@@ -327,8 +327,18 @@ public class RecipeProcessor implements Runnable
         
         if(index >= 0)
         {
-            commentBlock = true;
-            return (index == 0 ? null : line.substring(0, index).trim());
+            int end = line.indexOf("*/"); // check for comment block end chars on the same line
+            
+            if(end > 0)
+            {
+                return line.substring(0, index) + line.substring(end + 2);
+            }
+            else
+            {
+                commentBlock = true;
+                
+                return (index == 0 ? null : line.substring(0, index).trim());
+            }
         }
         
         // now check for line comments
