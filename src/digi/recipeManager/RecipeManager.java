@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -57,8 +58,8 @@ public class RecipeManager extends JavaPlugin
         settings = new Settings(sender);
         new InfoFiles(sender);
         
-        if(settings.METRICS)
-            new Metrics(this);
+//        if(settings.METRICS)
+//            new Metrics(this);
         
         new RecipeProcessor(sender, check);
         
@@ -89,5 +90,16 @@ public class RecipeManager extends JavaPlugin
     public static Settings getSettings()
     {
         return settings;
+    }
+    
+    public boolean canCraft(Player player)
+    {
+        return true; // TODO
+        /*
+        if(player == null)
+            return true;
+        
+        return !player.hasPermission("recipemanager.nocraft");
+        */
     }
 }

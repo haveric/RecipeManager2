@@ -5,7 +5,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 import digi.recipeManager.Tools;
 
-public class CraftRecipe extends MultiResultRecipe
+public class CraftRecipe extends WorkbenchRecipe
 {
     private ItemStack[]  ingredients;
     private int          width;
@@ -103,7 +103,7 @@ public class CraftRecipe extends MultiResultRecipe
     
     public ShapedRecipe toShapedRecipe(int markResultId)
     {
-        ShapedRecipe bukkitRecipe = new ShapedRecipe(markResultId == 0 ? getFirstResult() : Tools.generateRecipeIdResult(getFirstResult(), markResultId));
+        ShapedRecipe bukkitRecipe = new ShapedRecipe(markResultId >= 0 ? Tools.generateRecipeIdResult(getFirstResult(), markResultId) : getFirstResult());
         
         switch(height)
         {

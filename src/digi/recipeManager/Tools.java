@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,6 +14,16 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class Tools
 {
+    public static String parseColors(String message, boolean removeColors)
+    {
+        for(ChatColor color : ChatColor.values())
+        {
+            message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : "" + color));
+        }
+        
+        return message;
+    }
+    
     /**
      * For use in furnace smelting and fuel recipes hashmap
      */
@@ -48,11 +59,20 @@ public class Tools
             return -1;
         
         String id = desc.get(desc.size() - 1);
+        int index = -1;
         
-        if(!id.startsWith(Recipes.RECIPE_ID_STRING))
-            return -1;
+        if(id.startsWith(Recipes.RECIPE_ID_STRING))
+        {
+            try
+            {
+                index = Integer.valueOf(id.substring(Recipes.RECIPE_ID_STRING.length()));
+            }
+            catch(Exception e)
+            {
+            }
+        }
         
-        return Integer.valueOf(id.substring(Recipes.RECIPE_ID_STRING.length()));
+        return index;
     }
     
     /* TODO not really needed, remove ?

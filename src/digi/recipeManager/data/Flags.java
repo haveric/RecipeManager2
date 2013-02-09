@@ -1,59 +1,60 @@
 package digi.recipeManager.data;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 
 public class Flags implements Cloneable
 {
-    private String             failMessage     = null;
-    private String             craftMessage    = null;
+    private String             failMessage  = null;
+    private String             craftMessage = null;
     
-    private String             itemName        = null;
-    private String[]           itemDescription = null;
+    private String             itemName     = null;
+    private String[]           itemLore     = null;
+    private Color              itemColor    = null;
     
-    private String             color           = null;
+    private String             bookTitle    = null;
+    private List<String>       bookPages    = null;
     
-    private String             bookTitle       = null;
-    private List<String>       bookPages       = null;
+    private List<String>       meta         = null;
     
-    private List<String>       meta            = null;
+    private Flag<int[]>        expReq       = null;
+    private Flag<Integer>      expAward     = null;
     
-    private Flag<int[]>        levelReq        = null;
-    private Flag<int[]>        expReq          = null;
-    private Flag<double[]>     moneyReq        = null;
-    private Flag<Integer>      levelAward      = null;
-    private Flag<Integer>      expAward        = null;
-    private Flag<Double>       moneyAward      = null;
+    private Flag<int[]>        levelReq     = null;
+    private Flag<Integer>      levelAward   = null;
     
-    private Flag<String>       permission      = null;
-    private Flag<List<String>> groups          = null;
-    private Flag<Set<String>>  worlds          = null;
+    private Flag<double[]>     moneyReq     = null;
+    private Flag<Double>       moneyAward   = null;
     
-    private Flag<Integer>      proximity       = null;
-    private Flag<int[]>        heightReq       = null;
-    private Flag<ItemStack[]>  itemsReq        = null;
-    private Flag<ItemStack[]>  blocksNear      = null;
-    private Flag<ItemStack[]>  blocksUnder     = null;
-    private Flag<ItemStack[]>  blocksTop       = null;
+    private Flag<String>       permission   = null;
+    private Flag<List<String>> groups       = null;
+    private Flag<Set<String>>  worlds       = null;
     
-    private Flag<int[]>        explode         = null;
+    private Flag<Integer>      proximity    = null;
+    private Flag<int[]>        heightReq    = null;
+    private Flag<ItemStack[]>  itemsReq     = null;
+    private Flag<ItemStack[]>  blocksNear   = null;
+    private Flag<ItemStack[]>  blocksUnder  = null;
+    private Flag<ItemStack[]>  blocksTop    = null;
     
-    private List<String>       commands        = null;
-    private List<String>       messages        = null;
+    private Flag<int[]>        explode      = null;
     
-    private Flag<int[]>        clone           = null;
+    private List<String>       commands     = null;
+    private List<String>       messages     = null;
     
-    private String             math            = null;
+    private Flag<int[]>        clone        = null;
     
-    private Flag<int[]>        lightning       = null;
-    private Flag<String>       sound           = null;
+    private String             math         = null;
     
-    private boolean            secret          = false;
-    private boolean            override        = false;
-    private boolean            remove          = false;
-    private boolean            log             = false;
+    private Flag<int[]>        lightning    = null;
+    private Flag<String>       sound        = null;
+    
+    private boolean            secret       = false;
+    private boolean            override     = false;
+    private boolean            remove       = false;
+    private boolean            log          = false;
     
     public Flags()
     {
@@ -61,9 +62,15 @@ public class Flags implements Cloneable
     
     public Flags(Flags flags)
     {
+        // TODO add all variables here !!!!
+        
         failMessage = flags.failMessage;
+        craftMessage = flags.craftMessage;
+        
         itemName = flags.itemName;
-        itemDescription = flags.itemDescription;
+        itemLore = flags.itemLore;
+        
+        itemColor = flags.itemColor;
         
         levelReq = flags.levelReq;
         expReq = flags.expReq;
@@ -128,24 +135,24 @@ public class Flags implements Cloneable
         this.itemName = itemName;
     }
     
-    public String[] getItemDescription()
+    public String[] getItemLore()
     {
-        return itemDescription;
+        return itemLore;
     }
     
-    public void setItemDescription(String[] itemDescription)
+    public void setItemLore(String[] value)
     {
-        this.itemDescription = itemDescription;
+        this.itemLore = value;
     }
     
-    public String getColor()
+    public Color getItemColor()
     {
-        return color;
+        return itemColor;
     }
     
-    public void setColor(String color)
+    public void setItemColor(Color color)
     {
-        this.color = color;
+        this.itemColor = color;
     }
     
     public String getBookTitle()
@@ -346,6 +353,14 @@ public class Flags implements Cloneable
     public void setCommands(List<String> commands)
     {
         this.commands = commands;
+    }
+    
+    public void addCommand(String command)
+    {
+        if(commands == null)
+            commands = new ArrayList<String>();
+        
+        commands.add(command);
     }
     
     public List<String> getMessages()

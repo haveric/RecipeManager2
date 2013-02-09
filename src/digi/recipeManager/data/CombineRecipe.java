@@ -9,7 +9,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import digi.recipeManager.Tools;
 
-public class CombineRecipe extends MultiResultRecipe
+public class CombineRecipe extends WorkbenchRecipe
 {
     private List<ItemStack> ingredients;
     
@@ -114,7 +114,7 @@ public class CombineRecipe extends MultiResultRecipe
     
     public ShapelessRecipe toShapelessRecipe(int markResultId)
     {
-        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(markResultId == 0 ? getFirstResult() : Tools.generateRecipeIdResult(getFirstResult(), markResultId));
+        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(markResultId >= 0 ? Tools.generateRecipeIdResult(getFirstResult(), markResultId) : getFirstResult());
         
         for(ItemStack item : ingredients)
         {

@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -101,8 +100,6 @@ public class RecipeProcessor implements Runnable
             {
                 try
                 {
-                    currentFile = name;
-                    lineNum = 0;
                     parseFile(DIR_RECIPES + name);
                     parsedFiles++;
                     time = System.currentTimeMillis();
@@ -218,15 +215,16 @@ public class RecipeProcessor implements Runnable
     
     private void parseFile(String fileName) throws Exception
     {
-        this.currentFile = fileName;
+        currentFile = fileName;
+        lineNum = 0;
         reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fileName))));
         fileFlags = new Flags();
-        lineNum = 0;
+        commentBlock = false;
         String[] error = null;
         
         parseFlags(fileFlags, null, null); // parse file header flags that applies to all recipes
         
-        while(searchRecipes())
+        while(searchRecipes()) // search for recipes...
         {
             debug("checking recipe type...");
             
@@ -250,7 +248,6 @@ public class RecipeProcessor implements Runnable
         if(lineNum == 0)
             recipeError(ChatColor.YELLOW + "Recipe file '" + fileName + "' is empty.", null);
         
-        commentBlock = false;
         reader.close();
     }
     
@@ -336,7 +333,6 @@ public class RecipeProcessor implements Runnable
             else
             {
                 commentBlock = true;
-                
                 return (index == 0 ? null : line.substring(0, index).trim());
             }
         }
@@ -376,41 +372,171 @@ public class RecipeProcessor implements Runnable
     {
         debug("parsing found flag...");
         
-        String[] split = line.split(":", 2);
+        String[] split = line.split(" ", 2);
         String flag = split[0].substring(1).trim();
+        
+        int index = flag.indexOf(':');
+        
+        if(index >= 0)
+        {
+            flag = flag.substring(0, index);
+            recipeError(ChatColor.YELLOW + "Note: flag @" + flag + " has : character after it, you can now use flags without it !", null);
+        }
+        
         String value = (split.length > 1 ? split[1].trim() : null);
+        
+        if(flag.equalsIgnoreCase("failmessage"))
+        {
+            flags.setFailMessage(value);
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("craftmessage"))
+        {
+            flags.setCraftMessage(value);
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("itemname"))
+        {
+            if(recipeType != null)
+                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
+            else
+                flags.setItemName(value);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("itemlore"))
+        {
+            if(recipeType != null)
+                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
+            else
+            {
+                split = value.split("\\");
+                
+                for(int i = 0; i < split.length; i++)
+                {
+                    split[i] = Tools.parseColors(split[i], false);
+                }
+                
+                flags.setItemLore(split);
+            }
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("itemcolor"))
+        {
+            if(item == null)
+                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
+            else
+            {
+                split = value.split(" ");
+                Color color = null;
+                
+                if(split.length == 3)
+                {
+                    try
+                    {
+                        int r = Integer.valueOf(split[0]);
+                        int g = Integer.valueOf(split[1]);
+                        int b = Integer.valueOf(split[2]);
+                        
+                        color = Color.fromRGB(r, g, b);
+                    }
+                    catch(Exception e)
+                    {
+                    }
+                }
+                
+                if(color == null)
+                    recipeError("Invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
+                else
+                    flags.setItemColor(color);
+            }
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("command") || flag.equalsIgnoreCase("commands"))
+        {
+            if(value.equalsIgnoreCase("false"))
+                flags.setCommands(null);
+            else
+                flags.addCommand(value);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("exp") || flag.equalsIgnoreCase("xp"))
+        {
+            split = value.split("\\|");
+            value = split[0].trim();
+            String failMessage = null;
+            String successMessage = null;
+            Integer val = null;
+            
+            if(!value.equalsIgnoreCase("false"))
+            {
+                if(split.length > 1)
+                {
+                    failMessage = split[1].trim();
+                    
+                    if(split.length > 2)
+                        successMessage = split[2].trim();
+                }
+                
+                try
+                {
+                    val = Integer.valueOf(value);
+                }
+                catch(Exception e)
+                {
+                    recipeError("The @" + flag + " flag has invalid number value '" + value + "'", null);
+                    return;
+                }
+                
+                if(val == 0)
+                    val = null;
+            }
+            
+            flags.setExpAward(val == null ? null : new Flag<Integer>(val, failMessage, successMessage));
+            return;
+        }
         
         if(flag.equalsIgnoreCase("log"))
         {
-            flags.setLog(value == null ? true : !value.equalsIgnoreCase("false"));
+            if(item != null)
+                recipeError("The @" + flag + " flag doesn't have any effect on result items.", null);
+            else
+                flags.setLog(value == null ? true : !value.equalsIgnoreCase("false"));
+            
             return;
         }
         
         if(flag.equalsIgnoreCase("override"))
         {
-            flags.setOverride(value == null ? true : !value.equalsIgnoreCase("false"));
+            if(item != null)
+                recipeError("The @" + flag + " flag doesn't have any effect on result items.", null);
+            else
+                flags.setOverride(value == null ? true : !value.equalsIgnoreCase("false"));
+            
             return;
         }
         
         if(flag.equalsIgnoreCase("remove"))
         {
-            flags.setRemove(value == null ? true : !value.equalsIgnoreCase("false"));
+            if(item != null)
+                recipeError("The @" + flag + " flag doesn't have any effect on result items.", null);
+            else
+                flags.setRemove(value == null ? true : !value.equalsIgnoreCase("false"));
             return;
         }
         
         if(flag.equalsIgnoreCase("secret"))
         {
             flags.setSecret(value == null ? true : !value.equalsIgnoreCase("false"));
-            return;
-        }
-        
-        if(flag.equalsIgnoreCase("itemname"))
-        {
-            if(item == null)
-                recipeError("The @" + flag + " can only be used on results!", null);
-            else
-                flags.setItemName(value);
-            
             return;
         }
         
@@ -604,7 +730,7 @@ public class RecipeProcessor implements Runnable
         
         // get result or move current line after them if we got @remove and results
         List<ItemResult> results = new ArrayList<ItemResult>();
-        String[] resultErrors = parseResults(recipe, results, true, true);
+        String[] resultErrors = parseResults(recipe, results, false, true);
         
         if(!recipe.getFlags().isRemove()) // ignore results and results errors if we have @remove
         {
@@ -707,19 +833,15 @@ public class RecipeProcessor implements Runnable
     private String[] parseResults(RmRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Exception
     {
         int totalpercentage = 0;
-        ItemResult noPercentItem = null;
+        ItemResult resultCalc = null;
         ItemResult result;
         
-        debug("searching for results...");
-        
-        if(line.charAt(0) != '=')
+        if(line.charAt(0) != '=') // check if current line is a result, if not move on
             nextLine();
         
         while(line != null && line.charAt(0) == '=')
         {
-            debug("parsing result...");
-            
-            result = convertStringToItemResult(line, 0, true, true, true, true);
+            result = convertStringToItemResult(line, 0, true, true, true, true); // convert result to ItemResult, grabbing chance and whatother stuff
             
             if(result == null || (!allowAir && result.getTypeId() == 0))
                 return new String[] { "Invalid result !", "Result might be missing or just be incorectly typed, see previous errors if any." };
@@ -727,21 +849,21 @@ public class RecipeProcessor implements Runnable
             if((totalpercentage += result.getChance()) > 100)
                 return new String[] { "Total result items' chance exceeds 100% !", "Not defining percentage for one item will make its chance fit with the rest!" };
             
-            if(result.getChance() == -1)
+            if(result.getChance() == -1) // check if result has a specific chance set
             {
-                if(noPercentItem != null)
+                if(resultCalc != null)
                     return new String[] { "Can't have more than 1 item without percentage to fill the rest!" };
                 
-                noPercentItem = result;
+                resultCalc = result;
             }
             else
                 results.add(result);
             
-            parseFlags(result.getFlags(), null, result);
+            parseFlags(result.getFlags(), null, result); // check for result flags and keeps the line flow going too
         }
         
-        if(noPercentItem != null)
-            results.add(new ItemResult(noPercentItem, (100 - totalpercentage)));
+        if(resultCalc != null)
+            results.add(new ItemResult(resultCalc, (100 - totalpercentage)));
         
         else if(results.isEmpty())
             return new String[] { "Found = but no result !" };

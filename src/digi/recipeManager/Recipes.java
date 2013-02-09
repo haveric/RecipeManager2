@@ -5,8 +5,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.*;
 
 import digi.recipeManager.data.*;
 import digi.recipeManager.data.RecipeInfo.RecipeOwner;
@@ -36,7 +36,6 @@ public class Recipes
     protected Recipes()
     {
         recipeIndex.clear();
-        
         recipeIndex.putAll(BukkitRecipes.recipeIndex);
     }
     
@@ -69,7 +68,7 @@ public class Recipes
             flags = recipe.getFlags();
             add = true;
             
-            System.out.print("Custom recipe...");
+            System.out.print("Custom recipe... id=" + info.getIndex());
             
             if(recipe instanceof CraftRecipe)
             {
@@ -111,7 +110,6 @@ public class Recipes
                     
                     if(!BukkitRecipes.removeFurnaceRecipe((SmeltRecipe)recipe))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Couldn't find furnace recipe to remove!");
-                    
                 }
                 
                 if(add)
@@ -220,7 +218,7 @@ public class Recipes
         return (desc == null ? false : desc.get(desc.size() - 1).startsWith(RECIPE_ID_STRING));
     }
     
-    public boolean isCustomRecipe(org.bukkit.inventory.Recipe recipe)
+    public boolean isCustomRecipe(Recipe recipe)
     {
         if(recipe == null)
             return false;
@@ -264,5 +262,10 @@ public class Recipes
             return fuels.get(fuel.getTypeId() + ":" + fuel.getDurability());
         
         return recipe;
+    }
+    
+    public boolean isResultTakeable(Player player, ItemStack result, ItemStack cursor, boolean shiftClick)
+    {
+        return false; // TODO Auto-generated method stub
     }
 }

@@ -3,7 +3,6 @@ package digi.recipeManager;
 import java.io.File;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,7 +10,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Messages
 {
-    /*
     GENERAL_RECIPE("general.recipe", "recipe"),
     GENERAL_RECIPES("general.recipes", "recipes"),
     GENERAL_WORKBENCH("general.workbench", "workbench"),
@@ -121,10 +119,14 @@ public enum Messages
     
     COMMAND_RMGETBOOK_USAGE("command.rmgetbook.usage", "<white>Type <green>{command} <blue>title<white> |<blue> author <white>to get the recipe book with that title and author."),
     COMMAND_RMGETBOOK_NOTFOUND("command.rmgetbook.notfound", "<red>Couldn't find any recipe book titled '{title}' by '{author}'"),
-    COMMAND_RMGETBOOK_GOT("command.rmgetbook.got", "Got the recipe book titled '{title}' by '{author}'.");
-    */
+    COMMAND_RMGETBOOK_GOT("command.rmgetbook.got", "Got the recipe book titled '{title}' by '{author}'."),
+    
+    // ---------- ^ old ones
     
     CRAFT_SPECIAL_LEATHERDYE("craft.special.leatherdye", "Leather dyeing is disabled."),
+    CRAFT_SPECIAL_FIREWORKS("craft.special.fireworks", "Firework crafting is disabled."),
+    CRAFT_SPECIAL_MAP_CLONING("craft.special.mapcloning", "Map cloning is disabled."),
+    CRAFT_SPECIAL_MAP_EXTENDING("craft.special.mapextending", "Map extending is disabled."),
     
     EOF("", "");
     
@@ -154,7 +156,7 @@ public enum Messages
      */
     public String get()
     {
-        return replaceColors(message, false);
+        return Tools.parseColors(message, false);
     }
     
     /**
@@ -165,7 +167,7 @@ public enum Messages
      */
     public String get(String[][] variables)
     {
-        return replaceVariables(replaceColors(message, false), variables);
+        return replaceVariables(Tools.parseColors(message, false), variables);
     }
     
     /**
@@ -177,6 +179,9 @@ public enum Messages
      */
     public void print(CommandSender sender)
     {
+        if(sender == null)
+            return;
+        
         if(message != null)
             send(sender, message);
     }
@@ -193,6 +198,9 @@ public enum Messages
      */
     public void print(CommandSender sender, String recipeMessage)
     {
+        if(sender == null)
+            return;
+        
         if(recipeMessage != null) // recipe has custom message ?
         {
             if(!recipeMessage.equals("false")) // if it's not "false" send it, otherwise don't.
@@ -218,6 +226,9 @@ public enum Messages
      */
     public void print(CommandSender sender, String recipeMessage, String[][] variables)
     {
+        if(sender == null)
+            return;
+        
         String msg = message;
         
         if(recipeMessage != null) // recipe has custom message
@@ -264,7 +275,7 @@ public enum Messages
         
         for(String message : messages)
         {
-            message = replaceColors(message, removeColors);
+            message = Tools.parseColors(message, removeColors);
         }
         
         sender.sendMessage(messages);
@@ -282,17 +293,7 @@ public enum Messages
         if(sender == null)
             sender = Bukkit.getConsoleSender();
         
-        sender.sendMessage(replaceColors((sender instanceof ConsoleCommandSender ? "[RecipeManager] " + message : message), (!RecipeManager.settings.COLOR_CONSOLE && sender instanceof ConsoleCommandSender)));
-    }
-    
-    public static String replaceColors(String message, boolean removeColors)
-    {
-        for(ChatColor color : ChatColor.values())
-        {
-            message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : "" + color));
-        }
-        
-        return message;
+        sender.sendMessage(Tools.parseColors((sender instanceof ConsoleCommandSender ? "[RecipeManager] " + message : message), (!RecipeManager.settings.COLOR_CONSOLE && sender instanceof ConsoleCommandSender)));
     }
     
     /**
@@ -340,7 +341,7 @@ public enum Messages
     
     public static void log(String message)
     {
-        Bukkit.getLogger().fine(replaceColors("[RecipeManager] " + message, true));
+        Bukkit.getLogger().fine(Tools.parseColors("[RecipeManager] " + message, true));
     }
     
     public static void error(CommandSender sender, Exception exception, String message)

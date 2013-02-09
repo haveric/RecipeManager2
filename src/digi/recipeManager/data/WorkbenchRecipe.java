@@ -3,28 +3,26 @@ package digi.recipeManager.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import digi.recipeManager.RecipeManager;
 
-public class MultiResultRecipe extends RmRecipe
+public class WorkbenchRecipe extends RmRecipe
 {
     private List<ItemResult> results;
     
-    protected MultiResultRecipe()
+    protected WorkbenchRecipe()
     {
     }
     
-    public MultiResultRecipe(RmRecipe recipe)
+    public WorkbenchRecipe(RmRecipe recipe)
     {
         super(recipe);
     }
     
-    public MultiResultRecipe(Flags flags)
+    public WorkbenchRecipe(Flags flags)
     {
         super(flags);
     }
@@ -84,8 +82,9 @@ public class MultiResultRecipe extends RmRecipe
         return results.get(0);
     }
     
-    public ItemStack getDisplayResult(Player player)
+    public ItemStack getResult(Player player, Location location, boolean display)
     {
+        /*
         if(results.size() == 1)
             return getFirstResult();
         
@@ -115,5 +114,10 @@ public class MultiResultRecipe extends RmRecipe
         item.setItemMeta(meta);
         
         return item;
+        */
+        
+        // TODO
+        
+        return getFirstResult();
     }
 }
