@@ -37,30 +37,6 @@ public class RecipeManager extends JavaPlugin
         recipes = null;
         events = new Events();
         
-        // Test area!
-        /*
-        CraftRecipe test1 = new CraftRecipe();
-        
-        ItemStack[] ingredients = new ItemStack[9];
-        ingredients[0] = new ItemStack(Material.APPLE);
-        ingredients[1] = new ItemStack(Material.APPLE);
-        
-        test1.setIngredients(ingredients);
-        test1.setResult(new ItemStack(Material.APPLE, 2));
-        
-        List<RMRecipe> test = new ArrayList<RMRecipe>();
-        
-        CombineRecipe test2 = new CombineRecipe();
-        
-        test2.addIngredient(Material.APPLE, (short)0);
-        test2.setResult(new ItemStack(Material.APPLE, 4));
-        
-        test.add(test2);
-        test.add(test1);
-        System.out.print("test1 = " + test.contains(test1) + " | " + test1.hashCode());
-        System.out.print("test2 = " + test.contains(test2) + " | " + test2.hashCode());
-        */
-        
         getServer().getScheduler().runTaskLater(this, new Runnable()
         {
             public void run()
