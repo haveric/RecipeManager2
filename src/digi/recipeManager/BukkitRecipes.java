@@ -6,7 +6,8 @@ import org.bukkit.*;
 import org.bukkit.inventory.*;
 
 import digi.recipeManager.data.*;
-import digi.recipeManager.data.RecipeInfo.RecipeOwner;
+import digi.recipeManager.recipes.*;
+import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 
 /**
  * Control for bukkit recipes to avoid confusion with RecipeManager's recipes

@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import digi.recipeManager.data.WorkbenchRecipe;
+import digi.recipeManager.recipes.WorkbenchRecipe;
 
 /**
  * Event triggered when RecipeManager's custom recipes' ingredients are placed in the workbench and the result is displayed.<br>

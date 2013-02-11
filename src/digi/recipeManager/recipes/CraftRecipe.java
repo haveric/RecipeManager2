@@ -1,9 +1,10 @@
-package digi.recipeManager.data;
+package digi.recipeManager.recipes;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 import digi.recipeManager.Tools;
+import digi.recipeManager.recipes.flags.Flags;
 
 public class CraftRecipe extends WorkbenchRecipe
 {

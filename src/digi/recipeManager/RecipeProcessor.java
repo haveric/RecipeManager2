@@ -5,13 +5,17 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import org.bukkit.*;
+import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionEffect;
 
-import digi.recipeManager.data.*;
-import digi.recipeManager.data.RecipeInfo.RecipeOwner;
-import digi.recipeManager.data.RmRecipe.RecipeType;
+import digi.recipeManager.recipes.*;
+import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import digi.recipeManager.recipes.RmRecipe.RecipeType;
+import digi.recipeManager.recipes.flags.*;
 
 /**
  * Processes all recipe files and updates main Recipes class once done.
@@ -358,10 +362,7 @@ public class RecipeProcessor implements Runnable
         
         nextLine();
         
-        if(line == null)
-            return;
-        
-        while(line.charAt(0) == '@')
+        while(line != null && line.charAt(0) == '@')
         {
             parseFlag(flags, recipeType, item);
             nextLine();
@@ -385,77 +386,24 @@ public class RecipeProcessor implements Runnable
         
         String value = (split.length > 1 ? split[1].trim() : null);
         
-        if(flag.equalsIgnoreCase("failmessage"))
+        // ___________________________________________________________________________________
+        // Shared flags...
+        
+        if(flag.equalsIgnoreCase("message") || flag.equalsIgnoreCase("craftmsg"))
         {
-            flags.setFailMessage(value);
+            flags.setCraftMessage(value == null ? null : Tools.parseColors(value.replaceAll("\\", "\n"), false));
             return;
         }
         
-        if(flag.equalsIgnoreCase("craftmessage"))
+        if(flag.equalsIgnoreCase("secret"))
         {
-            flags.setCraftMessage(value);
+            flags.setSecret(value == null ? true : !value.equalsIgnoreCase("false"));
             return;
         }
         
-        if(flag.equalsIgnoreCase("itemname"))
+        if(flag.equalsIgnoreCase("log"))
         {
-            if(recipeType != null)
-                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
-            else
-                flags.setItemName(value);
-            
-            return;
-        }
-        
-        if(flag.equalsIgnoreCase("itemlore"))
-        {
-            if(recipeType != null)
-                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
-            else
-            {
-                split = value.split("\\");
-                
-                for(int i = 0; i < split.length; i++)
-                {
-                    split[i] = Tools.parseColors(split[i], false);
-                }
-                
-                flags.setItemLore(split);
-            }
-            
-            return;
-        }
-        
-        if(flag.equalsIgnoreCase("itemcolor"))
-        {
-            if(item == null)
-                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
-            else
-            {
-                split = value.split(" ");
-                Color color = null;
-                
-                if(split.length == 3)
-                {
-                    try
-                    {
-                        int r = Integer.valueOf(split[0]);
-                        int g = Integer.valueOf(split[1]);
-                        int b = Integer.valueOf(split[2]);
-                        
-                        color = Color.fromRGB(r, g, b);
-                    }
-                    catch(Exception e)
-                    {
-                    }
-                }
-                
-                if(color == null)
-                    recipeError("Invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
-                else
-                    flags.setItemColor(color);
-            }
-            
+            flags.setLog(value == null ? true : !value.equalsIgnoreCase("false"));
             return;
         }
         
@@ -505,20 +453,105 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("log"))
+        if(flag.equalsIgnoreCase("launchfirework"))
         {
-            if(item != null)
-                recipeError("The @" + flag + " flag doesn't have any effect on result items.", null);
+            if(value.equalsIgnoreCase("false"))
+                flags.setLaunchFirework(null);
             else
-                flags.setLog(value == null ? true : !value.equalsIgnoreCase("false"));
+            {
+                FireworkMeta firework = flags.getLaunchFirework();
+                
+                if(!value.equalsIgnoreCase("false"))
+                {
+                    if(firework == null)
+                        firework = (FireworkMeta)Bukkit.getItemFactory().getItemMeta(Material.FIREWORK);
+                    
+                    if(value.startsWith("effect"))
+                    {
+                        split = value.split(" ", 2);
+                        
+                        if(split.length <= 1)
+                        {
+                            recipeError("Flag @" + flag + " has no arguments for 'effect' !", null);
+                            return;
+                        }
+                        
+                        FireworkEffect effect = parseFireworkEffect(split[1].trim(), flag);
+                        
+                        if(effect != null)
+                            firework.addEffect(effect);
+                    }
+                    else if(value.startsWith("power"))
+                    {
+                        split = value.split(" ", 2);
+                        
+                        if(split.length <= 1)
+                        {
+                            recipeError("Flag @" + flag + " has no arguments for 'power' !", null);
+                            return;
+                        }
+                        
+                        int power = -1;
+                        
+                        try
+                        {
+                            power = Integer.valueOf(split[1].trim());
+                        }
+                        catch(Exception e)
+                        {
+                        }
+                        
+                        if(power < 0 || power > 128)
+                        {
+                            recipeError("Flag @" + flag + " invalid 'power' argument, it must be a number from 0 to 128", null);
+                            return;
+                        }
+                        
+                        firework.setPower(power);
+                    }
+                }
+                else
+                {
+                    firework = null;
+                }
+                
+                flags.setLaunchFirework(firework);
+            }
+            
+            return;
+        }
+        
+        // ___________________________________________________________________________________
+        // Recipe-only flags...
+        
+        RecipeFlags recipeFlags = (flags instanceof RecipeFlags ? (RecipeFlags)flags : null);
+        
+        if(flag.equalsIgnoreCase("info") || flag.equalsIgnoreCase("recipeinfo"))
+        {
+            if(recipeFlags == null)
+                recipeError("Flag @" + flag + " can only be used on recipes!", null);
+            else
+                recipeFlags.setInfo(value.equalsIgnoreCase("false") ? null : value);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("failmessage") || flag.equalsIgnoreCase("failmsg"))
+        {
+            // TODO maybe message and leave only one mssage ? To test.
+            
+            if(recipeFlags == null)
+                recipeError("Flag @" + flag + " can only be used on recipes!", null);
+            else
+                recipeFlags.setFailMessage(value == null ? null : Tools.parseColors(value.replaceAll("\\n", "\n"), false));
             
             return;
         }
         
         if(flag.equalsIgnoreCase("override"))
         {
-            if(item != null)
-                recipeError("The @" + flag + " flag doesn't have any effect on result items.", null);
+            if(recipeFlags == null)
+                recipeError("Flag @" + flag + " can only be used on recipes!", null);
             else
                 flags.setOverride(value == null ? true : !value.equalsIgnoreCase("false"));
             
@@ -527,20 +560,617 @@ public class RecipeProcessor implements Runnable
         
         if(flag.equalsIgnoreCase("remove"))
         {
-            if(item != null)
-                recipeError("The @" + flag + " flag doesn't have any effect on result items.", null);
+            if(recipeFlags == null)
+                recipeError("Flag @" + flag + " can only be used on recipes!", null);
             else
-                flags.setRemove(value == null ? true : !value.equalsIgnoreCase("false"));
+                flags.setRemove(value == null || value.equalsIgnoreCase("false") ? null : value);
+            
             return;
         }
         
-        if(flag.equalsIgnoreCase("secret"))
+        // ___________________________________________________________________________________
+        // Result items only flags...
+        
+        ItemFlags itemFlags = (flags instanceof ItemFlags ? (ItemFlags)flags : null);
+        
+        if(flag.equalsIgnoreCase("name") || flag.equalsIgnoreCase("itemname"))
         {
-            flags.setSecret(value == null ? true : !value.equalsIgnoreCase("false"));
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(value.equalsIgnoreCase("false") ? null : Tools.parseColors(value, false));
+                item.setItemMeta(meta);
+            }
+            else
+                recipeError("Flag @" + flag + " only works on result items.", null);
+            
             return;
         }
+        
+        if(flag.equalsIgnoreCase("lore") || flag.equalsIgnoreCase("itemlore"))
+        {
+            // TODO allow to be added line by line!
+            
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                List<String> lore = new ArrayList<String>();
+                split = value.split("\\");
+                
+                for(String s : split)
+                {
+                    lore.add(Tools.parseColors(s, false));
+                }
+                
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            }
+            else
+                recipeError("Flag @" + flag + " only works on result items.", null);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("color") || flag.equalsIgnoreCase("colour") || flag.equalsIgnoreCase("itemcolor") || flag.equalsIgnoreCase("itemcolour"))
+        {
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                
+                if(meta instanceof LeatherArmorMeta == false)
+                {
+                    recipeError("Item is not leather armor, therefore it can't be colored!", null);
+                    return;
+                }
+                
+                Color color = null;
+                
+                if(!value.equalsIgnoreCase("false"))
+                {
+                    color = Tools.parseColor(value);
+                    
+                    if(color == null)
+                    {
+                        recipeError("Flag @" + flag + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
+                        return;
+                    }
+                }
+                
+                LeatherArmorMeta leather = (LeatherArmorMeta)meta;
+                
+                leather.setColor(color);
+                
+                item.setItemMeta(meta);
+            }
+            else
+                recipeError("Flag @" + flag + " only works on result items.", null);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("book") || flag.equalsIgnoreCase("itembook"))
+        {
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                
+                if(meta instanceof BookMeta == false)
+                {
+                    recipeError("Item is not a written book!", null);
+                    return;
+                }
+                
+                BookMeta book = (BookMeta)meta;
+                
+                if(!value.equalsIgnoreCase("false"))
+                {
+                    split = value.split("\\|", 2);
+                    
+                    if(split.length == 2)
+                    {
+                        String title = Tools.parseColors(split[0].trim(), false);
+                        String author = Tools.parseColors(split[1].trim(), false);
+                        
+                        if(title.length() > 64 || author.length() > 64)
+                        {
+                            recipeError("Flag @" + flag + " has title or author larger than 64 characters, that's too long!", null);
+                            return;
+                        }
+                        
+                        book.setTitle(title);
+                        book.setAuthor(author);
+                    }
+                    else
+                    {
+                        recipeError("Flag @" + flag + " doesn't have title | author argument format!", null);
+                        return;
+                    }
+                }
+                else
+                {
+                    book.setTitle(null);
+                    book.setAuthor(null);
+                }
+                
+                item.setItemMeta(book);
+            }
+            else
+                recipeError("Flag @" + flag + " only works on result items.", null);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("page") || flag.equalsIgnoreCase("addpage") || flag.equalsIgnoreCase("bookpage"))
+        {
+            if(item == null)
+            {
+                recipeError("Flag @" + flag + " only works on result items.", null);
+                return;
+            }
+            
+            ItemMeta meta = item.getItemMeta();
+            
+            if(meta instanceof BookMeta == false)
+            {
+                recipeError("Item is not a written book!", null);
+                return;
+            }
+            
+            BookMeta book = (BookMeta)meta;
+            
+            if(value.equalsIgnoreCase("false"))
+            {
+                String text = Tools.parseColors(value, false);
+                
+                if(text.length() > 256)
+                {
+                    recipeError("Flag @" + flag + " has page with text longer than 256 characters, that's too long!", "Color codes use up that limit too, 1 character per color.");
+                    return;
+                }
+                
+                book.addPage(text);
+            }
+            else
+            {
+                book.getPages().clear();
+            }
+            
+            item.setItemMeta(book);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("firework") || flag.equalsIgnoreCase("fireworkrocket"))
+        {
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                
+                if(meta instanceof FireworkMeta == false)
+                {
+                    recipeError("Item is not a firework rocket !", null);
+                    return;
+                }
+                
+                FireworkMeta firework = (FireworkMeta)meta;
+                
+                if(!value.equalsIgnoreCase("false"))
+                {
+                    if(value.startsWith("effect"))
+                    {
+                        split = value.split(" ", 2);
+                        
+                        if(split.length <= 1)
+                        {
+                            recipeError("Flag @" + flag + " has no arguments for 'effect' !", null);
+                            return;
+                        }
+                        
+                        FireworkEffect effect = parseFireworkEffect(split[1].trim(), flag);
+                        
+                        if(effect != null)
+                            firework.addEffect(effect);
+                    }
+                    else if(value.startsWith("power"))
+                    {
+                        split = value.split(" ", 2);
+                        
+                        if(split.length <= 1)
+                        {
+                            recipeError("Flag @" + flag + " has no arguments for 'power' !", null);
+                            return;
+                        }
+                        
+                        int power = -1;
+                        
+                        try
+                        {
+                            power = Integer.valueOf(split[1].trim());
+                        }
+                        catch(Exception e)
+                        {
+                        }
+                        
+                        if(power < 0 || power > 128)
+                        {
+                            recipeError("Flag @" + flag + " invalid 'power' argument, it must be a number from 0 to 128", null);
+                            return;
+                        }
+                        
+                        firework.setPower(power);
+                    }
+                }
+                else
+                {
+                    firework.clearEffects();
+                    firework.setPower(0);
+                }
+                
+                item.setItemMeta(firework);
+            }
+            else
+                recipeError("Flag @" + flag + " only works on result items.", null);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("fireworkcharge") || flag.equalsIgnoreCase("fireworkeffect"))
+        {
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                
+                if(meta instanceof FireworkEffectMeta == false)
+                {
+                    recipeError("Item is not a firework charge !", null);
+                    return;
+                }
+                
+                FireworkEffectMeta firework = (FireworkEffectMeta)meta;
+                
+                if(!value.equalsIgnoreCase("false"))
+                {
+                    FireworkEffect effect = parseFireworkEffect(value, flag);
+                    
+                    if(effect != null)
+                        firework.setEffect(effect);
+                }
+                else
+                {
+                    firework.setEffect(null);
+                }
+                
+                item.setItemMeta(firework);
+            }
+            else
+                recipeError("Flag @" + flag + " only works on result items.", null);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("skullowner") || flag.equalsIgnoreCase("headowner"))
+        {
+            if(item == null)
+            {
+                recipeError("Flag @" + flag + " only works on result items.", null);
+                return;
+            }
+            
+            ItemMeta meta = item.getItemMeta();
+            
+            if(meta instanceof SkullMeta == false)
+            {
+                recipeError("Item is not a SKULL_ITEM !", "Also note that it must have data value of 3 to be a human skull in order to set the owner.");
+                return;
+            }
+            
+            if(item.getDurability() != 3)
+            {
+                recipeError("Item is not a Human skull item !", "The item needs to have data value 3 in order to be a human ownable one!");
+                return;
+            }
+            
+            SkullMeta skull = (SkullMeta)meta;
+            
+            skull.setOwner(value.equalsIgnoreCase("false") ? null : value);
+            
+            item.setItemMeta(skull);
+            
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("potion"))
+        {
+            if(item == null)
+            {
+                recipeError("Flag @" + flag + " only works on result items.", null);
+                return;
+            }
+            
+            ItemMeta meta = item.getItemMeta();
+            
+            if(meta instanceof PotionMeta == false)
+            {
+                recipeError("Item is not a potion !", "Item needs to be POTION in order to add effects to it!");
+                return;
+            }
+            
+            PotionMeta potion = (PotionMeta)meta;
+            
+            if(value.equalsIgnoreCase("false"))
+            {
+                potion.setMainEffect(null);
+                potion.clearCustomEffects();
+            }
+            else if(value.startsWith("main"))
+            {
+                PotionEffect effect = parsePotionEffect(value, flag);
+                
+                if(effect != null)
+                    potion.setMainEffect(effect.getType());
+            }
+            else if(value.startsWith("add"))
+            {
+                PotionEffect effect = parsePotionEffect(value, flag);
+                
+                if(effect != null)
+                    potion.addCustomEffect(effect, true);
+            }
+            
+            item.setItemMeta(potion);
+            return;
+        }
+        
+        if(flag.equalsIgnoreCase("enchant") || flag.equalsIgnoreCase("enchantment"))
+        {
+            if(item == null)
+            {
+                recipeError("Flag @" + flag + " only works on result items.", null);
+                return;
+            }
+            
+            if(value == null)
+            {
+                recipeError("Flag @" + flag + " doesn't have a value!", null);
+                return;
+            }
+            
+            if(value.equalsIgnoreCase("false"))
+            {
+                item.getEnchantments().clear();
+                return;
+            }
+            
+            split = value.split(" ");
+            value = split[0].trim();
+            
+            Enchantment ench = Enchantment.getByName(value);
+            
+            if(ench == null)
+            {
+                recipeError("Flag @" + flag + " has invalid enchantment: " + value, "Read '" + InfoFiles.FILE_INFONAMES + "' for enchantment names.");
+                return;
+            }
+            
+            int level = ench.getStartLevel();
+            
+            if(split.length > 1)
+            {
+                value = split[1].trim();
+                
+                if(!value.equalsIgnoreCase("max"))
+                {
+                    try
+                    {
+                        level = Math.min(Math.max(Integer.valueOf(value), ench.getStartLevel()), ench.getMaxLevel());
+                    }
+                    catch(Exception e)
+                    {
+                        recipeError("Flag @" + flag + " has invalid enchantment level number!", null);
+                        return;
+                    }
+                }
+                else
+                    level = ench.getMaxLevel();
+            }
+            
+            item.addUnsafeEnchantment(ench, level);
+            
+            return;
+        }
+        
+        /* TODO ?
+        if(flag.equalsIgnoreCase("repaircost"))
+        {
+            if(item != null)
+            {
+                ItemMeta meta = item.getItemMeta();
+                
+                if(meta instanceof Repairable == false)
+                {
+                    recipeError("Item is not a repairable item !", null);
+                    return;
+                }
+                
+                Repairable repairable = (Repairable)meta;
+                
+                repairable.setRepairCost(1000);
+            }
+        }
+        */
+        
+        /* TODO : needs NMS/CB code...
+        if(flag.equalsIgnoreCase("itemmeta"))
+        {
+            if(item == null)
+                recipeError("The @" + flag + " flag doesn't have any effect on recipes, use it on result items.", null);
+            else
+            {
+                split = value.split(" ");
+                Color color = null;
+                
+                if(split.length == 3)
+                {
+                    try
+                    {
+                        int r = Integer.valueOf(split[0]);
+                        int g = Integer.valueOf(split[1]);
+                        int b = Integer.valueOf(split[2]);
+                        
+                        color = Color.fromRGB(r, g, b);
+                    }
+                    catch(Exception e)
+                    {
+                    }
+                }
+                
+                if(color == null)
+                    recipeError("Invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
+                else
+                    flags.setItemColor(color);
+            }
+            
+            return;
+        }
+        */
         
         recipeError("Unknown flag: " + line, "Flag name might be diferent, check " + InfoFiles.FILE_INFOFLAGS);
+    }
+    
+    private PotionEffect parsePotionEffect(String value, String flag)
+    {
+        // TODO
+        
+        //new PotionEffect(type, duration, amplifier, ambient);
+        
+        /*
+        try
+        {
+            effect = PotionEffectType.getByName(...);
+        }
+        catch(Exception e)
+        {
+            recipeError("Effect type unknown...", "");
+            return;
+        }
+        */
+        
+        return null;
+    }
+    
+    private FireworkEffect parseFireworkEffect(String value, String flag)
+    {
+        Builder build = FireworkEffect.builder();
+        String[] split = value.toLowerCase().split("\\|");
+        
+        if(split.length == 0)
+        {
+            recipeError("Flag @" + flag + " doesn't have any settings!", "It must have at least one 'color' setting, read " + InfoFiles.FILE_INFONAMES + " file.");
+            return null;
+        }
+        
+        for(String s : split)
+        {
+            s = s.trim();
+            
+            if(s.equalsIgnoreCase("trail"))
+            {
+                build.withTrail();
+            }
+            else if(s.equalsIgnoreCase("flicker"))
+            {
+                build.withFlicker();
+            }
+            else if(s.startsWith("color"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    recipeError("Flag @" + flag + " has 'color' setting with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    return null;
+                }
+                
+                split = split[1].split(",");
+                List<Color> colors = new ArrayList<Color>();
+                Color color;
+                
+                for(String c : split)
+                {
+                    color = Tools.parseColor(c.trim());
+                    
+                    if(color == null)
+                        recipeError("Flag @" + flag + " has an invalid color! Moving on...", "The flag will still work but you should fix this issue.");
+                    else
+                        colors.add(color);
+                }
+                
+                if(colors.isEmpty())
+                {
+                    recipeError("Flag @" + flag + " doesn't have any valid colors, they are required!", "Colors are required therefore the flag was removed, you should fix this issue.");
+                    return null;
+                }
+                
+                build.withColor(colors);
+            }
+            else if(s.startsWith("fadecolor"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    recipeError("Flag @" + flag + " has 'fadecolor' setting with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    return null;
+                }
+                
+                split = split[1].split(",");
+                List<Color> colors = new ArrayList<Color>();
+                Color color;
+                
+                for(String c : split)
+                {
+                    color = Tools.parseColor(c.trim());
+                    
+                    if(color == null)
+                        recipeError("Flag @" + flag + " has an invalid fade color! Moving on...", "The flag will still work but you should fix this issue.");
+                    else
+                        colors.add(color);
+                }
+                
+                if(colors.isEmpty())
+                    recipeError("Flag @" + flag + " doesn't have any valid fade colors! Moving on...", "The flag will still work but you should fix this issue.");
+                else
+                    build.withFade(colors);
+            }
+            else if(s.startsWith("type"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    recipeError("Flag @" + flag + " has 'type' setting with no value!", "Read " + InfoFiles.FILE_INFONAMES + " for list of firework effect types.");
+                    return null;
+                }
+                
+                value = split[1].trim();
+                
+                try
+                {
+                    build.with(FireworkEffect.Type.valueOf(value.toUpperCase()));
+                }
+                catch(Exception e)
+                {
+                    recipeError("Flag @" + flag + " has invalid 'type' setting value: " + value, "Read " + InfoFiles.FILE_INFONAMES + " for list of firework effect types.");
+                    return null;
+                }
+            }
+            else
+            {
+                recipeError("Flag @" + flag + " has unknown setting: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFOFLAGS + " file.");
+            }
+        }
+        
+        return build.build();
     }
     
     private String[] parseCraftRecipe() throws Exception

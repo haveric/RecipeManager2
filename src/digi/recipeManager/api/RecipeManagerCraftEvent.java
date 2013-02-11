@@ -5,7 +5,7 @@ import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 
 import digi.recipeManager.RecipeManager;
-import digi.recipeManager.data.RmRecipe;
+import digi.recipeManager.recipes.RmRecipe;
 
 /**
  * Event triggered when RecipeManager's custom recipes are crafted/combined in the workbench.<br>

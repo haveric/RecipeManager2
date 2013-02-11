@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 
-import digi.recipeManager.data.FuelRecipe;
+import digi.recipeManager.recipes.FuelRecipe;
 
 /**
  * Event triggered when RecipeManager's custom fuel recipes are burnt.<br>

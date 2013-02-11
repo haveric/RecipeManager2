@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,6 +13,28 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class Tools
 {
+    public static Color parseColor(String rgbString)
+    {
+        String[] split = rgbString.split(" ");
+        
+        if(split.length == 3)
+        {
+            try
+            {
+                int r = Integer.valueOf(split[0].trim());
+                int g = Integer.valueOf(split[1].trim());
+                int b = Integer.valueOf(split[2].trim());
+                
+                return Color.fromRGB(r, g, b);
+            }
+            catch(Exception e)
+            {
+            }
+        }
+        
+        return null;
+    }
+    
     public static String parseColors(String message, boolean removeColors)
     {
         for(ChatColor color : ChatColor.values())
@@ -21,7 +42,7 @@ public class Tools
             message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : "" + color));
         }
         
-        return message;
+        return ChatColor.translateAlternateColorCodes(RecipeManager.getSettings().COLOR_CHAR, message);
     }
     
     /**

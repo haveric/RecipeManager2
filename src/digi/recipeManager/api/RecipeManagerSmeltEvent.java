@@ -7,6 +7,7 @@ import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 
 import digi.recipeManager.data.*;
+import digi.recipeManager.recipes.*;
 
 /**
  * Event triggered when RecipeManager's custom furnace recipes are beeing smelted.<br>

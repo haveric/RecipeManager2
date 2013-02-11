@@ -9,6 +9,7 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 
 import digi.recipeManager.data.*;
+import digi.recipeManager.recipes.SmeltRecipe;
 
 public class FurnaceWorker implements Runnable
 {

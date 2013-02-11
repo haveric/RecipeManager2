@@ -1,9 +1,10 @@
-package digi.recipeManager.data;
+package digi.recipeManager.recipes;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import digi.recipeManager.RecipeManager;
+import digi.recipeManager.recipes.flags.Flags;
 
 public class FuelRecipe extends RmRecipe
 {

@@ -1,4 +1,4 @@
-package digi.recipeManager.data;
+package digi.recipeManager.recipes;
 
 public class RecipeInfo
 {

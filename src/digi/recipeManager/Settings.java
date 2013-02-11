@@ -1,48 +1,62 @@
 package digi.recipeManager;
 
-import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class Settings
 {
-    public char    EXISTING_RECIPES         = 'r';
-    public boolean SPECIAL_REPAIR           = true;
-    public boolean SPECIAL_REPAIR_ENCHANTED = false;
-    public boolean SPECIAL_LEATHER_DYE      = true; // TODO read from CFG below
-    public boolean SPECIAL_FIREWORKS        = true;
-    public boolean SPECIAL_MAP_CLONING      = true;
-    public boolean SPECIAL_MAP_EXTENDING    = true;
-    public boolean UPDATE_BOOKS             = true;
-    public boolean COLOR_CONSOLE            = true;
-    public boolean RETURN_BUCKETS           = true;
-    public boolean RETURN_POTIONS           = true;
-    public boolean RETURN_BOWL              = true;
-    public boolean FUEL_RETURN_BUCKETS      = true;
-    public char    FURNACE_SHIFT_CLICK      = 'f';
-    public int     FURNACE_TICKS            = 1;
-    public boolean METRICS                  = true;
-    public boolean DEBUG                    = false;
+    public final char    EXISTING_RECIPES;
+    
+    public final boolean SPECIAL_REPAIR;
+    public final boolean SPECIAL_REPAIR_ENCHANTED;
+    public final boolean SPECIAL_LEATHER_DYE;
+    public final boolean SPECIAL_FIREWORKS;
+    public final boolean SPECIAL_MAP_CLONING;
+    public final boolean SPECIAL_MAP_EXTENDING;
+    
+    public final boolean UPDATE_BOOKS;
+    public final boolean COLOR_CONSOLE;
+    
+    public final boolean RETURN_BUCKETS;
+    public final boolean RETURN_POTIONS;
+    public final boolean RETURN_BOWL;
+    
+    public final boolean FUEL_RETURN_BUCKETS;
+    
+    public final char    FURNACE_SHIFT_CLICK;
+    public final int     FURNACE_TICKS;
+    
+    public final boolean METRICS;
+    
+    public final char    COLOR_CHAR;
     
     public Settings(CommandSender sender)
     {
         FileConfiguration cfg = RecipeManager.getPlugin().getConfig();
         
-        EXISTING_RECIPES = cfg.getString("existing-recipes", "" + EXISTING_RECIPES).charAt(0);
-        SPECIAL_REPAIR = cfg.getBoolean("special-recipes.repair", SPECIAL_REPAIR);
-        SPECIAL_REPAIR_ENCHANTED = cfg.getBoolean("special-recipes.repair-enchanted", SPECIAL_REPAIR_ENCHANTED);
-        UPDATE_BOOKS = cfg.getBoolean("update-books", UPDATE_BOOKS);
-        COLOR_CONSOLE = cfg.getBoolean("color-console", COLOR_CONSOLE);
-        RETURN_BUCKETS = cfg.getBoolean("return-empty.buckets", RETURN_BUCKETS);
-        RETURN_POTIONS = cfg.getBoolean("return-empty.potions", RETURN_POTIONS);
-        RETURN_BOWL = cfg.getBoolean("return-empty.bowl", RETURN_BOWL);
-        FUEL_RETURN_BUCKETS = cfg.getBoolean("fuel-return-buckets", FUEL_RETURN_BUCKETS);
-        FURNACE_SHIFT_CLICK = cfg.getString("furnace-shift-click", "" + FURNACE_SHIFT_CLICK).charAt(0);
-        FURNACE_TICKS = cfg.getInt("furnace-ticks", FURNACE_TICKS);
-        METRICS = cfg.getBoolean("metrics", METRICS);
+        EXISTING_RECIPES = cfg.getString("existing-recipes", "" + 'r').charAt(0);
         
+        SPECIAL_REPAIR = cfg.getBoolean("special-recipes.repair", true);
+        SPECIAL_REPAIR_ENCHANTED = cfg.getBoolean("special-recipes.repair-enchanted", false);
+        SPECIAL_LEATHER_DYE = cfg.getBoolean("special-recipes.leather-armor-dye", false);
+        SPECIAL_FIREWORKS = cfg.getBoolean("special-recipes.fireworks", false);
+        SPECIAL_MAP_CLONING = cfg.getBoolean("special-recipes.map-cloning", false);
+        SPECIAL_MAP_EXTENDING = cfg.getBoolean("special-recipes.map-extending", false);
+        
+        UPDATE_BOOKS = cfg.getBoolean("update-books", true);
+        COLOR_CONSOLE = cfg.getBoolean("color-console", true);
+        
+        RETURN_BUCKETS = cfg.getBoolean("return-empty.buckets", true);
+        RETURN_POTIONS = cfg.getBoolean("return-empty.potions", true);
+        RETURN_BOWL = cfg.getBoolean("return-empty.bowl", true);
+        
+        FUEL_RETURN_BUCKETS = cfg.getBoolean("fuel-return-buckets", true);
+        FURNACE_SHIFT_CLICK = cfg.getString("furnace-shift-click", "f").charAt(0);
+        FURNACE_TICKS = cfg.getInt("furnace-ticks", 1);
+        METRICS = cfg.getBoolean("metrics", true);
+        COLOR_CHAR = cfg.getString("color-character", "&").charAt(0);
+        
+        /* TODO ?
         Logger log = Bukkit.getLogger();
         
         log.fine("config.yml settings:");
@@ -58,5 +72,6 @@ public class Settings
         log.fine("    furnace-shift-click: " + FURNACE_SHIFT_CLICK);
         log.fine("    furnace-ticks: " + FURNACE_TICKS);
         log.fine("    metrics: " + METRICS);
+        */
     }
 }

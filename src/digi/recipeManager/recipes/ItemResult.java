@@ -1,14 +1,17 @@
-package digi.recipeManager.data;
+package digi.recipeManager.recipes;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import digi.recipeManager.Messages;
+import digi.recipeManager.recipes.flags.ItemFlags;
+
 public class ItemResult extends ItemStack
 {
-    private Flags flags  = new Flags();
-    private int   chance = -1;
+    private ItemFlags flags;
+    private int       chance = -1;
     
     public ItemResult()
     {
@@ -33,7 +36,7 @@ public class ItemResult extends ItemStack
         setChance(chance);
     }
     
-    public ItemResult(ItemStack item, Flags flags)
+    public ItemResult(ItemStack item, ItemFlags flags)
     {
         super(item);
         
@@ -48,8 +51,15 @@ public class ItemResult extends ItemStack
         setItemMeta(item.getItemMeta());
     }
     
-    public Flags getFlags()
+    public ItemFlags getFlags()
     {
+        if(flags == null) // TODO
+        {
+            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "ItemFlags were null!");
+            
+            flags = new ItemFlags();
+        }
+        
         return flags;
     }
     

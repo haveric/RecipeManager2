@@ -1,4 +1,4 @@
-package digi.recipeManager.data;
+package digi.recipeManager.recipes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import digi.recipeManager.Tools;
+import digi.recipeManager.recipes.flags.Flags;
 
 public class CombineRecipe extends WorkbenchRecipe
 {

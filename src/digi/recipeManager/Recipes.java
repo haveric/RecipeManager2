@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
 import digi.recipeManager.data.*;
-import digi.recipeManager.data.RecipeInfo.RecipeOwner;
+import digi.recipeManager.recipes.*;
+import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import digi.recipeManager.recipes.flags.Flags;
 
 /**
  * RecipeManager's recipe storage

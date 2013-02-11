@@ -6,7 +6,7 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.*;
@@ -17,6 +17,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import digi.recipeManager.api.RecipeManagerPrepareCraftEvent;
 import digi.recipeManager.data.*;
+import digi.recipeManager.recipes.*;
+import digi.recipeManager.recipes.flags.Flags;
 
 /**
  * RecipeManager handled events
@@ -246,7 +248,55 @@ public class Events implements Listener
     @EventHandler
     public void eventCraft(CraftItemEvent event)
     {
-        System.out.print("CraftItemEvent :: " + event.getCurrentItem());
+        try
+        {
+            System.out.print("CraftItemEvent :: " + event.getCurrentItem());
+            
+            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
+            Recipe bukkitRecipe = event.getRecipe();
+            ItemStack recipeResult = bukkitRecipe.getResult();
+            WorkbenchRecipe recipe = null;
+            
+            if(bukkitRecipe instanceof ShapedRecipe)
+                recipe = RecipeManager.recipes.getCraftRecipe(recipeResult);
+            
+            else if(bukkitRecipe instanceof ShapelessRecipe)
+                recipe = RecipeManager.recipes.getCombineRecipe(recipeResult);
+            
+            else
+                System.out.print("[debug] new recipe???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            
+            if(recipe == null)
+                return;
+            
+            if(recipe.getFlags().getLaunchFirework() != null)
+            {
+                // TODO this was just a test - use proper checks and stuff
+                Firework ent = (Firework)player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
+                
+                ent.setFireworkMeta(recipe.getFlags().getLaunchFirework());
+            }
+            
+//            ItemResult result = craftResult(player, inventory, recipe, location);
+//            callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
+            
+//            Bukkit.getPluginManager().callEvent(callEvent);
+//            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
+            
+            /*
+            if(result != null && !result.getFlags().check(player, location, true, true))
+                result = null;
+            */
+            
+//            inventory.setResult(result == null ? null : result);
+        }
+        catch(Exception e)
+        {
+            event.getInventory().setResult(null);
+            
+            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
+            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+        }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)

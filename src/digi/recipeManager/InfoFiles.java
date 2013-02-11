@@ -3,10 +3,10 @@ package digi.recipeManager;
 import java.io.File;
 import java.util.*;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.potion.PotionEffectType;
 
 public class InfoFiles
 {
@@ -19,7 +19,7 @@ public class InfoFiles
     
     // public constants
     public static final String  FILE_INFOBASICS = "info - basic recipes.txt";
-    public static final String  FILE_INFOITEMS  = "info - items, enchants, colors.txt";
+    public static final String  FILE_INFONAMES  = "info - names.txt";
     public static final String  FILE_INFOQA     = "info - questions-answers.txt";
     public static final String  FILE_INFOFLAGS  = "info - recipe flags.txt";
     public static final String  FILE_INFOERRORS = "info - recipe errors in detail.txt";
@@ -30,17 +30,17 @@ public class InfoFiles
         
         // TODO check FILE_VERSION...
         
-        fileItemData(false);
+        fileItemData();
     }
     
-    private void fileItemData(boolean overwrite)
+    private void fileItemData()
     {
-        File file = new File(DIR_PLUGIN + FILE_INFOITEMS);
+        File file = new File(DIR_PLUGIN + FILE_INFONAMES);
         
-        if(!overwrite && file.exists())
+        if(file.exists())
             return;
         
-        StringBuilder buffer = new StringBuilder("List of item, enchantment and chatcolor names.");
+        StringBuilder buffer = new StringBuilder("List of name constants");
         buffer.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods !");
         buffer.append(NL).append("If you want to update this file just delete it and use 'rmreload' in server console or just start the server.");
         buffer.append(NL);
@@ -80,13 +80,33 @@ public class InfoFiles
         
         buffer.append(NL);
         buffer.append(NL);
+        buffer.append(NL).append("POTION EFFECT TYPE NAME LIST:");
+        buffer.append(NL);
+        buffer.append(NL).append(String.format(" %-5s %-24s %-10s %s", "ID", "Name", "Instant ?", "Duration modifier"));
+        
+        for(PotionEffectType t : PotionEffectType.values())
+        {
+            if(t != null)
+                buffer.append(NL).append(String.format(" %-5d %-24s %-10s %f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
+        }
+        
+        buffer.append(NL);
+        buffer.append(NL);
+        buffer.append(NL).append("FIREWORK EFFECT TYPE NAME LIST:");
+        buffer.append(NL);
+        
+        for(FireworkEffect.Type t : FireworkEffect.Type.values())
+        {
+            buffer.append(NL).append(" ").append(t.toString());
+        }
+        
+        buffer.append(NL);
+        buffer.append(NL);
         buffer.append(NL).append("CHAT COLOR NAMES LIST:");
         buffer.append(NL);
         buffer.append(NL).append(String.format(" %-16s %s", "Name", "Color character"));
         
-        List<ChatColor> colors = Arrays.asList(ChatColor.values());
-        
-        for(ChatColor c : colors)
+        for(ChatColor c : ChatColor.values())
         {
             buffer.append(NL).append(String.format(" %-16s %s", c.toString(), c.getChar()));
         }
@@ -100,8 +120,8 @@ public class InfoFiles
         buffer.append(NL);
         buffer.append(NL).append("EOF");
         
-        Tools.saveTextToFile(buffer.toString(), DIR_PLUGIN + FILE_INFOITEMS);
+        Tools.saveTextToFile(buffer.toString(), DIR_PLUGIN + FILE_INFONAMES);
         
-        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFOITEMS + "' file.");
+        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFONAMES + "' file.");
     }
 }

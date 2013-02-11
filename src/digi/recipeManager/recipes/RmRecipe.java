@@ -1,10 +1,12 @@
-package digi.recipeManager.data;
+package digi.recipeManager.recipes;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import digi.recipeManager.Messages;
 import digi.recipeManager.RecipeManager;
+import digi.recipeManager.recipes.flags.Flags;
+import digi.recipeManager.recipes.flags.RecipeFlags;
 
 public class RmRecipe
 {
@@ -28,8 +30,8 @@ public class RmRecipe
         }
     }
     
-    private Flags flags;
-    protected int hash;
+    private RecipeFlags flags;
+    protected int       hash;
     
     public RmRecipe()
     {
@@ -37,12 +39,12 @@ public class RmRecipe
     
     public RmRecipe(RmRecipe recipe)
     {
-        flags = recipe.getFlags().clone();
+        this.flags = new RecipeFlags(recipe.getFlags());
     }
     
     public RmRecipe(Flags flags)
     {
-        this.flags = flags.clone();
+        this.flags = new RecipeFlags(flags);
     }
     
     public boolean isUsableBy(Player player)
@@ -50,19 +52,19 @@ public class RmRecipe
         return true;
     }
     
-    public Flags getFlags()
+    public RecipeFlags getFlags()
     {
         if(flags == null) // TODO
         {
             Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Flags were null!");
             
-            flags = new Flags();
+            flags = new RecipeFlags();
         }
         
         return flags;
     }
     
-    public void setFlags(Flags flags)
+    public void setFlags(RecipeFlags flags)
     {
         this.flags = flags;
     }
