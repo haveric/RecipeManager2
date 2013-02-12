@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import digi.recipeManager.RecipeManager;
 import digi.recipeManager.recipes.flags.Flags;
 
 public class WorkbenchRecipe extends RmRecipe
@@ -49,6 +48,12 @@ public class WorkbenchRecipe extends RmRecipe
         this.results = results;
     }
     
+    public ItemStack getFirstResult()
+    {
+        return results.get(0);
+    }
+    
+    /*
     public ItemStack getCraftResult(Player player)
     {
         if(results.size() == 1)
@@ -77,11 +82,7 @@ public class WorkbenchRecipe extends RmRecipe
         
         return result;
     }
-    
-    public ItemStack getFirstResult()
-    {
-        return results.get(0);
-    }
+    */
     
     public ItemStack getResult(Player player, Location location, boolean display)
     {
@@ -119,6 +120,225 @@ public class WorkbenchRecipe extends RmRecipe
         
         // TODO
         
-        return getFirstResult();
+        ItemStack result = getFirstResult(); //null;
+        
+        if(display)
+        {
+            // TODO !!!!!!!!!!!!
+            /*
+            String[] reasons = isCraftable(player, location);
+            
+            if(reasons != null && reasons.length > 0)
+            {
+                List<String> lore = new ArrayList<String>();
+                
+                for(String reason : reasons)
+                {
+                    lore.add(Messages.CRAFT_RESULT_FAILED_REASON.get("{reason}", reason));
+                }
+                
+                return Tools.generateItemStackWithMeta(Material.FIRE, 0, 1, Messages.CRAFT_RESULT_FAILED_TITLE.get(), lore);
+            }
+            
+            List<String> noCraftReasons = new ArrayList<String>();
+            List<ItemResult> viewable = new ArrayList<ItemResult>();
+            Map<ItemResult, String> unallowed = new HashMap<ItemResult, String>();
+            int unallowedChance = 0;
+            int viewableChance = 0;
+            int secretChance = 0;
+            
+            for(ItemResult r : results)
+            {
+                if(r.getFlags().isSecret())
+                {
+                    secretChance += r.getChance();
+                }
+                else
+                {
+                    reasons = r.canCraftResult(player);
+                    
+                    if(reasons == null)
+                    {
+                        viewable.add(r);
+                        viewableChance += r.getChance();
+                    }
+                    else
+                    {
+                        unallowed.put(r, reason);
+                        unallowedChance += r.getChance();
+                    }
+                }
+            }
+            
+            List<String> lore = new ArrayList<String>();
+            
+            for(ItemResult r : viewable)
+            {
+                lore.add(Messages.CRAFT_MULTIRESULT_RECIEVE_ITEM.get("{chance}", String.format("%3d%%", r.getChance()), "{item}", r.print()));
+            }
+            
+            if(secretChance > 0)
+            {
+                lore.add(Messages.CRAFT_MULTIRESULT_RECIEVE_SECRETS.get("{chance}", String.format("%3d%%", secretChance)));
+            }
+            
+            if(unallowed.size() > 0)
+            {
+                if(getFlags().isHideUnallowed())
+                {
+                    lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_HIDDEN.get("{chance}", String.format("%3d%%", unallowedChance)));
+                }
+                else
+                {
+                    lore.add("");
+                    lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_TITLE.get());
+                    
+                    for(Entry<ItemResult, String> entry : unallowed.entrySet())
+                    {
+                        lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", entry.getKey().print(), "{reason}", entry.getValue()));
+                    }
+                }
+            }
+            
+            if(viewable.isEmpty())
+            {
+                if(secretChance > 0)
+                    return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_UNKNOWN.get(), lore);
+                else
+                {
+                    lore.clear();
+                    
+                    for(String s : noCraftReasons)
+                    {
+                        lore.add(Messages.CRAFT_MULTIRESULT_NONE_REASON.get("{reason}", s));
+                    }
+                    
+                    return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_NONE_TITLE.get(), lore);
+                }
+            }
+            else
+                return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+            */
+            
+            // -------------------------------------------
+            
+            /*
+            List<String> noCraftReasons = new ArrayList<String>();
+            List<ItemResult> viewable = new ArrayList<ItemResult>();
+            Map<ItemResult, String> unallowed = new HashMap<ItemResult, String>();
+            String reason = isCraftable(player, location);
+            int unallowedChance = 0;
+            int viewableChance = 0;
+            int secretChance = 0;
+            
+            if(reason != null)
+                noCraftReasons.add(reason);
+            
+            for(ItemResult r : results)
+            {
+                if(r.getFlags().isSecret())
+                {
+                    secretChance += r.getChance();
+                }
+                else
+                {
+                    reason = r.canCraftResult(player);
+                    
+                    if(reason == null)
+                    {
+                        viewable.add(r);
+                        viewableChance += r.getChance();
+                    }
+                    else
+                    {
+                        unallowed.put(r, reason);
+                        unallowedChance += r.getChance();
+                    }
+                }
+            }
+            
+            List<String> lore = new ArrayList<String>();
+            
+            for(ItemResult r : viewable)
+            {
+                lore.add(Messages.CRAFT_MULTIRESULT_RECIEVE_ITEM.get("{chance}", String.format("%3d%%", r.getChance()), "{item}", r.print()));
+            }
+            
+            if(secretChance > 0)
+            {
+                lore.add(Messages.CRAFT_MULTIRESULT_RECIEVE_SECRETS.get("{chance}", String.format("%3d%%", secretChance)));
+            }
+            
+            if(unallowed.size() > 0)
+            {
+                if(getFlags().isHideUnallowed())
+                {
+                    lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_HIDDEN.get("{chance}", String.format("%3d%%", unallowedChance)));
+                }
+                else
+                {
+                    lore.add("");
+                    lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_TITLE.get());
+                    
+                    for(Entry<ItemResult, String> entry : unallowed.entrySet())
+                    {
+                        lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", entry.getKey().print(), "{reason}", entry.getValue()));
+                    }
+                }
+            }
+            
+            if(viewable.isEmpty())
+            {
+                if(secretChance > 0)
+                    return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_UNKNOWN.get(), lore);
+                else
+                {
+                    lore.clear();
+                    
+                    for(String s : noCraftReasons)
+                    {
+                        lore.add(Messages.CRAFT_MULTIRESULT_NONE_REASON.get("{reason}", s));
+                    }
+                    
+                    return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_NONE_TITLE.get(), lore);
+                }
+            }
+            else
+                return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_RECIEVE_TITLE.get(), lore);
+            */
+        }
+        else
+        {
+            /*
+            List<ItemResult> pick = new ArrayList<ItemResult>();
+            int totalChance = 0;
+            
+            for(ItemResult r : results) // put a list together of what results player is allowed to craft...
+            {
+                if(r.canCraftResult(player))
+                {
+                    pick.add(r);
+                    totalChance += r.getChance();
+                }
+            }
+            
+            if(totalChance <= 0)
+                return null; // can't craft anything from the results
+                
+            int rand = RecipeManager.rand.nextInt(totalChance);
+            int chance = 0;
+            
+            for(ItemResult r : pick)
+            {
+                if((chance += r.getChance()) > rand)
+                {
+                    result = r;
+                    break;
+                }
+            }
+            */
+        }
+        
+        return result;
     }
 }

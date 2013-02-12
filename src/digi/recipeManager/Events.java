@@ -6,7 +6,7 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.*;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import digi.recipeManager.api.RecipeManagerPrepareCraftEvent;
 import digi.recipeManager.data.*;
 import digi.recipeManager.recipes.*;
-import digi.recipeManager.recipes.flags.Flags;
+import digi.recipeManager.recipes.flags.RecipeFlags;
 
 /**
  * RecipeManager handled events
@@ -121,10 +121,8 @@ public class Events implements Listener
             Bukkit.getPluginManager().callEvent(callEvent);
             result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
             
-            /*
-            if(result != null && !result.getFlags().check(player, location, true, true))
-                result = null;
-            */
+//            if(result != null && !result.getFlags().check(player, location, true, true))
+//                result = null;
             
             inventory.setResult(result == null ? null : result);
         }
@@ -269,14 +267,6 @@ public class Events implements Listener
             if(recipe == null)
                 return;
             
-            if(recipe.getFlags().getLaunchFirework() != null)
-            {
-                // TODO this was just a test - use proper checks and stuff
-                Firework ent = (Firework)player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
-                
-                ent.setFireworkMeta(recipe.getFlags().getLaunchFirework());
-            }
-            
 //            ItemResult result = craftResult(player, inventory, recipe, location);
 //            callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
             
@@ -311,13 +301,13 @@ public class Events implements Listener
             
             FuelRecipe recipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
             
-            if(recipe != null)
-            {
-                Flags flags = recipe.getFlags();
-                
-                event.setBurnTime(flags.isRemove() ? 0 : recipe.getBurnTicks());
-                event.setBurning(flags.isRemove() ? false : true);
-            }
+            if(recipe == null)
+                return;
+            
+            RecipeFlags flags = recipe.getFlags();
+            
+            event.setBurnTime(flags.isRemove() ? 0 : recipe.getBurnTicks());
+            event.setBurning(flags.isRemove() ? false : true);
         }
         catch(Exception e)
         {
@@ -461,6 +451,7 @@ public class Events implements Listener
     }
     
     // Remove marked items
+    // TODO disable/enable switch ?
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void inventoryClose(InventoryCloseEvent event)
@@ -489,8 +480,13 @@ public class Events implements Listener
             return;
         
         int index = lore.size() - 1;
+        String line = lore.get(index);
         
-        if(lore.get(index).startsWith(Recipes.RECIPE_ID_STRING))
+        if(line != null && line.startsWith(Recipes.RECIPE_ID_STRING))
+        {
             lore.remove(index);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
     }
 }

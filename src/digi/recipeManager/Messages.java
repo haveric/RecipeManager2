@@ -128,6 +128,17 @@ public enum Messages
     CRAFT_SPECIAL_MAP_CLONING("craft.special.mapcloning", "Map cloning is disabled."),
     CRAFT_SPECIAL_MAP_EXTENDING("craft.special.mapextending", "Map extending is disabled."),
     
+    CRAFT_RESULT_FAILED_TITLE("craft.result.failed.title", "<red>Can't craft recipe because:"),
+    CRAFT_RESULT_FAILED_REASON("craft.result.failed.reason", "<dark_red>- <yellow>{reason}"),
+    
+    CRAFT_RESULT_RECIEVE_TITLE("craft.result.recieve.title", "<gold>You will get a random item:"),
+    CRAFT_RESULT_RECIEVE_ITEM("craft.result.recieve.item", "<dark_red>{chance} {item}"),
+    CRAFT_RESULT_RECIEVE_SECRETS("craft.result.recieve.secrets", "<dark_red>{chance} <red>Secret item(s)..."),
+    CRAFT_RESULT_UNKNOWN("craft.result.unknown", "<gold>You will get an unknown item!"),
+    CRAFT_RESULT_UNALLOWED_TITLE("craft.result.unallowed.title", "<red>Unallowed item(s):"),
+    CRAFT_RESULT_UNALLOWED_ITEM("craft.result.unallowed.item", "<dark_red>{chance} <red>{item} <gold>{reason}"),
+    CRAFT_RESULT_UNALLOWED_HIDDEN("craft.result.unallowed.hidden", "<dark_red>{chance} <red>Unallowed item(s)..."),
+    
     EOF("", "");
     
     private String                   path;
@@ -165,7 +176,7 @@ public enum Messages
      * 
      * @return
      */
-    public String get(String[][] variables)
+    public String get(String... variables)
     {
         return replaceVariables(Tools.parseColors(message, false), variables);
     }
@@ -224,7 +235,7 @@ public enum Messages
      * @param variables
      *            the variables array
      */
-    public void print(CommandSender sender, String recipeMessage, String[][] variables)
+    public void print(CommandSender sender, String recipeMessage, String... variables)
     {
         if(sender == null)
             return;
@@ -246,13 +257,16 @@ public enum Messages
         send(sender, msg);
     }
     
-    private String replaceVariables(String msg, String[][] variables)
+    private String replaceVariables(String msg, String... variables)
     {
         if(variables != null && variables.length > 0)
         {
-            for(String[] replace : variables)
+            if(variables.length % 2 > 0)
+                throw new IllegalArgumentException("Variables are UNEVEN !");
+            
+            for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
             {
-                msg = msg.replace(replace[0], replace[1]);
+                msg = msg.replace(variables[i], variables[i + 1]);
             }
         }
         

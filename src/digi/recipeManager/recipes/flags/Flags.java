@@ -2,6 +2,8 @@ package digi.recipeManager.recipes.flags;
 
 import java.util.*;
 
+import org.bukkit.Location;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -18,9 +20,12 @@ public class Flags implements Cloneable
     private Flag<double[]>     moneyReq       = null;
     private Flag<Double>       moneyAward     = null;
     
-    private Flag<String>       permission     = null;
+    private Flag<List<String>> permission     = null;
+    private Flag<List<String>> nopermission   = null;
     private Flag<List<String>> groups         = null;
+    private Flag<List<String>> nogroups       = null;
     private Flag<Set<String>>  worlds         = null;
+    private Flag<Set<String>>  noworlds       = null;
     
     private Flag<Integer>      proximity      = null;
     private Flag<ItemStack[]>  itemsReq       = null;
@@ -40,10 +45,10 @@ public class Flags implements Cloneable
     private Flag<int[]>        clone          = null;
     private String             math           = null;
     
-    private String             remove         = null;
-    private boolean            override       = false;
     private boolean            secret         = false;
     private boolean            log            = false;
+    
+    public boolean             test           = false;
     
     public Flags()
     {
@@ -85,8 +90,6 @@ public class Flags implements Cloneable
         clone = flags.clone;
         math = flags.math;
         
-        remove = flags.remove;
-        override = flags.override;
         secret = flags.secret;
         log = flags.log;
     }
@@ -165,31 +168,6 @@ public class Flags implements Cloneable
     public void setMoneyAward(Flag<Double> moneyAward)
     {
         this.moneyAward = moneyAward;
-    }
-    
-    public Flag<String> getPermission()
-    {
-        return permission;
-    }
-    
-    public void setPermission(Flag<String> permission)
-    {
-        this.permission = permission;
-    }
-    
-    public Flag<List<String>> getGroups()
-    {
-        return groups;
-    }
-    
-    public void setGroups(Flag<List<String>> groups)
-    {
-        this.groups = groups;
-    }
-    
-    public Flag<Set<String>> getWorlds()
-    {
-        return worlds;
     }
     
     public void setWorlds(Flag<Set<String>> worlds)
@@ -335,26 +313,6 @@ public class Flags implements Cloneable
         this.secret = secret;
     }
     
-    public boolean isOverride()
-    {
-        return override;
-    }
-    
-    public void setOverride(boolean override)
-    {
-        this.override = override;
-    }
-    
-    public boolean isRemove()
-    {
-        return remove != null;
-    }
-    
-    public void setRemove(String message)
-    {
-        remove = message;
-    }
-    
     public boolean isLog()
     {
         return log;
@@ -393,5 +351,36 @@ public class Flags implements Cloneable
     public void setLaunchFirework(FireworkMeta firework)
     {
         this.launchFirework = firework;
+    }
+    
+    public void useLaunchFirework(Location location)
+    {
+        if(launchFirework == null)
+            return;
+        
+        Firework ent = (Firework)location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        
+        ent.setFireworkMeta(launchFirework);
+    }
+    
+    public void applyFlags(Player player, Location location)
+    {
+        // TODO add everything !!!!!
+        
+        useLaunchFirework(location);
+        
+        if(this instanceof RecipeFlags)
+        {
+            RecipeFlags f = (RecipeFlags)this;
+            
+            // ...
+        }
+        
+        if(this instanceof ItemFlags)
+        {
+            ItemFlags f = (ItemFlags)this;
+            
+            // ...
+        }
     }
 }

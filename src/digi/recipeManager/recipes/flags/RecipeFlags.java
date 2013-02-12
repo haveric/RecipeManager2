@@ -4,9 +4,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class RecipeFlags extends Flags
 {
-    private String    failMessage = null;
-    private String    info        = null;
-    private ItemStack displayItem = null;
+    private String    info          = null;
+    private String    failMessage   = null;
+    private ItemStack displayItem   = null;
+    private boolean   hideUnallowed = false;
+    private String    remove        = null;
+    private boolean   override      = false;
     
     public RecipeFlags()
     {
@@ -20,8 +23,12 @@ public class RecipeFlags extends Flags
         {
             RecipeFlags f = (RecipeFlags)flags;
             
-            failMessage = f.failMessage;
             info = f.info;
+            failMessage = f.failMessage;
+            displayItem = f.displayItem;
+            hideUnallowed = f.hideUnallowed;
+            remove = f.remove;
+            override = f.override;
         }
     }
     
@@ -29,6 +36,16 @@ public class RecipeFlags extends Flags
     public RecipeFlags clone()
     {
         return new RecipeFlags(this);
+    }
+    
+    public String getInfo()
+    {
+        return info;
+    }
+    
+    public void setInfo(String info)
+    {
+        this.info = info;
     }
     
     public String getFailMessage()
@@ -41,13 +58,43 @@ public class RecipeFlags extends Flags
         this.failMessage = failMessage;
     }
     
-    public String getInfo()
+    public ItemStack getDisplayItem()
     {
-        return info;
+        return displayItem;
     }
     
-    public void setInfo(String info)
+    public void setDisplayItem(ItemStack displayItem)
     {
-        this.info = info;
+        this.displayItem = displayItem;
+    }
+    
+    public boolean isHideUnallowed()
+    {
+        return hideUnallowed;
+    }
+    
+    public void setHideUnallowed(boolean hideUnallowed)
+    {
+        this.hideUnallowed = hideUnallowed;
+    }
+    
+    public boolean isOverride()
+    {
+        return override;
+    }
+    
+    public void setOverride(boolean override)
+    {
+        this.override = override;
+    }
+    
+    public boolean isRemove()
+    {
+        return remove != null;
+    }
+    
+    public void setRemove(String message)
+    {
+        remove = message;
     }
 }

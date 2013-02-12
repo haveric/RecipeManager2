@@ -1,5 +1,6 @@
 package digi.recipeManager;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -8,12 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import digi.recipeManager.commands.CmdExtract;
+
 /**
  * RecipeManager's main class<br>
  * It has static methods for the API.
  */
 public class RecipeManager extends JavaPlugin
 {
+    public HashMap<Player, Player> test;
+    
     protected static RecipeManager plugin;
     protected static Recipes       recipes;
     protected static Events        events;
@@ -37,6 +42,9 @@ public class RecipeManager extends JavaPlugin
         plugin = this;
         recipes = null;
         events = new Events();
+        
+        getCommand("test").setExecutor(new TEST());
+        getCommand("rmextract").setExecutor(new CmdExtract());
         
         getServer().getScheduler().runTaskLater(this, new Runnable()
         {

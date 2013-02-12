@@ -12,7 +12,7 @@ public class RecipeInfo
     {
         MINECRAFT("Minecraft"),
         RECIPEMANAGER("RecipeManager"),
-        UNKNOWN("Unknown");
+        UNKNOWN("Unknown plugin");
         
         private String name;
         

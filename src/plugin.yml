@@ -7,6 +7,8 @@ dev-url: http://dev.bukkit.org/server-mods/recipemanager/
 main: digi.recipeManager.RecipeManager
 softdepend: [Vault, iConomy]
 commands:
+  test:
+    description: testing...
   rmrecipes:
     aliases: [recipe, recipes]
     description: search recipes that make item or use item if 'i' is specified

@@ -13,6 +13,19 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class Tools
 {
+    public static ItemStack generateItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
+    {
+        ItemStack item = new ItemStack(type, amount, (short)data);
+        ItemMeta meta = item.getItemMeta();
+        
+        if(lore != null)
+            meta.setLore(lore);
+        
+        meta.setDisplayName(name);
+        item.setItemMeta(meta);
+        return item;
+    }
+    
     public static Color parseColor(String rgbString)
     {
         String[] split = rgbString.split(" ");

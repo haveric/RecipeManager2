@@ -1,9 +1,8 @@
 package digi.recipeManager.recipes;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import digi.recipeManager.Messages;
 import digi.recipeManager.RecipeManager;
 import digi.recipeManager.recipes.flags.Flags;
 import digi.recipeManager.recipes.flags.RecipeFlags;
@@ -47,16 +46,18 @@ public class RmRecipe
         this.flags = new RecipeFlags(flags);
     }
     
-    public boolean isUsableBy(Player player)
+    public String[] isCraftable(Player player, Location location)
     {
-        return true;
+        return (RecipeManager.rand.nextBoolean() ? null : new String[] { "Recipe is refusing to cooperate :P" });
+        
+//        return null;
     }
     
     public RecipeFlags getFlags()
     {
         if(flags == null) // TODO
         {
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Flags were null!");
+//            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Flags were null!");
             
             flags = new RecipeFlags();
         }
@@ -122,5 +123,11 @@ public class RmRecipe
         
         return false;
         */
+    }
+    
+    public void applyFlags(Player player, Location location)
+    {
+        if(flags != null)
+            flags.applyFlags(player, location);
     }
 }

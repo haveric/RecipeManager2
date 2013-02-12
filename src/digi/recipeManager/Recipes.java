@@ -8,10 +8,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
-import digi.recipeManager.data.*;
 import digi.recipeManager.recipes.*;
 import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
-import digi.recipeManager.recipes.flags.Flags;
+import digi.recipeManager.recipes.flags.RecipeFlags;
 
 /**
  * RecipeManager's recipe storage
@@ -33,7 +32,7 @@ public class Recipes
     protected boolean                   customSmelt      = false;
     private boolean                     registered       = false;
     
-    public static final String          RECIPE_ID_STRING = ChatColor.BLACK + "RecipeManager #";
+    public static final String          RECIPE_ID_STRING = ChatColor.MAGIC + "RecipeManager #";
     
     protected Recipes()
     {
@@ -47,15 +46,16 @@ public class Recipes
             throw new IllegalAccessError("This class is already registered!");
         
         RecipeManager.updatingRecipes = true;
-        RecipeManager.recipes = this;
         
         BukkitRecipes.removeCustomRecipes();
+        
+        RecipeManager.recipes = this;
         
         Iterator<Entry<RmRecipe, RecipeInfo>> iterator = recipeIndex.entrySet().iterator();
         Entry<RmRecipe, RecipeInfo> entry;
         RecipeInfo info;
         RmRecipe recipe;
-        Flags flags;
+        RecipeFlags flags;
         boolean add;
         
         while(iterator.hasNext())
@@ -70,16 +70,10 @@ public class Recipes
             flags = recipe.getFlags();
             add = true;
             
-            System.out.print("Custom recipe... id=" + info.getIndex());
-            
             if(recipe instanceof CraftRecipe)
             {
-                System.out.print("Craft recipe...");
-                
                 if(flags.isOverride() || flags.isRemove())
                 {
-                    System.out.print("override/remove...");
-                    
                     add = flags.isOverride();
                     
                     // TODO remove debug ?
@@ -98,7 +92,6 @@ public class Recipes
                     
                     if(!BukkitRecipes.removeShapelessRecipe((CombineRecipe)recipe))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Couldn't find shapeless recipe to remove!");
-                    
                 }
                 
                 if(add)
@@ -118,14 +111,6 @@ public class Recipes
                     Bukkit.addRecipe(((SmeltRecipe)recipe).toFurnaceRecipe());
             }
         }
-        
-        /*
-        if(bukkitRecipes.isEmpty())
-            return;
-        
-        BukkitRecipes.setServerRecipes(bukkitRecipes);
-        bukkitRecipes.clear();
-        */
         
         RecipeManager.updatingRecipes = false;
         registered = true;

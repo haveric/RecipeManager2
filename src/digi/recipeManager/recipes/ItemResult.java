@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import digi.recipeManager.Messages;
 import digi.recipeManager.recipes.flags.ItemFlags;
 
 public class ItemResult extends ItemStack
@@ -55,7 +54,7 @@ public class ItemResult extends ItemStack
     {
         if(flags == null) // TODO
         {
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "ItemFlags were null!");
+//            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "ItemFlags were null!");
             
             flags = new ItemFlags();
         }
@@ -73,29 +72,21 @@ public class ItemResult extends ItemStack
         return chance;
     }
     
-    public boolean canSeeResult(Player player)
+    public String[] canCraftResult(Player player)
     {
         if(player == null)
-            return true;
+            return null;
         
-        if(flags.isSecret())
-            return false;
+        // TODO check permissions and stuff
         
-        return canCraftResult(player);
-    }
-    
-    public boolean canCraftResult(Player player)
-    {
-        if(player == null)
-            return true;
+        if(flags.test)
+            return new String[] { "Just because :P" };
         
-        // TODO
-        
-        return true;
+        return null;
     }
     
     public String print()
     {
-        return String.format("%s %3d%% %s%s%s%s", ChatColor.DARK_RED, getChance(), (getEnchantments().size() > 0 ? ChatColor.LIGHT_PURPLE : ChatColor.GREEN), getType().toString(), (getDurability() > 0 ? ":" + getDurability() : ""), (getAmount() > 1 ? " x " + getAmount() : ""));
+        return String.format("%s%s%s%s", (getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE), getType().toString(), (getDurability() > 0 ? ":" + getDurability() : ""), (getAmount() > 1 ? " x " + getAmount() : ""));
     }
 }

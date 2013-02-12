@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class InfoFiles
 {
@@ -23,6 +24,8 @@ public class InfoFiles
     public static final String  FILE_INFOQA     = "info - questions-answers.txt";
     public static final String  FILE_INFOFLAGS  = "info - recipe flags.txt";
     public static final String  FILE_INFOERRORS = "info - recipe errors in detail.txt";
+    
+    // TODO make them HTML format !
     
     public InfoFiles(CommandSender sender)
     {
@@ -49,7 +52,7 @@ public class InfoFiles
         buffer.append(NL);
         buffer.append(NL).append("MATERIAL LIST:");
         buffer.append(NL);
-        buffer.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID#", "Name", "Stack", "Durability"));
+        buffer.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID", "Name", "Stack", "Durability"));
         
         for(Material m : Material.values())
         {
@@ -60,7 +63,7 @@ public class InfoFiles
         buffer.append(NL);
         buffer.append(NL).append("ENCHANTMENTS LIST:");
         buffer.append(NL);
-        buffer.append(NL).append(String.format(" %-5s %-26s %-12s %s", "ID#", "Name", "Item type", "Level range"));
+        buffer.append(NL).append(String.format(" %-5s %-26s %-12s %s", "ID", "Name", "Item type", "Level range"));
         
         List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
         
@@ -80,6 +83,18 @@ public class InfoFiles
         
         buffer.append(NL);
         buffer.append(NL);
+        buffer.append(NL).append("POTION TYPE NAME LIST:");
+        buffer.append(NL);
+        buffer.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type", "Data value"));
+        
+        for(PotionType t : PotionType.values())
+        {
+            if(t != null)
+                buffer.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), (t.getEffectType() == null ? "" : t.getEffectType().getName()), t.getDamageValue()));
+        }
+        
+        buffer.append(NL);
+        buffer.append(NL);
         buffer.append(NL).append("POTION EFFECT TYPE NAME LIST:");
         buffer.append(NL);
         buffer.append(NL).append(String.format(" %-5s %-24s %-10s %s", "ID", "Name", "Instant ?", "Duration modifier"));
@@ -90,6 +105,8 @@ public class InfoFiles
                 buffer.append(NL).append(String.format(" %-5d %-24s %-10s %f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
         }
         
+        buffer.append(NL);
+        buffer.append(NL).append("More about potions, effects and custom effects: http://www.minecraftwiki.net/wiki/Potion_effects");
         buffer.append(NL);
         buffer.append(NL);
         buffer.append(NL).append("FIREWORK EFFECT TYPE NAME LIST:");
@@ -116,6 +133,9 @@ public class InfoFiles
         buffer.append(NL).append("BukkitAPI for these names:");
         buffer.append(NL).append("Item names: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html");
         buffer.append(NL).append("Enchantments: http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html");
+        buffer.append(NL).append("Potion types: http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionType.html");
+        buffer.append(NL).append("Potion effect types: http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionEffect.html");
+        buffer.append(NL).append("Firework effect types: http://jd.bukkit.org/rb/apidocs/org/bukkit/FireworkEffect.Type.html");
         buffer.append(NL).append("ChatColors: http://jd.bukkit.org/rb/apidocs/org/bukkit/ChatColor.html");
         buffer.append(NL);
         buffer.append(NL).append("EOF");
