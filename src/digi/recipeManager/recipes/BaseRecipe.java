@@ -1,13 +1,16 @@
 package digi.recipeManager.recipes;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Recipe;
 
 import digi.recipeManager.RecipeManager;
 import digi.recipeManager.recipes.flags.Flags;
 import digi.recipeManager.recipes.flags.RecipeFlags;
 
-public class RmRecipe
+public class BaseRecipe
 {
     public enum RecipeType
     {
@@ -32,35 +35,24 @@ public class RmRecipe
     private RecipeFlags flags;
     protected int       hash;
     
-    public RmRecipe()
+    public BaseRecipe()
     {
     }
     
-    public RmRecipe(RmRecipe recipe)
+    public BaseRecipe(BaseRecipe recipe)
     {
         this.flags = new RecipeFlags(recipe.getFlags());
     }
     
-    public RmRecipe(Flags flags)
+    public BaseRecipe(Flags flags)
     {
         this.flags = new RecipeFlags(flags);
     }
     
-    public String[] isCraftable(Player player, Location location)
-    {
-        return (RecipeManager.rand.nextBoolean() ? null : new String[] { "Recipe is refusing to cooperate :P" });
-        
-//        return null;
-    }
-    
     public RecipeFlags getFlags()
     {
-        if(flags == null) // TODO
-        {
-//            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Flags were null!");
-            
+        if(flags == null)
             flags = new RecipeFlags();
-        }
         
         return flags;
     }
@@ -70,13 +62,28 @@ public class RmRecipe
         this.flags = flags;
     }
     
+    public boolean checkFlags(Player player, String playerName, Location location, List<String> reasons)
+    {
+        return (flags == null ? true : flags.checkFlags(player, playerName, location, getRecipeType(), null, reasons));
+    }
+    
+    public boolean applyFlags(Player player, String playerName, Location location, List<String> reasons)
+    {
+        return (flags == null ? true : flags.applyFlags(player, playerName, location, getRecipeType(), null, reasons));
+    }
+    
+    public RecipeType getRecipeType()
+    {
+        return null;
+    }
+    
     /**
      * Adds the recipe! <br>
      * Alias of: <br>
      * <code>RecipeManager.getRecipes().addRecipe(this);</code> <br>
      * Note: you must use RecipeManager.getRecipes().registerRecipes() once done!
      */
-    public void registerRecipe()
+    public void addRecipe()
     {
         RecipeManager.getRecipes().addRecipe(this);
     }
@@ -125,9 +132,21 @@ public class RmRecipe
         */
     }
     
-    public void applyFlags(Player player, Location location)
+    public Recipe toBukkitRecipe()
     {
-        if(flags != null)
-            flags.applyFlags(player, location);
+        if(this instanceof CraftRecipe)
+        {
+            return ((CraftRecipe)this).toShapedRecipe();
+        }
+        else if(this instanceof CombineRecipe)
+        {
+            return ((CombineRecipe)this).toShapelessRecipe();
+        }
+        else if(this instanceof SmeltRecipe)
+        {
+            return ((SmeltRecipe)this).toFurnaceRecipe();
+        }
+        
+        return null;
     }
 }

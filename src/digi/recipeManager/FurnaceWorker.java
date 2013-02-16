@@ -3,21 +3,41 @@ package digi.recipeManager;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
-import digi.recipeManager.data.*;
+import digi.recipeManager.data.BlockID;
+import digi.recipeManager.data.MutableFloat;
 import digi.recipeManager.recipes.SmeltRecipe;
 
 public class FurnaceWorker implements Runnable
 {
-    private float ticks;
+    private final float       ticks;
+    private static BukkitTask task;
     
-    protected FurnaceWorker(int ticks)
+    private FurnaceWorker()
     {
-        this.ticks = (float)(10.0 / ticks);
+        stop();
+        ticks = (float)(10.0 / RecipeManager.getSettings().FURNACE_TICKS);
+        task = Bukkit.getScheduler().runTaskTimer(RecipeManager.getPlugin(), this, 0, RecipeManager.getSettings().FURNACE_TICKS);
+    }
+    
+    protected static void start()
+    {
+        new FurnaceWorker();
+    }
+    
+    protected static void stop()
+    {
+        if(task != null)
+        {
+            task.cancel();
+            task = null;
+        }
     }
     
     @Override
@@ -55,7 +75,7 @@ public class FurnaceWorker implements Runnable
             
             recipe = RecipeManager.getRecipes().getSmeltRecipe(smelt);
             
-            if(recipe == null || recipe.getMinTime() <= -1.0) // No custom recipe for item or it has default time
+            if(recipe == null || recipe.getMinTime() < 0) // No custom recipe for item or it has default time
             {
                 entry.getValue().value = 0;
                 continue;

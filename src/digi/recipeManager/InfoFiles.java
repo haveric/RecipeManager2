@@ -13,17 +13,20 @@ public class InfoFiles
 {
     // constants
     private final CommandSender sender;
-    private final String        DIR_PLUGIN      = RecipeManager.getPlugin().getDataFolder() + File.separator;
-    private final String        NL              = System.getProperty("line.separator");
+    private final String        DIR_PLUGIN       = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private final String        NL               = System.getProperty("line.separator");
     
 //    private final String        FILE_VERSION    = "version";
     
+    // constants
+    private static final String DIR_RESOURCES    = File.separator + "resources" + File.separator;
+    
     // public constants
-    public static final String  FILE_INFOBASICS = "info - basic recipes.txt";
-    public static final String  FILE_INFONAMES  = "info - names.txt";
-    public static final String  FILE_INFOQA     = "info - questions-answers.txt";
-    public static final String  FILE_INFOFLAGS  = "info - recipe flags.txt";
-    public static final String  FILE_INFOERRORS = "info - recipe errors in detail.txt";
+    public static final String  FILE_INFO_BASICS = "info - basic recipes.txt";
+    public static final String  FILE_INFO_NAMES  = "info - names.txt";
+    public static final String  FILE_INFO_QA     = "info - questions-answers.txt";
+    public static final String  FILE_INFO_FLAGS  = "info - recipe flags.html";
+    public static final String  FILE_INFO_ERRORS = "info - recipe errors in detail.txt";
     
     // TODO make them HTML format !
     
@@ -33,12 +36,50 @@ public class InfoFiles
         
         // TODO check FILE_VERSION...
         
-        fileItemData();
+        fileRecipeFlags();
+        fileNames();
     }
     
-    private void fileItemData()
+    private void fileRecipeFlags()
     {
-        File file = new File(DIR_PLUGIN + FILE_INFONAMES);
+        File file = new File(DIR_PLUGIN + FILE_INFO_FLAGS);
+        
+        if(file.exists())
+            return;
+        
+        StringBuilder buffer = new StringBuilder("<pre style=\"font-family:Verdana\">Information about recipe flags.");
+        
+        buffer.append(NL).append("WHAT ARE FLAGS ?");
+        buffer.append(NL).append("  Flags are the stuff that make a recipe very special ! You can add various features to a recipe by using flags.");
+        buffer.append(NL);
+        buffer.append(NL).append("USING FLAGS");
+        buffer.append(NL).append("  Flags can be added in 3 'zones':");
+        buffer.append(NL).append("  - at the begining of the file - which are copied to all recipes from that file");
+        buffer.append(NL).append("  - after recipe type (CRAFT, COMBINE, etc) - where they affect that specific recipe, you may even overwrite file flags for that specific recipe!");
+        buffer.append(NL).append("  - after recipe's individual results - to apply flags for the result items.");
+        buffer.append(NL);
+        buffer.append(NL).append("ABOUT ARGUMENTS");
+        buffer.append(NL).append("  Flags have arguments but not always are they all required.");
+        buffer.append(NL).append("  Arguments enclosed between &lt; and &gt; are required and those enclosed between [ and ] are optional.");
+        buffer.append(NL).append("  Some arguments may have 'or false', that means you can just type false in there to make it do something special (most likely disable the flag or a feature)");
+        buffer.append(NL);
+        buffer.append(NL).append("ALIASES");
+        buffer.append(NL).append("  They're just other names for the flag that you can use, they have no special effect if used, only for your preference.");
+        buffer.append(NL);
+        buffer.append(NL).append("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        buffer.append(NL);
+        buffer.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID", "Name", "Stack", "Durability"));
+        
+        buffer.append(NL).append("</pre>");
+        
+        Tools.saveTextToFile(buffer.toString(), DIR_PLUGIN + FILE_INFO_FLAGS);
+        
+        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
+    }
+    
+    private void fileNames()
+    {
+        File file = new File(DIR_PLUGIN + FILE_INFO_NAMES);
         
         if(file.exists())
             return;
@@ -140,8 +181,8 @@ public class InfoFiles
         buffer.append(NL);
         buffer.append(NL).append("EOF");
         
-        Tools.saveTextToFile(buffer.toString(), DIR_PLUGIN + FILE_INFONAMES);
+        Tools.saveTextToFile(buffer.toString(), DIR_PLUGIN + FILE_INFO_NAMES);
         
-        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFONAMES + "' file.");
+        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_NAMES + "' file.");
     }
 }

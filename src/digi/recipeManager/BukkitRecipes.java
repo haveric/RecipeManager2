@@ -1,6 +1,7 @@
 package digi.recipeManager;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,13 +15,29 @@ import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
  */
 public class BukkitRecipes
 {
-    protected static Map<RmRecipe, RecipeInfo> recipeIndex       = new HashMap<RmRecipe, RecipeInfo>();
+    protected static Map<BaseRecipe, RecipeInfo> initialRecipes    = new HashMap<BaseRecipe, RecipeInfo>();
     
     // Constants
-    public static final ItemStack              RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short)0);
-    public static final ItemStack              RECIPE_MAPCLONE   = new ItemStack(Material.MAP, 0, (short)-1);
-    public static final ItemStack              RECIPE_MAPEXTEND  = new ItemStack(Material.EMPTY_MAP, 0, (short)0);
-    public static final ItemStack              RECIPE_FIREWORKS  = new ItemStack(Material.FIREWORK, 0, (short)0);
+    
+    /**
+     * Leather dyeing's special recipe result, you can use it to identify vanilla firework recipes.
+     */
+    
+    public static final ItemStack                RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short)0);
+    /**
+     * Map cloning's special recipe result, you can use it to identify vanilla firework recipes.
+     */
+    public static final ItemStack                RECIPE_MAPCLONE   = new ItemStack(Material.MAP, 0, (short)-1);
+    
+    /**
+     * Map extending's special recipe result, you can use it to identify vanilla firework recipes.
+     */
+    public static final ItemStack                RECIPE_MAPEXTEND  = new ItemStack(Material.EMPTY_MAP, 0, (short)0);
+    
+    /**
+     * Fireworks' special recipe result, you can use it to identify vanilla firework recipes.
+     */
+    public static final ItemStack                RECIPE_FIREWORKS  = new ItemStack(Material.FIREWORK, 0, (short)0);
     
     protected static void init()
     {
@@ -34,19 +51,26 @@ public class BukkitRecipes
             r = iterator.next();
             
             if(r instanceof ShapedRecipe)
-                recipeIndex.put(new CraftRecipe((ShapedRecipe)r), new RecipeInfo(RecipeOwner.MINECRAFT));
+                initialRecipes.put(new CraftRecipe((ShapedRecipe)r), new RecipeInfo(RecipeOwner.MINECRAFT));
             else if(r instanceof ShapelessRecipe)
-                recipeIndex.put(new CombineRecipe((ShapelessRecipe)r), new RecipeInfo(RecipeOwner.MINECRAFT));
+                initialRecipes.put(new CombineRecipe((ShapelessRecipe)r), new RecipeInfo(RecipeOwner.MINECRAFT));
             else if(r instanceof FurnaceRecipe)
-                recipeIndex.put(new SmeltRecipe((FurnaceRecipe)r), new RecipeInfo(RecipeOwner.MINECRAFT));
+                initialRecipes.put(new SmeltRecipe((FurnaceRecipe)r), new RecipeInfo(RecipeOwner.MINECRAFT));
         }
     }
     
     protected static void clean()
     {
-        recipeIndex.clear();
+        initialRecipes.clear();
     }
     
+    /**
+     * Removes a RecipeManager's craft recipe from the <b>server</b>
+     * 
+     * @param recipe
+     *            RecipeManager's recipe
+     * @return true if recipe was found and removed
+     */
     public static boolean removeShapedRecipe(CraftRecipe recipe)
     {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
@@ -84,6 +108,13 @@ public class BukkitRecipes
         return false;
     }
     
+    /**
+     * Removes a RecipeManager's combine recipe from the <b>server</b>
+     * 
+     * @param recipe
+     *            RecipeManager's recipe
+     * @return true if recipe was found and removed
+     */
     public static boolean removeShapelessRecipe(CombineRecipe recipe)
     {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
@@ -112,6 +143,13 @@ public class BukkitRecipes
         return false;
     }
     
+    /**
+     * Removes a RecipeManager's smelt recipe from the <b>server</b>
+     * 
+     * @param recipe
+     *            RecipeManager's recipe
+     * @return true if recipe was found and removed
+     */
     public static boolean removeFurnaceRecipe(SmeltRecipe recipe)
     {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
@@ -139,6 +177,9 @@ public class BukkitRecipes
         return false;
     }
     
+    /**
+     * Remove all RecipeManager's recipes from the server.
+     */
     public static void removeCustomRecipes()
     {
         if(RecipeManager.getRecipes() == null)
@@ -155,6 +196,18 @@ public class BukkitRecipes
             {
                 iterator.remove();
             }
+        }
+    }
+    
+    /**
+     * Adds all recipes that already existed when the plugin was enabled.
+     */
+    public static void restoreInitialRecipes()
+    {
+        for(Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet())
+        {
+            // TODO maybe check if recipe is already in server ?
+            Bukkit.addRecipe(entry.getKey().toBukkitRecipe());
         }
     }
 }

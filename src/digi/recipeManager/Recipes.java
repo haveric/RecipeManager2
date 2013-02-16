@@ -1,15 +1,32 @@
 package digi.recipeManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.scheduler.BukkitTask;
 
-import digi.recipeManager.recipes.*;
+import digi.recipeManager.recipes.BaseRecipe;
+import digi.recipeManager.recipes.CombineRecipe;
+import digi.recipeManager.recipes.CraftRecipe;
+import digi.recipeManager.recipes.FuelRecipe;
+import digi.recipeManager.recipes.RecipeInfo;
 import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import digi.recipeManager.recipes.SmeltRecipe;
+import digi.recipeManager.recipes.WorkbenchRecipe;
 import digi.recipeManager.recipes.flags.RecipeFlags;
 
 /**
@@ -18,43 +35,86 @@ import digi.recipeManager.recipes.flags.RecipeFlags;
 public class Recipes
 {
     // Basic recipes
-    protected List<CraftRecipe>         craftRecipes     = new ArrayList<CraftRecipe>();
-    protected int                       craftIndex       = 0;
-    protected List<CombineRecipe>       combineRecipes   = new ArrayList<CombineRecipe>();
-    protected int                       combineIndex     = 0;
-    protected Map<Integer, SmeltRecipe> smeltRecipes     = new HashMap<Integer, SmeltRecipe>();
-    protected Map<String, FuelRecipe>   fuels            = new HashMap<String, FuelRecipe>();
+    protected List<CraftRecipe>           craftRecipes         = new ArrayList<CraftRecipe>();
+    protected int                         craftIndex           = 0;
+    protected List<CombineRecipe>         combineRecipes       = new ArrayList<CombineRecipe>();
+    protected int                         combineIndex         = 0;
+    protected Map<Integer, SmeltRecipe>   smeltRecipes         = new HashMap<Integer, SmeltRecipe>();
+    protected Map<String, FuelRecipe>     fuels                = new HashMap<String, FuelRecipe>();
     
-    protected Set<ItemStack>            removedResults   = new HashSet<ItemStack>();
+    protected Set<ItemStack>              removedResults       = new HashSet<ItemStack>();
     
-    protected Map<RmRecipe, RecipeInfo> recipeIndex      = new HashMap<RmRecipe, RecipeInfo>();
+    protected Map<BaseRecipe, RecipeInfo> recipeIndex          = new HashMap<BaseRecipe, RecipeInfo>();
     
-    protected boolean                   customSmelt      = false;
-    private boolean                     registered       = false;
+    private boolean                       needFurnaceWorker    = false;
+    private boolean                       registered           = false;
     
-    public static final String          RECIPE_ID_STRING = ChatColor.MAGIC + "RecipeManager #";
+    private static BukkitTask             furnaceWorkerTask    = null;
+    
+    public static final String            FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
+    public static final String            RECIPE_ID_STRING     = ChatColor.GRAY + "RecipeManager #";
     
     protected Recipes()
     {
         recipeIndex.clear();
-        recipeIndex.putAll(BukkitRecipes.recipeIndex);
+        recipeIndex.putAll(BukkitRecipes.initialRecipes);
     }
     
     public void registerRecipesToServer()
     {
+        registerRecipesToServer(null);
+    }
+    
+    protected void registerRecipesToServer(Set<String> reloadedFiles)
+    {
         if(registered)
             throw new IllegalAccessError("This class is already registered!");
         
-        RecipeManager.updatingRecipes = true;
+        /*
+        if(needFurnaceWorker)
+        {
+            furnaceWorkerTask.cancel();
+            furnaceWorkerTask = null;
+
+            furnaceWorkerTask = Bukkit.getScheduler().runTaskTimer(RecipeManager.getPlugin(), new FurnaceWorker(RecipeManager.getSettings().FURNACE_TICKS), 0, RecipeManager.getSettings().FURNACE_TICKS);
+        }
+        else if(furnaceWorkerTask != null)
+        {
+            furnaceWorkerTask.cancel();
+            furnaceWorkerTask = null;
+        }
+        */
         
-        BukkitRecipes.removeCustomRecipes();
+        /* TODO !
+        if(reloadedFiles != null && RecipeManager.recipes != null)
+        {
+            Iterator<Entry<BaseRecipe, RecipeInfo>> iterator = RecipeManager.recipes.recipeIndex.entrySet().iterator();
+            Entry<BaseRecipe, RecipeInfo> entry;
+            
+            while(iterator.hasNext())
+            {
+                entry = iterator.next();
+                
+                if(!reloadedFiles.contains(entry.getValue().getFile()))
+                {
+                    // copy unchanged recipes from old storage...
+                    recipeIndex.put(entry.getKey(), entry.getValue());
+                }
+                else
+                {
+                    // remove changed recipes from server
+                    
+                }
+            }
+        }
+        */
         
         RecipeManager.recipes = this;
         
-        Iterator<Entry<RmRecipe, RecipeInfo>> iterator = recipeIndex.entrySet().iterator();
-        Entry<RmRecipe, RecipeInfo> entry;
+        Iterator<Entry<BaseRecipe, RecipeInfo>> iterator = recipeIndex.entrySet().iterator();
+        Entry<BaseRecipe, RecipeInfo> entry;
         RecipeInfo info;
-        RmRecipe recipe;
+        BaseRecipe recipe;
         RecipeFlags flags;
         boolean add;
         
@@ -90,6 +150,7 @@ public class Recipes
                 {
                     add = flags.isOverride();
                     
+                    // TODO remove debug ?
                     if(!BukkitRecipes.removeShapelessRecipe((CombineRecipe)recipe))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Couldn't find shapeless recipe to remove!");
                 }
@@ -103,6 +164,7 @@ public class Recipes
                 {
                     add = flags.isOverride();
                     
+                    // TODO remove debug ?
                     if(!BukkitRecipes.removeFurnaceRecipe((SmeltRecipe)recipe))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Couldn't find furnace recipe to remove!");
                 }
@@ -112,11 +174,15 @@ public class Recipes
             }
         }
         
-        RecipeManager.updatingRecipes = false;
         registered = true;
+        
+        if(needFurnaceWorker)
+            FurnaceWorker.start();
+        else
+            FurnaceWorker.stop();
     }
     
-    public void addRecipe(RmRecipe recipe)
+    public void addRecipe(BaseRecipe recipe)
     {
         if(recipe instanceof CraftRecipe)
             addCraftRecipe((CraftRecipe)recipe);
@@ -177,6 +243,9 @@ public class Recipes
         int index = recipe.getIngredient().getTypeId();
         smeltRecipes.put(index, recipe);
         
+        if(!needFurnaceWorker && recipe.getMinTime() >= 0)
+            needFurnaceWorker = true;
+        
         recipeIndex.remove(recipe);
         recipeIndex.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, index));
     }
@@ -234,6 +303,19 @@ public class Recipes
             return null;
         
         return combineRecipes.get(index);
+    }
+    
+    public WorkbenchRecipe getWorkbenchRecipe(Recipe bukkitRecipe, ItemStack recipeResult)
+    {
+        if(bukkitRecipe instanceof ShapedRecipe)
+            return RecipeManager.recipes.getCraftRecipe(recipeResult);
+        
+        if(bukkitRecipe instanceof ShapelessRecipe)
+            return RecipeManager.recipes.getCombineRecipe(recipeResult);
+        
+        // TODO remove debug
+        System.out.print("[debug] new recipe???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return null;
     }
     
     public SmeltRecipe getSmeltRecipe(ItemStack ingredient)

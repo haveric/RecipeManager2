@@ -25,7 +25,7 @@ public class CraftRecipe extends WorkbenchRecipe
         setResult(recipe.getResult());
     }
     
-    public CraftRecipe(RmRecipe recipe)
+    public CraftRecipe(BaseRecipe recipe)
     {
         super(recipe);
     }
@@ -191,5 +191,11 @@ public class CraftRecipe extends WorkbenchRecipe
     public boolean isValid()
     {
         return hasIngredients() && hasResults();
+    }
+    
+    @Override
+    public RecipeType getRecipeType()
+    {
+        return RecipeType.CRAFT;
     }
 }

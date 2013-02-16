@@ -1,8 +1,11 @@
 package digi.recipeManager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Messages
 {
+    /*
     GENERAL_RECIPE("general.recipe", "recipe"),
     GENERAL_RECIPES("general.recipes", "recipes"),
     GENERAL_WORKBENCH("general.workbench", "workbench"),
@@ -120,34 +124,73 @@ public enum Messages
     COMMAND_RMGETBOOK_USAGE("command.rmgetbook.usage", "<white>Type <green>{command} <blue>title<white> |<blue> author <white>to get the recipe book with that title and author."),
     COMMAND_RMGETBOOK_NOTFOUND("command.rmgetbook.notfound", "<red>Couldn't find any recipe book titled '{title}' by '{author}'"),
     COMMAND_RMGETBOOK_GOT("command.rmgetbook.got", "Got the recipe book titled '{title}' by '{author}'."),
+    */
     
     // ---------- ^ old ones
     
-    CRAFT_SPECIAL_LEATHERDYE("craft.special.leatherdye", "Leather dyeing is disabled."),
-    CRAFT_SPECIAL_FIREWORKS("craft.special.fireworks", "Firework crafting is disabled."),
-    CRAFT_SPECIAL_MAP_CLONING("craft.special.mapcloning", "Map cloning is disabled."),
-    CRAFT_SPECIAL_MAP_EXTENDING("craft.special.mapextending", "Map extending is disabled."),
+    CRAFT_REPAIR_DISABLED("<red>Repair recipes disabled."),
     
-    CRAFT_RESULT_FAILED_TITLE("craft.result.failed.title", "<red>Can't craft recipe because:"),
-    CRAFT_RESULT_FAILED_REASON("craft.result.failed.reason", "<dark_red>- <yellow>{reason}"),
+    CRAFT_FLAG_GAMEMODE("<red>Allowed gamemodes: {gamemodes}"),
     
-    CRAFT_RESULT_RECIEVE_TITLE("craft.result.recieve.title", "<gold>You will get a random item:"),
-    CRAFT_RESULT_RECIEVE_ITEM("craft.result.recieve.item", "<dark_red>{chance} {item}"),
-    CRAFT_RESULT_RECIEVE_SECRETS("craft.result.recieve.secrets", "<dark_red>{chance} <red>Secret item(s)..."),
-    CRAFT_RESULT_UNKNOWN("craft.result.unknown", "<gold>You will get an unknown item!"),
-    CRAFT_RESULT_UNALLOWED_TITLE("craft.result.unallowed.title", "<red>Unallowed item(s):"),
-    CRAFT_RESULT_UNALLOWED_ITEM("craft.result.unallowed.item", "<dark_red>{chance} <red>{item} <gold>{reason}"),
-    CRAFT_RESULT_UNALLOWED_HIDDEN("craft.result.unallowed.hidden", "<dark_red>{chance} <red>Unallowed item(s)..."),
+    CRAFT_FLAG_HEIGHT("<red>Need height: {height}"),
+    CRAFT_FLAG_NOHEIGHT("<red>Disallowed height: {height}"),
     
-    EOF("", "");
+    CRAFT_FLAG_ONLINETIME("<red>Need online time: {time}"),
+    CRAFT_FLAG_PLAYTIME("<red>Need total play time: {time}"),
+    
+    CRAFT_FLAG_ITEMS("<red>Need in inventory: {items}"),
+    CRAFT_FLAG_NOITEMS("<red>Disallowed in inventory: {items}"),
+    CRAFT_FLAG_EQUIP("<red>Need equipped: {items}"),
+    CRAFT_FLAG_NOEQUIP("<red>Disallowed equipped: {items}"),
+    CRAFT_FLAG_HOLD("<red>Need in hand: {items}"),
+    CRAFT_FLAG_NOHOLD("<red>Disallowed in hand: {items}"),
+    
+    CRAFT_FLAG_EXP("<red>Need experience: {exp}"),
+    CRAFT_FLAG_EXPAWARD("{exp} experience"),
+    
+    CRAFT_FLAG_PERMISSIONS("<red>Allowed permissions: {permissions}"),
+    CRAFT_FLAG_NOPERMISSIONS("<red>Disallowed permissions: {permissions}"),
+    
+    CRAFT_FLAG_GROUPS("<red>Allowed groups: {groups}"),
+    CRAFT_FLAG_NOGROUPS("<red>Disallowed groups: {groups}"),
+    
+    CRAFT_FLAG_WORLDS("<red>Allowed worlds: {worlds}"),
+    CRAFT_FLAG_NOWORLDS("<red>Disallowed worlds: {worlds}"),
+    
+    CRAFT_FLAG_PLAYERBUKKITMETA("<red>You need to be special..."),
+    CRAFT_FLAG_NOPLAYERBUKKITMETA("<red>You're too special..."),
+    
+    CRAFT_FLAG_BLOCKBUKKITMETA("<red>Needs special block..."),
+    CRAFT_FLAG_NOBLOCKBUKKITMETA("<red>Block to special..."),
+    
+    CRAFT_FLAG_POTIONEFFECTS("<red>Need potion effect: {effects}"),
+    CRAFT_FLAG_NOPOTIONEFFECTS("<red>Disallowed potion effect: {effects}"),
+    
+    CRAFT_SPECIAL_LEATHERDYE("Leather dyeing is disabled."),
+    CRAFT_SPECIAL_FIREWORKS("Firework crafting is disabled."),
+    CRAFT_SPECIAL_MAP_CLONING("Map cloning is disabled."),
+    CRAFT_SPECIAL_MAP_EXTENDING("Map extending is disabled."),
+    
+    CRAFT_RESULT_FAILED_TITLE("<red>Can't craft recipe because:"),
+    CRAFT_RESULT_FAILED_REASON("<dark_red>- <yellow>{reason}"),
+    
+    CRAFT_RESULT_RECIEVE_TITLE("<gold>You will get a random item:"),
+    CRAFT_RESULT_RECIEVE_ITEM("<dark_red>{chance} <green>{item}"),
+    CRAFT_RESULT_RECIEVE_SECRETS("<dark_red>{chance} <red>Secret item(s)..."),
+    CRAFT_RESULT_UNKNOWN("<gold>You will get an unknown item!"),
+    CRAFT_RESULT_UNALLOWED_TITLE("<red>Unallowed item(s):"),
+    CRAFT_RESULT_UNALLOWED_ITEM("<dark_red>{chance} <red><strikethrough>{item} <reset><gold>{reason}"),
+    CRAFT_RESULT_UNALLOWED_HIDDEN("<dark_red>{chance} <red>Unallowed item(s)..."),
+    
+    LASTCHANGED(RecipeManager.LAST_CHANGED_MESSAGES);
     
     private String                   path;
     private String                   message;
     private static FileConfiguration messages;
     
-    private Messages(String path, String message)
+    private Messages(String message)
     {
-        this.path = path;
+        this.path = name().replace('_', '.').toLowerCase();
         this.message = message;
     }
     
@@ -179,6 +222,26 @@ public enum Messages
     public String get(String... variables)
     {
         return replaceVariables(Tools.parseColors(message, false), variables);
+    }
+    
+    public void addReason(List<String> reasons, String recipeMessage, String... variables)
+    {
+        String msg = message;
+        
+        if(recipeMessage != null) // recipe has custom message
+        {
+            if(recipeMessage.equals("false")) // if recipe message is set to "false" then don't show the message
+                return;
+            
+            msg = recipeMessage;
+        }
+        else if(msg == null) // message from messages.yml is "false", don't show the message
+            return;
+        
+        if(reasons == null)
+            reasons = new ArrayList<String>();
+        
+        reasons.add(replaceVariables(msg, variables));
     }
     
     /**
@@ -285,7 +348,7 @@ public enum Messages
         if(sender == null)
             sender = Bukkit.getConsoleSender();
         
-        boolean removeColors = (!RecipeManager.settings.COLOR_CONSOLE && sender instanceof ConsoleCommandSender);
+        boolean removeColors = (!RecipeManager.getSettings().COLOR_CONSOLE && sender instanceof ConsoleCommandSender);
         
         for(String message : messages)
         {
@@ -307,20 +370,21 @@ public enum Messages
         if(sender == null)
             sender = Bukkit.getConsoleSender();
         
-        sender.sendMessage(Tools.parseColors((sender instanceof ConsoleCommandSender ? "[RecipeManager] " + message : message), (!RecipeManager.settings.COLOR_CONSOLE && sender instanceof ConsoleCommandSender)));
+        sender.sendMessage(Tools.parseColors((sender instanceof ConsoleCommandSender ? "[RecipeManager] " + message : message), (!RecipeManager.getSettings().COLOR_CONSOLE && sender instanceof ConsoleCommandSender)));
     }
     
     /**
      * (Re)Loads all messages from messages.yml
      */
-    public static void loadMessages()
+    public static void reload()
     {
-        File file = new File(RecipeManager.plugin.getDataFolder() + File.separator + "messages.yml");
+        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "messages.yml");
         
         if(!file.exists())
         {
-            RecipeManager.plugin.saveResource("messages.yml", false);
-            info("messages.yml file created.");
+            // TODO maybe revert this or generate file directly ?
+//            RecipeManager.getPlugin().saveResource("messages.yml", false);
+            info(ChatColor.GREEN + "Generated 'messages.yml' file.");
         }
         
         messages = YamlConfiguration.loadConfiguration(file);
@@ -330,7 +394,7 @@ public enum Messages
             String version = messages.getString("lastchanged", null);
             
             if(version == null || !version.equals(RecipeManager.LAST_CHANGED_MESSAGES))
-                info("<yellow>messages.yml has changed! You should delete it, use rmreload to re-generate it and then re-configure it, and then rmreload again.");
+                info("<yellow>messages.yml has changed! You should delete it, use 'rmreload' to re-generate it and then re-configure it, and then rmreload again.");
         }
         catch(Exception e)
         {
@@ -360,7 +424,12 @@ public enum Messages
     
     public static void error(CommandSender sender, Exception exception, String message)
     {
-        send(sender, "<red>" + (message == null ? exception.getMessage() : message + " (" + exception.getMessage() + ")"));
+        message = "<red>" + (message == null ? exception.getMessage() : message + " (" + exception.getMessage() + ")");
+        
+        if(sender != null)
+            info(message);
+        
+        send(sender, message);
         
         exception.printStackTrace();
     }

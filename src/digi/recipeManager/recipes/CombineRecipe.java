@@ -24,7 +24,7 @@ public class CombineRecipe extends WorkbenchRecipe
         setResult(recipe.getResult());
     }
     
-    public CombineRecipe(RmRecipe recipe)
+    public CombineRecipe(BaseRecipe recipe)
     {
         super(recipe);
     }
@@ -134,5 +134,11 @@ public class CombineRecipe extends WorkbenchRecipe
     public boolean isValid()
     {
         return hasIngredients() && hasResults();
+    }
+    
+    @Override
+    public RecipeType getRecipeType()
+    {
+        return RecipeType.COMBINE;
     }
 }

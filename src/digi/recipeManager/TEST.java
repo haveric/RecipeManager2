@@ -1,27 +1,18 @@
 package digi.recipeManager;
 
-import java.util.Iterator;
-
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
 public class TEST implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        int recipes = 0;
+        Bukkit.getScheduler().cancelTasks(RecipeManager.getPlugin());
         
-        Iterator<Recipe> iterator = Bukkit.recipeIterator();
-        
-        while(iterator.hasNext())
-        {
-            iterator.next();
-            recipes++;
-        }
-        
-        System.out.print("Recipes = " + recipes);
+        System.out.print("Executing cancel task...");
         
         return true;
     }

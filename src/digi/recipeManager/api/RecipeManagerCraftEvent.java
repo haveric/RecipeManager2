@@ -5,7 +5,7 @@ import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 
 import digi.recipeManager.RecipeManager;
-import digi.recipeManager.recipes.RmRecipe;
+import digi.recipeManager.recipes.BaseRecipe;
 
 /**
  * Event triggered when RecipeManager's custom recipes are crafted/combined in the workbench.<br>
@@ -23,10 +23,10 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable
     private boolean                  rightClick = false;
     private ItemStack                result;
     private ItemStack                cursor;
-    private RmRecipe                 recipe;
+    private BaseRecipe                 recipe;
     private Player                   player;
     
-    public RecipeManagerCraftEvent(RmRecipe recipe, ItemStack item, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
+    public RecipeManagerCraftEvent(BaseRecipe recipe, ItemStack item, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
     {
         this.recipe = recipe;
         this.result = item;
@@ -47,7 +47,7 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable
     /**
      * @return the recipe
      */
-    public RmRecipe getRecipe()
+    public BaseRecipe getRecipe()
     {
         return recipe;
     }

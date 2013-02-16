@@ -272,6 +272,18 @@ public class Metrics
     }
     
     /**
+     * Stop sending metrics.
+     */
+    public void stop()
+    {
+        if(task != null)
+        {
+            task.cancel();
+            task = null;
+        }
+    }
+    
+    /**
      * Has the server owner denied plugin metrics?
      * 
      * @return true if metrics should be opted out of it
@@ -348,11 +360,7 @@ public class Metrics
             }
             
             // Disable Task, if it is running
-            if(task != null)
-            {
-                task.cancel();
-                task = null;
-            }
+            stop();
         }
     }
     

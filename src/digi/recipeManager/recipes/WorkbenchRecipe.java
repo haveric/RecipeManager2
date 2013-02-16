@@ -1,15 +1,21 @@
 package digi.recipeManager.recipes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import digi.recipeManager.Messages;
+import digi.recipeManager.Tools;
 import digi.recipeManager.recipes.flags.Flags;
 
-public class WorkbenchRecipe extends RmRecipe
+public class WorkbenchRecipe extends BaseRecipe
 {
     private List<ItemResult> results;
     
@@ -17,7 +23,7 @@ public class WorkbenchRecipe extends RmRecipe
     {
     }
     
-    public WorkbenchRecipe(RmRecipe recipe)
+    public WorkbenchRecipe(BaseRecipe recipe)
     {
         super(recipe);
     }
@@ -84,7 +90,7 @@ public class WorkbenchRecipe extends RmRecipe
     }
     */
     
-    public ItemStack getResult(Player player, Location location, boolean display)
+    public ItemStack getResult(Player player, String playerName, Location location, boolean display)
     {
         /*
         if(results.size() == 1)
@@ -124,20 +130,13 @@ public class WorkbenchRecipe extends RmRecipe
         
         if(display)
         {
-            // TODO !!!!!!!!!!!!
-            /*
-            String[] reasons = isCraftable(player, location);
+            List<String> reasons = new ArrayList<String>();
             
-            if(reasons != null && reasons.length > 0)
+            checkFlags(player, playerName, location, reasons);
+            
+            if(!reasons.isEmpty())
             {
-                List<String> lore = new ArrayList<String>();
-                
-                for(String reason : reasons)
-                {
-                    lore.add(Messages.CRAFT_RESULT_FAILED_REASON.get("{reason}", reason));
-                }
-                
-                return Tools.generateItemStackWithMeta(Material.FIRE, 0, 1, Messages.CRAFT_RESULT_FAILED_TITLE.get(), lore);
+                return Tools.generateItemStackWithMeta(Material.FIRE, 0, 1, Messages.CRAFT_RESULT_FAILED_TITLE.get(), reasons);
             }
             
             List<String> noCraftReasons = new ArrayList<String>();
@@ -155,7 +154,7 @@ public class WorkbenchRecipe extends RmRecipe
                 }
                 else
                 {
-                    reasons = r.canCraftResult(player);
+                    r.checkFlags(player, playerName, location, reasons);
                     
                     if(reasons == null)
                     {
@@ -164,7 +163,7 @@ public class WorkbenchRecipe extends RmRecipe
                     }
                     else
                     {
-                        unallowed.put(r, reason);
+                        unallowed.put(r, reasons.get(0));
                         unallowedChance += r.getChance();
                     }
                 }
@@ -174,28 +173,28 @@ public class WorkbenchRecipe extends RmRecipe
             
             for(ItemResult r : viewable)
             {
-                lore.add(Messages.CRAFT_MULTIRESULT_RECIEVE_ITEM.get("{chance}", String.format("%3d%%", r.getChance()), "{item}", r.print()));
+                lore.add(Messages.CRAFT_RESULT_RECIEVE_ITEM.get("{chance}", String.format("%3d%%", r.getChance()), "{item}", r.print()));
             }
             
             if(secretChance > 0)
             {
-                lore.add(Messages.CRAFT_MULTIRESULT_RECIEVE_SECRETS.get("{chance}", String.format("%3d%%", secretChance)));
+                lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", String.format("%3d%%", secretChance)));
             }
             
             if(unallowed.size() > 0)
             {
                 if(getFlags().isHideUnallowed())
                 {
-                    lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_HIDDEN.get("{chance}", String.format("%3d%%", unallowedChance)));
+                    lore.add(Messages.CRAFT_RESULT_UNALLOWED_HIDDEN.get("{chance}", String.format("%3d%%", unallowedChance)));
                 }
                 else
                 {
                     lore.add("");
-                    lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_TITLE.get());
+                    lore.add(Messages.CRAFT_RESULT_UNALLOWED_TITLE.get());
                     
                     for(Entry<ItemResult, String> entry : unallowed.entrySet())
                     {
-                        lore.add(Messages.CRAFT_MULTIRESULT_UNALLOWED_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", entry.getKey().print(), "{reason}", entry.getValue()));
+                        lore.add(Messages.CRAFT_RESULT_UNALLOWED_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", entry.getKey().print(), "{reason}", entry.getValue()));
                     }
                 }
             }
@@ -203,22 +202,21 @@ public class WorkbenchRecipe extends RmRecipe
             if(viewable.isEmpty())
             {
                 if(secretChance > 0)
-                    return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_UNKNOWN.get(), lore);
+                    return Tools.generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_RESULT_UNKNOWN.get(), lore);
                 else
                 {
                     lore.clear();
                     
                     for(String s : noCraftReasons)
                     {
-                        lore.add(Messages.CRAFT_MULTIRESULT_NONE_REASON.get("{reason}", s));
+                        lore.add(Messages.CRAFT_RESULT_FAILED_REASON.get("{reason}", s));
                     }
                     
-                    return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_MULTIRESULT_NONE_TITLE.get(), lore);
+                    return Tools.generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_RESULT_FAILED_TITLE.get(), lore);
                 }
             }
             else
-                return generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
-            */
+                return Tools.generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
             
             // -------------------------------------------
             

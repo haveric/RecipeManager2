@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import digi.recipeManager.RecipeManager;
 import digi.recipeManager.recipes.flags.Flags;
 
-public class FuelRecipe extends RmRecipe
+public class FuelRecipe extends BaseRecipe
 {
     private ItemStack ingredient;
     private float     minTime;
@@ -24,7 +24,7 @@ public class FuelRecipe extends RmRecipe
         setMinTime(burnTime);
     }
     
-    public FuelRecipe(RmRecipe recipe)
+    public FuelRecipe(BaseRecipe recipe)
     {
         super(recipe);
     }
@@ -68,7 +68,7 @@ public class FuelRecipe extends RmRecipe
     
     public int getBurnTicks()
     {
-        return (int)Math.round(20.0 * (maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.rand.nextFloat() : minTime));
+        return (int)Math.round(20.0 * (maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.random.nextFloat() : minTime));
     }
     
     public boolean hasIngredient()
@@ -80,5 +80,11 @@ public class FuelRecipe extends RmRecipe
     public boolean isValid()
     {
         return hasIngredient();
+    }
+    
+    @Override
+    public RecipeType getRecipeType()
+    {
+        return RecipeType.FUEL;
     }
 }

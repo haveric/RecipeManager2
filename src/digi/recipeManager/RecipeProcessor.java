@@ -1,21 +1,54 @@
 package digi.recipeManager;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.*;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
-import digi.recipeManager.recipes.*;
+import digi.recipeManager.recipes.BaseRecipe;
+import digi.recipeManager.recipes.BaseRecipe.RecipeType;
+import digi.recipeManager.recipes.CombineRecipe;
+import digi.recipeManager.recipes.CraftRecipe;
+import digi.recipeManager.recipes.FuelRecipe;
+import digi.recipeManager.recipes.ItemResult;
+import digi.recipeManager.recipes.RecipeInfo;
 import digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
-import digi.recipeManager.recipes.RmRecipe.RecipeType;
-import digi.recipeManager.recipes.flags.*;
+import digi.recipeManager.recipes.SmeltRecipe;
+import digi.recipeManager.recipes.flags.Flag;
+import digi.recipeManager.recipes.flags.Flags;
+import digi.recipeManager.recipes.flags.ItemFlags;
+import digi.recipeManager.recipes.flags.RecipeFlags;
 
 /**
  * Processes all recipe files and updates main Recipes class once done.
@@ -24,7 +57,8 @@ public class RecipeProcessor implements Runnable
 {
     private final CommandSender           sender;
     private final boolean                 check;
-    private Recipes                       recipes;
+    
+    private volatile Recipes              recipes;
     
     private Set<String>                   foundFiles;
     private List<String>                  fileList;
@@ -51,157 +85,177 @@ public class RecipeProcessor implements Runnable
         this.sender = sender;
         this.check = check;
         
-        run();
-//        Bukkit.getScheduler().runTask(RecipeManager.getPlugin(), this);
+        if(RecipeManager.getSettings().MULTITHREADING)
+            Bukkit.getScheduler().runTaskAsynchronously(RecipeManager.getPlugin(), this);
+        else
+            run();
     }
     
     @SuppressWarnings("unchecked")
     @Override
     public void run()
     {
-        long startTime = System.currentTimeMillis();
-        
-        Messages.send(sender, (check ? "Checking" : "Loading") + " recipes...");
-        
-        File dir = new File(DIR_RECIPES);
-        
-        if(!dir.exists() && !dir.mkdirs())
-            Messages.send(sender, ChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
-        
-        // Load last modified file list
-        lastRead = (HashMap<String, Long>)Tools.loadObjectFromFile(FILE_LASTREAD);
-        
-        if(lastRead == null)
-            lastRead = new HashMap<String, Long>();
-        
-        fileList = new ArrayList<String>();
-        foundFiles = new HashSet<String>();
-        recipeErrors = new HashMap<String, List<String>>();
-        
-        // Scan for files
-        analyzeDirectory(dir);
-        
-        boolean noRecipeFiles = foundFiles.isEmpty();
-        
-        if(fileList.isEmpty())
+        try
         {
-            if(noRecipeFiles)
-                Messages.send(sender, "Done (" + (System.currentTimeMillis() - startTime) / 1000.0 + "s), no recipe files exist in the recipes folder!");
-            else
-                Messages.send(sender, "Done (" + (System.currentTimeMillis() - startTime) / 1000.0 + "s), no modified recipe files to " + (check ? "check" : "load") + ".");
-        }
-        else
-        {
-            recipes = new Recipes(); // Create new recipe storage
+            long startTime = System.currentTimeMillis();
             
-            long lastDisplay = System.currentTimeMillis();
-            long time;
-            int numFiles = fileList.size();
-            int parsedFiles = 0;
+            Messages.send(sender, (check ? "Checking" : "Loading") + " recipes...");
             
-            // Start reading files...
-            for(String name : fileList)
+            File dir = new File(DIR_RECIPES);
+            
+            if(!dir.exists() && !dir.mkdirs())
+                Messages.send(sender, ChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
+            
+            // Load last modified file list
+            lastRead = (HashMap<String, Long>)Tools.loadObjectFromFile(FILE_LASTREAD);
+            
+            if(lastRead == null)
+                lastRead = new HashMap<String, Long>();
+            
+            fileList = new ArrayList<String>();
+            foundFiles = new HashSet<String>();
+            recipeErrors = new HashMap<String, List<String>>();
+            
+            // Scan for files
+            analyzeDirectory(dir);
+            
+            boolean noRecipeFiles = foundFiles.isEmpty();
+            
+            if(fileList.isEmpty())
             {
-                try
+                if(noRecipeFiles)
+                    Messages.send(sender, "Done (" + (System.currentTimeMillis() - startTime) / 1000.0 + "s), no recipe files exist in the recipes folder!");
+                else
+                    Messages.send(sender, "Done (" + (System.currentTimeMillis() - startTime) / 1000.0 + "s), no modified recipe files to " + (check ? "check" : "load") + ".");
+            }
+            else
+            {
+                recipes = new Recipes(); // Create new recipe storage
+                
+                long lastDisplay = System.currentTimeMillis();
+                long time;
+                int numFiles = fileList.size();
+                int parsedFiles = 0;
+                
+                // Start reading files...
+                for(String name : fileList)
                 {
-                    parseFile(DIR_RECIPES + name);
-                    parsedFiles++;
-                    time = System.currentTimeMillis();
-                    
-                    // display progress each second
-                    if(time > lastDisplay + 1000)
+                    try
                     {
-                        Messages.send(sender, "Recipes processed " + ((parsedFiles * 100) / numFiles) + "%...");
-                        lastDisplay = time;
+                        parseFile(DIR_RECIPES + name);
+                        parsedFiles++;
+                        time = System.currentTimeMillis();
+                        
+                        // display progress each second
+                        if(time > lastDisplay + 1000)
+                        {
+                            Messages.send(sender, "Recipes processed " + ((parsedFiles * 100) / numFiles) + "%...");
+                            lastDisplay = time;
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
                     }
                 }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            
-            if(!check) // replace recipes storage from server
-                recipes.registerRecipesToServer();
-            
-            int errors = recipeErrors.size();
-            int recipeNum = recipes.craftRecipes.size() + recipes.combineRecipes.size() + recipes.smeltRecipes.size() + recipes.fuels.size();
-            
-            if(errors > 0)
-            {
-                Messages.send(sender, ChatColor.RED + "Done " + (check ? "checking" : "loading") + " " + recipeNum + " recipes in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
                 
-                StringBuilder buffer = new StringBuilder().append(ChatColor.RED).append("There were ").append(errors).append(" errors while processing the files: ").append(NL).append(NL);
-                String lastError;
-                int lastErrorNum;
-                int similarErrors;
+                int errors = recipeErrors.size();
+                int recipeNum = recipes.craftRecipes.size() + recipes.combineRecipes.size() + recipes.smeltRecipes.size() + recipes.fuels.size();
                 
-                for(Entry<String, List<String>> entry : recipeErrors.entrySet())
+                if(errors > 0)
                 {
-                    buffer.append(ChatColor.BOLD).append(ChatColor.BLUE).append("File: ").append(entry.getKey()).append(NL);
+                    Messages.send(sender, ChatColor.RED + "Done " + (check ? "checking" : "loading") + " " + recipeNum + " recipes in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
                     
-                    lastError = "";
-                    lastErrorNum = 0;
-                    similarErrors = 0;
+                    StringBuilder buffer = new StringBuilder(errors * 128).append(ChatColor.RED).append("There were ").append(errors).append(" errors while processing the files: ").append(NL).append(NL);
+                    String lastError;
+                    int lastErrorNum;
+                    int similarErrors;
                     
-                    for(String error : entry.getValue())
+                    for(Entry<String, List<String>> entry : recipeErrors.entrySet())
                     {
-                        if(error.startsWith(lastError, 10))
+                        buffer.append(ChatColor.BOLD).append(ChatColor.BLUE).append("File: ").append(entry.getKey()).append(NL);
+                        
+                        lastError = "";
+                        lastErrorNum = 0;
+                        similarErrors = 0;
+                        
+                        for(String error : entry.getValue())
                         {
-                            if(++lastErrorNum > 10)
+                            if(error.startsWith(lastError, 10))
                             {
-                                similarErrors++;
-                                continue;
+                                if(++lastErrorNum > 10)
+                                {
+                                    similarErrors++;
+                                    continue;
+                                }
                             }
-                        }
-                        else
-                        {
-                            if(similarErrors > 0)
-                                buffer.append(ChatColor.RED).append("... and " + similarErrors + " more similar errors.").append(NL);
+                            else
+                            {
+                                if(similarErrors > 0)
+                                    buffer.append(ChatColor.RED).append("... and " + similarErrors + " more similar errors.").append(NL);
+                                
+                                lastErrorNum = 0;
+                                similarErrors = 0;
+                            }
                             
-                            lastErrorNum = 0;
-                            similarErrors = 0;
+                            buffer.append(ChatColor.WHITE).append(error).append(NL);
+                            lastError = error.substring(10);
                         }
                         
-                        buffer.append(ChatColor.WHITE).append(error).append(NL);
-                        lastError = error.substring(10);
+                        if(similarErrors > 0)
+                            buffer.append(ChatColor.RED).append("... and " + similarErrors + " more similar errors.").append(NL);
+                        
+                        buffer.append(NL);
                     }
                     
-                    if(similarErrors > 0)
-                        buffer.append(ChatColor.RED).append("... and " + similarErrors + " more similar errors.").append(NL);
+                    Messages.info(buffer.append(NL).append(NL).toString());
                     
-                    buffer.append(NL);
+                    if(Tools.saveTextToFile(ChatColor.stripColor(buffer.toString()), FILE_ERRORLOG))
+                        Messages.info(ChatColor.YELLOW + "Apart from server.log, these errors have been saved in '" + FILE_ERRORLOG + "' as well.");
                 }
+                else
+                    Messages.send(sender, "Done " + (check ? "checking" : "loading") + " " + recipeNum + " recipes without errors, elapsed time " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
                 
-                Messages.info(buffer.append(NL).append(NL).toString());
-                
-                if(Tools.saveTextToFile(ChatColor.stripColor(buffer.toString()), FILE_ERRORLOG))
-                    Messages.info(ChatColor.YELLOW + "Apart from server.log, these errors have been saved in '" + FILE_ERRORLOG + "' as well.");
-            }
-            else
-                Messages.send(sender, "Done " + (check ? "checking" : "loading") + " " + recipeNum + " recipes without errors, elapsed time " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
-            
-            if(!lastRead.isEmpty())
-            {
-                // Clean up last modified file list of inexistent files
-                Iterator<Entry<String, Long>> iterator = lastRead.entrySet().iterator();
-                String fileName;
-                
-                while(iterator.hasNext())
+                if(!lastRead.isEmpty())
                 {
-                    fileName = iterator.next().getKey();
+                    // Clean up last modified file list of inexistent files
+                    Iterator<Entry<String, Long>> iterator = lastRead.entrySet().iterator();
+                    String fileName;
                     
-                    if(!foundFiles.contains(fileName))
+                    while(iterator.hasNext())
                     {
-                        foundFiles.remove(fileName);
-                        iterator.remove();
+                        fileName = iterator.next().getKey();
+                        
+                        if(!foundFiles.contains(fileName))
+                        {
+                            foundFiles.remove(fileName);
+                            iterator.remove();
+                        }
                     }
                 }
+                
+                // Save last modified file list to file if we found at least 1 file
+//                if(!noRecipeFiles)
+//                    Tools.saveObjectToFile(lastRead, FILE_LASTREAD);
             }
-            
-            // Save last modified file list to file if we found at least 1 file
-//            if(!noRecipeFiles)
-//                Tools.saveObject(lastRead, FILE_LASTREAD); // TODO activate this cache once done testing
+        }
+        finally
+        {
+            if(!check && recipes != null)
+            {
+                if(RecipeManager.getSettings().MULTITHREADING)
+                {
+                    Bukkit.getScheduler().runTask(RecipeManager.getPlugin(), new Runnable()
+                    {
+                        public void run()
+                        {
+                            recipes.registerRecipesToServer();
+                        }
+                    });
+                }
+                else
+                    recipes.registerRecipesToServer();
+            }
         }
     }
     
@@ -271,7 +325,7 @@ public class RecipeProcessor implements Runnable
             else if(line.equalsIgnoreCase("removeresult"))
                 error = parseRemoveResult();
             else
-                error = new String[] { ChatColor.YELLOW + "Unexpected directive: '" + line + "'", "This might be caused by previous errors. For more info read '" + InfoFiles.FILE_INFOERRORS + "'." };
+                error = new String[] { ChatColor.YELLOW + "Unexpected directive: '" + line + "'", "This might be caused by previous errors. For more info read '" + InfoFiles.FILE_INFO_ERRORS + "'." };
             
             if(error != null)
                 recipeError(error[0], (error.length > 1 ? error[1] : null));
@@ -402,23 +456,23 @@ public class RecipeProcessor implements Runnable
         debug("parsing found flag...");
         
         String[] split = line.split(" ", 2);
-        String flag = split[0].substring(1).trim();
+        String flag = split[0].substring(1).trim().toLowerCase();
         
         int index = flag.indexOf(':');
         
         if(index >= 0)
         {
             flag = flag.substring(0, index);
-            recipeError(ChatColor.YELLOW + "Note: flag @" + flag + " has : character after it, you can now use flags without it !", null);
+//            recipeError(ChatColor.YELLOW + "Note: flag @" + flag + " has : character after it, you can now use flags without it !", null);
         }
         
         String value = (split.length > 1 ? split[1].trim() : null);
         
-        boolean isOverrideFlag = flag.equalsIgnoreCase("override") || flag.equalsIgnoreCase("overwrite") || flag.equalsIgnoreCase("supercede") || flag.equalsIgnoreCase("replace");
-        boolean isLogFlag = flag.equalsIgnoreCase("log");
-        boolean isRemoveFlag = flag.equalsIgnoreCase("remove") || flag.equalsIgnoreCase("delete");
-        boolean isCloneFlag = flag.equalsIgnoreCase("clone");
-        boolean isSecretFlag = flag.equalsIgnoreCase("secret");
+        boolean isOverrideFlag = flag.equals("override") || flag.equals("overwrite") || flag.equals("supercede") || flag.equals("replace");
+        boolean isLogFlag = flag.equals("log");
+        boolean isRemoveFlag = flag.equals("remove") || flag.equals("delete");
+        boolean isCloneFlag = flag.equals("clone");
+        boolean isSecretFlag = flag.equals("secret");
         
         if(value == null && !(isOverrideFlag || isLogFlag || isRemoveFlag || isCloneFlag || isSecretFlag))
         {
@@ -429,13 +483,13 @@ public class RecipeProcessor implements Runnable
         // ___________________________________________________________________________________
         // Shared flags...
         
-        if(flag.equalsIgnoreCase("test")) // TODO remove <<<
+        if(flag.equals("test")) // TODO remove <<<
         {
             flags.test = (value == null ? true : !value.equalsIgnoreCase("false"));
             return;
         }
         
-        if(flag.equalsIgnoreCase("message") || flag.equalsIgnoreCase("craftmsg"))
+        if(flag.equals("message") || flag.equals("craftmsg"))
         {
             flags.setCraftMessage(value == null ? null : Tools.parseColors(value.replaceAll("\\", "\n"), false));
             return;
@@ -453,7 +507,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("command") || flag.equalsIgnoreCase("commands"))
+        if(flag.equals("command") || flag.equals("commands"))
         {
             if(value.equalsIgnoreCase("false"))
                 flags.setCommands(null);
@@ -463,7 +517,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("exp") || flag.equalsIgnoreCase("xp"))
+        if(flag.equals("exp") || flag.equals("xp"))
         {
             split = value.split("\\|");
             value = split[0].trim();
@@ -500,7 +554,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("launchfirework"))
+        if(flag.equals("launchfirework"))
         {
             if(value.equalsIgnoreCase("false"))
             {
@@ -569,7 +623,7 @@ public class RecipeProcessor implements Runnable
         
         RecipeFlags recipeFlags = (flags instanceof RecipeFlags ? (RecipeFlags)flags : null);
         
-        if(flag.equalsIgnoreCase("info") || flag.equalsIgnoreCase("recipeinfo"))
+        if(flag.equals("info") || flag.equals("recipeinfo"))
         {
             if(item != null)
                 recipeError("Flag @" + flag + " can only be used on recipes!", null);
@@ -579,7 +633,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("failmessage") || flag.equalsIgnoreCase("failmsg"))
+        if(flag.equals("failmessage") || flag.equals("failmsg"))
         {
             if(item != null)
                 recipeError("Flag @" + flag + " can only be used on recipes!", null);
@@ -604,7 +658,17 @@ public class RecipeProcessor implements Runnable
             if(item != null)
                 recipeError("Flag @" + flag + " can only be used on recipes!", null);
             else
-                recipeFlags.setRemove(value == null ? "" : (value.equalsIgnoreCase("false") ? null : value));
+                recipeFlags.setRemove(value == null ? true : !value.equalsIgnoreCase("false"));
+            
+            return;
+        }
+        
+        if(flag.equals("restrict") || flag.equals("denied"))
+        {
+            if(item != null)
+                recipeError("Flag @" + flag + " can only be used on recipes!", null);
+            else
+                recipeFlags.setRestrict(value == null || value.equalsIgnoreCase("false") ? null : value);
             
             return;
         }
@@ -614,7 +678,7 @@ public class RecipeProcessor implements Runnable
         
         ItemFlags itemFlags = (flags instanceof ItemFlags ? (ItemFlags)flags : null);
         
-        if(flag.equalsIgnoreCase("name") || flag.equalsIgnoreCase("itemname"))
+        if(flag.equals("name") || flag.equals("itemname"))
         {
             if(item != null)
             {
@@ -628,7 +692,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("lore") || flag.equalsIgnoreCase("itemlore"))
+        if(flag.equals("lore") || flag.equals("itemlore"))
         {
             if(item == null)
             {
@@ -659,7 +723,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("color") || flag.equalsIgnoreCase("colour") || flag.equalsIgnoreCase("itemcolor") || flag.equalsIgnoreCase("itemcolour"))
+        if(flag.equals("color") || flag.equals("colour") || flag.equals("itemcolor") || flag.equals("itemcolour"))
         {
             if(item == null)
             {
@@ -697,7 +761,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("book") || flag.equalsIgnoreCase("itembook"))
+        if(flag.equals("book") || flag.equals("itembook"))
         {
             if(item == null)
             {
@@ -750,7 +814,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("page") || flag.equalsIgnoreCase("addpage") || flag.equalsIgnoreCase("bookpage"))
+        if(flag.equals("page") || flag.equals("addpage") || flag.equals("bookpage"))
         {
             if(item == null)
             {
@@ -790,7 +854,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("firework") || flag.equalsIgnoreCase("fireworkrocket"))
+        if(flag.equals("firework") || flag.equals("fireworkrocket"))
         {
             if(item == null)
             {
@@ -869,7 +933,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("fireworkcharge") || flag.equalsIgnoreCase("fireworkeffect"))
+        if(flag.equals("fireworkcharge") || flag.equals("fireworkeffect"))
         {
             if(item == null)
             {
@@ -905,7 +969,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("skullowner") || flag.equalsIgnoreCase("headowner"))
+        if(flag.equals("skullowner") || flag.equals("headowner"))
         {
             if(item == null)
             {
@@ -930,7 +994,7 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        if(flag.equalsIgnoreCase("potion"))
+        if(flag.equals("potion"))
         {
             if(item == null)
             {
@@ -987,9 +1051,9 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
-        boolean isEnchantBook = flag.equalsIgnoreCase("enchantbook") || flag.equalsIgnoreCase("enchantedbook");
+        boolean isEnchantBook = flag.equals("enchantbook") || flag.equals("enchantedbook");
         
-        if(isEnchantBook || flag.equalsIgnoreCase("enchant") || flag.equalsIgnoreCase("enchantment"))
+        if(isEnchantBook || flag.equals("enchant") || flag.equals("enchantment"))
         {
             if(item == null)
             {
@@ -1027,7 +1091,7 @@ public class RecipeProcessor implements Runnable
             
             if(ench == null)
             {
-                recipeError("Flag @" + flag + " has invalid enchantment: " + value, "Read '" + InfoFiles.FILE_INFONAMES + "' for enchantment names.");
+                recipeError("Flag @" + flag + " has invalid enchantment: " + value, "Read '" + InfoFiles.FILE_INFO_NAMES + "' for enchantment names.");
                 return;
             }
             
@@ -1064,14 +1128,55 @@ public class RecipeProcessor implements Runnable
             return;
         }
         
+        if(flag.equals("map"))
+        {
+            if(item == null)
+            {
+                recipeError("Flag @" + flag + " only works on result items.", null);
+                return;
+            }
+            
+            if(item.getType() != Material.MAP)
+            {
+                recipeError("Flag @" + flag + " needs a MAP item to work!", null);
+                return;
+            }
+            
+            if(value.equalsIgnoreCase("false"))
+            {
+                itemFlags.setMap(null);
+            }
+            else
+            {
+                split = value.toLowerCase().split("\\|");
+                
+                if(split.length == 0)
+                {
+                    recipeError("Flag @" + flag + " doesn't have any arguments!", null);
+                    return;
+                }
+                
+                for(String s : split)
+                {
+                    s = s.trim();
+                    
+                    if(s.equals("splash"))
+                    {
+                    }
+                }
+            }
+            
+            return;
+        }
+        
         /* TODO maybe - needs NMS/CB code...
-        if(flag.equalsIgnoreCase("meta") || flag.equalsIgnoreCase("nbt"))
+        if(flag.equals("meta") || flag.equals("nbt"))
         {
             return;
         }
         */
         
-        recipeError("Unknown flag: " + line, "Flag name might be diferent, check " + InfoFiles.FILE_INFOFLAGS);
+        recipeError("Unknown flag: " + line, "Flag name might be diferent, check " + InfoFiles.FILE_INFO_FLAGS);
     }
     
     private Potion parsePotion(String value, String flag)
@@ -1080,7 +1185,7 @@ public class RecipeProcessor implements Runnable
         
         if(split.length == 0)
         {
-            recipeError("Flag @" + flag + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + InfoFiles.FILE_INFONAMES + "' for potion types list.");
+            recipeError("Flag @" + flag + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + InfoFiles.FILE_INFO_NAMES + "' for potion types list.");
             return null;
         }
         
@@ -1093,11 +1198,11 @@ public class RecipeProcessor implements Runnable
         {
             s = s.trim();
             
-            if(s.equalsIgnoreCase("splash"))
+            if(s.equals("splash"))
             {
                 splash = true;
             }
-            else if(s.equalsIgnoreCase("extended"))
+            else if(s.equals("extended"))
             {
                 extended = true;
             }
@@ -1107,7 +1212,7 @@ public class RecipeProcessor implements Runnable
                 
                 if(split.length <= 1)
                 {
-                    recipeError("Flag @" + flag + " has 'type' argument with no type!", "Read '" + InfoFiles.FILE_INFONAMES + "' for potion types.");
+                    recipeError("Flag @" + flag + " has 'type' argument with no type!", "Read '" + InfoFiles.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
                 
@@ -1119,7 +1224,7 @@ public class RecipeProcessor implements Runnable
                 }
                 catch(Exception e)
                 {
-                    recipeError("Flag @" + flag + " has invalid 'type' argument value: " + value, "Read '" + InfoFiles.FILE_INFONAMES + "' for potion types.");
+                    recipeError("Flag @" + flag + " has invalid 'type' argument value: " + value, "Read '" + InfoFiles.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
             }
@@ -1129,13 +1234,13 @@ public class RecipeProcessor implements Runnable
                 
                 if(split.length <= 1)
                 {
-                    recipeError("Flag @" + flag + " has 'duration' argument with no duration!", null);
+                    recipeError("Flag @" + flag + " has 'level' argument with no level!", null);
                     continue;
                 }
                 
                 value = split[1].trim();
                 
-                if(value.equalsIgnoreCase("max"))
+                if(value.equals("max"))
                 {
                     level = 9999;
                 }
@@ -1153,13 +1258,13 @@ public class RecipeProcessor implements Runnable
             }
             else
             {
-                recipeError("Flag @" + flag + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFOFLAGS + " file.");
+                recipeError("Flag @" + flag + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFO_FLAGS + " file.");
             }
         }
         
         if(potion.getType() == null)
         {
-            recipeError("Flag @" + flag + " is missing 'type' argument !", "Read '" + InfoFiles.FILE_INFONAMES + "' for potion types.");
+            recipeError("Flag @" + flag + " is missing 'type' argument !", "Read '" + InfoFiles.FILE_INFO_NAMES + "' for potion types.");
             return null;
         }
         
@@ -1181,7 +1286,7 @@ public class RecipeProcessor implements Runnable
         
         if(split.length == 0)
         {
-            recipeError("Flag @" + flag + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + InfoFiles.FILE_INFONAMES + "' for potion effect types list.");
+            recipeError("Flag @" + flag + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + InfoFiles.FILE_INFO_NAMES + "' for potion effect types list.");
             return null;
         }
         
@@ -1194,7 +1299,7 @@ public class RecipeProcessor implements Runnable
         {
             s = s.trim();
             
-            if(s.equalsIgnoreCase("ambient"))
+            if(s.equals("ambient"))
             {
                 ambient = true;
             }
@@ -1204,7 +1309,7 @@ public class RecipeProcessor implements Runnable
                 
                 if(split.length <= 1)
                 {
-                    recipeError("Flag @" + flag + " has 'type' argument with no type!", "Read '" + InfoFiles.FILE_INFONAMES + "' for potion effect types.");
+                    recipeError("Flag @" + flag + " has 'type' argument with no type!", "Read '" + InfoFiles.FILE_INFO_NAMES + "' for potion effect types.");
                     return null;
                 }
                 
@@ -1216,7 +1321,7 @@ public class RecipeProcessor implements Runnable
                 }
                 catch(Exception e)
                 {
-                    recipeError("Flag @" + flag + " has invalid 'type' argument value: " + value, "Read '" + InfoFiles.FILE_INFONAMES + "' for potion effect types.");
+                    recipeError("Flag @" + flag + " has invalid 'type' argument value: " + value, "Read '" + InfoFiles.FILE_INFO_NAMES + "' for potion effect types.");
                     return null;
                 }
             }
@@ -1264,13 +1369,13 @@ public class RecipeProcessor implements Runnable
             }
             else
             {
-                recipeError("Flag @" + flag + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFOFLAGS + " file.");
+                recipeError("Flag @" + flag + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFO_FLAGS + " file.");
             }
         }
         
         if(type == null)
         {
-            recipeError("Flag @" + flag + " is missing 'type' argument !", "Read '" + InfoFiles.FILE_INFONAMES + "' for potion effect types.");
+            recipeError("Flag @" + flag + " is missing 'type' argument !", "Read '" + InfoFiles.FILE_INFO_NAMES + "' for potion effect types.");
             return null;
         }
         
@@ -1286,7 +1391,7 @@ public class RecipeProcessor implements Runnable
         
         if(split.length == 0)
         {
-            recipeError("Flag @" + flag + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + InfoFiles.FILE_INFOFLAGS + "' for syntax.");
+            recipeError("Flag @" + flag + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + InfoFiles.FILE_INFO_FLAGS + "' for syntax.");
             return null;
         }
         
@@ -1296,11 +1401,11 @@ public class RecipeProcessor implements Runnable
         {
             s = s.trim();
             
-            if(s.equalsIgnoreCase("trail"))
+            if(s.equals("trail"))
             {
                 build.withTrail();
             }
-            else if(s.equalsIgnoreCase("flicker"))
+            else if(s.equals("flicker"))
             {
                 build.withFlicker();
             }
@@ -1371,7 +1476,7 @@ public class RecipeProcessor implements Runnable
                 
                 if(split.length <= 1)
                 {
-                    recipeError("Flag @" + flag + " has 'type' argument with no value!", "Read " + InfoFiles.FILE_INFONAMES + " for list of firework effect types.");
+                    recipeError("Flag @" + flag + " has 'type' argument with no value!", "Read " + InfoFiles.FILE_INFO_NAMES + " for list of firework effect types.");
                     return null;
                 }
                 
@@ -1383,13 +1488,13 @@ public class RecipeProcessor implements Runnable
                 }
                 catch(Exception e)
                 {
-                    recipeError("Flag @" + flag + " has invalid 'type' setting value: " + value, "Read " + InfoFiles.FILE_INFONAMES + " for list of firework effect types.");
+                    recipeError("Flag @" + flag + " has invalid 'type' setting value: " + value, "Read " + InfoFiles.FILE_INFO_NAMES + " for list of firework effect types.");
                     return null;
                 }
             }
             else
             {
-                recipeError("Flag @" + flag + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFOFLAGS + " file.");
+                recipeError("Flag @" + flag + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + InfoFiles.FILE_INFO_FLAGS + " file.");
             }
         }
         
@@ -1605,9 +1710,6 @@ public class RecipeProcessor implements Runnable
         // add the recipe to the Recipes class and to the list for later adding to the server
         recipes.addSmeltRecipe(recipe);
         
-        if(!recipes.customSmelt && recipe.getMinTime() >= 0.0)
-            recipes.customSmelt = true;
-        
         return null;
     }
     
@@ -1683,7 +1785,7 @@ public class RecipeProcessor implements Runnable
         return null;
     }
     
-    private String[] parseResults(RmRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Exception
+    private String[] parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Exception
     {
         int totalpercentage = 0;
         ItemResult resultCalc = null;
@@ -1787,10 +1889,10 @@ public class RecipeProcessor implements Runnable
         
         if(alias != null)
         {
-                if(stringArray.length > 2 && printErrors)
-                        recipeError("'" + stringArray[0] + "' is an alias with data and amount.", "You can only set amount e.g.: alias:amount.");
-                
-                return stringToItemStack(string.replace(stringArray[0], alias), defaultData, allowData, allowAmount, allowEnchantments, printErrors);
+            if(stringArray.length > 2 && printErrors)
+                recipeError("'" + stringArray[0] + "' is an alias with data and amount.", "You can only set amount e.g.: alias:amount.");
+            
+            return stringToItemStack(string.replace(stringArray[0], alias), defaultData, allowData, allowAmount, allowEnchantments, printErrors);
         }
         */
         
@@ -1815,6 +1917,8 @@ public class RecipeProcessor implements Runnable
         {
             if(allowData)
             {
+                // TODO maybe use TreeSpecies, SkullTypes, etc as data aliases ?
+                
                 try
                 {
                     stringArray[1] = stringArray[1].trim();
@@ -1934,7 +2038,7 @@ public class RecipeProcessor implements Runnable
         return item;
     }
     
-    private String[] recipeCheckExists(RmRecipe recipe) // TODO
+    private String[] recipeCheckExists(BaseRecipe recipe) // TODO
     {
         boolean override = recipe.getFlags().isOverride();
         boolean remove = recipe.getFlags().isRemove();
@@ -1948,9 +2052,9 @@ public class RecipeProcessor implements Runnable
         else
         {
             if(info.getOwner() == RecipeOwner.RECIPEMANAGER)
-                return new String[] { "Recipe already defined in one of your recipe files.", (override || remove ? "You can't " + (override ? "override" : "remove") + " recipes that are already handled by this plugin because you can simply " + (override ? "edit" : "delete") + " them!" : null) };
-            else
-                return new String[] { "Recipe already exists, added by " + info.getOwner(), "You can use @override flag to overwrite the recipe, changing its result(s)." };
+                return new String[] { "Recipe already created with this plugin!", (override || remove ? "You can't @override or @remove recipes that you added using this plugin because you can just edit or delete them from the files." : null) };
+            else if(!(remove || override))
+                return new String[] { "Recipe already exists, added by " + info.getOwner(), "You can use @override flag to change recipe's result(s)." };
         }
         
         return null;

@@ -1,6 +1,9 @@
 package digi.recipeManager.recipes;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,14 +55,20 @@ public class ItemResult extends ItemStack
     
     public ItemFlags getFlags()
     {
-        if(flags == null) // TODO
-        {
-//            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "ItemFlags were null!");
-            
+        if(flags == null)
             flags = new ItemFlags();
-        }
         
         return flags;
+    }
+    
+    public boolean checkFlags(Player player, String playerName, Location location, List<String> reasons)
+    {
+        return (flags == null ? true : flags.checkFlags(player, playerName, location, null, this, reasons));
+    }
+    
+    public boolean applyFlags(Player player, String playerName, Location location, List<String> reasons)
+    {
+        return (flags == null ? true : flags.applyFlags(player, playerName, location, null, this, reasons));
     }
     
     public void setChance(int chance)
@@ -70,19 +79,6 @@ public class ItemResult extends ItemStack
     public int getChance()
     {
         return chance;
-    }
-    
-    public String[] canCraftResult(Player player)
-    {
-        if(player == null)
-            return null;
-        
-        // TODO check permissions and stuff
-        
-        if(flags.test)
-            return new String[] { "Just because :P" };
-        
-        return null;
     }
     
     public String print()

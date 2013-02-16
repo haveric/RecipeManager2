@@ -6,15 +6,15 @@ import org.bukkit.inventory.ItemStack;
 import digi.recipeManager.RecipeManager;
 import digi.recipeManager.recipes.flags.Flags;
 
-public class SmeltRecipe extends RmRecipe
+public class SmeltRecipe extends BaseRecipe
 {
     private ItemStack ingredient;
     private ItemStack result;
-    private float     minTime;
-    private float     maxTime;
+    private float     minTime = -1;
+    private float     maxTime = -1;
     private int       hash;
     
-    public SmeltRecipe(RmRecipe recipe)
+    public SmeltRecipe(BaseRecipe recipe)
     {
         super(recipe);
     }
@@ -74,7 +74,7 @@ public class SmeltRecipe extends RmRecipe
     
     public float getCookTime()
     {
-        return (float)(maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.rand.nextFloat() : minTime);
+        return (float)(maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.random.nextFloat() : minTime);
     }
     
     public float getCookTicks()
@@ -122,5 +122,11 @@ public class SmeltRecipe extends RmRecipe
     public boolean isValid()
     {
         return hasIngredient() && (getFlags().isRemove() ? true : hasResult());
+    }
+    
+    @Override
+    public RecipeType getRecipeType()
+    {
+        return RecipeType.SMELT;
     }
 }

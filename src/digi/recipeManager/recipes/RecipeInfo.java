@@ -31,12 +31,14 @@ public class RecipeInfo
     private int          index;
     private RecipeOwner  owner;
     private RecipeStatus status;
+    private String       file;
     
     public RecipeInfo(RecipeOwner owner)
     {
         this.owner = owner;
     }
     
+    // TODO add file to constructor ?
     public RecipeInfo(RecipeOwner owner, int index)
     {
         this.owner = owner;
@@ -68,6 +70,16 @@ public class RecipeInfo
     public void setStatus(RecipeStatus status)
     {
         this.status = status;
+    }
+    
+    public String getFile()
+    {
+        return file;
+    }
+    
+    public void setFile(String file)
+    {
+        this.file = file;
     }
     
     public int getIndex()

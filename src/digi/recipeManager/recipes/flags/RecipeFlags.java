@@ -8,8 +8,9 @@ public class RecipeFlags extends Flags
     private String    failMessage   = null;
     private ItemStack displayItem   = null;
     private boolean   hideUnallowed = false;
-    private String    remove        = null;
     private boolean   override      = false;
+    private boolean   remove        = false;
+    private String    restrict      = null;
     
     public RecipeFlags()
     {
@@ -27,8 +28,9 @@ public class RecipeFlags extends Flags
             failMessage = f.failMessage;
             displayItem = f.displayItem;
             hideUnallowed = f.hideUnallowed;
-            remove = f.remove;
             override = f.override;
+            remove = f.remove;
+            restrict = f.restrict;
         }
     }
     
@@ -90,11 +92,21 @@ public class RecipeFlags extends Flags
     
     public boolean isRemove()
     {
-        return remove != null;
+        return remove;
     }
     
-    public void setRemove(String message)
+    public void setRemove(boolean remove)
     {
-        remove = message;
+        this.remove = remove;
+    }
+    
+    public String getRestrict()
+    {
+        return restrict;
+    }
+    
+    public void setRestrict(String restrict)
+    {
+        this.restrict = restrict;
     }
 }

@@ -1,11 +1,28 @@
 package digi.recipeManager;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.*;
-import org.bukkit.inventory.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
@@ -13,6 +30,31 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class Tools
 {
+    public static String convertListToString(List<?> list)
+    {
+        if(list.isEmpty())
+            return "";
+        
+        int size = list.size();
+        
+        if(size == 1)
+            return list.get(0).toString();
+        
+        StringBuilder str = new StringBuilder(list.get(0).toString());
+        
+        for(int i = 1; i < size; i++)
+        {
+            str.append(", ").append(list.get(i).toString());
+        }
+        
+        return str.toString();
+    }
+    
+    public static ItemStack generateItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
+    {
+        return generateItemStackWithMeta(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
+    }
+    
     public static ItemStack generateItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
     {
         ItemStack item = new ItemStack(type, amount, (short)data);
@@ -55,7 +97,8 @@ public class Tools
             message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : "" + color));
         }
         
-        return ChatColor.translateAlternateColorCodes(RecipeManager.getSettings().COLOR_CHAR, message);
+        // TODO remove color &1  ?
+        return removeColors ? message : ChatColor.translateAlternateColorCodes(RecipeManager.getSettings().COLOR_CHAR, message);
     }
     
     /**
