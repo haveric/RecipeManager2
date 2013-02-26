@@ -1,0 +1,414 @@
+== Change log ==
+
+=== v2.0 ===
+++Changed files: all.++
+* Plugin rewritten, redesigned and restructured... same thing.
+
+* Recipe files now completly doesn't care about spacing at all, you can format the recipes with any number of empty lines, tabs, spaces or no empty lines at all
+* Added block comment support for recipe file, you can now use /* and */ to comment anything in between on any number of lines
+
+* Added recipe's result flag support and a few result specific flags:
+** Added @name flag to set display name for results
+** Added @lore flag to set description for results
+** Added @enchant flag to set enchants on results (same as | ENCHANT: LEVEL from items, added for consistency)
+** Added @firework ...
+...
+** Added @potion flag to allow building of basic and custom potion results
+
+
+
+// old WIP version, these aren't really added...
+++Changed files: readme.txt, config.yml, messages.yml++
+* Fixed givemoney and givelevel acting as giveexp
+* Fixed min/maxexp, min/maxlevel and min/maxmoney not working at all 
+* Fixed min/max/cost/give money messages printing amount next to the formatted amount
+* Fixed recipes with world restrictions not being listed in "rmrecipes" command in restricted worlds for players having "recipemanager.noworld" permission node
+* Fixed ChunkLoadEvent errors by getting the furnaces from a chunk in a more hacky way
+* Added the ability to generate books with recipes, it's automated and they can be crafted with special results, see readme.txt for details
+* Added "@book" flag which defines in what book the recipe(s) should be listed in, see readme.txt for details
+* Added "@bookinfo" flag which adds an information message to the recipe in its page in the book, see readme.txt for details
+* Added "@copy" flag for COMBINE recipes which makes an ingredient not be consumed and copied to the result, see readme.txt for details
+* Added "@needitem" flag that requires the player to own the listed items, see readme.txt for details
+* Added "@blocksnearby", "@blockstop" and "@blocksunder" flags that require certain blocks in proximity of the workbench/furnace in order for the recipe to work, see readme.txt for details
+* Added "special recipes.txt" file in the recipes folder which currently contains a recipe that copies written books
+* Added "rmfinditem" command which cand find items by partial names or get the name of the item in hand
+* Added information about @override flag in readme.txt (forgot to do it in the previous version)
+* Changed settings positions a bit in the config.yml file, no new stuff tough
+* Made recipe flags that accept boolean values work without values (example: @override: true is the same as @override)
+* Changed header color of recipe type when listed with "recipe" command from GOLD to YELLOW to allow better display in the server console
+* (API) Moved all recipe flag related methods into Flag class and added getFlag() for Recipe which accesses those methods, old methods are deprecated and will be removed in future versions
+* (API) Massively restructured code:
+** Removed Item and ItemData, switched to ItemStack and ItemResult (ItemStack extension)
+** Moved all classes from .data package in the main package to allow better control over what's public
+** ... ???
+** Finally, please update your plugins that hook into the API.
+
+\\
+
+=== v1.26 ===
+++Changed files: aliases.yml, readme.txt, default recipes++
+(Built on CB 1.3.1-R1.0)
+* Fixed aliases.yml keep warning about being changed
+* Fixed plugin not being fully unloaded when using "reload" command
+* Fixed the duplicated recipes warnings which didn't trigger
+* Fixed not being able to remove vanilla fuels
+* Fixed book_and_quill recipe accepting any kind of dye as ink
+* Added "rmextract" command which generates the recipes for all unhandled recipes (from other plugins or mods)
+* Added "@override" flag which allows admins to override a specific recipe
+* Added data value 7 for piston and sticky piston crafting result (that's how the default is, I don't know why)
+* Added default fuels: wood step (all types), wood stairs (all types), fence gate, wood sword and tools
+* Added removing and re-adding default recipes when using "rmreload" to allow @override to be undone for vanilla recipes
+** For recipes added by other plugins or mods, either restart the entire server or place the same result as the original
+* Added warnings when defining a recipe that has the same ingredient(s) as an existing recipe added by another plugin or mod
+* Added warnings when defining a recipe with @override flag and the original recipe wasn't found, it's also compatible with "rmreload"
+* Improved recipe error reporting, organized by file name and diferently colorized
+* The last report of recipe errors is stored in plugin/RecipeManager/last recipe errors.log
+* Removed mirrored recipes from recipe files as they work without adding mirror shaped duplicates
+* Removed the redstone repeater/diode recipe that uses OFF state redstone torches
+* Removed misleading command from readme.txt
+
+\\
+
+=== v1.25b ===
+++Changed files: aliases.yml, some files from recipes/default/ folder, read below++
+(Built on CB 1.3.1-R0.1 #2281, not compatible with MC 1.2.5)
+* Fixed wood step recipes returning only one because of the WOOD_STEP alias which was removed because WOOD_STEP is now a diferent item
+* Fixed wood stairs not being crafted for each wood type because there's a diferent material for each type instead of data value
+* Added warning when using an alias with data and amount, which isn't possible because it's "alias:amount", no data value.
+
+\\
+
+=== v1.25 ===
+++Changed files: some files from recipes/default/ folder, read below++
+(Built on CB 1.3.1-R0.1, not compatible with 1.2.5)
+* Fixed fine messages not showing in server.log
+* Change default recipe files to reflect the 1.3 changes, details:
+** In "smelt materials.txt"
+*** Added emerald_ore recipe (smelt: emerald_ore = emerald)
+** In "craft misc.txt"
+*** Changed book recipe (combine: leather + 3x paper = book)
+*** Added book_and_quill recipe (combine: book + feather + ink_sack = book_and_quill)
+*** Added emerald_block recipe (craft: 9x emerald = emerald_block)
+*** Added 9x emerald recipe (craft: emerald_block = 9x emerald)
+*** Changed all "Uncompress materials from blocks" from combine to craft for performance
+** In "craft wood.txt"
+*** Changed wood steps recipe (craft: 3x wood = 6x wood steps for each wood type)
+*** Changed wood stairs recipe (craft: [stair shape] 6x wood = 4x wood stairs for each wood type)
+*** Changed sign recipe (craft: 6x wood + stick = 3x sign)
+** In "craft stone.txt"
+*** Added sandstone_stairs recipe (craft: [stair shape] 6x sandstone = 4x sandstone stairs)
+*** Added ender_chest recipe (craft: [chest shape] 8x obsidian + eye of ender = ender chest)
+** In "craft redstone.txt"
+*** Added tripwire_hook recipe (craft: [vertical] iron_ingot + stick + wood = tripwire_hook)
+** In "craft food.txt"
+*** Added enchanted golden_apple recipe (craft: 8x gold_block + red_apple = enchanted golden_apple)
+
+\\
+
+=== v1.24c ===
+* Fixed an error when crafting (NPE regarding CraftItemEvent)
+* Changed power limit for @explode flag from 1 to 0, you can now specify power 0, it will most likely only break the workbench/furnace.
+* Added fine message notifying if group permissions are available or not (like economy did).
+* Added a warning for using "@explode" with "fail" for FUEL recipes as they never fail
+* Added a warning for using "@proximity" with CRAFT or COMBINE recipes as they don't do anything
+* Added a warning for using "@groups" or "@anygroup" without Vault and a group-supporting permission plugin running
+* Added a warning for using "@givemoney", "@minmoney" and "@maxmoney" without Vault and an economy plugin running
+* (API) Added setIngredients() and setResults() for Craft and Combine classes.
+* Improved memory efficiency a bit when loading recipes
+* Updated readme.txt's last changed version (forgot to do it for v1.24b)
+
+\\
+
+=== v1.24b ===
+* Fixed "rmreload" re-adding events instead of removing and adding, causing repetitive events
+* Fixed "@explode" flag causing the last used workbench to explode when crafting inside player inventory, now the player explodes if there's no workbench
+* Added @anygroup flag to specify groups that can use the recipe, players must be in at least one group to use the recipe (unlike @groups which requires membership of all listed groups)
+* Improved code execution speed a bit with some minor tweaks
+* API Change: Item class' getEnchantments() returns null if there are no enchantments, also added setEnchantments() and addEnchantment() which eases the null handling
+
+\\
+
+=== v1.24 ===
+++Changed files: readme.txt, messages.yml++
+* Added "explode" flag for recipes, you can now make the workbench/furnaces explode, see readme.txt for details.
+* Fixed recipes giving rewards even when failing by chance
+* Fixed setting "proximity: false" clearing the worlds instead
+* Fixed some API javadoc descriptios on setting/getting results from custom events
+* Fixed some other small inconsistencies
+
+\\
+
+=== v1.23e ===
+* Fixed "User not online" error on non-player crafting caused by server mods
+* Changed interaction with vault on adding/removing money to not use negative values, instead use the propper add or subtract methods
+* Improved memory performance a bit
+
+\\
+
+=== v1.23d ===
+++Changed files: messages.yml++
+* Fixed errors when using furnace and there are no custom-time smelting recipes
+* Fixed "rmreload" not removing removed furnace recipes
+* Added API method isCustomRecipe(recipe) that also checks if recipe is a furnace recipe (which isCustomRecipe(result) did NOT)
+* Fixed API method removeCustomRecipes() not removing custom furnace recipes
+* Fixed some java heap errors by updating the 3rd party ExperienceManager class
+* Blocked the "182 recipes" message that was sent by the server which confused people about loaded recipes
+* Changed "command.rmreload.done" message node to display the number of recipes loaded.
+
+\\
+
+=== v1.23c ===
+++Changed files: config.yml++
+* Fixed furnace Shift+Click behaviour:
+** Items can be stacked over other items in the slots if they're alike
+** You can now organize your inventory with Shift+Click again because plugin will no longer cancel it regardless of furnace's slot emptyness
+** Optimized a bit so it doesn't trigger when not clicking an item
+* Fixed rmreload restarting furnaces that run custom-time recipes
+* Added option to enable/disable certain events for compatibility, see config.yml.
+** They can also be changed while server is running by using rmreload
+* Made some changes to code, should improve performance a bit
+
+\\
+
+=== v1.23b ===
+++Changed files: config.yml++
+* Fixed Shift+Clicking workbench result not updating the inventory (the temporary fix)
+* Fixed RecipeManagerCraftEvent not triggering when recipe can be crafted and triggering when it couldn't
+* Added "metrics" config option to change whenver this specific plugin uses metrics (doesn't create the PluginMetrics folder and stuff)
+
+\\
+
+=== v1.23 ===
+NOTE: Previous version should've been v1.23 because it contains alot of new features and fixes, but I forgot to change that and I'll make this one instead.
+* Fixed errors when running plugin without having Vault (which is optional)
+* Fixed plugin removing other plugins' recipes, made the method more accurate and it's available in the API under .getRecipes().removeDefaultRecipes()
+* Added "furnace-shift-click" option in config.yml, controls shift+click behaviour inside furnace UI, read more about it in the config.yml file
+* Added restoreDefaultRecipes() for in the getRecipes() API, use whenever you want to re-add vanilla recipes but you don't want to remove the custom ones from any other plugin/mod.
+* Removed enchantment level limit, you can now use any value: negative, zero or positive for enchantment levels
+* Removed forgot unimplemented config setting "furnace-messages" from FINE logs when the settings are loaded
+* Improved "reload" memory efficiency by setting static variables to null when plugin disables
+* Included this file, readme.txt and configs inside the zip for easier access, they're still regenerated if deleted (this file, changelog.txt, doesn't regenerate however)
+
+\\
+
+=== v1.22c ===
+NOTE: You can delete smelters.dat, fuelers.dat and fueled.dat files since they're not used anymore
+
+* Replaced smelters.dat, fuelers.dat and fueled.dat with furnacedata.dat
+* Fixed furnace recipes not working with big time values
+* Fixed furnace fuels re-burning making the recipes cook timer reset
+* Fixed furnace recipes and fuels not checking for permission/world/exp/level/money change on each smelt, now it does and it stops the furnace when requirements fail
+* Fixed furnace recipes giving rewards when recipes fail
+* Fixed furnace recipes not printing success or failure messages
+* Fixed "norepair" message not beeing displayed when repair recipes are disabled
+* Fixed the few recipes command's messages that weren't printing
+* Fixed recipes' command flag still triggering on shift+click (they shouldn't)
+* Fixed RecipeManagerCraftEvent triggering when item can't be taken, it now only triggers when item was taken from the slot
+* Added @proximity flag for furnace recipes, checks if crafter is online or near furnace when crafting
+* Added @groups flag for recipes, checks if crafter is in a group (Vault required for this)
+* Added @failmessage flag for recipes, sets or disables the failure-by-chance message for the recipe.
+* Added feature to preserve enchantments on repair, see config.yml on repair-enchanted to enable it because it's default off
+* Added isShiftClick(), isLeftClick(), isRightClick() and getCursorItem() to RecipeManagerCraftEvent, they're self-explainatory.
+* Added isResultTakeable() method for RecipeManagerCraftEvent, read its javadoc (pause mouse on it) on how should it be used
+* Added some JavaDocs to some methods and classes for the API
+* Added check if Vault has an economy plugin hooked before enabling economy for this plugin
+* Added softdepend for Vault and iConomy in case they didn't work properly as is
+* Added monitoring economy type used for Metrics system
+* Added comments about optional variables in messages in messages.yml
+* Added a few more messages about furnaces and stuff in messages.yml
+* Changed recipe.usableBy() to recipe.isUsableBy(), devs should change accordingly
+* Changed the getter setDisplayRecipe() to getDisplayRecipe() from RecipeManagerPreCraftEvent, devs should change accordingly
+* Changed the crafting event code a bit to be less duplicated
+* Changed so fuel replacement with bucket first checks if there's an item there so it doesn't replace it
+* Removed "Register" economy interface because it's old and broken, use Vault or just iConomy instead
+* Re-generated messages.yml according to the code design to be 100% accurate without any missing parts or invalid variables
+* Permission nodes and any other flags are unaffected by forced lower letter casing, they will be stored as they are (case sensitive)
+* Updated readme.txt to match the latest changes
+
+\\
+
+=== v1.22b ===
+* Fixed @give(...) flags adding rewards instead of subtracting them on negative values
+* Fixed @giveexp giving alot more exp than intended
+* Fixed craft requirements failure messages not having their {amount} and {money} variables replaced with actual values
+* Fixed "false" not working for custom recipes when defined with spaces near it and fixed messages having spaces at the begining by trimming spaces
+* Changed when crafting, all requirement messages are printed (if it requires money, exp and permission, it will print all 3 instead of just 1)
+* Added events for the API, they're all named as "RecipeManager...Event", some of them cancellable, others having overwriteable methods (set...() methods)
+* Added ability to track what fuel was used for smelting recipe (usable in the custom events)
+* Added missing getters and setters for Smelt class for the API
+* Added {permission} variable for permission fail message, which is replaced with the required permission
+* Added {worlds} variable for world fail message, which is replaced with the permitted worlds
+* Added {amount} variable for money fail & success messages which is replaced with the raw money value (instead of formatted value which {money} is replaced by)
+* Added support for plugins that call the craft event without specifying a player, however this will not award the player with anything and it will only apply the server commands from @command and the @log if set.
+* Added previous fixes for CRAFT recipes to COMBINE recipes as well
+* Removed unused key "noshiftclick.furnaceinventory" from messages.yml (I didn't change the lastchanged version tough, because it's not that important)
+
+\\
+
+=== v1.22 ===
+(built on CraftBukkit: 1.2.5-R4.0)
+++Changed files: readme.txt++
+* Added Metrics (you can disable it for all plugins in plugins/PluginMetrics/config.yml by setting opt-out: true)
+* Added colored log messages, can be turned off in config.yml
+* Improved Shift+Click in furnaces, removed the restriction and now Shift+LeftClicking any item will put it in the ingredient slot and Shift+RightClicking will put it in the fuel slot
+* Fixed recipes awarding exp/level/money for recipes that have multiple results and use Shift+Click on them
+* Fixed players above level 150 not beeing able to craft recipes (getting grass instead, the placeholder item)
+* Fixed COMBINE recipes using rewards and restrictions from CRAFT recipes instead
+* Fixed SMELT recipes sometimes instantly smelting the recipe
+* Added @command, @message and @log flags for recipes, see readme.txt for details.
+* Added customizable success/failure messages for individual flags (like @giveexp), see readme.txt for details.
+* Replaced lang_*.yml system with a simple messages.yml file, removed "language: <val>" from config.yml as well
+* Removed check for item compatibility against enchantments, it adds enchantments regardless of item (but still checks for amount as that glitches alot of stuff)
+* Removed cap on enchantment levels, you can now use any value, you can also use "MAX" to use the maximum valid enchantment level.
+* Removed cap on result percentages (was 1-100), you can now specify 0% items that'll be just for display there (or you can just not specify any percentage for the first item and specify 100% for the next item(s))
+* Improved 'existing-recipes' change detection on rmreload, it now properly detects when changed from "nothing" to "replace"
+* Improved format of readme.txt, added examples for recipes.
+* Improved code that monitors and processes furnaces each tick
+* Added ability to track down who placed the smelting ingredient and fuel so you can use commands, messages, rewards, etc on them, they're also saved between server restarts BUT this won't work for items already in furnaces before the update, only those added after this update.
+* Added error handling for recipe crafting, if any error occurs it will cancel the event so players won't recieve unwanted items
+* Recoded some stuff to reduce the amount of static variables & methods
+* Added an API for developers to use, currently it only gives out methods used by the plugin itself, if you need more stuff just ask.
+
+\\
+
+=== v1.21b ===
+++Changed files: lang_en.yml, readme.txt++
+* Fixed all recipes printing that they cost 0 exp/level/money when player has 0 exp/level/money
+* Fixed @givelevel and @givemoney acting as unknown flags
+* Fixed printing <cyan> in a message (there's no such color)
+* Made all temporary Shift+Click messages available for edit in lang_en.yml (few were missing)
+* Added "recipemanager.noworld" permission to allow players to ignore world restrictions on recipes
+* Changed /recipe displaying to display the multiple results along with the chance of success and failure
+* Changed furnace recipe's ingredients to not accept data value since the game doesn't support it anyway, also changed it in readme.txt
+* Fixed experience changing levels whenever you lose experience and prevents certain bugs (credits goes to nisovin for the class)
+
+\\
+
+=== v1.21 ===
+(built on CraftBukkit 1.2.5-R1.0)
+++Changed files: config.yml, lang_en.yml, readme.txt, aliases.yml++
+* Added ability for recipes to return multiple results with chances and chances of failure (consult readme.txt for details)
+* Added @(give/min/max)(exp/level/money) recipe flags, consult readme.txt for the values
+* Added flags support for individual recipes which also have priority over file header flags
+* Added economy support for Vault, Register and iConomy (they're checked in this order)
+* Added value "false" for all flags to disable them for individual recipes
+* Added config option to disable weapon/tool repair recipes
+* Added config option to return empty buckets, bottles and bowls when crafting their filled counterparts
+* Added config option to return empty buckets when using any filled bucket as fuel
+* Fixed world and permission restrictions not working at all
+* Fixed permissions not changing their default value when using rmreload
+* Fixed an error when clicking virtual inventories (hopefully...)
+* Added permission's default value to be overwritten with the one set in the recipes
+* Added ability for readme.txt to overwrite itself on newer versions (apart from lang_en.yml which already did that)
+* Added a message to inform admins if the config.yml or aliases.yml files they have are outdated and should be renewed
+* Changed the way config is processed (a Config enum), impact only on code flexibility
+* Changed a few recipe parsing error messages to be more easily understandable
+* Removed file path from recipe parsing error messages, left only file name and line.
+* Fixed line reporting in recipe parsing errors and improved error detection
+* Fixed error for recipes without tailing AIR recipes to fill gaps, no longer required now
+* Changed config print options layout, now using sub-nodes
+* Restricted Shift+Clicking on in furnace inventory view on player's slots (not furnace slots) to fix the bypassing of recipe restrictions (until I find a better way)
+* Restricted Shift+Clicking on workbench results that give rewards (until I find a way to get how many times a recipe was crafted)
+* Added silverfish blocks aliases in aliases.yml
+* Made the furnace finder code a bit more efficient
+
+\\
+
+=== v1.2a ===
+++No changed config files++
+* Fixed world and permission restrictions not working at all
+* Fixed an error when clicking virtual inventories
+
+\\
+
+=== v1.2 ===
+(built on Bukkit 1.2.5-R1.0)
+++Changed files: config.yml, lang_en.yml, aliases.yml++
+* Fixed furnace timing task starting even when there aren't any custom cooktime recipes
+* Fixed furnace fuels resetting smelting process when changing fuel amount
+* Fixed various default recipes
+* Fixed plugin interfering with modded servers' recipes (unless specified to remove all recipes)
+* Fixed rmreload command to work properly
+* Added functionality to rmrecipes/recipe/recipes commands, they can be used to search for recipes by providing an item name
+* Removed printing recipes in server.log when loading, it now offers minimal details in server.log
+* Temporary fix for shift+clicking recipes acting weird, until Bukkit fixes it.
+* Added language files that also have versions, lang_en.yml will always be overwritten and is the fallback in case of other files are outdated/don't exist
+* Added alot of useful itemdata aliases in the aliases.yml
+* Various other minor fixes and adjustments from the beta
+
+\\
+
+=== v1.2beta ===
+(built on Bukkit 1.2.5-R1.0)
+* Remade the way the plugin loads files:
+** loads all .txt files inside the plugins/RecipeManager/recipes folder and all sub-folders
+** any txt file can contain any number of any kind of recipe, either a fuel, furnace, shaped or shapeless
+** files can have any name as long as they have the .txt extension
+** new readme.txt file that contains syntaxes and general information
+* Added ability to use enchanted items in recipes (only as results)
+* Added ability to edit and remove default recipes instead of restricting them
+* Added aliases.yml to use shortcuts for item:data (like bonemeal for ink_sack:15)
+* Replaced "debug" messages with fine/finer/finest style logging, only chosen level (bukkit.yml) is printed in the server console but all messages are logged in server.log
+* No longer uses Spout, it was removed completly
+* Added ability to smelt items with result AIR (nothing)
+* Many more code changes for the better that I lost track of
+
+\\
+
+=== v1.1g ===
+* Built on 1.1-R6
+* Fixed not loading restricted recipes and fuels
+
+\\
+
+=== v1.1f ===
+* Fixed errors when using plugin without Spout
+* Converted code that required CraftBukkit to Bukkit API, plugin uses only Bukkit API now
+
+\\
+
+=== v1.1e ===
+* Built on 1.1-R4 with new event system
+
+\\
+
+=== v1.1d ===
+* Fixed a issue where any item from a unshaped restricted recipe would restrict everything with that item
+
+\\
+
+=== v1.1c ===
+* Built on #1597 / 1.0.1-R1
+* Fixed console message printing loaded recipes/restrictions count that does not match the actual recipes/restrictions number
+* Added "print-features" in config.yml to toggle if players get the info about new/restricted recipes and fuels when interacting with a workbench or furnace
+* Optimized code (removed some forgot variables, disabled tasks when not needed, etc)
+* Removed the feature where you can specify no character item as AIR because it does not work right with the new dynamic size recipes
+
+\\
+
+=== v1.1b ===
+* Fixed in "/recipes" help message saying that unburnable are restricted recipes and unsmeltable are restricted fuels, but they're the other way around
+* Built on JRE6 to prevent "Unsupported major.minor version 51.0" error in Java 6 users and it still works with Java 7
+
+\\
+
+=== v1.1 ===
+Configuration notes: all .txt files have something changed in them, I recommend you delete them and re-write your recipes and stuff in the newly created ones using the syntax specified in the file header.
+
+* Added possibility to add custom fuels, new file: custom_fuels.txt
+* Added possibility to set time on furnace recipes, custom or existing (in custom_recipes.txt as furnace recipe).
+* Changed behavior of restricting recipes, now you restrict the recipe matrix, not the result !
+** NOTE: if you restricted some recipes, please delete and re-edit your uncraftable.txt file.
+* Added possibility to create any size of recipes from 1x1 to 3x3.
+* Added specifying no character at all for a item to be handled as AIR
+** Example: + + ITEM results in AIR + AIR + ITEM
+* Added * as alias to -1 data value (any data value) but it's not needed as it's default as any data value
+* Fixed "/recipes reload" to block the default help message (unknown command) and to work only on OPs
+* Added a list of recipes, restricted recipes, fuels, etc in the /recipes command, type it to see list of commands available
+* Changed code structure, divided stuff into separate classes and etc.
+* Other minor adjustments that I forgot =)
+
+\\
+
+=== v1.0 ===
+* Release

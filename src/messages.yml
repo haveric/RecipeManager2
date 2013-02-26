@@ -1,0 +1,90 @@
+# Messages file
+# Edit as you like
+# Any message set to "false" will not be displayed
+
+# Most messages from below can be overwritten by individual recipes
+
+craft:
+  cantcraftanything: <dark_red>You don't have permission to use <red>ANY recipes<dark_red>!
+  norepair: <dark_red>The repairing recipes are disabled!
+  failure: <dark_red>Recipe failed! <gray>(<white>{chance} chance<gray>)
+  dropped: <dark_green>Some items couldn't fit in your inventory, they were dropped on the floor!
+  nosmelt: <dark_red>Furnace at <gold>{location}<dark_red> lacks requirements to smelt recipe!
+  nofuel: <dark_red>Furnace at <gold>{location}<dark_red> lacks requirements for fuel!
+
+# Variable {permission} can be used to autofill required permission name
+  nopermission: <dark_red>You don't have the required permission for this recipe!
+
+# Variable {groups} can be used to autofill required group names
+  nogroup: <dark_red>You're not in the required group to use this recipe!
+
+# Variable {worlds} can be used to autofill required world names
+  noworld: <dark_red>You can't use this recipe in this world!
+
+  noproximity: <dark_red>Furnace at <gold>{location}<dark_red> uses a recipe that requires you to be at most {distance} blocks away!
+  warndistance: <dark_green>Recipe will only work as long as you're within {distance} blocks from the furnace!
+  warnonline: <dark_green>Recipe will only work as long as you're online in the server!
+
+  explode: <dark_green>Recipe exploded! <gray>(<white>{chance} chance of explosion<gray>)
+  explodeonsuccess: <dark_green>Recipe exploded! <gray>(<white>{chance} chance of explosion when recipe works<gray>)
+  explodeonfailure: <dark_red>Recipe exploded! <gray>(<white>{chance} chance of explosion when recipe fails<gray>)
+
+  giveexp: <green>Got {amount} experience<dark_green> for crafting recipe.
+  takeexp: <gold>Lost {amount} experience<dark_red> for crafting recipe.
+  costexp: <dark_red>Recipe <gold>costs {amount} experience<dark_red> to craft it!
+  minexp: <dark_red>Recipe usable if you have <gold>at least {amount} experience<dark_red>!
+  maxexp: <dark_red>Recipe usable if you have <gold>less than {amount} experience<dark_red>!
+
+  givelevel: <green>Got {amount} level(s)<dark_green> for crafting recipe.
+  takelevel: <gold>Lost {amount} level(s)<dark_red> for crafting recipe.
+  costlevel: <dark_red>Recipe <gold>costs {amount} level(s)<dark_red> to craft it!
+  minlevel: <dark_red>Recipe usable if you have <gold>at least {amount} level(s)<dark_red>!
+  maxlevel: <dark_red>Recipe usable if you have <gold>less than {amount} level(s)<dark_red>!
+
+# Variable {amount} can also be used to print raw money value since {money} is the formatted value
+  givemoney: <green>Got {money}<dark_green> for crafting recipe.
+  takemoney: <gold>Lost {money}<dark_red> for crafting recipe.
+  costmoney: <dark_red>Recipe <gold>costs {money}<dark_red> to craft it!
+  minmoney: <dark_red>Recipe usable if you have <gold>at least {money}<dark_red>!
+  maxmoney: <dark_red>Recipe usable if you have <gold>less than {money}<dark_red>!
+
+
+noshiftclick:
+  multipleresults: <dark_red>Can't Shift+Click recipes with multiple results <underline>for now<reset><dark_red>, sorry.
+  rewards: <dark_red>Can't Shift+Click recipes that give rewards <underline>for now<reset><dark_red>, sorry.
+  furnaceinventory: <dark_red>Can't Shift+Click in furnace interfaces <underline>for now<reset><dark_red>, sorry.
+
+general:
+  recipe: recipe
+  recipes: recipes
+
+command:
+  rmrecipes:
+    usage: <white>Type <green>{command} <blue>item <gray>[i]<white> to search for recipes. Use this as item to search for held item. Specify i to search in ingredients instead of results.
+    workbenchrecipes: <white>Workbench has <gold>{craftrecipes} shaped <white> and <gold>{combinerecipes} shapeless<white> recipes.
+    furnacerecipes: <white>Furnace has <gold>{smeltrecipes} recipes<white> and <gold>{fuels} fuels<white>.
+    invaliditem: '<red>Invalid item: <gray>{item}<red>!'
+    invalidhelditem: <red>You must hold an item to use this command like this.
+    noingredient: <yellow>No recipes that have <blue>{item}<yellow> as ingredient.
+    noresult: <yellow>No recipes that make <blue>{item}<yellow>.
+    listingredient: '<light_purple>The <blue>{item}<light_purple> item can be used as an ingredient in <white>{recipes}<light_purple>:'
+    listresult: '<light_purple>The <blue>{item}<light_purple> item can be created from <white>{recipes}<light_purple>:'
+    pageofpages: <gray>(Page <white>{page}<gray> of <white>{pages}<gray>)
+    nextavailable: <yellow>End of page <white>{page}<yellow> of <white>{pages}<yellow>. Type <green>{command}<yellow> for next page.
+    prevavailable: <yellow>End of page <white>{page}<yellow> of <white>{pages}<yellow>. Type <green>{command}<yellow> for previous page.
+
+  rmcheck:
+    checking: <white>Checking all files inside the '{folder}' folder...
+    valid: <green>All recipes are valid, no errors reported.
+    errors: <red>There were errors processing the files, check server log!
+
+  rmreload:
+    reloading: <white>Reloading all settings, recipes and language file...
+    done: <green>Everything reloaded succesfully, now there are {recipes} recipes.
+    errors: <red>There were errors processing the files, check server log!
+
+
+
+# --------------------------------------------------------------------------------------------------------------
+# DO NOT change this value - it helps plugin to inform you if this file has new options from latest updates!
+lastchanged: 1.27

@@ -1,0 +1,81 @@
+# RecipeManager configuration
+# Read the readme.txt file for information about recipes!
+
+
+# Enable/disable special recipes
+special-recipes:
+  repair: true               # Weapon/tool repair (these aren't actual recipes)
+  repair-metadata: false     # Weapon/tool repairing while preserving metadata (enchantments, name, etc), if both items have metadata, the first item's metadata will be preserved (ordering is from top left to bottom right)
+  leather-armor-dye: true    # leather armor dyeing recipes
+  fireworks: true            # fireworks recipes
+  map-cloning: true          # clone maps recipes
+  map-extending: true        # extend maps recipes
+
+
+# When to play some additional sounds
+sounds:
+  failed: true          # play a denied-like sound when a recipe fails ?
+  failed_click: true    # play a denied-like sound when clicking a failed result information ?
+  repair: true          # play a faster avil repair sound when repairing items in a workbench ?
+
+
+# As of version v2 the plugin generates books with recipes.
+# If you add or remove recipes from a book, all book's copies won't be updated because each book is individual (unlike maps).
+# This setting makes whenever a player opens a book (uniquely identified by title+author) it will be updated with the latest recipes.
+# 
+#   default true
+update-books: true
+
+
+# Enable or disable colored log messages
+#   default true
+color-console: true
+
+
+# Return empty item when used in a recipe
+#   all default: true
+return-empty:
+  buckets: true        # water/lava/milk bucket -> empty bucket (default behaviour of MC)
+  potions: true        # any potion -> empty bottle
+  bowl: true           # mushroom soup -> bowl
+
+
+# Return empty bucket when water/lava/milk bucket is used as a fuel in furnace
+#   default true
+fuel-return-buckets: true
+
+
+# When Shift+Clicking an item in the inventory while a furnace is opened, where should the item go ?
+# Values for this setting:
+#   fuel - if item is a fuel, will go in fuel slot, otherwise in the ingredient slot (default, like vaniila MC) NOTE: it can get confusing when creating fuels with items that are also ingredients.
+#   click - click type determins where the item should go, Shift+LeftClick to ingredient slot and Shift+RightClick to fuel slot.
+furnace-shift-click: fuel
+
+
+# Ticks that the furnace task runs at, 20 ticks is 1 second.
+# Use 2 or more if you have a very slow server OR alot of burning furnaces at once cause lag.
+#   default: 1
+furnace-ticks: 1
+
+
+# Multithreading allows server to do certain tasks in another thread (background) which would avoid freezing the server if it takes too long.
+# This is currently used for loading recipes, however if you encounter any weird problems you can disable this to make it run in the main thread.
+# Don't take this as a magic-fix if you don't understand your problem, you should instead post a ticket in the plugin's BukkitDev page.
+#   default: true
+multithreading: true
+
+
+# If you want to remove all existing recipes from the server, then set this to true.
+# Recipes added by this plugin will not be affected of course.
+#   default: false
+clear-recipes: false
+
+
+# Enable or disable metrics system for this specific plugin, it will also not create the PluginMetrics folder if this is disabled, but other plugins can use metrics if they have it implemented.
+#   default: true
+metrics: true
+
+
+# --------------------------------------------------------------------------------------------------------------
+# DO NOT change this value - it helps plugin to inform you if this file has new options from latest updates!
+lastchanged: 2.0
