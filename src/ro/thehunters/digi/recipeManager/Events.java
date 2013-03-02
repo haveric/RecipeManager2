@@ -47,16 +47,16 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import ro.thehunters.digi.recipeManager.api.RecipeManagerCraftEvent;
-import ro.thehunters.digi.recipeManager.api.RecipeManagerPrepareCraftEvent;
+import ro.thehunters.digi.recipeManager.apievents.RecipeManagerCraftEvent;
+import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
 import ro.thehunters.digi.recipeManager.data.BlockFurnaceData;
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.MutableFloat;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
-import ro.thehunters.digi.recipeManager.recipes.flags.RecipeFlags;
 
 /**
  * RecipeManager handled events
@@ -120,41 +120,6 @@ public class Events implements Listener
             playerWorkbench.remove(player.getName());
         }
     }
-    
-    // TODO maybe tackle anvil stuff ?
-    /*
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void eventInventoryClick(final InventoryClickEvent event)
-    {
-        if(event.getView().getType() != InventoryType.ANVIL)
-            return;
-        
-        final Player player = (Player)event.getView().getPlayer();
-        
-        if(event.getSlotType() == SlotType.CRAFTING)
-        {
-            event.setCancelled(true);
-            player.updateInventory();
-        }
-        
-        Bukkit.getScheduler().runTask(RecipeManager.getPlugin(), new Runnable()
-        {
-            public void run()
-            {
-                eventInventoryClickPost(event);
-            }
-        });
-    }
-    
-    private void eventInventoryClickPost(InventoryClickEvent event)
-    {
-        ItemStack[] items = event.getInventory().getContents();
-        Player player = (Player)event.getView().getPlayer();
-        
-        player.sendMessage("Result = " + items[0] + " | " + items[1] + " | " + event.getSlotType());
-        player.updateInventory();
-    }
-    */
     
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void eventInventoryClick(InventoryClickEvent event)
@@ -636,7 +601,7 @@ public class Events implements Listener
     
     private ItemStack prepareCraftResult(Player player, CraftingInventory inventory, WorkbenchRecipe recipe, Location location) throws Exception
     {
-        ItemStack result = recipe.getResult(player, (player == null ? null : player.getName()), location, true);
+        ItemStack result = recipe.getDisplayResult(player, null, location);
         
         /*
         if(result != null)
@@ -724,7 +689,7 @@ public class Events implements Listener
             if(recipe == null)
                 return;
             
-            result = recipe.getResult(player, (player == null ? null : player.getName()), location, false);
+            result = recipe.getResult(player, (player == null ? null : player.getName()), location);
             RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
             
             Bukkit.getPluginManager().callEvent(callEvent);
@@ -756,10 +721,10 @@ public class Events implements Listener
             if(recipe == null)
                 return;
             
-            RecipeFlags flags = recipe.getFlags();
+            boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
             
-            event.setBurnTime(flags.isRemove() ? 0 : recipe.getBurnTicks());
-            event.setBurning(flags.isRemove() ? false : true);
+            event.setBurnTime(isRemove ? 0 : recipe.getBurnTicks());
+            event.setBurning(isRemove ? false : true);
         }
         catch(Exception e)
         {
@@ -799,8 +764,7 @@ public class Events implements Listener
         
         Location loc = new Location(player.getWorld(), vec[0], vec[1], vec[2]);
         
-        // TODO check if it's accurate
-        return (loc.distanceSquared(playerLoc) > 4 * 4 ? playerLoc : loc);
+        return (loc.distanceSquared(playerLoc) > 36 ? playerLoc : loc); // 6 squared
     }
     
     // Monitor furnace ... stuff TODO

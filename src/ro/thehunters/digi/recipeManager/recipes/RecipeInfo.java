@@ -9,12 +9,6 @@ public class RecipeInfo
         REMOVED;
     }
     
-    /*
-    public static String OWNER_MINECRAFT = "Minecraft";
-    public static String OWNER_RECIPEMANAGER = "RecipeManager";
-    public static String OWNER_UNKNOWN = "unknown plugin";
-    */
-    
     public enum RecipeOwner
     {
         MINECRAFT("Minecraft"),

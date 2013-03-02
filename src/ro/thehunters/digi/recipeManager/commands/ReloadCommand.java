@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 
-
 public class ReloadCommand implements CommandExecutor
 {
     @Override

@@ -4,8 +4,8 @@ import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
-import ro.thehunters.digi.recipeManager.recipes.flags.Flags;
-
+import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class SmeltRecipe extends BaseRecipe
 {
@@ -127,7 +127,7 @@ public class SmeltRecipe extends BaseRecipe
     @Override
     public boolean isValid()
     {
-        return hasIngredient() && (getFlags().isRemove() ? true : hasResult());
+        return hasIngredient() && (hasFlag(FlagType.REMOVE) ? true : hasResult());
     }
     
     @Override

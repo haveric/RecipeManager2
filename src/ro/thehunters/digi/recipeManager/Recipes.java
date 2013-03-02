@@ -13,17 +13,16 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CombineRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
-import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
-import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
-import ro.thehunters.digi.recipeManager.recipes.flags.RecipeFlags;
-
+import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
+import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 /**
  * RecipeManager's recipe storage
@@ -246,12 +245,12 @@ public class Recipes
         if(queued)
             info.setStatus(null);
         
-        RecipeFlags flags = recipe.getFlags();
+        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
         
-        if(flags.isRemove())
+        if(isRemove)
             info.setStatus(RecipeStatus.REMOVED);
         
-        else if(flags.isOverride())
+        else if(recipe.hasFlag(FlagType.OVERRIDE))
             info.setStatus(RecipeStatus.OVERRIDEN);
         
         // Add to main index
@@ -259,7 +258,7 @@ public class Recipes
         
         // Add to quickfind index if it's not removed
         
-        if(!flags.isRemove())
+        if(!isRemove)
         {
             if(recipe instanceof CraftRecipe)
             {

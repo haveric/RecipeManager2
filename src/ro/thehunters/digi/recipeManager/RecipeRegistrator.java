@@ -15,16 +15,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.scheduler.BukkitTask;
 
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CombineRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
-import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
-import ro.thehunters.digi.recipeManager.recipes.flags.RecipeFlags;
-
+import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 public class RecipeRegistrator implements Runnable
 {
@@ -214,7 +213,6 @@ public class RecipeRegistrator implements Runnable
         
         iterator = queuedRecipes.entrySet().iterator();
         
-        RecipeFlags flags;
         boolean remove;
         boolean add;
         long lastDisplay = System.currentTimeMillis();
@@ -231,9 +229,8 @@ public class RecipeRegistrator implements Runnable
                 continue;
             
             recipe = entry.getKey();
-            flags = recipe.getFlags();
-            remove = flags.isOverride() || flags.isRemove() || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
-            add = !flags.isRemove();
+            add = !recipe.hasFlag(FlagType.REMOVE);
+            remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
             
             Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getRecipeType());
             
@@ -360,14 +357,11 @@ public class RecipeRegistrator implements Runnable
         
         iterator = queuedRecipes.entrySet().iterator();
         
-        RecipeFlags flags;
         boolean remove;
         boolean add;
         CraftRecipe cr;
         CombineRecipe co;
         SmeltRecipe sm;
-        int craftIndex = 0;
-        int combineIndex = 0;
         
         long lastDisplay = System.currentTimeMillis();
         long time;
@@ -385,9 +379,8 @@ public class RecipeRegistrator implements Runnable
                 continue;
             
             recipe = entry.getKey();
-            flags = recipe.getFlags();
-            remove = flags.isOverride() || flags.isRemove() || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
-            add = !flags.isRemove();
+            add = !recipe.hasFlag(FlagType.REMOVE);
+            remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
             
             Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getRecipeType());
             
@@ -407,7 +400,7 @@ public class RecipeRegistrator implements Runnable
                 {
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
                     
-                    recipeQueue.offer(cr.toShapedRecipe(craftIndex));
+                    recipeQueue.offer(cr.toShapedRecipe());
                 }
             }
             else if(recipe instanceof CombineRecipe)
@@ -427,7 +420,7 @@ public class RecipeRegistrator implements Runnable
                 {
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
                     
-                    recipeQueue.offer(co.toShapelessRecipe(combineIndex));
+                    recipeQueue.offer(co.toShapelessRecipe());
                 }
             }
             else if(recipe instanceof SmeltRecipe)

@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
-import ro.thehunters.digi.recipeManager.recipes.flags.Flags;
+import ro.thehunters.digi.recipeManager.flags.Flags;
 
 
 public class FuelRecipe extends BaseRecipe

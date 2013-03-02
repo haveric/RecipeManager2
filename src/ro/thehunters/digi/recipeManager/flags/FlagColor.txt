@@ -1,0 +1,11 @@
+  {flag} <red> <green> <blue> or false
+
+    Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.
+    Setting it to false will reset leather color.
+    
+    Examples:
+      {flag} 255 100 50
+      {flag} false
+    
+    Specific items: leather armor items
+    Aliases: {aliases}

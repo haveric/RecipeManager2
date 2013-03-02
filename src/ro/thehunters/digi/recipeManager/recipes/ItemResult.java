@@ -1,20 +1,18 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import ro.thehunters.digi.recipeManager.recipes.flags.ItemFlags;
+import ro.thehunters.digi.recipeManager.flags.Arguments;
+import ro.thehunters.digi.recipeManager.flags.Flag;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.flags.Flaggable;
+import ro.thehunters.digi.recipeManager.flags.Flags;
 
-
-public class ItemResult extends ItemStack
+public class ItemResult extends ItemStack implements Flaggable
 {
-    private ItemFlags flags;
-    private int       chance = -1;
+    private Flags flags;
+    private int   chance = 100;
     
     public ItemResult()
     {
@@ -39,11 +37,11 @@ public class ItemResult extends ItemStack
         setChance(chance);
     }
     
-    public ItemResult(ItemStack item, ItemFlags flags)
+    public ItemResult(ItemStack item, Flags flags)
     {
         super(item);
         
-        this.flags = flags;
+        this.flags = flags.clone(this);
     }
     
     public void setItemStack(ItemStack item)
@@ -54,22 +52,14 @@ public class ItemResult extends ItemStack
         setItemMeta(item.getItemMeta());
     }
     
-    public ItemFlags getFlags()
+    public boolean checkFlags(Arguments a)
     {
-        if(flags == null)
-            flags = new ItemFlags();
-        
-        return flags;
+        return (flags == null ? true : flags.checkFlags(a));
     }
     
-    public boolean checkFlags(Player player, String playerName, Location location, List<String> reasons)
+    public boolean applyFlags(Arguments a)
     {
-        return (flags == null ? true : flags.checkFlags(player, playerName, location, null, this, reasons));
-    }
-    
-    public boolean applyFlags(Player player, String playerName, Location location, List<String> reasons)
-    {
-        return (flags == null ? true : flags.applyFlags(player, playerName, location, null, this, reasons));
+        return (flags == null ? true : flags.applyFlags(a));
     }
     
     public void setChance(int chance)
@@ -82,8 +72,44 @@ public class ItemResult extends ItemStack
         return chance;
     }
     
-    public String print()
+    // From Flaggable interface
+    
+    @Override
+    public boolean hasFlag(FlagType type)
     {
-        return String.format("%s%s%s%s", (getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE), getType().toString(), (getDurability() > 0 ? ":" + getDurability() : ""), (getAmount() > 1 ? " x " + getAmount() : ""));
+        return (flags == null ? false : flags.hasFlag(type));
+    }
+    
+    @Override
+    public boolean hasFlags()
+    {
+        return (flags != null);
+    }
+    
+    @Override
+    public Flag getFlag(FlagType type)
+    {
+        return flags.getFlag(type);
+    }
+    
+    @Override
+    public <T extends Flag>T getFlag(Class<T> flagClass)
+    {
+        return flags.getFlag(flagClass);
+    }
+    
+    @Override
+    public Flags getFlags()
+    {
+        if(flags == null)
+            flags = new Flags(this);
+        
+        return flags;
+    }
+    
+    @Override
+    public void addFlag(Flag flag)
+    {
+        flags.addFlag(flag);
     }
 }

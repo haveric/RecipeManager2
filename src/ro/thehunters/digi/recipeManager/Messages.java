@@ -1,8 +1,6 @@
 package ro.thehunters.digi.recipeManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -130,6 +128,8 @@ public enum Messages
     
     CRAFT_REPAIR_DISABLED("<red>Repair recipes disabled."),
     
+    CRAFT_FLAG_DISABLED("<red>Recipe is disabled."),
+    
     CRAFT_FLAG_GAMEMODE("<red>Allowed gamemodes: {gamemodes}"),
     
     CRAFT_FLAG_HEIGHT("<red>Need height: {height}"),
@@ -145,8 +145,8 @@ public enum Messages
     CRAFT_FLAG_HOLD("<red>Need in hand: {items}"),
     CRAFT_FLAG_NOHOLD("<red>Disallowed in hand: {items}"),
     
-    CRAFT_FLAG_EXP("<red>Need experience: {exp}"),
-    CRAFT_FLAG_EXPAWARD("{exp} experience"),
+    CRAFT_FLAG_REQEXP("<red>Need EXP: {exp}"),
+    CRAFT_FLAG_MODEXP("{color}{exp} EXP"),
     
     CRAFT_FLAG_PERMISSIONS("<red>Allowed permissions: {permissions}"),
     CRAFT_FLAG_NOPERMISSIONS("<red>Disallowed permissions: {permissions}"),
@@ -171,16 +171,16 @@ public enum Messages
     CRAFT_SPECIAL_MAP_CLONING("Map cloning is disabled."),
     CRAFT_SPECIAL_MAP_EXTENDING("Map extending is disabled."),
     
-    CRAFT_RESULT_FAILED_TITLE("<red>Can't craft recipe because:"),
-    CRAFT_RESULT_FAILED_REASON("<dark_red>- <yellow>{reason}"),
+    CRAFT_RESULT_FAILED_TITLE("<yellow><underline>Unable to craft:"),
     
-    CRAFT_RESULT_RECIEVE_TITLE("<gold>You will get a random item:"),
-    CRAFT_RESULT_RECIEVE_ITEM("<dark_red>{chance} <green>{item}"),
-    CRAFT_RESULT_RECIEVE_SECRETS("<dark_red>{chance} <red>Secret item(s)..."),
-    CRAFT_RESULT_UNKNOWN("<gold>You will get an unknown item!"),
-    CRAFT_RESULT_UNALLOWED_TITLE("<red>Unallowed item(s):"),
-    CRAFT_RESULT_UNALLOWED_ITEM("<dark_red>{chance} <red><strikethrough>{item} <reset><gold>{reason}"),
-    CRAFT_RESULT_UNALLOWED_HIDDEN("<dark_red>{chance} <red>Unallowed item(s)..."),
+    CRAFT_RESULT_RECIEVE_TITLE("<light_purple><underline>You will get a random item:"),
+    CRAFT_RESULT_RECIEVE_ITEM("<dark_green>{chance} <green>{item}"),
+    CRAFT_RESULT_RECIEVE_NOTHING("<dark_red>{chance} <red>Failure chance"),
+    CRAFT_RESULT_RECIEVE_SECRETS("<dark_green>{chance} <red>{num} secret item(s)..."),
+    CRAFT_RESULT_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
+    CRAFT_RESULT_UNALLOWED_TITLE("<red><underline>Unallowed item(s):"),
+    CRAFT_RESULT_UNALLOWED_ITEM("<dark_green>{chance} <red><strikethrough>{item} <reset><gold>{reason}"),
+    CRAFT_RESULT_UNALLOWED_HIDDEN("<dark_green>{chance} <red>{num} unallowed item(s)..."),
     
     LASTCHANGED(Files.LASTCHANGED_MESSAGES);
     
@@ -221,27 +221,25 @@ public enum Messages
      */
     public String get(String... variables)
     {
-        return replaceVariables(Tools.parseColors(message, false), variables);
+        return Tools.replaceVariables(Tools.parseColors(message, false), variables);
     }
     
-    public void addReason(List<String> reasons, String recipeMessage, String... variables)
+    public String getCustom(String customMessage, String... variables)
     {
-        String msg = message;
+        String msg = get();
         
-        if(recipeMessage != null) // recipe has custom message
+        if(customMessage != null) // recipe has custom message
         {
-            if(recipeMessage.equals("false")) // if recipe message is set to "false" then don't show the message
-                return;
-            
-            msg = recipeMessage;
+            // if flag message is set to "false" then don't show the message
+            msg = (customMessage.equals("false") ? null : customMessage);
         }
-        else if(msg == null) // message from messages.yml is "false", don't show the message
-            return;
+        else if(msg != null && msg.equals("false"))
+        {
+            // message from messages.yml is "false", don't show the message
+            msg = null;
+        }
         
-        if(reasons == null)
-            reasons = new ArrayList<String>();
-        
-        reasons.add(replaceVariables(msg, variables));
+        return msg == null ? null : Tools.replaceVariables(msg, variables);
     }
     
     /**
@@ -315,25 +313,9 @@ public enum Messages
         else if(msg == null) // message from messages.yml is "false", don't show the message
             return;
         
-        msg = replaceVariables(msg, variables);
+        msg = Tools.replaceVariables(msg, variables);
         
         send(sender, msg);
-    }
-    
-    private String replaceVariables(String msg, String... variables)
-    {
-        if(variables != null && variables.length > 0)
-        {
-            if(variables.length % 2 > 0)
-                throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
-            
-            for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
-            {
-                msg = msg.replaceAll(variables[i], variables[i + 1]);
-            }
-        }
-        
-        return msg;
     }
     
     /**
@@ -396,6 +378,8 @@ public enum Messages
                 messages.set(msg.path, msg.message);
             }
             
+            // TODO re-enable
+            /*
             try
             {
                 messages.save(file);
@@ -406,6 +390,7 @@ public enum Messages
             }
             
             send(sender, ChatColor.GREEN + "Generated 'messages.yml' file.");
+            */
         }
         else
         {
@@ -453,5 +438,12 @@ public enum Messages
         send(sender, message);
         
         exception.printStackTrace();
+    }
+    
+    public static void debug(String message)
+    {
+        // TODO print stack trace
+        // TODO debug switch
+        info(ChatColor.LIGHT_PURPLE + "[DEBUG]" + ChatColor.RESET + message);
     }
 }

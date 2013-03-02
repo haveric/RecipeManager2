@@ -1,23 +1,23 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
-import java.util.List;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Recipes;
-import ro.thehunters.digi.recipeManager.recipes.flags.Flags;
-import ro.thehunters.digi.recipeManager.recipes.flags.RecipeFlags;
+import ro.thehunters.digi.recipeManager.flags.Arguments;
+import ro.thehunters.digi.recipeManager.flags.Flag;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.flags.Flaggable;
+import ro.thehunters.digi.recipeManager.flags.Flags;
 
-
-public class BaseRecipe
+public class BaseRecipe implements Flaggable
 {
     public enum RecipeType
     {
+        ANY(null),
         CRAFT("craft"),
         COMBINE("combine"),
+        WORKBENCH(null),
         SMELT("smelt"),
         FUEL("fuel");
         
@@ -34,8 +34,8 @@ public class BaseRecipe
         }
     }
     
-    private RecipeFlags flags;
-    protected int       hash;
+    private Flags flags;
+    protected int hash;
     
     public BaseRecipe()
     {
@@ -43,12 +43,12 @@ public class BaseRecipe
     
     public BaseRecipe(BaseRecipe recipe)
     {
-        this.flags = new RecipeFlags(recipe.getFlags());
+        this.flags = recipe.getFlags().clone(this);
     }
     
     public BaseRecipe(Flags flags)
     {
-        this.flags = new RecipeFlags(flags);
+        this.flags = flags.clone(this);
     }
     
     /**
@@ -62,27 +62,20 @@ public class BaseRecipe
         return RecipeManager.getRecipes().getRecipeInfo(this);
     }
     
-    public RecipeFlags getFlags()
+    public boolean checkFlags(Arguments a)
     {
-        if(flags == null)
-            flags = new RecipeFlags();
-        
-        return flags;
+        return (flags == null ? true : flags.checkFlags(a));
     }
     
-    public void setFlags(RecipeFlags flags)
+    public boolean applyFlags(Arguments a)
     {
-        this.flags = flags;
+        return (flags == null ? true : flags.applyFlags(a));
     }
     
-    public boolean checkFlags(Player player, String playerName, Location location, List<String> reasons)
+    public void sendFailed(Arguments a)
     {
-        return (flags == null ? true : flags.checkFlags(player, playerName, location, getRecipeType(), null, reasons));
-    }
-    
-    public boolean applyFlags(Player player, String playerName, Location location, List<String> reasons)
-    {
-        return (flags == null ? true : flags.applyFlags(player, playerName, location, getRecipeType(), null, reasons));
+        if(flags != null)
+            flags.sendFailed(a);
     }
     
     public RecipeType getRecipeType()
@@ -109,7 +102,7 @@ public class BaseRecipe
     @Override
     public boolean equals(Object obj)
     {
-        if(this == obj)
+        if(obj == this)
             return true;
         
         if(obj == null || obj instanceof BaseRecipe == false)
@@ -163,5 +156,46 @@ public class BaseRecipe
         }
         
         return null;
+    }
+    
+    // From Flaggable interface
+    
+    @Override
+    public boolean hasFlag(FlagType type)
+    {
+        return (flags == null ? false : flags.hasFlag(type));
+    }
+    
+    @Override
+    public boolean hasFlags()
+    {
+        return (flags != null);
+    }
+    
+    @Override
+    public Flag getFlag(FlagType type)
+    {
+        return flags.getFlag(type);
+    }
+    
+    @Override
+    public <T extends Flag>T getFlag(Class<T> flagClass)
+    {
+        return flags.getFlag(flagClass);
+    }
+    
+    @Override
+    public Flags getFlags()
+    {
+        if(flags == null)
+            flags = new Flags(this);
+        
+        return flags;
+    }
+    
+    @Override
+    public void addFlag(Flag flag)
+    {
+        flags.addFlag(flag);
     }
 }

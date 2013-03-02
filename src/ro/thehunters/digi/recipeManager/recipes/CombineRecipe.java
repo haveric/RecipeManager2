@@ -8,8 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.recipes.flags.Flags;
-
+import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class CombineRecipe extends WorkbenchRecipe
 {
@@ -111,12 +110,7 @@ public class CombineRecipe extends WorkbenchRecipe
     
     public ShapelessRecipe toShapelessRecipe()
     {
-        return toShapelessRecipe(0);
-    }
-    
-    public ShapelessRecipe toShapelessRecipe(int markResultId)
-    {
-        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(markResultId >= 0 ? Tools.generateRecipeIdResult(getFirstResult(), markResultId) : getFirstResult());
+        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.generateRecipeIdResult(getFirstResult(), getIndex()));
         
         for(ItemStack item : ingredients)
         {

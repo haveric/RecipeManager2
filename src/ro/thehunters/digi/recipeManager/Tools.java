@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -24,13 +26,397 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
+
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 
 /**
  * Collection of conversion and useful methods
  */
 public class Tools
 {
+    public static Integer parseInteger(String string)
+    {
+        return parseInteger(string, "Invalid number: " + string);
+    }
+    
+    public static Integer parseInteger(String string, String error)
+    {
+        try
+        {
+            return Integer.valueOf(string);
+        }
+        catch(Exception e)
+        {
+            RecipeErrorReporter.error(error);
+            return null;
+        }
+    }
+    
+    public static String printItemStack(ItemStack item)
+    {
+        if(item == null || item.getTypeId() == 0)
+            return "(nothing)";
+        
+        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE);
+        
+        ItemMeta meta = item.getItemMeta();
+        String name = meta == null ? null : meta.getDisplayName();
+        name = (name == null ? item.getType().toString() : ChatColor.ITALIC + name);
+        
+        String data = (item.getDurability() > 0 ? ":" + item.getDurability() : "");
+        String amount = (item.getAmount() > 1 ? " x " + item.getAmount() : "");
+        
+        return String.format("%s%s%s%s", color, name, data, amount);
+    }
+    
+    public static String replaceVariables(String msg, String... variables)
+    {
+        if(variables != null && variables.length > 0)
+        {
+            if(variables.length % 2 > 0)
+                throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
+            
+            for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
+            {
+                msg = msg.replace(variables[i], variables[i + 1]);
+            }
+        }
+        
+        return msg;
+    }
+    
+    public static Potion parsePotion(String value, FlagType type)
+    {
+        String[] split = value.toLowerCase().split("\\|");
+        
+        if(split.length == 0)
+        {
+            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
+            return null;
+        }
+        
+        Potion potion = new Potion(null);
+        boolean splash = false;
+        boolean extended = false;
+        int level = 1;
+        
+        for(String s : split)
+        {
+            s = s.trim();
+            
+            if(s.equals("splash"))
+            {
+                splash = true;
+            }
+            else if(s.equals("extended"))
+            {
+                extended = true;
+            }
+            else if(s.startsWith("type"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    return null;
+                }
+                
+                value = split[1].trim();
+                
+                try
+                {
+                    potion.setType(PotionType.valueOf(value.toUpperCase()));
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    return null;
+                }
+            }
+            else if(s.startsWith("level"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'level' argument with no level!");
+                    continue;
+                }
+                
+                value = split[1].trim();
+                
+                if(value.equals("max"))
+                {
+                    level = 9999;
+                }
+                else
+                {
+                    try
+                    {
+                        level = Integer.valueOf(value);
+                    }
+                    catch(Exception e)
+                    {
+                        RecipeErrorReporter.error("Flag @" + type + " has invalid 'level' number: " + value);
+                    }
+                }
+            }
+            else
+            {
+                RecipeErrorReporter.error("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+            }
+        }
+        
+        if(potion.getType() == null)
+        {
+            RecipeErrorReporter.error("Flag @" + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+            return null;
+        }
+        
+        potion.setLevel(Math.min(Math.max(level, 1), potion.getType().getMaxLevel()));
+        
+        if(!potion.getType().isInstant())
+            potion.setHasExtendedDuration(extended);
+        
+        potion.setSplash(splash);
+        
+        System.out.print("[debug] potion = " + potion.getLevel() + " | " + potion.getType() + " | " + potion.getEffects() + " | " + potion.isSplash() + " | " + potion.hasExtendedDuration());
+        
+        return potion;
+    }
+    
+    public static PotionEffect parsePotionEffect(String value, FlagType type)
+    {
+        String[] split = value.toLowerCase().split("\\|");
+        
+        if(split.length == 0)
+        {
+            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
+            return null;
+        }
+        
+        PotionEffectType effectType = null;
+        boolean ambient = false;
+        float duration = 1;
+        int amplify = 0;
+        
+        for(String s : split)
+        {
+            s = s.trim();
+            
+            if(s.equals("ambient"))
+            {
+                ambient = true;
+            }
+            else if(s.startsWith("type"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+                    return null;
+                }
+                
+                value = split[1].trim();
+                
+                try
+                {
+                    effectType = PotionEffectType.getByName(value.toUpperCase());
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+                    return null;
+                }
+            }
+            else if(s.startsWith("duration"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'duration' argument with no number!");
+                    continue;
+                }
+                
+                value = split[1].trim();
+                
+                try
+                {
+                    duration = Float.valueOf(value);
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'duration' number: " + value);
+                }
+            }
+            else if(s.startsWith("amplify"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'amplify' argument with no number!");
+                    continue;
+                }
+                
+                value = split[1].trim();
+                
+                try
+                {
+                    amplify = Integer.parseInt(value);
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'amplify' number: " + value);
+                }
+            }
+            else
+            {
+                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+            }
+        }
+        
+        if(effectType == null)
+        {
+            RecipeErrorReporter.error("Flag @" + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+            return null;
+        }
+        
+        if(duration != 1 && (effectType == PotionEffectType.HEAL || effectType == PotionEffectType.HARM))
+            RecipeErrorReporter.warning("Flag @" + type + " can't have duration on HEAL or HARM because they're instant!");
+        
+        return new PotionEffect(effectType, Math.round(duration * 20), amplify, ambient);
+    }
+    
+    public static FireworkEffect parseFireworkEffect(String value, FlagType type)
+    {
+        String[] split = value.toLowerCase().split("\\|");
+        
+        if(split.length == 0)
+        {
+            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + Files.FILE_INFO_FLAGS + "' for syntax.");
+            return null;
+        }
+        
+        Builder build = FireworkEffect.builder();
+        
+        for(String s : split)
+        {
+            s = s.trim();
+            
+            if(s.equals("trail"))
+            {
+                build.withTrail();
+            }
+            else if(s.equals("flicker"))
+            {
+                build.withFlicker();
+            }
+            else if(s.startsWith("color"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'color' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    return null;
+                }
+                
+                split = split[1].split(",");
+                List<Color> colors = new ArrayList<Color>();
+                Color color;
+                
+                for(String c : split)
+                {
+                    color = Tools.parseColor(c.trim());
+                    
+                    if(color == null)
+                        RecipeErrorReporter.warning("Flag @" + type + " has an invalid color!");
+                    else
+                        colors.add(color);
+                }
+                
+                if(colors.isEmpty())
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " doesn't have any valid colors, they are required!");
+                    return null;
+                }
+                
+                build.withColor(colors);
+            }
+            else if(s.startsWith("fadecolor"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'fadecolor' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    return null;
+                }
+                
+                split = split[1].split(",");
+                List<Color> colors = new ArrayList<Color>();
+                Color color;
+                
+                for(String c : split)
+                {
+                    color = Tools.parseColor(c.trim());
+                    
+                    if(color == null)
+                        RecipeErrorReporter.warning("Flag @" + type + " has an invalid fade color! Moving on...");
+                    else
+                        colors.add(color);
+                }
+                
+                if(colors.isEmpty())
+                    RecipeErrorReporter.error("Flag @" + type + " doesn't have any valid fade colors! Moving on...");
+                else
+                    build.withFade(colors);
+            }
+            else if(s.startsWith("type"))
+            {
+                split = s.split(" ", 2);
+                
+                if(split.length <= 1)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has 'type' argument with no value!", "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
+                    return null;
+                }
+                
+                value = split[1].trim();
+                
+                try
+                {
+                    build.with(FireworkEffect.Type.valueOf(value.toUpperCase()));
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'type' setting value: " + value, "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
+                    return null;
+                }
+            }
+            else
+            {
+                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+            }
+        }
+        
+        return build.build();
+    }
+    
     public static String convertListToString(List<?> list)
+    {
+        return convertListToString(list, ", ", "");
+    }
+    
+    public static String convertListToString(List<?> list, String separator, String prefix)
     {
         if(list.isEmpty())
             return "";
@@ -40,11 +426,11 @@ public class Tools
         if(size == 1)
             return list.get(0).toString();
         
-        StringBuilder str = new StringBuilder(list.get(0).toString());
+        StringBuilder str = new StringBuilder(prefix).append(list.get(0).toString());
         
         for(int i = 1; i < size; i++)
         {
-            str.append(", ").append(list.get(i).toString());
+            str.append(separator).append(prefix).append(list.get(i).toString());
         }
         
         return str.toString();

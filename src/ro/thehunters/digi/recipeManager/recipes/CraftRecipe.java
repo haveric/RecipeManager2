@@ -7,8 +7,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.recipes.flags.Flags;
-
+import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class CraftRecipe extends WorkbenchRecipe
 {
@@ -162,12 +161,7 @@ public class CraftRecipe extends WorkbenchRecipe
     
     public ShapedRecipe toShapedRecipe()
     {
-        return toShapedRecipe(0);
-    }
-    
-    public ShapedRecipe toShapedRecipe(int markResultId)
-    {
-        ShapedRecipe bukkitRecipe = new ShapedRecipe(markResultId >= 0 ? Tools.generateRecipeIdResult(getFirstResult(), markResultId) : getFirstResult());
+        ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.generateRecipeIdResult(getFirstResult(), getIndex()));
         
         switch(height)
         {

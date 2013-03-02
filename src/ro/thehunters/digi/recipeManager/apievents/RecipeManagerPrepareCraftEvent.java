@@ -1,4 +1,4 @@
-package ro.thehunters.digi.recipeManager.api;
+package ro.thehunters.digi.recipeManager.apievents;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
