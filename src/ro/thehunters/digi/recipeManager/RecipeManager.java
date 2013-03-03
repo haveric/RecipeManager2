@@ -5,13 +5,18 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.commands.ExtractCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
+import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 /**
  * RecipeManager's main class<br>
@@ -78,6 +83,19 @@ public class RecipeManager extends JavaPlugin
         
         // Start loading data
         reload(null, false, true);
+        
+        // TEST
+        SmeltRecipe r = new SmeltRecipe();
+        
+        r.setIngredient(new ItemStack(Material.SEEDS));
+        
+        r.setFuel(new ItemStack(Material.POTION, 1, new Potion(PotionType.INSTANT_HEAL).toDamageValue()));
+        
+        r.setMinTime(2);
+        
+        r.setResult(new ItemStack(Material.POTION, 1, new Potion(PotionType.INSTANT_HEAL).splash().toDamageValue()));
+        
+        r.register();
     }
     
     /**

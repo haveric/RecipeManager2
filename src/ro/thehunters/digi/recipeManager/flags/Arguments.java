@@ -162,9 +162,9 @@ public class Arguments
         if(sender == null)
             return;
         
-        for(String r : reasons)
+        for(String s : reasons)
         {
-            Messages.send(sender, r);
+            Messages.send(sender, s);
         }
     }
     
@@ -178,20 +178,34 @@ public class Arguments
         return (effects != null && !effects.isEmpty());
     }
     
-    public void addEffect(Messages globalMessage, String customMessage, String... variables)
+    public void addEffect(String message)
     {
-        customMessage = globalMessage.getCustom(customMessage, variables);
-        
         if(effects == null)
             effects = new ArrayList<String>();
         
-        effects.add(customMessage);
+        effects.add(message);
+    }
+    
+    public void addEffect(Messages globalMessage, String customMessage, String... variables)
+    {
+        addEffect(globalMessage.getCustom(customMessage, variables));
     }
     
     public void clearEffects()
     {
         if(effects != null)
             effects.clear();
+    }
+    
+    public void sendEffects(CommandSender sender)
+    {
+        if(sender == null)
+            return;
+        
+        for(String s : effects)
+        {
+            Messages.send(sender, s);
+        }
     }
     
     public String parseVariables(String string)
@@ -203,7 +217,7 @@ public class Arguments
         string = string.replace("{playerdisplay}", (p != null ? p.getDisplayName() : name));
         string = string.replace("{result}", Tools.printItemStack(result()));
         string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString() : "(unknown)"));
-        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "0"));
+        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
         string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "0"));
         string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "0"));
         string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "0"));

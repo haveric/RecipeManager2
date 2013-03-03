@@ -22,7 +22,9 @@ public enum FlagType
     MODMONEY(Flag.class, Bit.NONE, "moneymod", "money"),
     REQMONEY(Flag.class, Bit.NONE, "moneyreq", "needmoney"),
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NONE),
-    SOUND(FlagSound.class, Bit.NONE),
+    SOUND(FlagSound.class, Bit.NONE, "playsound"),
+    EFFECT(FlagEffect.class, Bit.NONE, "playeffect", "fx"), // TODO finish
+    CREATURE(FlagCreature.class, Bit.NONE, "spawncreature"), // TODO finish
     SECRET(FlagSecret.class, Bit.NO_VALUE, "hide"),
     DEBUG(FlagDebug.class, Bit.NO_VALUE, "monitor", "log"),
     
@@ -30,6 +32,7 @@ public enum FlagType
     DESCRIPTION(FlagDescription.class, Bit.RECIPE, "recipeinfo", "info"),
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"),
     HIDERESULTS(FlagHideResults.class, Bit.RECIPE | Bit.NO_VALUE),
+    NEEDFUEL(FlagNeedFuel.class, Bit.RECIPE, "reqfuel", "fuelreq"), // TODO Remove ?
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE, "delete"),
     RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE, "overwrite", "supercede", "replace"),

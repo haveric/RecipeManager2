@@ -201,7 +201,11 @@ public class WorkbenchRecipe extends BaseRecipe
             result = null;
         }
         
-        if(result == null)
+        if(result != null)
+        {
+            a.sendEffects(a.getPlayer());
+        }
+        else
         {
             sendFailed(a);
             

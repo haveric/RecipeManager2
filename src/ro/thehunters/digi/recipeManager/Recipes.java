@@ -149,7 +149,7 @@ public class Recipes
      */
     public CraftRecipe getCraftRecipe(ItemStack result)
     {
-        return indexCraft.get(Tools.getRecipeIdFromResult(result));
+        return (result == null ? null : indexCraft.get(Tools.getRecipeIdFromResult(result)));
     }
     
     /**
@@ -161,7 +161,7 @@ public class Recipes
      */
     public CombineRecipe getCombineRecipe(ItemStack result)
     {
-        return indexCombine.get(Tools.getRecipeIdFromResult(result));
+        return (result == null ? null : indexCombine.get(Tools.getRecipeIdFromResult(result)));
     }
     
     /**
@@ -173,7 +173,7 @@ public class Recipes
      */
     public SmeltRecipe getSmeltRecipe(ItemStack ingredient)
     {
-        return indexSmelt.get(ingredient.getTypeId());
+        return (ingredient == null ? null : indexSmelt.get(ingredient.getTypeId()));
     }
     
     /**
@@ -186,6 +186,9 @@ public class Recipes
      */
     public FuelRecipe getFuelRecipe(ItemStack fuel)
     {
+        if(fuel == null)
+            return null;
+        
         FuelRecipe recipe = indexFuels.get(fuel.getTypeId() + "");
         
         if(recipe == null)

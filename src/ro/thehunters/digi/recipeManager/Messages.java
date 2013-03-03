@@ -166,6 +166,8 @@ public enum Messages
     CRAFT_FLAG_POTIONEFFECTS("<red>Need potion effect: {effects}"),
     CRAFT_FLAG_NOPOTIONEFFECTS("<red>Disallowed potion effect: {effects}"),
     
+    CRAFT_FLAG_NEEDFUEL("<red>Need fuel: {fuels}"),
+    
     CRAFT_SPECIAL_LEATHERDYE("Leather dyeing is disabled."),
     CRAFT_SPECIAL_FIREWORKS("Firework crafting is disabled."),
     CRAFT_SPECIAL_MAP_CLONING("Map cloning is disabled."),

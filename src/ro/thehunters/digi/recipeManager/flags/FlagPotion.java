@@ -52,7 +52,7 @@ public class FlagPotion extends Flag
             
             if(split.length != 2)
             {
-                RecipeErrorReporter.error("Flag @" + type + " has 'custom' argument with no values!");
+                RecipeErrorReporter.error("Flag " + type + " has 'custom' argument with no values!");
                 return false;
             }
             

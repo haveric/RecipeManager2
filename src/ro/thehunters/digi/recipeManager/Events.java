@@ -38,9 +38,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -52,7 +50,9 @@ import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent
 import ro.thehunters.digi.recipeManager.data.BlockFurnaceData;
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.MutableFloat;
+import ro.thehunters.digi.recipeManager.flags.Arguments;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe.RecipeType;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
@@ -121,9 +121,24 @@ public class Events implements Listener
         }
     }
     
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler
     public void eventInventoryClick(InventoryClickEvent event)
     {
+        ItemStack[] contents = event.getInventory().getContents();
+        
+        System.out.print(" ");
+        System.out.print(event.getEventName());
+        System.out.print("    getCursor = " + event.getCursor());
+        System.out.print("    getCurrentItem() = " + event.getCurrentItem());
+        System.out.print("    isLeftClick() = " + event.isLeftClick());
+        System.out.print("    isRightClick() = " + event.isRightClick());
+        System.out.print("    isShiftClick() = " + event.isShiftClick());
+        System.out.print("    isCancelled() = " + event.isCancelled());
+        System.out.print("    getResult() = " + event.getResult());
+        System.out.print("    item at rawslot = " + (event.getRawSlot() < contents.length ? contents[event.getRawSlot()] : "Out of bounds"));
+        System.out.print(" ");
+        
+        /*
         try
         {
             Inventory inv = event.getInventory();
@@ -147,6 +162,7 @@ public class Events implements Listener
             CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player)event.getWhoClicked() : null);
             Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
         }
+        */
     }
     
     private void furnaceClickEvent(InventoryClickEvent event, Inventory inv, Furnace furnace) throws Exception
@@ -170,12 +186,30 @@ public class Events implements Listener
             {
                 Messages.info(ChatColor.GREEN + "ingredient :: " + cursor.isSimilar(clicked) + " | cursor=" + cursor + " | clicked=" + clicked);
                 
+                if(!furnaceCheckItems(event, furnace, player, cursor, furnace.getInventory().getFuel()))
+                {
+                    Messages.debug("CANCELLED!");
+                    event.setCancelled(true);
+                    event.setResult(Result.DENY);
+                    player.updateInventory();
+                    return;
+                }
+                
                 return;
             }
             
             case 1: // FUEL slot
             {
                 Messages.info(ChatColor.GREEN + "fuel :: " + cursor.isSimilar(clicked) + " | cursor=" + cursor + " | clicked=" + clicked);
+                
+                if(!furnaceCheckItems(event, furnace, player, furnace.getInventory().getSmelting(), cursor))
+                {
+                    Messages.debug("CANCELLED!");
+                    event.setCancelled(true);
+                    event.setResult(Result.DENY);
+                    player.updateInventory();
+                    return;
+                }
                 
                 return;
             }
@@ -317,6 +351,56 @@ public class Events implements Listener
         */
     }
     
+    private boolean furnaceCheckItems(InventoryClickEvent event, Furnace furnace, Player player, ItemStack ingredient, ItemStack fuel) throws Exception
+    {
+        Messages.debug("ingredient=" + ingredient + " | fuel=" + fuel + " | " + event.isLeftClick() + " | " + event.isRightClick() + " | " + event.isShiftClick());
+        
+        if(!RecipeManager.getPlugin().canCraft(player)) // player not allowed to craft
+        {
+            event.setCancelled(true);
+            event.setResult(Result.DENY);
+            return false;
+        }
+        
+        SmeltRecipe smeltRecipe = RecipeManager.recipes.getSmeltRecipe(ingredient);
+        
+        if(smeltRecipe != null && smeltRecipe.hasFuel())
+        {
+            Messages.debug("REQ FUEL = " + Tools.printItemStack(smeltRecipe.getFuel()));
+            Messages.debug("PLACED FUEL = " + Tools.printItemStack(fuel));
+            
+            if(fuel == null || fuel.getTypeId() == 0)
+                return true;
+            
+            if(!smeltRecipe.getFuel().isSimilar(fuel))
+            {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        /*
+        FuelRecipe fuelRecpe = RecipeManager.recipes.getFuelRecipe(fuel);
+        Location location = furnace.getLocation();
+        
+        if(smeltRecipe != null)
+        {
+            Arguments a = new Arguments(player, null, location, RecipeType.SMELT, null);
+            
+            if(!smeltRecipe.checkFlags(a))
+            {
+                a.sendReasons(player);
+                event.setCancelled(true);
+                event.setResult(Result.DENY);
+                return false;
+            }
+        }
+        */
+        
+        return true;
+    }
+    
     private boolean furnaceClickIngredient(InventoryClickEvent event, Furnace furnace, Player player, ItemStack placed) throws Exception
     {
         if(!RecipeManager.getPlugin().canCraft(player)) // player not allowed to craft
@@ -330,6 +414,19 @@ public class Events implements Listener
         Location location = furnace.getLocation();
         
         Messages.info(ChatColor.GREEN + "placed ingredient = " + placed + " | clicked=" + event.getCurrentItem());
+        
+        if(recipe != null)
+        {
+            Arguments a = new Arguments(player, null, location, RecipeType.SMELT, null);
+            
+            if(!recipe.checkFlags(a))
+            {
+                a.sendReasons(player);
+                event.setCancelled(true);
+                event.setResult(Result.DENY);
+                return false;
+            }
+        }
         
         /*
         ItemStack clicked = event.getCurrentItem();

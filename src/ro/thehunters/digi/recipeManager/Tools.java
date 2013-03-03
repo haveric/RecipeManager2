@@ -21,6 +21,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -32,12 +33,205 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 /**
  * Collection of conversion and useful methods
  */
 public class Tools
 {
+    public static ItemResult convertStringToItemResult(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    {
+        String[] split = string.substring(1).trim().split("%");
+        ItemResult result = new ItemResult();
+        
+        if(split.length >= 2)
+        {
+            string = split[0].trim();
+            
+            try
+            {
+                result.setChance(Math.min(Math.max(Integer.valueOf(string), 0), 100));
+            }
+            catch(Exception e)
+            {
+                RecipeErrorReporter.warning("Invalid percentage number: " + string);
+            }
+            
+            string = split[1];
+        }
+        else
+            string = split[0];
+        
+        ItemStack item = convertStringToItemStack(string, defaultData, allowData, allowAmount, allowEnchantments);
+        
+        if(item == null)
+            return null;
+        
+        result.setItemStack(item);
+        
+        return result;
+    }
+    
+    public static ItemStack convertStringToItemStack(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    {
+        string = string.trim();
+        
+        if(string.length() == 0)
+            return null;
+        
+        String[] itemString = string.split("\\|");
+        String[] stringArray = itemString[0].trim().split(":");
+        
+        if(stringArray.length <= 0 || stringArray[0].isEmpty())
+            return new ItemStack(0);
+        
+        stringArray[0] = stringArray[0].trim();
+        
+        /*
+        String alias = RecipeManager.getPlugin().getAliases().get(stringArray[0]);
+        
+        if(alias != null)
+        {
+            if(stringArray.length > 2 && printErrors)
+                RecipeErrorReporter.error("'" + stringArray[0] + "' is an alias with data and amount.", "You can only set amount e.g.: alias:amount.");
+            
+            return stringToItemStack(string.replace(stringArray[0], alias), defaultData, allowData, allowAmount, allowEnchantments, printErrors);
+        }
+        */
+        
+        Material mat = Material.matchMaterial(stringArray[0]);
+        
+        if(mat == null)
+        {
+            RecipeErrorReporter.error("Item '" + stringArray[0] + "' does not exist!", "Name could be different, look in readme.txt for links");
+            
+            return null;
+        }
+        
+        int type = mat.getId();
+        
+        if(type <= 0)
+            return new ItemStack(0);
+        
+        int data = defaultData;
+        
+        if(stringArray.length > 1)
+        {
+            if(allowData)
+            {
+                // TODO maybe use TreeSpecies, SkullTypes, etc as data aliases ?
+                
+                try
+                {
+                    stringArray[1] = stringArray[1].trim();
+                    
+                    if(stringArray[1].charAt(0) != '*')
+                        data = Math.max(Integer.valueOf(stringArray[1]), data);
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Item '" + mat + " has data value that is not a number: '" + stringArray[1] + "', defaulting to " + defaultData);
+                }
+            }
+            else
+                RecipeErrorReporter.error("Item '" + mat + "' can't have data value defined in this recipe's slot, data value ignored.");
+        }
+        
+        int amount = 1;
+        
+        if(stringArray.length > 2)
+        {
+            if(allowAmount)
+            {
+                try
+                {
+                    amount = Math.max(Integer.valueOf(stringArray[2].trim()), 1);
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.error("Item '" + mat + "' has amount value that is not a number: " + stringArray[2] + ", defaulting to 1");
+                }
+            }
+            else
+                RecipeErrorReporter.error("Item '" + mat + "' can't have amount defined in this recipe's slot, amount ignored.");
+        }
+        
+        ItemStack item = new ItemStack(type, amount, (short)data);
+        
+        if(itemString.length > 1)
+        {
+            if(allowEnchantments)
+            {
+                if(item.getAmount() > 1)
+                {
+                    RecipeErrorReporter.warning("Item '" + mat + "' has enchantments and more than 1 amount, it can't have both, amount set to 1.");
+                    
+                    item.setAmount(1);
+                }
+                
+                String[] enchants = itemString[1].split(",");
+                String[] enchData;
+                Enchantment ench;
+                int level;
+                
+                for(String enchant : enchants)
+                {
+                    enchant = enchant.trim();
+                    enchData = enchant.split(":");
+                    
+                    if(enchData.length != 2)
+                    {
+                        RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in readme.txt for enchantment list link.");
+                        continue;
+                    }
+                    
+                    ench = Enchantment.getByName(enchData[0]);
+                    
+                    if(ench == null)
+                    {
+                        try
+                        {
+                            ench = Enchantment.getById(Integer.valueOf(enchData[0]));
+                        }
+                        catch(Exception e)
+                        {
+                            ench = null;
+                        }
+                        
+                        if(ench == null)
+                        {
+                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in readme.txt for enchantments list links.");
+                            continue;
+                        }
+                    }
+                    
+                    if(enchData[1].equals("MAX"))
+                        level = ench.getMaxLevel();
+                    
+                    else
+                    {
+                        try
+                        {
+                            level = Integer.valueOf(enchData[1]);
+                        }
+                        catch(Exception e)
+                        {
+                            RecipeErrorReporter.warning("Invalid enchantment level: '" + enchData[1] + "' must be a valid number, positive, zero or negative.");
+                            continue;
+                        }
+                    }
+                    
+                    item.addUnsafeEnchantment(ench, level);
+                }
+            }
+            else
+                RecipeErrorReporter.error("Item '" + mat + "' can't use enchantments in this recipe slot!");
+        }
+        
+        return item;
+    }
+    
     public static Integer parseInteger(String string)
     {
         return parseInteger(string, "Invalid number: " + string);

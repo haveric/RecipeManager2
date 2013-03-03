@@ -34,7 +34,13 @@ public class FlagMessage extends Flag
     @Override
     public boolean onParse(String value)
     {
-        setMessage(Tools.parseColors(value.replaceAll("\\n", "\n"), false));
+        setMessage(Tools.parseColors(value.replace("|", "\n"), false));
         return true;
+    }
+    
+    @Override
+    public void onApply(Arguments a)
+    {
+        a.addEffect(message);
     }
 }

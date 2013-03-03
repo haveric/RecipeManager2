@@ -10,10 +10,15 @@ import ro.thehunters.digi.recipeManager.flags.Flags;
 public class SmeltRecipe extends BaseRecipe
 {
     private ItemStack ingredient;
+    private ItemStack fuel;
     private ItemStack result;
     private float     minTime = -1;
     private float     maxTime = -1;
     private int       hash;
+    
+    public SmeltRecipe()
+    {
+    }
     
     public SmeltRecipe(BaseRecipe recipe)
     {
@@ -53,6 +58,16 @@ public class SmeltRecipe extends BaseRecipe
         this.result = result;
     }
     
+    public ItemStack getFuel()
+    {
+        return fuel;
+    }
+    
+    public void setFuel(ItemStack fuel)
+    {
+        this.fuel = fuel;
+    }
+    
     public float getMinTime()
     {
         return minTime;
@@ -75,7 +90,7 @@ public class SmeltRecipe extends BaseRecipe
     
     public float getCookTime()
     {
-        return (float)(maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.random.nextFloat() : minTime);
+        return (maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.random.nextFloat() : minTime);
     }
     
     public float getCookTicks()
@@ -117,6 +132,11 @@ public class SmeltRecipe extends BaseRecipe
     public boolean hasIngredient()
     {
         return ingredient != null;
+    }
+    
+    public boolean hasFuel()
+    {
+        return fuel != null;
     }
     
     public boolean hasResult()

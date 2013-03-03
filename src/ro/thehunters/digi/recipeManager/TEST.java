@@ -11,7 +11,6 @@ import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 
-
 public class TEST implements CommandExecutor
 {
     @Override

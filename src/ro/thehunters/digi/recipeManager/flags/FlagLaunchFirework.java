@@ -63,7 +63,7 @@ public class FlagLaunchFirework extends Flag
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag @" + type + " has no arguments for 'effect' !");
+                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'effect' !");
                 return false;
             }
             
@@ -78,7 +78,7 @@ public class FlagLaunchFirework extends Flag
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag @" + type + " has no arguments for 'power' !");
+                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'power' !");
                 return false;
             }
             
@@ -94,7 +94,7 @@ public class FlagLaunchFirework extends Flag
             
             if(power < 0 || power > 128)
             {
-                RecipeErrorReporter.error("Flag @" + type + " invalid 'power' argument, it must be a number from 0 to 128");
+                RecipeErrorReporter.error("Flag " + type + " invalid 'power' argument, it must be a number from 0 to 128");
                 return false;
             }
             
@@ -102,7 +102,7 @@ public class FlagLaunchFirework extends Flag
         }
         else
         {
-            RecipeErrorReporter.warning("Flag @" + type + " has unknown value: " + value);
+            RecipeErrorReporter.warning("Flag " + type + " has unknown value: " + value);
             return false;
         }
         
