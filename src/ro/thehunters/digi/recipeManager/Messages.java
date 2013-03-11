@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public enum Messages
 {
@@ -180,9 +181,9 @@ public enum Messages
     CRAFT_RESULT_RECIEVE_NOTHING("<dark_red>{chance} <red>Failure chance"),
     CRAFT_RESULT_RECIEVE_SECRETS("<dark_green>{chance} <red>{num} secret item(s)..."),
     CRAFT_RESULT_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
-    CRAFT_RESULT_UNALLOWED_TITLE("<red><underline>Unallowed item(s):"),
-    CRAFT_RESULT_UNALLOWED_ITEM("<dark_green>{chance} <red><strikethrough>{item} <reset><gold>{reason}"),
-    CRAFT_RESULT_UNALLOWED_HIDDEN("<dark_green>{chance} <red>{num} unallowed item(s)..."),
+    CRAFT_RESULT_UNAVAILABLE("<dark_red>{chance} <red>{num} unavailable item(s)..."),
+    CRAFT_RESULT_UNAVAILABLE_TITLE("<red><underline>Unallowed item(s):"),
+    CRAFT_RESULT_UNAVAILABLE_ITEM("<dark_green>{chance} <red><strikethrough>{item} <reset><gold>{reason}"),
     
     LASTCHANGED(Files.LASTCHANGED_MESSAGES);
     
@@ -422,7 +423,7 @@ public enum Messages
      */
     public static void info(String message)
     {
-        send(Bukkit.getConsoleSender(), message);
+        send(null, message);
     }
     
     public static void log(String message)
@@ -438,14 +439,39 @@ public enum Messages
             info(message);
         
         send(sender, message);
+        notifyDebuggers(message);
         
         exception.printStackTrace();
+        
+        message = ChatColor.LIGHT_PURPLE + "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
+        info(message);
+        notifyDebuggers(message);
+    }
+    
+    /**
+     * Notifies all online operators and people having "recipemanager.debugger" permission
+     * 
+     * @param message
+     */
+    protected static void notifyDebuggers(String message)
+    {
+        message = ChatColor.DARK_RED + "(RecipeManager debug) " + ChatColor.RESET + message;
+        
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            if(p.hasPermission("recipemanager.debugger"))
+            {
+                send(p, message);
+            }
+        }
     }
     
     public static void debug(String message)
     {
         // TODO print stack trace
         // TODO debug switch
-        info(ChatColor.LIGHT_PURPLE + "[DEBUG]" + ChatColor.RESET + message);
+        StackTraceElement[] e = new Exception().getStackTrace();
+        
+        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[1].getFileName() + ":" + e[1].getLineNumber() + " " + ChatColor.RED + ChatColor.UNDERLINE + e[1].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
     }
 }

@@ -5,17 +5,11 @@ import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
-import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModExp extends Flag
 {
     private int    exp;
     private String message;
-    
-    public FlagModExp()
-    {
-        type = FlagType.MODEXP;
-    }
     
     @Override
     public FlagModExp clone()
@@ -49,7 +43,7 @@ public class FlagModExp extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.split("\\|");
         
@@ -59,14 +53,21 @@ public class FlagModExp extends Flag
         }
         
         value = split[0].trim();
-        Integer exp = Tools.parseInteger(value, "The @" + type + " flag has invalid min req exp number: " + value);
+        int exp = 0;
         
-        if(exp == null)
+        try
+        {
+            exp = Integer.valueOf(value);
+        }
+        catch(NumberFormatException e)
+        {
+            RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
             return false;
+        }
         
         if(exp == 0)
         {
-            RecipeErrorReporter.error("The @" + type + " flag must not have 0 exp !");
+            RecipeErrorReporter.error("The " + getType() + " flag must not have 0 exp !");
             return false;
         }
         
@@ -75,9 +76,9 @@ public class FlagModExp extends Flag
     }
     
     @Override
-    public void onApply(Arguments a)
+    protected void onApply(Arguments a)
     {
-        Player p = a.getPlayer();
+        Player p = a.player();
         
         if(p == null)
             return;

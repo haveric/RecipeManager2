@@ -1,9 +1,11 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 public enum FlagType
 {
@@ -32,15 +34,16 @@ public enum FlagType
     DESCRIPTION(FlagDescription.class, Bit.RECIPE, "recipeinfo", "info"),
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"),
     HIDERESULTS(FlagHideResults.class, Bit.RECIPE | Bit.NO_VALUE),
-    NEEDFUEL(FlagNeedFuel.class, Bit.RECIPE, "reqfuel", "fuelreq"), // TODO Remove ?
+    GETBOOK(FlagGetBook.class, Bit.RECIPE, "getrecipebook", "recipebook"), // TODO finsih
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE, "delete"),
     RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE, "overwrite", "supercede", "replace"),
     
     // Result only flags
+    CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT, "clone", "copy", "copyingredient"),
     NAME(FlagName.class, Bit.RESULT | Bit.NO_STORE, "itemname", "displayname"),
     LORE(FlagLore.class, Bit.RESULT | Bit.NO_STORE, "itemlore", "itemdescription"),
-    COLOR(FlagColor.class, Bit.RESULT | Bit.NO_STORE, "colour", "itemcolor", "itemcolour"),
+    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT | Bit.NO_STORE, "leathercolour", "color", "colour", "itemcolor", "itemcolour"),
     BOOK(FlagBook.class, Bit.RESULT | Bit.NO_STORE, "bookitem", "itembook"),
     BOOKPAGE(FlagBookPage.class, Bit.RESULT | Bit.NO_STORE, "bookitempage", "page", "addpage"),
     MAP(FlagMap.class, Bit.RESULT | Bit.NO_STORE, "mapitem", "itemmap"),
@@ -52,19 +55,20 @@ public enum FlagType
     ENCHANTBOOK(FlagEnchantBook.class, Bit.RESULT | Bit.NO_STORE, "enchantedbook");
     
     private final Class<? extends Flag> flagClass;
-    private final Set<String>           aliases;
+    private final String[]              names;
     private final int                   bits;
     
-    private FlagType(Class<? extends Flag> flagClass, int bits, String... args)
+    private FlagType(Class<? extends Flag> flagClass, int bits, String... aliases)
     {
         this.flagClass = flagClass;
         this.bits = bits;
-        this.aliases = new HashSet<String>(args.length + 1);
-        this.aliases.add(name().toLowerCase());
         
-        for(String arg : args)
+        this.names = new String[aliases.length + 1];
+        this.names[0] = name().toLowerCase();
+        
+        for(int i = 0; i < aliases.length; i++)
         {
-            this.aliases.add(arg);
+            this.names[i + 1] = aliases[i];
         }
     }
     
@@ -74,24 +78,16 @@ public enum FlagType
     }
     
     /**
-     * Checks if string is the name or alias of this flag.
-     * 
-     * If you're looping through FlagType.values() to use this, you should use {@link FlagType #get(String)} instead!
-     * 
-     * @param flag
-     * @return
-     */
-    public boolean compare(String flag)
-    {
-        return aliases.contains(flag);
-    }
-    
-    /**
      * @return the class asigned to this type (not the instance)
      */
     public Class<? extends Flag> getFlagClass()
     {
         return flagClass;
+    }
+    
+    public String[] getNames()
+    {
+        return names;
     }
     
     /**
@@ -126,22 +122,21 @@ public enum FlagType
     
     static
     {
+        Permission parent = new Permission("recipemanager.noflag.*", PermissionDefault.FALSE);
+        Permission p;
+        Bukkit.getPluginManager().addPermission(parent);
+        
         for(FlagType type : values())
         {
-            /*
-            // TODO remove
-            FlagType t = type.createFlagClass().getType();
-            
-            if(type != t)
-                Messages.info(ChatColor.RED + "WARNING: " + ChatColor.RESET + "INVALID TYPE ON " + type + ": " + t);
-            // TODO ^
-            */
-            
             classMap.put(type.getFlagClass(), type);
             
-            for(String dir : type.aliases)
+            for(String name : type.names)
             {
-                nameMap.put(dir, type);
+                nameMap.put(name, type);
+                
+                p = new Permission("recipemanager.noflag." + name, PermissionDefault.FALSE);
+                p.addParent(parent, true);
+                Bukkit.getPluginManager().addPermission(p);
             }
         }
     }

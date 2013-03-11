@@ -13,12 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import ro.thehunters.digi.recipeManager.data.BlockID;
-import ro.thehunters.digi.recipeManager.data.MutableFloat;
+import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
-
-public class FurnaceWorker implements Runnable
+class FurnaceWorker implements Runnable
 {
+//    private static final Map<BlockID, MutableFloat> furnaces = new HashMap<BlockID, MutableFloat>();
+    
     private final float       ticks;
     private static BukkitTask task;
     
@@ -29,26 +30,59 @@ public class FurnaceWorker implements Runnable
         task = Bukkit.getScheduler().runTaskTimer(RecipeManager.getPlugin(), this, 0, RecipeManager.getSettings().FURNACE_TICKS);
     }
     
+    static void init()
+    {
+    }
+    
     protected static void start()
     {
         stop();
         new FurnaceWorker();
     }
     
+    protected static boolean isRunning()
+    {
+        return task != null;
+    }
+    
     protected static void stop()
     {
-        if(task != null)
+        if(isRunning())
         {
             task.cancel();
             task = null;
         }
     }
     
+    protected static void clear()
+    {
+        stop();
+//        furnaces.clear();
+    }
+    
+    /*
+    protected static boolean hasFurnace(BlockID id)
+    {
+        return furnaces.containsKey(id);
+    }
+    
+    protected static void addFurnace(BlockID id)
+    {
+        furnaces.put(id, new MutableFloat());
+    }
+    
+    protected static void removeFurnace(BlockID id)
+    {
+        furnaces.remove(id);
+    }
+    */
+    
     @Override
     public void run()
     {
-        Iterator<Entry<BlockID, MutableFloat>> iterator = RecipeManager.events.furnaceSmelting.entrySet().iterator();
-        Entry<BlockID, MutableFloat> entry;
+        Iterator<Entry<BlockID, FurnaceData>> iterator = Furnaces.getFurnaces().entrySet().iterator();
+        Entry<BlockID, FurnaceData> entry;
+        FurnaceData data;
         Furnace furnace;
         FurnaceInventory inventory;
         ItemStack smelt;
@@ -60,11 +94,18 @@ public class FurnaceWorker implements Runnable
         while(iterator.hasNext())
         {
             entry = iterator.next();
-            furnace = convertBlockIdToFurnace(entry.getKey()); // convert location string to Furnace block object
+            data = entry.getValue();
             
-            if(furnace == null) // the burning furnace no longer exists by whatever reason
+            if(!data.isBurning())
             {
-                iterator.remove();
+                continue;
+            }
+            
+            furnace = convertBlockIdToFurnace(entry.getKey()); // convert blockID to Furnace block object
+            
+            if(furnace == null) // the burning furnace no longer exists for whatever reason
+            {
+//                iterator.remove();
                 continue;
             }
             
@@ -73,15 +114,15 @@ public class FurnaceWorker implements Runnable
             
             if(smelt == null || smelt.getType() == Material.AIR) // if there's nothing to smelt, skip furnace
             {
-                entry.getValue().value = 0;
+                data.setCookTime(0);
                 continue;
             }
             
             recipe = RecipeManager.getRecipes().getSmeltRecipe(smelt);
             
-            if(recipe == null || recipe.getMinTime() < 0) // No custom recipe for item or it has default time
+            if(recipe == null || !recipe.hasCustomTime()) // No custom recipe for item or it has default time
             {
-                entry.getValue().value = 0;
+                data.setCookTime(0);
                 continue;
             }
             
@@ -91,7 +132,7 @@ public class FurnaceWorker implements Runnable
             // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
             if(result != null && (!recipeResult.isSimilar(result) || result.getAmount() >= result.getType().getMaxStackSize()))
             {
-                entry.getValue().value = 0;
+                data.setCookTime(0);
                 continue;
             }
             
@@ -101,17 +142,19 @@ public class FurnaceWorker implements Runnable
             }
             else
             {
-                time = entry.getValue().value;
+                time = data.getCookTime();
                 
                 if(time >= 200 || furnace.getCookTime() == 0 || furnace.getCookTime() >= 200)
                 {
-                    entry.getValue().value = 0;
+                    data.setCookTime(0);
                 }
                 else
                 {
-                    time = time + (ticks / recipe.getCookTime());
+                    time = time + (ticks / (recipe.hasFuel() ? data.getBurnTime() : recipe.getCookTime()));
+                    
                     furnace.setCookTime((short)Math.min(Math.max(Math.round(time), 1), 199));
-                    entry.getValue().value = time;
+                    
+                    data.setCookTime(time);
                 }
             }
         }
@@ -128,12 +171,12 @@ public class FurnaceWorker implements Runnable
         
         BlockState blockState = block.getState();
         
-        if(!(blockState instanceof Furnace)) // not really a furnace
+        if(blockState instanceof Furnace == false) // not really a furnace
             return null;
         
         Furnace furnace = (Furnace)blockState;
         
-        if(furnace.getBurnTime() <= 0) // furnace is not really running
+        if(furnace.getBurnTime() <= 0) // furnace is not running
             return null;
         
         return furnace;

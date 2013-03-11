@@ -1,5 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import org.apache.commons.lang.Validate;
+
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
@@ -14,27 +16,9 @@ public class Flag implements Cloneable
     {
     }
     
-    // Tools/final methods
-    
-    /**
-     * Get flag type
-     * 
-     * @return
+    /*
+     *  Public tools/final methods
      */
-    final public FlagType getType()
-    {
-        return type;
-    }
-    
-    /**
-     * Removes the flag from its flag list container.<br>
-     * If the flag hasn't been added to any flag list, this method won't do anything.
-     */
-    final public void removeFlag()
-    {
-        if(flagsContainer != null)
-            flagsContainer.removeFlag(this);
-    }
     
     /**
      * @return Flags object that contains this flag.
@@ -43,6 +27,88 @@ public class Flag implements Cloneable
     {
         return flagsContainer;
     }
+    
+    /**
+     * Parses a string to get the values for this flag.
+     * Has diferent effects for each extension of Flag object.
+     * 
+     * @param value
+     *            the flag's value (not containing the <code>@flag</code> string)
+     * @return false if an error occured and the flag should not be added
+     */
+    final public void parse(String value)
+    {
+        onParse(value);
+    }
+    
+    /**
+     * Check if the flag allows to craft with these arguments.<br>
+     * Any and all arguments can be null if you don't have values for them.<br>
+     * To make the check fail you <b>must</b> add a reason to the argument!
+     * 
+     * @param a
+     *            the arguments class for easily maintainable argument class
+     */
+    final public void check(Arguments a)
+    {
+        onCheck(a);
+    }
+    
+    /**
+     * Apply the flag's effects to the arguments.<br>
+     * Any and all arguments can be null if you don't have values for them.<br>
+     * To make the check fail you <b>must</b> add a reason to the argument!
+     * 
+     * @param a
+     *            the arguments class for easily maintainable argument class
+     */
+    final public void apply(Arguments a)
+    {
+        onApply(a);
+    }
+    
+    /**
+     * Trigger flag failure as if it failed due to multi-result chance.
+     * Any and all arguments can be null if you don't have values for them.<br>
+     * Adding reasons to this will display them to the crafter.
+     * 
+     * @param a
+     */
+    final public void failed(Arguments a)
+    {
+        onFailed(a);
+    }
+    
+    /**
+     * Removes the flag from its flag list container.<br>
+     * This also notifies the flag of removal, it might do some stuff before removal.<br>
+     * If the flag hasn't been added to any flag list, this method won't do anything.
+     */
+    final public void remove()
+    {
+        if(flagsContainer != null)
+        {
+            flagsContainer.removeFlag(this);
+            onRemove();
+        }
+    }
+    
+    /**
+     * Clones the flag and asigns it to a new flag container
+     * 
+     * @param container
+     * @return
+     */
+    final public Flag clone(Flags container)
+    {
+        Flag flag = clone();
+        flag.flagsContainer = container;
+        return flag;
+    }
+    
+    /*
+     *  Non-public tools/final methods
+     */
     
     final protected Flaggable getFlaggable()
     {
@@ -56,6 +122,29 @@ public class Flag implements Cloneable
         return (flaggable instanceof BaseRecipe ? (BaseRecipe)flaggable : null);
     }
     
+    /*
+    final protected BaseRecipe getRecipeDeep()
+    {
+        Flaggable flaggable = getFlaggable();
+        
+        if(flaggable instanceof BaseRecipe)
+        {
+            return (BaseRecipe)flaggable;
+        }
+        else
+        {
+            ItemResult result = getResult();
+            
+            if(result != null)
+            {
+                return result.getRecipe();
+            }
+        }
+        
+        return null;
+    }
+    */
+    
     final protected ItemResult getResult()
     {
         Flaggable flaggable = getFlaggable();
@@ -63,7 +152,26 @@ public class Flag implements Cloneable
         return (flaggable instanceof ItemResult ? (ItemResult)flaggable : null);
     }
     
-    final public boolean validateAdd()
+    final protected boolean validateParse(String value)
+    {
+        Validate.notNull(getType());
+        
+        if(!getType().hasBit(Bit.NO_VALUE) && value == null)
+        {
+            RecipeErrorReporter.error("Flag " + getType() + " needs a value!");
+            return false;
+        }
+        
+        if(!getType().hasBit(Bit.NO_FALSE) && value != null && (value.equalsIgnoreCase("false") || value.equalsIgnoreCase("remove")))
+        {
+            remove();
+            return false;
+        }
+        
+        return validate();
+    }
+    
+    final protected boolean validate()
     {
         Flaggable flaggable = getFlaggable();
         
@@ -82,108 +190,18 @@ public class Flag implements Cloneable
         return onValidate();
     }
     
-    final public boolean validateParse(String value)
-    {
-        if(getType() == null)
-            return false;
-        
-        if(!getType().hasBit(Bit.NO_VALUE) && value == null)
-        {
-            RecipeErrorReporter.error("Flag " + getType() + " needs a value!");
-            return false;
-        }
-        
-        if(!getType().hasBit(Bit.NO_FALSE) && value != null && (value.equalsIgnoreCase("false") || value.equalsIgnoreCase("remove")))
-        {
-            removeFlag();
-            return false;
-        }
-        
-        return validateAdd();
-    }
-    
-    /**
-     * Clones the flag and asigns it to a new flag container
-     * 
-     * @param container
-     * @return
+    /*
+     *  Overwriteable methods/events
      */
-    final public Flag clone(Flags container)
-    {
-        Flag flag = clone();
-        flag.flagsContainer = container;
-        return flag;
-    }
-    
-    // Overwriteable methods/events
     
     /**
-     * The last flag-specific validation if it can be added to flag list
+     * Get flag type
      * 
      * @return
      */
-    public boolean onValidate()
+    public FlagType getType()
     {
-        return (getType() != null);
-    }
-    
-    /**
-     * Parses a string to get the values for this flag.
-     * Has diferent effects for each extension of Flag object.
-     * 
-     * @param value
-     *            the flag's value (not containing the <code>@flag</code> string)
-     * @param recipeType
-     *            for verification, can be null
-     * @param item
-     *            for verification, can be null
-     * @return false if an error occured and the flag should not be added
-     */
-    public boolean onParse(String value)
-    {
-        return false; // it didn't parse anything
-    }
-    
-    /**
-     * Triggered when flag is removed
-     */
-    public void onRemove()
-    {
-    }
-    
-    /**
-     * Check if the flag allows to craft with these arguments.<br>
-     * Any and all arguments can be null if you don't have values for them.<br>
-     * To make the check fail you <b>must</b> add a reason to the argument!
-     * 
-     * @param a
-     *            the arguments class for easily maintainable argument class
-     */
-    public void onCheck(Arguments a)
-    {
-    }
-    
-    /**
-     * Apply the flag's effects to the arguments.<br>
-     * Any and all arguments can be null if you don't have values for them.<br>
-     * To make the check fail you <b>must</b> add a reason to the argument!
-     * 
-     * @param a
-     *            the arguments class for easily maintainable argument class
-     */
-    public void onApply(Arguments a)
-    {
-    }
-    
-    /**
-     * Triggered when recipe fails by chance (multi-result)
-     * Any and all arguments can be null if you don't have values for them.<br>
-     * Adding reasons to this will display them to the crafter.
-     * 
-     * @param a
-     */
-    public void onFailed(Arguments a)
-    {
+        return type;
     }
     
     @Override
@@ -198,7 +216,33 @@ public class Flag implements Cloneable
         }
         catch(CloneNotSupportedException e)
         {
-            throw new RuntimeException("This should be impossible...");
+            throw new RuntimeException("Unsupported cloning !");
         }
+    }
+    
+    protected boolean onValidate()
+    {
+        return (getType() != null);
+    }
+    
+    protected boolean onParse(String value)
+    {
+        return false; // it didn't parse anything
+    }
+    
+    protected void onRemove()
+    {
+    }
+    
+    protected void onCheck(Arguments a)
+    {
+    }
+    
+    protected void onApply(Arguments a)
+    {
+    }
+    
+    protected void onFailed(Arguments a)
+    {
     }
 }

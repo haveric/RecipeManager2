@@ -1,4 +1,4 @@
-package ro.thehunters.digi.recipeManager;
+package ro.thehunters.digi.recipeManager.commands;
 
 import java.util.Map.Entry;
 
@@ -7,11 +7,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import ro.thehunters.digi.recipeManager.Messages;
+import ro.thehunters.digi.recipeManager.Recipes;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 
-public class TEST implements CommandExecutor
+public class RecipeCommand implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)

@@ -12,6 +12,7 @@ public class RecipeErrorReporter
     private static HashMap<String, List<String>> fileErrors;
     private static String                        currentFile;
     private static int                           currentLine;
+    private static boolean                       ignore = false;
     
     /**
      * Starts catching reported errors and stores them in a list for later printing.<br>
@@ -19,9 +20,8 @@ public class RecipeErrorReporter
      */
     public static void startCatching()
     {
+        stopCatching();
         fileErrors = new HashMap<String, List<String>>();
-        currentFile = null;
-        currentLine = 0;
     }
     
     /**
@@ -33,6 +33,7 @@ public class RecipeErrorReporter
         fileErrors = null;
         currentFile = null;
         currentLine = 0;
+        ignore = false;
     }
     
     /**
@@ -40,7 +41,7 @@ public class RecipeErrorReporter
      * 
      * @return false if no errors or no queue at all
      */
-    public static boolean catched()
+    public static boolean isCatching()
     {
         return (fileErrors != null && !fileErrors.isEmpty());
     }
@@ -50,7 +51,7 @@ public class RecipeErrorReporter
      * 
      * @return 0 if no errors or no queue at all
      */
-    public static int getCatched()
+    public static int getCatchedAmount()
     {
         return (fileErrors != null ? fileErrors.size() : 0);
     }
@@ -148,6 +149,23 @@ public class RecipeErrorReporter
         currentLine = line;
     }
     
+    /**
+     * This can be used to temporary ignore any errors that are stored.<br>
+     * <b>NOTE: Only works when catching errors, use with care.</b>
+     * 
+     * @param set
+     */
+    protected static void setIgnoreErrors(boolean set)
+    {
+        if(isCatching())
+            ignore = set;
+    }
+    
+    protected static boolean getIgnoreErrors()
+    {
+        return ignore;
+    }
+    
     public static void warning(String warning)
     {
         warning(warning, null);
@@ -162,10 +180,11 @@ public class RecipeErrorReporter
      * Queue error or print it directly if queue was not started.
      * 
      * @param error
+     * @return always returns false, useful for quick returns
      */
-    public static void error(String error)
+    public static boolean error(String error)
     {
-        error(error, null);
+        return error(error, null);
     }
     
     /**
@@ -175,10 +194,13 @@ public class RecipeErrorReporter
      *            the error message
      * @param tip
      *            optional tip, use null to avoid
+     * 
+     * @return always returns false, useful for quick returns
      */
-    public static void error(String error, String tip)
+    public static boolean error(String error, String tip)
     {
         entry(ChatColor.RED + "Fatal", error, tip);
+        return false;
     }
     
     private static void entry(String type, String message, String tip)
@@ -187,7 +209,7 @@ public class RecipeErrorReporter
         {
             Messages.error(null, new Exception(), type + ": " + ChatColor.RESET + message + (tip != null ? ChatColor.DARK_GREEN + "; TIP: " + ChatColor.GRAY + tip : ""));
         }
-        else
+        else if(!ignore)
         {
             List<String> errors = fileErrors.get(currentFile);
             

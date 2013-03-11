@@ -55,7 +55,7 @@ public class FlagCreature extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         EntityType ent;
         int num = 1;
@@ -76,9 +76,9 @@ public class FlagCreature extends Flag
     }
     
     @Override
-    public void onApply(Arguments a)
+    protected void onApply(Arguments a)
     {
-        Location l = a.getLocation();
+        Location l = a.location();
         
         if(l == null)
             return;

@@ -14,13 +14,13 @@ public class FlagBookPage extends Flag
     }
     
     @Override
-    public boolean onValidate()
+    protected boolean onValidate()
     {
         ItemResult result = getResult();
         
         if(result == null || result.getItemMeta() instanceof BookMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " needs a WRITTEN_BOOK item!");
+            RecipeErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK item!");
             return false;
         }
         
@@ -28,7 +28,7 @@ public class FlagBookPage extends Flag
     }
     
     @Override
-    public void onRemove()
+    protected void onRemove()
     {
         ItemResult result = getResult();
         BookMeta meta = (BookMeta)result.getItemMeta();
@@ -38,7 +38,7 @@ public class FlagBookPage extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         ItemResult result = getResult();
         BookMeta meta = (BookMeta)result.getItemMeta();
@@ -49,7 +49,7 @@ public class FlagBookPage extends Flag
             
             if(text.length() > 256)
             {
-                RecipeErrorReporter.warning("Flag @" + type + " has page with text longer than 256 characters, trimmed to size.", "Color codes use up that limit too, 1 character per color.");
+                RecipeErrorReporter.warning("Flag @" + getType() + " has page with text longer than 256 characters, trimmed to size.", "Color codes use up that limit too, 1 character per color.");
                 text = text.substring(0, 256);
             }
             

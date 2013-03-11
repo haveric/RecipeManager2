@@ -7,11 +7,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe.RecipeType;
-import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
@@ -24,7 +24,7 @@ public class Arguments
     private String       playerName;
     private Location     location;
     private RecipeType   recipeType;
-    private ItemResult   result;
+    private ItemStack    result;
     private List<String> reasons;
     private List<String> effects;
     
@@ -41,18 +41,13 @@ public class Arguments
      * @param result
      *            the recipe's result if appliable, null otherwise
      */
-    public Arguments(Player player, String playerName, Location location, RecipeType recipeType, ItemResult result)
+    public Arguments(Player player, String playerName, Location location, RecipeType recipeType, ItemStack result)
     {
-        this.player = player;
-        this.playerName = (player != null ? player.getName() : playerName);
-        this.location = location;
+        this.player = (player != null ? player : (playerName != null ? Bukkit.getPlayerExact(playerName) : null));
+        this.playerName = (this.player != null ? this.player.getName() : playerName);
+        this.location = (location != null ? location : (player != null ? player.getLocation() : null));
         this.recipeType = recipeType;
         this.result = result;
-    }
-    
-    public Player player()
-    {
-        return player;
     }
     
     /**
@@ -60,9 +55,9 @@ public class Arguments
      * 
      * @return player object or null if player just doesn't exist
      */
-    public Player getPlayer()
+    public Player player()
     {
-        return (player == null ? (playerName == null ? null : Bukkit.getPlayerExact(playerName)) : player);
+        return player;
     }
     
     public boolean hasPlayer()
@@ -80,27 +75,14 @@ public class Arguments
         return playerName != null;
     }
     
-    public Location location()
-    {
-        return location;
-    }
-    
     /**
      * Gets a location from either location, player or playername arguments.
      * 
      * @return null in case no location could be generated
      */
-    public Location getLocation()
+    public Location location()
     {
-        if(location != null)
-            return location;
-        
-        Player p = getPlayer();
-        
-        if(p != null)
-            return p.getLocation();
-        
-        return null;
+        return location;
     }
     
     public boolean hasLocation()
@@ -118,7 +100,7 @@ public class Arguments
         return recipeType != null;
     }
     
-    public ItemResult result()
+    public ItemStack result()
     {
         return result;
     }
@@ -138,6 +120,7 @@ public class Arguments
         return (reasons != null && !reasons.isEmpty());
     }
     
+    // TODO remove:
     public void addReason(String message)
     {
         if(reasons == null)
@@ -159,7 +142,7 @@ public class Arguments
     
     public void sendReasons(CommandSender sender)
     {
-        if(sender == null)
+        if(sender == null || reasons == null)
             return;
         
         for(String s : reasons)
@@ -199,7 +182,7 @@ public class Arguments
     
     public void sendEffects(CommandSender sender)
     {
-        if(sender == null)
+        if(sender == null || effects == null)
             return;
         
         for(String s : effects)
@@ -210,11 +193,10 @@ public class Arguments
     
     public String parseVariables(String string)
     {
-        Player p = getPlayer();
         String name = (hasPlayerName() ? playerName() : "(nobody)");
         
         string = string.replace("{player}", name);
-        string = string.replace("{playerdisplay}", (p != null ? p.getDisplayName() : name));
+        string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
         string = string.replace("{result}", Tools.printItemStack(result()));
         string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString() : "(unknown)"));
         string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));

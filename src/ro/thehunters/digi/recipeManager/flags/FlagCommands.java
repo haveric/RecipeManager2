@@ -43,7 +43,7 @@ public class FlagCommands extends Flag
     public void setCommands(List<String> commands)
     {
         if(commands == null)
-            removeFlag();
+            remove();
         else
             this.commands = commands;
     }
@@ -57,7 +57,7 @@ public class FlagCommands extends Flag
     public void addCommand(String command)
     {
         if(command.equalsIgnoreCase("false") || command.equalsIgnoreCase("remove"))
-            removeFlag();
+            remove();
         else
             commands.add(command);
     }

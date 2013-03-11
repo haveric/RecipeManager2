@@ -7,11 +7,11 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagColor extends Flag
+public class FlagLeatherColor extends Flag
 {
-    public FlagColor()
+    public FlagLeatherColor()
     {
-        type = FlagType.COLOR;
+        type = FlagType.LEATHERCOLOR;
     }
     
     @Override

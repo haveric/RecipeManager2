@@ -13,41 +13,43 @@ main: ro.thehunters.digi.recipeManager.RecipeManager
 load: postworld
 softdepend: [Vault, iConomy]
 commands:
-  test:
-    description: testing...
+  rm:
+    description: plugin info and prints available commands
+    aliases: [recipemanager]
+    usage: /<command>
   rmrecipes:
     aliases: [recipe, recipes]
     description: search recipes that make item or use item if 'i' is specified
-    usage: /<command> item i
+    usage: /<command> <item> [i]
     permission: recipemanager.view
   rmfinditem:
     aliases: [finditem, item]
     description: search for items by name or id
-    usage: /<command> name
+    usage: /<command> <name>
     permission: recipemanager.view
   rmcheck:
     aliases: [checkrecipes]
     description: check recipe file for errors
-    usage: /<command>
+    usage: /<command> [force]
     permission: recipemanager.admin
   rmreload:
     aliases: [reloadrecipes]
     description: reload all settings, aliases, language file and recipe files
-    usage: /<command>
+    usage: /<command> [force]
     permission: recipemanager.admin
   rmextract:
     aliases: [rmimport, importrecipes, extractrecipes]
     description: makes all recipes from other plugins or mods into a text file to allow overriding and editing
-    usage: /<command>
+    usage: /<command> [special]
     permission: recipemanager.admin
   rmgetbook:
     aliases: [getrecipebook]
     description: gives the specified recipe book to the caller, author is optional
-    usage: /command title | author
+    usage: /<command> <title> by <author>
     permission: recipemanager.admin
 permissions:
   recipemanager.craft:
-    description: Control for all recipes
+    description: Toggles ability to craft all recipes
     default: true
   recipemanager.view:
     description: View the recipe list
@@ -55,6 +57,6 @@ permissions:
   recipemanager.admin:
     description: Access to the admin commands
     default: op
-  recipemanager.noworld:
-    description: Ignore world restrictions
-    default: false
+  recipemanager.debugger:
+    description: Get error messages when online
+    default: op

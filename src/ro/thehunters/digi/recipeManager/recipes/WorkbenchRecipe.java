@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Location;
@@ -21,7 +20,7 @@ import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class WorkbenchRecipe extends BaseRecipe
 {
-    private List<ItemResult> results;
+    private List<ItemResult> results = new ArrayList<ItemResult>();
     
     protected WorkbenchRecipe()
     {
@@ -47,15 +46,28 @@ public class WorkbenchRecipe extends BaseRecipe
         return results;
     }
     
-    public void setResult(ItemStack result)
-    {
-        results = new ArrayList<ItemResult>();
-        results.add(new ItemResult(result, 100));
-    }
-    
     public void setResults(List<ItemResult> results)
     {
         this.results = results;
+        
+        for(ItemResult r : this.results)
+        {
+            r.setRecipe(this);
+        }
+    }
+    
+    public void setResult(ItemStack result)
+    {
+        results.clear();
+        addResult(result);
+    }
+    
+    public void addResult(ItemStack result)
+    {
+        if(result instanceof ItemResult)
+            results.add(((ItemResult)result).setRecipe(this));
+        else
+            results.add(new ItemResult(result).setRecipe(this));
     }
     
     public ItemStack getFirstResult()
@@ -63,10 +75,9 @@ public class WorkbenchRecipe extends BaseRecipe
         return results.get(0);
     }
     
-    public ItemStack getDisplayResult(Player player, String playerName, Location location)
+    public ItemStack getDisplayResult(Player player, Location location)
     {
-        playerName = (player == null ? playerName : player.getName());
-        Arguments a = new Arguments(player, playerName, location, getRecipeType(), null);
+        Arguments a = new Arguments(player, null, location, getRecipeType(), null);
         
         if(!checkFlags(a))
         {
@@ -79,12 +90,11 @@ public class WorkbenchRecipe extends BaseRecipe
         }
         
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
-        Map<ItemResult, String> unallowedResults = new HashMap<ItemResult, String>();
-        ItemResult result = null;
-        int secretChance = 0;
+        Map<ItemResult, String> unavailableResults = new HashMap<ItemResult, String>();
         int secretNum = 0;
-        int unallowedChance = 0;
-        int failChance = 0;
+        float secretChance = 0;
+        float unavailableChance = 0;
+        float failChance = 0;
         
         for(ItemResult r : results)
         {
@@ -107,14 +117,14 @@ public class WorkbenchRecipe extends BaseRecipe
                 }
                 else
                 {
-                    unallowedResults.put(r, a.reasons().get(0));
-                    unallowedChance += r.getChance();
+                    unavailableResults.put(r, a.reasons().get(0));
+                    unavailableChance += r.getChance();
                 }
             }
         }
         
         Messages.debug("recipe displays: " + ArrayUtils.toString(displayResults));
-        Messages.debug("recipe unallowed: " + ArrayUtils.toString(unallowedResults));
+        Messages.debug("recipe unavailable: " + ArrayUtils.toString(unavailableResults));
         
         List<String> lore = new ArrayList<String>();
         
@@ -133,32 +143,28 @@ public class WorkbenchRecipe extends BaseRecipe
             lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", String.format("%3d%%", secretChance), "{num}", "" + secretNum));
         }
         
-        if(unallowedResults.size() > 0)
+        if(unavailableResults.size() > 0)
         {
-            if(hasFlag(FlagType.HIDERESULTS))
+            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{num}", unavailableResults.size() + "", "{chance}", String.format("%3d%%", unavailableChance)));
+            
+            /*
+            lore.add("");
+            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE_TITLE.get());
+            
+            for(Entry<ItemResult, String> entry : unavailableResults.entrySet())
             {
-                lore.add(Messages.CRAFT_RESULT_UNALLOWED_HIDDEN.get("{chance}", String.format("%3d%%", unallowedChance)));
+                lore.add(Messages.CRAFT_RESULT_UNAVAILABLE_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", Tools.printItemStack(entry.getKey()), "{reason}", entry.getValue()));
             }
-            else
-            {
-                lore.add("");
-                lore.add(Messages.CRAFT_RESULT_UNALLOWED_TITLE.get());
-                
-                for(Entry<ItemResult, String> entry : unallowedResults.entrySet())
-                {
-                    lore.add(Messages.CRAFT_RESULT_UNALLOWED_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", Tools.printItemStack(entry.getKey()), "{reason}", entry.getValue()));
-                }
-            }
+            */
         }
         
-        return Tools.generateItemStackWithMeta(Material.PORTAL, 0, 1, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+        return Tools.generateItemStackWithMeta(Material.SKULL, 0, 1, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
     }
     
-    public ItemResult getResult(Player player, String playerName, Location location)
+    public ItemResult getResult(Player player, Location location)
     {
         List<ItemResult> pickFromResults = new ArrayList<ItemResult>();
-        playerName = (player == null ? playerName : player.getName());
-        Arguments a = new Arguments(player, playerName, location, getRecipeType(), null);
+        Arguments a = new Arguments(player, null, location, getRecipeType(), null);
         int maxChance = 0;
         
         for(ItemResult r : results)
@@ -185,13 +191,13 @@ public class WorkbenchRecipe extends BaseRecipe
             }
         }
         
-        a = new Arguments(player, playerName, location, getRecipeType(), result);
+        a = new Arguments(player, null, location, getRecipeType(), result);
         
         if(!checkFlags(a))
         {
             Messages.debug("recipe failed: " + ArrayUtils.toString(a.reasons()));
             
-            a.sendReasons(a.getPlayer());
+            a.sendReasons(a.player());
             
             return null;
         }
@@ -203,13 +209,13 @@ public class WorkbenchRecipe extends BaseRecipe
         
         if(result != null)
         {
-            a.sendEffects(a.getPlayer());
+            a.sendEffects(a.player());
         }
         else
         {
             sendFailed(a);
             
-            a.sendReasons(a.getPlayer());
+            a.sendReasons(a.player());
         }
         
         return result;

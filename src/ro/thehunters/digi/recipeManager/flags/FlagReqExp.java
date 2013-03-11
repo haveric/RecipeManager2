@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
-import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagReqExp extends Flag
 {
@@ -17,16 +16,19 @@ public class FlagReqExp extends Flag
         type = FlagType.REQEXP;
     }
     
+    public FlagReqExp(FlagReqExp flag)
+    {
+        this();
+        
+        minExp = flag.minExp;
+        maxExp = flag.maxExp;
+        message = flag.message;
+    }
+    
     @Override
     public FlagReqExp clone()
     {
-        FlagReqExp clone = new FlagReqExp();
-        
-        clone.minExp = minExp;
-        clone.maxExp = maxExp;
-        clone.message = message;
-        
-        return clone;
+        return new FlagReqExp(this);
     }
     
     public int getMinExp()
@@ -79,26 +81,32 @@ public class FlagReqExp extends Flag
             setMessage(split[1].trim());
         }
         
-        split = split[0].split("-");
+        split = split[0].split("-", 2);
         value = split[0].trim();
-        Integer xp = Tools.parseInteger(value, "The @" + type + " flag has invalid min req exp number: " + value);
         
-        if(xp == null)
+        try
+        {
+            setMinExp(Integer.valueOf(value));
+        }
+        catch(NumberFormatException e)
+        {
+            RecipeErrorReporter.error("The " + getType() + " flag has invalid min req exp number: " + value);
             return false;
-        
-        if(xp > 0)
-            setMinExp(xp);
+        }
         
         if(split.length > 1)
         {
             value = split[1].trim();
-            xp = Tools.parseInteger(value, "The @" + type + " flag has invalid max req exp number: " + value);
             
-            if(xp == null)
+            try
+            {
+                setMaxExp(Integer.valueOf(value));
+            }
+            catch(NumberFormatException e)
+            {
+                RecipeErrorReporter.error("The " + getType() + " flag has invalid max req exp number: " + value);
                 return false;
-            
-            if(xp > 0)
-                setMaxExp(xp);
+            }
         }
         
         if(getMinExp() > 0 || getMaxExp() > 0)
@@ -107,7 +115,7 @@ public class FlagReqExp extends Flag
         }
         else
         {
-            RecipeErrorReporter.error("The @" + type + " flag needs either min or max exp above 0 !");
+            RecipeErrorReporter.error("The " + type + " flag needs either min or max exp above 0 !");
             return false;
         }
     }
@@ -115,7 +123,7 @@ public class FlagReqExp extends Flag
     @Override
     public void onCheck(Arguments a)
     {
-        Player p = a.getPlayer();
+        Player p = a.player();
         
         if(p == null || !checkExp(p.getTotalExperience()))
         {

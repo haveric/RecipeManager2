@@ -1,17 +1,30 @@
 package ro.thehunters.digi.recipeManager.commands;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
-import ro.thehunters.digi.recipeManager.*;
-
+import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.Messages;
+import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class ExtractCommand implements CommandExecutor
 {
@@ -67,7 +80,7 @@ public class ExtractCommand implements CommandExecutor
             {
                 result = r.getResult();
                 
-                if(result.equals(BukkitRecipes.RECIPE_LEATHERDYE) || result.equals(BukkitRecipes.RECIPE_FIREWORKS) || result.equals(BukkitRecipes.RECIPE_MAPCLONE) || result.equals(BukkitRecipes.RECIPE_MAPEXTEND))
+                if(result.equals(Vanilla.RECIPE_LEATHERDYE) || result.equals(Vanilla.RECIPE_FIREWORKS) || result.equals(Vanilla.RECIPE_MAPCLONE) || result.equals(Vanilla.RECIPE_MAPEXTEND))
                     continue;
             }
             
@@ -193,7 +206,7 @@ public class ExtractCommand implements CommandExecutor
     
     private void parseResult(ItemStack result, StringBuilder recipeString)
     {
-        recipeString.append("= " + result.getType() + (result.getAmount() > 1 || result.getDurability() != 0 ? ":" + result.getDurability() + (result.getAmount() > 1 ? ":" + result.getAmount() : "") : ""));
+        recipeString.append("= ").append(result.getType()).append(":").append(result.getDurability()).append(":").append(result.getAmount());
         
         int enchantments = result.getEnchantments().size();
         
@@ -204,13 +217,13 @@ public class ExtractCommand implements CommandExecutor
             
             for(Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet())
             {
-                recipeString.append(entry.getKey() + ":" + entry.getValue());
+                recipeString.append(entry.getKey()).append(":").append(entry.getValue());
                 
                 if(++i < enchantments)
                     recipeString.append(", ");
             }
         }
         
-        recipeString.append(NL + NL);
+        recipeString.append(NL).append(NL);
     }
 }

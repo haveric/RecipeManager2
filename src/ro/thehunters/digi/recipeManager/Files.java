@@ -59,8 +59,22 @@ public class Files
         
         // TODO check versions...
         
+        directories();
         fileRecipeFlags();
         fileNames();
+    }
+    
+    private void directories()
+    {
+        // Create base directories
+        File file = new File(DIR_PLUGIN + "recipes" + File.separator + "disabled");
+        file.mkdirs();
+        
+        // Create base info files
+        file = new File(file.getPath() + File.separator + "Place recipe files here to prevent them from beeing loaded");
+        
+        if(!file.exists())
+            Tools.saveTextToFile("In the disabled folder you can place recipe files you don't want to load, instead of deleting them.", file.getPath());
     }
     
     private void fileRecipeFlags()

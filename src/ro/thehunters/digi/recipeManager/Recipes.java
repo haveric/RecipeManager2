@@ -274,6 +274,9 @@ public class Recipes
             else if(recipe instanceof SmeltRecipe)
             {
                 indexSmelt.put(recipe.getIndex(), (SmeltRecipe)recipe);
+                
+                if(!FurnaceWorker.isRunning() && ((SmeltRecipe)recipe).hasCustomTime())
+                    FurnaceWorker.start();
             }
             else if(recipe instanceof FuelRecipe)
             {
@@ -286,7 +289,7 @@ public class Recipes
         
         if(bukkitRecipe != null)
         {
-            BukkitRecipes.removeRecipeManagerRecipe(recipe);
+            Vanilla.removeRecipeManagerRecipe(recipe);
             
             Bukkit.addRecipe(bukkitRecipe);
         }
@@ -324,6 +327,6 @@ public class Recipes
         }
         
         // Remove from server
-        return BukkitRecipes.removeRecipeManagerRecipe(recipe);
+        return Vanilla.removeRecipeManagerRecipe(recipe);
     }
 }

@@ -26,7 +26,7 @@ import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 /**
  * Control for bukkit recipes to avoid confusion with RecipeManager's recipes
  */
-public class BukkitRecipes
+public class Vanilla
 {
     @Override
     protected void finalize() throws Throwable // TODO REMOVE
@@ -36,27 +36,29 @@ public class BukkitRecipes
         super.finalize();
     }
     
-    protected static Map<BaseRecipe, RecipeInfo> initialRecipes    = new HashMap<BaseRecipe, RecipeInfo>();
+    protected static Map<BaseRecipe, RecipeInfo> initialRecipes      = new HashMap<BaseRecipe, RecipeInfo>();
     
     /**
      * Leather dyeing's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack                RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short)0);
+    public static final ItemStack                RECIPE_LEATHERDYE   = new ItemStack(Material.LEATHER_HELMET, 0, (short)0);
     
     /**
      * Map cloning's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack                RECIPE_MAPCLONE   = new ItemStack(Material.MAP, 0, (short)-1);
+    public static final ItemStack                RECIPE_MAPCLONE     = new ItemStack(Material.MAP, 0, (short)-1);
     
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack                RECIPE_MAPEXTEND  = new ItemStack(Material.EMPTY_MAP, 0, (short)0);
+    public static final ItemStack                RECIPE_MAPEXTEND    = new ItemStack(Material.EMPTY_MAP, 0, (short)0);
     
     /**
      * Fireworks' special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack                RECIPE_FIREWORKS  = new ItemStack(Material.FIREWORK, 0, (short)0);
+    public static final ItemStack                RECIPE_FIREWORKS    = new ItemStack(Material.FIREWORK, 0, (short)0);
+    
+    public static final float                    FURNACE_RECIPE_TIME = 9.25f;
     
     protected static void init()
     {

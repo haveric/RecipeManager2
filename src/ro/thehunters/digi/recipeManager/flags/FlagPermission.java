@@ -72,7 +72,7 @@ public class FlagPermission extends Flag
     @Override
     public void onCheck(Arguments a)
     {
-        Player player = a.getPlayer();
+        Player player = a.player();
         boolean ok = false;
         
         if(player != null)

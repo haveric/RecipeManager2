@@ -8,19 +8,19 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagBook extends Flag
 {
-    public FlagBook(FlagBook flag)
+    public FlagBook()
     {
         type = FlagType.BOOK;
     }
     
     @Override
-    public boolean onValidate()
+    protected boolean onValidate()
     {
         ItemResult result = getResult();
         
         if(result == null || result.getItemMeta() instanceof BookMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " needs a WRITTEN_BOOK item!");
+            RecipeErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK item!");
             return false;
         }
         
@@ -28,7 +28,7 @@ public class FlagBook extends Flag
     }
     
     @Override
-    public void onRemove()
+    protected void onRemove()
     {
         ItemResult result = getResult();
         BookMeta meta = (BookMeta)result.getItemMeta();
@@ -38,7 +38,7 @@ public class FlagBook extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         ItemResult result = getResult();
         BookMeta meta = (BookMeta)result.getItemMeta();
@@ -47,7 +47,7 @@ public class FlagBook extends Flag
         
         if(split.length != 2)
         {
-            RecipeErrorReporter.error("Flag @" + type + " doesn't have title | author argument format!");
+            RecipeErrorReporter.error("Flag @" + getType() + " doesn't have title | author argument format!");
             return false;
         }
         
@@ -56,7 +56,7 @@ public class FlagBook extends Flag
         
         if(title.length() > 64 || author.length() > 64)
         {
-            RecipeErrorReporter.warning("Flag @" + type + " has title or author larger than 64 characters, trimmed to fit.");
+            RecipeErrorReporter.warning("Flag @" + getType() + " has title or author larger than 64 characters, trimmed to fit.");
             title = title.substring(0, (title.length() > 64 ? 64 : title.length()));
             author = author.substring(0, (author.length() > 64 ? 64 : author.length()));
         }

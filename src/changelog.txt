@@ -2,18 +2,26 @@
 
 === v2.0 ===
 ++Changed files: all.++
-* Plugin rewritten, redesigned and restructured... same thing.
+* Plugin rewritten, redesigned and restructured... 
 
-* Recipe files now completly doesn't care about spacing at all, you can format the recipes with any number of empty lines, tabs, spaces or no empty lines at all
-* Added block comment support for recipe file, you can now use /* and */ to comment anything in between on any number of lines
+* Impreovements for recipe files:
+** Recipe files now don't care about spaces and new lines even more ! You can format the recipes as you like using tabs, empty lines between them or no empty lines at all ! The only thing that is required is for diferent statements to be on new lines.
+** Added block comment support for recipe file, you can now use /* and */ to comment anything in between on any number of lines
 
-* Added recipe's result flag support and a few result specific flags:
-** Added @name flag to set display name for results
-** Added @lore flag to set description for results
-** Added @enchant flag to set enchants on results (same as | ENCHANT: LEVEL from items, added for consistency)
-** Added @firework ...
-...
-** Added @potion flag to allow building of basic and custom potion results
+* Impreovements for flag system:
+** Removed the need for ":" character, e.g. "@flag value", but it still works with it.
+** 
+
+* Re-defined alias system:
+** Now uses aliases for material and data separately
+** Multiple names for each material or data value
+** The names are also used for printing item names in format "data material", e.g. "Oak Wood Planks"
+
+* Impreovements for recipe results:
+** Added calc% to specify that the percentage of that item should be calculated automatically (just like not defining percentage at all)
+** Added option to auto-calculate chance for more than one item, it will be split evenly.
+** Added flag support for individual results!
+** Added serval result-only flags: @name, @lore, @enchant, @book, @leathercolor, @firework, @potion, and more !
 
 
 

@@ -106,7 +106,7 @@ public class FlagEffect extends Flag
     {
         if(onlyPlayer)
         {
-            Player p = a.getPlayer();
+            Player p = a.player();
             
             if(p != null)
             {
@@ -117,7 +117,7 @@ public class FlagEffect extends Flag
         }
         else
         {
-            Location l = a.getLocation();
+            Location l = a.location();
             
             if(l != null)
             {

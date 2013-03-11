@@ -1,10 +1,6 @@
 package ro.thehunters.digi.recipeManager;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,8 +21,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
+import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -34,11 +33,16 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -47,9 +51,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerCraftEvent;
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
-import ro.thehunters.digi.recipeManager.data.BlockFurnaceData;
 import ro.thehunters.digi.recipeManager.data.BlockID;
-import ro.thehunters.digi.recipeManager.data.MutableFloat;
+import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.flags.Arguments;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe.RecipeType;
@@ -87,16 +90,318 @@ public class Events implements Listener
         Bukkit.getPluginManager().registerEvents(RecipeManager.events, RecipeManager.getPlugin());
     }
     
-    @EventHandler
+    /*
+     *  Workbench craft events
+     */
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void eventPrepareCraft(PrepareItemCraftEvent event)
+    {
+        try
+        {
+            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
+            CraftingInventory inventory = event.getInventory();
+            
+            if(!RecipeManager.getPlugin().canCraft(player))
+            {
+                inventory.setResult(null);
+                return; // player not allowed to craft, stop here
+            }
+            
+            Location location = Workbenches.get(player); // get workbench location or null
+            
+            if(event.isRepair())
+            {
+                prepareRepairRecipe(player, inventory, location);
+                return; // if it's a repair recipe we don't need to move on
+            }
+            
+            Recipe bukkitRecipe = event.getRecipe();
+            
+            if(bukkitRecipe == null)
+                return; // bukkit recipe is null ! skip it
+                
+            ItemStack result = inventory.getResult();
+            ItemStack recipeResult = bukkitRecipe.getResult();
+            
+            if(prepareSpecialRecipe(player, inventory, result, recipeResult))
+                return; // stop here if it's a special recipe
+                
+            WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
+            
+            if(recipe == null)
+                return; // not a custom recipe or recipe not found, no need to move on
+                
+            result = prepareCraftResult(player, inventory, recipe, location); // get the result from recipe
+            
+            // Call the RecipeManagerPrepareCraftEvent
+            RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
+            Bukkit.getPluginManager().callEvent(callEvent);
+            
+            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
+            
+            inventory.setResult(result == null ? null : result);
+        }
+        catch(Exception e)
+        {
+            event.getInventory().setResult(null);
+            
+            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
+            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+        }
+    }
+    
+    private boolean prepareSpecialRecipe(Player player, CraftingInventory inventory, ItemStack result, ItemStack recipeResult)
+    {
+        if(!result.equals(recipeResult)) // result was processed by the game and it doesn't match the original recipe
+        {
+            if(RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE))
+            {
+                Messages.CRAFT_SPECIAL_LEATHERDYE.print(player);
+                inventory.setResult(null);
+                return true;
+            }
+            
+            if(RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE))
+            {
+                Messages.CRAFT_SPECIAL_MAP_CLONING.print(player);
+                inventory.setResult(null);
+                return true;
+            }
+            
+            if(RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND))
+            {
+                Messages.CRAFT_SPECIAL_MAP_EXTENDING.print(player);
+                inventory.setResult(null);
+                return true;
+            }
+            
+            if(RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS))
+            {
+                Messages.CRAFT_SPECIAL_FIREWORKS.print(player);
+                inventory.setResult(null);
+                return true;
+            }
+            
+            System.out.print("[debug] Results don't match, special recipe ? " + recipeResult + " vs " + result);
+        }
+        
+        return false;
+    }
+    
+    private void prepareRepairRecipe(Player player, CraftingInventory inventory, Location location) throws Exception
+    {
+        if(!RecipeManager.getSettings().SPECIAL_REPAIR)
+        {
+            if(player != null)
+                player.playSound((location == null ? player.getLocation() : location), Sound.NOTE_BASS, 1, 255);
+            
+            inventory.setResult(Tools.generateItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
+            return;
+        }
+        
+        ItemStack result = inventory.getRecipe().getResult();
+        
+        if(RecipeManager.getSettings().SPECIAL_REPAIR_METADATA)
+        {
+            ItemStack[] matrix = inventory.getMatrix();
+            ItemStack[] repaired = new ItemStack[2];
+            int repair[] = new int[2];
+            int repairIndex = 0;
+            
+            for(int i = 0; i < matrix.length; i++)
+            {
+                if(matrix[i] != null && matrix[i].getTypeId() != 0)
+                {
+                    repair[repairIndex] = i;
+                    repaired[repairIndex] = matrix[i];
+                    
+                    if(++repairIndex > 1)
+                        break;
+                }
+            }
+            
+            if(repaired[0] != null && repaired[1] != null)
+            {
+                ItemMeta meta = null;
+                
+                if(repaired[0].hasItemMeta())
+                {
+                    meta = repaired[0].getItemMeta();
+                }
+                else if(repaired[1].hasItemMeta())
+                {
+                    meta = repaired[1].getItemMeta();
+                }
+                
+                if(meta != null)
+                {
+                    result = inventory.getResult();
+                    result.setItemMeta(meta);
+                }
+            }
+        }
+        
+        RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(null, result, player, location);
+        Bukkit.getPluginManager().callEvent(callEvent);
+        
+        result = callEvent.getResult();
+        
+        if(RecipeManager.getSettings().SOUNDS_REPAIR && result != null && player != null)
+        {
+            player.playSound((location == null ? player.getLocation() : location), Sound.ANVIL_USE, 1, 50);
+        }
+        
+        inventory.setResult(result);
+    }
+    
+    private ItemStack prepareCraftResult(Player player, CraftingInventory inventory, WorkbenchRecipe recipe, Location location) throws Exception
+    {
+        ItemStack result = recipe.getDisplayResult(player, location);
+        
+        if(result != null)
+        {
+            if(recipe.hasFlag(FlagType.CLONEINGREDIENT))
+            {
+                // figure out if it was a single-display item to overwrite it
+                
+//                result = FlagCloneIngredient.getClonedItem(recipe.getFlag(FlagType.CLONEINGREDIENT), inventory);
+            }
+            else if(recipe.hasFlag(FlagType.GETBOOK))
+            {
+                
+            }
+        }
+        
+        /*
+        if(result != null)
+        {
+            int[] vec = (workbenchEvents ? workbench.get(player.getName()) : null);
+            
+            if(vec == null || !recipe.isUsableBlocks(player, player.getWorld(), vec[0], vec[1], vec[2], true, true) || !recipe.isUsableHeight(player, player.getWorld(), vec[1], true, true))
+            {
+                ItemStack item = null;
+                
+                Book getBook = recipe.getFlags().getGetBook();
+                
+                if(getBook != null)
+                {
+                    ItemStack bookItem = RecipeManager.recipes.books.get(getBook);
+                    
+                    if(bookItem != null)
+                    {
+                        item = bookItem.clone();
+                        item.setAmount(1);
+                    }
+                }
+                else
+                {
+                    ItemStack copy = recipe.getFlags().getClone();
+                    
+                    if(copy != null)
+                    {
+                        for(ItemStack i : inventory.getContents())
+                        {
+                            if(copy.equals(i))
+                            {
+                                item = i.clone();
+                                item.setAmount(1);
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                if(item != null)
+                    result = item;
+            }
+        }
+        */
+        
+        return result;
+    }
+    
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void eventCraftFinish(CraftItemEvent event)
+    {
+        try
+        {
+            CraftingInventory inventory = event.getInventory();
+            ItemStack result = inventory.getResult();
+            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
+            Location location = Workbenches.get(player);
+            
+            if(result == null || result.getAmount() <= 0)
+            {
+                event.setCancelled(true);
+                
+                if(RecipeManager.getSettings().SOUNDS_FAILED_CLICK && player != null)
+                    player.playSound(location, Sound.NOTE_BASS, 1, 255);
+                
+                return;
+            }
+            
+            Messages.debug("current item = " + event.getCurrentItem());
+            
+            Recipe bukkitRecipe = event.getRecipe();
+            ItemStack recipeResult = bukkitRecipe.getResult();
+            WorkbenchRecipe recipe = null;
+            
+            if(bukkitRecipe instanceof ShapedRecipe)
+            {
+                recipe = RecipeManager.recipes.getCraftRecipe(recipeResult);
+            }
+            else if(bukkitRecipe instanceof ShapelessRecipe)
+            {
+                recipe = RecipeManager.recipes.getCombineRecipe(recipeResult);
+            }
+            else
+            {
+                Messages.debug("<red>new recipe???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+            
+            if(recipe == null)
+                return;
+            
+            result = recipe.getResult(player, location);
+            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
+            
+            Bukkit.getPluginManager().callEvent(callEvent);
+            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
+            
+            inventory.setResult(result == null ? null : result);
+        }
+        catch(Exception e)
+        {
+            event.getInventory().setResult(null);
+            
+            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
+            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+        }
+    }
+    
+    /*
+     * Workbenche monitor events
+     */
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void eventInventoryClose(InventoryCloseEvent event)
+    {
+        if(event.getView().getType() == InventoryType.WORKBENCH)
+        {
+            Player player = (Player)event.getView().getPlayer();
+            Workbenches.remove(player);
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void eventPlayerIntereact(PlayerInteractEvent event)
     {
         switch(event.getAction())
         {
             case RIGHT_CLICK_BLOCK:
             {
-                Location l = event.getClickedBlock().getLocation();
-                
-                playerWorkbench.put(event.getPlayer().getName(), new int[] { l.getBlockX(), l.getBlockY(), l.getBlockZ() });
+                Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
                 
                 return;
             }
@@ -106,54 +411,54 @@ public class Events implements Listener
                 
             default:
             {
-                playerWorkbench.remove(event.getPlayer().getName());
+                Workbenches.remove(event.getPlayer());
             }
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void eventInventoryClose(InventoryCloseEvent event)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void eventPlayerTeleport(PlayerTeleportEvent event)
     {
-        if(event.getView().getType() == InventoryType.WORKBENCH)
-        {
-            Player player = (Player)event.getView().getPlayer();
-            playerWorkbench.remove(player.getName());
-        }
+        Workbenches.remove(event.getPlayer());
     }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void eventPlayerDeath(PlayerDeathEvent event)
+    {
+        Workbenches.remove(event.getEntity());
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void eventPlayerQuit(PlayerQuitEvent event)
+    {
+        Workbenches.remove(event.getPlayer());
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void eventPlayerKick(PlayerKickEvent event)
+    {
+        Workbenches.remove(event.getPlayer());
+    }
+    
+    /*
+     *  Furnace craft events
+     */
     
     @EventHandler
     public void eventInventoryClick(InventoryClickEvent event)
     {
-        ItemStack[] contents = event.getInventory().getContents();
-        
-        System.out.print(" ");
-        System.out.print(event.getEventName());
-        System.out.print("    getCursor = " + event.getCursor());
-        System.out.print("    getCurrentItem() = " + event.getCurrentItem());
-        System.out.print("    isLeftClick() = " + event.isLeftClick());
-        System.out.print("    isRightClick() = " + event.isRightClick());
-        System.out.print("    isShiftClick() = " + event.isShiftClick());
-        System.out.print("    isCancelled() = " + event.isCancelled());
-        System.out.print("    getResult() = " + event.getResult());
-        System.out.print("    item at rawslot = " + (event.getRawSlot() < contents.length ? contents[event.getRawSlot()] : "Out of bounds"));
-        System.out.print(" ");
-        
-        /*
         try
         {
             Inventory inv = event.getInventory();
             
-            if(inv == null)
-                return;
-            
-            if(inv instanceof FurnaceInventory) // furnace inventory
+            if(inv instanceof FurnaceInventory)
             {
                 InventoryHolder holder = inv.getHolder();
                 
-                if(holder == null || !(holder instanceof Furnace)) // no furnace block for inventory, we don't care then
-                    return;
+                if(holder != null && holder instanceof Furnace)
+                    eventFurnaceClick(event, inv, (Furnace)holder);
                 
-                furnaceClickEvent(event, inv, (Furnace)holder);
+                return;
             }
         }
         catch(Exception e)
@@ -162,17 +467,16 @@ public class Events implements Listener
             CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player)event.getWhoClicked() : null);
             Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
         }
-        */
     }
     
-    private void furnaceClickEvent(InventoryClickEvent event, Inventory inv, Furnace furnace) throws Exception
+    private void eventFurnaceClick(InventoryClickEvent event, Inventory inv, Furnace furnace) throws Exception
     {
-        HumanEntity human = event.getWhoClicked();
+        HumanEntity ent = event.getWhoClicked();
         
-        if(human == null || human instanceof Player == false)
+        if(ent == null || ent instanceof Player == false)
             return;
         
-        Player player = (Player)human;
+        Player player = (Player)ent;
         
         ItemStack cursor = event.getCursor();
         ItemStack clicked = event.getCurrentItem();
@@ -541,287 +845,63 @@ public class Events implements Listener
     }
     
     @EventHandler(priority = EventPriority.LOW)
-    public void eventPrepareCraft(PrepareItemCraftEvent event)
-    {
-        try
-        {
-            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
-            CraftingInventory inventory = event.getInventory();
-            
-            if(!RecipeManager.getPlugin().canCraft(player))
-            {
-                inventory.setResult(null);
-                return;  // player not allowed to craft, stop here
-            }
-            
-            Location location = getPlayerWorkbench(player); // get workbench location or null
-            
-            if(event.isRepair())
-            {
-                prepareRepairRecipe(player, inventory, location);
-                return; // if it's a repair recipe we don't need to move on
-            }
-            
-            Recipe bukkitRecipe = event.getRecipe();
-            
-            if(bukkitRecipe == null)
-                return; // bukkit recipe is null ! skip it
-                
-            ItemStack result = inventory.getResult();
-            ItemStack recipeResult = bukkitRecipe.getResult();
-            
-            if(prepareSpecialRecipe(player, inventory, result, recipeResult))
-                return; // stop here if it's a special recipe
-                
-            WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
-            
-            if(recipe == null)
-                return; // not a custom recipe or recipe not found, no need to move on
-                
-            result = prepareCraftResult(player, inventory, recipe, location); // get the result from recipe
-            
-            // Call the RecipeManagerPrepareCraftEvent
-            RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
-            Bukkit.getPluginManager().callEvent(callEvent);
-            
-            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
-            
-            inventory.setResult(result == null ? null : result);
-        }
-        catch(Exception e)
-        {
-            event.getInventory().setResult(null);
-            
-            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
-            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
-        }
-    }
-    
-    private boolean prepareSpecialRecipe(Player player, CraftingInventory inventory, ItemStack result, ItemStack recipeResult)
-    {
-        if(!result.equals(recipeResult)) // result was processed by the game and it doesn't match the original recipe
-        {
-            if(RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(BukkitRecipes.RECIPE_LEATHERDYE))
-            {
-                Messages.CRAFT_SPECIAL_LEATHERDYE.print(player);
-                inventory.setResult(null);
-                return true;
-            }
-            
-            if(RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(BukkitRecipes.RECIPE_MAPCLONE))
-            {
-                Messages.CRAFT_SPECIAL_MAP_CLONING.print(player);
-                inventory.setResult(null);
-                return true;
-            }
-            
-            if(RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(BukkitRecipes.RECIPE_MAPEXTEND))
-            {
-                Messages.CRAFT_SPECIAL_MAP_EXTENDING.print(player);
-                inventory.setResult(null);
-                return true;
-            }
-            
-            if(RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(BukkitRecipes.RECIPE_FIREWORKS))
-            {
-                Messages.CRAFT_SPECIAL_FIREWORKS.print(player);
-                inventory.setResult(null);
-                return true;
-            }
-            
-            System.out.print("[debug] Results don't match, special recipe ? " + recipeResult + " vs " + result);
-        }
-        
-        return false;
-    }
-    
-    private void prepareRepairRecipe(Player player, CraftingInventory inventory, Location location) throws Exception
-    {
-        if(!RecipeManager.getSettings().SPECIAL_REPAIR)
-        {
-            if(player != null)
-                player.playSound((location == null ? player.getLocation() : location), Sound.NOTE_BASS, 1, 255);
-            
-            inventory.setResult(Tools.generateItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
-            return;
-        }
-        
-        ItemStack result = inventory.getRecipe().getResult();
-        
-        if(RecipeManager.getSettings().SPECIAL_REPAIR_METADATA)
-        {
-            ItemStack[] matrix = inventory.getMatrix();
-            ItemStack[] repaired = new ItemStack[2];
-            int repair[] = new int[2];
-            int repairIndex = 0;
-            
-            for(int i = 0; i < matrix.length; i++)
-            {
-                if(matrix[i] != null && matrix[i].getTypeId() != 0)
-                {
-                    repair[repairIndex] = i;
-                    repaired[repairIndex] = matrix[i];
-                    
-                    if(++repairIndex > 1)
-                        break;
-                }
-            }
-            
-            if(repaired[0] != null && repaired[1] != null)
-            {
-                ItemMeta meta = null;
-                
-                if(repaired[0].hasItemMeta())
-                    meta = repaired[0].getItemMeta();
-                
-                else if(repaired[1].hasItemMeta())
-                    meta = repaired[1].getItemMeta();
-                
-                if(meta != null)
-                {
-                    result = inventory.getResult();
-                    result.setItemMeta(meta);
-                }
-            }
-        }
-        
-        RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(null, result, player, location);
-        Bukkit.getPluginManager().callEvent(callEvent);
-        
-        result = callEvent.getResult();
-        
-        if(RecipeManager.getSettings().SOUNDS_REPAIR && result != null && player != null)
-            player.playSound((location == null ? player.getLocation() : location), Sound.ANVIL_USE, 1, 50);
-        
-        inventory.setResult(result);
-    }
-    
-    private ItemStack prepareCraftResult(Player player, CraftingInventory inventory, WorkbenchRecipe recipe, Location location) throws Exception
-    {
-        ItemStack result = recipe.getDisplayResult(player, null, location);
-        
-        /*
-        if(result != null)
-        {
-            int[] vec = (workbenchEvents ? workbench.get(player.getName()) : null);
-            
-            if(vec == null || !recipe.isUsableBlocks(player, player.getWorld(), vec[0], vec[1], vec[2], true, true) || !recipe.isUsableHeight(player, player.getWorld(), vec[1], true, true))
-            {
-                ItemStack item = null;
-                
-                Book getBook = recipe.getFlags().getGetBook();
-                
-                if(getBook != null)
-                {
-                    ItemStack bookItem = RecipeManager.recipes.books.get(getBook);
-                    
-                    if(bookItem != null)
-                    {
-                        item = bookItem.clone();
-                        item.setAmount(1);
-                    }
-                }
-                else
-                {
-                    ItemStack copy = recipe.getFlags().getClone();
-                    
-                    if(copy != null)
-                    {
-                        for(ItemStack i : inventory.getContents())
-                        {
-                            if(copy.equals(i))
-                            {
-                                item = i.clone();
-                                item.setAmount(1);
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                if(item != null)
-                    result = item;
-            }
-        }
-        */
-        
-        return result;
-    }
-    
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void eventCraftFinish(CraftItemEvent event)
-    {
-        try
-        {
-            CraftingInventory inventory = event.getInventory();
-            ItemStack result = inventory.getResult();
-            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
-            Location location = getPlayerWorkbench(player);
-            
-            if(result == null || result.getAmount() <= 0)
-            {
-                event.setCancelled(true);
-                
-                if(RecipeManager.getSettings().SOUNDS_FAILED_CLICK && player != null)
-                    player.playSound(location, Sound.NOTE_BASS, 1, 255);
-                
-                return;
-            }
-            
-            System.out.print("CraftItemEvent :: " + event.getCurrentItem());
-            
-            Recipe bukkitRecipe = event.getRecipe();
-            ItemStack recipeResult = bukkitRecipe.getResult();
-            WorkbenchRecipe recipe = null;
-            
-            if(bukkitRecipe instanceof ShapedRecipe)
-                recipe = RecipeManager.recipes.getCraftRecipe(recipeResult);
-            
-            else if(bukkitRecipe instanceof ShapelessRecipe)
-                recipe = RecipeManager.recipes.getCombineRecipe(recipeResult);
-            
-            else
-                System.out.print("[debug] new recipe???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            
-            if(recipe == null)
-                return;
-            
-            result = recipe.getResult(player, (player == null ? null : player.getName()), location);
-            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
-            
-            Bukkit.getPluginManager().callEvent(callEvent);
-            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
-            
-            inventory.setResult(result == null ? null : result);
-        }
-        catch(Exception e)
-        {
-            event.getInventory().setResult(null);
-            
-            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
-            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
-        }
-    }
-    
-    @EventHandler(priority = EventPriority.LOW)
     public void eventFurnaceBurn(FurnaceBurnEvent event)
     {
         try
         {
-            BlockID blockID = new BlockID(event.getBlock());
+            BlockID id = new BlockID(event.getBlock());
             
-            if(furnaceSmelting != null && !furnaceSmelting.containsKey(blockID))
-                furnaceSmelting.put(blockID, new MutableFloat());
+            // TODO if reverting to FurnaceWorker storage, check if exists and add furnace!
             
-            FuelRecipe recipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+            FurnaceData data = Furnaces.get(id);
             
-            if(recipe == null)
-                return;
+            final FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
             
-            boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
+            if(fuelRecipe != null)
+            {
+                // Fuel recipe
+                int time = (fuelRecipe.hasFlag(FlagType.REMOVE) ? 0 : fuelRecipe.getBurnTicks());
+                
+                event.setBurnTime(time);
+                event.setBurning(time > 0);
+            }
+            else
+            {
+                // Smelting recipe with specific fuel
+                
+                BlockState state = event.getBlock().getState();
+                
+                if(state instanceof Furnace == false)
+                    return; // highly unlikely but better safe than sorry
+                    
+                Furnace furnace = (Furnace)state;
+                ItemStack ingredient = furnace.getInventory().getSmelting();
+                SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+                
+                if(smeltRecipe != null)
+                {
+                    if(!smeltRecipe.hasFuel() || !event.getFuel().isSimilar(smeltRecipe.getFuel()))
+                    {
+                        event.setCancelled(true);
+                    }
+                    else
+                    {
+                        event.setBurning(true);
+                        event.setBurnTime((int)Math.ceil(smeltRecipe.getCookTime()) * 20);
+                    }
+                }
+            }
             
-            event.setBurnTime(isRemove ? 0 : recipe.getBurnTicks());
-            event.setBurning(isRemove ? false : true);
+            boolean running = !event.isCancelled() && event.isBurning();
+            
+            data.setBurnTime(running ? event.getBurnTime() : 0);
+            
+            Messages.debug("furnace set burn time to = " + data.getBurnTime());
+            
+            if(running)
+            {
+//              new FurnaceBurnOut(event.getBlock(), event.getFuel(), event.getBurnTime());
+            }
         }
         catch(Exception e)
         {
@@ -840,6 +920,9 @@ public class Events implements Listener
             if(recipe == null)
                 return;
             
+            Arguments a = new Arguments(null, null, event.getBlock().getLocation(), RecipeType.SMELT, event.getResult());
+            
+            recipe.applyFlags(a);
         }
         catch(Exception e)
         {
@@ -848,34 +931,67 @@ public class Events implements Listener
         }
     }
     
-    private Location getPlayerWorkbench(Player player) throws Exception
+    @EventHandler(priority = EventPriority.LOW)
+    public void eventFurnaceTakeResult(FurnaceExtractEvent event)
     {
-        if(player == null)
-            return null;
+        if(event.getExpToDrop() == 0)
+            return;
         
-        int[] vec = playerWorkbench.get(player.getName());
-        Location playerLoc = player.getLocation();
+        BlockState state = event.getBlock().getState();
         
-        if(vec == null)
-            return playerLoc;
+        if(state instanceof Furnace == false)
+            return; // highly unlikely but better safe than sorry
+            
+        Furnace furnace = (Furnace)state;
+        ItemStack ingredient = furnace.getInventory().getSmelting();
+        SmeltRecipe smeltRecipe = null;
         
-        Location loc = new Location(player.getWorld(), vec[0], vec[1], vec[2]);
+        if(ingredient == null || ingredient.getTypeId() == 0)
+        {
+            ItemStack result = furnace.getInventory().getResult();
+            
+            if(result == null)
+                return;
+            
+            for(SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values())
+            {
+                if(result.isSimilar(r.getResult()))
+                {
+                    smeltRecipe = r;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+        }
         
-        return (loc.distanceSquared(playerLoc) > 36 ? playerLoc : loc); // 6 squared
+        if(smeltRecipe != null)
+        {
+            event.setExpToDrop(0);
+        }
     }
     
-    // Monitor furnace ... stuff TODO
+    /*
+     * Furnace monitor events
+     */
     
-    // TODO Testing...
-    protected HashMap<BlockID, MutableFloat> furnaceSmelting = new HashMap<BlockID, MutableFloat>();
-    
-    private Set<BlockID>                     furnaceNotified = new HashSet<BlockID>();
-    private Set<BlockID>                     furnaceStop     = new HashSet<BlockID>();
-    
-    // TODO replace this with Placer: <name> in item lore !
-    private Map<BlockID, BlockFurnaceData>   furnaceData     = new HashMap<BlockID, BlockFurnaceData>();
-    
-    private Map<String, int[]>               playerWorkbench = new HashMap<String, int[]>();
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void eventBlockPlace(BlockPlaceEvent event)
+    {
+        Block block = event.getBlock();
+        
+        switch(block.getType())
+        {
+            case BURNING_FURNACE:
+            case FURNACE:
+            {
+                Messages.debug("added furnace at " + BlockID.fromBlock(block).getCoordsString());
+                Furnaces.add(BlockID.fromBlock(block));
+            }
+        }
+    }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void eventBlockBreak(BlockBreakEvent event)
@@ -887,13 +1003,8 @@ public class Events implements Listener
             case BURNING_FURNACE:
             case FURNACE:
             {
-                BlockID blockID = new BlockID(block);
-                
-                furnaceStop.remove(blockID);
-                furnaceData.remove(blockID);
-                
-                if(furnaceSmelting != null)
-                    furnaceSmelting.remove(blockID);
+                Messages.debug("removed furnace at " + BlockID.fromBlock(block).getCoordsString());
+                Furnaces.remove(BlockID.fromBlock(block));
             }
         }
     }
@@ -901,29 +1012,20 @@ public class Events implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void eventWorldLoad(WorldLoadEvent event)
     {
-        if(furnaceSmelting == null)
-            return;
-        
         worldLoad(event.getWorld());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void eventChunkLoad(ChunkLoadEvent event)
     {
-        if(furnaceSmelting == null)
-            return;
-        
         if(!event.isNewChunk())
-            furnaceChunk(event.getChunk(), true);
+            findFurnaces(event.getChunk(), true);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void eventChunkUnload(ChunkUnloadEvent event)
     {
-        if(furnaceSmelting == null)
-            return;
-        
-        furnaceChunk(event.getChunk(), false);
+        findFurnaces(event.getChunk(), false);
     }
     
     protected void worldLoad(World world)
@@ -932,56 +1034,38 @@ public class Events implements Listener
         
         for(Chunk chunk : chunks)
         {
-            furnaceChunk(chunk, true);
+            findFurnaces(chunk, true);
         }
     }
     
-    private void furnaceChunk(Chunk chunk, boolean add)
+    private void findFurnaces(final Chunk chunk, final boolean add)
     {
-        /* CraftBukkit way
-        if(chunk == null || RecipeManager.recipes.furnaceSmelting == null)
-            return;
-        
-        net.minecraft.server.v1_4_R1.Chunk mcChunk = ((CraftChunk)chunk).getHandle();
-        TileEntity tile;
-        
-        for(Object obj : mcChunk.tileEntities.values())
-        {
-            if(obj != null && obj instanceof TileEntity)
-            {
-                tile = (TileEntity)obj;
-                
-                if(tile instanceof TileEntityFurnace)
-                {
-                    if(add)
-                        RecipeManager.recipes.furnaceSmelting.put(Recipes.locationToString(new Location(chunk.getWorld(), tile.x, tile.y, tile.z)), new MutableDouble());
-                    else
-                        RecipeManager.recipes.furnaceSmelting.remove(Recipes.locationToString(new Location(chunk.getWorld(), tile.x, tile.y, tile.z)));
-                }
-            }
-        }
-        */
-        
-        // TODO check if this has been fixed (no idea how though)
         if(chunk == null)
             return;
         
         BlockState[] tileEntities = chunk.getTileEntities();
         
-        for(BlockState blockState : tileEntities)
+        for(BlockState state : tileEntities)
         {
-            if(blockState != null & blockState instanceof Furnace)
+            if(state != null & state instanceof Furnace)
             {
                 if(add)
-                    furnaceSmelting.put(new BlockID(blockState.getLocation()), new MutableFloat());
+                {
+                    Messages.debug("added furnace at " + new BlockID(state.getLocation()).getCoordsString());
+                    Furnaces.add(state.getLocation());
+                }
                 else
-                    furnaceSmelting.remove(new BlockID(blockState.getLocation()));
+                {
+                    Messages.debug("removed furnace at " + new BlockID(state.getLocation()).getCoordsString());
+                    Furnaces.remove(state.getLocation());
+                }
             }
         }
     }
     
-    // Remove marked items
-    // TODO disable/enable switch ?
+    /*
+     * Marked item monitor events
+     */
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void inventoryClose(InventoryCloseEvent event)

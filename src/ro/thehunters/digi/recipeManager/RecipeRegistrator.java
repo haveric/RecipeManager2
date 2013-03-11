@@ -168,7 +168,7 @@ public class RecipeRegistrator implements Runnable
         Entry<BaseRecipe, RecipeInfo> entry;
         RecipeInfo info;
         BaseRecipe recipe;
-        boolean needFurnaceWorker = false;
+        boolean needFurnaceWorker = !FurnaceWorker.isRunning();
         
         // ---
         
@@ -198,7 +198,7 @@ public class RecipeRegistrator implements Runnable
                     {
                         recipe = entry.getKey();
                         
-                        if(recipe instanceof SmeltRecipe && ((SmeltRecipe)recipe).getMinTime() >= 0)
+                        if(recipe instanceof SmeltRecipe && ((SmeltRecipe)recipe).hasCustomTime())
                             needFurnaceWorker = true;
                     }
                     
@@ -275,8 +275,6 @@ public class RecipeRegistrator implements Runnable
         // Start/restart/stop the furnace worker task
         if(needFurnaceWorker)
             FurnaceWorker.start();
-        else
-            FurnaceWorker.stop();
         
         registered = true; // mark this class as registered so it doesn't get re-registered
         queuedRecipes.clear(); // clear the queue to let the class vanish
@@ -392,7 +390,7 @@ public class RecipeRegistrator implements Runnable
                 {
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
                     
-                    if(!BukkitRecipes.removeCraftRecipe(cr))
+                    if(!Vanilla.removeCraftRecipe(cr))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shaped recipe to remove!");
                 }
                 
@@ -412,7 +410,7 @@ public class RecipeRegistrator implements Runnable
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
                     
                     // TODO remove debug ?
-                    if(!BukkitRecipes.removeCombineRecipe(co))
+                    if(!Vanilla.removeCombineRecipe(co))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shapeless recipe to remove!");
                 }
                 
@@ -432,7 +430,7 @@ public class RecipeRegistrator implements Runnable
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
                     
                     // TODO remove debug ?
-                    if(!BukkitRecipes.removeSmeltRecipe(sm))
+                    if(!Vanilla.removeSmeltRecipe(sm))
                         Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find furnace recipe to remove!");
                 }
                 

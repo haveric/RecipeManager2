@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -40,28 +41,101 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  */
 public class Tools
 {
+    public static String parseAliasName(String name)
+    {
+        return name.replaceAll("[\\s\\W]+", "").trim().toLowerCase();
+    }
+    
+    public static String parseAliasPrint(String name)
+    {
+        return WordUtils.capitalize(name.toLowerCase().replace('_', ' ').trim());
+    }
+    
+    public static String printItemStack(ItemStack item)
+    {
+        if(item == null || item.getTypeId() == 0)
+            return "(nothing)";
+        
+        String name = null;
+        String itemData = null;
+        
+        ItemMeta meta = item.getItemMeta();
+        
+        if(meta.hasDisplayName())
+        {
+            name = ChatColor.ITALIC + meta.getDisplayName();
+        }
+        else
+        {
+            name = RecipeManager.getSettings().printName.get(item.getType());
+            
+            if(name == null)
+                name = parseAliasPrint(item.getType().toString());
+        }
+        
+        Map<Short, String> dataMap = RecipeManager.getSettings().printData.get(item.getType());
+        
+        if(dataMap != null)
+        {
+            itemData = dataMap.get(item.getDurability());
+            
+            if(itemData != null)
+                itemData = itemData + " " + name;
+        }
+        
+        if(itemData == null)
+            itemData = name + (item.getDurability() > 0 ? ":" + item.getDurability() : "");
+        
+        String amount = (item.getAmount() > 1 ? item.getAmount() + "x " : "");
+        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE);
+        
+        return amount + color + itemData;
+    }
+    
+    public static String replaceVariables(String msg, String... variables)
+    {
+        if(variables != null && variables.length > 0)
+        {
+            if(variables.length % 2 > 0)
+                throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
+            
+            for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
+            {
+                msg = msg.replace(variables[i], variables[i + 1]);
+            }
+        }
+        
+        return msg;
+    }
+    
     public static ItemResult convertStringToItemResult(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
     {
         String[] split = string.substring(1).trim().split("%");
         ItemResult result = new ItemResult();
+        result.setChance(-1);
         
         if(split.length >= 2)
         {
             string = split[0].trim();
             
-            try
+            if(!string.equals("*") && !string.equalsIgnoreCase("calc"))
             {
-                result.setChance(Math.min(Math.max(Integer.valueOf(string), 0), 100));
-            }
-            catch(Exception e)
-            {
-                RecipeErrorReporter.warning("Invalid percentage number: " + string);
+                try
+                {
+                    result.setChance(Math.min(Math.max(Float.valueOf(string), 0), 100));
+                }
+                catch(Exception e)
+                {
+                    RecipeErrorReporter.warning("Invalid percentage number: " + string);
+                }
             }
             
             string = split[1];
         }
         else
+        {
             string = split[0];
+        }
         
         ItemStack item = convertStringToItemStack(string, defaultData, allowData, allowAmount, allowEnchantments);
         
@@ -73,20 +147,20 @@ public class Tools
         return result;
     }
     
-    public static ItemStack convertStringToItemStack(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    public static ItemStack convertStringToItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
     {
-        string = string.trim();
+        value = value.trim();
         
-        if(string.length() == 0)
+        if(value.length() == 0)
             return null;
         
-        String[] itemString = string.split("\\|");
-        String[] stringArray = itemString[0].trim().split(":");
+        String[] enchantSplit = value.split("\\|");
+        String[] split = enchantSplit[0].trim().split(":");
         
-        if(stringArray.length <= 0 || stringArray[0].isEmpty())
+        if(split.length <= 0 || split[0].isEmpty())
             return new ItemStack(0);
         
-        stringArray[0] = stringArray[0].trim();
+        value = split[0].trim();
         
         /*
         String alias = RecipeManager.getPlugin().getAliases().get(stringArray[0]);
@@ -100,77 +174,101 @@ public class Tools
         }
         */
         
-        Material mat = Material.matchMaterial(stringArray[0]);
+        Material material = RecipeManager.getSettings().nameAliases.get(Tools.parseAliasName(value));
         
-        if(mat == null)
+        if(material == null)
+            material = Material.matchMaterial(value);
+        
+        if(material == null)
         {
-            RecipeErrorReporter.error("Item '" + stringArray[0] + "' does not exist!", "Name could be different, look in readme.txt for links");
-            
+            RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in " + Files.FILE_INFO_NAMES + " or aliases.yml for material names.");
             return null;
         }
         
-        int type = mat.getId();
+        int type = material.getId();
         
         if(type <= 0)
             return new ItemStack(0);
         
         int data = defaultData;
         
-        if(stringArray.length > 1)
+        if(split.length > 1)
         {
             if(allowData)
             {
-                // TODO maybe use TreeSpecies, SkullTypes, etc as data aliases ?
+                value = split[1].trim();
                 
-                try
+                if(value.charAt(0) == '*')
                 {
-                    stringArray[1] = stringArray[1].trim();
-                    
-                    if(stringArray[1].charAt(0) != '*')
-                        data = Math.max(Integer.valueOf(stringArray[1]), data);
+                    data = -1;
                 }
-                catch(Exception e)
+                else
                 {
-                    RecipeErrorReporter.error("Item '" + mat + " has data value that is not a number: '" + stringArray[1] + "', defaulting to " + defaultData);
+                    Map<String, Short> dataMap = RecipeManager.getSettings().dataAliases.get(material);
+                    Short dataValue = (dataMap != null ? dataMap.get(Tools.parseAliasName(value)) : null);
+                    
+                    if(dataValue != null)
+                    {
+                        data = dataValue.shortValue();
+                    }
+                    else
+                    {
+                        try
+                        {
+                            data = Integer.valueOf(value);
+                        }
+                        catch(Exception e)
+                        {
+                            RecipeErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
+                        }
+                    }
                 }
             }
             else
-                RecipeErrorReporter.error("Item '" + mat + "' can't have data value defined in this recipe's slot, data value ignored.");
+            {
+                RecipeErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
+            }
         }
         
         int amount = 1;
         
-        if(stringArray.length > 2)
+        if(split.length > 2)
         {
             if(allowAmount)
             {
+                value = split[2].trim();
+                
                 try
                 {
-                    amount = Math.max(Integer.valueOf(stringArray[2].trim()), 1);
+                    amount = Integer.valueOf(value);
                 }
                 catch(Exception e)
                 {
-                    RecipeErrorReporter.error("Item '" + mat + "' has amount value that is not a number: " + stringArray[2] + ", defaulting to 1");
+                    RecipeErrorReporter.error("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
                 }
             }
             else
-                RecipeErrorReporter.error("Item '" + mat + "' can't have amount defined in this recipe's slot, amount ignored.");
+            {
+                RecipeErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
+            }
         }
         
         ItemStack item = new ItemStack(type, amount, (short)data);
         
-        if(itemString.length > 1)
+        if(enchantSplit.length > 1)
         {
             if(allowEnchantments)
             {
+                /*
                 if(item.getAmount() > 1)
                 {
-                    RecipeErrorReporter.warning("Item '" + mat + "' has enchantments and more than 1 amount, it can't have both, amount set to 1.");
+                    RecipeErrorReporter.warning("Item '" + material + "' has enchantments and more than 1 amount, it can't have both, amount set to 1.");
                     
                     item.setAmount(1);
                 }
+                */
                 
-                String[] enchants = itemString[1].split(",");
+                String[] enchants = enchantSplit[1].split(",");
                 String[] enchData;
                 Enchantment ench;
                 int level;
@@ -182,7 +280,7 @@ public class Tools
                     
                     if(enchData.length != 2)
                     {
-                        RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in readme.txt for enchantment list link.");
+                        RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in " + Files.FILE_INFO_NAMES + " for enchantments list.");
                         continue;
                     }
                     
@@ -196,19 +294,15 @@ public class Tools
                         }
                         catch(Exception e)
                         {
-                            ench = null;
-                        }
-                        
-                        if(ench == null)
-                        {
-                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in readme.txt for enchantments list links.");
+                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in " + Files.FILE_INFO_NAMES + " for enchantments list.");
                             continue;
                         }
                     }
                     
                     if(enchData[1].equals("MAX"))
+                    {
                         level = ench.getMaxLevel();
-                    
+                    }
                     else
                     {
                         try
@@ -226,61 +320,12 @@ public class Tools
                 }
             }
             else
-                RecipeErrorReporter.error("Item '" + mat + "' can't use enchantments in this recipe slot!");
-        }
-        
-        return item;
-    }
-    
-    public static Integer parseInteger(String string)
-    {
-        return parseInteger(string, "Invalid number: " + string);
-    }
-    
-    public static Integer parseInteger(String string, String error)
-    {
-        try
-        {
-            return Integer.valueOf(string);
-        }
-        catch(Exception e)
-        {
-            RecipeErrorReporter.error(error);
-            return null;
-        }
-    }
-    
-    public static String printItemStack(ItemStack item)
-    {
-        if(item == null || item.getTypeId() == 0)
-            return "(nothing)";
-        
-        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE);
-        
-        ItemMeta meta = item.getItemMeta();
-        String name = meta == null ? null : meta.getDisplayName();
-        name = (name == null ? item.getType().toString() : ChatColor.ITALIC + name);
-        
-        String data = (item.getDurability() > 0 ? ":" + item.getDurability() : "");
-        String amount = (item.getAmount() > 1 ? " x " + item.getAmount() : "");
-        
-        return String.format("%s%s%s%s", color, name, data, amount);
-    }
-    
-    public static String replaceVariables(String msg, String... variables)
-    {
-        if(variables != null && variables.length > 0)
-        {
-            if(variables.length % 2 > 0)
-                throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
-            
-            for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
             {
-                msg = msg.replace(variables[i], variables[i + 1]);
+                RecipeErrorReporter.warning("Item '" + material + "' can't use enchantments in this recipe slot!");
             }
         }
         
-        return msg;
+        return item;
     }
     
     public static Potion parsePotion(String value, FlagType type)

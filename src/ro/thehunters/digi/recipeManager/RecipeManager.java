@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.commands.ExtractCommand;
+import ro.thehunters.digi.recipeManager.commands.HelpCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
@@ -57,11 +58,18 @@ public class RecipeManager extends JavaPlugin
         permissions = new Permissions();
         events = new Events();
         
-        BukkitRecipes.init(); // get initial recipes...
-        recipes.index.putAll(BukkitRecipes.initialRecipes);
+        // Avoid reload errors if jar is changed
+        Workbenches.init();
+        Furnaces.init();
+        FurnaceWorker.init();
+        
+        Vanilla.init(); // get initial recipes...
+        recipes.index.putAll(Vanilla.initialRecipes);
+        
+        Furnaces.load(); // load saved furnaces...
         
         // Register commands
-        getCommand("test").setExecutor(new TEST()); // TODO REMOVE
+        getCommand("rm").setExecutor(new HelpCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());
         
@@ -78,8 +86,8 @@ public class RecipeManager extends JavaPlugin
     private void onEnablePost()
     {
         scanPlugins(); // scan for other plugins and store them in case any use our API
-        BukkitRecipes.init(); // update initial recipes...
-        recipes.index.putAll(BukkitRecipes.initialRecipes);
+        Vanilla.init(); // update initial recipes...
+        recipes.index.putAll(Vanilla.initialRecipes);
         
         // Start loading data
         reload(null, false, true);
@@ -127,7 +135,7 @@ public class RecipeManager extends JavaPlugin
         
         if(previousClearRecipes != false && RecipeManager.getSettings().CLEAR_RECIPES == false)
         {
-            BukkitRecipes.restoreInitialRecipes();
+            Vanilla.restoreInitialRecipes();
             Messages.info("<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
         }
         
@@ -157,13 +165,13 @@ public class RecipeManager extends JavaPlugin
         StackTraceElement[] traces = new Exception().getStackTrace();
         StackTraceElement trace;
         
-        Messages.info(ChatColor.GRAY + "[debug] tracing...");
+        Messages.debug("tracing...");
         
         for(int i = 0; i < traces.length; i++)
         {
             trace = traces[i];
             
-            Messages.info(ChatColor.GRAY + "[debug] " + trace.getClassName() + " | " + trace.getMethodName());
+            Messages.debug(trace.getClassName() + " | " + trace.getMethodName());
             
             if(trace.getMethodName().equals(method) && traces.length >= i)
             {
@@ -179,13 +187,13 @@ public class RecipeManager extends JavaPlugin
                 }
                 else
                 {
-                    Messages.info(ChatColor.RED + "[debug] Couldn't figure out plugin of package: " + packageName + " | class=" + trace.getClassName());
+                    Messages.debug("<red>Couldn't figure out plugin of package: " + packageName + " | class=" + trace.getClassName());
                     return null;
                 }
             }
         }
         
-        Messages.info(ChatColor.RED + "[debug] Couldn't find caller of registerRecipesToServer!");
+        Messages.debug("<red>Couldn't find caller of registerRecipesToServer!");
         return null;
     }
     
@@ -194,8 +202,11 @@ public class RecipeManager extends JavaPlugin
         if(plugin == null)
             return;
         
-        FurnaceWorker.stop();
-        BukkitRecipes.clean();
+        Furnaces.save();
+        Furnaces.clear();
+        FurnaceWorker.clear();
+        Workbenches.clear();
+        Vanilla.clean();
         Bukkit.getScheduler().cancelTasks(this);
         
         plugin = null;

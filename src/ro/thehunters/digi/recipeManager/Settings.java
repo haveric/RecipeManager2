@@ -3,10 +3,11 @@ package ro.thehunters.digi.recipeManager;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,43 +16,48 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class Settings
 {
-    public final boolean              SPECIAL_REPAIR;
-    public final boolean              SPECIAL_REPAIR_METADATA;
+    public final boolean                        SPECIAL_REPAIR;
+    public final boolean                        SPECIAL_REPAIR_METADATA;
     
-    public final boolean              SPECIAL_LEATHER_DYE;
-    public final boolean              SPECIAL_FIREWORKS;
-    public final boolean              SPECIAL_MAP_CLONING;
-    public final boolean              SPECIAL_MAP_EXTENDING;
+    public final boolean                        SPECIAL_LEATHER_DYE;
+    public final boolean                        SPECIAL_FIREWORKS;
+    public final boolean                        SPECIAL_MAP_CLONING;
+    public final boolean                        SPECIAL_MAP_EXTENDING;
     
-    public final boolean              SOUNDS_REPAIR;
-    public final boolean              SOUNDS_FAILED;
-    public final boolean              SOUNDS_FAILED_CLICK;
+    public final boolean                        SOUNDS_REPAIR;
+    public final boolean                        SOUNDS_FAILED;
+    public final boolean                        SOUNDS_FAILED_CLICK;
     
-    public final boolean              UPDATE_BOOKS;
-    public final boolean              COLOR_CONSOLE;
+    public final boolean                        UPDATE_BOOKS;
+    public final boolean                        COLOR_CONSOLE;
     
-    public final boolean              RETURN_BUCKETS;
-    public final boolean              RETURN_POTIONS;
-    public final boolean              RETURN_BOWL;
+    public final boolean                        RETURN_BUCKETS;
+    public final boolean                        RETURN_POTIONS;
+    public final boolean                        RETURN_BOWL;
     
-    public final boolean              FUEL_RETURN_BUCKETS;
+    public final boolean                        FUEL_RETURN_BUCKETS;
     
-    public final char                 FURNACE_SHIFT_CLICK;
-    public final int                  FURNACE_TICKS;
+    public final char                           FURNACE_SHIFT_CLICK;
+    public final int                            FURNACE_TICKS;
     
-    public final boolean              MULTITHREADING;
+    public final boolean                        MULTITHREADING;
     
-    public final boolean              CLEAR_RECIPES;
+    public final boolean                        CLEAR_RECIPES;
     
-    public final boolean              METRICS;
+    public final boolean                        METRICS;
     
-    protected final String            LASTCHANGED;
+    protected final String                      LASTCHANGED;
     
-    private final Map<String, String> itemAlias = new HashMap<String, String>();
-    private final Map<String, String> aliasItem = new HashMap<String, String>();
+    protected Map<String, Material>             nameAliases = new HashMap<String, Material>();
+    protected Map<Material, Map<String, Short>> dataAliases = new HashMap<Material, Map<String, Short>>();
+    
+    protected Map<Material, String>             printName   = new HashMap<Material, String>();
+    protected Map<Material, Map<Short, String>> printData   = new HashMap<Material, Map<Short, String>>();
     
     public Settings(CommandSender sender)
     {
+        RecipeManager.settings = this;
+        
         // Load/reload/generate config.yml
         FileConfiguration yml = loadYML(sender, "config.yml");
         
@@ -107,25 +113,122 @@ public class Settings
         
         yml = loadYML(sender, "aliases.yml");
         
-        aliasItem.clear();
-        itemAlias.clear();
-        String alias;
-        String item;
-        
-        for(Entry<String, Object> entry : yml.getValues(false).entrySet())
+        for(String materialString : yml.getKeys(false))
         {
-            if(entry.getKey().equals("lastchanged"))
+            if(materialString.equals("lastchanged"))
                 continue;
             
-            item = entry.getValue().toString().toUpperCase();
+            Material material = Material.matchMaterial(materialString);
             
-            if(!item.contains(":"))
-                item = item + ":*";
+            if(material == null)
+            {
+                Messages.info("<yellow>WARNING: <reset>aliases.yml has invalid material definition: " + materialString);
+                continue;
+            }
             
-            alias = entry.getKey().toUpperCase();
+            Object value = yml.get(materialString);
             
-            aliasItem.put(alias, item);
-            itemAlias.put(item, alias);
+            if(value instanceof String)
+            {
+                parseNames((String)value, material);
+            }
+            else if(value instanceof ConfigurationSection)
+            {
+                ConfigurationSection section = (ConfigurationSection)value;
+                
+                for(String key : section.getKeys(false))
+                {
+                    if(key.equals("names"))
+                    {
+                        parseNames(section.getString(key), material);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            parseDataNames(section.getString(key), Short.valueOf(key), material);
+                        }
+                        catch(NumberFormatException e)
+                        {
+                            Messages.info("<yellow>WARNING: <reset>aliases.yml has invalid data value number: " + key + " for material: " + material);
+                            continue;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Messages.info("<yellow>WARNING: <reset>aliases.yml has invalid data type at: " + materialString);
+                continue;
+            }
+        }
+    }
+    
+    private void parseNames(String names, Material material)
+    {
+        if(names == null)
+            return;
+        
+        String[] split = names.split(",");
+        
+        for(String str : split)
+        {
+            String parsed = Tools.parseAliasName(str);
+            
+            if(nameAliases.containsKey(parsed))
+            {
+                Messages.info("<yellow>WARNING: <reset>aliases.yml has duplicate material alias '" + str + "' for material " + material);
+                continue;
+            }
+            
+            nameAliases.put(parsed, material);
+            
+            if(!printName.containsKey(material))
+            {
+                printName.put(material, Tools.parseAliasPrint(str));
+            }
+        }
+    }
+    
+    private void parseDataNames(String names, short data, Material material)
+    {
+        if(names == null)
+            return;
+        
+        String[] split = names.split(",");
+        
+        for(String str : split)
+        {
+            Map<String, Short> dataMap = dataAliases.get(material);
+            
+            if(dataMap == null)
+            {
+                dataMap = new HashMap<String, Short>();
+                dataAliases.put(material, dataMap);
+            }
+            
+            String parsed = Tools.parseAliasName(str);
+            
+            if(dataMap.containsKey(parsed))
+            {
+                Messages.info("<yellow>WARNING: <reset>aliases.yml has duplicate data alias '" + str + "' for material " + material + " and data value " + data);
+                continue;
+            }
+            
+            dataMap.put(parsed, data);
+            
+            Map<Short, String> printMap = printData.get(material);
+            
+            if(printMap == null)
+            {
+                printMap = new HashMap<Short, String>();
+                printData.put(material, printMap);
+            }
+            
+            if(!printMap.containsKey(data))
+            {
+                printMap.put(data, Tools.parseAliasPrint(str));
+            }
         }
     }
     

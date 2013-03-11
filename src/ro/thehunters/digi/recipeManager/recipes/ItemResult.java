@@ -11,8 +11,9 @@ import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class ItemResult extends ItemStack implements Flaggable
 {
-    private Flags flags;
-    private int   chance = 100;
+    private Flags      flags;
+    private float      chance = 100;
+    private BaseRecipe recipe;
     
     public ItemResult()
     {
@@ -23,14 +24,23 @@ public class ItemResult extends ItemStack implements Flaggable
         super(item);
     }
     
-    public ItemResult(ItemStack item, int chance)
+    public ItemResult(ItemResult result)
+    {
+        super((ItemStack)result);
+        
+        flags = result.hasFlags() ? result.getFlags().clone(this) : null;
+        chance = result.chance;
+        recipe = result.recipe; // don't clone, just a pointer
+    }
+    
+    public ItemResult(ItemStack item, float chance)
     {
         super(item);
         
         setChance(chance);
     }
     
-    public ItemResult(Material type, int amount, int data, int chance)
+    public ItemResult(Material type, int amount, int data, float chance)
     {
         super(type, amount, (short)data);
         
@@ -62,14 +72,25 @@ public class ItemResult extends ItemStack implements Flaggable
         return (flags == null ? true : flags.applyFlags(a));
     }
     
-    public void setChance(int chance)
+    public void setChance(float chance)
     {
         this.chance = chance;
     }
     
-    public int getChance()
+    public float getChance()
     {
         return chance;
+    }
+    
+    public BaseRecipe getRecipe()
+    {
+        return recipe;
+    }
+    
+    public ItemResult setRecipe(BaseRecipe recipe)
+    {
+        this.recipe = recipe;
+        return this;
     }
     
     // From Flaggable interface

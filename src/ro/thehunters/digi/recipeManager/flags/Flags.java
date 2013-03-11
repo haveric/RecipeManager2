@@ -3,6 +3,8 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.entity.Player;
+
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
@@ -71,7 +73,7 @@ public class Flags implements Cloneable
      */
     public boolean canAdd(Flag flag)
     {
-        return flag != null && flag.onValidate();
+        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_STORE);
     }
     
     /**
@@ -105,6 +107,12 @@ public class Flags implements Cloneable
         String[] split = string.split(" ", 2);
         String flagString = split[0].substring(1).trim().toLowerCase();
         
+        if(flagString.isEmpty())
+        {
+            RecipeErrorReporter.warning("Flag name empty: " + string);
+            return;
+        }
+        
         // check for : character at the end of string and remove it
         int len = flagString.length() - 1;
         
@@ -117,7 +125,7 @@ public class Flags implements Cloneable
         // If no valid flag was found
         if(type == null)
         {
-            RecipeErrorReporter.warning("Unknown flag: " + flagString);
+            RecipeErrorReporter.warning("Unknown flag: @" + flagString);
             return;
         }
         
@@ -196,9 +204,27 @@ public class Flags implements Cloneable
      */
     public boolean checkFlags(Arguments a)
     {
-        for(Flag flag : flags.values())
+        Player p = a.player();
+        
+        if(p != null && p.hasPermission("recipemanager.noflag.*"))
         {
-            flag.onCheck(a);
+            return true;
+        }
+        
+        FlagLoop: for(Flag flag : flags.values())
+        {
+            if(p != null)
+            {
+                for(String name : flag.getType().getNames())
+                {
+                    if(p.hasPermission("recipemanager.noflag." + name))
+                    {
+                        continue FlagLoop;
+                    }
+                }
+            }
+            
+            flag.check(a);
         }
         
         return !a.hasReasons();
@@ -216,7 +242,7 @@ public class Flags implements Cloneable
     {
         for(Flag flag : flags.values())
         {
-            flag.onApply(a);
+            flag.apply(a);
         }
         
         return !a.hasReasons();
@@ -232,7 +258,7 @@ public class Flags implements Cloneable
     {
         for(Flag flag : flags.values())
         {
-            flag.onFailed(a);
+            flag.failed(a);
         }
     }
     
