@@ -3,7 +3,7 @@ package ro.thehunters.digi.recipeManager.recipes;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import ro.thehunters.digi.recipeManager.flags.Arguments;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.Flag;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flaggable;
@@ -30,7 +30,7 @@ public class ItemResult extends ItemStack implements Flaggable
         
         flags = result.hasFlags() ? result.getFlags().clone(this) : null;
         chance = result.chance;
-        recipe = result.recipe; // don't clone, just a pointer
+        recipe = result.recipe; // don't clone, needs to be a pointer
     }
     
     public ItemResult(ItemStack item, float chance)
@@ -60,16 +60,6 @@ public class ItemResult extends ItemStack implements Flaggable
         setDurability(item.getDurability());
         setAmount(item.getAmount());
         setItemMeta(item.getItemMeta());
-    }
-    
-    public boolean checkFlags(Arguments a)
-    {
-        return (flags == null ? true : flags.checkFlags(a));
-    }
-    
-    public boolean applyFlags(Arguments a)
-    {
-        return (flags == null ? true : flags.applyFlags(a));
     }
     
     public void setChance(float chance)
@@ -132,5 +122,23 @@ public class ItemResult extends ItemStack implements Flaggable
     public void addFlag(Flag flag)
     {
         flags.addFlag(flag);
+    }
+    
+    @Override
+    public boolean checkFlags(Args a)
+    {
+        return (flags == null ? true : flags.checkFlags(a));
+    }
+    
+    @Override
+    public boolean sendCrafted(Args a)
+    {
+        return (flags == null ? true : flags.sendCrafted(a));
+    }
+    
+    @Override
+    public boolean sendPrepare(Args a)
+    {
+        return (flags == null ? true : flags.sendPrepare(a));
     }
 }

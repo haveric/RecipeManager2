@@ -331,7 +331,7 @@ public class FlagCloneIngredient extends Flag
     }
     
     @Override
-    protected void onCheck(Arguments a)
+    protected void onCheck(Args a)
     {
     }
     

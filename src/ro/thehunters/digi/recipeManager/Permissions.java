@@ -8,7 +8,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Permissions
 {
-    private Permission permissions = null;
+    public static final String SKIPFLAG_PREFIX = "recipemanager.skipflag.";
+    public static final String SKIPFLAG_ALL    = SKIPFLAG_PREFIX + "*";
+    
+    private Permission         permissions     = null;
     
     public Permissions()
     {
@@ -22,14 +25,18 @@ public class Permissions
                 
                 if(permissions.isEnabled())
                 {
-                    Messages.log("Vault has made group-permission available for this plugin.");
+                    Messages.log("Vault has made permission-group available for this plugin.");
                 }
                 else
                 {
                     permissions = null;
-                    Messages.log("Vault doesn't have a group-permission plugin connected!");
+                    Messages.info("<yellow>NOTE: <dark_aqua>Vault<reset> doesn't have a permission-group plugin connected!");
                 }
             }
+        }
+        else
+        {
+            Messages.log("Vault was not found.");
         }
     }
     

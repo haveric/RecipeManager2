@@ -7,6 +7,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class CraftRecipe extends WorkbenchRecipe
@@ -144,22 +145,69 @@ public class CraftRecipe extends WorkbenchRecipe
         hash = str.toString().hashCode();
     }
     
+    @Override
+    public void regenName()
+    {
+        // TODO
+        StringBuilder s = new StringBuilder();
+        boolean removed = hasFlag(FlagType.REMOVE);
+        
+        if(removed)
+            s.append("removed ");
+        else if(hasFlag(FlagType.OVERRIDE))
+            s.append("overwritten ");
+        
+        s.append("shaped ");
+        
+        s.append(getWidth()).append('x').append(getHeight());
+        
+        if(!removed)
+        {
+            s.append(" = ");
+            int resultNum = getResults().size();
+            
+            if(resultNum > 0)
+            {
+                ItemStack result = getFirstResult();
+                
+                s.append(result == null ? "nothing" : result.getType());
+                
+                if(resultNum > 1)
+                    s.append(" & ").append(resultNum - 1).append(" more");
+            }
+            else
+            {
+                s.append("no result");
+            }
+        }
+        
+        setName(s.toString());
+        Messages.debug("recipe name = " + getName());
+    }
+    
+    /**
+     * @return Shape width, 1 to 3
+     */
     public int getWidth()
     {
         return width;
     }
     
+    /**
+     * @return Shape height, 1 to 3
+     */
     public int getHeight()
     {
         return height;
     }
     
+    @Override
     public ShapedRecipe getBukkitRecipe()
     {
         return bukkitRecipe == null ? toShapedRecipe() : bukkitRecipe;
     }
     
-    public ShapedRecipe toShapedRecipe()
+    private ShapedRecipe toShapedRecipe()
     {
         ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.generateRecipeIdResult(getFirstResult(), getIndex()));
         
@@ -251,7 +299,7 @@ public class CraftRecipe extends WorkbenchRecipe
     }
     
     @Override
-    public RecipeType getRecipeType()
+    public RecipeType getType()
     {
         return RecipeType.CRAFT;
     }

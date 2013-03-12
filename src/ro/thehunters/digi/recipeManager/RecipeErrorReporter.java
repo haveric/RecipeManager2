@@ -173,7 +173,7 @@ public class RecipeErrorReporter
     
     public static void warning(String warning, String tip)
     {
-        entry(ChatColor.YELLOW + "Warning", warning, tip);
+        entry(ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "Warning", warning, tip);
     }
     
     /**
@@ -194,12 +194,11 @@ public class RecipeErrorReporter
      *            the error message
      * @param tip
      *            optional tip, use null to avoid
-     * 
      * @return always returns false, useful for quick returns
      */
     public static boolean error(String error, String tip)
     {
-        entry(ChatColor.RED + "Fatal", error, tip);
+        entry(ChatColor.RED.toString() + ChatColor.UNDERLINE + "Fatal", error, tip);
         return false;
     }
     
@@ -207,7 +206,7 @@ public class RecipeErrorReporter
     {
         if(fileErrors == null)
         {
-            Messages.error(null, new Exception(), type + ": " + ChatColor.RESET + message + (tip != null ? ChatColor.DARK_GREEN + "; TIP: " + ChatColor.GRAY + tip : ""));
+            Messages.error(null, new Exception(), type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + "; TIP: " + ChatColor.GRAY + tip : ""));
         }
         else if(!ignore)
         {

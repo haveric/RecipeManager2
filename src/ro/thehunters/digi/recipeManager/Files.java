@@ -59,6 +59,8 @@ public class Files
         
         // TODO check versions...
         
+        // TODO extract and overwrite changelog.txt too - check 4th line first
+        
         directories();
         fileRecipeFlags();
         fileNames();

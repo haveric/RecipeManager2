@@ -15,7 +15,6 @@ public class FlagEffect extends Flag
     private Effect  data       = null;
     private int     radius     = 10;
     
-    // TODO finish this
     public FlagEffect()
     {
         type = FlagType.EFFECT;
@@ -25,7 +24,10 @@ public class FlagEffect extends Flag
     {
         this();
         
-        // TODO CLONE
+        onlyPlayer = flag.onlyPlayer;
+        effect = flag.effect;
+        data = flag.data;
+        radius = flag.radius;
     }
     
     @Override
@@ -35,7 +37,7 @@ public class FlagEffect extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.toLowerCase().split("\\|");
         
@@ -101,8 +103,9 @@ public class FlagEffect extends Flag
         return true;
     }
     
+    // TODO Finish
     @Override
-    public void onApply(Arguments a)
+    protected boolean onCrafted(Args a)
     {
         if(onlyPlayer)
         {
@@ -111,6 +114,8 @@ public class FlagEffect extends Flag
             if(p != null)
             {
                 p.playEffect(EntityEffect.WOLF_HEARTS);
+                
+                return true;
                 
 //                p.playSound(a.hasLocation() ? a.location() : p.getLocation(), sound, volume, pitch);
             }
@@ -122,7 +127,11 @@ public class FlagEffect extends Flag
             if(l != null)
             {
                 l.getWorld().playEffect(l, effect, data, radius);
+                
+                return true;
             }
         }
+        
+        return false;
     }
 }

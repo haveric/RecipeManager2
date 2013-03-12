@@ -14,6 +14,8 @@ public class CombineRecipe extends WorkbenchRecipe
 {
     private List<ItemStack> ingredients;
     
+    private ShapelessRecipe bukkitRecipe;
+    
     public CombineRecipe()
     {
     }
@@ -108,6 +110,12 @@ public class CombineRecipe extends WorkbenchRecipe
         hash = str.toString().hashCode();
     }
     
+    @Override
+    public ShapelessRecipe getBukkitRecipe()
+    {
+        return bukkitRecipe == null ? toShapelessRecipe() : bukkitRecipe;
+    }
+    
     public ShapelessRecipe toShapelessRecipe()
     {
         ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.generateRecipeIdResult(getFirstResult(), getIndex()));
@@ -132,7 +140,7 @@ public class CombineRecipe extends WorkbenchRecipe
     }
     
     @Override
-    public RecipeType getRecipeType()
+    public RecipeType getType()
     {
         return RecipeType.COMBINE;
     }

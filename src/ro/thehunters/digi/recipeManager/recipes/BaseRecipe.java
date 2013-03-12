@@ -4,7 +4,7 @@ import org.bukkit.inventory.Recipe;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Recipes;
-import ro.thehunters.digi.recipeManager.flags.Arguments;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.Flag;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flaggable;
@@ -34,8 +34,9 @@ public class BaseRecipe implements Flaggable
         }
     }
     
-    private Flags flags;
-    protected int hash;
+    private String name = "???";
+    private Flags  flags;
+    protected int  hash;
     
     public BaseRecipe()
     {
@@ -62,25 +63,29 @@ public class BaseRecipe implements Flaggable
         return RecipeManager.getRecipes().getRecipeInfo(this);
     }
     
-    public boolean checkFlags(Arguments a)
-    {
-        return (flags == null ? true : flags.checkFlags(a));
-    }
-    
-    public boolean applyFlags(Arguments a)
-    {
-        return (flags == null ? true : flags.applyFlags(a));
-    }
-    
-    public void sendFailed(Arguments a)
-    {
-        if(flags != null)
-            flags.sendFailed(a);
-    }
-    
-    public RecipeType getRecipeType()
+    public RecipeType getType()
     {
         return null;
+    }
+    
+    /**
+     * Returns the auto-generated name or the custom name (if set) of the recipe.
+     * 
+     * @return never null
+     */
+    public String getName()
+    {
+        return name;
+    }
+    
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    public void regenName()
+    {
+        name = "Empty recipe";
     }
     
     public boolean isValid()
@@ -140,21 +145,8 @@ public class BaseRecipe implements Flaggable
      * @return
      *         Bukkit API version of the recipe
      */
-    public Recipe toBukkitRecipe()
+    public Recipe getBukkitRecipe()
     {
-        if(this instanceof CraftRecipe)
-        {
-            return ((CraftRecipe)this).toShapedRecipe();
-        }
-        else if(this instanceof CombineRecipe)
-        {
-            return ((CombineRecipe)this).toShapelessRecipe();
-        }
-        else if(this instanceof SmeltRecipe)
-        {
-            return ((SmeltRecipe)this).toFurnaceRecipe();
-        }
-        
         return null;
     }
     
@@ -197,5 +189,34 @@ public class BaseRecipe implements Flaggable
     public void addFlag(Flag flag)
     {
         flags.addFlag(flag);
+    }
+    
+    @Override
+    public boolean checkFlags(Args a)
+    {
+        return (flags == null ? true : flags.checkFlags(a));
+    }
+    
+    @Override
+    public boolean sendCrafted(Args a)
+    {
+        return (flags == null ? true : flags.sendCrafted(a));
+    }
+    
+    @Override
+    public boolean sendPrepare(Args a)
+    {
+        return (flags == null ? true : flags.sendPrepare(a));
+    }
+    
+    /**
+     * Notify flags that the recipe failed.
+     * 
+     * @param a
+     */
+    public void sendFailed(Args a)
+    {
+        if(flags != null)
+            flags.sendFailed(a);
     }
 }

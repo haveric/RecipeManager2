@@ -65,7 +65,7 @@ public class RecipeCommand implements CommandExecutor
             if(info.getAdder() == null)
                 continue;
             
-            Messages.send(sender, String.format(format, recipe.getRecipeType(), info.getOwner(), info.getStatus(), info.getAdder()));
+            Messages.send(sender, String.format(format, recipe.getType(), info.getOwner(), info.getStatus(), info.getAdder()));
         }
         
         Messages.send(sender, ChatColor.GREEN + "END OF LIST");

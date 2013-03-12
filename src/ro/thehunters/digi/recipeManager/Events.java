@@ -42,20 +42,19 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerCraftEvent;
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
-import ro.thehunters.digi.recipeManager.flags.Arguments;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
-import ro.thehunters.digi.recipeManager.recipes.BaseRecipe.RecipeType;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
@@ -121,7 +120,7 @@ public class Events implements Listener
             if(bukkitRecipe == null)
                 return; // bukkit recipe is null ! skip it
                 
-            ItemStack result = inventory.getResult();
+            ItemResult result = (inventory.getResult() == null ? null : new ItemResult(inventory.getResult()));
             ItemStack recipeResult = bukkitRecipe.getResult();
             
             if(prepareSpecialRecipe(player, inventory, result, recipeResult))
@@ -140,7 +139,31 @@ public class Events implements Listener
             
             result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
             
-            inventory.setResult(result == null ? null : result);
+            Messages.debug("result = " + result);
+            
+            if(result != null)
+            {
+                Args a = Args.create().player(player).location(location).recipe(recipe).inventory(inventory).result(result).build();
+                
+                if(!recipe.sendPrepare(a))
+                {
+                    result = null;
+                }
+                
+                // TODO remove
+                if(result != null)
+                {
+                    a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                }
+                else
+                {
+                    a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                }
+            }
+            
+            inventory.setResult(result);
+            
+            new UpdateInventory(player); // TODO REMOVE
         }
         catch(Exception e)
         {
@@ -255,9 +278,10 @@ public class Events implements Listener
         inventory.setResult(result);
     }
     
-    private ItemStack prepareCraftResult(Player player, CraftingInventory inventory, WorkbenchRecipe recipe, Location location) throws Exception
+    private ItemResult prepareCraftResult(Player player, CraftingInventory inventory, WorkbenchRecipe recipe, Location location) throws Exception
     {
-        ItemStack result = recipe.getDisplayResult(player, location);
+        Args a = Args.create().player(player).inventory(inventory).recipe(recipe).location(location).build();
+        ItemResult result = recipe.getDisplayResult(a);
         
         if(result != null)
         {
@@ -327,16 +351,18 @@ public class Events implements Listener
         try
         {
             CraftingInventory inventory = event.getInventory();
-            ItemStack result = inventory.getResult();
+            ItemResult result = (inventory.getResult() == null ? null : new ItemResult(inventory.getResult()));
             Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
             Location location = Workbenches.get(player);
             
-            if(result == null || result.getAmount() <= 0)
+            if(result == null)
             {
                 event.setCancelled(true);
                 
                 if(RecipeManager.getSettings().SOUNDS_FAILED_CLICK && player != null)
+                {
                     player.playSound(location, Sound.NOTE_BASS, 1, 255);
+                }
                 
                 return;
             }
@@ -363,13 +389,37 @@ public class Events implements Listener
             if(recipe == null)
                 return;
             
-            result = recipe.getResult(player, location);
-            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
+            Args a = Args.create().player(player).location(location).recipe(recipe).inventory(inventory).build();
             
+            result = recipe.getResult(a);
+            
+            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
             Bukkit.getPluginManager().callEvent(callEvent);
             result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
             
-            inventory.setResult(result == null ? null : result);
+            if(result != null)
+            {
+                a = Args.create().player(player).inventory(inventory).recipe(recipe).location(location).build();
+                
+                if(!recipe.sendCrafted(a) || !result.sendCrafted(a))
+                {
+                    result = null;
+                }
+                
+                if(result != null)
+                {
+                    a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                }
+                else
+                {
+                    recipe.sendFailed(a);
+                    a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                }
+            }
+            
+            inventory.setResult(result);
+            
+            new UpdateInventory(player); // TODO REMOVE
         }
         catch(Exception e)
         {
@@ -377,6 +427,23 @@ public class Events implements Listener
             
             CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
             Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+        }
+    }
+    
+    private class UpdateInventory extends BukkitRunnable
+    {
+        private final Player player;
+        
+        public UpdateInventory(Player player)
+        {
+            this.player = player;
+            runTask(RecipeManager.getPlugin());
+        }
+        
+        @Override
+        public void run()
+        {
+            player.updateInventory();
         }
     }
     
@@ -447,6 +514,7 @@ public class Events implements Listener
     @EventHandler
     public void eventInventoryClick(InventoryClickEvent event)
     {
+        /*
         try
         {
             Inventory inv = event.getInventory();
@@ -467,6 +535,7 @@ public class Events implements Listener
             CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player)event.getWhoClicked() : null);
             Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
         }
+        */
     }
     
     private void eventFurnaceClick(InventoryClickEvent event, Inventory inv, Furnace furnace) throws Exception
@@ -721,11 +790,12 @@ public class Events implements Listener
         
         if(recipe != null)
         {
-            Arguments a = new Arguments(player, null, location, RecipeType.SMELT, null);
+            Args a = Args.create().player(player).location(location).recipe(recipe).inventory(furnace.getInventory()).build();
+//            Args a = new Args(player, null, location, RecipeType.SMELT, null);
             
             if(!recipe.checkFlags(a))
             {
-                a.sendReasons(player);
+                a.sendReasons(player, Messages.CRAFT_FLAG_PREFIX_RECIPE);
                 event.setCancelled(true);
                 event.setResult(Result.DENY);
                 return false;
@@ -847,6 +917,8 @@ public class Events implements Listener
     @EventHandler(priority = EventPriority.LOW)
     public void eventFurnaceBurn(FurnaceBurnEvent event)
     {
+        Messages.debug("BURN EVENT");
+        
         try
         {
             BlockID id = new BlockID(event.getBlock());
@@ -880,7 +952,7 @@ public class Events implements Listener
                 
                 if(smeltRecipe != null)
                 {
-                    if(!smeltRecipe.hasFuel() || !event.getFuel().isSimilar(smeltRecipe.getFuel()))
+                    if(!smeltRecipe.hasFuel() || !smeltRecipe.getFuel().isSimilar(event.getFuel()))
                     {
                         event.setCancelled(true);
                     }
@@ -896,10 +968,12 @@ public class Events implements Listener
             
             data.setBurnTime(running ? event.getBurnTime() : 0);
             
-            Messages.debug("furnace set burn time to = " + data.getBurnTime());
+//            Messages.debug("furnace set burn time to = " + data.getBurnTime());
             
             if(running)
             {
+                FurnaceWorker.start(); // make sure it's started
+                
 //              new FurnaceBurnOut(event.getBlock(), event.getFuel(), event.getBurnTime());
             }
         }
@@ -920,9 +994,14 @@ public class Events implements Listener
             if(recipe == null)
                 return;
             
-            Arguments a = new Arguments(null, null, event.getBlock().getLocation(), RecipeType.SMELT, event.getResult());
+            FurnaceInventory inventory = null;
             
-            recipe.applyFlags(a);
+            if(event.getBlock() instanceof Furnace)
+                inventory = ((Furnace)event.getBlock()).getInventory();
+            
+            Args a = Args.create().location(event.getBlock().getLocation()).recipe(recipe).inventory(inventory).result(event.getResult()).build();
+            
+            recipe.sendCrafted(a);
         }
         catch(Exception e)
         {

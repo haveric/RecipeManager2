@@ -3,50 +3,71 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Inventory;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe.RecipeType;
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
  * 
  * @author Digi
  */
-public class Arguments
+public class Args
 {
     private Player       player;
     private String       playerName;
     private Location     location;
+    private BaseRecipe   recipe;
     private RecipeType   recipeType;
-    private ItemStack    result;
+    private Inventory    inventory;
+    private ItemResult   result;
+    
     private List<String> reasons;
     private List<String> effects;
     
-    /**
-     * 
-     * @param player
-     *            player instance if you have it, enter playerName if you only have that
-     * @param playerName
-     *            automatically filled if player is not null, otherwise enter it manually if you have it!
-     * @param location
-     *            the location if available, enter null otherwise
-     * @param recipeType
-     *            the recipe type if appliable, null otherwise
-     * @param result
-     *            the recipe's result if appliable, null otherwise
-     */
-    public Arguments(Player player, String playerName, Location location, RecipeType recipeType, ItemStack result)
+    protected Args()
     {
-        this.player = (player != null ? player : (playerName != null ? Bukkit.getPlayerExact(playerName) : null));
-        this.playerName = (this.player != null ? this.player.getName() : playerName);
-        this.location = (location != null ? location : (player != null ? player.getLocation() : null));
+    }
+    
+    protected void setPlayer(Player player)
+    {
+        this.player = player;
+    }
+    
+    protected void setPlayerName(String playerName)
+    {
+        this.playerName = playerName;
+    }
+    
+    protected void setLocation(Location location)
+    {
+        this.location = location;
+    }
+    
+    protected void setRecipe(BaseRecipe recipe)
+    {
+        this.recipe = recipe;
+    }
+    
+    protected void setRecipeType(RecipeType recipeType)
+    {
         this.recipeType = recipeType;
+    }
+    
+    protected void setInventory(Inventory inventory)
+    {
+        this.inventory = inventory;
+    }
+    
+    protected void setResult(ItemResult result)
+    {
         this.result = result;
     }
     
@@ -100,7 +121,27 @@ public class Arguments
         return recipeType != null;
     }
     
-    public ItemStack result()
+    public BaseRecipe recipe()
+    {
+        return recipe;
+    }
+    
+    public boolean hasRecipe()
+    {
+        return recipe != null;
+    }
+    
+    public Inventory inventory()
+    {
+        return inventory;
+    }
+    
+    public boolean hasInventory()
+    {
+        return inventory != null;
+    }
+    
+    public ItemResult result()
     {
         return result;
     }
@@ -120,8 +161,7 @@ public class Arguments
         return (reasons != null && !reasons.isEmpty());
     }
     
-    // TODO remove:
-    public void addReason(String message)
+    public void addCustomReason(String message)
     {
         if(reasons == null)
             reasons = new ArrayList<String>();
@@ -131,7 +171,7 @@ public class Arguments
     
     public void addReason(Messages globalMessage, String customMessage, String... variables)
     {
-        addReason(globalMessage.getCustom(customMessage, variables));
+        addCustomReason(globalMessage.getCustom(customMessage, variables));
     }
     
     public void clearReasons()
@@ -140,15 +180,9 @@ public class Arguments
             reasons.clear();
     }
     
-    public void sendReasons(CommandSender sender)
+    public void sendReasons(CommandSender sender, Messages prefix)
     {
-        if(sender == null || reasons == null)
-            return;
-        
-        for(String s : reasons)
-        {
-            Messages.send(sender, s);
-        }
+        sendList(sender, prefix, reasons);
     }
     
     public List<String> effects()
@@ -161,7 +195,7 @@ public class Arguments
         return (effects != null && !effects.isEmpty());
     }
     
-    public void addEffect(String message)
+    public void addCustomEffect(String message)
     {
         if(effects == null)
             effects = new ArrayList<String>();
@@ -171,7 +205,7 @@ public class Arguments
     
     public void addEffect(Messages globalMessage, String customMessage, String... variables)
     {
-        addEffect(globalMessage.getCustom(customMessage, variables));
+        addCustomEffect(globalMessage.getCustom(customMessage, variables));
     }
     
     public void clearEffects()
@@ -180,15 +214,51 @@ public class Arguments
             effects.clear();
     }
     
-    public void sendEffects(CommandSender sender)
+    public void sendEffects(CommandSender sender, Messages prefix)
     {
-        if(sender == null || effects == null)
+        sendList(sender, prefix, effects);
+    }
+    
+    public void clear()
+    {
+        clearReasons();
+        clearEffects();
+    }
+    
+    private void sendList(CommandSender sender, Messages prefix, List<String> list)
+    {
+        if(sender == null || list == null)
             return;
         
-        for(String s : effects)
+        for(String s : list)
         {
-            Messages.send(sender, s);
+            if(s != null)
+            {
+                Messages.send(sender, prefix.get() + s);
+            }
         }
+        
+        /*
+        StringBuilder str = new StringBuilder();
+        
+        str.append(ChatColor.YELLOW).append(title).append(ChatColor.RESET);
+        boolean comma = false;
+        
+        for(int i = 0; i < list.size(); i++)
+        {
+            if(list.get(i) != null)
+            {
+                if(comma)
+                    str.append(", ");
+                else
+                    comma = true;
+                
+                str.append(list.get(i));
+            }
+        }
+        
+        Messages.send(sender, str.toString());
+        */
     }
     
     public String parseVariables(String string)
@@ -198,12 +268,24 @@ public class Arguments
         string = string.replace("{player}", name);
         string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
         string = string.replace("{result}", Tools.printItemStack(result()));
-        string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString() : "(unknown)"));
-        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
+        string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(no recipe)"));
+        string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(no recipe)"));
+        string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(no inventory)"));
+        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(no location)"));
         string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "0"));
         string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "0"));
         string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "0"));
         
         return string;
+    }
+    
+    /**
+     * Start building an argument class for flag events
+     * 
+     * @return linkable methods
+     */
+    public static ArgBuilder create()
+    {
+        return new ArgBuilder();
     }
 }

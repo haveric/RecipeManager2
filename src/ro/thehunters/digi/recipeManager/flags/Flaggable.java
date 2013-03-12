@@ -1,6 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-
 public interface Flaggable
 {
     /**
@@ -39,4 +38,31 @@ public interface Flaggable
      * Shortcut for {@link Flags#addFlag(Flag)}
      */
     public void addFlag(Flag flag);
+    
+    /**
+     * Check with flags if recipe/result can be crafted/used
+     * 
+     * @param a
+     *            use {@link Args#create()}
+     * @return if recipe can be crafted
+     */
+    public boolean checkFlags(Args a);
+    
+    /**
+     * Apply flags when recipe/result is crafted/taken
+     * 
+     * @param a
+     *            use {@link Args#create()}
+     * @return
+     */
+    public boolean sendCrafted(Args a);
+    
+    /**
+     * Apply flags when recipe/result is prepared/displayed
+     * 
+     * @param ause
+     *            {@link Args#create()}
+     * @return
+     */
+    public boolean sendPrepare(Args a);
 }

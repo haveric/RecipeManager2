@@ -1,7 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 
+import ro.thehunters.digi.recipeManager.Permissions;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
@@ -12,7 +14,7 @@ public class Flag implements Cloneable
     protected FlagType type;
     protected Flags    flagsContainer;
     
-    public Flag()
+    protected Flag()
     {
     }
     
@@ -21,7 +23,7 @@ public class Flag implements Cloneable
      */
     
     /**
-     * @return Flags object that contains this flag.
+     * @return The Flags object that holds this flag
      */
     final public Flags getFlagsContainer()
     {
@@ -29,16 +31,46 @@ public class Flag implements Cloneable
     }
     
     /**
-     * Parses a string to get the values for this flag.
+     * Parses a string to get the values for this flag.<br>
      * Has diferent effects for each extension of Flag object.
      * 
      * @param value
      *            the flag's value (not containing the <code>@flag</code> string)
+     * @return
      * @return false if an error occured and the flag should not be added
      */
-    final public void parse(String value)
+    final public boolean parse(String value)
     {
-        onParse(value);
+        return onParse(value);
+    }
+    
+    /**
+     * Check if player has the required permissions to skip this flag
+     * 
+     * @param player
+     * @return
+     */
+    final public boolean hasSkipPermission(Player player)
+    {
+        if(player == null)
+        {
+            return false; // no player, no skip
+        }
+        
+        if(player.hasPermission(Permissions.SKIPFLAG_ALL))
+        {
+            return true; // has skip permission for all flags
+        }
+        
+        for(String name : getType().getNames())
+        {
+            if(player.hasPermission(Permissions.SKIPFLAG_PREFIX + name))
+            {
+                return true; // has skip permission for this flag
+            }
+        }
+        
+        return false; // don't skip flag
     }
     
     /**
@@ -49,9 +81,22 @@ public class Flag implements Cloneable
      * @param a
      *            the arguments class for easily maintainable argument class
      */
-    final public void check(Arguments a)
+    final public void check(Args a)
     {
-        onCheck(a);
+        if(!hasSkipPermission(a.player()))
+            onCheck(a);
+    }
+    
+    /**
+     * Apply the flag's effects - triggered when recipe is prepared or result is displayed
+     * 
+     * @param a
+     *            the arguments class for easily maintainable argument class
+     * @return true if succesful or skipped, false if some required argument was null/invalid.
+     */
+    final public boolean prepare(Args a)
+    {
+        return (hasSkipPermission(a.player()) ? true : onPrepare(a));
     }
     
     /**
@@ -61,20 +106,21 @@ public class Flag implements Cloneable
      * 
      * @param a
      *            the arguments class for easily maintainable argument class
+     * @return true if succesful or skipped, false if some required argument was null/invalid.
      */
-    final public void apply(Arguments a)
+    final public boolean crafted(Args a)
     {
-        onApply(a);
+        return (hasSkipPermission(a.player()) ? true : onCrafted(a));
     }
     
     /**
-     * Trigger flag failure as if it failed due to multi-result chance.
+     * Trigger flag failure as if it failed due to multi-result chance.<br>
      * Any and all arguments can be null if you don't have values for them.<br>
      * Adding reasons to this will display them to the crafter.
      * 
      * @param a
      */
-    final public void failed(Arguments a)
+    final public void failed(Args a)
     {
         onFailed(a);
     }
@@ -195,9 +241,7 @@ public class Flag implements Cloneable
      */
     
     /**
-     * Get flag type
-     * 
-     * @return
+     * @return the flag name enum
      */
     public FlagType getType()
     {
@@ -207,9 +251,11 @@ public class Flag implements Cloneable
     @Override
     public Flag clone()
     {
+        return this; // pointless to clone an empty flag
+        
         // TODO test
         // TODO maybe return new Flag() instead
-        
+        /*
         try
         {
             return (Flag)super.clone();
@@ -218,6 +264,7 @@ public class Flag implements Cloneable
         {
             throw new RuntimeException("Unsupported cloning !");
         }
+        */
     }
     
     protected boolean onValidate()
@@ -234,15 +281,21 @@ public class Flag implements Cloneable
     {
     }
     
-    protected void onCheck(Arguments a)
+    protected void onCheck(Args a)
     {
     }
     
-    protected void onApply(Arguments a)
+    protected boolean onPrepare(Args a)
     {
+        return true;
     }
     
-    protected void onFailed(Arguments a)
+    protected boolean onCrafted(Args a)
+    {
+        return true;
+    }
+    
+    protected void onFailed(Args a)
     {
     }
 }

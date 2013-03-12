@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -54,7 +53,12 @@ public class Settings
     protected Map<Material, String>             printName   = new HashMap<Material, String>();
     protected Map<Material, Map<Short, String>> printData   = new HashMap<Material, Map<Short, String>>();
     
-    public Settings(CommandSender sender)
+    public static void reload(CommandSender sender)
+    {
+        new Settings(sender);
+    }
+    
+    private Settings(CommandSender sender)
     {
         RecipeManager.settings = this;
         
@@ -84,7 +88,15 @@ public class Settings
         
         FUEL_RETURN_BUCKETS = yml.getBoolean("fuel-return-buckets", true);
         FURNACE_SHIFT_CLICK = yml.getString("furnace-shift-click", "f").charAt(0);
-        FURNACE_TICKS = yml.getInt("furnace-ticks", 1);
+        
+        int ticks = yml.getInt("furnace-ticks", 1);
+        
+        if(ticks < 1 || ticks > 20)
+        {
+            Messages.send(sender, "<yellow>WARNING: <reset>config.yml's 'furnace-ticks' must be between 1 and 20");
+        }
+        
+        FURNACE_TICKS = ticks;
         
         MULTITHREADING = yml.getBoolean("multithreading", true);
         
@@ -93,6 +105,11 @@ public class Settings
         METRICS = yml.getBoolean("metrics", true);
         
         LASTCHANGED = yml.getString("lastchanged");
+        
+        if(!Files.LASTCHANGED_CONFIG.equals(LASTCHANGED))
+        {
+            Messages.send(sender, "<yellow>NOTE: <reset>config.yml file is outdated, please delete it to allow it to be generated again.");
+        }
         
         Messages.log("config.yml settings:");
         Messages.log("    special-recipes.repair: " + SPECIAL_REPAIR);
@@ -112,6 +129,11 @@ public class Settings
         Messages.log("    metrics: " + METRICS);
         
         yml = loadYML(sender, "aliases.yml");
+        
+        if(!Files.LASTCHANGED_CONFIG.equals(yml.get("lastchanged")))
+        {
+            Messages.send(sender, "<yellow>NOTE: <reset>aliases.yml file is outdated, please delete it to allow it to be generated again.");
+        }
         
         for(String materialString : yml.getKeys(false))
         {
@@ -230,14 +252,6 @@ public class Settings
                 printMap.put(data, Tools.parseAliasPrint(str));
             }
         }
-    }
-    
-    public static void reload(CommandSender sender)
-    {
-        RecipeManager.settings = new Settings(sender);
-        
-        if(!Files.LASTCHANGED_CONFIG.equals(RecipeManager.settings.LASTCHANGED))
-            Messages.send(sender, ChatColor.YELLOW + "The 'config.yml' file is outdated, please delete it to allow it to be generated again.");
     }
     
     private FileConfiguration loadYML(CommandSender sender, String fileName)

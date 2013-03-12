@@ -39,8 +39,8 @@ public class FlagFailMessage extends Flag
     }
     
     @Override
-    public void onFailed(Arguments a)
+    public void onFailed(Args a)
     {
-        a.addReason(message);
+        a.addCustomReason(message);
     }
 }

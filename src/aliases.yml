@@ -1,3 +1,5 @@
+lastchanged: 2.0beta # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+#-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
 # This file defines aliases for MATERIAL and DATA usable in recipe ingredients and results.
@@ -30,7 +32,7 @@
 #
 # NOTE: You should split words by space or underscore when defining an alias, it will give you more matches, example:
 # "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".
-#
+#------------------------------------------------------------------------------------------------------------------------
 
 coal:
   0: mined
@@ -295,6 +297,3 @@ powered_minecart: minecart with furnace, furnace minecart
 
 
 
-# --------------------------------------------------------------------------------------------------------------
-# DO NOT change this value - it helps plugin to inform you if this file has new options from latest updates!
-lastchanged: 2.0

@@ -1,20 +1,16 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.flags.Arguments;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -70,31 +66,52 @@ public class WorkbenchRecipe extends BaseRecipe
             results.add(new ItemResult(result).setRecipe(this));
     }
     
-    public ItemStack getFirstResult()
+    public ItemResult getFirstResult()
     {
-        return results.get(0);
+        for(ItemResult r : results)
+        {
+            if(r != null)
+                return r;
+        }
+        
+        return null;
     }
     
-    public ItemStack getDisplayResult(Player player, Location location)
+    public ItemResult getDisplayResult(Args a)
     {
-        Arguments a = new Arguments(player, null, location, getRecipeType(), null);
+        a.clear();
         
         if(!checkFlags(a))
         {
-            return Tools.generateItemStackWithMeta(Material.FIRE, 0, 1, Messages.CRAFT_RESULT_FAILED_TITLE.get(), a.reasons());
+            List<String> lore = new ArrayList<String>();
+            
+            for(String r : a.reasons())
+            {
+                lore.add(Messages.CRAFT_RESULT_DENIED_REASON.get("{reason}", r));
+            }
+            
+            return Tools.generateItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
         }
         
         if(results.size() == 1)
         {
-            return getFirstResult();
+            ItemResult result = getFirstResult();
+            
+            if(result.checkFlags(a))
+            {
+                result.sendPrepare(a);
+                return result;
+            }
+            
+            return null;
         }
         
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
-        Map<ItemResult, String> unavailableResults = new HashMap<ItemResult, String>();
+        float failChance = 0;
         int secretNum = 0;
         float secretChance = 0;
+        int unavailableNum = 0;
         float unavailableChance = 0;
-        float failChance = 0;
         
         for(ItemResult r : results)
         {
@@ -104,8 +121,8 @@ public class WorkbenchRecipe extends BaseRecipe
             }
             else if(r.hasFlag(FlagType.SECRET))
             {
-                secretChance += r.getChance();
                 secretNum++;
+                secretChance += r.getChance();
             }
             else
             {
@@ -113,63 +130,56 @@ public class WorkbenchRecipe extends BaseRecipe
                 
                 if(r.checkFlags(a))
                 {
+                    r.sendPrepare(a);
                     displayResults.add(r);
                 }
                 else
                 {
-                    unavailableResults.put(r, a.reasons().get(0));
+                    unavailableNum++;
                     unavailableChance += r.getChance();
                 }
             }
         }
         
-        Messages.debug("recipe displays: " + ArrayUtils.toString(displayResults));
-        Messages.debug("recipe unavailable: " + ArrayUtils.toString(unavailableResults));
+//        Messages.debug("recipe displays: " + ArrayUtils.toString(displayResults));
+//        Messages.debug("recipe unavailable: " + ArrayUtils.toString(unavailableResults));
         
         List<String> lore = new ArrayList<String>();
+        String FORMAT_CHANCE = "%2.0f%%";
         
         for(ItemResult r : displayResults)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_ITEM.get("{chance}", String.format("%3d%%", r.getChance()), "{item}", Tools.printItemStack(r)));
+            lore.add(Messages.CRAFT_RESULT_RECIEVE_ITEM.get("{chance}", String.format(FORMAT_CHANCE, r.getChance()), "{item}", Tools.printItemStack(r)));
         }
         
         if(failChance > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_NOTHING.get("{chance}", String.format("%3d%%", failChance)));
+            lore.add(Messages.CRAFT_RESULT_RECIEVE_NOTHING.get("{chance}", String.format(FORMAT_CHANCE, failChance)));
         }
         
         if(secretNum > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", String.format("%3d%%", secretChance), "{num}", "" + secretNum));
+            lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", String.format(FORMAT_CHANCE, secretChance), "{num}", String.valueOf(secretNum)));
         }
         
-        if(unavailableResults.size() > 0)
+        if(unavailableNum > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{num}", unavailableResults.size() + "", "{chance}", String.format("%3d%%", unavailableChance)));
-            
-            /*
-            lore.add("");
-            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE_TITLE.get());
-            
-            for(Entry<ItemResult, String> entry : unavailableResults.entrySet())
-            {
-                lore.add(Messages.CRAFT_RESULT_UNAVAILABLE_ITEM.get("{chance}", String.format("%3d%%", entry.getKey().getChance()), "{item}", Tools.printItemStack(entry.getKey()), "{reason}", entry.getValue()));
-            }
-            */
+            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{chance}", String.format(FORMAT_CHANCE, unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
         
-        return Tools.generateItemStackWithMeta(Material.SKULL, 0, 1, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+        return Tools.generateItemStackWithMeta(Material.SKULL, 3, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
     }
     
-    public ItemResult getResult(Player player, Location location)
+    public ItemResult getResult(Args a)
     {
+        a.clear();
+        
         List<ItemResult> pickFromResults = new ArrayList<ItemResult>();
-        Arguments a = new Arguments(player, null, location, getRecipeType(), null);
         int maxChance = 0;
         
         for(ItemResult r : results)
         {
-            a.clearReasons();
+            a.clear();
             
             if(r.checkFlags(a))
             {
@@ -191,31 +201,15 @@ public class WorkbenchRecipe extends BaseRecipe
             }
         }
         
-        a = new Arguments(player, null, location, getRecipeType(), result);
+        a.clear();
         
         if(!checkFlags(a))
         {
             Messages.debug("recipe failed: " + ArrayUtils.toString(a.reasons()));
             
-            a.sendReasons(a.player());
+            a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
             
             return null;
-        }
-        
-        if(result != null && !result.applyFlags(a))
-        {
-            result = null;
-        }
-        
-        if(result != null)
-        {
-            a.sendEffects(a.player());
-        }
-        else
-        {
-            sendFailed(a);
-            
-            a.sendReasons(a.player());
         }
         
         return result;

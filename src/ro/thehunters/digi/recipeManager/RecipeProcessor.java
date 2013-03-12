@@ -592,7 +592,7 @@ public class RecipeProcessor implements Runnable
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
         
         // get min-max or fixed smelting time
-        if(!isRemove) // if it's got @remove we don't care about burn time
+        if(!isRemove) // if it's got @remove we don't care about burn time or fuel
         {
             float minTime = Vanilla.FURNACE_RECIPE_TIME;
             float maxTime = -1;
@@ -630,6 +630,24 @@ public class RecipeProcessor implements Runnable
             
             recipe.setMinTime(minTime);
             recipe.setMaxTime(maxTime);
+            
+            nextLine();
+            
+            if(line.charAt(0) == '&') // check if we have a fuel
+            {
+                ItemStack fuelItem = Tools.convertStringToItemStack(line.substring(1).trim(), 0, true, true, true);
+                
+                if(fuelItem == null)
+                    return false;
+                
+                if(fuelItem.getTypeId() == 0)
+                {
+                    return RecipeErrorReporter.error("Fuel can not be air!");
+                }
+                
+                recipe.setFuel(fuelItem);
+                parseFlags(recipe.getFuel().getFlags());
+            }
         }
         
         // get result or move current line after them if we got @remove and results
@@ -837,22 +855,6 @@ public class RecipeProcessor implements Runnable
                 results.add(new ItemResult(Material.AIR, 0, 0, (100.0f - totalPercentage)));
             }
         }
-        
-        /*
-        if(resultCalc != null)
-        {
-            resultCalc.setChance(100 - totalPercentage);
-            results.add(resultCalc);
-        }
-        else if(results.isEmpty())
-        {
-            return new String[] { "Found '=' character but without result item !" };
-        }
-        else if(!oneResult && totalPercentage < 100)
-        {
-            results.add(new ItemResult(Material.AIR, 0, 0, (100 - totalPercentage)));
-        }
-        */
         
         if(oneResult && results.size() > 1)
         {

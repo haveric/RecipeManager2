@@ -121,7 +121,7 @@ public class FuelRecipe extends BaseRecipe
     }
     
     @Override
-    public RecipeType getRecipeType()
+    public RecipeType getType()
     {
         return RecipeType.FUEL;
     }

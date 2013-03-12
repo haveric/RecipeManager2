@@ -3,8 +3,10 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
@@ -97,45 +99,37 @@ public class Flags implements Cloneable
      * 
      * @param string
      *            must not be null and should contain a flag expression like the ones in recipe files
-     * @param recipeType
-     *            can be null
-     * @param item
-     *            can be null
      */
     public void parseFlag(String string)
     {
-        String[] split = string.split(" ", 2);
-        String flagString = split[0].substring(1).trim().toLowerCase();
+        Validate.notNull(string);
+        string = string.trim();
         
-        if(flagString.isEmpty())
+        // check if it's really a flag because this is a public method
+        if(string.charAt(0) != '@')
         {
-            RecipeErrorReporter.warning("Flag name empty: " + string);
+            RecipeErrorReporter.warning("Flags must start with @ character!");
             return;
         }
         
-        // check for : character at the end of string and remove it
-        int len = flagString.length() - 1;
-        
-        if(flagString.charAt(len) == ':')
-            flagString = flagString.substring(0, len);
-        
-        // Find the current flag
-        FlagType type = FlagType.getByName(flagString);
+        String[] split = string.split("[:\\s]+", 2); // split by space or : char
+        String flagString = split[0].trim(); // format flag name
+        FlagType type = FlagType.getByName(flagString); // Find the current flag
         
         // If no valid flag was found
         if(type == null)
         {
-            RecipeErrorReporter.warning("Unknown flag: @" + flagString);
+            RecipeErrorReporter.warning("Unknown flag: " + flagString, "Name might be diferent, check " + Files.FILE_INFO_FLAGS + " for flag list.");
             return;
         }
         
         Flag flag = flags.get(type); // get existing flag, if any
         
-        // create a new instance of the flag does not exist
         if(flag == null)
-            flag = type.createFlagClass();
-        
-        flag.flagsContainer = this; // set container before hand to allow checks
+        {
+            flag = type.createFlagClass(); // create a new instance of the flag does not exist
+            flag.flagsContainer = this; // set container before hand to allow checks
+        }
         
         String value = (split.length > 1 ? split[1].trim() : null);
         
@@ -202,29 +196,24 @@ public class Flags implements Cloneable
      *            arguments class
      * @return true if recipe/result can be crafted by the arguments with the current flags
      */
-    public boolean checkFlags(Arguments a)
+    public boolean checkFlags(Args a)
     {
         Player p = a.player();
         
-        if(p != null && p.hasPermission("recipemanager.noflag.*"))
+        for(Flag flag : flags.values())
         {
-            return true;
+            if(!flag.hasSkipPermission(p))
+                flag.check(a);
         }
         
-        FlagLoop: for(Flag flag : flags.values())
+        return !a.hasReasons();
+    }
+    
+    public boolean sendPrepare(Args a)
+    {
+        for(Flag flag : flags.values())
         {
-            if(p != null)
-            {
-                for(String name : flag.getType().getNames())
-                {
-                    if(p.hasPermission("recipemanager.noflag." + name))
-                    {
-                        continue FlagLoop;
-                    }
-                }
-            }
-            
-            flag.check(a);
+            flag.prepare(a);
         }
         
         return !a.hasReasons();
@@ -238,11 +227,11 @@ public class Flags implements Cloneable
      *            arguments class
      * @return false if something was absolutely required and crafting should be cancelled
      */
-    public boolean applyFlags(Arguments a)
+    public boolean sendCrafted(Args a)
     {
         for(Flag flag : flags.values())
         {
-            flag.apply(a);
+            flag.crafted(a);
         }
         
         return !a.hasReasons();
@@ -254,7 +243,7 @@ public class Flags implements Cloneable
      * @param a
      *            arguments class
      */
-    public void sendFailed(Arguments a)
+    public void sendFailed(Args a)
     {
         for(Flag flag : flags.values())
         {

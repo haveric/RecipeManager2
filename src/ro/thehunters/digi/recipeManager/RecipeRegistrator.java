@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -161,6 +162,8 @@ public class RecipeRegistrator implements Runnable
         if(registered)
             throw new IllegalAccessError("This class is already registered, create a new one!");
         
+        Messages.debug("adders = " + ArrayUtils.toString(adders));
+        
         Map<BaseRecipe, RecipeInfo> copyRecipes = new HashMap<BaseRecipe, RecipeInfo>();
         Set<BaseRecipe> removeRecipes = new HashSet<BaseRecipe>();
         
@@ -232,7 +235,7 @@ public class RecipeRegistrator implements Runnable
             add = !recipe.hasFlag(FlagType.REMOVE);
             remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
             
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getRecipeType());
+            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getType());
             
             if(remove)
             {
@@ -272,7 +275,7 @@ public class RecipeRegistrator implements Runnable
             removeRecipes.clear();
         }
         
-        // Start/restart/stop the furnace worker task
+        // Start the furnace worker task if it's not running
         if(needFurnaceWorker)
             FurnaceWorker.start();
         
@@ -380,7 +383,7 @@ public class RecipeRegistrator implements Runnable
             add = !recipe.hasFlag(FlagType.REMOVE);
             remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
             
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getRecipeType());
+            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getType());
             
             if(recipe instanceof CraftRecipe)
             {
@@ -398,7 +401,7 @@ public class RecipeRegistrator implements Runnable
                 {
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
                     
-                    recipeQueue.offer(cr.toShapedRecipe());
+                    recipeQueue.offer(cr.getBukkitRecipe());
                 }
             }
             else if(recipe instanceof CombineRecipe)
@@ -418,7 +421,7 @@ public class RecipeRegistrator implements Runnable
                 {
                     Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
                     
-                    recipeQueue.offer(co.toShapelessRecipe());
+                    recipeQueue.offer(co.getBukkitRecipe());
                 }
             }
             else if(recipe instanceof SmeltRecipe)
@@ -490,10 +493,12 @@ public class RecipeRegistrator implements Runnable
 //        RecipeManager.recipes = this;
         registered = true;
         
+        /*
         if(needFurnaceWorker)
             FurnaceWorker.start();
         else
             FurnaceWorker.stop();
+        */
     }
     
     // Public API methods

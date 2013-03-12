@@ -11,14 +11,17 @@ public class FlagMessage extends Flag
         type = FlagType.MESSAGE;
     }
     
+    public FlagMessage(FlagMessage flag)
+    {
+        this();
+        
+        message = flag.message;
+    }
+    
     @Override
     public FlagMessage clone()
     {
-        FlagMessage clone = new FlagMessage();
-        
-        clone.message = message;
-        
-        return clone;
+        return new FlagMessage(this);
     }
     
     public String getMessage()
@@ -28,19 +31,27 @@ public class FlagMessage extends Flag
     
     public void setMessage(String message)
     {
-        this.message = message;
+        if(message == null || message.equalsIgnoreCase("false") || message.equalsIgnoreCase("remove"))
+        {
+            this.remove();
+        }
+        else
+        {
+            this.message = message;
+        }
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
-        setMessage(Tools.parseColors(value.replace("|", "\n"), false));
+        setMessage(Tools.parseColors(value.replace('|', '\n'), false));
         return true;
     }
     
     @Override
-    public void onApply(Arguments a)
+    protected boolean onCrafted(Args a)
     {
-        a.addEffect(message);
+        a.addCustomEffect(a.parseVariables(getMessage()));
+        return true;
     }
 }

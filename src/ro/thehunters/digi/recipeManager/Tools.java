@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -675,14 +676,19 @@ public class Tools
         return str.toString();
     }
     
-    public static ItemStack generateItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
+    public static ItemResult generateItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
     {
         return generateItemStackWithMeta(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
     }
     
-    public static ItemStack generateItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
+    public static String printNumber(Number number)
     {
-        ItemStack item = new ItemStack(type, amount, (short)data);
+        return NumberFormat.getNumberInstance().format(number);
+    }
+    
+    public static ItemResult generateItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
+    {
+        ItemResult item = new ItemResult(type, amount, (short)data, 100);
         ItemMeta meta = item.getItemMeta();
         
         if(lore != null)
@@ -690,6 +696,7 @@ public class Tools
         
         meta.setDisplayName(name);
         item.setItemMeta(meta);
+        
         return item;
     }
     

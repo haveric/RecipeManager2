@@ -251,16 +251,18 @@ public class Recipes
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
         
         if(isRemove)
+        {
             info.setStatus(RecipeStatus.REMOVED);
-        
+        }
         else if(recipe.hasFlag(FlagType.OVERRIDE))
+        {
             info.setStatus(RecipeStatus.OVERRIDEN);
+        }
         
         // Add to main index
         index.put(recipe, info);
         
         // Add to quickfind index if it's not removed
-        
         if(!isRemove)
         {
             if(recipe instanceof CraftRecipe)
@@ -275,7 +277,7 @@ public class Recipes
             {
                 indexSmelt.put(recipe.getIndex(), (SmeltRecipe)recipe);
                 
-                if(!FurnaceWorker.isRunning() && ((SmeltRecipe)recipe).hasCustomTime())
+                if(((SmeltRecipe)recipe).hasCustomTime())
                     FurnaceWorker.start();
             }
             else if(recipe instanceof FuelRecipe)
@@ -285,11 +287,11 @@ public class Recipes
         }
         
         // Add to server if appliable
-        Recipe bukkitRecipe = recipe.toBukkitRecipe();
+        Recipe bukkitRecipe = recipe.getBukkitRecipe();
         
         if(bukkitRecipe != null)
         {
-            Vanilla.removeRecipeManagerRecipe(recipe);
+            Vanilla.removeCustomRecipe(recipe);
             
             Bukkit.addRecipe(bukkitRecipe);
         }
@@ -327,6 +329,6 @@ public class Recipes
         }
         
         // Remove from server
-        return Vanilla.removeRecipeManagerRecipe(recipe);
+        return Vanilla.removeCustomRecipe(recipe);
     }
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -43,24 +44,33 @@ public class FlagCreature extends Flag
         this.entities = entities;
     }
     
-    public void addEntity(EntityType ent, int amount)
+    public boolean addEntity(EntityType ent, int amount)
     {
+        Validate.notNull(ent);
+        
         if(!ent.isSpawnable())
         {
-            RecipeErrorReporter.error("The @" + type + " flag has unspawnable entity type!");
-            return;
+            RecipeErrorReporter.error("The " + type + " flag has unspawnable entity type: " + ent);
+            return false;
+        }
+        
+        if(amount <= 0)
+        {
+            amount = 1;
+            RecipeErrorReporter.warning("The " + type + " flag can't have less than 1 amount, set to 1.");
         }
         
         entities.put(ent, amount);
+        return true;
     }
     
     @Override
     protected boolean onParse(String value)
     {
+        String[] split = value.split(" ");
+        value = split[0].trim();
         EntityType ent;
-        int num = 1;
-        
-        // TODO
+        int amount = 1;
         
         try
         {
@@ -68,20 +78,35 @@ public class FlagCreature extends Flag
         }
         catch(Exception e)
         {
-            RecipeErrorReporter.error("The @" + type + " flag has invalid entity type: " + value);
+            RecipeErrorReporter.error("The " + type + " flag has invalid entity type: " + value);
             return false;
         }
         
-        return true;
+        if(split.length > 1)
+        {
+            value = split[1].trim();
+            
+            try
+            {
+                amount = Integer.valueOf(value);
+            }
+            catch(Exception e)
+            {
+                RecipeErrorReporter.error("The " + type + " flag has invalid amount number: " + value);
+                return false;
+            }
+        }
+        
+        return addEntity(ent, amount);
     }
     
     @Override
-    protected void onApply(Arguments a)
+    protected boolean onCrafted(Args a)
     {
         Location l = a.location();
         
         if(l == null)
-            return;
+            return false;
         
         l = l.add(0, 1, 0);
         World w = l.getWorld();
@@ -93,5 +118,7 @@ public class FlagCreature extends Flag
                 w.spawnEntity(l, e.getKey()).playEffect(EntityEffect.WOLF_SMOKE);
             }
         }
+        
+        return true;
     }
 }

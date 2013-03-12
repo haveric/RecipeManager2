@@ -26,7 +26,9 @@ public class Workbenches
     
     public static void add(Player player, Location location)
     {
-        Validate.notNull(player, "player argument must not be null!");
+        if(player == null)
+            return;
+        
         Validate.notNull(location, "location argument must not be null!");
         
         workbenches.put(player.getName(), new BlockID(location));
@@ -34,14 +36,16 @@ public class Workbenches
     
     public static void remove(Player player)
     {
-        Validate.notNull(player, "player argument must not be null!");
+        if(player == null)
+            return;
         
         workbenches.remove(player.getName());
     }
     
     public static Location get(Player player)
     {
-        Validate.notNull(player, "player argument must not be null!");
+        if(player == null)
+            return null;
         
         BlockID blockID = workbenches.get(player.getName());
         Location playerLoc = player.getLocation();

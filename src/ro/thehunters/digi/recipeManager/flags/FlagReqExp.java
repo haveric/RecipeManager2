@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagReqExp extends Flag
 {
@@ -72,7 +73,7 @@ public class FlagReqExp extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.split("\\|");
         
@@ -83,6 +84,12 @@ public class FlagReqExp extends Flag
         
         split = split[0].split("-", 2);
         value = split[0].trim();
+        
+        if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
+        {
+            RecipeErrorReporter.error("The " + getType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+            return false;
+        }
         
         try
         {
@@ -98,6 +105,12 @@ public class FlagReqExp extends Flag
         {
             value = split[1].trim();
             
+            if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
+            {
+                RecipeErrorReporter.error("The " + getType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+                return false;
+            }
+            
             try
             {
                 setMaxExp(Integer.valueOf(value));
@@ -109,19 +122,17 @@ public class FlagReqExp extends Flag
             }
         }
         
-        if(getMinExp() > 0 || getMaxExp() > 0)
+        if(getMinExp() <= 0 && getMaxExp() <= 0)
         {
-            return true;
-        }
-        else
-        {
-            RecipeErrorReporter.error("The " + type + " flag needs either min or max exp above 0 !");
+            RecipeErrorReporter.error("The " + getType() + " flag needs either min or max exp above 0 !");
             return false;
         }
+        
+        return true;
     }
     
     @Override
-    public void onCheck(Arguments a)
+    protected void onCheck(Args a)
     {
         Player p = a.player();
         

@@ -106,7 +106,7 @@ public class FlagSound extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.toLowerCase().split("\\|");
         
@@ -194,7 +194,7 @@ public class FlagSound extends Flag
     }
     
     @Override
-    public void onApply(Arguments a)
+    protected boolean onCrafted(Args a)
     {
         if(onlyPlayer)
         {
@@ -203,6 +203,7 @@ public class FlagSound extends Flag
             if(p != null)
             {
                 p.playSound(a.hasLocation() ? a.location() : p.getLocation(), sound, volume, pitch);
+                return true;
             }
         }
         else
@@ -212,7 +213,10 @@ public class FlagSound extends Flag
             if(l != null)
             {
                 l.getWorld().playSound(l, sound, volume, pitch);
+                return true;
             }
         }
+        
+        return false;
     }
 }

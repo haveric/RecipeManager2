@@ -36,6 +36,12 @@ class FurnaceWorker implements Runnable
     
     protected static void start()
     {
+        if(!isRunning())
+            new FurnaceWorker();
+    }
+    
+    protected static void restart()
+    {
         stop();
         new FurnaceWorker();
     }
@@ -89,6 +95,7 @@ class FurnaceWorker implements Runnable
         ItemStack result;
         ItemStack recipeResult;
         SmeltRecipe recipe;
+        boolean stop = true; // assume no burning furnaces exist
         float time;
         
         while(iterator.hasNext())
@@ -96,19 +103,20 @@ class FurnaceWorker implements Runnable
             entry = iterator.next();
             data = entry.getValue();
             
+            /*
             if(!data.isBurning())
-            {
                 continue;
-            }
+            */
             
             furnace = convertBlockIdToFurnace(entry.getKey()); // convert blockID to Furnace block object
             
             if(furnace == null) // the burning furnace no longer exists for whatever reason
             {
-//                iterator.remove();
+//              iterator.remove();
                 continue;
             }
             
+            stop = false; // we have a burning furnace, do not stop
             inventory = furnace.getInventory();
             smelt = inventory.getSmelting();
             
@@ -150,16 +158,26 @@ class FurnaceWorker implements Runnable
                 }
                 else
                 {
-                    time = time + (ticks / (recipe.hasFuel() ? data.getBurnTime() : recipe.getCookTime()));
+                    time = time + (ticks / recipe.getCookTime()); // (recipe.hasFuel() ? data.getBurnTime() : recipe.getCookTime()));
                     
                     furnace.setCookTime((short)Math.min(Math.max(Math.round(time), 1), 199));
                     
                     data.setCookTime(time);
+                    
+                    Messages.debug("time = " + time);
                 }
             }
         }
         
         iterator = null;
+        
+        /*
+        if(stop)
+        {
+            stop();
+            Messages.debug("SELF-STOP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+        */
     }
     
     private Furnace convertBlockIdToFurnace(BlockID blockID)

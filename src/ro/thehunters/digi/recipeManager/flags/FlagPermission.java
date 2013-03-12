@@ -70,7 +70,7 @@ public class FlagPermission extends Flag
     }
     
     @Override
-    public void onCheck(Arguments a)
+    public void onCheck(Args a)
     {
         Player player = a.player();
         boolean ok = false;

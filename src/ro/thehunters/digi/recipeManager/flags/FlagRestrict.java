@@ -11,14 +11,17 @@ public class FlagRestrict extends Flag
         type = FlagType.RESTRICT;
     }
     
+    public FlagRestrict(FlagRestrict flag)
+    {
+        this();
+        
+        message = flag.message;
+    }
+    
     @Override
     public FlagRestrict clone()
     {
-        FlagRestrict clone = new FlagRestrict();
-        
-        clone.message = message;
-        
-        return clone;
+        return new FlagRestrict(this);
     }
     
     public String getMessage()
@@ -32,14 +35,14 @@ public class FlagRestrict extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         setMessage(value);
         return true;
     }
     
     @Override
-    public void onCheck(Arguments a)
+    protected void onCheck(Args a)
     {
         a.addReason(Messages.CRAFT_FLAG_DISABLED, message);
     }

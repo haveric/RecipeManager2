@@ -1,5 +1,6 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,12 +11,14 @@ import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class SmeltRecipe extends BaseRecipe
 {
-    private ItemStack ingredient;
-    private ItemStack fuel;
-    private ItemStack result;
-    private float     minTime = Vanilla.FURNACE_RECIPE_TIME;
-    private float     maxTime = -1;
-    private int       hash;
+    private ItemStack     ingredient;
+    private ItemResult    fuel;
+    private ItemResult    result;
+    private float         minTime = Vanilla.FURNACE_RECIPE_TIME;
+    private float         maxTime = -1;
+    private int           hash;
+    
+    private FurnaceRecipe bukkitRecipe;
     
     public SmeltRecipe()
     {
@@ -49,27 +52,34 @@ public class SmeltRecipe extends BaseRecipe
         hash = ("smelt" + ingredient.getTypeId() + ":" + ingredient.getDurability()).hashCode();
     }
     
-    public ItemStack getResult()
+    public ItemResult getResult()
     {
         return result;
     }
     
     public void setResult(ItemStack result)
     {
+        Validate.notNull(result);
+        
         if(result instanceof ItemResult)
             this.result = ((ItemResult)result).setRecipe(this);
         else
             this.result = new ItemResult(result).setRecipe(this);
     }
     
-    public ItemStack getFuel()
+    public ItemResult getFuel()
     {
         return fuel;
     }
     
     public void setFuel(ItemStack fuel)
     {
-        this.fuel = fuel;
+        Validate.notNull(fuel);
+        
+        if(fuel instanceof ItemResult)
+            this.fuel = ((ItemResult)fuel).setRecipe(this);
+        else
+            this.fuel = new ItemResult(fuel).setRecipe(this);
     }
     
     public boolean hasCustomTime()
@@ -133,6 +143,12 @@ public class SmeltRecipe extends BaseRecipe
         return true;
     }
     
+    @Override
+    public FurnaceRecipe getBukkitRecipe()
+    {
+        return bukkitRecipe == null ? toFurnaceRecipe() : bukkitRecipe;
+    }
+    
     public FurnaceRecipe toFurnaceRecipe()
     {
         return new FurnaceRecipe(result, ingredient.getType(), ingredient.getDurability());
@@ -160,7 +176,7 @@ public class SmeltRecipe extends BaseRecipe
     }
     
     @Override
-    public RecipeType getRecipeType()
+    public RecipeType getType()
     {
         return RecipeType.SMELT;
     }

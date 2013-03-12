@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -28,14 +27,6 @@ import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
  */
 public class Vanilla
 {
-    @Override
-    protected void finalize() throws Throwable // TODO REMOVE
-    {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + getClass().getName() + " :: finalize()");
-        
-        super.finalize();
-    }
-    
     protected static Map<BaseRecipe, RecipeInfo> initialRecipes      = new HashMap<BaseRecipe, RecipeInfo>();
     
     /**
@@ -58,13 +49,17 @@ public class Vanilla
      */
     public static final ItemStack                RECIPE_FIREWORKS    = new ItemStack(Material.FIREWORK, 0, (short)0);
     
+    /**
+     * Default time a furnace recipe burns for.<br>
+     * This is a game constant.
+     */
     public static final float                    FURNACE_RECIPE_TIME = 9.25f;
     
     protected static void init()
     {
         clean();
         
-        RecipeInfo info = new RecipeInfo(RecipeOwner.MINECRAFT, null);
+        RecipeInfo info = new RecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe r;
         
@@ -137,7 +132,7 @@ public class Vanilla
      * @return
      *         true if recipe was found and removed
      */
-    public static boolean removeRecipeManagerRecipe(BaseRecipe recipe)
+    public static boolean removeCustomRecipe(BaseRecipe recipe)
     {
         if(recipe instanceof CraftRecipe)
             return removeCraftRecipe((CraftRecipe)recipe);
@@ -153,7 +148,7 @@ public class Vanilla
     
     /**
      * Removes a Bukkit recipe from the <b>server</b>
-     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the BaseRecipe object you should use {@link #removeRecipeManagerRecipe(BaseRecipe)}</b>
+     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the BaseRecipe object you should use {@link #removeCustomRecipe(BaseRecipe)}</b>
      * 
      * @param recipe
      *            Bukkit recipe
@@ -360,7 +355,7 @@ public class Vanilla
         for(Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet())
         {
             // TODO maybe check if recipe is already in server ?
-            Bukkit.addRecipe(entry.getKey().toBukkitRecipe());
+            Bukkit.addRecipe(entry.getKey().getBukkitRecipe());
         }
     }
 }

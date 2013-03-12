@@ -167,23 +167,30 @@ public enum Messages
     CRAFT_FLAG_POTIONEFFECTS("<red>Need potion effect: {effects}"),
     CRAFT_FLAG_NOPOTIONEFFECTS("<red>Disallowed potion effect: {effects}"),
     
+    CRAFT_FLAG_REALTIME("<red>Allowed between {mindate} and {maxdate}"),
+    
+    CRAFT_FLAG_COOLDOWN_FAIL("<red>Cooldown: {time}"),
+    CRAFT_FLAG_COOLDOWN_CRAFT("<yellow>Cooldown set to {time}"),
+    
     CRAFT_FLAG_NEEDFUEL("<red>Need fuel: {fuels}"),
+    
+    CRAFT_FLAG_PREFIX_RECIPE("<gray>(Recipe) <reset>"),
+    CRAFT_FLAG_PREFIX_RESULT("<gray>(Result) <reset>"),
     
     CRAFT_SPECIAL_LEATHERDYE("Leather dyeing is disabled."),
     CRAFT_SPECIAL_FIREWORKS("Firework crafting is disabled."),
     CRAFT_SPECIAL_MAP_CLONING("Map cloning is disabled."),
     CRAFT_SPECIAL_MAP_EXTENDING("Map extending is disabled."),
     
-    CRAFT_RESULT_FAILED_TITLE("<yellow><underline>Unable to craft:"),
+    CRAFT_RESULT_DENIED_TITLE("<yellow><underline>Unable to craft:"),
+    CRAFT_RESULT_DENIED_REASON("<aqua><bold>* <reset>{reason}"),
     
+    CRAFT_RESULT_RECIEVE_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
     CRAFT_RESULT_RECIEVE_TITLE("<light_purple><underline>You will get a random item:"),
     CRAFT_RESULT_RECIEVE_ITEM("<dark_green>{chance} <green>{item}"),
-    CRAFT_RESULT_RECIEVE_NOTHING("<dark_red>{chance} <red>Failure chance"),
-    CRAFT_RESULT_RECIEVE_SECRETS("<dark_green>{chance} <red>{num} secret item(s)..."),
-    CRAFT_RESULT_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
-    CRAFT_RESULT_UNAVAILABLE("<dark_red>{chance} <red>{num} unavailable item(s)..."),
-    CRAFT_RESULT_UNAVAILABLE_TITLE("<red><underline>Unallowed item(s):"),
-    CRAFT_RESULT_UNAVAILABLE_ITEM("<dark_green>{chance} <red><strikethrough>{item} <reset><gold>{reason}"),
+    CRAFT_RESULT_RECIEVE_SECRETS("<dark_aqua>{num} secret item(s)..."),
+    CRAFT_RESULT_RECIEVE_NOTHING("<red>{chance} Failure chance"),
+    CRAFT_RESULT_UNAVAILABLE("<dark_red>{num} unavailable item(s)..."),
     
     LASTCHANGED(Files.LASTCHANGED_MESSAGES);
     
@@ -472,6 +479,6 @@ public enum Messages
         // TODO debug switch
         StackTraceElement[] e = new Exception().getStackTrace();
         
-        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[1].getFileName() + ":" + e[1].getLineNumber() + " " + ChatColor.RED + ChatColor.UNDERLINE + e[1].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
+        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[1].getFileName() + ":" + e[1].getLineNumber() + ChatColor.RESET + " " + ChatColor.RED + e[1].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
     }
 }

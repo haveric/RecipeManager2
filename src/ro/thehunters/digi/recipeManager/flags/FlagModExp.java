@@ -5,21 +5,30 @@ import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModExp extends Flag
 {
     private int    exp;
     private String message;
     
+    public FlagModExp()
+    {
+        type = FlagType.MODEXP;
+    }
+    
+    public FlagModExp(FlagModExp flag)
+    {
+        this();
+        
+        exp = flag.exp;
+        message = flag.message;
+    }
+    
     @Override
     public FlagModExp clone()
     {
-        FlagModExp clone = new FlagModExp();
-        
-        clone.exp = exp;
-        clone.message = message;
-        
-        return clone;
+        return new FlagModExp(this);
     }
     
     public int getExp()
@@ -53,6 +62,13 @@ public class FlagModExp extends Flag
         }
         
         value = split[0].trim();
+        
+        if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
+        {
+            RecipeErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+            return false;
+        }
+        
         int exp = 0;
         
         try
@@ -76,12 +92,12 @@ public class FlagModExp extends Flag
     }
     
     @Override
-    protected void onApply(Arguments a)
+    protected boolean onCrafted(Args a)
     {
         Player p = a.player();
         
         if(p == null)
-            return;
+            return false;
         
         if(exp < 0)
         {
@@ -93,19 +109,15 @@ public class FlagModExp extends Flag
             if(diff > 0)
                 p.giveExp(diff);
             
-            // TODO !
             a.addEffect(Messages.CRAFT_FLAG_MODEXP, message, "{color}", "" + ChatColor.RED, "{exp}", "" + exp);
-            
-            Messages.CRAFT_FLAG_MODEXP.print(p, message, "{color}", "" + ChatColor.RED, "{exp}", "" + exp);
         }
         else
         {
             p.giveExp(exp);
             
-            // TODO !
-            a.addEffect(Messages.CRAFT_FLAG_MODEXP, message, "{color}", "" + ChatColor.GREEN, "{exp}", "" + exp);
-            
-            Messages.CRAFT_FLAG_MODEXP.print(p, message, "{color}", "" + ChatColor.GREEN, "{exp}", "+" + exp);
+            a.addEffect(Messages.CRAFT_FLAG_MODEXP, message, "{color}", "" + ChatColor.GREEN, "{exp}", "+" + exp);
         }
+        
+        return true;
     }
 }
