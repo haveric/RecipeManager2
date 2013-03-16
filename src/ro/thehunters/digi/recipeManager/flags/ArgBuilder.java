@@ -93,6 +93,9 @@ public class ArgBuilder
         if(a.player() == null && a.playerName() != null)
             a.setPlayer(Bukkit.getPlayerExact(a.playerName()));
         
+        if(a.playerName() == null && a.player() != null)
+            a.setPlayerName(a.player().getName());
+        
         if(a.location() == null && a.player() != null)
             a.setLocation(a.player().getLocation());
         

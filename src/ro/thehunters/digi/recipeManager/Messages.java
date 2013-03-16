@@ -149,6 +149,12 @@ public enum Messages
     CRAFT_FLAG_REQEXP("<red>Need EXP: {exp}"),
     CRAFT_FLAG_MODEXP("{color}{exp} EXP"),
     
+    CRAFT_FLAG_REQLEVEL("<red>Need level: {level}"),
+    CRAFT_FLAG_MODLEVEL("{color}{level} levels"),
+    
+    CRAFT_FLAG_REQMONEY("<red>Need money: {amount}"),
+    CRAFT_FLAG_MODMONEY("{color}{amount}"),
+    
     CRAFT_FLAG_PERMISSIONS("<red>Allowed permissions: {permissions}"),
     CRAFT_FLAG_NOPERMISSIONS("<red>Disallowed permissions: {permissions}"),
     
@@ -172,7 +178,9 @@ public enum Messages
     CRAFT_FLAG_COOLDOWN_FAIL("<red>Cooldown: {time}"),
     CRAFT_FLAG_COOLDOWN_CRAFT("<yellow>Cooldown set to {time}"),
     
-    CRAFT_FLAG_NEEDFUEL("<red>Need fuel: {fuels}"),
+//    CRAFT_FLAG_NEEDFUEL("<red>Need fuel: {fuels}"),
+    
+    CRAFT_FLAG_NOSHIFTCLICK("<red>You can't use shift+click on this recipe!"),
     
     CRAFT_FLAG_PREFIX_RECIPE("<gray>(Recipe) <reset>"),
     CRAFT_FLAG_PREFIX_RESULT("<gray>(Result) <reset>"),

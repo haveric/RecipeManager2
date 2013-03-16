@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -102,9 +103,15 @@ public class CombineRecipe extends WorkbenchRecipe
         // build hashcode
         StringBuilder str = new StringBuilder("combine");
         
-        for(ItemStack ingredient : ingredients)
+        for(ItemStack item : ingredients)
         {
-            str.append(ingredient.getTypeId()).append(':').append(ingredient.getDurability()).append(';');
+            str.append(item.getTypeId()).append(':').append(item.getDurability()).append(';');
+            
+            // TODO remove
+            if(item.getDurability() == -1)
+            {
+                Messages.debug("found an item with data value -1 | result=" + getFirstResult());
+            }
         }
         
         hash = str.toString().hashCode();

@@ -162,7 +162,7 @@ public class RecipeRegistrator implements Runnable
         if(registered)
             throw new IllegalAccessError("This class is already registered, create a new one!");
         
-        Messages.debug("adders = " + ArrayUtils.toString(adders));
+        Messages.debug("adders " + (adders == null ? "n/a" : adders.size() + ":" + ArrayUtils.toString(adders)));
         
         Map<BaseRecipe, RecipeInfo> copyRecipes = new HashMap<BaseRecipe, RecipeInfo>();
         Set<BaseRecipe> removeRecipes = new HashSet<BaseRecipe>();
@@ -235,19 +235,21 @@ public class RecipeRegistrator implements Runnable
             add = !recipe.hasFlag(FlagType.REMOVE);
             remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
             
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getType());
+//            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getType());
             
             if(remove)
             {
-                Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
+//                Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
                 
-                if(!recipe.remove())
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shaped recipe to remove!");
+                recipe.remove();
+                
+//                if(!recipe.remove())
+//                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shaped recipe to remove!");
             }
             
             if(add)
             {
-                Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Registering recipe...");
+//                Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Registering recipe...");
                 
                 RecipeManager.getRecipes().registerRecipe(recipe, info);
             }
@@ -256,7 +258,7 @@ public class RecipeRegistrator implements Runnable
             
             if(time > lastDisplay + 1000)
             {
-                Messages.send(sender, ChatColor.GRAY + "Step 2/3 " + ChatColor.RESET + "Converting recipes " + ((processed * 100) / size) + "%...");
+                Messages.send(sender, ChatColor.YELLOW + "Registering recipes " + ((processed * 100) / size) + "%...");
                 lastDisplay = time;
             }
             
@@ -281,6 +283,8 @@ public class RecipeRegistrator implements Runnable
         
         registered = true; // mark this class as registered so it doesn't get re-registered
         queuedRecipes.clear(); // clear the queue to let the class vanish
+        
+        Messages.send(sender, String.format("All done, %d recipes registered.", processed));
     }
     
     protected void aaaaaaaaaaaaaa(CommandSender sender, long start, Set<String> adders)

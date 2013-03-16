@@ -20,6 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import ro.thehunters.digi.recipeManager.flags.FlagType;
@@ -166,16 +167,18 @@ public class RecipeProcessor implements Runnable
                     }
                 }
                 
+                // TODO detect when loaded files were deleted
+                
                 int errors = RecipeErrorReporter.getCatchedAmount();
                 
                 if(errors > 0)
                 {
-                    Messages.send(sender, ChatColor.YELLOW + "Done " + (check ? "checking" : "loading") + " " + loaded + " recipes in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
+                    Messages.send(sender, ChatColor.YELLOW + (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
                     RecipeErrorReporter.print(FILE_ERRORLOG);
                 }
                 else
                 {
-                    Messages.send(sender, "Done " + (check ? "checking" : "loading") + " " + loaded + " recipes without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
+                    Messages.send(sender, (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
                 }
                 
                 if(!lastModified.isEmpty())
@@ -207,13 +210,14 @@ public class RecipeProcessor implements Runnable
             // Calling registerRecipesToServer() in main thread...
             if(RecipeManager.getSettings().MULTITHREADING)
             {
-                Bukkit.getScheduler().runTask(RecipeManager.getPlugin(), new Runnable()
+                new BukkitRunnable()
                 {
+                    @Override
                     public void run()
                     {
                         registrator.registerRecipesToServer(sender, start, (fileList.size() == foundFiles.size() ? null : new HashSet<String>(fileList)));
                     }
-                });
+                }.runTask(RecipeManager.getPlugin());
             }
             else
             {
@@ -465,7 +469,7 @@ public class RecipeProcessor implements Runnable
             
             for(int i = 0; i < rowLen; i++) // go through each ingredient on the line
             {
-                if((item = Tools.convertStringToItemStack(split[i], -1, true, false, false)) == null) // invalid item
+                if((item = Tools.convertStringToItemStack(split[i], Vanilla.DATA_WILDCARD, true, false, false)) == null) // invalid item
                     ingredientErrors = true;
                 
                 if(ingredientErrors) // no point in adding more ingredients if there are errors
@@ -528,7 +532,7 @@ public class RecipeProcessor implements Runnable
         
         for(String str : ingredientsRaw)
         {
-            item = Tools.convertStringToItemStack(str, -1, true, true, false);
+            item = Tools.convertStringToItemStack(str, Vanilla.DATA_WILDCARD, true, true, false);
             
             if(item == null)
                 return false;
@@ -577,7 +581,7 @@ public class RecipeProcessor implements Runnable
             return RecipeErrorReporter.error("Smeling recipe doesn't have an ingredient !");
         }
         
-        ItemStack ingredient = Tools.convertStringToItemStack(split[0], -1, true, false, false);
+        ItemStack ingredient = Tools.convertStringToItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
         
         if(ingredient == null)
             return false;
@@ -729,7 +733,7 @@ public class RecipeProcessor implements Runnable
         }
         
         // set ingredient
-        ItemStack ingredient = Tools.convertStringToItemStack(split[0], -1, true, false, false);
+        ItemStack ingredient = Tools.convertStringToItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
         
         if(ingredient == null)
             return false;

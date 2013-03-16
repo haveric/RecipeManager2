@@ -33,6 +33,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -44,8 +45,6 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -75,7 +74,7 @@ public class Events implements Listener
     
     protected Events()
     {
-        // evets are registered in the reload() method
+        // events are registered in the reload() method
         
         for(World world : Bukkit.getWorlds())
         {
@@ -98,12 +97,18 @@ public class Events implements Listener
     {
         try
         {
+            CraftingInventory inv = event.getInventory();
+            
+            if(inv.getResult() == null)
+            {
+                return; // event was canceled by some other plugin
+            }
+            
             Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
-            CraftingInventory inventory = event.getInventory();
             
             if(!RecipeManager.getPlugin().canCraft(player))
             {
-                inventory.setResult(null);
+                inv.setResult(null);
                 return; // player not allowed to craft, stop here
             }
             
@@ -111,27 +116,33 @@ public class Events implements Listener
             
             if(event.isRepair())
             {
-                prepareRepairRecipe(player, inventory, location);
+                prepareRepairRecipe(player, inv, location);
                 return; // if it's a repair recipe we don't need to move on
             }
             
             Recipe bukkitRecipe = event.getRecipe();
             
             if(bukkitRecipe == null)
+            {
                 return; // bukkit recipe is null ! skip it
-                
-            ItemResult result = (inventory.getResult() == null ? null : new ItemResult(inventory.getResult()));
+            }
+            
+            ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
             ItemStack recipeResult = bukkitRecipe.getResult();
             
-            if(prepareSpecialRecipe(player, inventory, result, recipeResult))
+            if(prepareSpecialRecipe(player, inv, result, recipeResult))
+            {
                 return; // stop here if it's a special recipe
-                
+            }
+            
             WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
             
             if(recipe == null)
+            {
                 return; // not a custom recipe or recipe not found, no need to move on
-                
-            result = prepareCraftResult(player, inventory, recipe, location); // get the result from recipe
+            }
+            
+            result = prepareCraftResult(player, inv, recipe, location); // get the result from recipe
             
             // Call the RecipeManagerPrepareCraftEvent
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
@@ -139,18 +150,16 @@ public class Events implements Listener
             
             result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
             
-            Messages.debug("result = " + result);
-            
             if(result != null)
             {
-                Args a = Args.create().player(player).location(location).recipe(recipe).inventory(inventory).result(result).build();
+                Args a = Args.create().player(player).location(location).recipe(recipe).inventory(inv).result(result).build();
                 
                 if(!recipe.sendPrepare(a))
                 {
                     result = null;
                 }
                 
-                // TODO remove
+                // TODO remove ?
                 if(result != null)
                 {
                     a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
@@ -161,48 +170,46 @@ public class Events implements Listener
                 }
             }
             
-            inventory.setResult(result);
-            
-            new UpdateInventory(player); // TODO REMOVE
+            inv.setResult(result);
         }
         catch(Exception e)
         {
             event.getInventory().setResult(null);
             
             CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
-            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+            Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
     
-    private boolean prepareSpecialRecipe(Player player, CraftingInventory inventory, ItemStack result, ItemStack recipeResult)
+    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult)
     {
         if(!result.equals(recipeResult)) // result was processed by the game and it doesn't match the original recipe
         {
-            if(RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE))
+            if(!RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE))
             {
                 Messages.CRAFT_SPECIAL_LEATHERDYE.print(player);
-                inventory.setResult(null);
+                inv.setResult(null);
                 return true;
             }
             
-            if(RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE))
+            if(!RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE))
             {
                 Messages.CRAFT_SPECIAL_MAP_CLONING.print(player);
-                inventory.setResult(null);
+                inv.setResult(null);
                 return true;
             }
             
-            if(RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND))
+            if(!RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND))
             {
                 Messages.CRAFT_SPECIAL_MAP_EXTENDING.print(player);
-                inventory.setResult(null);
+                inv.setResult(null);
                 return true;
             }
             
-            if(RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS))
+            if(!RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS))
             {
                 Messages.CRAFT_SPECIAL_FIREWORKS.print(player);
-                inventory.setResult(null);
+                inv.setResult(null);
                 return true;
             }
             
@@ -212,22 +219,22 @@ public class Events implements Listener
         return false;
     }
     
-    private void prepareRepairRecipe(Player player, CraftingInventory inventory, Location location) throws Exception
+    private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) throws Exception
     {
         if(!RecipeManager.getSettings().SPECIAL_REPAIR)
         {
             if(player != null)
                 player.playSound((location == null ? player.getLocation() : location), Sound.NOTE_BASS, 1, 255);
             
-            inventory.setResult(Tools.generateItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
+            inv.setResult(Tools.generateItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
             return;
         }
         
-        ItemStack result = inventory.getRecipe().getResult();
+        ItemStack result = inv.getRecipe().getResult();
         
         if(RecipeManager.getSettings().SPECIAL_REPAIR_METADATA)
         {
-            ItemStack[] matrix = inventory.getMatrix();
+            ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];
             int repair[] = new int[2];
             int repairIndex = 0;
@@ -259,7 +266,7 @@ public class Events implements Listener
                 
                 if(meta != null)
                 {
-                    result = inventory.getResult();
+                    result = inv.getResult();
                     result.setItemMeta(meta);
                 }
             }
@@ -275,12 +282,12 @@ public class Events implements Listener
             player.playSound((location == null ? player.getLocation() : location), Sound.ANVIL_USE, 1, 50);
         }
         
-        inventory.setResult(result);
+        inv.setResult(result);
     }
     
-    private ItemResult prepareCraftResult(Player player, CraftingInventory inventory, WorkbenchRecipe recipe, Location location) throws Exception
+    private ItemResult prepareCraftResult(Player player, CraftingInventory inv, WorkbenchRecipe recipe, Location location) throws Exception
     {
-        Args a = Args.create().player(player).inventory(inventory).recipe(recipe).location(location).build();
+        Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
         ItemResult result = recipe.getDisplayResult(a);
         
         if(result != null)
@@ -350,8 +357,8 @@ public class Events implements Listener
     {
         try
         {
-            CraftingInventory inventory = event.getInventory();
-            ItemResult result = (inventory.getResult() == null ? null : new ItemResult(inventory.getResult()));
+            CraftingInventory inv = event.getInventory();
+            ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
             Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
             Location location = Workbenches.get(player);
             
@@ -361,85 +368,246 @@ public class Events implements Listener
                 
                 if(RecipeManager.getSettings().SOUNDS_FAILED_CLICK && player != null)
                 {
-                    player.playSound(location, Sound.NOTE_BASS, 1, 255);
+                    player.playSound(location, Sound.NOTE_BASS, 0.8f, 255);
                 }
                 
                 return;
             }
             
-            Messages.debug("current item = " + event.getCurrentItem());
-            
             Recipe bukkitRecipe = event.getRecipe();
-            ItemStack recipeResult = bukkitRecipe.getResult();
-            WorkbenchRecipe recipe = null;
-            
-            if(bukkitRecipe instanceof ShapedRecipe)
-            {
-                recipe = RecipeManager.recipes.getCraftRecipe(recipeResult);
-            }
-            else if(bukkitRecipe instanceof ShapelessRecipe)
-            {
-                recipe = RecipeManager.recipes.getCombineRecipe(recipeResult);
-            }
-            else
-            {
-                Messages.debug("<red>new recipe???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            }
+            WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
             
             if(recipe == null)
                 return;
             
-            Args a = Args.create().player(player).location(location).recipe(recipe).inventory(inventory).build();
-            
-            result = recipe.getResult(a);
+            Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
+            result = Players.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
             
             RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
             Bukkit.getPluginManager().callEvent(callEvent);
+            
             result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
             
-            if(result != null)
+            a.clear();
+            
+            int times = craftedResult(event, inv, player, recipe, result, a);
+            
+            Messages.debug("crafted " + times + " times = " + result);
+            
+            while(--times >= 0)
             {
-                a = Args.create().player(player).inventory(inventory).recipe(recipe).location(location).build();
+                Messages.debug("...");
                 
-                if(!recipe.sendCrafted(a) || !result.sendCrafted(a))
+                Players.recipeResetResult(a.playerName());
+                
+                if(result != null)
                 {
-                    result = null;
+                    a.clear();
+                    a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
+                    
+                    if(!recipe.sendCrafted(a) || !result.sendCrafted(a))
+                    {
+                        a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
+                        result = null;
+                    }
                 }
                 
                 if(result != null)
                 {
                     a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                    
+                    a.clear();
+                    
+                    result.sendCrafted(a);
+                    a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
                 }
-                else
-                {
-                    recipe.sendFailed(a);
-                    a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
-                }
+                
+                // TODO call post event ?
             }
             
-            inventory.setResult(result);
-            
-            new UpdateInventory(player); // TODO REMOVE
+            new UpdateInventory(player, 2); // update inventory 2 ticks later
         }
         catch(Exception e)
         {
-            event.getInventory().setResult(null);
+            event.setCancelled(true);
             
             CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
-            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+            Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
+    }
+    
+    private int craftedResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemStack result, Args a)
+    {
+        if(!recipe.checkFlags(a))
+        {
+            a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
+            return 0;
+        }
+        
+        if(!recipe.isMultiResult())
+        {
+            if(result == null || result.getTypeId() == 0)
+            {
+                event.setCancelled(true);
+                return 0;
+            }
+            
+            if(event.isShiftClick())
+            {
+                if(recipe.hasFlag(FlagType.NOSHIFTCLICK))
+                {
+                    Messages.CRAFT_FLAG_NOSHIFTCLICK.print(player);
+                    event.setCancelled(true);
+                    return 0;
+                }
+                
+                int craftAmount = inv.getMaxStackSize();
+                
+                for(ItemStack i : inv.getMatrix())
+                {
+                    if(i != null && i.getTypeId() != 0)
+                    {
+                        craftAmount = Math.min(i.getAmount(), craftAmount);
+                    }
+                }
+                
+                ItemStack item = result.clone();
+                item.setAmount(result.getAmount() * craftAmount);
+                
+                int space = Tools.playerFreeSpaceForItem(player, item);
+                int crafted = Math.min((int)Math.ceil(Float.valueOf(space) / result.getAmount()), craftAmount);
+                
+                if(crafted > 0)
+                {
+                    /* TODO REMOVE
+                    Messages.debug("craftAmount=" + craftAmount);
+                    Messages.debug("result.amount=" + result.getAmount());
+                    Messages.debug("space=" + space);
+                    Messages.debug("crafted=" + crafted);
+                    */
+                    
+                    event.setCurrentItem(result);
+                    return crafted;
+                }
+                else
+                {
+                    Messages.send(player, "<red>Inventory full !"); // TODO remove
+                    return 0;
+                }
+            }
+            else
+            {
+                ItemStack cursor = event.getCursor();
+                ItemStack merged = Tools.mergeItems(cursor, result);
+                
+                if(merged != null)
+                {
+                    event.setCurrentItem(result);
+                }
+                else
+                {
+                    Messages.send(player, "<red>Cursor is full !"); // TODO remove
+                    return 0;
+                }
+            }
+        }
+        else
+        {
+            // more special treatment needed for multi-result ones...
+            
+            event.setCancelled(true); // need to cancel this from the start.
+            
+            // Check if result is air / recipe failed
+            if(result == null || result.getTypeId() == 0)
+            {
+                // TODO send only once
+                Messages.send(player, "That sound was the recipe failing by chance! See 'fail chance' in the result description.");
+                
+                if(RecipeManager.getSettings().SOUNDS_FAILED && player != null)
+                {
+                    player.playSound(a.location(), Sound.NOTE_PLING, 0.8f, 10);
+                }
+            }
+            else
+            {
+                if(event.isShiftClick())
+                {
+                    if(recipe.hasFlag(FlagType.NOSHIFTCLICK))
+                    {
+                        Messages.CRAFT_FLAG_NOSHIFTCLICK.print(player);
+                        event.setCancelled(true);
+                        return 0;
+                    }
+                    
+                    // TODO send only once.
+                    Messages.send(player, "Shift-clicking multi-result recipes will only process it once and add the item to the inventory.");
+                    
+                    if(Tools.playerCanAddItem(player, result))
+                    {
+                        player.getInventory().addItem(result);
+                    }
+                    else
+                    {
+                        Messages.send(player, "<red>Inventory is full !"); // TODO msg & trigger once
+                        return 0;
+                    }
+                }
+                else
+                {
+                    ItemStack cursor = event.getCursor();
+                    ItemStack merged = Tools.mergeItems(cursor, result);
+                    
+                    if(merged != null)
+                    {
+                        event.setCursor(merged);
+                    }
+                    else
+                    {
+                        Messages.send(player, "<red>Cursor is full !"); // TODO msg
+                        return 0;
+                    }
+                }
+            }
+            
+            // Subtract from ingredients manually
+            int amt;
+            
+            for(int i = 1; i < 10; i++)
+            {
+                ItemStack item = inv.getItem(i);
+                
+                if(item != null)
+                {
+                    if((amt = (item.getAmount() - 1)) > 0)
+                    {
+                        item.setAmount(amt);
+                    }
+                    else
+                    {
+                        inv.clear(i);
+                    }
+                }
+            }
+        }
+        
+        return 1;
     }
     
     private class UpdateInventory extends BukkitRunnable
     {
         private final Player player;
         
-        public UpdateInventory(Player player)
+        public UpdateInventory(Player player, int ticks)
         {
             this.player = player;
-            runTask(RecipeManager.getPlugin());
+            
+            if(ticks <= 0)
+                run();
+            else
+                runTaskLater(RecipeManager.getPlugin(), ticks);
         }
         
+        @SuppressWarnings("deprecation")
         @Override
         public void run()
         {
@@ -533,7 +701,7 @@ public class Events implements Listener
         {
             event.setCancelled(true);
             CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player)event.getWhoClicked() : null);
-            Messages.error(sender, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+            Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
         */
     }
@@ -980,7 +1148,7 @@ public class Events implements Listener
         catch(Exception e)
         {
             event.setCancelled(true);
-            Messages.error(null, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+            Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
     
@@ -1006,7 +1174,7 @@ public class Events implements Listener
         catch(Exception e)
         {
             event.setCancelled(true);
-            Messages.error(null, e, ChatColor.RED + event.getEventName() + " cancelled due to error:");
+            Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
     
@@ -1180,6 +1348,26 @@ public class Events implements Listener
             lore.remove(index);
             meta.setLore(lore);
             item.setItemMeta(meta);
+        }
+    }
+    
+    /*
+     * Update check notifier
+     */
+    
+    public void eventPlayerJoin(PlayerJoinEvent event)
+    {
+        Player player = event.getPlayer();
+        
+        if(player.isOp())
+        {
+            final String newVersion = UpdateChecker.getNewVersion();
+            
+            if(newVersion != null)
+            {
+                Messages.send(player, "<green>New version available: " + newVersion + " ! You're using " + RecipeManager.getPlugin().getDescription().getVersion());
+                Messages.send(player, "<green>Grab it at: " + UpdateChecker.getNewLink());
+            }
         }
     }
 }

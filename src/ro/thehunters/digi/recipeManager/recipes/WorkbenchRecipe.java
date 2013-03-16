@@ -3,7 +3,7 @@ package ro.thehunters.digi.recipeManager.recipes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,23 +60,56 @@ public class WorkbenchRecipe extends BaseRecipe
     
     public void addResult(ItemStack result)
     {
+        Validate.notNull(result);
+        
         if(result instanceof ItemResult)
             results.add(((ItemResult)result).setRecipe(this));
         else
             results.add(new ItemResult(result).setRecipe(this));
     }
     
+    /**
+     * @return true if recipe has more than 1 result or has failure chance (2 results, one being air), otherwise false.
+     */
+    public boolean isMultiResult()
+    {
+        return results.size() > 1;
+    }
+    
+    /**
+     * @return failure chance or 0 if it can not fail.
+     */
+    public float getFailChance()
+    {
+        for(ItemResult r : results)
+        {
+            if(r.getTypeId() == 0)
+                return r.getChance();
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * @return the first valid result or null.
+     */
     public ItemResult getFirstResult()
     {
         for(ItemResult r : results)
         {
-            if(r != null)
+            if(r.getTypeId() != 0)
                 return r;
         }
         
         return null;
     }
     
+    /**
+     * Generate a display result for showing off all results (if available).
+     * 
+     * @param a
+     * @return the result if it's only one or a special multi-result information item
+     */
     public ItemResult getDisplayResult(Args a)
     {
         a.clear();
@@ -93,9 +126,12 @@ public class WorkbenchRecipe extends BaseRecipe
             return Tools.generateItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
         }
         
-        if(results.size() == 1)
+        if(!isMultiResult())
         {
             ItemResult result = getFirstResult();
+            
+            if(result == null)
+                return null;
             
             if(result.checkFlags(a))
             {
@@ -167,14 +203,14 @@ public class WorkbenchRecipe extends BaseRecipe
             lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{chance}", String.format(FORMAT_CHANCE, unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
         
-        return Tools.generateItemStackWithMeta(Material.SKULL, 3, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+        return Tools.generateItemStackWithMeta(Material.PORTAL, 3, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
     }
     
     public ItemResult getResult(Args a)
     {
         a.clear();
         
-        List<ItemResult> pickFromResults = new ArrayList<ItemResult>();
+        List<ItemResult> pickResults = new ArrayList<ItemResult>();
         int maxChance = 0;
         
         for(ItemResult r : results)
@@ -183,16 +219,16 @@ public class WorkbenchRecipe extends BaseRecipe
             
             if(r.checkFlags(a))
             {
-                pickFromResults.add(r);
+                pickResults.add(r);
                 maxChance += r.getChance();
             }
         }
         
-        ItemResult result = null;
         int rand = RecipeManager.random.nextInt(maxChance);
         int chance = 0;
+        ItemResult result = null;
         
-        for(ItemResult r : results)
+        for(ItemResult r : pickResults)
         {
             if((chance += r.getChance()) > rand)
             {
@@ -202,16 +238,6 @@ public class WorkbenchRecipe extends BaseRecipe
         }
         
         a.clear();
-        
-        if(!checkFlags(a))
-        {
-            Messages.debug("recipe failed: " + ArrayUtils.toString(a.reasons()));
-            
-            a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
-            
-            return null;
-        }
-        
         return result;
     }
 }

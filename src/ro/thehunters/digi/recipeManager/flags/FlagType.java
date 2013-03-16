@@ -22,21 +22,25 @@ public enum FlagType
     COMMANDS(FlagCommands.class, Bit.NONE, "command", "cmd"),
     PERMISSION(FlagPermission.class, Bit.NONE, "perm"),
     FORPERMISSION(FlagForPermission.class, Bit.NONE, "forperm", "for"),
-    HOLD(Flag.class, Bit.NONE),
-    PLAYTIME(Flag.class, Bit.NONE),
-    ONLINETIME(Flag.class, Bit.NONE),
-    GAMEMODE(Flag.class, Bit.NONE),
+    INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NONE, "ingredient", "ifingr"), // TODO finish
+//    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
+//    PLAYTIME(FlagPlayTime.class, Bit.NONE),
+//    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
+//    GAMEMODE(FlagGameMode.class, Bit.NONE),
     MODEXP(FlagModExp.class, Bit.NONE, "expmod", "modxp", "xpmod", "exp", "xp"),
     REQEXP(FlagReqExp.class, Bit.NONE, "expreq", "reqxp", "xpreq", "needexp", "needxp"),
-    MODLEVEL(Flag.class, Bit.NONE, "levelmod", "level"),
-    REQLEVEL(Flag.class, Bit.NONE, "levelreq", "needlevel"),
-    MODMONEY(Flag.class, Bit.NONE, "moneymod", "money"),
-    REQMONEY(Flag.class, Bit.NONE, "moneyreq", "needmoney"),
+    MODLEVEL(FlagModLevel.class, Bit.NONE, "levelmod", "level"),
+    REQLEVEL(FlagReqLevel.class, Bit.NONE, "levelreq", "needlevel"),
+    MODMONEY(FlagModMoney.class, Bit.NONE, "moneymod", "money"),
+    REQMONEY(FlagReqMoney.class, Bit.NONE, "moneyreq", "needmoney"),
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NONE),
     EXPLODE(FlagExplode.class, Bit.NONE, "explosion", "boom"),
     SOUND(FlagSound.class, Bit.NONE, "playsound"),
     EFFECT(FlagEffect.class, Bit.NONE, "playeffect", "fx"), // TODO finish
     CREATURE(FlagCreature.class, Bit.NONE, "spawncreature"), // TODO finish
+    BIOME(FlagBiome.class, Bit.NONE), // TODO finish
+    WEATHER(FlagWeather.class, Bit.NONE), // TODO finish
+    WORLDTIME(FlagWorldTime.class, Bit.NONE), // TODO finish
     SECRET(FlagSecret.class, Bit.NO_VALUE, "hide"),
     DEBUG(FlagDebug.class, Bit.NO_VALUE, "monitor", "log"),
     REALTIME(FlagRealTime.class, Bit.NONE, "time", "timereq"),
@@ -50,12 +54,17 @@ public enum FlagType
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE, "delete"),
     RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE, "overwrite", "supercede", "replace"),
+    NOSHIFTCLICK(FlagNoShiftClick.class, Bit.RECIPE | Bit.NO_VALUE, "noshift"),
     
     // Result only flags
-    CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT, "clone", "copy", "copyingredient"),
+//    SETCHANCE(FlagSetChance.class, Bit.RESULT, "chance"), // TODO finish
+    CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT, "clone", "copy", "copyingredient"), // TODO finish
     NAME(FlagName.class, Bit.RESULT | Bit.NO_STORE, "itemname", "displayname"),
     LORE(FlagLore.class, Bit.RESULT | Bit.NO_STORE, "itemlore", "itemdescription"),
-    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT | Bit.NO_STORE, "leathercolour", "color", "colour", "itemcolor", "itemcolour"),
+    
+    // TODO test as STORED flag:
+    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour", "itemcolor", "itemcolour"),
+    
     BOOK(FlagBook.class, Bit.RESULT | Bit.NO_STORE, "bookitem", "itembook"),
     BOOKPAGE(FlagBookPage.class, Bit.RESULT | Bit.NO_STORE, "bookitempage", "page", "addpage"),
     MAP(FlagMap.class, Bit.RESULT | Bit.NO_STORE, "mapitem", "itemmap"),
@@ -97,6 +106,9 @@ public enum FlagType
         return flagClass;
     }
     
+    /**
+     * @return array of flags names, index 0 is always the main name
+     */
     public String[] getNames()
     {
         return names;
@@ -124,7 +136,7 @@ public enum FlagType
      */
     public String toString()
     {
-        return "@" + name().toLowerCase();
+        return "@" + names[0];
     }
     
     // Static stuff
@@ -204,6 +216,8 @@ public enum FlagType
         
         /**
          * Disables flag from being stored - used on flags that directly affect result's metadata
+         * <p />
+         * TODO remove this ?
          */
         public static final byte NO_STORE = 1 << 4;
         
@@ -211,10 +225,5 @@ public enum FlagType
          * Disables "false" or "remove" values from removing the flag
          */
         public static final byte NO_FALSE = 1 << 5;
-        
-        /**
-         * Triggers onApply() when result is requested
-         */
-//        public static final byte APPLY_RESULT = 1 << 6;
     }
 }

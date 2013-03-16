@@ -9,6 +9,7 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModExp extends Flag
 {
+    private char   mod;
     private int    exp;
     private String message;
     
@@ -62,11 +63,28 @@ public class FlagModExp extends Flag
         }
         
         value = split[0].trim();
+        char mod = value.charAt(0);
+        
+        switch(mod)
+        {
+            case '-':
+            case '=':
+            case '+':
+            {
+                value = value.substring(1);
+                break;
+            }
+            
+            default:
+                mod = '+';
+        }
+        
+        // TODO finish
+        Messages.debug("value: " + value);
         
         if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
-            return false;
+            return RecipeErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
         }
         
         int exp = 0;
@@ -77,14 +95,12 @@ public class FlagModExp extends Flag
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
-            return false;
+            return RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
         }
         
         if(exp == 0)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag must not have 0 exp !");
-            return false;
+            return RecipeErrorReporter.error("The " + getType() + " flag must not have 0 exp !");
         }
         
         setExp(exp);
@@ -94,6 +110,9 @@ public class FlagModExp extends Flag
     @Override
     protected boolean onCrafted(Args a)
     {
+        if(exp == 0)
+            return false;
+        
         Player p = a.player();
         
         if(p == null)

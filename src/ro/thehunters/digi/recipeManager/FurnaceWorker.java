@@ -23,15 +23,15 @@ class FurnaceWorker implements Runnable
     private final float       ticks;
     private static BukkitTask task;
     
+    static void init()
+    {
+    }
+    
     private FurnaceWorker()
     {
         stop();
         ticks = (float)(10.0 / RecipeManager.getSettings().FURNACE_TICKS);
         task = Bukkit.getScheduler().runTaskTimer(RecipeManager.getPlugin(), this, 0, RecipeManager.getSettings().FURNACE_TICKS);
-    }
-    
-    static void init()
-    {
     }
     
     protected static void start()
@@ -60,7 +60,7 @@ class FurnaceWorker implements Runnable
         }
     }
     
-    protected static void clear()
+    protected static void clean()
     {
         stop();
 //        furnaces.clear();

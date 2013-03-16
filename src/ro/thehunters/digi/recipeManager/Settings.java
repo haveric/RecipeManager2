@@ -43,6 +43,9 @@ public class Settings
     
     public final boolean                        CLEAR_RECIPES;
     
+    public final boolean                        UPDATE_CHECK_ENABLED;
+    public final int                            UPDATE_CHECK_FREQUENCY;
+    
     public final boolean                        METRICS;
     
     protected final String                      LASTCHANGED;
@@ -70,10 +73,10 @@ public class Settings
         SPECIAL_REPAIR = yml.getBoolean("special-recipes.repair", true);
         SPECIAL_REPAIR_METADATA = yml.getBoolean("special-recipes.repair-metadata", false);
         
-        SPECIAL_LEATHER_DYE = yml.getBoolean("special-recipes.leather-armor-dye", false);
-        SPECIAL_FIREWORKS = yml.getBoolean("special-recipes.fireworks", false);
-        SPECIAL_MAP_CLONING = yml.getBoolean("special-recipes.map-cloning", false);
-        SPECIAL_MAP_EXTENDING = yml.getBoolean("special-recipes.map-extending", false);
+        SPECIAL_LEATHER_DYE = yml.getBoolean("special-recipes.leather-armor-dye", true);
+        SPECIAL_FIREWORKS = yml.getBoolean("special-recipes.fireworks", true);
+        SPECIAL_MAP_CLONING = yml.getBoolean("special-recipes.map-cloning", true);
+        SPECIAL_MAP_EXTENDING = yml.getBoolean("special-recipes.map-extending", true);
         
         SOUNDS_REPAIR = yml.getBoolean("sounds.repair", true);
         SOUNDS_FAILED = yml.getBoolean("sounds.failed", true);
@@ -101,6 +104,9 @@ public class Settings
         MULTITHREADING = yml.getBoolean("multithreading", true);
         
         CLEAR_RECIPES = yml.getBoolean("clear-recipes", false);
+        
+        UPDATE_CHECK_ENABLED = yml.getBoolean("update_check.enabled", true);
+        UPDATE_CHECK_FREQUENCY = Math.max(yml.getInt("update_check.frequency", 6), 0);
         
         METRICS = yml.getBoolean("metrics", true);
         

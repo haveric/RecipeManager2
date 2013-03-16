@@ -55,6 +55,8 @@ public class Vanilla
      */
     public static final float                    FURNACE_RECIPE_TIME = 9.25f;
     
+    public static final short                    DATA_WILDCARD       = 32767;
+    
     protected static void init()
     {
         clean();
@@ -113,10 +115,8 @@ public class Vanilla
         initialRecipes.put(new FuelRecipe(Material.HUGE_MUSHROOM_2, 15), info);
         initialRecipes.put(new FuelRecipe(Material.BLAZE_ROD, 120), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
-        
-        // TODO MC 1.5
-//      initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
-//      initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_SENSOR, 15), info);        
+        initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
     }
     
     protected static void clean()

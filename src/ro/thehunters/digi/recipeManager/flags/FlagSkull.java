@@ -19,8 +19,7 @@ public class FlagSkull extends Flag
         
         if(result == null || result.getItemMeta() instanceof SkullMeta == false || result.getDurability() != 3)
         {
-            RecipeErrorReporter.error("Flag @" + type + " needs a SKULL_ITEM with data value 3 to work!");
-            return false;
+            return RecipeErrorReporter.error("Flag @" + type + " needs a SKULL_ITEM with data value 3 to work!");
         }
         
         return true;
@@ -39,6 +38,7 @@ public class FlagSkull extends Flag
         SkullMeta skull = (SkullMeta)result.getItemMeta();
         skull.setOwner(value);
         result.setItemMeta(skull);
+        
         return true;
     }
 }

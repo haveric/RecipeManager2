@@ -22,8 +22,7 @@ public class FlagPotion extends Flag
         
         if(result == null || result.getItemMeta() instanceof PotionMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " needs a POTION item!");
-            return false;
+            return RecipeErrorReporter.error("Flag " + type + " needs a POTION item!");
         }
         
         return true;
@@ -52,8 +51,7 @@ public class FlagPotion extends Flag
             
             if(split.length != 2)
             {
-                RecipeErrorReporter.error("Flag " + type + " has 'custom' argument with no values!");
-                return false;
+                return RecipeErrorReporter.error("Flag " + type + " has 'custom' argument with no values!");
             }
             
             value = split[1].trim();

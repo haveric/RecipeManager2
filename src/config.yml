@@ -76,6 +76,12 @@ multithreading: true
 clear-recipes: false
 
 
+# Automatic update checker (no auto download)
+update-check:
+  enabled: true    # Enable/disable update checking. (default: true)
+  frequency: 6     # Check for updates each N hours, use 0 to check only at startup. (default: 6)
+
+
 # Enable or disable metrics system for this specific plugin, it will also not create the PluginMetrics folder if this is disabled, but other plugins can use metrics if they have it implemented.
 #   default: true
 metrics: true

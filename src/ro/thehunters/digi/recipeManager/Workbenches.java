@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.data.BlockID;
 
+/**
+ * Stores in-use workbench locations to be used with flags.
+ */
 public class Workbenches
 {
     private static final Map<String, BlockID> workbenches = new HashMap<String, BlockID>();
@@ -19,7 +22,7 @@ public class Workbenches
     {
     }
     
-    static void clear()
+    static void clean()
     {
         workbenches.clear();
     }
@@ -42,6 +45,13 @@ public class Workbenches
         workbenches.remove(player.getName());
     }
     
+    /**
+     * Get open workbench location of player if available.
+     * 
+     * @param player
+     *            the crafter, can be null but will make the method return null
+     * @return workbench location if available or in-range, otherwise player's location or null if player is null
+     */
     public static Location get(Player player)
     {
         if(player == null)
@@ -55,9 +65,8 @@ public class Workbenches
         
         Block block = blockID.toBlock();
         
-        if(block.getType() != Material.WORKBENCH)
+        if(block.getType() != Material.WORKBENCH) // Workbench doesn't exist anymore
         {
-            // Workbench doesn't exist anymore
             workbenches.remove(player.getName());
             return playerLoc;
         }

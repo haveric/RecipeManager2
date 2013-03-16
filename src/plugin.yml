@@ -1,11 +1,11 @@
 name: RecipeManager
 description: Add, edit or remove recipes and fuels
-version: 2.0TEST
+version: 2.0beta
 lastchanged:
-  config: 2.0
-  readme: 2.0
-  aliases: 2.0
-  messages: 2.0
+  config: 2.0beta
+  readme: 2.0beta
+  aliases: 2.0beta
+  messages: 2.0beta
 author: Digi
 website: http://dev.bukkit.org/server-mods/recipemanager/
 dev-url: http://dev.bukkit.org/server-mods/recipemanager/
@@ -45,7 +45,12 @@ commands:
   rmgetbook:
     aliases: [getrecipebook]
     description: gives the specified recipe book to the caller, author is optional
-    usage: /<command> <title> by <author>
+    usage: /<command> <title>
+    permission: recipemanager.admin
+  rmupdate:
+    aliases: [rmcheckupdates]
+    description: checks if there's a newer version available for the plugin
+    usage: /<command>
     permission: recipemanager.admin
 permissions:
   recipemanager.craft:

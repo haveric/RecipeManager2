@@ -28,7 +28,7 @@ public class Furnaces
     {
     }
     
-    static void clear()
+    static void clean()
     {
         furnaces.clear();
     }

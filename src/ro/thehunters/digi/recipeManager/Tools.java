@@ -24,7 +24,9 @@ import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -42,9 +44,91 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  */
 public class Tools
 {
+    public static ItemStack mergeItems(ItemStack into, ItemStack item)
+    {
+        if(into == null || into.getTypeId() == 0)
+        {
+            return item;
+        }
+        
+        if(item.isSimilar(into) && item.getAmount() <= (into.getMaxStackSize() - into.getAmount()))
+        {
+            ItemStack clone = item.clone();
+            
+            clone.setAmount(into.getAmount() + item.getAmount());
+            
+            return clone;
+        }
+        
+        return null;
+    }
+    
+    public static boolean canMergeItems(ItemStack intoItem, ItemStack item)
+    {
+        if(intoItem == null || intoItem.getTypeId() == 0)
+        {
+            return true;
+        }
+        
+        if(intoItem.isSimilar(item) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount()))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public static int playerFreeSpaceForItem(Player player, ItemStack item)
+    {
+        Inventory inv = player.getInventory();
+        
+        int available = 0;
+        
+        for(ItemStack i : inv.getContents())
+        {
+            if(i == null)
+            {
+                available += item.getType().getMaxStackSize();
+            }
+            else if(item.isSimilar(i))
+            {
+                available += Math.max(Math.max(i.getMaxStackSize(), inv.getMaxStackSize()) - i.getAmount(), 0);
+            }
+        }
+        
+        return available;
+    }
+    
+    public static boolean playerCanAddItem(Player player, ItemStack item)
+    {
+        Inventory inv = player.getInventory();
+        
+        int amount = item.getAmount();
+        int available = 0;
+        
+        for(ItemStack i : inv.getContents())
+        {
+            if(i == null)
+            {
+                available += item.getType().getMaxStackSize();
+            }
+            else if(item.isSimilar(i))
+            {
+                available += Math.max(Math.max(i.getMaxStackSize(), inv.getMaxStackSize()) - i.getAmount(), 0);
+            }
+            
+            if(available >= amount)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public static String parseAliasName(String name)
     {
-        return name.replaceAll("[\\s\\W]+", "").trim().toLowerCase();
+        return name.replaceAll("[\\s\\W_]+", "").trim().toLowerCase();
     }
     
     public static String parseAliasPrint(String name)
@@ -153,32 +237,26 @@ public class Tools
         value = value.trim();
         
         if(value.length() == 0)
+        {
             return null;
+        }
         
         String[] enchantSplit = value.split("\\|");
         String[] split = enchantSplit[0].trim().split(":");
         
         if(split.length <= 0 || split[0].isEmpty())
+        {
             return new ItemStack(0);
+        }
         
         value = split[0].trim();
-        
-        /*
-        String alias = RecipeManager.getPlugin().getAliases().get(stringArray[0]);
-        
-        if(alias != null)
-        {
-            if(stringArray.length > 2 && printErrors)
-                RecipeErrorReporter.error("'" + stringArray[0] + "' is an alias with data and amount.", "You can only set amount e.g.: alias:amount.");
-            
-            return stringToItemStack(string.replace(stringArray[0], alias), defaultData, allowData, allowAmount, allowEnchantments, printErrors);
-        }
-        */
         
         Material material = RecipeManager.getSettings().nameAliases.get(Tools.parseAliasName(value));
         
         if(material == null)
+        {
             material = Material.matchMaterial(value);
+        }
         
         if(material == null)
         {
@@ -189,7 +267,9 @@ public class Tools
         int type = material.getId();
         
         if(type <= 0)
+        {
             return new ItemStack(0);
+        }
         
         int data = defaultData;
         
@@ -201,7 +281,7 @@ public class Tools
                 
                 if(value.charAt(0) == '*')
                 {
-                    data = -1;
+                    data = Vanilla.DATA_WILDCARD;
                 }
                 else
                 {
@@ -222,6 +302,11 @@ public class Tools
                         {
                             RecipeErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
                         }
+                    }
+                    
+                    if(data == -1)
+                    {
+                        RecipeErrorReporter.warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
                     }
                 }
             }
@@ -424,8 +509,6 @@ public class Tools
             potion.setHasExtendedDuration(extended);
         
         potion.setSplash(splash);
-        
-        System.out.print("[debug] potion = " + potion.getLevel() + " | " + potion.getType() + " | " + potion.getEffects() + " | " + potion.isSplash() + " | " + potion.hasExtendedDuration());
         
         return potion;
     }
@@ -737,7 +820,7 @@ public class Tools
      */
     public static String convertItemToStringID(ItemStack item)
     {
-        return item.getTypeId() + (item.getDurability() == -1 ? "" : ":" + item.getDurability());
+        return item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());
     }
     
     /**
@@ -819,7 +902,7 @@ public class Tools
             if(matrix[i] == null && ingredients[i] == null)
                 continue;
             
-            if(matrix[i] == null || ingredients[i] == null || ingredients[i].getTypeId() != matrix[i].getTypeId() || (ingredients[i].getDurability() != -1 && ingredients[i].getDurability() != matrix[i].getDurability()))
+            if(matrix[i] == null || ingredients[i] == null || ingredients[i].getTypeId() != matrix[i].getTypeId() || (ingredients[i].getDurability() != Vanilla.DATA_WILDCARD && ingredients[i].getDurability() != matrix[i].getDurability()))
                 return false;
         }
         

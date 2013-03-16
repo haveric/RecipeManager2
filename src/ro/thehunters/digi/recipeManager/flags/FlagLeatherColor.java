@@ -52,8 +52,7 @@ public class FlagLeatherColor extends Flag
         
         if(result == null || result.getItemMeta() instanceof LeatherArmorMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " needs a leather armor item!");
-            return false;
+            return RecipeErrorReporter.error("Flag " + type + " needs a leather armor item!");
         }
         
         return true;
@@ -66,11 +65,16 @@ public class FlagLeatherColor extends Flag
         
         if(color == null)
         {
-            RecipeErrorReporter.error("Flag @" + type + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
-            return false;
+            return RecipeErrorReporter.error("Flag @" + type + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
         }
         
         return true;
+    }
+    
+    @Override
+    protected boolean onPrepare(Args a)
+    {
+        return onCrafted(a);
     }
     
     @Override

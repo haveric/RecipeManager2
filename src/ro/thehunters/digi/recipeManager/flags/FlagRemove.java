@@ -19,7 +19,9 @@ public class FlagRemove extends Flag
     protected boolean onValidate()
     {
         if(getFlagsContainer().hasFlag(FlagType.OVERRIDE))
+        {
             return RecipeErrorReporter.error("Flag " + getType() + " can't work with @override flag!");
+        }
         
         return true;
     }

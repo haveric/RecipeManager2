@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerEnabledEvent;
+import ro.thehunters.digi.recipeManager.commands.CheckUpdatesCommand;
 import ro.thehunters.digi.recipeManager.commands.ExtractCommand;
 import ro.thehunters.digi.recipeManager.commands.HelpCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
@@ -33,6 +34,7 @@ public class RecipeManager extends JavaPlugin
     protected static Recipes              recipes;
     protected static Events               events;
     protected static Settings             settings;
+    protected static Economy              economy;
     protected static Permissions          permissions;
     protected static Metrics              metrics;
     
@@ -43,32 +45,6 @@ public class RecipeManager extends JavaPlugin
     
     public void onEnable()
     {
-        if(plugin != null)
-        {
-            Messages.info(ChatColor.RED + "Plugin is already enabled!");
-            return;
-        }
-        
-        plugin = this;
-        recipes = new Recipes();
-        permissions = new Permissions();
-        events = new Events();
-        
-        // Avoid reload errors if jar is changed
-        Workbenches.init();
-        Furnaces.init();
-        FurnaceWorker.init();
-        
-        Vanilla.init(); // get initial recipes...
-        recipes.index.putAll(Vanilla.initialRecipes);
-        
-        Furnaces.load(); // load saved furnaces...
-        
-        // Register commands
-        getCommand("rm").setExecutor(new HelpCommand());
-        getCommand("rmreload").setExecutor(new ReloadCommand());
-        getCommand("rmextract").setExecutor(new ExtractCommand());
-        
         // wait for all plugins to load then init this...
         new BukkitRunnable()
         {
@@ -81,8 +57,38 @@ public class RecipeManager extends JavaPlugin
     
     private void onEnablePost()
     {
+        if(plugin != null)
+        {
+            Messages.info(ChatColor.RED + "Plugin is already enabled!");
+            return;
+        }
+        
+        plugin = this;
+        
+        events = new Events();
+        recipes = new Recipes();
+        economy = new Economy();
+        permissions = new Permissions();
+        
+        Workbenches.init(); // avoid errors on reload if jar is changed
+        FurnaceWorker.init();
+        Players.init();
+        Furnaces.load(); // load saved furnaces...
+        
+        // Register commands
+        getCommand("rm").setExecutor(new HelpCommand());
+        getCommand("rmrecipes").setExecutor(new HelpCommand());
+        getCommand("rmfinditem").setExecutor(new HelpCommand());
+        getCommand("rmcheck").setExecutor(new HelpCommand());
+        getCommand("rmreload").setExecutor(new ReloadCommand());
+        getCommand("rmextract").setExecutor(new ExtractCommand());
+        getCommand("rmgetbook").setExecutor(new HelpCommand());
+        getCommand("rmupdate").setExecutor(new CheckUpdatesCommand());
+        
+        // -------------------------
+        
         scanPlugins(); // scan for other plugins and store them in case any use our API
-        Vanilla.init(); // update initial recipes...
+        Vanilla.init(); // get initial recipes...
         recipes.index.putAll(Vanilla.initialRecipes);
         
         // Start loading data
@@ -90,6 +96,60 @@ public class RecipeManager extends JavaPlugin
         
         // Call the enabled event to notify other plugins that use this plugin's API
         getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent());
+        
+        // TODO testing
+        
+        /*
+        for(BaseRecipe r : Vanilla.initialRecipes.keySet())
+        {
+            if(r instanceof CraftRecipe)
+            {
+                CraftRecipe cr = (CraftRecipe)r;
+                
+                if(cr.getFirstResult().getType() == Material.STICK)
+                {
+                    Messages.debug(" ");
+                    Messages.debug(" " + Arrays.toString(cr.getIngredients()));
+                    Messages.debug(" " + ArrayUtils.toString(cr.getResults()));
+                }
+            }
+        }
+        */
+        /*
+        ShapedRecipe testRecipe = new ShapedRecipe(new ItemStack(Material.YELLOW_FLOWER));
+        testRecipe.shape("A", " ", "F");
+        testRecipe.setIngredient('A', Material.WOOD, Vanilla.DATA_WILDCARD);
+        testRecipe.setIngredient('F', Material.WOOD, 0);
+        
+        Bukkit.addRecipe(testRecipe);
+        */
+        /*
+        Iterator<Recipe> it = Bukkit.recipeIterator();
+        
+        while(it.hasNext())
+        {
+            Recipe r = it.next();
+            
+            if(r instanceof ShapedRecipe && r.getResult().getType() == Material.YELLOW_FLOWER)
+            {
+                ShapedRecipe sr = (ShapedRecipe)r;
+                
+                for(String s : sr.getShape())
+                {
+                    Messages.debug("     " + s);
+                }
+                
+                Messages.debug(" ");
+                
+                for(Entry<Character, ItemStack> e : sr.getIngredientMap().entrySet())
+                {
+                    Messages.debug(e.getKey() + " = " + e.getValue());
+                }
+                
+                break;
+            }
+        }
+        */
     }
     
     /**
@@ -109,20 +169,40 @@ public class RecipeManager extends JavaPlugin
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
         
-        if(settings.METRICS) // start/stop metrics accordingly
+        if(settings.UPDATE_CHECK_ENABLED)
         {
-            metrics = new Metrics(this);
-            metrics.start();
+            UpdateChecker.start();
+            
+            new UpdateChecker(sender);
+        }
+        
+        if(metrics == null)
+        {
+            if(settings.METRICS) // start/stop metrics accordingly
+            {
+                metrics = new Metrics(this);
+                metrics.start();
+            }
         }
         else if(metrics != null)
         {
             metrics.stop();
         }
         
-        if(previousClearRecipes != false && RecipeManager.getSettings().CLEAR_RECIPES == false)
+        if(previousClearRecipes != settings.CLEAR_RECIPES)
         {
-            Vanilla.restoreInitialRecipes();
-            Messages.info("<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
+            if(settings.CLEAR_RECIPES)
+            {
+                Bukkit.clearRecipes();
+                Recipes.getInstance().clean();
+            }
+            else
+            {
+                Vanilla.restoreInitialRecipes();
+                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+                
+                Messages.info("<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
+            }
         }
         
         RecipeProcessor.reload(sender, check, force); // (re)parse recipe files
@@ -189,24 +269,35 @@ public class RecipeManager extends JavaPlugin
             return;
         
         Furnaces.save();
-        Furnaces.clear();
-        FurnaceWorker.clear();
-        Workbenches.clear();
+        Furnaces.clean();
+        FurnaceWorker.clean();
+        Workbenches.clean();
+        Players.clean();
         Vanilla.clean();
-        Bukkit.getScheduler().cancelTasks(this);
+        
+        economy.clear();
+        economy = null;
+        
+        recipes.clean();
+        recipes = null;
+        
+        events = null;
+        
+        settings = null;
+        
+        permissions.clean();
+        permissions = null;
+        
+        metrics.stop();
+        metrics = null;
         
         plugin = null;
-        recipes = null;
-        events = null;
-        settings = null;
-        permissions = null;
-        metrics = null;
+        
+        Bukkit.getScheduler().cancelTasks(this);
     }
     
     /**
-     * Get the plugin instance for more methods
-     * 
-     * @return
+     * @return plugin's main class
      */
     public static RecipeManager getPlugin()
     {
@@ -214,9 +305,7 @@ public class RecipeManager extends JavaPlugin
     }
     
     /**
-     * Get recipes class
-     * 
-     * @return
+     * @return Recipes class
      */
     public static Recipes getRecipes()
     {
@@ -224,9 +313,7 @@ public class RecipeManager extends JavaPlugin
     }
     
     /**
-     * Get configured settings
-     * 
-     * @return
+     * @return Configured settings
      */
     public static Settings getSettings()
     {
@@ -234,9 +321,15 @@ public class RecipeManager extends JavaPlugin
     }
     
     /**
-     * Get hooked permissions from Vault
-     * 
-     * @return
+     * @return Economy methods
+     */
+    public static Economy getEconomy()
+    {
+        return economy;
+    }
+    
+    /**
+     * @return hooked permissions from Vault
      */
     public static Permissions getPermissions()
     {

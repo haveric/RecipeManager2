@@ -16,9 +16,9 @@ lastchanged: 2.0beta # Please do not edit this value - it is used by the plugin 
 #  dye:5 - valid: purple dye (numeral data value acceptable)
 #  wood:red - invalid: will give an error since data value alias "red" isn't defined for material "wood".
 #
-# And of course you can avoid the data value or use * to set it to -1 which means any data type - useful for ingredients.
+# And of course when defining ingredients you can avoid the data value or use * to allow any data value.
 #
-# This file is great for giving easy names to items added by other plugins or server mods.
+# This file is great for giving easy-to-use names to items that are added by other plugins or server mods.
 #
 # You can add new aliases or edit existing if you like, see below examples or follow syntax:
 #
@@ -207,7 +207,7 @@ brewing_stand_item: brewing stand    # overwrites brewing_stand material which r
 brewing_stand: brewing stand block   # name to make the brewing stand block usable but you won't really need this.
 glass_bottle: empty bottle, bottle
 potion:
-  names: bottle
+  names: water bottle
   0: water
   16: awkward
   32: thick
@@ -229,19 +229,19 @@ golden_apple:
   0: 
   1: enchanted golden apple
 
-# Discs (TODO)
-GOLD_RECORD: Music Disc 1
-GREEN_RECORD: Music Disc 2
-RECORD_3: Music Disc 3
-RECORD_4: Music Disc 4
-RECORD_5: Music Disc 5
-RECORD_6: Music Disc 6
-RECORD_7: Music Disc 7
-RECORD_8: Music Disc 8
-RECORD_9: Music Disc 9
-RECORD_10: Music Disc 10
-RECORD_11: Music Disc 11
-RECORD_12: Music Disc 12
+# Music discs
+GOLD_RECORD: music disc 1, disc 1, record 1
+GREEN_RECORD: music disc 2, disc 2, record 2
+RECORD_3: music disc 3, disc 3, record 3
+RECORD_4: music disc 4, disc 4, record 4
+RECORD_5: music disc 5, disc 5, record 5
+RECORD_6: music disc 6, disc 6, record 6
+RECORD_7: music disc 7, disc 7, record 7
+RECORD_8: music disc 8, disc 8, record 8
+RECORD_9: music disc 9, disc 9, record 9
+RECORD_10: music disc 10, disc 10, record 10
+RECORD_11: music disc 11, disc 11, record 11
+RECORD_12: music disc 12, disc 12, record 12
 
 # Flower pots
 flower_pot: flower pot block         # name to make the flower pot block usable but you won't really need this.
@@ -277,6 +277,10 @@ thin_glass: glass pane
 workbench: crafting table, craft table
 storage_minecart: minecart with chest, chest minecart
 powered_minecart: minecart with furnace, furnace minecart
+explosive_minecart: minecart with TNT, tnt minecart
+hopper_minecart: minecart with hopper
+redstone_comparator: comparator
+daylight_detector: daylight sensor
 
 # add your own if you want.
 
