@@ -14,13 +14,13 @@ load: postworld
 softdepend: [Vault, iConomy]
 commands:
   rm:
-    description: plugin info and prints available commands
+    description: plugin info and available commands
     aliases: [recipemanager]
     usage: /<command>
   rmrecipes:
     aliases: [recipe, recipes]
-    description: search recipes that make item or use item if 'i' is specified
-    usage: /<command> <item> [i]
+    description: find custom recipes that use the specified item
+    usage: /<command> <item> [result or ingredient]
     permission: recipemanager.view
   rmfinditem:
     aliases: [finditem, item]
@@ -29,7 +29,7 @@ commands:
     permission: recipemanager.view
   rmcheck:
     aliases: [checkrecipes]
-    description: check recipe file for errors
+    description: simulates loading recipe files to check for errors
     usage: /<command> [force]
     permission: recipemanager.admin
   rmreload:

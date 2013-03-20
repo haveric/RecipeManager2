@@ -1,9 +1,15 @@
 package ro.thehunters.digi.recipeManager;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -127,84 +133,99 @@ public enum Messages
     
     // ---------- ^ old ones
     
+    FLAG_DISABLED("<red>Recipe is disabled."),
+    
+    FLAG_GAMEMODE("<red>Allowed gamemodes: {gamemodes}"),
+    
+    FLAG_HEIGHT("<red>Need height: {height}"),
+    FLAG_NOHEIGHT("<red>Unallowed height: {height}"),
+    
+    FLAG_ONLINETIME("<red>Need online time: {time}"),
+    FLAG_PLAYTIME("<red>Need total play time: {time}"),
+    
+    FLAG_ITEMS("<red>Need in inventory: {items}"),
+    FLAG_NOITEMS("<red>Unallowed in inventory: {items}"),
+    FLAG_EQUIP("<red>Need equipped: {items}"),
+    FLAG_NOEQUIP("<red>Unallowed equipped: {items}"),
+    FLAG_HOLD("<red>Need in hand: {items}"),
+    FLAG_NOHOLD("<red>Unallowed in hand: {items}"),
+    
+    FLAG_REQEXP("<red>Need EXP: {exp}"),
+    
+    FLAG_MODEXP_ADD("<green>+{exp} EXP"),
+    FLAG_MODEXP_SUB("<red>-{exp} EXP"),
+    FLAG_MODEXP_SET("<yellow>EXP set to {exp}"),
+    
+    FLAG_REQLEVEL("<red>Need level: {level}"),
+    
+    FLAG_MODLEVEL("{color}{level} levels"),
+    
+    FLAG_REQMONEY("<red>Need money: {amount}"),
+    FLAG_MODMONEY("{color}{amount}"),
+    
+    FLAG_PERMISSION_NEED("<red>Allowed permissions: {permissions}"),
+    FLAG_PERMISSION_UNALLOWED("<red>Unallowed permissions: {permissions}"),
+    
+    FLAG_GROUPS("<red>Allowed groups: {groups}"),
+    FLAG_NOGROUPS("<red>Unallowed groups: {groups}"),
+    
+    FLAG_WORLDS("<red>Allowed worlds: {worlds}"),
+    FLAG_NOWORLDS("<red>Unallowed worlds: {worlds}"),
+    
+    FLAG_PLAYERBUKKITMETA("<red>You need to be special..."),
+    FLAG_NOPLAYERBUKKITMETA("<red>You're too special..."),
+    
+    FLAG_BLOCKBUKKITMETA("<red>Needs special block..."),
+    FLAG_NOBLOCKBUKKITMETA("<red>Block to special..."),
+    
+    FLAG_POTIONEFFECTS("<red>Need potion effect: {effects}"),
+    FLAG_NOPOTIONEFFECTS("<red>Unallowed potion effect: {effects}"),
+    
+    FLAG_REALTIME("<red>Allowed between {mindate} and {maxdate}"),
+    
+    FLAG_COOLDOWN_FAIL("<red>Cooldown: {time}"),
+    FLAG_COOLDOWN_CRAFT("<yellow>Cooldown set to {time}"),
+    
+    FLAG_CLONE_RESULTDISPLAY("<dark_aqua><italic>(clone)"),
+    
+    FLAG_PREFIX_RECIPE("<gray>(Recipe) <reset>"),
+    FLAG_PREFIX_RESULT("<gray>(Result) <reset>"),
+    
     CRAFT_REPAIR_DISABLED("<red>Repair recipes disabled."),
     
-    CRAFT_FLAG_DISABLED("<red>Recipe is disabled."),
-    
-    CRAFT_FLAG_GAMEMODE("<red>Allowed gamemodes: {gamemodes}"),
-    
-    CRAFT_FLAG_HEIGHT("<red>Need height: {height}"),
-    CRAFT_FLAG_NOHEIGHT("<red>Disallowed height: {height}"),
-    
-    CRAFT_FLAG_ONLINETIME("<red>Need online time: {time}"),
-    CRAFT_FLAG_PLAYTIME("<red>Need total play time: {time}"),
-    
-    CRAFT_FLAG_ITEMS("<red>Need in inventory: {items}"),
-    CRAFT_FLAG_NOITEMS("<red>Disallowed in inventory: {items}"),
-    CRAFT_FLAG_EQUIP("<red>Need equipped: {items}"),
-    CRAFT_FLAG_NOEQUIP("<red>Disallowed equipped: {items}"),
-    CRAFT_FLAG_HOLD("<red>Need in hand: {items}"),
-    CRAFT_FLAG_NOHOLD("<red>Disallowed in hand: {items}"),
-    
-    CRAFT_FLAG_REQEXP("<red>Need EXP: {exp}"),
-    CRAFT_FLAG_MODEXP("{color}{exp} EXP"),
-    
-    CRAFT_FLAG_REQLEVEL("<red>Need level: {level}"),
-    CRAFT_FLAG_MODLEVEL("{color}{level} levels"),
-    
-    CRAFT_FLAG_REQMONEY("<red>Need money: {amount}"),
-    CRAFT_FLAG_MODMONEY("{color}{amount}"),
-    
-    CRAFT_FLAG_PERMISSIONS("<red>Allowed permissions: {permissions}"),
-    CRAFT_FLAG_NOPERMISSIONS("<red>Disallowed permissions: {permissions}"),
-    
-    CRAFT_FLAG_GROUPS("<red>Allowed groups: {groups}"),
-    CRAFT_FLAG_NOGROUPS("<red>Disallowed groups: {groups}"),
-    
-    CRAFT_FLAG_WORLDS("<red>Allowed worlds: {worlds}"),
-    CRAFT_FLAG_NOWORLDS("<red>Disallowed worlds: {worlds}"),
-    
-    CRAFT_FLAG_PLAYERBUKKITMETA("<red>You need to be special..."),
-    CRAFT_FLAG_NOPLAYERBUKKITMETA("<red>You're too special..."),
-    
-    CRAFT_FLAG_BLOCKBUKKITMETA("<red>Needs special block..."),
-    CRAFT_FLAG_NOBLOCKBUKKITMETA("<red>Block to special..."),
-    
-    CRAFT_FLAG_POTIONEFFECTS("<red>Need potion effect: {effects}"),
-    CRAFT_FLAG_NOPOTIONEFFECTS("<red>Disallowed potion effect: {effects}"),
-    
-    CRAFT_FLAG_REALTIME("<red>Allowed between {mindate} and {maxdate}"),
-    
-    CRAFT_FLAG_COOLDOWN_FAIL("<red>Cooldown: {time}"),
-    CRAFT_FLAG_COOLDOWN_CRAFT("<yellow>Cooldown set to {time}"),
-    
-//    CRAFT_FLAG_NEEDFUEL("<red>Need fuel: {fuels}"),
-    
-    CRAFT_FLAG_NOSHIFTCLICK("<red>You can't use shift+click on this recipe!"),
-    
-    CRAFT_FLAG_PREFIX_RECIPE("<gray>(Recipe) <reset>"),
-    CRAFT_FLAG_PREFIX_RESULT("<gray>(Result) <reset>"),
-    
-    CRAFT_SPECIAL_LEATHERDYE("Leather dyeing is disabled."),
-    CRAFT_SPECIAL_FIREWORKS("Firework crafting is disabled."),
-    CRAFT_SPECIAL_MAP_CLONING("Map cloning is disabled."),
-    CRAFT_SPECIAL_MAP_EXTENDING("Map extending is disabled."),
+    CRAFT_SPECIAL_LEATHERDYE("<red>Leather dyeing is disabled."),
+    CRAFT_SPECIAL_FIREWORKS("<red>Firework crafting is disabled."),
+    CRAFT_SPECIAL_MAP_CLONING("<red>Map cloning is disabled."),
+    CRAFT_SPECIAL_MAP_EXTENDING("<red>Map extending is disabled."),
     
     CRAFT_RESULT_DENIED_TITLE("<yellow><underline>Unable to craft:"),
     CRAFT_RESULT_DENIED_REASON("<aqua><bold>* <reset>{reason}"),
     
     CRAFT_RESULT_RECIEVE_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
     CRAFT_RESULT_RECIEVE_TITLE("<light_purple><underline>You will get a random item:"),
-    CRAFT_RESULT_RECIEVE_ITEM("<dark_green>{chance} <green>{item}"),
+    CRAFT_RESULT_RECIEVE_ITEM("<dark_green>{chance} <green>{item} {clone}"),
     CRAFT_RESULT_RECIEVE_SECRETS("<dark_aqua>{num} secret item(s)..."),
     CRAFT_RESULT_RECIEVE_NOTHING("<red>{chance} Failure chance"),
     CRAFT_RESULT_UNAVAILABLE("<dark_red>{num} unavailable item(s)..."),
     
+    CRAFT_RECIPE_MULTI_FAILED("<yellow>NOTE: <white>That sound was the recipe failing by chance! See 'fail chance' in the result description."),
+    CRAFT_RECIPE_MULTI_NOSHIFTCLICK("<yellow>NOTE: <white>Recipe has more than one result, shift+clicking will only craft it once."),
+    CRAFT_RECIPE_MULTI_CURSORFULL("<yellow>NOTE: <white>Cursor is full or not same type as result, put the held item in inventory or use Shift+Click to craft one by one to inventory."),
+    
+    CRAFT_RECIPE_FLAG_NOSHIFTCLICK("<yellow>NOTE: <white>Recipe is special, shift-clicking will only craft it once."),
+    
+    SMELT_FUEL_NEEDINGREDIENT("<red>Fuel {fuel}<red> needs specific ingredient: {ingredient}"),
+    SMELT_FUEL_NEEDFUEL("<red>Ingredient {ingredient}<red> needs specific fuel: {fuel}"),
+    
+    ITEM_ANYDATA("<gray>any"),
+    
     LASTCHANGED(Files.LASTCHANGED_MESSAGES);
     
-    private String                   path;
-    private String                   message;
-    private static FileConfiguration messages;
+    private static final Map<String, Set<String>> sent = new HashMap<String, Set<String>>();
+    private static FileConfiguration              yml;
+    
+    private String                                path;
+    private String                                message;
     
     private Messages(String message)
     {
@@ -214,10 +235,67 @@ public enum Messages
     
     private void asign()
     {
-        message = messages.getString(path, message);
+        message = yml.getString(path, message); // get the message or use the predefined one if doesn't exist
         
         if(message != null && (message.isEmpty() || message.equals("false")))
-            message = null;
+        {
+            message = null; // disable message if empty or 'false'
+        }
+    }
+    
+    /**
+     * (Re)Loads all messages from messages.yml
+     * 
+     * @param force
+     */
+    public static void reload(CommandSender sender)
+    {
+        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "messages.yml");
+        
+        if(!file.exists())
+        {
+            yml = new YamlConfiguration();
+            yml.options().header("Configurable messages.\nParts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.\nTo disable messages you can just delete the message or use 'false'.");
+            yml.options().copyHeader(true);
+            
+            for(Messages msg : values())
+            {
+                yml.set(msg.path, msg.message);
+            }
+            
+            // TODO re-enable
+            /*
+            try
+            {
+                messages.save(file);
+            }
+            catch(Exception e)
+            {
+                error(sender, e, "Couldn't save 'messages.yml' !");
+            }
+            
+            send(sender, ChatColor.GREEN + "Generated 'messages.yml' file.");
+            */
+        }
+        else
+        {
+            yml = YamlConfiguration.loadConfiguration(file);
+        }
+        
+        for(Messages msg : values())
+        {
+            msg.asign();
+        }
+        
+        try
+        {
+            if(LASTCHANGED == null || !LASTCHANGED.equals(Files.LASTCHANGED_MESSAGES))
+                send(sender, "<yellow>messages.yml has changed! You should delete it, use 'rmreload' to re-generate it and then re-configure it, and then rmreload again.");
+        }
+        catch(Exception e)
+        {
+            send(sender, "<yellow>Error reading messages.yml's version! You should delete it to allow it to re-generate the newest version!");
+        }
     }
     
     /**
@@ -337,7 +415,37 @@ public enum Messages
     }
     
     /**
-     * Sends an array of messages to a player or console. <br>
+     * Send this message only once per connection.
+     * 
+     * @param sender
+     */
+    public void printOnce(CommandSender sender)
+    {
+        if(sender == null)
+            return;
+        
+        Set<String> set = sent.get(sender.getName());
+        
+        if(set == null)
+        {
+            set = new HashSet<String>();
+            sent.put(sender.getName(), set);
+        }
+        
+        if(!set.contains(path))
+        {
+            set.add(path);
+            print(sender);
+        }
+    }
+    
+    protected static void clearPlayer(String name)
+    {
+        sent.remove(name);
+    }
+    
+    /**
+     * Sends an array of messages to a player or console.<br>
      * Message supports &lt;color&gt; codes.
      * 
      * @param sender
@@ -359,7 +467,7 @@ public enum Messages
     }
     
     /**
-     * Sends a message to a player or console. <br>
+     * Sends a message to a player or console.<br>
      * Message supports &lt;color&gt; codes.
      * 
      * @param sender
@@ -376,58 +484,19 @@ public enum Messages
         sender.sendMessage(Tools.parseColors(message, (sender instanceof ConsoleCommandSender && !RecipeManager.getSettings().COLOR_CONSOLE)));
     }
     
-    /**
-     * (Re)Loads all messages from messages.yml
-     * 
-     * @param force
-     */
-    public static void reload(CommandSender sender)
+    public static void sendDenySound(Player player, Location location)
     {
-        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "messages.yml");
-        
-        if(!file.exists())
+        if(player != null && RecipeManager.getSettings().SOUNDS_FAILED_CLICK)
         {
-            messages = new YamlConfiguration();
-            messages.options().header("Configurable messages. Blank out or replace a message with false to disable it.");
-            messages.options().copyHeader(true);
-            
-            for(Messages msg : values())
-            {
-                messages.set(msg.path, msg.message);
-            }
-            
-            // TODO re-enable
-            /*
-            try
-            {
-                messages.save(file);
-            }
-            catch(Exception e)
-            {
-                error(sender, e, "Couldn't save 'messages.yml' !");
-            }
-            
-            send(sender, ChatColor.GREEN + "Generated 'messages.yml' file.");
-            */
+            player.playSound(location, Sound.NOTE_BASS, 0.8f, 255);
         }
-        else
+    }
+    
+    public static void sendFailSound(Player player, Location location)
+    {
+        if(RecipeManager.getSettings().SOUNDS_FAILED && player != null)
         {
-            messages = YamlConfiguration.loadConfiguration(file);
-        }
-        
-        for(Messages msg : values())
-        {
-            msg.asign();
-        }
-        
-        try
-        {
-            if(LASTCHANGED == null || !LASTCHANGED.equals(Files.LASTCHANGED_MESSAGES))
-                send(sender, "<yellow>messages.yml has changed! You should delete it, use 'rmreload' to re-generate it and then re-configure it, and then rmreload again.");
-        }
-        catch(Exception e)
-        {
-            send(sender, "<yellow>Error reading messages.yml's version! You should delete it to allow it to re-generate the newest version!");
+            player.playSound(location, Sound.NOTE_PLING, 0.8f, 10);
         }
     }
     

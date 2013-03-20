@@ -13,11 +13,13 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CombineRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
@@ -29,26 +31,21 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
  */
 public class Recipes
 {
-    @Override
-    protected void finalize() throws Throwable // TODO REMOVE
-    {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + getClass().getName() + " :: finalize()");
-        
-        super.finalize();
-    }
-    
     // Recipe index
-    protected Map<BaseRecipe, RecipeInfo> index                = new HashMap<BaseRecipe, RecipeInfo>();
+    protected Map<BaseRecipe, RecipeInfo>        index                = new HashMap<BaseRecipe, RecipeInfo>();
     
     // Quick-find index
-    protected Map<Integer, CraftRecipe>   indexCraft           = new HashMap<Integer, CraftRecipe>();
-    protected Map<Integer, CombineRecipe> indexCombine         = new HashMap<Integer, CombineRecipe>();
-    protected Map<Integer, SmeltRecipe>   indexSmelt           = new HashMap<Integer, SmeltRecipe>();
-    protected Map<String, FuelRecipe>     indexFuels           = new HashMap<String, FuelRecipe>();
+    protected Map<Integer, CraftRecipe>          indexCraft           = new HashMap<Integer, CraftRecipe>();
+    protected Map<Integer, CombineRecipe>        indexCombine         = new HashMap<Integer, CombineRecipe>();
+    protected Map<Integer, SmeltRecipe>          indexSmelt           = new HashMap<Integer, SmeltRecipe>();
+    protected Map<String, SmeltRecipe>           indexSmeltFuels      = new HashMap<String, SmeltRecipe>();
+    protected Map<String, FuelRecipe>            indexFuels           = new HashMap<String, FuelRecipe>();
     
     // constants
-    public static final String            FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
-    public static final String            RECIPE_ID_STRING     = ChatColor.GRAY + "RecipeManager #";
+    public static final String                   FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
+    public static final String                   RECIPE_ID_STRING     = ChatColor.GRAY + "RecipeManager #";
+    
+    private static final Map<String, ItemResult> staticResults        = new HashMap<String, ItemResult>();
     
     protected Recipes()
     {
@@ -61,6 +58,8 @@ public class Recipes
         indexCombine.clear();
         indexSmelt.clear();
         indexFuels.clear();
+        
+        staticResults.clear();
     }
     
     /**
@@ -149,7 +148,7 @@ public class Recipes
      */
     public CraftRecipe getCraftRecipe(ItemStack result)
     {
-        return (result == null ? null : indexCraft.get(Tools.getRecipeIdFromResult(result)));
+        return (result == null ? null : indexCraft.get(Tools.getRecipeIdFromItem(result)));
     }
     
     /**
@@ -161,7 +160,7 @@ public class Recipes
      */
     public CombineRecipe getCombineRecipe(ItemStack result)
     {
-        return (result == null ? null : indexCombine.get(Tools.getRecipeIdFromResult(result)));
+        return (result == null ? null : indexCombine.get(Tools.getRecipeIdFromItem(result)));
     }
     
     /**
@@ -174,6 +173,21 @@ public class Recipes
     public SmeltRecipe getSmeltRecipe(ItemStack ingredient)
     {
         return (ingredient == null ? null : indexSmelt.get(ingredient.getTypeId()));
+    }
+    
+    public SmeltRecipe getSmeltRecipeWithFuel(ItemStack fuel)
+    {
+        if(fuel == null)
+            return null;
+        
+        SmeltRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getTypeId()));
+        
+        if(recipe == null)
+        {
+            return indexSmeltFuels.get(fuel.getTypeId() + ":" + fuel.getDurability());
+        }
+        
+        return recipe;
     }
     
     /**
@@ -189,10 +203,12 @@ public class Recipes
         if(fuel == null)
             return null;
         
-        FuelRecipe recipe = indexFuels.get(fuel.getTypeId() + "");
+        FuelRecipe recipe = indexFuels.get(String.valueOf(fuel.getTypeId()));
         
         if(recipe == null)
+        {
             return indexFuels.get(fuel.getTypeId() + ":" + fuel.getDurability());
+        }
         
         return recipe;
     }
@@ -275,10 +291,19 @@ public class Recipes
             }
             else if(recipe instanceof SmeltRecipe)
             {
-                indexSmelt.put(recipe.getIndex(), (SmeltRecipe)recipe);
+                SmeltRecipe r = (SmeltRecipe)recipe;
                 
-                if(((SmeltRecipe)recipe).hasCustomTime())
+                indexSmelt.put(recipe.getIndex(), r);
+                
+                if(r.hasFuel())
+                {
+                    indexSmeltFuels.put(r.getFuelIndex(), r);
+                }
+                
+                if(r.hasCustomTime())
+                {
                     FurnaceWorker.start();
+                }
             }
             else if(recipe instanceof FuelRecipe)
             {
@@ -330,5 +355,23 @@ public class Recipes
         
         // Remove from server
         return Vanilla.removeCustomRecipe(recipe);
+    }
+    
+    protected static ItemResult recipeGetResult(Args a, WorkbenchRecipe recipe)
+    {
+        ItemResult result = staticResults.get(a.playerName());
+        
+        if(result == null)
+        {
+            result = recipe.getResult(a);
+            staticResults.put(a.playerName(), result);
+        }
+        
+        return result;
+    }
+    
+    protected static void recipeResetResult(String name)
+    {
+        staticResults.remove(name);
     }
 }

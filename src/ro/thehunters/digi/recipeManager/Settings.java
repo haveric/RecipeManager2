@@ -270,7 +270,9 @@ public class Settings
             Messages.log("Generated and loaded '" + fileName + "' file.");
         }
         else
+        {
             Messages.log("Loaded '" + fileName + "' file.");
+        }
         
         return YamlConfiguration.loadConfiguration(file);
     }

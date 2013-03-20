@@ -101,7 +101,7 @@ public class FlagModLevel extends Flag
         
         p.giveExpLevels(level);
         
-        a.addEffect(Messages.CRAFT_FLAG_MODLEVEL, message, "{color}", (level < 0 ? ChatColor.RED : ChatColor.GREEN) + "", "{level}", "" + level);
+        a.addEffect(Messages.FLAG_MODLEVEL, message, "{color}", (level < 0 ? ChatColor.RED : ChatColor.GREEN) + "", "{level}", "" + level);
         
         return true;
     }

@@ -207,7 +207,6 @@ brewing_stand_item: brewing stand    # overwrites brewing_stand material which r
 brewing_stand: brewing stand block   # name to make the brewing stand block usable but you won't really need this.
 glass_bottle: empty bottle, bottle
 potion:
-  names: water bottle
   0: water
   16: awkward
   32: thick

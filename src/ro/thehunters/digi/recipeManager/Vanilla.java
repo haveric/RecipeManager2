@@ -55,7 +55,11 @@ public class Vanilla
      */
     public static final float                    FURNACE_RECIPE_TIME = 9.25f;
     
-    public static final short                    DATA_WILDCARD       = 32767;
+    /**
+     * The data value wildcard for recipe ingredients.<br>
+     * If an ingredient has this data value its data value will be ignored.
+     */
+    public static final short                    DATA_WILDCARD       = Short.MAX_VALUE;
     
     protected static void init()
     {
@@ -91,7 +95,7 @@ public class Vanilla
         initialRecipes.put(new FuelRecipe(Material.LOG, 15), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD, 15), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_STEP, 5), info);
-        initialRecipes.put(new FuelRecipe(Material.SAPLING, (float)5), info);
+        initialRecipes.put(new FuelRecipe(Material.SAPLING, 5), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_AXE, 10), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_HOE, 10), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_PICKAXE, 10), info);
@@ -117,6 +121,9 @@ public class Vanilla
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
         initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
         initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
+        
+        // Add them to recipe storage
+        RecipeManager.getRecipes().index.putAll(Vanilla.initialRecipes);
     }
     
     protected static void clean()

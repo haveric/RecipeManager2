@@ -15,6 +15,9 @@ import ro.thehunters.digi.recipeManager.commands.CheckUpdatesCommand;
 import ro.thehunters.digi.recipeManager.commands.ExtractCommand;
 import ro.thehunters.digi.recipeManager.commands.HelpCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
+import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 
 /**
  * RecipeManager's main class<br>
@@ -22,14 +25,6 @@ import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
  */
 public class RecipeManager extends JavaPlugin
 {
-    @Override
-    protected void finalize() throws Throwable // TODO REMOVE
-    {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + getClass().getName() + " :: finalize()");
-        
-        super.finalize();
-    }
-    
     protected static RecipeManager        plugin;
     protected static Recipes              recipes;
     protected static Events               events;
@@ -45,6 +40,12 @@ public class RecipeManager extends JavaPlugin
     
     public void onEnable()
     {
+        if(plugin != null)
+        {
+            Messages.info(ChatColor.RED + "Plugin is already enabled!");
+            return;
+        }
+        
         // wait for all plugins to load then init this...
         new BukkitRunnable()
         {
@@ -57,12 +58,6 @@ public class RecipeManager extends JavaPlugin
     
     private void onEnablePost()
     {
-        if(plugin != null)
-        {
-            Messages.info(ChatColor.RED + "Plugin is already enabled!");
-            return;
-        }
-        
         plugin = this;
         
         events = new Events();
@@ -70,86 +65,37 @@ public class RecipeManager extends JavaPlugin
         economy = new Economy();
         permissions = new Permissions();
         
+        scanPlugins(); // scan for other plugins and store them in case any use our API
+        Vanilla.init(); // get initial recipes...
         Workbenches.init(); // avoid errors on reload if jar is changed
         FurnaceWorker.init();
-        Players.init();
+        FlagType.init();
+        Files.init();
         Furnaces.load(); // load saved furnaces...
         
         // Register commands
         getCommand("rm").setExecutor(new HelpCommand());
-        getCommand("rmrecipes").setExecutor(new HelpCommand());
-        getCommand("rmfinditem").setExecutor(new HelpCommand());
-        getCommand("rmcheck").setExecutor(new HelpCommand());
+//        getCommand("rmrecipes").setExecutor(new HelpCommand());
+//        getCommand("rmfinditem").setExecutor(new HelpCommand());
+//        getCommand("rmcheck").setExecutor(new HelpCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());
-        getCommand("rmgetbook").setExecutor(new HelpCommand());
+//        getCommand("rmgetbook").setExecutor(new HelpCommand());
         getCommand("rmupdate").setExecutor(new CheckUpdatesCommand());
         
-        // -------------------------
-        
-        scanPlugins(); // scan for other plugins and store them in case any use our API
-        Vanilla.init(); // get initial recipes...
-        recipes.index.putAll(Vanilla.initialRecipes);
+        for(BaseRecipe r : recipes.index.keySet())
+        {
+            if(r instanceof FuelRecipe)
+            {
+                recipes.indexFuels.put(((FuelRecipe)r).getIndexString(), (FuelRecipe)r);
+            }
+        }
         
         // Start loading data
         reload(null, false, true);
         
         // Call the enabled event to notify other plugins that use this plugin's API
         getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent());
-        
-        // TODO testing
-        
-        /*
-        for(BaseRecipe r : Vanilla.initialRecipes.keySet())
-        {
-            if(r instanceof CraftRecipe)
-            {
-                CraftRecipe cr = (CraftRecipe)r;
-                
-                if(cr.getFirstResult().getType() == Material.STICK)
-                {
-                    Messages.debug(" ");
-                    Messages.debug(" " + Arrays.toString(cr.getIngredients()));
-                    Messages.debug(" " + ArrayUtils.toString(cr.getResults()));
-                }
-            }
-        }
-        */
-        /*
-        ShapedRecipe testRecipe = new ShapedRecipe(new ItemStack(Material.YELLOW_FLOWER));
-        testRecipe.shape("A", " ", "F");
-        testRecipe.setIngredient('A', Material.WOOD, Vanilla.DATA_WILDCARD);
-        testRecipe.setIngredient('F', Material.WOOD, 0);
-        
-        Bukkit.addRecipe(testRecipe);
-        */
-        /*
-        Iterator<Recipe> it = Bukkit.recipeIterator();
-        
-        while(it.hasNext())
-        {
-            Recipe r = it.next();
-            
-            if(r instanceof ShapedRecipe && r.getResult().getType() == Material.YELLOW_FLOWER)
-            {
-                ShapedRecipe sr = (ShapedRecipe)r;
-                
-                for(String s : sr.getShape())
-                {
-                    Messages.debug("     " + s);
-                }
-                
-                Messages.debug(" ");
-                
-                for(Entry<Character, ItemStack> e : sr.getIngredientMap().entrySet())
-                {
-                    Messages.debug(e.getKey() + " = " + e.getValue());
-                }
-                
-                break;
-            }
-        }
-        */
     }
     
     /**
@@ -268,12 +214,16 @@ public class RecipeManager extends JavaPlugin
         if(plugin == null)
             return;
         
+        Bukkit.getScheduler().cancelTasks(this);
+        
+        Vanilla.removeCustomRecipes();
+        
         Furnaces.save();
         Furnaces.clean();
         FurnaceWorker.clean();
         Workbenches.clean();
-        Players.clean();
         Vanilla.clean();
+        UpdateChecker.clean();
         
         economy.clear();
         economy = null;
@@ -292,8 +242,6 @@ public class RecipeManager extends JavaPlugin
         metrics = null;
         
         plugin = null;
-        
-        Bukkit.getScheduler().cancelTasks(this);
     }
     
     /**

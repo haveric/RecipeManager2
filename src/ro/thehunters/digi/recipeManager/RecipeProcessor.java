@@ -40,14 +40,6 @@ import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
  */
 public class RecipeProcessor implements Runnable
 {
-    @Override
-    protected void finalize() throws Throwable // TODO REMOVE
-    {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + getClass().getName() + " :: finalize()");
-        
-        super.finalize();
-    }
-    
     private final CommandSender               sender;
     private final boolean                     check;
     private final boolean                     force;
@@ -489,8 +481,7 @@ public class RecipeProcessor implements Runnable
         }
         else if(rows == 0) // no ingredients were processed
         {
-            RecipeErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
-            return false;
+            return RecipeErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
         }
         
         recipe.setIngredients(ingredients); // done with ingredients, set'em
@@ -503,6 +494,11 @@ public class RecipeProcessor implements Runnable
             return false;
         
         recipe.setResults(results); // done with results, set'em
+        
+        if(recipe.getFirstResult() == null)
+        {
+            return RecipeErrorReporter.error("Recipe must have at least one non-air result!");
+        }
         
         // check if the recipe already exists...
         if(!recipeCheckExists(recipe))
@@ -555,6 +551,11 @@ public class RecipeProcessor implements Runnable
             return false;
         
         recipe.setResults(results);
+        
+        if(recipe.getFirstResult() == null)
+        {
+            return RecipeErrorReporter.error("Recipe must have at least one non-air result!");
+        }
         
         // check if recipe already exists
         if(!recipeCheckExists(recipe))

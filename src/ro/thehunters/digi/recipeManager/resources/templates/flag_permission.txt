@@ -1,0 +1,17 @@
+  {flag} <permission or -permission or false>
+  
+    Makes the recipe or item require the crafter to have a permission.
+    This flag can be used more than once to add more permissions, the player must have at least one to allow crafting.
+    
+    Specifying a permission node with the - prefix would prevent crafting if player has at least one permission.
+    
+    Using 'false' will remove all previously added permissions for the recipe/result.
+    
+    Examples:
+      {flag} ranks.vip
+      {flag} jobs.crafter
+      {flag} -ranks.newbs
+      {flag} - jobs.warrior  // valid with a space too
+      {flag} false
+    
+    Aliases: {aliases}

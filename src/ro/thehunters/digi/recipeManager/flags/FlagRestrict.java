@@ -44,6 +44,6 @@ public class FlagRestrict extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        a.addReason(Messages.CRAFT_FLAG_DISABLED, message);
+        a.addReason(Messages.FLAG_DISABLED, message);
     }
 }

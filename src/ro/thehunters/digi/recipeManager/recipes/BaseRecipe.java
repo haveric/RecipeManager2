@@ -113,7 +113,7 @@ public class BaseRecipe implements Flaggable
         if(obj == null || obj instanceof BaseRecipe == false)
             return false;
         
-        return obj.hashCode() == hash;
+        return obj.hashCode() == hashCode();
     }
     
     /**
@@ -162,6 +162,12 @@ public class BaseRecipe implements Flaggable
     public boolean hasFlags()
     {
         return (flags != null);
+    }
+    
+    @Override
+    public boolean hasNoShiftBit()
+    {
+        return (flags == null ? true : flags.hasNoShiftBit());
     }
     
     @Override

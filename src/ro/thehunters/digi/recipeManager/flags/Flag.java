@@ -152,6 +152,30 @@ public class Flag implements Cloneable
         return flag;
     }
     
+    /**
+     * Returns the hashcode of the flag's type enum.
+     */
+    @Override
+    public int hashCode()
+    {
+        return (getType() == null ? 0 : getType().hashCode());
+    }
+    
+    /**
+     * Warning: this method doesn't check flag's values, it only compares flag type!
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj == this)
+            return true;
+        
+        if(obj == null || obj instanceof Flag == false)
+            return false;
+        
+        return obj.hashCode() == hashCode();
+    }
+    
     /*
      *  Non-public tools/final methods
      */
@@ -252,19 +276,6 @@ public class Flag implements Cloneable
     public Flag clone()
     {
         return this; // pointless to clone an empty flag
-        
-        // TODO test
-        // TODO maybe return new Flag() instead
-        /*
-        try
-        {
-            return (Flag)super.clone();
-        }
-        catch(CloneNotSupportedException e)
-        {
-            throw new RuntimeException("Unsupported cloning !");
-        }
-        */
     }
     
     protected boolean onValidate()

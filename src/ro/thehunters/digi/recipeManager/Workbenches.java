@@ -7,7 +7,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 
 import ro.thehunters.digi.recipeManager.data.BlockID;
 
@@ -27,47 +27,47 @@ public class Workbenches
         workbenches.clear();
     }
     
-    public static void add(Player player, Location location)
+    public static void add(HumanEntity human, Location location)
     {
-        if(player == null)
-            return;
-        
-        Validate.notNull(location, "location argument must not be null!");
-        
-        workbenches.put(player.getName(), new BlockID(location));
+        if(human != null)
+        {
+            Validate.notNull(location, "location argument must not be null!");
+            
+            workbenches.put(human.getName(), new BlockID(location));
+        }
     }
     
-    public static void remove(Player player)
+    public static void remove(HumanEntity human)
     {
-        if(player == null)
-            return;
-        
-        workbenches.remove(player.getName());
+        if(human != null)
+        {
+            workbenches.remove(human.getName());
+        }
     }
     
     /**
      * Get open workbench location of player if available.
      * 
-     * @param player
+     * @param human
      *            the crafter, can be null but will make the method return null
      * @return workbench location if available or in-range, otherwise player's location or null if player is null
      */
-    public static Location get(Player player)
+    public static Location get(HumanEntity human)
     {
-        if(player == null)
+        if(human == null)
             return null;
         
-        BlockID blockID = workbenches.get(player.getName());
-        Location playerLoc = player.getLocation();
+        BlockID blockID = workbenches.get(human.getName());
+        Location playerLoc = human.getLocation();
         
-        if(blockID == null || !blockID.getWorldID().equals(player.getWorld().getUID()))
+        if(blockID == null || !blockID.getWorldID().equals(human.getWorld().getUID()))
             return playerLoc;
         
         Block block = blockID.toBlock();
         
         if(block.getType() != Material.WORKBENCH) // Workbench doesn't exist anymore
         {
-            workbenches.remove(player.getName());
+            workbenches.remove(human.getName());
             return playerLoc;
         }
         

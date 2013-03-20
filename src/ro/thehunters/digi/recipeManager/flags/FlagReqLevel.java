@@ -138,7 +138,7 @@ public class FlagReqLevel extends Flag
         
         if(p == null || !checkExp(p.getTotalExperience()))
         {
-            a.addReason(Messages.CRAFT_FLAG_REQEXP, message, "{exp}", getExp());
+            a.addReason(Messages.FLAG_REQEXP, message, "{exp}", getExp());
         }
     }
 }

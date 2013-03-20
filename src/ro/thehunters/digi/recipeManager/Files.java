@@ -1,6 +1,12 @@
 package ro.thehunters.digi.recipeManager;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,28 +23,36 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
+import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
+
+import com.google.common.io.CharStreams;
+
 public class Files
 {
-    public static final String    NL               = System.getProperty("line.separator");
-    public static final String    PAD1             = "  ";
-    public static final String    PAD2             = "    ";
-    public static final String    PAD3             = "      ";
+    public static final String  NL                 = System.getProperty("line.separator");
+    public static final String  PAD1               = "  ";
+    public static final String  PAD2               = "    ";
+    public static final String  PAD3               = "      ";
     
-    private final CommandSender   sender;
-    private final String          DIR_PLUGIN       = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private final CommandSender sender;
+    private final String        DIR_PLUGIN         = RecipeManager.getPlugin().getDataFolder() + File.separator;
     
-    protected static final String LASTCHANGED_CONFIG;
-    protected static final String LASTCHANGED_README;
-    protected static final String LASTCHANGED_ALIASES;
-    protected static final String LASTCHANGED_MESSAGES;
+    protected static String     LASTCHANGED_CONFIG;
+    protected static String     LASTCHANGED_README;
+    protected static String     LASTCHANGED_ALIASES;
+    protected static String     LASTCHANGED_MESSAGES;
     
-    public static final String    FILE_INFO_BASICS = "info - basic recipes.txt";
-    public static final String    FILE_INFO_NAMES  = "info - names.txt";
-    public static final String    FILE_INFO_QA     = "info - questions-answers.txt";
-    public static final String    FILE_INFO_FLAGS  = "info - recipe flags.html";
-    public static final String    FILE_INFO_ERRORS = "info - recipe errors in detail.txt";
+    public static final String  FILE_USED_VERSION  = "used.version";
     
-    static
+    public static final String  FILE_INFO_BASICS   = "info - basic recipes.txt";
+    public static final String  FILE_INFO_COMMANDS = "info - commands & permissions.txt";
+    public static final String  FILE_INFO_NAMES    = "info - name index.txt";
+    public static final String  FILE_INFO_QA       = "info - questions-answers.txt";
+    public static final String  FILE_INFO_FLAGS    = "info - recipe flags.html";
+    public static final String  FILE_INFO_ERRORS   = "info - recipe errors in detail.txt";
+    
+    protected static void init()
     {
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(RecipeManager.getPlugin().getResource("plugin.yml"));
         
@@ -61,12 +75,50 @@ public class Files
         
         // TODO extract and overwrite changelog.txt too - check 4th line first
         
-        directories();
-        fileRecipeFlags();
-        fileNames();
+        createDirectories();
+        
+        if(isNewVersion())
+        {
+            createRecipeFlags();
+            createNameIndex();
+            
+            Messages.info("<gray>New version installed, information files have been written.");
+        }
     }
     
-    private void directories()
+    private boolean isNewVersion()
+    {
+        boolean newVersion = true;
+        
+        try
+        {
+            File file = new File(DIR_PLUGIN + FILE_USED_VERSION);
+            String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
+            
+            if(file.exists())
+            {
+                BufferedReader b = new BufferedReader(new FileReader(file));
+                String version = b.readLine();
+                b.close();
+                newVersion = (version == null || !version.equals(currentVersion));
+            }
+            
+            if(newVersion || file.exists())
+            {
+                BufferedWriter b = new BufferedWriter(new FileWriter(file, false));
+                b.write(currentVersion);
+                b.close();
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return newVersion;
+    }
+    
+    private void createDirectories()
     {
         // Create base directories
         File file = new File(DIR_PLUGIN + "recipes" + File.separator + "disabled");
@@ -76,18 +128,93 @@ public class Files
         file = new File(file.getPath() + File.separator + "Place recipe files here to prevent them from beeing loaded");
         
         if(!file.exists())
+        {
             Tools.saveTextToFile("In the disabled folder you can place recipe files you don't want to load, instead of deleting them.", file.getPath());
+        }
     }
     
-    private void fileRecipeFlags()
+    private String getTemplate(String name)
     {
-        File file = new File(DIR_PLUGIN + FILE_INFO_FLAGS);
+        InputStream stream = getClass().getResourceAsStream("resources/templates/" + name + ".txt");
         
-        if(file.exists())
-            return;
+        if(stream != null)
+        {
+            try
+            {
+                InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
+                
+                String string = CharStreams.toString(reader);
+                
+                reader.close();
+                
+                return string;
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
         
+        return null;
+    }
+    
+    private void createRecipeFlags()
+    {
+        StringBuilder s = new StringBuilder();
+        String tpl;
+        boolean first = true;
+        
+        s.append(getTemplate("flags_header"));
+        
+        s.append(NL).append("==========================================================================================");
+        s.append(NL).append(" SHARED FLAGS");
+        s.append(NL).append("  Usable on anything - file header, recipe header or result items.");
+        s.append(NL).append("==========================================================================================");
+        s.append(NL).append(NL);
+        
+        for(FlagType flag : FlagType.values())
+        {
+            if(flag.hasBit(Bit.RECIPE) || flag.hasBit(Bit.RESULT))
+            {
+                continue;
+            }
+            
+            if(first)
+            {
+                first = false;
+            }
+            else
+            {
+                s.append(NL).append(NL);
+                s.append(NL).append(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                s.append(NL).append(NL);
+            }
+            
+            tpl = getTemplate("flag_" + flag.getName());
+            
+            if(tpl == null)
+            {
+                s.append("(resources/templates/flag_" + flag.getName() + ".txt not found)");
+                continue;
+            }
+            
+            tpl = tpl.replace("{flag}", flag.toString());
+            tpl = tpl.replace("{aliases}", Tools.listToString(Arrays.asList(flag.getNames()), ", ", "@"));
+            
+            s.append(tpl);
+        }
+        
+        /*
+        if(s != null)
+        {
+            s = s.replace("{flag}", "@" + "test");
+            s = s.replace("{aliases}", Tools.convertListToString(Arrays.asList(args), ", ", "@"));
+        }
+        */
+        
+        /*
         StringBuilder s = new StringBuilder("<pre style=\"font-family:Verdana\">Information about recipe flags.");
-        
+        s.append(NL);
         s.append(NL).append("WHAT ARE FLAGS ?");
         s.append(NL).append("  Flags are the stuff that make a recipe very special ! You can add various features to a recipe by using flags.");
         s.append(NL);
@@ -110,19 +237,15 @@ public class Files
         s.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID", "Name", "Stack", "Durability"));
         
         s.append(NL).append("</pre>");
+        */
         
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_FLAGS);
         
         Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
     }
     
-    private void fileNames()
+    private void createNameIndex()
     {
-        File file = new File(DIR_PLUGIN + FILE_INFO_NAMES);
-        
-        if(file.exists())
-            return;
-        
         StringBuilder s = new StringBuilder("List of name constants");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods !");
         s.append(NL).append("If you want to update this file just delete it and use 'rmreload' in server console or just start the server.");

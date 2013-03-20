@@ -57,6 +57,13 @@ public class UpdateChecker extends BukkitRunnable
         runTaskTimerAsynchronously(RecipeManager.getPlugin(), time, time); // auto-update check every 12 hours
     }
     
+    protected static void clean()
+    {
+        newVersion = null;
+        newLink = null;
+        stop();
+    }
+    
     /**
      * (Re)Start checker schedule
      */
@@ -97,6 +104,9 @@ public class UpdateChecker extends BukkitRunnable
             newLink = null;
         }
         
+        if(RecipeManager.getPlugin() == null)
+            return;
+        
         if(newVersion == null)
         {
             if(sender != null) // send this message only if it's a requested update check
@@ -110,6 +120,9 @@ public class UpdateChecker extends BukkitRunnable
         }
         else
         {
+            if(RecipeManager.getPlugin() == null)
+                return;
+            
             String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
             
             if(currentVersion.equalsIgnoreCase(newVersion))

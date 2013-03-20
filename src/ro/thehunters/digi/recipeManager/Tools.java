@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -44,6 +45,22 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  */
 public class Tools
 {
+    public static boolean itemSimilarDataWildcard(ItemStack source, ItemStack item)
+    {
+        if(item == null)
+            return false;
+        
+        if(item == source)
+            return true;
+        
+        return source.getTypeId() == item.getTypeId() && (source.getDurability() == Vanilla.DATA_WILDCARD ? true : source.getDurability() == item.getDurability()) && source.hasItemMeta() == item.hasItemMeta() && (source.hasItemMeta() ? Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta()) : true);
+    }
+    
+    public static ItemStack nullItemIfAir(ItemStack item)
+    {
+        return (item == null || item.getTypeId() == 0 ? null : item);
+    }
+    
     public static ItemStack mergeItems(ItemStack into, ItemStack item)
     {
         if(into == null || into.getTypeId() == 0)
@@ -136,10 +153,41 @@ public class Tools
         return WordUtils.capitalize(name.toLowerCase().replace('_', ' ').trim());
     }
     
-    public static String printItemStack(ItemStack item)
+    /**
+     * Displays the itemstack in a user-friendly and colorful manner.<br>
+     * If item is null or air it will print "nothing" in gray.<br>
+     * If item is enchanted it will have aqua color instead of white.<br>
+     * Uses aliases to display data values as well.<br>
+     * Uses item's display name in italic font if available.<br>
+     * <br>
+     * NOTE: Will have a RESET color at the end, use {@link #printItem(ItemStack, ChatColor)} to use a diferent end-color instead.
+     * 
+     * @param item
+     *            the item to print, can be null
+     * @return user-friendly item print
+     */
+    public static String printItem(ItemStack item)
+    {
+        return printItem(item, ChatColor.RESET);
+    }
+    
+    /**
+     * Displays the itemstack in a user-friendly and colorful manner.<br>
+     * If item is null or air it will print "nothing" in gray.<br>
+     * If item is enchanted it will have aqua color instead of white.<br>
+     * Uses aliases to display data values as well.<br>
+     * Uses item's display name in italic font if available.
+     * 
+     * @param item
+     *            the item to print, can be null
+     * @param endColor
+     *            will be appended at the end of string, should be your text color
+     * @return user-friendly item print
+     */
+    public static String printItem(ItemStack item, ChatColor endColor)
     {
         if(item == null || item.getTypeId() == 0)
-            return "(nothing)";
+            return ChatColor.GRAY + "(nothing)";
         
         String name = null;
         String itemData = null;
@@ -155,7 +203,9 @@ public class Tools
             name = RecipeManager.getSettings().printName.get(item.getType());
             
             if(name == null)
+            {
                 name = parseAliasPrint(item.getType().toString());
+            }
         }
         
         Map<Short, String> dataMap = RecipeManager.getSettings().printData.get(item.getType());
@@ -165,16 +215,80 @@ public class Tools
             itemData = dataMap.get(item.getDurability());
             
             if(itemData != null)
+            {
                 itemData = itemData + " " + name;
+            }
         }
         
         if(itemData == null)
-            itemData = name + (item.getDurability() > 0 ? ":" + item.getDurability() : "");
+        {
+            short data = item.getDurability();
+            
+            if(data != 0)
+            {
+                short maxDur = item.getType().getMaxDurability();
+                
+                if(maxDur > 0)
+                {
+                    StringBuilder s = new StringBuilder(name).append(' ');
+                    s.append(ChatColor.DARK_GRAY).append('[');
+                    
+                    int scale = Math.max(((maxDur - data) * 10) / maxDur, 0); // damage scale from 1 to 10
+                    
+                    switch(scale)
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+                            s.append(ChatColor.RED);
+                            break;
+                        case 3:
+                        case 4:
+                            s.append(ChatColor.GOLD);
+                            break;
+                        case 5:
+                            s.append(ChatColor.DARK_GREEN);
+                            break;
+                        default:
+                            s.append(ChatColor.GREEN);
+                    }
+                    
+                    for(int i = 0; i <= 10; i++)
+                    {
+                        s.append('.');
+                        
+                        if(i == scale)
+                            s.append(ChatColor.DARK_GRAY);
+                    }
+                    
+                    s.append(']');
+                    
+                    itemData = s.toString();
+                }
+                else if(data == Vanilla.DATA_WILDCARD)
+                {
+                    itemData = name + ChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
+                }
+                else
+                {
+                    itemData = name + ChatColor.GRAY + ":" + data;
+                }
+            }
+            else
+            {
+                itemData = name;
+            }
+        }
         
         String amount = (item.getAmount() > 1 ? item.getAmount() + "x " : "");
         ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE);
         
-        return amount + color + itemData;
+        return amount + color + itemData + ChatColor.RESET;
+    }
+    
+    public static String printNumber(Number number)
+    {
+        return NumberFormat.getNumberInstance().format(number);
     }
     
     public static String replaceVariables(String msg, String... variables)
@@ -182,7 +296,9 @@ public class Tools
         if(variables != null && variables.length > 0)
         {
             if(variables.length % 2 > 0)
+            {
                 throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
+            }
             
             for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
             {
@@ -734,12 +850,12 @@ public class Tools
         return build.build();
     }
     
-    public static String convertListToString(List<?> list)
+    public static String listToString(List<?> list)
     {
-        return convertListToString(list, ", ", "");
+        return listToString(list, ", ", "");
     }
     
-    public static String convertListToString(List<?> list, String separator, String prefix)
+    public static String listToString(List<?> list, String separator, String prefix)
     {
         if(list.isEmpty())
             return "";
@@ -759,17 +875,12 @@ public class Tools
         return str.toString();
     }
     
-    public static ItemResult generateItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
+    public static ItemResult createItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
     {
-        return generateItemStackWithMeta(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
+        return createItemStackWithMeta(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
     }
     
-    public static String printNumber(Number number)
-    {
-        return NumberFormat.getNumberInstance().format(number);
-    }
-    
-    public static ItemResult generateItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
+    public static ItemResult createItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
     {
         ItemResult item = new ItemResult(type, amount, (short)data, 100);
         ItemMeta meta = item.getItemMeta();
@@ -818,7 +929,7 @@ public class Tools
     /**
      * For use in furnace smelting and fuel recipes hashmap
      */
-    public static String convertItemToStringID(ItemStack item)
+    public static String convertItemToStringId(ItemStack item)
     {
         return item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());
     }
@@ -826,14 +937,16 @@ public class Tools
     /**
      * For use in shaped/shapeless recipe's result
      */
-    public static ItemStack generateRecipeIdResult(ItemStack result, int id)
+    public static ItemStack createItemRecipeId(ItemStack result, int id)
     {
         result = result.clone();
         ItemMeta meta = result.getItemMeta();
         List<String> lore = meta.getLore();
         
         if(lore == null)
+        {
             lore = new ArrayList<String>();
+        }
         
         lore.add(Recipes.RECIPE_ID_STRING + id);
         meta.setLore(lore);
@@ -842,28 +955,39 @@ public class Tools
         return result;
     }
     
-    public static int getRecipeIdFromResult(ItemStack result)
+    public static int getRecipeIdFromItem(ItemStack result)
     {
-        List<String> desc = result.getItemMeta().getLore();
-        
-        if(desc == null)
-            return -1;
-        
-        String id = desc.get(desc.size() - 1);
-        int index = -1;
-        
-        if(id.startsWith(Recipes.RECIPE_ID_STRING))
+        if(!result.hasItemMeta())
         {
-            try
+            return -1;
+        }
+        
+        List<String> lore = result.getItemMeta().getLore();
+        
+        if(lore == null || lore.isEmpty())
+        {
+            return -1;
+        }
+        
+        for(int i = 0; i < lore.size(); i++)
+        {
+            String s = lore.get(i);
+            
+            if(s.startsWith(Recipes.RECIPE_ID_STRING))
             {
-                index = Integer.valueOf(id.substring(Recipes.RECIPE_ID_STRING.length()));
-            }
-            catch(Exception e)
-            {
+                try
+                {
+                    return Integer.valueOf(s.substring(Recipes.RECIPE_ID_STRING.length()));
+                }
+                catch(Exception e)
+                {
+                    Messages.debug("Invalid recipe identifier found: " + s);
+                    break;
+                }
             }
         }
         
-        return index;
+        return -1;
     }
     
     /* TODO not really needed, remove ?

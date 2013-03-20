@@ -12,8 +12,6 @@ public class FlagIngredientCondition extends Flag
         type = FlagType.INGREDIENTCONDITION;
     }
     
-    // TODO maybe this or better yet try ranged data values ?
-    
     @Override
     protected boolean onParse(String value)
     {
@@ -27,16 +25,18 @@ public class FlagIngredientCondition extends Flag
         
         if(inv instanceof CraftingInventory)
         {
-            CraftingInventory cInv = (CraftingInventory)inv;
+            CraftingInventory craftInv = (CraftingInventory)inv;
             
-            ItemStack[] matrix = cInv.getMatrix();
-            
+            for(ItemStack i : craftInv)
+            {
+                
+            }
         }
         else if(inv instanceof FurnaceInventory)
         {
             
         }
         
-//      a.addReason(globalMessage, customMessage, variables)
+//      a.addReason(globalMessage, customMessage, variables) // < TODO
     }
 }

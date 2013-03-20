@@ -1,12 +1,10 @@
 package ro.thehunters.digi.recipeManager.apievents;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 /**
@@ -17,22 +15,21 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
  * 
  * @author Digi
  */
-public class RMCraftEvent extends Event implements Cancellable
+public class RMCraftEventPost extends Event
 {
     private static final HandlerList handlers   = new HandlerList();
     
-    private boolean                  cancelled  = false;
     private boolean                  shiftClick = false;
     private boolean                  rightClick = false;
-    private ItemResult               result;
+    private ItemStack                result;
     private ItemStack                cursor;
     private WorkbenchRecipe          recipe;
     private Player                   player;
     
-    public RMCraftEvent(WorkbenchRecipe recipe, ItemResult result, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
+    public RMCraftEventPost(WorkbenchRecipe recipe, ItemStack item, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
     {
         this.recipe = recipe;
-        this.result = result;
+        this.result = item;
         this.player = player;
         this.cursor = cursor;
         this.shiftClick = shiftClick;
@@ -48,18 +45,6 @@ public class RMCraftEvent extends Event implements Cancellable
     public static HandlerList getHandlerList()
     {
         return handlers;
-    }
-    
-    @Override
-    public boolean isCancelled()
-    {
-        return cancelled;
-    }
-    
-    @Override
-    public void setCancelled(boolean cancelled)
-    {
-        this.cancelled = cancelled;
     }
     
     /**
@@ -81,21 +66,9 @@ public class RMCraftEvent extends Event implements Cancellable
     /**
      * @return result item or AIR if chance of failure occured
      */
-    public ItemResult getResult()
+    public ItemStack getResult()
     {
         return result;
-    }
-    
-    /**
-     * Sets the result to the specified item.<br>
-     * Set to AIR or NULL to force the recipe to fail.
-     * 
-     * @param result
-     *            the new result or null
-     */
-    public void setResult(ItemStack result)
-    {
-        this.result = (result == null ? null : (result instanceof ItemResult ? (ItemResult)result : new ItemResult(result)));
     }
     
     /**

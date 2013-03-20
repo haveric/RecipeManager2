@@ -1,6 +1,6 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -12,7 +12,7 @@ import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
 public class Flags implements Cloneable
 {
-    private Map<FlagType, Flag> flags = new HashMap<FlagType, Flag>();
+    private Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
     protected Flaggable         flaggable;
     
     public Flags()
@@ -27,6 +27,19 @@ public class Flags implements Cloneable
     public boolean hasFlag(Class<? extends Flag> flagClass)
     {
         return flags.containsKey(flagClass);
+    }
+    
+    public boolean hasNoShiftBit()
+    {
+        for(FlagType t : flags.keySet())
+        {
+            if(t.hasBit(Bit.NO_SHIFT))
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     /**
@@ -80,7 +93,7 @@ public class Flags implements Cloneable
     
     /**
      * Attempts to add a flag to this flag list.<br>
-     * Throws an error in the console if flag is not compatible with recipe/result
+     * Adds an error to the {@link RecipeErrorReporter} class if flag is not compatible with recipe/result.
      * 
      * @param flag
      */
@@ -98,7 +111,7 @@ public class Flags implements Cloneable
      * This is used by RecipeManager's file processor.
      * 
      * @param string
-     *            must not be null and should contain a flag expression like the ones in recipe files
+     *            flag expression string like the ones in recipe files
      */
     public void parseFlag(String string)
     {
@@ -135,7 +148,9 @@ public class Flags implements Cloneable
         
         // make sure the flag can be added to this flag list
         if(!flag.validateParse(value))
+        {
             return;
+        }
         
         // check if parsed flag had valid values and needs to be added to flag list
         if(flag.onParse(value) && !flag.getType().hasBit(Bit.NO_STORE))

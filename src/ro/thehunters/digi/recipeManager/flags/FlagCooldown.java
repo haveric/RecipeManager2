@@ -164,7 +164,7 @@ public class FlagCooldown extends Flag
     {
         if(!checkTime(a.playerName()))
         {
-            a.addReason(Messages.CRAFT_FLAG_COOLDOWN_FAIL, getFailMessage(), "{time}", getCooldownStringFor(a.playerName()));
+            a.addReason(Messages.FLAG_COOLDOWN_FAIL, getFailMessage(), "{time}", getCooldownStringFor(a.playerName()));
         }
     }
     
@@ -187,7 +187,7 @@ public class FlagCooldown extends Flag
             get.value = time;
         }
         
-        a.addEffect(Messages.CRAFT_FLAG_COOLDOWN_CRAFT, getCraftMessage(), "{time}", diffTimeToString(time));
+        a.addEffect(Messages.FLAG_COOLDOWN_CRAFT, getCraftMessage(), "{time}", diffTimeToString(time));
         
         return true;
     }

@@ -164,7 +164,9 @@ public class Args
     public void addCustomReason(String message)
     {
         if(reasons == null)
+        {
             reasons = new ArrayList<String>();
+        }
         
         reasons.add(message);
     }
@@ -177,7 +179,9 @@ public class Args
     public void clearReasons()
     {
         if(reasons != null)
+        {
             reasons.clear();
+        }
     }
     
     public void sendReasons(CommandSender sender, Messages prefix)
@@ -198,7 +202,9 @@ public class Args
     public void addCustomEffect(String message)
     {
         if(effects == null)
+        {
             effects = new ArrayList<String>();
+        }
         
         effects.add(message);
     }
@@ -211,7 +217,9 @@ public class Args
     public void clearEffects()
     {
         if(effects != null)
+        {
             effects.clear();
+        }
     }
     
     public void sendEffects(CommandSender sender, Messages prefix)
@@ -228,7 +236,9 @@ public class Args
     private void sendList(CommandSender sender, Messages prefix, List<String> list)
     {
         if(sender == null || list == null)
+        {
             return;
+        }
         
         for(String s : list)
         {
@@ -237,28 +247,6 @@ public class Args
                 Messages.send(sender, prefix.get() + s);
             }
         }
-        
-        /*
-        StringBuilder str = new StringBuilder();
-        
-        str.append(ChatColor.YELLOW).append(title).append(ChatColor.RESET);
-        boolean comma = false;
-        
-        for(int i = 0; i < list.size(); i++)
-        {
-            if(list.get(i) != null)
-            {
-                if(comma)
-                    str.append(", ");
-                else
-                    comma = true;
-                
-                str.append(list.get(i));
-            }
-        }
-        
-        Messages.send(sender, str.toString());
-        */
     }
     
     public String parseVariables(String string)
@@ -267,7 +255,7 @@ public class Args
         
         string = string.replace("{player}", name);
         string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
-        string = string.replace("{result}", Tools.printItemStack(result()));
+        string = string.replace("{result}", Tools.printItem(result()));
         string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(no recipe)"));
         string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(no recipe)"));
         string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(no inventory)"));

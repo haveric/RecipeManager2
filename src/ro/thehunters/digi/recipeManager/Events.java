@@ -3,7 +3,6 @@ package ro.thehunters.digi.recipeManager;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,7 +14,6 @@ import org.bukkit.block.Furnace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -43,12 +41,14 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import ro.thehunters.digi.recipeManager.apievents.RecipeManagerCraftEvent;
+import ro.thehunters.digi.recipeManager.apievents.RMCraftEvent;
+import ro.thehunters.digi.recipeManager.apievents.RMCraftEventPost;
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
@@ -64,14 +64,6 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
  */
 public class Events implements Listener
 {
-    @Override
-    protected void finalize() throws Throwable // TODO REMOVE
-    {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + getClass().getName() + " :: finalize()");
-        
-        super.finalize();
-    }
-    
     protected Events()
     {
         // events are registered in the reload() method
@@ -93,7 +85,7 @@ public class Events implements Listener
      */
     
     @EventHandler(priority = EventPriority.LOW)
-    public void eventPrepareCraft(PrepareItemCraftEvent event)
+    public void prepareCraft(PrepareItemCraftEvent event)
     {
         try
         {
@@ -142,7 +134,9 @@ public class Events implements Listener
                 return; // not a custom recipe or recipe not found, no need to move on
             }
             
-            result = prepareCraftResult(player, inv, recipe, location); // get the result from recipe
+            Args a = Args.create().player(player).inventory(inv).location(location).recipe(recipe).build();
+            
+            result = recipe.getDisplayResult(a);  // get the result from recipe
             
             // Call the RecipeManagerPrepareCraftEvent
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
@@ -152,7 +146,7 @@ public class Events implements Listener
             
             if(result != null)
             {
-                Args a = Args.create().player(player).location(location).recipe(recipe).inventory(inv).result(result).build();
+                a = Args.create().player(player).inventory(inv).location(location).recipe(recipe).result(result).build();
                 
                 if(!recipe.sendPrepare(a))
                 {
@@ -162,11 +156,11 @@ public class Events implements Listener
                 // TODO remove ?
                 if(result != null)
                 {
-                    a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE);
                 }
                 else
                 {
-                    a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
+                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE);
                 }
             }
             
@@ -174,7 +168,8 @@ public class Events implements Listener
         }
         catch(Exception e)
         {
-            event.getInventory().setResult(null);
+            if(event.getInventory() != null)
+                event.getInventory().setResult(null);
             
             CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
@@ -213,7 +208,7 @@ public class Events implements Listener
                 return true;
             }
             
-            System.out.print("[debug] Results don't match, special recipe ? " + recipeResult + " vs " + result);
+            Messages.debug("Results don't match, special recipe ? " + recipeResult + " vs " + result);
         }
         
         return false;
@@ -226,7 +221,7 @@ public class Events implements Listener
             if(player != null)
                 player.playSound((location == null ? player.getLocation() : location), Sound.NOTE_BASS, 1, 255);
             
-            inv.setResult(Tools.generateItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
+            inv.setResult(Tools.createItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
             return;
         }
         
@@ -279,98 +274,26 @@ public class Events implements Listener
         
         if(RecipeManager.getSettings().SOUNDS_REPAIR && result != null && player != null)
         {
-            player.playSound((location == null ? player.getLocation() : location), Sound.ANVIL_USE, 1, 50);
+            player.playSound(location, Sound.ANVIL_USE, 0.8f, 4.0f);
         }
         
         inv.setResult(result);
     }
     
-    private ItemResult prepareCraftResult(Player player, CraftingInventory inv, WorkbenchRecipe recipe, Location location) throws Exception
-    {
-        Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
-        ItemResult result = recipe.getDisplayResult(a);
-        
-        if(result != null)
-        {
-            if(recipe.hasFlag(FlagType.CLONEINGREDIENT))
-            {
-                // figure out if it was a single-display item to overwrite it
-                
-//                result = FlagCloneIngredient.getClonedItem(recipe.getFlag(FlagType.CLONEINGREDIENT), inventory);
-            }
-            else if(recipe.hasFlag(FlagType.GETBOOK))
-            {
-                
-            }
-        }
-        
-        /*
-        if(result != null)
-        {
-            int[] vec = (workbenchEvents ? workbench.get(player.getName()) : null);
-            
-            if(vec == null || !recipe.isUsableBlocks(player, player.getWorld(), vec[0], vec[1], vec[2], true, true) || !recipe.isUsableHeight(player, player.getWorld(), vec[1], true, true))
-            {
-                ItemStack item = null;
-                
-                Book getBook = recipe.getFlags().getGetBook();
-                
-                if(getBook != null)
-                {
-                    ItemStack bookItem = RecipeManager.recipes.books.get(getBook);
-                    
-                    if(bookItem != null)
-                    {
-                        item = bookItem.clone();
-                        item.setAmount(1);
-                    }
-                }
-                else
-                {
-                    ItemStack copy = recipe.getFlags().getClone();
-                    
-                    if(copy != null)
-                    {
-                        for(ItemStack i : inventory.getContents())
-                        {
-                            if(copy.equals(i))
-                            {
-                                item = i.clone();
-                                item.setAmount(1);
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                if(item != null)
-                    result = item;
-            }
-        }
-        */
-        
-        return result;
-    }
-    
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void eventCraftFinish(CraftItemEvent event)
+    public void craftFinish(CraftItemEvent event)
     {
         try
         {
             CraftingInventory inv = event.getInventory();
             ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
-            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
+            final Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
             Location location = Workbenches.get(player);
             
             if(result == null)
             {
                 event.setCancelled(true);
-                
-                if(RecipeManager.getSettings().SOUNDS_FAILED_CLICK && player != null)
-                {
-                    player.playSound(location, Sound.NOTE_BASS, 0.8f, 255);
-                }
-                
+                Messages.sendDenySound(player, location);
                 return;
             }
             
@@ -381,48 +304,65 @@ public class Events implements Listener
                 return;
             
             Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
-            result = Players.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
             
-            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
+            if(!recipe.checkFlags(a))
+            {
+                a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT);
+                Messages.sendDenySound(player, location);
+                event.setCancelled(true);
+                return;
+            }
+            
+            result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
+            
+            // Call the PRE event
+            RMCraftEvent callEvent = new RMCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
             Bukkit.getPluginManager().callEvent(callEvent);
             
-            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
-            
-            a.clear();
-            
-            int times = craftedResult(event, inv, player, recipe, result, a);
-            
-            Messages.debug("crafted " + times + " times = " + result);
-            
-            while(--times >= 0)
+            if(callEvent.isCancelled()) // if event was canceled by some other plugin then cancel this event
             {
-                Messages.debug("...");
+                event.setCancelled(true);
+                return;
+            }
+            
+            result = callEvent.getResult(); // get the result from the event if it was changed
+            
+            a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
+            
+            int times = craftResult(event, inv, player, recipe, result, a); // craft the result
+            
+            if(result != null)
+            {
+                a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
                 
-                Players.recipeResetResult(a.playerName());
-                
-                if(result != null)
+                while(--times >= 0)
                 {
-                    a.clear();
-                    a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
+                    Recipes.recipeResetResult(a.playerName());
                     
-                    if(!recipe.sendCrafted(a) || !result.sendCrafted(a))
+                    a.clear();
+                    
+                    if(result.sendPrepare(a))
                     {
-                        a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
-                        result = null;
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT);
                     }
-                }
-                
-                if(result != null)
-                {
-                    a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RECIPE);
                     
                     a.clear();
                     
-                    result.sendCrafted(a);
-                    a.sendEffects(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
+                    if(recipe.sendCrafted(a))
+                    {
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE);
+                    }
+                    
+                    a.clear();
+                    
+                    if(result.sendCrafted(a))
+                    {
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT);
+                    }
+                    
+                    // Call the POST event
+                    Bukkit.getPluginManager().callEvent(new RMCraftEventPost(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick()));
                 }
-                
-                // TODO call post event ?
             }
             
             new UpdateInventory(player, 2); // update inventory 2 ticks later
@@ -430,46 +370,43 @@ public class Events implements Listener
         catch(Exception e)
         {
             event.setCancelled(true);
-            
             CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
     
-    private int craftedResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemStack result, Args a)
+    private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Exception
     {
-        if(!recipe.checkFlags(a))
-        {
-            a.sendReasons(a.player(), Messages.CRAFT_FLAG_PREFIX_RESULT);
-            return 0;
-        }
-        
         if(!recipe.isMultiResult())
         {
             if(result == null || result.getTypeId() == 0)
             {
-                event.setCancelled(true);
+                event.setCurrentItem(null);
                 return 0;
             }
             
             if(event.isShiftClick())
             {
-                if(recipe.hasFlag(FlagType.NOSHIFTCLICK))
+                if(recipe.hasNoShiftBit() || result.hasNoShiftBit())
                 {
-                    Messages.CRAFT_FLAG_NOSHIFTCLICK.print(player);
-                    event.setCancelled(true);
-                    return 0;
-                }
-                
-                int craftAmount = inv.getMaxStackSize();
-                
-                for(ItemStack i : inv.getMatrix())
-                {
-                    if(i != null && i.getTypeId() != 0)
+                    Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
+                    
+                    event.setCancelled(true); // cancel regardless just to be safe
+                    
+                    if(Tools.playerCanAddItem(player, result))
                     {
-                        craftAmount = Math.min(i.getAmount(), craftAmount);
+                        player.getInventory().addItem(result);
+                        recipe.subtractIngredients(inv); // subtract from ingredients manually
+                        
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
                     }
                 }
+                
+                int craftAmount = recipe.getCraftableTimes(inv); // Calculate how many times the recipe can be crafted
                 
                 ItemStack item = result.clone();
                 item.setAmount(result.getAmount() * craftAmount);
@@ -479,19 +416,11 @@ public class Events implements Listener
                 
                 if(crafted > 0)
                 {
-                    /* TODO REMOVE
-                    Messages.debug("craftAmount=" + craftAmount);
-                    Messages.debug("result.amount=" + result.getAmount());
-                    Messages.debug("space=" + space);
-                    Messages.debug("crafted=" + crafted);
-                    */
-                    
                     event.setCurrentItem(result);
                     return crafted;
                 }
                 else
                 {
-                    Messages.send(player, "<red>Inventory full !"); // TODO remove
                     return 0;
                 }
             }
@@ -506,7 +435,6 @@ public class Events implements Listener
                 }
                 else
                 {
-                    Messages.send(player, "<red>Cursor is full !"); // TODO remove
                     return 0;
                 }
             }
@@ -517,30 +445,25 @@ public class Events implements Listener
             
             event.setCancelled(true); // need to cancel this from the start.
             
-            // Check if result is air / recipe failed
+            // check if result is air / recipe failed
             if(result == null || result.getTypeId() == 0)
             {
-                // TODO send only once
-                Messages.send(player, "That sound was the recipe failing by chance! See 'fail chance' in the result description.");
-                
-                if(RecipeManager.getSettings().SOUNDS_FAILED && player != null)
-                {
-                    player.playSound(a.location(), Sound.NOTE_PLING, 0.8f, 10);
-                }
+                Messages.CRAFT_RECIPE_MULTI_FAILED.printOnce(player);
+                Messages.sendFailSound(player, a.location());
             }
             else
             {
                 if(event.isShiftClick())
                 {
-                    if(recipe.hasFlag(FlagType.NOSHIFTCLICK))
+                    // TODO remove ?
+                    if(!recipe.hasNoShiftBit())
                     {
-                        Messages.CRAFT_FLAG_NOSHIFTCLICK.print(player);
+                        Messages.send(player, "<red>No shift+click is not allowed !"); // TODO to Messages
                         event.setCancelled(true);
                         return 0;
                     }
                     
-                    // TODO send only once.
-                    Messages.send(player, "Shift-clicking multi-result recipes will only process it once and add the item to the inventory.");
+                    Messages.CRAFT_RECIPE_MULTI_NOSHIFTCLICK.printOnce(player);
                     
                     if(Tools.playerCanAddItem(player, result))
                     {
@@ -548,7 +471,6 @@ public class Events implements Listener
                     }
                     else
                     {
-                        Messages.send(player, "<red>Inventory is full !"); // TODO msg & trigger once
                         return 0;
                     }
                 }
@@ -563,87 +485,89 @@ public class Events implements Listener
                     }
                     else
                     {
-                        Messages.send(player, "<red>Cursor is full !"); // TODO msg
+                        Messages.CRAFT_RECIPE_MULTI_CURSORFULL.printOnce(player);
                         return 0;
                     }
                 }
             }
             
-            // Subtract from ingredients manually
-            int amt;
+            recipe.subtractIngredients(inv); // subtract from ingredients manually
             
-            for(int i = 1; i < 10; i++)
+            // update displayed result
+            // TODO need accurate reading if there is a recipe!
+            /*
+            if(inv.getResult() != null && inv.getResult().getTypeId() != 0)
             {
-                ItemStack item = inv.getItem(i);
-                
-                if(item != null)
-                {
-                    if((amt = (item.getAmount() - 1)) > 0)
-                    {
-                        item.setAmount(amt);
-                    }
-                    else
-                    {
-                        inv.clear(i);
-                    }
-                }
+                event.setCurrentItem(recipe.getDisplayResult(a));
             }
+            else
+            {
+                event.setCurrentItem(null);
+            }
+            */
         }
         
         return 1;
     }
     
-    private class UpdateInventory extends BukkitRunnable
-    {
-        private final Player player;
-        
-        public UpdateInventory(Player player, int ticks)
-        {
-            this.player = player;
-            
-            if(ticks <= 0)
-                run();
-            else
-                runTaskLater(RecipeManager.getPlugin(), ticks);
-        }
-        
-        @SuppressWarnings("deprecation")
-        @Override
-        public void run()
-        {
-            player.updateInventory();
-        }
-    }
-    
     /*
-     * Workbenche monitor events
+     *  Workbenche monitor events
      */
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void eventInventoryClose(InventoryCloseEvent event)
+    public void inventoryClose(InventoryCloseEvent event)
     {
+        HumanEntity human = event.getPlayer();
+        
         if(event.getView().getType() == InventoryType.WORKBENCH)
         {
-            Player player = (Player)event.getView().getPlayer();
-            Workbenches.remove(player);
+            Workbenches.remove(human);
+        }
+        
+        for(ItemStack item : human.getInventory().getContents())
+        {
+            itemProcess(item);
         }
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventPlayerIntereact(PlayerInteractEvent event)
+    public void playerIntereact(PlayerInteractEvent event)
     {
         switch(event.getAction())
         {
             case RIGHT_CLICK_BLOCK:
             {
-                Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
+                Player player = event.getPlayer();
+                Block block = event.getClickedBlock();
                 
-                return;
+                switch(block.getType())
+                {
+                    case WORKBENCH:
+                    case FURNACE:
+                    case BURNING_FURNACE:
+                    case BREWING_STAND:
+                    case ENCHANTMENT_TABLE:
+                    case ANVIL:
+                    {
+                        if(!RecipeManager.getPlugin().canCraft(player))
+                        {
+                            event.setCancelled(true);
+                            return;
+                        }
+                        
+                        if(block.getType() == Material.WORKBENCH)
+                            Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
+                        
+                        break;
+                    }
+                }
+                
+                break;
             }
             
             case PHYSICAL:
-                return;
-                
+                break;
+            
             default:
             {
                 Workbenches.remove(event.getPlayer());
@@ -652,27 +576,34 @@ public class Events implements Listener
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventPlayerTeleport(PlayerTeleportEvent event)
+    public void playerTeleport(PlayerTeleportEvent event)
     {
         Workbenches.remove(event.getPlayer());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void eventPlayerDeath(PlayerDeathEvent event)
+    public void playerDeath(PlayerDeathEvent event)
     {
         Workbenches.remove(event.getEntity());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void eventPlayerQuit(PlayerQuitEvent event)
+    public void playerQuit(PlayerQuitEvent event)
     {
-        Workbenches.remove(event.getPlayer());
+        playerDisconnect(event.getPlayer());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void eventPlayerKick(PlayerKickEvent event)
+    public void playerKick(PlayerKickEvent event)
     {
-        Workbenches.remove(event.getPlayer());
+        playerDisconnect(event.getPlayer());
+    }
+    
+    private void playerDisconnect(Player player)
+    {
+        Workbenches.remove(player);
+        Recipes.recipeResetResult(player.getName());
+        Messages.clearPlayer(player.getName());
     }
     
     /*
@@ -680,9 +611,8 @@ public class Events implements Listener
      */
     
     @EventHandler
-    public void eventInventoryClick(InventoryClickEvent event)
+    public void inventoryClick(InventoryClickEvent event)
     {
-        /*
         try
         {
             Inventory inv = event.getInventory();
@@ -692,7 +622,14 @@ public class Events implements Listener
                 InventoryHolder holder = inv.getHolder();
                 
                 if(holder != null && holder instanceof Furnace)
-                    eventFurnaceClick(event, inv, (Furnace)holder);
+                {
+                    HumanEntity ent = event.getWhoClicked();
+                    
+                    if(ent == null || ent instanceof Player == false)
+                        return;
+                    
+                    furnaceClick(event, (Furnace)holder, (Player)ent);
+                }
                 
                 return;
             }
@@ -703,52 +640,42 @@ public class Events implements Listener
             CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player)event.getWhoClicked() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
-        */
     }
     
-    private void eventFurnaceClick(InventoryClickEvent event, Inventory inv, Furnace furnace) throws Exception
+    private void furnaceClick(InventoryClickEvent event, Furnace furnace, Player player) throws Exception
     {
-        HumanEntity ent = event.getWhoClicked();
-        
-        if(ent == null || ent instanceof Player == false)
+        if(!RecipeManager.getPlugin().canCraft(player))
+        {
+            event.setCancelled(true);
             return;
+        }
         
-        Player player = (Player)ent;
+        if(event.getRawSlot() == -1)
+        {
+            return;
+        }
         
+        FurnaceInventory inv = furnace.getInventory();
         ItemStack cursor = event.getCursor();
         ItemStack clicked = event.getCurrentItem();
+        int slot = event.getRawSlot();
         
-        boolean shift = event.isShiftClick();
-        boolean right = event.isRightClick();
-        
-        switch(event.getRawSlot())
+        switch(slot)
         {
             case 0: // INGREDIENT slot
-            {
-                Messages.info(ChatColor.GREEN + "ingredient :: " + cursor.isSimilar(clicked) + " | cursor=" + cursor + " | clicked=" + clicked);
-                
-                if(!furnaceCheckItems(event, furnace, player, cursor, furnace.getInventory().getFuel()))
-                {
-                    Messages.debug("CANCELLED!");
-                    event.setCancelled(true);
-                    event.setResult(Result.DENY);
-                    player.updateInventory();
-                    return;
-                }
-                
-                return;
-            }
-            
             case 1: // FUEL slot
             {
-                Messages.info(ChatColor.GREEN + "fuel :: " + cursor.isSimilar(clicked) + " | cursor=" + cursor + " | clicked=" + clicked);
+                // TODO middle click detection required
+                if(event.isShiftClick() /* || event.isMiddleClick() */)
+                {
+                    cursor = null; // if you're shift+clicking or using middle click on the slot then you're not placing anything
+                }
                 
-                if(!furnaceCheckItems(event, furnace, player, furnace.getInventory().getSmelting(), cursor))
+                if(!furnaceModifySlot(event, furnace, inv, player, slot, cursor))
                 {
                     Messages.debug("CANCELLED!");
                     event.setCancelled(true);
-                    event.setResult(Result.DENY);
-                    player.updateInventory();
+                    new UpdateInventory(player, 0);
                     return;
                 }
                 
@@ -757,333 +684,159 @@ public class Events implements Listener
             
             case 2: // RESULT slot
             {
-                Messages.info(ChatColor.GREEN + "result :: " + cursor.isSimilar(clicked) + " | cursor=" + cursor + " | clicked=" + clicked);
-                
                 return;
             }
             
             default: // player inventory - Shift+Click handling in player inventory while having furnace UI opened
             {
-                if(!event.isShiftClick() || clicked == null || clicked.getTypeId() == 0) // not shiftclick or clicked empty slot
-                    return;
+                if(slot == -999 || !event.isShiftClick() || clicked == null || clicked.getTypeId() == 0)
+                {
+                    return; // abort if clicked outside of inventory OR not shift+click OR clicked on empty slot
+                }
                 
-                Messages.info(ChatColor.GREEN + "shift+inv :: " + cursor.isSimilar(clicked) + " | cursor=" + cursor + " | clicked=" + clicked);
+                // Get the target slot for the shift+click
+                // First checks if the setting is for normal shift+click mode
+                // Then checks if the clicked item is a fuel recipe and sends it to fuel slot if so, otherwise to ingredient slot
+                // If it's left/right click mode then see if it's right click and send to fuel slot otherwise to ingredient slot
+                int targetSlot = ((RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' ? RecipeManager.getRecipes().getFuelRecipe(clicked) != null : event.isRightClick()) ? 1 : 0);
+                ItemStack item = inv.getItem(targetSlot); // Get the item at the target slot
+                boolean similarItems = clicked.isSimilar(item); // Check if the clicked item is similar to the item at the targeted slot
                 
-                int targetSlot = ((RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' ? RecipeManager.recipes.getFuelRecipe(clicked) != null : event.isRightClick()) ? 1 : 0);
-                ItemStack item = inv.getItem(targetSlot);
-                boolean similarItems = clicked.isSimilar(item);
-                
+                // Check if it's normal shift+click mode setting and if targeted slot is the fuel slot and there is an item there but it's not similar to our clicked item
                 if(RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' && targetSlot == 1 && item != null && !similarItems)
                 {
-                    targetSlot = 0;
-                    item = inv.getItem(targetSlot);
-                    similarItems = clicked.isSimilar(item);
+                    targetSlot = 0; // change the target slot to ingredient slot
+                    item = inv.getItem(targetSlot); // get the item at the new set slot
+                    similarItems = clicked.isSimilar(item); // update similarity check
                 }
                 
-                if(item == null || item.getTypeId() == 0) // nothing in slot, place entire clicked stack
+                if(item == null || item.getTypeId() == 0) // If targeted item slot is empty
                 {
-                    if(targetSlot == 1 ? furnaceClickFuel(event, furnace, player, clicked) : furnaceClickIngredient(event, furnace, player, clicked))
+                    // Check if item is allowed to be placed on that slot
+                    if(furnaceModifySlot(event, furnace, inv, player, targetSlot, clicked))
                     {
-                        inv.setItem(targetSlot, clicked);
-                        event.setCurrentItem(null);
-                        event.setCancelled(true);
+                        inv.setItem(targetSlot, clicked); // send the item to the slot
+                        event.setCurrentItem(null); // clear the clicked slot
+                        event.setCancelled(true); // cancel only if we're going to mess with the items
+                        new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     }
                 }
                 else
                 {
-                    int maxStack = item.getType().getMaxStackSize();
-                    int itemAmount = item.getAmount();
+                    // Otherwise the targeted slot contains some item, need to identify if we can stack over it
                     
-                    if(similarItems && itemAmount < maxStack) // ingredient has room for more in the stack and it's similar!
+                    int maxStack = Math.max(inv.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
+                    int itemAmount = item.getAmount(); // get how many items there are in the stack
+                    
+                    if(similarItems && itemAmount < maxStack) // if item has room for more and they're similar
                     {
-                        Messages.info(ChatColor.GREEN + "shift+click similar :: " + event.getCurrentItem() + " | " + itemAmount + " < " + maxStack);
+                        event.setCancelled(true); // cancel only if we're going to mess with the items
                         
-                        int amount = itemAmount + clicked.getAmount();
-                        int diff = amount - maxStack;
+                        int amount = itemAmount + clicked.getAmount(); // add the stacks together
+                        int diff = amount - maxStack; // check to see if there are any leftovers
                         
-                        item.setAmount(Math.min(amount, maxStack));
+                        item.setAmount(Math.min(amount, maxStack)); // set the amount of targeted slot to the added amount OR max stack if it's exceeded
                         
                         if(diff > 0)
-                            clicked.setAmount(diff);
+                        {
+                            clicked.setAmount(diff); // reduce stack amount from clicked stack if there are leftovers
+                        }
                         else
-                            event.setCurrentItem(null);
+                        {
+                            event.setCurrentItem(null); // entirely remove the clicked stack if there are no leftovers
+                        }
                         
-                        event.setCancelled(true);
-                        player.updateInventory();
+                        new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     }
                 }
             }
         }
-        
-        /*
-        Player player = (Player)event.getWhoClicked();
-        
-        Messages.info(ChatColor.GREEN + "furnaceClickEvent :: cursor=" + event.getCursor() + " | clicked=" + event.getCurrentItem());
-        
-        switch(event.getRawSlot())
-        {
-            case 0: // INGREDIENT slot
-            {
-                furnaceClickIngredient(event, furnace, player, event.getCursor());
-                return;
-            }
-            
-            case 1: // FUEL slot
-            {
-                furnaceClickFuel(event, furnace, player, event.getCursor());
-                return;
-            }
-            
-            case 2:
-                return; // Result slot
-                
-            default: // player inventory - Shift+Click handling in player inventory while having furnace UI opened
-            {
-                if(!event.isShiftClick())
-                    return;
-                
-                ItemStack clicked = event.getCurrentItem();
-                
-                if(clicked == null || clicked.getTypeId() == 0) // clicked empty slot
-                    return;
-                
-                int slot = ((RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' ? RecipeManager.recipes.getFuelRecipe(clicked) != null : event.isRightClick()) ? 1 : 0);
-                ItemStack item = inv.getItem(slot);
-                boolean itemsAlike = (item != null && item.getTypeId() == clicked.getTypeId() && item.getDurability() == clicked.getDurability());
-                
-                if(RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' && slot == 1 && item != null && !itemsAlike)
-                {
-                    slot = 0;
-                    item = inv.getItem(slot);
-                    itemsAlike = (item != null && item.getTypeId() == clicked.getTypeId() && item.getDurability() == clicked.getDurability());
-                }
-                
-                if(item == null || item.getTypeId() == 0) // nothing in slot, place entire clicked stack
-                {
-                    if(slot == 1 ? furnaceClickFuel(event, furnace, player, clicked) : furnaceClickIngredient(event, furnace, player, clicked))
-                    {
-                        inv.setItem(slot, clicked);
-                        event.setCurrentItem(null);
-                        event.setCancelled(true);
-                    }
-                }
-                else
-                {
-                    int itemStack = item.getType().getMaxStackSize();
-                    int itemAmount = item.getAmount();
-                    
-                    if(itemsAlike && itemAmount < itemStack) // ingredient has room for more in the stack and it's the same type and data
-                    {
-                        int amount = itemAmount + clicked.getAmount();
-                        int diff = amount - itemStack;
-                        
-                        item.setAmount(Math.min(amount, itemStack));
-                        
-                        if(diff > 0)
-                            clicked.setAmount(diff);
-                        else
-                            event.setCurrentItem(null);
-                        
-                        event.setCancelled(true);
-                    }
-                }
-            }
-        }
-        */
     }
     
-    private boolean furnaceCheckItems(InventoryClickEvent event, Furnace furnace, Player player, ItemStack ingredient, ItemStack fuel) throws Exception
+    private boolean furnaceModifySlot(InventoryClickEvent event, Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Exception
     {
-        Messages.debug("ingredient=" + ingredient + " | fuel=" + fuel + " | " + event.isLeftClick() + " | " + event.isRightClick() + " | " + event.isShiftClick());
+        // TODO NOTE: Don't rely on AMOUNTS until the event is updated!
         
-        if(!RecipeManager.getPlugin().canCraft(player)) // player not allowed to craft
-        {
-            event.setCancelled(true);
-            event.setResult(Result.DENY);
-            return false;
-        }
-        
-        SmeltRecipe smeltRecipe = RecipeManager.recipes.getSmeltRecipe(ingredient);
-        
-        if(smeltRecipe != null && smeltRecipe.hasFuel())
-        {
-            Messages.debug("REQ FUEL = " + Tools.printItemStack(smeltRecipe.getFuel()));
-            Messages.debug("PLACED FUEL = " + Tools.printItemStack(fuel));
-            
-            if(fuel == null || fuel.getTypeId() == 0)
-                return true;
-            
-            if(!smeltRecipe.getFuel().isSimilar(fuel))
-            {
-                return false;
-            }
-            
-            return true;
-        }
+        ItemStack ingredient = Tools.nullItemIfAir(slot == 0 ? item : inv.getSmelting());
+        ItemStack fuel = Tools.nullItemIfAir(slot == 1 ? item : inv.getFuel());
         
         /*
-        FuelRecipe fuelRecpe = RecipeManager.recipes.getFuelRecipe(fuel);
+        if(slot == 0)
+            Messages.debug("<green>Placed ingredient: " + Tools.printItem(ingredient));
+        
+        if(slot == 1)
+            Messages.debug("<green>Placed fuel: " + Tools.printItem(fuel));
+        */
+        
+        SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
         Location location = furnace.getLocation();
+        
+        if(smeltRecipe == null && fuel != null)
+        {
+            smeltRecipe = RecipeManager.getRecipes().getSmeltRecipeWithFuel(fuel);
+        }
         
         if(smeltRecipe != null)
         {
-            Arguments a = new Arguments(player, null, location, RecipeType.SMELT, null);
+//            Messages.debug("INGR = " + Tools.printItem(smeltRecipe.getIngredient()) + " | " + Tools.printItem(ingredient) + " | " + Tools.itemSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient));
+//            Messages.debug("FUEL = " + Tools.printItem(smeltRecipe.getFuel()) + " | " + Tools.printItem(fuel) + " | " + Tools.itemSimilarDataWildcard(smeltRecipe.getFuel(), fuel));
             
-            if(!smeltRecipe.checkFlags(a))
+            if(smeltRecipe.hasFuel() && fuel != null && ingredient != null)
             {
-                a.sendReasons(player);
-                event.setCancelled(true);
-                event.setResult(Result.DENY);
+                if(!Tools.itemSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient))
+                {
+                    Messages.SMELT_FUEL_NEEDINGREDIENT.print(player, null, "{ingredient}", Tools.printItem(smeltRecipe.getIngredient()), "{fuel}", Tools.printItem(smeltRecipe.getFuel()));
+                    return false;
+                }
+                
+                if(!Tools.itemSimilarDataWildcard(smeltRecipe.getFuel(), fuel))
+                {
+                    Messages.SMELT_FUEL_NEEDFUEL.print(player, null, "{ingredient}", Tools.printItem(smeltRecipe.getIngredient()), "{fuel}", Tools.printItem(smeltRecipe.getFuel()));
+                    return false;
+                }
+            }
+            
+            Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
+            
+            if(smeltRecipe.checkFlags(a))
+            {
+                a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE);
+                a.clear();
+                smeltRecipe.sendPrepare(a);
+                return true;
+            }
+            else
+            {
+                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE);
                 return false;
             }
         }
-        */
+        
+        FuelRecipe fuelRecpe = RecipeManager.getRecipes().getFuelRecipe(fuel);
+        
+        if(fuelRecpe != null)
+        {
+            Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
+            
+            if(fuelRecpe.checkFlags(a))
+            {
+                a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE);
+                a.clear();
+                fuelRecpe.sendPrepare(a);
+                return true;
+            }
+            else
+            {
+                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE);
+                return false;
+            }
+        }
         
         return true;
     }
     
-    private boolean furnaceClickIngredient(InventoryClickEvent event, Furnace furnace, Player player, ItemStack placed) throws Exception
-    {
-        if(!RecipeManager.getPlugin().canCraft(player)) // player not allowed to craft
-        {
-            event.setCancelled(true);
-            event.setResult(Result.DENY);
-            return false;
-        }
-        
-        SmeltRecipe recipe = RecipeManager.recipes.getSmeltRecipe(placed);
-        Location location = furnace.getLocation();
-        
-        Messages.info(ChatColor.GREEN + "placed ingredient = " + placed + " | clicked=" + event.getCurrentItem());
-        
-        if(recipe != null)
-        {
-            Args a = Args.create().player(player).location(location).recipe(recipe).inventory(furnace.getInventory()).build();
-//            Args a = new Args(player, null, location, RecipeType.SMELT, null);
-            
-            if(!recipe.checkFlags(a))
-            {
-                a.sendReasons(player, Messages.CRAFT_FLAG_PREFIX_RECIPE);
-                event.setCancelled(true);
-                event.setResult(Result.DENY);
-                return false;
-            }
-        }
-        
-        /*
-        ItemStack clicked = event.getCurrentItem();
-        
-        if(clicked != null && clicked.getTypeId() > 0)
-        {
-            ItemMeta meta = clicked.getItemMeta();
-            
-            if(meta != null)
-            {
-                List<String> lore = meta.getLore();
-                
-                if(lore != null)
-                {
-                    lore.clear(); // TODO remove specific line!
-                    meta.setLore(lore);
-                    clicked.setItemMeta(meta);
-                }
-            }
-        }
-        
-        if(cursor != null)
-        {
-            ItemMeta meta = cursor.getItemMeta();
-            
-            if(meta != null)
-            {
-                List<String> lore = meta.getLore();
-                
-                if(lore == null)
-                    lore = new ArrayList<String>();
-                
-                lore.add(Recipes.FURNACE_OWNER_STRING + player.getName());
-                
-                meta.setLore(lore);
-                cursor.setItemMeta(meta);
-            }
-        }
-        
-        /*
-        if(recipe != null && (!recipe.isUsableBy(player, true) || !recipe.isUsableProximity(player, location, true) || !recipe.isUsableBlocks(player, location, false, true) || !recipe.isUsableHeight(player, location, false, true)))
-        {
-            event.setCancelled(true);
-            event.setResult(Result.DENY);
-            return false;
-        }
-        
-        furnaceNotified.remove(player.getName());
-        furnaceStop.remove(Recipes.locationToString(furnace.getLocation()));
-        
-        if(recipe != null)
-        {
-            if(recipe.getFlags().getProximity() != null)
-            {
-                if(recipe.getFlags().getProximity().getValue() > 0)
-                {
-                    Messages.CRAFT_WARNDISTANCE.print(player, recipe.getFlags().getProximity().getSuccessMessage(), new String[][] { { "{distance}", "" + recipe.getFlags().getProximity().getValue() } });
-                }
-                else
-                    Messages.CRAFT_WARNONLINE.print(player, recipe.getFlags().getProximity().getSuccessMessage());
-            }
-            
-            RecipeManager.recipes.getFurnaceData(furnace.getLocation(), true).setSmelter(player.getName()).setSmeltItem(recipe.getIngredient());
-        }
-        */
-        
-        return true; // custom recipe or not, no reason to restrict
-    }
-    
-    private boolean furnaceClickFuel(InventoryClickEvent event, Furnace furnace, Player player, ItemStack placed) throws Exception
-    {
-        if(!RecipeManager.getPlugin().canCraft(player)) // player not allowed to craft
-        {
-            event.setCancelled(true);
-            event.setResult(Result.DENY);
-            return false;
-        }
-        
-        FuelRecipe recipe = RecipeManager.recipes.getFuelRecipe(placed);
-        Location location = furnace.getLocation();
-        
-        Messages.info(ChatColor.GREEN + "placed fuel = " + placed + " | clicked=" + event.getCurrentItem());
-        
-        /*
-        if(recipe != null && (!recipe.isUsableBy(player, true) || !recipe.isUsableProximity(player, location, true) || !recipe.isUsableBlocks(player, location, false, true) || !recipe.isUsableHeight(player, location, false, true)))
-        {
-            event.setCancelled(true);
-            event.setResult(Result.DENY);
-            return false;
-        }
-        
-        furnaceNotified.remove(player.getName());
-        furnaceStop.remove(Recipes.locationToString(furnace.getLocation()));
-        
-        if(recipe != null)
-        {
-            if(recipe.getFlags().getProximity() != null)
-            {
-                if(recipe.getFlags().getProximity().getValue() > 0)
-                {
-                    Messages.CRAFT_WARNDISTANCE.print(player, recipe.getFlags().getProximity().getSuccessMessage(), new String[][] { { "{distance}", "" + recipe.getFlags().getProximity().getValue() } });
-                }
-                else
-                    Messages.CRAFT_WARNONLINE.print(player, recipe.getFlags().getProximity().getSuccessMessage());
-            }
-            
-            RecipeManager.recipes.getFurnaceData(furnace.getLocation(), true).setFueler(player.getName()).setFuelItem(recipe.getFuel());
-        }
-        */
-        
-        return true; // custom recipe or not, no reason to restrict
-    }
-    
     @EventHandler(priority = EventPriority.LOW)
-    public void eventFurnaceBurn(FurnaceBurnEvent event)
+    public void furnaceBurn(FurnaceBurnEvent event)
     {
         Messages.debug("BURN EVENT");
         
@@ -1153,7 +906,7 @@ public class Events implements Listener
     }
     
     @EventHandler(priority = EventPriority.LOW)
-    public void eventFurnaceSmelt(FurnaceSmeltEvent event)
+    public void furnaceSmelt(FurnaceSmeltEvent event)
     {
         try
         {
@@ -1179,7 +932,7 @@ public class Events implements Listener
     }
     
     @EventHandler(priority = EventPriority.LOW)
-    public void eventFurnaceTakeResult(FurnaceExtractEvent event)
+    public void furnaceTakeResult(FurnaceExtractEvent event)
     {
         if(event.getExpToDrop() == 0)
             return;
@@ -1221,11 +974,11 @@ public class Events implements Listener
     }
     
     /*
-     * Furnace monitor events
+     *  Furnace monitor events
      */
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventBlockPlace(BlockPlaceEvent event)
+    public void blockPlace(BlockPlaceEvent event)
     {
         Block block = event.getBlock();
         
@@ -1241,7 +994,7 @@ public class Events implements Listener
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventBlockBreak(BlockBreakEvent event)
+    public void blockBreak(BlockBreakEvent event)
     {
         Block block = event.getBlock();
         
@@ -1257,20 +1010,20 @@ public class Events implements Listener
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventWorldLoad(WorldLoadEvent event)
+    public void worldLoad(WorldLoadEvent event)
     {
         worldLoad(event.getWorld());
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventChunkLoad(ChunkLoadEvent event)
+    public void chunkLoad(ChunkLoadEvent event)
     {
         if(!event.isNewChunk())
             findFurnaces(event.getChunk(), true);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void eventChunkUnload(ChunkUnloadEvent event)
+    public void chunkUnload(ChunkUnloadEvent event)
     {
         findFurnaces(event.getChunk(), false);
     }
@@ -1311,17 +1064,8 @@ public class Events implements Listener
     }
     
     /*
-     * Marked item monitor events
+     *  Marked item monitor events
      */
-    
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void inventoryClose(InventoryCloseEvent event)
-    {
-        for(ItemStack item : event.getPlayer().getInventory().getContents())
-        {
-            itemProcess(item);
-        }
-    }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void playerItemHeld(PlayerItemHeldEvent event)
@@ -1352,10 +1096,11 @@ public class Events implements Listener
     }
     
     /*
-     * Update check notifier
+     *  Update check notifier
      */
     
-    public void eventPlayerJoin(PlayerJoinEvent event)
+    @EventHandler
+    public void playerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
         
@@ -1368,6 +1113,32 @@ public class Events implements Listener
                 Messages.send(player, "<green>New version available: " + newVersion + " ! You're using " + RecipeManager.getPlugin().getDescription().getVersion());
                 Messages.send(player, "<green>Grab it at: " + UpdateChecker.getNewLink());
             }
+        }
+    }
+    
+    /*
+     *  Update inventory inner helper class
+     */
+    
+    private class UpdateInventory extends BukkitRunnable
+    {
+        private final Player player;
+        
+        public UpdateInventory(Player player, int ticks)
+        {
+            this.player = player;
+            
+            if(ticks <= 0)
+                run();
+            else
+                runTaskLater(RecipeManager.getPlugin(), ticks);
+        }
+        
+        @SuppressWarnings("deprecation")
+        @Override
+        public void run()
+        {
+            player.updateInventory();
         }
     }
 }

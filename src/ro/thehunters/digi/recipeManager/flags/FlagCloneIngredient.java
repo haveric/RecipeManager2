@@ -3,7 +3,6 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -209,7 +208,7 @@ public class FlagCloneIngredient extends Flag
                 }
                 else
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has more ingredients of the cloned type: " + Tools.printItemStack(i), "Recipe must only have a single type of the cloned material in the ingredients!");
+                    RecipeErrorReporter.error("Flag " + type + " has more ingredients of the cloned type: " + Tools.printItem(i), "Recipe must only have a single type of the cloned material in the ingredients!");
                     return false;
                 }
             }
@@ -310,9 +309,13 @@ public class FlagCloneIngredient extends Flag
                     try
                     {
                         if(isDataArg)
+                        {
                             setDataModifier(match.group(0).charAt(0), Math.abs(Integer.valueOf(value)));
+                        }
                         else
+                        {
                             setAmountModifier(match.group(0).charAt(0), Math.abs(Integer.valueOf(value)));
+                        }
                     }
                     catch(Exception e)
                     {
@@ -335,18 +338,31 @@ public class FlagCloneIngredient extends Flag
     {
     }
     
-    public static ItemStack getClonedItem(Flag flag, CraftingInventory inventory)
+    @Override
+    protected boolean onPrepare(Args a)
     {
-        if(flag instanceof FlagCloneIngredient == false)
-            return null;
+        ItemStack result = getResult();
+        boolean cloned = cloneIngredientToResult(result, a);
         
-        FlagCloneIngredient cloneFlag = (FlagCloneIngredient)flag;
-        ItemResult result = cloneFlag.getResult();
+        Messages.debug("cloned " + cloned); // TODO remove
+        a.addCustomEffect("[debug] cloned " + cloned);
+        
+        return cloned;
+    }
+    
+    private boolean cloneIngredientToResult(ItemStack result, Args a)
+    {
+        if(result == null || a.inventory() instanceof CraftingInventory == false)
+        {
+            Messages.debug("no inventory or no result set!");
+            return false;
+        }
+        
         ItemStack ingredient = null;
         
-        Validate.notNull(result, "Flag has NULL result pointer!");
+        CraftingInventory craftInv = (CraftingInventory)a.inventory();
         
-        for(ItemStack i : inventory.getContents())
+        for(ItemStack i : craftInv.getMatrix())
         {
             if(i != null && result.getTypeId() == i.getTypeId())
             {
@@ -355,44 +371,45 @@ public class FlagCloneIngredient extends Flag
             }
         }
         
-        result = new ItemResult(result);
-        
         if(ingredient == null)
         {
             Messages.debug("Couldn't find target ingredient!");
-            return null;
+            return false;
         }
         
-        if(cloneFlag.hasCopyBit(Bit.DATA))
+        if(this.hasCopyBit(Bit.DATA))
         {
             short data = ingredient.getDurability();
-            int[] dataMod = cloneFlag.getDataModifier();
+            int[] dataMod = this.getDataModifier();
             
             if(dataMod != null)
             {
                 switch(dataMod[0])
                 {
-                    case '+':
-                        data += dataMod[1];
-                        break;
-                    
                     case '-':
                         data -= dataMod[1];
                         break;
                     
+                    // TODO remove setting data because it's redundant ?
                     case '=':
                         data = (short)dataMod[1];
+                        break;
+                    
+                    default: // default adds to data
+                        data += dataMod[1];
                         break;
                 }
             }
             
+            Messages.debug("data: " + (dataMod == null ? null : dataMod[0]) + " " + data);
+            
             result.setDurability(data);
         }
         
-        if(cloneFlag.hasCopyBit(Bit.AMOUNT))
+        if(this.hasCopyBit(Bit.AMOUNT))
         {
             int amount = ingredient.getAmount();
-            int[] amountMod = cloneFlag.getDataModifier();
+            int[] amountMod = this.getDataModifier();
             
             if(amountMod != null)
             {
@@ -415,7 +432,7 @@ public class FlagCloneIngredient extends Flag
             result.setAmount(amount);
         }
         
-        if(cloneFlag.hasCopyBit(Bit.SPECIAL))
+        if(this.hasCopyBit(Bit.SPECIAL))
         {
             ItemMeta resultMeta = result.getItemMeta();
             
@@ -432,25 +449,36 @@ public class FlagCloneIngredient extends Flag
             result.setItemMeta(ingrMeta);
         }
         
-        if(cloneFlag.hasCopyBit(Bit.ENCHANTS))
+        if(this.hasCopyBit(Bit.ENCHANTS))
         {
             result.addUnsafeEnchantments(ingredient.getEnchantments());
         }
         
-        if(cloneFlag.hasCopyBit(Bit.NAME))
+        if(this.hasCopyBit(Bit.NAME))
         {
             ItemMeta meta = result.getItemMeta();
             meta.setDisplayName(ingredient.getItemMeta().getDisplayName());
             result.setItemMeta(meta);
         }
         
-        if(cloneFlag.hasCopyBit(Bit.LORE))
+        if(this.hasCopyBit(Bit.LORE))
         {
             ItemMeta meta = result.getItemMeta();
             meta.setLore(ingredient.getItemMeta().getLore());
             result.setItemMeta(meta);
         }
         
-        return null;
+        return true;
     }
+    
+    /*
+    public static ItemStack getClonedItem(Flag flag, CraftingInventory inventory)
+    {
+        if(flag instanceof FlagCloneIngredient == false)
+            return null;
+        
+        FlagCloneIngredient cloneFlag = (FlagCloneIngredient)flag;
+        
+    }
+    */
 }

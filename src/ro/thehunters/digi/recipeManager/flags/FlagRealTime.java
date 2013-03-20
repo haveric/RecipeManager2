@@ -124,7 +124,7 @@ public class FlagRealTime extends Flag
     {
         if(!checkTime())
         {
-            a.addReason(Messages.CRAFT_FLAG_REALTIME, message, "{mindate}", getMinDate(), "{maxdate}", getMaxDate());
+            a.addReason(Messages.FLAG_REALTIME, message, "{mindate}", getMinDate(), "{maxdate}", getMaxDate());
         }
     }
 }

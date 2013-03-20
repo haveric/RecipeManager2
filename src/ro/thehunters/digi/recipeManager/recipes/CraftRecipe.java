@@ -215,7 +215,7 @@ public class CraftRecipe extends WorkbenchRecipe
     
     private ShapedRecipe toShapedRecipe()
     {
-        ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.generateRecipeIdResult(getFirstResult(), getIndex()));
+        ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
         
         switch(height)
         {

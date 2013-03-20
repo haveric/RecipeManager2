@@ -1,7 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
@@ -10,8 +12,6 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagLeatherColor extends Flag
 {
-    private Color color;
-    
     public FlagLeatherColor()
     {
         type = FlagType.LEATHERCOLOR;
@@ -20,29 +20,12 @@ public class FlagLeatherColor extends Flag
     public FlagLeatherColor(FlagLeatherColor flag)
     {
         this();
-        
-        color = Color.fromRGB(flag.color.asRGB());
     }
     
     @Override
     public FlagLeatherColor clone()
     {
         return new FlagLeatherColor(this);
-    }
-    
-    public Color getColor()
-    {
-        return color;
-    }
-    
-    public void setColor(Color color)
-    {
-        this.color = color;
-    }
-    
-    public void setColor(int red, int green, int blue)
-    {
-        setColor(Color.fromRGB(red, green, blue));
     }
     
     @Override
@@ -61,33 +44,30 @@ public class FlagLeatherColor extends Flag
     @Override
     protected boolean onParse(String value)
     {
-        color = Tools.parseColor(value);
+        Color color = Tools.parseColor(value);
         
         if(color == null)
         {
             return RecipeErrorReporter.error("Flag @" + type + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
         }
         
-        return true;
+        return applyOnItem(getResult(), color);
     }
     
-    @Override
-    protected boolean onPrepare(Args a)
+    private boolean applyOnItem(ItemStack item, Color color)
     {
-        return onCrafted(a);
-    }
-    
-    @Override
-    protected boolean onCrafted(Args a)
-    {
-        ItemStack result = a.result();
+        Validate.notNull(item);
         
-        if(result == null || result.getItemMeta() instanceof LeatherArmorMeta == false)
+        ItemMeta meta = item.getItemMeta();
+        
+        if(meta instanceof LeatherArmorMeta == false)
             return false;
         
-        LeatherArmorMeta meta = (LeatherArmorMeta)result.getItemMeta();
-        meta.setColor(color);
-        result.setItemMeta(meta);
+        LeatherArmorMeta leather = (LeatherArmorMeta)meta;
+        
+        leather.setColor(color);
+        
+        item.setItemMeta(leather);
         
         return true;
     }

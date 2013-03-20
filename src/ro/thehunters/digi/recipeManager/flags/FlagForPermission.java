@@ -1,8 +1,10 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang.Validate;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
@@ -10,7 +12,7 @@ import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
 public class FlagForPermission extends Flag
 {
-    private Map<String, Flag> flagMap = new HashMap<String, Flag>();
+    private Map<String, Map<FlagType, Flag>> flagMap = new LinkedHashMap<String, Map<FlagType, Flag>>();
     
     public FlagForPermission()
     {
@@ -21,25 +23,17 @@ public class FlagForPermission extends Flag
     {
         this();
         
-        for(Entry<String, ? extends Flag> e : flag.flagMap.entrySet())
+        for(Entry<String, Map<FlagType, Flag>> e : flag.flagMap.entrySet())
         {
-            flagMap.put(e.getKey(), e.getValue().clone(this.getFlagsContainer()));
+            Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
+            
+            for(Flag f : e.getValue().values())
+            {
+                flags.put(f.getType(), f.clone(this.getFlagsContainer()));
+            }
+            
+            flagMap.put(e.getKey(), flags);
         }
-    }
-    
-    public Map<String, Flag> getFlagMap()
-    {
-        return flagMap;
-    }
-    
-    public void setFlagMap(Map<String, Flag> map)
-    {
-        flagMap = map;
-    }
-    
-    public void addFlag(String permission, Flag flag)
-    {
-        flagMap.put(permission, flag);
     }
     
     @Override
@@ -48,8 +42,72 @@ public class FlagForPermission extends Flag
         return new FlagForPermission(this);
     }
     
+    public Map<String, Map<FlagType, Flag>> getFlagMap()
+    {
+        return flagMap;
+    }
+    
+    public Flag getFlagForPermission(String permission, FlagType type)
+    {
+        Map<FlagType, Flag> flags = flagMap.get(permission);
+        
+        if(flags != null)
+        {
+            return flags.get(type);
+        }
+        
+        return null;
+    }
+    
+    public void setFlagMap(Map<String, Map<FlagType, Flag>> map)
+    {
+        flagMap = map;
+    }
+    
+    public void setFlagsForPermission(String permission, Map<FlagType, Flag> flags)
+    {
+        flagMap.put(permission, flags);
+    }
+    
+    /**
+     * Checks if the flag can be added to this flag list.<br>
+     * 
+     * @param flag
+     * @return false if flag can only be added on specific flaggables
+     */
+    public boolean canAdd(Flag flag)
+    {
+        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_STORE);
+    }
+    
+    /**
+     * Attempts to add a flag to this flag list for the permission.<br>
+     * Adds an error to the {@link RecipeErrorReporter} class if flag is not compatible with recipe/result.
+     * 
+     * @param permission
+     * @param flag
+     */
+    public void addFlag(String permission, Flag flag)
+    {
+        Validate.notNull(flag);
+        
+        if(canAdd(flag))
+        {
+            Map<FlagType, Flag> flags = flagMap.get(permission);
+            
+            if(flags == null)
+            {
+                flags = new LinkedHashMap<FlagType, Flag>();
+                flagMap.put(permission, flags);
+            }
+            
+            flag.flagsContainer = this.getFlagsContainer();
+            flags.put(flag.getType(), flag);
+        }
+    }
+    
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.split("@");
         
@@ -73,7 +131,7 @@ public class FlagForPermission extends Flag
             return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " is a unstorable flag, can't be used with permissions.");
         }
         
-        Flag flag = flagMap.get(type); // get existing flag, if any
+        Flag flag = getFlagForPermission(permission, type); // get existing flag, if any
         
         if(flag == null)
         {
@@ -85,13 +143,17 @@ public class FlagForPermission extends Flag
         
         // make sure the flag can be added to this flag list
         if(!flag.validateParse(value))
+        {
             return false;
+        }
         
         // check if parsed flag had valid values and needs to be added to flag list
         if(!flag.onParse(value))
+        {
             return false;
+        }
         
-        flagMap.put(permission, flag);
+        addFlag(permission, flag);
         
         return true;
     }
@@ -99,71 +161,68 @@ public class FlagForPermission extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        if(!a.hasPlayer())
-            return;
-        
-        for(Entry<String, Flag> e : flagMap.entrySet())
-        {
-            if(a.player().hasPermission(e.getKey()))
-            {
-                e.getValue().check(a);
-            }
-        }
-    }
-    
-    @Override
-    protected boolean onPrepare(Args a)
-    {
-        if(!a.hasPlayer())
-            return true;
-        
-        boolean failed = false;
-        
-        for(Entry<String, Flag> e : flagMap.entrySet())
-        {
-            if(a.player().hasPermission(e.getKey()))
-            {
-                boolean returned = e.getValue().prepare(a);
-                
-                if(!failed && !returned)
-                    failed = true;
-            }
-        }
-        
-        return !failed;
+        event(a, 'c');
     }
     
     @Override
     protected void onFailed(Args a)
     {
-        if(!a.hasPlayer())
-            return;
-        
-        for(Entry<String, Flag> e : flagMap.entrySet())
-        {
-            if(a.player().hasPermission(e.getKey()))
-            {
-                e.getValue().failed(a);
-            }
-        }
+        event(a, 'f');
+    }
+    
+    @Override
+    protected boolean onPrepare(Args a)
+    {
+        return event(a, 'p');
     }
     
     @Override
     protected boolean onCrafted(Args a)
     {
+        return event(a, 'r');
+    }
+    
+    private boolean event(Args a, char method)
+    {
         if(!a.hasPlayer())
-            return true;
+        {
+            return true; // no fail, optional flag
+        }
         
         boolean failed = false;
         
-        for(Entry<String, Flag> e : flagMap.entrySet())
+        for(Entry<String, Map<FlagType, Flag>> e : flagMap.entrySet())
         {
             if(a.player().hasPermission(e.getKey()))
             {
-                boolean returned = e.getValue().crafted(a);
-                
-                if(!failed && !returned)
-                    failed = true;
+                for(Flag f : e.getValue().values())
+                {
+                    Boolean returned = null;
+                    
+                    switch(method)
+                    {
+                        case 'c':
+                            f.check(a);
+                            break;
+                        
+                        case 'p':
+                            returned = f.prepare(a);
+                            break;
+                        
+                        case 'r':
+                            returned = f.crafted(a);
+                            break;
+                        
+                        case 'f':
+                            f.failed(a);
+                            break;
+                    }
+                    
+                    if(returned != null && !returned && !failed)
+                    {
+                        failed = true;
+                    }
+                }
             }
         }
         

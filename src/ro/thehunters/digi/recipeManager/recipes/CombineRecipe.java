@@ -125,7 +125,7 @@ public class CombineRecipe extends WorkbenchRecipe
     
     public ShapelessRecipe toShapelessRecipe()
     {
-        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.generateRecipeIdResult(getFirstResult(), getIndex()));
+        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
         
         for(ItemStack item : ingredients)
         {

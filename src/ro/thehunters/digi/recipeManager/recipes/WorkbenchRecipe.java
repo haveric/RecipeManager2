@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
@@ -123,7 +124,7 @@ public class WorkbenchRecipe extends BaseRecipe
                 lore.add(Messages.CRAFT_RESULT_DENIED_REASON.get("{reason}", r));
             }
             
-            return Tools.generateItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
+            return Tools.createItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
         }
         
         if(!isMultiResult())
@@ -181,29 +182,33 @@ public class WorkbenchRecipe extends BaseRecipe
 //        Messages.debug("recipe unavailable: " + ArrayUtils.toString(unavailableResults));
         
         List<String> lore = new ArrayList<String>();
-        String FORMAT_CHANCE = "%2.0f%%";
         
         for(ItemResult r : displayResults)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_ITEM.get("{chance}", String.format(FORMAT_CHANCE, r.getChance()), "{item}", Tools.printItemStack(r)));
+            lore.add(Messages.CRAFT_RESULT_RECIEVE_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.printItem(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
         }
         
         if(failChance > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_NOTHING.get("{chance}", String.format(FORMAT_CHANCE, failChance)));
+            lore.add(Messages.CRAFT_RESULT_RECIEVE_NOTHING.get("{chance}", formatChance(failChance)));
         }
         
         if(secretNum > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", String.format(FORMAT_CHANCE, secretChance), "{num}", String.valueOf(secretNum)));
+            lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
         }
         
         if(unavailableNum > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{chance}", String.format(FORMAT_CHANCE, unavailableChance), "{num}", String.valueOf(unavailableNum)));
+            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
         
-        return Tools.generateItemStackWithMeta(Material.PORTAL, 3, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+        return Tools.createItemStackWithMeta(Material.PORTAL, 3, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+    }
+    
+    private String formatChance(float chance)
+    {
+        return chance == 100 ? "100%" : String.format((Math.round(chance) == chance ? "%4.0f%%" : "%4.1f%%"), chance);
     }
     
     public ItemResult getResult(Args a)
@@ -239,5 +244,42 @@ public class WorkbenchRecipe extends BaseRecipe
         
         a.clear();
         return result;
+    }
+    
+    public int getCraftableTimes(CraftingInventory inv)
+    {
+        int craftAmount = inv.getMaxStackSize();
+        
+        for(ItemStack i : inv.getMatrix())
+        {
+            if(i != null && i.getTypeId() != 0)
+            {
+                craftAmount = Math.min(i.getAmount(), craftAmount);
+            }
+        }
+        
+        return craftAmount;
+    }
+    
+    public void subtractIngredients(CraftingInventory inv)
+    {
+        int amt;
+        
+        for(int i = 1; i < 10; i++)
+        {
+            ItemStack item = inv.getItem(i);
+            
+            if(item != null)
+            {
+                if((amt = (item.getAmount() - 1)) > 0)
+                {
+                    item.setAmount(amt);
+                }
+                else
+                {
+                    inv.clear(i);
+                }
+            }
+        }
     }
 }

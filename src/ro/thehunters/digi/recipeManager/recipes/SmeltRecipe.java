@@ -122,6 +122,11 @@ public class SmeltRecipe extends BaseRecipe
         return ingredient.getTypeId();
     }
     
+    public String getFuelIndex()
+    {
+        return fuel.getTypeId() + (fuel.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + fuel.getDurability());
+    }
+    
     @Override
     public int hashCode()
     {

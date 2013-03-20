@@ -4,8 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.Vanilla;
 import ro.thehunters.digi.recipeManager.flags.Flags;
-
 
 public class FuelRecipe extends BaseRecipe
 {
@@ -106,7 +106,7 @@ public class FuelRecipe extends BaseRecipe
     
     public String getIndexString()
     {
-        return ingredient.getTypeId() + (ingredient.getDurability() == -1 ? "" : ":" + ingredient.getDurability());
+        return ingredient.getTypeId() + (ingredient.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + ingredient.getDurability());
     }
     
     public boolean hasIngredient()

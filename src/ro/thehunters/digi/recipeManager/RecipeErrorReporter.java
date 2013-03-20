@@ -7,6 +7,11 @@ import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 
+/**
+ * This class is used by RecipeManager to display recipe errors.<br>
+ * Errors can be caught to be displayed in a single chunk along with file name and lines.<br>
+ * When errors are not caught they'll be directly displayed to console.
+ */
 public class RecipeErrorReporter
 {
     private static HashMap<String, List<String>> fileErrors;

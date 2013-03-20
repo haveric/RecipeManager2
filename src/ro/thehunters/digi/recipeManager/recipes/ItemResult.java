@@ -98,6 +98,12 @@ public class ItemResult extends ItemStack implements Flaggable
     }
     
     @Override
+    public boolean hasNoShiftBit()
+    {
+        return (flags == null ? true : flags.hasNoShiftBit());
+    }
+    
+    @Override
     public Flag getFlag(FlagType type)
     {
         return flags.getFlag(type);

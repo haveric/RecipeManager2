@@ -10,7 +10,8 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagPermission extends Flag
 {
-    private List<String> permissions = new ArrayList<String>();
+    private List<String> permissions     = new ArrayList<String>();
+    private List<String> antiPermissions = new ArrayList<String>();
     private String       message;
     
     public FlagPermission()
@@ -39,9 +40,24 @@ public class FlagPermission extends Flag
         this.permissions = permissions;
     }
     
-    public void addPermissions(String permission)
+    public void addPermission(String permission)
     {
         permissions.add(permission);
+    }
+    
+    public List<String> getAntiPermissions()
+    {
+        return antiPermissions;
+    }
+    
+    public void setAntiPermissions(List<String> antiPermissions)
+    {
+        this.antiPermissions = antiPermissions;
+    }
+    
+    public void addAntiPermission(String permission)
+    {
+        antiPermissions.add(permission);
     }
     
     public String getMessage()
@@ -64,7 +80,16 @@ public class FlagPermission extends Flag
             setMessage(split[1].trim());
         }
         
-        addPermissions(split[0].trim());
+        value = split[0].trim();
+        
+        if(value.charAt(0) == '-')
+        {
+            addAntiPermission(value.substring(1).trim());
+        }
+        else
+        {
+            addPermission(value);
+        }
         
         return true;
     }
@@ -72,24 +97,40 @@ public class FlagPermission extends Flag
     @Override
     public void onCheck(Args a)
     {
+        if(!a.hasPlayer())
+        {
+            if(!permissions.isEmpty())
+            {
+                a.addReason(Messages.FLAG_PERMISSION_NEED, message, "{permission}", permissions.get(0), "{permissions}", Tools.listToString(permissions));
+            }
+            
+            return;
+        }
+        
         Player player = a.player();
         boolean ok = false;
         
-        if(player != null)
+        for(String perm : permissions)
         {
-            for(String s : permissions)
+            if(player.hasPermission(perm))
             {
-                if(player.hasPermission(s))
-                {
-                    ok = true;
-                    break;
-                }
+                ok = true;
+                break;
             }
         }
         
         if(!ok)
         {
-            a.addReason(Messages.CRAFT_FLAG_PERMISSIONS, message, "{permissions}", Tools.convertListToString(permissions));
+            a.addReason(Messages.FLAG_PERMISSION_NEED, message, "{permission}", permissions.get(0), "{permissions}", Tools.listToString(permissions));
+        }
+        
+        for(String perm : antiPermissions)
+        {
+            if(player.hasPermission(perm))
+            {
+                a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, message, "{permission}", perm, "{permissions}", Tools.listToString(antiPermissions));
+                break;
+            }
         }
     }
 }

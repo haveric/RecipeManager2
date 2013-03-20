@@ -114,7 +114,7 @@ public class FlagModMoney extends Flag
             RecipeManager.getEconomy().modMoney(a.playerName(), money);
         }
         
-        a.addEffect(Messages.CRAFT_FLAG_MODMONEY, message, "{color}", (money < 0 ? ChatColor.RED : ChatColor.GREEN) + "", "{money}", RecipeManager.getEconomy().getFormat(money));
+        a.addEffect(Messages.FLAG_MODMONEY, message, "{color}", (money < 0 ? ChatColor.RED : ChatColor.GREEN) + "", "{money}", RecipeManager.getEconomy().getFormat(money));
         
         return true;
     }

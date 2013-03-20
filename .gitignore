@@ -5,6 +5,7 @@
 scrap/
 TODO
 sync.ffs_db
+*.jardesc
 
 
 #################
