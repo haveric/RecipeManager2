@@ -1,7 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.ChatColor;
-
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
@@ -9,19 +7,60 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModMoney extends Flag
 {
-    private float  money;
-    private String message;
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "{flag} [modifier]<float number>",
+            "{flag} [modifier]<float number> | <message>",
+            "{flag} false",
+        };
+        
+        D = new String[]
+        {
+            "Modifies crafter's money.",
+            "",
+            "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+            "The '<number>' argument must be the amount of money to modify.",
+            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "",
+            "NOTE: Using this flag more than once will overwrite the previous one.",
+            "NOTE: This flag requires Vault with a supported economy plugin to be installed.",
+            "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.REQMONEY.toString() + " if you want to check.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} 0.5 // gives 0.5 currency or 50 minor currency money to crafter",
+            "{flag} +0.5 // exacly the same as above",
+            "{flag} -2.5 | <red>You lost {money}!  // takes at most 2.5 currency from crafter, if he does not have that amount it will be set to 0.",
+            "{flag} = 0 | <red>You lost all your money!  // sets crafter's money to 0, that space is valid there too.",
+        };
+    }
+    
+    // Flag code
+    
+    private char mod = '+';
+    private float amount = 0.0f;
+    private String message = null;
     
     public FlagModMoney()
     {
-        type = FlagType.MODLEVEL;
+        type = FlagType.MODMONEY;
     }
     
     public FlagModMoney(FlagModMoney flag)
     {
         this();
         
-        money = flag.money;
+        mod = flag.mod;
+        amount = flag.amount;
         message = flag.message;
     }
     
@@ -31,14 +70,55 @@ public class FlagModMoney extends Flag
         return new FlagModMoney(this);
     }
     
-    public double getMoney()
+    public char getModifier()
     {
-        return money;
+        return mod;
     }
     
-    public void setMoney(float money)
+    public float getAmount()
     {
-        this.money = money;
+        return amount;
+    }
+    
+    /**
+     * Set the amount, can be negative.
+     * 
+     * @param amount
+     */
+    public void setAmount(float amount)
+    {
+        setAmount(amount < 0 ? '-' : '+', amount);
+    }
+    
+    /**
+     * @param mod
+     *            can be '+', '-', '='
+     * @param amount
+     *            the amount, forced as positive number
+     */
+    public void setAmount(char mod, float amount)
+    {
+        switch(mod)
+        {
+            case '-':
+            case '=':
+            case '+':
+            {
+                break;
+            }
+            
+            default:
+            {
+                throw new IllegalArgumentException("mod can only be '+', '-', '=' !");
+            }
+        }
+        
+        if(mod != '=' && amount == 0)
+        {
+            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
+        }
+        
+        this.amount = Math.abs(amount);
     }
     
     public String getMessage()
@@ -62,59 +142,94 @@ public class FlagModMoney extends Flag
         }
         
         value = split[0].trim();
+        char mod = value.charAt(0);
         
-        if(value.length() > String.valueOf(Float.MAX_VALUE).length())
+        switch(mod)
         {
-            return RecipeErrorReporter.error("The " + getType() + " flag has money value that is too long: " + value, "Value for floats can be between " + Tools.printNumber(Float.MIN_VALUE) + " and " + Tools.printNumber(Float.MAX_VALUE) + ".");
+            case '-':
+            case '=':
+            case '+':
+            {
+                value = value.substring(1).trim(); // remove modifier from string
+                break;
+            }
+            
+            default:
+            {
+                mod = '+'; // set default modifier if it's not defined
+            }
         }
         
-        float money = 0;
+        if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
+        {
+            return RecipeErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+        }
+        
+        float amount = 0;
         
         try
         {
-            money = Float.valueOf(value);
+            amount = Float.valueOf(value);
         }
         catch(NumberFormatException e)
         {
             return RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
         }
         
-        if(money == 0)
+        if(mod != '=' && amount == 0)
         {
-            return RecipeErrorReporter.error("The " + getType() + " flag must not have 0 value !");
+            return RecipeErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
         }
         
-        setMoney(money);
+        setAmount(mod, amount);
+        
         return true;
     }
     
     @Override
     protected boolean onCrafted(Args a)
     {
-        if(money == 0 || !a.hasPlayerName())
+        if(amount == 0 || !a.hasPlayerName() || !RecipeManager.getEconomy().isEnabled())
+        {
             return false;
-        
-        if(money < 0)
-        {
-            double amount = RecipeManager.getEconomy().getMoney(a.playerName());
-            
-            if((amount - money) < 0)
-            {
-                amount = -amount;
-            }
-            else
-            {
-                amount = money;
-            }
-            
-            RecipeManager.getEconomy().modMoney(a.playerName(), amount);
-        }
-        else
-        {
-            RecipeManager.getEconomy().modMoney(a.playerName(), money);
         }
         
-        a.addEffect(Messages.FLAG_MODMONEY, message, "{color}", (money < 0 ? ChatColor.RED : ChatColor.GREEN) + "", "{money}", RecipeManager.getEconomy().getFormat(money));
+        switch(mod)
+        {
+            case '-':
+            {
+                RecipeManager.getEconomy().modMoney(a.playerName(), -amount);
+                
+                a.addEffect(Messages.FLAG_MODMONEY_SUB, message, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount);
+                
+                break;
+            }
+            
+            case '+':
+            {
+                RecipeManager.getEconomy().modMoney(a.playerName(), amount);
+                
+                a.addEffect(Messages.FLAG_MODMONEY_ADD, message, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount);
+                
+                break;
+            }
+            
+            case '=':
+            {
+                double money = RecipeManager.getEconomy().getMoney(a.playerName());
+                
+                RecipeManager.getEconomy().modMoney(a.playerName(), -money);
+                
+                if(amount > 0)
+                {
+                    RecipeManager.getEconomy().modMoney(a.playerName(), amount);
+                }
+                
+                a.addEffect(Messages.FLAG_MODMONEY_SET, message, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount);
+                
+                break;
+            }
+        }
         
         return true;
     }

@@ -6,11 +6,30 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagBookPage extends Flag
+public class FlagItemBookPage extends Flag
 {
-    public FlagBookPage()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.BOOKPAGE;
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
+    public FlagItemBookPage()
+    {
+        type = FlagType.ITEMBOOKPAGE;
     }
     
     @Override

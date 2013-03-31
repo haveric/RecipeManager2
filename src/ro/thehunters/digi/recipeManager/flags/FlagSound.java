@@ -9,10 +9,38 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
 public class FlagSound extends Flag
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[1];
+        A[0] = "{flag} <arguments or false>";
+        
+        D = new String[8];
+        D[0] = "Plays a sound at the workbench/furnace/crafter location for everyone or only for crafter if specified.";
+        D[1] = null;
+        D[2] = "Replace <arguments> with the following arguments separated by | character:";
+        D[3] = "  play <sound>        = (Required) the sound name to play, sound names can be found in '" + Files.FILE_INFO_NAMES + "'.";
+        D[4] = "  volume <0.0 to 1.0> = (Optional) sound's volume value";
+        D[5] = "  pitch <0.0 to 4.0>  = (Optional) sound's pitch value";
+        D[6] = "  player              = (Optional) use this to make the sound only play to the crafter";
+        D[7] = "You can specify these arguments in any order.";
+        
+        E = new String[2];
+        E[0] = "@sound play portal_travel | volume 0.7 | pitch 1.5";
+        E[1] = "@sound volume 1.0 | play WOLF_HOWL";
+    }
+    
+    // Flag code
+    
     private boolean onlyPlayer = false;
-    private Sound   sound      = null;
-    private float   volume     = 1;
-    private float   pitch      = 0;
+    private Sound sound = null;
+    private float volume = 1;
+    private float pitch = 0;
     
     public FlagSound()
     {

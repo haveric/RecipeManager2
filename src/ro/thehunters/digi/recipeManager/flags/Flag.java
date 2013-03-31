@@ -11,8 +11,31 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class Flag implements Cloneable
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "{flag}",
+        };
+        
+        D = new String[]
+        {
+            "Flag not yet documented.",
+        };
+        
+        E = null;
+    }
+    
+    // Flag code
+    
     protected FlagType type;
-    protected Flags    flagsContainer;
+    protected Flags flagsContainer;
     
     protected Flag()
     {
@@ -245,15 +268,15 @@ public class Flag implements Cloneable
     {
         Flaggable flaggable = getFlaggable();
         
-        if(getType().hasBit(Bit.RECIPE) && flaggable instanceof BaseRecipe == false)
-        {
-            RecipeErrorReporter.error("Flag " + getType() + " only works on recipes!");
-            return false;
-        }
-        
         if(getType().hasBit(Bit.RESULT) && flaggable instanceof ItemResult == false)
         {
             RecipeErrorReporter.error("Flag " + getType() + " only works on results!");
+            return false;
+        }
+        
+        if(getType().hasBit(Bit.RECIPE) && flaggable instanceof BaseRecipe == false && flaggable instanceof ItemResult)
+        {
+            RecipeErrorReporter.error("Flag " + getType() + " only works on recipes!");
             return false;
         }
         

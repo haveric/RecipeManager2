@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class RecipeManagerRepairEvent extends Event implements Cancellable
 {
-    private static final HandlerList handlers  = new HandlerList();
-    private boolean                  cancelled = false;
+    private static final HandlerList handlers = new HandlerList();
+    private boolean cancelled = false;
     
     public RecipeManagerRepairEvent(ItemStack[] repaired, ItemStack result)
     {

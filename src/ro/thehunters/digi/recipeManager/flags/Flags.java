@@ -13,7 +13,7 @@ import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 public class Flags implements Cloneable
 {
     private Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
-    protected Flaggable         flaggable;
+    protected Flaggable flaggable;
     
     public Flags()
     {

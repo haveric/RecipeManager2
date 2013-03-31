@@ -18,7 +18,26 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 public class FlagCloneIngredient extends Flag
 {
-    private byte  copyBitsum;
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
+    private byte copyBitsum;
     private int[] dataModifier;
     private int[] amountModifier;
     
@@ -27,15 +46,15 @@ public class FlagCloneIngredient extends Flag
      */
     public class Bit
     {
-        public static final byte NONE     = 1 << 0;
-        public static final byte DATA     = 1 << 1;
-        public static final byte AMOUNT   = 1 << 2;
+        public static final byte NONE = 1 << 0;
+        public static final byte DATA = 1 << 1;
+        public static final byte AMOUNT = 1 << 2;
         public static final byte ENCHANTS = 1 << 3;
-        public static final byte NAME     = 1 << 4;
-        public static final byte LORE     = 1 << 5;
-        public static final byte SPECIAL  = 1 << 6;
-        public static final byte ALLMETA  = ENCHANTS | NAME | LORE | SPECIAL;
-        public static final byte ALL      = DATA | AMOUNT | ALLMETA;
+        public static final byte NAME = 1 << 4;
+        public static final byte LORE = 1 << 5;
+        public static final byte SPECIAL = 1 << 6;
+        public static final byte ALLMETA = ENCHANTS | NAME | LORE | SPECIAL;
+        public static final byte ALL = DATA | AMOUNT | ALLMETA;
     }
     
     public FlagCloneIngredient()
@@ -122,7 +141,11 @@ public class FlagCloneIngredient extends Flag
      */
     public void setDataModifier(char symbol, int data)
     {
-        dataModifier = new int[] { symbol, data };
+        dataModifier = new int[]
+        {
+            symbol,
+            data
+        };
     }
     
     /**
@@ -145,7 +168,11 @@ public class FlagCloneIngredient extends Flag
      */
     public void setAmountModifier(char symbol, int data)
     {
-        amountModifier = new int[] { symbol, data };
+        amountModifier = new int[]
+        {
+            symbol,
+            data
+        };
     }
     
     @Override
@@ -219,43 +246,6 @@ public class FlagCloneIngredient extends Flag
             RecipeErrorReporter.error("Flag " + type + " has couldn't find ingredient of type: " + result.getType());
             return false;
         }
-        
-        /*
-        args = s.split(" ");
-        
-        if(args.length > 1)
-        {
-            value = args[1].trim();
-            
-            try
-            {
-                slot = Byte.valueOf(value);
-            }
-            catch(Exception e)
-            {
-                RecipeErrorReporter.error("Flag " + type + " has 'slot' argument with invalid number: " + value);
-                return false;
-            }
-            
-            if(slot < 0 || slot > maxSlot)
-            {
-                RecipeErrorReporter.error("Flag " + type + " has 'slot' argument with invalid range: " + slot + ", it must be between 1 and " + maxSlot + " !", "max slot size is determined by the recipe's ingredients");
-                return false;
-            }
-            
-        }
-        else
-        {
-            RecipeErrorReporter.error("Flag " + type + " has 'slot' argument without a value!");
-            return false;
-        }
-        
-        if(slot == 0)
-        {
-            RecipeErrorReporter.error("Flag " + type + " needs the 'slot' argument !");
-            return false;
-        }
-        */
         
         for(String s : split)
         {
@@ -470,15 +460,4 @@ public class FlagCloneIngredient extends Flag
         
         return true;
     }
-    
-    /*
-    public static ItemStack getClonedItem(Flag flag, CraftingInventory inventory)
-    {
-        if(flag instanceof FlagCloneIngredient == false)
-            return null;
-        
-        FlagCloneIngredient cloneFlag = (FlagCloneIngredient)flag;
-        
-    }
-    */
 }

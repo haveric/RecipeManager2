@@ -5,11 +5,30 @@ import org.bukkit.inventory.meta.SkullMeta;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagSkull extends Flag
+public class FlagItemSkull extends Flag
 {
-    public FlagSkull()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.SKULL;
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
+    public FlagItemSkull()
+    {
+        type = FlagType.ITEMSKULL;
     }
     
     @Override

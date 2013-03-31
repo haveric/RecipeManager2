@@ -35,8 +35,8 @@ public class BaseRecipe implements Flaggable
     }
     
     private String name = "???";
-    private Flags  flags;
-    protected int  hash;
+    private Flags flags;
+    protected int hash;
     
     public BaseRecipe()
     {
@@ -224,5 +224,21 @@ public class BaseRecipe implements Flaggable
     {
         if(flags != null)
             flags.sendFailed(a);
+    }
+    
+    /**
+     * @return Recipe short string for book contents index
+     */
+    public String printBookIndex()
+    {
+        return "undefined";
+    }
+    
+    /**
+     * @return Recipe detail string that can fit inside a book.
+     */
+    public String printBook()
+    {
+        return "undefined";
     }
 }

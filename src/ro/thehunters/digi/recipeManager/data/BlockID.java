@@ -2,6 +2,7 @@ package ro.thehunters.digi.recipeManager.data;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,10 +13,10 @@ public class BlockID
 {
     private transient int hash;
     
-    private UUID          wid;
-    private int           x;
-    private int           y;
-    private int           z;
+    private UUID wid;
+    private int x;
+    private int y;
+    private int z;
     
     public BlockID(Block block)
     {
@@ -38,7 +39,6 @@ public class BlockID
     }
     
     /**
-     * 
      * @param id
      * @param coords
      * @throws IllegalArgumentException
@@ -46,8 +46,8 @@ public class BlockID
      */
     public BlockID(UUID id, String coords)
     {
-        if(id == null)
-            throw new IllegalArgumentException("ID must not be null!");
+        Validate.notNull(id, "id argument must not be null!");
+        Validate.notNull(coords, "coords argument must not be null!");
         
         this.wid = id;
         
@@ -67,6 +67,8 @@ public class BlockID
     
     private void parseLocation(Location location)
     {
+        Validate.notNull(location, "location argument must not be null!");
+        
         this.wid = location.getWorld().getUID();
         this.x = location.getBlockX();
         this.y = location.getBlockY();

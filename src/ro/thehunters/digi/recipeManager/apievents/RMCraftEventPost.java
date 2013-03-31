@@ -17,14 +17,14 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
  */
 public class RMCraftEventPost extends Event
 {
-    private static final HandlerList handlers   = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     
-    private boolean                  shiftClick = false;
-    private boolean                  rightClick = false;
-    private ItemStack                result;
-    private ItemStack                cursor;
-    private WorkbenchRecipe          recipe;
-    private Player                   player;
+    private boolean shiftClick = false;
+    private boolean rightClick = false;
+    private ItemStack result;
+    private ItemStack cursor;
+    private WorkbenchRecipe recipe;
+    private Player player;
     
     public RMCraftEventPost(WorkbenchRecipe recipe, ItemStack item, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
     {

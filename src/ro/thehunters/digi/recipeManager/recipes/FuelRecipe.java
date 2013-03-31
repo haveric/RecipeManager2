@@ -10,8 +10,8 @@ import ro.thehunters.digi.recipeManager.flags.Flags;
 public class FuelRecipe extends BaseRecipe
 {
     private ItemStack ingredient;
-    private float     minTime;
-    private float     maxTime;
+    private float minTime;
+    private float maxTime;
     
     public FuelRecipe(Material type, float burnTime)
     {

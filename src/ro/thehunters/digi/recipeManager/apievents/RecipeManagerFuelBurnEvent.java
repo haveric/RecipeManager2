@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 
-
 /**
  * Event triggered when RecipeManager's custom fuel recipes are burnt.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
@@ -20,12 +19,12 @@ import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
  */
 public class RecipeManagerFuelBurnEvent extends Event implements Cancellable
 {
-    private static final HandlerList handlers  = new HandlerList();
-    private boolean                  cancelled = false;
-    private FuelRecipe               recipe;
-    private int                      burnTicks;
-    private Block                    block;
-    private String                   fueler;
+    private static final HandlerList handlers = new HandlerList();
+    private boolean cancelled = false;
+    private FuelRecipe recipe;
+    private int burnTicks;
+    private Block block;
+    private String fueler;
     
     public RecipeManagerFuelBurnEvent(FuelRecipe recipe, int burnTicks, Block block, String fueler)
     {

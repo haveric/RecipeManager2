@@ -1,14 +1,21 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang.mutable.MutableInt;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.flags.FlagDescription;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class CombineRecipe extends WorkbenchRecipe
@@ -60,10 +67,14 @@ public class CombineRecipe extends WorkbenchRecipe
     public void addIngredient(int amount, Material type, short data)
     {
         if(ingredients == null)
+        {
             ingredients = new ArrayList<ItemStack>();
+        }
         
         if((ingredients.size() + amount) > 9) // check if they're more than they should...
+        {
             throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
+        }
         
         while(amount-- > 0)
         {
@@ -150,5 +161,58 @@ public class CombineRecipe extends WorkbenchRecipe
     public RecipeType getType()
     {
         return RecipeType.COMBINE;
+    }
+    
+    @Override
+    public String printBookIndex()
+    {
+        return Tools.getItemName(getFirstResult());
+    }
+    
+    @Override
+    public String printBook()
+    {
+        StringBuilder s = new StringBuilder(256);
+        
+        s.append(Messages.RECIPEBOOK_HEADER_SHAPELESS.get());
+        
+        s.append('\n').append(Tools.printItem(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        
+        if(isMultiResult())
+        {
+            s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
+        }
+        
+        if(hasFlag(FlagType.DESCRIPTION))
+        {
+            s.append('\n').append(ChatColor.DARK_BLUE).append(Tools.parseColors(getFlag(FlagDescription.class).getDescription(), false));
+        }
+        
+        s.append('\n');
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENTS.get()).append(ChatColor.BLACK);
+        
+        Map<ItemStack, MutableInt> items = new HashMap<ItemStack, MutableInt>();
+        
+        for(ItemStack item : ingredients)
+        {
+            MutableInt i = items.get(item);
+            
+            if(i == null)
+            {
+                i = new MutableInt();
+                items.put(item, i);
+            }
+            
+            i.add(item.getAmount());
+        }
+        
+        for(Entry<ItemStack, MutableInt> e : items.entrySet())
+        {
+            ItemStack item = e.getKey();
+            item.setAmount(e.getValue().intValue());
+            s.append('\n').append(Tools.printItem(item, ChatColor.RED, ChatColor.BLACK, true));
+        }
+        
+        return s.toString();
     }
 }

@@ -19,10 +19,10 @@ import ro.thehunters.digi.recipeManager.data.FurnaceData;
 
 public class Furnaces
 {
-    protected static final Map<BlockID, FurnaceData> furnaces       = new HashMap<BlockID, FurnaceData>();
+    protected static final Map<BlockID, FurnaceData> furnaces = new HashMap<BlockID, FurnaceData>();
     
     // constants
-    private static final String                      SAVE_EXTENSION = ".furnacedata";
+    private static final String SAVE_EXTENSION = ".furnacedata";
     
     static void init()
     {
@@ -45,18 +45,28 @@ public class Furnaces
         return furnaces.containsKey(id);
     }
     
-    public static void add(BlockID id)
+    public static void add(BlockID id, String owner)
     {
         Validate.notNull(id, "id argument must not be null!");
         
-        furnaces.put(id, new FurnaceData());
+        furnaces.put(id, new FurnaceData(owner));
     }
     
-    public static void add(Location location)
+    public static void addIfNotExists(Location location)
     {
         Validate.notNull(location, "location argument must not be null!");
         
-        add(BlockID.fromLocation(location));
+        BlockID id = BlockID.fromLocation(location);
+        
+        if(!furnaces.containsKey(id))
+        {
+            add(id, null);
+        }
+    }
+    
+    public static void add(Location location, String owner)
+    {
+        add(BlockID.fromLocation(location), owner);
     }
     
     /*

@@ -5,7 +5,7 @@ public class RecipeInfo
     public enum RecipeStatus
     {
         QUEUED,
-        OVERRIDEN,
+        OVERRIDDEN,
         REMOVED;
     }
     
@@ -29,10 +29,10 @@ public class RecipeInfo
         }
     }
     
-    private RecipeOwner  owner;
-    private String       adder;
+    private RecipeOwner owner;
+    private String adder;
     private RecipeStatus status;
-    private int          index;
+    private int index;
     
     public RecipeInfo(RecipeOwner owner, String adder)
     {

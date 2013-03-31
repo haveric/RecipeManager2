@@ -20,10 +20,10 @@ public enum FlagType
     
     // Shared flags
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
-    COMMANDS(FlagCommands.class, Bit.NONE, "command", "cmd"),
+    COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"),
     PERMISSION(FlagPermission.class, Bit.NONE, "perm"),
     FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm", "for"),
-    INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingredient", "ifingr"), // TODO finish
+    INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"), // TODO finish
 //    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
 //    PLAYTIME(FlagPlayTime.class, Bit.NONE),
 //    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
@@ -35,7 +35,7 @@ public enum FlagType
     MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "money"),
     REQMONEY(FlagReqMoney.class, Bit.NONE, "moneyreq", "needmoney"),
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT),
-    EXPLODE(FlagExplode.class, Bit.NO_SHIFT, "explosion", "boom"),
+    EXPLODE(FlagExplode.class, Bit.NO_VALUE | Bit.NO_SHIFT, "explosion", "boom", "tnt"),
     SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
     EFFECT(FlagEffect.class, Bit.NO_SHIFT, "playeffect", "fx"), // TODO finish
     CREATURE(FlagCreature.class, Bit.NO_SHIFT, "spawncreature"), // TODO finish
@@ -49,38 +49,41 @@ public enum FlagType
     RETURNITEM(FlagReturnItem.class, Bit.NO_SHIFT, "returningr", "returningredient"),
     
     // Recipe only flags
+    RECIPEBOOK(FlagRecipeBook.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "bookrecipe"),
     DESCRIPTION(FlagDescription.class, Bit.RECIPE, "recipeinfo", "info"),
+    GETBOOK(FlagGetBook.class, Bit.RECIPE | Bit.NO_SHIFT | Bit.NO_SKIP_PERMISSION, "getrecipebook"), // TODO finsih
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"),
     HIDERESULTS(FlagHideResults.class, Bit.RECIPE | Bit.NO_VALUE),
-    GETBOOK(FlagGetBook.class, Bit.RECIPE | Bit.NO_SHIFT, "getrecipebook", "recipebook"), // TODO finsih
-    REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE, "delete"),
-    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "denied", "deny"),
-    OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE, "edit", "overwrite", "supercede", "replace"),
+    REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
+    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "denied", "deny"),
+    OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
 //    PROXIMITY(FlagProximity.class, Bit.RECIPE, "distance", "nearby"), // TODO
     
     // Result only flags
 //    SETCHANCE(FlagSetChance.class, Bit.RESULT, "chance"), // TODO finish
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
-    NAME(FlagName.class, Bit.RESULT | Bit.NO_STORE, "itemname", "displayname"),
-    LORE(FlagLore.class, Bit.RESULT | Bit.NO_STORE, "itemlore", "itemdescription"),
-    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT | Bit.NO_STORE, "leathercolour", "color", "colour", "itemcolor", "itemcolour"),
-    BOOK(FlagBook.class, Bit.RESULT | Bit.NO_STORE, "bookitem", "itembook"),
-    BOOKPAGE(FlagBookPage.class, Bit.RESULT | Bit.NO_STORE, "bookitempage", "page", "addpage"),
-    MAP(FlagMap.class, Bit.RESULT | Bit.NO_STORE, "mapitem", "itemmap"),
-    FIREWORK(FlagFirework.class, Bit.RESULT | Bit.NO_STORE, "fireworkrocket"),
-    FIREWORKCHARGE(FlagFireworkCharge.class, Bit.RESULT | Bit.NO_STORE, "fireworkeffect"),
-    SKULL(FlagSkull.class, Bit.RESULT | Bit.NO_STORE, "skullowner"),
-    POTION(FlagPotion.class, Bit.RESULT | Bit.NO_STORE, "potionitem"),
-    ENCHANT(FlagEnchant.class, Bit.RESULT | Bit.NO_STORE, "enchantment"),
-    ENCHANTBOOK(FlagEnchantBook.class, Bit.RESULT | Bit.NO_STORE, "enchantedbook");
+    ITEMNAME(FlagItemName.class, Bit.RESULT | Bit.NO_STORE, "name", "displayname"),
+    ITEMLORE(FlagItemLore.class, Bit.RESULT | Bit.NO_STORE, "lore", "itemdescription"),
+    ITEMCOLOR(FlagItemColor.class, Bit.RESULT | Bit.NO_STORE, "itemcolour", "leathercolor", "leathercolour", "color", "colour"),
+    ITEMBOOK(FlagItemBook.class, Bit.RESULT | Bit.NO_STORE, "bookitem"),
+    ITEMBOOKPAGE(FlagItemBookPage.class, Bit.RESULT | Bit.NO_STORE, "bookitempage", "bookpage"),
+    ITEMMAP(FlagItemMap.class, Bit.RESULT | Bit.NO_STORE, "map", "mapitem"),
+    ITEMFIREWORK(FlagItemFirework.class, Bit.RESULT | Bit.NO_STORE, "firework", "fireworkrocket"),
+    ITEMFIREWORKCHARGE(FlagItemFireworkCharge.class, Bit.RESULT | Bit.NO_STORE, "fireworkcharge", "fireworkeffect"),
+    ITEMSKULL(FlagItemSkull.class, Bit.RESULT | Bit.NO_STORE, "skullowner"),
+    ITEMPOTION(FlagItemPotion.class, Bit.RESULT | Bit.NO_STORE, "potion", "potionitem"),
+    ITEMENCHANT(FlagItemEnchant.class, Bit.RESULT | Bit.NO_STORE, "enchant", "enchantment"),
+    ITEMENCHANTBOOK(FlagItemEnchantBook.class, Bit.RESULT | Bit.NO_STORE, "enchantbook", "enchantedbook"),
+    
+    ;
     
     /*
      *  FlagType related methods
      */
     
     private final Class<? extends Flag> flagClass;
-    private final String[]              names;
-    private final int                   bits;
+    private final String[] names;
+    private final int bits;
     
     private FlagType(Class<? extends Flag> flagClass, int bits, String... aliases)
     {
@@ -142,6 +145,45 @@ public enum FlagType
         return null;
     }
     
+    public String[] getArguments()
+    {
+        try
+        {
+            return (String[])flagClass.getField("A").get(null);
+        }
+        catch(Exception e)
+        {
+        }
+        
+        return null;
+    }
+    
+    public String[] getExamples()
+    {
+        try
+        {
+            return (String[])flagClass.getField("E").get(null);
+        }
+        catch(Exception e)
+        {
+        }
+        
+        return null;
+    }
+    
+    public String[] getDescription()
+    {
+        try
+        {
+            return (String[])flagClass.getField("D").get(null);
+        }
+        catch(Exception e)
+        {
+        }
+        
+        return null;
+    }
+    
     /**
      * Gets the <code>@flag</code> style flag name
      */
@@ -154,7 +196,7 @@ public enum FlagType
      *  Static stuff
      */
     
-    private static final Map<String, FlagType>                nameMap  = new HashMap<String, FlagType>();
+    private static final Map<String, FlagType> nameMap = new HashMap<String, FlagType>();
     private static final Map<Class<? extends Flag>, FlagType> classMap = new HashMap<Class<? extends Flag>, FlagType>();
     
     /**
@@ -177,19 +219,21 @@ public enum FlagType
             {
                 nameMap.put(name, type);
                 
-                if(!type.hasBit(Bit.NO_STORE))
+                if(type.hasBit(Bit.NO_SKIP_PERMISSION) || type.hasBit(Bit.NO_STORE))
                 {
-                    if(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + name) != null)
-                    {
-                        Messages.debug("permission for flag " + name + " already exists!");
-                        continue;
-                    }
-                    
-                    p = new Permission(Permissions.SKIPFLAG_PREFIX + name, PermissionDefault.FALSE);
-                    p.setDescription("Ignores the " + type + " flag.");
-                    p.addParent(parent, true);
-                    Bukkit.getPluginManager().addPermission(p);
+                    continue;
                 }
+                
+                if(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + name) != null)
+                {
+                    Messages.debug("permission for flag " + name + " already exists!");
+                    continue;
+                }
+                
+                p = new Permission(Permissions.SKIPFLAG_PREFIX + name, PermissionDefault.FALSE);
+                p.setDescription("Ignores the " + type + " flag.");
+                p.addParent(parent, true);
+                Bukkit.getPluginManager().addPermission(p);
             }
         }
     }
@@ -230,17 +274,17 @@ public enum FlagType
      */
     public class Bit
     {
-        public static final byte NONE     = 0;
+        public static final byte NONE = 0;
         
         /**
          * Flag only works in recipes.
          */
-        public static final byte RECIPE   = 1 << 1;
+        public static final byte RECIPE = 1 << 1;
         
         /**
          * Flag only works on results.
          */
-        public static final byte RESULT   = 1 << 2;
+        public static final byte RESULT = 1 << 2;
         
         /**
          * No value is allowed for this flag.
@@ -261,5 +305,10 @@ public enum FlagType
          * Disables shift+click on the recipe if there is at least one flag with this bit.
          */
         public static final byte NO_SHIFT = 1 << 6;
+        
+        /**
+         * Disables generating a skip permission for this flag
+         */
+        public static final short NO_SKIP_PERMISSION = 1 << 7;
     }
 }

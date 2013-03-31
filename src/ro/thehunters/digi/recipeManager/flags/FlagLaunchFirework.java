@@ -8,14 +8,63 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagLaunchFirework extends Flag
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "@launchfirework effect <effects>",
+            "@launchfirework power <number 0-128>",
+            "@launchfirework false",
+        };
+        
+        D = new String[]
+        {
+            "Launches a firework from workbench/player/furnace when recipe or result item is crafted.",
+            "This flag can be defined multiple times add effects and set power to the same rocket.",
+            "",
+            "The 'effect' setting adds an effect to the rocket.",
+            "Replace <effects> with the effects separated by | character.",
+            "Effects can be:",
+            "  color <red> <green> <blue>, ...           = (Required at least 1 color) Sets the primary explosion color(s), you can define more colors separated by comma.",
+            "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
+            "  type <explode type>                       = (Optional) Shape/size of explosion, can be: BALL, BALL_LARGE, BURST, CREEPER or STAR... or see " + Files.FILE_INFO_NAMES + " file.",
+            "  trail                                     = (Optional) Adds a trail to the explosion",
+            "  flicker                                   = (Optional) Adds a flicker to explosion",
+            "",
+            "Effects can be listed in any order.",
+            "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
+            "",
+            "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds, values above 4 are NOT recommended because it heavily affects client performance.",
+            "",
+            "Setting it to false will remove disable the flag.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} effect color 0 255 0",
+            "{flag} effect trail | color 255 0 0 | type burst",
+            "{flag} effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0",
+            "{flag} power 2",
+        };
+    }
+    
+    // Flag code
+    
     private FireworkMeta firework;
-    private float        chance = 100;
+    private float chance = 100;
     
     public FlagLaunchFirework()
     {

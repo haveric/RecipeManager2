@@ -6,11 +6,37 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagBook extends Flag
+public class FlagItemBook extends Flag
 {
-    public FlagBook()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.BOOK;
+        A = new String[1];
+        A[0] = "{flag} <title | author or false>";
+        
+        D = new String[6];
+        D[0] = "Changes book's title and author.";
+        D[1] = "You can use 'false' to completly erase its title and pages.";
+        D[2] = "Supports colors and format (e.g. <red>, <blue>, &4, &F, etc).";
+        D[3] = "Title and author must not exceed 64 characters individually, colors use 2 character each.";
+        D[4] = null;
+        D[5] = "Specific items: written book";
+        
+        E = new String[2];
+        E[0] = "{flag} The Art of Stealing | Gray Fox";
+        E[1] = "{flag} false";
+    }
+    
+    // Flag code
+    
+    public FlagItemBook()
+    {
+        type = FlagType.ITEMBOOK;
     }
     
     @Override

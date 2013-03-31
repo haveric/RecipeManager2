@@ -10,11 +10,30 @@ import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagMap extends Flag
+public class FlagItemMap extends Flag
 {
-    public FlagMap()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.MAP;
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
+    public FlagItemMap()
+    {
+        type = FlagType.ITEMMAP;
     }
     
     @Override
@@ -108,7 +127,11 @@ public class FlagMap extends Flag
                 
                 try
                 {
-                    center = new int[] { Integer.valueOf(split[1].trim()), Integer.valueOf(split[1].trim()) };
+                    center = new int[]
+                    {
+                        Integer.valueOf(split[1].trim()),
+                        Integer.valueOf(split[1].trim())
+                    };
                 }
                 catch(Exception e)
                 {

@@ -5,6 +5,25 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
 public class FlagHideResults extends Flag
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
     private int hideBitsum;
     
     /**
@@ -15,13 +34,13 @@ public class FlagHideResults extends Flag
         /**
          * Hide
          */
-        public static final byte SECRET    = 1 << 1;
+        public static final byte SECRET = 1 << 1;
         public static final byte UNALLOWED = 1 << 2;
         public static final byte CRAFTABLE = 1 << 3;
         /**
          * All settings into one for accessibility
          */
-        public static final byte ALL       = SECRET | UNALLOWED | CRAFTABLE;
+        public static final byte ALL = SECRET | UNALLOWED | CRAFTABLE;
     }
     
     public FlagHideResults()

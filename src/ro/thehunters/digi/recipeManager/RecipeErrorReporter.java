@@ -15,9 +15,9 @@ import org.bukkit.ChatColor;
 public class RecipeErrorReporter
 {
     private static HashMap<String, List<String>> fileErrors;
-    private static String                        currentFile;
-    private static int                           currentLine;
-    private static boolean                       ignore = false;
+    private static String currentFile;
+    private static int currentLine;
+    private static boolean ignore = false;
     
     /**
      * Starts catching reported errors and stores them in a list for later printing.<br>
@@ -44,21 +44,21 @@ public class RecipeErrorReporter
     /**
      * Check if class catched any errors.
      * 
-     * @return false if no errors or no queue at all
+     * @return true if catching, false otherwise
      */
     public static boolean isCatching()
     {
-        return (fileErrors != null && !fileErrors.isEmpty());
+        return (fileErrors != null);
     }
     
     /**
      * Gets the amount of queued errors.
      * 
-     * @return 0 if no errors or no queue at all
+     * @return 0 if no errors, -1 if not catching at all
      */
     public static int getCatchedAmount()
     {
-        return (fileErrors != null ? fileErrors.size() : 0);
+        return (isCatching() ? fileErrors.size() : -1);
     }
     
     /**
@@ -68,7 +68,7 @@ public class RecipeErrorReporter
      */
     public static void print(String logFile)
     {
-        if(fileErrors == null || fileErrors.isEmpty())
+        if(!isCatching() || fileErrors.isEmpty())
             return;
         
         int errors = fileErrors.size();
@@ -209,9 +209,11 @@ public class RecipeErrorReporter
     
     private static void entry(String type, String message, String tip)
     {
-        if(fileErrors == null)
+        if(!isCatching())
         {
-            Messages.error(null, new Exception(), type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + "; TIP: " + ChatColor.GRAY + tip : ""));
+            Messages.info(type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + " TIP: " + ChatColor.GRAY + tip : ""));
+            
+//            Messages.error(null, new Exception(), type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + "; TIP: " + ChatColor.GRAY + tip : ""));
         }
         else if(!ignore)
         {

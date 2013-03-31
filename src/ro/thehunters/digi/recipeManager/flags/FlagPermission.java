@@ -10,9 +10,45 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagPermission extends Flag
 {
-    private List<String> permissions     = new ArrayList<String>();
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "{flag} <permission or -permission or false>",
+        };
+        
+        D = new String[]
+        {
+            "Makes the recipe or item require the crafter to have a permission.",
+            "",
+            "This flag can be used more than once to add more permissions, the player must have at least one to allow crafting.",
+            "",
+            "Specifying permission nodes with the - prefix would prevent crafting if player has at least one of those permissions.",
+            "",
+            "Using 'false' will remove all previously added permissions for the recipe/result.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} ranks.vip",
+            "{flag} jobs.crafter",
+            "{flag} -ranks.newbs",
+            "{flag} - jobs.warrior  // valid with a space too",
+            "{flag} false",
+        };
+    }
+    
+    // Flag code
+    
+    private List<String> permissions = new ArrayList<String>();
     private List<String> antiPermissions = new ArrayList<String>();
-    private String       message;
+    private String message;
     
     public FlagPermission()
     {

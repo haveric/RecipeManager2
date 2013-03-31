@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -32,20 +31,20 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 public class Recipes
 {
     // Recipe index
-    protected Map<BaseRecipe, RecipeInfo>        index                = new HashMap<BaseRecipe, RecipeInfo>();
+    protected Map<BaseRecipe, RecipeInfo> index = new HashMap<BaseRecipe, RecipeInfo>();
     
     // Quick-find index
-    protected Map<Integer, CraftRecipe>          indexCraft           = new HashMap<Integer, CraftRecipe>();
-    protected Map<Integer, CombineRecipe>        indexCombine         = new HashMap<Integer, CombineRecipe>();
-    protected Map<Integer, SmeltRecipe>          indexSmelt           = new HashMap<Integer, SmeltRecipe>();
-    protected Map<String, SmeltRecipe>           indexSmeltFuels      = new HashMap<String, SmeltRecipe>();
-    protected Map<String, FuelRecipe>            indexFuels           = new HashMap<String, FuelRecipe>();
+    protected Map<Integer, CraftRecipe> indexCraft = new HashMap<Integer, CraftRecipe>();
+    protected Map<Integer, CombineRecipe> indexCombine = new HashMap<Integer, CombineRecipe>();
+    protected Map<Integer, SmeltRecipe> indexSmelt = new HashMap<Integer, SmeltRecipe>();
+    protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<String, SmeltRecipe>();
+    protected Map<String, FuelRecipe> indexFuels = new HashMap<String, FuelRecipe>();
     
     // constants
-    public static final String                   FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
-    public static final String                   RECIPE_ID_STRING     = ChatColor.GRAY + "RecipeManager #";
+    public static final String FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
+    public static final String RECIPE_ID_STRING = ChatColor.GRAY + "RecipeManager #";
     
-    private static final Map<String, ItemResult> staticResults        = new HashMap<String, ItemResult>();
+    private static final Map<String, ItemResult> staticResults = new HashMap<String, ItemResult>();
     
     protected Recipes()
     {
@@ -239,11 +238,6 @@ public class Recipes
         return new HashMap<BaseRecipe, RecipeInfo>(index);
     }
     
-    public boolean isResultTakeable(Player player, ItemStack result, ItemStack cursor, boolean shiftClick)
-    {
-        return true; // TODO Auto-generated method stub
-    }
-    
     public void registerRecipe(BaseRecipe recipe)
     {
         String adder = "TODO"; // TODO
@@ -272,7 +266,7 @@ public class Recipes
         }
         else if(recipe.hasFlag(FlagType.OVERRIDE))
         {
-            info.setStatus(RecipeStatus.OVERRIDEN);
+            info.setStatus(RecipeStatus.OVERRIDDEN);
         }
         
         // Add to main index
@@ -326,14 +320,6 @@ public class Recipes
     {
         // Remove from main index
         index.remove(recipe);
-        
-        /*
-        RecipeFlags flags = recipe.getFlags();
-        
-        BukkitRecipes.removeBukkitRecipe(recipe);
-        
-        Bukkit.addRecipe(bukkitRecipe);
-        */
         
         // Remove from quickfind index
         if(recipe instanceof CraftRecipe)

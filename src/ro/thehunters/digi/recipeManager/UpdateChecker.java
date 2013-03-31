@@ -18,13 +18,13 @@ import org.w3c.dom.NodeList;
  */
 public class UpdateChecker extends BukkitRunnable
 {
-    private static final String  URL_PLUGIN    = "http://dev.bukkit.org/server-mods/recipemanager/";
-    private static final String  URL_FILES     = URL_PLUGIN + "files";
-    private static final String  URL_FILES_RSS = URL_FILES + ".rss";
+    private static final String URL_PLUGIN = "http://dev.bukkit.org/server-mods/recipemanager/";
+    private static final String URL_FILES = URL_PLUGIN + "files";
+    private static final String URL_FILES_RSS = URL_FILES + ".rss";
     private static UpdateChecker instance;
-    private static String        newVersion;
-    private static String        newLink;
-    private CommandSender        sender;
+    private static String newVersion;
+    private static String newLink;
+    private CommandSender sender;
     
     /**
      * Constructor for calling update check one time only
@@ -104,8 +104,10 @@ public class UpdateChecker extends BukkitRunnable
             newLink = null;
         }
         
-        if(RecipeManager.getPlugin() == null)
+        if(!RecipeManager.isPluginFullyEnabled())
+        {
             return;
+        }
         
         if(newVersion == null)
         {

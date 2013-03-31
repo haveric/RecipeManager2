@@ -3,18 +3,57 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.mutable.MutableInt;
+
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.data.MutableInteger;
 
 public class FlagCooldown extends Flag
 {
-    private static final Map<String, MutableInteger> playerNextUse = new HashMap<String, MutableInteger>();
+    // Flag documentation
     
-    private int                                      cooldown;
-    private String                                   failMessage;
-    private String                                   craftMessage;
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[1];
+        A[0] = "{flag} <seconds> | [fail message or blank or false] | [craft message or false]";
+        
+        D = new String[17];
+        D[0] = "Sets a cooldown time for recipe or result.";
+        D[1] = "Once a recipe/result is used, it can not be used for the specified amount of time.";
+        D[2] = "If set on a result, the result will be unavailable for the cooldown time, the recipe will work just like before.";
+        D[3] = "NOTE: the cooldown is not saved between full server shutdowns!";
+        D[4] = null;
+        D[5] = "The <seconds> argument must be a number in seconds.";
+        D[6] = null;
+        D[7] = "The [fail message or false] argument is used when the result/recipe is still in cooldown.";
+        D[8] = "Using 'false' as value will hide the message.";
+        D[9] = "You can also not write anything (leave it blank) to skip it if you want to only set the craft message";
+        D[10] = "It can have the following variables:";
+        D[11] = "  {time}    = the remaining cooldown time for current crafter in format '#h #m #s'.";
+        D[12] = null;
+        D[13] = "The [craft message or false] is triggered when the recipe/result was crafted and cooldown was set.";
+        D[14] = "Using 'false' as value will hide the message.";
+        D[15] = "It can have the following variables:";
+        D[16] = "  {time}    = the new cooldown time in format '#h #m #s'.";
+        
+        E = new String[3];
+        E[0] = "{flag} 30";
+        E[1] = "{flag} 5 | <red>Cooldown: {time}";
+        E[2] = "{flag} 120 | <red>Wait {time}! | <yellow>You can craft this again after {time}...";
+    }
+    
+    // Flag code
+    
+    private static final Map<String, MutableInt> playerNextUse = new HashMap<String, MutableInt>();
+    
+    private int cooldown;
+    private String failMessage;
+    private String craftMessage;
     
     public FlagCooldown()
     {
@@ -51,13 +90,13 @@ public class FlagCooldown extends Flag
         if(playerName == null)
             return -1;
         
-        MutableInteger get = playerNextUse.get(playerName);
+        MutableInt get = playerNextUse.get(playerName);
         int time = (int)(System.currentTimeMillis() / 1000);
         
-        if(get == null || time >= get.value)
+        if(get == null || time >= get.intValue())
             return 0;
         
-        return get.value - time;
+        return get.intValue() - time;
     }
     
     public String getCooldownStringFor(String playerName)
@@ -84,12 +123,12 @@ public class FlagCooldown extends Flag
         if(playerName == null)
             return false;
         
-        MutableInteger get = playerNextUse.get(playerName);
+        MutableInt get = playerNextUse.get(playerName);
         
         if(get == null)
             return true;
         
-        return (System.currentTimeMillis() / 1000) >= get.value;
+        return (System.currentTimeMillis() / 1000) >= get.intValue();
     }
     
     public String getFailMessage()
@@ -174,17 +213,17 @@ public class FlagCooldown extends Flag
         if(!a.hasPlayerName())
             return false;
         
-        MutableInteger get = playerNextUse.get(a.playerName());
+        MutableInt get = playerNextUse.get(a.playerName());
         int time = (int)(System.currentTimeMillis() / 1000) + getCooldownTime();
         
         if(get == null)
         {
-            get = new MutableInteger(time);
+            get = new MutableInt(time);
             playerNextUse.put(a.playerName(), get);
         }
         else
         {
-            get.value = time;
+            get.setValue(time);
         }
         
         a.addEffect(Messages.FLAG_COOLDOWN_CRAFT, getCraftMessage(), "{time}", diffTimeToString(time));

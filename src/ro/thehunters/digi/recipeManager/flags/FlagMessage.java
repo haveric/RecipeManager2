@@ -4,6 +4,37 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagMessage extends Flag
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "{flag} <text or false>",
+        };
+        
+        D = new String[]
+        {
+            "Prints a message when recipe or item is succesfully crafted.",
+            "The text can contain colors (<red>, &5, etc) and can also contain new lines, separated by | character.",
+            "",
+            "Setting to false will disable the flag.",
+            "",
+            "NOTE: Using this flag more than once will overwrite the previous one.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} <green>Good job ! |<gray>Now you can die happy that you crafted that.",
+        };
+    }
+    
+    // Flag code
+    
     private String message;
     
     public FlagMessage()

@@ -45,6 +45,24 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  */
 public class Tools
 {
+    public static String hideString(String string)
+    {
+        char[] data = new char[string.length() * 2];
+        
+        for(int i = 0; i < data.length; i += 2)
+        {
+            data[i] = ChatColor.COLOR_CHAR;
+            data[i + 1] = string.charAt(i == 0 ? 0 : i / 2);
+        }
+        
+        return new String(data);
+    }
+    
+    public static String unhideString(String string)
+    {
+        return string.replace("" + ChatColor.COLOR_CHAR, "");
+    }
+    
     public static boolean itemSimilarDataWildcard(ItemStack source, ItemStack item)
     {
         if(item == null)
@@ -168,7 +186,12 @@ public class Tools
      */
     public static String printItem(ItemStack item)
     {
-        return printItem(item, ChatColor.RESET);
+        return printItem(item, ChatColor.WHITE, ChatColor.RESET, false);
+    }
+    
+    public static String printItemBook(ItemStack item)
+    {
+        return printItem(item, ChatColor.BLACK, null, false);
     }
     
     /**
@@ -180,11 +203,13 @@ public class Tools
      * 
      * @param item
      *            the item to print, can be null
+     * @param defColor
+     *            default color, usually white
      * @param endColor
      *            will be appended at the end of string, should be your text color
      * @return user-friendly item print
      */
-    public static String printItem(ItemStack item, ChatColor endColor)
+    public static String printItem(ItemStack item, ChatColor defColor, ChatColor endColor, boolean alwaysShowAmount)
     {
         if(item == null || item.getTypeId() == 0)
             return ChatColor.GRAY + "(nothing)";
@@ -226,12 +251,13 @@ public class Tools
             
             if(data != 0)
             {
+                /*
                 short maxDur = item.getType().getMaxDurability();
                 
                 if(maxDur > 0)
                 {
                     StringBuilder s = new StringBuilder(name).append(' ');
-                    s.append(ChatColor.DARK_GRAY).append('[');
+                    s.append(ChatColor.DARK_GRAY).append('|');
                     
                     int scale = Math.max(((maxDur - data) * 10) / maxDur, 0); // damage scale from 1 to 10
                     
@@ -261,11 +287,12 @@ public class Tools
                             s.append(ChatColor.DARK_GRAY);
                     }
                     
-                    s.append(']');
+                    s.append('|');
                     
                     itemData = s.toString();
                 }
-                else if(data == Vanilla.DATA_WILDCARD)
+                else*/
+                if(data == Vanilla.DATA_WILDCARD)
                 {
                     itemData = name + ChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
                 }
@@ -280,10 +307,46 @@ public class Tools
             }
         }
         
-        String amount = (item.getAmount() > 1 ? item.getAmount() + "x " : "");
-        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : ChatColor.WHITE);
+        String amount = (alwaysShowAmount || item.getAmount() > 1 ? item.getAmount() + "x " : "");
+        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : defColor);
         
-        return amount + color + itemData + ChatColor.RESET;
+        return amount + color + itemData + (endColor == null ? "" : endColor);
+    }
+    
+    public static String getItemName(ItemStack item)
+    {
+        String name = null;
+        String itemData = null;
+        
+        ItemMeta meta = item.getItemMeta();
+        
+        if(meta.hasDisplayName())
+        {
+            name = ChatColor.ITALIC + meta.getDisplayName();
+        }
+        else
+        {
+            name = RecipeManager.getSettings().printName.get(item.getType());
+            
+            if(name == null)
+            {
+                name = parseAliasPrint(item.getType().toString());
+            }
+        }
+        
+        Map<Short, String> dataMap = RecipeManager.getSettings().printData.get(item.getType());
+        
+        if(dataMap != null)
+        {
+            itemData = dataMap.get(item.getDurability());
+            
+            if(itemData != null)
+            {
+                itemData = itemData + " " + name;
+            }
+        }
+        
+        return (item.getEnchantments().size() > 0 ? ChatColor.AQUA : "") + (itemData == null ? name : itemData);
     }
     
     public static String printNumber(Number number)
@@ -291,7 +354,7 @@ public class Tools
         return NumberFormat.getNumberInstance().format(number);
     }
     
-    public static String replaceVariables(String msg, String... variables)
+    public static String replaceVariables(String msg, Object... variables)
     {
         if(variables != null && variables.length > 0)
         {
@@ -302,14 +365,14 @@ public class Tools
             
             for(int i = 0; i < variables.length; i += 2) // loop 2 by 2
             {
-                msg = msg.replace(variables[i], variables[i + 1]);
+                msg = msg.replace(variables[i].toString(), variables[i + 1].toString());
             }
         }
         
         return msg;
     }
     
-    public static ItemResult convertStringToItemResult(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    public static ItemResult parseItemResult(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
     {
         String[] split = string.substring(1).trim().split("%");
         ItemResult result = new ItemResult();
@@ -338,7 +401,7 @@ public class Tools
             string = split[0];
         }
         
-        ItemStack item = convertStringToItemStack(string, defaultData, allowData, allowAmount, allowEnchantments);
+        ItemStack item = parseItemStack(string, defaultData, allowData, allowAmount, allowEnchantments);
         
         if(item == null)
             return null;
@@ -348,7 +411,7 @@ public class Tools
         return result;
     }
     
-    public static ItemStack convertStringToItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    public static ItemStack parseItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
     {
         value = value.trim();
         
@@ -920,10 +983,10 @@ public class Tools
     {
         for(ChatColor color : ChatColor.values())
         {
-            message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : "" + color));
+            message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : color.toString()));
         }
         
-        return removeColors ? message : ChatColor.translateAlternateColorCodes('&', message);
+        return removeColors ? ChatColor.stripColor(message) : ChatColor.translateAlternateColorCodes('&', message);
     }
     
     /**
@@ -973,7 +1036,7 @@ public class Tools
         {
             String s = lore.get(i);
             
-            if(s.startsWith(Recipes.RECIPE_ID_STRING))
+            if(s != null && s.startsWith(Recipes.RECIPE_ID_STRING))
             {
                 try
                 {

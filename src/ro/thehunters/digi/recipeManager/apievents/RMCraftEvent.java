@@ -19,15 +19,15 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
  */
 public class RMCraftEvent extends Event implements Cancellable
 {
-    private static final HandlerList handlers   = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     
-    private boolean                  cancelled  = false;
-    private boolean                  shiftClick = false;
-    private boolean                  rightClick = false;
-    private ItemResult               result;
-    private ItemStack                cursor;
-    private WorkbenchRecipe          recipe;
-    private Player                   player;
+    private boolean cancelled = false;
+    private boolean shiftClick = false;
+    private boolean rightClick = false;
+    private ItemResult result;
+    private ItemStack cursor;
+    private WorkbenchRecipe recipe;
+    private Player player;
     
     public RMCraftEvent(WorkbenchRecipe recipe, ItemResult result, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
     {

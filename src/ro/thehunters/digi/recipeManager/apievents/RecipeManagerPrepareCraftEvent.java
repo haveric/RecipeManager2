@@ -19,10 +19,10 @@ public class RecipeManagerPrepareCraftEvent extends Event
 {
     private static final HandlerList handlers = new HandlerList();
     
-    private WorkbenchRecipe          recipe;
-    private ItemStack                result;
-    private Player                   player;
-    private Location                 workbench;
+    private WorkbenchRecipe recipe;
+    private ItemStack result;
+    private Player player;
+    private Location workbench;
     
     public RecipeManagerPrepareCraftEvent(WorkbenchRecipe recipe, ItemStack result, Player player, Location workbench)
     {

@@ -6,16 +6,58 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class FlagCommands extends Flag
+public class FlagCommand extends Flag
 {
-    private List<String> commands = new ArrayList<String>();
+    // Flag documentation
     
-    public FlagCommands()
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.COMMANDS;
+        A = new String[]
+        {
+            "{flag} <text or false>",
+        };
+        
+        D = new String[]
+        {
+            "Executes the command when recipe is succesful.",
+            "This flag can be used more than once to add more commands to the list.",
+            "",
+            "Commands are executed server-side, if you add / prefix it will execute the command on the crafter.",
+            "",
+            "You can use wildcards to replace text in commands:",
+            "  {player}         = crafter's name or '(nobody)' if not available",
+            "  {playerdisplay}  = crafter's display name or '(nobody)' if not available",
+            "  {result}         = the result item name or '(nothing)' if recipe failed.",
+            "  {recipetype}     = recipe type or '(unknown)' if not available",
+            "  {world}          = world of event location or '(unknown)' if not available",
+            "  {x}              = event location's X coord or 0 if not available",
+            "  {y}              = event location's Y coord or 0 if not available",
+            "  {z}              = event location's Z coord or 0 if not available",
+            "",
+            "Setting to false will remove all commands for the current recipe or item.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} /say I crafted {result} !",
+            "{flag} kick {player}",
+        };
     }
     
-    public FlagCommands(FlagCommands flag)
+    // Flag code
+    
+    private List<String> commands = new ArrayList<String>();
+    
+    public FlagCommand()
+    {
+        type = FlagType.COMMAND;
+    }
+    
+    public FlagCommand(FlagCommand flag)
     {
         this();
         
@@ -23,9 +65,9 @@ public class FlagCommands extends Flag
     }
     
     @Override
-    public FlagCommands clone()
+    public FlagCommand clone()
     {
-        return new FlagCommands(this);
+        return new FlagCommand(this);
     }
     
     /**

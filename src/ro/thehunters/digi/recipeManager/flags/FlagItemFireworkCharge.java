@@ -7,11 +7,30 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagFireworkCharge extends Flag
+public class FlagItemFireworkCharge extends Flag
 {
-    public FlagFireworkCharge()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.FIREWORKCHARGE;
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
+    public FlagItemFireworkCharge()
+    {
+        type = FlagType.ITEMFIREWORKCHARGE;
     }
     
     @Override

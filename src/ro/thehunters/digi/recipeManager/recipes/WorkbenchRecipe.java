@@ -12,6 +12,8 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.flags.Args;
+import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
+import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition.Conditions;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -98,11 +100,22 @@ public class WorkbenchRecipe extends BaseRecipe
     {
         for(ItemResult r : results)
         {
-            if(r.getTypeId() != 0)
+            if(r.getTypeId() != 0 && !r.hasFlag(FlagType.SECRET))
+            {
                 return r;
+            }
         }
         
-        return null;
+        // if no non-secret result was found, then we must return something...
+        for(ItemResult r : results)
+        {
+            if(r.getTypeId() != 0)
+            {
+                return r;
+            }
+        }
+        
+        return null; // no valid results defined
     }
     
     /**
@@ -261,9 +274,9 @@ public class WorkbenchRecipe extends BaseRecipe
         return craftAmount;
     }
     
-    public void subtractIngredients(CraftingInventory inv)
+    public void subtractIngredients(CraftingInventory inv, boolean onlyExtra)
     {
-        int amt;
+        FlagIngredientCondition flag = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
         
         for(int i = 1; i < 10; i++)
         {
@@ -271,13 +284,38 @@ public class WorkbenchRecipe extends BaseRecipe
             
             if(item != null)
             {
-                if((amt = (item.getAmount() - 1)) > 0)
+                int amt = item.getAmount();
+                int newAmt = amt;
+                
+                if(flag != null)
                 {
-                    item.setAmount(amt);
+                    Conditions cond = flag.getConditions(item);
+                    
+                    if(cond != null && cond.getAmount() > 0)
+                    {
+                        Messages.debug("flag removed amount " + cond.getAmount() + " from " + Tools.printItem(item));
+                        
+                        newAmt -= cond.getAmount();
+                    }
                 }
-                else
+                
+                if(!onlyExtra)
                 {
-                    inv.clear(i);
+                    newAmt -= 1;
+                    
+                    Messages.debug("extra removed amount 1 from " + Tools.printItem(item));
+                }
+                
+                if(amt != newAmt)
+                {
+                    if(newAmt > 0)
+                    {
+                        item.setAmount(newAmt);
+                    }
+                    else
+                    {
+                        inv.clear(i);
+                    }
                 }
             }
         }

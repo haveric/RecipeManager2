@@ -5,11 +5,30 @@ import org.bukkit.enchantments.Enchantment;
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
-public class FlagEnchant extends Flag
+public class FlagItemEnchant extends Flag
 {
-    public FlagEnchant()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.ENCHANT;
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
+    public FlagItemEnchant()
+    {
+        type = FlagType.ITEMENCHANT;
     }
     
     @Override

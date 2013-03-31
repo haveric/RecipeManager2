@@ -6,9 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
-
 
 /**
  * Event triggered when RecipeManager's custom recipes are crafted/combined in the workbench.<br>
@@ -20,14 +18,14 @@ import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
  */
 public class RecipeManagerCraftEvent extends Event implements Cancellable
 {
-    private static final HandlerList handlers   = new HandlerList();
-    private boolean                  cancelled  = false;
-    private boolean                  shiftClick = false;
-    private boolean                  rightClick = false;
-    private ItemStack                result;
-    private ItemStack                cursor;
-    private BaseRecipe               recipe;
-    private Player                   player;
+    private static final HandlerList handlers = new HandlerList();
+    private boolean cancelled = false;
+    private boolean shiftClick = false;
+    private boolean rightClick = false;
+    private ItemStack result;
+    private ItemStack cursor;
+    private BaseRecipe recipe;
+    private Player player;
     
     public RecipeManagerCraftEvent(BaseRecipe recipe, ItemStack item, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
     {
@@ -93,7 +91,8 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable
      */
     public boolean isResultTakeable()
     {
-        return (player == null || RecipeManager.getRecipes().isResultTakeable(player, result, cursor, shiftClick));
+        return false;
+//        return (player == null || RecipeManager.getRecipes().isResultTakeable(player, result, cursor, shiftClick));
     }
     
     /**

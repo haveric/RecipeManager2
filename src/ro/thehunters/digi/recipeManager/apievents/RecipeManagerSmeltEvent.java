@@ -12,7 +12,6 @@ import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
-
 /**
  * Event triggered when RecipeManager's custom furnace recipes are beeing smelted.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
@@ -22,14 +21,14 @@ import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
  */
 public class RecipeManagerSmeltEvent extends Event implements Cancellable
 {
-    private static final HandlerList handlers  = new HandlerList();
-    private boolean                  cancelled = false;
-    private SmeltRecipe              recipe;
-    private FuelRecipe               fuelRecipe;
-    private ItemResult               result;
-    private Block                    block;
-    private String                   smelter;
-    private String                   fueler;
+    private static final HandlerList handlers = new HandlerList();
+    private boolean cancelled = false;
+    private SmeltRecipe recipe;
+    private FuelRecipe fuelRecipe;
+    private ItemResult result;
+    private Block block;
+    private String smelter;
+    private String fueler;
     
     public RecipeManagerSmeltEvent(SmeltRecipe recipe, FuelRecipe fuelRecipe, ItemResult result, Block block, String smelter, String fueler)
     {

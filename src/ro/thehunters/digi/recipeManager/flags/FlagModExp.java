@@ -8,8 +8,47 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModExp extends Flag
 {
-    private char   mod     = '+';
-    private int    amount  = 0;
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "{flag} [modifier]<number>",
+            "{flag} [modifier]<number> | <message>",
+            "{flag} false",
+        };
+        
+        D = new String[]
+        {
+            "Modifies crafter's experience points.",
+            "",
+            "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+            "The '<number>' argument must be the amount of experience to modify.",
+            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "",
+            "NOTE: Using this flag more than once will overwrite the previous one.",
+            "NOTE: This is for total experience points, for experience levels use " + FlagType.MODLEVEL.toString(),
+            "NOTE: This flag does not check if player has enough experience when subtracting! Use in combination with " + FlagType.REQEXP.toString() + " if you want to check.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} 25 // gives 25 experience to crafter",
+            "{flag} +25 // exacly the same as above",
+            "{flag} -50 | <red>You lost {amount} exp!  // takes at most 50 experience from crafter, if he does not have that amount it will be set to 0.",
+            "{flag} = 0 | <red>You lost all your experience!  // sets crafter experience to 0, that space is valid there too.",
+        };
+    }
+    
+    // Flag code
+    
+    private char mod = '+';
+    private int amount = 0;
     private String message = null;
     
     public FlagModExp()
@@ -30,6 +69,11 @@ public class FlagModExp extends Flag
     public FlagModExp clone()
     {
         return new FlagModExp(this);
+    }
+    
+    public char getModifier()
+    {
+        return mod;
     }
     
     public int getAmount()
@@ -107,13 +151,13 @@ public class FlagModExp extends Flag
             case '=':
             case '+':
             {
-                value = value.substring(1);
+                value = value.substring(1).trim(); // remove modifier from string
                 break;
             }
             
             default:
             {
-                mod = '+';
+                mod = '+'; // set default modifier if it's not defined
             }
         }
         
@@ -135,7 +179,7 @@ public class FlagModExp extends Flag
         
         if(mod != '=' && amount == 0)
         {
-            return RecipeErrorReporter.error("The " + getType() + " flag must not have 0 exp !");
+            return RecipeErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
         }
         
         setAmount(mod, amount);
@@ -167,7 +211,7 @@ public class FlagModExp extends Flag
                     p.giveExp(diff);
                 }
                 
-                a.addEffect(Messages.FLAG_MODEXP_SUB, message, "{exp}", String.valueOf(Math.abs(amount)));
+                a.addEffect(Messages.FLAG_MODEXP_SUB, message, "{amount}", amount);
                 
                 break;
             }
@@ -176,7 +220,7 @@ public class FlagModExp extends Flag
             {
                 p.giveExp(amount);
                 
-                a.addEffect(Messages.FLAG_MODEXP_ADD, message, "{exp}", String.valueOf(amount));
+                a.addEffect(Messages.FLAG_MODEXP_ADD, message, "{amount}", amount);
                 
                 break;
             }
@@ -187,7 +231,7 @@ public class FlagModExp extends Flag
                 p.setLevel(0);
                 p.giveExp(amount);
                 
-                a.addEffect(Messages.FLAG_MODEXP_SET, message, "{exp}", String.valueOf(amount));
+                a.addEffect(Messages.FLAG_MODEXP_SET, message, "{amount}", amount);
                 
                 break;
             }

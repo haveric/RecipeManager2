@@ -8,8 +8,43 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagReqExp extends Flag
 {
-    private int    minExp;
-    private int    maxExp;
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[]
+        {
+            "{flag} <min or min-max>",
+            "{flag} <min or min-max> | <message>",
+            "{flag} false",
+        };
+        
+        D = new String[]
+        {
+            "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
+            "",
+            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in result's lore, should be as short as possible.",
+            "",
+            "NOTE: Using this flag more than once will overwrite the previous one!",
+            "NOTE: This is for total experience points, for experience levels use " + FlagType.REQLEVEL.toString(),
+        };
+        
+        E = new String[]
+        {
+            "{flag} 100 // player needs to have at least 100 experience to craft",
+            "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
+            "{flag} 1000 | <red>Need {exp} exp!",
+        };
+    }
+    
+    // Flag code
+    
+    private int minExp;
+    private int maxExp;
     private String message;
     
     public FlagReqExp()

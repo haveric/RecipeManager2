@@ -1,5 +1,9 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -7,14 +11,15 @@ import org.bukkit.inventory.ShapedRecipe;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class CraftRecipe extends WorkbenchRecipe
 {
-    private ItemStack[]  ingredients;
-    private int          width;
-    private int          height;
+    private ItemStack[] ingredients;
+    private int width;
+    private int height;
     
     private ShapedRecipe bukkitRecipe;
     
@@ -308,5 +313,80 @@ public class CraftRecipe extends WorkbenchRecipe
     public RecipeType getType()
     {
         return RecipeType.CRAFT;
+    }
+    
+    @Override
+    public String printBookIndex()
+    {
+        return Tools.getItemName(getFirstResult());
+    }
+    
+    @Override
+    public String printBook()
+    {
+        StringBuilder s = new StringBuilder(256);
+        
+        s.append(Messages.RECIPEBOOK_HEADER_SHAPED.get());
+        
+        s.append('\n').append(Tools.printItem(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        
+        if(isMultiResult())
+        {
+            s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
+        }
+        
+        if(hasFlag(FlagType.DESCRIPTION))
+        {
+            s.append('\n').append(ChatColor.DARK_BLUE).append(Tools.parseColors(getFlag(FlagDescription.class).getDescription(), false));
+        }
+        
+        s.append('\n');
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_SHAPE.get()).append(ChatColor.GRAY);
+        
+        Map<String, Integer> charItems = new LinkedHashMap<String, Integer>();
+        int num = 1;
+        boolean smallGrid = getWidth() <= 2 && getHeight() <= 2;
+        
+        for(int i = 0; i < ingredients.length; i++)
+        {
+            if(smallGrid && (i == 2 || i >= 5))
+            {
+                continue;
+            }
+            
+            if(i == 0 || i == 3 || i == 6)
+            {
+                s.append('\n');
+            }
+            
+            if(ingredients[i] == null)
+            {
+                s.append('[').append(ChatColor.WHITE).append('_').append(ChatColor.GRAY).append(']');
+            }
+            else
+            {
+                String print = Tools.printItemBook(ingredients[i]);
+                Integer get = charItems.get(print);
+                
+                if(get == null)
+                {
+                    charItems.put(print, num);
+                    get = num;
+                    num++;
+                }
+                
+                s.append('[').append(ChatColor.RED).append(get).append(ChatColor.GRAY).append(']');
+            }
+        }
+        
+        s.append('\n');
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENTS.get()).append(ChatColor.GRAY);
+        
+        for(Entry<String, Integer> entry : charItems.entrySet())
+        {
+            s.append('\n').append(ChatColor.RED).append(entry.getValue()).append(ChatColor.GRAY).append(": ").append(entry.getKey());
+        }
+        
+        return s.toString();
     }
 }

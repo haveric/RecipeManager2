@@ -11,8 +11,8 @@ import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class ItemResult extends ItemStack implements Flaggable
 {
-    private Flags      flags;
-    private float      chance = 100;
+    private Flags flags;
+    private float chance = 100;
     private BaseRecipe recipe;
     
     public ItemResult()

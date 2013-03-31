@@ -27,6 +27,16 @@ public class HelpCommand implements CommandExecutor
         for(Entry<String, Map<String, Object>> e : cmds.entrySet())
         {
             data = e.getValue();
+            Object obj = data.get("permission");
+            
+            if(obj != null && obj instanceof String)
+            {
+                if(!sender.hasPermission((String)obj))
+                {
+                    continue;
+                }
+            }
+            
             Messages.send(sender, "<gold>" + data.get("usage").toString().replace("<command>", e.getKey()) + ": " + ChatColor.RESET + data.get("description"));
         }
         

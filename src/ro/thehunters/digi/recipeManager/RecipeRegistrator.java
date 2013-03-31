@@ -3,17 +3,13 @@ package ro.thehunters.digi.recipeManager;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.Set;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import ro.thehunters.digi.recipeManager.flags.FlagType;
@@ -26,12 +22,15 @@ import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
+import com.google.common.collect.Sets;
+
 public class RecipeRegistrator implements Runnable
 {
-    private final CommandSender                     sender;
+    protected Map<BaseRecipe, RecipeInfo> queuedRecipes = new HashMap<BaseRecipe, RecipeInfo>();
+    private boolean registered = false;
     
-    protected Map<BaseRecipe, RecipeInfo>           queuedRecipes = new HashMap<BaseRecipe, RecipeInfo>();
-    private boolean                                 registered    = false;
+    /*
+    private final CommandSender                     sender;
     
     private Iterator<Entry<BaseRecipe, RecipeInfo>> iterator      = null;
     
@@ -42,17 +41,22 @@ public class RecipeRegistrator implements Runnable
     private long                                    lastDisplay;
     private int                                     temp;
     
-    private static BukkitTask                       task;
+    private BaseRecipe r;
+    */
+    
+    private static BukkitTask task;
     
     protected RecipeRegistrator(CommandSender sender)
     {
-        this.sender = sender;
+//        this.sender = sender;
         
         if(task != null)
+        {
             task.cancel();
+        }
     }
     
-    private BaseRecipe r;
+    // TODO register in chunks
     
     @Override
     public void run()
@@ -90,19 +94,25 @@ public class RecipeRegistrator implements Runnable
     protected void queueRecipe(BaseRecipe recipe, String adder)
     {
         if(recipe instanceof CraftRecipe)
+        {
             queueCraftRecipe((CraftRecipe)recipe, adder);
-        
+        }
         else if(recipe instanceof CombineRecipe)
+        {
             queueCombineRecipe((CombineRecipe)recipe, adder);
-        
+        }
         else if(recipe instanceof SmeltRecipe)
+        {
             queueSmeltRecipe((SmeltRecipe)recipe, adder);
-        
+        }
         else if(recipe instanceof FuelRecipe)
+        {
             queuFuelRecipe((FuelRecipe)recipe, adder);
-        
+        }
         else
+        {
             throw new IllegalArgumentException("Unknown recipe!");
+        }
     }
     
     protected void queueCraftRecipe(CraftRecipe recipe, String adder)
@@ -149,20 +159,18 @@ public class RecipeRegistrator implements Runnable
         if(!recipe.isValid())
             throw new IllegalArgumentException("Recipe is invalid ! Needs an ingredient!");
         
-        /*
-        fuels.put(Tools.convertItemToStringID(recipe.getIngredient()), recipe);
-        */
-        
         queuedRecipes.remove(recipe);
         queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder, RecipeStatus.QUEUED));
     }
     
-    protected void registerRecipesToServer(CommandSender sender, long start, Set<String> adders)
+    protected void registerRecipesToServer(CommandSender sender, long start, Set<String> changedFiles)
     {
         if(registered)
+        {
             throw new IllegalAccessError("This class is already registered, create a new one!");
+        }
         
-        Messages.debug("adders " + (adders == null ? "n/a" : adders.size() + ":" + ArrayUtils.toString(adders)));
+//        Messages.debug("adders " + (changedFiles == null ? "n/a" : changedFiles.size() + ":" + ArrayUtils.toString(changedFiles)));
         
         Map<BaseRecipe, RecipeInfo> copyRecipes = new HashMap<BaseRecipe, RecipeInfo>();
         Set<BaseRecipe> removeRecipes = new HashSet<BaseRecipe>();
@@ -175,9 +183,11 @@ public class RecipeRegistrator implements Runnable
         
         // ---
         
-        if(adders != null && !adders.isEmpty() && RecipeManager.getRecipes() != null)
+        if(RecipeManager.getRecipes() != null && changedFiles != null)
         {
             iterator = RecipeManager.getRecipes().index.entrySet().iterator();
+            
+//            Messages.debug("processing changed files...");
             
             while(iterator.hasNext())
             {
@@ -185,16 +195,22 @@ public class RecipeRegistrator implements Runnable
                 info = entry.getValue();
                 
                 if(info.getOwner() != RecipeOwner.RECIPEMANAGER)
-                    continue; // skip unowned recipes
-                    
-                if(adders.contains(info.getAdder()))
                 {
-                    // recipe was defined in reloaded file, queue for removal in case it's not found defined in the file
+                    continue; // skip unowned recipes
+                }
+                
+                if(changedFiles.contains(info.getAdder()))
+                {
+//                    Messages.debug("changed '" + info.getAdder() + "': " + entry.getKey().getType());
+                    
+                    // recipe was defined in a changed file, queue for removal in case it's not found defined in the file
                     removeRecipes.add(entry.getKey());
                 }
                 else
                 {
                     // unchanged recipe
+                    
+//                    Messages.debug("not changed '" + info.getAdder() + "': " + entry.getKey().getType());
                     
                     // check if recipe has custom smelt time
                     if(!needFurnaceWorker)
@@ -202,7 +218,9 @@ public class RecipeRegistrator implements Runnable
                         recipe = entry.getKey();
                         
                         if(recipe instanceof SmeltRecipe && ((SmeltRecipe)recipe).hasCustomTime())
+                        {
                             needFurnaceWorker = true;
+                        }
                     }
                     
                     copyRecipes.put(entry.getKey(), info); // save recipe
@@ -212,7 +230,7 @@ public class RecipeRegistrator implements Runnable
         
         // ---
         
-        Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Processed recipes: " + queuedRecipes.size());
+//        Messages.debug("Processed recipes: " + queuedRecipes.size());
         
         iterator = queuedRecipes.entrySet().iterator();
         
@@ -222,6 +240,8 @@ public class RecipeRegistrator implements Runnable
         long time;
         int processed = 0;
         int size = queuedRecipes.size();
+        int addedNum = 0;
+        int removedNum = 0;
         
         while(iterator.hasNext())
         {
@@ -229,36 +249,39 @@ public class RecipeRegistrator implements Runnable
             info = entry.getValue();
             
             if(info.getOwner() != RecipeOwner.RECIPEMANAGER)
+            {
                 continue;
+            }
             
             recipe = entry.getKey();
             add = !recipe.hasFlag(FlagType.REMOVE);
             remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
             
-//            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getType());
+//            Messages.debug("recipe = " + recipe.getType());
             
             if(remove)
             {
-//                Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
+//                Messages.debug("Removing recipe...");
                 
-                recipe.remove();
-                
-//                if(!recipe.remove())
-//                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shaped recipe to remove!");
+                if(!recipe.remove())
+                {
+//                    Messages.debug("Couldn't find shaped recipe to remove!");
+                }
             }
             
             if(add)
             {
-//                Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Registering recipe...");
+//                Messages.debug("Registering recipe...");
                 
                 RecipeManager.getRecipes().registerRecipe(recipe, info);
+                addedNum++;
             }
             
             time = System.currentTimeMillis();
             
             if(time > lastDisplay + 1000)
             {
-                Messages.send(sender, ChatColor.YELLOW + "Registering recipes " + ((processed * 100) / size) + "%...");
+                Messages.send(sender, String.format("%sRegistering recipes %d%%...", ChatColor.YELLOW, ((processed * 100) / size)));
                 lastDisplay = time;
             }
             
@@ -272,240 +295,28 @@ public class RecipeRegistrator implements Runnable
             while(it.hasNext())
             {
                 it.next().remove();
+                removedNum++;
             }
             
             removeRecipes.clear();
         }
         
-        // Start the furnace worker task if it's not running
-        if(needFurnaceWorker)
+        RecipeManager.getRecipeBooks().reload(); // (Re)Create recipe books for recipes
+        
+        if(needFurnaceWorker) // Start the furnace worker task if it's not running and it's now needed
+        {
             FurnaceWorker.start();
+        }
         
         registered = true; // mark this class as registered so it doesn't get re-registered
         queuedRecipes.clear(); // clear the queue to let the class vanish
         
-        Messages.send(sender, String.format("All done, %d recipes registered.", processed));
+        Messages.send(sender, String.format("All done in %.3f seconds, %d recipes added, %d removed.", ((System.currentTimeMillis() - start) / 1000.0), addedNum, removedNum));
     }
     
-    protected void aaaaaaaaaaaaaa(CommandSender sender, long start, Set<String> adders)
-    {
-        if(registered)
-            throw new IllegalAccessError("This class is already registered, create a new one!");
-        
-        iterator = queuedRecipes.entrySet().iterator();
-        
-        /*
-        if(RecipeManager.getSettings().MULTITHREADING && size > 500)
-        {
-            task = Bukkit.getScheduler().runTaskTimer(RecipeManager.getPlugin(), this, 0, 2);
-        }
-        else
-        {
-            task = null;
-            
-            while(!recipes.isEmpty())
-            {
-                run();
-            }
-        }
-        */
-        
-        Map<BaseRecipe, RecipeInfo> copyRecipes = new HashMap<BaseRecipe, RecipeInfo>();
-        Set<BaseRecipe> removeRecipes = new HashSet<BaseRecipe>();
-        
-        Iterator<Entry<BaseRecipe, RecipeInfo>> iterator;
-        Entry<BaseRecipe, RecipeInfo> entry;
-        RecipeInfo info;
-        BaseRecipe recipe;
-        boolean needFurnaceWorker = false;
-        
-        // ---
-        
-        if(adders != null && !adders.isEmpty() && RecipeManager.getRecipes() != null)
-        {
-            iterator = RecipeManager.getRecipes().index.entrySet().iterator();
-            
-            while(iterator.hasNext())
-            {
-                entry = iterator.next();
-                info = entry.getValue();
-                
-                if(info.getOwner() != RecipeOwner.RECIPEMANAGER)
-                    continue; // skip unowned recipes
-                    
-                if(adders.contains(info.getAdder()))
-                {
-                    // recipe was defined in reloaded file, queue for removal in case it's not found defined in the file
-                    removeRecipes.add(entry.getKey());
-                }
-                else
-                {
-                    // unchanged recipe
-                    
-                    // check if recipe has custom smelt time
-                    if(!needFurnaceWorker)
-                    {
-                        recipe = entry.getKey();
-                        
-                        if(recipe instanceof SmeltRecipe && ((SmeltRecipe)recipe).getMinTime() >= 0)
-                            needFurnaceWorker = true;
-                    }
-                    
-                    copyRecipes.put(entry.getKey(), info); // save recipe
-                }
-            }
-        }
-        
-        // ---
-        
-        Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Processed recipes: " + queuedRecipes.size());
-        
-        iterator = queuedRecipes.entrySet().iterator();
-        
-        boolean remove;
-        boolean add;
-        CraftRecipe cr;
-        CombineRecipe co;
-        SmeltRecipe sm;
-        
-        long lastDisplay = System.currentTimeMillis();
-        long time;
-        int processed = 0;
-        int size = queuedRecipes.size();
-        
-        final Queue<Recipe> recipeQueue = new LinkedList<Recipe>();
-        
-        while(iterator.hasNext())
-        {
-            entry = iterator.next();
-            info = entry.getValue();
-            
-            if(info.getOwner() != RecipeOwner.RECIPEMANAGER)
-                continue;
-            
-            recipe = entry.getKey();
-            add = !recipe.hasFlag(FlagType.REMOVE);
-            remove = !add || recipe.hasFlag(FlagType.OVERRIDE) || removeRecipes.remove(recipe); // overriden recipe OR removed recipe (and also remove it from list)
-            
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.GREEN + "RECIPE = " + recipe.getType());
-            
-            if(recipe instanceof CraftRecipe)
-            {
-                cr = (CraftRecipe)recipe;
-                
-                if(remove)
-                {
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
-                    
-                    if(!Vanilla.removeCraftRecipe(cr))
-                        Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shaped recipe to remove!");
-                }
-                
-                if(add)
-                {
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
-                    
-                    recipeQueue.offer(cr.getBukkitRecipe());
-                }
-            }
-            else if(recipe instanceof CombineRecipe)
-            {
-                co = (CombineRecipe)recipe;
-                
-                if(remove)
-                {
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
-                    
-                    // TODO remove debug ?
-                    if(!Vanilla.removeCombineRecipe(co))
-                        Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find shapeless recipe to remove!");
-                }
-                
-                if(add)
-                {
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
-                    
-                    recipeQueue.offer(co.getBukkitRecipe());
-                }
-            }
-            else if(recipe instanceof SmeltRecipe)
-            {
-                sm = (SmeltRecipe)recipe;
-                
-                if(remove)
-                {
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Removing recipe...");
-                    
-                    // TODO remove debug ?
-                    if(!Vanilla.removeSmeltRecipe(sm))
-                        Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RED + "Couldn't find furnace recipe to remove!");
-                }
-                
-                if(add)
-                {
-                    Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Adding recipe to queue...");
-                    
-                    recipeQueue.offer(sm.toFurnaceRecipe());
-                    
-                    if(!needFurnaceWorker && sm.getMinTime() >= 0)
-                    {
-                        Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.LIGHT_PURPLE + "needFurnaceWorker set to true");
-                        needFurnaceWorker = true;
-                    }
-                }
-            }
-            
-            time = System.currentTimeMillis();
-            
-            if(time > lastDisplay + 1000)
-            {
-                Messages.send(sender, ChatColor.GRAY + "Step 2/3 " + ChatColor.RESET + "Converting recipes " + ((processed * 100) / size) + "%...");
-                lastDisplay = time;
-            }
-            
-            processed++;
-        }
-        
-        /*
-        if(!removeRecipes.isEmpty())
-        {
-            Iterator<BaseRecipe> it = removeRecipes.iterator();
-            
-            while(it.hasNext())
-            {
-                BukkitRecipes.removeBukkitRecipe(it.next());
-            }
-            
-            removeRecipes.clear();
-        }
-        */
-        
-        if(!recipeQueue.isEmpty())
-        {
-            Messages.info(ChatColor.RED + "[DEBUG] " + ChatColor.RESET + "Registering recipes: " + recipeQueue.size());
-            
-//            new RecipeRegistrator(sender, start, recipeQueue, new LinkedList<BaseRecipe>(removeRecipes));
-        }
-        
-        if(!copyRecipes.isEmpty())
-        {
-            copyRecipes.putAll(queuedRecipes);
-            queuedRecipes.clear();
-            queuedRecipes.putAll(copyRecipes);
-        }
-        
-//        RecipeManager.recipes = this;
-        registered = true;
-        
-        /*
-        if(needFurnaceWorker)
-            FurnaceWorker.start();
-        else
-            FurnaceWorker.stop();
-        */
-    }
-    
-    // Public API methods
+    /*
+     *  Public API methods
+     */
     
     /**
      * Adds recipe to queue.<br>
@@ -573,25 +384,35 @@ public class RecipeRegistrator implements Runnable
     public void registerRecipesToServer()
     {
         if(registered)
-            throw new IllegalAccessError("This class is already registered, create a new one!");
-        
-        Bukkit.getScheduler().runTask(RecipeManager.getPlugin(), new Runnable()
         {
-            public void run()
+            throw new IllegalAccessError("This class is already registered, create a new one!");
+        }
+        
+        if(RecipeManager.getPlugin() == null)
+        {
+            Messages.debug("plugin = null, wait for post-enable !");
+            
+            new BukkitRunnable()
             {
-                Messages.info(ChatColor.GOLD + "registerRecipesToServer()");
-                
-                String adder = RecipeManager.getPlugin().getPluginCaller("registerRecipesToServer");
-                
-                if(adder != null)
+                @Override
+                public void run()
                 {
-                    Set<String> set = new HashSet<String>();
-                    set.add(adder);
-                    registerRecipesToServer(null, System.currentTimeMillis(), set);
+                    registerRecipes();
                 }
-                else
-                    registerRecipesToServer(null, System.currentTimeMillis(), null);
-            }
-        });
+            }.runTaskLater(RecipeManager.getPlugin(), 1);
+        }
+        else
+        {
+            registerRecipes();
+        }
+    }
+    
+    private void registerRecipes()
+    {
+        Messages.debug("... ?");
+        
+        String adder = RecipeManager.getPlugin().getPluginCaller("registerRecipesToServer");
+        
+        registerRecipesToServer(null, System.currentTimeMillis(), (adder == null ? null : Sets.newHashSet(adder)));
     }
 }

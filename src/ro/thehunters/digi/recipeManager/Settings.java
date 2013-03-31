@@ -15,46 +15,47 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class Settings
 {
-    public final boolean                        SPECIAL_REPAIR;
-    public final boolean                        SPECIAL_REPAIR_METADATA;
+    public final boolean SPECIAL_REPAIR;
+    public final boolean SPECIAL_REPAIR_METADATA;
     
-    public final boolean                        SPECIAL_LEATHER_DYE;
-    public final boolean                        SPECIAL_FIREWORKS;
-    public final boolean                        SPECIAL_MAP_CLONING;
-    public final boolean                        SPECIAL_MAP_EXTENDING;
+    public final boolean SPECIAL_LEATHER_DYE;
+    public final boolean SPECIAL_FIREWORKS;
+    public final boolean SPECIAL_MAP_CLONING;
+    public final boolean SPECIAL_MAP_EXTENDING;
     
-    public final boolean                        SOUNDS_REPAIR;
-    public final boolean                        SOUNDS_FAILED;
-    public final boolean                        SOUNDS_FAILED_CLICK;
+    public final boolean SOUNDS_REPAIR;
+    public final boolean SOUNDS_FAILED;
+    public final boolean SOUNDS_FAILED_CLICK;
     
-    public final boolean                        UPDATE_BOOKS;
-    public final boolean                        COLOR_CONSOLE;
+    public final boolean FIX_MOD_RESULTS;
+    public final boolean UPDATE_BOOKS;
+    public final boolean COLOR_CONSOLE;
     
-    public final boolean                        RETURN_BUCKETS;
-    public final boolean                        RETURN_POTIONS;
-    public final boolean                        RETURN_BOWL;
+    public final boolean RETURN_BUCKETS;
+    public final boolean RETURN_POTIONS;
+    public final boolean RETURN_BOWL;
     
-    public final boolean                        FUEL_RETURN_BUCKETS;
+    public final boolean FUEL_RETURN_BUCKETS;
     
-    public final char                           FURNACE_SHIFT_CLICK;
-    public final int                            FURNACE_TICKS;
+    public final char FURNACE_SHIFT_CLICK;
+    public final int FURNACE_TICKS;
     
-    public final boolean                        MULTITHREADING;
+    public final boolean MULTITHREADING;
     
-    public final boolean                        CLEAR_RECIPES;
+    public final boolean CLEAR_RECIPES;
     
-    public final boolean                        UPDATE_CHECK_ENABLED;
-    public final int                            UPDATE_CHECK_FREQUENCY;
+    public final boolean UPDATE_CHECK_ENABLED;
+    public final int UPDATE_CHECK_FREQUENCY;
     
-    public final boolean                        METRICS;
+    public final boolean METRICS;
     
-    protected final String                      LASTCHANGED;
+    protected final String LASTCHANGED;
     
-    protected Map<String, Material>             nameAliases = new HashMap<String, Material>();
+    protected Map<String, Material> nameAliases = new HashMap<String, Material>();
     protected Map<Material, Map<String, Short>> dataAliases = new HashMap<Material, Map<String, Short>>();
     
-    protected Map<Material, String>             printName   = new HashMap<Material, String>();
-    protected Map<Material, Map<Short, String>> printData   = new HashMap<Material, Map<Short, String>>();
+    protected Map<Material, String> printName = new HashMap<Material, String>();
+    protected Map<Material, Map<Short, String>> printData = new HashMap<Material, Map<Short, String>>();
     
     public static void reload(CommandSender sender)
     {
@@ -66,7 +67,7 @@ public class Settings
         RecipeManager.settings = this;
         
         // Load/reload/generate config.yml
-        FileConfiguration yml = loadYML(sender, "config.yml");
+        FileConfiguration yml = loadYML("config.yml");
         
         RecipeManager.plugin.reloadConfig();
         
@@ -82,6 +83,7 @@ public class Settings
         SOUNDS_FAILED = yml.getBoolean("sounds.failed", true);
         SOUNDS_FAILED_CLICK = yml.getBoolean("sounds.failed_click", true);
         
+        FIX_MOD_RESULTS = yml.getBoolean("fix-mod-results", false);
         UPDATE_BOOKS = yml.getBoolean("update-books", true);
         COLOR_CONSOLE = yml.getBoolean("color-console", true);
         
@@ -105,8 +107,8 @@ public class Settings
         
         CLEAR_RECIPES = yml.getBoolean("clear-recipes", false);
         
-        UPDATE_CHECK_ENABLED = yml.getBoolean("update_check.enabled", true);
-        UPDATE_CHECK_FREQUENCY = Math.max(yml.getInt("update_check.frequency", 6), 0);
+        UPDATE_CHECK_ENABLED = yml.getBoolean("update-check.enabled", true);
+        UPDATE_CHECK_FREQUENCY = Math.max(yml.getInt("update-check.frequency", 6), 0);
         
         METRICS = yml.getBoolean("metrics", true);
         
@@ -124,6 +126,7 @@ public class Settings
         Messages.log("    special-recipes.fireworks: " + SPECIAL_FIREWORKS);
         Messages.log("    special-recipes.map-cloning: " + SPECIAL_MAP_CLONING);
         Messages.log("    special-recipes.map-extending: " + SPECIAL_MAP_EXTENDING);
+        Messages.log("    fix-mod-results: " + FIX_MOD_RESULTS);
         Messages.log("    update-books: " + UPDATE_BOOKS);
         Messages.log("    color-console: " + COLOR_CONSOLE);
         Messages.log("    return-empty.buckets: " + RETURN_BUCKETS);
@@ -134,7 +137,7 @@ public class Settings
         Messages.log("    furnace-ticks: " + FURNACE_TICKS);
         Messages.log("    metrics: " + METRICS);
         
-        yml = loadYML(sender, "aliases.yml");
+        yml = loadYML("aliases.yml");
         
         if(!Files.LASTCHANGED_CONFIG.equals(yml.get("lastchanged")))
         {
@@ -260,7 +263,7 @@ public class Settings
         }
     }
     
-    private FileConfiguration loadYML(CommandSender sender, String fileName)
+    private FileConfiguration loadYML(String fileName)
     {
         File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + fileName);
         

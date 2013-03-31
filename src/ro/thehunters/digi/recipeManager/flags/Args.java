@@ -21,13 +21,13 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  */
 public class Args
 {
-    private Player       player;
-    private String       playerName;
-    private Location     location;
-    private BaseRecipe   recipe;
-    private RecipeType   recipeType;
-    private Inventory    inventory;
-    private ItemResult   result;
+    private Player player;
+    private String playerName;
+    private Location location;
+    private BaseRecipe recipe;
+    private RecipeType recipeType;
+    private Inventory inventory;
+    private ItemResult result;
     
     private List<String> reasons;
     private List<String> effects;
@@ -171,7 +171,7 @@ public class Args
         reasons.add(message);
     }
     
-    public void addReason(Messages globalMessage, String customMessage, String... variables)
+    public void addReason(Messages globalMessage, String customMessage, Object... variables)
     {
         addCustomReason(globalMessage.getCustom(customMessage, variables));
     }
@@ -209,7 +209,7 @@ public class Args
         effects.add(message);
     }
     
-    public void addEffect(Messages globalMessage, String customMessage, String... variables)
+    public void addEffect(Messages globalMessage, String customMessage, Object... variables)
     {
         addCustomEffect(globalMessage.getCustom(customMessage, variables));
     }

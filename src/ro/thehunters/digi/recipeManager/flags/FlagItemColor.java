@@ -10,22 +10,46 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagLeatherColor extends Flag
+public class FlagItemColor extends Flag
 {
-    public FlagLeatherColor()
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
     {
-        type = FlagType.LEATHERCOLOR;
+        A = new String[1];
+        A[0] = "{flag} <R G B or false>";
+        
+        D = new String[4];
+        D[0] = "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.";
+        D[1] = "Setting it to false will reset leather color.";
+        D[2] = null;
+        D[3] = "Specific items: leather armor";
+        
+        E = new String[2];
+        E[0] = "{flag} 255 100 50";
+        E[1] = "{flag} false";
     }
     
-    public FlagLeatherColor(FlagLeatherColor flag)
+    // Flag code
+    
+    public FlagItemColor()
+    {
+        type = FlagType.ITEMCOLOR;
+    }
+    
+    public FlagItemColor(FlagItemColor flag)
     {
         this();
     }
     
     @Override
-    public FlagLeatherColor clone()
+    public FlagItemColor clone()
     {
-        return new FlagLeatherColor(this);
+        return new FlagItemColor(this);
     }
     
     @Override

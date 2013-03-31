@@ -27,6 +27,7 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -51,7 +52,6 @@ import ro.thehunters.digi.recipeManager.apievents.RMCraftEvent;
 import ro.thehunters.digi.recipeManager.apievents.RMCraftEventPost;
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
 import ro.thehunters.digi.recipeManager.data.BlockID;
-import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
@@ -396,7 +396,7 @@ public class Events implements Listener
                     if(Tools.playerCanAddItem(player, result))
                     {
                         player.getInventory().addItem(result);
-                        recipe.subtractIngredients(inv); // subtract from ingredients manually
+                        recipe.subtractIngredients(inv, false); // subtract from ingredients manually
                         
                         return 1;
                     }
@@ -436,6 +436,11 @@ public class Events implements Listener
                 else
                 {
                     return 0;
+                }
+                
+                if(recipe.hasFlag(FlagType.INGREDIENTCONDITION))
+                {
+                    recipe.subtractIngredients(inv, true);
                 }
             }
         }
@@ -491,7 +496,7 @@ public class Events implements Listener
                 }
             }
             
-            recipe.subtractIngredients(inv); // subtract from ingredients manually
+            recipe.subtractIngredients(inv, false); // subtract from ingredients manually
             
             // update displayed result
             // TODO need accurate reading if there is a recipe!
@@ -524,9 +529,14 @@ public class Events implements Listener
             Workbenches.remove(human);
         }
         
-        for(ItemStack item : human.getInventory().getContents())
+        // TODO re-enable ?
+        
+        if(RecipeManager.getSettings().FIX_MOD_RESULTS)
         {
-            itemProcess(item);
+            for(ItemStack item : human.getInventory().getContents())
+            {
+                itemProcess(item);
+            }
         }
     }
     
@@ -842,18 +852,23 @@ public class Events implements Listener
         
         try
         {
-            BlockID id = new BlockID(event.getBlock());
+//            BlockID id = new BlockID(event.getBlock());
             
             // TODO if reverting to FurnaceWorker storage, check if exists and add furnace!
             
-            FurnaceData data = Furnaces.get(id);
+//            FurnaceData data = Furnaces.get(id);
             
             final FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+            Furnace furnace = (Furnace)event.getBlock().getState();
             
             if(fuelRecipe != null)
             {
                 // Fuel recipe
                 int time = (fuelRecipe.hasFlag(FlagType.REMOVE) ? 0 : fuelRecipe.getBurnTicks());
+                
+                Args a = Args.create().location(event.getBlock().getLocation()).recipe(fuelRecipe).inventory(furnace.getInventory()).build();
+                
+                fuelRecipe.sendCrafted(a);
                 
                 event.setBurnTime(time);
                 event.setBurning(time > 0);
@@ -862,12 +877,6 @@ public class Events implements Listener
             {
                 // Smelting recipe with specific fuel
                 
-                BlockState state = event.getBlock().getState();
-                
-                if(state instanceof Furnace == false)
-                    return; // highly unlikely but better safe than sorry
-                    
-                Furnace furnace = (Furnace)state;
                 ItemStack ingredient = furnace.getInventory().getSmelting();
                 SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
                 
@@ -887,7 +896,7 @@ public class Events implements Listener
             
             boolean running = !event.isCancelled() && event.isBurning();
             
-            data.setBurnTime(running ? event.getBurnTime() : 0);
+//            data.setBurnTime(running ? event.getBurnTime() : 0);
             
 //            Messages.debug("furnace set burn time to = " + data.getBurnTime());
             
@@ -973,6 +982,14 @@ public class Events implements Listener
         }
     }
     
+    // TODO !!!!!!!
+    @EventHandler
+    public void inventoryPickup(InventoryPickupItemEvent event)
+    {
+        Messages.debug("item = " + event.getItem());
+        event.setCancelled(true);
+    }
+    
     /*
      *  Furnace monitor events
      */
@@ -987,8 +1004,21 @@ public class Events implements Listener
             case BURNING_FURNACE:
             case FURNACE:
             {
+                // TODO set furnace title ?
+                /*
+                BlockState state = block.getState();
+                
+                if(state instanceof Furnace == false)
+                    return;
+                
+                Furnace furnace = (Furnace)state;
+                
+                furnace.
+                */
+//              Furnaces.add(BlockID.fromBlock(block), event.getPlayer().getName());
+                
                 Messages.debug("added furnace at " + BlockID.fromBlock(block).getCoordsString());
-                Furnaces.add(BlockID.fromBlock(block));
+                FurnaceWorker.addFurnace(BlockID.fromBlock(block));
             }
         }
     }
@@ -1004,7 +1034,9 @@ public class Events implements Listener
             case FURNACE:
             {
                 Messages.debug("removed furnace at " + BlockID.fromBlock(block).getCoordsString());
-                Furnaces.remove(BlockID.fromBlock(block));
+                FurnaceWorker.removeFurnace(BlockID.fromBlock(block));
+                
+//                Furnaces.remove(BlockID.fromBlock(block));
             }
         }
     }
@@ -1047,17 +1079,30 @@ public class Events implements Listener
         
         for(BlockState state : tileEntities)
         {
-            if(state != null & state instanceof Furnace)
+            if(state != null && state instanceof Furnace)
             {
                 if(add)
                 {
-                    Messages.debug("added furnace at " + new BlockID(state.getLocation()).getCoordsString());
-                    Furnaces.add(state.getLocation());
+                    /*
+                    Furnaces.addIfNotExists(state.getLocation());
+                    */
+                    
+                    if(state.getType() == Material.BURNING_FURNACE)
+                    {
+                        Messages.debug("added furnace at " + new BlockID(state.getLocation()).getCoordsString());
+                        
+                        FurnaceWorker.addFurnace(BlockID.fromLocation(state.getLocation()));
+                    }
                 }
                 else
                 {
-                    Messages.debug("removed furnace at " + new BlockID(state.getLocation()).getCoordsString());
+                    /*
                     Furnaces.remove(state.getLocation());
+                    */
+                    
+                    Messages.debug("removed furnace at " + new BlockID(state.getLocation()).getCoordsString());
+                    
+                    FurnaceWorker.removeFurnace(BlockID.fromLocation(state.getLocation()));
                 }
             }
         }
@@ -1070,28 +1115,44 @@ public class Events implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void playerItemHeld(PlayerItemHeldEvent event)
     {
-        itemProcess(event.getPlayer().getInventory().getItem(event.getNewSlot()));
+        Player player = event.getPlayer();
+        
+        if(RecipeManager.getSettings().UPDATE_BOOKS)
+        {
+            RecipeManager.getRecipeBooks().updateBook(player, player.getInventory().getItem(event.getNewSlot()));
+        }
+        
+        if(RecipeManager.getSettings().FIX_MOD_RESULTS)
+        {
+            itemProcess(event.getPlayer().getInventory().getItem(event.getNewSlot()));
+        }
     }
     
     private void itemProcess(ItemStack item)
     {
         if(item == null || !item.hasItemMeta())
+        {
             return;
+        }
         
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
+        List<String> lore = item.getItemMeta().getLore();
         
         if(lore == null || lore.isEmpty())
-            return;
-        
-        int index = lore.size() - 1;
-        String line = lore.get(index);
-        
-        if(line != null && line.startsWith(Recipes.RECIPE_ID_STRING))
         {
-            lore.remove(index);
-            meta.setLore(lore);
-            item.setItemMeta(meta);
+            return;
+        }
+        
+        for(int i = 0; i < lore.size(); i++)
+        {
+            String s = lore.get(i);
+            
+            if(s != null && s.startsWith(Recipes.RECIPE_ID_STRING))
+            {
+                lore.remove(i);
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            }
         }
     }
     
@@ -1129,9 +1190,13 @@ public class Events implements Listener
             this.player = player;
             
             if(ticks <= 0)
+            {
                 run();
+            }
             else
+            {
                 runTaskLater(RecipeManager.getPlugin(), ticks);
+            }
         }
         
         @SuppressWarnings("deprecation")

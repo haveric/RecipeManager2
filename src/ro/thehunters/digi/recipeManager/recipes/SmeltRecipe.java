@@ -1,22 +1,26 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class SmeltRecipe extends BaseRecipe
 {
-    private ItemStack     ingredient;
-    private ItemResult    fuel;
-    private ItemResult    result;
-    private float         minTime = Vanilla.FURNACE_RECIPE_TIME;
-    private float         maxTime = -1;
-    private int           hash;
+    private ItemStack ingredient;
+    private ItemResult fuel;
+    private ItemResult result;
+    private float minTime = Vanilla.FURNACE_RECIPE_TIME;
+    private float maxTime = -1;
+    private int hash;
     
     private FurnaceRecipe bukkitRecipe;
     
@@ -184,5 +188,39 @@ public class SmeltRecipe extends BaseRecipe
     public RecipeType getType()
     {
         return RecipeType.SMELT;
+    }
+    
+    @Override
+    public String printBookIndex()
+    {
+        return Tools.getItemName(getResult());
+    }
+    
+    @Override
+    public String printBook()
+    {
+        StringBuilder s = new StringBuilder(256);
+        
+        s.append(Messages.RECIPEBOOK_HEADER_SMELT.get());
+        
+        s.append('\n').append(Tools.printItem(getResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n');
+        
+        if(hasFlag(FlagType.DESCRIPTION))
+        {
+            s.append('\n').append(ChatColor.DARK_BLUE).append(Tools.parseColors(getFlag(FlagDescription.class).getDescription(), false));
+        }
+        
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
+        s.append('\n').append(Tools.printItem(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
+        
+        if(hasFuel())
+        {
+            s.append('\n');
+            s.append('\n').append(Messages.RECIPEBOOK_HEADER_REQUIREFUEL.get()).append(ChatColor.BLACK);
+            s.append('\n').append(Tools.printItem(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
+        }
+        
+        return s.toString();
     }
 }

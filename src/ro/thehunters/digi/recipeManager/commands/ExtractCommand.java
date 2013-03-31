@@ -22,18 +22,20 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 
 public class ExtractCommand implements CommandExecutor
 {
-    private String NL = System.getProperty("line.separator");
-    
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted recipes (" + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(new Date()) + ").txt");
+        
+        // TODO messages.yml
         
         if(file.exists())
         {
@@ -64,7 +66,7 @@ public class ExtractCommand implements CommandExecutor
         List<String> parsedCombineRecipes = new ArrayList<String>();
         List<String> parsedSmeltRecipes = new ArrayList<String>();
         
-        Iterator<org.bukkit.inventory.Recipe> recipes = Bukkit.getServer().recipeIterator();
+        Iterator<Recipe> recipes = Bukkit.getServer().recipeIterator();
         ItemStack result;
         Recipe r;
         int recipesNum = 0;
@@ -74,20 +76,24 @@ public class ExtractCommand implements CommandExecutor
             r = recipes.next();
             
             if(r == null || RecipeManager.getRecipes().isCustomRecipe(r))
+            {
                 continue;
+            }
             
             if(skipSpecial)
             {
                 result = r.getResult();
                 
                 if(result.equals(Vanilla.RECIPE_LEATHERDYE) || result.equals(Vanilla.RECIPE_FIREWORKS) || result.equals(Vanilla.RECIPE_MAPCLONE) || result.equals(Vanilla.RECIPE_MAPEXTEND))
+                {
                     continue;
+                }
             }
             
             if(r instanceof ShapedRecipe)
             {
                 ShapedRecipe recipe = (ShapedRecipe)r;
-                StringBuilder recipeString = new StringBuilder("CRAFT").append(NL);
+                StringBuilder recipeString = new StringBuilder("CRAFT").append(Files.NL);
                 Map<Character, ItemStack> items = recipe.getIngredientMap();
                 String[] shape = recipe.getShape();
                 char[] cols;
@@ -107,7 +113,7 @@ public class ExtractCommand implements CommandExecutor
                             recipeString.append(" + ");
                     }
                     
-                    recipeString.append(NL);
+                    recipeString.append(Files.NL);
                 }
                 
                 parseResult(recipe.getResult(), recipeString);
@@ -117,7 +123,7 @@ public class ExtractCommand implements CommandExecutor
             else if(r instanceof ShapelessRecipe)
             {
                 ShapelessRecipe recipe = (ShapelessRecipe)r;
-                StringBuilder recipeString = new StringBuilder("COMBINE").append(NL);
+                StringBuilder recipeString = new StringBuilder("COMBINE").append(Files.NL);
                 List<ItemStack> ingredients = recipe.getIngredientList();
                 int size = ingredients.size();
                 
@@ -126,10 +132,12 @@ public class ExtractCommand implements CommandExecutor
                     recipeString.append(parseIngredient(ingredients.get(i)));
                     
                     if((i + 1) < size)
+                    {
                         recipeString.append(" + ");
+                    }
                 }
                 
-                recipeString.append(NL);
+                recipeString.append(Files.NL);
                 parseResult(recipe.getResult(), recipeString);
                 
                 parsedCombineRecipes.add(recipeString.toString());
@@ -137,10 +145,10 @@ public class ExtractCommand implements CommandExecutor
             else if(r instanceof FurnaceRecipe)
             {
                 FurnaceRecipe recipe = (FurnaceRecipe)r;
-                StringBuilder recipeString = new StringBuilder("SMELT").append(NL);
+                StringBuilder recipeString = new StringBuilder("SMELT").append(Files.NL);
                 
                 recipeString.append(parseIngredient(recipe.getInput()));
-                recipeString.append(NL);
+                recipeString.append(Files.NL);
                 parseResult(recipe.getResult(), recipeString);
                 
                 parsedSmeltRecipes.add(recipeString.toString());
@@ -150,36 +158,39 @@ public class ExtractCommand implements CommandExecutor
         }
         
         if(recipesNum == 0)
+        {
             Messages.send(sender, "<yellow>No recipes to extract.");
-        
+        }
         else
         {
             try
             {
                 if(!file.createNewFile())
+                {
                     Messages.log("<red>Couldn't create file: " + file.getPath());
+                }
                 
                 BufferedWriter stream = new BufferedWriter(new FileWriter(file));
                 
-                stream.write("// You can uncomment the following lines to apply the flag to the entire file:" + NL);
-                stream.write("//@remove     // remove recipes" + NL);
-                stream.write("//@override   // allow editing of result and adding other flags to the recipes" + NL);
+                stream.write("// You can uncomment the following lines to apply the flag to the entire file:" + Files.NL);
+                stream.write("//@remove     // remove recipes" + Files.NL);
+                stream.write("//@override   // allow editing of result and adding other flags to the recipes" + Files.NL);
                 
-                stream.write("//---------------------------------------------------" + NL + "// Craft recipes" + NL + NL);
+                stream.write("//---------------------------------------------------" + Files.NL + "// Craft recipes" + Files.NL + Files.NL);
                 
                 for(String str : parsedCraftRecipes)
                 {
                     stream.write(str);
                 }
                 
-                stream.write("//---------------------------------------------------" + NL + "// Combine recipes" + NL + NL);
+                stream.write("//---------------------------------------------------" + Files.NL + "// Combine recipes" + Files.NL + Files.NL);
                 
                 for(String str : parsedCombineRecipes)
                 {
                     stream.write(str);
                 }
                 
-                stream.write("//---------------------------------------------------" + NL + "// Smelt recipes" + NL + NL);
+                stream.write("//---------------------------------------------------" + Files.NL + "// Smelt recipes" + Files.NL + Files.NL);
                 
                 for(String str : parsedSmeltRecipes)
                 {
@@ -201,17 +212,23 @@ public class ExtractCommand implements CommandExecutor
     
     private String parseIngredient(ItemStack item)
     {
-        return (item == null ? "AIR" : item.getType() + (item.getAmount() > 1 || item.getDurability() != -1 ? ":" + item.getDurability() + (item.getAmount() > 1 ? ":" + item.getAmount() : "") : ""));
+        return (item == null || item.getTypeId() == 0 ? "AIR" : item.getType().toString() + ":" + (item.getDurability() == Vanilla.DATA_WILDCARD ? "*" : item.getDurability()) + (item.getAmount() != 1 ? ":" + item.getAmount() : ""));
     }
     
     private void parseResult(ItemStack result, StringBuilder recipeString)
     {
-        recipeString.append("= ").append(result.getType()).append(":").append(result.getDurability()).append(":").append(result.getAmount());
+        recipeString.append("= ").append(result.getType()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
         
         int enchantments = result.getEnchantments().size();
         
         if(enchantments > 0)
         {
+            for(Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet())
+            {
+                recipeString.append(Files.NL).append("  @").append(FlagType.ITEMENCHANT.getName()).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
+            }
+            
+            /*
             recipeString.append(" | ");
             int i = 0;
             
@@ -220,10 +237,13 @@ public class ExtractCommand implements CommandExecutor
                 recipeString.append(entry.getKey()).append(":").append(entry.getValue());
                 
                 if(++i < enchantments)
+                {
                     recipeString.append(", ");
+                }
             }
+            */
         }
         
-        recipeString.append(NL).append(NL);
+        recipeString.append(Files.NL).append(Files.NL);
     }
 }

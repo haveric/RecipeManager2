@@ -13,10 +13,10 @@ import com.iCo6.system.Accounts;
 
 public class Economy
 {
-    private boolean                            enabled    = false;
-    private net.milkbowl.vault.economy.Economy vault      = null;
-    private com.iCo6.system.Accounts           iConomy    = null;
-    private boolean                            essentials = false;
+    private boolean enabled = false;
+    private net.milkbowl.vault.economy.Economy vault = null;
+    private com.iCo6.system.Accounts iConomy = null;
+    private boolean essentials = false;
     
     protected Economy()
     {
@@ -171,7 +171,9 @@ public class Economy
     public void modMoney(String playerName, double amount)
     {
         if(!isEnabled() || amount == 0)
+        {
             return;
+        }
         
         if(vault != null)
         {

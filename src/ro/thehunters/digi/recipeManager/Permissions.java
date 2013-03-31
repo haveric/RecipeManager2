@@ -9,9 +9,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class Permissions
 {
     public static final String SKIPFLAG_PREFIX = "recipemanager.skipflag.";
-    public static final String SKIPFLAG_ALL    = SKIPFLAG_PREFIX + "*";
+    public static final String SKIPFLAG_ALL = SKIPFLAG_PREFIX + "*";
     
-    private Permission         permissions     = null;
+    private Permission permissions = null;
     
     public Permissions()
     {

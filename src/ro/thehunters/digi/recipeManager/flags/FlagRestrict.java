@@ -4,6 +4,25 @@ import ro.thehunters.digi.recipeManager.Messages;
 
 public class FlagRestrict extends Flag
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
     private String message;
     
     public FlagRestrict()

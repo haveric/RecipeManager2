@@ -1,11 +1,6 @@
 name: RecipeManager
 description: Add, edit or remove recipes and fuels
-version: 2.0beta
-lastchanged:
-  config: 2.0beta
-  readme: 2.0beta
-  aliases: 2.0beta
-  messages: 2.0beta
+version: 2.0alpha1
 author: Digi
 website: http://dev.bukkit.org/server-mods/recipemanager/
 dev-url: http://dev.bukkit.org/server-mods/recipemanager/
@@ -15,53 +10,100 @@ softdepend: [Vault, iConomy]
 commands:
   rm:
     description: plugin info and available commands
-    aliases: [recipemanager]
+    aliases: [recipemanager, rmhelp]
     usage: /<command>
+    permission: recipemanager.command.rm
   rmrecipes:
     aliases: [recipe, recipes]
     description: find custom recipes that use the specified item
-    usage: /<command> <item> [result or ingredient]
-    permission: recipemanager.view
+    usage: /<command> <item> [i]
+    permission: recipemanager.command.rmrecipes
   rmfinditem:
     aliases: [finditem, item]
     description: search for items by name or id
     usage: /<command> <name>
-    permission: recipemanager.view
+    permission: recipemanager.command.rmfinditem
   rmcheck:
     aliases: [checkrecipes]
     description: simulates loading recipe files to check for errors
     usage: /<command> [force]
-    permission: recipemanager.admin
+    permission: recipemanager.command.rmecheck
   rmreload:
     aliases: [reloadrecipes]
     description: reload all settings, aliases, language file and recipe files
     usage: /<command> [force]
-    permission: recipemanager.admin
+    permission: recipemanager.command.rmreload
   rmextract:
     aliases: [rmimport, importrecipes, extractrecipes]
     description: makes all recipes from other plugins or mods into a text file to allow overriding and editing
     usage: /<command> [special]
-    permission: recipemanager.admin
+    permission: recipemanager.command.rmextract
   rmgetbook:
     aliases: [getrecipebook]
-    description: gives the specified recipe book to the caller, author is optional
-    usage: /<command> <title>
-    permission: recipemanager.admin
+    description: gives a recipe book
+    usage: /<command> <title> [#<volume>]
+    permission: recipemanager.command.rmgetbook
+  rmbooks:
+    aliases: [recipebooks]
+    description: lists available recipe books
+    usage: /<command>
+    permission: recipemanager.command.rmbooks
   rmupdate:
     aliases: [rmcheckupdates]
     description: checks if there's a newer version available for the plugin
     usage: /<command>
-    permission: recipemanager.admin
+    permission: recipemanager.command.rmupdate
 permissions:
   recipemanager.craft:
     description: Toggles ability to craft all recipes
     default: true
-  recipemanager.view:
-    description: View the recipe list
+  recipemanager.user:
+    description: Gives basic user access
     default: true
+    children:
+      recipemanager.command.rm: true
+      recipemanager.command.rmrecipes: true
+      recipemanager.command.rmfinditem: true
   recipemanager.admin:
     description: Access to the admin commands
     default: op
+    children:
+      recipemanager.command.rmecheck: true
+      recipemanager.command.rmreload: true
+      recipemanager.command.rmextract: true
+      recipemanager.command.rmgetbook: true
+      recipemanager.command.rmbooks: true
+      recipemanager.command.rmupdate: true
   recipemanager.debugger:
     description: Get error messages when online
+    default: op
+  recipemanager.updatebooks:
+    description: Allows player's recipe books to be updated
+    default: true
+  recipemanager.command.rm:
+    description:
+    default: true
+  recipemanager.command.rmrecipes:
+    description:
+    default: true
+  recipemanager.command.rmfinditem:
+    description:
+    default: true
+  recipemanager.command.rmecheck:
+    description:
+    default: op
+  recipemanager.command.rmreload:
+    description:
+    default: op
+  recipemanager.command.rmextract:
+    description:
+    default: op
+  recipemanager.command.rmgetbook:
+    description:
+    default: op
+  recipemanager.command.rmbooks:
+    description:
+    default: op
+  recipemanager.command.rmupdate:
+    description:
     default: op

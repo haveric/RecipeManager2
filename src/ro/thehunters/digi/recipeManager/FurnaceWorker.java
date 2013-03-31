@@ -1,8 +1,11 @@
 package ro.thehunters.digi.recipeManager;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.mutable.MutableFloat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,14 +16,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import ro.thehunters.digi.recipeManager.data.BlockID;
-import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 class FurnaceWorker implements Runnable
 {
-//    private static final Map<BlockID, MutableFloat> furnaces = new HashMap<BlockID, MutableFloat>();
+    private static final Map<BlockID, MutableFloat> furnaces = new HashMap<BlockID, MutableFloat>();
     
-    private final float       ticks;
+    private final float ticks;
     private static BukkitTask task;
     
     static void init()
@@ -63,10 +65,9 @@ class FurnaceWorker implements Runnable
     protected static void clean()
     {
         stop();
-//        furnaces.clear();
+        furnaces.clear();
     }
     
-    /*
     protected static boolean hasFurnace(BlockID id)
     {
         return furnaces.containsKey(id);
@@ -81,48 +82,40 @@ class FurnaceWorker implements Runnable
     {
         furnaces.remove(id);
     }
-    */
     
     @Override
     public void run()
     {
-        Iterator<Entry<BlockID, FurnaceData>> iterator = Furnaces.getFurnaces().entrySet().iterator();
-        Entry<BlockID, FurnaceData> entry;
-        FurnaceData data;
+        Iterator<Entry<BlockID, MutableFloat>> iterator = furnaces.entrySet().iterator();
+        Entry<BlockID, MutableFloat> entry;
+        MutableFloat data;
         Furnace furnace;
         FurnaceInventory inventory;
         ItemStack smelt;
         ItemStack result;
         ItemStack recipeResult;
         SmeltRecipe recipe;
-        boolean stop = true; // assume no burning furnaces exist
         float time;
         
         while(iterator.hasNext())
         {
             entry = iterator.next();
-            data = entry.getValue();
-            
-            /*
-            if(!data.isBurning())
-                continue;
-            */
             
             furnace = convertBlockIdToFurnace(entry.getKey()); // convert blockID to Furnace block object
             
             if(furnace == null) // the burning furnace no longer exists for whatever reason
             {
-//              iterator.remove();
+                iterator.remove();
                 continue;
             }
             
-            stop = false; // we have a burning furnace, do not stop
             inventory = furnace.getInventory();
             smelt = inventory.getSmelting();
+            data = entry.getValue();
             
             if(smelt == null || smelt.getType() == Material.AIR) // if there's nothing to smelt, skip furnace
             {
-                data.setCookTime(0);
+                data.setValue(0);
                 continue;
             }
             
@@ -130,7 +123,7 @@ class FurnaceWorker implements Runnable
             
             if(recipe == null || !recipe.hasCustomTime()) // No custom recipe for item or it has default time
             {
-                data.setCookTime(0);
+                data.setValue(0);
                 continue;
             }
             
@@ -140,7 +133,7 @@ class FurnaceWorker implements Runnable
             // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
             if(result != null && (!recipeResult.isSimilar(result) || result.getAmount() >= result.getType().getMaxStackSize()))
             {
-                data.setCookTime(0);
+                data.setValue(0);
                 continue;
             }
             
@@ -150,11 +143,11 @@ class FurnaceWorker implements Runnable
             }
             else
             {
-                time = data.getCookTime();
+                time = data.intValue();
                 
                 if(time >= 200 || furnace.getCookTime() == 0 || furnace.getCookTime() >= 200)
                 {
-                    data.setCookTime(0);
+                    data.setValue(0);
                 }
                 else
                 {
@@ -162,22 +155,12 @@ class FurnaceWorker implements Runnable
                     
                     furnace.setCookTime((short)Math.min(Math.max(Math.round(time), 1), 199));
                     
-                    data.setCookTime(time);
-                    
-                    Messages.debug("time = " + time);
+                    data.setValue(time);
                 }
             }
         }
         
         iterator = null;
-        
-        /*
-        if(stop)
-        {
-            stop();
-            Messages.debug("SELF-STOP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-        */
     }
     
     private Furnace convertBlockIdToFurnace(BlockID blockID)

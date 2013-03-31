@@ -5,61 +5,56 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
-import com.google.common.io.CharStreams;
-
 public class Files
 {
-    public static final String  NL                 = System.getProperty("line.separator");
-    public static final String  PAD1               = "  ";
-    public static final String  PAD2               = "    ";
-    public static final String  PAD3               = "      ";
+    public static final String NL = System.getProperty("line.separator");
+    public static final String PAD1 = "  ";
+    public static final String PAD2 = "    ";
+    public static final String PAD3 = "      ";
     
     private final CommandSender sender;
-    private final String        DIR_PLUGIN         = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
     
-    protected static String     LASTCHANGED_CONFIG;
-    protected static String     LASTCHANGED_README;
-    protected static String     LASTCHANGED_ALIASES;
-    protected static String     LASTCHANGED_MESSAGES;
+    public static final String LASTCHANGED_CONFIG = "2.0alpha1";
+    public static final String LASTCHANGED_README = "2.0alpha1";
+    public static final String LASTCHANGED_ALIASES = "2.0alpha1";
+    public static final String LASTCHANGED_MESSAGES = "2.0alpha1";
     
-    public static final String  FILE_USED_VERSION  = "used.version";
+    public static final String FILE_USED_VERSION = "used.version";
     
-    public static final String  FILE_INFO_BASICS   = "info - basic recipes.txt";
-    public static final String  FILE_INFO_COMMANDS = "info - commands & permissions.txt";
-    public static final String  FILE_INFO_NAMES    = "info - name index.txt";
-    public static final String  FILE_INFO_QA       = "info - questions-answers.txt";
-    public static final String  FILE_INFO_FLAGS    = "info - recipe flags.html";
-    public static final String  FILE_INFO_ERRORS   = "info - recipe errors in detail.txt";
+    public static final String FILE_INFO_BASICS = "basic recipes.html";
+    public static final String FILE_INFO_ADVANCED = "advanced recipes.html";
+    public static final String FILE_INFO_COMMANDS = "commands & permissions.html";
+    public static final String FILE_INFO_NAMES = "name index.html";
+    public static final String FILE_INFO_FLAGS = "recipe flags.html";
     
     protected static void init()
     {
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(RecipeManager.getPlugin().getResource("plugin.yml"));
-        
-        LASTCHANGED_CONFIG = cfg.getString("lastchanged.config");
-        LASTCHANGED_README = cfg.getString("lastchanged.readme");
-        LASTCHANGED_ALIASES = cfg.getString("lastchanged.aliases");
-        LASTCHANGED_MESSAGES = cfg.getString("lastchanged.messages");
     }
     
     protected static void reload(CommandSender sender)
@@ -71,18 +66,19 @@ public class Files
     {
         this.sender = sender;
         
-        // TODO check versions...
-        
-        // TODO extract and overwrite changelog.txt too - check 4th line first
-        
         createDirectories();
         
         if(isNewVersion())
         {
+            Messages.info("<gray>New version installed, information files and changelog have been overwritten.");
+            
             createRecipeFlags();
+            createCommands();
             createNameIndex();
             
-            Messages.info("<gray>New version installed, information files have been written.");
+            RecipeManager.getPlugin().saveResource(FILE_INFO_BASICS, true);
+            RecipeManager.getPlugin().saveResource(FILE_INFO_ADVANCED, true);
+            RecipeManager.getPlugin().saveResource("changelog.txt", true);
         }
     }
     
@@ -124,7 +120,7 @@ public class Files
         File file = new File(DIR_PLUGIN + "recipes" + File.separator + "disabled");
         file.mkdirs();
         
-        // Create base info files
+        // Create disable directory info file
         file = new File(file.getPath() + File.separator + "Place recipe files here to prevent them from beeing loaded");
         
         if(!file.exists())
@@ -133,127 +129,303 @@ public class Files
         }
     }
     
-    private String getTemplate(String name)
-    {
-        InputStream stream = getClass().getResourceAsStream("resources/templates/" + name + ".txt");
-        
-        if(stream != null)
-        {
-            try
-            {
-                InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
-                
-                String string = CharStreams.toString(reader);
-                
-                reader.close();
-                
-                return string;
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        
-        return null;
-    }
-    
     private void createRecipeFlags()
     {
-        StringBuilder s = new StringBuilder();
-        String tpl;
-        boolean first = true;
+        StringBuilder s = new StringBuilder(32000);
+        Map<String, List<FlagType>> flags = new LinkedHashMap<String, List<FlagType>>();
+        String[] category = new String[]
+        {
+            "SHARED FLAGS",
+            "RECIPE ONLY FLAGS",
+            "RESULT ONLY FLAGS"
+        };
+        String[] description = new String[]
+        {
+            "Usable on anything - file header, recipe header or result items.",
+            "Usable only on file headers or recipe headers. Can not be used on result items.",
+            "Usable only on recipe's result items. Can not be used on recipes or file header."
+        };
+        int size = FlagType.values().length;
         
-        s.append(getTemplate("flags_header"));
-        
-        s.append(NL).append("==========================================================================================");
-        s.append(NL).append(" SHARED FLAGS");
-        s.append(NL).append("  Usable on anything - file header, recipe header or result items.");
-        s.append(NL).append("==========================================================================================");
-        s.append(NL).append(NL);
+        for(String c : category)
+        {
+            flags.put(c, new ArrayList<FlagType>(size));
+        }
         
         for(FlagType flag : FlagType.values())
         {
-            if(flag.hasBit(Bit.RECIPE) || flag.hasBit(Bit.RESULT))
+            if(flag.hasBit(Bit.RECIPE))
             {
-                continue;
+                flags.get(category[1]).add(flag);
             }
-            
-            if(first)
+            else if(flag.hasBit(Bit.RESULT))
             {
-                first = false;
+                flags.get(category[2]).add(flag);
             }
             else
             {
-                s.append(NL).append(NL);
-                s.append(NL).append(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                s.append(NL).append(NL);
+                flags.get(category[0]).add(flag);
             }
-            
-            tpl = getTemplate("flag_" + flag.getName());
-            
-            if(tpl == null)
-            {
-                s.append("(resources/templates/flag_" + flag.getName() + ".txt not found)");
-                continue;
-            }
-            
-            tpl = tpl.replace("{flag}", flag.toString());
-            tpl = tpl.replace("{aliases}", Tools.listToString(Arrays.asList(flag.getNames()), ", ", "@"));
-            
-            s.append(tpl);
         }
         
-        /*
-        if(s != null)
-        {
-            s = s.replace("{flag}", "@" + "test");
-            s = s.replace("{aliases}", Tools.convertListToString(Arrays.asList(args), ", ", "@"));
-        }
-        */
-        
-        /*
-        StringBuilder s = new StringBuilder("<pre style=\"font-family:Verdana\">Information about recipe flags.");
+        s.append("<pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
+        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <b>Recipe Flags</b> | <a href=\"name index.html\">Name index</a> | <a href=\"commands & permissions.html\">Commands &amp; permissions</a>");
+        s.append(NL).append("<h1>Recipe flags</h1>");
         s.append(NL);
-        s.append(NL).append("WHAT ARE FLAGS ?");
+        s.append(NL).append("<b>WHAT ARE FLAGS ?</b>");
         s.append(NL).append("  Flags are the stuff that make a recipe very special ! You can add various features to a recipe by using flags.");
+        s.append(NL).append("  For examples see <a href=\"advanced recipes.html\"><b>advanced recipes.html</b></a>.");
         s.append(NL);
-        s.append(NL).append("USING FLAGS");
+        s.append(NL).append("<b>USING FLAGS</b>");
         s.append(NL).append("  Flags can be added in 3 'zones':");
         s.append(NL).append("  - at the begining of the file - which are copied to all recipes from that file");
         s.append(NL).append("  - after recipe type (CRAFT, COMBINE, etc) - where they affect that specific recipe, you may even overwrite file flags for that specific recipe!");
         s.append(NL).append("  - after recipe's individual results - to apply flags for the result items.");
         s.append(NL);
-        s.append(NL).append("ABOUT ARGUMENTS");
+        s.append(NL).append("<b>ABOUT ARGUMENTS</b>");
         s.append(NL).append("  Flags have arguments but not always are they all required.");
         s.append(NL).append("  Arguments enclosed between &lt; and &gt; are required and those enclosed between [ and ] are optional.");
         s.append(NL).append("  Some arguments may have 'or false', that means you can just type false in there to make it do something special (most likely disable the flag or a feature)");
         s.append(NL);
-        s.append(NL).append("ALIASES");
+        s.append(NL).append("<b>ALIASES</b>");
         s.append(NL).append("  They're just other names for the flag that you can use, they have no special effect if used, only for your preference.");
         s.append(NL);
-        s.append(NL).append("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID", "Name", "Stack", "Durability"));
+        s.append(NL);
+        s.append("<hr>");
+        s.append(NL);
+        s.append(NL).append("<a name=\"contents\"></a><h3>CONTENTS</h3>");
         
-        s.append(NL).append("</pre>");
-        */
+        for(String c : category)
+        {
+            String key = c.replace(' ', '_').toLowerCase();
+            
+            s.append(NL).append("<a href=\"#").append(key).append("\"><b>").append(c).append("</b></a>");
+            
+            for(FlagType flag : flags.get(c))
+            {
+                s.append(NL).append("- <a href=\"#").append(flag.getName()).append("\"><b>@").append(flag.getName()).append("</b></a>");
+            }
+            
+            s.append(NL);
+        }
+        
+        s.append(NL);
+        
+        for(int t = 0; t < category.length; t++)
+        {
+            String key = category[t].replace(' ', '_').toLowerCase();
+            
+            s.append(NL).append("<a name=\"").append(key).append("\"></a><hr>  <b>").append(category[t]).append("</b>");
+            s.append(NL).append("    ").append(description[t]);
+            
+            for(FlagType flag : flags.get(category[t]))
+            {
+                s.append(NL);
+                s.append("<hr><a href=\"#contents\" style=\"font-size:12px;\">^ Contents</a><a name=\"").append(flag.getName()).append("\"></a>");
+                s.append(NL);
+                s.append(NL);
+                
+                String[] args = flag.getArguments();
+                
+                if(args != null)
+                {
+                    for(String a : args)
+                    {
+                        s.append(NL).append("  <b>").append(StringEscapeUtils.escapeHtml(a.replace("{flag}", flag.toString()))).append("</b>");
+                    }
+                }
+                
+                String[] desc = flag.getDescription();
+                
+                if(desc != null)
+                {
+                    s.append(NL);
+                    
+                    for(String d : desc)
+                    {
+                        s.append(NL);
+                        
+                        if(d != null)
+                        {
+                            s.append("    ").append(StringEscapeUtils.escapeHtml(d));
+                        }
+                    }
+                }
+                
+                String[] ex = flag.getExamples();
+                
+                if(ex != null)
+                {
+                    s.append(NL).append(NL).append("    <b>Examples:</b>");
+                    
+                    for(String e : ex)
+                    {
+                        s.append(NL).append("      ").append(StringEscapeUtils.escapeHtml(e.replace("{flag}", flag.toString())));
+                    }
+                }
+                
+                if(flag.getNames().length > 1)
+                {
+                    s.append(NL).append(NL).append("    <b>Aliases:</b> ");
+                    
+                    for(int i = 1; i < flag.getNames().length; i++)
+                    {
+                        if(i != 1)
+                        {
+                            s.append(", ");
+                        }
+                        
+                        s.append('@').append(flag.getNames()[i]);
+                    }
+                }
+                
+                s.append(NL);
+                s.append(NL);
+            }
+            
+            s.append(NL);
+        }
         
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_FLAGS);
         
         Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
     }
     
+    private void createCommands()
+    {
+        StringBuilder s = new StringBuilder();
+        
+        s.append("<pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
+        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <a href=\"name index.html\">Name index</a> | <b>Commands &amp; permissions</b>");
+        s.append(NL).append("<h1>Commands &amp; permissions</h1>");
+        s.append(NL);
+        s.append(NL);
+        s.append(NL).append("<h2>Commands</h2>");
+        s.append("<table style=\"border-collapse:collapse;\" border=\"1\" cellpadding=\"5\">");
+        
+        PluginDescriptionFile desc = RecipeManager.getPlugin().getDescription();
+        Map<String, Map<String, Object>> cmds = desc.getCommands();
+        Map<String, Object> data;
+        
+        for(Entry<String, Map<String, Object>> e : cmds.entrySet())
+        {
+            data = e.getValue();
+            String permission = data.get("permission").toString();
+            String usage = data.get("usage").toString().replace("<command>", e.getKey());
+            String info = data.get("description").toString();
+            @SuppressWarnings("unchecked")
+            List<String> aliases = (List<String>)data.get("aliases");
+            
+            s.append(NL).append("<tr>");
+            s.append("<td width=\"40%\"><b>");
+            s.append(StringEscapeUtils.escapeHtml(usage)).append("</b><span style=\"font-size:14px;\">");
+            s.append("<br>Permission: ").append(permission);
+            s.append("<br>Aliases: ").append(aliases == null ? "N/A" : Tools.listToString(aliases));
+            s.append("</span></td>");
+            s.append("<td>").append(StringEscapeUtils.escapeHtml(info)).append("</td>");
+            s.append("</tr>");
+        }
+        
+        s.append(NL).append("</table>");
+        s.append(NL);
+        s.append(NL);
+        s.append(NL).append("<h2>Permissions</h2>");
+        s.append("<table style=\"border-collapse:collapse;\" border=\"1\" cellpadding=\"5\">");
+        s.append(NL).append("<tr>");
+        s.append("<th>Permission node</th>");
+        s.append("<th>Defaulted to</th>");
+        s.append("<th>Description</th>");
+        s.append("</tr>");
+        
+        List<Permission> permissions = desc.getPermissions();
+        List<Permission> perms = new ArrayList<Permission>(permissions.size() + FlagType.values().length);
+        
+        perms.addAll(permissions);
+        
+        perms.add(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + "*"));
+        
+        for(FlagType type : FlagType.values())
+        {
+            if(type.hasBit(Bit.NO_SKIP_PERMISSION) || type.hasBit(Bit.NO_STORE))
+            {
+                continue;
+            }
+            
+            perms.add(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + type.getName()));
+        }
+        
+        for(Permission p : perms)
+        {
+            if(!p.getName().startsWith("recipemanager."))
+            {
+                continue;
+            }
+            
+            s.append(NL).append("<tr>");
+            s.append("<td>").append(p.getName()).append("</td>");
+            s.append("<td>");
+            
+            switch(p.getDefault())
+            {
+                case TRUE:
+                    s.append("All players");
+                    break;
+                case OP:
+                    s.append("OP only");
+                    break;
+                case NOT_OP:
+                    s.append("Non-OP players");
+                    break;
+                default:
+                    s.append("Noone");
+            }
+            
+            s.append("</td>");
+            s.append("<td>").append(p.getDescription()).append("</td>");
+            s.append("</tr>");
+        }
+        
+        s.append(NL).append("</table>");
+        s.append(NL);
+        s.append(NL).append("For the skipflag permissions you can use the flag's aliases as well, I filtered them from this list because it would've become too long, but the permissions are there.");
+        s.append(NL).append("For example, <i>recipemanager.skipflag.modexp</i> and <i>recipemanager.skipflag.xp</i> both affect the same flag, the @modexp flag, since 'xp' is an alias for 'modexp'.");
+        s.append(NL);
+        s.append(NL);
+        s.append("</pre>");
+        
+        Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_COMMANDS);
+        
+        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
+    }
+    
     private void createNameIndex()
     {
-        StringBuilder s = new StringBuilder("List of name constants");
+        StringBuilder s = new StringBuilder(24000);
+        
+        s.append("<pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
+        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <b>Name index</b> | <a href=\"commands & permissions.html\">Commands &amp; permissions</a>");
+        s.append(NL).append("<h1>Name index</h1>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods !");
-        s.append(NL).append("If you want to update this file just delete it and use 'rmreload' in server console or just start the server.");
+        s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
         s.append(NL);
-        s.append(NL).append("Item data/damage values are listed on Minecraft wiki: http://www.minecraftwiki.net/wiki/Data_value#Data");
+        s.append(NL).append("<hr>");
+        s.append(NL);
+        s.append(NL).append("<a name=\"contents\"></a><h3>CONTENTS</h3>");
+        s.append(NL).append("- <a href=\"#material\"><b>MATERIAL LIST</b></a>");
+        s.append(NL).append("- <a href=\"#enchantment\"><b>ENCHANTMENTS LIST</b></a>");
+        s.append(NL).append("- <a href=\"#potiontype\"><b>POTION TYPE LIST</b></a>");
+        s.append(NL).append("- <a href=\"#potioneffect\"><b>POTION EFFECT TYPE LIST</b></a>");
+        s.append(NL).append("- <a href=\"#fireworkeffect\"><b>FIREWORK EFFECT TYPE LIST</b></a>");
+        s.append(NL).append("- <a href=\"#sound\"><b>SOUND LIST</b></a>");
+        s.append(NL).append("- <a href=\"#chatcolor\"><b>CHAT COLOR LIST</b></a>");
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("MATERIAL LIST:");
+        s.append(NL).append("<hr>");
+        s.append(NL);
+        s.append(NL).append("<a name=\"material\"></a><a href=\"#contents\">^ Contents</a><h3>MATERIAL LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html\">BukkitAPI / Material</a>");
+        s.append(NL).append("Data/damage/durability values are listed at <a href=\"http://www.minecraftwiki.net/wiki/Data_value#Data\">Minecraft Wiki / Data Value</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID", "Name", "Stack", "Durability"));
         
@@ -264,7 +436,8 @@ public class Files
         
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("ENCHANTMENTS LIST:");
+        s.append(NL).append("<a name=\"enchantment\"></a><a href=\"#contents\">^ Contents</a><h3>ENCHANTMENTS LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html\">BukkitAPI / Enchantment</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-26s %-12s %s", "ID", "Name", "Item type", "Level range"));
         
@@ -286,7 +459,8 @@ public class Files
         
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("POTION TYPE NAME LIST:");
+        s.append(NL).append("<a name=\"potiontype\"></a><a href=\"#contents\">^ Contents</a><h3>POTION TYPE LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionType.html\">BukkitAPI / PotionType</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type", "Data value"));
         
@@ -298,7 +472,8 @@ public class Files
         
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("POTION EFFECT TYPE NAME LIST:");
+        s.append(NL).append("<a name=\"potioneffect\"></a><a href=\"#contents\">^ Contents</a><h3>POTION EFFECT TYPE LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionEffect.html\">BukkitAPI / PotionEffect</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-10s %s", "ID", "Name", "Instant ?", "Duration modifier"));
         
@@ -312,7 +487,8 @@ public class Files
         s.append(NL).append("More about potions, effects and custom effects: http://www.minecraftwiki.net/wiki/Potion_effects");
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("FIREWORK EFFECT TYPE NAME LIST:");
+        s.append(NL).append("<a name=\"fireworkeffect\"></a><a href=\"#contents\">^ Contents</a><h3>FIREWORK EFFECT TYPE LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/FireworkEffect.Type.html\">BukkitAPI / FireworkEffect.Type</a>");
         s.append(NL);
         
         for(FireworkEffect.Type t : FireworkEffect.Type.values())
@@ -322,7 +498,8 @@ public class Files
         
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("SOUND NAME LIST:");
+        s.append(NL).append("<a name=\"sound\"></a><a href=\"#contents\">^ Contents</a><h3>SOUND LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html\">BukkitAPI / Sound</a>");
         s.append(NL);
         
         Sound[] sounds = Sound.values();
@@ -334,7 +511,8 @@ public class Files
         
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("CHAT COLOR NAMES LIST:");
+        s.append(NL).append("<a name=\"chatcolor\"></a><a href=\"#contents\">^ Contents</a><h3>CHAT COLOR LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/ChatColor.html\">BukkitAPI / ChatColor</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-16s %s", "Name", "Color character"));
         
@@ -345,15 +523,7 @@ public class Files
         
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("BukkitAPI for these names:");
-        s.append(NL).append("Item names: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html");
-        s.append(NL).append("Enchantments: http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html");
-        s.append(NL).append("Potion types: http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionType.html");
-        s.append(NL).append("Potion effect types: http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionEffect.html");
-        s.append(NL).append("Firework effect types: http://jd.bukkit.org/rb/apidocs/org/bukkit/FireworkEffect.Type.html");
-        s.append(NL).append("ChatColors: http://jd.bukkit.org/rb/apidocs/org/bukkit/ChatColor.html");
-        s.append(NL);
-        s.append(NL).append("EOF");
+        s.append(NL).append("</pre>");
         
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_NAMES);
         

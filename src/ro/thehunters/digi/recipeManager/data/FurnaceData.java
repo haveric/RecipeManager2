@@ -16,17 +16,24 @@ public class FurnaceData implements ConfigurationSerializable
         ConfigurationSerialization.registerClass(FurnaceData.class, "RM_FurnaceData");
     }
     
-    private String    smelter;
-    private String    fueler;
+    private String owner;
+    
+    private String smelter;
+    private String fueler;
     
     private ItemStack smelt;
     private ItemStack fuel;
     
-    private int       burnTime;
-    private float     cookTime;
+    private int burnTime;
+    private float cookTime;
     
     public FurnaceData()
     {
+    }
+    
+    public FurnaceData(String owner)
+    {
+        this.owner = owner;
     }
     
     public FurnaceData(String smelter, String fueler, ItemStack smelt, ItemStack fuel)
@@ -44,7 +51,6 @@ public class FurnaceData implements ConfigurationSerializable
         {
             smelter = (map.containsKey("smelter") ? (String)map.get("smelter") : null);
             fueler = (map.containsKey("fueler") ? (String)map.get("fueler") : null);
-            
             smelt = (map.containsKey("smelt") ? ItemStack.deserialize((Map<String, Object>)map.get("smelt")) : null);
             fuel = (map.containsKey("fuel") ? ItemStack.deserialize((Map<String, Object>)map.get("fuel")) : null);
         }

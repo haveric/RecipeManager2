@@ -27,9 +27,22 @@
  */
 package ro.thehunters.digi.recipeManager;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -57,36 +70,36 @@ public class Metrics
     /**
      * The current revision number
      */
-    private final static int        REVISION              = 6;
+    private final static int REVISION = 6;
     /**
      * The base url of the metrics domain
      */
-    private static final String     BASE_URL              = "http://mcstats.org";
+    private static final String BASE_URL = "http://mcstats.org";
     /**
      * The url used to report a server's status
      */
-    private static final String     REPORT_URL            = "/report/%s";
+    private static final String REPORT_URL = "/report/%s";
     /**
      * The separator to use for custom data. This MUST NOT change unless you are hosting your own version of metrics and
      * want to change it.
      */
-    private static final String     CUSTOM_DATA_SEPARATOR = "~~";
+    private static final String CUSTOM_DATA_SEPARATOR = "~~";
     /**
      * Interval of time to ping (in minutes)
      */
-    private static final int        PING_INTERVAL         = 10;
+    private static final int PING_INTERVAL = 10;
     /**
      * The plugin this metrics submits for
      */
-    private final Plugin            plugin;
+    private final Plugin plugin;
     /**
      * All of the custom graphs to submit to metrics
      */
-    private final Set<Graph>        graphs                = Collections.synchronizedSet(new HashSet<Graph>());
+    private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
     /**
      * The default graph, used for addCustomData when you don't want a specific graph
      */
-    private final Graph             defaultGraph          = new Graph("Default");
+    private final Graph defaultGraph = new Graph("Default");
     /**
      * The plugin configuration file
      */
@@ -94,23 +107,23 @@ public class Metrics
     /**
      * The plugin configuration file
      */
-    private final File              configurationFile;
+    private final File configurationFile;
     /**
      * Unique server id
      */
-    private final String            guid;
+    private final String guid;
     /**
      * Debug mode
      */
-    private final boolean           debug;
+    private final boolean debug;
     /**
      * Lock for synchronization
      */
-    private final Object            optOutLock            = new Object();
+    private final Object optOutLock = new Object();
     /**
      * The scheduled task
      */
-    private volatile BukkitTask     task                  = null;
+    private volatile BukkitTask task = null;
     
     public Metrics(final Plugin plugin)
     {
@@ -581,7 +594,7 @@ public class Metrics
          * The graph's name, alphanumeric and spaces only :) If it does not comply to the above when submitted, it is
          * rejected
          */
-        private final String       name;
+        private final String name;
         /**
          * The set of plotters that are contained within this graph
          */

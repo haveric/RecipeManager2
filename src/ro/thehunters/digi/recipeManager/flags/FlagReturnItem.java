@@ -14,6 +14,25 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 public class FlagReturnItem extends Flag
 {
+    // Flag documentation
+    
+    public static final String[] A;
+    public static final String[] D;
+    public static final String[] E;
+    
+    static
+    {
+        A = new String[1];
+        A[0] = "{flag} < ??? >";
+        
+        D = new String[1];
+        D[0] = "Flag not yet documented.";
+        
+        E = null;
+    }
+    
+    // Flag code
+    
     private Map<String, ItemStack> returnItems = new HashMap<String, ItemStack>();
     
     public FlagReturnItem()
@@ -58,8 +77,8 @@ public class FlagReturnItem extends Flag
             return RecipeErrorReporter.error("Flag " + getType() + " does not have 2 items separated by > character.");
         }
         
-        ItemStack key = Tools.convertStringToItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
-        ItemStack replace = Tools.convertStringToItemStack(split[1], Vanilla.DATA_WILDCARD, true, false, false);
+        ItemStack key = Tools.parseItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
+        ItemStack replace = Tools.parseItemStack(split[1], Vanilla.DATA_WILDCARD, true, false, false);
         
         if(key == null || replace == null)
         {
