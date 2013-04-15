@@ -23,7 +23,7 @@ public class FlagForPermission extends Flag
         A = new String[]
         {
             "@forpermission <permission node> @<flag declaration>",
-            "@forpermission [false]",
+            "@forpermission false",
         };
         
         D = new String[]
@@ -210,25 +210,24 @@ public class FlagForPermission extends Flag
     }
     
     @Override
-    protected boolean onPrepare(Args a)
+    protected void onPrepare(Args a)
     {
-        return event(a, 'p');
+        event(a, 'p');
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        return event(a, 'r');
+        event(a, 'r');
     }
     
-    private boolean event(Args a, char method)
+    private void event(Args a, char method)
     {
         if(!a.hasPlayer())
         {
-            return true; // no fail, optional flag
+            // no fail, optional flag
+            return;
         }
-        
-        boolean failed = false;
         
         for(Entry<String, Map<FlagType, Flag>> e : flagMap.entrySet())
         {
@@ -236,8 +235,6 @@ public class FlagForPermission extends Flag
             {
                 for(Flag f : e.getValue().values())
                 {
-                    Boolean returned = null;
-                    
                     switch(method)
                     {
                         case 'c':
@@ -245,26 +242,19 @@ public class FlagForPermission extends Flag
                             break;
                         
                         case 'p':
-                            returned = f.prepare(a);
+                            f.prepare(a);
                             break;
                         
                         case 'r':
-                            returned = f.crafted(a);
+                            f.crafted(a);
                             break;
                         
                         case 'f':
                             f.failed(a);
                             break;
                     }
-                    
-                    if(returned != null && !returned && !failed)
-                    {
-                        failed = true;
-                    }
                 }
             }
         }
-        
-        return !failed;
     }
 }

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+
+import ro.thehunters.digi.recipeManager.Messages;
 
 public class FlagCommand extends Flag
 {
@@ -87,9 +88,13 @@ public class FlagCommand extends Flag
     public void setCommands(List<String> commands)
     {
         if(commands == null)
-            remove();
+        {
+            this.remove();
+        }
         else
+        {
             this.commands = commands;
+        }
     }
     
     /**
@@ -114,13 +119,26 @@ public class FlagCommand extends Flag
     protected boolean onParse(String value)
     {
         addCommand(value);
+        
         return true;
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        Player p = a.player();
+        for(String command : commands)
+        {
+            if(command.charAt(0) == '/')
+            {
+                if(!a.hasPlayer())
+                {
+                    a.addCustomReason("Need player!");
+                    return;
+                }
+                
+                break;
+            }
+        }
         
         for(String command : commands)
         {
@@ -128,17 +146,37 @@ public class FlagCommand extends Flag
             
             if(command.charAt(0) == '/')
             {
-                if(p != null)
-                {
-                    a.player().chat(command);
-                }
+                a.player().chat(command);
             }
             else
             {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
             }
         }
+    }
+    
+    @Override
+    public List<String> information()
+    {
+        if(commands.isEmpty())
+        {
+            return null;
+        }
         
-        return true;
+        List<String> list = new ArrayList<String>(commands.size());
+        
+        for(String command : commands)
+        {
+            if(command.charAt(0) == '/')
+            {
+                list.add(Messages.FLAG_COMMAND_PLAYER.get("{command}", command));
+            }
+            else
+            {
+                list.add(Messages.FLAG_COMMAND_SERVER.get("{command}", command));
+            }
+        }
+        
+        return list;
     }
 }

@@ -89,6 +89,19 @@ public class FlagIngredientCondition extends Flag
         type = FlagType.INGREDIENTCONDITION;
     }
     
+    public FlagIngredientCondition(FlagIngredientCondition flag)
+    {
+        this();
+        
+        // TODO clone conditions
+    }
+    
+    @Override
+    public FlagIngredientCondition clone()
+    {
+        return new FlagIngredientCondition(this);
+    }
+    
     @Override
     protected boolean onParse(String value)
     {

@@ -20,7 +20,11 @@ public class FlagPermission extends Flag
     {
         A = new String[]
         {
-            "{flag} <permission or -permission or false>",
+            "{flag} <permission>",
+            "{flag} <permission> | [message]",
+            "{flag} -<permission>",
+            "{flag} -<permission> | [message]",
+            "{flag} false",
         };
         
         D = new String[]
@@ -31,113 +35,139 @@ public class FlagPermission extends Flag
             "",
             "Specifying permission nodes with the - prefix would prevent crafting if player has at least one of those permissions.",
             "",
-            "Using 'false' will remove all previously added permissions for the recipe/result.",
+            "Optionally you can specify a message for allowed permission nodes and one for unallowed permission nodes, but not for individual permissions.",
+            "The messages can have the following variables:",
+            "  {permission}  = first allowed or unallowed permission node in the list",
+            "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes",
+            "",
+            "Using 'false' will disable the flag.",
         };
         
         E = new String[]
         {
             "{flag} ranks.vip",
-            "{flag} jobs.crafter",
-            "{flag} -ranks.newbs",
-            "{flag} - jobs.warrior  // valid with a space too",
+            "{flag} jobs.crafter | <red>Need perms: {permissions} // this message will be printed for 'ranks.vip' too !",
+            "{flag} -ranks.newbs | <red>Can't have perm: {permissions} // a diferent message for unallowed nodes",
+            "{flag} - jobs.warrior // valid with a space too",
             "{flag} false",
         };
     }
     
     // Flag code
     
-    private List<String> permissions = new ArrayList<String>();
-    private List<String> antiPermissions = new ArrayList<String>();
-    private String message;
+    private List<String> allowedPermissions = new ArrayList<String>();
+    private String allowedMessage;
+    
+    private List<String> unallowedPermissions = new ArrayList<String>();
+    private String unallowedMessage;
     
     public FlagPermission()
     {
         type = FlagType.PERMISSION;
     }
     
+    public FlagPermission(FlagPermission flag)
+    {
+        this();
+        
+        allowedPermissions.addAll(flag.allowedPermissions);
+        allowedMessage = flag.allowedMessage;
+        unallowedPermissions.addAll(flag.unallowedPermissions);
+        unallowedMessage = flag.unallowedMessage;
+    }
+    
     @Override
     public FlagPermission clone()
     {
-        FlagPermission clone = new FlagPermission();
-        
-        clone.permissions.addAll(permissions);
-        clone.message = message;
-        
-        return clone;
+        return new FlagPermission(this);
     }
     
-    public List<String> getPermissions()
+    public List<String> getAllowedPermissions()
     {
-        return permissions;
+        return allowedPermissions;
     }
     
-    public void setPermissions(List<String> permissions)
+    public void setAllowedPermissions(List<String> permissions)
     {
-        this.permissions = permissions;
+        this.allowedPermissions = permissions;
     }
     
-    public void addPermission(String permission)
+    public void addAllowedPermission(String permission)
     {
-        permissions.add(permission);
+        this.allowedPermissions.add(permission);
     }
     
-    public List<String> getAntiPermissions()
+    public List<String> getUnallowedPermissions()
     {
-        return antiPermissions;
+        return unallowedPermissions;
     }
     
-    public void setAntiPermissions(List<String> antiPermissions)
+    public void setUnallowedPermissions(List<String> permissions)
     {
-        this.antiPermissions = antiPermissions;
+        this.unallowedPermissions = permissions;
     }
     
-    public void addAntiPermission(String permission)
+    public void addUnallowedPermission(String permission)
     {
-        antiPermissions.add(permission);
+        this.unallowedPermissions.add(permission);
     }
     
-    public String getMessage()
+    public String getAllowedMessage()
     {
-        return message;
+        return allowedMessage;
     }
     
-    public void setMessage(String message)
+    public void setAllowedMessage(String allowedMessage)
     {
-        this.message = message;
+        this.allowedMessage = allowedMessage;
+    }
+    
+    public String getUnallowedMessage()
+    {
+        return unallowedMessage;
+    }
+    
+    public void setUnallowedMessage(String unallowedMessage)
+    {
+        this.unallowedMessage = unallowedMessage;
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.split("\\|");
-        
-        if(split.length > 1)
-        {
-            setMessage(split[1].trim());
-        }
-        
         value = split[0].trim();
         
         if(value.charAt(0) == '-')
         {
-            addAntiPermission(value.substring(1).trim());
+            addUnallowedPermission(value.substring(1).trim());
+            
+            if(split.length > 1)
+            {
+                setUnallowedMessage(split[1].trim());
+            }
         }
         else
         {
-            addPermission(value);
+            addAllowedPermission(value);
+            
+            if(split.length > 1)
+            {
+                setAllowedMessage(split[1].trim());
+            }
         }
         
         return true;
     }
     
     @Override
-    public void onCheck(Args a)
+    protected void onCheck(Args a)
     {
         if(!a.hasPlayer())
         {
-            if(!permissions.isEmpty())
+            if(!allowedPermissions.isEmpty())
             {
-                a.addReason(Messages.FLAG_PERMISSION_NEED, message, "{permission}", permissions.get(0), "{permissions}", Tools.listToString(permissions));
+                a.addReason(Messages.FLAG_PERMISSION_ALLOWED, allowedMessage, "{permission}", allowedPermissions.get(0), "{permissions}", Tools.collectionToString(allowedPermissions));
             }
             
             return;
@@ -146,7 +176,7 @@ public class FlagPermission extends Flag
         Player player = a.player();
         boolean ok = false;
         
-        for(String perm : permissions)
+        for(String perm : allowedPermissions)
         {
             if(player.hasPermission(perm))
             {
@@ -157,16 +187,34 @@ public class FlagPermission extends Flag
         
         if(!ok)
         {
-            a.addReason(Messages.FLAG_PERMISSION_NEED, message, "{permission}", permissions.get(0), "{permissions}", Tools.listToString(permissions));
+            a.addReason(Messages.FLAG_PERMISSION_ALLOWED, allowedMessage, "{permission}", allowedPermissions.get(0), "{permissions}", Tools.collectionToString(allowedPermissions));
         }
         
-        for(String perm : antiPermissions)
+        for(String perm : unallowedPermissions)
         {
             if(player.hasPermission(perm))
             {
-                a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, message, "{permission}", perm, "{permissions}", Tools.listToString(antiPermissions));
+                a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, unallowedMessage, "{permission}", perm, "{permissions}", Tools.collectionToString(unallowedPermissions));
                 break;
             }
         }
+    }
+    
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(2);
+        
+        if(!allowedPermissions.isEmpty())
+        {
+            list.add(Messages.FLAG_PERMISSION_ALLOWED.get("{permissions}", Tools.collectionToString(allowedPermissions)));
+        }
+        
+        if(!unallowedPermissions.isEmpty())
+        {
+            list.add(Messages.FLAG_PERMISSION_UNALLOWED.get("{worpermissionslds}", Tools.collectionToString(unallowedPermissions)));
+        }
+        
+        return list;
     }
 }

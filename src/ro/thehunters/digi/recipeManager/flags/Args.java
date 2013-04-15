@@ -36,6 +36,10 @@ public class Args
     {
     }
     
+    public static void init()
+    {
+    }
+    
     protected void setPlayer(Player player)
     {
         this.player = player;
@@ -184,7 +188,7 @@ public class Args
         }
     }
     
-    public void sendReasons(CommandSender sender, Messages prefix)
+    public void sendReasons(CommandSender sender, String prefix)
     {
         sendList(sender, prefix, reasons);
     }
@@ -222,7 +226,7 @@ public class Args
         }
     }
     
-    public void sendEffects(CommandSender sender, Messages prefix)
+    public void sendEffects(CommandSender sender, String prefix)
     {
         sendList(sender, prefix, effects);
     }
@@ -233,7 +237,7 @@ public class Args
         clearEffects();
     }
     
-    private void sendList(CommandSender sender, Messages prefix, List<String> list)
+    private void sendList(CommandSender sender, String prefix, List<String> list)
     {
         if(sender == null || list == null)
         {
@@ -244,7 +248,7 @@ public class Args
         {
             if(s != null)
             {
-                Messages.send(sender, prefix.get() + s);
+                Messages.send(sender, prefix + s);
             }
         }
     }

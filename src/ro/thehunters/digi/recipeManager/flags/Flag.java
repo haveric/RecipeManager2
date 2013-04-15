@@ -1,5 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
@@ -11,29 +13,6 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class Flag implements Cloneable
 {
-    // Flag documentation
-    
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
-    
-    static
-    {
-        A = new String[]
-        {
-            "{flag}",
-        };
-        
-        D = new String[]
-        {
-            "Flag not yet documented.",
-        };
-        
-        E = null;
-    }
-    
-    // Flag code
-    
     protected FlagType type;
     protected Flags flagsContainer;
     
@@ -115,11 +94,13 @@ public class Flag implements Cloneable
      * 
      * @param a
      *            the arguments class for easily maintainable argument class
-     * @return true if succesful or skipped, false if some required argument was null/invalid.
      */
-    final public boolean prepare(Args a)
+    final public void prepare(Args a)
     {
-        return (hasSkipPermission(a.player()) ? true : onPrepare(a));
+        if(!hasSkipPermission(a.player()))
+        {
+            onPrepare(a);
+        }
     }
     
     /**
@@ -129,11 +110,13 @@ public class Flag implements Cloneable
      * 
      * @param a
      *            the arguments class for easily maintainable argument class
-     * @return true if succesful or skipped, false if some required argument was null/invalid.
      */
-    final public boolean crafted(Args a)
+    final public void crafted(Args a)
     {
-        return (hasSkipPermission(a.player()) ? true : onCrafted(a));
+        if(!hasSkipPermission(a.player()))
+        {
+            onCrafted(a);
+        }
     }
     
     /**
@@ -191,10 +174,14 @@ public class Flag implements Cloneable
     public boolean equals(Object obj)
     {
         if(obj == this)
+        {
             return true;
+        }
         
         if(obj == null || obj instanceof Flag == false)
+        {
             return false;
+        }
         
         return obj.hashCode() == hashCode();
     }
@@ -247,7 +234,7 @@ public class Flag implements Cloneable
     
     final protected boolean validateParse(String value)
     {
-        Validate.notNull(getType());
+        Validate.notNull(getType(), "This can't be used on a blank flag!");
         
         if(!getType().hasBit(Bit.NO_VALUE) && value == null)
         {
@@ -295,6 +282,16 @@ public class Flag implements Cloneable
         return type;
     }
     
+    /**
+     * Human friendly information about what the flag does with its current settings.
+     * 
+     * @return list of strings which represent individual lines or null if not defined.
+     */
+    public List<String> information()
+    {
+        return null;
+    }
+    
     @Override
     public Flag clone()
     {
@@ -319,14 +316,12 @@ public class Flag implements Cloneable
     {
     }
     
-    protected boolean onPrepare(Args a)
+    protected void onPrepare(Args a)
     {
-        return true;
     }
     
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        return true;
     }
     
     protected void onFailed(Args a)

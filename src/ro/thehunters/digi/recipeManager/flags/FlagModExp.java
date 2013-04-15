@@ -1,5 +1,8 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
@@ -119,6 +122,7 @@ public class FlagModExp extends Flag
             throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
         }
         
+        this.mod = mod;
         this.amount = Math.abs(amount);
     }
     
@@ -188,11 +192,17 @@ public class FlagModExp extends Flag
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        if(amount == 0 || !a.hasPlayer())
+        if(mod != '=' && amount == 0)
         {
-            return false;
+            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
+        }
+        
+        if(!a.hasPlayer())
+        {
+            a.addCustomReason("Need a player!");
+            return;
         }
         
         Player p = a.player();
@@ -229,14 +239,37 @@ public class FlagModExp extends Flag
             {
                 p.setTotalExperience(0);
                 p.setLevel(0);
-                p.giveExp(amount);
+                
+                if(amount > 0)
+                {
+                    p.giveExp(amount);
+                }
                 
                 a.addEffect(Messages.FLAG_MODEXP_SET, message, "{amount}", amount);
                 
                 break;
             }
         }
+    }
+    
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(1);
         
-        return true;
+        switch(mod)
+        {
+            case '+':
+                list.add(Messages.FLAG_MODEXP_ADD.get("{amount}", amount));
+                break;
+            case '-':
+                list.add(Messages.FLAG_MODEXP_SUB.get("{amount}", amount));
+                break;
+            case '=':
+                list.add(Messages.FLAG_MODEXP_SET.get("{amount}", amount));
+                break;
+        }
+        
+        return list;
     }
 }

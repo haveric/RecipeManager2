@@ -10,12 +10,8 @@ public class FlagBiome extends Flag
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
-        
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
-        
+        A = null;
+        D = null;
         E = null;
     }
     

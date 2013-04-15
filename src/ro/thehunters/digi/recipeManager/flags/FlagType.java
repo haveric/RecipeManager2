@@ -1,5 +1,6 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,27 +19,30 @@ public enum FlagType
     // protected on*() methods
     // ...
     
+    TEST(FlagTest.class, Bit.NO_VALUE), // TODO remove
+    
     // Shared flags
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
     COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"),
-    PERMISSION(FlagPermission.class, Bit.NONE, "perm"),
-    FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm", "for"),
     INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"), // TODO finish
-//    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
-//    PLAYTIME(FlagPlayTime.class, Bit.NONE),
-//    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
-//    GAMEMODE(FlagGameMode.class, Bit.NONE),
+    PERMISSION(FlagPermission.class, Bit.NONE, "permissions", "perm"),
+    FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm", "for"),
+    GROUP(FlagGroup.class, Bit.NONE, "groups"),
+    WORLD(FlagWorld.class, Bit.NONE, "worlds"),
+    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
+    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
+    GAMEMODE(FlagGameMode.class, Bit.NONE),
     MODEXP(FlagModExp.class, Bit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp"),
     REQEXP(FlagReqExp.class, Bit.NONE, "expreq", "reqxp", "xpreq", "needexp", "needxp"),
     MODLEVEL(FlagModLevel.class, Bit.NO_SHIFT, "levelmod", "level"),
     REQLEVEL(FlagReqLevel.class, Bit.NONE, "levelreq", "needlevel"),
     MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "money"),
     REQMONEY(FlagReqMoney.class, Bit.NONE, "moneyreq", "needmoney"),
-    LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT),
-    EXPLODE(FlagExplode.class, Bit.NO_VALUE | Bit.NO_SHIFT, "explosion", "boom", "tnt"),
+    POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"),
+    LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
+    EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"),
     SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
-    EFFECT(FlagEffect.class, Bit.NO_SHIFT, "playeffect", "fx"), // TODO finish
-    CREATURE(FlagCreature.class, Bit.NO_SHIFT, "spawncreature"), // TODO finish
+    SPAWN(FlagSpawn.class, Bit.NO_SHIFT, "summon", "creature", "mob", "animal"),
     BIOME(FlagBiome.class, Bit.NONE), // TODO finish
     WEATHER(FlagWeather.class, Bit.NONE), // TODO finish
     WORLDTIME(FlagWorldTime.class, Bit.NONE), // TODO finish
@@ -46,9 +50,11 @@ public enum FlagType
     DEBUG(FlagDebug.class, Bit.NO_VALUE, "monitor", "log"),
     REALTIME(FlagRealTime.class, Bit.NONE, "time", "timereq"),
     COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"),
-    RETURNITEM(FlagReturnItem.class, Bit.NO_SHIFT, "returningr", "returningredient"),
+    KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"),
+    TELEPORT(FlagTeleport.class, Bit.NO_SHIFT),
     
     // Recipe only flags
+    DOCUMENTATION(FlagDocumentation.class, Bit.NO_SKIP_PERMISSION, "doc", "html"),
     RECIPEBOOK(FlagRecipeBook.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "bookrecipe"),
     DESCRIPTION(FlagDescription.class, Bit.RECIPE, "recipeinfo", "info"),
     GETBOOK(FlagGetBook.class, Bit.RECIPE | Bit.NO_SHIFT | Bit.NO_SKIP_PERMISSION, "getrecipebook"), // TODO finsih
@@ -145,34 +151,41 @@ public enum FlagType
         return null;
     }
     
-    public String[] getArguments()
+    private String[] getField(String name)
     {
-        try
+        for(Field f : flagClass.getFields())
         {
-            return (String[])flagClass.getField("A").get(null);
-        }
-        catch(Exception e)
-        {
+            if(f.getName().equals(name))
+            {
+                try
+                {
+                    return (String[])f.get(null);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace(); // TODO remove
+                }
+            }
         }
         
         return null;
+    }
+    
+    public String[] getArguments()
+    {
+        return getField("A");
     }
     
     public String[] getExamples()
     {
-        try
-        {
-            return (String[])flagClass.getField("E").get(null);
-        }
-        catch(Exception e)
-        {
-        }
-        
-        return null;
+        return getField("E");
     }
     
     public String[] getDescription()
     {
+        return getField("D");
+        
+        /*
         try
         {
             return (String[])flagClass.getField("D").get(null);
@@ -182,14 +195,16 @@ public enum FlagType
         }
         
         return null;
+        */
     }
     
     /**
      * Gets the <code>@flag</code> style flag name
      */
+    @Override
     public String toString()
     {
-        return "@" + names[0];
+        return '@' + names[0];
     }
     
     /*

@@ -26,13 +26,31 @@ public class FlagCloneIngredient extends Flag
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        A = new String[]
+        {
+            "{flag} <ingredient> | [arguments]",
+            "{flag} false",
+        };
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        D = new String[]
+        {
+            "Clones the ingredient matching the result of this recipe.",
+            "The cloned ingredient item will remain in the crafting grid after crafting.",
+            "The true or false argument is optional, by default it enables cloning.",
+            "",
+            "The result will be added as an ingredient to the recipe internally so this flag will limit the recipe to 8 ingredients.",
+            "Can only be used on COMBINE recipes!",
+            "Does not work with multiple results!",
+            "",
+            "You may set additional flags on the result to add/remove certain features from it.",
+            "For example you can use '@page false' to clear the contents of the resulting book.",
+            "Or you could use @lore text to add an additional line of text to the item.",
+        };
         
-        E = null;
+        E = new String[]
+        {
+            "{flag} ???????",
+        };
     }
     
     // Flag code
@@ -329,15 +347,14 @@ public class FlagCloneIngredient extends Flag
     }
     
     @Override
-    protected boolean onPrepare(Args a)
+    protected void onPrepare(Args a)
     {
         ItemStack result = getResult();
         boolean cloned = cloneIngredientToResult(result, a);
         
         Messages.debug("cloned " + cloned); // TODO remove
-        a.addCustomEffect("[debug] cloned " + cloned);
         
-        return cloned;
+        a.addCustomEffect("[debug] cloned " + cloned); // TODO remove
     }
     
     private boolean cloneIngredientToResult(ItemStack result, Args a)
@@ -380,7 +397,6 @@ public class FlagCloneIngredient extends Flag
                         data -= dataMod[1];
                         break;
                     
-                    // TODO remove setting data because it's redundant ?
                     case '=':
                         data = (short)dataMod[1];
                         break;

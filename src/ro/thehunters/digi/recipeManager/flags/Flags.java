@@ -15,6 +15,29 @@ public class Flags implements Cloneable
     private Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
     protected Flaggable flaggable;
     
+    @Override
+    public String toString()
+    {
+        StringBuilder s = new StringBuilder(flags.size() * 24);
+        boolean first = true;
+        
+        for(Flag f : flags.values())
+        {
+            if(first)
+            {
+                first = false;
+            }
+            else
+            {
+                s.append(", ");
+            }
+            
+            s.append(f.getType());
+        }
+        
+        return s.toString();
+    }
+    
     public Flags()
     {
     }
@@ -99,10 +122,16 @@ public class Flags implements Cloneable
      */
     public void addFlag(Flag flag)
     {
+        Flags prevContainer = flag.flagsContainer;
+        flag.flagsContainer = this;
+        
         if(canAdd(flag))
         {
-            flag.flagsContainer = this;
             flags.put(flag.getType(), flag);
+        }
+        else
+        {
+            flag.flagsContainer = prevContainer;
         }
     }
     
@@ -110,29 +139,29 @@ public class Flags implements Cloneable
      * Parses a string to create/get a flag and add to/update the list.<br>
      * This is used by RecipeManager's file processor.
      * 
-     * @param string
+     * @param value
      *            flag expression string like the ones in recipe files
      */
-    public void parseFlag(String string)
+    public void parseFlag(String value)
     {
-        Validate.notNull(string);
-        string = string.trim();
+        Validate.notNull(value, "Input value must not be null!");
+        value = value.trim();
         
         // check if it's really a flag because this is a public method
-        if(string.charAt(0) != '@')
+        if(value.charAt(0) != '@')
         {
             RecipeErrorReporter.warning("Flags must start with @ character!");
             return;
         }
         
-        String[] split = string.split("[:\\s]+", 2); // split by space or : char
+        String[] split = value.split("[:\\s]+", 2); // split by space or : char
         String flagString = split[0].trim(); // format flag name
         FlagType type = FlagType.getByName(flagString); // Find the current flag
         
         // If no valid flag was found
         if(type == null)
         {
-            RecipeErrorReporter.warning("Unknown flag: " + flagString, "Name might be diferent, check " + Files.FILE_INFO_FLAGS + " for flag list.");
+            RecipeErrorReporter.warning("Unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
             return;
         }
         
@@ -144,7 +173,7 @@ public class Flags implements Cloneable
             flag.flagsContainer = this; // set container before hand to allow checks
         }
         
-        String value = (split.length > 1 ? split[1].trim() : null);
+        value = (split.length > 1 ? split[1].trim() : null);
         
         // make sure the flag can be added to this flag list
         if(!flag.validateParse(value))
@@ -280,6 +309,7 @@ public class Flags implements Cloneable
         return clone;
     }
     
+    @Override
     public Flags clone()
     {
         Flags clone = new Flags();

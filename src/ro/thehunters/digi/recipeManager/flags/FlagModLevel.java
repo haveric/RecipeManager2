@@ -119,6 +119,7 @@ public class FlagModLevel extends Flag
             throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
         }
         
+        this.mod = mod;
         this.amount = Math.abs(amount);
     }
     
@@ -188,11 +189,17 @@ public class FlagModLevel extends Flag
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        if(amount == 0 || !a.hasPlayer())
+        if(mod != '=' && amount == 0)
         {
-            return false;
+            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
+        }
+        
+        if(!a.hasPlayer())
+        {
+            a.addCustomReason("Need a player!");
+            return;
         }
         
         Player p = a.player();
@@ -226,7 +233,5 @@ public class FlagModLevel extends Flag
                 break;
             }
         }
-        
-        return true;
     }
 }

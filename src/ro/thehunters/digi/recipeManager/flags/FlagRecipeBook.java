@@ -14,13 +14,28 @@ public class FlagRecipeBook extends Flag
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        A = new String[]
+        {
+            "{flag} <title>",
+            "{flag} <description>",
+        };
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        D = new String[]
+        {
+            "Define the book name and description that will host this recipe(s).",
+            "This flag can only be used on file headers, can't be used on individual recipes.",
+            "",
+            "The first time specifying the argument will be the title, the 2nd time and onward will add to the book description lines.",
+            "",
+            "If you define the title of an existing book, that book will be used.",
+        };
         
-        E = null;
+        E = new String[]
+        {
+            "{flag} Some New Stuff",
+            "{flag} This book is awesome!",
+            "{flag} Go to nex page!!!",
+        };
     }
     
     // Flag code
@@ -87,7 +102,7 @@ public class FlagRecipeBook extends Flag
         
         if(recipe != null || result != null)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " can only be used in file header !");
+            RecipeErrorReporter.error("Flag " + getType() + " can only be used in file header! (before any recipe is defined)");
             return false;
         }
         

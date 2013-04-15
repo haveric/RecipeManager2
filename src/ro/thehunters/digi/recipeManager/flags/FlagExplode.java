@@ -74,6 +74,56 @@ public class FlagExplode extends Flag
         return new FlagExplode(this);
     }
     
+    public float getPower()
+    {
+        return power;
+    }
+    
+    public void setPower(float power)
+    {
+        this.power = power;
+    }
+    
+    public float getChance()
+    {
+        return chance;
+    }
+    
+    public void setChance(float chance)
+    {
+        this.chance = chance;
+    }
+    
+    public boolean getFire()
+    {
+        return fire;
+    }
+    
+    public void setFire(boolean fire)
+    {
+        this.fire = fire;
+    }
+    
+    public boolean getFailure()
+    {
+        return failure;
+    }
+    
+    public void setFailure(boolean failure)
+    {
+        this.failure = failure;
+    }
+    
+    public boolean getNoBreak()
+    {
+        return noBreak;
+    }
+    
+    public void setNoBreak(boolean noBreak)
+    {
+        this.noBreak = noBreak;
+    }
+    
     @Override
     protected boolean onParse(String value)
     {
@@ -90,15 +140,15 @@ public class FlagExplode extends Flag
             
             if(arg.equals("fire"))
             {
-                fire = true;
+                setFire(true);
             }
             else if(arg.equals("fail"))
             {
-                failure = true;
+                setFailure(true);
             }
             else if(arg.equals("nobreak"))
             {
-                noBreak = true;
+                setNoBreak(true);
             }
             else if(arg.startsWith("power"))
             {
@@ -114,7 +164,7 @@ public class FlagExplode extends Flag
                 
                 try
                 {
-                    power = Float.valueOf(value);
+                    setPower(Float.valueOf(value));
                 }
                 catch(NumberFormatException e)
                 {
@@ -141,7 +191,7 @@ public class FlagExplode extends Flag
                 
                 try
                 {
-                    chance = Float.valueOf(value);
+                    setChance(Float.valueOf(value));
                 }
                 catch(NumberFormatException e)
                 {
@@ -159,20 +209,22 @@ public class FlagExplode extends Flag
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
         if(!a.hasLocation())
         {
-            return false;
+            a.addCustomReason("Need a location!");
+            return;
         }
         
-        if(((failure && !a.hasResult()) || !failure) && (chance >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance))
+        if((failure && !a.hasResult()) || !failure)
         {
-            Location l = a.location();
-            
-            l.getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), power, fire, !noBreak);
+            if(getChance() >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance)
+            {
+                Location l = a.location();
+                
+                l.getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), getPower(), getFire(), !getNoBreak());
+            }
         }
-        
-        return true;
     }
 }

@@ -25,9 +25,9 @@ public class FlagLaunchFirework extends Flag
     {
         A = new String[]
         {
-            "@launchfirework effect <effects>",
-            "@launchfirework power <number 0-128>",
-            "@launchfirework false",
+            "{flag} effect <effects>",
+            "{flag} power <number 0-128>",
+            "{flag} false",
         };
         
         D = new String[]
@@ -76,6 +76,7 @@ public class FlagLaunchFirework extends Flag
         this();
         
         firework = flag.firework.clone();
+        chance = flag.chance;
     }
     
     @Override
@@ -110,7 +111,9 @@ public class FlagLaunchFirework extends Flag
     protected boolean onParse(String value)
     {
         if(firework == null)
+        {
             firework = (FireworkMeta)Bukkit.getItemFactory().getItemMeta(Material.FIREWORK);
+        }
         
         String[] split;
         
@@ -127,7 +130,9 @@ public class FlagLaunchFirework extends Flag
             FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), type);
             
             if(effect != null)
+            {
                 firework.addEffect(effect);
+            }
         }
         else if(value.startsWith("power"))
         {
@@ -193,19 +198,20 @@ public class FlagLaunchFirework extends Flag
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
         Validate.notNull(firework);
         
-        if(a.hasLocation())
-            return false;
+        if(!a.hasLocation())
+        {
+            return;
+        }
         
         if(chance >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance)
         {
             Firework ent = (Firework)a.location().getWorld().spawnEntity(a.location(), EntityType.FIREWORK);
+            
             ent.setFireworkMeta(firework);
         }
-        
-        return true;
     }
 }

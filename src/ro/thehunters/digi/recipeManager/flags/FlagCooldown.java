@@ -1,6 +1,8 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.mutable.MutableInt;
@@ -19,39 +21,52 @@ public class FlagCooldown extends Flag
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} <seconds> | [fail message or blank or false] | [craft message or false]";
+        A = new String[]
+        {
+            "{flag} <number>[suffix] | [arguments]",
+            "{flag} false",
+        };
         
-        D = new String[17];
-        D[0] = "Sets a cooldown time for recipe or result.";
-        D[1] = "Once a recipe/result is used, it can not be used for the specified amount of time.";
-        D[2] = "If set on a result, the result will be unavailable for the cooldown time, the recipe will work just like before.";
-        D[3] = "NOTE: the cooldown is not saved between full server shutdowns!";
-        D[4] = null;
-        D[5] = "The <seconds> argument must be a number in seconds.";
-        D[6] = null;
-        D[7] = "The [fail message or false] argument is used when the result/recipe is still in cooldown.";
-        D[8] = "Using 'false' as value will hide the message.";
-        D[9] = "You can also not write anything (leave it blank) to skip it if you want to only set the craft message";
-        D[10] = "It can have the following variables:";
-        D[11] = "  {time}    = the remaining cooldown time for current crafter in format '#h #m #s'.";
-        D[12] = null;
-        D[13] = "The [craft message or false] is triggered when the recipe/result was crafted and cooldown was set.";
-        D[14] = "Using 'false' as value will hide the message.";
-        D[15] = "It can have the following variables:";
-        D[16] = "  {time}    = the new cooldown time in format '#h #m #s'.";
+        D = new String[]
+        {
+            "Sets a cooldown time for crafting a recipe or result.",
+            "Once a recipe/result is used, the crafter can not craft it again for the specified amount of time.",
+            "If set on a result, the result will be unavailable to the crafter for the cooldown time but the rest of results and the recipe will work as before.",
+            "NOTE: cooldown is reset when reloading/restarting server.",
+            "",
+            "The <number> argument must be a number, by default it's seconds.",
+            "The [suffix] argument defines what the <number> value is scaled in, values for suffix can be:",
+            "  s  = for seconds (default)",
+            "  m  = for minutes",
+            "  h  = for hours",
+            "You can also use float values like '0.5m' to get 30 seconds.",
+            "",
+            "Optionally you can add some arguments separated by | character, those being:",
+            "  global            = make the cooldown global instead of per-player.",
+            "",
+            "  msg <text>        = overwrites the information message; false to hide; supports colors; use {time} variable to display the new cooldown time.",
+            "",
+            "  failmsg <text>    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.",
+            "",
+            "",
+            "Setting the flag to 'false' will disable the flag.",
+        };
         
-        E = new String[3];
-        E[0] = "{flag} 30";
-        E[1] = "{flag} 5 | <red>Cooldown: {time}";
-        E[2] = "{flag} 120 | <red>Wait {time}! | <yellow>You can craft this again after {time}...";
+        E = new String[]
+        {
+            "{flag} 30",
+            "{flag} 30s // exacly the same as the previous flag",
+            "{flag} 1.75m | failmsg <red>Usable in: {time} // 1 minute and 45 seconds or 1 minute and 75% of a minute.",
+            "{flag} .5h | global | failmsg <red>Someone used this recently, wait: {time} | msg <yellow>Cooldown time: {time} // half an hour",
+        };
     }
     
     // Flag code
     
-    private static final Map<String, MutableInt> playerNextUse = new HashMap<String, MutableInt>();
+    private final Map<String, MutableInt> cooldownTime = new HashMap<String, MutableInt>();
     
     private int cooldown;
+    private boolean global = false;
     private String failMessage;
     private String craftMessage;
     
@@ -65,8 +80,11 @@ public class FlagCooldown extends Flag
         this();
         
         cooldown = flag.cooldown;
+        global = flag.global;
         failMessage = flag.failMessage;
         craftMessage = flag.craftMessage;
+        
+        // no cloning of cooldownTime Map.
     }
     
     @Override
@@ -75,60 +93,112 @@ public class FlagCooldown extends Flag
         return new FlagCooldown(this);
     }
     
+    /**
+     * @return cooldown time in seconds
+     */
     public int getCooldownTime()
     {
         return cooldown;
     }
     
-    public void setCooldownTime(int time)
+    /**
+     * @param seconds
+     *            Set the cooldown time in seconds
+     */
+    public void setCooldownTime(int seconds)
     {
-        this.cooldown = time;
+        this.cooldown = seconds;
     }
     
-    public int getCooldownTimeFor(String playerName)
+    public boolean isGlobal()
     {
-        if(playerName == null)
+        return global;
+    }
+    
+    public void setGlobal(boolean global)
+    {
+        this.global = global;
+    }
+    
+    /**
+     * Gets the cooldown time in seconds for specified player or for global if null is specified and global is enabled.
+     * 
+     * @param playerName
+     *            if global is enabled this value is ignored, can be null.
+     * @return -1 if there is a problem otherwise 0 or more specifies seconds left
+     */
+    public int getTimeLeftFor(String playerName)
+    {
+        if(global)
+        {
+            playerName = null;
+        }
+        else if(playerName == null)
+        {
             return -1;
+        }
         
-        MutableInt get = playerNextUse.get(playerName);
+        MutableInt get = cooldownTime.get(playerName);
         int time = (int)(System.currentTimeMillis() / 1000);
         
         if(get == null || time >= get.intValue())
+        {
             return 0;
+        }
         
         return get.intValue() - time;
     }
     
-    public String getCooldownStringFor(String playerName)
+    /**
+     * Gets the cooldown time as formatted string for specified player or for global if null is specified and global is enabled.
+     * 
+     * @param playerName
+     *            if global is enabled this value is ignored, can be null.
+     * @return '#h #m #s' format of remaining time.
+     */
+    public String getTimeLeftStringFor(String playerName)
     {
-        int diff = getCooldownTimeFor(playerName);
-        
-        if(diff < 1)
-            return "0s";
-        
-        return diffTimeToString(diff);
+        return timeToString(getTimeLeftFor(playerName));
     }
     
-    private String diffTimeToString(int diff)
+    private String timeToString(int time)
     {
-        int seconds = diff % 60;
-        int minutes = diff % 3600 / 60;
-        int hours = diff / 3600;
+        Messages.debug("time = " + time);
+        
+        if(time < 1)
+        {
+            return "0s";
+        }
+        
+        int seconds = time % 60;
+        int minutes = time % 3600 / 60;
+        int hours = time / 3600;
         
         return ((hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "")).trim();
     }
     
-    public boolean checkTime(String playerName)
+    /**
+     * Checks countdown time for player or globally if null is supplied and global is enabled.
+     * 
+     * @param playerName
+     *            if global is enabled this value is ignored, can be null.
+     * @return
+     *         true if can be used, false otherwise.
+     */
+    public boolean hasCooldown(String playerName)
     {
-        if(playerName == null)
+        if(global)
+        {
+            playerName = null;
+        }
+        else if(playerName == null)
+        {
             return false;
+        }
         
-        MutableInt get = playerNextUse.get(playerName);
+        MutableInt get = cooldownTime.get(playerName);
         
-        if(get == null)
-            return true;
-        
-        return (System.currentTimeMillis() / 1000) >= get.intValue();
+        return (get == null ? true : (System.currentTimeMillis() / 1000) >= get.intValue());
     }
     
     public String getFailMessage()
@@ -156,32 +226,39 @@ public class FlagCooldown extends Flag
     {
         String[] split = value.split("\\|");
         
-        if(split.length > 1)
+        value = split[0].trim();
+        float multiplier = 0;
+        float time = 0.0f;
+        
+        switch(value.charAt(value.length() - 1))
         {
-            value = split[1].trim();
+            case 'm':
+                multiplier = 60.0f;
+                break;
             
-            if(!value.isEmpty())
-                setFailMessage(value);
+            case 'h':
+                multiplier = 3600.0f;
+                break;
             
-            if(split.length > 2)
-            {
-                setCraftMessage(split[2].trim());
-            }
+            case 's':
+                multiplier = 1;
+                break;
         }
         
-        value = split[0].trim();
-        
-        if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
+        if(multiplier > 0)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+            value = value.substring(0, value.length() - 1).trim();
+        }
+        
+        if(value.length() > String.valueOf(Float.MAX_VALUE).length())
+        {
+            RecipeErrorReporter.error("The " + getType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + Tools.printNumber(Float.MIN_VALUE) + " and " + Tools.printNumber(Float.MAX_VALUE) + ".");
             return false;
         }
         
-        int exp = 0;
-        
         try
         {
-            exp = Integer.valueOf(value);
+            time = Float.valueOf(value);
         }
         catch(NumberFormatException e)
         {
@@ -189,10 +266,33 @@ public class FlagCooldown extends Flag
             return false;
         }
         
-        if(exp == 0)
+        cooldown = Math.round(multiplier > 0 ? multiplier * time : time);
+        
+        if(time <= 0.0f)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag must not have 0 exp !");
+            RecipeErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0 !");
             return false;
+        }
+        
+        if(split.length > 1)
+        {
+            for(int i = 1; i < split.length; i++)
+            {
+                value = split[i].trim();
+                
+                if(value.equalsIgnoreCase("global"))
+                {
+                    global = true;
+                }
+                else if(value.toLowerCase().startsWith("msg"))
+                {
+                    craftMessage = value.substring("msg".length()).trim();
+                }
+                else if(value.toLowerCase().startsWith("failmsg"))
+                {
+                    failMessage = value.substring("failmsg".length()).trim();
+                }
+            }
         }
         
         return true;
@@ -201,33 +301,45 @@ public class FlagCooldown extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        if(!checkTime(a.playerName()))
+        if(!hasCooldown(a.playerName()))
         {
-            a.addReason(Messages.FLAG_COOLDOWN_FAIL, getFailMessage(), "{time}", getCooldownStringFor(a.playerName()));
+            a.addReason((global ? Messages.FLAG_COOLDOWN_FAIL_GLOBAL : Messages.FLAG_COOLDOWN_FAIL_PERPLAYER), getFailMessage(), "{time}", getTimeLeftStringFor(a.playerName()));
         }
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        if(!a.hasPlayerName())
-            return false;
+        if(!global && !a.hasPlayerName())
+        {
+            return;
+        }
         
-        MutableInt get = playerNextUse.get(a.playerName());
-        int time = (int)(System.currentTimeMillis() / 1000) + getCooldownTime();
+        MutableInt get = cooldownTime.get(global ? null : a.playerName());
+        int diff = (int)(System.currentTimeMillis() / 1000) + getCooldownTime();
         
         if(get == null)
         {
-            get = new MutableInt(time);
-            playerNextUse.put(a.playerName(), get);
+            get = new MutableInt(diff);
+            cooldownTime.put(global ? null : a.playerName(), get);
         }
         else
         {
-            get.setValue(time);
+            get.setValue(diff);
         }
         
-        a.addEffect(Messages.FLAG_COOLDOWN_CRAFT, getCraftMessage(), "{time}", diffTimeToString(time));
+        Messages.debug("{time} = " + timeToString(getCooldownTime()) + " | cooldown = " + getCooldownTime());
         
-        return true;
+        a.addEffect((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER), getCraftMessage(), "{time}", timeToString(getCooldownTime()));
+    }
+    
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(1);
+        
+        list.add((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER).get("{time}", timeToString(getCooldownTime())));
+        
+        return list;
     }
 }

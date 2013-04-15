@@ -14,6 +14,10 @@ public class ArgBuilder
 {
     private Args a = new Args();
     
+    public static void init()
+    {
+    }
+    
     /**
      * Start building an argument class for flag events
      * 
@@ -91,30 +95,25 @@ public class ArgBuilder
     public Args build()
     {
         if(a.player() == null && a.playerName() != null)
+        {
             a.setPlayer(Bukkit.getPlayerExact(a.playerName()));
+        }
         
         if(a.playerName() == null && a.player() != null)
+        {
             a.setPlayerName(a.player().getName());
+        }
         
         if(a.location() == null && a.player() != null)
+        {
             a.setLocation(a.player().getLocation());
+        }
         
         if(a.recipeType() == null && a.recipe() != null)
+        {
             a.setRecipeType(a.recipe().getType());
+        }
         
         return a;
     }
-    
-    /*
-    public Args(Player player, String playerName, Location location, BaseRecipe recipe, RecipeType recipeType, Inventory inventory, ItemStack result)
-    {
-        this.player = (player != null ? player : (playerName != null ? Bukkit.getPlayerExact(playerName) : null));
-        this.playerName = (this.player != null ? this.player.getName() : playerName);
-        this.location = (location != null ? location : (player != null ? player.getLocation() : null));
-        this.recipe = recipe;
-        this.recipeType = (recipe == null ? recipeType : recipe.getType());
-        this.inventory = inventory;
-        this.result = (result == null ? null : (result instanceof ItemResult ? (ItemResult)result : new ItemResult(result)));
-    }
-    */
 }

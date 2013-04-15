@@ -1,34 +1,82 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.enchantments.Enchantment;
 
 import ro.thehunters.digi.recipeManager.Files;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagItemEnchant extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.ITEMENCHANT;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} <enchantment> [level]",
+            "{flag} false",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "Enchants the result with the specified enchantment at specified level.",
+            "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
+            "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
+            "",
+            "Enchantments are forced and there is no level cap!",
+            "This flag may be used more times to add more enchantments to the item.",
+            "Setting to 'false' will do nothing !",
+        };
+        
+        E = new String[]
+        {
+            "{flag} OXYGEN // enchant with oxygen at level 1",
+            "{flag} DIG_SPEED max // enchant with dig speed at max valid level",
+            "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127",
+        };
     }
     
     // Flag code
     
+    private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
+    
     public FlagItemEnchant()
     {
         type = FlagType.ITEMENCHANT;
+    }
+    
+    public FlagItemEnchant(FlagItemEnchant flag)
+    {
+        this();
+        
+        enchants.putAll(flag.enchants);
+    }
+    
+    @Override
+    public FlagItemEnchant clone()
+    {
+        return new FlagItemEnchant(this);
+    }
+    
+    @Override
+    public FlagType getType() // TODO to all flags ?
+    {
+        return TYPE;
     }
     
     @Override
@@ -75,7 +123,37 @@ public class FlagItemEnchant extends Flag
             }
         }
         
-        getResult().addUnsafeEnchantment(ench, level);
+        enchants.put(ench, level);
+        
+//        getResult().addUnsafeEnchantment(ench, level);
+        
         return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        if(!a.hasResult())
+        {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+        
+        Messages.debug("Enchanted " + Tools.printItem(a.result()) + " with " + enchants.size() + " enchants.");
+        
+        for(Entry<Enchantment, Integer> e : enchants.entrySet())
+        {
+            a.result().addUnsafeEnchantment(e.getKey(), e.getValue());
+        }
+    }
+    
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(1);
+        
+        list.add("enchant..."); // TODO
+        
+        return list;
     }
 }

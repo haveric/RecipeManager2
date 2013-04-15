@@ -1,5 +1,10 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.Validate;
+
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagMessage extends Flag
@@ -20,22 +25,22 @@ public class FlagMessage extends Flag
         D = new String[]
         {
             "Prints a message when recipe or item is succesfully crafted.",
-            "The text can contain colors (<red>, &5, etc) and can also contain new lines, separated by | character.",
+            "This flag can be used more than once to add more messages.",
+            "The text can contain colors (<red>, &5, etc)",
             "",
             "Setting to false will disable the flag.",
-            "",
-            "NOTE: Using this flag more than once will overwrite the previous one.",
         };
         
         E = new String[]
         {
-            "{flag} <green>Good job ! |<gray>Now you can die happy that you crafted that.",
+            "{flag} <green>Good job !",
+            "{flag} <gray>Now you can die happy that you crafted that.",
         };
     }
     
     // Flag code
     
-    private String message;
+    private List<String> messages = new ArrayList<String>();
     
     public FlagMessage()
     {
@@ -46,7 +51,7 @@ public class FlagMessage extends Flag
     {
         this();
         
-        message = flag.message;
+        messages.addAll(flag.messages);
     }
     
     @Override
@@ -55,12 +60,24 @@ public class FlagMessage extends Flag
         return new FlagMessage(this);
     }
     
-    public String getMessage()
+    public List<String> getMessages()
     {
-        return message;
+        return messages;
     }
     
-    public void setMessage(String message)
+    public void setMessages(List<String> messages)
+    {
+        if(messages == null)
+        {
+            this.remove();
+        }
+        else
+        {
+            this.messages = messages;
+        }
+    }
+    
+    public void addMessage(String message)
     {
         if(message == null || message.equalsIgnoreCase("false") || message.equalsIgnoreCase("remove"))
         {
@@ -68,21 +85,31 @@ public class FlagMessage extends Flag
         }
         else
         {
-            this.message = message;
+            if(messages == null)
+            {
+                messages = new ArrayList<String>();
+            }
+            
+            messages.add(message);
         }
     }
     
     @Override
     protected boolean onParse(String value)
     {
-        setMessage(Tools.parseColors(value.replace('|', '\n'), false));
+        addMessage(Tools.parseColors(value, false));
+        
         return true;
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        a.addCustomEffect(a.parseVariables(getMessage()));
-        return true;
+        Validate.notNull(messages);
+        
+        for(String s : messages)
+        {
+            a.addCustomEffect(a.parseVariables(s));
+        }
     }
 }

@@ -1,8 +1,6 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
@@ -222,29 +220,27 @@ public class FlagSound extends Flag
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
         if(onlyPlayer)
         {
-            Player p = a.player();
-            
-            if(p != null)
+            if(!a.hasPlayer())
             {
-                p.playSound(a.hasLocation() ? a.location() : p.getLocation(), sound, volume, pitch);
-                return true;
+                a.addCustomReason("Needs player!");
+                return;
             }
+            
+            a.player().playSound(a.hasLocation() ? a.location() : a.player().getLocation(), sound, volume, pitch);
         }
         else
         {
-            Location l = a.location();
-            
-            if(l != null)
+            if(!a.hasLocation())
             {
-                l.getWorld().playSound(l, sound, volume, pitch);
-                return true;
+                a.addCustomReason("Needs location!");
+                return;
             }
+            
+            a.location().getWorld().playSound(a.location(), sound, volume, pitch);
         }
-        
-        return false;
     }
 }

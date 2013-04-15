@@ -118,6 +118,7 @@ public class FlagModMoney extends Flag
             throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
         }
         
+        this.mod = mod;
         this.amount = Math.abs(amount);
     }
     
@@ -187,11 +188,22 @@ public class FlagModMoney extends Flag
     }
     
     @Override
-    protected boolean onCrafted(Args a)
+    protected void onCrafted(Args a)
     {
-        if(amount == 0 || !a.hasPlayerName() || !RecipeManager.getEconomy().isEnabled())
+        if(mod != '=' && amount == 0)
         {
-            return false;
+            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
+        }
+        
+        if(!RecipeManager.getEconomy().isEnabled())
+        {
+            return;
+        }
+        
+        if(!a.hasPlayerName())
+        {
+            a.addCustomReason("Need a player name!");
+            return;
         }
         
         switch(mod)
@@ -230,7 +242,5 @@ public class FlagModMoney extends Flag
                 break;
             }
         }
-        
-        return true;
     }
 }
