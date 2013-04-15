@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerEnabledEvent;
 import ro.thehunters.digi.recipeManager.commands.BooksCommand;
@@ -19,10 +20,12 @@ import ro.thehunters.digi.recipeManager.commands.FindItemCommand;
 import ro.thehunters.digi.recipeManager.commands.GetBookCommand;
 import ro.thehunters.digi.recipeManager.commands.HelpCommand;
 import ro.thehunters.digi.recipeManager.commands.RecipeCommand;
+import ro.thehunters.digi.recipeManager.commands.RecipeHelpCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
+import ro.thehunters.digi.recipeManager.data.FurnaceData;
+import ro.thehunters.digi.recipeManager.flags.ArgBuilder;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
-import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
-import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 
 /**
  * RecipeManager's main class<br>
@@ -44,6 +47,7 @@ public class RecipeManager extends JavaPlugin
     // constants
     public static final Random random = new Random();
     
+    @Override
     public void onEnable()
     {
         if(plugin != null)
@@ -52,18 +56,15 @@ public class RecipeManager extends JavaPlugin
             return;
         }
         
-        onEnablePost();
-        
         // wait for all plugins to load then init this...
-        /*
         new BukkitRunnable()
         {
+            @Override
             public void run()
             {
                 onEnablePost();
             }
         }.runTask(this);
-        */
     }
     
     private void onEnablePost()
@@ -72,23 +73,36 @@ public class RecipeManager extends JavaPlugin
         
         plugin = this;
         
+        FurnaceData.init(); // dummy caller
+        Furnaces.load(); // load saved furnaces...
+        
         events = new Events();
         recipes = new Recipes();
         economy = new Economy();
         permissions = new Permissions();
         
-        scanPlugins(); // scan for other plugins and store them in case any use our API
         Vanilla.init(); // get initial recipes...
+        
+        scanPlugins(); // scan for other plugins and store them in case any use our API
+        
+        Args.init(); // dummy method to avoid errors on 'reload' with updating
+        ArgBuilder.init();
         FlagType.init();
-        Files.init();
-        Workbenches.init(); // avoid errors on reload if jar is changed
         RecipeBooks.init();
         FurnaceWorker.init();
-//        Furnaces.load(); // load saved furnaces...
+        UpdateChecker.init();
+        Files.init();
+        Players.init();
+        Workbenches.init();
+        
+        reload(null, false, true); // load data
+        
+        getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
         
         // Register commands
         getCommand("rm").setExecutor(new HelpCommand());
         getCommand("rmrecipes").setExecutor(new RecipeCommand());
+        getCommand("rmrecipehelp").setExecutor(new RecipeHelpCommand()); // TODO remove ?
         getCommand("rmfinditem").setExecutor(new FindItemCommand());
 //        getCommand("rmcheck").setExecutor(new HelpCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
@@ -96,18 +110,6 @@ public class RecipeManager extends JavaPlugin
         getCommand("rmgetbook").setExecutor(new GetBookCommand());
         getCommand("rmbooks").setExecutor(new BooksCommand());
         getCommand("rmupdate").setExecutor(new CheckUpdatesCommand());
-        
-        for(BaseRecipe r : recipes.index.keySet())
-        {
-            if(r instanceof FuelRecipe)
-            {
-                recipes.indexFuels.put(((FuelRecipe)r).getIndexString(), (FuelRecipe)r);
-            }
-        }
-        
-        reload(null, false, true); // Start loading data
-        
-        getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
     }
     
     @Override
@@ -227,43 +229,54 @@ public class RecipeManager extends JavaPlugin
         return null;
     }
     
+    @Override
     public void onDisable()
     {
-        Bukkit.getScheduler().cancelTasks(this);
-        
-        if(plugin == null)
-            return;
-        
-        Vanilla.removeCustomRecipes();
-        
-//        Furnaces.save();
-//        Furnaces.clean();
-        
-        FurnaceWorker.clean();
-        Workbenches.clean();
-        Vanilla.clean();
-        UpdateChecker.clean();
-        
-        economy.clear();
-        economy = null;
-        
-        recipes.clean();
-        recipes = null;
-        
-        recipeBooks.clean();
-        recipeBooks = null;
-        
-        events = null;
-        
-        settings = null;
-        
-        permissions.clean();
-        permissions = null;
-        
-        metrics.stop();
-        metrics = null;
-        
-        plugin = null;
+        try
+        {
+            Bukkit.getScheduler().cancelTasks(this);
+            
+            if(plugin == null)
+            {
+                return;
+            }
+            
+            Vanilla.removeCustomRecipes();
+            
+            Furnaces.save();
+            Furnaces.clean();
+            
+            Events.clean();
+            FurnaceWorker.clean();
+            Workbenches.clean();
+            Vanilla.clean();
+            UpdateChecker.clean();
+            
+            economy.clear();
+            economy = null;
+            
+            recipes.clean();
+            recipes = null;
+            
+            recipeBooks.clean();
+            recipeBooks = null;
+            
+            events = null;
+            
+            settings = null;
+            
+            permissions.clean();
+            permissions = null;
+            
+            metrics.stop();
+            metrics = null;
+            
+            plugin = null;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
     /**

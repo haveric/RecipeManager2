@@ -3,7 +3,6 @@ package ro.thehunters.digi.recipeManager.data;
 import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -63,6 +62,8 @@ public class BlockID
         {
             throw new IllegalArgumentException("Coords argument must have 3 numbers separated by commas!");
         }
+        
+        buildHash();
     }
     
     private void parseLocation(Location location)
@@ -79,7 +80,8 @@ public class BlockID
     
     private void buildHash()
     {
-        hash = new HashCodeBuilder().append(wid).append(x).append(y).append(z).toHashCode();
+//        hash = new HashCodeBuilder().append(wid).append(x).append(y).append(z).toHashCode();
+        hash = (wid.toString() + ":" + x + ":" + y + ":" + z + ":").hashCode();
     }
     
     public static BlockID fromString(UUID id, String coords)
@@ -117,7 +119,9 @@ public class BlockID
         World world = getWorld();
         
         if(world == null)
+        {
             return null;
+        }
         
         return world.getBlockAt(x, y, z);
     }
@@ -182,13 +186,19 @@ public class BlockID
     public boolean equals(Object obj)
     {
         if(this == obj)
+        {
             return true;
+        }
         
         if(obj == null)
+        {
             return false;
+        }
         
         if(obj instanceof BlockID == false)
+        {
             return false;
+        }
         
         BlockID b = (BlockID)obj;
         

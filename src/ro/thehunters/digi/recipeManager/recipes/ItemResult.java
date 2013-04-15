@@ -26,7 +26,7 @@ public class ItemResult extends ItemStack implements Flaggable
     
     public ItemResult(ItemResult result)
     {
-        super((ItemStack)result);
+        super(result);
         
         flags = result.hasFlags() ? result.getFlags().clone(this) : null;
         chance = result.chance;
@@ -52,6 +52,12 @@ public class ItemResult extends ItemStack implements Flaggable
         super(item);
         
         this.flags = flags.clone(this);
+    }
+    
+    @Override
+    public ItemResult clone()
+    {
+        return new ItemResult(this);
     }
     
     public void setItemStack(ItemStack item)
@@ -119,7 +125,9 @@ public class ItemResult extends ItemStack implements Flaggable
     public Flags getFlags()
     {
         if(flags == null)
+        {
             flags = new Flags(this);
+        }
         
         return flags;
     }

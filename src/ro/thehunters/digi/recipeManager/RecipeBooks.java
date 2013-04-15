@@ -165,7 +165,7 @@ public class RecipeBooks
     // Constants
     public static final String BOOK_MARKER = "RecipeManager";
     
-    public static void init()
+    protected static void init()
     {
         if(RecipeManager.recipeBooks != null)
         {

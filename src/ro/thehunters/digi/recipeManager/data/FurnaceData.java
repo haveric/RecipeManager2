@@ -8,6 +8,9 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Stores data about a furnace
+ */
 @SerializableAs("RM_FurnaceData")
 public class FurnaceData implements ConfigurationSerializable
 {
@@ -16,47 +19,149 @@ public class FurnaceData implements ConfigurationSerializable
         ConfigurationSerialization.registerClass(FurnaceData.class, "RM_FurnaceData");
     }
     
-    private String owner;
+    private String smelter = null;
+    private String fueler = null;
+    private ItemStack smelting = null;
+    private ItemStack fuel = null;
+    private float burnTicks = 0;
+    private Float cookTime = null;
+    private float cookProgress = 0;
     
-    private String smelter;
-    private String fueler;
+    private static final String ID_SMELTER = "smelter";
+    private static final String ID_FUELER = "fueler";
+    private static final String ID_SMELTING = "smelting";
+    private static final String ID_FUEL = "fuel";
+    private static final String ID_BURNTICKS = "burnTicks";
+    private static final String ID_COOKTIME = "cookTime";
+    private static final String ID_COOKPROGRESS = "cookProgress";
     
-    private ItemStack smelt;
-    private ItemStack fuel;
-    
-    private int burnTime;
-    private float cookTime;
+    public static void init()
+    {
+    }
     
     public FurnaceData()
     {
     }
     
-    public FurnaceData(String owner)
-    {
-        this.owner = owner;
-    }
-    
-    public FurnaceData(String smelter, String fueler, ItemStack smelt, ItemStack fuel)
-    {
-        this.smelter = smelter;
-        this.fueler = fueler;
-        this.smelt = smelt;
-        this.fuel = fuel;
-    }
-    
+    /**
+     * Deserialization constructor
+     * 
+     * @param map
+     */
     @SuppressWarnings("unchecked")
     public FurnaceData(Map<String, Object> map)
     {
         try
         {
-            smelter = (map.containsKey("smelter") ? (String)map.get("smelter") : null);
-            fueler = (map.containsKey("fueler") ? (String)map.get("fueler") : null);
-            smelt = (map.containsKey("smelt") ? ItemStack.deserialize((Map<String, Object>)map.get("smelt")) : null);
-            fuel = (map.containsKey("fuel") ? ItemStack.deserialize((Map<String, Object>)map.get("fuel")) : null);
+            Object obj;
+            
+            obj = map.get(ID_SMELTER);
+            
+            if(obj instanceof String)
+            {
+                smelter = (String)obj;
+            }
+            
+            obj = map.get(ID_FUELER);
+            
+            if(obj instanceof String)
+            {
+                fueler = (String)obj;
+            }
+            
+            obj = map.get(ID_SMELTING);
+            
+            if(obj instanceof Map)
+            {
+                smelting = ItemStack.deserialize((Map<String, Object>)obj);
+            }
+            
+            obj = map.get(ID_FUEL);
+            
+            if(obj instanceof Map)
+            {
+                fuel = ItemStack.deserialize((Map<String, Object>)obj);
+            }
+            
+            obj = map.get(ID_BURNTICKS);
+            
+            if(obj instanceof Double)
+            {
+                burnTicks = ((Double)obj).floatValue();
+            }
+            
+            obj = map.get(ID_COOKTIME);
+            
+            if(obj instanceof Double)
+            {
+                cookTime = ((Double)obj).floatValue();
+            }
+            
+            obj = map.get(ID_COOKPROGRESS);
+            
+            if(obj instanceof Double)
+            {
+                cookProgress = ((Double)obj).floatValue();
+            }
         }
         catch(Exception e)
         {
+            // TODO remove ?
+            e.printStackTrace();
         }
+    }
+    
+    @Override
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> map = new HashMap<String, Object>(7);
+        
+        if(smelter != null)
+        {
+            map.put(ID_SMELTER, smelter);
+        }
+        
+        if(fueler != null)
+        {
+            map.put(ID_FUELER, fueler);
+        }
+        
+        if(smelting != null)
+        {
+            map.put(ID_SMELTING, smelting.serialize());
+        }
+        
+        if(fuel != null)
+        {
+            map.put(ID_FUEL, fuel.serialize());
+        }
+        
+        if(burnTicks > 0)
+        {
+            map.put(ID_BURNTICKS, burnTicks);
+        }
+        
+        if(cookTime != null)
+        {
+            map.put(ID_COOKTIME, cookTime);
+        }
+        
+        if(cookProgress > 0)
+        {
+            map.put(ID_COOKPROGRESS, cookProgress);
+        }
+        
+        return map;
+    }
+    
+    public static FurnaceData deserialize(Map<String, Object> map)
+    {
+        return new FurnaceData(map);
+    }
+    
+    public static FurnaceData valueOf(Map<String, Object> map)
+    {
+        return new FurnaceData(map);
     }
     
     public String getFueler()
@@ -79,14 +184,14 @@ public class FurnaceData implements ConfigurationSerializable
         this.smelter = smelter;
     }
     
-    public ItemStack getSmelt()
+    public ItemStack getSmelting()
     {
-        return smelt;
+        return smelting;
     }
     
-    public void setSmelt(ItemStack smelt)
+    public void setSmelting(ItemStack smelting)
     {
-        this.smelt = smelt;
+        this.smelting = smelting;
     }
     
     public ItemStack getFuel()
@@ -99,58 +204,51 @@ public class FurnaceData implements ConfigurationSerializable
         this.fuel = fuel;
     }
     
-    public int getBurnTime()
-    {
-        return burnTime;
-    }
-    
     public boolean isBurning()
     {
-        return burnTime > 0;
+        return burnTicks > 0;
     }
     
-    public void setBurnTime(int burnTime)
+    public float getBurnTicks()
     {
-        this.burnTime = burnTime;
+        return burnTicks;
     }
     
-    public float getCookTime()
+    public void setBurnTicks(float ticks)
+    {
+        this.burnTicks = ticks;
+    }
+    
+    /**
+     * @return furnace's total cooking time or null if not asigned.
+     */
+    public Float getCookTime()
     {
         return cookTime;
     }
     
-    public void setCookTime(float cookTime)
+    /**
+     * Set furnace's total cooking time or null to unset.
+     * 
+     * @param cookTime
+     */
+    public void setCookTime(Float cookTime)
     {
         this.cookTime = cookTime;
     }
     
-    @Override
-    public Map<String, Object> serialize()
+    public float getCookProgress()
     {
-        Map<String, Object> map = new HashMap<String, Object>(4);
-        
-        if(smelter != null)
-            map.put("smelter", smelter);
-        
-        if(fueler != null)
-            map.put("fueler", fueler);
-        
-        if(smelt != null)
-            map.put("smelt", smelt.serialize());
-        
-        if(fuel != null)
-            map.put("fuel", fuel.serialize());
-        
-        return map;
+        return cookProgress;
     }
     
-    public static FurnaceData deserialize(Map<String, Object> map)
+    public void setCookProgress(float ticks)
     {
-        return new FurnaceData(map);
+        this.cookProgress = ticks;
     }
     
-    public static FurnaceData valueOf(Map<String, Object> map)
+    public short getCookProgressForFurnace()
     {
-        return new FurnaceData(map);
+        return (short)Math.min(Math.max(Math.round(cookProgress), 1), 200);
     }
 }

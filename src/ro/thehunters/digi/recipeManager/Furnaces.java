@@ -3,14 +3,18 @@ package ro.thehunters.digi.recipeManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Furnace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -19,18 +23,35 @@ import ro.thehunters.digi.recipeManager.data.FurnaceData;
 
 public class Furnaces
 {
-    protected static final Map<BlockID, FurnaceData> furnaces = new HashMap<BlockID, FurnaceData>();
-    
-    // constants
     private static final String SAVE_EXTENSION = ".furnacedata";
     
-    static void init()
+    private static Map<BlockID, FurnaceData> furnaces = new HashMap<BlockID, FurnaceData>();
+    
+    protected static void init()
     {
     }
     
-    static void clean()
+    protected static void clean()
     {
         furnaces.clear();
+    }
+    
+    public static void cleanChunk(Chunk chunk, Set<BlockID> added)
+    {
+        Iterator<Entry<BlockID, FurnaceData>> it = furnaces.entrySet().iterator();
+        int x = chunk.getX();
+        int z = chunk.getZ();
+        
+        while(it.hasNext())
+        {
+            Entry<BlockID, FurnaceData> e = it.next();
+            BlockID id = e.getKey();
+            
+            if(Math.floor(id.getX() / 16.0) == x && Math.floor(id.getZ() / 16.0) == z && !added.contains(id))
+            {
+                it.remove();
+            }
+        }
     }
     
     public static Map<BlockID, FurnaceData> getFurnaces()
@@ -45,45 +66,68 @@ public class Furnaces
         return furnaces.containsKey(id);
     }
     
-    public static void add(BlockID id, String owner)
+    /**
+     * Add/update existing furnace.
+     * 
+     * @param furnace
+     */
+    public static void set(Furnace furnace)
+    {
+        set(null, furnace);
+    }
+    
+    protected static void set(BlockID id, Furnace furnace)
+    {
+        Validate.notNull(furnace, "furnace argument must not be null!");
+        
+        if(id == null)
+        {
+            id = BlockID.fromLocation(furnace.getLocation());
+        }
+        
+        FurnaceData data = furnaces.get(id);
+        
+        if(data == null)
+        {
+            data = new FurnaceData();
+            furnaces.put(id, data);
+        }
+        
+        if(data.getFuel() == null)
+        {
+            data.setFuel(furnace.getInventory().getFuel());
+        }
+        
+        if(data.getSmelting() == null)
+        {
+            data.setSmelting(furnace.getInventory().getSmelting());
+        }
+        
+        data.setBurnTicks(furnace.getBurnTime());
+        data.setCookProgress(furnace.getCookTime());
+    }
+    
+    /**
+     * Add new furnace
+     * 
+     * @param id
+     */
+    public static void add(BlockID id)
     {
         Validate.notNull(id, "id argument must not be null!");
         
-        furnaces.put(id, new FurnaceData(owner));
+        furnaces.put(id, new FurnaceData());
     }
     
-    public static void addIfNotExists(Location location)
+    /**
+     * Add new furnace
+     * 
+     * @param id
+     */
+    public static void add(Location location)
     {
-        Validate.notNull(location, "location argument must not be null!");
-        
-        BlockID id = BlockID.fromLocation(location);
-        
-        if(!furnaces.containsKey(id))
-        {
-            add(id, null);
-        }
+        add(BlockID.fromLocation(location));
     }
-    
-    public static void add(Location location, String owner)
-    {
-        add(BlockID.fromLocation(location), owner);
-    }
-    
-    /*
-    protected static void updateBurnTime(BlockID id, int burnTime)
-    {
-        FurnaceData data = furnaces.get(id);
-        boolean exists = data != null;
-        
-        if(!exists)
-            data = new FurnaceData();
-        
-        data.setBurnTime(burnTime);
-        
-        if(!exists)
-            furnaces.put(id, data);
-    }
-    */
     
     public static FurnaceData get(BlockID id)
     {
@@ -123,10 +167,14 @@ public class Furnaces
     
     public static void load()
     {
+        long start = System.currentTimeMillis();
+        
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
         
         if(!dir.exists())
+        {
             return;
+        }
         
         FileConfiguration yml;
         UUID id;
@@ -134,7 +182,9 @@ public class Furnaces
         for(File file : dir.listFiles())
         {
             if(!file.isFile() || !file.getName().endsWith(SAVE_EXTENSION))
+            {
                 continue;
+            }
             
             yml = YamlConfiguration.loadConfiguration(file);
             
@@ -145,10 +195,14 @@ public class Furnaces
                 furnaces.put(BlockID.fromString(id, e.getKey()), (FurnaceData)e.getValue());
             }
         }
+        
+        Messages.debug("loaded " + furnaces.size() + " furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
     
     public static void save()
     {
+        long start = System.currentTimeMillis();
+        
         Map<UUID, Map<String, FurnaceData>> mapWorld = new HashMap<UUID, Map<String, FurnaceData>>();
         Map<String, FurnaceData> mapCoords;
         BlockID id;
@@ -169,42 +223,25 @@ public class Furnaces
         
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
         
-        if(!dir.mkdirs())
+        if(!dir.exists() && !dir.mkdirs())
         {
             Messages.info("<red>Couldn't create directories: " + dir.getPath());
             return;
         }
         
-        FileConfiguration yml;
-        File file;
-        World world;
-        
         for(Entry<UUID, Map<String, FurnaceData>> w : mapWorld.entrySet())
         {
-            world = Bukkit.getWorld(w.getKey());
+            World world = Bukkit.getWorld(w.getKey());
             
-            file = new File(dir.getPath() + File.separator + (world == null ? w.getKey().toString() : world.getName()) + SAVE_EXTENSION);
-            
-            if(!file.exists())
-            {
-                try
-                {
-                    file.createNewFile();
-                }
-                catch(IOException ioe)
-                {
-                    Messages.error(null, ioe, "Failed to create " + file.getPath() + " file!");
-                    break;
-                }
-            }
-            
-            yml = YamlConfiguration.loadConfiguration(file);
+            FileConfiguration yml = new YamlConfiguration();
             yml.set("id", w.getKey().toString());
             
             for(Entry<String, FurnaceData> f : w.getValue().entrySet())
             {
                 yml.set("coords." + f.getKey(), f.getValue());
             }
+            
+            File file = new File(dir.getPath() + File.separator + (world == null ? w.getKey().toString() : world.getName()) + SAVE_EXTENSION);
             
             try
             {
@@ -216,5 +253,7 @@ public class Furnaces
                 break;
             }
         }
+        
+        Messages.debug("saved furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 }

@@ -3,24 +3,21 @@ package ro.thehunters.digi.recipeManager.recipes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.flags.Args;
+import ro.thehunters.digi.recipeManager.flags.FlagDebug;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition.Conditions;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
-public class WorkbenchRecipe extends BaseRecipe
+public class WorkbenchRecipe extends MultiResultRecipe
 {
-    private List<ItemResult> results = new ArrayList<ItemResult>();
-    
     protected WorkbenchRecipe()
     {
     }
@@ -35,89 +32,6 @@ public class WorkbenchRecipe extends BaseRecipe
         super(flags);
     }
     
-    public boolean hasResults()
-    {
-        return results != null && !results.isEmpty();
-    }
-    
-    public List<ItemResult> getResults()
-    {
-        return results;
-    }
-    
-    public void setResults(List<ItemResult> results)
-    {
-        this.results = results;
-        
-        for(ItemResult r : this.results)
-        {
-            r.setRecipe(this);
-        }
-    }
-    
-    public void setResult(ItemStack result)
-    {
-        results.clear();
-        addResult(result);
-    }
-    
-    public void addResult(ItemStack result)
-    {
-        Validate.notNull(result);
-        
-        if(result instanceof ItemResult)
-            results.add(((ItemResult)result).setRecipe(this));
-        else
-            results.add(new ItemResult(result).setRecipe(this));
-    }
-    
-    /**
-     * @return true if recipe has more than 1 result or has failure chance (2 results, one being air), otherwise false.
-     */
-    public boolean isMultiResult()
-    {
-        return results.size() > 1;
-    }
-    
-    /**
-     * @return failure chance or 0 if it can not fail.
-     */
-    public float getFailChance()
-    {
-        for(ItemResult r : results)
-        {
-            if(r.getTypeId() == 0)
-                return r.getChance();
-        }
-        
-        return 0;
-    }
-    
-    /**
-     * @return the first valid result or null.
-     */
-    public ItemResult getFirstResult()
-    {
-        for(ItemResult r : results)
-        {
-            if(r.getTypeId() != 0 && !r.hasFlag(FlagType.SECRET))
-            {
-                return r;
-            }
-        }
-        
-        // if no non-secret result was found, then we must return something...
-        for(ItemResult r : results)
-        {
-            if(r.getTypeId() != 0)
-            {
-                return r;
-            }
-        }
-        
-        return null; // no valid results defined
-    }
-    
     /**
      * Generate a display result for showing off all results (if available).
      * 
@@ -130,6 +44,7 @@ public class WorkbenchRecipe extends BaseRecipe
         
         if(!checkFlags(a))
         {
+            /*
             List<String> lore = new ArrayList<String>();
             
             for(String r : a.reasons())
@@ -138,23 +53,44 @@ public class WorkbenchRecipe extends BaseRecipe
             }
             
             return Tools.createItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
+            */
+            
+            FlagDebug.grabReasons(a.playerName(), this, a.reasons());
+            
+            a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+            
+            return Tools.createItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
         
+        /*
         if(!isMultiResult())
         {
             ItemResult result = getFirstResult();
             
             if(result == null)
-                return null;
-            
-            if(result.checkFlags(a))
             {
-                result.sendPrepare(a);
-                return result;
+                return null;
             }
             
-            return null;
+            if(!result.hasFlag(FlagType.SECRET))
+            {
+                if(result.checkFlags(a))
+                {
+                    result.sendPrepare(a);
+                    
+                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(result)));
+                    
+                    return result;
+                }
+                else
+                {
+                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(result)));
+                }
+                
+                return null;
+            }
         }
+        */
         
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
         float failChance = 0;
@@ -163,16 +99,11 @@ public class WorkbenchRecipe extends BaseRecipe
         int unavailableNum = 0;
         float unavailableChance = 0;
         
-        for(ItemResult r : results)
+        for(ItemResult r : getResults())
         {
             if(r.getTypeId() == 0)
             {
                 failChance = r.getChance();
-            }
-            else if(r.hasFlag(FlagType.SECRET))
-            {
-                secretNum++;
-                secretChance += r.getChance();
             }
             else
             {
@@ -181,12 +112,30 @@ public class WorkbenchRecipe extends BaseRecipe
                 if(r.checkFlags(a))
                 {
                     r.sendPrepare(a);
-                    displayResults.add(r);
+                    
+                    if(r.hasFlag(FlagType.SECRET))
+                    {
+                        secretNum++;
+                        secretChance += r.getChance();
+                    }
+                    else
+                    {
+                        displayResults.add(r);
+                        
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(r)));
+                    }
                 }
                 else
                 {
                     unavailableNum++;
                     unavailableChance += r.getChance();
+                    
+                    if(!r.hasFlag(FlagType.SECRET))
+                    {
+                        FlagDebug.grabReasons(a.playerName(), r, a.reasons());
+                        
+                        a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(r)));
+                    }
                 }
             }
         }
@@ -194,69 +143,51 @@ public class WorkbenchRecipe extends BaseRecipe
 //        Messages.debug("recipe displays: " + ArrayUtils.toString(displayResults));
 //        Messages.debug("recipe unavailable: " + ArrayUtils.toString(unavailableResults));
         
+        if(displayResults.size() == 1 && secretNum == 0 && unavailableNum == 0 && failChance == 0)
+        {
+            return displayResults.get(0);
+        }
+        
         List<String> lore = new ArrayList<String>();
+        String title = null;
+        boolean recieve = (secretNum + displayResults.size()) > 0;
+        
+        if(recieve)
+        {
+            title = Messages.CRAFT_RESULT_RECIEVE_TITLE_RANDOM.get();
+        }
+        else
+        {
+            title = Messages.CRAFT_RESULT_NORECIEVE_TITLE.get();
+            lore.add(Messages.CRAFT_RESULT_DENIED_INFO.get());
+        }
         
         for(ItemResult r : displayResults)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.printItem(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
+            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.printItem(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
         }
         
         if(failChance > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_NOTHING.get("{chance}", formatChance(failChance)));
+            lore.add(Messages.CRAFT_RESULT_LIST_FAILURE.get("{chance}", formatChance(failChance)));
         }
         
         if(secretNum > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_RECIEVE_SECRETS.get("{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
+            lore.add(Messages.CRAFT_RESULT_LIST_SECRETS.get("{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
         }
         
         if(unavailableNum > 0)
         {
-            lore.add(Messages.CRAFT_RESULT_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
+            lore.add(Messages.CRAFT_RESULT_LIST_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
         
-        return Tools.createItemStackWithMeta(Material.PORTAL, 3, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE.get(), lore);
+        return Tools.createItemStackWithMeta(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
     }
     
     private String formatChance(float chance)
     {
         return chance == 100 ? "100%" : String.format((Math.round(chance) == chance ? "%4.0f%%" : "%4.1f%%"), chance);
-    }
-    
-    public ItemResult getResult(Args a)
-    {
-        a.clear();
-        
-        List<ItemResult> pickResults = new ArrayList<ItemResult>();
-        int maxChance = 0;
-        
-        for(ItemResult r : results)
-        {
-            a.clear();
-            
-            if(r.checkFlags(a))
-            {
-                pickResults.add(r);
-                maxChance += r.getChance();
-            }
-        }
-        
-        int rand = RecipeManager.random.nextInt(maxChance);
-        int chance = 0;
-        ItemResult result = null;
-        
-        for(ItemResult r : pickResults)
-        {
-            if((chance += r.getChance()) > rand)
-            {
-                result = r;
-                break;
-            }
-        }
-        
-        a.clear();
-        return result;
     }
     
     public int getCraftableTimes(CraftingInventory inv)

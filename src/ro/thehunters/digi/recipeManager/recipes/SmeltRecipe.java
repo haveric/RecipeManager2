@@ -66,9 +66,13 @@ public class SmeltRecipe extends BaseRecipe
         Validate.notNull(result);
         
         if(result instanceof ItemResult)
+        {
             this.result = ((ItemResult)result).setRecipe(this);
+        }
         else
+        {
             this.result = new ItemResult(result).setRecipe(this);
+        }
     }
     
     public ItemResult getFuel()
@@ -81,9 +85,13 @@ public class SmeltRecipe extends BaseRecipe
         Validate.notNull(fuel);
         
         if(fuel instanceof ItemResult)
+        {
             this.fuel = ((ItemResult)fuel).setRecipe(this);
+        }
         else
+        {
             this.fuel = new ItemResult(fuel).setRecipe(this);
+        }
     }
     
     public boolean hasCustomTime()
@@ -96,6 +104,10 @@ public class SmeltRecipe extends BaseRecipe
         return minTime;
     }
     
+    /**
+     * @param minTime
+     *            min random time range (seconds)
+     */
     public void setMinTime(float minTime)
     {
         this.minTime = minTime;
@@ -106,21 +118,40 @@ public class SmeltRecipe extends BaseRecipe
         return maxTime;
     }
     
+    /**
+     * @param maxTime
+     *            max random time range (seconds) or set to -1 to disable
+     */
     public void setMaxTime(float maxTime)
     {
         this.maxTime = maxTime;
     }
     
+    /**
+     * @return if recipe has random time range
+     */
+    public boolean hasRandomTime()
+    {
+        return (maxTime > minTime);
+    }
+    
+    /**
+     * @return min time or if hasRandomTime() gets a random between min and max time.
+     */
     public float getCookTime()
     {
-        return (maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.random.nextFloat() : minTime);
+        return (hasRandomTime() ? minTime + ((maxTime - minTime) * RecipeManager.random.nextFloat()) : minTime);
     }
     
+    /**
+     * @return getCookTime() multiplied by 20.0 and rounded
+     */
     public int getCookTicks()
     {
-        return Math.round(getCookTime() * 20);
+        return Math.round(getCookTime() * 20.0f);
     }
     
+    @Override
     public int getIndex()
     {
         return ingredient.getTypeId();
@@ -141,13 +172,19 @@ public class SmeltRecipe extends BaseRecipe
     public boolean equals(Object obj)
     {
         if(this == obj)
+        {
             return true;
+        }
         
         if(obj == null || obj instanceof SmeltRecipe == false)
+        {
             return false;
+        }
         
         if(hash != ((SmeltRecipe)obj).hashCode())
+        {
             return false;
+        }
         
         return true;
     }

@@ -66,29 +66,6 @@ public class Vanilla
         clean();
         
         RecipeInfo info = new RecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
-        Iterator<Recipe> iterator = Bukkit.recipeIterator();
-        Recipe r;
-        
-        while(iterator.hasNext())
-        {
-            r = iterator.next();
-            
-            if(r == null || (RecipeManager.getRecipes() != null && RecipeManager.getRecipes().isCustomRecipe(r)))
-                continue;
-            
-            if(r instanceof ShapedRecipe)
-            {
-                initialRecipes.put(new CraftRecipe((ShapedRecipe)r), info);
-            }
-            else if(r instanceof ShapelessRecipe)
-            {
-                initialRecipes.put(new CombineRecipe((ShapelessRecipe)r), info);
-            }
-            else if(r instanceof FurnaceRecipe)
-            {
-                initialRecipes.put(new SmeltRecipe((FurnaceRecipe)r), info);
-            }
-        }
         
         // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite an unexistent one
         initialRecipes.put(new FuelRecipe(Material.COAL, 80), info);
@@ -122,6 +99,41 @@ public class Vanilla
         initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
         initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
         
+        // Index fuel recipes
+        for(BaseRecipe recipe : initialRecipes.keySet())
+        {
+            if(recipe instanceof FuelRecipe)
+            {
+                RecipeManager.getRecipes().indexFuels.put(((FuelRecipe)recipe).getIndexString(), (FuelRecipe)recipe);
+            }
+        }
+        
+        Iterator<Recipe> iterator = Bukkit.recipeIterator();
+        Recipe r;
+        
+        while(iterator.hasNext())
+        {
+            r = iterator.next();
+            
+            if(r == null || (RecipeManager.getRecipes() != null && RecipeManager.getRecipes().isCustomRecipe(r)))
+            {
+                continue;
+            }
+            
+            if(r instanceof ShapedRecipe)
+            {
+                initialRecipes.put(new CraftRecipe((ShapedRecipe)r), info);
+            }
+            else if(r instanceof ShapelessRecipe)
+            {
+                initialRecipes.put(new CombineRecipe((ShapelessRecipe)r), info);
+            }
+            else if(r instanceof FurnaceRecipe)
+            {
+                initialRecipes.put(new SmeltRecipe((FurnaceRecipe)r), info);
+            }
+        }
+        
         // Add them to recipe storage
         RecipeManager.getRecipes().index.putAll(Vanilla.initialRecipes);
     }
@@ -142,13 +154,19 @@ public class Vanilla
     public static boolean removeCustomRecipe(BaseRecipe recipe)
     {
         if(recipe instanceof CraftRecipe)
+        {
             return removeCraftRecipe((CraftRecipe)recipe);
+        }
         
         if(recipe instanceof CombineRecipe)
+        {
             return removeCombineRecipe((CombineRecipe)recipe);
+        }
         
         if(recipe instanceof SmeltRecipe)
+        {
             return removeSmeltRecipe((SmeltRecipe)recipe);
+        }
         
         return false;
     }
@@ -165,13 +183,19 @@ public class Vanilla
     public static boolean removeBukkitRecipe(Recipe recipe)
     {
         if(recipe instanceof ShapedRecipe)
+        {
             return removeShapedRecipe((ShapedRecipe)recipe);
+        }
         
         if(recipe instanceof ShapelessRecipe)
+        {
             return removeShapelessRecipe((ShapelessRecipe)recipe);
+        }
         
         if(recipe instanceof FurnaceRecipe)
+        {
             return removeFurnaceRecipe((FurnaceRecipe)recipe);
+        }
         
         return false;
     }
@@ -218,13 +242,10 @@ public class Vanilla
                 sr = (ShapedRecipe)r;
                 sh = sr.getShape();
                 
-                if(sh.length == height && sh[0].length() == width)
+                if(sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))
                 {
-                    if(Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))
-                    {
-                        iterator.remove();
-                        return true;
-                    }
+                    iterator.remove();
+                    return true;
                 }
             }
         }

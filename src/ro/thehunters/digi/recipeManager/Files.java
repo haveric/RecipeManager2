@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
@@ -30,6 +31,8 @@ import org.bukkit.potion.PotionType;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
+import com.google.common.collect.Sets;
+
 public class Files
 {
     public static final String NL = System.getProperty("line.separator");
@@ -43,7 +46,7 @@ public class Files
     public static final String LASTCHANGED_CONFIG = "2.0alpha1";
     public static final String LASTCHANGED_README = "2.0alpha1";
     public static final String LASTCHANGED_ALIASES = "2.0alpha1";
-    public static final String LASTCHANGED_MESSAGES = "2.0alpha1";
+    public static final String LASTCHANGED_MESSAGES = "2.0alpha2";
     
     public static final String FILE_USED_VERSION = "used.version";
     
@@ -52,6 +55,10 @@ public class Files
     public static final String FILE_INFO_COMMANDS = "commands & permissions.html";
     public static final String FILE_INFO_NAMES = "name index.html";
     public static final String FILE_INFO_FLAGS = "recipe flags.html";
+    
+    public static final String FILE_RECIPES = "recipes.html";
+    
+    public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
     
     protected static void init()
     {
@@ -121,7 +128,7 @@ public class Files
         file.mkdirs();
         
         // Create disable directory info file
-        file = new File(file.getPath() + File.separator + "Place recipe files here to prevent them from beeing loaded");
+        file = new File(file.getPath() + File.separator + "Recipe files in here are ignored !");
         
         if(!file.exists())
         {
@@ -133,18 +140,21 @@ public class Files
     {
         StringBuilder s = new StringBuilder(32000);
         Map<String, List<FlagType>> flags = new LinkedHashMap<String, List<FlagType>>();
+        
         String[] category = new String[]
         {
             "SHARED FLAGS",
             "RECIPE ONLY FLAGS",
-            "RESULT ONLY FLAGS"
+            "RESULT ONLY FLAGS",
         };
+        
         String[] description = new String[]
         {
             "Usable on anything - file header, recipe header or result items.",
             "Usable only on file headers or recipe headers. Can not be used on result items.",
-            "Usable only on recipe's result items. Can not be used on recipes or file header."
+            "Usable only on recipe's result items. Can not be used on recipes or file header.",
         };
+        
         int size = FlagType.values().length;
         
         for(String c : category)
@@ -221,12 +231,14 @@ public class Files
             
             for(FlagType flag : flags.get(category[t]))
             {
+                String[] args = flag.getArguments();
+                String[] desc = flag.getDescription();
+                String[] ex = flag.getExamples();
+                
                 s.append(NL);
                 s.append("<hr><a href=\"#contents\" style=\"font-size:12px;\">^ Contents</a><a name=\"").append(flag.getName()).append("\"></a>");
                 s.append(NL);
                 s.append(NL);
-                
-                String[] args = flag.getArguments();
                 
                 if(args != null)
                 {
@@ -236,24 +248,25 @@ public class Files
                     }
                 }
                 
-                String[] desc = flag.getDescription();
+                if(desc == null)
+                {
+                    desc = new String[]
+                    {
+                        "Flag not yet documented...",
+                    };
+                }
                 
-                if(desc != null)
+                s.append(NL);
+                
+                for(String d : desc)
                 {
                     s.append(NL);
                     
-                    for(String d : desc)
+                    if(d != null)
                     {
-                        s.append(NL);
-                        
-                        if(d != null)
-                        {
-                            s.append("    ").append(StringEscapeUtils.escapeHtml(d));
-                        }
+                        s.append("    ").append(StringEscapeUtils.escapeHtml(d));
                     }
                 }
-                
-                String[] ex = flag.getExamples();
                 
                 if(ex != null)
                 {
@@ -311,17 +324,31 @@ public class Files
         for(Entry<String, Map<String, Object>> e : cmds.entrySet())
         {
             data = e.getValue();
-            String permission = data.get("permission").toString();
-            String usage = data.get("usage").toString().replace("<command>", e.getKey());
-            String info = data.get("description").toString();
+            
+            if(data == null)
+            {
+                Messages.debug("data == null !!");
+                continue;
+            }
+            
+            Object obj = data.get("permission");
+            String permission = (obj == null ? null : obj.toString());
+            
+            obj = data.get("usage");
+            String usage = (obj == null ? null : obj.toString().replace("<command>", e.getKey()));
+            
+            obj = data.get("description");
+            String info = (obj == null ? null : obj.toString());
+            
+            obj = data.get("aliases");
             @SuppressWarnings("unchecked")
-            List<String> aliases = (List<String>)data.get("aliases");
+            List<String> aliases = (obj instanceof List ? (List<String>)obj : null);
             
             s.append(NL).append("<tr>");
             s.append("<td width=\"40%\"><b>");
             s.append(StringEscapeUtils.escapeHtml(usage)).append("</b><span style=\"font-size:14px;\">");
             s.append("<br>Permission: ").append(permission);
-            s.append("<br>Aliases: ").append(aliases == null ? "N/A" : Tools.listToString(aliases));
+            s.append("<br>Aliases: ").append(aliases == null ? "N/A" : Tools.collectionToString(aliases));
             s.append("</span></td>");
             s.append("<td>").append(StringEscapeUtils.escapeHtml(info)).append("</td>");
             s.append("</tr>");
@@ -402,6 +429,9 @@ public class Files
     private void createNameIndex()
     {
         StringBuilder s = new StringBuilder(24000);
+        
+        // TODO dye colors
+        // TODO entity types + alive + other details
         
         s.append("<pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
         s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <b>Name index</b> | <a href=\"commands & permissions.html\">Commands &amp; permissions</a>");

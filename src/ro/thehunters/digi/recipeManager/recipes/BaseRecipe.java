@@ -108,10 +108,14 @@ public class BaseRecipe implements Flaggable
     public boolean equals(Object obj)
     {
         if(obj == this)
+        {
             return true;
+        }
         
         if(obj == null || obj instanceof BaseRecipe == false)
+        {
             return false;
+        }
         
         return obj.hashCode() == hashCode();
     }
@@ -123,7 +127,9 @@ public class BaseRecipe implements Flaggable
     public void register()
     {
         if(!isValid())
+        {
             throw new IllegalArgumentException("Recipe is invalid ! Check ingredients and results.");
+        }
         
         RecipeManager.getRecipes().registerRecipe(this);
     }
@@ -186,7 +192,9 @@ public class BaseRecipe implements Flaggable
     public Flags getFlags()
     {
         if(flags == null)
+        {
             flags = new Flags(this);
+        }
         
         return flags;
     }
@@ -223,7 +231,9 @@ public class BaseRecipe implements Flaggable
     public void sendFailed(Args a)
     {
         if(flags != null)
+        {
             flags.sendFailed(a);
+        }
     }
     
     /**

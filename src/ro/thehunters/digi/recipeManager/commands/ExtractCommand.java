@@ -173,8 +173,9 @@ public class ExtractCommand implements CommandExecutor
                 BufferedWriter stream = new BufferedWriter(new FileWriter(file));
                 
                 stream.write("// You can uncomment the following lines to apply the flag to the entire file:" + Files.NL);
-                stream.write("//@remove     // remove recipes" + Files.NL);
-                stream.write("//@override   // allow editing of result and adding other flags to the recipes" + Files.NL);
+                stream.write("//@remove   // remove recipes." + Files.NL);
+                stream.write("//@restrict // prevents recipes from being used with a notification, you can also set a custom message." + Files.NL);
+                stream.write("//@override // overwrite result and/or allows adding other flags to the recipes." + Files.NL);
                 
                 stream.write("//---------------------------------------------------" + Files.NL + "// Craft recipes" + Files.NL + Files.NL);
                 

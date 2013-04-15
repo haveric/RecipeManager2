@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -66,10 +67,14 @@ public class Tools
     public static boolean itemSimilarDataWildcard(ItemStack source, ItemStack item)
     {
         if(item == null)
+        {
             return false;
+        }
         
         if(item == source)
+        {
             return true;
+        }
         
         return source.getTypeId() == item.getTypeId() && (source.getDurability() == Vanilla.DATA_WILDCARD ? true : source.getDurability() == item.getDurability()) && source.hasItemMeta() == item.hasItemMeta() && (source.hasItemMeta() ? Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta()) : true);
     }
@@ -212,7 +217,9 @@ public class Tools
     public static String printItem(ItemStack item, ChatColor defColor, ChatColor endColor, boolean alwaysShowAmount)
     {
         if(item == null || item.getTypeId() == 0)
+        {
             return ChatColor.GRAY + "(nothing)";
+        }
         
         String name = null;
         String itemData = null;
@@ -404,7 +411,9 @@ public class Tools
         ItemStack item = parseItemStack(string, defaultData, allowData, allowAmount, allowEnchantments);
         
         if(item == null)
+        {
             return null;
+        }
         
         result.setItemStack(item);
         
@@ -439,7 +448,7 @@ public class Tools
         
         if(material == null)
         {
-            RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in " + Files.FILE_INFO_NAMES + " or aliases.yml for material names.");
+            RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
             return null;
         }
         
@@ -545,7 +554,7 @@ public class Tools
                     
                     if(enchData.length != 2)
                     {
-                        RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in " + Files.FILE_INFO_NAMES + " for enchantments list.");
+                        RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
                         continue;
                     }
                     
@@ -559,7 +568,7 @@ public class Tools
                         }
                         catch(Exception e)
                         {
-                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in " + Files.FILE_INFO_NAMES + " for enchantments list.");
+                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
                             continue;
                         }
                     }
@@ -672,7 +681,7 @@ public class Tools
             }
             else
             {
-                RecipeErrorReporter.error("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                RecipeErrorReporter.error("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
         
@@ -685,7 +694,9 @@ public class Tools
         potion.setLevel(Math.min(Math.max(level, 1), potion.getType().getMaxLevel()));
         
         if(!potion.getType().isInstant())
+        {
             potion.setHasExtendedDuration(extended);
+        }
         
         potion.setSplash(splash);
         
@@ -781,7 +792,7 @@ public class Tools
             }
             else
             {
-                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
         
@@ -792,7 +803,9 @@ public class Tools
         }
         
         if(duration != 1 && (effectType == PotionEffectType.HEAL || effectType == PotionEffectType.HARM))
+        {
             RecipeErrorReporter.warning("Flag @" + type + " can't have duration on HEAL or HARM because they're instant!");
+        }
         
         return new PotionEffect(effectType, Math.round(duration * 20), amplify, ambient);
     }
@@ -840,9 +853,13 @@ public class Tools
                     color = Tools.parseColor(c.trim());
                     
                     if(color == null)
+                    {
                         RecipeErrorReporter.warning("Flag @" + type + " has an invalid color!");
+                    }
                     else
+                    {
                         colors.add(color);
+                    }
                 }
                 
                 if(colors.isEmpty())
@@ -872,15 +889,23 @@ public class Tools
                     color = Tools.parseColor(c.trim());
                     
                     if(color == null)
+                    {
                         RecipeErrorReporter.warning("Flag @" + type + " has an invalid fade color! Moving on...");
+                    }
                     else
+                    {
                         colors.add(color);
+                    }
                 }
                 
                 if(colors.isEmpty())
+                {
                     RecipeErrorReporter.error("Flag @" + type + " doesn't have any valid fade colors! Moving on...");
+                }
                 else
+                {
                     build.withFade(colors);
+                }
             }
             else if(s.startsWith("type"))
             {
@@ -913,29 +938,31 @@ public class Tools
         return build.build();
     }
     
-    public static String listToString(List<?> list)
+    public static String collectionToString(Collection<?> collection)
     {
-        return listToString(list, ", ", "");
-    }
-    
-    public static String listToString(List<?> list, String separator, String prefix)
-    {
-        if(list.isEmpty())
-            return "";
-        
-        int size = list.size();
-        
-        if(size == 1)
-            return list.get(0).toString();
-        
-        StringBuilder str = new StringBuilder(prefix).append(list.get(0).toString());
-        
-        for(int i = 1; i < size; i++)
+        if(collection.isEmpty())
         {
-            str.append(separator).append(prefix).append(list.get(i).toString());
+            return "";
         }
         
-        return str.toString();
+        StringBuilder s = new StringBuilder(collection.size() * 16);
+        boolean first = true;
+        
+        for(Object o : collection)
+        {
+            if(first)
+            {
+                first = false;
+            }
+            else
+            {
+                s.append(", ");
+            }
+            
+            s.append(o.toString());
+        }
+        
+        return s.toString();
     }
     
     public static ItemResult createItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
@@ -949,7 +976,9 @@ public class Tools
         ItemMeta meta = item.getItemMeta();
         
         if(lore != null)
+        {
             meta.setLore(lore);
+        }
         
         meta.setDisplayName(name);
         item.setItemMeta(meta);
@@ -1077,7 +1106,9 @@ public class Tools
         boolean result = compareItemMatrix(ingredients, matrix);
         
         if(!result)
+        {
             result = compareItemMatrix(ingredients, matrixMirror);
+        }
         
         return result;
     }
@@ -1087,10 +1118,14 @@ public class Tools
         for(int i = 0; i < 9; i++)
         {
             if(matrix[i] == null && ingredients[i] == null)
+            {
                 continue;
+            }
             
             if(matrix[i] == null || ingredients[i] == null || ingredients[i].getTypeId() != matrix[i].getTypeId() || (ingredients[i].getDurability() != Vanilla.DATA_WILDCARD && ingredients[i].getDurability() != matrix[i].getDurability()))
+            {
                 return false;
+            }
         }
         
         return true;
@@ -1173,14 +1208,18 @@ public class Tools
         int size = ingredients.size();
         
         if(size != sortedIngr.size())
+        {
             return false;
+        }
         
         sortIngredientList(ingredients);
         
         for(int i = 0; i < size; i++)
         {
             if(!sortedIngr.get(i).isSimilar(ingredients.get(i)))
+            {
                 return false;
+            }
         }
         
         return true;
@@ -1211,7 +1250,9 @@ public class Tools
         for(Entry<Character, ItemStack> entry : recipe.getIngredientMap().entrySet())
         {
             if(entry.getKey() != null && entry.getValue() != null)
+            {
                 str.append(entry.getKey()).append("=").append(entry.getValue().getTypeId()).append(":").append(entry.getValue().getDurability()).append(";");
+            }
         }
         
         for(String row : recipe.getShape())
@@ -1229,7 +1270,9 @@ public class Tools
         for(ItemStack ingredient : recipe.getIngredientList())
         {
             if(ingredient == null)
+            {
                 continue;
+            }
             
             str.append(ingredient.getTypeId()).append(":").append(ingredient.getDurability()).append(";");
         }

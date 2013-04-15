@@ -20,6 +20,7 @@ public class CraftRecipe extends WorkbenchRecipe
     private ItemStack[] ingredients;
     private int width;
     private int height;
+    private boolean mirror = false;
     
     private ShapedRecipe bukkitRecipe;
     
@@ -37,6 +38,8 @@ public class CraftRecipe extends WorkbenchRecipe
     public CraftRecipe(BaseRecipe recipe)
     {
         super(recipe);
+        
+        // TODO clone this extension
     }
     
     public CraftRecipe(Flags flags)
@@ -60,7 +63,9 @@ public class CraftRecipe extends WorkbenchRecipe
     public void setIngredients(ItemStack[] ingredients)
     {
         if(ingredients.length != 9)
+        {
             throw new IllegalArgumentException("Recipe must have exacly 9 items, use null to specify empty slots!");
+        }
         
         this.ingredients = ingredients;
         calculate();
@@ -105,7 +110,9 @@ public class CraftRecipe extends WorkbenchRecipe
     public void setIngredient(int slot, Material type, int data)
     {
         if(ingredients == null)
+        {
             ingredients = new ItemStack[9];
+        }
         
         if(slot != 0 && ingredients[0] == null)
         {
@@ -118,13 +125,50 @@ public class CraftRecipe extends WorkbenchRecipe
         calculate();
     }
     
+    /**
+     * @return true if shape was mirrored, usually false.
+     */
+    public boolean isMirrorShape()
+    {
+        return mirror;
+    }
+    
+    /**
+     * Mirror the ingredients shape.<br>
+     * Useful for matching recipes, no other real effect.<br>
+     * This triggers a hashCode recalculation.
+     * 
+     * @param mirror
+     */
+    public void setMirrorShape(boolean mirror)
+    {
+        this.mirror = mirror;
+        calculate();
+    }
+    
     private void calculate()
     {
+        if(ingredients == null)
+        {
+            return;
+        }
+        
         StringBuilder str = new StringBuilder("craft");
         ItemStack item;
         
-        // Trim the item matrix, shift ingredients to top-left corner
-        Tools.trimItemMatrix(ingredients);
+        if(mirror)
+        {
+            // Mirror the ingredients shape and trim the item matrix, shift ingredients to top-left corner
+            ingredients = Tools.mirrorItemMatrix(ingredients);
+        }
+        else
+        {
+            // Trim the item matrix, shift ingredients to top-left corner
+            Tools.trimItemMatrix(ingredients);
+        }
+        
+        width = 0;
+        height = 0;
         
         // Calculate width and height of the shape and build the ingredient string for hashing
         for(int h = 0; h < 3; h++)
@@ -164,9 +208,13 @@ public class CraftRecipe extends WorkbenchRecipe
         boolean removed = hasFlag(FlagType.REMOVE);
         
         if(removed)
+        {
             s.append("removed ");
+        }
         else if(hasFlag(FlagType.OVERRIDE))
+        {
             s.append("overwritten ");
+        }
         
         s.append("shaped ");
         
@@ -184,7 +232,9 @@ public class CraftRecipe extends WorkbenchRecipe
                 s.append(result == null ? "nothing" : result.getType());
                 
                 if(resultNum > 1)
+                {
                     s.append(" & ").append(resultNum - 1).append(" more");
+                }
             }
             else
             {
@@ -289,7 +339,9 @@ public class CraftRecipe extends WorkbenchRecipe
                 item = ingredients[(h * 3) + w];
                 
                 if(item != null)
+                {
                     bukkitRecipe.setIngredient(key, item.getType(), item.getDurability());
+                }
                 
                 key++;
             }

@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import ro.thehunters.digi.recipeManager.flags.FlagOverride;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
@@ -50,6 +51,7 @@ public class RecipeProcessor implements Runnable
     private Flags fileFlags;
     private String line;
     private int lineNum;
+    private int directiveLine;
     private int loaded;
     
     // Storage
@@ -64,7 +66,6 @@ public class RecipeProcessor implements Runnable
     // Constants
     private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
     private final String DIR_RECIPES = DIR_PLUGIN + "recipes" + File.separator;
-//    private final String                      FILE_LASTREAD = DIR_RECIPES + "lastread.dat";
     private final String FILE_ERRORLOG = DIR_PLUGIN + "last recipe errors.log";
     private final String[] COMMENTS =
     {
@@ -260,8 +261,15 @@ public class RecipeProcessor implements Runnable
                     analyzeDirectory(file);
                 }
             }
-            else if(file.getName().endsWith(".txt"))
+            else
             {
+                int index = file.getName().lastIndexOf('.');
+                
+                if(index == -1 || !Files.FILE_RECIPE_EXTENSIONS.contains(file.getName().substring(index)))
+                {
+                    continue;
+                }
+                
                 fileName = file.getPath().replace(DIR_RECIPES, ""); // get the relative path+filename
                 foundFiles.add(fileName); // add to found files list to clean the lastmodified file later
                 
@@ -296,6 +304,8 @@ public class RecipeProcessor implements Runnable
         
         while(searchRecipes()) // search for recipes...
         {
+            directiveLine = lineNum;
+            
             if(line.equalsIgnoreCase(RecipeType.CRAFT.getDirective()))
             {
                 added = parseCraftRecipe();
@@ -328,7 +338,9 @@ public class RecipeProcessor implements Runnable
         }
         
         if(lineNum == 0)
+        {
             RecipeErrorReporter.warning("Recipe file '" + fileName + "' is empty.");
+        }
         
         reader.close();
     }
@@ -348,7 +360,9 @@ public class RecipeProcessor implements Runnable
         for(RecipeType type : RecipeType.values())
         {
             if(type.getDirective() != null && line.equalsIgnoreCase(type.getDirective()))
+            {
                 return true;
+            }
         }
         
         return false;
@@ -376,7 +390,9 @@ public class RecipeProcessor implements Runnable
         do
         {
             if(!readNextLine())
+            {
                 return false;
+            }
             
             line = parseComments();
         }
@@ -387,12 +403,12 @@ public class RecipeProcessor implements Runnable
     
     private String parseComments()
     {
-//        debug("parsing comments...");
-        
         line = (line == null ? null : line.trim());
         
         if(line == null || line.isEmpty())
+        {
             return null;
+        }
         
         int index;
         
@@ -521,7 +537,9 @@ public class RecipeProcessor implements Runnable
         List<ItemResult> results = new ArrayList<ItemResult>();
         
         if(!parseResults(recipe, results, true, false)) // results have errors
+        {
             return false;
+        }
         
         recipe.setResults(results); // done with results, set'em
         
@@ -531,7 +549,7 @@ public class RecipeProcessor implements Runnable
         }
         
         // check if the recipe already exists...
-        if(!recipeCheckExists(recipe))
+        if(!recipeExists(recipe))
         {
             return false;
         }
@@ -539,6 +557,7 @@ public class RecipeProcessor implements Runnable
         // add the recipe to the Recipes class and to the list for later adding to the server
         registrator.queueCraftRecipe(recipe, currentFile);
         loaded++;
+        
         return true; // succesfully added
     }
     
@@ -578,7 +597,9 @@ public class RecipeProcessor implements Runnable
         List<ItemResult> results = new ArrayList<ItemResult>();
         
         if(!parseResults(recipe, results, true, false))
+        {
             return false;
+        }
         
         recipe.setResults(results);
         
@@ -588,7 +609,7 @@ public class RecipeProcessor implements Runnable
         }
         
         // check if recipe already exists
-        if(!recipeCheckExists(recipe))
+        if(!recipeExists(recipe))
         {
             return false;
         }
@@ -596,6 +617,7 @@ public class RecipeProcessor implements Runnable
         // add the recipe to the Recipes class and to the list for later adding to the server
         registrator.queueCombineRecipe(recipe, currentFile);
         loaded++;
+        
         return true; // no errors encountered
     }
     
@@ -695,7 +717,9 @@ public class RecipeProcessor implements Runnable
         List<ItemResult> results = new ArrayList<ItemResult>();
         
         if(isRemove) // ignore result errors if we have @remove
+        {
             RecipeErrorReporter.setIgnoreErrors(true);
+        }
         
         boolean hasResults = parseResults(recipe, results, false, true);
         
@@ -715,7 +739,7 @@ public class RecipeProcessor implements Runnable
         }
         
         // check if the recipe already exists
-        if(!recipeCheckExists(recipe))
+        if(!recipeExists(recipe))
         {
             return false;
         }
@@ -805,7 +829,7 @@ public class RecipeProcessor implements Runnable
             recipe.setIngredient(ingredient);
             
             // check if the recipe already exists
-            if(!recipeCheckExists(recipe))
+            if(!recipeExists(recipe))
             {
                 continue;
             }
@@ -836,7 +860,9 @@ public class RecipeProcessor implements Runnable
     private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Exception
     {
         if(line.charAt(0) != '=') // check if current line is a result, if not move on
+        {
             nextLine();
+        }
         
         ItemResult result;
         float totalPercentage = 0;
@@ -862,9 +888,13 @@ public class RecipeProcessor implements Runnable
             result.setRecipe(recipe);
             
             if(result.getChance() < 0)
+            {
                 splitChanceBy++;
+            }
             else
+            {
                 totalPercentage += result.getChance();
+            }
             
             parseFlags(result.getFlags()); // check for result flags and keeps the line flow going too
         }
@@ -930,70 +960,77 @@ public class RecipeProcessor implements Runnable
         return true; // valid results
     }
     
-    private boolean recipeCheckExists(BaseRecipe recipe) // TODO
+    private boolean recipeExists(BaseRecipe recipe)
     {
-        RecipeInfo registered = RecipeManager.recipes.index.get(recipe);
-        boolean isOverride = recipe.hasFlag(FlagType.OVERRIDE);
-        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
+        RecipeErrorReporter.setLine(directiveLine); // set the line to point to the directive rather than the last read line!
+        RecipeInfo registered = getRecipeFromMap(recipe, RecipeManager.getRecipes().index);
         
-        if(isOverride || isRemove)
+        if(recipe.hasFlag(FlagType.OVERRIDE) || recipe.hasFlag(FlagType.REMOVE))
         {
             if(registered == null)
             {
                 recipe.getFlags().removeFlag(FlagType.REMOVE);
                 recipe.getFlags().removeFlag(FlagType.OVERRIDE);
+                
                 RecipeErrorReporter.warning("Recipe was not found, can't override/remove it! Added as new recipe.", "Use 'rmextract' command to see the exact ingredients needed");
+                
                 return true; // allow recipe to be added
             }
             else if(registered.getOwner() == RecipeOwner.RECIPEMANAGER && registered.getStatus() == null)
             {
-                RecipeErrorReporter.warning("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
-                return false;
+                RecipeErrorReporter.error("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
+                
+                return false; // can't re-add recipes
             }
             
-            return true;
+            return true; // all ok, allow it to be added
         }
         
-        if(registered != null && registered.getOwner() == RecipeOwner.RECIPEMANAGER && !currentFile.equals(registered.getAdder()))
+        if(registered != null)
         {
-            RecipeErrorReporter.warning("Recipe already created with this plugin, file: " + registered.getAdder());
-            return false;
+            if(registered.getOwner() == RecipeOwner.RECIPEMANAGER)
+            {
+                if(!currentFile.equals(registered.getAdder()))
+                {
+                    RecipeErrorReporter.error("Recipe already created with this plugin, file: " + registered.getAdder());
+                    
+                    return false; // can't re-add recipes
+                }
+            }
+            else
+            {
+                recipe.getFlags().addFlag(new FlagOverride());
+                
+                RecipeErrorReporter.warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
+                
+                return true; // allow to be added since we're overwriting it
+            }
         }
         
-        RecipeInfo queued = registrator.queuedRecipes.get(recipe);
+        RecipeInfo queued = getRecipeFromMap(recipe, registrator.queuedRecipes);
         
         if(queued != null)
         {
-            RecipeErrorReporter.warning("Recipe already created with this plugin, file: " + queued.getAdder());
-            return false;
-        }
-        
-        /*
-        RecipeInfo infoExisting = RecipeManager.getRecipes() == null ? null : RecipeManager.getRecipes().getRecipeInfo(recipe);
-        RecipeInfo infoProcessed = registrator.queuedRecipes.get(recipe);
-        boolean override = recipe.getFlags().isOverride();
-        boolean remove = recipe.getFlags().isRemove();
-        
-        if(infoProcessed == null && infoExisting == null)
-        {
-            if(remove || override)
-            {
-                return new String[] { "Recipe was not found, can't " + (override ? "override" : "remove") + " it! Added as new recipe.", "Use 'rmextract' command to see the exact ingredients needed" };
-            }
+            RecipeErrorReporter.error("Recipe already created with this plugin, file: " + queued.getAdder());
             
-            return null;
+            return false; // can't re-add recipes
         }
         
-        if((infoProcessed != null && infoProcessed.getOwner() == RecipeOwner.RECIPEMANAGER) || (infoExisting != null && infoExisting.getOwner() == RecipeOwner.RECIPEMANAGER))
-        {
-            return new String[] { "Recipe already created with this plugin, file: " + (infoProcessed == null ? infoExisting.getAdder() : infoProcessed.getAdder()), (override || remove ? "You can't @override or @remove recipes that you added using this plugin because you can just edit or delete them from the files." : null) };
-        }
-        else if(!(remove || override))
-        {
-            return new String[] { "Recipe already exists, added by " + (infoProcessed == null ? infoExisting.getAdder() : infoProcessed.getAdder()), "You can use @override flag to change recipe's result(s)." };
-        }
-        */
+        return true; // nothing found, let it be added
+    }
+    
+    private RecipeInfo getRecipeFromMap(BaseRecipe recipe, Map<BaseRecipe, RecipeInfo> map)
+    {
+        RecipeInfo info = map.get(recipe);
         
-        return true;
+        if(info == null && recipe instanceof CraftRecipe)
+        {
+            CraftRecipe cr = (CraftRecipe)recipe;
+            cr.setMirrorShape(true);
+            
+            info = map.get(recipe);
+        }
+        
+        return info;
     }
 }

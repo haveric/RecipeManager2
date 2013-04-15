@@ -18,11 +18,15 @@ public class Workbenches
 {
     private static final Map<String, BlockID> workbenches = new HashMap<String, BlockID>();
     
-    static void init()
+    private Workbenches()
     {
     }
     
-    static void clean()
+    protected static void init()
+    {
+    }
+    
+    protected static void clean()
     {
         workbenches.clear();
     }

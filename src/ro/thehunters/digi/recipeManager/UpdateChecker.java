@@ -26,6 +26,10 @@ public class UpdateChecker extends BukkitRunnable
     private static String newLink;
     private CommandSender sender;
     
+    protected static void init()
+    {
+    }
+    
     /**
      * Constructor for calling update check one time only
      * 

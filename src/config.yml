@@ -87,7 +87,7 @@ clear-recipes: false
 # Automatic update checker (no auto download)
 update-check:
   enabled: false    # Enable/disable update checking. (default: true) - NOTE: set to false while in alpha/beta
-  frequency: 6     # Check for updates each N hours, use 0 to check only at startup. (default: 6)
+  frequency: 6      # Check for updates each N hours, use 0 to check only at startup. (default: 6)
 
 
 # Enable or disable metrics system for this specific plugin, it will also not create the PluginMetrics folder if this is disabled, but other plugins can use metrics if they have it implemented.

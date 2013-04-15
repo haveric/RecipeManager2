@@ -18,15 +18,33 @@ import org.bukkit.entity.Player;
 
 public enum Messages
 {
+    // Flags
+    
+    FLAG_OVERRIDE("<yellow>Overwrites another recipe."),
+    
     FLAG_DISABLED("<red>Recipe is disabled."),
+    
+    FLAG_HOLDITEM("<red>Need to hold: {items}"),
     
     FLAG_GAMEMODE("<red>Allowed gamemodes: {gamemodes}"),
     
     FLAG_HEIGHT("<red>Need height: {height}"),
-    FLAG_NOHEIGHT("<red>Unallowed height: {height}"),
     
-    FLAG_ONLINETIME("<red>Need online time: {time}"),
-    FLAG_PLAYTIME("<red>Need total play time: {time}"),
+    FLAG_ONLINETIME("<red>Need online time: {range}"),
+    
+    FLAG_PERMISSION_ALLOWED("<red>Allowed permissions: {permissions}"),
+    FLAG_PERMISSION_UNALLOWED("<red>Unallowed permissions: {permissions}"),
+    
+    FLAG_GROUP_ALLOWED("<red>Allowed groups: {groups}"),
+    FLAG_GROUP_UNALLOWED("<red>Unallowed groups: {groups}"),
+    
+    FLAG_WORLD_ALLOWED("<red>Allowed worlds: {worlds}"),
+    FLAG_WORLD_UNALLOWED("<red>Unallowed worlds: {worlds}"),
+    
+    FLAG_RETURNITEM_RETURNED("<green>Returned item {item}<green> in crafting grid."),
+    FLAG_RETURNITEM_MERGED("<green>Returned item {item}<green> merged in crafting grid."),
+    FLAG_RETURNITEM_RECIEVED("<yellow>Returned item {item}<green> added to inventory."),
+    FLAG_RETURNITEM_DROPPED("<yellow>Returned item {item}<green> dropped."),
     
     FLAG_ITEMS("<red>Need in inventory: {items}"),
     FLAG_NOITEMS("<red>Unallowed in inventory: {items}"),
@@ -34,6 +52,9 @@ public enum Messages
     FLAG_NOEQUIP("<red>Unallowed equipped: {items}"),
     FLAG_HOLD("<red>Need in hand: {items}"),
     FLAG_NOHOLD("<red>Unallowed in hand: {items}"),
+    
+    FLAG_COMMAND_PLAYER("Executes command on crafter: {command}"),
+    FLAG_COMMAND_SERVER("Executes console command: {command}"),
     
     FLAG_INGREDIENTCONDITIONS_NOAMOUNT("<red>{item} needs to have {amount} amount"),
     
@@ -45,24 +66,15 @@ public enum Messages
     
     FLAG_REQLEVEL("<red>Need level: {level}"),
     
-    FLAG_MODLEVEL_ADD("<green>+{amount} level"),
-    FLAG_MODLEVEL_SUB("<red>-{amount} level"),
+    FLAG_MODLEVEL_ADD("<green>+{amount} level(s)"),
+    FLAG_MODLEVEL_SUB("<red>-{amount} level(s)"),
     FLAG_MODLEVEL_SET("<yellow>Level set to {amount}"),
     
-    FLAG_REQMONEY("<red>Need money: {amount}"),
+    FLAG_REQMONEY("<red>Need money: {money}"),
     
     FLAG_MODMONEY_ADD("<green>+{money}"),
     FLAG_MODMONEY_SUB("<red>-{money}"),
     FLAG_MODMONEY_SET("<yellow>Money set to {money}"),
-    
-    FLAG_PERMISSION_NEED("<red>Allowed permissions: {permissions}"),
-    FLAG_PERMISSION_UNALLOWED("<red>Unallowed permissions: {permissions}"),
-    
-    FLAG_GROUPS("<red>Allowed groups: {groups}"),
-    FLAG_NOGROUPS("<red>Unallowed groups: {groups}"),
-    
-    FLAG_WORLDS("<red>Allowed worlds: {worlds}"),
-    FLAG_NOWORLDS("<red>Unallowed worlds: {worlds}"),
     
     FLAG_PLAYERBUKKITMETA("<red>You need to be special..."),
     FLAG_NOPLAYERBUKKITMETA("<red>You're too special..."),
@@ -75,13 +87,17 @@ public enum Messages
     
     FLAG_REALTIME("<red>Allowed between {mindate} and {maxdate}"),
     
-    FLAG_COOLDOWN_FAIL("<red>Cooldown: {time}"),
-    FLAG_COOLDOWN_CRAFT("<yellow>Cooldown set to {time}"),
+    FLAG_COOLDOWN_FAIL_PERPLAYER("<red>Personal cooldown: {time}"),
+    FLAG_COOLDOWN_FAIL_GLOBAL("<red>Global cooldown: {time}"),
+    FLAG_COOLDOWN_SET_PERPLAYER("<yellow>Personal cooldown set to {time}"),
+    FLAG_COOLDOWN_SET_GLOBAL("<yellow>Global cooldown set to {time}"),
     
     FLAG_CLONE_RESULTDISPLAY("<dark_aqua><italic>(clone)"),
     
     FLAG_PREFIX_RECIPE("<gray>(Recipe) <reset>"),
-    FLAG_PREFIX_RESULT("<gray>(Result) <reset>"),
+    FLAG_PREFIX_RESULT("<gray>(Result {item}<gray>) <reset>"),
+    
+    // Crafting
     
     CRAFT_REPAIR_DISABLED("<red>Repair recipes disabled."),
     
@@ -90,15 +106,16 @@ public enum Messages
     CRAFT_SPECIAL_MAP_CLONING("<red>Map cloning is disabled."),
     CRAFT_SPECIAL_MAP_EXTENDING("<red>Map extending is disabled."),
     
-    CRAFT_RESULT_DENIED_TITLE("<yellow><underline>Unable to craft:"),
-    CRAFT_RESULT_DENIED_REASON("<aqua><bold>* <reset>{reason}"),
-    
-    CRAFT_RESULT_RECIEVE_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
-    CRAFT_RESULT_RECIEVE_TITLE("<light_purple><underline>You will get a random item:"),
-    CRAFT_RESULT_RECIEVE_ITEM("<dark_green>{chance} <green>{item} {clone}"),
-    CRAFT_RESULT_RECIEVE_SECRETS("<dark_aqua>{num} secret item(s)..."),
-    CRAFT_RESULT_RECIEVE_NOTHING("<red>{chance} Failure chance"),
-    CRAFT_RESULT_UNAVAILABLE("<dark_red>{num} unavailable item(s)..."),
+    CRAFT_RESULT_DENIED_TITLE("<yellow><underline>You can't craft this recipe!"),
+    CRAFT_RESULT_DENIED_INFO("<green>See chat for reasons."),
+    CRAFT_RESULT_NORECIEVE_TITLE("<yellow><underline>You can't craft any results from this recipe!"),
+    CRAFT_RESULT_NORECIEVE_INFO("<green>See chat for reasons."),
+    CRAFT_RESULT_RECIEVE_TITLE_UNKNOWN("<light_purple><underline>You will get an unknown item!"),
+    CRAFT_RESULT_RECIEVE_TITLE_RANDOM("<light_purple><underline>You will get a random item:"),
+    CRAFT_RESULT_LIST_ITEM("<dark_green>{chance} <green>{item} {clone}"),
+    CRAFT_RESULT_LIST_SECRETS("<dark_aqua>{num} secret item(s)"),
+    CRAFT_RESULT_LIST_FAILURE("<red>{chance} Failure chance"),
+    CRAFT_RESULT_LIST_UNAVAILABLE("<dark_red>{num} unavailable item(s)"),
     
     CRAFT_RECIPE_MULTI_FAILED("<yellow>NOTE: <white>That sound was the recipe failing by chance! See 'fail chance' in the result description."),
     CRAFT_RECIPE_MULTI_NOSHIFTCLICK("<yellow>NOTE: <white>Recipe has more than one result, shift+clicking will only craft it once."),

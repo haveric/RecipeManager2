@@ -37,6 +37,8 @@ public class CombineRecipe extends WorkbenchRecipe
     public CombineRecipe(BaseRecipe recipe)
     {
         super(recipe);
+        
+        // TODO clone this extension
     }
     
     public CombineRecipe(Flags flags)

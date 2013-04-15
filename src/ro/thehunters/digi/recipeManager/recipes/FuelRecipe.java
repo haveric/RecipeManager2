@@ -15,13 +15,13 @@ public class FuelRecipe extends BaseRecipe
     
     public FuelRecipe(Material type, float burnTime)
     {
-        setIngredient(new ItemStack(type, 1, (short)-1));
+        setIngredient(new ItemStack(type, 1, Vanilla.DATA_WILDCARD));
         setMinTime(burnTime);
     }
     
     public FuelRecipe(Material type, float minTime, float maxTime)
     {
-        setIngredient(new ItemStack(type, 1, (short)-1));
+        setIngredient(new ItemStack(type, 1, Vanilla.DATA_WILDCARD));
         setMinTime(minTime);
         setMaxTime(maxTime);
     }
@@ -42,6 +42,8 @@ public class FuelRecipe extends BaseRecipe
     public FuelRecipe(BaseRecipe recipe)
     {
         super(recipe);
+        
+        // TODO clone this extension
     }
     
     public FuelRecipe(Flags flags)

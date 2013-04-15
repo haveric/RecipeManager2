@@ -144,6 +144,14 @@ public class RecipeErrorReporter
     }
     
     /**
+     * @return the current file the parser is at.
+     */
+    public static String getFile()
+    {
+        return currentFile;
+    }
+    
+    /**
      * Set the current line - printed in queued errors.<br>
      * This will be reset to 0 after calling {@link #setFile()}
      * 
@@ -152,6 +160,14 @@ public class RecipeErrorReporter
     public static void setLine(int line)
     {
         currentLine = line;
+    }
+    
+    /**
+     * @return the current line the parser is at.
+     */
+    public static int getLine()
+    {
+        return currentLine;
     }
     
     /**

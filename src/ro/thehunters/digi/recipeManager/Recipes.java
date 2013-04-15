@@ -81,7 +81,9 @@ public class Recipes
     public boolean isCustomWorkbenchRecipe(ItemStack result)
     {
         if(result == null)
+        {
             return false;
+        }
         
         List<String> desc = result.getItemMeta().getLore();
         
@@ -99,10 +101,14 @@ public class Recipes
     public boolean isCustomRecipe(Recipe recipe)
     {
         if(recipe == null)
+        {
             return false;
+        }
         
         if(recipe instanceof FurnaceRecipe)
+        {
             return (getSmeltRecipe(((FurnaceRecipe)recipe).getInput()) != null);
+        }
         
         return isCustomWorkbenchRecipe(recipe.getResult());
     }
@@ -130,10 +136,14 @@ public class Recipes
     public WorkbenchRecipe getWorkbenchRecipe(Recipe recipe)
     {
         if(recipe instanceof ShapedRecipe)
+        {
             return getCraftRecipe(recipe.getResult());
+        }
         
         if(recipe instanceof ShapelessRecipe)
+        {
             return getCombineRecipe(recipe.getResult());
+        }
         
         return null;
     }
@@ -177,7 +187,9 @@ public class Recipes
     public SmeltRecipe getSmeltRecipeWithFuel(ItemStack fuel)
     {
         if(fuel == null)
+        {
             return null;
+        }
         
         SmeltRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getTypeId()));
         
@@ -200,7 +212,9 @@ public class Recipes
     public FuelRecipe getFuelRecipe(ItemStack fuel)
     {
         if(fuel == null)
+        {
             return null;
+        }
         
         FuelRecipe recipe = indexFuels.get(String.valueOf(fuel.getTypeId()));
         
@@ -256,7 +270,9 @@ public class Recipes
         }
         
         if(queued)
+        {
             info.setStatus(null);
+        }
         
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
         

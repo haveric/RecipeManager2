@@ -1,12 +1,27 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== v2.0alpha2 ===
+
+* Alpha fixes:
+** Fixed @modexp, @modlevel and @modmoney not working with - or = modifiers.
+** Made @message usable multiple times to add more messages instead of using | as newline
+** Fixed not detecting when a recipe already exists
+** Fixed setting 'furnace-ticks' above 1 slowing down smelting
+
+* Changed how crafting denial reasons are displayed, they're now shown in chat instead of in display result.
+
+* Added @keepitem to allow items to be kept in crafting grid when recipe is used.
+** This also supports damaging kept items OR replacing item with a diferent item
+
+\\
+
 === v2.0alpha1 ===
 ++ Changed files: all of them ++
 * Plugin rewritten, redesigned and restructured... 
 
-* First off, removed features:
-** Removed ability to return empty versions of some items, however this can be achieved by using @returnitem flag!
+* Removed and replaced features:
+** Replaced ability to return empty versions of some predefined items with @keepitem flag which has more options!
 
 * Improvements for recipe files:
 ** Recipe files now don't care about spaces and new lines even more ! You can format the recipes as you like using tabs, empty lines between them or no empty lines at all ! The only thing that is required is for diferent statements to be on new lines.

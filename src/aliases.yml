@@ -226,7 +226,7 @@ skull_item:
 golden_apple:
   names: golden apple, gold apple
   0: 
-  1: enchanted golden apple
+  1: enchanted
 
 # Music discs
 GOLD_RECORD: music disc 1, disc 1, record 1
