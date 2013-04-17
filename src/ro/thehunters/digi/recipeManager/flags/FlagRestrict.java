@@ -4,21 +4,38 @@ import ro.thehunters.digi.recipeManager.Messages;
 
 public class FlagRestrict extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.RESTRICT;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} ...",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "FLAG NOT IMPLEMENTED",
+        /*
+        "Restricts the recipe to everybody.",
+        "This is the crafter friendly version of @remove because crafter gets a message when trying to craft the recipe.",
+        "Optionally you can overwrite the default restrict message.",
+        "",
+        "Setting it to false will lift the restriction.",
+         */
+        };
+        
+        E = new String[]
+        {
+            "{flag} ...",
+        };
     }
     
     // Flag code
@@ -27,13 +44,10 @@ public class FlagRestrict extends Flag
     
     public FlagRestrict()
     {
-        type = FlagType.RESTRICT;
     }
     
     public FlagRestrict(FlagRestrict flag)
     {
-        this();
-        
         message = flag.message;
     }
     
@@ -41,6 +55,12 @@ public class FlagRestrict extends Flag
     public FlagRestrict clone()
     {
         return new FlagRestrict(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public String getMessage()
@@ -63,6 +83,6 @@ public class FlagRestrict extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        a.addReason(Messages.FLAG_DISABLED, message);
+        a.addReason(Messages.FLAG_RESTRICT, message);
     }
 }

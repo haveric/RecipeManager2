@@ -1,5 +1,6 @@
 package ro.thehunters.digi.recipeManager;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -183,7 +184,9 @@ public class Events implements Listener
         catch(Exception e)
         {
             if(event.getInventory() != null)
+            {
                 event.getInventory().setResult(null);
+            }
             
             CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
@@ -233,7 +236,9 @@ public class Events implements Listener
         if(!RecipeManager.getSettings().SPECIAL_REPAIR)
         {
             if(player != null)
+            {
                 player.playSound((location == null ? player.getLocation() : location), Sound.NOTE_BASS, 1, 255);
+            }
             
             inv.setResult(Tools.createItemStackWithMeta(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
             return;
@@ -256,7 +261,9 @@ public class Events implements Listener
                     repaired[repairIndex] = matrix[i];
                     
                     if(++repairIndex > 1)
+                    {
                         break;
+                    }
                 }
             }
             
@@ -705,7 +712,7 @@ public class Events implements Listener
                 
                 if(!furnaceModifySlot(furnace, inv, player, slot, cursor))
                 {
-                    Messages.debug("CANCELLED!");
+//                    Messages.debug("CANCELLED!");
                     event.setCancelled(true);
                     new UpdateInventory(player, 0);
                     return;
@@ -791,7 +798,7 @@ public class Events implements Listener
         
         if(furnace.getBurnTime() > 0)
         {
-            Messages.debug("furnace is burning...");
+//            Messages.debug("furnace is burning...");
             
             ItemStack i = Tools.nullItemIfAir(inv.getSmelting());
             ItemStack f = Tools.nullItemIfAir(inv.getFuel());
@@ -807,11 +814,11 @@ public class Events implements Listener
             {
                 if(item != null && item.isSimilar(slot == 0 ? i : f))
                 {
-                    Messages.debug("recipe is smelt+fuel but added similar items!");
+//                    Messages.debug("recipe is smelt+fuel but added similar items!");
                 }
                 else
                 {
-                    Messages.debug("recipe is a smelt+fuel recipe, removing active burntime...");
+//                    Messages.debug("recipe is a smelt+fuel recipe, removing active burntime...");
                     furnace.setBurnTime((short)0);
                 }
             }
@@ -820,11 +827,13 @@ public class Events implements Listener
         ItemStack ingredient = Tools.nullItemIfAir(slot == 0 ? item : inv.getSmelting());
         ItemStack fuel = Tools.nullItemIfAir(slot == 1 ? item : inv.getFuel());
         
+        /*
         if(slot == 0)
             Messages.debug("<green>Placed ingredient: " + Tools.printItem(ingredient));
         
         if(slot == 1)
             Messages.debug("<green>Placed fuel: " + Tools.printItem(fuel));
+        */
         
         SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
         Location location = furnace.getLocation();
@@ -961,8 +970,6 @@ public class Events implements Listener
             Furnace furnace = (Furnace)event.getBlock().getState();
             FurnaceInventory inv = furnace.getInventory();
             
-            Messages.debug("smelted " + inv.getResult());
-            
             if(recipe.hasFuel())
             {
                 ItemStack fuel = Tools.nullItemIfAir(inv.getFuel());
@@ -997,8 +1004,6 @@ public class Events implements Listener
                         {
                             data.setBurnTicks(0);
                         }
-                        
-                        Messages.debug("furnace stopped.");
                     }
                 }
             }
@@ -1033,13 +1038,12 @@ public class Events implements Listener
             }
             
             Furnace furnace = (Furnace)state;
-            ItemStack ingredient = furnace.getInventory().getSmelting();
+            ItemStack ingredient = Tools.nullItemIfAir(furnace.getInventory().getSmelting());
             SmeltRecipe smeltRecipe = null;
+            ItemStack result = furnace.getInventory().getResult();
             
-            if(ingredient == null || ingredient.getTypeId() == 0)
+            if(ingredient == null)
             {
-                ItemStack result = furnace.getInventory().getResult();
-                
                 if(result == null)
                 {
                     return;
@@ -1047,10 +1051,17 @@ public class Events implements Listener
                 
                 for(SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values())
                 {
-                    if(result.isSimilar(r.getResult()))
+                    if(r.isMultiResult())
                     {
-                        smeltRecipe = r;
-                        break;
+                        // TODO trace recipe backwards by ID stored in chest...
+                    }
+                    else
+                    {
+                        if(result.isSimilar(r.getFirstResult()))
+                        {
+                            smeltRecipe = r;
+                            break;
+                        }
                     }
                 }
             }
@@ -1229,7 +1240,44 @@ public class Events implements Listener
             return;
         }
         
-        BlockState[] tileEntities = chunk.getTileEntities();
+        BlockState[] tileEntities = null;
+        
+        // Workaround for CB issues with block states.
+        try
+        {
+            tileEntities = chunk.getTileEntities();
+        }
+        catch(Exception e)
+        {
+            Messages.debug("Loading error for chunk at " + chunk.getX() + ", " + chunk.getZ() + ", attempting workaround...");
+            
+            List<BlockState> list = new ArrayList<BlockState>(32);
+            int maxY = chunk.getWorld().getMaxHeight();
+            
+            for(int x = 0; x < 16; x++)
+            {
+                for(int z = 0; z < 16; z++)
+                {
+                    for(int y = 0; y < maxY; y++)
+                    {
+                        Block block = chunk.getBlock(x, y, z);
+                        
+                        switch(block.getType())
+                        {
+                            case FURNACE:
+                            case BURNING_FURNACE:
+                            {
+                                list.add(block.getState());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            tileEntities = list.toArray(new BlockState[0]);
+        }
+        
         Set<BlockID> added = (add ? new HashSet<BlockID>(tileEntities.length) : null);
         
         for(BlockState state : tileEntities)
@@ -1356,4 +1404,95 @@ public class Events implements Listener
             player.updateInventory();
         }
     }
+    
+    // TODO remove
+    
+    /*
+    private Location boom = null;
+    
+    @EventHandler
+    public void dmg(EntityDamageByBlockEvent event)
+    {
+        Messages.debug("type = " + event.getCause() + " | dmg = " + event.getDamage() + " | " + event.getDamager());
+        Messages.debug("distance to boom = " + (boom == null ? "null" : boom.distance(event.getEntity().getLocation())));
+    }
+    */
+    
+    /*
+    @EventHandler
+    public void interact(PlayerInteractEvent event)
+    {
+        Player p = event.getPlayer();
+        
+        if(p.getItemInHand() == null || p.getItemInHand().getTypeId() == 0)
+        {
+            if(!event.hasBlock())
+            {
+                return;
+            }
+            
+            Block t = event.getClickedBlock().getRelative(BlockFace.UP);
+            
+            p.sendMessage(String.format("l=%d, bl=%d, sl=%d", t.getLightLevel(), t.getLightFromBlocks(), t.getLightFromSky()));
+            
+            /*
+            Block t = p.getTargetBlock(null, 32);
+            
+            if(t == null)
+            {
+                p.sendMessage("can't get target block");
+            }
+            else
+            {
+                if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+                {
+                    int ticks = p.getMaximumNoDamageTicks();
+                    p.setMaximumNoDamageTicks(1);
+                    p.setNoDamageTicks(1);
+                    
+                    boom = t.getLocation();
+                    t.getWorld().createExplosion(boom.getX(), boom.getY(), boom.getZ(), 8.0f, false, false);
+                    
+                    p.setNoDamageTicks(0);
+                    p.setMaximumNoDamageTicks(ticks);
+                }
+                else
+                {
+                    boom = t.getLocation();
+                    t.getWorld().createExplosion(boom.getX(), boom.getY(), boom.getZ(), 8.0f, false, false);
+                }
+            }
+            */
+    /*
+        }
+    }
+    */
+    
+    /*
+    // TODO remove
+    private double temp[] = new double[2];
+    private double wet[] = new double[2];
+    
+    @EventHandler
+    public void move(PlayerMoveEvent event)
+    {
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        
+        if(from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ())
+        {
+            return;
+        }
+        
+        Block block = to.getBlock();
+        
+        temp[0] = Math.min(temp[0], block.getTemperature());
+        temp[1] = Math.max(temp[1], block.getTemperature());
+        
+        wet[0] = Math.min(wet[0], block.getHumidity());
+        wet[1] = Math.max(wet[1], block.getHumidity());
+        
+        Messages.debug(String.format("%-16s t=%.2f (%.2f - %.2f) h=%.2f (%.2f-%.2f)", block.getBiome(), block.getTemperature(), temp[0], temp[1], block.getHumidity(), wet[0], wet[1]));
+    }
+    */
 }

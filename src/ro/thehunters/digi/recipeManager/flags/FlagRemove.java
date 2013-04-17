@@ -4,34 +4,51 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
 public class FlagRemove extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.REMOVE;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} [true or false]",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "Removes an existing recipe that was added by vanilla Minecraft or other plugins/mods. ",
+            "The recipe definition must have the exact ingredients of the recipe you want to overwrite.",
+            "",
+            "Results and smelt time will be ignored and you don't have to delete them if you want to keep them for later.",
+            "",
+            "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.",
+            "Value is optional, if value is not specified it will just be enabled.",
+            "",
+            "This can't be used along with " + FlagType.OVERRIDE + " flag.",
+        };
+        
+        E = new String[]
+        {
+            "{flag}",
+        };
     }
     
     // Flag code
     
     public FlagRemove()
     {
-        type = FlagType.REMOVE;
     }
     
     @Override
-    public FlagRemove clone()
+    public FlagType getType()
     {
-        return new FlagRemove();
+        return TYPE;
     }
     
     @Override
@@ -39,7 +56,7 @@ public class FlagRemove extends Flag
     {
         if(getFlagsContainer().hasFlag(FlagType.OVERRIDE))
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " can't work with @override flag!");
+            return RecipeErrorReporter.error("Flag " + getType() + " can't work with " + FlagType.OVERRIDE + " flag!");
         }
         
         return true;

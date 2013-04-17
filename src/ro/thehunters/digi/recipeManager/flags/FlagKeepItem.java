@@ -23,14 +23,17 @@ import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 public class FlagKeepItem extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.KEEPITEM;
+        
         A = new String[]
         {
             "{flag} <ingredient>",
@@ -72,20 +75,28 @@ public class FlagKeepItem extends Flag
     
     public FlagKeepItem()
     {
-        type = FlagType.KEEPITEM;
     }
     
     public FlagKeepItem(FlagKeepItem flag)
     {
-        this();
-        
-        keepItems.putAll(flag.keepItems);
+        for(Entry<String, Object> e : flag.keepItems.entrySet())
+        {
+            Object obj = e.getValue();
+            
+            keepItems.put(e.getKey(), (obj instanceof ItemStack ? ((ItemStack)obj).clone() : obj));
+        }
     }
     
     @Override
     public FlagKeepItem clone()
     {
         return new FlagKeepItem(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public Map<String, Object> getKeepItems()

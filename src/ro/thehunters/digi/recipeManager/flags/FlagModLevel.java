@@ -8,14 +8,17 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModLevel extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.MODLEVEL;
+        
         A = new String[]
         {
             "{flag} [modifier]<number>",
@@ -26,14 +29,14 @@ public class FlagModLevel extends Flag
         D = new String[]
         {
             "Modifies crafter's level.",
+            "Using this flag more than once will overwrite the previous one.",
             "",
             "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
             "The '<number>' argument must be the amount of levels to modify.",
             "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
             "",
-            "NOTE: Using this flag more than once will overwrite the previous one.",
             "NOTE: This is for experience levels, for experience points use " + FlagType.MODEXP.toString(),
-            "NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with " + FlagType.REQLEVEL.toString() + " if you want to check.",
+            "NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with " + FlagType.NEEDLEVEL.toString() + " if you want to check.",
         };
         
         E = new String[]
@@ -49,26 +52,29 @@ public class FlagModLevel extends Flag
     
     private char mod = '+';
     private int amount = 0;
-    private String message = null;
+    private String failMessage;
     
     public FlagModLevel()
     {
-        type = FlagType.MODLEVEL;
     }
     
     public FlagModLevel(FlagModLevel flag)
     {
-        this();
-        
         mod = flag.mod;
         amount = flag.amount;
-        message = flag.message;
+        failMessage = flag.failMessage;
     }
     
     @Override
     public FlagModLevel clone()
     {
         return new FlagModLevel(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public char getModifier()
@@ -123,14 +129,14 @@ public class FlagModLevel extends Flag
         this.amount = Math.abs(amount);
     }
     
-    public String getMessage()
+    public String getFailMessage()
     {
-        return message;
+        return failMessage;
     }
     
-    public void setMessage(String message)
+    public void setFailMessage(String failMessage)
     {
-        this.message = message;
+        this.failMessage = failMessage;
     }
     
     @Override
@@ -140,7 +146,7 @@ public class FlagModLevel extends Flag
         
         if(split.length > 1)
         {
-            setMessage(split[1].trim());
+            setFailMessage(split[1].trim());
         }
         
         value = split[0].trim();
@@ -210,7 +216,7 @@ public class FlagModLevel extends Flag
             {
                 p.giveExpLevels(-amount);
                 
-                a.addEffect(Messages.FLAG_MODLEVEL_SUB, message, "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODLEVEL_SUB, failMessage, "{amount}", amount);
                 
                 break;
             }
@@ -219,7 +225,7 @@ public class FlagModLevel extends Flag
             {
                 p.giveExpLevels(amount);
                 
-                a.addEffect(Messages.FLAG_MODLEVEL_ADD, message, "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODLEVEL_ADD, failMessage, "{amount}", amount);
                 
                 break;
             }
@@ -228,7 +234,7 @@ public class FlagModLevel extends Flag
             {
                 p.setLevel(amount);
                 
-                a.addEffect(Messages.FLAG_MODLEVEL_SET, message, "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODLEVEL_SET, failMessage, "{amount}", amount);
                 
                 break;
             }

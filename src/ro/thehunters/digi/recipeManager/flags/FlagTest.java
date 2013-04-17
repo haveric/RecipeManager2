@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 import ro.thehunters.digi.recipeManager.Messages;
 
@@ -24,7 +24,7 @@ public class FlagTest extends Flag
     
     public FlagTest()
     {
-        type = FlagType.TEST;
+//        type = FlagType.TEST;
     }
     
     public FlagTest(FlagTest flag)
@@ -45,17 +45,27 @@ public class FlagTest extends Flag
     }
     
     @Override
-    protected void onCrafted(Args a)
+    protected void onCheck(Args a)
     {
-        Messages.debug("testing...");
+//        Messages.debug("testing...");
         
-        LivingEntity ent = (LivingEntity)a.location().getWorld().spawnEntity(a.location().add(0.5, 1, 0.5), EntityType.SHEEP);
+        Block block = a.location().getBlock();
         
-        /*
-        if(ent instanceof Creature)
+        Messages.debug(block.getType() + " | power = " + block.getBlockPower() + " | " + block.isBlockPowered() + " | " + block.isBlockIndirectlyPowered());
+        
+        BlockFace[] faces = new BlockFace[]
         {
-            ((Creature)ent).setTarget(a.player());
+            BlockFace.NORTH,
+            BlockFace.SOUTH,
+            BlockFace.EAST,
+            BlockFace.WEST,
+            BlockFace.UP,
+            BlockFace.DOWN,
+        };
+        
+        for(BlockFace f : faces)
+        {
+            Messages.debug(f + " = " + block.getBlockPower(f) + " | " + block.isBlockFacePowered(f) + " | " + block.isBlockFaceIndirectlyPowered(f));
         }
-        */
     }
 }

@@ -9,14 +9,17 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagDebug extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.DEBUG;
+        
         A = new String[]
         {
             "{flag} [true or false]",
@@ -24,6 +27,8 @@ public class FlagDebug extends Flag
         
         D = new String[]
         {
+            "FLAG NOT FULLY IMPLEMENTED - does not really work", // TODO
+            "",
             "Prints what the recipe and flag does in the server console.",
             "",
             "This flag is merely a tool to help you analyse the recipe's code flow.",
@@ -38,7 +43,12 @@ public class FlagDebug extends Flag
     
     public FlagDebug()
     {
-        type = FlagType.DEBUG;
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     @Override

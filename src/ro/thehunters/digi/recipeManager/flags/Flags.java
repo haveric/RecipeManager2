@@ -35,7 +35,7 @@ public class Flags implements Cloneable
             s.append(f.getType());
         }
         
-        return s.toString();
+        return (s.length() > 0 ? s.toString() : "empty");
     }
     
     public Flags()
@@ -170,9 +170,9 @@ public class Flags implements Cloneable
         if(flag == null)
         {
             flag = type.createFlagClass(); // create a new instance of the flag does not exist
-            flag.flagsContainer = this; // set container before hand to allow checks
         }
         
+        flag.flagsContainer = this; // set container before hand to allow checks
         value = (split.length > 1 ? split[1].trim() : null);
         
         // make sure the flag can be added to this flag list

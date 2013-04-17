@@ -22,41 +22,50 @@ public enum Messages
     
     FLAG_OVERRIDE("<yellow>Overwrites another recipe."),
     
-    FLAG_DISABLED("<red>Recipe is disabled."),
+    FLAG_RESTRICT("<red>Recipe is disabled."),
     
-    FLAG_HOLDITEM("<red>Need to hold: {items}"),
+    FLAG_HOLDITEM("<red>Need to hold: <yellow>{items}"),
     
-    FLAG_GAMEMODE("<red>Allowed gamemodes: {gamemodes}"),
+    FLAG_GAMEMODE("<red>Allowed gamemodes: <yellow>{gamemodes}"),
     
-    FLAG_HEIGHT("<red>Need height: {height}"),
+    FLAG_HEIGHT("<red>Need height: <yellow>{height}"),
     
-    FLAG_ONLINETIME("<red>Need online time: {range}"),
+    FLAG_ONLINETIME("<red>Need online time: <yellow>{range}"),
     
-    FLAG_PERMISSION_ALLOWED("<red>Allowed permissions: {permissions}"),
-    FLAG_PERMISSION_UNALLOWED("<red>Unallowed permissions: {permissions}"),
+    FLAG_PERMISSION_ALLOWED("<red>Allowed permissions: <yellow>{permissions}"),
+    FLAG_PERMISSION_UNALLOWED("<red>Unallowed permissions: <yellow>{permissions}"),
     
-    FLAG_GROUP_ALLOWED("<red>Allowed groups: {groups}"),
-    FLAG_GROUP_UNALLOWED("<red>Unallowed groups: {groups}"),
+    FLAG_GROUP_ALLOWED("<red>Allowed groups: <yellow>{groups}"),
+    FLAG_GROUP_UNALLOWED("<red>Unallowed groups: <yellow>{groups}"),
     
-    FLAG_WORLD_ALLOWED("<red>Allowed worlds: {worlds}"),
-    FLAG_WORLD_UNALLOWED("<red>Unallowed worlds: {worlds}"),
+    FLAG_WORLD_ALLOWED("<red>Allowed worlds: <yellow>{worlds}"),
+    FLAG_WORLD_UNALLOWED("<red>Unallowed worlds: <yellow>{worlds}"),
     
     FLAG_RETURNITEM_RETURNED("<green>Returned item {item}<green> in crafting grid."),
     FLAG_RETURNITEM_MERGED("<green>Returned item {item}<green> merged in crafting grid."),
     FLAG_RETURNITEM_RECIEVED("<yellow>Returned item {item}<green> added to inventory."),
     FLAG_RETURNITEM_DROPPED("<yellow>Returned item {item}<green> dropped."),
     
-    FLAG_ITEMS("<red>Need in inventory: {items}"),
-    FLAG_NOITEMS("<red>Unallowed in inventory: {items}"),
-    FLAG_EQUIP("<red>Need equipped: {items}"),
-    FLAG_NOEQUIP("<red>Unallowed equipped: {items}"),
-    FLAG_HOLD("<red>Need in hand: {items}"),
-    FLAG_NOHOLD("<red>Unallowed in hand: {items}"),
+    FLAG_BLOCKPOWERED_FURNACE("<red>Need a furnace powered by redstone."),
+    FLAG_BLOCKPOWERED_WORKBENCH("<red>Need a workbench powered by redstone."),
+    
+    FLAG_LIGHTLEVEL("<red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>."),
+    
+    FLAG_ITEMS("<red>Need in inventory: <yellow>{items}"),
+    FLAG_NOITEMS("<red>Unallowed in inventory: <yellow>{items}"),
+    FLAG_EQUIP("<red>Need equipped: <yellow>{items}"),
+    FLAG_NOEQUIP("<red>Unallowed equipped: <yellow>{items}"),
+    FLAG_HOLD("<red>Need in hand: <yellow>{items}"),
+    FLAG_NOHOLD("<red>Unallowed in hand: <yellow>{items}"),
     
     FLAG_COMMAND_PLAYER("Executes command on crafter: {command}"),
     FLAG_COMMAND_SERVER("Executes console command: {command}"),
     
-    FLAG_INGREDIENTCONDITIONS_NOAMOUNT("<red>{item} needs to have {amount} amount"),
+    FLAG_INGREDIENTCONDITIONS_NOAMOUNT("<yellow>{item}<red> needs amount: <yellow>{amount}"),
+    FLAG_INGREDIENTCONDITIONS_NODATA("<yellow>{item}<red> needs data values: <yellow>{data}"),
+    FLAG_INGREDIENTCONDITIONS_NOENCHANTS("<yellow>{item}<red> needs enchantments: <yellow>{enchants}"),
+    FLAG_INGREDIENTCONDITIONS_NONAME("<yellow>{item}<red> needs name: <yellow>{name}"),
+    FLAG_INGREDIENTCONDITIONS_NOCOLOR("<yellow>{item}<red> needs color: <yellow>{color}"),
     
     FLAG_REQEXP("<red>Need EXP: {exp}"),
     

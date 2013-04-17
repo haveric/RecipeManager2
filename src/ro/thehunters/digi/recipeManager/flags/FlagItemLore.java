@@ -10,44 +10,61 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagItemLore extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} <text or false>";
+        TYPE = FlagType.ITEMLORE;
         
-        D = new String[2];
-        D[0] = "Adds a line to result's lore (description), supports colors (e.g. <red>, <blue>, &4, &F, etc).";
-        D[1] = "Setting to false will remove all lines.";
+        A = new String[]
+        {
+            "{flag} <text or false>",
+        };
         
-        E = new String[2];
-        E[0] = "{flag} <red>Awesome item";
-        E[1] = "{flag} <magic>some scrambled text on line 2";
+        D = new String[]
+        {
+            "Adds a line to result's lore (description), supports colors (e.g. <red>, <blue>, &4, &F, etc).",
+        };
+        
+        E = new String[]
+        {
+            "{flag} <red>Awesome item",
+            "{flag} <magic>some scrambled text on line 2",
+        };
     }
     
     // Flag code
     
+    private List<String> lore = new ArrayList<String>(); // TODO
+    
     public FlagItemLore()
     {
-        type = FlagType.ITEMLORE;
     }
     
-    @Override
-    public void onRemove()
+    public FlagItemLore(FlagItemLore flag)
     {
-        onParse(null);
-        
-        // TODO REMOVE:
-        System.out.print("FlagLore :: onRemove() " + getResult());
+        // TODO clone
     }
     
     @Override
-    public boolean onParse(String value)
+    public FlagItemLore clone()
+    {
+        return new FlagItemLore(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onParse(String value)
     {
         ItemResult result = getResult();
         ItemMeta meta = result.getItemMeta();

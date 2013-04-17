@@ -7,9 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeBooks.Book;
-import ro.thehunters.digi.recipeManager.RecipeBooks.BookID;
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.data.Book;
+import ro.thehunters.digi.recipeManager.data.BookID;
 
 public class BooksCommand implements CommandExecutor
 {

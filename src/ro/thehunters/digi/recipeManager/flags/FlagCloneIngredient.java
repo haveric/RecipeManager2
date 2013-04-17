@@ -18,14 +18,17 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 public class FlagCloneIngredient extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.CLONEINGREDIENT;
+        
         A = new String[]
         {
             "{flag} <ingredient> | [arguments]",
@@ -77,13 +80,10 @@ public class FlagCloneIngredient extends Flag
     
     public FlagCloneIngredient()
     {
-        type = FlagType.CLONEINGREDIENT;
     }
     
     public FlagCloneIngredient(FlagCloneIngredient flag)
     {
-        this();
-        
         copyBitsum = flag.copyBitsum;
         dataModifier = flag.dataModifier.clone();
         amountModifier = flag.amountModifier.clone();
@@ -93,6 +93,12 @@ public class FlagCloneIngredient extends Flag
     public FlagCloneIngredient clone()
     {
         return new FlagCloneIngredient(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     /**
@@ -200,7 +206,7 @@ public class FlagCloneIngredient extends Flag
         
         if(result == null || result.getTypeId() == 0)
         {
-            RecipeErrorReporter.error("Flag " + type + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
+            RecipeErrorReporter.error("Flag " + getType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
             return false;
         }
         
@@ -208,7 +214,7 @@ public class FlagCloneIngredient extends Flag
         
         if(recipe instanceof WorkbenchRecipe == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " only works on workbench (craft and combine) recipes!");
+            RecipeErrorReporter.error("Flag " + getType() + " only works on workbench (craft and combine) recipes!");
             return false;
         }
         
@@ -253,7 +259,7 @@ public class FlagCloneIngredient extends Flag
                 }
                 else
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has more ingredients of the cloned type: " + Tools.printItem(i), "Recipe must only have a single type of the cloned material in the ingredients!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has more ingredients of the cloned type: " + Tools.printItem(i), "Recipe must only have a single type of the cloned material in the ingredients!");
                     return false;
                 }
             }
@@ -261,7 +267,7 @@ public class FlagCloneIngredient extends Flag
         
         if(ingredient == null)
         {
-            RecipeErrorReporter.error("Flag " + type + " has couldn't find ingredient of type: " + result.getType());
+            RecipeErrorReporter.error("Flag " + getType() + " has couldn't find ingredient of type: " + result.getType());
             return false;
         }
         
@@ -327,7 +333,7 @@ public class FlagCloneIngredient extends Flag
                     }
                     catch(Exception e)
                     {
-                        RecipeErrorReporter.warning("Flag " + type + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
+                        RecipeErrorReporter.warning("Flag " + getType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
                         continue;
                     }
                 }
@@ -335,7 +341,7 @@ public class FlagCloneIngredient extends Flag
                 continue;
             }
             
-            RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + s);
+            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + s);
         }
         
         return true;

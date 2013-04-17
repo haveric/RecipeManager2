@@ -13,7 +13,7 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
-public class FlagItemEnchant extends Flag
+public class FlagEnchantItem extends Flag
 {
     // Flag definition and documentation
     
@@ -24,7 +24,7 @@ public class FlagItemEnchant extends Flag
     
     static
     {
-        TYPE = FlagType.ITEMENCHANT;
+        TYPE = FlagType.ENCHANTITEM;
         
         A = new String[]
         {
@@ -53,28 +53,26 @@ public class FlagItemEnchant extends Flag
     
     // Flag code
     
+    // TODO
     private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
     
-    public FlagItemEnchant()
+    public FlagEnchantItem()
     {
-        type = FlagType.ITEMENCHANT;
     }
     
-    public FlagItemEnchant(FlagItemEnchant flag)
+    public FlagEnchantItem(FlagEnchantItem flag)
     {
-        this();
-        
         enchants.putAll(flag.enchants);
     }
     
     @Override
-    public FlagItemEnchant clone()
+    public FlagEnchantItem clone()
     {
-        return new FlagItemEnchant(this);
+        return new FlagEnchantItem(this);
     }
     
     @Override
-    public FlagType getType() // TODO to all flags ?
+    public FlagType getType()
     {
         return TYPE;
     }
@@ -89,13 +87,13 @@ public class FlagItemEnchant extends Flag
     public boolean onParse(String value)
     {
         String[] split = value.split(" ");
-        value = split[0].trim();
+        value = split[0].toUpperCase().trim();
         
         Enchantment ench = Enchantment.getByName(value);
         
         if(ench == null)
         {
-            RecipeErrorReporter.error("Flag " + type + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+            RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
             return false;
         }
         
@@ -103,7 +101,7 @@ public class FlagItemEnchant extends Flag
         
         if(split.length > 1)
         {
-            value = split[1].trim();
+            value = split[1].toLowerCase().trim();
             
             if(!value.equalsIgnoreCase("max"))
             {
@@ -113,7 +111,7 @@ public class FlagItemEnchant extends Flag
                 }
                 catch(Exception e)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid enchantment level number!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
                     return false;
                 }
             }

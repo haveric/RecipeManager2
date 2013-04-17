@@ -2,32 +2,50 @@ package ro.thehunters.digi.recipeManager.flags;
 
 public class FlagSecret extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.SECRET;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} [true or false]",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "Hides the recipe or result from common info sources.",
+            "Recipes are hidden from commands, books, etc.",
+            "Results are also hidden from commands, books and most importantly from multiresult item display.",
+            "This also means recipes/results won't give out any fail craft reasons!",
+        };
+        
+        E = new String[]
+        {
+            "{flag}",
+        };
     }
     
     // Flag code
     
     public FlagSecret()
     {
-        type = FlagType.SECRET;
     }
     
     @Override
-    public boolean onParse(String value)
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onParse(String value)
     {
         return true;
     }

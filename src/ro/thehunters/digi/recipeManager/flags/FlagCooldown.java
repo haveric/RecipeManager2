@@ -13,14 +13,17 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagCooldown extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.COOLDOWN;
+        
         A = new String[]
         {
             "{flag} <number>[suffix] | [arguments]",
@@ -48,8 +51,6 @@ public class FlagCooldown extends Flag
             "",
             "  failmsg <text>    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.",
             "",
-            "",
-            "Setting the flag to 'false' will disable the flag.",
         };
         
         E = new String[]
@@ -72,13 +73,10 @@ public class FlagCooldown extends Flag
     
     public FlagCooldown()
     {
-        type = FlagType.COOLDOWN;
     }
     
     public FlagCooldown(FlagCooldown flag)
     {
-        this();
-        
         cooldown = flag.cooldown;
         global = flag.global;
         failMessage = flag.failMessage;
@@ -91,6 +89,12 @@ public class FlagCooldown extends Flag
     public FlagCooldown clone()
     {
         return new FlagCooldown(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     /**

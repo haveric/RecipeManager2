@@ -108,14 +108,21 @@ class FurnaceWorker implements Runnable
                 continue;
             }
             
-            ItemResult recipeResult = recipe.getResult();
-            ItemStack result = inventory.getResult();
-            
-            // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
-            if(result != null && (!recipeResult.isSimilar(result) || result.getAmount() >= result.getType().getMaxStackSize()))
+            if(recipe.isMultiResult())
             {
-                data.setCookProgress(0);
-                continue;
+                // TODO ...
+            }
+            else
+            {
+                ItemResult recipeResult = recipe.getFirstResult();
+                ItemStack result = inventory.getResult();
+                
+                // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
+                if(result != null && (!recipeResult.isSimilar(result) || result.getAmount() >= result.getType().getMaxStackSize()))
+                {
+                    data.setCookProgress(0);
+                    continue;
+                }
             }
             
             if(recipe.getMinTime() <= 0.0) // instant smelting

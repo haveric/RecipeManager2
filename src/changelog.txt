@@ -3,16 +3,32 @@ This file will be automatically overwritten when a new version is installed.
 
 === v2.0alpha2 ===
 
-* Alpha fixes:
-** Fixed @modexp, @modlevel and @modmoney not working with - or = modifiers.
-** Made @message usable multiple times to add more messages instead of using | as newline
-** Fixed not detecting when a recipe already exists
-** Fixed setting 'furnace-ticks' above 1 slowing down smelting
-
+* Fixed @modexp, @modlevel and @modmoney not working with - or = modifiers.
+* Made @message usable multiple times to add more messages instead of using | as newline
+* Added new supported '.rm' extension for recile files, the '.txt' one is still available too.
+* Fixed not detecting when a recipe already exists
+* Fixed fuels not working
+* Fixed alot of stuff about furnaces - they should now work properly
+* Fixed setting 'furnace-ticks' above 1 slowing down smelting
+* Added warning if using only 2 identical tools as ingredients
 * Changed how crafting denial reasons are displayed, they're now shown in chat instead of in display result.
-
-* Added @keepitem to allow items to be kept in crafting grid when recipe is used.
+* Added documentation to alot of flags and renamed some flags.
+* Added more name lists to 'name index.html'
+* Redesigned @permission, @world and @group - they should also work, not fully tested though
+* Added @keepitem to allow items to be kept in crafting grid when recipe is used
 ** This also supports damaging kept items OR replacing item with a diferent item
+* Added @summon to spawn creatures - alot of customization!
+* Added @forchance to trigger flags on random chances
+** Not working with result flags - working on it
+* Added @ingredientcondition flag to set additional conditions on ingredients!
+** Ranged data values
+** Check data bits (potion data bits for example)
+** Enchantments with optional ranged levels
+** Ranged leather color
+** Check display name with optional regex pattern
+** Stack amounts and lore checking are work-in-progress.
+* Added/coded @lightlevel, @potioneffect, @explode, @blockpowered and few more...
+* And more changes that I've forgot along the way...
 
 \\
 

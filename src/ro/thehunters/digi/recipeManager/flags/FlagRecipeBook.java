@@ -6,14 +6,17 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagRecipeBook extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.RECIPEBOOK;
+        
         A = new String[]
         {
             "{flag} <title>",
@@ -45,13 +48,10 @@ public class FlagRecipeBook extends Flag
     
     public FlagRecipeBook()
     {
-        type = FlagType.RECIPEBOOK;
     }
     
     public FlagRecipeBook(FlagRecipeBook flag)
     {
-        this();
-        
         title = flag.title;
         description = flag.description;
     }
@@ -60,6 +60,12 @@ public class FlagRecipeBook extends Flag
     public FlagRecipeBook clone()
     {
         return new FlagRecipeBook(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public String getTitle()

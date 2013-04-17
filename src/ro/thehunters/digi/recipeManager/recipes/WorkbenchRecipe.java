@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.flags.ArgBuilder;
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagDebug;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
@@ -101,6 +102,8 @@ public class WorkbenchRecipe extends MultiResultRecipe
         
         for(ItemResult r : getResults())
         {
+            r = r.clone();
+            
             if(r.getTypeId() == 0)
             {
                 failChance = r.getChance();
@@ -111,6 +114,11 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 
                 if(r.checkFlags(a))
                 {
+                    a = ArgBuilder.create().inventory(a.inventory()).location(a.location()).player(a.player()).player(a.playerName()).recipe(a.recipe()).recipe(a.recipeType()).result(r).build();
+                    
+                    // TODO come up with an idea to fix @forchance/@forpermission and/or result flags!!!!!
+                    // TODO clone results
+                    
                     r.sendPrepare(a);
                     
                     if(r.hasFlag(FlagType.SECRET))
@@ -220,7 +228,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 
                 if(flag != null)
                 {
-                    Conditions cond = flag.getConditions(item);
+                    Conditions cond = flag.getIngredientConditions(item);
                     
                     if(cond != null && cond.getAmount() > 0)
                     {

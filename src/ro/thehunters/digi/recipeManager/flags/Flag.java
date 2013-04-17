@@ -13,7 +13,6 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class Flag implements Cloneable
 {
-    protected FlagType type;
     protected Flags flagsContainer;
     
     protected Flag()
@@ -279,7 +278,7 @@ public class Flag implements Cloneable
      */
     public FlagType getType()
     {
-        return type;
+        return null;
     }
     
     /**

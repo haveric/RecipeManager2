@@ -5,14 +5,17 @@ import ro.thehunters.digi.recipeManager.recipes.MultiResultRecipe;
 
 public class FlagFailMessage extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.FAILMESSAGE;
+        
         A = new String[]
         {
             "{flag} [message or false]",
@@ -45,13 +48,10 @@ public class FlagFailMessage extends Flag
     
     public FlagFailMessage()
     {
-        type = FlagType.FAILMESSAGE;
     }
     
     public FlagFailMessage(FlagFailMessage flag)
     {
-        this();
-        
         message = flag.message;
     }
     
@@ -59,6 +59,12 @@ public class FlagFailMessage extends Flag
     public FlagFailMessage clone()
     {
         return new FlagFailMessage(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public String getMessage()

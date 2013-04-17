@@ -252,6 +252,11 @@ public class Recipes
         return new HashMap<BaseRecipe, RecipeInfo>(index);
     }
     
+    /**
+     * Register a recipe.
+     * 
+     * @param recipe
+     */
     public void registerRecipe(BaseRecipe recipe)
     {
         String adder = "TODO"; // TODO
@@ -259,7 +264,14 @@ public class Recipes
         registerRecipe(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
     }
     
-    protected void registerRecipe(BaseRecipe recipe, RecipeInfo info)
+    /**
+     * Registers a recipe with custom recipe info object.<br>
+     * NOTE: You should not use this if you don't know what the recipe info object REALLY does.
+     * 
+     * @param recipe
+     * @param info
+     */
+    public void registerRecipe(BaseRecipe recipe, RecipeInfo info)
     {
         boolean queued = info.getStatus() == RecipeStatus.QUEUED;
         
@@ -369,7 +381,7 @@ public class Recipes
             staticResults.put(a.playerName(), result);
         }
         
-        return result;
+        return (result == null ? null : result.clone());
     }
     
     protected static void recipeResetResult(String name)

@@ -150,7 +150,7 @@ public class MultiResultRecipe extends BaseRecipe
         {
             if(r.getTypeId() != 0)
             {
-                return r;
+                return r.clone();
             }
         }
         
@@ -189,9 +189,9 @@ public class MultiResultRecipe extends BaseRecipe
         
         for(ItemResult r : pickResults)
         {
-            if((chance += r.getChance()) > rand)
+            if((chance += r.getChance()) >= rand)
             {
-                result = r;
+                result = r.clone();
                 break;
             }
         }

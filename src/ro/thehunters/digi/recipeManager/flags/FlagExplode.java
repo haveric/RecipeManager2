@@ -1,20 +1,30 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
-import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagExplode extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.EXPLODE;
+        
         A = new String[]
         {
             "{flag} <arguments or false>",
@@ -26,11 +36,12 @@ public class FlagExplode extends Flag
             "This flag can only be declared once per recipe and once per result.",
             "",
             "Replace <arguments> with the following arguments separated by | character:",
-            "  power <0.0 to ...>     = Set the explosion power. TNT has 4.0 (default 2.0)",
-            "  chance <0.0 to 100.0>% = Chance of the explosion to occur (default 100.0%)",
-            "  fire                   = Explosion sets fires (defualt not set)",
-            "  nobreak                = Makes explosion not break blocks (defualt not set)",
-            "  fail                   = Explode if recipe failed as opposed to succeed (defualt not set)",
+            "  power <0.0 to ...>     = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
+//            "  chance <0.0 to 100.0>% = (default 100.0%) Chance of the explosion to occur.", // TODO remove ?
+            "  fire                   = (defualt not set) Explosion sets fires.",
+            "  nobreak                = (defualt not set) Makes explosion not break blocks.",
+            "  nodamage [self]        = (defualt not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
+            "  fail                   = (defualt not set) Explode if recipe failed as opposed to succeed.",
             "All arguments are optional and you can specify these arguments in any order.",
             "",
             "Using 'false' instead of arguments will disable the flag.",
@@ -47,24 +58,23 @@ public class FlagExplode extends Flag
     // Flag code
     
     private float power = 2.0f;
-    private float chance = 100.0f;
+//    private float chance = 100.0f; // TODO remove ?
     private boolean fire = false;
     private boolean noBreak = false;
+    private byte noDamage = 0;
     private boolean failure = false;
     
     public FlagExplode()
     {
-        type = FlagType.EXPLODE;
     }
     
     public FlagExplode(FlagExplode flag)
     {
-        this();
-        
         power = flag.power;
-        chance = flag.chance;
+//        chance = flag.chance;
         fire = flag.fire;
         noBreak = flag.noBreak;
+        noDamage = flag.noDamage;
         failure = flag.failure;
     }
     
@@ -72,6 +82,12 @@ public class FlagExplode extends Flag
     public FlagExplode clone()
     {
         return new FlagExplode(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public float getPower()
@@ -84,6 +100,7 @@ public class FlagExplode extends Flag
         this.power = power;
     }
     
+    /*
     public float getChance()
     {
         return chance;
@@ -93,6 +110,7 @@ public class FlagExplode extends Flag
     {
         this.chance = chance;
     }
+    */
     
     public boolean getFire()
     {
@@ -124,6 +142,26 @@ public class FlagExplode extends Flag
         this.noBreak = noBreak;
     }
     
+    public boolean isNoDamageEnabled()
+    {
+        return noDamage > 0;
+    }
+    
+    public boolean isNoDamageSelf()
+    {
+        return noDamage == 2;
+    }
+    
+    public void setNoDamage(boolean enable)
+    {
+        setNoDamage(enable, false);
+    }
+    
+    public void setNoDamage(boolean enable, boolean self)
+    {
+        noDamage = (byte)(enable ? (self ? 2 : 1) : 0);
+    }
+    
     @Override
     protected boolean onParse(String value)
     {
@@ -136,7 +174,7 @@ public class FlagExplode extends Flag
         
         for(String arg : args)
         {
-            arg = arg.trim();
+            arg = arg.trim().toLowerCase();
             
             if(arg.equals("fire"))
             {
@@ -150,17 +188,15 @@ public class FlagExplode extends Flag
             {
                 setNoBreak(true);
             }
+            else if(arg.startsWith("nodamage"))
+            {
+                value = arg.substring("nodamage".length()).trim();
+                
+                setNoDamage(true, value.equals("self"));
+            }
             else if(arg.startsWith("power"))
             {
-                String[] data = arg.split(" ", 2);
-                
-                if(data.length > 2)
-                {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'power' argument with no value.");
-                    continue;
-                }
-                
-                value = data[1];
+                value = arg.substring("power".length()).trim();
                 
                 try
                 {
@@ -172,6 +208,7 @@ public class FlagExplode extends Flag
                     continue;
                 }
             }
+            /*
             else if(arg.startsWith("chance"))
             {
                 String[] data = arg.split(" ", 2);
@@ -199,6 +236,7 @@ public class FlagExplode extends Flag
                     continue;
                 }
             }
+            */
             else
             {
                 RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
@@ -217,13 +255,67 @@ public class FlagExplode extends Flag
             return;
         }
         
+        Map<LivingEntity, Integer> entities = new HashMap<LivingEntity, Integer>();
+        
         if((failure && !a.hasResult()) || !failure)
         {
-            if(getChance() >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance)
+//            if(getChance() >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance)
             {
-                Location l = a.location();
+                Location loc = a.location();
+                World world = loc.getWorld();
+                double x = loc.getX() + 0.5;
+                double y = loc.getY() + 0.5;
+                double z = loc.getZ() + 0.5;
                 
-                l.getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), getPower(), getFire(), !getNoBreak());
+                if(isNoDamageEnabled())
+                {
+                    double distanceSquared = power * 2.0;
+                    distanceSquared *= distanceSquared;
+                    
+                    if(isNoDamageSelf())
+                    {
+                        if(!a.hasPlayer())
+                        {
+                            a.addCustomReason("Can't protect crafter, no player!");
+                        }
+                        else
+                        {
+                            Player p = a.player();
+                            Location l = p.getLocation();
+                            
+                            if(l.distanceSquared(loc) <= distanceSquared)
+                            {
+                                entities.put(p, p.getMaximumNoDamageTicks());
+                                p.setMaximumNoDamageTicks(1);
+                                p.setNoDamageTicks(1);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for(Entity ent : world.getEntities())
+                        {
+                            if(ent instanceof LivingEntity)
+                            {
+                                LivingEntity e = (LivingEntity)ent;
+                                
+                                if(e.getLocation().distanceSquared(loc) <= distanceSquared)
+                                {
+                                    entities.put(e, e.getMaximumNoDamageTicks());
+                                    e.setMaximumNoDamageTicks(1);
+                                    e.setNoDamageTicks(1);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                world.createExplosion(x, y, z, getPower(), getFire(), !getNoBreak());
+                
+                for(Entry<LivingEntity, Integer> e : entities.entrySet())
+                {
+                    e.getKey().setMaximumNoDamageTicks(e.getValue());
+                }
             }
         }
     }

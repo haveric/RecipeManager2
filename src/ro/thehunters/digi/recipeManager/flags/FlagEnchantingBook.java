@@ -1,5 +1,8 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
@@ -7,40 +10,68 @@ import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagItemEnchantBook extends Flag
+public class FlagEnchantingBook extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.ENCHANTENGBOOK;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} ...",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "FLAG NOT IMPLEMENTED",
+        };
+        
+        E = new String[]
+        {
+            "{flag} ...",
+        };
     }
     
     // Flag code
     
-    public FlagItemEnchantBook()
+    private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>(); // TODO
+    
+    public FlagEnchantingBook()
     {
-        type = FlagType.ITEMENCHANTBOOK;
+    }
+    
+    public FlagEnchantingBook(FlagEnchantingBook flag)
+    {
+        // TODO clone
     }
     
     @Override
-    public boolean onValidate()
+    public Flag clone()
+    {
+        return new FlagEnchantingBook(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onValidate()
     {
         ItemResult result = getResult();
         
         if(result == null || result.getItemMeta() instanceof EnchantmentStorageMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " needs an enchantable book!");
+            RecipeErrorReporter.error("Flag " + getType() + " needs an enchantable book!");
             return false;
         }
         
@@ -48,7 +79,7 @@ public class FlagItemEnchantBook extends Flag
     }
     
     @Override
-    public void onRemove()
+    protected void onRemove()
     {
         ItemResult result = getResult();
         EnchantmentStorageMeta meta = (EnchantmentStorageMeta)result.getItemMeta();
@@ -57,7 +88,7 @@ public class FlagItemEnchantBook extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         ItemResult result = getResult();
         EnchantmentStorageMeta meta = (EnchantmentStorageMeta)result.getItemMeta();
@@ -69,7 +100,7 @@ public class FlagItemEnchantBook extends Flag
         
         if(ench == null)
         {
-            RecipeErrorReporter.error("Flag " + type + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+            RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
             return false;
         }
         
@@ -87,7 +118,7 @@ public class FlagItemEnchantBook extends Flag
                 }
                 catch(Exception e)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid enchantment level number!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
                     return false;
                 }
             }

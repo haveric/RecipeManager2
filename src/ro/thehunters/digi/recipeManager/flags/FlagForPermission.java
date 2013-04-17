@@ -12,31 +12,35 @@ import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
 public class FlagForPermission extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.FORPERMISSION;
+        
         A = new String[]
         {
-            "@forpermission <permission node> @<flag declaration>",
-            "@forpermission false",
+            "{flag} <permission node> @<flag declaration>",
         };
         
         D = new String[]
         {
             "Adds other flags with permission requirements.",
+            "You can specify this flag more than once to add more permissions or more flags to a permission.",
+            "",
             "Basically this is a storage for flags and will only trigger them if the crafter has the required permission.",
             "This is useful for using diferent values for flags on the same recipe but for diferent permissions.",
             "",
-            "The <permission node> argument must be a permission node.",
-            "The <flag declaration> must be a flag that will work on the current recipe or result.",
-            "You can specify this flag more than once to add more permissions or more flags to the permission.",
+            "The '<permission node>' argument must be a permission node.",
+            "The '<flag declaration>' must be a flag that will work on the current recipe or result.",
+            "For extra awesomeness you can even add this flag inside itself !",
             "",
-            "Using 'false' as a single value will remove all permission only flags for the current recipe/result.",
+            "NOTE: This will trigger all flags that player has permission for which means that flag effects will stack up.",
         };
         
         E = new String[]
@@ -45,7 +49,6 @@ public class FlagForPermission extends Flag
             "{flag} farmer.newbs @exp 4   // add 4 exp to the original -2 exp so player will have +2 exp",
             "{flag} farmer.uber @exp 50   // add 50 exp to the original -2 exp and also add 4 exp if the player has that node too",
             "{flag} farmer.uber @level 1  // if has required  give the crafter 1 level",
-            "{flag} false                 // removes this flag as if it wasn't even defined",
         };
     }
     
@@ -55,13 +58,10 @@ public class FlagForPermission extends Flag
     
     public FlagForPermission()
     {
-        type = FlagType.FORPERMISSION;
     }
     
     public FlagForPermission(FlagForPermission flag)
     {
-        this();
-        
         for(Entry<String, Map<FlagType, Flag>> e : flag.flagMap.entrySet())
         {
             Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
@@ -79,6 +79,12 @@ public class FlagForPermission extends Flag
     public FlagForPermission clone()
     {
         return new FlagForPermission(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public Map<String, Map<FlagType, Flag>> getFlagMap()
@@ -128,7 +134,7 @@ public class FlagForPermission extends Flag
      */
     public void addFlag(String permission, Flag flag)
     {
-        Validate.notNull(flag);
+        Validate.notNull(flag, "Argument flag must not be null!");
         
         if(canAdd(flag))
         {
@@ -162,7 +168,7 @@ public class FlagForPermission extends Flag
         
         if(type == null) // If no valid flag was found
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be diferent, check " + Files.FILE_INFO_FLAGS + " for flag list.");
+            return RecipeErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
         }
         
         if(type.hasBit(Bit.NO_STORE))

@@ -1,79 +1,70 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.bukkit.entity.Player;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagPermission extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.PERMISSION;
+        
         A = new String[]
         {
-            "{flag} <permission>",
-            "{flag} <permission> | [message]",
-            "{flag} -<permission>",
-            "{flag} -<permission> | [message]",
-            "{flag} false",
+            "{flag} [!]<permission>, [...] | [fail message]",
         };
         
         D = new String[]
         {
             "Makes the recipe or item require the crafter to have a permission.",
+            "Using this flag more than once will add more permissions, the player must have at least one to allow crafting.",
             "",
-            "This flag can be used more than once to add more permissions, the player must have at least one to allow crafting.",
+            "The '<permission>' argument must be an permission node, regardless if it exists or not.",
             "",
-            "Specifying permission nodes with the - prefix would prevent crafting if player has at least one of those permissions.",
+            "Adding ! character as prefix to individual permission nodes will do the opposite check, if crafter has permission it will not craft.",
             "",
-            "Optionally you can specify a message for allowed permission nodes and one for unallowed permission nodes, but not for individual permissions.",
+            "You can also specify more permissions separated by , character.",
+            "",
+            "Optionally you can specify a failure message that will be used on the specific permission(s) defined.",
             "The messages can have the following variables:",
-            "  {permission}  = first allowed or unallowed permission node in the list",
-            "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes",
-            "",
-            "Using 'false' will disable the flag.",
+            "  {permission}  = permission that was not found or was found and it's unallowed.",
+            "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes.",
         };
         
         E = new String[]
         {
             "{flag} ranks.vip",
-            "{flag} jobs.crafter | <red>Need perms: {permissions} // this message will be printed for 'ranks.vip' too !",
-            "{flag} -ranks.newbs | <red>Can't have perm: {permissions} // a diferent message for unallowed nodes",
-            "{flag} - jobs.warrior // valid with a space too",
-            "{flag} false",
+            "{flag} !jobs.builder | <red>Builders can't use this!",
+            "{flag} jobs.famer, jobs.trader | <red>You must be a farmer or trader!",
+            "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too",
         };
     }
     
     // Flag code
     
-    private List<String> allowedPermissions = new ArrayList<String>();
-    private String allowedMessage;
-    
-    private List<String> unallowedPermissions = new ArrayList<String>();
-    private String unallowedMessage;
+    private Map<String, Boolean> permissions = new HashMap<String, Boolean>();
+    private Map<String, String> messages = new HashMap<String, String>();
     
     public FlagPermission()
     {
-        type = FlagType.PERMISSION;
     }
     
     public FlagPermission(FlagPermission flag)
     {
-        this();
-        
-        allowedPermissions.addAll(flag.allowedPermissions);
-        allowedMessage = flag.allowedMessage;
-        unallowedPermissions.addAll(flag.unallowedPermissions);
-        unallowedMessage = flag.unallowedMessage;
+        permissions.putAll(flag.permissions);
+        messages.putAll(flag.messages);
     }
     
     @Override
@@ -82,79 +73,82 @@ public class FlagPermission extends Flag
         return new FlagPermission(this);
     }
     
-    public List<String> getAllowedPermissions()
+    @Override
+    public FlagType getType()
     {
-        return allowedPermissions;
+        return TYPE;
     }
     
-    public void setAllowedPermissions(List<String> permissions)
+    public Map<String, Boolean> getPermissions()
     {
-        this.allowedPermissions = permissions;
+        return permissions;
     }
     
-    public void addAllowedPermission(String permission)
+    public void addPermission(String permission, String message, boolean allowed)
     {
-        this.allowedPermissions.add(permission);
+        permissions.put(permission, allowed);
+        messages.put(permission, message);
     }
     
-    public List<String> getUnallowedPermissions()
+    public Map<String, String> getMessages()
     {
-        return unallowedPermissions;
+        return messages;
     }
     
-    public void setUnallowedPermissions(List<String> permissions)
+    public String getPermissionMessage(String permission)
     {
-        this.unallowedPermissions = permissions;
+        return messages.get(permission);
     }
     
-    public void addUnallowedPermission(String permission)
+    public String getPermissionsString(boolean allowed)
     {
-        this.unallowedPermissions.add(permission);
-    }
-    
-    public String getAllowedMessage()
-    {
-        return allowedMessage;
-    }
-    
-    public void setAllowedMessage(String allowedMessage)
-    {
-        this.allowedMessage = allowedMessage;
-    }
-    
-    public String getUnallowedMessage()
-    {
-        return unallowedMessage;
-    }
-    
-    public void setUnallowedMessage(String unallowedMessage)
-    {
-        this.unallowedMessage = unallowedMessage;
+        StringBuilder s = new StringBuilder();
+        
+        for(Entry<String, Boolean> e : permissions.entrySet())
+        {
+            if(allowed == e.getValue().booleanValue())
+            {
+                if(s.length() > 0)
+                {
+                    s.append(", ");
+                }
+                
+                s.append(e.getKey());
+            }
+        }
+        
+        return s.toString();
     }
     
     @Override
     protected boolean onParse(String value)
     {
         String[] split = value.split("\\|");
-        value = split[0].trim();
+        String message = (split.length > 1 ? split[1].trim() : null);
+        split = split[0].toLowerCase().split(",");
         
-        if(value.charAt(0) == '-')
+        for(String arg : split)
         {
-            addUnallowedPermission(value.substring(1).trim());
+            arg = arg.trim();
+            boolean not = arg.charAt(0) == '!';
             
-            if(split.length > 1)
+            if(not)
             {
-                setUnallowedMessage(split[1].trim());
+                arg = arg.substring(1).trim();
             }
-        }
-        else
-        {
-            addAllowedPermission(value);
             
-            if(split.length > 1)
+            /*
+            Permission permission = Bukkit.getPluginManager().getPermission(arg);
+            
+            if(permission == null)
             {
-                setAllowedMessage(split[1].trim());
+                permission = new Permission(arg, PermissionDefault.FALSE);
+                Bukkit.getPluginManager().addPermission(permission);
+                //RecipeErrorReporter.warning("Flag " + getType() + " has permission '" + arg + "' which is not registered!");
             }
+            */
+            
+            addPermission(arg, message, !not);
         }
         
         return true;
@@ -163,39 +157,21 @@ public class FlagPermission extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        if(!a.hasPlayer())
+        for(Entry<String, Boolean> e : permissions.entrySet())
         {
-            if(!allowedPermissions.isEmpty())
+            if(e.getValue().booleanValue())
             {
-                a.addReason(Messages.FLAG_PERMISSION_ALLOWED, allowedMessage, "{permission}", allowedPermissions.get(0), "{permissions}", Tools.collectionToString(allowedPermissions));
+                if(!a.hasPlayer() || !a.player().hasPermission(e.getKey()))
+                {
+                    a.addReason(Messages.FLAG_PERMISSION_ALLOWED, getPermissionMessage(e.getKey()), "{permission}", e.getKey(), "{permissions}", getPermissionsString(true));
+                }
             }
-            
-            return;
-        }
-        
-        Player player = a.player();
-        boolean ok = false;
-        
-        for(String perm : allowedPermissions)
-        {
-            if(player.hasPermission(perm))
+            else
             {
-                ok = true;
-                break;
-            }
-        }
-        
-        if(!ok)
-        {
-            a.addReason(Messages.FLAG_PERMISSION_ALLOWED, allowedMessage, "{permission}", allowedPermissions.get(0), "{permissions}", Tools.collectionToString(allowedPermissions));
-        }
-        
-        for(String perm : unallowedPermissions)
-        {
-            if(player.hasPermission(perm))
-            {
-                a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, unallowedMessage, "{permission}", perm, "{permissions}", Tools.collectionToString(unallowedPermissions));
-                break;
+                if(a.hasPlayer() && a.player().hasPermission(e.getKey()))
+                {
+                    a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, getPermissionMessage(e.getKey()), "{permission}", e.getKey(), "{permissions}", getPermissionsString(false));
+                }
             }
         }
     }
@@ -205,14 +181,21 @@ public class FlagPermission extends Flag
     {
         List<String> list = new ArrayList<String>(2);
         
-        if(!allowedPermissions.isEmpty())
+        String allowed = getPermissionsString(true);
+        String unallowed = getPermissionsString(false);
+        
+        if(!allowed.isEmpty())
         {
-            list.add(Messages.FLAG_PERMISSION_ALLOWED.get("{permissions}", Tools.collectionToString(allowedPermissions)));
+            int i = allowed.indexOf(',');
+            String permission = allowed.substring(0, (i > 0 ? i : allowed.length()));
+            list.add(Messages.FLAG_PERMISSION_ALLOWED.get("{permission}", permission, "{permissions}", allowed));
         }
         
-        if(!unallowedPermissions.isEmpty())
+        if(!unallowed.isEmpty())
         {
-            list.add(Messages.FLAG_PERMISSION_UNALLOWED.get("{worpermissionslds}", Tools.collectionToString(unallowedPermissions)));
+            int i = unallowed.indexOf(',');
+            String permission = unallowed.substring(0, (i > 0 ? i : unallowed.length()));
+            list.add(Messages.FLAG_PERMISSION_UNALLOWED.get("{permission}", permission, "{permissions}", unallowed));
         }
         
         return list;

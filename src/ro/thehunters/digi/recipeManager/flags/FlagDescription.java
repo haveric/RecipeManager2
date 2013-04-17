@@ -6,17 +6,34 @@ import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 
 public class FlagDescription extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = null;
-        D = null;
-        E = null;
+        TYPE = FlagType.DESCRIPTION;
+        
+        A = new String[]
+        {
+            "{flag} <text>",
+        };
+        
+        D = new String[]
+        {
+            "Used to share a small description for the recipe, used in recipe books and recipe search.",
+            "",
+            "Using a description that is too long might damage the format of the book page.",
+            "Please review the book that holds the recipe with this flag to be sure that it displays properly.",
+        };
+        
+        E = new String[]
+        {
+            "{flag} <gray>Common recipe.",
+        };
     }
     
     // Flag code
@@ -25,17 +42,23 @@ public class FlagDescription extends Flag
     
     public FlagDescription()
     {
-        type = FlagType.DESCRIPTION;
+    }
+    
+    public FlagDescription(FlagDescription flag)
+    {
+        description = flag.description;
     }
     
     @Override
     public FlagDescription clone()
     {
-        FlagDescription clone = new FlagDescription();
-        
-        clone.description = description;
-        
-        return clone;
+        return new FlagDescription(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public String getDescription()

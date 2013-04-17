@@ -13,14 +13,17 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagGameMode extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.GAMEMODE;
+        
         A = new String[]
         {
             "{flag} <game mode>",
@@ -55,25 +58,28 @@ public class FlagGameMode extends Flag
     // Flag code
     
     private Set<GameMode> gameModes = new HashSet<GameMode>();
-    private String message;
+    private String failMessage;
     
     public FlagGameMode()
     {
-        type = FlagType.GAMEMODE;
     }
     
     public FlagGameMode(FlagGameMode flag)
     {
-        this();
-        
         gameModes.addAll(flag.gameModes);
-        message = flag.message;
+        failMessage = flag.failMessage;
     }
     
     @Override
     public FlagGameMode clone()
     {
         return new FlagGameMode(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public Set<GameMode> getGameModes()
@@ -97,14 +103,14 @@ public class FlagGameMode extends Flag
         gameModes.add(gameMode);
     }
     
-    public String getMessage()
+    public String getFailMessage()
     {
-        return message;
+        return failMessage;
     }
     
-    public void setMessage(String message)
+    public void setFailMessage(String failMessage)
     {
-        this.message = message;
+        this.failMessage = failMessage;
     }
     
     @Override
@@ -114,7 +120,7 @@ public class FlagGameMode extends Flag
         
         if(split.length > 1)
         {
-            setMessage(split[1].trim());
+            setFailMessage(split[1].trim());
         }
         
         split = split[0].toLowerCase().split(",");
@@ -165,7 +171,7 @@ public class FlagGameMode extends Flag
         
         if(!getGameModes().contains(gm))
         {
-            a.addReason(Messages.FLAG_GAMEMODE, message, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", Tools.collectionToString(getGameModes()));
+            a.addReason(Messages.FLAG_GAMEMODE, failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", Tools.collectionToString(getGameModes()));
         }
     }
     

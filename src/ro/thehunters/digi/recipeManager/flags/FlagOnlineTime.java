@@ -6,29 +6,30 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
 public class FlagOnlineTime extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.ONLINETIME;
         
-        // TODO
         A = new String[]
         {
-            "{flag} <min or min-max or false>",
+            "{flag} ...",
         };
         
         D = new String[]
         {
-            "",
+            "FLAG NOT YET IMPLEMENTED!",
         };
         
         E = new String[]
         {
-            "",
+            "{flag} ...",
         };
     }
     
@@ -40,13 +41,10 @@ public class FlagOnlineTime extends Flag
     
     public FlagOnlineTime()
     {
-        type = FlagType.ONLINETIME;
     }
     
     public FlagOnlineTime(FlagOnlineTime flag)
     {
-        this();
-        
         minTime = flag.minTime;
         maxTime = flag.maxTime;
         message = flag.message;
@@ -56,6 +54,12 @@ public class FlagOnlineTime extends Flag
     public FlagOnlineTime clone()
     {
         return new FlagOnlineTime(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public int getMinTime()

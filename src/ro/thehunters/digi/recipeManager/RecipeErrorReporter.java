@@ -77,14 +77,14 @@ public class RecipeErrorReporter
         int similarErrors;
         
         StringBuilder buffer;
-        StringBuilder text = new StringBuilder(errors * 128).append(ChatColor.RED).append("There were ").append(errors).append(" errors while processing the files: ");
+        StringBuilder text = new StringBuilder(errors * 128); //.append(ChatColor.RED).append("There were ").append(errors).append(" errors while processing the files: ");
         Messages.info(text.toString());
-        text.append(Files.NL).append(Files.NL);
+//        text.append(Files.NL).append(Files.NL);
         
         for(Entry<String, List<String>> entry : fileErrors.entrySet())
         {
             buffer = new StringBuilder();
-            buffer.append(ChatColor.BOLD).append(ChatColor.BLUE).append("File: ").append(entry.getKey()).append(Files.NL);
+            buffer.append(ChatColor.BOLD).append(ChatColor.AQUA).append("Errors in recipe file: ").append(entry.getKey()).append(Files.NL);
             
             lastError = "";
             lastErrorNum = 0;

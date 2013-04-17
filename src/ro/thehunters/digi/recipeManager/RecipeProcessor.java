@@ -34,6 +34,7 @@ import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import ro.thehunters.digi.recipeManager.recipes.RemoveResultRecipe;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 /**
@@ -322,9 +323,9 @@ public class RecipeProcessor implements Runnable
             {
                 added = parseFuelRecipe();
             }
-            else if(line.equalsIgnoreCase("removeresult"))
+            else if(line.equalsIgnoreCase(RecipeType.SPECIAL.getDirective()))
             {
-                added = parseRemoveResult();
+                added = parseRemoveResults();
             }
             else
             {
@@ -476,6 +477,7 @@ public class RecipeProcessor implements Runnable
         String split[];
         ItemStack item;
         int rows = 0;
+        int ingredientsNum = 0;
         boolean ingredientErrors = false;
         
         while(rows < 3) // loop until we find 3 rows of ingredients (or bump into the result along the way)
@@ -515,6 +517,7 @@ public class RecipeProcessor implements Runnable
                 if(!ingredientErrors && item.getTypeId() != 0)
                 {
                     ingredients[(rows * 3) + i] = item;
+                    ingredientsNum++;
                 }
             }
             
@@ -526,9 +529,13 @@ public class RecipeProcessor implements Runnable
             RecipeErrorReporter.error("Recipe has some invalid ingredients, fix them!");
             return false;
         }
-        else if(rows == 0) // no ingredients were processed
+        else if(ingredientsNum == 0) // no ingredients were processed
         {
             return RecipeErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
+        }
+        else if(ingredientsNum == 2 && !checkIngredients(ingredients))
+        {
+            return false;
         }
         
         recipe.setIngredients(ingredients); // done with ingredients, set'em
@@ -577,9 +584,9 @@ public class RecipeProcessor implements Runnable
         {
             item = Tools.parseItemStack(str, Vanilla.DATA_WILDCARD, true, true, false);
             
-            if(item == null)
+            if(item == null || item.getTypeId() == 0)
             {
-                return false;
+                continue;
             }
             
             if((items += item.getAmount()) > 9)
@@ -589,6 +596,11 @@ public class RecipeProcessor implements Runnable
             }
             
             ingredients.add(item);
+        }
+        
+        if(ingredients.size() == 2 && !checkIngredients(ingredients.get(0), ingredients.get(1)))
+        {
+            return false;
         }
         
         recipe.setIngredients(ingredients);
@@ -619,6 +631,29 @@ public class RecipeProcessor implements Runnable
         loaded++;
         
         return true; // no errors encountered
+    }
+    
+    private boolean checkIngredients(ItemStack... ingredients)
+    {
+        Material toolType = null;
+        
+        for(ItemStack i : ingredients)
+        {
+            if(i != null && i.getType().getMaxDurability() > 0)
+            {
+                if(toolType == i.getType())
+                {
+                    RecipeErrorReporter.error("Recipes can't have exacly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEPITEM + " flag to keep it.");
+                    return false;
+                }
+                else
+                {
+                    toolType = i.getType();
+                }
+            }
+        }
+        
+        return true;
     }
     
     private boolean parseSmeltRecipe() throws Exception
@@ -843,18 +878,47 @@ public class RecipeProcessor implements Runnable
         return (added > 0);
     }
     
-    private boolean parseRemoveResult() throws Exception
+    // TODO
+    private boolean parseRemoveResults() throws Exception
     {
-        // TODO ???
-        /*
-        ItemStack item = Tools.convertStringToItemStack(line, 1, true, true, true);
+        RemoveResultRecipe recipe;
+        int added = 0;
         
-        if(item == null)
-            return new String[] { "Invalid item!" };
+        do
+        {
+            if(lineIsRecipe())
+            {
+                break;
+            }
+            
+            ItemStack result = Tools.parseItemStack(line, 0, true, true, true);
+            
+            if(result == null)
+            {
+                continue;
+            }
+            
+            if(result.getTypeId() == 0)
+            {
+                RecipeErrorReporter.error("Recipe has invalid item to remove!");
+                continue;
+            }
+            
+            recipe = new RemoveResultRecipe(result);
+            
+            // check if the recipe already exists
+            if(!recipeExists(recipe))
+            {
+                continue;
+            }
+            
+//            registrator.queueRemoveResultRecipe(recipe, currentFile);
+            loaded++;
+            added++;
+        }
+        while(nextLine());
         
-        loaded++;
-        */
-        return false;
+        return (added > 0);
     }
     
     private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Exception

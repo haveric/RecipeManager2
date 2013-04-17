@@ -19,67 +19,71 @@ public enum FlagType
     // protected on*() methods
     // ...
     
-    TEST(FlagTest.class, Bit.NO_VALUE), // TODO remove
+//    TEST(FlagTest.class, Bit.NO_VALUE), // TODO remove
     
     // Shared flags
-    MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
     COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"),
+    KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"),
     INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"), // TODO finish
     PERMISSION(FlagPermission.class, Bit.NONE, "permissions", "perm"),
-    FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm", "for"),
-    GROUP(FlagGroup.class, Bit.NONE, "groups"),
-    WORLD(FlagWorld.class, Bit.NONE, "worlds"),
-    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
-    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
-    GAMEMODE(FlagGameMode.class, Bit.NONE),
+    FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm"),
+    FORCHANCE(FlagForChance.class, Bit.NO_SHIFT),
+    GROUP(FlagGroup.class, Bit.NONE, "groups", "permissiongroup"),
+    WORLD(FlagWorld.class, Bit.NONE, "needworld", "worlds"), // TODO redesign required
+    NEEDHEIGHT(FlagNeedHeight.class, Bit.NONE, "height"), // TODO finish
     MODEXP(FlagModExp.class, Bit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp"),
-    REQEXP(FlagReqExp.class, Bit.NONE, "expreq", "reqxp", "xpreq", "needexp", "needxp"),
-    MODLEVEL(FlagModLevel.class, Bit.NO_SHIFT, "levelmod", "level"),
-    REQLEVEL(FlagReqLevel.class, Bit.NONE, "levelreq", "needlevel"),
-    MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "money"),
-    REQMONEY(FlagReqMoney.class, Bit.NONE, "moneyreq", "needmoney"),
-    POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"),
-    LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
-    EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"),
-    SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
-    SPAWN(FlagSpawn.class, Bit.NO_SHIFT, "summon", "creature", "mob", "animal"),
+    NEEDEXP(FlagNeedExp.class, Bit.NONE, "needxp", "reqexp", "expreq", "reqxp", "xpreq"),
+    MODLEVEL(FlagModLevel.class, Bit.NO_SHIFT, "levelmod", "setlevel", "level"),
+    NEEDLEVEL(FlagNeedLevel.class, Bit.NONE, "reqlevel", "levelreq"),
+    MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "setmoney", "money"),
+    NEEDMONEY(FlagNeedMoney.class, Bit.NONE, "reqmoney", "moneyreq"),
+    COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"),
+    REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"),
+    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
+    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
+    GAMEMODE(FlagGameMode.class, Bit.NONE, "needgm"),
+    LIGHTLEVEL(FlagLightLevel.class, Bit.NONE, "blocklight", "sunlight", "light"),
     BIOME(FlagBiome.class, Bit.NONE), // TODO finish
     WEATHER(FlagWeather.class, Bit.NONE), // TODO finish
     WORLDTIME(FlagWorldTime.class, Bit.NONE), // TODO finish
+    EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"),
+    SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
+    SUMMON(FlagSummon.class, Bit.NO_SHIFT, "spawn", "creature", "mob", "animal"),
+    BLOCKPOWERED(FlagBlockPowered.class, Bit.NO_VALUE, "poweredblock", "blockpower", "redstonepowered"),
+    POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"),
+    LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
+    TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"),
+    MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
     SECRET(FlagSecret.class, Bit.NO_VALUE, "hide"),
     DEBUG(FlagDebug.class, Bit.NO_VALUE, "monitor", "log"),
-    REALTIME(FlagRealTime.class, Bit.NONE, "time", "timereq"),
-    COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"),
-    KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"),
-    TELEPORT(FlagTeleport.class, Bit.NO_SHIFT),
     
     // Recipe only flags
-    DOCUMENTATION(FlagDocumentation.class, Bit.NO_SKIP_PERMISSION, "doc", "html"),
+    DOCUMENTATION(FlagDocumentation.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "doc", "html"), // TODO finish
     RECIPEBOOK(FlagRecipeBook.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "bookrecipe"),
     DESCRIPTION(FlagDescription.class, Bit.RECIPE, "recipeinfo", "info"),
-    GETBOOK(FlagGetBook.class, Bit.RECIPE | Bit.NO_SHIFT | Bit.NO_SKIP_PERMISSION, "getrecipebook"), // TODO finsih
-    FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"),
-    HIDERESULTS(FlagHideResults.class, Bit.RECIPE | Bit.NO_VALUE),
+    GETBOOK(FlagGetBook.class, Bit.RECIPE | Bit.NO_SHIFT | Bit.NO_SKIP_PERMISSION, "getrecipebook", "bookresult"), // TODO finsih
+    FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"), // TODO finish
+//    HIDERESULTS(FlagHideResults.class, Bit.RECIPE | Bit.NO_VALUE), // TODO finish or remove ?
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
-    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "denied", "deny"),
+    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "disable", "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
-//    PROXIMITY(FlagProximity.class, Bit.RECIPE, "distance", "nearby"), // TODO
+    PROXIMITY(FlagProximity.class, Bit.RECIPE, "distance", "nearby"), // TODO
     
-    // Result only flags
-//    SETCHANCE(FlagSetChance.class, Bit.RESULT, "chance"), // TODO finish
+    // Result only flags    
+    // TODO remove NO_STORE bit
+    RESULTCHANCE(FlagResultChance.class, Bit.RESULT, "modchance", "setchance"), // TODO finish
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
     ITEMNAME(FlagItemName.class, Bit.RESULT | Bit.NO_STORE, "name", "displayname"),
-    ITEMLORE(FlagItemLore.class, Bit.RESULT | Bit.NO_STORE, "lore", "itemdescription"),
-    ITEMCOLOR(FlagItemColor.class, Bit.RESULT | Bit.NO_STORE, "itemcolour", "leathercolor", "leathercolour", "color", "colour"),
+    ITEMLORE(FlagItemLore.class, Bit.RESULT | Bit.NO_STORE, "lore", "itemdesc"),
+    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour"),
     ITEMBOOK(FlagItemBook.class, Bit.RESULT | Bit.NO_STORE, "bookitem"),
-    ITEMBOOKPAGE(FlagItemBookPage.class, Bit.RESULT | Bit.NO_STORE, "bookitempage", "bookpage"),
-    ITEMMAP(FlagItemMap.class, Bit.RESULT | Bit.NO_STORE, "map", "mapitem"),
-    ITEMFIREWORK(FlagItemFirework.class, Bit.RESULT | Bit.NO_STORE, "firework", "fireworkrocket"),
-    ITEMFIREWORKCHARGE(FlagItemFireworkCharge.class, Bit.RESULT | Bit.NO_STORE, "fireworkcharge", "fireworkeffect"),
-    ITEMSKULL(FlagItemSkull.class, Bit.RESULT | Bit.NO_STORE, "skullowner"),
-    ITEMPOTION(FlagItemPotion.class, Bit.RESULT | Bit.NO_STORE, "potion", "potionitem"),
-    ITEMENCHANT(FlagItemEnchant.class, Bit.RESULT | Bit.NO_STORE, "enchant", "enchantment"),
-    ITEMENCHANTBOOK(FlagItemEnchantBook.class, Bit.RESULT | Bit.NO_STORE, "enchantbook", "enchantedbook"),
+    MAPITEM(FlagMapItem.class, Bit.RESULT | Bit.NO_STORE, "map", "mapitem"),
+    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT | Bit.NO_STORE, "firework", "fireworkrocket"),
+    FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT | Bit.NO_STORE, "fireworkcharge", "fireworkeffect"),
+    SKULLOWNER(FlagSkullOwner.class, Bit.RESULT | Bit.NO_STORE, "skullowner"),
+    POTIONITEM(FlagPotionItem.class, Bit.RESULT | Bit.NO_STORE, "potion", "potionitem"),
+    ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT | Bit.NO_STORE, "enchant", "enchantment"),
+    ENCHANTENGBOOK(FlagEnchantingBook.class, Bit.RESULT | Bit.NO_STORE, "enchantbook", "enchantedbook"),
     
     ;
     
@@ -105,6 +109,13 @@ public enum FlagType
         }
     }
     
+    /**
+     * Checks if flag type has a special bit.
+     * 
+     * @param bit
+     *            See {@link Bit}
+     * @return
+     */
     public boolean hasBit(int bit)
     {
         return (bits & bit) == bit;

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class Furnaces
 {
     private static final String SAVE_EXTENSION = ".furnacedata";
     
-    private static Map<BlockID, FurnaceData> furnaces = new HashMap<BlockID, FurnaceData>();
+    private static Map<BlockID, FurnaceData> furnaces = new LinkedHashMap<BlockID, FurnaceData>(128);
     
     protected static void init()
     {

@@ -15,14 +15,17 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagLaunchFirework extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.LAUNCHFIREWORK;
+        
         A = new String[]
         {
             "{flag} effect <effects>",
@@ -68,13 +71,10 @@ public class FlagLaunchFirework extends Flag
     
     public FlagLaunchFirework()
     {
-        type = FlagType.LAUNCHFIREWORK;
     }
     
     public FlagLaunchFirework(FlagLaunchFirework flag)
     {
-        this();
-        
         firework = flag.firework.clone();
         chance = flag.chance;
     }
@@ -83,6 +83,12 @@ public class FlagLaunchFirework extends Flag
     public FlagLaunchFirework clone()
     {
         return new FlagLaunchFirework(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public FireworkMeta getFirework()
@@ -123,11 +129,11 @@ public class FlagLaunchFirework extends Flag
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'effect' !");
+                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'effect' !");
                 return false;
             }
             
-            FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), type);
+            FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), getType());
             
             if(effect != null)
             {
@@ -140,7 +146,7 @@ public class FlagLaunchFirework extends Flag
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'power' !");
+                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'power' !");
                 return false;
             }
             
@@ -156,7 +162,7 @@ public class FlagLaunchFirework extends Flag
             
             if(power < 0 || power > 128)
             {
-                RecipeErrorReporter.error("Flag " + type + " invalid 'power' argument, it must be a number from 0 to 128");
+                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument, it must be a number from 0 to 128");
                 return false;
             }
             
@@ -168,7 +174,7 @@ public class FlagLaunchFirework extends Flag
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'chance' !");
+                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'chance' !");
                 return false;
             }
             
@@ -184,13 +190,13 @@ public class FlagLaunchFirework extends Flag
             
             if(getChance() < 0 || getChance() > 100)
             {
-                RecipeErrorReporter.error("Flag " + type + " invalid 'chance' argument, it must be a number from 0 to 100");
+                RecipeErrorReporter.error("Flag " + getType() + " invalid 'chance' argument, it must be a number from 0 to 100");
                 return false;
             }
         }
         else
         {
-            RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + value);
+            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
             return false;
         }
         

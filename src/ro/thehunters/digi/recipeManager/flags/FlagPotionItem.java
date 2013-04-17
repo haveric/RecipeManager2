@@ -9,16 +9,19 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagItemPotion extends Flag
+public class FlagPotionItem extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.POTIONITEM;
+        
         A = new String[]
         {
             "{flag} <basic effect>",
@@ -75,26 +78,44 @@ public class FlagItemPotion extends Flag
     
     // Flag code
     
-    public FlagItemPotion()
+    private PotionMeta potion; // TODO
+    
+    public FlagPotionItem()
     {
-        type = FlagType.ITEMPOTION;
+    }
+    
+    public FlagPotionItem(FlagPotionItem flag)
+    {
+        // TODO clone
     }
     
     @Override
-    public boolean onValidate()
+    public FlagPotionItem clone()
+    {
+        return new FlagPotionItem(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onValidate()
     {
         ItemResult result = getResult();
         
         if(result == null || result.getItemMeta() instanceof PotionMeta == false)
         {
-            return RecipeErrorReporter.error("Flag " + type + " needs a POTION item!");
+            return RecipeErrorReporter.error("Flag " + getType() + " needs a POTION item!");
         }
         
         return true;
     }
     
     @Override
-    public void onRemove()
+    protected void onRemove()
     {
         ItemResult result = getResult();
         PotionMeta potion = (PotionMeta)result.getItemMeta();
@@ -105,7 +126,7 @@ public class FlagItemPotion extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         ItemResult result = getResult();
         PotionMeta potion = (PotionMeta)result.getItemMeta();
@@ -116,11 +137,11 @@ public class FlagItemPotion extends Flag
             
             if(split.length != 2)
             {
-                return RecipeErrorReporter.error("Flag " + type + " has 'custom' argument with no values!");
+                return RecipeErrorReporter.error("Flag " + getType() + " has 'custom' argument with no values!");
             }
             
             value = split[1].trim();
-            PotionEffect effect = Tools.parsePotionEffect(value, type);
+            PotionEffect effect = Tools.parsePotionEffect(value, getType());
             
             if(effect != null)
             {
@@ -130,7 +151,7 @@ public class FlagItemPotion extends Flag
         }
         else
         {
-            Potion p = Tools.parsePotion(value, type);
+            Potion p = Tools.parsePotion(value, getType());
             
             if(p != null)
             {

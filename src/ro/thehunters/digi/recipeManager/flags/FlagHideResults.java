@@ -5,26 +5,34 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
 public class FlagHideResults extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = null; //FlagType.HIDERESULTS; // TODO
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} ...",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "FLAG NOT IMPLEMENTED",
+        };
+        
+        E = new String[]
+        {
+            "{flag} ...",
+        };
     }
     
     // Flag code
-    
-    private int hideBitsum;
     
     /**
      * Contains bit settings for {@link FlagHideResults}'s bitsum
@@ -43,9 +51,27 @@ public class FlagHideResults extends Flag
         public static final byte ALL = SECRET | UNALLOWED | CRAFTABLE;
     }
     
+    private int hideBitsum;
+    
     public FlagHideResults()
     {
-        type = FlagType.HIDERESULTS;
+    }
+    
+    public FlagHideResults(FlagHideResults flag)
+    {
+        hideBitsum = flag.hideBitsum;
+    }
+    
+    @Override
+    public FlagHideResults clone()
+    {
+        return new FlagHideResults(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     /**
@@ -116,7 +142,7 @@ public class FlagHideResults extends Flag
             }
             else
             {
-                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
             }
         }
         

@@ -7,14 +7,17 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModMoney extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.MODMONEY;
+        
         A = new String[]
         {
             "{flag} [modifier]<float number>",
@@ -25,14 +28,14 @@ public class FlagModMoney extends Flag
         D = new String[]
         {
             "Modifies crafter's money.",
+            "Using this flag more than once will overwrite the previous one.",
             "",
             "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
             "The '<number>' argument must be the amount of money to modify.",
             "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
             "",
-            "NOTE: Using this flag more than once will overwrite the previous one.",
-            "NOTE: This flag requires Vault with a supported economy plugin to be installed.",
-            "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.REQMONEY.toString() + " if you want to check.",
+            "NOTE: Vault with a supported economy plugin is required for this flag to work.",
+            "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.NEEDMONEY.toString() + " if you want to check.",
         };
         
         E = new String[]
@@ -52,13 +55,10 @@ public class FlagModMoney extends Flag
     
     public FlagModMoney()
     {
-        type = FlagType.MODMONEY;
     }
     
     public FlagModMoney(FlagModMoney flag)
     {
-        this();
-        
         mod = flag.mod;
         amount = flag.amount;
         message = flag.message;
@@ -68,6 +68,12 @@ public class FlagModMoney extends Flag
     public FlagModMoney clone()
     {
         return new FlagModMoney(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public char getModifier()
@@ -135,6 +141,11 @@ public class FlagModMoney extends Flag
     @Override
     protected boolean onParse(String value)
     {
+        if(!RecipeManager.getEconomy().isEnabled())
+        {
+            RecipeErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
+        }
+        
         String[] split = value.split("\\|");
         
         if(split.length > 1)

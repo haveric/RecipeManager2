@@ -2,27 +2,36 @@ package ro.thehunters.digi.recipeManager.flags;
 
 public class FlagWeather extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.GETBOOK;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} ...",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "FLAG NOT YET IMPLEMENTED!",
+        };
+        
+        E = new String[]
+        {
+            "{flag} ...",
+        };
     }
     
     // Flag code
     
     public FlagWeather()
     {
-        type = FlagType.WEATHER;
     }
 }

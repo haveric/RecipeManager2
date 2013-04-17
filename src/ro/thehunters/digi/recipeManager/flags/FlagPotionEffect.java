@@ -13,14 +13,17 @@ import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagPotionEffect extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.POTIONEFFECT;
+        
         A = new String[]
         {
             "{flag} <effect type> | [arguments]",
@@ -57,13 +60,10 @@ public class FlagPotionEffect extends Flag
     
     public FlagPotionEffect()
     {
-        type = FlagType.POTIONEFFECT;
     }
     
     public FlagPotionEffect(FlagPotionEffect flag)
     {
-        this();
-        
         effects.putAll(flag.effects);
     }
     
@@ -71,6 +71,12 @@ public class FlagPotionEffect extends Flag
     public FlagPotionEffect clone()
     {
         return new FlagPotionEffect(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public Map<PotionEffect, Float> getEffects()
@@ -176,6 +182,8 @@ public class FlagPotionEffect extends Flag
                     }
                     
                     value = value.substring("duration".length()).trim();
+                    
+                    // TODO type.getDurationModifier() !!!
                     
                     try
                     {

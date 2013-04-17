@@ -50,8 +50,6 @@ public class RecipeCommand implements CommandExecutor
     {
         Player player = (Player)sender;
         
-        player.kickPlayer("Bye!");
-        
         /*
         if(args.length == 0)
         {

@@ -1,6 +1,8 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-public class FlagTeleport extends Flag
+import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+
+public class FlagProximity extends Flag
 {
     // Flag definition and documentation
     
@@ -11,36 +13,28 @@ public class FlagTeleport extends Flag
     
     static
     {
-        TYPE = FlagType.TELEPORT;
+        TYPE = FlagType.PROXIMITY;
         
-        A = new String[]
-        {
-            "{flag} ...",
-        };
-        
-        D = new String[]
-        {
-            "FLAG NOT YET IMPLEMENTED !",
-        };
-        
+        A = null;
+        D = null;
         E = null;
     }
     
     // Flag code
     
-    public FlagTeleport()
+    public FlagProximity()
     {
     }
     
-    public FlagTeleport(FlagTeleport flag)
+    public FlagProximity(FlagProximity flag)
     {
         // TODO clone
     }
     
     @Override
-    public FlagTeleport clone()
+    public FlagProximity clone()
     {
-        return new FlagTeleport(this);
+        return new FlagProximity(this);
     }
     
     @Override
@@ -54,14 +48,18 @@ public class FlagTeleport extends Flag
     {
         // TODO
         
-        // @teleport relative block | y + 2 | x - 2
-        // @teleport relative player | y + 10
+        RecipeErrorReporter.warning("Flag " + getType() + " is not yet coded.");
         
-        return true;
+        return false;
     }
     
     @Override
-    protected void onCrafted(Args a)
+    protected void onCheck(Args a)
     {
+        if(!a.hasPlayer() || !a.hasLocation())
+        {
+            a.addCustomReason("Needs player and location!");
+            return;
+        }
     }
 }

@@ -422,6 +422,11 @@ public class Tools
     
     public static ItemStack parseItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
     {
+        return parseItemStack(value, defaultData, allowData, allowAmount, allowEnchantments, true);
+    }
+    
+    public static ItemStack parseItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments, boolean printErrors)
+    {
         value = value.trim();
         
         if(value.length() == 0)
@@ -448,7 +453,11 @@ public class Tools
         
         if(material == null)
         {
-            RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
+            if(printErrors)
+            {
+                RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
+            }
+            
             return null;
         }
         
@@ -465,9 +474,9 @@ public class Tools
         {
             if(allowData)
             {
-                value = split[1].trim();
+                value = split[1].toLowerCase().trim();
                 
-                if(value.charAt(0) == '*')
+                if(value.charAt(0) == '*' || value.equals("any"))
                 {
                     data = Vanilla.DATA_WILDCARD;
                 }
@@ -488,19 +497,28 @@ public class Tools
                         }
                         catch(Exception e)
                         {
-                            RecipeErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
+                            if(printErrors)
+                            {
+                                RecipeErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
+                            }
                         }
                     }
                     
                     if(data == -1)
                     {
-                        RecipeErrorReporter.warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
+                        if(printErrors)
+                        {
+                            RecipeErrorReporter.warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
+                        }
                     }
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
+                if(printErrors)
+                {
+                    RecipeErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
+                }
             }
         }
         
@@ -518,12 +536,18 @@ public class Tools
                 }
                 catch(Exception e)
                 {
-                    RecipeErrorReporter.error("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
+                    if(printErrors)
+                    {
+                        RecipeErrorReporter.error("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
+                    }
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
+                if(printErrors)
+                {
+                    RecipeErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
+                }
             }
         }
         
@@ -536,7 +560,10 @@ public class Tools
                 /*
                 if(item.getAmount() > 1)
                 {
-                    RecipeErrorReporter.warning("Item '" + material + "' has enchantments and more than 1 amount, it can't have both, amount set to 1.");
+                    if(printErrors)
+                    {
+                        RecipeErrorReporter.warning("Item '" + material + "' has enchantments and more than 1 amount, it can't have both, amount set to 1.");
+                    }
                     
                     item.setAmount(1);
                 }
@@ -554,7 +581,11 @@ public class Tools
                     
                     if(enchData.length != 2)
                     {
-                        RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
+                        if(printErrors)
+                        {
+                            RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
+                        }
+                        
                         continue;
                     }
                     
@@ -568,7 +599,11 @@ public class Tools
                         }
                         catch(Exception e)
                         {
-                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
+                            if(printErrors)
+                            {
+                                RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
+                            }
+                            
                             continue;
                         }
                     }
@@ -585,7 +620,11 @@ public class Tools
                         }
                         catch(Exception e)
                         {
-                            RecipeErrorReporter.warning("Invalid enchantment level: '" + enchData[1] + "' must be a valid number, positive, zero or negative.");
+                            if(printErrors)
+                            {
+                                RecipeErrorReporter.warning("Invalid enchantment level: '" + enchData[1] + "' must be a valid number, positive, zero or negative.");
+                            }
+                            
                             continue;
                         }
                     }
@@ -595,7 +634,10 @@ public class Tools
             }
             else
             {
-                RecipeErrorReporter.warning("Item '" + material + "' can't use enchantments in this recipe slot!");
+                if(printErrors)
+                {
+                    RecipeErrorReporter.warning("Item '" + material + "' can't use enchantments in this recipe slot!");
+                }
             }
         }
         

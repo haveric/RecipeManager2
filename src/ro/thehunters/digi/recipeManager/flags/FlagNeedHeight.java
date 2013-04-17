@@ -1,6 +1,6 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-public class FlagWorldTime extends Flag
+public class FlagNeedHeight extends Flag
 {
     // Flag definition and documentation
     
@@ -11,7 +11,7 @@ public class FlagWorldTime extends Flag
     
     static
     {
-        TYPE = FlagType.WORLDTIME;
+        TYPE = FlagType.NEEDHEIGHT;
         
         A = new String[]
         {
@@ -20,7 +20,7 @@ public class FlagWorldTime extends Flag
         
         D = new String[]
         {
-            "FLAG NOT YET IMPLEMENTED!",
+            "FLAG NOT IMPLEMENTED YET!",
         };
         
         E = new String[]
@@ -31,7 +31,30 @@ public class FlagWorldTime extends Flag
     
     // Flag code
     
-    public FlagWorldTime()
+    public FlagNeedHeight()
     {
+    }
+    
+    public FlagNeedHeight(FlagNeedHeight flag)
+    {
+        // TODO clone
+    }
+    
+    @Override
+    public FlagNeedHeight clone()
+    {
+        return new FlagNeedHeight(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onParse(String value)
+    {
+        return false;
     }
 }

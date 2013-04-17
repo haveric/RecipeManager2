@@ -7,30 +7,58 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagItemFirework extends Flag
+public class FlagFireworkItem extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.FIREWORKITEM;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} ...",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "FLAG NOT IMPLEMENTED",
+        };
+        
+        E = new String[]
+        {
+            "{flag} ...",
+        };
     }
     
     // Flag code
     
-    public FlagItemFirework()
+    private FireworkMeta fwMeta; // TODO
+    
+    public FlagFireworkItem()
     {
-        type = FlagType.ITEMFIREWORK;
+    }
+    
+    public FlagFireworkItem(FlagFireworkItem flag)
+    {
+        // TODO clone
+    }
+    
+    @Override
+    public FlagFireworkItem clone()
+    {
+        return new FlagFireworkItem(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     @Override
@@ -40,7 +68,7 @@ public class FlagItemFirework extends Flag
         
         if(result == null || result.getItemMeta() instanceof FireworkMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + type + " needs a FIREWORK item!");
+            RecipeErrorReporter.error("Flag " + getType() + " needs a FIREWORK item!");
             return false;
         }
         
@@ -52,33 +80,36 @@ public class FlagItemFirework extends Flag
     {
         ItemResult result = getResult();
         FireworkMeta firework = (FireworkMeta)result.getItemMeta();
-        String[] split;
+        
+        value = value.toLowerCase();
         
         if(value.startsWith("effect"))
         {
-            split = value.split(" ", 2);
+            String[] split = value.split(" ", 2);
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'effect' !");
+                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'effect' !");
                 return false;
             }
             
-            FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), type);
+            FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), getType());
             
             if(effect == null)
+            {
                 return false;
+            }
             
             firework.addEffect(effect);
             result.setItemMeta(firework);
         }
         else if(value.startsWith("power"))
         {
-            split = value.split(" ", 2);
+            String[] split = value.split(" ", 2);
             
             if(split.length <= 1)
             {
-                RecipeErrorReporter.error("Flag " + type + " has no arguments for 'power' !");
+                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'power' !");
                 return false;
             }
             
@@ -94,7 +125,7 @@ public class FlagItemFirework extends Flag
             
             if(power < 0 || power > 128)
             {
-                RecipeErrorReporter.error("Flag " + type + " invalid 'power' argument, it must be a number from 0 to 128");
+                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument, it must be a number from 0 to 128");
                 return false;
             }
             
@@ -103,7 +134,7 @@ public class FlagItemFirework extends Flag
         }
         else
         {
-            RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + value);
+            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
         }
         
         return true;

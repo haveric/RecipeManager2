@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,8 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import ro.thehunters.digi.recipeManager.flags.FlagRecipeBook;
-import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.data.Book;
+import ro.thehunters.digi.recipeManager.data.BookID;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
@@ -27,138 +26,6 @@ import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 
 public class RecipeBooks
 {
-    public class BookID
-    {
-        private String id;
-        private String title;
-        private String description;
-        private int hash;
-        
-        public BookID(String name)
-        {
-            setTitle(name);
-        }
-        
-        public BookID(BaseRecipe recipe, RecipeInfo info)
-        {
-            if(recipe.hasFlag(FlagType.RECIPEBOOK))
-            {
-                FlagRecipeBook flag = recipe.getFlag(FlagRecipeBook.class);
-                
-                title = flag.getTitle();
-                description = Tools.parseColors(flag.getDescription(), false);
-            }
-            
-            if(title == null)
-            {
-                title = info.getAdder().toString().toLowerCase();
-                
-                int start = Math.max(title.lastIndexOf('/'), 0);
-                int end = Math.min(title.lastIndexOf('.'), title.length());
-                title = title.substring(start, end);
-                
-                title = WordUtils.capitalize(title);
-            }
-            
-            setTitle(title);
-        }
-        
-        private void setTitle(String title)
-        {
-            this.title = Tools.parseColors(title, false);
-            this.id = ChatColor.stripColor(this.title).toLowerCase().replaceAll("[\\W\\s]+", "");
-            this.hash = id.hashCode();
-        }
-        
-        public String getID()
-        {
-            return id;
-        }
-        
-        public String getTitle()
-        {
-            return title;
-        }
-        
-        public String getDescription()
-        {
-            return description;
-        }
-        
-        @Override
-        public int hashCode()
-        {
-            return hash;
-        }
-        
-        @Override
-        public boolean equals(Object obj)
-        {
-            if(this == obj)
-                return true;
-            
-            if(obj == null || obj instanceof BookID == false)
-                return false;
-            
-            return obj.hashCode() == hashCode();
-        }
-    }
-    
-    public class Book
-    {
-        private String title;
-        private String description;
-        private BookMeta[] volumes;
-        
-        public Book(String title)
-        {
-            this.title = title;
-        }
-        
-        public Book(String title, String description, BookMeta[] volumes)
-        {
-            this.title = title;
-            this.description = description;
-            setVolumes(volumes);
-        }
-        
-        public String getTitle()
-        {
-            return title;
-        }
-        
-        public String getDescription()
-        {
-            return description;
-        }
-        
-        public BookMeta[] getVolumes()
-        {
-            return volumes;
-        }
-        
-        public void setVolumes(BookMeta[] volumes)
-        {
-            this.volumes = volumes;
-        }
-        
-        public ItemStack getBookItem()
-        {
-            return getBookItem(1);
-        }
-        
-        public ItemStack getBookItem(int volume)
-        {
-            volume = Math.min(Math.max(volume, 1), volumes.length) - 1;
-            
-            ItemStack item = new ItemStack(Material.WRITTEN_BOOK);
-            
-            item.setItemMeta(volumes[volume]);
-            
-            return item;
-        }
-    }
-    
     private final Map<BookID, Book> books = new HashMap<BookID, Book>();
     private final int generated = (int)(System.currentTimeMillis() / 1000);
     

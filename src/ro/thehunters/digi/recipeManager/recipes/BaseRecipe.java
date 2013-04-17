@@ -19,7 +19,8 @@ public class BaseRecipe implements Flaggable
         COMBINE("combine"),
         WORKBENCH(null),
         SMELT("smelt"),
-        FUEL("fuel");
+        FUEL("fuel"),
+        SPECIAL("special");
         
         private final String directive;
         

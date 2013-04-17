@@ -40,16 +40,19 @@ import ro.thehunters.digi.recipeManager.RecipeManager;
 
 ;
 
-public class FlagSpawn extends Flag
+public class FlagSummon extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.SUMMON;
+        
         A = new String[]
         {
             "{flag} <type> | [arguments]",
@@ -58,7 +61,9 @@ public class FlagSpawn extends Flag
         
         D = new String[]
         {
-            "Spawns a creature.",
+            "NOTE: not finished, some arguments don't do anything yet, most of them work, some of them are broken.", // TODO finish
+            "",
+            "Summons a creature.",
             "Using this flag more than once will add more creatures.",
             "",
             "The <type> argument can be a living entity type, you can find all entity types in '" + Files.FILE_INFO_NAMES + "' file.",
@@ -884,15 +889,12 @@ public class FlagSpawn extends Flag
     
     List<Customization> spawn = new ArrayList<Customization>();
     
-    public FlagSpawn()
+    public FlagSummon()
     {
-        type = FlagType.SPAWN;
     }
     
-    public FlagSpawn(FlagSpawn flag)
+    public FlagSummon(FlagSummon flag)
     {
-        this();
-        
         for(Customization c : flag.spawn)
         {
             spawn.add(c.clone());
@@ -900,9 +902,15 @@ public class FlagSpawn extends Flag
     }
     
     @Override
-    public FlagSpawn clone()
+    public FlagSummon clone()
     {
-        return new FlagSpawn(this);
+        return new FlagSummon(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public List<Customization> getSpawnList()

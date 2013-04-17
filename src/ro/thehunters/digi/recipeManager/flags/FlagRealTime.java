@@ -6,20 +6,19 @@ import ro.thehunters.digi.recipeManager.Messages;
 
 public class FlagRealTime extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.REALTIME;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
-        
+        A = null;
+        D = null;
         E = null;
     }
     
@@ -31,7 +30,6 @@ public class FlagRealTime extends Flag
     
     public FlagRealTime()
     {
-        type = FlagType.REALTIME;
     }
     
     public FlagRealTime(FlagRealTime flag)
@@ -47,6 +45,12 @@ public class FlagRealTime extends Flag
     public FlagRealTime clone()
     {
         return new FlagRealTime(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public int getMinTime()

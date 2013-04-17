@@ -8,14 +8,17 @@ import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
 public class FlagOverride extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.OVERRIDE;
+        
         A = new String[]
         {
             "{flag} [true or false]",
@@ -32,20 +35,22 @@ public class FlagOverride extends Flag
             "Value is optional, if value is not specified it will just be enabled.",
         };
         
-        E = null;
+        E = new String[]
+        {
+            "{flag}",
+        };
     }
     
     // Flag code
     
     public FlagOverride()
     {
-        type = FlagType.OVERRIDE;
     }
     
     @Override
-    public Flag clone()
+    public FlagType getType()
     {
-        return new FlagOverride();
+        return TYPE;
     }
     
     @Override

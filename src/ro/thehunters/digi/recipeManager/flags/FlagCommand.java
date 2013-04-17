@@ -9,14 +9,17 @@ import ro.thehunters.digi.recipeManager.Messages;
 
 public class FlagCommand extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.COMMAND;
+        
         A = new String[]
         {
             "{flag} <text or false>",
@@ -55,13 +58,10 @@ public class FlagCommand extends Flag
     
     public FlagCommand()
     {
-        type = FlagType.COMMAND;
     }
     
     public FlagCommand(FlagCommand flag)
     {
-        this();
-        
         commands.addAll(flag.commands);
     }
     
@@ -69,6 +69,12 @@ public class FlagCommand extends Flag
     public FlagCommand clone()
     {
         return new FlagCommand(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     /**
@@ -99,7 +105,7 @@ public class FlagCommand extends Flag
     
     /**
      * Adds a command to the list.<br>
-     * You can use "false" or "remove" to remove the entire flag.
+     * You can use null, "false" or "remove" to remove the entire flag.
      * 
      * @param command
      */

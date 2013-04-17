@@ -10,40 +10,68 @@ import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagItemMap extends Flag
+public class FlagMapItem extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} < ??? >";
+        TYPE = FlagType.MAPITEM;
         
-        D = new String[1];
-        D[0] = "Flag not yet documented.";
+        A = new String[]
+        {
+            "{flag} ...",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "FLAG NOT IMPLEMENTED",
+        };
+        
+        E = new String[]
+        {
+            "{flag} ...",
+        };
     }
     
     // Flag code
     
-    public FlagItemMap()
+    private MapView map; // TODO
+    
+    public FlagMapItem()
     {
-        type = FlagType.ITEMMAP;
+    }
+    
+    public FlagMapItem(FlagMapItem flag)
+    {
+        // TODO clone
     }
     
     @Override
-    public boolean onValidate()
+    public FlagMapItem clone()
+    {
+        return new FlagMapItem(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onValidate()
     {
         ItemResult result = getResult();
         
         if(result == null || result.getType() != Material.MAP || result.getDurability() < 0)
         {
-            RecipeErrorReporter.error("Flag @" + type + " needs a MAP with a specific data value to work!");
+            RecipeErrorReporter.error("Flag " + getType() + " needs a MAP with a specific data value to work!");
             return false;
         }
         
@@ -51,13 +79,13 @@ public class FlagItemMap extends Flag
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onParse(String value)
     {
         String[] split = value.toLowerCase().split("\\|");
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!");
+            RecipeErrorReporter.error("Flag " + getType() + " doesn't have any arguments!");
             return false;
         }
         
@@ -80,7 +108,7 @@ public class FlagItemMap extends Flag
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'world' argument with no world!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'world' argument with no world!");
                     return false;
                 }
                 
@@ -89,7 +117,7 @@ public class FlagItemMap extends Flag
                 
                 if(world == null)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'world' that does not exist: " + value);
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'world' that does not exist: " + value);
                     return false;
                 }
             }
@@ -99,7 +127,7 @@ public class FlagItemMap extends Flag
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'scale' argument with no scale!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'scale' argument with no scale!");
                     return false;
                 }
                 
@@ -111,7 +139,7 @@ public class FlagItemMap extends Flag
                 }
                 catch(Exception e)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'scale' with invalid argument: " + value, "See scale options in " + Files.FILE_INFO_FLAGS);
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'scale' with invalid argument: " + value, "See scale options in " + Files.FILE_INFO_FLAGS);
                     return false;
                 }
             }
@@ -121,7 +149,7 @@ public class FlagItemMap extends Flag
                 
                 if(split.length < 3)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'center' argument without X and Z coords!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'center' argument without X and Z coords!");
                     return false;
                 }
                 
@@ -135,7 +163,7 @@ public class FlagItemMap extends Flag
                 }
                 catch(Exception e)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'center' with invalid X/Z numbers, must be whole numbers!");
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'center' with invalid X/Z numbers, must be whole numbers!");
                     return false;
                 }
             }
@@ -147,7 +175,7 @@ public class FlagItemMap extends Flag
         {
             if(world == null && map == null)
             {
-                RecipeErrorReporter.error("Flag @" + type + " can't create a new map without either an existing map data value on item OR the world argument.");
+                RecipeErrorReporter.error("Flag " + getType() + " can't create a new map without either an existing map data value on item OR the world argument.");
                 return false;
             }
             
@@ -157,7 +185,7 @@ public class FlagItemMap extends Flag
         {
             if(world == null)
             {
-                RecipeErrorReporter.error("Flag @" + type + " can't find the map for item's data value and world is not set so it can't create one either.");
+                RecipeErrorReporter.error("Flag " + getType() + " can't find the map for item's data value and world is not set so it can't create one either.");
                 return false;
             }
             
@@ -166,7 +194,7 @@ public class FlagItemMap extends Flag
         
         if(map == null)
         {
-            RecipeErrorReporter.error("Flag @" + type + " couldn't create a new map!");
+            RecipeErrorReporter.error("Flag " + getType() + " couldn't create a new map!");
             return false;
         }
         
@@ -177,10 +205,14 @@ public class FlagItemMap extends Flag
         }
         
         if(world != null)
+        {
             map.setWorld(world);
+        }
         
         if(scale != null)
+        {
             map.setScale(scale);
+        }
         
         return true;
     }

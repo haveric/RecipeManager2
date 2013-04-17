@@ -5,21 +5,22 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
-import ro.thehunters.digi.recipeManager.Tools;
-
 public class FlagMessage extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.MESSAGE;
+        
         A = new String[]
         {
-            "{flag} <text or false>",
+            "{flag} <text>",
         };
         
         D = new String[]
@@ -27,14 +28,12 @@ public class FlagMessage extends Flag
             "Prints a message when recipe or item is succesfully crafted.",
             "This flag can be used more than once to add more messages.",
             "The text can contain colors (<red>, &5, etc)",
-            "",
-            "Setting to false will disable the flag.",
         };
         
         E = new String[]
         {
             "{flag} <green>Good job !",
-            "{flag} <gray>Now you can die happy that you crafted that.",
+            "{flag} <gray>Now you can die&c happy<gray> that you crafted that.",
         };
     }
     
@@ -44,13 +43,10 @@ public class FlagMessage extends Flag
     
     public FlagMessage()
     {
-        type = FlagType.MESSAGE;
     }
     
     public FlagMessage(FlagMessage flag)
     {
-        this();
-        
         messages.addAll(flag.messages);
     }
     
@@ -60,11 +56,22 @@ public class FlagMessage extends Flag
         return new FlagMessage(this);
     }
     
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
     public List<String> getMessages()
     {
         return messages;
     }
     
+    /**
+     * Set the message list.
+     * 
+     * @param messages
+     */
     public void setMessages(List<String> messages)
     {
         if(messages == null)
@@ -77,6 +84,13 @@ public class FlagMessage extends Flag
         }
     }
     
+    /**
+     * Set the message.<br>
+     * Supports parsable color tags and codes.<br>
+     * You can use null, "false" or "remove" to remove the entire flag.
+     * 
+     * @param message
+     */
     public void addMessage(String message)
     {
         if(message == null || message.equalsIgnoreCase("false") || message.equalsIgnoreCase("remove"))
@@ -97,8 +111,7 @@ public class FlagMessage extends Flag
     @Override
     protected boolean onParse(String value)
     {
-        addMessage(Tools.parseColors(value, false));
-        
+        addMessage(value);
         return true;
     }
     

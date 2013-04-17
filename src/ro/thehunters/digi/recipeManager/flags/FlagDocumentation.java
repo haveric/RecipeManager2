@@ -4,14 +4,17 @@ import ro.thehunters.digi.recipeManager.Files;
 
 public class FlagDocumentation extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.DESCRIPTION;
+        
         A = new String[]
         {
             "{flag} [true or false]",
@@ -19,6 +22,8 @@ public class FlagDocumentation extends Flag
         
         D = new String[]
         {
+            "IMPLEMENTATION NOT DONE, FLAG DOES NOTHING.",
+            "",
             "Exports the recipe to '" + Files.FILE_RECIPES + "' file.",
             "",
             "Should be used at the begining of file to affect all recipes in the file, but can be used on individual recipes too.",
@@ -37,7 +42,6 @@ public class FlagDocumentation extends Flag
     
     public FlagDocumentation()
     {
-        type = FlagType.DOCUMENTATION;
     }
     
     @Override

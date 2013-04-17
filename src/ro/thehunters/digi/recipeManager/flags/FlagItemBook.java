@@ -8,35 +8,61 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagItemBook extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} <title | author or false>";
+        TYPE = FlagType.ITEMBOOK;
         
-        D = new String[6];
-        D[0] = "Changes book's title and author.";
-        D[1] = "You can use 'false' to completly erase its title and pages.";
-        D[2] = "Supports colors and format (e.g. <red>, <blue>, &4, &F, etc).";
-        D[3] = "Title and author must not exceed 64 characters individually, colors use 2 character each.";
-        D[4] = null;
-        D[5] = "Specific items: written book";
+        A = new String[]
+        {
+            "{flag} <title | author>",
+        };
         
-        E = new String[2];
-        E[0] = "{flag} The Art of Stealing | Gray Fox";
-        E[1] = "{flag} false";
+        D = new String[]
+        {
+            "Changes book's title and author.",
+            "",
+            "Supports colors and format (e.g. <red>, <blue>, &4, &F, etc).",
+            "Title and author must not exceed 64 characters individually, colors use 2 character each.",
+            "",
+            "Specific items: written book",
+        };
+        
+        E = new String[]
+        {
+            "{flag} The Art of Stealing | Gray Fox",
+        };
     }
     
     // Flag code
     
+    private BookMeta bookMeta; // TODO
+    
     public FlagItemBook()
     {
-        type = FlagType.ITEMBOOK;
+    }
+    
+    public FlagItemBook(FlagItemBook flag)
+    {
+        // TODO clone
+    }
+    
+    @Override
+    public FlagItemBook clone()
+    {
+        return new FlagItemBook(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     @Override
@@ -90,6 +116,47 @@ public class FlagItemBook extends Flag
         meta.setTitle(title);
         meta.setAuthor(author);
         result.setItemMeta(meta);
+        
         return true;
     }
+    
+    // TODO pages too
+    /*
+    @Override
+    protected void onRemove()
+    {
+        ItemResult result = getResult();
+        BookMeta meta = (BookMeta)result.getItemMeta();
+        meta.setTitle(null);
+        meta.setAuthor(null);
+        result.setItemMeta(meta);
+    }
+    
+    @Override
+    protected boolean onParse(String value)
+    {
+        ItemResult result = getResult();
+        BookMeta meta = (BookMeta)result.getItemMeta();
+        
+        if(value.equalsIgnoreCase("false"))
+        {
+            String text = Tools.parseColors(value, false);
+            
+            if(text.length() > 256)
+            {
+                RecipeErrorReporter.warning("Flag @" + getType() + " has page with text longer than 256 characters, trimmed to size.", "Color codes use up that limit too, 1 character per color.");
+                text = text.substring(0, 256);
+            }
+            
+            meta.addPage(text);
+        }
+        else
+        {
+            meta.getPages().clear();
+        }
+        
+        result.setItemMeta(meta);
+        return true;
+    }
+    */
 }

@@ -6,16 +6,19 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
-public class FlagReqExp extends Flag
+public class FlagNeedExp extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.NEEDEXP;
+        
         A = new String[]
         {
             "{flag} <min or min-max>",
@@ -26,11 +29,13 @@ public class FlagReqExp extends Flag
         D = new String[]
         {
             "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
+            "Using this flag more than once will overwrite the previous one.",
             "",
-            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in result's lore, should be as short as possible.",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {exp}  = exp or exp range",
             "",
-            "NOTE: Using this flag more than once will overwrite the previous one!",
-            "NOTE: This is for total experience points, for experience levels use " + FlagType.REQLEVEL.toString(),
+            "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(),
         };
         
         E = new String[]
@@ -45,26 +50,29 @@ public class FlagReqExp extends Flag
     
     private int minExp;
     private int maxExp;
-    private String message;
+    private String failMessage;
     
-    public FlagReqExp()
+    public FlagNeedExp()
     {
-        type = FlagType.REQEXP;
     }
     
-    public FlagReqExp(FlagReqExp flag)
+    public FlagNeedExp(FlagNeedExp flag)
     {
-        this();
-        
         minExp = flag.minExp;
         maxExp = flag.maxExp;
-        message = flag.message;
+        failMessage = flag.failMessage;
     }
     
     @Override
-    public FlagReqExp clone()
+    public FlagNeedExp clone()
     {
-        return new FlagReqExp(this);
+        return new FlagNeedExp(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public int getMinExp()
@@ -97,14 +105,14 @@ public class FlagReqExp extends Flag
         return !((minExp > 0 && exp < minExp) || (maxExp > 0 && exp > maxExp));
     }
     
-    public String getMessage()
+    public String getFailMessage()
     {
-        return message;
+        return failMessage;
     }
     
-    public void setMessage(String message)
+    public void setFailMessage(String failMessage)
     {
-        this.message = message;
+        this.failMessage = failMessage;
     }
     
     @Override
@@ -114,7 +122,7 @@ public class FlagReqExp extends Flag
         
         if(split.length > 1)
         {
-            setMessage(split[1].trim());
+            setFailMessage(split[1].trim());
         }
         
         split = split[0].split("-", 2);
@@ -173,7 +181,7 @@ public class FlagReqExp extends Flag
         
         if(p == null || !checkExp(p.getTotalExperience()))
         {
-            a.addReason(Messages.FLAG_REQEXP, message, "{exp}", getExp());
+            a.addReason(Messages.FLAG_REQEXP, failMessage, "{exp}", getExp());
         }
     }
 }

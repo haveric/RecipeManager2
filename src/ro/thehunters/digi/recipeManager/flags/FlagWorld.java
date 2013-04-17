@@ -4,41 +4,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagWorld extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.WORLD;
+        
         A = new String[]
         {
-            "{flag} ",
-            "{flag} [-]<world>[, ...] [| <message>]",
-            "{flag} false",
+            "{flag} [!]<world>, [...] | [fail message]",
         };
         
         D = new String[]
         {
-            "Restricts recipe to only some worlds.",
-            "The '<world>' arguemnt can be a world name, the recipe/result will only work in that world.",
-            "Using the flag more than once will add more worlds to the list.",
+            "Makes the recipe or item work only in certain worlds.",
+            "Using this flag more than once will add more worlds.",
             "",
-            "The '-<world>' argument can be a world name prefixed with - character to define a disallowed world.",
+            "The '<world>' argument can be a world name.",
+            "Adding ! character as prefix to individual worlds will do the opposite check, will not craft in specified world.",
+            "You should require or disallow worlds, using both would be logically pointless.",
             "",
-            "You should only allow or disallow words, using both systems would be pointless.",
-            "",
-            "Optionally you can specify a message for allowed permission nodes and one for unallowed worlds, but not for individual worlds.",
+            "Optionally you can specify a failure message that will be used on the specific world(s) defined.",
             "The messages can have the following variables:",
-            "  {permission}  = first allowed or unallowed permission node in the list",
-            "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes",
+            "  {world}   = current world.",
+            "  {worlds}  = a comma separated list of the required or unallowed worlds.",
             "",
             "Using 'false' will disable the flag.",
         };
@@ -46,43 +46,22 @@ public class FlagWorld extends Flag
         E = new String[]
         {
             "{flag} world // only allows 'world'",
-            "{flag} -world_nether // disallows 'world_nether'",
-            "{flag} false",
+            "{flag} !world_nether // disallows 'world_nether'",
+            "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds",
         };
     }
     
-    // Flag code
-    
-    // TODO redesign
-    // @perm perm.perm, perm.perm, perm.perm | message applies to all 3
-    // @perm newperm | message that applies only to this perm
-    
-    private Map<String, String> allowedWorlds = new HashMap<String, String>();
-    private Map<String, String> unallowedWorlds = new HashMap<String, String>();
-    
-    /*
-    private Set<String> allowedWorlds = new HashSet<String>();
-    private String allowedMessage;
-    
-    private Set<String> unallowedWorlds = new HashSet<String>();
-    private String unallowedMessage;
-    */
+    private Map<String, Boolean> worlds = new HashMap<String, Boolean>();
+    private Map<String, String> messages = new HashMap<String, String>();
     
     public FlagWorld()
     {
-        type = FlagType.WORLD;
     }
     
     public FlagWorld(FlagWorld flag)
     {
-        this();
-        
-        /*
-        allowedWorlds.addAll(flag.allowedWorlds);
-        allowedMessage = flag.allowedMessage;
-        unallowedWorlds.addAll(flag.unallowedWorlds);
-        unallowedMessage = flag.unallowedMessage;
-        */
+        worlds.putAll(flag.worlds);
+        messages.putAll(flag.messages);
     }
     
     @Override
@@ -91,99 +70,71 @@ public class FlagWorld extends Flag
         return new FlagWorld(this);
     }
     
-    /*
-    public Set<String> getAllowedWorlds()
+    @Override
+    public FlagType getType()
     {
-        return allowedWorlds;
+        return TYPE;
     }
     
-    public void setAllowedWorlds(Set<String> worlds)
+    public Map<String, Boolean> getWorlds()
     {
-        this.allowedWorlds = worlds;
+        return worlds;
     }
     
-    public void addAllowedWorld(String world)
+    public void addWorld(String world, String message, boolean allowed)
     {
-        this.allowedWorlds.add(world);
+        worlds.put(world, allowed);
+        messages.put(world, message);
     }
     
-    public Set<String> getUnallowedWorlds()
+    public Map<String, String> getMessages()
     {
-        return unallowedWorlds;
+        return messages;
     }
     
-    public void setUnallowedWorlds(Set<String> worlds)
+    public String getWorldMessage(String world)
     {
-        this.unallowedWorlds = worlds;
+        return messages.get(world);
     }
     
-    public void addUnallowedWorld(String world)
+    public String getWorldsString(boolean allowed)
     {
-        this.unallowedWorlds.add(world);
+        StringBuilder s = new StringBuilder();
+        
+        for(Entry<String, Boolean> e : worlds.entrySet())
+        {
+            if(allowed == e.getValue().booleanValue())
+            {
+                if(s.length() > 0)
+                {
+                    s.append(", ");
+                }
+                
+                s.append(e.getKey());
+            }
+        }
+        
+        return s.toString();
     }
-    
-    public String getAllowedMessage()
-    {
-        return allowedMessage;
-    }
-    
-    public void setAllowedMessage(String allowedMessage)
-    {
-        this.allowedMessage = allowedMessage;
-    }
-    
-    public String getUnallowedMessage()
-    {
-        return unallowedMessage;
-    }
-    
-    public void setUnallowedMessage(String unallowedMessage)
-    {
-        this.unallowedMessage = unallowedMessage;
-    }
-    */
     
     @Override
     protected boolean onParse(String value)
     {
-        /*
-        String[] split = value.split("\\|");
-        value = split[0].trim().toLowerCase();
-        
-        if(value.charAt(0) == '-')
-        {
-            addUnallowedWorld(value.substring(1).trim());
-            
-            if(split.length > 1)
-            {
-                setUnallowedMessage(split[1].trim());
-            }
-        }
-        else
-        {
-            addAllowedWorld(value);
-            
-            if(split.length > 1)
-            {
-                setAllowedMessage(split[1].trim());
-            }
-        }
-        */
-        
         String[] split = value.split("\\|");
         String message = (split.length > 1 ? split[1].trim() : null);
         split = split[0].toLowerCase().split(",");
         
-        for(String s : split)
+        for(String arg : split)
         {
-            if(s.charAt(0) == '-')
+            arg = arg.trim();
+            boolean not = arg.charAt(0) == '!';
+            
+            if(not)
             {
-                unallowedWorlds.put(s.substring(1).trim(), message);
+                arg = arg.substring(1).trim();
             }
-            else
-            {
-                allowedWorlds.put(s.trim(), message);
-            }
+            
+            addWorld(arg, message, !not);
         }
         
         return true;
@@ -199,27 +150,23 @@ public class FlagWorld extends Flag
             world = a.location().getWorld().toString().toLowerCase();
         }
         
-        if(!allowedWorlds.isEmpty() && (world == null || !allowedWorlds.containsKey(world)))
+        for(Entry<String, Boolean> e : worlds.entrySet())
         {
-            a.addReason(Messages.FLAG_WORLD_ALLOWED, allowedWorlds.get(world), "{worlds}", Tools.collectionToString(allowedWorlds.keySet()));
+            if(e.getValue().booleanValue())
+            {
+                if(world == null || !world.equals(e.getKey()))
+                {
+                    a.addReason(Messages.FLAG_WORLD_ALLOWED, getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(true));
+                }
+            }
+            else
+            {
+                if(world != null && world.equals(e.getKey()))
+                {
+                    a.addReason(Messages.FLAG_WORLD_UNALLOWED, getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(false));
+                }
+            }
         }
-        
-        if(!unallowedWorlds.isEmpty() && (world == null || unallowedWorlds.containsKey(world)))
-        {
-            a.addReason(Messages.FLAG_WORLD_UNALLOWED, unallowedWorlds.get(world), "{worlds}", Tools.collectionToString(unallowedWorlds.keySet()));
-        }
-        
-        /*
-        if(!allowedWorlds.isEmpty() && (world == null || !allowedWorlds.contains(world)))
-        {
-            a.addReason(Messages.FLAG_WORLD_ALLOWED, allowedMessage, "{worlds}", Tools.collectionToString(allowedWorlds));
-        }
-        
-        if(!unallowedWorlds.isEmpty() && (world == null || unallowedWorlds.contains(world)))
-        {
-            a.addReason(Messages.FLAG_WORLD_UNALLOWED, unallowedMessage, "{worlds}", Tools.collectionToString(unallowedWorlds));
-        }
-        */
     }
     
     @Override
@@ -227,14 +174,21 @@ public class FlagWorld extends Flag
     {
         List<String> list = new ArrayList<String>(2);
         
-        if(!allowedWorlds.isEmpty())
+        String allowed = getWorldsString(true);
+        String unallowed = getWorldsString(false);
+        
+        if(!allowed.isEmpty())
         {
-            list.add(Messages.FLAG_WORLD_ALLOWED.get("{worlds}", Tools.collectionToString(allowedWorlds.keySet())));
+            int i = allowed.indexOf(',');
+            String world = allowed.substring(0, (i > 0 ? i : allowed.length()));
+            list.add(Messages.FLAG_WORLD_ALLOWED.get("{world}", world, "{worlds}", allowed));
         }
         
-        if(!unallowedWorlds.isEmpty())
+        if(!unallowed.isEmpty())
         {
-            list.add(Messages.FLAG_WORLD_UNALLOWED.get("{worlds}", Tools.collectionToString(unallowedWorlds.keySet())));
+            int i = unallowed.indexOf(',');
+            String world = unallowed.substring(0, (i > 0 ? i : unallowed.length()));
+            list.add(Messages.FLAG_WORLD_UNALLOWED.get("{world}", world, "{worlds}", unallowed));
         }
         
         return list;

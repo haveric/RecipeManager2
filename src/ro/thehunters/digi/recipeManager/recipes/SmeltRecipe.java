@@ -13,11 +13,11 @@ import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
-public class SmeltRecipe extends BaseRecipe
+public class SmeltRecipe extends MultiResultRecipe
 {
     private ItemStack ingredient;
     private ItemResult fuel;
-    private ItemResult result;
+//    private ItemResult result;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
     private int hash;
@@ -56,6 +56,7 @@ public class SmeltRecipe extends BaseRecipe
         hash = ("smelt" + ingredient.getTypeId() + ":" + ingredient.getDurability()).hashCode();
     }
     
+    /*
     public ItemResult getResult()
     {
         return result;
@@ -74,6 +75,7 @@ public class SmeltRecipe extends BaseRecipe
             this.result = new ItemResult(result).setRecipe(this);
         }
     }
+    */
     
     public ItemResult getFuel()
     {
@@ -197,7 +199,7 @@ public class SmeltRecipe extends BaseRecipe
     
     public FurnaceRecipe toFurnaceRecipe()
     {
-        return new FurnaceRecipe(result, ingredient.getType(), ingredient.getDurability());
+        return new FurnaceRecipe(getFirstResult(), ingredient.getType(), ingredient.getDurability());
     }
     
     public boolean hasIngredient()
@@ -210,15 +212,17 @@ public class SmeltRecipe extends BaseRecipe
         return fuel != null;
     }
     
+    /*
     public boolean hasResult()
     {
         return result != null;
     }
+    */
     
     @Override
     public boolean isValid()
     {
-        return hasIngredient() && (hasFlag(FlagType.REMOVE) ? true : hasResult());
+        return hasIngredient() && (hasFlag(FlagType.REMOVE) ? true : hasResults());
     }
     
     @Override
@@ -230,7 +234,7 @@ public class SmeltRecipe extends BaseRecipe
     @Override
     public String printBookIndex()
     {
-        return Tools.getItemName(getResult());
+        return Tools.getItemName(getFirstResult());
     }
     
     @Override
@@ -239,9 +243,12 @@ public class SmeltRecipe extends BaseRecipe
         StringBuilder s = new StringBuilder(256);
         
         s.append(Messages.RECIPEBOOK_HEADER_SMELT.get());
+        s.append('\n').append(Tools.printItem(getFirstResult(), ChatColor.DARK_GREEN, null, true));
         
-        s.append('\n').append(Tools.printItem(getResult(), ChatColor.DARK_GREEN, null, true));
-        s.append('\n');
+        if(isMultiResult())
+        {
+            s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
+        }
         
         if(hasFlag(FlagType.DESCRIPTION))
         {

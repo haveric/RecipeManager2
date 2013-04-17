@@ -1,67 +1,76 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.bukkit.entity.Player;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagGroup extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.GROUP;
+        
         A = new String[]
         {
-            "{flag} <permission or -permission or false>",
+            "{flag} [!]<group>, [...] | [fail message]",
         };
         
         D = new String[]
         {
-            "Makes the recipe or item require the crafter to have a permission.",
+            "Makes the recipe or item require the crafter to be in a permission group.",
+            "Using this flag more than once will add more groups, the player must be in at least one group.",
             "",
-            "This flag can be used more than once to add more permissions, the player must have at least one to allow crafting.",
+            "The '<group>' argument must be a permission group.",
             "",
-            "Specifying permission nodes with the - prefix would prevent crafting if player has at least one of those permissions.",
+            "Adding ! character as prefix to individual groups will do the opposite check, if crafter is in group it will not craft.",
             "",
-            "Using 'false' will disable the flag.",
+            "You can also specify more groups separated by , character.",
+            "",
+            "Optionally you can specify a failure message that will be used on the specific group(s) defined.",
+            "The messages can have the following variables:",
+            "  {group}   = group that was not found or was found and it's unallowed.",
+            "  {groups}  = a comma separated list of the allowed or unallowed groups.",
+            "",
+            "NOTE: Vault with a supported permission plugin is required for this flag to work.",
         };
         
         E = new String[]
         {
             "{flag} ranks.vip",
-            "{flag} jobs.crafter",
-            "{flag} -ranks.newbs",
-            "{flag} - jobs.warrior  // valid with a space too",
-            "{flag} false",
+            "{flag} !jobs.builder | <red>Builders can't use this!",
+            "{flag} jobs.famer, jobs.trader | <red>You must be a farmer or trader!",
+            "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too",
         };
     }
     
     // Flag code
     
-    private List<String> allowedGroups = new ArrayList<String>();
-    private List<String> unallowedGroups = new ArrayList<String>();
-    private String message;
+    private Map<String, Boolean> groups = new HashMap<String, Boolean>();
+    private Map<String, String> messages = new HashMap<String, String>();
+    
+    // TODO finish
     
     public FlagGroup()
     {
-        type = FlagType.GROUP;
     }
     
     public FlagGroup(FlagGroup flag)
     {
-        this();
-        
-        allowedGroups.addAll(flag.allowedGroups);
-        unallowedGroups.addAll(flag.unallowedGroups);
-        message = flag.message;
+        groups.putAll(flag.groups);
+        messages.putAll(flag.messages);
     }
     
     @Override
@@ -70,65 +79,76 @@ public class FlagGroup extends Flag
         return new FlagGroup(this);
     }
     
-    public List<String> getAllowedGroups()
+    @Override
+    public FlagType getType()
     {
-        return allowedGroups;
+        return TYPE;
     }
     
-    public void setAllowedGroups(List<String> groups)
+    public Map<String, Boolean> getGroups()
     {
-        this.allowedGroups = groups;
+        return groups;
     }
     
-    public void addAllowedGroup(String group)
+    public void addGroup(String group, String message, boolean allowed)
     {
-        this.allowedGroups.add(group);
+        groups.put(group, allowed);
+        messages.put(group, message);
     }
     
-    public List<String> getUnallowedGroups()
+    public Map<String, String> getMessages()
     {
-        return unallowedGroups;
+        return messages;
     }
     
-    public void setUnallowedGroups(List<String> groups)
+    public String getGroupMessage(String group)
     {
-        this.unallowedGroups = groups;
+        return messages.get(group);
     }
     
-    public void addUnallowedGroup(String group)
+    public String getGroupsString(boolean allowed)
     {
-        this.unallowedGroups.add(group);
-    }
-    
-    public String getMessage()
-    {
-        return message;
-    }
-    
-    public void setMessage(String message)
-    {
-        this.message = message;
+        StringBuilder s = new StringBuilder();
+        
+        for(Entry<String, Boolean> e : groups.entrySet())
+        {
+            if(allowed == e.getValue().booleanValue())
+            {
+                if(s.length() > 0)
+                {
+                    s.append(", ");
+                }
+                
+                s.append(e.getKey());
+            }
+        }
+        
+        return s.toString();
     }
     
     @Override
     protected boolean onParse(String value)
     {
+        if(!RecipeManager.getPermissions().isEnabled())
+        {
+            RecipeErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported permission plugin was detected.");
+        }
+        
         String[] split = value.split("\\|");
+        String message = (split.length > 1 ? split[1].trim() : null);
+        split = split[0].toLowerCase().split(",");
         
-        if(split.length > 1)
+        for(String arg : split)
         {
-            setMessage(split[1].trim());
-        }
-        
-        value = split[0].trim();
-        
-        if(value.charAt(0) == '-')
-        {
-            addUnallowedGroup(value.substring(1).trim());
-        }
-        else
-        {
-            addAllowedGroup(value);
+            arg = arg.trim();
+            boolean not = arg.charAt(0) == '!';
+            
+            if(not)
+            {
+                arg = arg.substring(1).trim();
+            }
+            
+            addGroup(arg, message, !not);
         }
         
         return true;
@@ -137,40 +157,52 @@ public class FlagGroup extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        if(!a.hasPlayer())
+        if(!RecipeManager.getPermissions().isEnabled())
         {
-            if(!allowedGroups.isEmpty())
-            {
-                a.addReason(Messages.FLAG_GROUP_ALLOWED, message, "{group}", allowedGroups.get(0), "{groups}", Tools.collectionToString(allowedGroups));
-            }
-            
             return;
         }
         
-        Player player = a.player();
-        boolean ok = false;
-        
-        for(String perm : allowedGroups)
+        for(Entry<String, Boolean> e : groups.entrySet())
         {
-            if(player.hasPermission(perm))
+            if(e.getValue().booleanValue())
             {
-                ok = true;
-                break;
+                if(!a.hasPlayerName() || !RecipeManager.getPermissions().playerInGroup(a.playerName(), e.getKey()))
+                {
+                    a.addReason(Messages.FLAG_GROUP_ALLOWED, getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(true));
+                }
+            }
+            else
+            {
+                if(a.hasPlayerName() && RecipeManager.getPermissions().playerInGroup(a.playerName(), e.getKey()))
+                {
+                    a.addReason(Messages.FLAG_GROUP_UNALLOWED, getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(false));
+                }
             }
         }
+    }
+    
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(2);
         
-        if(!ok)
+        String allowed = getGroupsString(true);
+        String unallowed = getGroupsString(false);
+        
+        if(!allowed.isEmpty())
         {
-            a.addReason(Messages.FLAG_PERMISSION_ALLOWED, message, "{permission}", allowedGroups.get(0), "{permissions}", Tools.collectionToString(allowedGroups));
+            int i = allowed.indexOf(',');
+            String group = allowed.substring(0, (i > 0 ? i : allowed.length()));
+            list.add(Messages.FLAG_GROUP_ALLOWED.get("{group}", group, "{groups}", allowed));
         }
         
-        for(String perm : unallowedGroups)
+        if(!unallowed.isEmpty())
         {
-            if(player.hasPermission(perm))
-            {
-                a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, message, "{permission}", perm, "{permissions}", Tools.collectionToString(unallowedGroups));
-                break;
-            }
+            int i = unallowed.indexOf(',');
+            String group = unallowed.substring(0, (i > 0 ? i : unallowed.length()));
+            list.add(Messages.FLAG_GROUP_UNALLOWED.get("{group}", group, "{groups}", unallowed));
         }
+        
+        return list;
     }
 }

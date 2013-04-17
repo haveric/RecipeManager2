@@ -7,42 +7,58 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagItemName extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
-        A = new String[1];
-        A[0] = "{flag} <text or false>";
+        TYPE = FlagType.ITEMNAME;
         
-        D = new String[2];
-        D[0] = "Changes result's display name, supports colors (e.g. <red>, <blue>, &4, &F, etc)";
-        D[1] = "Setting to false will remove custom display name.";
+        A = new String[]
+        {
+            "{flag} <text or false>",
+        };
         
-        E = null;
+        D = new String[]
+        {
+            "Changes result's display name, supports colors (e.g. <red>, <blue>, &4, &F, etc)",
+        };
+        
+        E = new String[]
+        {
+            "{flag} <yellow>Weird Item",
+        };
     }
     
     // Flag code
     
     public FlagItemName()
     {
-        type = FlagType.ITEMNAME;
     }
     
-    @Override
-    public void onRemove()
+    public FlagItemName(FlagItemName flag)
     {
-        onParse(null);
-        
-        // TODO REMOVE:
-        System.out.print("FlagName :: onRemove() " + getResult());
+        // TODO clone
     }
     
     @Override
-    public boolean onParse(String value)
+    public FlagItemName clone()
+    {
+        return new FlagItemName(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
+    }
+    
+    @Override
+    protected boolean onParse(String value)
     {
         ItemResult result = getResult();
         ItemMeta meta = result.getItemMeta();

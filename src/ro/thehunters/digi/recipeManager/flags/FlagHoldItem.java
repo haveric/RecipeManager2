@@ -10,14 +10,17 @@ import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagHoldItem extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = FlagType.HOLDITEM;
+        
         A = new String[]
         {
             "{flag} <item or false>",
@@ -47,29 +50,32 @@ public class FlagHoldItem extends Flag
     // Flag code
     
     private List<ItemStack> items = new ArrayList<ItemStack>();
-    private String message;
+    private String failMessage;
     
     public FlagHoldItem()
     {
-        type = FlagType.HOLDITEM;
     }
     
     public FlagHoldItem(FlagHoldItem flag)
     {
-        this();
-        
         for(ItemStack i : flag.items)
         {
             items.add(i.clone());
         }
         
-        message = flag.message;
+        failMessage = flag.failMessage;
     }
     
     @Override
     public FlagHoldItem clone()
     {
         return new FlagHoldItem(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     public List<ItemStack> getItems()
@@ -87,14 +93,14 @@ public class FlagHoldItem extends Flag
         items.add(item);
     }
     
-    public String getMessage()
+    public String getFailMessage()
     {
-        return message;
+        return failMessage;
     }
     
-    public void setMessage(String message)
+    public void setFailMessage(String failMessage)
     {
-        this.message = message;
+        this.failMessage = failMessage;
     }
     
     @Override
@@ -104,7 +110,7 @@ public class FlagHoldItem extends Flag
         
         if(split.length > 1)
         {
-            setMessage(split[1].trim());
+            setFailMessage(split[1].trim());
         }
         
         value = split[0].trim();
@@ -153,7 +159,7 @@ public class FlagHoldItem extends Flag
         
         if(!found)
         {
-            a.addReason(Messages.FLAG_HOLDITEM, message, "{items}", s.toString());
+            a.addReason(Messages.FLAG_HOLDITEM, failMessage, "{items}", s.toString());
         }
     }
 }
