@@ -37,6 +37,11 @@ commands:
     description: reload all settings, aliases, language file and recipe files
     usage: /<command> [force]
     permission: recipemanager.command.rmreload
+  rmreloadbooks:
+    aliases: [reloadrecipes]
+    description: reloads books
+    usage: /<command>
+    permission: recipemanager.command.rmreloadbooks
   rmextract:
     aliases: [rmimport, importrecipes, extractrecipes]
     description: makes all recipes from other plugins or mods into a text file to allow overriding and editing
@@ -74,6 +79,7 @@ permissions:
     children:
       recipemanager.command.rmecheck: true
       recipemanager.command.rmreload: true
+      recipemanager.command.rmreloadbooks: true
       recipemanager.command.rmextract: true
       recipemanager.command.rmgetbook: true
       recipemanager.command.rmbooks: true
@@ -97,6 +103,9 @@ permissions:
     description:
     default: op
   recipemanager.command.rmreload:
+    description:
+    default: op
+  recipemanager.command.rmreloadbooks:
     description:
     default: op
   recipemanager.command.rmextract:

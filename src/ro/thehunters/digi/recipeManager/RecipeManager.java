@@ -21,6 +21,7 @@ import ro.thehunters.digi.recipeManager.commands.GetBookCommand;
 import ro.thehunters.digi.recipeManager.commands.HelpCommand;
 import ro.thehunters.digi.recipeManager.commands.RecipeCommand;
 import ro.thehunters.digi.recipeManager.commands.RecipeHelpCommand;
+import ro.thehunters.digi.recipeManager.commands.ReloadBooksCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.flags.ArgBuilder;
@@ -106,6 +107,7 @@ public class RecipeManager extends JavaPlugin
         getCommand("rmfinditem").setExecutor(new FindItemCommand());
 //        getCommand("rmcheck").setExecutor(new HelpCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
+        getCommand("rmreloadbooks").setExecutor(new ReloadBooksCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());
         getCommand("rmgetbook").setExecutor(new GetBookCommand());
         getCommand("rmbooks").setExecutor(new BooksCommand());
