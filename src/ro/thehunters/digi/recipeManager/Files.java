@@ -22,6 +22,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -46,8 +47,14 @@ public class Files
     private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
     
     public static final String LASTCHANGED_CONFIG = "2.0alpha1";
-    public static final String LASTCHANGED_ALIASES = "2.0alpha2";
     public static final String LASTCHANGED_MESSAGES = "2.0alpha2";
+    public static final String LASTCHANGED_ITEM_ALIASES = "2.0alpha3";
+    public static final String LASTCHANGED_ENCHANT_ALIASES = "2.0alpha3";
+    
+    public static final String FILE_CONFIG = "config.yml";
+    
+    public static final String FILE_ITEM_ALIASES = "item aliases.yml";
+    public static final String FILE_ENCHANT_ALIASES = "enchant aliases.yml";
     
     public static final String FILE_USED_VERSION = "used.version";
     public static final String FILE_CHANGELOG = "changelog.txt";
@@ -57,6 +64,7 @@ public class Files
     public static final String FILE_INFO_COMMANDS = "commands & permissions.html";
     public static final String FILE_INFO_NAMES = "name index.html";
     public static final String FILE_INFO_FLAGS = "recipe flags.html";
+    public static final String FILE_INFO_BOOKS = "recipe books.html";
     
     public static final String FILE_RECIPES = "recipes.html";
     
@@ -77,18 +85,19 @@ public class Files
         
         createDirectories();
         
-        boolean newVersion = isNewVersion();
+        boolean overwrite = isNewVersion();
         
-        createRecipeFlags(newVersion);
-        createCommands(newVersion);
-        createNameIndex(newVersion);
-        createFile(FILE_INFO_BASICS, newVersion);
-        createFile(FILE_INFO_ADVANCED, newVersion);
-        createFile(FILE_CHANGELOG, newVersion);
+        createRecipeFlags(overwrite);
+        createCommands(overwrite);
+        createNameIndex(overwrite);
+        createFile(FILE_INFO_BASICS, overwrite);
+        createFile(FILE_INFO_ADVANCED, overwrite);
+        createFile(FILE_INFO_BOOKS, overwrite);
+        createFile(FILE_CHANGELOG, overwrite);
         
-        if(newVersion)
+        if(overwrite)
         {
-            Messages.info("<gray>New version installed, information files and changelog have been overwritten.");
+            Messages.sendAndLog(sender, "<gray>New version installed, information files and changelog have been overwritten.");
         }
     }
     
@@ -116,7 +125,7 @@ public class Files
                 b.close();
             }
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }
@@ -206,8 +215,8 @@ public class Files
             }
         }
         
-        s.append("<title>Recipe Flags</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
-        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <b>Recipe Flags</b> | <a href=\"name index.html\">Name index</a> | <a href=\"commands & permissions.html\">Commands &amp; permissions</a>");
+        s.append("<title>Recipe Flags</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;\">");
+        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <b>Recipe Flags</b> | <a href=\"recipe books.html\">Recipe Books</a> | <a href=\"name index.html\">Name Index</a> | <a href=\"commands & permissions.html\">Commands &amp; Permissions</a>");
         s.append(NL).append("<h1>Recipe flags</h1>");
         s.append(NL);
         s.append(NL).append("<b>WHAT ARE FLAGS ?</b>");
@@ -335,7 +344,7 @@ public class Files
         
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_FLAGS);
         
-        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
+        Messages.sendAndLog(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
     }
     
     private void createCommands(boolean overwrite)
@@ -347,8 +356,8 @@ public class Files
         
         StringBuilder s = new StringBuilder();
         
-        s.append("<title>Commands &amp; permissions</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
-        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <a href=\"name index.html\">Name index</a> | <b>Commands &amp; permissions</b>");
+        s.append("<title>Commands &amp; permissions</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;\">");
+        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <a href=\"recipe books.html\">Recipe Books</a> | <a href=\"name index.html\">Name Index</a> | <b>Commands &amp; Permissions</b>");
         s.append(NL).append("<h1>Commands &amp; permissions</h1>");
         s.append(NL);
         s.append(NL);
@@ -365,7 +374,7 @@ public class Files
             
             if(data == null)
             {
-                Messages.debug("data == null !!");
+                Messages.debug("command " + e.getKey() + " has data = null !");
                 continue;
             }
             
@@ -412,7 +421,7 @@ public class Files
         
         for(FlagType type : FlagType.values())
         {
-            if(type.hasBit(Bit.NO_SKIP_PERMISSION) || type.hasBit(Bit.NO_STORE))
+            if(type.hasBit(Bit.NO_SKIP_PERMISSION))
             {
                 continue;
             }
@@ -461,7 +470,7 @@ public class Files
         
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_COMMANDS);
         
-        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
+        Messages.sendAndLog(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
     }
     
     private void createNameIndex(boolean overwrite)
@@ -473,8 +482,8 @@ public class Files
         
         StringBuilder s = new StringBuilder(24000);
         
-        s.append("<title>Name index</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;\">");
-        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <b>Name index</b> | <a href=\"commands & permissions.html\">Commands &amp; permissions</a>");
+        s.append("<title>Name index</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;\">");
+        s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <a href=\"recipe books.html\">Recipe Books</a> | <b>Name Index</b> | <a href=\"commands & permissions.html\">Commands &amp; Permissions</a>");
         s.append(NL).append("<h1>Name index</h1>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods !");
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
@@ -487,6 +496,7 @@ public class Files
         s.append(NL).append("- <a href=\"#potiontype\"><b>POTION TYPE LIST</b></a>");
         s.append(NL).append("- <a href=\"#potioneffect\"><b>POTION EFFECT TYPE LIST</b></a>");
         s.append(NL).append("- <a href=\"#fireworkeffect\"><b>FIREWORK EFFECT TYPE LIST</b></a>");
+        s.append(NL).append("- <a href=\"#biomes\"><b>BIOMES LIST</b></a>");
         s.append(NL).append("- <a href=\"#sound\"><b>SOUND LIST</b></a>");
         s.append(NL).append("- <a href=\"#entitytype\"><b>ENTITY TYPE LIST</b></a>");
         s.append(NL).append("- <a href=\"#dyecolor\"><b>DYE COLOR LIST</b></a>");
@@ -503,7 +513,7 @@ public class Files
         
         for(Material m : Material.values())
         {
-            s.append(NL).append(String.format(" %-5d %-24s %-5d %s", m.getId(), m.toString(), m.getMaxStackSize(), m.getMaxDurability()));
+            s.append(NL).append(String.format(" %-5d %-24s %-5d %s", m.getId(), m.toString().toLowerCase(), m.getMaxStackSize(), m.getMaxDurability()));
         }
         
         s.append(NL);
@@ -511,7 +521,7 @@ public class Files
         s.append(NL).append("<a name=\"enchantment\"></a><a href=\"#contents\">^ Contents</a><h3>ENCHANTMENTS LIST</h3>");
         s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html\">BukkitAPI / Enchantment</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-26s %-12s %s", "ID", "Name", "Item type", "Level range"));
+        s.append(NL).append(String.format(" %-5s %-26s %-24s %-12s %s", "ID", "Name", "Alternate name", "Item type", "Level range"));
         
         List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
         
@@ -526,7 +536,7 @@ public class Files
         
         for(Enchantment e : enchantments)
         {
-            s.append(NL).append(String.format(" %-5d %-26s %-12s %s", e.getId(), e.getName(), e.getItemTarget().toString(), e.getStartLevel() + " to " + e.getMaxLevel()));
+            s.append(NL).append(String.format(" %-5d %-26s %-24s %-12s %s", e.getId(), e.getName(), RecipeManager.getSettings().enchantPrint.get(e), e.getItemTarget().toString(), e.getStartLevel() + " to " + e.getMaxLevel()));
         }
         
         s.append(NL);
@@ -552,9 +562,11 @@ public class Files
         for(PotionEffectType t : PotionEffectType.values())
         {
             if(t != null)
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
+                s.append(NL).append(String.format(" %-5d %-24s %-10s %.2f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
         }
         
+        s.append(NL);
+        s.append(NL).append("NOTE: The duration is compensated when setting potions in flags, so when using 2 seconds it will last 2 seconds regardless of effect type.");
         s.append(NL);
         s.append(NL).append("More about potions, effects and custom effects: http://www.minecraftwiki.net/wiki/Potion_effects");
         s.append(NL);
@@ -566,6 +578,18 @@ public class Files
         for(FireworkEffect.Type t : FireworkEffect.Type.values())
         {
             s.append(NL).append(" ").append(t.toString());
+        }
+        
+        s.append(NL);
+        s.append(NL);
+        s.append(NL).append("<a name=\"biomes\"></a><a href=\"#contents\">^ Contents</a><h3>BIOMES LIST</h3>");
+        s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/block/Biome.html\">BukkitAPI / Biome</a>");
+        s.append(NL);
+        s.append(NL).append(String.format(" %-5s %-24s", "ID", "Name"));
+        
+        for(Biome b : Biome.values())
+        {
+            s.append(NL).append(String.format(" %-5d %-24s", b.ordinal(), b.name()));
         }
         
         s.append(NL);
@@ -626,6 +650,6 @@ public class Files
         
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_NAMES);
         
-        Messages.send(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_NAMES + "' file.");
+        Messages.sendAndLog(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_NAMES + "' file.");
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 
 /**
  * RecipeManager's settings loaded from its config.yml, values are read-only.
@@ -51,11 +52,13 @@ public class Settings
     
     protected final String LASTCHANGED;
     
-    protected Map<String, Material> nameAliases = new HashMap<String, Material>();
-    protected Map<Material, Map<String, Short>> dataAliases = new HashMap<Material, Map<String, Short>>();
+    protected Map<String, Material> materialNames = new HashMap<String, Material>();
+    protected Map<Material, Map<String, Short>> materialDataNames = new HashMap<Material, Map<String, Short>>();
+    protected Map<String, Enchantment> enchantNames = new HashMap<String, Enchantment>();
     
-    protected Map<Material, String> printName = new HashMap<Material, String>();
-    protected Map<Material, Map<Short, String>> printData = new HashMap<Material, Map<Short, String>>();
+    protected Map<Material, String> materialPrint = new HashMap<Material, String>();
+    protected Map<Material, Map<Short, String>> materialDataPrint = new HashMap<Material, Map<Short, String>>();
+    protected Map<Enchantment, String> enchantPrint = new HashMap<Enchantment, String>();
     
     public static void reload(CommandSender sender)
     {
@@ -67,9 +70,9 @@ public class Settings
         RecipeManager.settings = this;
         
         // Load/reload/generate config.yml
-        FileConfiguration yml = loadYML("config.yml");
+        FileConfiguration yml = loadYML(Files.FILE_CONFIG);
         
-        RecipeManager.plugin.reloadConfig();
+//        RecipeManager.plugin.reloadConfig(); // TODO WTF ?
         
         SPECIAL_REPAIR = yml.getBoolean("special-recipes.repair", true);
         SPECIAL_REPAIR_METADATA = yml.getBoolean("special-recipes.repair-metadata", false);
@@ -98,7 +101,7 @@ public class Settings
         
         if(ticks < 1 || ticks > 20)
         {
-            Messages.send(sender, "<yellow>WARNING: <reset>config.yml's 'furnace-ticks' must be between 1 and 20");
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CONFIG + "' has invalid value for 'furnace-ticks', it must be between 1 and 20");
         }
         
         FURNACE_TICKS = ticks;
@@ -116,9 +119,10 @@ public class Settings
         
         if(!Files.LASTCHANGED_CONFIG.equals(LASTCHANGED))
         {
-            Messages.send(sender, "<yellow>NOTE: <reset>config.yml file is outdated, please delete it to allow it to be generated again.");
+            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CONFIG + "' file is outdated, please delete it to allow it to be generated again.");
         }
         
+        // TODO fill all settings into these
         Messages.log("config.yml settings:");
         Messages.log("    special-recipes.repair: " + SPECIAL_REPAIR);
         Messages.log("    special-recipes.repair-metadata: " + SPECIAL_REPAIR_METADATA);
@@ -137,31 +141,42 @@ public class Settings
         Messages.log("    furnace-ticks: " + FURNACE_TICKS);
         Messages.log("    metrics: " + METRICS);
         
-        yml = loadYML("aliases.yml");
+        yml = loadYML(Files.FILE_ITEM_ALIASES);
         
-        if(!Files.LASTCHANGED_CONFIG.equals(yml.get("lastchanged")))
+        if(!Files.LASTCHANGED_ITEM_ALIASES.equals(yml.get("lastchanged")))
         {
-            Messages.send(sender, "<yellow>NOTE: <reset>aliases.yml file is outdated, please delete it to allow it to be generated again.");
+            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
         
-        for(String materialString : yml.getKeys(false))
+        /*
+        for(Material m : Material.values())
         {
-            if(materialString.equals("lastchanged"))
-                continue;
-            
-            Material material = Material.matchMaterial(materialString);
-            
-            if(material == null)
+            materialNames.put(String.valueOf(m.getId()), m);
+            materialNames.put(Tools.parseAliasName(m.toString()), m);
+            materialPrint.put(m, Tools.parseAliasPrint(m.toString()));
+        }
+        */
+        
+        for(String arg : yml.getKeys(false))
+        {
+            if(arg.equals("lastchanged"))
             {
-                Messages.info("<yellow>WARNING: <reset>aliases.yml has invalid material definition: " + materialString);
                 continue;
             }
             
-            Object value = yml.get(materialString);
+            Material material = Material.matchMaterial(arg);
+            
+            if(material == null)
+            {
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid material definition: " + arg);
+                continue;
+            }
+            
+            Object value = yml.get(arg);
             
             if(value instanceof String)
             {
-                parseNames((String)value, material);
+                parseMaterialNames(sender, (String)value, material);
             }
             else if(value instanceof ConfigurationSection)
             {
@@ -171,17 +186,17 @@ public class Settings
                 {
                     if(key.equals("names"))
                     {
-                        parseNames(section.getString(key), material);
+                        parseMaterialNames(sender, section.getString(key), material);
                     }
                     else
                     {
                         try
                         {
-                            parseDataNames(section.getString(key), Short.valueOf(key), material);
+                            parseMaterialDataNames(sender, section.getString(key), Short.valueOf(key), material);
                         }
                         catch(NumberFormatException e)
                         {
-                            Messages.info("<yellow>WARNING: <reset>aliases.yml has invalid data value number: " + key + " for material: " + material);
+                            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data value number: " + key + " for material: " + material);
                             continue;
                         }
                     }
@@ -189,71 +204,131 @@ public class Settings
             }
             else
             {
-                Messages.info("<yellow>WARNING: <reset>aliases.yml has invalid data type at: " + materialString);
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
                 continue;
+            }
+        }
+        
+        yml = loadYML(Files.FILE_ENCHANT_ALIASES);
+        
+        if(!Files.LASTCHANGED_ENCHANT_ALIASES.equals(yml.get("lastchanged")))
+        {
+            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+        
+        /*
+        for(Enchantment e : Enchantment.values())
+        {
+            enchantNames.put(String.valueOf(e.getId()), e);
+            enchantNames.put(Tools.parseAliasName(e.toString()), e);
+            enchantPrint.put(e, Tools.parseAliasPrint(e.toString()));
+        }
+        */
+        
+        for(String arg : yml.getKeys(false))
+        {
+            if(arg.equals("lastchanged"))
+            {
+                continue;
+            }
+            
+            Enchantment enchant = Enchantment.getByName(arg.toUpperCase());
+            
+            if(enchant == null)
+            {
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has invalid enchant definition: " + arg);
+                continue;
+            }
+            
+            String names = yml.getString(arg);
+            String[] split = names.split(",");
+            
+            for(String str : split)
+            {
+                str = str.trim();
+                String parsed = Tools.parseAliasName(str);
+                
+                if(enchantNames.containsKey(parsed))
+                {
+                    Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has duplicate enchant alias '" + str + "' for enchant " + enchant);
+                    continue;
+                }
+                
+                enchantNames.put(parsed, enchant);
+                
+                if(!enchantPrint.containsKey(enchant))
+                {
+                    enchantPrint.put(enchant, Tools.parseAliasPrint(str));
+                }
             }
         }
     }
     
-    private void parseNames(String names, Material material)
+    private void parseMaterialNames(CommandSender sender, String names, Material material)
     {
         if(names == null)
+        {
             return;
+        }
         
         String[] split = names.split(",");
         
         for(String str : split)
         {
+            str = str.trim();
             String parsed = Tools.parseAliasName(str);
             
-            if(nameAliases.containsKey(parsed))
+            if(materialNames.containsKey(parsed))
             {
-                Messages.info("<yellow>WARNING: <reset>aliases.yml has duplicate material alias '" + str + "' for material " + material);
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate material alias '" + str + "' for material " + material);
                 continue;
             }
             
-            nameAliases.put(parsed, material);
+            materialNames.put(parsed, material);
             
-            if(!printName.containsKey(material))
+            if(!materialPrint.containsKey(material))
             {
-                printName.put(material, Tools.parseAliasPrint(str));
+                materialPrint.put(material, Tools.parseAliasPrint(str));
             }
         }
     }
     
-    private void parseDataNames(String names, short data, Material material)
+    private void parseMaterialDataNames(CommandSender sender, String names, short data, Material material)
     {
         if(names == null)
+        {
             return;
+        }
         
         String[] split = names.split(",");
         
         for(String str : split)
         {
-            Map<String, Short> dataMap = dataAliases.get(material);
+            str = str.trim();
+            Map<String, Short> dataMap = materialDataNames.get(material);
             
             if(dataMap == null)
             {
                 dataMap = new HashMap<String, Short>();
-                dataAliases.put(material, dataMap);
+                materialDataNames.put(material, dataMap);
             }
             
             String parsed = Tools.parseAliasName(str);
             
             if(dataMap.containsKey(parsed))
             {
-                Messages.info("<yellow>WARNING: <reset>aliases.yml has duplicate data alias '" + str + "' for material " + material + " and data value " + data);
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate data alias '" + str + "' for material " + material + " and data value " + data);
                 continue;
             }
             
             dataMap.put(parsed, data);
             
-            Map<Short, String> printMap = printData.get(material);
+            Map<Short, String> printMap = materialDataPrint.get(material);
             
             if(printMap == null)
             {
                 printMap = new HashMap<Short, String>();
-                printData.put(material, printMap);
+                materialDataPrint.put(material, printMap);
             }
             
             if(!printMap.containsKey(data))
