@@ -1,7 +1,71 @@
-<title>Advanced recipes</title><pre style="font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;">
-<a href="basic recipes.html">Basic Recipes</a> | <b>Advanced Recipes</b> | <a href="recipe flags.html">Recipe Flags</a> | <a href="name index.html">Name index</a> | <a href="commands & permissions.html">Commands &amp; permissions</a>
-<h1>Advanced recipe tutorial</h1>
+<title>Advanced Recipes</title>
+<style>
+div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
+</style>
+<pre style="font-family:Lucida Console;font-size:16px;width:100%;">
+<a href="basic recipes.html">Basic Recipes</a> | <b>Advanced Recipes</b> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+<h1>Advanced Recipes</h1>
 
-to do...
+If you haven't read the <a href="basic recipes.html">Basic Recipes</a> I suggest you do before reading this tutorial.
+
+In this tutorial we will cover more advanced customization of recipes.
+
+You should first know about argument styles that I'm going to be using in this tutorial.
+Arguments enclosed between &lt; and &gt; are required and those enclosed between [ and ] are optional.
+Some arguments may have 'or false', that means you can just type false in there to make it do something special (most likely disable the flag or a feature)
+
+<hr><h2>Contents</h2>
+- <a href="#books"><b>Recipe books and named recipes</b></a>
+- <a href="#flags"><b>Using flags</b></a>
+
+
+<hr><h2>USING FLAGS</h2>
+
+Here's the full syntax of a recipe file:
+
+<div id="code">[@shared or recipe flag]
+[... more flags]
+
+&lt;recipe definition&gt; [recipe name]
+[@shared or recipe flag]
+[... more flags]
+&lt;ingredients&gt;
+= &lt;result&gt;
+  [@shared or result flag]
+  [... more flags]
+[... more results]
+
+[... more recipes]
+</div>
+
+
+Here's a quick example of the above syntax by using all available options:
+
+<div id="code">@message You crafted this! // this applies to all recipes within this file
+
+COMBINE
+@broadcast {player} has crafted a fine sword!
+
+iron_ingot + gold_ingot + diamond:*:2
+
+= gold_sword
+  @enchant durability max
+  @name Fine Gold Sword
+  @lore &gt;gray&lt;This sword has been crafted from pure awesomeness!
+
+
+CRAFT Some Awesome Recipe
+@modexp +1
+@message false // disable the file-wide flag on this recipe
+
+apple
+
+= apple
+
+</div>
+
+The spacing is not required as I put it but it's recommended because you can see stuff easier.
+
+
 
 </pre>

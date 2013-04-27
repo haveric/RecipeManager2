@@ -2,9 +2,9 @@
 <style>
 div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
 </style>
-<pre style="font-family:Lucida Console;font-size:16px;width:100%;white-space:pre-wrap;word-wrap:break-word;">
-<b>Basic Recipes</b> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <a href="name index.html">Name index</a> | <a href="commands & permissions.html">Commands &amp; permissions</a>
-<h1>Basic recipe tutorial</h1>
+<pre style="font-family:Lucida Console;font-size:16px;width:100%;">
+<b>Basic Recipes</b> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+<h1>Basic Recipes</h1>
 
 
 <b>HOW TO MAKE A RECIPE FILE</b>
@@ -21,6 +21,9 @@ div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
   The text in recipe files can be any letter case and can have any amount of spaces, tabs and new lines.
   
   They also support diferent styles of comments: //, /* */ and #
+  
+  Also, <b>&lt; &gt;</b> are used to enclose required arguments and <b>[ ]</b> optional ones.
+  <b>Do not type &lt;, &gt;, [ or ] !</b>, anything outside their bounds are constant characters that need to be used, anything inside are variables.
 
 
 <b>ABOUT DEFINING ITEMS</b>
@@ -33,15 +36,33 @@ div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
   For more advanced settings like name, lore, enchantments, etc, see <a href="recipe flags.html">recipe flags.html</a>
 
 
+<b>ABOUT MULTI-RESULTS</b>
+
+  Certain recipes support having multiple results.
+  Only one result type can be crafted at one time, therefore each result has a set chance of success.
+  Additionally you can set 'air' as result to make the recipe fail by that chance, which gives no result item but still decreases ingredients.
+  Chances must be a total of 100%, if you do not define the chance for one or more items the chance will be evenly calculated for the remaining chance up to 100%.
+  The options for this can be extended even more with flags, be sure to see the <a href="advanced recipes.html"><b>advanced recipes.html</b></a> file after reading this one.
+
+
+<b>ABOUT RECIPE NAMES</b>
+
+  Recipe names are use by recipe books.
+  If you define a custom name it must be unique and between 3 and 32 characters long (18 recommended).
+  The custom name will be displayed in the books if defined, otherwise it will use the result.
+  In the 'books/*.yml' files the recipe names (custom or auto-generated) are used to add and sort recipes in the books.
+  <a href="recipe books.html"><b>More about recipe books...</b></a>
+
+
 <hr><h2>RECIPE SYNTAXES</h2>
 
 
 <h3>CRAFT RECIPE - shaped workbench recipe</h3>
-<div id="code">CRAFT
-material:data + material:data + material:data
-material:data + material:data + material:data
-material:data + material:data + material:data
-= chance% material:data:amount
+<div id="code">CRAFT [recipe name]
+&lt;material:data&gt; + [material:data] + [material:data]
+[material:data] + [material:data] + [material:data]
+[material:data] + [material:data] + [material:data]
+= [chance%] &lt;material:data:amount&gt;
 ...</div>
     
   The ingredients are in the shape of the recipe grid, it will also work if horizontally mirroed.
@@ -49,7 +70,7 @@ material:data + material:data + material:data
   Specifying a square of 4 or smaller makes it work in player's inventory crafting.
   
   As for the result the 'chance%' part is optional and if defined then 'chance' must be a number between 0.0 and 100.0 (yes, accepts decimals)
-  The '...' part means that you can repeat the previous statement, so you can define more than one result and the recipe will randomly pick one of the results.
+  The '[...]' part means that you can repeat the previous statement, so you can define more than one result and the recipe will randomly pick one of the results.
   You can avoid defining the chance number or use *% even to allow it to be calculated.
   You can also add a chance of failure to the recipe by using fail, air or 0 as one of the results.
   
@@ -61,19 +82,19 @@ wood + wood
 stick
 = wood_hoe
 
-// fragile bowl
-craft
+// fragile bowl named recipe
+craft	Bowl craft attempt
 stick + wood + stick
 air + stick
 = bowl // undefined chance, will be calculated
-= 25% fail // 'fail' is alias for air, but will make the recipe fail, yes.</div>
+= 25% fail // 'fail' is alias for 'air'.</div>
 
 
 
 <h3>COMBINE RECIPE - shapeless workbench recipe</h3>
-<div id="code">COMBINE
-material:data:amount + ...
-= chance% material:data:amount
+<div id="code">COMBINE [recipe name]
+&lt;material:data:amount&gt; + [...]
+= [chance%] &lt;material:data:amount&gt;
 ...</div>
 
   Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.
@@ -88,7 +109,7 @@ sulphur:*:3 + sand + sand
 = TNT:0:2
 
 // smash 2 diamonds and pray for something good
-combine
+combine Smash 2 diamonds and pray
 diamond + diamond
 = 0.1% diamond:0:32
 = coal:0:4 // let it calculate the chance evenly for this and the next two
@@ -98,10 +119,10 @@ diamond + diamond
 
 
 <h3>SMELT RECIPE - furnace smelting recipe</h3>
-<div id="code">SMELT
-material:data % time
-&amp; material:data
-= material:data:amount</div>
+<div id="code">SMELT [recipe name]
+&lt;material&gt; % [time]
+&amp; [material:data]
+= &lt;material:data:amount&gt;</div>
 
 
   The first 'material:data' is the ingredient.
@@ -116,15 +137,15 @@ gold_ingot
 = gold_ore
 
 // glowstone and water bottle as fuel makes an exp bottle
-smelt
+smelt Exp Bottle Alchemy
 glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
 &amp; potion:water // fuel, 'water' data value from 'aliases.yml'
 = exp_bottle</div>
 
 
 <h3>FUEL RECIPE - furnace fuel</h3>
-<div id="code">FUEL
-material:data % time
+<div id="code">FUEL [recipe name]
+&lt;material:data&gt; % &lt;time&gt;
 ...</div>
 
   Adds a fuel with the specified burn time.

@@ -1,0 +1,92 @@
+<title>Recipe Books</title>
+<style>
+div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
+</style>
+<pre style="font-family:Lucida Console;font-size:16px;width:100%;">
+<a href="basic recipes.html">Basic Recipes</a> | <a href="recipe books.html">Advanced Recipes</b> | <a href="recipe flags.html">Recipe Flags</a> | <b>Recipe Books</b> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+<h1>Recipe Books</h1>
+
+This plugin auto-generates written book items with recipes written in them.
+Books are configured and stored in /plugins/RecipeManager/books/ as .yml files.
+
+There should already be a recipe book there containing all your server's existing recipes, you can edit that as you like or even remove it.
+
+You can create new books just by creating a new .yml file in that folder but unlike recipes that folder does not support sub-folders.
+
+The book's filename defines the book's ID which will be used to identify books even if they're renamed.
+This is useful when editing books that players already have which the plugin will automatically update, if you edit the file name their old book items will not be updated anymore.
+
+A book's .yml file can have:
+<div id="code">title: The Book Title
+description: Book description written on the first page
+recipes-per-volume: 50 # this is the default
+recipes:
+- list of
+- recipe names or
+- + special arguments
+
+# or you can directly define individual volumes
+volume 1:
+- recipe name
+- ...
+volume 2:
+- recipe name
+- etc ...
+volume ...
+</div>
+
+Note that a book can not contain the same recipe twice.
+
+'title' (optional, default file name) must not be longer than 64 characters, supports colors.
+
+'description' (optional, default nothing) must not be longer than 100 characters, supports colors.
+
+'recipes-per-volume' (optional, default 50) defines the max amount of recipes per volume the 'recipes' node allocates.
+This does not limit you from adding more recipes in volumes.
+
+Then you can use 'recipes' node to list the recipes you want to add or use special arguments (see below).
+Once 'recipes' is defined and book is loaded, the node will be deleted and will auto-generate the volumes according to the recipe-per-volume limit.
+
+You can add the 'recipes' node again to append recipes to the existing volumes automatically or you can just add them directly to the volumes you want.
+
+
+Recipe names must be unique when defined in their recipe files, but if recipes do not have a name defined they will have a uniquely generated name.
+That generated name contains the recipe type, its ingredient(s) and its result(s).
+
+Nobody expects you to guess the generated recipe names, here's where the special arguments come in.
+The available special arguments are:
+
+  <b>+existing &lt;all/workbench/smelt/fuel&gt;</b>
+    This is replaced by existing recipes matching the type specified.
+    Using 'all' will add workbench, smelt and fuel recipes in order.
+
+  <b>+file &lt;/path/to/file.ext&gt;</b>
+  <b>+folder &lt;/path/to/folder&gt;</b>
+    These are replaced by the recipes defined in the recipe file defined or the recipe files from the defined folder.
+    Paths are relative to '/plugins/RecipeManager/recipes' so defining '/' as path would mean the of 'recipes' folder.
+
+Once book is loaded by the server, these arguments will be replaced in the file with the recipes they find.
+
+If you use any + argument in 'recipes' node they will be automatically distributed throughout volumes as defined by the 'recipes-per-volume' limit.
+However, if you add them directly to volumes they will be added to that volume directly because you are not bound by the volume limit, only the 'recipes' node is.
+
+Also, when a book file is loaded it will have a header comment appended to it specifying the last date/time it was read.
+
+After adding your recipes you can just move them around or remove them if you want.
+
+Now your book should be ready.
+
+To see available recipe books type 'rmbooks' in server console or as an operator.
+
+You can use @getrecipebook in recipes to make a recipe that creates a recipe book.
+
+Additionally you can get books with the 'rmgetbook' command, available to operators.
+
+
+
+
+
+
+
+
+</pre>
