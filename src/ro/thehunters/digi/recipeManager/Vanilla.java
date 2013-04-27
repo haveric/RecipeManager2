@@ -376,6 +376,32 @@ public class Vanilla
     }
     
     /**
+     * Remove all recipes from the server except special ones
+     */
+    public static void removeAllButSpecialRecipes()
+    {
+        Iterator<Recipe> iterator = Bukkit.recipeIterator();
+        Recipe recipe;
+        
+        while(iterator.hasNext())
+        {
+            recipe = iterator.next();
+            
+            if(recipe != null)
+            {
+                ItemStack result = recipe.getResult();
+                
+                if(result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND))
+                {
+                    continue;
+                }
+                
+                iterator.remove();
+            }
+        }
+    }
+    
+    /**
      * Adds all recipes that already existed when the plugin was enabled.
      */
     public static void restoreInitialRecipes()

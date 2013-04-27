@@ -163,7 +163,7 @@ public class RecipeManager extends JavaPlugin
         {
             if(settings.CLEAR_RECIPES)
             {
-                Bukkit.clearRecipes();
+                Vanilla.removeAllButSpecialRecipes();
                 Recipes.getInstance().clean();
             }
             else

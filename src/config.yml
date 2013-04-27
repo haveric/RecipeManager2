@@ -78,7 +78,7 @@ multithreading: true
 fix-mod-results: false
 
 
-# If you want to remove all existing recipes from the server, then set this to true.
+# If you want to remove all existing recipes (except special ones configured above) from the server, then set this to true.
 # Recipes added by this plugin will not be affected of course.
 #   default: false
 clear-recipes: false
