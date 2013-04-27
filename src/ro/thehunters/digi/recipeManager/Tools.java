@@ -1,12 +1,7 @@
 package ro.thehunters.digi.recipeManager;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
@@ -46,6 +42,178 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  */
 public class Tools
 {
+    /**
+     * Proper experience methods.
+     * 
+     * @author Essentials<br>
+     *         https://github.com/essentials/Essentials/blob/master/Essentials/src/net/ess3/craftbukkit/SetExpFix.java
+     */
+    public static class Exp
+    {
+        // This method is used to update both the recorded total experience and displayed total experience.
+        // We reset both types to prevent issues.
+        public static void setTotalExperience(final Player player, final int exp)
+        {
+            if(exp < 0)
+            {
+                throw new IllegalArgumentException("Experience is negative!");
+            }
+            
+            player.setExp(0);
+            player.setLevel(0);
+            player.setTotalExperience(0);
+            
+            // This following code is technically redundant now, as bukkit now calculates levels more or less correctly
+            // At larger numbers however... player.getExp(3000), only seems to give 2999, putting the below calculations off.
+            int amount = exp;
+            
+            while(amount > 0)
+            {
+                final int expToLevel = getExpAtLevel(player);
+                amount -= expToLevel;
+                
+                if(amount >= 0)
+                {
+                    // give until next level
+                    player.giveExp(expToLevel);
+                }
+                else
+                {
+                    // give the rest
+                    amount += expToLevel;
+                    player.giveExp(amount);
+                    amount = 0;
+                }
+            }
+        }
+        
+        private static int getExpAtLevel(final Player player)
+        {
+            return getExpAtLevel(player.getLevel());
+        }
+        
+        public static int getExpAtLevel(final int level)
+        {
+            if(level > 29)
+            {
+                return 62 + (level - 30) * 7;
+            }
+            
+            if(level > 15)
+            {
+                return 17 + (level - 15) * 3;
+            }
+            
+            return 17;
+        }
+        
+        public static int getExpToLevel(final int level)
+        {
+            int currentLevel = 0;
+            int exp = 0;
+            
+            while(currentLevel < level)
+            {
+                exp += getExpAtLevel(currentLevel);
+                currentLevel++;
+            }
+            
+            return exp;
+        }
+        
+        // This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
+        // Without this people would be able to use exp and then still sell it.
+        public static int getTotalExperience(final Player player)
+        {
+            int exp = Math.round(getExpAtLevel(player) * player.getExp());
+            int currentLevel = player.getLevel();
+            
+            while(currentLevel > 0)
+            {
+                currentLevel--;
+                exp += getExpAtLevel(currentLevel);
+            }
+            
+            return exp;
+        }
+        
+        public static int getExpUntilNextLevel(final Player player)
+        {
+            int exp = Math.round(getExpAtLevel(player) * player.getExp());
+            int nextLevel = player.getLevel();
+            
+            return getExpAtLevel(nextLevel) - exp;
+        }
+    }
+    
+    public static <T>T parseEnum(String name, T[] values)
+    {
+        if(name != null && !name.isEmpty())
+        {
+            name = Tools.parseAliasName(name);
+            
+            for(T t : values)
+            {
+                if(t != null)
+                {
+                    String s = Tools.parseAliasName(((Enum<?>)t).name());
+                    
+                    if(s.equals(name))
+                    {
+                        return t;
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    public static Enchantment parseEnchant(String value)
+    {
+        Enchantment enchant = null;
+        
+        try
+        {
+            enchant = Enchantment.getById(Integer.valueOf(value));
+        }
+        catch(NumberFormatException e)
+        {
+            value = Tools.parseAliasName(value);
+            
+            enchant = RecipeManager.getSettings().enchantNames.get(value);
+        }
+        
+        if(enchant != null)
+        {
+            return enchant;
+        }
+        
+        for(Enchantment e : Enchantment.values())
+        {
+            String s = e.getName().toLowerCase().replaceAll("[_\\s]+", "");
+            
+            if(s.equals(value))
+            {
+                return e;
+            }
+        }
+        
+        return null;
+    }
+    
+    public static String removeExtensions(String value, Set<String> extensions)
+    {
+        int i = value.lastIndexOf('.');
+        
+        if(i > -1 && extensions.contains(value.substring(i).trim().toLowerCase()))
+        {
+            return value.substring(0, i);
+        }
+        
+        return value;
+    }
+    
     public static String hideString(String string)
     {
         char[] data = new char[string.length() * 2];
@@ -61,61 +229,219 @@ public class Tools
     
     public static String unhideString(String string)
     {
-        return string.replace("" + ChatColor.COLOR_CHAR, "");
+        return string.replace(String.valueOf(ChatColor.COLOR_CHAR), "");
     }
     
-    public static boolean itemSimilarDataWildcard(ItemStack source, ItemStack item)
+    public static class Item
     {
-        if(item == null)
+        public static ItemResult create(Material type, int data, int amount, String name, String... lore)
         {
-            return false;
+            return create(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
         }
         
-        if(item == source)
+        public static ItemResult create(Material type, int data, int amount, String name, List<String> lore)
         {
-            return true;
-        }
-        
-        return source.getTypeId() == item.getTypeId() && (source.getDurability() == Vanilla.DATA_WILDCARD ? true : source.getDurability() == item.getDurability()) && source.hasItemMeta() == item.hasItemMeta() && (source.hasItemMeta() ? Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta()) : true);
-    }
-    
-    public static ItemStack nullItemIfAir(ItemStack item)
-    {
-        return (item == null || item.getTypeId() == 0 ? null : item);
-    }
-    
-    public static ItemStack mergeItems(ItemStack into, ItemStack item)
-    {
-        if(into == null || into.getTypeId() == 0)
-        {
+            ItemResult item = new ItemResult(type, amount, (short)data, 100);
+            ItemMeta meta = item.getItemMeta();
+            
+            if(lore != null)
+            {
+                meta.setLore(lore);
+            }
+            
+            meta.setDisplayName(name);
+            item.setItemMeta(meta);
+            
             return item;
         }
         
-        if(item.isSimilar(into) && item.getAmount() <= (into.getMaxStackSize() - into.getAmount()))
+        /**
+         * Displays the itemstack in a user-friendly and colorful manner.<br>
+         * If item is null or air it will print "nothing" in gray.<br>
+         * If item is enchanted it will have aqua color instead of white.<br>
+         * Uses aliases to display data values as well.<br>
+         * Uses item's display name in italic font if available.<br>
+         * <br>
+         * NOTE: Will have a RESET color at the end, use {@link #print(ItemStack, ChatColor)} to use a diferent end-color instead.
+         * 
+         * @param item
+         *            the item to print, can be null
+         * @return user-friendly item print
+         */
+        public static String print(ItemStack item)
         {
-            ItemStack clone = item.clone();
+            return print(item, ChatColor.WHITE, ChatColor.RESET, false);
+        }
+        
+        /**
+         * Displays the itemstack in a user-friendly and colorful manner.<br>
+         * If item is null or air it will print "nothing" in gray.<br>
+         * If item is enchanted it will have aqua color instead of white.<br>
+         * Uses aliases to display data values as well.<br>
+         * Uses item's display name in italic font if available.
+         * 
+         * @param item
+         *            the item to print, can be null
+         * @param defColor
+         *            default color, usually white
+         * @param endColor
+         *            will be appended at the end of string, should be your text color
+         * @return user-friendly item print
+         */
+        public static String print(ItemStack item, ChatColor defColor, ChatColor endColor, boolean alwaysShowAmount)
+        {
+            if(item == null || item.getTypeId() == 0)
+            {
+                return ChatColor.GRAY + "(nothing)";
+            }
             
-            clone.setAmount(into.getAmount() + item.getAmount());
+            String name = null;
+            String itemData = null;
             
-            return clone;
+            ItemMeta meta = item.getItemMeta();
+            
+            if(meta.hasDisplayName())
+            {
+                name = ChatColor.ITALIC + meta.getDisplayName();
+            }
+            else
+            {
+                name = RecipeManager.getSettings().materialPrint.get(item.getType());
+                
+                if(name == null)
+                {
+                    name = parseAliasPrint(item.getType().toString());
+                }
+            }
+            
+            Map<Short, String> dataMap = RecipeManager.getSettings().materialDataPrint.get(item.getType());
+            
+            if(dataMap != null)
+            {
+                itemData = dataMap.get(item.getDurability());
+                
+                if(itemData != null)
+                {
+                    itemData = itemData + " " + name;
+                }
+            }
+            
+            if(itemData == null)
+            {
+                short data = item.getDurability();
+                
+                if(data != 0)
+                {
+                    if(data == Vanilla.DATA_WILDCARD)
+                    {
+                        itemData = name + ChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
+                    }
+                    else
+                    {
+                        itemData = name + ChatColor.GRAY + ":" + data;
+                    }
+                }
+                else
+                {
+                    itemData = name;
+                }
+            }
+            
+            String amount = (alwaysShowAmount || item.getAmount() > 1 ? item.getAmount() + "x " : "");
+            ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : defColor);
+            
+            return amount + color + itemData + (endColor == null ? "" : endColor);
         }
         
-        return null;
-    }
-    
-    public static boolean canMergeItems(ItemStack intoItem, ItemStack item)
-    {
-        if(intoItem == null || intoItem.getTypeId() == 0)
+        public static String getName(ItemStack item)
         {
-            return true;
+            String name = null;
+            String itemData = null;
+            
+            ItemMeta meta = item.getItemMeta();
+            
+            if(meta.hasDisplayName())
+            {
+                name = ChatColor.ITALIC + meta.getDisplayName();
+            }
+            else
+            {
+                name = RecipeManager.getSettings().materialPrint.get(item.getType());
+                
+                if(name == null)
+                {
+                    name = parseAliasPrint(item.getType().toString());
+                }
+            }
+            
+            Map<Short, String> dataMap = RecipeManager.getSettings().materialDataPrint.get(item.getType());
+            
+            if(dataMap != null)
+            {
+                itemData = dataMap.get(item.getDurability());
+                
+                if(itemData != null)
+                {
+                    itemData = itemData + " " + name;
+                }
+            }
+            
+            return (item.getEnchantments().size() > 0 ? ChatColor.AQUA : "") + (itemData == null ? name : itemData);
         }
         
-        if(intoItem.isSimilar(item) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount()))
+        public static boolean isSimilarDataWildcard(ItemStack source, ItemStack item)
         {
-            return true;
+            if(item == null)
+            {
+                return false;
+            }
+            
+            if(item == source)
+            {
+                return true;
+            }
+            
+            return source.getTypeId() == item.getTypeId() && (source.getDurability() == Vanilla.DATA_WILDCARD ? true : source.getDurability() == item.getDurability()) && source.hasItemMeta() == item.hasItemMeta() && (source.hasItemMeta() ? Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta()) : true);
         }
         
-        return false;
+        public static ItemStack nullIfAir(ItemStack item)
+        {
+            return (item == null || item.getTypeId() == 0 ? null : item);
+        }
+        
+        public static ItemStack merge(ItemStack into, ItemStack item)
+        {
+            if(into == null || into.getTypeId() == 0)
+            {
+                return item;
+            }
+            
+            if(item.isSimilar(into) && item.getAmount() <= (into.getMaxStackSize() - into.getAmount()))
+            {
+                ItemStack clone = item.clone();
+                
+                clone.setAmount(into.getAmount() + item.getAmount());
+                
+                return clone;
+            }
+            
+            return null;
+        }
+        
+        public static boolean canMerge(ItemStack intoItem, ItemStack item)
+        {
+            if(intoItem == null || intoItem.getTypeId() == 0)
+            {
+                return true;
+            }
+            
+            if(intoItem.isSimilar(item) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount()))
+            {
+                return true;
+            }
+            
+            return false;
+        }
     }
     
     public static int playerFreeSpaceForItem(Player player, ItemStack item)
@@ -176,186 +502,6 @@ public class Tools
         return WordUtils.capitalize(name.toLowerCase().replace('_', ' ').trim());
     }
     
-    /**
-     * Displays the itemstack in a user-friendly and colorful manner.<br>
-     * If item is null or air it will print "nothing" in gray.<br>
-     * If item is enchanted it will have aqua color instead of white.<br>
-     * Uses aliases to display data values as well.<br>
-     * Uses item's display name in italic font if available.<br>
-     * <br>
-     * NOTE: Will have a RESET color at the end, use {@link #printItem(ItemStack, ChatColor)} to use a diferent end-color instead.
-     * 
-     * @param item
-     *            the item to print, can be null
-     * @return user-friendly item print
-     */
-    public static String printItem(ItemStack item)
-    {
-        return printItem(item, ChatColor.WHITE, ChatColor.RESET, false);
-    }
-    
-    public static String printItemBook(ItemStack item)
-    {
-        return printItem(item, ChatColor.BLACK, null, false);
-    }
-    
-    /**
-     * Displays the itemstack in a user-friendly and colorful manner.<br>
-     * If item is null or air it will print "nothing" in gray.<br>
-     * If item is enchanted it will have aqua color instead of white.<br>
-     * Uses aliases to display data values as well.<br>
-     * Uses item's display name in italic font if available.
-     * 
-     * @param item
-     *            the item to print, can be null
-     * @param defColor
-     *            default color, usually white
-     * @param endColor
-     *            will be appended at the end of string, should be your text color
-     * @return user-friendly item print
-     */
-    public static String printItem(ItemStack item, ChatColor defColor, ChatColor endColor, boolean alwaysShowAmount)
-    {
-        if(item == null || item.getTypeId() == 0)
-        {
-            return ChatColor.GRAY + "(nothing)";
-        }
-        
-        String name = null;
-        String itemData = null;
-        
-        ItemMeta meta = item.getItemMeta();
-        
-        if(meta.hasDisplayName())
-        {
-            name = ChatColor.ITALIC + meta.getDisplayName();
-        }
-        else
-        {
-            name = RecipeManager.getSettings().printName.get(item.getType());
-            
-            if(name == null)
-            {
-                name = parseAliasPrint(item.getType().toString());
-            }
-        }
-        
-        Map<Short, String> dataMap = RecipeManager.getSettings().printData.get(item.getType());
-        
-        if(dataMap != null)
-        {
-            itemData = dataMap.get(item.getDurability());
-            
-            if(itemData != null)
-            {
-                itemData = itemData + " " + name;
-            }
-        }
-        
-        if(itemData == null)
-        {
-            short data = item.getDurability();
-            
-            if(data != 0)
-            {
-                /*
-                short maxDur = item.getType().getMaxDurability();
-                
-                if(maxDur > 0)
-                {
-                    StringBuilder s = new StringBuilder(name).append(' ');
-                    s.append(ChatColor.DARK_GRAY).append('|');
-                    
-                    int scale = Math.max(((maxDur - data) * 10) / maxDur, 0); // damage scale from 1 to 10
-                    
-                    switch(scale)
-                    {
-                        case 0:
-                        case 1:
-                        case 2:
-                            s.append(ChatColor.RED);
-                            break;
-                        case 3:
-                        case 4:
-                            s.append(ChatColor.GOLD);
-                            break;
-                        case 5:
-                            s.append(ChatColor.DARK_GREEN);
-                            break;
-                        default:
-                            s.append(ChatColor.GREEN);
-                    }
-                    
-                    for(int i = 0; i <= 10; i++)
-                    {
-                        s.append('.');
-                        
-                        if(i == scale)
-                            s.append(ChatColor.DARK_GRAY);
-                    }
-                    
-                    s.append('|');
-                    
-                    itemData = s.toString();
-                }
-                else*/
-                if(data == Vanilla.DATA_WILDCARD)
-                {
-                    itemData = name + ChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
-                }
-                else
-                {
-                    itemData = name + ChatColor.GRAY + ":" + data;
-                }
-            }
-            else
-            {
-                itemData = name;
-            }
-        }
-        
-        String amount = (alwaysShowAmount || item.getAmount() > 1 ? item.getAmount() + "x " : "");
-        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : defColor);
-        
-        return amount + color + itemData + (endColor == null ? "" : endColor);
-    }
-    
-    public static String getItemName(ItemStack item)
-    {
-        String name = null;
-        String itemData = null;
-        
-        ItemMeta meta = item.getItemMeta();
-        
-        if(meta.hasDisplayName())
-        {
-            name = ChatColor.ITALIC + meta.getDisplayName();
-        }
-        else
-        {
-            name = RecipeManager.getSettings().printName.get(item.getType());
-            
-            if(name == null)
-            {
-                name = parseAliasPrint(item.getType().toString());
-            }
-        }
-        
-        Map<Short, String> dataMap = RecipeManager.getSettings().printData.get(item.getType());
-        
-        if(dataMap != null)
-        {
-            itemData = dataMap.get(item.getDurability());
-            
-            if(itemData != null)
-            {
-                itemData = itemData + " " + name;
-            }
-        }
-        
-        return (item.getEnchantments().size() > 0 ? ChatColor.AQUA : "") + (itemData == null ? name : itemData);
-    }
-    
     public static String printNumber(Number number)
     {
         return NumberFormat.getNumberInstance().format(number);
@@ -395,7 +541,7 @@ public class Tools
                 {
                     result.setChance(Math.min(Math.max(Float.valueOf(string), 0), 100));
                 }
-                catch(Exception e)
+                catch(NumberFormatException e)
                 {
                     RecipeErrorReporter.warning("Invalid percentage number: " + string);
                 }
@@ -434,8 +580,8 @@ public class Tools
             return null;
         }
         
-        String[] enchantSplit = value.split("\\|");
-        String[] split = enchantSplit[0].trim().split(":");
+        String[] argSplit = value.split("\\|");
+        String[] split = argSplit[0].trim().split(":");
         
         if(split.length <= 0 || split[0].isEmpty())
         {
@@ -444,7 +590,7 @@ public class Tools
         
         value = split[0].trim();
         
-        Material material = RecipeManager.getSettings().nameAliases.get(Tools.parseAliasName(value));
+        Material material = RecipeManager.getSettings().materialNames.get(Tools.parseAliasName(value));
         
         if(material == null)
         {
@@ -482,7 +628,7 @@ public class Tools
                 }
                 else
                 {
-                    Map<String, Short> dataMap = RecipeManager.getSettings().dataAliases.get(material);
+                    Map<String, Short> dataMap = RecipeManager.getSettings().materialDataNames.get(material);
                     Short dataValue = (dataMap != null ? dataMap.get(Tools.parseAliasName(value)) : null);
                     
                     if(dataValue != null)
@@ -495,7 +641,7 @@ public class Tools
                         {
                             data = Integer.valueOf(value);
                         }
-                        catch(Exception e)
+                        catch(NumberFormatException e)
                         {
                             if(printErrors)
                             {
@@ -534,7 +680,7 @@ public class Tools
                 {
                     amount = Integer.valueOf(value);
                 }
-                catch(Exception e)
+                catch(NumberFormatException e)
                 {
                     if(printErrors)
                     {
@@ -553,23 +699,11 @@ public class Tools
         
         ItemStack item = new ItemStack(type, amount, (short)data);
         
-        if(enchantSplit.length > 1)
+        if(argSplit.length > 1)
         {
             if(allowEnchantments)
             {
-                /*
-                if(item.getAmount() > 1)
-                {
-                    if(printErrors)
-                    {
-                        RecipeErrorReporter.warning("Item '" + material + "' has enchantments and more than 1 amount, it can't have both, amount set to 1.");
-                    }
-                    
-                    item.setAmount(1);
-                }
-                */
-                
-                String[] enchants = enchantSplit[1].split(",");
+                String[] enchants = argSplit[1].split(",");
                 String[] enchData;
                 Enchantment ench;
                 int level;
@@ -589,23 +723,16 @@ public class Tools
                         continue;
                     }
                     
-                    ench = Enchantment.getByName(enchData[0]);
+                    ench = parseEnchant(enchData[0]);
                     
                     if(ench == null)
                     {
-                        try
+                        if(printErrors)
                         {
-                            ench = Enchantment.getById(Integer.valueOf(enchData[0]));
+                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
                         }
-                        catch(Exception e)
-                        {
-                            if(printErrors)
-                            {
-                                RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
-                            }
-                            
-                            continue;
-                        }
+                        
+                        continue;
                     }
                     
                     if(enchData[1].equals("MAX"))
@@ -618,7 +745,7 @@ public class Tools
                         {
                             level = Integer.valueOf(enchData[1]);
                         }
-                        catch(Exception e)
+                        catch(NumberFormatException e)
                         {
                             if(printErrors)
                             {
@@ -650,7 +777,7 @@ public class Tools
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
+            RecipeErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
             return null;
         }
         
@@ -677,7 +804,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    RecipeErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
                 
@@ -687,9 +814,9 @@ public class Tools
                 {
                     potion.setType(PotionType.valueOf(value.toUpperCase()));
                 }
-                catch(Exception e)
+                catch(IllegalArgumentException e)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    RecipeErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
             }
@@ -699,7 +826,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'level' argument with no level!");
+                    RecipeErrorReporter.error("Flag " + type + " has 'level' argument with no level!");
                     continue;
                 }
                 
@@ -715,25 +842,28 @@ public class Tools
                     {
                         level = Integer.valueOf(value);
                     }
-                    catch(Exception e)
+                    catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.error("Flag @" + type + " has invalid 'level' number: " + value);
+                        RecipeErrorReporter.error("Flag " + type + " has invalid 'level' number: " + value);
                     }
                 }
             }
             else
             {
-                RecipeErrorReporter.error("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
+                RecipeErrorReporter.error("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
         
         if(potion.getType() == null)
         {
-            RecipeErrorReporter.error("Flag @" + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+            RecipeErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
             return null;
         }
         
-        potion.setLevel(Math.min(Math.max(level, 1), potion.getType().getMaxLevel()));
+        if(potion.getType().getMaxLevel() > 0)
+        {
+            potion.setLevel(Math.min(Math.max(level, 1), potion.getType().getMaxLevel()));
+        }
         
         if(!potion.getType().isInstant())
         {
@@ -751,7 +881,7 @@ public class Tools
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
+            RecipeErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
             return null;
         }
         
@@ -774,19 +904,16 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+                    RecipeErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
                     return null;
                 }
                 
                 value = split[1].trim();
+                effectType = PotionEffectType.getByName(value.toUpperCase());
                 
-                try
+                if(effectType == null)
                 {
-                    effectType = PotionEffectType.getByName(value.toUpperCase());
-                }
-                catch(Exception e)
-                {
-                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+                    RecipeErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
                     return null;
                 }
             }
@@ -796,7 +923,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'duration' argument with no number!");
+                    RecipeErrorReporter.error("Flag " + type + " has 'duration' argument with no number!");
                     continue;
                 }
                 
@@ -805,10 +932,11 @@ public class Tools
                 try
                 {
                     duration = Float.valueOf(value);
+                    duration /= effectType.getDurationModifier(); // compensate for effect's duration modifier
                 }
-                catch(Exception e)
+                catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'duration' number: " + value);
+                    RecipeErrorReporter.error("Flag " + type + " has invalid 'duration' number: " + value);
                 }
             }
             else if(s.startsWith("amplify"))
@@ -817,7 +945,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'amplify' argument with no number!");
+                    RecipeErrorReporter.error("Flag " + type + " has 'amplify' argument with no number!");
                     continue;
                 }
                 
@@ -827,26 +955,26 @@ public class Tools
                 {
                     amplify = Integer.parseInt(value);
                 }
-                catch(Exception e)
+                catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'amplify' number: " + value);
+                    RecipeErrorReporter.error("Flag " + type + " has invalid 'amplify' number: " + value);
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
+                RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
         
         if(effectType == null)
         {
-            RecipeErrorReporter.error("Flag @" + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+            RecipeErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
             return null;
         }
         
         if(duration != 1 && (effectType == PotionEffectType.HEAL || effectType == PotionEffectType.HARM))
         {
-            RecipeErrorReporter.warning("Flag @" + type + " can't have duration on HEAL or HARM because they're instant!");
+            RecipeErrorReporter.warning("Flag " + type + " can't have duration on HEAL or HARM because they're instant!");
         }
         
         return new PotionEffect(effectType, Math.round(duration * 20), amplify, ambient);
@@ -858,7 +986,7 @@ public class Tools
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag @" + type + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + Files.FILE_INFO_FLAGS + "' for syntax.");
+            RecipeErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + Files.FILE_INFO_FLAGS + "' for syntax.");
             return null;
         }
         
@@ -882,7 +1010,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'color' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    RecipeErrorReporter.error("Flag " + type + " has 'color' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
                     return null;
                 }
                 
@@ -896,7 +1024,7 @@ public class Tools
                     
                     if(color == null)
                     {
-                        RecipeErrorReporter.warning("Flag @" + type + " has an invalid color!");
+                        RecipeErrorReporter.warning("Flag " + type + " has an invalid color!");
                     }
                     else
                     {
@@ -906,7 +1034,7 @@ public class Tools
                 
                 if(colors.isEmpty())
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " doesn't have any valid colors, they are required!");
+                    RecipeErrorReporter.error("Flag " + type + " doesn't have any valid colors, they are required!");
                     return null;
                 }
                 
@@ -918,7 +1046,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'fadecolor' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    RecipeErrorReporter.error("Flag " + type + " has 'fadecolor' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
                     return null;
                 }
                 
@@ -932,7 +1060,7 @@ public class Tools
                     
                     if(color == null)
                     {
-                        RecipeErrorReporter.warning("Flag @" + type + " has an invalid fade color! Moving on...");
+                        RecipeErrorReporter.warning("Flag " + type + " has an invalid fade color! Moving on...");
                     }
                     else
                     {
@@ -942,7 +1070,7 @@ public class Tools
                 
                 if(colors.isEmpty())
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " doesn't have any valid fade colors! Moving on...");
+                    RecipeErrorReporter.error("Flag " + type + " doesn't have any valid fade colors! Moving on...");
                 }
                 else
                 {
@@ -955,7 +1083,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has 'type' argument with no value!", "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
+                    RecipeErrorReporter.error("Flag " + type + " has 'type' argument with no value!", "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
                     return null;
                 }
                 
@@ -965,15 +1093,15 @@ public class Tools
                 {
                     build.with(FireworkEffect.Type.valueOf(value.toUpperCase()));
                 }
-                catch(Exception e)
+                catch(IllegalArgumentException e)
                 {
-                    RecipeErrorReporter.error("Flag @" + type + " has invalid 'type' setting value: " + value, "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
+                    RecipeErrorReporter.error("Flag " + type + " has invalid 'type' setting value: " + value, "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
                     return null;
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Flag @" + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
             }
         }
         
@@ -1007,27 +1135,6 @@ public class Tools
         return s.toString();
     }
     
-    public static ItemResult createItemStackWithMeta(Material type, int data, int amount, String name, String... lore)
-    {
-        return createItemStackWithMeta(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
-    }
-    
-    public static ItemResult createItemStackWithMeta(Material type, int data, int amount, String name, List<String> lore)
-    {
-        ItemResult item = new ItemResult(type, amount, (short)data, 100);
-        ItemMeta meta = item.getItemMeta();
-        
-        if(lore != null)
-        {
-            meta.setLore(lore);
-        }
-        
-        meta.setDisplayName(name);
-        item.setItemMeta(meta);
-        
-        return item;
-    }
-    
     public static Color parseColor(String rgbString)
     {
         String[] split = rgbString.split(" ");
@@ -1042,7 +1149,7 @@ public class Tools
                 
                 return Color.fromRGB(r, g, b);
             }
-            catch(Exception e)
+            catch(Throwable e)
             {
             }
         }
@@ -1113,7 +1220,7 @@ public class Tools
                 {
                     return Integer.valueOf(s.substring(Recipes.RECIPE_ID_STRING.length()));
                 }
-                catch(Exception e)
+                catch(Throwable e)
                 {
                     Messages.debug("Invalid recipe identifier found: " + s);
                     break;
@@ -1123,23 +1230,6 @@ public class Tools
         
         return -1;
     }
-    
-    /* TODO not really needed, remove ?
-    public static boolean compareShapedRecipeToCraftRecipe(ShapedRecipe bukkitRecipe, CraftRecipe recipe)
-    {
-        ItemStack[] matrix = recipe.getIngredients().clone();
-        Tools.trimItemMatrix(matrix);
-        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-        int height = recipe.getHeight();
-        int width = recipe.getWidth();
-        String[] sh = bukkitRecipe.getShape();
-        
-        if(sh.length == height && sh[0].length() == width)
-            return false;
-        
-        return Tools.compareShapedRecipeToMatrix(bukkitRecipe, matrix, matrixMirror);
-    }
-    */
     
     public static boolean compareShapedRecipeToMatrix(ShapedRecipe recipe, ItemStack[] matrix, ItemStack[] matrixMirror)
     {
@@ -1341,51 +1431,11 @@ public class Tools
             stream.close();
             return true;
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }
         
         return false;
-    }
-    
-    public static boolean saveObjectToFile(Object object, String filePath)
-    {
-        try
-        {
-            ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(filePath));
-            stream.writeObject(object);
-            stream.flush();
-            stream.close();
-            return true;
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return false;
-    }
-    
-    public static Object loadObjectFromFile(String filePath)
-    {
-        File file = new File(filePath);
-        
-        if(file.exists())
-        {
-            try
-            {
-                ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
-                Object result = stream.readObject();
-                stream.close();
-                return result;
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        
-        return null;
     }
 }

@@ -69,7 +69,10 @@ public class RecipeErrorReporter
     public static void print(String logFile)
     {
         if(!isCatching() || fileErrors.isEmpty())
+        {
+            stopCatching();
             return;
+        }
         
         int errors = fileErrors.size();
         String lastError;
@@ -84,7 +87,7 @@ public class RecipeErrorReporter
         for(Entry<String, List<String>> entry : fileErrors.entrySet())
         {
             buffer = new StringBuilder();
-            buffer.append(ChatColor.BOLD).append(ChatColor.AQUA).append("Errors in recipe file: ").append(entry.getKey()).append(Files.NL);
+            buffer.append(ChatColor.BOLD).append(ChatColor.AQUA).append("File: ").append(entry.getKey()).append(Files.NL);
             
             lastError = "";
             lastErrorNum = 0;
@@ -103,7 +106,9 @@ public class RecipeErrorReporter
                 else
                 {
                     if(similarErrors > 0)
+                    {
                         buffer.append(ChatColor.RED).append("... and ").append(similarErrors).append(" more similar errors.").append(Files.NL);
+                    }
                     
                     lastErrorNum = 0;
                     similarErrors = 0;
@@ -114,7 +119,9 @@ public class RecipeErrorReporter
             }
             
             if(similarErrors > 0)
+            {
                 buffer.append(ChatColor.RED).append("... and ").append(similarErrors).append(" more similar errors.").append(Files.NL);
+            }
             
             buffer.append(Files.NL);
             text.append(buffer);
@@ -125,7 +132,7 @@ public class RecipeErrorReporter
         
         if(logFile != null && Tools.saveTextToFile(ChatColor.stripColor(text.toString()), logFile))
         {
-            Messages.info(ChatColor.YELLOW + "Apart from server.log, these errors have been saved in '" + logFile + "' as well.");
+            Messages.info(ChatColor.YELLOW + "Error messages saved in '" + logFile + "'.");
         }
         
         stopCatching();
@@ -179,7 +186,9 @@ public class RecipeErrorReporter
     protected static void setIgnoreErrors(boolean set)
     {
         if(isCatching())
+        {
             ignore = set;
+        }
     }
     
     protected static boolean getIgnoreErrors()
@@ -228,15 +237,15 @@ public class RecipeErrorReporter
         if(!isCatching())
         {
             Messages.info(type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + " TIP: " + ChatColor.GRAY + tip : ""));
-            
-//            Messages.error(null, new Exception(), type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + "; TIP: " + ChatColor.GRAY + tip : ""));
         }
         else if(!ignore)
         {
             List<String> errors = fileErrors.get(currentFile);
             
             if(errors == null)
+            {
                 errors = new ArrayList<String>();
+            }
             
             errors.add("line " + String.format("%-5d", currentLine) + type + ": " + ChatColor.RESET + message + (tip != null ? Files.NL + ChatColor.DARK_GREEN + "          TIP: " + ChatColor.GRAY + tip : ""));
             

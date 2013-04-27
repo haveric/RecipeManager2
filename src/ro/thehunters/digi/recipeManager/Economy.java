@@ -49,7 +49,9 @@ public class Economy
             iConomy = new Accounts();
             
             if(iConomy != null)
+            {
                 Messages.log("iConomy detected and connected, economy features are available.");
+            }
         }
         else if((plugin = Bukkit.getPluginManager().getPlugin("Essentials")) instanceof Essentials)
         {
@@ -102,7 +104,9 @@ public class Economy
     public String getFormat(double amount)
     {
         if(!isEnabled())
+        {
             return null;
+        }
         
         if(vault != null)
         {
@@ -131,7 +135,9 @@ public class Economy
     public double getMoney(String playerName)
     {
         if(!isEnabled())
+        {
             return 0;
+        }
         
         if(vault != null)
         {
@@ -149,7 +155,7 @@ public class Economy
                 {
                     return com.earth2me.essentials.api.Economy.getMoney(playerName);
                 }
-                catch(Exception e)
+                catch(Throwable e)
                 {
                 }
             }
@@ -219,7 +225,7 @@ public class Economy
                         com.earth2me.essentials.api.Economy.subtract(playerName, Math.abs(amount));
                     }
                 }
-                catch(Exception e)
+                catch(Throwable e)
                 {
                 }
             }

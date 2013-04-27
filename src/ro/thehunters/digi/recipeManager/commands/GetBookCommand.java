@@ -50,7 +50,7 @@ public class GetBookCommand implements CommandExecutor
             {
                 volume = Integer.valueOf(bookName.substring(index + 1));
             }
-            catch(Exception e)
+            catch(Throwable e)
             {
                 Messages.CMD_GETBOOK_INVALIDNUMBER.print(sender);
             }

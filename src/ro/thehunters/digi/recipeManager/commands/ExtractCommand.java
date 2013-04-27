@@ -200,7 +200,7 @@ public class ExtractCommand implements CommandExecutor
                 
                 stream.close();
             }
-            catch(Exception e)
+            catch(Throwable e)
             {
                 e.printStackTrace();
             }

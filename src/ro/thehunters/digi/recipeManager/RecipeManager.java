@@ -171,12 +171,12 @@ public class RecipeManager extends JavaPlugin
                 Vanilla.restoreInitialRecipes();
                 Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
                 
-                Messages.info("<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
+                Messages.sendAndLog(sender, "<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
             }
         }
         
         RecipeProcessor.reload(sender, check, force); // (re)parse recipe files
-        Events.reload(sender); // (re)register events
+        Events.reload(); // (re)register events
     }
     
     private void scanPlugins()
@@ -186,7 +186,9 @@ public class RecipeManager extends JavaPlugin
         for(Plugin plugin : getServer().getPluginManager().getPlugins())
         {
             if(plugin instanceof RecipeManager)
+            {
                 continue;
+            }
             
             packageName = plugin.getDescription().getMain();
             packageName = packageName.substring(0, packageName.lastIndexOf('.'));
@@ -275,7 +277,7 @@ public class RecipeManager extends JavaPlugin
             
             plugin = null;
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }

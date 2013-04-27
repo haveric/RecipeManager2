@@ -104,7 +104,7 @@ public class FurnaceData implements ConfigurationSerializable
                 cookProgress = ((Double)obj).floatValue();
             }
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             // TODO remove ?
             e.printStackTrace();

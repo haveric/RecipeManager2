@@ -118,10 +118,14 @@ public class RecipeRegistrator implements Runnable
     protected void queueCraftRecipe(CraftRecipe recipe, String adder)
     {
         if(registered)
+        {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
+        }
         
         if(!recipe.isValid())
+        {
             throw new IllegalArgumentException("Recipe is invalid ! Needs at least one result and exacly 9 ingredient slots, empty ones can be null.");
+        }
         
         queuedRecipes.remove(recipe); // if exists, update key too !
         queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder, RecipeStatus.QUEUED));
@@ -130,10 +134,14 @@ public class RecipeRegistrator implements Runnable
     protected void queueCombineRecipe(CombineRecipe recipe, String adder)
     {
         if(registered)
+        {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
+        }
         
         if(!recipe.isValid())
+        {
             throw new IllegalArgumentException("Recipe is invalid ! Needs at least one result and ingredient!");
+        }
         
         queuedRecipes.remove(recipe);
         queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder, RecipeStatus.QUEUED));
@@ -142,10 +150,14 @@ public class RecipeRegistrator implements Runnable
     protected void queueSmeltRecipe(SmeltRecipe recipe, String adder)
     {
         if(registered)
+        {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
+        }
         
         if(!recipe.isValid())
+        {
             throw new IllegalArgumentException("Recipe is invalid ! Needs a result and ingredient!");
+        }
         
         queuedRecipes.remove(recipe);
         queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder, RecipeStatus.QUEUED));
@@ -154,10 +166,14 @@ public class RecipeRegistrator implements Runnable
     protected void queuFuelRecipe(FuelRecipe recipe, String adder)
     {
         if(registered)
+        {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
+        }
         
         if(!recipe.isValid())
+        {
             throw new IllegalArgumentException("Recipe is invalid ! Needs an ingredient!");
+        }
         
         queuedRecipes.remove(recipe);
         queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder, RecipeStatus.QUEUED));
@@ -243,6 +259,8 @@ public class RecipeRegistrator implements Runnable
         int addedNum = 0;
         int removedNum = 0;
         
+        // TODO fix removed!!!!!!!! it does not remove recipes that are removed from files
+        
         while(iterator.hasNext())
         {
             entry = iterator.next();
@@ -265,7 +283,7 @@ public class RecipeRegistrator implements Runnable
                 
                 if(!recipe.remove())
                 {
-//                    Messages.debug("Couldn't find shaped recipe to remove!");
+                    Messages.debug("Couldn't find shaped recipe to remove: " + recipe.getName());
                 }
             }
             
@@ -301,7 +319,7 @@ public class RecipeRegistrator implements Runnable
             removeRecipes.clear();
         }
         
-        RecipeManager.getRecipeBooks().reload(); // (Re)Create recipe books for recipes
+        RecipeManager.getRecipeBooks().reload(sender); // (Re)Create recipe books for recipes
         
         if(needFurnaceWorker) // Start the furnace worker task if it's not running and it's now needed
         {

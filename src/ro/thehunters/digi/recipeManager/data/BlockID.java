@@ -52,13 +52,13 @@ public class BlockID
         
         try
         {
-            String[] s = coords.split(",");
+            String[] s = coords.split(",", 3);
             
             this.x = Integer.parseInt(s[0]);
             this.y = Integer.parseInt(s[1]);
             this.z = Integer.parseInt(s[2]);
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             throw new IllegalArgumentException("Coords argument must have 3 numbers separated by commas!");
         }

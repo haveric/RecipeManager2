@@ -1,7 +1,6 @@
 package ro.thehunters.digi.recipeManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -204,6 +203,8 @@ public class Furnaces
     {
         long start = System.currentTimeMillis();
         
+        Messages.debug("saving " + furnaces.size() + " furnaces...");
+        
         Map<UUID, Map<String, FurnaceData>> mapWorld = new HashMap<UUID, Map<String, FurnaceData>>();
         Map<String, FurnaceData> mapCoords;
         BlockID id;
@@ -248,9 +249,9 @@ public class Furnaces
             {
                 yml.save(file);
             }
-            catch(IOException ioe)
+            catch(Throwable e)
             {
-                Messages.error(null, ioe, "Failed to create " + file.getPath() + " file!");
+                Messages.error(null, e, "Failed to create " + file.getPath() + " file!");
                 break;
             }
         }

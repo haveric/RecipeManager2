@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +53,7 @@ public class RecipeProcessor implements Runnable
     private int lineNum;
     private int directiveLine;
     private int loaded;
+    private String recipeName;
     
     // Storage
     private volatile RecipeRegistrator registrator = null;
@@ -67,7 +67,7 @@ public class RecipeProcessor implements Runnable
     // Constants
     private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
     private final String DIR_RECIPES = DIR_PLUGIN + "recipes" + File.separator;
-    private final String FILE_ERRORLOG = DIR_PLUGIN + "last recipe errors.log";
+    private final String FILE_ERRORLOG = DIR_RECIPES + "errors.log";
     private final String[] COMMENTS =
     {
         "//",
@@ -111,13 +111,13 @@ public class RecipeProcessor implements Runnable
         
         try
         {
-            Messages.send(sender, (check ? "Checking" : "Loading") + " " + (force ? "all" : "changed") + " recipes...");
+            Messages.sendAndLog(sender, (check ? "Checking" : "Loading") + " " + (force ? "all" : "changed") + " recipes...");
             
             File dir = new File(DIR_RECIPES);
             
             if(!dir.exists() && !dir.mkdirs())
             {
-                Messages.send(sender, ChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
+                Messages.sendAndLog(sender, ChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
             }
             
             if(force)
@@ -154,11 +154,11 @@ public class RecipeProcessor implements Runnable
                         // display progress each second
                         if(time > lastDisplay + 500)
                         {
-                            Messages.send(sender, "Recipes processed " + ((parsedFiles * 100) / numFiles) + "%...");
+                            Messages.sendAndLog(sender, "Recipes processed " + ((parsedFiles * 100) / numFiles) + "%...");
                             lastDisplay = time;
                         }
                     }
-                    catch(Exception e)
+                    catch(Throwable e)
                     {
                         e.printStackTrace();
                     }
@@ -168,13 +168,23 @@ public class RecipeProcessor implements Runnable
                 
                 if(errors > 0)
                 {
-                    Messages.send(sender, ChatColor.YELLOW + (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
+                    Messages.sendAndLog(sender, ChatColor.YELLOW + (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
+                    
                     RecipeErrorReporter.print(FILE_ERRORLOG);
                 }
                 else
                 {
-                    Messages.send(sender, (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
+                    Messages.sendAndLog(sender, (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
+                    
+                    File log = new File(FILE_ERRORLOG);
+                    
+                    if(log.exists())
+                    {
+                        log.delete();
+                    }
                 }
+                
+                RecipeErrorReporter.stopCatching();
                 
                 if(!lastModified.isEmpty())
                 {
@@ -201,15 +211,15 @@ public class RecipeProcessor implements Runnable
             {
                 if(foundFiles.isEmpty())
                 {
-                    Messages.send(sender, "Done (" + (System.currentTimeMillis() - start) / 1000.0 + "s), no recipe files exist in the recipes folder!");
+                    Messages.sendAndLog(sender, "Done (" + (System.currentTimeMillis() - start) / 1000.0 + "s), no recipe files exist in the recipes folder!");
                 }
                 else
                 {
-                    Messages.send(sender, "Done (" + (System.currentTimeMillis() - start) / 1000.0 + "s), no modified recipe files to " + (check ? "check" : "load") + ".");
+                    Messages.sendAndLog(sender, "Done (" + (System.currentTimeMillis() - start) / 1000.0 + "s), no modified recipe files to " + (check ? "check" : "load") + ".");
                     
                     if(!force)
                     {
-                        Messages.send(sender, "You can use 'force' argument for 'rmreload' command to re-check all files regardless of modified state.");
+                        Messages.sendAndLog(sender, "You can use 'force' argument for 'rmreload' command to re-check all files regardless of modified state.");
                     }
                 }
             }
@@ -264,9 +274,10 @@ public class RecipeProcessor implements Runnable
             }
             else
             {
-                int index = file.getName().lastIndexOf('.');
+                int i = file.getName().lastIndexOf('.');
+                String ext = (i > 0 ? file.getName().substring(i).toLowerCase() : file.getName());
                 
-                if(index == -1 || !Files.FILE_RECIPE_EXTENSIONS.contains(file.getName().substring(index)))
+                if(!Files.FILE_RECIPE_EXTENSIONS.contains(ext))
                 {
                     continue;
                 }
@@ -291,10 +302,10 @@ public class RecipeProcessor implements Runnable
         }
     }
     
-    private void parseFile(String root, String fileName) throws Exception
+    private void parseFile(String root, String fileName) throws Throwable
     {
         reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(root + fileName))));
-        currentFile = fileName;
+        currentFile = Tools.removeExtensions(fileName, Files.FILE_RECIPE_EXTENSIONS);
         lineNum = 0;
         RecipeErrorReporter.setFile(currentFile);
         fileFlags = new Flags();
@@ -306,24 +317,33 @@ public class RecipeProcessor implements Runnable
         while(searchRecipes()) // search for recipes...
         {
             directiveLine = lineNum;
+            String directive = line.toLowerCase();
+            recipeName = null;
+            int i = directive.indexOf(' ');
             
-            if(line.equalsIgnoreCase(RecipeType.CRAFT.getDirective()))
+            if(i > 0)
+            {
+                recipeName = directive.substring(i + 1).trim();
+                directive = directive.substring(0, i);
+            }
+            
+            if(directive.equals(RecipeType.CRAFT.getDirective()))
             {
                 added = parseCraftRecipe();
             }
-            else if(line.equalsIgnoreCase(RecipeType.COMBINE.getDirective()))
+            else if(directive.equals(RecipeType.COMBINE.getDirective()))
             {
                 added = parseCombineRecipe();
             }
-            else if(line.equalsIgnoreCase(RecipeType.SMELT.getDirective()))
+            else if(directive.equals(RecipeType.SMELT.getDirective()))
             {
                 added = parseSmeltRecipe();
             }
-            else if(line.equalsIgnoreCase(RecipeType.FUEL.getDirective()))
+            else if(directive.equals(RecipeType.FUEL.getDirective()))
             {
                 added = parseFuelRecipe();
             }
-            else if(line.equalsIgnoreCase(RecipeType.SPECIAL.getDirective()))
+            else if(directive.equals(RecipeType.SPECIAL.getDirective()))
             {
                 added = parseRemoveResults();
             }
@@ -360,7 +380,7 @@ public class RecipeProcessor implements Runnable
     {
         for(RecipeType type : RecipeType.values())
         {
-            if(type.getDirective() != null && line.equalsIgnoreCase(type.getDirective()))
+            if(type.getDirective() != null && line.toLowerCase().startsWith(type.getDirective()))
             {
                 return true;
             }
@@ -379,7 +399,7 @@ public class RecipeProcessor implements Runnable
             line = reader.readLine();
             return line != null;
         }
-        catch(IOException e)
+        catch(Throwable e)
         {
             e.printStackTrace();
             return false;
@@ -457,7 +477,7 @@ public class RecipeProcessor implements Runnable
         return line;
     }
     
-    private void parseFlags(Flags flags) throws Exception
+    private void parseFlags(Flags flags) throws Throwable
     {
         nextLine();
         
@@ -468,7 +488,7 @@ public class RecipeProcessor implements Runnable
         }
     }
     
-    private boolean parseCraftRecipe() throws Exception
+    private boolean parseCraftRecipe() throws Throwable
     {
         CraftRecipe recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
         parseFlags(recipe.getFlags()); // parse recipe's flags
@@ -561,6 +581,11 @@ public class RecipeProcessor implements Runnable
             return false;
         }
         
+        if(recipeName != null)
+        {
+            recipe.setName(recipeName); // set recipe's name if defined
+        }
+        
         // add the recipe to the Recipes class and to the list for later adding to the server
         registrator.queueCraftRecipe(recipe, currentFile);
         loaded++;
@@ -568,7 +593,7 @@ public class RecipeProcessor implements Runnable
         return true; // succesfully added
     }
     
-    private boolean parseCombineRecipe() throws Exception
+    private boolean parseCombineRecipe() throws Throwable
     {
         CombineRecipe recipe = new CombineRecipe(fileFlags); // create recipe and copy flags from file
         parseFlags(recipe.getFlags()); // parse recipe's flags
@@ -626,6 +651,11 @@ public class RecipeProcessor implements Runnable
             return false;
         }
         
+        if(recipeName != null)
+        {
+            recipe.setName(recipeName); // set recipe's name if defined
+        }
+        
         // add the recipe to the Recipes class and to the list for later adding to the server
         registrator.queueCombineRecipe(recipe, currentFile);
         loaded++;
@@ -656,7 +686,7 @@ public class RecipeProcessor implements Runnable
         return true;
     }
     
-    private boolean parseSmeltRecipe() throws Exception
+    private boolean parseSmeltRecipe() throws Throwable
     {
         SmeltRecipe recipe = new SmeltRecipe(fileFlags); // create recipe and copy flags from file
         parseFlags(recipe.getFlags()); // check for @flags
@@ -779,6 +809,11 @@ public class RecipeProcessor implements Runnable
             return false;
         }
         
+        if(recipeName != null)
+        {
+            recipe.setName(recipeName); // set recipe's name if defined
+        }
+        
         // add the recipe to the Recipes class and to the list for later adding to the server
         registrator.queueSmeltRecipe(recipe, currentFile);
         loaded++;
@@ -786,7 +821,7 @@ public class RecipeProcessor implements Runnable
         return true;
     }
     
-    private boolean parseFuelRecipe() throws Exception
+    private boolean parseFuelRecipe() throws Throwable
     {
         FuelRecipe recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
         parseFlags(recipe.getFlags()); // check for @flags
@@ -869,6 +904,11 @@ public class RecipeProcessor implements Runnable
                 continue;
             }
             
+            if(recipeName != null)
+            {
+                recipe.setName(recipeName + (added > 1 ? " (" + added + ")" : "")); // set recipe's name if defined
+            }
+            
             registrator.queuFuelRecipe(recipe, currentFile);
             loaded++;
             added++;
@@ -879,7 +919,7 @@ public class RecipeProcessor implements Runnable
     }
     
     // TODO
-    private boolean parseRemoveResults() throws Exception
+    private boolean parseRemoveResults() throws Throwable
     {
         RemoveResultRecipe recipe;
         int added = 0;
@@ -912,6 +952,11 @@ public class RecipeProcessor implements Runnable
                 continue;
             }
             
+            if(recipeName != null)
+            {
+                recipe.setName(recipeName + (added > 1 ? " (" + added + ")" : "")); // set recipe's name if defined
+            }
+            
 //            registrator.queueRemoveResultRecipe(recipe, currentFile);
             loaded++;
             added++;
@@ -921,7 +966,7 @@ public class RecipeProcessor implements Runnable
         return (added > 0);
     }
     
-    private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Exception
+    private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Throwable
     {
         if(line.charAt(0) != '=') // check if current line is a result, if not move on
         {
@@ -1056,6 +1101,10 @@ public class RecipeProcessor implements Runnable
             {
                 if(!currentFile.equals(registered.getAdder()))
                 {
+                    // TODO fix this OR ditch the lastmodified system
+                    
+//                    Messages.debug(currentFile + " | " + registered.getAdder()); // TODO remove
+                    
                     RecipeErrorReporter.error("Recipe already created with this plugin, file: " + registered.getAdder());
                     
                     return false; // can't re-add recipes

@@ -117,7 +117,7 @@ public class UpdateChecker extends BukkitRunnable
         {
             if(sender != null) // send this message only if it's a requested update check
             {
-                Messages.send(sender, "<dark_red>Unable to check for updates, please check manually by visiting: " + URL_FILES);
+                Messages.sendAndLog(sender, "<dark_red>Unable to check for updates, please check manually by visiting: " + URL_FILES);
             }
             else
             {
@@ -135,7 +135,7 @@ public class UpdateChecker extends BukkitRunnable
             {
                 if(sender != null) // send this message only if it's a requested update check
                 {
-                    Messages.send(sender, "<gray>Using the latest version: " + newVersion);
+                    Messages.sendAndLog(sender, "<gray>Using the latest version: " + newVersion);
                 }
                 else
                 {
@@ -144,12 +144,12 @@ public class UpdateChecker extends BukkitRunnable
             }
             else
             {
-                Messages.send(sender, "<green>New version available: " + newVersion + " ! You're using " + currentVersion);
-                Messages.send(sender, "<green>Grab it at: " + newLink);
+                Messages.sendAndLog(sender, "<green>New version available: " + newVersion + " ! You're using " + currentVersion);
+                Messages.sendAndLog(sender, "<green>Grab it at: " + newLink);
             }
         }
         
-        Messages.send(sender, "<gray>You can disable this check from config.yml.");
+        Messages.sendAndLog(sender, "<gray>You can disable this check from config.yml.");
     }
     
     private boolean getLatestVersion()
@@ -163,7 +163,9 @@ public class UpdateChecker extends BukkitRunnable
             Node node = nodes.item(0);
             
             if(node.getNodeType() != Node.ELEMENT_NODE)
+            {
                 return false;
+            }
             
             nodes = ((Element)node).getElementsByTagName("title");
             nodes = ((Element)nodes.item(0)).getChildNodes();
@@ -173,8 +175,10 @@ public class UpdateChecker extends BukkitRunnable
             Matcher m = Pattern.compile("([\\d\\.]+)([a-z]+|)").matcher(version);
             
             if(!m.find())
+            {
                 return false; // version was not found !
-                
+            }
+            
             newVersion = m.group();
             
             nodes = ((Element)node).getElementsByTagName("link");
@@ -183,7 +187,7 @@ public class UpdateChecker extends BukkitRunnable
             
             return true;
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
         }
         

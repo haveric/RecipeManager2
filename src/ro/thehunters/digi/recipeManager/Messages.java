@@ -217,12 +217,12 @@ public enum Messages
             {
                 yml.save(file);
             }
-            catch(Exception e)
+            catch(Throwable e)
             {
                 error(sender, e, "Couldn't save 'messages.yml' !");
             }
             
-            send(sender, ChatColor.GREEN + "Generated 'messages.yml' file.");
+            sendAndLog(sender, ChatColor.GREEN + "Generated 'messages.yml' file.");
         }
         else
         {
@@ -238,12 +238,12 @@ public enum Messages
         {
             if(LASTCHANGED == null || LASTCHANGED.message == null || !LASTCHANGED.message.equals(Files.LASTCHANGED_MESSAGES))
             {
-                send(sender, "<yellow>messages.yml has changed! You should delete it, use 'rmreload' to re-generate it and then re-configure it, and then rmreload again.");
+                sendAndLog(sender, "<yellow>messages.yml has changed! You should delete it, use 'rmreload' to re-generate it and then re-configure it, and then rmreload again.");
             }
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
-            send(sender, "<yellow>Error reading messages.yml's version! You should delete it to allow it to re-generate the newest version!");
+            sendAndLog(sender, "<yellow>Error reading messages.yml's version! You should delete it to allow it to re-generate the newest version!");
         }
     }
     
@@ -303,10 +303,14 @@ public enum Messages
     public void print(CommandSender sender)
     {
         if(sender == null)
+        {
             return;
+        }
         
         if(message != null)
+        {
             send(sender, message);
+        }
     }
     
     /**
@@ -322,15 +326,21 @@ public enum Messages
     public void print(CommandSender sender, String recipeMessage)
     {
         if(sender == null)
+        {
             return;
+        }
         
         if(recipeMessage != null) // recipe has custom message ?
         {
             if(!recipeMessage.equals("false")) // if it's not "false" send it, otherwise don't.
+            {
                 send(sender, recipeMessage);
+            }
         }
         else if(message != null) // message not set to "false" in messages.yml (replaced with null to save memory)
+        {
             send(sender, message);
+        }
     }
     
     /**
@@ -350,19 +360,25 @@ public enum Messages
     public void print(CommandSender sender, String recipeMessage, Object... variables)
     {
         if(sender == null)
+        {
             return;
+        }
         
         String msg = message;
         
         if(recipeMessage != null) // recipe has custom message
         {
             if(recipeMessage.equals("false")) // if recipe message is set to "false" then don't show the message
+            {
                 return;
+            }
             
             msg = recipeMessage;
         }
         else if(msg == null) // message from messages.yml is "false", don't show the message
+        {
             return;
+        }
         
         msg = Tools.replaceVariables(msg, variables);
         
@@ -389,7 +405,9 @@ public enum Messages
     public void printOnce(CommandSender sender, String recipeMessage, Object... variables)
     {
         if(sender == null)
+        {
             return;
+        }
         
         Set<String> set = sent.get(sender.getName());
         
@@ -421,7 +439,9 @@ public enum Messages
     public static void send(CommandSender sender, String[] messages)
     {
         if(sender == null)
+        {
             sender = Bukkit.getConsoleSender();
+        }
         
         boolean removeColors = (!RecipeManager.getSettings().COLOR_CONSOLE && sender instanceof ConsoleCommandSender);
         
@@ -455,6 +475,16 @@ public enum Messages
         sender.sendMessage(Tools.parseColors(message, (sender instanceof ConsoleCommandSender && !RecipeManager.getSettings().COLOR_CONSOLE)));
     }
     
+    public static void sendAndLog(CommandSender sender, String message)
+    {
+        if(sender instanceof Player)
+        {
+            send(sender, message);
+        }
+        
+        info(message);
+    }
+    
     public static void sendDenySound(Player player, Location location)
     {
         if(player != null && RecipeManager.getSettings().SOUNDS_FAILED_CLICK)
@@ -486,19 +516,19 @@ public enum Messages
         Bukkit.getLogger().fine(Tools.parseColors("[RecipeManager] " + message, true));
     }
     
-    public static void error(CommandSender sender, Exception exception, String message)
+    public static void error(CommandSender sender, Throwable thrown, String message)
     {
-        message = "<red>" + (message == null ? exception.getMessage() : message + " (" + exception.getMessage() + ")");
+        message = "<red>" + (message == null ? thrown.getMessage() : message + " (" + thrown.getMessage() + ")");
         
         if(sender != null)
         {
             info(message);
         }
         
-        send(sender, message);
+        sendAndLog(sender, message);
         notifyDebuggers(message);
         
-        exception.printStackTrace();
+        thrown.printStackTrace();
         
         message = ChatColor.LIGHT_PURPLE + "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
         info(message);
@@ -528,7 +558,7 @@ public enum Messages
         // TODO print stack trace
         // TODO debug switch
         StackTraceElement[] e = new Exception().getStackTrace();
-        
-        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[1].getFileName() + ":" + e[1].getLineNumber() + ChatColor.RESET + " " + ChatColor.RED + e[1].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
+        int i = 1;
+        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[i].getFileName() + ":" + e[i].getLineNumber() + ChatColor.RESET + " " + ChatColor.RED + e[i].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
     }
 }
