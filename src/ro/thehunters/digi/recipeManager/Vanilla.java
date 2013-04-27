@@ -120,22 +120,36 @@ public class Vanilla
                 continue;
             }
             
+            BaseRecipe recipe = null;
+            
             if(r instanceof ShapedRecipe)
             {
-                initialRecipes.put(new CraftRecipe((ShapedRecipe)r), info);
+                recipe = new CraftRecipe((ShapedRecipe)r);
             }
             else if(r instanceof ShapelessRecipe)
             {
-                initialRecipes.put(new CombineRecipe((ShapelessRecipe)r), info);
+                recipe = new CombineRecipe((ShapelessRecipe)r);
             }
             else if(r instanceof FurnaceRecipe)
             {
-                initialRecipes.put(new SmeltRecipe((FurnaceRecipe)r), info);
+                recipe = new SmeltRecipe((FurnaceRecipe)r);
             }
+            
+            if(recipe == null)
+            {
+                Messages.debug("Unknown recipe class found: " + r); // TODO remove
+                continue;
+            }
+            
+            initialRecipes.put(recipe, info);
         }
         
-        // Add them to recipe storage
-        RecipeManager.getRecipes().index.putAll(Vanilla.initialRecipes);
+        for(Entry<BaseRecipe, RecipeInfo> e : initialRecipes.entrySet())
+        {
+            BaseRecipe recipe = e.getKey();
+            RecipeManager.getRecipes().index.put(recipe, e.getValue());
+            RecipeManager.getRecipes().indexName.put(recipe.getName(), recipe);
+        }
     }
     
     protected static void clean()
@@ -359,7 +373,9 @@ public class Vanilla
     public static void removeCustomRecipes()
     {
         if(RecipeManager.getRecipes() == null)
+        {
             return;
+        }
         
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;

@@ -10,16 +10,11 @@ public class Book
     private String description;
     private BookMeta[] volumes;
     
-    public Book(String title)
-    {
-        this.title = title;
-    }
-    
     public Book(String title, String description, BookMeta[] volumes)
     {
         this.title = title;
         this.description = description;
-        setVolumes(volumes);
+        this.volumes = volumes;
     }
     
     public String getTitle()
@@ -52,7 +47,6 @@ public class Book
         volume = Math.min(Math.max(volume, 1), volumes.length) - 1;
         
         ItemStack item = new ItemStack(Material.WRITTEN_BOOK);
-        
         item.setItemMeta(volumes[volume]);
         
         return item;

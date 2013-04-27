@@ -1,32 +1,46 @@
 package ro.thehunters.digi.recipeManager;
 
+import java.io.File;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import ro.thehunters.digi.recipeManager.data.Book;
-import ro.thehunters.digi.recipeManager.data.BookID;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
+import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
+
+import com.google.common.collect.Sets;
 
 public class RecipeBooks
 {
-    private final Map<BookID, Book> books = new HashMap<BookID, Book>();
+    private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private final String DIR_BOOKS = DIR_PLUGIN + "books" + File.separator;
+    private final String FILE_ERRORLOG = DIR_BOOKS + "errors.log";
+    
+    private final Map<String, Book> books = new HashMap<String, Book>();
     private final int generated = (int)(System.currentTimeMillis() / 1000);
     
     // Constants
@@ -44,7 +58,6 @@ public class RecipeBooks
     
     private RecipeBooks()
     {
-        
     }
     
     public void clean()
@@ -52,205 +65,616 @@ public class RecipeBooks
         books.clear();
     }
     
-    public void reload()
+    public void reload(CommandSender sender)
     {
         clean();
         
-        Map<BookID, Map<Integer, List<BaseRecipe>>> recipeBooks = new HashMap<BookID, Map<Integer, List<BaseRecipe>>>();
-        Map<BookID, MutableInt> volumeNum = new HashMap<BookID, MutableInt>();
-        Map<BookID, MutableInt> recipeNum = new HashMap<BookID, MutableInt>();
-        BookID vanillaBook = new BookID("Vanilla Minecraft Recipes"); // TODO messages.yml
-        BookID unknownBook = new BookID("Unknown Plugins Recipes");
-        RecipeInfo info;
-        BookID id;
+        File dir = new File(DIR_BOOKS);
         
-        for(Entry<BaseRecipe, RecipeInfo> e : RecipeManager.getRecipes().getRecipeList().entrySet())
+        RecipeErrorReporter.startCatching();
+        
+        if(!dir.exists() && !dir.mkdirs())
         {
-            info = e.getValue();
-            
-            if(info.getOwner() == RecipeOwner.RECIPEMANAGER)
+            Messages.send(sender, ChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
+        }
+        
+        for(File file : dir.listFiles())
+        {
+            if(file.isFile())
             {
-                id = new BookID(e.getKey(), e.getValue());
-            }
-            else if(info.getOwner() == RecipeOwner.MINECRAFT)
-            {
-                id = vanillaBook;
-            }
-            else
-            {
-                id = unknownBook;
-            }
-            
-            Map<Integer, List<BaseRecipe>> volumes = recipeBooks.get(id);
-            
-            if(volumes == null)
-            {
-                volumes = new HashMap<Integer, List<BaseRecipe>>();
-                recipeBooks.put(id, volumes);
-                volumeNum.put(id, new MutableInt(0));
-                recipeNum.put(id, new MutableInt(0));
-            }
-            
-            MutableInt vol = volumeNum.get(id);
-            List<BaseRecipe> volume = volumes.get(vol.intValue());
-            
-            if(volume == null)
-            {
-                volume = new ArrayList<BaseRecipe>();
-                volumes.put(vol.intValue(), volume);
-            }
-            
-            volume.add(e.getKey());
-            
-            MutableInt num = recipeNum.get(id);
-            num.increment();
-            
-            if(num.intValue() > 48)
-            {
-                num.setValue(0);
-                vol.increment();
+                int i = file.getName().lastIndexOf('.');
+                String ext = (i > 0 ? file.getName().substring(i).toLowerCase() : file.getName());
+                
+                if(ext.equals(".yml"))
+                {
+                    parseBook(sender, file);
+                }
             }
         }
         
-        for(Entry<BookID, Map<Integer, List<BaseRecipe>>> b : recipeBooks.entrySet())
+        if(RecipeErrorReporter.getCatchedAmount() > 0)
         {
-            BookMeta[] volume = new BookMeta[b.getValue().size()];
-            id = b.getKey();
-            int vol = 0;
+            RecipeErrorReporter.print(FILE_ERRORLOG);
+        }
+        else
+        {
+            RecipeErrorReporter.stopCatching();
             
-            for(Entry<Integer, List<BaseRecipe>> v : b.getValue().entrySet())
+            File log = new File(FILE_ERRORLOG);
+            
+            if(log.exists())
             {
-                BookMeta meta = (BookMeta)Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
-                volume[vol] = meta;
+                log.delete();
+            }
+        }
+        
+        Messages.info("Loaded " + books.size() + " recipe books."); // TODO remove ?
+    }
+    
+    private void parseBook(CommandSender sender, File file)
+    {
+        FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        
+        String id = Tools.removeExtensions(file.getName(), Sets.newHashSet(".yml"));
+        
+        yml.addDefault("title", id);
+        yml.addDefault("description", "");
+        
+        String title = Tools.parseColors(yml.getString("title"), false);
+        String description = Tools.parseColors(yml.getString("description"), false);
+        int recipesPerVolume = yml.getInt("recipes-per-volume", 50);
+        
+        Set<String> allRecipes = new HashSet<String>();
+        Map<Integer, List<String>> volumesMap = new HashMap<Integer, List<String>>();
+        int recipesNum = 0;
+        
+        for(String key : yml.getKeys(false))
+        {
+            if(key.startsWith("volume"))
+            {
+                String volString = key.substring("volume".length()).trim();
+                int volume = 0;
                 
-                meta.setTitle(id.getTitle() + (volume.length > 1 ? " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", (vol + 1)) : ""));
-                meta.setAuthor(BOOK_MARKER + Tools.hideString(" " + id.getID() + " " + vol + " " + (System.currentTimeMillis() / 1000)));
-                
-                // Cover page
-                
-                StringBuilder cover = new StringBuilder(256);
-                
-                cover.append('\n').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append(id.getTitle());
-                
-                if(volume.length > 1)
+                try
                 {
-                    cover.append('\n').append(ChatColor.BLACK).append("        ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", (vol + 1), "{volumes}", volume.length));
+                    volume = Integer.valueOf(volString);
+                }
+                catch(NumberFormatException e)
+                {
                 }
                 
-                cover.append('\n').append(ChatColor.GRAY).append("        Published by\n          RecipeManager");
-                
-                if(id.getDescription() != null)
+                if(volume < 1)
                 {
-                    cover.append('\n').append(ChatColor.DARK_BLUE).append(id.getDescription());
+                    RecipeErrorReporter.error("Book '" + id + "' has invalid volume number: " + volString, "Must be a number starting from 1.");
+                    continue;
                 }
                 
-                meta.addPage(cover.toString());
+                List<String> recipes = volumesMap.get(volume);
                 
-                List<StringBuilder> index = new ArrayList<StringBuilder>();
-                List<String> pages = new ArrayList<String>();
-                int r = 2;
-                int i = 0;
-                int p = (int)Math.ceil(v.getValue().size() / 13.0) + 2;
-                
-                index.add(new StringBuilder(256).append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append("CONTENTS INDEX").append("\n\n").append(ChatColor.BLACK));
-                
-                List<FuelRecipe> fuels = new ArrayList<FuelRecipe>();
-                
-                for(BaseRecipe recipe : v.getValue())
+                if(recipes == null)
                 {
-                    if(recipe instanceof FuelRecipe)
+                    recipes = new ArrayList<String>(recipesPerVolume);
+                    volumesMap.put(volume, recipes);
+                }
+                
+                for(String value : yml.getStringList(key))
+                {
+                    parseRecipeName(id, value, recipes, allRecipes);
+                }
+                
+                recipesNum += recipes.size();
+            }
+        }
+        
+        if(yml.isSet("recipes"))
+        {
+            List<String> unsorted = new ArrayList<String>();
+            
+            for(String value : yml.getStringList("recipes"))
+            {
+                parseRecipeName(id, value, unsorted, allRecipes);
+            }
+            
+            Messages.info("Transfered all recipes from 'recipes' to individual volumes.");
+            yml.set("recipes", null);
+            
+            int volume = Math.max((int)Math.floor((recipesNum + 0.0) / recipesPerVolume), 1);
+            int added = (recipesNum % recipesPerVolume);
+            
+            Messages.debug("recipesNum = " + recipesNum);
+            Messages.debug("volume = " + volume);
+            Messages.debug("added = " + added);
+            Messages.debug("allRecipes.size() = " + allRecipes.size());
+            
+            for(int i = 0; i < unsorted.size(); i++)
+            {
+                List<String> recipes = volumesMap.get(volume);
+                
+                if(recipes == null)
+                {
+                    recipes = new ArrayList<String>(recipesPerVolume);
+                    volumesMap.put(volume, recipes);
+                }
+                
+                Messages.debug("Added " + unsorted.get(i) + " to volume " + volume);
+                
+                recipes.add(unsorted.get(i));
+                
+                if(++added >= recipesPerVolume)
+                {
+                    volume++;
+                    added = 0;
+                }
+            }
+        }
+        
+        int maxVolume = 1;
+        
+        for(Entry<Integer, List<String>> e : volumesMap.entrySet())
+        {
+            maxVolume = Math.max(e.getKey(), maxVolume);
+        }
+        
+        for(int i = 1; i <= maxVolume; i++)
+        {
+            if(!volumesMap.containsKey(i))
+            {
+                RecipeErrorReporter.warning("Book '" + id + "' is missing volume number " + i + ", volumes have been renamed!");
+                
+                List<List<String>> list = new ArrayList<List<String>>();
+                
+                for(int v = 1; v <= maxVolume; v++)
+                {
+                    List<String> l = volumesMap.get(v);
+                    
+                    if(l != null)
                     {
-                        fuels.add((FuelRecipe)recipe);
-                        continue;
+                        list.add(l);
                     }
                     
-                    index.get(i).append(p++).append(". ").append(recipe.printBookIndex()).append(ChatColor.BLACK).append('\n');
+                    yml.set("volume" + v, null);
+                    yml.set("volume " + v, null);
+                }
+                
+                volumesMap.clear();
+                
+                for(int v = 0; v < list.size(); v++)
+                {
+                    volumesMap.put(v + 1, list.get(v));
+                }
+                
+                break;
+            }
+        }
+        
+        for(Entry<Integer, List<String>> e : volumesMap.entrySet())
+        {
+            yml.set("volume" + e.getKey(), null);
+            yml.set("volume " + e.getKey(), e.getValue());
+        }
+        
+        yml.options().header("Recipe book configuration (last loaded at " + DateFormat.getDateTimeInstance().format(new Date()) + ")" + Files.NL + "Read '" + Files.FILE_INFO_BOOKS + "' file to learn how to configure books." + Files.NL);
+        yml.options().copyDefaults(true);
+        
+        try
+        {
+            yml.save(file);
+        }
+        catch(Throwable e)
+        {
+            Messages.error(sender, e, "<red>Couldn't save '" + id + ".yml' !");
+        }
+        
+        if(volumesMap.size() == 0)
+        {
+            RecipeErrorReporter.error("Book '" + id + "' has no defined recipes!", "See '" + Files.FILE_INFO_BOOKS + "' file to learn about recipe books.");
+            return;
+        }
+        
+        BookMeta[] metaArray = new BookMeta[volumesMap.size()];
+        
+        for(Entry<Integer, List<String>> v : volumesMap.entrySet())
+        {
+            int vol = v.getKey() - 1;
+            BookMeta meta = (BookMeta)Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
+            metaArray[vol] = meta;
+            
+            meta.setTitle(title + (metaArray.length > 1 ? " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", (vol + 1)) : ""));
+            meta.setAuthor(BOOK_MARKER + Tools.hideString(" " + id + " " + vol + " " + (System.currentTimeMillis() / 1000)));
+            
+            // Cover page
+            
+            StringBuilder cover = new StringBuilder(256);
+            
+            cover.append('\n').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append(title);
+            
+            if(metaArray.length > 1)
+            {
+                cover.append('\n').append(ChatColor.BLACK).append("        ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", (vol + 1), "{volumes}", metaArray.length));
+            }
+            
+            cover.append('\n').append(ChatColor.GRAY).append("        Published by\n          RecipeManager");
+            
+            if(description != null)
+            {
+                cover.append('\n').append(ChatColor.DARK_BLUE).append(description);
+            }
+            
+            meta.addPage(cover.toString());
+            
+            List<StringBuilder> index = new ArrayList<StringBuilder>();
+            List<String> pages = new ArrayList<String>();
+//            List<FuelRecipe> fuels = new ArrayList<FuelRecipe>();
+            int i = 0;
+            int r = 2;
+            int p = (int)Math.ceil(v.getValue().size() / 13.0) + 2;
+            
+            index.add(new StringBuilder(256).append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append("CONTENTS INDEX").append("\n\n").append(ChatColor.BLACK));
+            
+            for(String name : v.getValue())
+            {
+                BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
+                
+                /*
+                if(recipe instanceof FuelRecipe)
+                {
+                    fuels.add((FuelRecipe)recipe);
                     
-                    if(++r >= 13)
+                    if(fuels.size() == 10)
                     {
-                        r = 0;
-                        i++;
-                        index.add(new StringBuilder(256).append(ChatColor.BLACK));
-                    }
-                    
-                    String page = recipe.printBook();
-                    
-                    if(page.length() >= 255)
-                    {
-                        int x = page.indexOf('\n', 220);
+                        StringBuilder s = new StringBuilder(256);
+                        s.append(ChatColor.BLACK).append(ChatColor.BOLD).append("FURNACE FUELS"); // TODO messages.yml
+                        s.append('\n');
                         
-                        if(x < 0 || x > 255)
+                        for(FuelRecipe fuelRecipe : fuels)
                         {
-                            x = 255;
+                            s.append('\n').append(Tools.Item.print(fuelRecipe.getIngredient(), ChatColor.BLACK, null, false));
                         }
                         
-                        pages.add(page.substring(0, x));
-                        pages.add(page.substring(x + 1));
-                        p++;
+                        meta.addPage(s.toString());
+                        
+                        fuels.clear();
                     }
-                    else
-                    {
-                        pages.add(page);
-                    }
+                    
+                    continue;
                 }
+                */
                 
-                boolean hasFuels = !fuels.isEmpty();
+                index.get(i).append(p++).append(". ").append(recipe.printBookIndex()).append(ChatColor.BLACK).append('\n');
                 
-                if(hasFuels)
+                if(++r >= 13)
                 {
-                    index.get(i).append(p++).append(". ").append("Furnace fuels").append(ChatColor.BLACK).append('\n');
+                    r = 0;
+                    i++;
+                    index.add(new StringBuilder(256).append(ChatColor.BLACK));
                 }
                 
-                for(StringBuilder s : index)
+                String page = recipe.printBook();
+                
+                if(page.length() >= 255)
+                {
+                    int x = page.indexOf('\n', 220);
+                    
+                    if(x < 0 || x > 255)
+                    {
+                        x = 255;
+                    }
+                    
+                    pages.add(page.substring(0, x));
+                    pages.add(page.substring(x + 1));
+                    p++;
+                }
+                else
+                {
+                    pages.add(page);
+                }
+            }
+            
+            for(StringBuilder s : index)
+            {
+                meta.addPage(s.toString());
+            }
+            
+            for(String s : pages)
+            {
+                meta.addPage(s);
+            }
+            
+            /*
+            List<StringBuilder> index = new ArrayList<StringBuilder>();
+            List<String> pages = new ArrayList<String>();
+            int r = 2;
+            int i = 0;
+            int p = (int)Math.ceil(v.getValue().size() / 13.0) + 2;
+            
+            index.add(new StringBuilder(256).append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append("CONTENTS INDEX").append("\n\n").append(ChatColor.BLACK));
+            
+            List<FuelRecipe> fuels = new ArrayList<FuelRecipe>();
+            
+            for(String name : v.getValue())
+            {
+                BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
+                
+                if(recipe instanceof FuelRecipe)
+                {
+                    fuels.add((FuelRecipe)recipe);
+                    continue;
+                }
+                
+                index.get(i).append(p++).append(". ").append(recipe.printBookIndex()).append(ChatColor.BLACK).append('\n');
+                
+                if(++r >= 13)
+                {
+                    r = 0;
+                    i++;
+                    index.add(new StringBuilder(256).append(ChatColor.BLACK));
+                }
+                
+                String page = recipe.printBook();
+                
+                if(page.length() >= 255)
+                {
+                    int x = page.indexOf('\n', 220);
+                    
+                    if(x < 0 || x > 255)
+                    {
+                        x = 255;
+                    }
+                    
+                    pages.add(page.substring(0, x));
+                    pages.add(page.substring(x + 1));
+                    p++;
+                }
+                else
+                {
+                    pages.add(page);
+                }
+            }
+            
+            boolean hasFuels = !fuels.isEmpty();
+            
+            if(hasFuels)
+            {
+                index.get(i).append(p++).append(". ").append("Furnace fuels").append(ChatColor.BLACK).append('\n');
+            }
+            
+            for(StringBuilder s : index)
+            {
+                meta.addPage(s.toString());
+            }
+            
+            for(String s : pages)
+            {
+                meta.addPage(s);
+            }
+            
+            if(hasFuels)
+            {
+                StringBuilder s = null;
+                int f = 0;
+                
+                for(FuelRecipe recipe : fuels)
+                {
+                    if(f == 0)
+                    {
+                        s = new StringBuilder(256);
+                        s.append(ChatColor.BLACK).append(ChatColor.BOLD).append("FURNACE FUELS"); // TODO messages.yml
+                        s.append('\n');
+                    }
+                    
+                    s.append('\n').append(Tools.Item.print(recipe.getIngredient(), ChatColor.BLACK, null, false));
+                    
+                    if(++f > 10)
+                    {
+                        meta.addPage(s.toString());
+                        f = 0;
+                    }
+                }
+                
+                if(f > 0)
                 {
                     meta.addPage(s.toString());
                 }
-                
-                for(String s : pages)
-                {
-                    meta.addPage(s);
-                }
-                
-                if(hasFuels)
-                {
-                    StringBuilder s = null;
-                    int f = 0;
-                    
-                    for(FuelRecipe recipe : fuels)
-                    {
-                        if(f == 0)
-                        {
-                            s = new StringBuilder(256);
-                            s.append(ChatColor.BLACK).append(ChatColor.BOLD).append("FURNACE FUELS"); // TODO messages.yml
-                            s.append('\n');
-                        }
-                        
-                        s.append('\n').append(Tools.printItem(recipe.getIngredient(), ChatColor.BLACK, null, false));
-                        
-                        if(++f > 10)
-                        {
-                            meta.addPage(s.toString());
-                            f = 0;
-                        }
-                    }
-                    
-                    if(f > 0)
-                    {
-                        meta.addPage(s.toString());
-                    }
-                }
-                
-                vol++;
             }
-            
-            books.put(id, new Book(id.getTitle(), id.getDescription(), volume));
+            */
         }
         
-        // Update online player's in hand books
-        
-        for(Player player : Bukkit.getOnlinePlayers())
+        books.put(id, new Book(title, description, metaArray));
+    }
+    
+    private void parseRecipeName(String fileName, String value, List<String> recipes, Set<String> allRecipes)
+    {
+        if(value.charAt(0) == '+')
         {
-            updateBook(player, player.getItemInHand());
+            value = value.substring(1).trim();
+            int i = value.indexOf(' ');
+            
+            if(i < 0)
+            {
+                RecipeErrorReporter.warning("Book '" + fileName + "' has an argument without a value, removed.");
+            }
+            
+            String arg = value.substring(0, i + 1).trim();
+            value = value.substring(i).trim();
+            
+            if(arg.startsWith("existing"))
+            {
+                if(value.equals("all"))
+                {
+                    getExistingByType(recipes, allRecipes, WorkbenchRecipe.class);
+                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                    getExistingByType(recipes, allRecipes, FuelRecipe.class);
+                }
+                else if(value.startsWith("work") || value.startsWith("craft"))
+                {
+                    getExistingByType(recipes, allRecipes, WorkbenchRecipe.class);
+                }
+                else if(value.startsWith("smelt") || value.startsWith("furnace"))
+                {
+                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                }
+                else if(value.startsWith("fuel"))
+                {
+                    getExistingByType(recipes, allRecipes, FuelRecipe.class);
+                }
+                else
+                {
+                    RecipeErrorReporter.warning("Book '" + fileName + "' has 'existing' argument with unknown value: '" + value + "', removed");
+                }
+            }
+            else if(arg.startsWith("custom"))
+            {
+                if(value.equals("all"))
+                {
+                    getExistingByType(recipes, allRecipes, WorkbenchRecipe.class);
+                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                    getExistingByType(recipes, allRecipes, FuelRecipe.class);
+                }
+                else if(value.startsWith("work") || value.startsWith("craft"))
+                {
+                    getExistingByType(recipes, allRecipes, WorkbenchRecipe.class);
+                }
+                else if(value.startsWith("smelt") || value.startsWith("furnace"))
+                {
+                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                }
+                else if(value.startsWith("fuel"))
+                {
+                    getExistingByType(recipes, allRecipes, FuelRecipe.class);
+                }
+                else
+                {
+                    RecipeErrorReporter.warning("Book '" + fileName + "' has 'existing' argument with unknown value: '" + value + "', removed");
+                }
+            }
+            else if(arg.startsWith("file"))
+            {
+                if(value.charAt(0) == '/')
+                {
+                    value = value.substring(1).trim();
+                }
+                
+                value = Tools.removeExtensions(value, Files.FILE_RECIPE_EXTENSIONS);
+                
+                int added = 0;
+                
+                for(Entry<BaseRecipe, RecipeInfo> e : RecipeManager.getRecipes().index.entrySet())
+                {
+                    RecipeInfo info = e.getValue();
+                    
+                    if(info.getOwner() == RecipeOwner.RECIPEMANAGER && value.equals(info.getAdder()))
+                    {
+                        recipes.add(e.getKey().getName());
+                        added++;
+                    }
+                }
+                
+                if(added == 0)
+                {
+                    RecipeErrorReporter.warning("Book '" + fileName + "' could not find any recipes that were added by: '" + value + "', removed.");
+                }
+            }
+            else if(arg.startsWith("folder"))
+            {
+                if(value.charAt(0) != '/')
+                {
+                    value = '/' + value;
+                }
+                
+                value = value.replace('\\', '/');
+                int added = 0;
+                
+                for(Entry<BaseRecipe, RecipeInfo> e : RecipeManager.getRecipes().index.entrySet())
+                {
+                    RecipeInfo info = e.getValue();
+                    
+                    if(info.getOwner() == RecipeOwner.RECIPEMANAGER && info.getAdder() != null)
+                    {
+                        String adder = '/' + info.getAdder().replace('\\', '/');
+                        i = adder.lastIndexOf('/');
+                        
+                        if(i > -1)
+                        {
+                            adder = adder.substring(0, (i == 0 ? i + 1 : i));
+                        }
+                        
+                        if(value.equals(adder))
+                        {
+                            recipes.add(e.getKey().getName());
+                            added++;
+                        }
+                    }
+                }
+                
+                if(added == 0)
+                {
+                    RecipeErrorReporter.warning("Book '" + fileName + "' could not find any recipes in folder: '" + value + "', removed.");
+                }
+            }
+            else
+            {
+                RecipeErrorReporter.warning("Book '" + fileName + "' has unknown argument: '" + arg + "', removed.");
+            }
+        }
+        else
+        {
+            BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(value);
+            
+            if(recipe == null)
+            {
+                RecipeErrorReporter.warning("Book '" + fileName + "' has a recipe that does not exist anymore: '" + value + "', removed.");
+            }
+            else
+            {
+                if(allRecipes.contains(value))
+                {
+                    RecipeErrorReporter.warning("Book '" + fileName + " already has recipe '" + value + "' added, ignored.");
+                }
+                else
+                {
+                    recipes.add(value);
+                    allRecipes.add(value);
+                }
+            }
+        }
+        
+        return;
+    }
+    
+    private void getExistingByType(List<String> recipes, Set<String> allRecipes, Class<? extends BaseRecipe> cls)
+    {
+        for(Entry<BaseRecipe, RecipeInfo> e : Vanilla.initialRecipes.entrySet())
+        {
+            BaseRecipe recipe = e.getKey();
+            
+            if(cls == null || cls.isInstance(recipe))
+            {
+                if(!allRecipes.contains(recipe.getName()))
+                {
+                    recipes.add(recipe.getName());
+                    allRecipes.add(recipe.getName());
+                }
+            }
+        }
+    }
+    
+    private void getCustomByType(List<String> recipes, Set<String> allRecipes, Class<? extends BaseRecipe> cls)
+    {
+        for(Entry<BaseRecipe, RecipeInfo> e : RecipeManager.getRecipes().index.entrySet())
+        {
+            if(e.getValue().getOwner() == RecipeOwner.RECIPEMANAGER)
+            {
+                BaseRecipe recipe = e.getKey();
+                
+                if(cls == null || cls.isInstance(recipe))
+                {
+                    if(!allRecipes.contains(recipe.getName()))
+                    {
+                        recipes.add(recipe.getName());
+                        allRecipes.add(recipe.getName());
+                    }
+                }
+            }
         }
     }
     
@@ -296,9 +720,33 @@ public class RecipeBooks
                 
                 if(generated > lastUpdate)
                 {
-                    item.setItemMeta(book.getVolumes()[volume]);
+                    if(volume >= book.getVolumes().length)
+                    {
+                        Messages.EVENTS_UPDATEBOOK_NOVOLUME.printOnce(player, null, "{title}", meta.getTitle(), "{volume}", volume);
+                        return;
+                    }
                     
-                    Messages.EVENTS_UPDATEBOOK_DONE.print(player, null, "{title}", book.getTitle());
+                    ItemStack bookItem = book.getBookItem(volume);
+                    BookMeta bookMeta = (BookMeta)bookItem.getItemMeta();
+                    
+                    boolean titleDiff = !bookMeta.getTitle().equals(meta.getTitle());
+                    
+                    if(titleDiff || !bookMeta.getPages().equals(meta.getPages()))
+                    {
+                        Messages.EVENTS_UPDATEBOOK_DONE.print(player);
+                        
+                        if(titleDiff)
+                        {
+                            Messages.EVENTS_UPDATEBOOK_CHANGED_TITLE.print(player, null, "{oldtitle}", meta.getTitle(), "{newtitle}", book.getTitle());
+                        }
+                        
+                        if(meta.getPageCount() != bookMeta.getPageCount())
+                        {
+                            Messages.EVENTS_UPDATEBOOK_CHANGED_PAGES.print(player, null, "{oldpages}", meta.getPageCount(), "{newpages}", bookMeta.getPageCount());
+                        }
+                    }
+                    
+                    item.setItemMeta(bookMeta);
                 }
             }
             catch(NumberFormatException e)
@@ -308,24 +756,30 @@ public class RecipeBooks
         }
     }
     
-    public Map<BookID, Book> getBooks()
+    public Map<String, Book> getBooks()
     {
         return books;
     }
     
-    public Book getBook(String name)
+    public Book getBook(String id)
     {
-        return books.get(new BookID(name));
+        return books.get(id);
     }
     
-    public ItemStack getBookItem(String name)
+    public ItemStack getBookItem(String id)
     {
-        return getBookItem(name, 1);
+        return getBookItem(id, 1);
     }
     
-    public List<Book> getBooksPartialMatch(String name)
+    public ItemStack getBookItem(String id, int volume)
     {
-        BookID id = new BookID(name);
+        Book book = getBook(id);
+        
+        return (book == null ? null : book.getBookItem(volume));
+    }
+    
+    public List<Book> getBooksPartialMatch(String id)
+    {
         Book book = books.get(id); // full match first
         
         if(book != null)
@@ -337,15 +791,9 @@ public class RecipeBooks
             // partial match
             List<Book> found = new ArrayList<Book>(books.size());
             
-            if(id.getID().isEmpty())
+            for(Entry<String, Book> e : books.entrySet())
             {
-                return found;
-            }
-            
-            for(Entry<BookID, Book> e : books.entrySet())
-            {
-                Messages.debug("id = " + e.getKey().getID() + " & " + id.getID() + " = " + e.getKey().getID().contains(id.getID()));
-                if(e.getKey().getID().contains(id.getID()))
+                if(e.getKey().contains(id))
                 {
                     found.add(e.getValue());
                 }
@@ -353,15 +801,5 @@ public class RecipeBooks
             
             return found;
         }
-    }
-    
-    public ItemStack getBookItem(String name, int volume)
-    {
-        Book book = getBook(name);
-        
-        if(book == null)
-            return null;
-        
-        return book.getBookItem(volume);
     }
 }

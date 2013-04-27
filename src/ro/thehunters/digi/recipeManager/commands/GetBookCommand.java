@@ -55,7 +55,7 @@ public class GetBookCommand implements CommandExecutor
                 Messages.CMD_GETBOOK_INVALIDNUMBER.print(sender);
             }
             
-            bookName = bookName.substring(0, index);
+            bookName = bookName.substring(0, index).trim();
         }
         
         List<Book> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(bookName);

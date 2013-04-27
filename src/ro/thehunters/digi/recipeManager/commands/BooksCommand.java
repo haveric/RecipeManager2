@@ -9,14 +9,13 @@ import org.bukkit.command.CommandSender;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.data.Book;
-import ro.thehunters.digi.recipeManager.data.BookID;
 
 public class BooksCommand implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        Map<BookID, Book> books = RecipeManager.getRecipeBooks().getBooks();
+        Map<String, Book> books = RecipeManager.getRecipeBooks().getBooks();
         
         if(books.isEmpty())
         {
