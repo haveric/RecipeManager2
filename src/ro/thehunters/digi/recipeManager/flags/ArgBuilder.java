@@ -1,6 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -28,6 +27,11 @@ public class ArgBuilder
         return new ArgBuilder();
     }
     
+    public static ArgBuilder create(Args a)
+    {
+        return new ArgBuilder(a);
+    }
+    
     /**
      * Start building an argument class for flag events
      * 
@@ -35,6 +39,17 @@ public class ArgBuilder
      */
     public ArgBuilder()
     {
+    }
+    
+    public ArgBuilder(Args a)
+    {
+        a.setPlayerName(a.playerName());
+        a.setPlayer(a.player());
+        a.setLocation(a.location().clone());
+        a.setRecipe(a.recipe());
+        a.setRecipeType(a.recipeType());
+        a.setInventory(a.inventory());
+        a.setResult(a.result().clone());
     }
     
     public ArgBuilder player(String player)
@@ -94,26 +109,6 @@ public class ArgBuilder
      */
     public Args build()
     {
-        if(a.player() == null && a.playerName() != null)
-        {
-            a.setPlayer(Bukkit.getPlayerExact(a.playerName()));
-        }
-        
-        if(a.playerName() == null && a.player() != null)
-        {
-            a.setPlayerName(a.player().getName());
-        }
-        
-        if(a.location() == null && a.player() != null)
-        {
-            a.setLocation(a.player().getLocation());
-        }
-        
-        if(a.recipeType() == null && a.recipe() != null)
-        {
-            a.setRecipeType(a.recipe().getType());
-        }
-        
-        return a;
+        return a.processArgs();
     }
 }

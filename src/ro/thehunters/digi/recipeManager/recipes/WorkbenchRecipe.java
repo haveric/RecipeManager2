@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.flags.ArgBuilder;
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagDebug;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
@@ -60,7 +59,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
             
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
             
-            return Tools.createItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
+            return Tools.Item.create(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
         
         /*
@@ -99,28 +98,23 @@ public class WorkbenchRecipe extends MultiResultRecipe
         float secretChance = 0;
         int unavailableNum = 0;
         float unavailableChance = 0;
+        int displayNum = 0;
         
         for(ItemResult r : getResults())
         {
-            r = r.clone();
-            
             if(r.getTypeId() == 0)
             {
                 failChance = r.getChance();
             }
             else
             {
+                r = r.clone();
                 a.clearReasons();
+                a.setResult(r);
+                r.sendPrepare(a);
                 
                 if(r.checkFlags(a))
                 {
-                    a = ArgBuilder.create().inventory(a.inventory()).location(a.location()).player(a.player()).player(a.playerName()).recipe(a.recipe()).recipe(a.recipeType()).result(r).build();
-                    
-                    // TODO come up with an idea to fix @forchance/@forpermission and/or result flags!!!!!
-                    // TODO clone results
-                    
-                    r.sendPrepare(a);
-                    
                     if(r.hasFlag(FlagType.SECRET))
                     {
                         secretNum++;
@@ -130,7 +124,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
                     {
                         displayResults.add(r);
                         
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(r)));
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                     }
                 }
                 else
@@ -142,18 +136,24 @@ public class WorkbenchRecipe extends MultiResultRecipe
                     {
                         FlagDebug.grabReasons(a.playerName(), r, a.reasons());
                         
-                        a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(r)));
+                        a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                     }
                 }
             }
         }
         
-//        Messages.debug("recipe displays: " + ArrayUtils.toString(displayResults));
-//        Messages.debug("recipe unavailable: " + ArrayUtils.toString(unavailableResults));
+        displayNum = displayResults.size();
         
-        if(displayResults.size() == 1 && secretNum == 0 && unavailableNum == 0 && failChance == 0)
+        if(unavailableNum == 0 && failChance == 0)
         {
-            return displayResults.get(0);
+            if(displayNum == 1 && secretNum == 0)
+            {
+                return displayResults.get(0);
+            }
+            else if(secretNum == 1 && displayNum == 0)
+            {
+                return Tools.Item.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE_UNKNOWN.get());
+            }
         }
         
         List<String> lore = new ArrayList<String>();
@@ -172,7 +172,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
         
         for(ItemResult r : displayResults)
         {
-            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.printItem(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
+            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.Item.print(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
         }
         
         if(failChance > 0)
@@ -190,7 +190,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
             lore.add(Messages.CRAFT_RESULT_LIST_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
         
-        return Tools.createItemStackWithMeta(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
+        return Tools.Item.create(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
     }
     
     private String formatChance(float chance)
@@ -232,7 +232,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
                     
                     if(cond != null && cond.getAmount() > 0)
                     {
-                        Messages.debug("flag removed amount " + cond.getAmount() + " from " + Tools.printItem(item));
+                        Messages.debug("flag removed amount " + cond.getAmount() + " from " + Tools.Item.print(item));
                         
                         newAmt -= cond.getAmount();
                     }
@@ -242,7 +242,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 {
                     newAmt -= 1;
                     
-                    Messages.debug("extra removed amount 1 from " + Tools.printItem(item));
+                    Messages.debug("extra removed amount 1 from " + Tools.Item.print(item));
                 }
                 
                 if(amt != newAmt)

@@ -1,10 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Set;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 
 import ro.thehunters.digi.recipeManager.Messages;
@@ -57,7 +56,7 @@ public class FlagGameMode extends Flag
     
     // Flag code
     
-    private Set<GameMode> gameModes = new HashSet<GameMode>();
+    private Set<GameMode> gameModes = EnumSet.noneOf(GameMode.class);
     private String failMessage;
     
     public FlagGameMode()
@@ -87,15 +86,11 @@ public class FlagGameMode extends Flag
         return gameModes;
     }
     
-    public void setGameModes(Set<GameMode> gameModes)
+    public void setGameModes(EnumSet<GameMode> set)
     {
-        if(gameModes == null)
-        {
-            this.remove();
-            return;
-        }
+        Validate.notNull(set, "The 'set' argument must not be null!");
         
-        this.gameModes = gameModes;
+        gameModes = set;
     }
     
     public void addGameMode(GameMode gameMode)
@@ -125,9 +120,11 @@ public class FlagGameMode extends Flag
         
         split = split[0].toLowerCase().split(",");
         
-        for(String s : split)
+        for(String arg : split)
         {
-            switch(s.charAt(0))
+            arg = arg.trim();
+            
+            switch(arg.charAt(0))
             {
                 case 'a':
                     addGameMode(GameMode.ADVENTURE);
@@ -145,7 +142,7 @@ public class FlagGameMode extends Flag
                 {
                     try
                     {
-                        addGameMode(GameMode.valueOf(s));
+                        addGameMode(GameMode.valueOf(arg));
                     }
                     catch(IllegalArgumentException e)
                     {
@@ -175,6 +172,7 @@ public class FlagGameMode extends Flag
         }
     }
     
+    /*
     @Override
     public List<String> information()
     {
@@ -184,4 +182,5 @@ public class FlagGameMode extends Flag
         
         return list;
     }
+    */
 }

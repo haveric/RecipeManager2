@@ -1,5 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -8,6 +10,7 @@ import org.bukkit.map.MapView.Scale;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagMapItem extends Flag
@@ -30,7 +33,15 @@ public class FlagMapItem extends Flag
         
         D = new String[]
         {
-            "FLAG NOT IMPLEMENTED",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "  scale <value>    = map scale, values: " + Tools.collectionToString(Arrays.asList(Scale.values())).toLowerCase(),
+            "",
+            "",
         };
         
         E = new String[]
@@ -40,8 +51,6 @@ public class FlagMapItem extends Flag
     }
     
     // Flag code
-    
-    private MapView map; // TODO
     
     public FlagMapItem()
     {
@@ -78,6 +87,11 @@ public class FlagMapItem extends Flag
         return true;
     }
     
+    private boolean newMap = false;
+    private String world = null;
+    private Scale scale = Scale.CLOSEST;
+    private int[] center = new int[2];
+    
     @Override
     protected boolean onParse(String value)
     {
@@ -89,63 +103,44 @@ public class FlagMapItem extends Flag
             return false;
         }
         
-        boolean newMap = false;
-        int[] center = null;
-        World world = null;
-        Scale scale = null;
-        
-        for(String s : split)
+        for(String arg : split)
         {
-            s = s.trim();
+            arg = arg.trim();
             
-            if(s.equals("newmap"))
+            if(arg.equals("newmap"))
             {
                 newMap = true;
             }
-            else if(s.startsWith("world"))
+            else if(arg.startsWith("world"))
             {
-                split = s.split(" ", 2);
-                
-                if(split.length <= 1)
-                {
-                    RecipeErrorReporter.error("Flag " + getType() + " has 'world' argument with no world!");
-                    return false;
-                }
-                
-                value = split[1].trim();
-                world = Bukkit.getWorld(value);
+                value = arg.substring("world".length()).trim();
+                World world = Bukkit.getWorld(value);
                 
                 if(world == null)
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has 'world' that does not exist: " + value);
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'world' that is not loaded or doesn't exist: " + value);
                     return false;
                 }
+                
+                this.world = world.getName();
             }
-            else if(s.startsWith("scale"))
+            else if(arg.startsWith("scale"))
             {
-                split = s.split(" ", 2);
-                
-                if(split.length <= 1)
-                {
-                    RecipeErrorReporter.error("Flag " + getType() + " has 'scale' argument with no scale!");
-                    return false;
-                }
-                
-                value = split[1].trim();
+                value = arg.substring("scale".length()).trim();
                 
                 try
                 {
                     scale = Scale.valueOf(value.toUpperCase());
                 }
-                catch(Exception e)
+                catch(IllegalArgumentException e)
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has 'scale' with invalid argument: " + value, "See scale options in " + Files.FILE_INFO_FLAGS);
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'scale' with invalid argument: " + value, "See scale options in '" + Files.FILE_INFO_FLAGS + "' file at this flag.");
                     return false;
                 }
             }
-            else if(s.startsWith("center"))
+            else if(arg.startsWith("center"))
             {
-                split = s.split(" ", 3);
+                split = arg.split(" ", 2);
                 
                 if(split.length < 3)
                 {
@@ -158,16 +153,24 @@ public class FlagMapItem extends Flag
                     center = new int[]
                     {
                         Integer.valueOf(split[1].trim()),
-                        Integer.valueOf(split[1].trim())
+                        Integer.valueOf(split[2].trim())
                     };
                 }
-                catch(Exception e)
+                catch(Throwable e)
                 {
                     RecipeErrorReporter.error("Flag " + getType() + " has 'center' with invalid X/Z numbers, must be whole numbers!");
                     return false;
                 }
             }
         }
+        
+        return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        // TODO
         
         MapView map = Bukkit.getMap(getResult().getDurability());
         
@@ -176,26 +179,26 @@ public class FlagMapItem extends Flag
             if(world == null && map == null)
             {
                 RecipeErrorReporter.error("Flag " + getType() + " can't create a new map without either an existing map data value on item OR the world argument.");
-                return false;
+                return;
             }
             
-            map = Bukkit.createMap(world == null ? map.getWorld() : world);
+            map = Bukkit.createMap(world == null ? map.getWorld() : Bukkit.getWorld(world));
         }
         else if(map == null)
         {
             if(world == null)
             {
                 RecipeErrorReporter.error("Flag " + getType() + " can't find the map for item's data value and world is not set so it can't create one either.");
-                return false;
+                return;
             }
             
-            map = Bukkit.createMap(world);
+            map = Bukkit.createMap(Bukkit.getWorld(world));
         }
         
         if(map == null)
         {
             RecipeErrorReporter.error("Flag " + getType() + " couldn't create a new map!");
-            return false;
+            return;
         }
         
         if(center != null)
@@ -206,6 +209,14 @@ public class FlagMapItem extends Flag
         
         if(world != null)
         {
+            World world = Bukkit.getWorld(this.world);
+            
+            if(world == null)
+            {
+                a.addCustomReason("Unknown world: " + this.world);
+                return;
+            }
+            
             map.setWorld(world);
         }
         
@@ -213,7 +224,5 @@ public class FlagMapItem extends Flag
         {
             map.setScale(scale);
         }
-        
-        return true;
     }
 }

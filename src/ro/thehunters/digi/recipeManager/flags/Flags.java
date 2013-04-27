@@ -111,7 +111,7 @@ public class Flags implements Cloneable
      */
     public boolean canAdd(Flag flag)
     {
-        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_STORE);
+        return flag != null && flag.validate();
     }
     
     /**
@@ -182,7 +182,7 @@ public class Flags implements Cloneable
         }
         
         // check if parsed flag had valid values and needs to be added to flag list
-        if(flag.onParse(value) && !flag.getType().hasBit(Bit.NO_STORE))
+        if(flag.onParse(value))
         {
             flags.put(flag.getType(), flag);
         }
@@ -197,7 +197,9 @@ public class Flags implements Cloneable
     public void removeFlag(Flag flag)
     {
         if(flag == null)
+        {
             return;
+        }
         
         removeFlag(flag.getType());
     }
@@ -210,7 +212,9 @@ public class Flags implements Cloneable
     public void removeFlag(FlagType type)
     {
         if(type == null)
+        {
             return;
+        }
         
         Flag flag = flags.remove(type);
         
@@ -247,7 +251,9 @@ public class Flags implements Cloneable
         for(Flag flag : flags.values())
         {
             if(!flag.hasSkipPermission(p))
+            {
                 flag.check(a);
+            }
         }
         
         return !a.hasReasons();
@@ -296,6 +302,18 @@ public class Flags implements Cloneable
     }
     
     /**
+     * Notifies all flags that the recipe was registered.<br>
+     * Shouldn't really be triggered manually.
+     */
+    public void sendRegistered()
+    {
+        for(Flag flag : flags.values())
+        {
+            flag.registered();
+        }
+    }
+    
+    /**
      * Copy this flag storage and give it a new container.<br>
      * 
      * @param newContainer
@@ -305,7 +323,6 @@ public class Flags implements Cloneable
     {
         Flags clone = clone();
         clone.flaggable = newContainer;
-        
         return clone;
     }
     

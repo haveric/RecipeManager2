@@ -35,7 +35,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
+import ro.thehunters.digi.recipeManager.recipes.CombineRecipe;
+import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
+import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 /**
  * Collection of conversion and useful methods
@@ -1231,6 +1235,58 @@ public class Tools
         return -1;
     }
     
+    public static int findItemInIngredients(BaseRecipe recipe, Material type, Short data)
+    {
+        int found = 0;
+        
+        if(recipe instanceof CraftRecipe)
+        {
+            CraftRecipe r = (CraftRecipe)recipe;
+            
+            for(ItemStack i : r.getIngredients())
+            {
+                if(i == null)
+                {
+                    continue;
+                }
+                
+                if(i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD ? true : i.getDurability() == data))
+                {
+                    found++;
+                }
+            }
+        }
+        else if(recipe instanceof CombineRecipe)
+        {
+            CombineRecipe r = (CombineRecipe)recipe;
+            
+            for(ItemStack i : r.getIngredients())
+            {
+                if(i == null)
+                {
+                    continue;
+                }
+                
+                if(i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD ? true : i.getDurability() == data))
+                {
+                    found++;
+                }
+            }
+        }
+        else if(recipe instanceof SmeltRecipe)
+        {
+            SmeltRecipe r = (SmeltRecipe)recipe;
+            ItemStack i = r.getIngredient();
+            
+            if(i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD ? true : i.getDurability() == data))
+            {
+                found++;
+            }
+        }
+        
+        return found;
+    }
+    
     public static boolean compareShapedRecipeToMatrix(ShapedRecipe recipe, ItemStack[] matrix, ItemStack[] matrixMirror)
     {
         ItemStack[] ingredients = Tools.convertShapedRecipeToItemMatrix(recipe);
@@ -1348,7 +1404,7 @@ public class Tools
         
         for(int i = 0; i < size; i++)
         {
-            if(!sortedIngr.get(i).isSimilar(ingredients.get(i)))
+            if(!sortedIngr.get(i).equals(ingredients.get(i)))
             {
                 return false;
             }

@@ -35,7 +35,8 @@ public class BaseRecipe implements Flaggable
         }
     }
     
-    private String name = "???";
+    protected String name;
+    protected boolean customName;
     private Flags flags;
     protected int hash;
     
@@ -72,21 +73,71 @@ public class BaseRecipe implements Flaggable
     /**
      * Returns the auto-generated name or the custom name (if set) of the recipe.
      * 
-     * @return never null
+     * @return recipe name, never null.
      */
     public String getName()
     {
+        if(name == null)
+        {
+            resetName();
+        }
+        
         return name;
     }
     
+    /**
+     * If it's the auto-generated name it returns it without the ingredients.<br>
+     * Returns full name if it's a custom name or a fuel recipe.
+     * 
+     * @return parsed generated name or original custom name
+     */
+    public String getNameNoIngredients()
+    {
+        String name = getName();
+        
+        if(customName || this instanceof FuelRecipe)
+        {
+            return name;
+        }
+        
+        int first = name.indexOf('(') - 1; // trim a space too
+        int last = name.lastIndexOf(')') + 1;
+        
+        if(first > 0 && last > 0)
+        {
+            name = name.substring(0, first) + name.substring(last);
+        }
+        
+        return name;
+    }
+    
+    /**
+     * @return true if recipe has custom name or false if it's auto-generated.
+     */
+    public boolean hasCustomName()
+    {
+        return customName;
+    }
+    
+    /**
+     * Set the name of this recipe.
+     * 
+     * @param name
+     *            should be an UNIQUE name
+     */
     public void setName(String name)
     {
         this.name = name;
+        customName = true;
     }
     
-    public void regenName()
+    /**
+     * Reset name to the auto-generated one.
+     */
+    public void resetName()
     {
-        name = "Empty recipe";
+        name = "unknown recipe";
+        customName = false;
     }
     
     public boolean isValid()

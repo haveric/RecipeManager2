@@ -1,8 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
@@ -24,8 +21,7 @@ public class FlagModExp extends Flag
         
         A = new String[]
         {
-            "{flag} [modifier]<number>",
-            "{flag} [modifier]<number> | <message>",
+            "{flag} [modifier]<amount> | [fail message]",
             "{flag} false",
         };
         
@@ -35,8 +31,12 @@ public class FlagModExp extends Flag
             "Using this flag more than once will overwrite the previous one.",
             "",
             "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
-            "The '<number>' argument must be the amount of experience to modify.",
-            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "The '<amount>' argument must be the amount of experience to modify.",
+            "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "For the fail message you can use the following arguments:",
+            "  {amount}       = amount defined in the flag, never has modifier prefix.",
+            "  {modifier}     = the modifier prefix.",
+            "  {actualamount} = (only works for - modifier) the actual amount lost.",
             "",
             "NOTE: This is for total experience points, for experience levels use " + FlagType.MODLEVEL.toString(),
             "NOTE: This flag does not check if player has enough experience when subtracting! Use in combination with " + FlagType.NEEDEXP.toString() + " if you want to check.",
@@ -55,7 +55,7 @@ public class FlagModExp extends Flag
     
     private char mod = '+';
     private int amount = 0;
-    private String message = null;
+    private String failMessage = null;
     
     public FlagModExp()
     {
@@ -65,7 +65,7 @@ public class FlagModExp extends Flag
     {
         mod = flag.mod;
         amount = flag.amount;
-        message = flag.message;
+        failMessage = flag.failMessage;
     }
     
     @Override
@@ -132,14 +132,14 @@ public class FlagModExp extends Flag
         this.amount = Math.abs(amount);
     }
     
-    public String getMessage()
+    public String getFailMessage()
     {
-        return message;
+        return failMessage;
     }
     
-    public void setMessage(String message)
+    public void setFailMessage(String message)
     {
-        this.message = message;
+        this.failMessage = message;
     }
     
     @Override
@@ -149,7 +149,7 @@ public class FlagModExp extends Flag
         
         if(split.length > 1)
         {
-            setMessage(split[1].trim());
+            setFailMessage(split[1].trim());
         }
         
         value = split[0].trim();
@@ -212,11 +212,26 @@ public class FlagModExp extends Flag
         }
         
         Player p = a.player();
+        int exp = 0;
         
         switch(mod)
         {
+            case '+':
+            {
+                /*
+                p.giveExp(amount);
+                */
+                
+                exp = Tools.Exp.getTotalExperience(p) + amount;
+                
+                a.addEffect(Messages.FLAG_MODEXP_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
+                
+                break;
+            }
+            
             case '-':
             {
+                /*
                 int diff = p.getTotalExperience() - amount;
                 
                 p.setTotalExperience(0);
@@ -226,23 +241,22 @@ public class FlagModExp extends Flag
                 {
                     p.giveExp(diff);
                 }
+                else
+                {
+                    p.setExp(0);
+                }
+                */
                 
-                a.addEffect(Messages.FLAG_MODEXP_SUB, message, "{amount}", amount);
+                exp = Math.max(Tools.Exp.getTotalExperience(p) - amount, 0);
                 
-                break;
-            }
-            
-            case '+':
-            {
-                p.giveExp(amount);
-                
-                a.addEffect(Messages.FLAG_MODEXP_ADD, message, "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODEXP_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
                 
                 break;
             }
             
             case '=':
             {
+                /*
                 p.setTotalExperience(0);
                 p.setLevel(0);
                 
@@ -250,14 +264,20 @@ public class FlagModExp extends Flag
                 {
                     p.giveExp(amount);
                 }
+                */
                 
-                a.addEffect(Messages.FLAG_MODEXP_SET, message, "{amount}", amount);
+                exp = Math.max(amount, 0);
+                
+                a.addEffect(Messages.FLAG_MODEXP_SET, failMessage, "{amount}", amount, "{modifier}", mod);
                 
                 break;
             }
         }
+        
+        Tools.Exp.setTotalExperience(p, exp);
     }
     
+    /*
     @Override
     public List<String> information()
     {
@@ -266,16 +286,17 @@ public class FlagModExp extends Flag
         switch(mod)
         {
             case '+':
-                list.add(Messages.FLAG_MODEXP_ADD.get("{amount}", amount));
+                list.add(Messages.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod));
                 break;
             case '-':
-                list.add(Messages.FLAG_MODEXP_SUB.get("{amount}", amount));
+                list.add(Messages.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}", mod, "{actualamount}", amount));
                 break;
             case '=':
-                list.add(Messages.FLAG_MODEXP_SET.get("{amount}", amount));
+                list.add(Messages.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod));
                 break;
         }
         
         return list;
     }
+    */
 }

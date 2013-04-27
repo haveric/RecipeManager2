@@ -1,8 +1,15 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
@@ -22,23 +29,44 @@ public class FlagFireworkItem extends Flag
         
         A = new String[]
         {
-            "{flag} ...",
+            "{flag} effect <effect data>",
+            "{flag} power <0-128>",
         };
         
         D = new String[]
         {
-            "FLAG NOT IMPLEMENTED",
+            "Configures firework rocket's effects.",
+            "Using this flag more than once will append changes to the item.",
+            "",
+            "The 'effect' setting adds an effect to the rocket.",
+            "Replace '<effect arguments>' with the following arguments separated by | character.",
+            "Effects can be:",
+            "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.",
+            "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
+            "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + Tools.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)",
+            "  trail                                     = (Optional) Adds a trail to the explosion",
+            "  flicker                                   = (Optional) Adds a flicker to explosion",
+            "Effects can be listed in any order.",
+            "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
+            "",
+            "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.",
+            "",
+            "Specific item: firework.",
         };
         
         E = new String[]
         {
-            "{flag} ...",
+            "{flag} effect color 0 255 0",
+            "{flag} effect trail | color 255 0 0 | type burst",
+            "{flag} effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0",
+            "{flag} power 1",
         };
     }
     
     // Flag code
     
-    private FireworkMeta fwMeta; // TODO
+    private int power = 2;
+    private List<FireworkEffect> effects = new ArrayList<FireworkEffect>();
     
     public FlagFireworkItem()
     {
@@ -46,7 +74,7 @@ public class FlagFireworkItem extends Flag
     
     public FlagFireworkItem(FlagFireworkItem flag)
     {
-        // TODO clone
+        effects.addAll(flag.effects);
     }
     
     @Override
@@ -59,6 +87,33 @@ public class FlagFireworkItem extends Flag
     public FlagType getType()
     {
         return TYPE;
+    }
+    
+    public int getPower()
+    {
+        return power;
+    }
+    
+    public void setPower(int power)
+    {
+        this.power = power;
+    }
+    
+    public List<FireworkEffect> getEffects()
+    {
+        return effects;
+    }
+    
+    public void setEffects(List<FireworkEffect> effects)
+    {
+        Validate.notNull(effects, "The 'effects' argument must not be null!");
+        
+        this.effects = effects;
+    }
+    
+    public void addEffect(FireworkEffect effect)
+    {
+        effects.add(effect);
     }
     
     @Override
@@ -78,59 +133,38 @@ public class FlagFireworkItem extends Flag
     @Override
     public boolean onParse(String value)
     {
-        ItemResult result = getResult();
-        FireworkMeta firework = (FireworkMeta)result.getItemMeta();
-        
         value = value.toLowerCase();
         
         if(value.startsWith("effect"))
         {
-            String[] split = value.split(" ", 2);
+            value = value.substring("power".length()).trim();
             
-            if(split.length <= 1)
-            {
-                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'effect' !");
-                return false;
-            }
-            
-            FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), getType());
+            FireworkEffect effect = Tools.parseFireworkEffect(value, getType());
             
             if(effect == null)
             {
                 return false;
             }
             
-            firework.addEffect(effect);
-            result.setItemMeta(firework);
+            addEffect(effect);
         }
         else if(value.startsWith("power"))
         {
-            String[] split = value.split(" ", 2);
-            
-            if(split.length <= 1)
-            {
-                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'power' !");
-                return false;
-            }
-            
-            int power = -1;
+            value = value.substring("power".length()).trim();
             
             try
             {
-                power = Integer.valueOf(split[1].trim());
+                setPower(Integer.valueOf(value));
             }
-            catch(Exception e)
+            catch(NumberFormatException e)
             {
             }
             
-            if(power < 0 || power > 128)
+            if(getPower() < 0 || getPower() > 128)
             {
-                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument, it must be a number from 0 to 128");
+                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
                 return false;
             }
-            
-            firework.setPower(power);
-            result.setItemMeta(firework);
         }
         else
         {
@@ -138,5 +172,30 @@ public class FlagFireworkItem extends Flag
         }
         
         return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        if(!a.hasResult())
+        {
+            a.addCustomReason("Need result!");
+            return;
+        }
+        
+        ItemMeta meta = a.result().getItemMeta();
+        
+        if(meta instanceof FireworkMeta == false)
+        {
+            a.addCustomReason("Needs FireworkMeta supported item!");
+            return;
+        }
+        
+        FireworkMeta fireworkMeta = (FireworkMeta)meta;
+        
+        fireworkMeta.addEffects(getEffects());
+        fireworkMeta.setPower(getPower());
+        
+        a.result().setItemMeta(fireworkMeta);
     }
 }

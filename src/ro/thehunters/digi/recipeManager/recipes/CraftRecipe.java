@@ -11,6 +11,7 @@ import org.bukkit.inventory.ShapedRecipe;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.Vanilla;
 import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
@@ -116,9 +117,7 @@ public class CraftRecipe extends WorkbenchRecipe
         
         if(slot != 0 && ingredients[0] == null)
         {
-            Messages.info(ChatColor.RED + "A plugin is using setIngredient() with index NOT starting at 0, shape is corupted!!!");
-            new Exception().printStackTrace();
-            return;
+            throw new IllegalArgumentException("A plugin is using setIngredient() with index NOT starting at 0, shape is corupted!!!");
         }
         
         ingredients[slot] = new ItemStack(type, 1, (short)data);
@@ -154,7 +153,6 @@ public class CraftRecipe extends WorkbenchRecipe
         }
         
         StringBuilder str = new StringBuilder("craft");
-        ItemStack item;
         
         if(mirror)
         {
@@ -175,7 +173,7 @@ public class CraftRecipe extends WorkbenchRecipe
         {
             for(int w = 0; w < 3; w++)
             {
-                item = ingredients[(h * 3) + w];
+                ItemStack item = ingredients[(h * 3) + w];
                 
                 if(item != null)
                 {
@@ -201,49 +199,60 @@ public class CraftRecipe extends WorkbenchRecipe
     }
     
     @Override
-    public void regenName()
+    public void resetName()
     {
-        // TODO
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
         
-        if(removed)
+        s.append("shaped ").append(getWidth()).append("x").append(getHeight());
+        
+        s.append(" (");
+        
+        for(int h = 0; h < height; h++)
         {
-            s.append("removed ");
-        }
-        else if(hasFlag(FlagType.OVERRIDE))
-        {
-            s.append("overwritten ");
+            for(int w = 0; w < width; w++)
+            {
+                ItemStack item = ingredients[(h * 3) + w];
+                
+                if(item != null)
+                {
+                    s.append(item.getTypeId()); // item.getType().toString().toLowerCase());
+                    
+                    if(item.getDurability() != Vanilla.DATA_WILDCARD)
+                    {
+                        s.append(":").append(item.getDurability());
+                    }
+                }
+                else
+                {
+                    s.append("0");
+                }
+                
+                if(w < (width - 1))
+                {
+                    s.append(" ");
+                }
+            }
+            
+            if(h < (height - 1))
+            {
+                s.append(" / ");
+            }
         }
         
-        s.append("shaped ");
-        
-        s.append(getWidth()).append('x').append(getHeight());
+        s.append(") ");
         
         if(!removed)
         {
-            s.append(" = ");
-            int resultNum = getResults().size();
-            
-            if(resultNum > 0)
-            {
-                ItemStack result = getFirstResult();
-                
-                s.append(result == null ? "nothing" : result.getType());
-                
-                if(resultNum > 1)
-                {
-                    s.append(" & ").append(resultNum - 1).append(" more");
-                }
-            }
-            else
-            {
-                s.append("no result");
-            }
+            s.append(this.getResultsString());
+        }
+        else
+        {
+            s.append("removed recipe");
         }
         
-        setName(s.toString());
-        Messages.debug("recipe name = " + getName());
+        name = s.toString();
+        customName = false;
     }
     
     /**
@@ -370,7 +379,7 @@ public class CraftRecipe extends WorkbenchRecipe
     @Override
     public String printBookIndex()
     {
-        return Tools.getItemName(getFirstResult());
+        return Tools.Item.getName(getFirstResult());
     }
     
     @Override
@@ -380,7 +389,7 @@ public class CraftRecipe extends WorkbenchRecipe
         
         s.append(Messages.RECIPEBOOK_HEADER_SHAPED.get());
         
-        s.append('\n').append(Tools.printItem(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
         
         if(isMultiResult())
         {
@@ -417,7 +426,7 @@ public class CraftRecipe extends WorkbenchRecipe
             }
             else
             {
-                String print = Tools.printItemBook(ingredients[i]);
+                String print = Tools.Item.print(ingredients[i], ChatColor.RED, ChatColor.BLACK, true);
                 Integer get = charItems.get(print);
                 
                 if(get == null)

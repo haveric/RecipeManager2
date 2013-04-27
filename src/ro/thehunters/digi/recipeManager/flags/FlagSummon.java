@@ -1,6 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
@@ -30,13 +31,15 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
-import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.Tools;
 
 ;
 
@@ -56,58 +59,66 @@ public class FlagSummon extends Flag
         A = new String[]
         {
             "{flag} <type> | [arguments]",
-            "{flag} false",
         };
+        
+        String argFormat = "  %-26s = %s";
         
         D = new String[]
         {
-            "NOTE: not finished, some arguments don't do anything yet, most of them work, some of them are broken.", // TODO finish
-            "",
             "Summons a creature.",
             "Using this flag more than once will add more creatures.",
             "",
             "The <type> argument can be a living entity type, you can find all entity types in '" + Files.FILE_INFO_NAMES + "' file.",
             "",
             "Optionally you can add some arguments separated by | character, those being:",
-            "  noeffect             = no spawning particle effects on creature.",
-            "  noremove             = prevents creature from being removed if nobody is near it.",
-            "  mountnext            = this creature will mount the next creature definition that triggers after it.",
-            "  chance <0.01-100>%   = chance of the creature to spawn, this value is for individual creatures.",
-            "  num <number>         = spawn more cloned creatures.",
-            "  spread <range>       = spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)",
-            "  view <yaw> [pitch]   = sets the creature's yaw view axis and optionally the pitch view axis too, values must be angles from -180 to 180.",
-            "  target               = creature targets crafter, that means monsters attack and animals follow and the rest do nothing.",
-            "  onfire <time>        = spawn creature on fire for <time> amount of seconds, value can be float.",
-            "  nodamage <time>      = spawn creature as invulnerable for <time> amount of seconds, value can be float.",
-            "  damagedelay <time>   = make creature have invulnerability of <time> amount of seconds after being damaged.",
-            "  pickup [true/false]  = change if creature can pick-up dropped items.",
-            "  pet [nosit]          = makes creature owned by crafter, only works for wolf and ocelot, optionally specify 'nosit' to not spawn creature in sit stance.",
-            "  collar <dye>         = sets wolf collar color, only works for wolves and only if 'pet' argument is set, values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section.",
-            "  angrywolf            = makes wolf angry, only works for wolves and it's incompatible with 'pet' and 'collar' arguments.",
-            "  cat <type>           = ocelot type, available values: wild, black, red, siamese.",
-            "  saddle [mount]       = adds saddle on creature, only works for pig, optionally you can specify 'mount' to make crafter mount creature.",
-            "  color <dye>          = sets character color, only works for sheep, values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section.",
-            "  shearedsheep         = sets the sheep as sheared, only works for sheep.",
-            "  zombievillager       = makes zombie a zombie villager, only works on zombies.",
-            "  villager <type>      = set the villager profession, values: famer, librarian, priest, blacksmith, butcher.",
-            "  skeleton <type>      = set the skeleton type, values: normal, wither", // TODO maybe list SkeletonType directly ?
-            "  poweredcreeper       = makes creeper a powered one, only works for creepers.",
-            "  name <text>          = sets the creature's name, supports colors (<red>, &3, etc).",
-            "  nohidename           = don't hide name plate when aiming away from creature.",
-            "  hp <health> [max]    = set creature's health and optionally max health",
-            "  baby [always]        = spawn creature as a baby, optionally specify 'always' to prevent creature from growing up (doesn't work for zombies)",
-            "  head <item> [drop%]  = equip an item on the creature's head with optional drop chance.",
-            "  chest <item> [drop%] = equip an item on the creature's chest with optional drop chance.",
-            "  legs <item> [drop%]  = equip an item on the creature's legs with optional drop chance.",
-            "  feet <item> [drop%]  = equip an item on the creature's feet with optional drop chance.",
-            "  hand <item> [drop%]  = equip an item on the creature's hand with optional drop chance.",
+            String.format(argFormat, "noeffect", "no spawning particle effects on creature."),
+            String.format(argFormat, "noremove", "prevents creature from being removed if nobody is near it."),
+            String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
+            String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
+            String.format(argFormat, "num <number>", "spawn more cloned creatures."),
+            String.format(argFormat, "spread <range>", "spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
+            String.format(argFormat, "target", "creature targets crafter, that means monsters attack and animals follow and the rest do nothing"),
+            String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."),
+            String.format(argFormat, "onfire <time>", "spawn creature on fire for <time> amount of seconds, value can be float."),
+            String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
+            String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for wolf and ocelot, optionally specify 'nosit' to not spawn creature in sit stance."),
+            String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
+            String.format(argFormat, "cat <type>", "ocelot type, available values: " + Tools.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
+            String.format(argFormat, "saddle [mount]", "adds saddle on creature, only works for pig, optionally you can specify 'mount' to make crafter mount creature."),
+            String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
+            String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
+            String.format(argFormat, "villager <type>", "set the villager profession, values: " + Tools.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
+            String.format(argFormat, "skeleton <type>", "set the skeleton type, values: " + Tools.collectionToString(Arrays.asList(SkeletonType.values())).toLowerCase()),
+            String.format(argFormat, "zombievillager", "makes zombie a zombie villager, only works on zombies."),
+            String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
+            String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
+            String.format(argFormat, "name <text>", "sets the creature's name, supports colors (<red>, &3, etc)."),
+            String.format(argFormat, "nohidename", "don't hide name plate when not aiming at creature."),
+            String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health"),
+            String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies."),
+            String.format(argFormat, "agelock", "prevent the creature from maturing or getting ready for mating, works with animals and villagers."),
+            String.format(argFormat, "nobreed", "prevent the creature being able to breed, works for animals and villagers."),
+            String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
+            String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
+            String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
+            String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
+            String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."),
+            String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
             "",
             "These arguments can be used in any order and they're all optional.",
         };
         
         E = new String[]
         {
-            "{flag}", // TODO
+            "{flag} cow",
+            "{flag} skeleton | hand bow // skeletons spawn without weapons, you need to give it one",
+            "{flag} zombie | zombievillager | baby | chest chainmail_chestplate 25% | legs chainmail_leggings 25% | hand iron_sword 50% // baby villager zombie warrior",
+            "{flag} sheep | color pink | name <light_purple>Pony",
+            "{flag} ocelot | cat redcat | pet | potion speed 30 5",
+            "// chicken on a villager and villager on a cow:",
+            "{flag} chicken | mountnext",
+            "{flag} villager | mountnext",
+            "{flag} cow",
         };
     }
     
@@ -115,23 +126,20 @@ public class FlagSummon extends Flag
     
     public class Customization implements Cloneable
     {
-        private EntityType type;
+        private EntityType type = EntityType.PIG;
         private boolean noEffect = false;
         private boolean noRemove = false;
+        private boolean mountNext = false;
         private float chance = 100.0f;
         private int num = 1;
         private int spread = 0;
-        private Float yaw = null;
-        private Float pitch = null;
         private float onFire = 0;
-        private float noDamage = 0;
-        private float damageDelay = 0;
         private Boolean pickup = null;
         private boolean target = false;
+        private boolean hit = false;
+        private boolean angry = false;
         private boolean pet = false;
         private boolean noSit = false;
-        private DyeColor collar = null;
-        private boolean angryWolf = false;
         private Ocelot.Type cat = null;
         private boolean saddle = false;
         private boolean mount = false;
@@ -141,46 +149,60 @@ public class FlagSummon extends Flag
         private boolean zombieVillager = false;
         private Villager.Profession villager = null;
         private boolean poweredCreeper = false;
-        private MaterialData enderHand = null;
         private boolean playerIronGolem = false;
-        private int pigZombieAnger = 0;
+        private int pigAnger = 0;
         private String name = null;
         private boolean noHideName = false;
         private int hp = 0;
         private int maxHp = 0;
         private boolean baby = false;
-        private boolean alwaysBaby = false;
+        private boolean ageLock = false;
+        private boolean noBreed = false;
         private ItemStack[] equip = new ItemStack[5];
         private float[] drop = new float[5];
-        private List<PotionEffect> effects = new ArrayList<PotionEffect>();
-        private boolean mountNext = false;
+        private List<PotionEffect> potions = new ArrayList<PotionEffect>();
         
         public Customization(EntityType type)
         {
             this.type = type;
         }
         
-        public Customization(Customization clone)
+        public Customization(Customization c)
         {
-            // TODO clone
-            
-            type = clone.type;
-            noEffect = clone.noEffect;
-            noRemove = clone.noRemove;
-            chance = clone.chance;
-            num = clone.num;
-            spread = clone.spread;
-            target = clone.target;
-            pet = clone.pet;
-            name = clone.name;
-            noHideName = clone.noHideName;
-            hp = clone.hp;
-            maxHp = clone.maxHp;
-            baby = clone.baby;
-            alwaysBaby = clone.alwaysBaby;
-            equip = clone.equip.clone();
-            drop = clone.drop.clone();
-            effects.addAll(clone.effects);
+            type = c.type;
+            noEffect = c.noEffect;
+            noRemove = c.noRemove;
+            chance = c.chance;
+            num = c.num;
+            spread = c.spread;
+            onFire = c.onFire;
+            pickup = c.pickup;
+            target = c.target;
+            hit = c.hit;
+            angry = c.angry;
+            pet = c.pet;
+            noSit = c.noSit;
+            cat = c.cat;
+            saddle = c.saddle;
+            mount = c.mount;
+            color = c.color;
+            shearedSheep = c.shearedSheep;
+            skeleton = c.skeleton;
+            zombieVillager = c.zombieVillager;
+            villager = c.villager;
+            poweredCreeper = c.poweredCreeper;
+            playerIronGolem = c.playerIronGolem;
+            name = c.name;
+            noHideName = c.noHideName;
+            hp = c.hp;
+            maxHp = c.maxHp;
+            baby = c.baby;
+            ageLock = c.ageLock;
+            noBreed = c.noBreed;
+            System.arraycopy(c.equip, 0, equip, 0, c.equip.length);
+            System.arraycopy(c.drop, 0, drop, 0, c.drop.length);
+            potions.addAll(c.potions);
+            mountNext = c.mountNext;
         }
         
         @Override
@@ -234,23 +256,14 @@ public class FlagSummon extends Flag
                     
                     if(!found)
                     {
-                        Messages.debug("Can't find suitable location !");
+                        Messages.debug("Can't find suitable location after " + (spread * 10) + " tries !");
                     }
                     
                     location.add(0.5, 0, 0.5);
                 }
                 
-                if(yaw != null)
-                {
-                    location.setYaw(yaw);
-                }
-                
-                if(pitch != null)
-                {
-                    location.setPitch(pitch);
-                }
-                
                 LivingEntity ent = (LivingEntity)world.spawnEntity(location, type);
+                entities.add(ent);
                 
                 if(!noEffect)
                 {
@@ -266,16 +279,6 @@ public class FlagSummon extends Flag
                 if(onFire > 0.0f)
                 {
                     ent.setFireTicks((int)Math.ceil(onFire * 20.0));
-                }
-                
-                if(noDamage > 0.0f)
-                {
-                    ent.setNoDamageTicks((int)Math.ceil(noDamage * 20.0));
-                }
-                
-                if(damageDelay > 0.0f)
-                {
-                    ent.setMaximumNoDamageTicks((int)Math.ceil(damageDelay * 20.0));
                 }
                 
                 if(pickup != null)
@@ -301,12 +304,12 @@ public class FlagSummon extends Flag
                             npc.setSitting(false);
                         }
                         
-                        if(collar != null)
+                        if(color != null)
                         {
-                            npc.setCollarColor(collar);
+                            npc.setCollarColor(color);
                         }
                     }
-                    else if(angryWolf)
+                    else if(angry)
                     {
                         npc.setAngry(true);
                     }
@@ -337,14 +340,23 @@ public class FlagSummon extends Flag
                     }
                 }
                 
-                if(baby && ent instanceof Ageable)
+                if(ent instanceof Ageable)
                 {
                     Ageable npc = (Ageable)ent;
-                    npc.setBaby();
                     
-                    if(alwaysBaby)
+                    if(baby)
+                    {
+                        npc.setBaby();
+                    }
+                    
+                    if(ageLock)
                     {
                         npc.setAgeLock(true);
+                    }
+                    
+                    if(noBreed)
+                    {
+                        npc.setBreed(false);
                     }
                 }
                 
@@ -386,18 +398,10 @@ public class FlagSummon extends Flag
                     npc.setPowered(true);
                 }
                 
-                if(enderHand != null && ent instanceof Enderman)
-                {
-                    Enderman npc = (Enderman)ent;
-                    npc.setCarriedMaterial(enderHand);
-                    // TODO test entity equipament in-hand item against this
-                }
-                
                 if(playerIronGolem && ent instanceof IronGolem)
                 {
                     IronGolem npc = (IronGolem)ent;
-                    npc.setPlayerCreated(true);
-                    // TODO what exacly does this do ?
+                    npc.setPlayerCreated(true); // TODO what exacly does this do ?
                 }
                 
                 if(shearedSheep && ent instanceof Sheep)
@@ -424,10 +428,24 @@ public class FlagSummon extends Flag
                     npc.setTarget(player);
                 }
                 
-                if(pigZombieAnger > 0 && ent instanceof PigZombie)
+                if(pigAnger > 0 && ent instanceof PigZombie)
                 {
                     PigZombie npc = (PigZombie)ent;
-                    npc.setAnger(pigZombieAnger);
+                    npc.setAnger(pigAnger);
+                }
+                
+                if(hit)
+                {
+                    ent.damage(0, player);
+                    ent.setVelocity(new Vector());
+                }
+                
+                if(!potions.isEmpty())
+                {
+                    for(PotionEffect effect : potions)
+                    {
+                        ent.addPotionEffect(effect, true);
+                    }
                 }
                 
                 ent.setRemoveWhenFarAway(!noRemove);
@@ -466,13 +484,22 @@ public class FlagSummon extends Flag
                             break;
                         
                         case 4:
-                            eq.setItemInHand(item);
-                            eq.setItemInHandDropChance(drop[i]);
+                        {
+                            if(ent instanceof Enderman)
+                            {
+                                Enderman npc = (Enderman)ent;
+                                npc.setCarriedMaterial(item.getData());
+                            }
+                            else
+                            {
+                                eq.setItemInHand(item);
+                                eq.setItemInHandDropChance(drop[i]);
+                            }
+                            
                             break;
+                        }
                     }
                 }
-                
-                entities.add(ent);
             }
             
             return entities;
@@ -603,7 +630,7 @@ public class FlagSummon extends Flag
         
         public void setName(String name)
         {
-            this.name = name;
+            this.name = Tools.parseColors(name, false);
         }
         
         public boolean isNoHideName()
@@ -646,14 +673,14 @@ public class FlagSummon extends Flag
             this.baby = baby;
         }
         
-        public boolean isAlwaysBaby()
+        public boolean isAgeLock()
         {
-            return alwaysBaby;
+            return ageLock;
         }
         
-        public void setAlwaysBaby(boolean alwaysBaby)
+        public void setAgeLock(boolean lock)
         {
-            this.alwaysBaby = alwaysBaby;
+            this.ageLock = lock;
         }
         
         public ItemStack[] getEquip()
@@ -676,34 +703,26 @@ public class FlagSummon extends Flag
             this.drop = drop;
         }
         
-        public List<PotionEffect> getEffects()
+        public List<PotionEffect> getPotionEffects()
         {
-            return effects;
+            return potions;
         }
         
-        public void setEffects(List<PotionEffect> effects)
+        public void setPotionEFfects(List<PotionEffect> effects)
         {
-            this.effects = effects;
+            if(effects == null)
+            {
+                potions.clear();
+            }
+            else
+            {
+                potions = effects;
+            }
         }
         
-        public Float getYaw()
+        public void addPotionEffect(PotionEffectType type, float duration, int amplifier)
         {
-            return yaw;
-        }
-        
-        public void setYaw(Float yaw)
-        {
-            this.yaw = yaw;
-        }
-        
-        public Float getPitch()
-        {
-            return pitch;
-        }
-        
-        public void setPitch(Float pitch)
-        {
-            this.pitch = pitch;
+            potions.add(new PotionEffect(type, (int)Math.ceil((duration * 20) / type.getDurationModifier()), amplifier));
         }
         
         public float getOnFire()
@@ -714,26 +733,6 @@ public class FlagSummon extends Flag
         public void setOnFire(float onFire)
         {
             this.onFire = onFire;
-        }
-        
-        public float getNoDamage()
-        {
-            return noDamage;
-        }
-        
-        public void setNoDamage(float noDamage)
-        {
-            this.noDamage = noDamage;
-        }
-        
-        public float getDamageDelay()
-        {
-            return damageDelay;
-        }
-        
-        public void setDamageDelay(float damageDelay)
-        {
-            this.damageDelay = damageDelay;
         }
         
         public Boolean getPickup()
@@ -756,24 +755,14 @@ public class FlagSummon extends Flag
             this.noSit = noSit;
         }
         
-        public DyeColor getCollar()
+        public boolean isAngry()
         {
-            return collar;
+            return angry;
         }
         
-        public void setCollar(DyeColor collar)
+        public void setAngry(boolean angry)
         {
-            this.collar = collar;
-        }
-        
-        public boolean isAngryWolf()
-        {
-            return angryWolf;
-        }
-        
-        public void setAngryWolf(boolean angryWolf)
-        {
-            this.angryWolf = angryWolf;
+            this.angry = angry;
         }
         
         public Ocelot.Type getCat()
@@ -846,16 +835,6 @@ public class FlagSummon extends Flag
             this.poweredCreeper = poweredCreeper;
         }
         
-        public MaterialData getEnderHand()
-        {
-            return enderHand;
-        }
-        
-        public void setEnderHand(MaterialData enderHand)
-        {
-            this.enderHand = enderHand;
-        }
-        
         public boolean isPlayerIronGolem()
         {
             return playerIronGolem;
@@ -866,14 +845,14 @@ public class FlagSummon extends Flag
             this.playerIronGolem = playerIronGolem;
         }
         
-        public int getPigZombieAnger()
+        public int getPigAnger()
         {
-            return pigZombieAnger;
+            return pigAnger;
         }
         
-        public void setPigZombieAnger(int pigZombieAnger)
+        public void setPigAnger(int anger)
         {
-            this.pigZombieAnger = pigZombieAnger;
+            this.pigAnger = anger;
         }
         
         public boolean isMountNext()
@@ -885,9 +864,29 @@ public class FlagSummon extends Flag
         {
             this.mountNext = mountNext;
         }
+        
+        public boolean isHit()
+        {
+            return hit;
+        }
+        
+        public void setHit(boolean hit)
+        {
+            this.hit = hit;
+        }
+        
+        public boolean isNoBreed()
+        {
+            return noBreed;
+        }
+        
+        public void setNoBreed(boolean noBreed)
+        {
+            this.noBreed = noBreed;
+        }
     }
     
-    List<Customization> spawn = new ArrayList<Customization>();
+    private List<Customization> spawn = new ArrayList<Customization>();
     
     public FlagSummon()
     {
@@ -943,7 +942,7 @@ public class FlagSummon extends Flag
         String[] split = value.split("\\|");
         
         value = split[0].trim();
-        EntityType type = EntityType.fromName(value);
+        EntityType type = Tools.parseEnum(value, EntityType.values());
         
         if(type == null || !type.isAlive())
         {
@@ -951,54 +950,185 @@ public class FlagSummon extends Flag
             return false;
         }
         
-        Customization customize = new Customization(type);
+        Customization c = new Customization(type);
         
         if(split.length > 1)
         {
-            for(int i = 1; i < split.length; i++)
+            for(int n = 1; n < split.length; n++)
             {
-                String original = split[i].trim();
+                String original = split[n].trim();
                 value = original.toLowerCase();
                 
                 if(value.equals("noremove"))
                 {
-                    customize.setNoRemove(true);
+                    c.setNoRemove(true);
                 }
                 else if(value.equals("noeffect"))
                 {
-                    customize.setNoEffect(true);
+                    c.setNoEffect(true);
                 }
                 else if(value.equals("target"))
                 {
-                    customize.setTarget(true);
+                    c.setTarget(true);
                 }
                 else if(value.equals("nohidename"))
                 {
-                    customize.setNoHideName(true);
+                    c.setNoHideName(true);
                 }
                 else if(value.equals("mountnext"))
                 {
-                    customize.setMountNext(true);
+                    c.setMountNext(true);
                 }
-                else if(value.equals("angrywolf"))
+                else if(value.equals("angry"))
                 {
-                    customize.setAngryWolf(true);
+                    switch(type)
+                    {
+                        case WOLF:
+                        case PIG_ZOMBIE:
+                            break;
+                        
+                        default:
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'angry' on unsupported creature!");
+                            continue;
+                    }
+                    
+                    c.setAngry(true);
                 }
                 else if(value.equals("shearedsheep"))
                 {
-                    customize.setShearedSheep(true);
+                    if(type != EntityType.SHEEP)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'shearedsheep' on non-sheep creature!");
+                        continue;
+                    }
+                    
+                    c.setShearedSheep(true);
                 }
                 else if(value.equals("zombievillager"))
                 {
-                    customize.setZombieVillager(true);
+                    if(type != EntityType.ZOMBIE)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'zombievillager' on non-zombie creature!");
+                        continue;
+                    }
+                    
+                    c.setZombieVillager(true);
                 }
                 else if(value.equals("poweredcreeper"))
                 {
-                    customize.setPoweredCreeper(true);
+                    if(type != EntityType.CREEPER)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'poweredcreeper' on non-creeper creature!");
+                        continue;
+                    }
+                    
+                    c.setPoweredCreeper(true);
+                }
+                else if(value.equals("playerirongolem"))
+                {
+                    if(type != EntityType.IRON_GOLEM)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'playerirongolem' on non-irongolem creature!");
+                        continue;
+                    }
+                    
+                    c.setPlayerIronGolem(true);
+                }
+                else if(value.equals("hit"))
+                {
+                    c.setHit(true);
+                }
+                else if(value.equals("baby"))
+                {
+                    switch(type)
+                    {
+                        case CHICKEN:
+                        case COW:
+                        case MUSHROOM_COW:
+                        case OCELOT:
+                        case PIG:
+                        case SHEEP:
+                        case VILLAGER:
+                        case WOLF:
+                        case ZOMBIE: // has set/getBaby() but does not implement Ageable
+                            break;
+                        
+                        default:
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'baby' set on unsupported creature!");
+                            continue;
+                    }
+                    
+                    c.setBaby(true);
+                }
+                else if(value.equals("agelock"))
+                {
+                    switch(type)
+                    {
+                        case CHICKEN:
+                        case COW:
+                        case MUSHROOM_COW:
+                        case OCELOT:
+                        case PIG:
+                        case SHEEP:
+                        case VILLAGER:
+                        case WOLF:
+                            break;
+                        
+                        default:
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'agelock' set on unsupported creature!");
+                            continue;
+                    }
+                    
+                    c.setAgeLock(true);
+                }
+                else if(value.equals("nobreed"))
+                {
+                    switch(type)
+                    {
+                        case CHICKEN:
+                        case COW:
+                        case MUSHROOM_COW:
+                        case OCELOT:
+                        case PIG:
+                        case SHEEP:
+                        case VILLAGER:
+                        case WOLF:
+                            break;
+                        
+                        default:
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'nobreed' set on unsupported creature!");
+                            continue;
+                    }
+                    
+                    c.setNoBreed(true);
+                }
+                else if(value.startsWith("pickup"))
+                {
+                    value = value.substring("pickup".length()).trim();
+                    
+                    if(value.isEmpty())
+                    {
+                        c.setPickup(true);
+                    }
+                    else
+                    {
+                        c.setPickup(value.equals("true"));
+                    }
                 }
                 else if(value.startsWith("pet"))
                 {
-                    customize.setPet(true);
+                    switch(type)
+                    {
+                        case WOLF:
+                        case OCELOT:
+                            break;
+                        
+                        default:
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'pet' on untameable creature!");
+                            continue;
+                    }
+                    
+                    c.setPet(true);
                     
                     if(value.length() > "pet".length())
                     {
@@ -1006,7 +1136,7 @@ public class FlagSummon extends Flag
                         
                         if(value.equals("nosit"))
                         {
-                            customize.setNoSit(true);
+                            c.setNoSit(true);
                         }
                         else
                         {
@@ -1014,21 +1144,27 @@ public class FlagSummon extends Flag
                         }
                     }
                 }
-                else if(value.startsWith("baby"))
+                else if(value.startsWith("saddle"))
                 {
-                    customize.setBaby(true);
-                    
-                    if(value.length() > "baby".length())
+                    if(type != EntityType.PIG)
                     {
-                        value = value.substring("baby".length()).trim();
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'saddle' on non-pig creature!");
+                        continue;
+                    }
+                    
+                    c.setSaddle(true);
+                    
+                    if(value.length() > "saddle".length())
+                    {
+                        value = value.substring("saddle".length()).trim();
                         
-                        if(value.equals("always"))
+                        if(value.equals("mount"))
                         {
-                            customize.setAlwaysBaby(true);
+                            c.setMount(true);
                         }
                         else
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'baby' argument with unknown value: " + value);
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'saddle' argument with unknown value: " + value);
                         }
                     }
                 }
@@ -1043,7 +1179,7 @@ public class FlagSummon extends Flag
                     
                     try
                     {
-                        customize.setChance(Float.valueOf(value));
+                        c.setChance(Float.valueOf(value));
                     }
                     catch(NumberFormatException e)
                     {
@@ -1057,7 +1193,7 @@ public class FlagSummon extends Flag
                     
                     try
                     {
-                        customize.setNum(Integer.valueOf(value));
+                        c.setNum(Integer.valueOf(value));
                     }
                     catch(NumberFormatException e)
                     {
@@ -1070,27 +1206,121 @@ public class FlagSummon extends Flag
                     
                     try
                     {
-                        customize.setSpread(Integer.valueOf(value));
+                        c.setSpread(Integer.valueOf(value));
                     }
                     catch(NumberFormatException e)
                     {
                         RecipeErrorReporter.warning("Flag " + getType() + " has 'spread' argument with invalid value number: " + value);
                     }
                 }
-                else if(value.startsWith("view"))
+                else if(value.startsWith("onfire"))
                 {
-                    value = value.substring("view".length()).trim();
+                    value = value.substring("onfire".length()).trim();
+                    
+                    try
+                    {
+                        c.setOnFire(Float.valueOf(value) * 20.0f);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'onfire' argument with invalid value number: " + value);
+                    }
+                }
+                else if(value.startsWith("color"))
+                {
+                    switch(type)
+                    {
+                        case SHEEP:
+                        case WOLF:
+                            break;
+                        
+                        default:
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'color' on unsupported creature!");
+                            continue;
+                    }
+                    
+                    value = value.substring("color".length()).trim();
+                    
+                    c.setColor(Tools.parseEnum(value, DyeColor.values()));
+                    
+                    if(c.getColor() == null)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid dye color: " + value);
+                    }
+                }
+                else if(value.startsWith("villager"))
+                {
+                    if(type != EntityType.VILLAGER)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'villager' argument on non-villager creature!");
+                        continue;
+                    }
+                    
+                    value = value.substring("villager".length()).trim();
+                    
+                    c.setVillager(Tools.parseEnum(value, Villager.Profession.values()));
+                    
+                    if(c.getVillager() == null)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'villager' argument with invalid type: " + value);
+                    }
+                }
+                else if(value.startsWith("skeleton"))
+                {
+                    if(type != EntityType.SKELETON)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'skeleton' argument on non-skeleton creature!");
+                        continue;
+                    }
+                    
+                    value = value.substring("skeleton".length()).trim();
+                    
+                    c.setSkeleton(Tools.parseEnum(value, SkeletonType.values()));
+                    
+                    if(c.getSkeleton() == null)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'skeleton' argument with invalid type: " + value);
+                    }
+                }
+                else if(value.startsWith("cat"))
+                {
+                    if(type != EntityType.OCELOT)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'cat' argument on non-ocelot creature!");
+                        continue;
+                    }
+                    
+                    value = value.substring("cat".length()).trim();
+                    
+                    c.setCat(Tools.parseEnum(value, Ocelot.Type.values()));
+                    
+                    if(c.getCat() == null)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'cat' argument with invalid type: " + value);
+                    }
+                }
+                else if(value.startsWith("name"))
+                {
+                    value = original.substring("name".length()).trim();
+                    
+                    c.setName(value);
+                }
+                else if(value.startsWith("hp"))
+                {
+                    value = value.substring("hp".length()).trim();
+                    
                     String[] args = value.split(" ");
                     
                     value = args[0].trim();
                     
                     try
                     {
-                        customize.setYaw(Float.valueOf(value));
+                        c.setHp(Integer.valueOf(value));
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'view' argument with invalid value number for yaw: " + value);
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'hp' argument with invalid number: " + value);
+                        continue;
                     }
                     
                     if(args.length > 1)
@@ -1099,15 +1329,137 @@ public class FlagSummon extends Flag
                         
                         try
                         {
-                            customize.setPitch(Float.valueOf(value));
+                            c.setMaxHp(Integer.valueOf(value));
                         }
                         catch(NumberFormatException e)
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'view' argument with invalid value number for pitch: " + value);
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'hp' argument with invalid number for maxhp: " + value);
+                            continue;
                         }
                     }
                 }
-                // TODO
+                else if(value.startsWith("potion"))
+                {
+                    value = value.substring("potion".length()).trim();
+                    String[] args = value.split(" ");
+                    value = args[0].trim();
+                    
+                    PotionEffectType effect = PotionEffectType.getByName(value); // Tools.parseEnum(value, PotionEffectType.values());
+                    
+                    if(effect == null)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid type: " + value);
+                        continue;
+                    }
+                    
+                    float duration = 1;
+                    int amplifier = 0;
+                    
+                    if(args.length > 1)
+                    {
+                        value = args[1].trim();
+                        
+                        try
+                        {
+                            duration = Float.valueOf(value);
+                        }
+                        catch(NumberFormatException e)
+                        {
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid number for duration: " + value);
+                            continue;
+                        }
+                    }
+                    
+                    if(args.length > 2)
+                    {
+                        value = args[2].trim();
+                        
+                        try
+                        {
+                            amplifier = Integer.valueOf(value);
+                        }
+                        catch(NumberFormatException e)
+                        {
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid number for amplifier: " + value);
+                            continue;
+                        }
+                    }
+                    
+                    c.addPotionEffect(effect, duration, amplifier);
+                }
+                else if(value.startsWith("hand") || value.startsWith("hold") || value.startsWith("head") || value.startsWith("helmet") || value.startsWith("chest") || value.startsWith("leg") || value.startsWith("feet") || value.startsWith("boot"))
+                {
+                    int index = -1;
+                    
+                    switch(value.charAt(0))
+                    {
+                        case 'h':
+                            switch(value.charAt(1))
+                            {
+                                case 'e':
+                                    index = 0;
+                                    break;
+                                
+                                case 'o':
+                                case 'a':
+                                    index = 4;
+                                    break;
+                            }
+                            break;
+                        
+                        case 'c':
+                            index = 1;
+                            break;
+                        
+                        case 'l':
+                            index = 2;
+                            break;
+                        
+                        case 'b':
+                        case 'f':
+                            index = 3;
+                            break;
+                    }
+                    
+                    if(index < 0)
+                    {
+                        RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+                        continue;
+                    }
+                    
+                    int i = value.indexOf(' ');
+                    String[] args = value.substring(i + 1).trim().split(" ");
+                    value = args[0].trim();
+                    
+                    ItemStack item = Tools.parseItemStack(value, 0, true, true, true);
+                    
+                    if(item == null)
+                    {
+                        continue;
+                    }
+                    
+                    c.getEquip()[index] = item;
+                    
+                    if(args.length > 1)
+                    {
+                        value = args[1].trim();
+                        
+                        if(value.charAt(value.length() - 1) == '%')
+                        {
+                            value = value.substring(0, value.length() - 1);
+                        }
+                        
+                        try
+                        {
+                            c.getDrop()[index] = Math.min(Math.max(Float.valueOf(value), 0), 100);
+                        }
+                        catch(NumberFormatException e)
+                        {
+                            RecipeErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
+                            continue;
+                        }
+                    }
+                }
                 else
                 {
                     RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
@@ -1115,7 +1467,27 @@ public class FlagSummon extends Flag
             }
         }
         
-        addSpawn(customize);
+        if(type == EntityType.WOLF)
+        {
+            if(c.isPet())
+            {
+                if(c.isAngry())
+                {
+                    c.setAngry(false);
+                    RecipeErrorReporter.warning("Flag " + getType() + " has 'angry' with 'pet' on wolf! Argument 'angry' ignored.");
+                }
+            }
+            else
+            {
+                if(c.getColor() != null)
+                {
+                    c.setColor(null);
+                    RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument without wolf being a pet, ignored.");
+                }
+            }
+        }
+        
+        addSpawn(c);
         
         return true;
     }
@@ -1150,7 +1522,7 @@ public class FlagSummon extends Flag
             l.add(0.5, 1.5, 0.5);
         }
         
-        Customization mount = null;
+        List<LivingEntity> toMount = null;
         
         for(Customization c : spawn)
         {
@@ -1159,33 +1531,17 @@ public class FlagSummon extends Flag
                 continue;
             }
             
-            if(mount != null)
+            List<LivingEntity> spawned = c.spawn(l, a.player());
+            
+            if(toMount != null)
             {
-                List<LivingEntity> mounted = mount.spawn(l, a.player());
-                List<LivingEntity> ents = c.spawn(l, a.player());
-                
-                for(int i = 0; i < Math.min(mounted.size(), ents.size()); i++)
+                for(int i = 0; i < Math.min(spawned.size(), toMount.size()); i++)
                 {
-                    ents.get(i).setPassenger(mounted.get(i));
+                    spawned.get(i).setPassenger(toMount.get(i));
                 }
-                
-                // TODO test ^
-                
-                mount = null;
             }
-            else if(c.mountNext)
-            {
-                mount = c;
-            }
-            else
-            {
-                c.spawn(l, a.player());
-            }
-        }
-        
-        if(mount != null)
-        {
-            mount.spawn(l, a.player());
+            
+            toMount = c.mountNext ? spawned : null;
         }
     }
 }

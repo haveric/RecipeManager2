@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class FuelRecipe extends BaseRecipe
@@ -109,6 +110,30 @@ public class FuelRecipe extends BaseRecipe
     public String getIndexString()
     {
         return ingredient.getTypeId() + (ingredient.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + ingredient.getDurability());
+    }
+    
+    @Override
+    public void resetName()
+    {
+        StringBuilder s = new StringBuilder();
+        boolean removed = hasFlag(FlagType.REMOVE);
+        
+        s.append("fuel ");
+        
+        s.append(ingredient.getType().toString().toLowerCase());
+        
+        if(ingredient.getDurability() != Vanilla.DATA_WILDCARD)
+        {
+            s.append(":").append(ingredient.getDurability());
+        }
+        
+        if(removed)
+        {
+            s.append(" / removed recipe");
+        }
+        
+        name = s.toString();
+        customName = false;
     }
     
     public boolean hasIngredient()

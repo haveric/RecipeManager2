@@ -1,8 +1,6 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.mutable.MutableInt;
@@ -337,6 +335,7 @@ public class FlagCooldown extends Flag
         a.addEffect((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER), getCraftMessage(), "{time}", timeToString(getCooldownTime()));
     }
     
+    /*
     @Override
     public List<String> information()
     {
@@ -346,4 +345,5 @@ public class FlagCooldown extends Flag
         
         return list;
     }
+    */
 }

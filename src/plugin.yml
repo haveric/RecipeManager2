@@ -1,6 +1,6 @@
 name: RecipeManager
 description: Add, edit or remove recipes and fuels
-version: 2.0alpha2
+version: 2.0alpha3
 author: Digi
 website: http://dev.bukkit.org/server-mods/recipemanager/
 dev-url: http://dev.bukkit.org/server-mods/recipemanager/
@@ -34,7 +34,7 @@ commands:
     permission: recipemanager.command.rmecheck
   rmreload:
     aliases: [reloadrecipes]
-    description: reload all settings, aliases, language file and recipe files
+    description: reload configurations (recipes, settings, aliases, messages, etc.)
     usage: /<command> [force]
     permission: recipemanager.command.rmreload
   rmreloadbooks:

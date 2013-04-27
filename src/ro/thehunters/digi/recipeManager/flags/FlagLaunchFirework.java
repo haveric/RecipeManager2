@@ -121,19 +121,11 @@ public class FlagLaunchFirework extends Flag
             firework = (FireworkMeta)Bukkit.getItemFactory().getItemMeta(Material.FIREWORK);
         }
         
-        String[] split;
-        
         if(value.startsWith("effect"))
         {
-            split = value.split(" ", 2);
+            value = value.substring("effect".length()).trim();
             
-            if(split.length <= 1)
-            {
-                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'effect' !");
-                return false;
-            }
-            
-            FireworkEffect effect = Tools.parseFireworkEffect(split[1].trim(), getType());
+            FireworkEffect effect = Tools.parseFireworkEffect(value, getType());
             
             if(effect != null)
             {
@@ -142,27 +134,20 @@ public class FlagLaunchFirework extends Flag
         }
         else if(value.startsWith("power"))
         {
-            split = value.split(" ", 2);
-            
-            if(split.length <= 1)
-            {
-                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'power' !");
-                return false;
-            }
-            
+            value = value.substring("power".length()).trim();
             int power = -1;
             
             try
             {
-                power = Integer.valueOf(split[1].trim());
+                power = Integer.valueOf(value);
             }
-            catch(Exception e)
+            catch(NumberFormatException e)
             {
             }
             
             if(power < 0 || power > 128)
             {
-                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument, it must be a number from 0 to 128");
+                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument value: '" + value + "', it must be a number from 0 to 128");
                 return false;
             }
             
@@ -170,27 +155,19 @@ public class FlagLaunchFirework extends Flag
         }
         else if(value.startsWith("chance"))
         {
-            split = value.split(" ", 2);
-            
-            if(split.length <= 1)
-            {
-                RecipeErrorReporter.error("Flag " + getType() + " has no arguments for 'chance' !");
-                return false;
-            }
-            
-            value = split[1].replace('%', ' ').trim();
+            value = value.substring("chance".length()).replace('%', ' ').trim();
             
             try
             {
                 setChance(Float.valueOf(value));
             }
-            catch(Exception e)
+            catch(NumberFormatException e)
             {
             }
             
             if(getChance() < 0 || getChance() > 100)
             {
-                RecipeErrorReporter.error("Flag " + getType() + " invalid 'chance' argument, it must be a number from 0 to 100");
+                RecipeErrorReporter.error("Flag " + getType() + " invalid 'chance' argument value: '" + value + "', it must be a number from 0 to 100");
                 return false;
             }
         }

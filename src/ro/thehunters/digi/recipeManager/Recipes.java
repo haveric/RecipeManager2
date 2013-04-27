@@ -30,6 +30,13 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
  */
 public class Recipes
 {
+    // constants
+    public static final String FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
+    public static final String RECIPE_ID_STRING = ChatColor.GRAY + "RecipeManager #";
+    
+    // Remember results for re-use on failure
+    private static final Map<String, ItemResult> staticResults = new HashMap<String, ItemResult>();
+    
     // Recipe index
     protected Map<BaseRecipe, RecipeInfo> index = new HashMap<BaseRecipe, RecipeInfo>();
     
@@ -39,12 +46,7 @@ public class Recipes
     protected Map<Integer, SmeltRecipe> indexSmelt = new HashMap<Integer, SmeltRecipe>();
     protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<String, SmeltRecipe>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<String, FuelRecipe>();
-    
-    // constants
-    public static final String FURNACE_OWNER_STRING = ChatColor.GRAY + "Placed by: " + ChatColor.WHITE;
-    public static final String RECIPE_ID_STRING = ChatColor.GRAY + "RecipeManager #";
-    
-    private static final Map<String, ItemResult> staticResults = new HashMap<String, ItemResult>();
+    protected Map<String, BaseRecipe> indexName = new HashMap<String, BaseRecipe>();
     
     protected Recipes()
     {
@@ -57,6 +59,7 @@ public class Recipes
         indexCombine.clear();
         indexSmelt.clear();
         indexFuels.clear();
+        indexName.clear();
         
         staticResults.clear();
     }
@@ -227,6 +230,19 @@ public class Recipes
     }
     
     /**
+     * Gets a recipe by its name.<br>
+     * The name can be an auto-generated name or a custom name.
+     * 
+     * @param name
+     *            recipe name
+     * @return the recipe matching name
+     */
+    public BaseRecipe getRecipeByName(String name)
+    {
+        return indexName.get(name);
+    }
+    
+    /**
      * Gets the recipe's information (owner, adder, status, etc).<br>
      * You can use this on bukkit recipes by converting them to RecipeManager format using:<br>
      * <code>new BaseRecipe(bukkitRecipe);</code>
@@ -277,7 +293,7 @@ public class Recipes
         
         if(index.containsKey(recipe) && !queued)
         {
-            Messages.info(ChatColor.RED + "[debug] " + ChatColor.GREEN + "RECIPE EXISTS !!!!!!!!!!!!!!!!!!!!");
+            Messages.debug("recipe already exists: " + recipe.getName());
             return;
         }
         
@@ -286,6 +302,7 @@ public class Recipes
             info.setStatus(null);
         }
         
+        /* replaced by sendRegistered()  TODO remove ?
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
         
         if(isRemove)
@@ -296,13 +313,15 @@ public class Recipes
         {
             info.setStatus(RecipeStatus.OVERRIDDEN);
         }
+        */
         
-        // Add to main index
-        index.put(recipe, info);
+        index.put(recipe, info); // Add to main index
         
         // Add to quickfind index if it's not removed
-        if(!isRemove)
+        if(!recipe.hasFlag(FlagType.REMOVE))
         {
+            indexName.put(recipe.getName(), recipe); // Add to name index
+            
             if(recipe instanceof CraftRecipe)
             {
                 indexCraft.put(recipe.getIndex(), (CraftRecipe)recipe);
@@ -342,12 +361,17 @@ public class Recipes
             
             Bukkit.addRecipe(bukkitRecipe);
         }
+        
+        if(recipe.hasFlags())
+        {
+            recipe.getFlags().sendRegistered();
+        }
     }
     
     public boolean removeRecipe(BaseRecipe recipe)
     {
-        // Remove from main index
-        index.remove(recipe);
+        index.remove(recipe); // Remove from main index
+        indexName.remove(recipe.getName()); // Remove from name index
         
         // Remove from quickfind index
         if(recipe instanceof CraftRecipe)

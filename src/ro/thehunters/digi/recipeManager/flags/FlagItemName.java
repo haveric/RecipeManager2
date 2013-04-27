@@ -3,7 +3,6 @@ package ro.thehunters.digi.recipeManager.flags;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagItemName extends Flag
 {
@@ -36,13 +35,15 @@ public class FlagItemName extends Flag
     
     // Flag code
     
+    private String name;
+    
     public FlagItemName()
     {
     }
     
     public FlagItemName(FlagItemName flag)
     {
-        // TODO clone
+        name = flag.name;
     }
     
     @Override
@@ -57,13 +58,36 @@ public class FlagItemName extends Flag
         return TYPE;
     }
     
+    public String getName()
+    {
+        return name;
+    }
+    
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
     @Override
     protected boolean onParse(String value)
     {
-        ItemResult result = getResult();
-        ItemMeta meta = result.getItemMeta();
-        meta.setDisplayName(value == null ? null : Tools.parseColors(value, false));
-        result.setItemMeta(meta);
+        setName(value);
         return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        if(!a.hasResult())
+        {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+        
+        ItemMeta meta = a.result().getItemMeta();
+        
+        meta.setDisplayName(getName() == null ? null : Tools.parseColors(getName(), false));
+        
+        a.result().setItemMeta(meta);
     }
 }

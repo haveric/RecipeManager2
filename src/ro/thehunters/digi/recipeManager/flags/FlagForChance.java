@@ -80,11 +80,20 @@ public class FlagForChance extends Flag
     {
         private Flag flag;
         private float chance;
+        private boolean autoChance = false;
         
-        public ChanceFlag(Flag flag, float chance)
+        public ChanceFlag(Flag flag, Float chance)
         {
             this.flag = flag;
-            this.chance = chance;
+            
+            if(chance == null)
+            {
+                this.autoChance = true;
+            }
+            else
+            {
+                this.chance = chance;
+            }
         }
         
         public Flag getFlag()
@@ -103,9 +112,9 @@ public class FlagForChance extends Flag
             return chance;
         }
         
-        public void setChance(float chance)
+        public boolean isAutoChance()
         {
-            this.chance = chance;
+            return autoChance;
         }
     }
     
@@ -119,14 +128,22 @@ public class FlagForChance extends Flag
     {
         for(Entry<String, List<ChanceFlag>> e : flag.flagMap.entrySet())
         {
-            List<ChanceFlag> list = new ArrayList<ChanceFlag>();
+            List<ChanceFlag> flags = new ArrayList<ChanceFlag>();
             
             for(ChanceFlag c : e.getValue())
             {
-                list.add(new ChanceFlag(c.getFlag() == null ? null : c.getFlag().clone(this.getFlagsContainer()), c.getChance()));
+                if(c.getFlag() == null)
+                {
+                    flags.add(null);
+                }
+                else
+                {
+                    flags.add(new ChanceFlag(c.getFlag().clone(this.getFlagsContainer()), c.isAutoChance() ? null : c.getChance()));
+                }
             }
             
-            flagMap.put(e.getKey(), list);
+            recalculateChances(e.getKey(), flags);
+            flagMap.put(e.getKey(), flags);
         }
     }
     
@@ -184,7 +201,7 @@ public class FlagForChance extends Flag
      */
     public boolean canAdd(Flag flag)
     {
-        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_STORE);
+        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_FOR);
     }
     
     /**
@@ -210,9 +227,9 @@ public class FlagForChance extends Flag
      * @param flag
      *            the flag
      * @param chance
-     *            trigger chance, valid values between 0.01f to 100.0f (trimmed if off, no error)
+     *            trigger chance, valid values between 0.01f to 100.0f or null to auto-calculate
      */
-    public void addFlag(String group, Flag flag, float chance)
+    public void addFlag(String group, Flag flag, Float chance)
     {
         Validate.notNull(flag, "Argument flag must not be null!");
         
@@ -227,9 +244,14 @@ public class FlagForChance extends Flag
             }
             
             flag.flagsContainer = this.getFlagsContainer();
-            chance = Math.min(Math.max(chance, 0.01f), 100.0f);
+            
+            if(chance != null)
+            {
+                chance = Math.min(Math.max(chance, 0.01f), 100.0f);
+            }
             
             flags.add(new ChanceFlag(flag, chance));
+            recalculateChances(group, flags);
         }
     }
     
@@ -239,7 +261,7 @@ public class FlagForChance extends Flag
         int i = value.indexOf(' '); // get position of first space
         String flagDeclaration = null;
         String group = null;
-        float chance = 0;
+        Float chance = null;
         boolean newFlag = false;
         
         if(i < 0)
@@ -371,9 +393,9 @@ public class FlagForChance extends Flag
                 return false;
             }
             
-            if(type.hasBit(Bit.NO_STORE))
+            if(type.hasBit(Bit.NO_FOR))
             {
-                return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " is a unstorable flag, can't be used with permissions.");
+                return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
             }
             
             if(flags != null)
@@ -389,7 +411,7 @@ public class FlagForChance extends Flag
                         {
                             flagChance = c;
                             
-                            if(chance > 0)
+                            if(chance != null)
                             {
                                 RecipeErrorReporter.warning("Flag " + getType() + " has flag " + flagChance.getFlag().getType() + " with chance defined, chance will be ignored because flag will be added to/overwritten in the storage !", "Prefix the flag with '!' character to create a new fresh flag instead, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
                             }
@@ -409,7 +431,7 @@ public class FlagForChance extends Flag
             
             if(newFlag || flagChance == null)
             {
-                if(chance <= 0.01f)
+                if(chance != null)
                 {
                     float totalChance = 0;
                     
@@ -451,6 +473,7 @@ public class FlagForChance extends Flag
             }
             
             flags.add(flagChance);
+            recalculateChances(group, flags);
         }
         else
         {
@@ -473,9 +496,94 @@ public class FlagForChance extends Flag
             
             flagChance = new ChanceFlag(null, chance);
             flags.add(flagChance);
+            recalculateChances(group, flags);
         }
         
         return true;
+    }
+    
+    private void recalculateChances(String group, List<ChanceFlag> flags)
+    {
+        if(group == null)
+        {
+            return;
+        }
+        
+        float totalChance = 100;
+        int num = 0;
+        
+        for(ChanceFlag c : flags)
+        {
+            if(c.isAutoChance())
+            {
+                num++;
+            }
+            else
+            {
+                totalChance -= c.getChance();
+            }
+        }
+        
+        if(num > 0)
+        {
+            float chance = totalChance / num;
+            
+            for(ChanceFlag c : flags)
+            {
+                if(c.isAutoChance())
+                {
+                    c.chance = chance;
+                }
+            }
+        }
+        
+        /*
+        List<ChanceFlag> calc = new ArrayList<ChanceFlag>();
+        
+        for(Entry<String, List<ChanceFlag>> e : flagMap.entrySet())
+        {
+            if(e.getKey() == null)
+            {
+                continue;
+            }
+            
+            float totalChance = 100;
+            
+            for(ChanceFlag c : e.getValue())
+            {
+                if(c.isAutoChance())
+                {
+                    calc.add(c);
+                }
+                else
+                {
+                    totalChance -= c.getChance();
+                }
+            }
+            
+            if(!calc.isEmpty())
+            {
+                float chance = totalChance / calc.size();
+                float extra = totalChance % calc.size();
+                
+                Messages.debug(e.getKey() + " | chance=" + chance + " | extra=" + extra);
+                
+                for(int i = 0; i < calc.size(); i++)
+                {
+                    if(i == 0 && extra > 0)
+                    {
+                        calc.get(0).chance = (chance + extra);
+                    }
+                    else
+                    {
+                        calc.get(0).chance = chance;
+                    }
+                }
+                
+                calc.clear();
+            }
+        }
+        */
     }
     
     @Override

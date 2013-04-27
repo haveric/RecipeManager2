@@ -1,20 +1,22 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Messages;
 
 public class FlagTest extends Flag
 {
-    // Flag documentation
+    // Flag definition and documentation
     
-    public static final String[] A;
-    public static final String[] D;
-    public static final String[] E;
+    private static final FlagType TYPE;
+    protected static final String[] A;
+    protected static final String[] D;
+    protected static final String[] E;
     
     static
     {
+        TYPE = null; //FlagType.TEST;
         A = null;
         D = null;
         E = null;
@@ -24,18 +26,22 @@ public class FlagTest extends Flag
     
     public FlagTest()
     {
-//        type = FlagType.TEST;
     }
     
     public FlagTest(FlagTest flag)
     {
-        this();
     }
     
     @Override
     public FlagTest clone()
     {
         return new FlagTest(this);
+    }
+    
+    @Override
+    public FlagType getType()
+    {
+        return TYPE;
     }
     
     @Override
@@ -47,8 +53,35 @@ public class FlagTest extends Flag
     @Override
     protected void onCheck(Args a)
     {
-//        Messages.debug("testing...");
+        Messages.debug("testing...");
         
+        Player p = a.player();
+        Location l = a.location().add(0, 1, 0);
+        
+        /*
+        LivingEntity ent = (LivingEntity)l.getWorld().spawnEntity(l, EntityType.WOLF);
+        Player player = a.player();
+        
+        if(ent instanceof Wolf)
+        {
+            Wolf npc = (Wolf)ent;
+            
+            npc.setAngry(true);
+            
+            Messages.debug("wolf set angry");
+        }
+        
+        if(ent instanceof Creature)
+        {
+            Creature npc = (Creature)ent;
+            
+            npc.setTarget(player);
+            
+            Messages.debug("target set to " + player);
+        }
+        */
+        
+        /*
         Block block = a.location().getBlock();
         
         Messages.debug(block.getType() + " | power = " + block.getBlockPower() + " | " + block.isBlockPowered() + " | " + block.isBlockIndirectlyPowered());
@@ -67,5 +100,6 @@ public class FlagTest extends Flag
         {
             Messages.debug(f + " = " + block.getBlockPower(f) + " | " + block.isBlockFacePowered(f) + " | " + block.isBlockFaceIndirectlyPowered(f));
         }
+        */
     }
 }

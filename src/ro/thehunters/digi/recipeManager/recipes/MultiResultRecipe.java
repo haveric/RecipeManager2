@@ -55,6 +55,30 @@ public class MultiResultRecipe extends BaseRecipe
     }
     
     /**
+     * @param a
+     * @return list of cloned results available for specified arguments
+     */
+    /* TODO remove ?
+    public List<ItemResult> getResults(Args a)
+    {
+        List<ItemResult> list = new ArrayList<ItemResult>(results.size());
+        
+        for(ItemResult r : results)
+        {
+            r = r.clone();
+            a = ArgBuilder.create(a).result(r).build();
+            
+            if(r.checkFlags(a))
+            {
+                list.add(r);
+            }
+        }
+        
+        return list;
+    }
+    */
+    
+    /**
      * @param results
      *            the results list or null if you want to clear results
      */
@@ -105,6 +129,48 @@ public class MultiResultRecipe extends BaseRecipe
         }
     }
     
+    public String getResultsString()
+    {
+        StringBuilder s = new StringBuilder();
+        
+        int resultNum = getResults().size();
+        
+        if(resultNum > 0)
+        {
+            ItemStack result = getFirstResult();
+            
+            if(result != null)
+            {
+                if(result.getAmount() > 1)
+                {
+                    s.append("x").append(result.getAmount()).append(" ");
+                }
+                
+                s.append(result.getType().toString().toLowerCase());
+                
+                if(result.getDurability() != 0)
+                {
+                    s.append(":").append(result.getDurability());
+                }
+                
+                if(resultNum > 1)
+                {
+                    s.append(" +").append(resultNum - 1).append(" more");
+                }
+            }
+            else
+            {
+                s.append("nothing");
+            }
+        }
+        else
+        {
+            s.append("no result");
+        }
+        
+        return s.toString();
+    }
+    
     /**
      * @return true if recipe has more than 1 result or has failure chance (2 results, one being air), otherwise false.
      */
@@ -130,7 +196,7 @@ public class MultiResultRecipe extends BaseRecipe
     }
     
     /**
-     * @return the first valid result or null.
+     * @return the first valid result as a clone or null.
      */
     public ItemResult getFirstResult()
     {
@@ -163,13 +229,13 @@ public class MultiResultRecipe extends BaseRecipe
      * 
      * @param a
      *            dynamic arguments, use {@link ArgBuilder#create()} to build arguments for this.
-     * @return the result, never null.
+     * @return the result as a clone, never null.
      */
     public ItemResult getResult(Args a)
     {
         a.clear();
         
-        List<ItemResult> pickResults = new ArrayList<ItemResult>();
+        List<ItemResult> list = new ArrayList<ItemResult>();
         float maxChance = 0;
         
         for(ItemResult r : results)
@@ -178,7 +244,7 @@ public class MultiResultRecipe extends BaseRecipe
             
             if(r.checkFlags(a))
             {
-                pickResults.add(r);
+                list.add(r);
                 maxChance += r.getChance();
             }
         }
@@ -187,7 +253,7 @@ public class MultiResultRecipe extends BaseRecipe
         float rand = RecipeManager.random.nextFloat() * maxChance;
         float chance = 0;
         
-        for(ItemResult r : pickResults)
+        for(ItemResult r : list)
         {
             if((chance += r.getChance()) >= rand)
             {
@@ -197,6 +263,8 @@ public class MultiResultRecipe extends BaseRecipe
         }
         
         a.clear();
+        a.setResult(result);
+        result.sendPrepare(a);
         
         return result;
     }

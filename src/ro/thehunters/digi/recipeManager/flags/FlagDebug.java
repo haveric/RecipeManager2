@@ -79,7 +79,7 @@ public class FlagDebug extends Flag
             }
             else if(flaggable instanceof ItemResult)
             {
-                type = Tools.printItem(((ItemResult)flaggable));
+                type = Tools.Item.print(((ItemResult)flaggable));
             }
             
             String prefix = "[@debug|" + type + "] ";

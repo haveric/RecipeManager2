@@ -1,11 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 
-public class FlagMessage extends Flag
+public class FlagBroadcast extends Flag
 {
     // Flag definition and documentation
     
@@ -16,17 +14,19 @@ public class FlagMessage extends Flag
     
     static
     {
-        TYPE = FlagType.MESSAGE;
+        TYPE = FlagType.BROADCAST;
         
         A = new String[]
         {
-            "{flag} <text>",
+            "{flag} <text> | [permission]",
         };
         
         D = new String[]
         {
-            "Prints a message when recipe or item is succesfully crafted.",
-            "This flag can be used more than once to add more messages.",
+            "Prints a chat message for all online players.",
+            "Using this flag more than once will overwrite the previous message.",
+            "",
+            "Optionally you can set a permission node that will define who sees the message.",
             "",
             "Colors are supported (<red>, &5, etc).",
             "The message can also contain variables:",
@@ -44,28 +44,30 @@ public class FlagMessage extends Flag
         
         E = new String[]
         {
-            "{flag} <green>Good job !",
-            "{flag} <gray>Now you can die&c happy<gray> that you crafted that.",
+            "{flag} {playerdisplay} <green>crafted something!",
+            "{flag} '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z} | ranks.admins",
         };
     }
     
     // Flag code
     
-    private List<String> messages = new ArrayList<String>();
+    private String message;
+    private String permission;
     
-    public FlagMessage()
+    public FlagBroadcast()
     {
     }
     
-    public FlagMessage(FlagMessage flag)
+    public FlagBroadcast(FlagBroadcast flag)
     {
-        messages.addAll(flag.messages);
+        message = flag.message;
+        permission = flag.permission;
     }
     
     @Override
-    public FlagMessage clone()
+    public FlagBroadcast clone()
     {
-        return new FlagMessage(this);
+        return new FlagBroadcast(this);
     }
     
     @Override
@@ -74,67 +76,54 @@ public class FlagMessage extends Flag
         return TYPE;
     }
     
-    public List<String> getMessages()
+    public String getMessage()
     {
-        return messages;
+        return message;
     }
     
-    /**
-     * Set the message list.
-     * 
-     * @param messages
-     */
-    public void setMessages(List<String> messages)
+    public void setMessage(String message)
     {
-        if(messages == null)
-        {
-            this.remove();
-        }
-        else
-        {
-            this.messages = messages;
-        }
+        this.message = message;
     }
     
-    /**
-     * Set the message.<br>
-     * Supports parsable color tags and codes.<br>
-     * You can use null, "false" or "remove" to remove the entire flag.
-     * 
-     * @param message
-     */
-    public void addMessage(String message)
+    public String getPermission()
     {
-        if(message == null || message.equalsIgnoreCase("false") || message.equalsIgnoreCase("remove"))
-        {
-            this.remove();
-        }
-        else
-        {
-            if(messages == null)
-            {
-                messages = new ArrayList<String>();
-            }
-            
-            messages.add(message);
-        }
+        return permission;
+    }
+    
+    public void setPermission(String permission)
+    {
+        this.permission = permission;
     }
     
     @Override
     protected boolean onParse(String value)
     {
-        addMessage(value);
+        String[] split = value.split("\\|", 2);
+        
+        setMessage(split[0].trim());
+        setPermission(null);
+        
+        if(split.length > 1)
+        {
+            setPermission(split[1].trim().toLowerCase());
+        }
+        
         return true;
     }
     
     @Override
     protected void onCrafted(Args a)
     {
-        Validate.notNull(messages);
+        Validate.notNull(message);
         
-        for(String s : messages)
+        if(permission == null)
         {
-            a.addCustomEffect(a.parseVariables(s));
+            Bukkit.broadcastMessage(a.parseVariables(message));
+        }
+        else
+        {
+            Bukkit.broadcast(a.parseVariables(message), permission);
         }
     }
 }

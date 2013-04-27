@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -37,7 +37,6 @@ public class FlagExplode extends Flag
             "",
             "Replace <arguments> with the following arguments separated by | character:",
             "  power <0.0 to ...>     = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
-//            "  chance <0.0 to 100.0>% = (default 100.0%) Chance of the explosion to occur.", // TODO remove ?
             "  fire                   = (defualt not set) Explosion sets fires.",
             "  nobreak                = (defualt not set) Makes explosion not break blocks.",
             "  nodamage [self]        = (defualt not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
@@ -58,7 +57,6 @@ public class FlagExplode extends Flag
     // Flag code
     
     private float power = 2.0f;
-//    private float chance = 100.0f; // TODO remove ?
     private boolean fire = false;
     private boolean noBreak = false;
     private byte noDamage = 0;
@@ -71,7 +69,6 @@ public class FlagExplode extends Flag
     public FlagExplode(FlagExplode flag)
     {
         power = flag.power;
-//        chance = flag.chance;
         fire = flag.fire;
         noBreak = flag.noBreak;
         noDamage = flag.noDamage;
@@ -99,18 +96,6 @@ public class FlagExplode extends Flag
     {
         this.power = power;
     }
-    
-    /*
-    public float getChance()
-    {
-        return chance;
-    }
-    
-    public void setChance(float chance)
-    {
-        this.chance = chance;
-    }
-    */
     
     public boolean getFire()
     {
@@ -208,35 +193,6 @@ public class FlagExplode extends Flag
                     continue;
                 }
             }
-            /*
-            else if(arg.startsWith("chance"))
-            {
-                String[] data = arg.split(" ", 2);
-                
-                if(data.length > 2)
-                {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'chance' argument with no value.");
-                    continue;
-                }
-                
-                value = data[1].trim();
-                
-                if(value.endsWith("%"))
-                {
-                    value = value.replace('%', ' ');
-                }
-                
-                try
-                {
-                    setChance(Float.valueOf(value));
-                }
-                catch(NumberFormatException e)
-                {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
-                    continue;
-                }
-            }
-            */
             else
             {
                 RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
@@ -255,67 +211,67 @@ public class FlagExplode extends Flag
             return;
         }
         
-        Map<LivingEntity, Integer> entities = new HashMap<LivingEntity, Integer>();
-        
-        if((failure && !a.hasResult()) || !failure)
+        if(!a.hasResult())
         {
-//            if(getChance() >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance)
+            a.addCustomReason("Needs a result!");
+            return;
+        }
+        
+        boolean failed = a.result().getType() == Material.AIR;
+        
+        if(!failure || failure == failed)
+        {
+            Map<LivingEntity, Integer> entities = new HashMap<LivingEntity, Integer>();
+            Location loc = a.location();
+            World world = loc.getWorld();
+            double x = loc.getX() + 0.5;
+            double y = loc.getY() + 0.5;
+            double z = loc.getZ() + 0.5;
+            
+            if(isNoDamageEnabled())
             {
-                Location loc = a.location();
-                World world = loc.getWorld();
-                double x = loc.getX() + 0.5;
-                double y = loc.getY() + 0.5;
-                double z = loc.getZ() + 0.5;
+                double distanceSquared = power * 2.0;
+                distanceSquared *= distanceSquared;
                 
-                if(isNoDamageEnabled())
+                if(isNoDamageSelf())
                 {
-                    double distanceSquared = power * 2.0;
-                    distanceSquared *= distanceSquared;
-                    
-                    if(isNoDamageSelf())
+                    if(!a.hasPlayer())
                     {
-                        if(!a.hasPlayer())
-                        {
-                            a.addCustomReason("Can't protect crafter, no player!");
-                        }
-                        else
-                        {
-                            Player p = a.player();
-                            Location l = p.getLocation();
-                            
-                            if(l.distanceSquared(loc) <= distanceSquared)
-                            {
-                                entities.put(p, p.getMaximumNoDamageTicks());
-                                p.setMaximumNoDamageTicks(1);
-                                p.setNoDamageTicks(1);
-                            }
-                        }
+                        a.addCustomReason("Can't protect crafter, no player!");
                     }
                     else
                     {
-                        for(Entity ent : world.getEntities())
+                        Player p = a.player();
+                        Location l = p.getLocation();
+                        
+                        if(l.distanceSquared(loc) <= distanceSquared)
                         {
-                            if(ent instanceof LivingEntity)
-                            {
-                                LivingEntity e = (LivingEntity)ent;
-                                
-                                if(e.getLocation().distanceSquared(loc) <= distanceSquared)
-                                {
-                                    entities.put(e, e.getMaximumNoDamageTicks());
-                                    e.setMaximumNoDamageTicks(1);
-                                    e.setNoDamageTicks(1);
-                                }
-                            }
+                            entities.put(p, p.getLastDamage());
+                            p.setNoDamageTicks(p.getMaximumNoDamageTicks());
+                            p.setLastDamage(Integer.MAX_VALUE);
                         }
                     }
                 }
-                
-                world.createExplosion(x, y, z, getPower(), getFire(), !getNoBreak());
-                
-                for(Entry<LivingEntity, Integer> e : entities.entrySet())
+                else
                 {
-                    e.getKey().setMaximumNoDamageTicks(e.getValue());
+                    for(LivingEntity e : world.getLivingEntities())
+                    {
+                        if(e.getLocation().distanceSquared(loc) <= distanceSquared)
+                        {
+                            entities.put(e, e.getLastDamage());
+                            e.setNoDamageTicks(e.getMaximumNoDamageTicks());
+                            e.setLastDamage(Integer.MAX_VALUE);
+                        }
+                    }
                 }
+            }
+            
+            world.createExplosion(x, y, z, getPower(), getFire(), !getNoBreak());
+            
+            for(Entry<LivingEntity, Integer> e : entities.entrySet())
+            {
+                e.getKey().setNoDamageTicks(0);
+                e.getKey().setLastDamage(e.getValue());
             }
         }
     }

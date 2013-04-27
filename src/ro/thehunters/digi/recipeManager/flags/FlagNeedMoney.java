@@ -1,7 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.entity.Player;
-
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
@@ -92,19 +90,19 @@ public class FlagNeedMoney extends Flag
         this.maxMoney = maxMoney;
     }
     
-    public String getMoney()
+    public String getMoneyString()
     {
         if(!RecipeManager.getEconomy().isEnabled())
         {
             return null;
         }
         
-        return RecipeManager.getEconomy().getFormat(getMinMoney()) + (getMaxMoney() > 0 ? " - " + RecipeManager.getEconomy().getFormat(getMaxMoney()) : "");
+        return RecipeManager.getEconomy().getFormat(getMinMoney()) + (getMaxMoney() > getMinMoney() ? " - " + RecipeManager.getEconomy().getFormat(getMaxMoney()) : "");
     }
     
     public boolean checkMoney(double money)
     {
-        return !((minMoney > 0 && money < minMoney) || (maxMoney > 0 && money > maxMoney));
+        return (money >= minMoney && money <= maxMoney);
     }
     
     public String getFailMessage()
@@ -138,6 +136,7 @@ public class FlagNeedMoney extends Flag
         try
         {
             setMinMoney(Double.valueOf(value));
+            setMaxMoney(getMinMoney());
         }
         catch(NumberFormatException e)
         {
@@ -160,9 +159,9 @@ public class FlagNeedMoney extends Flag
             }
         }
         
-        if(getMinMoney() <= 0 && getMaxMoney() <= 0)
+        if((getMinMoney() <= 0 && getMaxMoney() <= 0) || getMaxMoney() < getMinMoney())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag needs either min or max money above 0 !");
+            RecipeErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
         
@@ -177,11 +176,9 @@ public class FlagNeedMoney extends Flag
             return;
         }
         
-        Player p = a.player();
-        
-        if(p == null || !checkMoney(p.getTotalExperience()))
+        if(!a.hasPlayerName() || !checkMoney(RecipeManager.getEconomy().getMoney(a.playerName())))
         {
-            a.addReason(Messages.FLAG_REQMONEY, failMessage, "{money}", getMoney());
+            a.addReason(Messages.FLAG_NEEDMONEY, failMessage, "{money}", getMoneyString());
         }
     }
 }

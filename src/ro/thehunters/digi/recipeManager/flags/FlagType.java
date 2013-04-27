@@ -1,6 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,23 +13,18 @@ import ro.thehunters.digi.recipeManager.Permissions;
 
 public enum FlagType
 {
-    // TODO go through each flag and check:
-    // new Flag(this) clone style and must have this() in them !!!!!
-    // protected on*() methods
-    // ...
-    
 //    TEST(FlagTest.class, Bit.NO_VALUE), // TODO remove
     
     // Shared flags
     COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"),
     KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"),
-    INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"), // TODO finish
+    INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"),
     PERMISSION(FlagPermission.class, Bit.NONE, "permissions", "perm"),
     FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm"),
-    FORCHANCE(FlagForChance.class, Bit.NO_SHIFT),
+    FORCHANCE(FlagForChance.class, Bit.NO_SHIFT, "chance"),
     GROUP(FlagGroup.class, Bit.NONE, "groups", "permissiongroup"),
-    WORLD(FlagWorld.class, Bit.NONE, "needworld", "worlds"), // TODO redesign required
-    NEEDHEIGHT(FlagNeedHeight.class, Bit.NONE, "height"), // TODO finish
+    WORLD(FlagWorld.class, Bit.NONE, "needworld", "worlds"),
+    HEIGHT(FlagHeight.class, Bit.NONE, "depth"),
     MODEXP(FlagModExp.class, Bit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp"),
     NEEDEXP(FlagNeedExp.class, Bit.NONE, "needxp", "reqexp", "expreq", "reqxp", "xpreq"),
     MODLEVEL(FlagModLevel.class, Bit.NO_SHIFT, "levelmod", "setlevel", "level"),
@@ -39,12 +33,12 @@ public enum FlagType
     NEEDMONEY(FlagNeedMoney.class, Bit.NONE, "reqmoney", "moneyreq"),
     COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"),
     REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"),
-    ONLINETIME(FlagOnlineTime.class, Bit.NONE),
+    ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
     HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
     GAMEMODE(FlagGameMode.class, Bit.NONE, "needgm"),
     LIGHTLEVEL(FlagLightLevel.class, Bit.NONE, "blocklight", "sunlight", "light"),
     BIOME(FlagBiome.class, Bit.NONE), // TODO finish
-    WEATHER(FlagWeather.class, Bit.NONE), // TODO finish
+    WEATHER(FlagWeather.class, Bit.NONE),
     WORLDTIME(FlagWorldTime.class, Bit.NONE), // TODO finish
     EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"),
     SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
@@ -52,38 +46,36 @@ public enum FlagType
     BLOCKPOWERED(FlagBlockPowered.class, Bit.NO_VALUE, "poweredblock", "blockpower", "redstonepowered"),
     POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"),
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
+    SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"),
     TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"),
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
-    SECRET(FlagSecret.class, Bit.NO_VALUE, "hide"),
-    DEBUG(FlagDebug.class, Bit.NO_VALUE, "monitor", "log"),
+    BROADCAST(FlagBroadcast.class, Bit.NONE, "announce"),
+    SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
+    DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
     
     // Recipe only flags
-    DOCUMENTATION(FlagDocumentation.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "doc", "html"), // TODO finish
     RECIPEBOOK(FlagRecipeBook.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "bookrecipe"),
-    DESCRIPTION(FlagDescription.class, Bit.RECIPE, "recipeinfo", "info"),
-    GETBOOK(FlagGetBook.class, Bit.RECIPE | Bit.NO_SHIFT | Bit.NO_SKIP_PERMISSION, "getrecipebook", "bookresult"), // TODO finsih
+    DESCRIPTION(FlagDescription.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipeinfo", "info"),
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"), // TODO finish
-//    HIDERESULTS(FlagHideResults.class, Bit.RECIPE | Bit.NO_VALUE), // TODO finish or remove ?
-    REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
-    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "disable", "denied", "deny"),
-    OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
+    REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
+    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "disable", "denied", "deny"),
+    OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
     PROXIMITY(FlagProximity.class, Bit.RECIPE, "distance", "nearby"), // TODO
     
-    // Result only flags    
-    // TODO remove NO_STORE bit
-    RESULTCHANCE(FlagResultChance.class, Bit.RESULT, "modchance", "setchance"), // TODO finish
+    // Result only flags
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
-    ITEMNAME(FlagItemName.class, Bit.RESULT | Bit.NO_STORE, "name", "displayname"),
-    ITEMLORE(FlagItemLore.class, Bit.RESULT | Bit.NO_STORE, "lore", "itemdesc"),
+    ITEMNAME(FlagItemName.class, Bit.RESULT, "name", "displayname"),
+    ITEMLORE(FlagItemLore.class, Bit.RESULT, "lore", "itemdesc"),
     LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour"),
-    ITEMBOOK(FlagItemBook.class, Bit.RESULT | Bit.NO_STORE, "bookitem"),
-    MAPITEM(FlagMapItem.class, Bit.RESULT | Bit.NO_STORE, "map", "mapitem"),
-    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT | Bit.NO_STORE, "firework", "fireworkrocket"),
-    FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT | Bit.NO_STORE, "fireworkcharge", "fireworkeffect"),
-    SKULLOWNER(FlagSkullOwner.class, Bit.RESULT | Bit.NO_STORE, "skullowner"),
-    POTIONITEM(FlagPotionItem.class, Bit.RESULT | Bit.NO_STORE, "potion", "potionitem"),
-    ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT | Bit.NO_STORE, "enchant", "enchantment"),
-    ENCHANTENGBOOK(FlagEnchantingBook.class, Bit.RESULT | Bit.NO_STORE, "enchantbook", "enchantedbook"),
+    BOOKITEM(FlagBookItem.class, Bit.RESULT, "book"),
+    MAPITEM(FlagMapItem.class, Bit.RESULT, "map"), // TODO
+    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"),
+    FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT, "fireworkcharge", "fireworkeffect"),
+    SKULLOWNER(FlagSkullOwner.class, Bit.RESULT, "skullitem"),
+    POTIONITEM(FlagPotionItem.class, Bit.RESULT, "potion"),
+    ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"),
+    ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"),
+    GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult"),
     
     ;
     
@@ -154,7 +146,7 @@ public enum FlagType
         {
             return flagClass.newInstance();
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }
@@ -164,19 +156,13 @@ public enum FlagType
     
     private String[] getField(String name)
     {
-        for(Field f : flagClass.getFields())
+        try
         {
-            if(f.getName().equals(name))
-            {
-                try
-                {
-                    return (String[])f.get(null);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace(); // TODO remove
-                }
-            }
+            return (String[])flagClass.getDeclaredField(name).get(null);
+        }
+        catch(Throwable e)
+        {
+            Messages.debug("flag " + toString() + " does not have '" + name + "' field!");
         }
         
         return null;
@@ -195,18 +181,6 @@ public enum FlagType
     public String[] getDescription()
     {
         return getField("D");
-        
-        /*
-        try
-        {
-            return (String[])flagClass.getField("D").get(null);
-        }
-        catch(Exception e)
-        {
-        }
-        
-        return null;
-        */
     }
     
     /**
@@ -245,7 +219,7 @@ public enum FlagType
             {
                 nameMap.put(name, type);
                 
-                if(type.hasBit(Bit.NO_SKIP_PERMISSION) || type.hasBit(Bit.NO_STORE))
+                if(type.hasBit(Bit.NO_SKIP_PERMISSION))
                 {
                     continue;
                 }
@@ -305,36 +279,36 @@ public enum FlagType
         /**
          * Flag only works in recipes.
          */
-        public static final byte RECIPE = 1 << 1;
+        public static final byte RECIPE = 1 << 0;
         
         /**
          * Flag only works on results.
          */
-        public static final byte RESULT = 1 << 2;
+        public static final byte RESULT = 1 << 1;
         
         /**
          * No value is allowed for this flag.
          */
-        public static final byte NO_VALUE = 1 << 3;
+        public static final byte NO_VALUE = 1 << 2;
         
         /**
          * Disables flag from being stored - used on flags that directly affect result's metadata.
          */
-        public static final byte NO_STORE = 1 << 4;
+        public static final byte NO_FOR = 1 << 3;
         
         /**
          * Disables "false" or "remove" values from removing the flag.
          */
-        public static final byte NO_FALSE = 1 << 5;
+        public static final byte NO_FALSE = 1 << 4;
         
         /**
          * Disables shift+click on the recipe if there is at least one flag with this bit.
          */
-        public static final byte NO_SHIFT = 1 << 6;
+        public static final byte NO_SHIFT = 1 << 5;
         
         /**
          * Disables generating a skip permission for this flag
          */
-        public static final short NO_SKIP_PERMISSION = 1 << 7;
+        public static final byte NO_SKIP_PERMISSION = 1 << 6;
     }
 }

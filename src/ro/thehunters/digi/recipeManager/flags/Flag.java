@@ -1,7 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.List;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
@@ -269,6 +267,11 @@ public class Flag implements Cloneable
         return onValidate();
     }
     
+    final protected void registered()
+    {
+        onRegistered();
+    }
+    
     /*
      *  Overwriteable methods/events
      */
@@ -281,15 +284,18 @@ public class Flag implements Cloneable
         return null;
     }
     
+    /*
     /**
      * Human friendly information about what the flag does with its current settings.
      * 
      * @return list of strings which represent individual lines or null if not defined.
      */
+    /*
     public List<String> information()
     {
         return null;
     }
+    */
     
     @Override
     public Flag clone()
@@ -300,6 +306,10 @@ public class Flag implements Cloneable
     protected boolean onValidate()
     {
         return (getType() != null);
+    }
+    
+    protected void onRegistered()
+    {
     }
     
     protected boolean onParse(String value)

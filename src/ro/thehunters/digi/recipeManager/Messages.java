@@ -41,6 +41,11 @@ public enum Messages
     FLAG_WORLD_ALLOWED("<red>Allowed worlds: <yellow>{worlds}"),
     FLAG_WORLD_UNALLOWED("<red>Unallowed worlds: <yellow>{worlds}"),
     
+    FLAG_WEATHER("<red>Needs weather: <yellow>{weather}"),
+    
+    FLAG_BIOME_ALLOWED("<red>Allowed biomes: <yellow>{biomes}"),
+    FLAG_BIOME_UNALLOWED("<red>Unallowed biomes: <yellow>{biomes}"),
+    
     FLAG_RETURNITEM_RETURNED("<green>Returned item {item}<green> in crafting grid."),
     FLAG_RETURNITEM_MERGED("<green>Returned item {item}<green> merged in crafting grid."),
     FLAG_RETURNITEM_RECIEVED("<yellow>Returned item {item}<green> added to inventory."),
@@ -50,6 +55,8 @@ public enum Messages
     FLAG_BLOCKPOWERED_WORKBENCH("<red>Need a workbench powered by redstone."),
     
     FLAG_LIGHTLEVEL("<red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>."),
+    
+    FLAG_SETBLOCK_NEEDSWORKBENCH("<red>Recipe needs to be used with a workbench!"),
     
     FLAG_ITEMS("<red>Need in inventory: <yellow>{items}"),
     FLAG_NOITEMS("<red>Unallowed in inventory: <yellow>{items}"),
@@ -61,25 +68,26 @@ public enum Messages
     FLAG_COMMAND_PLAYER("Executes command on crafter: {command}"),
     FLAG_COMMAND_SERVER("Executes console command: {command}"),
     
-    FLAG_INGREDIENTCONDITIONS_NOAMOUNT("<yellow>{item}<red> needs amount: <yellow>{amount}"),
     FLAG_INGREDIENTCONDITIONS_NODATA("<yellow>{item}<red> needs data values: <yellow>{data}"),
+    FLAG_INGREDIENTCONDITIONS_NOAMOUNT("<yellow>{item}<red> needs amount: <yellow>{amount}"),
     FLAG_INGREDIENTCONDITIONS_NOENCHANTS("<yellow>{item}<red> needs enchantments: <yellow>{enchants}"),
     FLAG_INGREDIENTCONDITIONS_NONAME("<yellow>{item}<red> needs name: <yellow>{name}"),
+    FLAG_INGREDIENTCONDITIONS_NOLORE("<yellow>{item}<red> needs lore: <yellow>{lore}"),
     FLAG_INGREDIENTCONDITIONS_NOCOLOR("<yellow>{item}<red> needs color: <yellow>{color}"),
     
-    FLAG_REQEXP("<red>Need EXP: {exp}"),
+    FLAG_NEEDEXP("<red>Need EXP: {exp}"),
     
     FLAG_MODEXP_ADD("<green>+{amount} EXP"),
     FLAG_MODEXP_SUB("<red>-{amount} EXP"),
     FLAG_MODEXP_SET("<yellow>EXP set to {amount}"),
     
-    FLAG_REQLEVEL("<red>Need level: {level}"),
+    FLAG_NEEDLEVEL("<red>Need level: {level}"),
     
     FLAG_MODLEVEL_ADD("<green>+{amount} level(s)"),
     FLAG_MODLEVEL_SUB("<red>-{amount} level(s)"),
     FLAG_MODLEVEL_SET("<yellow>Level set to {amount}"),
     
-    FLAG_REQMONEY("<red>Need money: {money}"),
+    FLAG_NEEDMONEY("<red>Need money: {money}"),
     
     FLAG_MODMONEY_ADD("<green>+{money}"),
     FLAG_MODMONEY_SUB("<red>-{money}"),
@@ -156,8 +164,11 @@ public enum Messages
     CMD_GETBOOK_MANYMATCHES("<red>Found {num} books by '{arg}':"),
     CMD_GETBOOK_GIVEN("<green>Got book: {title}"),
     
-    EVENTS_UPDATEBOOK_EXTINCT("<red>Your '<white>{title}<red>' recipe book does not exist anymore, it won't be updated anymore."),
-    EVENTS_UPDATEBOOK_DONE("<gray>Your '<white>{title}<gray>' recipe book has been updated."),
+    EVENTS_UPDATEBOOK_EXTINCT("<red>Your '<yellow>{title}<red>' recipe book does not exist anymore, it won't be updated further."),
+    EVENTS_UPDATEBOOK_NOVOLUME("<red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> anymore, it won't be updated further."),
+    EVENTS_UPDATEBOOK_DONE("<gray>Your held recipe book has been updated!"),
+    EVENTS_UPDATEBOOK_CHANGED_TITLE("<gray>Its title changed from '<red>{oldtitle}<gray>' to '<yellow>{newtitle}<gray>'."),
+    EVENTS_UPDATEBOOK_CHANGED_PAGES("<gray>It now has <green>{newpages}<gray> pages instead of <red>{oldpages}<gray> pages."),
     
     CMD_BOOKS_NOBOOKS("<red>No generated books."),
     CMD_BOOKS_HEADER("<yellow>Generated recipe books ({number}):"),

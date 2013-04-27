@@ -5,13 +5,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
-public class FlagEnchantItem extends Flag
+public class FlagEnchantedBook extends Flag
 {
     // Flag definition and documentation
     
@@ -22,30 +23,31 @@ public class FlagEnchantItem extends Flag
     
     static
     {
-        TYPE = FlagType.ENCHANTITEM;
+        TYPE = FlagType.ENCHANTEDBOOK;
         
         A = new String[]
         {
-            "{flag} <enchantment> [level]",
-            "{flag} false",
+            "{flag} <enchant> [level or max]",
         };
         
         D = new String[]
         {
-            "Enchants the result with the specified enchantment at specified level.",
-            "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
+            "Adds stored enchantments in a enchanted book item.",
+            "This flag may be used more times to add more enchantments to the item.",
+            "",
+            "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
             "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
             "",
             "Enchantments are forced and there is no level cap!",
-            "This flag may be used more times to add more enchantments to the item.",
-            "Setting to 'false' will do nothing !",
+            "",
+            "Specific item: enchanted_book",
         };
         
         E = new String[]
         {
-            "{flag} OXYGEN // enchant with oxygen at level 1",
-            "{flag} DIG_SPEED max // enchant with dig speed at max valid level",
-            "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127",
+            "{flag} efficiency // dig_speed alias",
+            "{flag} damage_all max",
+            "{flag} arrow_fire 127",
         };
     }
     
@@ -53,19 +55,19 @@ public class FlagEnchantItem extends Flag
     
     private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
     
-    public FlagEnchantItem()
+    public FlagEnchantedBook()
     {
     }
     
-    public FlagEnchantItem(FlagEnchantItem flag)
+    public FlagEnchantedBook(FlagEnchantedBook flag)
     {
         enchants.putAll(flag.enchants);
     }
     
     @Override
-    public FlagEnchantItem clone()
+    public Flag clone()
     {
-        return new FlagEnchantItem(this);
+        return new FlagEnchantedBook(this);
     }
     
     @Override
@@ -74,18 +76,47 @@ public class FlagEnchantItem extends Flag
         return TYPE;
     }
     
-    @Override
-    public void onRemove()
+    public Map<Enchantment, Integer> getEnchants()
     {
-        getResult().getEnchantments().clear();
+        return enchants;
+    }
+    
+    public void setEnchants(Map<Enchantment, Integer> enchants)
+    {
+        if(enchants == null)
+        {
+            this.enchants.clear();
+        }
+        else
+        {
+            this.enchants = enchants;
+        }
+    }
+    
+    public void addEnchant(Enchantment enchant, int level)
+    {
+        enchants.put(enchant, level);
     }
     
     @Override
-    public boolean onParse(String value)
+    protected boolean onValidate()
+    {
+        ItemResult result = getResult();
+        
+        if(result == null || result.getItemMeta() instanceof EnchantmentStorageMeta == false)
+        {
+            RecipeErrorReporter.error("Flag " + getType() + " needs an enchantable book!");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    @Override
+    protected boolean onParse(String value)
     {
         String[] split = value.split(" ");
         value = split[0].trim();
-        
         Enchantment enchant = Tools.parseEnchant(value);
         
         if(enchant == null)
@@ -98,7 +129,7 @@ public class FlagEnchantItem extends Flag
         
         if(split.length > 1)
         {
-            value = split[1].toLowerCase().trim();
+            value = split[1].trim();
             
             if(!value.equalsIgnoreCase("max"))
             {
@@ -118,7 +149,7 @@ public class FlagEnchantItem extends Flag
             }
         }
         
-        enchants.put(enchant, level);
+        addEnchant(enchant, level);
         
         return true;
     }
@@ -132,23 +163,11 @@ public class FlagEnchantItem extends Flag
             return;
         }
         
-        Messages.debug("Enchanted " + Tools.Item.print(a.result()) + " with " + enchants.size() + " enchants.");
+        EnchantmentStorageMeta meta = (EnchantmentStorageMeta)a.result().getItemMeta();
         
         for(Entry<Enchantment, Integer> e : enchants.entrySet())
         {
-            a.result().addUnsafeEnchantment(e.getKey(), e.getValue());
+            meta.addStoredEnchant(e.getKey(), e.getValue(), true);
         }
     }
-    
-    /*
-    @Override
-    public List<String> information()
-    {
-        List<String> list = new ArrayList<String>(1);
-        
-        list.add("enchant..."); // TODO
-        
-        return list;
-    }
-    */
 }

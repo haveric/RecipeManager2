@@ -105,7 +105,7 @@ public class RecipeManager extends JavaPlugin
         getCommand("rmrecipes").setExecutor(new RecipeCommand());
         getCommand("rmrecipehelp").setExecutor(new RecipeHelpCommand()); // TODO remove ?
         getCommand("rmfinditem").setExecutor(new FindItemCommand());
-//        getCommand("rmcheck").setExecutor(new HelpCommand());
+//        getCommand("rmcheck").setExecutor(new CheckCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
         getCommand("rmreloadbooks").setExecutor(new ReloadBooksCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());

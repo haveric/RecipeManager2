@@ -3,6 +3,7 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,37 +41,37 @@ public class Args
     {
     }
     
-    protected void setPlayer(Player player)
+    public void setPlayer(Player player)
     {
         this.player = player;
     }
     
-    protected void setPlayerName(String playerName)
+    public void setPlayerName(String playerName)
     {
         this.playerName = playerName;
     }
     
-    protected void setLocation(Location location)
+    public void setLocation(Location location)
     {
         this.location = location;
     }
     
-    protected void setRecipe(BaseRecipe recipe)
+    public void setRecipe(BaseRecipe recipe)
     {
         this.recipe = recipe;
     }
     
-    protected void setRecipeType(RecipeType recipeType)
+    public void setRecipeType(RecipeType recipeType)
     {
         this.recipeType = recipeType;
     }
     
-    protected void setInventory(Inventory inventory)
+    public void setInventory(Inventory inventory)
     {
         this.inventory = inventory;
     }
     
-    protected void setResult(ItemResult result)
+    public void setResult(ItemResult result)
     {
         this.result = result;
     }
@@ -259,14 +260,14 @@ public class Args
         
         string = string.replace("{player}", name);
         string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
-        string = string.replace("{result}", Tools.printItem(result()));
-        string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(no recipe)"));
-        string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(no recipe)"));
-        string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(no inventory)"));
-        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(no location)"));
-        string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "0"));
-        string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "0"));
-        string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "0"));
+        string = string.replace("{result}", Tools.Item.print(result()));
+        string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(unknown)"));
+        string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
+        string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(unknown)"));
+        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
+        string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "(?)"));
+        string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "(?)"));
+        string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "(?)"));
         
         return string;
     }
@@ -279,5 +280,36 @@ public class Args
     public static ArgBuilder create()
     {
         return new ArgBuilder();
+    }
+    
+    /**
+     * Re-processes the arguments to asign them in as many places as possible.<br>
+     * For example, if you only set player name, the player() will still be null, but by triggering this it will try to asign player() to an Player object.
+     * 
+     * @return same instance
+     */
+    public Args processArgs()
+    {
+        if(player() == null && playerName() != null)
+        {
+            setPlayer(Bukkit.getPlayerExact(playerName()));
+        }
+        
+        if(playerName() == null && player() != null)
+        {
+            setPlayerName(player().getName());
+        }
+        
+        if(location() == null && player() != null)
+        {
+            setLocation(player().getLocation());
+        }
+        
+        if(recipeType() == null && recipe() != null)
+        {
+            setRecipeType(recipe().getType());
+        }
+        
+        return this;
     }
 }

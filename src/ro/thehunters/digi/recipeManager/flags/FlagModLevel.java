@@ -21,8 +21,7 @@ public class FlagModLevel extends Flag
         
         A = new String[]
         {
-            "{flag} [modifier]<number>",
-            "{flag} [modifier]<number> | <message>",
+            "{flag} [modifier]<number> | [fail message]",
             "{flag} false",
         };
         
@@ -33,7 +32,11 @@ public class FlagModLevel extends Flag
             "",
             "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
             "The '<number>' argument must be the amount of levels to modify.",
-            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "For the fail message you can use the following arguments:",
+            "  {amount}       = amount defined in the flag, never has modifier prefix.",
+            "  {modifier}     = the modifier prefix.",
+            "  {actualamount} = (only works for - modifier) the actual amount lost.",
             "",
             "NOTE: This is for experience levels, for experience points use " + FlagType.MODEXP.toString(),
             "NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with " + FlagType.NEEDLEVEL.toString() + " if you want to check.",
@@ -77,11 +80,20 @@ public class FlagModLevel extends Flag
         return TYPE;
     }
     
+    /**
+     * @return type of modifier (+, -, =)
+     */
     public char getModifier()
     {
         return mod;
     }
     
+    /**
+     * The amount modified.<br>
+     * Use {@link #getModifier()} to get the type of modifier (+, -, =).
+     * 
+     * @return amount
+     */
     public int getAmount()
     {
         return amount;
@@ -212,20 +224,22 @@ public class FlagModLevel extends Flag
         
         switch(mod)
         {
-            case '-':
-            {
-                p.giveExpLevels(-amount);
-                
-                a.addEffect(Messages.FLAG_MODLEVEL_SUB, failMessage, "{amount}", amount);
-                
-                break;
-            }
-            
             case '+':
             {
                 p.giveExpLevels(amount);
                 
-                a.addEffect(Messages.FLAG_MODLEVEL_ADD, failMessage, "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODLEVEL_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
+                
+                break;
+            }
+            
+            case '-':
+            {
+                int level = Math.max(p.getLevel() - amount, 0);
+                
+                p.setLevel(level);
+                
+                a.addEffect(Messages.FLAG_MODLEVEL_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", level);
                 
                 break;
             }
@@ -234,10 +248,33 @@ public class FlagModLevel extends Flag
             {
                 p.setLevel(amount);
                 
-                a.addEffect(Messages.FLAG_MODLEVEL_SET, failMessage, "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODLEVEL_SET, failMessage, "{amount}", amount, "{modifier}", mod);
                 
                 break;
             }
         }
     }
+    
+    /*
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(1);
+        
+        switch(mod)
+        {
+            case '+':
+                list.add(Messages.FLAG_MODLEVEL_ADD.get("{amount}", amount, "{modifier}", mod));
+                break;
+            case '-':
+                list.add(Messages.FLAG_MODLEVEL_SUB.get("{amount}", amount, "{modifier}", mod, "{actualamount}", amount));
+                break;
+            case '=':
+                list.add(Messages.FLAG_MODLEVEL_SET.get("{amount}", amount, "{modifier}", mod));
+                break;
+        }
+        
+        return list;
+    }
+    */
 }

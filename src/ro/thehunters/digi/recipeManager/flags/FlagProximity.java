@@ -1,6 +1,11 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import org.bukkit.Location;
+
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
+import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
+import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 public class FlagProximity extends Flag
 {
@@ -15,12 +20,28 @@ public class FlagProximity extends Flag
     {
         TYPE = FlagType.PROXIMITY;
         
-        A = null;
-        D = null;
-        E = null;
+        A = new String[]
+        {
+            "{flag} <range> | [fail message]",
+        };
+        
+        D = new String[]
+        {
+            "",
+            "",
+        };
+        
+        E = new String[]
+        {
+            "",
+        };
     }
     
     // Flag code
+    
+    private float min;
+    private float max;
+    private String failMessage;
     
     public FlagProximity()
     {
@@ -44,6 +65,20 @@ public class FlagProximity extends Flag
     }
     
     @Override
+    protected boolean onValidate()
+    {
+        BaseRecipe recipe = getRecipe();
+        
+        if(recipe instanceof SmeltRecipe == false && recipe instanceof FuelRecipe == false)
+        {
+            RecipeErrorReporter.error("Flag " + getType() + " only works for smelt and fuel recipes!");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    @Override
     protected boolean onParse(String value)
     {
         // TODO
@@ -61,5 +96,9 @@ public class FlagProximity extends Flag
             a.addCustomReason("Needs player and location!");
             return;
         }
+        
+        Location l = a.location();
+        
+        // TODO
     }
 }

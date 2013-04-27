@@ -1,6 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.MultiResultRecipe;
 
 public class FlagFailMessage extends Flag
@@ -26,19 +29,21 @@ public class FlagFailMessage extends Flag
             "Changes the message when recipe fails due to failure chance.",
             "Using this flag more than once will overwrite the previous message.",
             "",
-            "The message allows colors (<red>, &3, etc) and new lines (with \n ).",
-            "You can also use the following variables inside the message:",
-            "  {failchance}    = the chance of failure as a number",
-            "  {successchance} = the chance of success as a number",
+            "The message supports colors (<red>, &3, etc).",
             "",
-            "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result.",
+            "You can also use the following variables inside the message:",
+            "  {failchance}    = recipe's chance of failure as a number.",
+            "  {successchance} = recipe's chance of success as a number.",
+            "  {resultchance}  = result's chance of success as a number.",
+            "",
+            "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.",
             "",
             "Setting to 'false' will disable this flag, setting to blank will disable the message.",
         };
         
         E = new String[]
         {
-            "{flag} <red>YOU FAILED, MWaHahahah!\n<gray>Now be gone.",
+            "{flag} <red>YOU FAILED, MWaHahahah!",
         };
     }
     
@@ -85,6 +90,20 @@ public class FlagFailMessage extends Flag
     }
     
     @Override
+    protected boolean onValidate()
+    {
+        BaseRecipe recipe = getRecipe();
+        
+        if(recipe instanceof MultiResultRecipe == false)
+        {
+            RecipeErrorReporter.error("Flag " + getType() + " can only be used on multi-result recipes, which can fail.");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    @Override
     public boolean onParse(String value)
     {
         setMessage(value);
@@ -94,13 +113,30 @@ public class FlagFailMessage extends Flag
     @Override
     public void onFailed(Args a)
     {
-        if(a.hasRecipe() && a.recipe() instanceof MultiResultRecipe)
+        if(!a.hasResult() || !a.hasRecipe() || a.recipe() instanceof MultiResultRecipe == false)
         {
-            MultiResultRecipe recipe = (MultiResultRecipe)a.recipe();
-            
-            // TODO {failchance} & {successchance} vars
-            
-            a.addCustomReason(message);
+            a.addCustomReason("Needs multi-result recipe and result!");
+            return;
         }
+        
+        MultiResultRecipe recipe = (MultiResultRecipe)a.recipe();
+        
+        float resultChance = a.result().getChance();
+        float failChance = 0;
+        float successChance = 0;
+        
+        for(ItemResult r : recipe.getResults())
+        {
+            if(r.getTypeId() == 0)
+            {
+                failChance = r.getChance();
+            }
+            else
+            {
+                successChance += r.getChance();
+            }
+        }
+        
+        a.addCustomReason(Tools.replaceVariables(message, "{failchance}", failChance, "{successchance}", successChance, "{resultchance}", resultChance));
     }
 }

@@ -122,7 +122,7 @@ public class FlagForPermission extends Flag
      */
     public boolean canAdd(Flag flag)
     {
-        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_STORE);
+        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_FOR);
     }
     
     /**
@@ -171,9 +171,9 @@ public class FlagForPermission extends Flag
             return RecipeErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
         }
         
-        if(type.hasBit(Bit.NO_STORE))
+        if(type.hasBit(Bit.NO_FOR))
         {
-            return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " is a unstorable flag, can't be used with permissions.");
+            return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
         }
         
         Flag flag = getFlagForPermission(permission, type); // get existing flag, if any

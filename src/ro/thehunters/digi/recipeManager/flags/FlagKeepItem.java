@@ -137,7 +137,7 @@ public class FlagKeepItem extends Flag
         
         if(keepItems.containsKey(key))
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " already has the '" + Tools.printItem(item) + "' ingredient added.");
+            RecipeErrorReporter.warning("Flag " + getType() + " already has the '" + Tools.Item.print(item) + "' ingredient added.");
             return false;
         }
         
@@ -164,7 +164,7 @@ public class FlagKeepItem extends Flag
                 }
                 else
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + Tools.printItem(item) + ", ignored.");
+                    RecipeErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + Tools.Item.print(item) + ", ignored.");
                 }
                 
                 keepItems.put(key, damage);
@@ -173,7 +173,7 @@ public class FlagKeepItem extends Flag
             {
                 if(item.getType().getMaxStackSize() > 1)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + Tools.printItem(item));
+                    RecipeErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + Tools.Item.print(item));
                     return false;
                 }
                 

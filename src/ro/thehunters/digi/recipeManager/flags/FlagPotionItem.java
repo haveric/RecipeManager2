@@ -1,5 +1,8 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -78,7 +81,8 @@ public class FlagPotionItem extends Flag
     
     // Flag code
     
-    private PotionMeta potion; // TODO
+    private short data;
+    private List<PotionEffect> effects = new ArrayList<PotionEffect>();
     
     public FlagPotionItem()
     {
@@ -86,7 +90,8 @@ public class FlagPotionItem extends Flag
     
     public FlagPotionItem(FlagPotionItem flag)
     {
-        // TODO clone
+        data = flag.data;
+        effects.addAll(flag.effects);
     }
     
     @Override
@@ -101,6 +106,38 @@ public class FlagPotionItem extends Flag
         return TYPE;
     }
     
+    public short getData()
+    {
+        return data;
+    }
+    
+    public void setData(short data)
+    {
+        this.data = data;
+    }
+    
+    public List<PotionEffect> getEffects()
+    {
+        return effects;
+    }
+    
+    public void setEffects(List<PotionEffect> effects)
+    {
+        if(effects == null)
+        {
+            this.effects.clear();
+        }
+        else
+        {
+            this.effects = effects;
+        }
+    }
+    
+    public void addEffect(PotionEffect effect)
+    {
+        this.effects.add(effect);
+    }
+    
     @Override
     protected boolean onValidate()
     {
@@ -108,45 +145,24 @@ public class FlagPotionItem extends Flag
         
         if(result == null || result.getItemMeta() instanceof PotionMeta == false)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " needs a POTION item!");
+            RecipeErrorReporter.error("Flag " + getType() + " needs a POTION item!");
+            return false;
         }
         
         return true;
     }
     
     @Override
-    protected void onRemove()
-    {
-        ItemResult result = getResult();
-        PotionMeta potion = (PotionMeta)result.getItemMeta();
-        potion.setMainEffect(null);
-        potion.clearCustomEffects();
-        result.setItemMeta(potion);
-        result.setDurability((short)0);
-    }
-    
-    @Override
     protected boolean onParse(String value)
     {
-        ItemResult result = getResult();
-        PotionMeta potion = (PotionMeta)result.getItemMeta();
-        
         if(value.startsWith("custom"))
         {
-            String[] split = value.split(" ", 2);
-            
-            if(split.length != 2)
-            {
-                return RecipeErrorReporter.error("Flag " + getType() + " has 'custom' argument with no values!");
-            }
-            
-            value = split[1].trim();
+            value = value.substring("custom".length()).trim();
             PotionEffect effect = Tools.parsePotionEffect(value, getType());
             
             if(effect != null)
             {
-                potion.addCustomEffect(effect, true);
-                result.setItemMeta(potion);
+                addEffect(effect);
             }
         }
         else
@@ -155,10 +171,37 @@ public class FlagPotionItem extends Flag
             
             if(p != null)
             {
-                result.setDurability(p.toDamageValue());
+                setData(p.toDamageValue());
             }
         }
         
         return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        if(!a.hasResult())
+        {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+        
+        if(data != 0)
+        {
+            a.result().setDurability(data);
+        }
+        
+        if(!getEffects().isEmpty())
+        {
+            PotionMeta meta = (PotionMeta)a.result().getItemMeta();
+            
+            for(PotionEffect effect : getEffects())
+            {
+                meta.addCustomEffect(effect, true);
+            }
+            
+            a.result().setItemMeta(meta);
+        }
     }
 }

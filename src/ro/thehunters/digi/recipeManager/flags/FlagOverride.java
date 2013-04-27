@@ -1,10 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
+import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
 
 public class FlagOverride extends Flag
 {
@@ -71,6 +70,21 @@ public class FlagOverride extends Flag
     }
     
     @Override
+    protected void onRegistered()
+    {
+        BaseRecipe recipe = getRecipe();
+        
+        if(recipe == null)
+        {
+            Messages.debug("ERROR: invalid recipe pointer: " + recipe);
+            remove();
+        }
+        
+        recipe.getInfo().setStatus(RecipeStatus.OVERRIDDEN);
+    }
+    
+    /*
+    @Override
     public List<String> information()
     {
         List<String> list = new ArrayList<String>(1);
@@ -79,4 +93,5 @@ public class FlagOverride extends Flag
         
         return list;
     }
+    */
 }

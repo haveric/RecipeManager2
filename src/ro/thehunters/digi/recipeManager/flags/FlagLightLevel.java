@@ -1,8 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -320,6 +317,7 @@ public class FlagLightLevel extends Flag
         }
     }
     
+    /*
     @Override
     public List<String> information()
     {
@@ -329,4 +327,5 @@ public class FlagLightLevel extends Flag
         
         return list;
     }
+    */
 }

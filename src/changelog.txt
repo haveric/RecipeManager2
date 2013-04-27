@@ -1,6 +1,24 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== v2.0alpha3 ===
+
+* Added a benchmark for the furnace worker, it prints code execution time each minute in console.
+** The purpose of this is to analyse the performance of a task that runs constantly on the server.
+** It should give bigger values when 1 or more furnaces are smelting recipes with custom burning time.
+** If you have 1ms or more at average please PM me your avg,min,max and number of furnaces that were running and number of furnaces that are stored (see at 'saving X furnaces' on shutdown or reload)
+* Finished @summon flag.
+* Redesigned recipe books system, see 'recipe books.html'.
+* Fixed @needlevel and @needmoney not checking for level/money properly.
+* Fixed @needexp, @modexp, @needlevel and @modlevel not working in certain conditions.
+* Renamed nodes from messages.yml, flag.reqexp/level/money to flag.needexp/level/money to be consistent with flag's main name.
+* Made most result flags @forpermission/@forchance compatible (@mapitem remains to be done).
+* New @broadcast flag.
+* Fixed @forchance not calculating chance for grouped flags.
+* Finished @cloneingredient flag, wrote documentation too.
+* Tweaked @ingredientcondition flag and added documentation.
+
+
 === v2.0alpha2 ===
 
 * Fixed @modexp, @modlevel and @modmoney not working with - or = modifiers.

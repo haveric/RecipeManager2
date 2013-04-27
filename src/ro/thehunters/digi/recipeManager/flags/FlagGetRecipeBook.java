@@ -198,45 +198,4 @@ public class FlagGetRecipeBook extends Flag
         
         a.result().setItemMeta(book.getBookItem(volume).getItemMeta());
     }
-    
-    /*
-    @Override
-    protected void onCrafted(Args a)
-    {
-        if(book == null)
-        {
-            a.addCustomReason("Flag not configured; book is null!");
-            return;
-        }
-        
-        if(a.inventory() instanceof CraftingInventory)
-        {
-            CraftingInventory inv = (CraftingInventory)a.inventory();
-            
-            Messages.debug("testing workbench...");
-            
-            inv.setResult(new ItemStack(Material.ARROW));
-            
-    //            inv.setResult(book.getBookItem(volume));
-            
-            return;
-        }
-        else if(a.inventory() instanceof FurnaceInventory)
-        {
-            FurnaceInventory inv = (FurnaceInventory)a.inventory();
-            
-            Messages.debug("testing furnace...");
-            
-            inv.setResult(new ItemStack(Material.CACTUS));
-            
-            return;
-        }
-        else
-        {
-            Messages.debug("unknown inventory = " + a.inventory());
-        }
-        
-        a.addCustomReason("Need inventory!");
-    }
-    */
 }

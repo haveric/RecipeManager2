@@ -25,18 +25,20 @@ public class FlagSkullOwner extends Flag
         
         D = new String[]
         {
-            "Changes skull head's owner to change its skin.",
+            "Sets the human skull's owner to apply the skin.",
+            "If you set it to '{player}' then it will use crafter's name.",
         };
         
         E = new String[]
         {
             "{flag} Notch",
+            "{flag} {player}",
         };
     }
     
     // Flag code
     
-    private String owner; // TODO
+    private String owner;
     
     public FlagSkullOwner()
     {
@@ -44,7 +46,7 @@ public class FlagSkullOwner extends Flag
     
     public FlagSkullOwner(FlagSkullOwner flag)
     {
-        // TODO clone
+        owner = flag.owner;
     }
     
     @Override
@@ -57,6 +59,16 @@ public class FlagSkullOwner extends Flag
     public FlagType getType()
     {
         return TYPE;
+    }
+    
+    public String getOwner()
+    {
+        return owner;
+    }
+    
+    public void setOwner(String owner)
+    {
+        this.owner = owner;
     }
     
     @Override
@@ -75,11 +87,36 @@ public class FlagSkullOwner extends Flag
     @Override
     protected boolean onParse(String value)
     {
-        ItemResult result = getResult();
-        SkullMeta skull = (SkullMeta)result.getItemMeta();
-        skull.setOwner(value);
-        result.setItemMeta(skull);
-        
+        setOwner(value);
         return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        if(!a.hasResult())
+        {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+        
+        SkullMeta meta = (SkullMeta)a.result().getItemMeta();
+        
+        if(getOwner().equalsIgnoreCase("{player}"))
+        {
+            if(!a.hasPlayerName())
+            {
+                a.addCustomReason("Needs player name!");
+                return;
+            }
+            
+            meta.setOwner(a.playerName());
+        }
+        else
+        {
+            meta.setOwner(getOwner());
+        }
+        
+        a.result().setItemMeta(meta);
     }
 }

@@ -509,11 +509,13 @@ public class Files
         s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html\">BukkitAPI / Material</a>");
         s.append(NL).append("Data/damage/durability values are listed at <a href=\"http://www.minecraftwiki.net/wiki/Data_value#Data\">Minecraft Wiki / Data Value</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-24s %-5s %s", "ID", "Name", "Stack", "Durability"));
+        s.append(NL).append(String.format(" %-5s %-24s %-24s %-5s %s", "ID", "Name", "Alias", "Stack", "Max durability"));
         
         for(Material m : Material.values())
         {
-            s.append(NL).append(String.format(" %-5d %-24s %-5d %s", m.getId(), m.toString().toLowerCase(), m.getMaxStackSize(), m.getMaxDurability()));
+            String alias = RecipeManager.settings.materialPrint.get(m);
+            
+            s.append(NL).append(String.format(" %-5d %-24s %-24s %-5d %s", m.getId(), m.toString(), (alias == null ? "" : alias), m.getMaxStackSize(), (m.getMaxDurability() == 0 ? "" : m.getMaxDurability())));
         }
         
         s.append(NL);
@@ -521,7 +523,7 @@ public class Files
         s.append(NL).append("<a name=\"enchantment\"></a><a href=\"#contents\">^ Contents</a><h3>ENCHANTMENTS LIST</h3>");
         s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html\">BukkitAPI / Enchantment</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-26s %-24s %-12s %s", "ID", "Name", "Alternate name", "Item type", "Level range"));
+        s.append(NL).append(String.format(" %-5s %-26s %-24s %-12s %s", "ID", "Name", "Alias", "Item type", "Level range"));
         
         List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
         
@@ -536,7 +538,7 @@ public class Files
         
         for(Enchantment e : enchantments)
         {
-            s.append(NL).append(String.format(" %-5d %-26s %-24s %-12s %s", e.getId(), e.getName(), RecipeManager.getSettings().enchantPrint.get(e), e.getItemTarget().toString(), e.getStartLevel() + " to " + e.getMaxLevel()));
+            s.append(NL).append(String.format(" %-5d %-26s %-24s %-12s %s", e.getId(), e.getName(), RecipeManager.settings.enchantPrint.get(e), e.getItemTarget().toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
         }
         
         s.append(NL);

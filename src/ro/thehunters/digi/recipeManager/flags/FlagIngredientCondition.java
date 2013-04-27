@@ -1,6 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,7 +11,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -37,16 +37,12 @@ public class FlagIngredientCondition extends Flag
         A = new String[]
         {
             "{flag} <item> | <conditions>",
-            "{flag} false",
         };
         
         D = new String[]
         {
-            "DOCUMENTATION IS WIP - flag's 'amount' and 'lore' args do not work yet.",
-            "",
-            "",
-            "More conditions for individual ingredients like ranged data values, enchantments or using stacks.",
-            "This flag can be called more than once to add conditions for more ingredients but conditions for an ingredient must be in a single statement.",
+            "Adds conditions for individual ingredients like ranged data values, enchantments or using stacks.",
+            "This flag can be called more than once to add more ingredients with conditions.",
             "",
             "The <item> argument must be an item that is in the recipe, 'material:data' format.",
             "If planning to add ranged data values the data value must be the wildcard '*' or not set at all in order to work.",
@@ -62,8 +58,6 @@ public class FlagIngredientCondition extends Flag
             "    Prefixing with '&' would make a bitwise operation on the data value.",
             "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
             "",
-            "  amount <num>    = stack amount, this will also subtract from the ingredient when crafted!",
-            "",
             "  enchant <name> [[!]min[-max]], [...]",
             "    Condition for applied enchantments (not stored in books).",
             "    This argument can be used more than once to add more enchantments as conditions.",
@@ -74,19 +68,13 @@ public class FlagIngredientCondition extends Flag
             "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
             "    Prefixing with '!' would ban the level or level range.",
             "",
-            // TODO finish
-            "",
-            "For <conditions> there must be at least one of the following arguments, separated by | character and in any order:",
-            "  data <values>                = data values, they can be listed with commas, set ranges with - as separator or both.",
-            "  enchant <name> [levels]      = name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' for the list; levels can be listed by comma, ranged separated by - or both; this argument can be used more than once.",
-            "  amount <value>               = stack amount required to craft, this also consumes the amount specified.",
-            "  name <text or regex>         = check display name for exact match or a regex pattern.",
-            "  lore [#line] <text or regex> = checks each lore line for a specific text/regex pattern or a specific line for exact match/regex pattern; you can use '#last' as line to use the last line; this can be called multiple times to check more lore lines.",
-            "  failmsg <text>               = overwrite message sent to crafter when failing to provide required ingredient.",
-            "  author <text or regex>       = only works for written books, checks if author is equal to the text or matches the regex pattern.",
+            "  amount <num>                 = stack amount, this will also subtract from the ingredient when crafted!",
+            "  name <text or regex>         = check the item name against exact text or regex pattern.",
+            "  lore <text or regex>         = checks each lore line for a specific text or regex pattern.",
             "  leather <colorname or R,G,B> = only works for leather armor, checks color, the values can be individual values or ranged separated by - char or you can use a color name constant, see '" + Files.FILE_INFO_NAMES + "' at 'DYE COLOR'.",
+            "  failmsg <text>               = overwrite message sent to crafter when failing to provide required ingredient.",
             "",
-            "Setting to 'false' will disable the flag.",
+            "NOTE: if an ingredient exists more than once in the recipe then the conditions will apply to all of them.",
         };
         
         E = new String[]
@@ -102,7 +90,7 @@ public class FlagIngredientCondition extends Flag
     
     // Flag code
     
-    // TODO check and subtract amounts!
+    // TODO written book title, author, page num, chars per page, etc
     
     public class Conditions implements Cloneable
     {
@@ -112,7 +100,7 @@ public class FlagIngredientCondition extends Flag
         private int amount;
         private Map<Enchantment, Map<Short, Boolean>> enchants = new HashMap<Enchantment, Map<Short, Boolean>>();
         private String name;
-        private Map<String, String> lore = new HashMap<String, String>();
+        private String lore;
         private Color minColor;
         private Color maxColor;
         
@@ -138,7 +126,7 @@ public class FlagIngredientCondition extends Flag
             
             name = original.name;
             
-            lore.putAll(original.lore);
+            lore = original.lore;
             
             minColor = original.minColor;
             maxColor = original.maxColor;
@@ -371,6 +359,26 @@ public class FlagIngredientCondition extends Flag
             return true;
         }
         
+        public int getAmount()
+        {
+            return amount;
+        }
+        
+        public void setAmount(int amount)
+        {
+            this.amount = amount;
+        }
+        
+        public boolean hasAmount()
+        {
+            return amount > 0;
+        }
+        
+        public boolean checkAmount(int amount)
+        {
+            return (amount >= this.amount);
+        }
+        
         /**
          * @return enchantments map, never null.
          */
@@ -511,26 +519,6 @@ public class FlagIngredientCondition extends Flag
             return s.toString();
         }
         
-        public int getAmount()
-        {
-            return amount;
-        }
-        
-        public void setAmount(int amount)
-        {
-            this.amount = amount;
-        }
-        
-        public boolean hasAmount()
-        {
-            return amount > 0;
-        }
-        
-        public boolean checkAmount(int amount)
-        {
-            return (amount >= this.amount);
-        }
-        
         public String getName()
         {
             return name;
@@ -553,14 +541,47 @@ public class FlagIngredientCondition extends Flag
                 return true;
             }
             
-            if(this.name.equals(name))
+            if(this.name.equalsIgnoreCase(name) || name.matches(this.name))
             {
                 return true;
             }
             
-            if(name.matches(this.name))
+            return false;
+        }
+        
+        public String getLore()
+        {
+            return lore;
+        }
+        
+        public void setLore(String lore)
+        {
+            this.lore = lore;
+        }
+        
+        public boolean hasLore()
+        {
+            return lore != null;
+        }
+        
+        public boolean checkLore(List<String> lore)
+        {
+            if(!hasLore())
             {
                 return true;
+            }
+            
+            if(lore == null || lore.isEmpty())
+            {
+                return false;
+            }
+            
+            for(String l : lore)
+            {
+                if(l.equalsIgnoreCase(this.lore) || l.matches(this.lore))
+                {
+                    return true;
+                }
             }
             
             return false;
@@ -712,23 +733,7 @@ public class FlagIngredientCondition extends Flag
                     return false;
                 }
                 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NODATA, getFailMessage(), "{item}", Tools.printItem(item), "{data}", getDataString());
-                ok = false;
-                
-                if(getFailMessage() != null)
-                {
-                    return false;
-                }
-            }
-            
-            if(!checkEnchants(item.getEnchantments()))
-            {
-                if(a == null)
-                {
-                    return false;
-                }
-                
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", Tools.printItem(item), "{enchants}", getEnchantsString());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NODATA, getFailMessage(), "{item}", Tools.Item.print(item), "{data}", getDataString());
                 ok = false;
                 
                 if(getFailMessage() != null)
@@ -744,7 +749,23 @@ public class FlagIngredientCondition extends Flag
                     return false;
                 }
                 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOAMOUNT, getFailMessage(), "{item}", Tools.printItem(item), "{amount}", getAmount());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOAMOUNT, getFailMessage(), "{item}", Tools.Item.print(item), "{amount}", getAmount());
+                ok = false;
+                
+                if(getFailMessage() != null)
+                {
+                    return false;
+                }
+            }
+            
+            if(!checkEnchants(item.getEnchantments()))
+            {
+                if(a == null)
+                {
+                    return false;
+                }
+                
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", Tools.Item.print(item), "{enchants}", getEnchantsString());
                 ok = false;
                 
                 if(getFailMessage() != null)
@@ -762,7 +783,23 @@ public class FlagIngredientCondition extends Flag
                     return false;
                 }
                 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NONAME, getFailMessage(), "{item}", Tools.printItem(item), "{name}", getName());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NONAME, getFailMessage(), "{item}", Tools.Item.print(item), "{name}", getName());
+                ok = false;
+                
+                if(getFailMessage() != null)
+                {
+                    return false;
+                }
+            }
+            
+            if(!checkLore(meta.getLore()))
+            {
+                if(a == null)
+                {
+                    return false;
+                }
+                
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOLORE, getFailMessage(), "{item}", Tools.Item.print(item), "{lore}", getLore());
                 ok = false;
                 
                 if(getFailMessage() != null)
@@ -792,7 +829,7 @@ public class FlagIngredientCondition extends Flag
                         return false;
                     }
                     
-                    a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOCOLOR, getFailMessage(), "{item}", Tools.printItem(item), "{color}", getColorString());
+                    a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOCOLOR, getFailMessage(), "{item}", Tools.Item.print(item), "{color}", getColorString());
                     ok = false;
                     
                     if(getFailMessage() != null)
@@ -849,6 +886,12 @@ public class FlagIngredientCondition extends Flag
             return false;
         }
         
+        if(Tools.findItemInIngredients(getRecipe(), item.getType(), item.getDurability()) == 0)
+        {
+            RecipeErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(item));
+            return false;
+        }
+        
         Conditions cond = getIngredientConditions(item);
         
         if(cond == null)
@@ -859,7 +902,7 @@ public class FlagIngredientCondition extends Flag
         
         for(int i = 1; i < args.length; i++)
         {
-            String arg = args[i].trim();
+            String arg = args[i].trim().toLowerCase();
             
             if(arg.startsWith("data"))
             {
@@ -873,17 +916,17 @@ public class FlagIngredientCondition extends Flag
                 
                 String[] list = value.split(",");
                 
-                for(String s : list)
+                for(String val : list)
                 {
-                    s = s.trim();
-                    boolean not = s.charAt(0) == '!';
+                    val = val.trim();
+                    boolean not = val.charAt(0) == '!';
                     
                     if(not)
                     {
-                        s = s.substring(1).trim();
+                        val = val.substring(1).trim();
                     }
                     
-                    ItemStack match = Tools.parseItemStack(s, 0, true, false, false, false);
+                    ItemStack match = Tools.parseItemStack(val, 0, true, false, false, false);
                     
                     if(match != null)
                     {
@@ -891,7 +934,7 @@ public class FlagIngredientCondition extends Flag
                     }
                     else
                     {
-                        String[] split = s.split("-");
+                        String[] split = val.split("-");
                         
                         if(split.length > 1)
                         {
@@ -905,7 +948,7 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid numbers: " + s);
+                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid numbers: " + val);
                                 continue;
                             }
                             
@@ -919,32 +962,46 @@ public class FlagIngredientCondition extends Flag
                         }
                         else
                         {
-                            s = s.trim();
-                            boolean bitwise = s.charAt(0) == '&';
+                            val = val.trim();
+                            boolean bitwise = val.charAt(0) == '&';
                             
                             if(bitwise)
                             {
-                                s = s.substring(1).trim();
+                                val = val.substring(1).trim();
                             }
                             
                             try
                             {
                                 if(bitwise)
                                 {
-                                    cond.addDataBit(Short.valueOf(s), not);
+                                    cond.addDataBit(Short.valueOf(val), not);
                                 }
                                 else
                                 {
-                                    cond.addDataValue(Short.valueOf(s), not);
+                                    cond.addDataValue(Short.valueOf(val), not);
                                 }
                             }
                             catch(NumberFormatException e)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number: " + s);
+                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number: " + val);
                                 continue;
                             }
                         }
                     }
+                }
+            }
+            else if(arg.startsWith("amount"))
+            {
+                value = arg.substring("amount".length()).trim();
+                
+                try
+                {
+                    cond.setAmount(Integer.valueOf(value));
+                }
+                catch(NumberFormatException e)
+                {
+                    RecipeErrorReporter.warning("Flag " + getType() + " has 'amount' argument with invalid number: " + value);
+                    continue;
                 }
             }
             else if(arg.startsWith("enchant"))
@@ -953,9 +1010,15 @@ public class FlagIngredientCondition extends Flag
                 
                 String[] list = value.split(" ", 2);
                 
-                value = list[0].trim().toUpperCase();
+                value = list[0].trim();
                 
-                Enchantment enchant = Enchantment.getByName(value);
+                Enchantment enchant = Tools.parseEnchant(value);
+                
+                if(enchant == null)
+                {
+                    RecipeErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid name: " + value);
+                    continue;
+                }
                 
                 if(list.length > 1)
                 {
@@ -992,7 +1055,7 @@ public class FlagIngredientCondition extends Flag
                             if(min > max)
                             {
                                 RecipeErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
-                                break;
+                                continue;
                             }
                             
                             cond.addEnchantLevelRange(enchant, min, max, !not);
@@ -1024,18 +1087,9 @@ public class FlagIngredientCondition extends Flag
                     continue;
                 }
                 
-                value = arg.substring("color".length()).trim().toUpperCase();
+                value = arg.substring("color".length()).trim();
                 
-                DyeColor dye = null;
-                
-                for(DyeColor c : DyeColor.values())
-                {
-                    if(value.equals(c.name()))
-                    {
-                        dye = c;
-                        break;
-                    }
-                }
+                DyeColor dye = Tools.parseEnum(value, DyeColor.values());
                 
                 if(dye != null)
                 {
@@ -1085,23 +1139,21 @@ public class FlagIngredientCondition extends Flag
                     }
                 }
             }
-            else if(arg.startsWith("amount"))
+            else if(arg.startsWith("name"))
             {
-                value = arg.substring("amount".length()).trim();
+                value = args[i].trim().substring("name".length()).trim(); // preserve case for regex
                 
-                try
-                {
-                    cond.setAmount(Integer.valueOf(value));
-                }
-                catch(NumberFormatException e)
-                {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'amount' argument with invalid number: " + value);
-                    continue;
-                }
+                cond.setName(value);
+            }
+            else if(arg.startsWith("lore"))
+            {
+                value = args[i].trim().substring("lore".length()).trim(); // preserve case for regex
+                
+                cond.setLore(value);
             }
             else if(arg.startsWith("failmsg"))
             {
-                value = arg.substring("failmsg".length()).trim();
+                value = args[i].trim().substring("failmsg".length()).trim(); // preserve case... because it's a message
                 
                 cond.setFailMessage(value);
             }
@@ -1172,13 +1224,11 @@ public class FlagIngredientCondition extends Flag
             return;
         }
         
-        Inventory inv = a.inventory();
-        
-        if(inv instanceof CraftingInventory)
+        if(a.inventory() instanceof CraftingInventory)
         {
             for(int i = 1; i < 10; i++)
             {
-                ItemStack item = inv.getItem(i);
+                ItemStack item = a.inventory().getItem(i);
                 
                 if(item != null)
                 {
@@ -1188,10 +1238,10 @@ public class FlagIngredientCondition extends Flag
             
             return;
         }
-        else if(inv instanceof FurnaceInventory)
+        else if(a.inventory() instanceof FurnaceInventory)
         {
-            FurnaceInventory fi = (FurnaceInventory)inv;
-            ItemStack smelting = Tools.nullItemIfAir(fi.getSmelting());
+            FurnaceInventory inv = (FurnaceInventory)a.inventory();
+            ItemStack smelting = Tools.Item.nullIfAir(inv.getSmelting());
             
             if(smelting != null)
             {
@@ -1200,12 +1250,7 @@ public class FlagIngredientCondition extends Flag
             
             return;
         }
-        else
-        {
-            Messages.debug("wrong inventory implementation ? | inv = " + inv);
-        }
         
-        a.addCustomReason("???");
-//      a.addReason(globalMessage, customMessage, variables) // < TODO
+        a.addCustomReason("Unknown inventory type: " + a.inventory());
     }
 }

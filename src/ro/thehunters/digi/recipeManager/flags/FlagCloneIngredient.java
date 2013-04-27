@@ -1,20 +1,19 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
-import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
-import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 public class FlagCloneIngredient extends Flag
 {
@@ -31,49 +30,59 @@ public class FlagCloneIngredient extends Flag
         
         A = new String[]
         {
-            "{flag} <ingredient> | [arguments]",
-            "{flag} false",
+            "{flag} <arguments>",
         };
         
         D = new String[]
         {
-            "Clones the ingredient matching the result of this recipe.",
-            "The cloned ingredient item will remain in the crafting grid after crafting.",
-            "The true or false argument is optional, by default it enables cloning.",
+            "Clones the ingredient matching material of the result used on.",
+            "Using this flag more than once will overwrite the previous one.",
             "",
-            "The result will be added as an ingredient to the recipe internally so this flag will limit the recipe to 8 ingredients.",
-            "Can only be used on COMBINE recipes!",
-            "Does not work with multiple results!",
+            "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.",
+            "Arguments can be one or more of the following, separated by | character:",
+            "  data [<mod> <value>]   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+            "  amount [<mod> <value>] = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+            "  enchants               = copies the enchantments.",
+            "  name                   = copies the custom item name.",
+            "  lore                   = copies the custom item lore/description.",
+            "  special                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
+            "  allmeta                = copies enchants, name, lore and special.",
+            "  all                    = copies entire item (data, amount, enchants, name, lore, special)",
             "",
-            "You may set additional flags on the result to add/remove certain features from it.",
-            "For example you can use '@page false' to clear the contents of the resulting book.",
-            "Or you could use @lore text to add an additional line of text to the item.",
+            "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
+            "",
+            "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENTCONDITION + " flag too.",
         };
         
         E = new String[]
         {
-            "{flag} ???????",
+            "{flag} data // just copy data value",
+            "{flag} data +2 // copy data value and add 2 to it",
+            "{flag} amount * 2 // copy amount and multiply it by 2",
+            "{flag} data % 2 // get the remainer from data divided by 2.",
+            "{flag} data | amount | lore // only copy these things",
+            "{flag} all // copy entire ingredient",
         };
     }
     
     // Flag code
     
     private byte copyBitsum;
-    private int[] dataModifier;
-    private int[] amountModifier;
+    private int[] dataModifier = new int[2];
+    private int[] amountModifier = new int[2];
     
     /**
      * Contains static constants that are usable in the 'copy' methods of {@link FlagCloneIngredient}.
      */
     public class Bit
     {
-        public static final byte NONE = 1 << 0;
-        public static final byte DATA = 1 << 1;
-        public static final byte AMOUNT = 1 << 2;
-        public static final byte ENCHANTS = 1 << 3;
-        public static final byte NAME = 1 << 4;
-        public static final byte LORE = 1 << 5;
-        public static final byte SPECIAL = 1 << 6;
+        public static final byte NONE = 0;
+        public static final byte DATA = 1 << 0;
+        public static final byte AMOUNT = 1 << 1;
+        public static final byte ENCHANTS = 1 << 2;
+        public static final byte NAME = 1 << 3;
+        public static final byte LORE = 1 << 4;
+        public static final byte SPECIAL = 1 << 5;
         public static final byte ALLMETA = ENCHANTS | NAME | LORE | SPECIAL;
         public static final byte ALL = DATA | AMOUNT | ALLMETA;
     }
@@ -85,8 +94,8 @@ public class FlagCloneIngredient extends Flag
     public FlagCloneIngredient(FlagCloneIngredient flag)
     {
         copyBitsum = flag.copyBitsum;
-        dataModifier = flag.dataModifier.clone();
-        amountModifier = flag.amountModifier.clone();
+        System.arraycopy(flag.dataModifier, 0, dataModifier, 0, dataModifier.length);
+        System.arraycopy(flag.amountModifier, 0, amountModifier, 0, amountModifier.length);
     }
     
     @Override
@@ -156,20 +165,17 @@ public class FlagCloneIngredient extends Flag
     }
     
     /**
-     * Modify the final result's data value by using symbol as math value to add/subtract/set data.
+     * Modify the final result's data value by using symbol as math operator.
      * 
      * @param symbol
-     *            can be '+', '-' or '='
+     *            can be: +, -, *, /, %
      * @param data
      *            the data amount to change
      */
     public void setDataModifier(char symbol, int data)
     {
-        dataModifier = new int[]
-        {
-            symbol,
-            data
-        };
+        dataModifier[0] = symbol;
+        dataModifier[1] = data;
     }
     
     /**
@@ -183,20 +189,17 @@ public class FlagCloneIngredient extends Flag
     }
     
     /**
-     * Modify the final result's amount by using symbol as math value to add/subtract/set amount.
+     * Modify the final result's amount by using symbol as math operator.
      * 
      * @param symbol
-     *            can be '+', '-' or '='
+     *            can be: +, -, *, /, %
      * @param data
      *            the amount amount to change
      */
     public void setAmountModifier(char symbol, int data)
     {
-        amountModifier = new int[]
-        {
-            symbol,
-            data
-        };
+        amountModifier[0] = symbol;
+        amountModifier[1] = data;
     }
     
     @Override
@@ -210,6 +213,7 @@ public class FlagCloneIngredient extends Flag
             return false;
         }
         
+        /*
         BaseRecipe recipe = result.getRecipe();
         
         if(recipe instanceof WorkbenchRecipe == false)
@@ -217,6 +221,7 @@ public class FlagCloneIngredient extends Flag
             RecipeErrorReporter.error("Flag " + getType() + " only works on workbench (craft and combine) recipes!");
             return false;
         }
+        */
         
         return true;
     }
@@ -224,100 +229,67 @@ public class FlagCloneIngredient extends Flag
     @Override
     protected boolean onParse(String value)
     {
-        String[] split = value.toLowerCase().split("\\|");
-        String[] args;
+        String[] args = value.toLowerCase().split("\\|");
         
-        ItemResult result = getResult();
+        int found = Tools.findItemInIngredients(getRecipe(), getResult().getType(), null);
         
-        if(result == null)
+        if(found == 0)
         {
-            Messages.debug("SOMETHING IS WRONG WITH RESULT: " + result);
+            RecipeErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(getResult()));
             return false;
         }
-        
-        BaseRecipe r = result.getRecipe();
-        
-        if(r instanceof CraftRecipe == false)
+        else if(found > 1)
         {
-            Messages.debug("SOMETHING IS WRONG WITH RECIPE: " + r);
-            return false;
+            RecipeErrorReporter.warning("Flag " + getType() + " has found the " + Tools.Item.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
         }
         
-        CraftRecipe recipe = (CraftRecipe)r;
-        
-        ItemStack[] ingredients = recipe.getIngredients();
-        ItemStack ingredient = null;
-        
-        for(ItemStack i : ingredients)
+        for(String arg : args)
         {
-            if(i != null && i.getTypeId() == result.getTypeId())
-            {
-                if(ingredient == null)
-                {
-                    ingredient = i;
-                    // continue the search for possible duplicates
-                }
-                else
-                {
-                    RecipeErrorReporter.error("Flag " + getType() + " has more ingredients of the cloned type: " + Tools.printItem(i), "Recipe must only have a single type of the cloned material in the ingredients!");
-                    return false;
-                }
-            }
-        }
-        
-        if(ingredient == null)
-        {
-            RecipeErrorReporter.error("Flag " + getType() + " has couldn't find ingredient of type: " + result.getType());
-            return false;
-        }
-        
-        for(String s : split)
-        {
-            s = s.trim();
+            arg = arg.trim();
             
-            if(s.equals("all"))
+            if(arg.equals("all"))
             {
                 setCopyBitsum(Bit.ALL);
                 break;
             }
-            else if(s.equals("allmeta"))
+            else if(arg.equals("allmeta"))
             {
                 addCopyBit(Bit.ALLMETA);
                 continue;
             }
-            else if(s.equals("enchants"))
+            else if(arg.equals("enchants"))
             {
                 addCopyBit(Bit.ENCHANTS);
                 continue;
             }
-            else if(s.equals("name"))
+            else if(arg.equals("name"))
             {
                 addCopyBit(Bit.NAME);
                 continue;
             }
-            else if(s.equals("lore"))
+            else if(arg.equals("lore"))
             {
                 addCopyBit(Bit.LORE);
                 continue;
             }
-            else if(s.equals("special"))
+            else if(arg.equals("special"))
             {
                 addCopyBit(Bit.SPECIAL);
                 continue;
             }
             
-            boolean isDataArg = s.startsWith("data");
+            boolean isDataArg = arg.startsWith("data");
             
-            if(isDataArg || s.startsWith("amount"))
+            if(isDataArg || arg.startsWith("amount"))
             {
                 addCopyBit(isDataArg ? Bit.DATA : Bit.AMOUNT);
                 
-                Pattern pattern = Pattern.compile("[+-=]");
-                Matcher match = pattern.matcher(s);
+                Pattern pattern = Pattern.compile("[+-*/%]");
+                Matcher match = pattern.matcher(arg);
                 
                 if(match.find())
                 {
-                    args = pattern.split(s, 2);
+                    args = pattern.split(arg, 2);
                     value = args[1].trim();
                     
                     try
@@ -331,7 +303,7 @@ public class FlagCloneIngredient extends Flag
                             setAmountModifier(match.group(0).charAt(0), Math.abs(Integer.valueOf(value)));
                         }
                     }
-                    catch(Exception e)
+                    catch(Throwable e)
                     {
                         RecipeErrorReporter.warning("Flag " + getType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
                         continue;
@@ -341,144 +313,173 @@ public class FlagCloneIngredient extends Flag
                 continue;
             }
             
-            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + s);
+            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
         }
         
         return true;
     }
     
     @Override
-    protected void onCheck(Args a)
-    {
-    }
-    
-    @Override
     protected void onPrepare(Args a)
     {
-        ItemStack result = getResult();
-        boolean cloned = cloneIngredientToResult(result, a);
+        if(!a.hasResult() || !a.hasInventory()) // || a.inventory() instanceof CraftingInventory == false)
+        {
+            Messages.debug("Needs inventory and result!");
+            return;
+        }
         
-        Messages.debug("cloned " + cloned); // TODO remove
+        boolean cloned = cloneIngredientToResult(a.result(), a);
         
-        a.addCustomEffect("[debug] cloned " + cloned); // TODO remove
+        if(!cloned)
+        {
+            a.addCustomReason("Failed to clone ingredient."); // TODO remove ?
+        }
     }
     
     private boolean cloneIngredientToResult(ItemStack result, Args a)
     {
-        if(result == null || a.inventory() instanceof CraftingInventory == false)
-        {
-            Messages.debug("no inventory or no result set!");
-            return false;
-        }
-        
         ItemStack ingredient = null;
         
-        CraftingInventory craftInv = (CraftingInventory)a.inventory();
-        
-        for(ItemStack i : craftInv.getMatrix())
+        if(a.inventory() instanceof CraftingInventory)
         {
+            CraftingInventory inv = (CraftingInventory)a.inventory();
+            
+            for(ItemStack i : inv.getMatrix())
+            {
+                if(i != null && result.getTypeId() == i.getTypeId())
+                {
+                    ingredient = i;
+                    break;
+                }
+            }
+        }
+        else if(a.inventory() instanceof FurnaceInventory)
+        {
+            FurnaceInventory inv = (FurnaceInventory)a.inventory();
+            ItemStack i = inv.getSmelting();
+            
             if(i != null && result.getTypeId() == i.getTypeId())
             {
                 ingredient = i;
-                break;
             }
+        }
+        else
+        {
+            a.addCustomReason("Unknown inventory type: " + a.inventory());
+            return false;
         }
         
         if(ingredient == null)
         {
-            Messages.debug("Couldn't find target ingredient!");
+            a.addCustomReason("Couldn't find target ingredient!");
             return false;
         }
         
         if(this.hasCopyBit(Bit.DATA))
         {
-            short data = ingredient.getDurability();
-            int[] dataMod = this.getDataModifier();
+            int data = ingredient.getDurability();
+            int[] mod = this.getDataModifier();
             
-            if(dataMod != null)
+            switch(mod[0])
             {
-                switch(dataMod[0])
-                {
-                    case '-':
-                        data -= dataMod[1];
-                        break;
-                    
-                    case '=':
-                        data = (short)dataMod[1];
-                        break;
-                    
-                    default: // default adds to data
-                        data += dataMod[1];
-                        break;
-                }
+                case '-':
+                    data -= mod[1];
+                    break;
+                
+                case '*':
+                    data *= mod[1];
+                    break;
+                
+                case '/':
+                    data /= mod[1];
+                    break;
+                
+                case '%':
+                    data %= mod[1];
+                    break;
+                
+                default:
+                    data += mod[1];
+                    break;
             }
             
-            Messages.debug("data: " + (dataMod == null ? null : dataMod[0]) + " " + data);
-            
-            result.setDurability(data);
+            result.setDurability((short)data);
         }
         
         if(this.hasCopyBit(Bit.AMOUNT))
         {
             int amount = ingredient.getAmount();
-            int[] amountMod = this.getDataModifier();
+            int[] mod = this.getAmountModifier();
             
-            if(amountMod != null)
+            switch(mod[0])
             {
-                switch(amountMod[0])
-                {
-                    case '+':
-                        amount += amountMod[1];
-                        break;
-                    
-                    case '-':
-                        amount -= amountMod[1];
-                        break;
-                    
-                    case '=':
-                        amount = (short)amountMod[1];
-                        break;
-                }
+                case '-':
+                    amount -= mod[1];
+                    break;
+                
+                case '*':
+                    amount *= mod[1];
+                    break;
+                
+                case '/':
+                    amount /= mod[1];
+                    break;
+                
+                case '%':
+                    amount %= mod[1];
+                    break;
+                
+                default:
+                    amount += mod[1];
+                    break;
             }
             
             result.setAmount(amount);
         }
         
-        if(this.hasCopyBit(Bit.SPECIAL))
-        {
-            ItemMeta resultMeta = result.getItemMeta();
-            
-            // Clear ItemMeta copy's other data
-            ItemMeta ingrMeta = ingredient.getItemMeta();
-            ingrMeta.setDisplayName(resultMeta.getDisplayName());
-            ingrMeta.setLore(resultMeta.getLore());
-            
-            for(Enchantment e : ingrMeta.getEnchants().keySet())
-            {
-                ingrMeta.removeEnchant(e);
-            }
-            
-            result.setItemMeta(ingrMeta);
-        }
+        ItemMeta ingredientMeta = ingredient.getItemMeta();
+        ItemMeta resultMeta = result.getItemMeta();
         
         if(this.hasCopyBit(Bit.ENCHANTS))
         {
-            result.addUnsafeEnchantments(ingredient.getEnchantments());
+            for(Entry<Enchantment, Integer> e : ingredientMeta.getEnchants().entrySet())
+            {
+                resultMeta.addEnchant(e.getKey(), e.getValue(), true);
+            }
         }
         
         if(this.hasCopyBit(Bit.NAME))
         {
-            ItemMeta meta = result.getItemMeta();
-            meta.setDisplayName(ingredient.getItemMeta().getDisplayName());
-            result.setItemMeta(meta);
+            resultMeta.setDisplayName(ingredientMeta.getDisplayName());
         }
         
         if(this.hasCopyBit(Bit.LORE))
         {
-            ItemMeta meta = result.getItemMeta();
-            meta.setLore(ingredient.getItemMeta().getLore());
-            result.setItemMeta(meta);
+            resultMeta.setLore(ingredientMeta.getLore());
         }
+        
+        if(this.hasCopyBit(Bit.SPECIAL))
+        {
+            ingredientMeta.setDisplayName(resultMeta.getDisplayName());
+            ingredientMeta.setLore(resultMeta.getLore());
+            
+            if(ingredientMeta.hasEnchants())
+            {
+                for(Enchantment e : ingredientMeta.getEnchants().keySet())
+                {
+                    ingredientMeta.removeEnchant(e);
+                }
+            }
+            
+            for(Entry<Enchantment, Integer> e : resultMeta.getEnchants().entrySet())
+            {
+                ingredientMeta.addEnchant(e.getKey(), e.getValue(), true);
+            }
+            
+            resultMeta = ingredientMeta;
+        }
+        
+        result.setItemMeta(resultMeta);
         
         return true;
     }

@@ -154,6 +154,37 @@ public class SmeltRecipe extends MultiResultRecipe
     }
     
     @Override
+    public void resetName()
+    {
+        StringBuilder s = new StringBuilder();
+        boolean removed = hasFlag(FlagType.REMOVE);
+        
+        s.append("smelt");
+        s.append(" (");
+        
+        s.append(ingredient.getTypeId());
+        
+        if(ingredient.getDurability() != Vanilla.DATA_WILDCARD)
+        {
+            s.append(":").append(ingredient.getDurability());
+        }
+        
+        s.append(") ");
+        
+        if(!removed)
+        {
+            s.append(this.getResultsString());
+        }
+        else
+        {
+            s.append("removed recipe");
+        }
+        
+        name = s.toString();
+        customName = false;
+    }
+    
+    @Override
     public int getIndex()
     {
         return ingredient.getTypeId();
@@ -234,7 +265,7 @@ public class SmeltRecipe extends MultiResultRecipe
     @Override
     public String printBookIndex()
     {
-        return Tools.getItemName(getFirstResult());
+        return Tools.Item.getName(getFirstResult());
     }
     
     @Override
@@ -243,7 +274,7 @@ public class SmeltRecipe extends MultiResultRecipe
         StringBuilder s = new StringBuilder(256);
         
         s.append(Messages.RECIPEBOOK_HEADER_SMELT.get());
-        s.append('\n').append(Tools.printItem(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
         
         if(isMultiResult())
         {
@@ -256,13 +287,13 @@ public class SmeltRecipe extends MultiResultRecipe
         }
         
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
-        s.append('\n').append(Tools.printItem(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
+        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
         
         if(hasFuel())
         {
             s.append('\n');
             s.append('\n').append(Messages.RECIPEBOOK_HEADER_REQUIREFUEL.get()).append(ChatColor.BLACK);
-            s.append('\n').append(Tools.printItem(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
+            s.append('\n').append(Tools.Item.print(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
         }
         
         return s.toString();

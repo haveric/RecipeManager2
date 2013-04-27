@@ -141,7 +141,7 @@ public class FlagHoldItem extends Flag
             {
                 for(int i = 0; i < items.size(); i++)
                 {
-                    if(Tools.itemSimilarDataWildcard(items.get(i), held))
+                    if(Tools.Item.isSimilarDataWildcard(items.get(i), held))
                     {
                         found = true;
                         break;
@@ -152,7 +152,7 @@ public class FlagHoldItem extends Flag
                         s.append(", ");
                     }
                     
-                    s.append(Tools.printItem(items.get(i)));
+                    s.append(Tools.Item.print(items.get(i)));
                 }
             }
         }

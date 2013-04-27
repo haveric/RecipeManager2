@@ -3,7 +3,7 @@ package ro.thehunters.digi.recipeManager.flags;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 
-public class FlagNeedLevel extends Flag
+public class FlagHeight extends Flag
 {
     // Flag definition and documentation
     
@@ -14,7 +14,7 @@ public class FlagNeedLevel extends Flag
     
     static
     {
-        TYPE = FlagType.NEEDLEVEL;
+        TYPE = FlagType.HEIGHT;
         
         A = new String[]
         {
@@ -23,44 +23,42 @@ public class FlagNeedLevel extends Flag
         
         D = new String[]
         {
-            "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.",
+            "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.",
             "Using this flag more than once will overwrite the previous one.",
             "",
             "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
             "In the message the following variables can be used:",
-            "  {level}  = level or level range",
-            "",
-            "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".",
+            "  {height}  = height or height range",
         };
         
         E = new String[]
         {
-            "{flag} 1",
-            "{flag} 25-100 | <red>Need level 25 to 100!",
+            "{flag} 200 // must be high in the sky",
+            "{flag} 0-30 | <red>You need to be deep underground!",
         };
     }
     
     // Flag code
     
-    private int minLevel;
-    private int maxLevel;
+    private int minHeight;
+    private int maxHeight;
     private String failMessage;
     
-    public FlagNeedLevel()
+    public FlagHeight()
     {
     }
     
-    public FlagNeedLevel(FlagNeedLevel flag)
+    public FlagHeight(FlagHeight flag)
     {
-        minLevel = flag.minLevel;
-        maxLevel = flag.maxLevel;
+        minHeight = flag.minHeight;
+        maxHeight = flag.maxHeight;
         failMessage = flag.failMessage;
     }
     
     @Override
-    public FlagNeedLevel clone()
+    public FlagHeight clone()
     {
-        return new FlagNeedLevel(this);
+        return new FlagHeight(this);
     }
     
     @Override
@@ -69,36 +67,34 @@ public class FlagNeedLevel extends Flag
         return TYPE;
     }
     
-    public int getMinLevel()
+    public int getMinHeight()
     {
-        return minLevel;
+        return minHeight;
     }
     
-    public void setMinLevel(int minLevel)
+    public void setMinHeight(int minHeight)
     {
-        this.minLevel = minLevel;
+        this.minHeight = minHeight;
     }
     
-    public int getMaxLevel()
+    public int getMaxHeight()
     {
-        return maxLevel;
+        return maxHeight;
     }
     
-    public void setMaxLevel(int maxLevel)
+    public void setMaxHeight(int maxHeight)
     {
-        this.maxLevel = maxLevel;
+        this.maxHeight = maxHeight;
     }
     
-    public String getLevelString()
+    public String getHeightString()
     {
-        return getMinLevel() + (getMaxLevel() > getMinLevel() ? " - " + getMaxLevel() : "");
+        return getMinHeight() + (getMaxHeight() > getMinHeight() ? " - " + getMaxHeight() : "");
     }
     
-    public boolean checkLevel(int level)
+    public boolean checkHeight(int height)
     {
-//      return !((minLevel > 0 && level < minLevel) || (maxLevel > 0 && level > maxLevel));
-        
-        return (level >= minLevel && level <= maxLevel);
+        return (height >= minHeight && height <= maxHeight);
     }
     
     public String getFailMessage()
@@ -126,12 +122,12 @@ public class FlagNeedLevel extends Flag
         
         try
         {
-            setMinLevel(Integer.valueOf(value));
-            setMaxLevel(getMinLevel());
+            setMinHeight(Integer.valueOf(value));
+            setMaxHeight(getMinHeight());
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid min required level number: " + value);
+            RecipeErrorReporter.error("The " + getType() + " flag has invalid min required height number: " + value);
             return false;
         }
         
@@ -141,16 +137,16 @@ public class FlagNeedLevel extends Flag
             
             try
             {
-                setMaxLevel(Integer.valueOf(value));
+                setMaxHeight(Integer.valueOf(value));
             }
             catch(NumberFormatException e)
             {
-                RecipeErrorReporter.error("The " + getType() + " flag has invalid max required level number: " + value);
+                RecipeErrorReporter.error("The " + getType() + " flag has invalid max required height number: " + value);
                 return false;
             }
         }
         
-        if((getMinLevel() <= 0 && getMaxLevel() <= 0) || getMaxLevel() < getMinLevel())
+        if((getMinHeight() <= 0 && getMaxHeight() <= 0) || getMaxHeight() < getMinHeight())
         {
             RecipeErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
@@ -162,9 +158,9 @@ public class FlagNeedLevel extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        if(!a.hasPlayer() || !checkLevel(a.player().getLevel()))
+        if(!a.hasLocation() || !checkHeight(a.location().getBlockY()))
         {
-            a.addReason(Messages.FLAG_NEEDLEVEL, failMessage, "{level}", getLevelString());
+            a.addReason(Messages.FLAG_HEIGHT, failMessage, "{height}", getHeightString());
         }
     }
 }

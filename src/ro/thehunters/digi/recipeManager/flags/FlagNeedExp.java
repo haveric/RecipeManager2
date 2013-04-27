@@ -1,7 +1,5 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import org.bukkit.entity.Player;
-
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
@@ -21,8 +19,7 @@ public class FlagNeedExp extends Flag
         
         A = new String[]
         {
-            "{flag} <min or min-max>",
-            "{flag} <min or min-max> | <message>",
+            "{flag} <min or min-max> | [message]",
             "{flag} false",
         };
         
@@ -33,7 +30,9 @@ public class FlagNeedExp extends Flag
             "",
             "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
             "In the message the following variables can be used:",
-            "  {exp}  = exp or exp range",
+            "  {exp}    = exp or exp range.",
+            "  {minexp} = defined min exp range.",
+            "  {maxexp} = defined max exp range.",
             "",
             "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(),
         };
@@ -95,14 +94,14 @@ public class FlagNeedExp extends Flag
         this.maxExp = maxExp;
     }
     
-    public String getExp()
+    public String getExpString()
     {
-        return getMinExp() + (getMaxExp() > 0 ? " - " + getMaxExp() : "");
+        return getMinExp() + (getMaxExp() > getMinExp() ? " - " + getMaxExp() : "");
     }
     
     public boolean checkExp(int exp)
     {
-        return !((minExp > 0 && exp < minExp) || (maxExp > 0 && exp > maxExp));
+        return (exp >= minExp && exp <= maxExp);
     }
     
     public String getFailMessage()
@@ -137,6 +136,7 @@ public class FlagNeedExp extends Flag
         try
         {
             setMinExp(Integer.valueOf(value));
+            setMaxExp(getMinExp());
         }
         catch(NumberFormatException e)
         {
@@ -165,9 +165,9 @@ public class FlagNeedExp extends Flag
             }
         }
         
-        if(getMinExp() <= 0 && getMaxExp() <= 0)
+        if((getMinExp() <= 0 && getMaxExp() <= 0) || getMaxExp() < getMinExp())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag needs either min or max exp above 0 !");
+            RecipeErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
         
@@ -177,11 +177,9 @@ public class FlagNeedExp extends Flag
     @Override
     protected void onCheck(Args a)
     {
-        Player p = a.player();
-        
-        if(p == null || !checkExp(p.getTotalExperience()))
+        if(!a.hasPlayer() || !checkExp(Tools.Exp.getTotalExperience(a.player()))) // p.getTotalExperience()
         {
-            a.addReason(Messages.FLAG_REQEXP, failMessage, "{exp}", getExp());
+            a.addReason(Messages.FLAG_NEEDEXP, failMessage, "{exp}", getExpString(), "{minexp}", getMinExp(), "{maxexp}", getMaxExp());
         }
     }
 }

@@ -11,10 +11,10 @@ lastchanged: 2.0alpha3 # Please do not edit this value - it is used by the plugi
 # NOTE: This file is not like 1.xx versions anymore, see examples below.
 #
 # Examples:
-#  dye:red - valid: rose red dyes. (dye is material alias)
+#  dye:red    - valid: rose red dyes. (dye is material alias)
 #  wood:brich - valid: brich wood planks (wood is original material name)
-#  dye:5 - valid: purple dye (numeral data value acceptable)
-#  wood:red - invalid: will give an error since data value alias "red" isn't defined for material "wood".
+#  dye:5      - valid: purple dye (numeral data value acceptable)
+#  wood:red   - invalid: will give an error since data value alias "red" isn't defined for material "wood".
 #
 # And of course when defining ingredients you can avoid the data value or use * to allow any data value.
 #
@@ -25,6 +25,7 @@ lastchanged: 2.0alpha3 # Please do not edit this value - it is used by the plugi
 # <material or id>:
 #   names: <alias>, ...
 #   <number>: <alias>, ...
+#   ...
 #
 # If you don't want to give any data values, just aliases:
 #
@@ -35,7 +36,7 @@ lastchanged: 2.0alpha3 # Please do not edit this value - it is used by the plugi
 #------------------------------------------------------------------------------------------------------------------------
 
 coal:
-  0: mined
+  0: # no name for this
   1: char, log, burnt
 
 ink_sack:
@@ -158,6 +159,7 @@ log:
   3: jungle, pink
 
 leaves:
+  names: leaf
   0: oak, normal
   1: spruce, pine, dark
   2: brich, white

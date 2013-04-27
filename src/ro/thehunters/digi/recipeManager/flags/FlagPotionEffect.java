@@ -27,13 +27,15 @@ public class FlagPotionEffect extends Flag
         A = new String[]
         {
             "{flag} <effect type> | [arguments]",
-            "{flag} false",
+            "{flag} clear",
         };
         
         D = new String[]
         {
             "Adds potion effects to crafter.",
             "This flag can be used more than once to add more effects.",
+            "",
+            "Using 'clear' will remove all potion effects from player before adding any defined ones.",
             "",
             "The <effect type> argument must be an effect type, names for them can be found in '" + Files.FILE_INFO_NAMES + "' file at 'POTION EFFECT TYPE'.",
             "",
@@ -42,12 +44,11 @@ public class FlagPotionEffect extends Flag
             "  amplifier <num>     = (default 0) potion effect amplifier.",
             "  chance <0.01-100>%  = (default 100%) chance that the effect will be applied, this chance is individual for this effect.",
             "  morefx              = (default not set) more ambient particle effects, more screen intrusive.",
-            "",
-            "Setting to 'false' will remove the flag.",
         };
         
         E = new String[]
         {
+            "{flag} clear // remove all player's potion effects beforehand",
             "{flag} heal",
             "{flag} blindness | duration 60 | amplifier 5",
             "{flag} poison | chance 6.66% | morefx | amplifier 666 | duration 6.66",
@@ -57,6 +58,7 @@ public class FlagPotionEffect extends Flag
     // Flag code
     
     private Map<PotionEffect, Float> effects = new HashMap<PotionEffect, Float>();
+    private boolean clear = false;
     
     public FlagPotionEffect()
     {
@@ -65,6 +67,7 @@ public class FlagPotionEffect extends Flag
     public FlagPotionEffect(FlagPotionEffect flag)
     {
         effects.putAll(flag.effects);
+        clear = flag.clear;
     }
     
     @Override
@@ -106,9 +109,27 @@ public class FlagPotionEffect extends Flag
         effects.put(effect, chance);
     }
     
+    public boolean isClear()
+    {
+        return clear;
+    }
+    
+    public void setClear(boolean clear)
+    {
+        this.clear = clear;
+    }
+    
     @Override
     protected boolean onParse(String value)
     {
+        value = value.toLowerCase();
+        
+        if(value.equals("clear"))
+        {
+            setClear(true);
+            return true;
+        }
+        
         String[] split = value.split("\\|");
         
         value = split[0].trim();
@@ -128,7 +149,7 @@ public class FlagPotionEffect extends Flag
         {
             for(int i = 1; i < split.length; i++)
             {
-                value = split[i].toLowerCase().trim();
+                value = split[i].trim();
                 
                 if(value.equals("morefx"))
                 {
@@ -183,11 +204,10 @@ public class FlagPotionEffect extends Flag
                     
                     value = value.substring("duration".length()).trim();
                     
-                    // TODO type.getDurationModifier() !!!
-                    
                     try
                     {
                         duration = Float.valueOf(value);
+                        duration /= type.getDurationModifier(); // compensate for effect's duration modifier
                     }
                     catch(NumberFormatException e)
                     {
@@ -211,6 +231,14 @@ public class FlagPotionEffect extends Flag
         {
             a.addCustomReason("Need player!");
             return;
+        }
+        
+        if(isClear())
+        {
+            for(PotionEffect e : a.player().getActivePotionEffects())
+            {
+                a.player().removePotionEffect(e.getType());
+            }
         }
         
         for(Entry<PotionEffect, Float> e : effects.entrySet())

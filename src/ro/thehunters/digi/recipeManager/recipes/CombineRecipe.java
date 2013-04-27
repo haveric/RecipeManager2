@@ -14,6 +14,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.Vanilla;
 import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
@@ -103,7 +104,9 @@ public class CombineRecipe extends WorkbenchRecipe
         }
         
         if(this.ingredients.size() > 9) // check if they're more than they should...
+        {
             throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
+        }
         
         sort();
     }
@@ -128,6 +131,56 @@ public class CombineRecipe extends WorkbenchRecipe
         }
         
         hash = str.toString().hashCode();
+    }
+    
+    @Override
+    public void resetName()
+    {
+        StringBuilder s = new StringBuilder();
+        boolean removed = hasFlag(FlagType.REMOVE);
+        
+        s.append("shapeless");
+        s.append(" (");
+        
+        int size = ingredients.size();
+        
+        for(int i = 0; i < size; i++)
+        {
+            ItemStack item = ingredients.get(i);
+            
+            if(item != null)
+            {
+                s.append(item.getTypeId()); // item.getType().toString().toLowerCase());
+                
+                if(item.getDurability() != Vanilla.DATA_WILDCARD)
+                {
+                    s.append(":").append(item.getDurability());
+                }
+            }
+            else
+            {
+                s.append("0");
+            }
+            
+            if(i < (size - 1))
+            {
+                s.append(" ");
+            }
+        }
+        
+        s.append(") ");
+        
+        if(!removed)
+        {
+            s.append(this.getResultsString());
+        }
+        else
+        {
+            s.append("removed recipe");
+        }
+        
+        name = s.toString();
+        customName = false;
     }
     
     @Override
@@ -168,7 +221,7 @@ public class CombineRecipe extends WorkbenchRecipe
     @Override
     public String printBookIndex()
     {
-        return Tools.getItemName(getFirstResult());
+        return Tools.Item.getName(getFirstResult());
     }
     
     @Override
@@ -178,7 +231,7 @@ public class CombineRecipe extends WorkbenchRecipe
         
         s.append(Messages.RECIPEBOOK_HEADER_SHAPELESS.get());
         
-        s.append('\n').append(Tools.printItem(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
         
         if(isMultiResult())
         {
@@ -212,7 +265,7 @@ public class CombineRecipe extends WorkbenchRecipe
         {
             ItemStack item = e.getKey();
             item.setAmount(e.getValue().intValue());
-            s.append('\n').append(Tools.printItem(item, ChatColor.RED, ChatColor.BLACK, true));
+            s.append('\n').append(Tools.Item.print(item, ChatColor.RED, ChatColor.BLACK, true));
         }
         
         return s.toString();

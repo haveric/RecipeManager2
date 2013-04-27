@@ -3,10 +3,10 @@ package ro.thehunters.digi.recipeManager.flags;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.Tools;
-import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagItemLore extends Flag
 {
@@ -23,12 +23,13 @@ public class FlagItemLore extends Flag
         
         A = new String[]
         {
-            "{flag} <text or false>",
+            "{flag} <text>",
         };
         
         D = new String[]
         {
-            "Adds a line to result's lore (description), supports colors (e.g. <red>, <blue>, &4, &F, etc).",
+            "Adds a line to result's lore (description)",
+            "Supports colors (e.g. <red>, <blue>, &4, &F, etc).",
         };
         
         E = new String[]
@@ -40,7 +41,7 @@ public class FlagItemLore extends Flag
     
     // Flag code
     
-    private List<String> lore = new ArrayList<String>(); // TODO
+    private List<String> lore = new ArrayList<String>();
     
     public FlagItemLore()
     {
@@ -48,7 +49,7 @@ public class FlagItemLore extends Flag
     
     public FlagItemLore(FlagItemLore flag)
     {
-        // TODO clone
+        lore.addAll(flag.lore);
     }
     
     @Override
@@ -63,32 +64,56 @@ public class FlagItemLore extends Flag
         return TYPE;
     }
     
+    public List<String> getLore()
+    {
+        return lore;
+    }
+    
+    public void setLore(List<String> lore)
+    {
+        Validate.notNull(lore, "The 'lore' argument must not be null!");
+        
+        this.lore.clear();
+        
+        for(String value : lore)
+        {
+            addLore(value);
+        }
+    }
+    
+    public void addLore(String value)
+    {
+        lore.add(Tools.parseColors(value, false));
+    }
+    
     @Override
     protected boolean onParse(String value)
     {
-        ItemResult result = getResult();
-        ItemMeta meta = result.getItemMeta();
+        addLore(value);
         
-        if(value == null)
+        return true;
+    }
+    
+    @Override
+    protected void onPrepare(Args a)
+    {
+        if(!a.hasResult())
         {
-            meta.setLore(null);
+            a.addCustomReason("Need result!");
+            return;
+        }
+        
+        ItemMeta meta = a.result().getItemMeta();
+        
+        if(meta.hasLore())
+        {
+            meta.getLore().addAll(this.lore);
         }
         else
         {
-            List<String> lore = meta.getLore();
-            
-            if(lore == null || lore.isEmpty())
-            {
-                lore = new ArrayList<String>();
-            }
-            
-            lore.add(Tools.parseColors(value, false));
-            
-            meta.setLore(lore);
+            meta.setLore(this.lore);
         }
         
-        result.setItemMeta(meta);
-        
-        return true;
+        a.result().setItemMeta(meta);
     }
 }

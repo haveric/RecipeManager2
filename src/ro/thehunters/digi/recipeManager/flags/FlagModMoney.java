@@ -20,8 +20,7 @@ public class FlagModMoney extends Flag
         
         A = new String[]
         {
-            "{flag} [modifier]<float number>",
-            "{flag} [modifier]<float number> | <message>",
+            "{flag} [modifier]<float number> | [fail message]",
             "{flag} false",
         };
         
@@ -32,7 +31,10 @@ public class FlagModMoney extends Flag
             "",
             "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
             "The '<number>' argument must be the amount of money to modify.",
-            "The '<message>' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "For the fail message you can use the following arguments:",
+            "  {amount}       = amount defined in the flag, never has modifier prefix.",
+            "  {modifier}     = the modifier prefix.",
             "",
             "NOTE: Vault with a supported economy plugin is required for this flag to work.",
             "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.NEEDMONEY.toString() + " if you want to check.",
@@ -51,7 +53,7 @@ public class FlagModMoney extends Flag
     
     private char mod = '+';
     private float amount = 0.0f;
-    private String message = null;
+    private String failMessage = null;
     
     public FlagModMoney()
     {
@@ -61,7 +63,7 @@ public class FlagModMoney extends Flag
     {
         mod = flag.mod;
         amount = flag.amount;
-        message = flag.message;
+        failMessage = flag.failMessage;
     }
     
     @Override
@@ -128,14 +130,14 @@ public class FlagModMoney extends Flag
         this.amount = Math.abs(amount);
     }
     
-    public String getMessage()
+    public String getFailMessage()
     {
-        return message;
+        return failMessage;
     }
     
-    public void setMessage(String message)
+    public void setFailMessage(String message)
     {
-        this.message = message;
+        this.failMessage = message;
     }
     
     @Override
@@ -150,7 +152,7 @@ public class FlagModMoney extends Flag
         
         if(split.length > 1)
         {
-            setMessage(split[1].trim());
+            setFailMessage(split[1].trim());
         }
         
         value = split[0].trim();
@@ -219,20 +221,20 @@ public class FlagModMoney extends Flag
         
         switch(mod)
         {
-            case '-':
-            {
-                RecipeManager.getEconomy().modMoney(a.playerName(), -amount);
-                
-                a.addEffect(Messages.FLAG_MODMONEY_SUB, message, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount);
-                
-                break;
-            }
-            
             case '+':
             {
                 RecipeManager.getEconomy().modMoney(a.playerName(), amount);
                 
-                a.addEffect(Messages.FLAG_MODMONEY_ADD, message, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODMONEY_ADD, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                
+                break;
+            }
+            
+            case '-':
+            {
+                RecipeManager.getEconomy().modMoney(a.playerName(), -amount);
+                
+                a.addEffect(Messages.FLAG_MODMONEY_SUB, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
                 
                 break;
             }
@@ -248,10 +250,33 @@ public class FlagModMoney extends Flag
                     RecipeManager.getEconomy().modMoney(a.playerName(), amount);
                 }
                 
-                a.addEffect(Messages.FLAG_MODMONEY_SET, message, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount);
+                a.addEffect(Messages.FLAG_MODMONEY_SET, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
                 
                 break;
             }
         }
     }
+    
+    /*
+    @Override
+    public List<String> information()
+    {
+        List<String> list = new ArrayList<String>(1);
+        
+        switch(mod)
+        {
+            case '+':
+                list.add(Messages.FLAG_MODMONEY_ADD.get("{amount}", amount, "{modifier}", mod));
+                break;
+            case '-':
+                list.add(Messages.FLAG_MODMONEY_SUB.get("{amount}", amount, "{modifier}", mod));
+                break;
+            case '=':
+                list.add(Messages.FLAG_MODMONEY_SET.get("{amount}", amount, "{modifier}", mod));
+                break;
+        }
+        
+        return list;
+    }
+    */
 }

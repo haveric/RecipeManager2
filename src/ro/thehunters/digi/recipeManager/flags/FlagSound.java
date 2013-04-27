@@ -165,7 +165,7 @@ public class FlagSound extends Flag
         {
             setSound(Sound.valueOf(value));
         }
-        catch(Exception e)
+        catch(IllegalArgumentException e)
         {
             RecipeErrorReporter.error("Flag " + getType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
             return false;
@@ -195,7 +195,7 @@ public class FlagSound extends Flag
                     {
                         setVolume(Float.valueOf(value));
                     }
-                    catch(Exception e)
+                    catch(NumberFormatException e)
                     {
                         RecipeErrorReporter.error("Flag " + getType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
@@ -215,7 +215,7 @@ public class FlagSound extends Flag
                     {
                         setPitch(Float.valueOf(value));
                     }
-                    catch(Exception e)
+                    catch(NumberFormatException e)
                     {
                         RecipeErrorReporter.error("Flag " + getType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;

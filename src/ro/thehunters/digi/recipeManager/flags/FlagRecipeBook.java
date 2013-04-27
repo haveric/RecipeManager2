@@ -17,6 +17,11 @@ public class FlagRecipeBook extends Flag
     {
         TYPE = FlagType.RECIPEBOOK;
         
+        A = null;
+        D = null;
+        E = null;
+        
+        /*
         A = new String[]
         {
             "{flag} <title>",
@@ -39,6 +44,7 @@ public class FlagRecipeBook extends Flag
             "{flag} This book is awesome!",
             "{flag} Go to nex page!!!",
         };
+        */
     }
     
     // Flag code
