@@ -199,7 +199,6 @@ public class Flag implements Cloneable
         return (flaggable instanceof BaseRecipe ? (BaseRecipe)flaggable : null);
     }
     
-    /*
     final protected BaseRecipe getRecipeDeep()
     {
         Flaggable flaggable = getFlaggable();
@@ -220,7 +219,6 @@ public class Flag implements Cloneable
         
         return null;
     }
-    */
     
     final protected ItemResult getResult()
     {

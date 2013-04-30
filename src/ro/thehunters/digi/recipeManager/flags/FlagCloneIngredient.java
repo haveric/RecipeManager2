@@ -231,7 +231,7 @@ public class FlagCloneIngredient extends Flag
     {
         String[] args = value.toLowerCase().split("\\|");
         
-        int found = Tools.findItemInIngredients(getRecipe(), getResult().getType(), null);
+        int found = Tools.findItemInIngredients(getResult().getRecipe(), getResult().getType(), null);
         
         if(found == 0)
         {
