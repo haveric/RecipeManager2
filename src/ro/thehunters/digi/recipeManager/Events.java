@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -198,28 +197,28 @@ public class Events implements Listener
         {
             if(!RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE))
             {
-                Messages.CRAFT_SPECIAL_LEATHERDYE.print(player);
+                Messages.CRAFT_SPECIAL_LEATHERDYE.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
             
             if(!RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE))
             {
-                Messages.CRAFT_SPECIAL_MAP_CLONING.print(player);
+                Messages.CRAFT_SPECIAL_MAP_CLONING.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
             
             if(!RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND))
             {
-                Messages.CRAFT_SPECIAL_MAP_EXTENDING.print(player);
+                Messages.CRAFT_SPECIAL_MAP_EXTENDING.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
             
             if(!RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS))
             {
-                Messages.CRAFT_SPECIAL_FIREWORKS.print(player);
+                Messages.CRAFT_SPECIAL_FIREWORKS.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
@@ -234,12 +233,9 @@ public class Events implements Listener
     {
         if(!RecipeManager.getSettings().SPECIAL_REPAIR)
         {
-            if(player != null)
-            {
-                player.playSound((location == null ? player.getLocation() : location), Sound.NOTE_BASS, 1, 255);
-            }
-            
-            inv.setResult(Tools.Item.create(Material.TRIPWIRE, 0, 0, Messages.CRAFT_REPAIR_DISABLED.get()));
+            Messages.sendDenySound(player, location);
+            Messages.CRAFT_REPAIR_DISABLED.printOnce(player);
+            inv.setResult(null);
             return;
         }
         
@@ -292,9 +288,9 @@ public class Events implements Listener
         
         result = callEvent.getResult();
         
-        if(RecipeManager.getSettings().SOUNDS_REPAIR && result != null && player != null)
+        if(result != null)
         {
-            player.playSound(location, Sound.ANVIL_USE, 0.8f, 4.0f);
+            Messages.sendRepairSound(player, location);
         }
         
         inv.setResult(result);

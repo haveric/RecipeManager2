@@ -498,17 +498,24 @@ public enum Messages
     
     public static void sendDenySound(Player player, Location location)
     {
-        if(player != null && RecipeManager.getSettings().SOUNDS_FAILED_CLICK)
-        {
-            player.playSound(location, Sound.NOTE_BASS, 0.8f, 255);
-        }
+        sendSound(player, location, Sound.NOTE_BASS, 0.8f, 4, RecipeManager.getSettings().SOUNDS_FAILED_CLICK);
     }
     
     public static void sendFailSound(Player player, Location location)
     {
-        if(RecipeManager.getSettings().SOUNDS_FAILED && player != null)
+        sendSound(player, location, Sound.NOTE_PLING, 0.8f, 4, RecipeManager.getSettings().SOUNDS_FAILED);
+    }
+    
+    public static void sendRepairSound(Player player, Location location)
+    {
+        sendSound(player, location, Sound.ANVIL_USE, 0.8f, 4, RecipeManager.getSettings().SOUNDS_REPAIR);
+    }
+    
+    private static void sendSound(Player player, Location location, Sound sound, float volume, float pitch, boolean condition)
+    {
+        if(player != null && condition)
         {
-            player.playSound(location, Sound.NOTE_PLING, 0.8f, 10);
+            player.playSound(location == null ? player.getLocation() : location, sound, volume, pitch);
         }
     }
     
