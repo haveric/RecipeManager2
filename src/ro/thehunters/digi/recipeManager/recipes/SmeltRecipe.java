@@ -12,11 +12,10 @@ import ro.thehunters.digi.recipeManager.Vanilla;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
-public class SmeltRecipe extends MultiResultRecipe
+public class SmeltRecipe extends SingleResultRecipe
 {
     private ItemStack ingredient;
     private ItemResult fuel;
-//    private ItemResult result;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
     private int hash;
@@ -54,27 +53,6 @@ public class SmeltRecipe extends MultiResultRecipe
         
         hash = ("smelt" + ingredient.getTypeId() + ":" + ingredient.getDurability()).hashCode();
     }
-    
-    /*
-    public ItemResult getResult()
-    {
-        return result;
-    }
-    
-    public void setResult(ItemStack result)
-    {
-        Validate.notNull(result);
-        
-        if(result instanceof ItemResult)
-        {
-            this.result = ((ItemResult)result).setRecipe(this);
-        }
-        else
-        {
-            this.result = new ItemResult(result).setRecipe(this);
-        }
-    }
-    */
     
     public ItemResult getFuel()
     {
@@ -172,7 +150,7 @@ public class SmeltRecipe extends MultiResultRecipe
         
         if(!removed)
         {
-            s.append(this.getResultsString());
+            s.append(this.getResultString());
         }
         else
         {
@@ -229,7 +207,7 @@ public class SmeltRecipe extends MultiResultRecipe
     
     public FurnaceRecipe toFurnaceRecipe()
     {
-        return new FurnaceRecipe(getFirstResult(), ingredient.getType(), ingredient.getDurability());
+        return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability());
     }
     
     public boolean hasIngredient()
@@ -242,17 +220,10 @@ public class SmeltRecipe extends MultiResultRecipe
         return fuel != null;
     }
     
-    /*
-    public boolean hasResult()
-    {
-        return result != null;
-    }
-    */
-    
     @Override
     public boolean isValid()
     {
-        return hasIngredient() && (hasFlag(FlagType.REMOVE) ? true : hasResults());
+        return hasIngredient() && (hasFlag(FlagType.REMOVE) ? true : hasResult());
     }
     
     @Override
@@ -264,7 +235,7 @@ public class SmeltRecipe extends MultiResultRecipe
     @Override
     public String printBookIndex()
     {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getFirstResult());
+        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getResult());
     }
     
     @Override
@@ -279,12 +250,14 @@ public class SmeltRecipe extends MultiResultRecipe
             s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
         }
         
-        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(Tools.Item.print(getResult(), ChatColor.DARK_GREEN, null, true));
         
+        /*
         if(isMultiResult())
         {
             s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
         }
+        */
         
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
         s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));

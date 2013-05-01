@@ -116,13 +116,15 @@ class FurnaceWorker implements Runnable
                 continue;
             }
             
+            /*
             if(recipe.isMultiResult())
             {
                 // TODO ...
             }
             else
+            */
             {
-                ItemResult recipeResult = recipe.getFirstResult();
+                ItemResult recipeResult = recipe.getResult();
                 ItemStack result = inventory.getResult();
                 
                 // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace

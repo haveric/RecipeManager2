@@ -1028,7 +1028,7 @@ public class Events implements Listener
             
             Args a = Args.create().location(event.getBlock().getLocation()).recipe(recipe).inventory(inv).result(event.getResult()).build();
             
-            ItemResult result = recipe.getResult(a);
+            ItemResult result = recipe.getResult(); // (a);
             
             a.setResult(result);
             a.clear();
@@ -1103,6 +1103,13 @@ public class Events implements Listener
                 
                 for(SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values())
                 {
+                    if(result.isSimilar(r.getResult()))
+                    {
+                        smeltRecipe = r;
+                        break;
+                    }
+                    
+                    /*
                     if(r.isMultiResult())
                     {
                         // TODO trace recipe backwards by ID stored in chest...
@@ -1115,6 +1122,7 @@ public class Events implements Listener
                             break;
                         }
                     }
+                    */
                 }
             }
             else
