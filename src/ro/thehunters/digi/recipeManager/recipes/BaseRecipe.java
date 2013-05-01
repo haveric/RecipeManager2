@@ -1,5 +1,6 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Recipe;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
@@ -293,7 +294,7 @@ public class BaseRecipe implements Flaggable
      */
     public String printBookIndex()
     {
-        return "undefined";
+        return ChatColor.RED + "(undefined)";
     }
     
     /**
@@ -301,6 +302,6 @@ public class BaseRecipe implements Flaggable
      */
     public String printBook()
     {
-        return "undefined";
+        return ChatColor.RED + "(undefined)";
     }
 }

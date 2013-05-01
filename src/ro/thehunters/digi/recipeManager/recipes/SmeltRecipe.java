@@ -9,7 +9,6 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Vanilla;
-import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -265,7 +264,7 @@ public class SmeltRecipe extends MultiResultRecipe
     @Override
     public String printBookIndex()
     {
-        return Tools.Item.getName(getFirstResult());
+        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getFirstResult());
     }
     
     @Override
@@ -274,24 +273,50 @@ public class SmeltRecipe extends MultiResultRecipe
         StringBuilder s = new StringBuilder(256);
         
         s.append(Messages.RECIPEBOOK_HEADER_SMELT.get());
-        s.append('\n').append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        
+        if(hasCustomName())
+        {
+            s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
+        }
+        
+        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
         
         if(isMultiResult())
         {
             s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
         }
         
-        if(hasFlag(FlagType.DESCRIPTION))
-        {
-            s.append('\n').append(ChatColor.DARK_BLUE).append(Tools.parseColors(getFlag(FlagDescription.class).getDescription(), false));
-        }
-        
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
         s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
         
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_COOKTIME.get()).append(ChatColor.BLACK);
+        s.append('\n');
+        
+        if(hasCustomTime())
+        {
+            if(maxTime > minTime)
+            {
+                s.append(Messages.RECIPEBOOK_SMELT_TIME_RANDOM.get("{min}", Tools.printNumber(minTime), "{max}", Tools.printNumber(maxTime)));
+            }
+            else
+            {
+                if(minTime <= 0)
+                {
+                    s.append(Messages.RECIPEBOOK_SMELT_TIME_INSTANT.get());
+                }
+                else
+                {
+                    s.append(Messages.RECIPEBOOK_SMELT_TIME_FIXED.get("{time}", Tools.printNumber(minTime)));
+                }
+            }
+        }
+        else
+        {
+            s.append(Messages.RECIPEBOOK_SMELT_TIME_NORMAL.get("{time}", Tools.printNumber(minTime)));
+        }
+        
         if(hasFuel())
         {
-            s.append('\n');
             s.append('\n').append(Messages.RECIPEBOOK_HEADER_REQUIREFUEL.get()).append(ChatColor.BLACK);
             s.append('\n').append(Tools.Item.print(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
         }

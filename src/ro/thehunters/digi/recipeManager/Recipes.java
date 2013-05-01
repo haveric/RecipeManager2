@@ -239,7 +239,7 @@ public class Recipes
      */
     public BaseRecipe getRecipeByName(String name)
     {
-        return indexName.get(name);
+        return indexName.get(name.toLowerCase());
     }
     
     /**
@@ -320,7 +320,7 @@ public class Recipes
         // Add to quickfind index if it's not removed
         if(!recipe.hasFlag(FlagType.REMOVE))
         {
-            indexName.put(recipe.getName(), recipe); // Add to name index
+            indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
             
             if(recipe instanceof CraftRecipe)
             {
@@ -371,7 +371,7 @@ public class Recipes
     public boolean removeRecipe(BaseRecipe recipe)
     {
         index.remove(recipe); // Remove from main index
-        indexName.remove(recipe.getName()); // Remove from name index
+        indexName.remove(recipe.getName().toLowerCase()); // Remove from name index
         
         // Remove from quickfind index
         if(recipe instanceof CraftRecipe)

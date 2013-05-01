@@ -304,7 +304,6 @@ public class RecipeBooks
             
             List<StringBuilder> index = new ArrayList<StringBuilder>();
             List<String> pages = new ArrayList<String>();
-//            List<FuelRecipe> fuels = new ArrayList<FuelRecipe>();
             int i = 0;
             int r = 2;
             int p = (int)Math.ceil(v.getValue().size() / 13.0) + 2;
@@ -315,39 +314,16 @@ public class RecipeBooks
             {
                 BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
                 
-                /*
-                if(recipe instanceof FuelRecipe)
-                {
-                    fuels.add((FuelRecipe)recipe);
-                    
-                    if(fuels.size() == 10)
-                    {
-                        StringBuilder s = new StringBuilder(256);
-                        s.append(ChatColor.BLACK).append(ChatColor.BOLD).append("FURNACE FUELS"); // TODO messages.yml
-                        s.append('\n');
-                        
-                        for(FuelRecipe fuelRecipe : fuels)
-                        {
-                            s.append('\n').append(Tools.Item.print(fuelRecipe.getIngredient(), ChatColor.BLACK, null, false));
-                        }
-                        
-                        meta.addPage(s.toString());
-                        
-                        fuels.clear();
-                    }
-                    
-                    continue;
-                }
-                */
-                
-                index.get(i).append(p++).append(". ").append(recipe.printBookIndex()).append(ChatColor.BLACK).append('\n');
-                
-                if(++r >= 13)
+                if(r > 13)
                 {
                     r = 0;
                     i++;
                     index.add(new StringBuilder(256).append(ChatColor.BLACK));
                 }
+                
+                index.get(i).append(p).append(". ").append(recipe.printBookIndex()).append(ChatColor.BLACK).append('\n');
+                r++;
+                p++;
                 
                 String page = recipe.printBook();
                 
@@ -380,103 +356,6 @@ public class RecipeBooks
                 meta.addPage(s);
             }
             
-            /*
-            List<StringBuilder> index = new ArrayList<StringBuilder>();
-            List<String> pages = new ArrayList<String>();
-            int r = 2;
-            int i = 0;
-            int p = (int)Math.ceil(v.getValue().size() / 13.0) + 2;
-            
-            index.add(new StringBuilder(256).append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append("CONTENTS INDEX").append("\n\n").append(ChatColor.BLACK));
-            
-            List<FuelRecipe> fuels = new ArrayList<FuelRecipe>();
-            
-            for(String name : v.getValue())
-            {
-                BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
-                
-                if(recipe instanceof FuelRecipe)
-                {
-                    fuels.add((FuelRecipe)recipe);
-                    continue;
-                }
-                
-                index.get(i).append(p++).append(". ").append(recipe.printBookIndex()).append(ChatColor.BLACK).append('\n');
-                
-                if(++r >= 13)
-                {
-                    r = 0;
-                    i++;
-                    index.add(new StringBuilder(256).append(ChatColor.BLACK));
-                }
-                
-                String page = recipe.printBook();
-                
-                if(page.length() >= 255)
-                {
-                    int x = page.indexOf('\n', 220);
-                    
-                    if(x < 0 || x > 255)
-                    {
-                        x = 255;
-                    }
-                    
-                    pages.add(page.substring(0, x));
-                    pages.add(page.substring(x + 1));
-                    p++;
-                }
-                else
-                {
-                    pages.add(page);
-                }
-            }
-            
-            boolean hasFuels = !fuels.isEmpty();
-            
-            if(hasFuels)
-            {
-                index.get(i).append(p++).append(". ").append("Furnace fuels").append(ChatColor.BLACK).append('\n');
-            }
-            
-            for(StringBuilder s : index)
-            {
-                meta.addPage(s.toString());
-            }
-            
-            for(String s : pages)
-            {
-                meta.addPage(s);
-            }
-            
-            if(hasFuels)
-            {
-                StringBuilder s = null;
-                int f = 0;
-                
-                for(FuelRecipe recipe : fuels)
-                {
-                    if(f == 0)
-                    {
-                        s = new StringBuilder(256);
-                        s.append(ChatColor.BLACK).append(ChatColor.BOLD).append("FURNACE FUELS"); // TODO messages.yml
-                        s.append('\n');
-                    }
-                    
-                    s.append('\n').append(Tools.Item.print(recipe.getIngredient(), ChatColor.BLACK, null, false));
-                    
-                    if(++f > 10)
-                    {
-                        meta.addPage(s.toString());
-                        f = 0;
-                    }
-                }
-                
-                if(f > 0)
-                {
-                    meta.addPage(s.toString());
-                }
-            }
-            */
         }
         
         books.put(id, new Book(title, description, metaArray));
@@ -526,25 +405,25 @@ public class RecipeBooks
             {
                 if(value.equals("all"))
                 {
-                    getExistingByType(recipes, allRecipes, WorkbenchRecipe.class);
-                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
-                    getExistingByType(recipes, allRecipes, FuelRecipe.class);
+                    getCustomByType(recipes, allRecipes, WorkbenchRecipe.class);
+                    getCustomByType(recipes, allRecipes, SmeltRecipe.class);
+                    getCustomByType(recipes, allRecipes, FuelRecipe.class);
                 }
                 else if(value.startsWith("work") || value.startsWith("craft"))
                 {
-                    getExistingByType(recipes, allRecipes, WorkbenchRecipe.class);
+                    getCustomByType(recipes, allRecipes, WorkbenchRecipe.class);
                 }
                 else if(value.startsWith("smelt") || value.startsWith("furnace"))
                 {
-                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                    getCustomByType(recipes, allRecipes, SmeltRecipe.class);
                 }
                 else if(value.startsWith("fuel"))
                 {
-                    getExistingByType(recipes, allRecipes, FuelRecipe.class);
+                    getCustomByType(recipes, allRecipes, FuelRecipe.class);
                 }
                 else
                 {
-                    RecipeErrorReporter.warning("Book '" + fileName + "' has 'existing' argument with unknown value: '" + value + "', removed");
+                    RecipeErrorReporter.warning("Book '" + fileName + "' has 'custom' argument with unknown value: '" + value + "', removed");
                 }
             }
             else if(arg.startsWith("file"))
@@ -628,7 +507,7 @@ public class RecipeBooks
             {
                 if(allRecipes.contains(value))
                 {
-                    RecipeErrorReporter.warning("Book '" + fileName + " already has recipe '" + value + "' added, ignored.");
+                    RecipeErrorReporter.warning("Book '" + fileName + "' already has recipe '" + value + "' added, removed.");
                 }
                 else
                 {
@@ -715,12 +594,12 @@ public class RecipeBooks
                     return;
                 }
                 
-                Integer volume = Integer.valueOf(match.group(2));
+                Integer volume = Integer.valueOf(match.group(2)) + 1;
                 Integer lastUpdate = Integer.valueOf(match.group(3));
                 
                 if(generated > lastUpdate)
                 {
-                    if(volume >= book.getVolumes().length)
+                    if(volume > book.getVolumes().length)
                     {
                         Messages.EVENTS_UPDATEBOOK_NOVOLUME.printOnce(player, null, "{title}", meta.getTitle(), "{volume}", volume);
                         return;

@@ -55,7 +55,6 @@ public enum FlagType
     
     // Recipe only flags
     RECIPEBOOK(FlagRecipeBook.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "bookrecipe"),
-    DESCRIPTION(FlagDescription.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipeinfo", "info"),
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"), // TODO finish
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
     RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "disable", "denied", "deny"),

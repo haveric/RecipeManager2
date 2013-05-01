@@ -1,9 +1,12 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Vanilla;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
@@ -151,5 +154,41 @@ public class FuelRecipe extends BaseRecipe
     public RecipeType getType()
     {
         return RecipeType.FUEL;
+    }
+    
+    @Override
+    public String printBookIndex()
+    {
+        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getIngredient());
+    }
+    
+    @Override
+    public String printBook()
+    {
+        StringBuilder s = new StringBuilder(256);
+        
+        s.append(Messages.RECIPEBOOK_HEADER_FUEL.get());
+        
+        if(hasCustomName())
+        {
+            s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
+        }
+        
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
+        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
+        
+        s.append('\n').append(Messages.RECIPEBOOK_HEADER_BURNTIME.get()).append(ChatColor.BLACK);
+        s.append('\n');
+        
+        if(maxTime > minTime)
+        {
+            s.append(Messages.RECIPEBOOK_FUEL_TIME_RANDOM.get("{min}", Tools.printNumber(minTime), "{max}", Tools.printNumber(maxTime)));
+        }
+        else
+        {
+            s.append(Messages.RECIPEBOOK_FUEL_TIME_FIXED.get("{time}", Tools.printNumber(minTime)));
+        }
+        
+        return s.toString();
     }
 }

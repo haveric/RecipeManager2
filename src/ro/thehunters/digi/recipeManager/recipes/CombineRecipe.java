@@ -15,7 +15,6 @@ import org.bukkit.inventory.ShapelessRecipe;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Vanilla;
-import ro.thehunters.digi.recipeManager.flags.FlagDescription;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -221,7 +220,7 @@ public class CombineRecipe extends WorkbenchRecipe
     @Override
     public String printBookIndex()
     {
-        return Tools.Item.getName(getFirstResult());
+        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getFirstResult());
     }
     
     @Override
@@ -231,16 +230,16 @@ public class CombineRecipe extends WorkbenchRecipe
         
         s.append(Messages.RECIPEBOOK_HEADER_SHAPELESS.get());
         
-        s.append('\n').append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        if(hasCustomName())
+        {
+            s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
+        }
+        
+        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
         
         if(isMultiResult())
         {
             s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
-        }
-        
-        if(hasFlag(FlagType.DESCRIPTION))
-        {
-            s.append('\n').append(ChatColor.DARK_BLUE).append(Tools.parseColors(getFlag(FlagDescription.class).getDescription(), false));
         }
         
         s.append('\n');

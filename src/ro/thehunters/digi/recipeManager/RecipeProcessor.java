@@ -323,7 +323,7 @@ public class RecipeProcessor implements Runnable
             
             if(i > 0)
             {
-                recipeName = directive.substring(i + 1).trim();
+                recipeName = line.substring(i + 1).trim();
                 directive = directive.substring(0, i);
             }
             
@@ -738,7 +738,7 @@ public class RecipeProcessor implements Runnable
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Invalid burn time float number! Smelt time set to default.");
+                        RecipeErrorReporter.warning("Invalid burn time float number! Smelt time left as default.");
                         minTime = Vanilla.FURNACE_RECIPE_TIME;
                         maxTime = -1;
                     }
