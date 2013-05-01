@@ -19,6 +19,7 @@ import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 import ro.thehunters.digi.recipeManager.Vanilla;
 
 public class FlagIngredientCondition extends Flag
@@ -879,7 +880,7 @@ public class FlagIngredientCondition extends Flag
             return RecipeErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions !", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
         
-        ItemStack item = Tools.parseItemStack(args[0], Vanilla.DATA_WILDCARD, true, false, false);
+        ItemStack item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(item == null)
         {
@@ -926,7 +927,7 @@ public class FlagIngredientCondition extends Flag
                         val = val.substring(1).trim();
                     }
                     
-                    ItemStack match = Tools.parseItemStack(val, 0, true, false, false, false);
+                    ItemStack match = Tools.parseItem(val, 0, ParseBit.NO_AMOUNT | ParseBit.NO_META | ParseBit.NO_PRINT);
                     
                     if(match != null)
                     {

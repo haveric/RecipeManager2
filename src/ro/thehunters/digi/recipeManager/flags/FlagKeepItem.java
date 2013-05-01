@@ -17,6 +17,7 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 import ro.thehunters.digi.recipeManager.Vanilla;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
@@ -126,7 +127,7 @@ public class FlagKeepItem extends Flag
     {
         String[] split = value.split("\\|", 2);
         
-        ItemStack item = Tools.parseItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
+        ItemStack item = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(item == null)
         {
@@ -179,7 +180,7 @@ public class FlagKeepItem extends Flag
                 
                 value = value.substring("replace".length());
                 
-                ItemStack replace = Tools.parseItemStack(value, 0, true, true, true);
+                ItemStack replace = Tools.parseItem(value, 0);
                 
                 if(replace == null || replace.getTypeId() == 0)
                 {

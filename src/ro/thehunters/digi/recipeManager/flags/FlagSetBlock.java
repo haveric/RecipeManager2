@@ -8,6 +8,7 @@ import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
+import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 
 public class FlagSetBlock extends Flag
 {
@@ -89,7 +90,7 @@ public class FlagSetBlock extends Flag
         
         value = args[0].trim();
         
-        ItemStack item = Tools.parseItemStack(value, 0, true, false, false);
+        ItemStack item = Tools.parseItem(value, 0, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(item == null || !item.getType().isBlock())
         {

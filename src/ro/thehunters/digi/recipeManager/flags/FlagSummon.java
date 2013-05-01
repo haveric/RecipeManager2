@@ -1431,7 +1431,7 @@ public class FlagSummon extends Flag
                     String[] args = value.substring(i + 1).trim().split(" ");
                     value = args[0].trim();
                     
-                    ItemStack item = Tools.parseItemStack(value, 0, true, true, true);
+                    ItemStack item = Tools.parseItem(value, 0);
                     
                     if(item == null)
                     {

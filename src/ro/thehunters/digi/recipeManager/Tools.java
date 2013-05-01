@@ -529,7 +529,28 @@ public class Tools
         return msg;
     }
     
-    public static ItemResult parseItemResult(String string, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    public class ParseBit
+    {
+        public static final byte NO_ERRORS = 1 << 0;
+        public static final byte NO_WARNINGS = 1 << 1;
+        public static final byte NO_PRINT = NO_ERRORS | NO_WARNINGS;
+        
+        public static final byte NO_DATA = 1 << 2;
+        public static final byte NO_AMOUNT = 1 << 3;
+        
+        public static final byte NO_ENCHANTMENTS = 1 << 5;
+        public static final byte NO_NAME = 1 << 6;
+        public static final short NO_LORE = 1 << 7;
+        public static final short NO_COLOR = 1 << 8;
+        public static final short NO_META = NO_ENCHANTMENTS | NO_NAME | NO_LORE | NO_COLOR;
+    }
+    
+    public static ItemResult parseItemResult(String string, int defaultData)
+    {
+        return parseItemResult(string, defaultData, 0);
+    }
+    
+    public static ItemResult parseItemResult(String string, int defaultData, int settings)
     {
         String[] split = string.substring(1).trim().split("%");
         ItemResult result = new ItemResult();
@@ -558,7 +579,7 @@ public class Tools
             string = split[0];
         }
         
-        ItemStack item = parseItemStack(string, defaultData, allowData, allowAmount, allowEnchantments);
+        ItemStack item = parseItem(string, defaultData, settings);
         
         if(item == null)
         {
@@ -570,12 +591,12 @@ public class Tools
         return result;
     }
     
-    public static ItemStack parseItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments)
+    public static ItemStack parseItem(String value, int defaultData)
     {
-        return parseItemStack(value, defaultData, allowData, allowAmount, allowEnchantments, true);
+        return parseItem(value, defaultData, 0);
     }
     
-    public static ItemStack parseItemStack(String value, int defaultData, boolean allowData, boolean allowAmount, boolean allowEnchantments, boolean printErrors)
+    public static ItemStack parseItem(String value, int defaultData, int settings)
     {
         value = value.trim();
         
@@ -603,7 +624,7 @@ public class Tools
         
         if(material == null)
         {
-            if(printErrors)
+            if((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS)
             {
                 RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
             }
@@ -622,7 +643,7 @@ public class Tools
         
         if(split.length > 1)
         {
-            if(allowData)
+            if((settings & ParseBit.NO_DATA) != ParseBit.NO_DATA)
             {
                 value = split[1].toLowerCase().trim();
                 
@@ -647,7 +668,7 @@ public class Tools
                         }
                         catch(NumberFormatException e)
                         {
-                            if(printErrors)
+                            if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                             {
                                 RecipeErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
                             }
@@ -656,7 +677,7 @@ public class Tools
                     
                     if(data == -1)
                     {
-                        if(printErrors)
+                        if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                         {
                             RecipeErrorReporter.warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
                         }
@@ -665,7 +686,7 @@ public class Tools
             }
             else
             {
-                if(printErrors)
+                if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                 {
                     RecipeErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
                 }
@@ -676,7 +697,7 @@ public class Tools
         
         if(split.length > 2)
         {
-            if(allowAmount)
+            if((settings & ParseBit.NO_AMOUNT) != ParseBit.NO_AMOUNT)
             {
                 value = split[2].trim();
                 
@@ -686,15 +707,15 @@ public class Tools
                 }
                 catch(NumberFormatException e)
                 {
-                    if(printErrors)
+                    if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                     {
-                        RecipeErrorReporter.error("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
+                        RecipeErrorReporter.warning("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
                     }
                 }
             }
             else
             {
-                if(printErrors)
+                if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                 {
                     RecipeErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
                 }
@@ -705,70 +726,11 @@ public class Tools
         
         if(argSplit.length > 1)
         {
-            if(allowEnchantments)
+            // TODO ?
+            
+            if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
             {
-                String[] enchants = argSplit[1].split(",");
-                String[] enchData;
-                Enchantment ench;
-                int level;
-                
-                for(String enchant : enchants)
-                {
-                    enchant = enchant.trim();
-                    enchData = enchant.split(":");
-                    
-                    if(enchData.length != 2)
-                    {
-                        if(printErrors)
-                        {
-                            RecipeErrorReporter.warning("Enchantments have to be 'ENCHANTMENT:LEVEL' format.", "Look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
-                        }
-                        
-                        continue;
-                    }
-                    
-                    ench = parseEnchant(enchData[0]);
-                    
-                    if(ench == null)
-                    {
-                        if(printErrors)
-                        {
-                            RecipeErrorReporter.warning("Enchantment '" + enchData[0] + "' does not exist!", "Name or ID could be different, look in '" + Files.FILE_INFO_NAMES + "' for enchantments list.");
-                        }
-                        
-                        continue;
-                    }
-                    
-                    if(enchData[1].equals("MAX"))
-                    {
-                        level = ench.getMaxLevel();
-                    }
-                    else
-                    {
-                        try
-                        {
-                            level = Integer.valueOf(enchData[1]);
-                        }
-                        catch(NumberFormatException e)
-                        {
-                            if(printErrors)
-                            {
-                                RecipeErrorReporter.warning("Invalid enchantment level: '" + enchData[1] + "' must be a valid number, positive, zero or negative.");
-                            }
-                            
-                            continue;
-                        }
-                    }
-                    
-                    item.addUnsafeEnchantment(ench, level);
-                }
-            }
-            else
-            {
-                if(printErrors)
-                {
-                    RecipeErrorReporter.warning("Item '" + material + "' can't use enchantments in this recipe slot!");
-                }
+                RecipeErrorReporter.warning("Can't define enchants directly on items, use " + FlagType.ENCHANTITEM + " instead (if appliable)", "Probably in the future I will add support for enchants, name and other stuff defineable in the item directly.");
             }
         }
         

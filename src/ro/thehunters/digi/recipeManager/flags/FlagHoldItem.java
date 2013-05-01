@@ -115,7 +115,7 @@ public class FlagHoldItem extends Flag
         
         value = split[0].trim();
         
-        ItemStack item = Tools.parseItemStack(value, Short.MAX_VALUE, true, true, true);
+        ItemStack item = Tools.parseItem(value, Short.MAX_VALUE);
         
         if(item == null)
         {

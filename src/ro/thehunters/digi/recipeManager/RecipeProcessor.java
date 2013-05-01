@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 import ro.thehunters.digi.recipeManager.flags.FlagOverride;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
@@ -528,7 +529,9 @@ public class RecipeProcessor implements Runnable
             
             for(int i = 0; i < rowLen; i++) // go through each ingredient on the line
             {
-                if((item = Tools.parseItemStack(split[i], Vanilla.DATA_WILDCARD, true, false, false)) == null) // invalid item
+                item = Tools.parseItem(split[i], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+                
+                if(item == null) // invalid item
                 {
                     ingredientErrors = true;
                 }
@@ -607,7 +610,7 @@ public class RecipeProcessor implements Runnable
         
         for(String str : ingredientsRaw)
         {
-            item = Tools.parseItemStack(str, Vanilla.DATA_WILDCARD, true, true, false);
+            item = Tools.parseItem(str, Vanilla.DATA_WILDCARD, ParseBit.NO_META);
             
             if(item == null || item.getTypeId() == 0)
             {
@@ -699,7 +702,7 @@ public class RecipeProcessor implements Runnable
             return RecipeErrorReporter.error("Smeling recipe doesn't have an ingredient !");
         }
         
-        ItemStack ingredient = Tools.parseItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
+        ItemStack ingredient = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(ingredient == null)
         {
@@ -761,7 +764,7 @@ public class RecipeProcessor implements Runnable
             
             if(line.charAt(0) == '&') // check if we have a fuel
             {
-                ItemStack fuelItem = Tools.parseItemStack(line.substring(1).trim(), 0, true, true, true);
+                ItemStack fuelItem = Tools.parseItem(line.substring(1), 0, ParseBit.NO_AMOUNT);
                 
                 if(fuelItem == null)
                 {
@@ -883,7 +886,7 @@ public class RecipeProcessor implements Runnable
             }
             
             // set ingredient
-            ItemStack ingredient = Tools.parseItemStack(split[0], Vanilla.DATA_WILDCARD, true, false, false);
+            ItemStack ingredient = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
             
             if(ingredient == null)
             {
@@ -931,7 +934,7 @@ public class RecipeProcessor implements Runnable
                 break;
             }
             
-            ItemStack result = Tools.parseItemStack(line, 0, true, true, true);
+            ItemStack result = Tools.parseItem(line, 0);
             
             if(result == null)
             {
@@ -979,7 +982,7 @@ public class RecipeProcessor implements Runnable
         
         while(line != null && line.charAt(0) == '=')
         {
-            result = Tools.parseItemResult(line, 0, true, true, true); // convert result to ItemResult, grabbing chance and whatother stuff
+            result = Tools.parseItemResult(line, 0); // convert result to ItemResult, grabbing chance and whatother stuff
             
             if(result == null)
             {
