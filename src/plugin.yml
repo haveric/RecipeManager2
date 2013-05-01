@@ -18,10 +18,6 @@ commands:
     description: find custom recipes that use the specified item
     usage: /<command> <item> [i]
     permission: recipemanager.command.rmrecipes
-  rmrecipehelp:
-    aliases: [recipehelp]
-    description: get help on last attempted recipe
-    usage: /<command>
   rmfinditem:
     aliases: [finditem, item]
     description: search for items by name or id
