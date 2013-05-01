@@ -442,7 +442,7 @@ public class RecipeRegistrator implements Runnable
         
         if(RecipeManager.getPlugin() == null)
         {
-            Messages.debug("plugin = null, wait for post-enable !");
+            Messages.debug("plugin = null, wait for post-enable !"); // TODO
             
             new BukkitRunnable()
             {
@@ -461,7 +461,7 @@ public class RecipeRegistrator implements Runnable
     
     private void registerRecipes()
     {
-        Messages.debug("... ?");
+        Messages.debug("... ?"); // TODO ???
         
         String adder = RecipeManager.getPlugin().getPluginCaller("registerRecipesToServer");
         
