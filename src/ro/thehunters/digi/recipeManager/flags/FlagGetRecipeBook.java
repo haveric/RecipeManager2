@@ -5,9 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.data.Book;
@@ -28,7 +26,7 @@ public class FlagGetRecipeBook extends Flag
         
         A = new String[]
         {
-            "{flag} <book> [#volume]",
+            "{flag} <book> [volume <num>]",
         };
         
         D = new String[]
@@ -38,13 +36,13 @@ public class FlagGetRecipeBook extends Flag
             "For the '<book>' argument you need to specify the book ID or if ID is not set for that book you can specify the title.",
             "You can write partial IDs or titles and the book will still be found.",
             "",
-            "Optionally you can set the book's volume by adding '#' along with a number from 1 to max volumes of the book.",
+            "Optionally you can set which volume to give, will give first by default, using a bigger number thant the number of volumes will pick the last volume.",
         };
         
         E = new String[]
         {
-            "{flag} recipe stuff // matches a 'Recipe Stuff' book for example.",
-            "{flag} vanillarec #2 // matches a 'Vanilla Recipes Volume 2' book for example.",
+            "{flag} recipestu // matches a 'Recipe Stuff' book for example.",
+            "{flag} vanilla rec volume 2 // matches a 'Vanilla Recipes Volume 2' book for example.",
         };
     }
     
@@ -112,21 +110,21 @@ public class FlagGetRecipeBook extends Flag
     @Override
     protected boolean onParse(String value)
     {
+        value = value.toLowerCase();
         String bookName = value;
-        int index = value.lastIndexOf('#');
+        int index = value.lastIndexOf("volume");
         
-        if(index > 0) // found and it's not the first char
+        if(index > 0)
         {
-            value = value.substring(index + 1);
-            bookName = bookName.substring(0, index).trim();
+            value = value.substring(index + "volume".length()).trim();
             
             try
             {
                 setVolume(Integer.valueOf(value));
+                bookName = bookName.substring(0, index).trim();
             }
             catch(NumberFormatException e)
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has invalid volume number: " + value);
             }
         }
         
@@ -138,13 +136,11 @@ public class FlagGetRecipeBook extends Flag
     @Override
     protected void onRegistered()
     {
-        Messages.debug("registering...");
-        
         List<Book> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookName());
         
         if(books.isEmpty())
         {
-            RecipeErrorReporter.error("Flag " + getType() + " could not find book title containing '" + bookName + "', flag removed.");
+            RecipeErrorReporter.warning("Flag " + getType() + " could not find book title containing '" + bookName + "', flag ignored.");
             remove();
             return;
         }
@@ -176,25 +172,10 @@ public class FlagGetRecipeBook extends Flag
         
         if(books.isEmpty())
         {
-            RecipeErrorReporter.error("Flag " + getType() + " could not find book title containing: " + bookName);
             return;
         }
         
         Book book = books.get(0);
-        
-        if(books.size() > 1)
-        {
-            RecipeErrorReporter.warning("Flag " + getType() + " found " + books.size() + " books matching '" + bookName + "', using first: " + book.getTitle());
-        }
-        
-        ItemMeta meta = a.result().getItemMeta();
-        
-        if(meta instanceof BookMeta == false)
-        {
-            a.addCustomReason("Result not a written book!");
-            RecipeErrorReporter.warning("Flag " + getType() + " was triggered on a non-writtenbook item!");
-            return;
-        }
         
         a.result().setItemMeta(book.getBookItem(volume).getItemMeta());
     }

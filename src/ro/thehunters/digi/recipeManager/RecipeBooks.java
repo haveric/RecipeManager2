@@ -92,7 +92,9 @@ public class RecipeBooks
             }
         }
         
-        if(RecipeErrorReporter.getCatchedAmount() > 0)
+        int errors = RecipeErrorReporter.getCatchedAmount();
+        
+        if(errors > 0)
         {
             RecipeErrorReporter.print(FILE_ERRORLOG);
         }
@@ -108,7 +110,7 @@ public class RecipeBooks
             }
         }
         
-        Messages.info("Loaded " + books.size() + " recipe books."); // TODO remove ?
+        Messages.sendAndLog(sender, "Parsed " + books.size() + " recipe books" + (errors > 0 ? " with " + errors + " errors/warnings." : "."));
     }
     
     private void parseBook(CommandSender sender, File file)
@@ -358,7 +360,7 @@ public class RecipeBooks
             
         }
         
-        books.put(id, new Book(title, description, metaArray));
+        books.put(id.toLowerCase(), new Book(title, description, metaArray));
     }
     
     private void parseRecipeName(String fileName, String value, List<String> recipes, Set<String> allRecipes)
@@ -659,6 +661,7 @@ public class RecipeBooks
     
     public List<Book> getBooksPartialMatch(String id)
     {
+        id = id.toLowerCase();
         Book book = books.get(id); // full match first
         
         if(book != null)

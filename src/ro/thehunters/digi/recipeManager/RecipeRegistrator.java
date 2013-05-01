@@ -17,9 +17,12 @@ import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CombineRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
+import ro.thehunters.digi.recipeManager.recipes.MultiResultRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
+import ro.thehunters.digi.recipeManager.recipes.SingleResultRecipe;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
 import com.google.common.collect.Sets;
@@ -328,6 +331,37 @@ public class RecipeRegistrator implements Runnable
         
         registered = true; // mark this class as registered so it doesn't get re-registered
         queuedRecipes.clear(); // clear the queue to let the class vanish
+        
+        for(BaseRecipe r : RecipeManager.getRecipes().index.keySet())
+        {
+            if(r.hasFlags())
+            {
+                r.getFlags().sendRegistered();
+            }
+            
+            if(r instanceof SingleResultRecipe)
+            {
+                SingleResultRecipe rec = (SingleResultRecipe)r;
+                ItemResult result = rec.getResult();
+                
+                if(result.hasFlags())
+                {
+                    result.getFlags().sendRegistered();
+                }
+            }
+            else if(r instanceof MultiResultRecipe)
+            {
+                MultiResultRecipe rec = (MultiResultRecipe)r;
+                
+                for(ItemResult result : rec.getResults())
+                {
+                    if(result.hasFlags())
+                    {
+                        result.getFlags().sendRegistered();
+                    }
+                }
+            }
+        }
         
         Messages.send(sender, String.format("All done in %.3f seconds, %d recipes added, %d removed.", ((System.currentTimeMillis() - start) / 1000.0), addedNum, removedNum));
     }

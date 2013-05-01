@@ -361,11 +361,6 @@ public class Recipes
             
             Bukkit.addRecipe(bukkitRecipe);
         }
-        
-        if(recipe.hasFlags())
-        {
-            recipe.getFlags().sendRegistered();
-        }
     }
     
     public boolean removeRecipe(BaseRecipe recipe)

@@ -306,13 +306,13 @@ public class Flag implements Cloneable
         return (getType() != null);
     }
     
-    protected void onRegistered()
-    {
-    }
-    
     protected boolean onParse(String value)
     {
         return false; // it didn't parse anything
+    }
+    
+    protected void onRegistered()
+    {
     }
     
     protected void onRemove()
