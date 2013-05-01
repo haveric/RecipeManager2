@@ -182,6 +182,12 @@ public enum Messages
     CMD_BOOKS_HEADER("<yellow>Generated recipe books ({number}):"),
     CMD_BOOKS_ITEM("<white>{title} <gray>(volumes: {volumes})"),
     
+    CMD_EXTRACT_WAIT("<red>Command re-used too fast, wait a second."),
+    CMD_EXTRACT_UNKNOWNARG("<red>Unknown argument: <yellow>{arg}"),
+    CMD_EXTRACT_CONVERTING("<gray>Searching and converting recipes..."),
+    CMD_EXTRACT_NORECIPES("<yellow>No recipes to extract."),
+    CMD_EXTRACT_DONE("<green>Done! Recipes saved to '<white>{file}<green>'."),
+    
     CMD_RMFINDITEM_USAGE("<yellow>Usage: <white>/{command} <gray>"),
     CMD_RMFINDITEM_INVALIDHELDITEM(""),
     CMD_RMFINDITEM_HEADER(""),
