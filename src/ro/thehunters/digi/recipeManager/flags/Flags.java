@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
 public class Flags implements Cloneable
@@ -58,11 +58,11 @@ public class Flags implements Cloneable
         {
             if(t.hasBit(Bit.NO_SHIFT))
             {
-                return false;
+                return true;
             }
         }
         
-        return true;
+        return false;
     }
     
     /**

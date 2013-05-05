@@ -408,7 +408,7 @@ public class Events implements Listener
             
             if(event.isShiftClick())
             {
-                if(recipe.hasNoShiftBit() || result.hasNoShiftBit())
+                if(recipe.hasNoShiftBit())
                 {
                     Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
                     
@@ -481,10 +481,10 @@ public class Events implements Listener
             {
                 if(event.isShiftClick())
                 {
-                    // TODO remove ?
                     if(!recipe.hasNoShiftBit())
                     {
-                        Messages.send(player, "<red>Shift+click is not allowed !"); // TODO to Messages
+                        Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
+//                        Messages.send(player, "<red>Shift+click is not allowed !"); // TODO to Messages
                         event.setCancelled(true);
                         return 0;
                     }

@@ -25,6 +25,8 @@ import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * RecipeManager's recipe storage
  */
@@ -265,7 +267,7 @@ public class Recipes
      */
     public Map<BaseRecipe, RecipeInfo> getRecipeList()
     {
-        return new HashMap<BaseRecipe, RecipeInfo>(index);
+        return ImmutableMap.copyOf(index);
     }
     
     /**
