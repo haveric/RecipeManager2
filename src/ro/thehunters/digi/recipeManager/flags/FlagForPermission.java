@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.Validate;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
 public class FlagForPermission extends Flag
@@ -127,7 +127,7 @@ public class FlagForPermission extends Flag
     
     /**
      * Attempts to add a flag to this flag list for the permission.<br>
-     * Adds an error to the {@link RecipeErrorReporter} class if flag is not compatible with recipe/result.
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      * 
      * @param permission
      * @param flag
@@ -158,7 +158,7 @@ public class FlagForPermission extends Flag
         
         if(split.length <= 1)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " is missing the inner flag declaration !");
+            return ErrorReporter.error("Flag " + getType() + " is missing the inner flag declaration !");
         }
         
         String permission = split[0].trim(); // store permission node for later use
@@ -168,12 +168,12 @@ public class FlagForPermission extends Flag
         
         if(type == null) // If no valid flag was found
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
+            return ErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
         }
         
         if(type.hasBit(Bit.NO_FOR))
         {
-            return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
+            return ErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
         }
         
         Flag flag = getFlagForPermission(permission, type); // get existing flag, if any

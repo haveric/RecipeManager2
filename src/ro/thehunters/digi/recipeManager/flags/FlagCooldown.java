@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang.mutable.MutableInt;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagCooldown extends Flag
@@ -254,7 +254,7 @@ public class FlagCooldown extends Flag
         
         if(value.length() > String.valueOf(Float.MAX_VALUE).length())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + Tools.printNumber(Float.MIN_VALUE) + " and " + Tools.printNumber(Float.MAX_VALUE) + ".");
+            ErrorReporter.error("The " + getType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + Tools.printNumber(Float.MIN_VALUE) + " and " + Tools.printNumber(Float.MAX_VALUE) + ".");
             return false;
         }
         
@@ -264,7 +264,7 @@ public class FlagCooldown extends Flag
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
             return false;
         }
         
@@ -272,7 +272,7 @@ public class FlagCooldown extends Flag
         
         if(time <= 0.0f)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0 !");
+            ErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0 !");
             return false;
         }
         

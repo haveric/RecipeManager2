@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -209,7 +209,7 @@ public class FlagCloneIngredient extends Flag
         
         if(result == null || result.getTypeId() == 0)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
+            ErrorReporter.error("Flag " + getType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
             return false;
         }
         
@@ -235,12 +235,12 @@ public class FlagCloneIngredient extends Flag
         
         if(found == 0)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(getResult()));
+            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(getResult()));
             return false;
         }
         else if(found > 1)
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " has found the " + Tools.Item.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
+            ErrorReporter.warning("Flag " + getType() + " has found the " + Tools.Item.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
         }
         
         for(String arg : args)
@@ -305,7 +305,7 @@ public class FlagCloneIngredient extends Flag
                     }
                     catch(Throwable e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
                         continue;
                     }
                 }
@@ -313,7 +313,7 @@ public class FlagCloneIngredient extends Flag
                 continue;
             }
             
-            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
+            ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
         }
         
         return true;

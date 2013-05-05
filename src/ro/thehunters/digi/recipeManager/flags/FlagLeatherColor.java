@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -72,7 +72,7 @@ public class FlagLeatherColor extends Flag
         
         if(result == null || result.getItemMeta() instanceof LeatherArmorMeta == false)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " needs a leather armor item!");
+            return ErrorReporter.error("Flag " + getType() + " needs a leather armor item!");
         }
         
         return true;
@@ -85,7 +85,7 @@ public class FlagLeatherColor extends Flag
         
         if(color == null)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
+            return ErrorReporter.error("Flag " + getType() + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
         }
         
         return true;

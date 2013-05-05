@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
 
@@ -57,7 +57,7 @@ public class FlagOverride extends Flag
     {
         if(getFlagsContainer().hasFlag(FlagType.REMOVE))
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " can't work with @remove flag!");
+            return ErrorReporter.error("Flag " + getType() + " can't work with @remove flag!");
         }
         
         return true;

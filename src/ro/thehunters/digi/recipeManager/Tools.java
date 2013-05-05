@@ -568,7 +568,7 @@ public class Tools
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.warning("Invalid percentage number: " + string);
+                    ErrorReporter.warning("Invalid percentage number: " + string);
                 }
             }
             
@@ -626,7 +626,7 @@ public class Tools
         {
             if((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS)
             {
-                RecipeErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
+                ErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
             }
             
             return null;
@@ -670,7 +670,7 @@ public class Tools
                         {
                             if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                             {
-                                RecipeErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
+                                ErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
                             }
                         }
                     }
@@ -679,7 +679,7 @@ public class Tools
                     {
                         if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                         {
-                            RecipeErrorReporter.warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
+                            ErrorReporter.warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
                         }
                     }
                 }
@@ -688,7 +688,7 @@ public class Tools
             {
                 if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                 {
-                    RecipeErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
+                    ErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
                 }
             }
         }
@@ -709,7 +709,7 @@ public class Tools
                 {
                     if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                     {
-                        RecipeErrorReporter.warning("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
+                        ErrorReporter.warning("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
                     }
                 }
             }
@@ -717,7 +717,7 @@ public class Tools
             {
                 if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                 {
-                    RecipeErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
+                    ErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
                 }
             }
         }
@@ -730,7 +730,7 @@ public class Tools
             
             if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
             {
-                RecipeErrorReporter.warning("Can't define enchants directly on items, use " + FlagType.ENCHANTITEM + " instead (if appliable)", "Probably in the future I will add support for enchants, name and other stuff defineable in the item directly.");
+                ErrorReporter.warning("Can't define enchants directly on items, use " + FlagType.ENCHANTITEM + " instead (if appliable)", "Probably in the future I will add support for enchants, name and other stuff defineable in the item directly.");
             }
         }
         
@@ -743,7 +743,7 @@ public class Tools
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
+            ErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
             return null;
         }
         
@@ -770,7 +770,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    ErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
                 
@@ -782,7 +782,7 @@ public class Tools
                 }
                 catch(IllegalArgumentException e)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    ErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
             }
@@ -792,7 +792,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'level' argument with no level!");
+                    ErrorReporter.error("Flag " + type + " has 'level' argument with no level!");
                     continue;
                 }
                 
@@ -810,19 +810,19 @@ public class Tools
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.error("Flag " + type + " has invalid 'level' number: " + value);
+                        ErrorReporter.error("Flag " + type + " has invalid 'level' number: " + value);
                     }
                 }
             }
             else
             {
-                RecipeErrorReporter.error("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
+                ErrorReporter.error("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
         
         if(potion.getType() == null)
         {
-            RecipeErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+            ErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
             return null;
         }
         
@@ -847,7 +847,7 @@ public class Tools
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
+            ErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
             return null;
         }
         
@@ -870,7 +870,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+                    ErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
                     return null;
                 }
                 
@@ -879,7 +879,7 @@ public class Tools
                 
                 if(effectType == null)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+                    ErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
                     return null;
                 }
             }
@@ -889,7 +889,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'duration' argument with no number!");
+                    ErrorReporter.error("Flag " + type + " has 'duration' argument with no number!");
                     continue;
                 }
                 
@@ -902,7 +902,7 @@ public class Tools
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid 'duration' number: " + value);
+                    ErrorReporter.error("Flag " + type + " has invalid 'duration' number: " + value);
                 }
             }
             else if(s.startsWith("amplify"))
@@ -911,7 +911,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'amplify' argument with no number!");
+                    ErrorReporter.error("Flag " + type + " has 'amplify' argument with no number!");
                     continue;
                 }
                 
@@ -923,24 +923,24 @@ public class Tools
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid 'amplify' number: " + value);
+                    ErrorReporter.error("Flag " + type + " has invalid 'amplify' number: " + value);
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
+                ErrorReporter.warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
         
         if(effectType == null)
         {
-            RecipeErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+            ErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
             return null;
         }
         
         if(duration != 1 && (effectType == PotionEffectType.HEAL || effectType == PotionEffectType.HARM))
         {
-            RecipeErrorReporter.warning("Flag " + type + " can't have duration on HEAL or HARM because they're instant!");
+            ErrorReporter.warning("Flag " + type + " can't have duration on HEAL or HARM because they're instant!");
         }
         
         return new PotionEffect(effectType, Math.round(duration * 20), amplify, ambient);
@@ -952,7 +952,7 @@ public class Tools
         
         if(split.length == 0)
         {
-            RecipeErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + Files.FILE_INFO_FLAGS + "' for syntax.");
+            ErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least one 'color' argument, read '" + Files.FILE_INFO_FLAGS + "' for syntax.");
             return null;
         }
         
@@ -976,7 +976,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'color' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    ErrorReporter.error("Flag " + type + " has 'color' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
                     return null;
                 }
                 
@@ -990,7 +990,7 @@ public class Tools
                     
                     if(color == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + type + " has an invalid color!");
+                        ErrorReporter.warning("Flag " + type + " has an invalid color!");
                     }
                     else
                     {
@@ -1000,7 +1000,7 @@ public class Tools
                 
                 if(colors.isEmpty())
                 {
-                    RecipeErrorReporter.error("Flag " + type + " doesn't have any valid colors, they are required!");
+                    ErrorReporter.error("Flag " + type + " doesn't have any valid colors, they are required!");
                     return null;
                 }
                 
@@ -1012,7 +1012,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'fadecolor' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
+                    ErrorReporter.error("Flag " + type + " has 'fadecolor' argument with no colors!", "Add colors separated by , in RGB format (3 numbers ranged 0-255)");
                     return null;
                 }
                 
@@ -1026,7 +1026,7 @@ public class Tools
                     
                     if(color == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + type + " has an invalid fade color! Moving on...");
+                        ErrorReporter.warning("Flag " + type + " has an invalid fade color! Moving on...");
                     }
                     else
                     {
@@ -1036,7 +1036,7 @@ public class Tools
                 
                 if(colors.isEmpty())
                 {
-                    RecipeErrorReporter.error("Flag " + type + " doesn't have any valid fade colors! Moving on...");
+                    ErrorReporter.error("Flag " + type + " doesn't have any valid fade colors! Moving on...");
                 }
                 else
                 {
@@ -1049,7 +1049,7 @@ public class Tools
                 
                 if(split.length <= 1)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has 'type' argument with no value!", "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
+                    ErrorReporter.error("Flag " + type + " has 'type' argument with no value!", "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
                     return null;
                 }
                 
@@ -1061,13 +1061,13 @@ public class Tools
                 }
                 catch(IllegalArgumentException e)
                 {
-                    RecipeErrorReporter.error("Flag " + type + " has invalid 'type' setting value: " + value, "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
+                    ErrorReporter.error("Flag " + type + " has invalid 'type' setting value: " + value, "Read " + Files.FILE_INFO_NAMES + " for list of firework effect types.");
                     return null;
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                ErrorReporter.warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
             }
         }
         

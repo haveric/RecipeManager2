@@ -12,7 +12,7 @@ import org.bukkit.ChatColor;
  * Errors can be caught to be displayed in a single chunk along with file name and lines.<br>
  * When errors are not caught they'll be directly displayed to console.
  */
-public class RecipeErrorReporter
+public class ErrorReporter
 {
     private static HashMap<String, List<String>> fileErrors;
     private static String currentFile;

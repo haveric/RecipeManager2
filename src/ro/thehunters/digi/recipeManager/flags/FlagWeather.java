@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.World;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagWeather extends Flag
@@ -174,13 +174,13 @@ public class FlagWeather extends Flag
                     break;
                 
                 default:
-                    RecipeErrorReporter.warning("Flag " + getType() + " has unknown weather type: " + value);
+                    ErrorReporter.warning("Flag " + getType() + " has unknown weather type: " + value);
             }
         }
         
         if(weather == 0)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs at least one valid weather type!");
+            ErrorReporter.error("Flag " + getType() + " needs at least one valid weather type!");
             return false;
         }
         

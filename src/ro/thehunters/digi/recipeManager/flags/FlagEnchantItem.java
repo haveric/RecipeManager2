@@ -8,7 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagEnchantItem extends Flag
@@ -90,7 +90,7 @@ public class FlagEnchantItem extends Flag
         
         if(enchant == null)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+            ErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
             return false;
         }
         
@@ -108,7 +108,7 @@ public class FlagEnchantItem extends Flag
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
+                    ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
                     return false;
                 }
             }

@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagBlockPowered extends Flag
 {
@@ -114,7 +114,7 @@ public class FlagBlockPowered extends Flag
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
+                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
             }
         }
         

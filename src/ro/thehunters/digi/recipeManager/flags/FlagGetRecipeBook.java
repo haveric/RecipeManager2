@@ -6,9 +6,9 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.data.Book;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagGetRecipeBook extends Flag
@@ -101,7 +101,7 @@ public class FlagGetRecipeBook extends Flag
         
         if(result == null || result.getType() != Material.WRITTEN_BOOK || result.getItemMeta() instanceof BookMeta == false)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK to work!");
+            return ErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK to work!");
         }
         
         return true;
@@ -140,7 +140,7 @@ public class FlagGetRecipeBook extends Flag
         
         if(books.isEmpty())
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " could not find book title containing '" + bookName + "', flag ignored.");
+            ErrorReporter.warning("Flag " + getType() + " could not find book title containing '" + bookName + "', flag ignored.");
             remove();
             return;
         }
@@ -149,7 +149,7 @@ public class FlagGetRecipeBook extends Flag
         
         if(books.size() > 1)
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " found " + books.size() + " books matching '" + bookName + "', using first: " + book.getTitle());
+            ErrorReporter.warning("Flag " + getType() + " found " + books.size() + " books matching '" + bookName + "', using first: " + book.getTitle());
         }
     }
     

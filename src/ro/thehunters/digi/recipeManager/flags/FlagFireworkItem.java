@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -123,7 +123,7 @@ public class FlagFireworkItem extends Flag
         
         if(result == null || result.getItemMeta() instanceof FireworkMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs a FIREWORK item!");
+            ErrorReporter.error("Flag " + getType() + " needs a FIREWORK item!");
             return false;
         }
         
@@ -162,13 +162,13 @@ public class FlagFireworkItem extends Flag
             
             if(getPower() < 0 || getPower() > 128)
             {
-                RecipeErrorReporter.error("Flag " + getType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
+                ErrorReporter.error("Flag " + getType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
                 return false;
             }
         }
         else
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+            ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
         }
         
         return true;

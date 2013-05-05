@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Tools.ParseBit;
@@ -138,7 +138,7 @@ public class FlagKeepItem extends Flag
         
         if(keepItems.containsKey(key))
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " already has the '" + Tools.Item.print(item) + "' ingredient added.");
+            ErrorReporter.warning("Flag " + getType() + " already has the '" + Tools.Item.print(item) + "' ingredient added.");
             return false;
         }
         
@@ -160,12 +160,12 @@ public class FlagKeepItem extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has invalid damage number: " + value + ", ignored.");
+                        ErrorReporter.warning("Flag " + getType() + " has invalid damage number: " + value + ", ignored.");
                     }
                 }
                 else
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + Tools.Item.print(item) + ", ignored.");
+                    ErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + Tools.Item.print(item) + ", ignored.");
                 }
                 
                 keepItems.put(key, damage);
@@ -174,7 +174,7 @@ public class FlagKeepItem extends Flag
             {
                 if(item.getType().getMaxStackSize() > 1)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + Tools.Item.print(item));
+                    ErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + Tools.Item.print(item));
                     return false;
                 }
                 
@@ -191,7 +191,7 @@ public class FlagKeepItem extends Flag
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
                 return false;
             }
         }

@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagHeight extends Flag
 {
@@ -127,7 +127,7 @@ public class FlagHeight extends Flag
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid min required height number: " + value);
+            ErrorReporter.error("The " + getType() + " flag has invalid min required height number: " + value);
             return false;
         }
         
@@ -141,14 +141,14 @@ public class FlagHeight extends Flag
             }
             catch(NumberFormatException e)
             {
-                RecipeErrorReporter.error("The " + getType() + " flag has invalid max required height number: " + value);
+                ErrorReporter.error("The " + getType() + " flag has invalid max required height number: " + value);
                 return false;
             }
         }
         
         if((getMinHeight() <= 0 && getMaxHeight() <= 0) || getMaxHeight() < getMinHeight())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
         

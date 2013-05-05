@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 import ro.thehunters.digi.recipeManager.Vanilla;
@@ -894,7 +894,7 @@ public class FlagIngredientCondition extends Flag
         
         if(args.length <= 1)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions !", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
+            return ErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions !", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
         
         ItemStack item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
@@ -906,7 +906,7 @@ public class FlagIngredientCondition extends Flag
         
         if(Tools.findItemInIngredients(getRecipeDeep(), item.getType(), item.getDurability()) == 0)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(item));
+            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(item));
             return false;
         }
         
@@ -926,7 +926,7 @@ public class FlagIngredientCondition extends Flag
             {
                 if(item.getDurability() != Vanilla.DATA_WILDCARD)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
+                    ErrorReporter.warning("Flag " + getType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
                     continue;
                 }
                 
@@ -966,13 +966,13 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid numbers: " + val);
+                                ErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid numbers: " + val);
                                 continue;
                             }
                             
                             if(min > max)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number range: " + min + " to " + max);
+                                ErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number range: " + min + " to " + max);
                                 break;
                             }
                             
@@ -1001,7 +1001,7 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number: " + val);
+                                ErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number: " + val);
                                 continue;
                             }
                         }
@@ -1018,7 +1018,7 @@ public class FlagIngredientCondition extends Flag
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'amount' argument with invalid number: " + value);
+                    ErrorReporter.warning("Flag " + getType() + " has 'amount' argument with invalid number: " + value);
                     continue;
                 }
             }
@@ -1034,7 +1034,7 @@ public class FlagIngredientCondition extends Flag
                 
                 if(enchant == null)
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid name: " + value);
+                    ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid name: " + value);
                     continue;
                 }
                 
@@ -1066,13 +1066,13 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid numbers: " + s);
+                                ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid numbers: " + s);
                                 continue;
                             }
                             
                             if(min > max)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
+                                ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
                                 continue;
                             }
                             
@@ -1086,7 +1086,7 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                RecipeErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number: " + s);
+                                ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number: " + s);
                                 continue;
                             }
                         }
@@ -1101,7 +1101,7 @@ public class FlagIngredientCondition extends Flag
             {
                 if(item.getItemMeta() instanceof LeatherArmorMeta == false)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
+                    ErrorReporter.warning("Flag " + getType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
                     continue;
                 }
                 
@@ -1119,7 +1119,7 @@ public class FlagIngredientCondition extends Flag
                     
                     if(split.length != 3)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
                         continue;
                     }
                     
@@ -1142,7 +1142,7 @@ public class FlagIngredientCondition extends Flag
                             
                             if(min < 0 || min > 255 || min > max || max > 255)
                             {
-                                RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
+                                ErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
                                 break;
                             }
                             
@@ -1151,7 +1151,7 @@ public class FlagIngredientCondition extends Flag
                         }
                         catch(NumberFormatException e)
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid number: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid number: " + value);
                             continue;
                         }
                     }
@@ -1177,7 +1177,7 @@ public class FlagIngredientCondition extends Flag
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + args[i]);
+                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + args[i]);
             }
         }
         

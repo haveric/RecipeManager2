@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagLightLevel extends Flag
 {
@@ -230,7 +230,7 @@ public class FlagLightLevel extends Flag
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
             return false;
         }
         
@@ -244,14 +244,14 @@ public class FlagLightLevel extends Flag
             }
             catch(NumberFormatException e)
             {
-                RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+                ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
                 return false;
             }
         }
         
         if(minLight > 15 || maxLight > 15 || (maxLight > 0 && (minLight > maxLight || minLight < 0)))
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
+            ErrorReporter.error("The " + getType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
             return false;
         }
         

@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagHideResults extends Flag
 {
@@ -142,7 +142,7 @@ public class FlagHideResults extends Flag
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
             }
         }
         

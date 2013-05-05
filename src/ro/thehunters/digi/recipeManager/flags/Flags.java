@@ -116,7 +116,7 @@ public class Flags implements Cloneable
     
     /**
      * Attempts to add a flag to this flag list.<br>
-     * Adds an error to the {@link RecipeErrorReporter} class if flag is not compatible with recipe/result.
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      * 
      * @param flag
      */
@@ -150,7 +150,7 @@ public class Flags implements Cloneable
         // check if it's really a flag because this is a public method
         if(value.charAt(0) != '@')
         {
-            RecipeErrorReporter.warning("Flags must start with @ character!");
+            ErrorReporter.warning("Flags must start with @ character!");
             return;
         }
         
@@ -161,7 +161,7 @@ public class Flags implements Cloneable
         // If no valid flag was found
         if(type == null)
         {
-            RecipeErrorReporter.warning("Unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
+            ErrorReporter.warning("Unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
             return;
         }
         

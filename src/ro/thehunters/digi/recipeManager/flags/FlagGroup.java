@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagGroup extends Flag
@@ -129,7 +129,7 @@ public class FlagGroup extends Flag
     {
         if(!RecipeManager.getPermissions().isEnabled())
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported permission plugin was detected.");
+            ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported permission plugin was detected.");
         }
         
         String[] split = value.split("\\|");

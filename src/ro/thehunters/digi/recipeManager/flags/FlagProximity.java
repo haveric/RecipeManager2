@@ -2,7 +2,7 @@ package ro.thehunters.digi.recipeManager.flags;
 
 import org.bukkit.Location;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
@@ -71,7 +71,7 @@ public class FlagProximity extends Flag
         
         if(recipe instanceof SmeltRecipe == false && recipe instanceof FuelRecipe == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " only works for smelt and fuel recipes!");
+            ErrorReporter.error("Flag " + getType() + " only works for smelt and fuel recipes!");
             return false;
         }
         
@@ -83,7 +83,7 @@ public class FlagProximity extends Flag
     {
         // TODO
         
-        RecipeErrorReporter.warning("Flag " + getType() + " is not yet coded.");
+        ErrorReporter.warning("Flag " + getType() + " is not yet coded.");
         
         return false;
     }

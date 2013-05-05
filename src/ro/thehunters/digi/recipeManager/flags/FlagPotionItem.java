@@ -8,7 +8,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -145,7 +145,7 @@ public class FlagPotionItem extends Flag
         
         if(result == null || result.getItemMeta() instanceof PotionMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs a POTION item!");
+            ErrorReporter.error("Flag " + getType() + " needs a POTION item!");
             return false;
         }
         

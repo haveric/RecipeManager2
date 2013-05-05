@@ -10,7 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagExplode extends Flag
 {
@@ -189,13 +189,13 @@ public class FlagExplode extends Flag
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'power' argument with invalid number: " + value);
+                    ErrorReporter.warning("Flag " + getType() + " has 'power' argument with invalid number: " + value);
                     continue;
                 }
             }
             else
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
+                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
             }
         }
         

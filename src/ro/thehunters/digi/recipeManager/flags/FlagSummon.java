@@ -37,7 +37,7 @@ import org.bukkit.util.Vector;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
@@ -546,7 +546,7 @@ public class FlagSummon extends Flag
             {
                 this.chance = Math.min(Math.max(chance, 0.01f), 100.0f);
                 
-                RecipeErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
+                ErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
             }
             else
             {
@@ -565,7 +565,7 @@ public class FlagSummon extends Flag
             {
                 this.num = 1;
                 
-                RecipeErrorReporter.warning("The " + getType() + " flag can't have 'num' argument less than 1, set to 1.");
+                ErrorReporter.warning("The " + getType() + " flag can't have 'num' argument less than 1, set to 1.");
             }
             else
             {
@@ -946,7 +946,7 @@ public class FlagSummon extends Flag
         
         if(type == null || !type.isAlive())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid creature: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section for ALIVE entities.");
+            ErrorReporter.error("The " + getType() + " flag has invalid creature: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section for ALIVE entities.");
             return false;
         }
         
@@ -988,7 +988,7 @@ public class FlagSummon extends Flag
                             break;
                         
                         default:
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'angry' on unsupported creature!");
+                            ErrorReporter.warning("Flag " + getType() + " has 'angry' on unsupported creature!");
                             continue;
                     }
                     
@@ -998,7 +998,7 @@ public class FlagSummon extends Flag
                 {
                     if(type != EntityType.SHEEP)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'shearedsheep' on non-sheep creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'shearedsheep' on non-sheep creature!");
                         continue;
                     }
                     
@@ -1008,7 +1008,7 @@ public class FlagSummon extends Flag
                 {
                     if(type != EntityType.ZOMBIE)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'zombievillager' on non-zombie creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'zombievillager' on non-zombie creature!");
                         continue;
                     }
                     
@@ -1018,7 +1018,7 @@ public class FlagSummon extends Flag
                 {
                     if(type != EntityType.CREEPER)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'poweredcreeper' on non-creeper creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'poweredcreeper' on non-creeper creature!");
                         continue;
                     }
                     
@@ -1028,7 +1028,7 @@ public class FlagSummon extends Flag
                 {
                     if(type != EntityType.IRON_GOLEM)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'playerirongolem' on non-irongolem creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'playerirongolem' on non-irongolem creature!");
                         continue;
                     }
                     
@@ -1054,7 +1054,7 @@ public class FlagSummon extends Flag
                             break;
                         
                         default:
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'baby' set on unsupported creature!");
+                            ErrorReporter.warning("Flag " + getType() + " has 'baby' set on unsupported creature!");
                             continue;
                     }
                     
@@ -1075,7 +1075,7 @@ public class FlagSummon extends Flag
                             break;
                         
                         default:
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'agelock' set on unsupported creature!");
+                            ErrorReporter.warning("Flag " + getType() + " has 'agelock' set on unsupported creature!");
                             continue;
                     }
                     
@@ -1096,7 +1096,7 @@ public class FlagSummon extends Flag
                             break;
                         
                         default:
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'nobreed' set on unsupported creature!");
+                            ErrorReporter.warning("Flag " + getType() + " has 'nobreed' set on unsupported creature!");
                             continue;
                     }
                     
@@ -1124,7 +1124,7 @@ public class FlagSummon extends Flag
                             break;
                         
                         default:
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'pet' on untameable creature!");
+                            ErrorReporter.warning("Flag " + getType() + " has 'pet' on untameable creature!");
                             continue;
                     }
                     
@@ -1140,7 +1140,7 @@ public class FlagSummon extends Flag
                         }
                         else
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'pet' argument with unknown value: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'pet' argument with unknown value: " + value);
                         }
                     }
                 }
@@ -1148,7 +1148,7 @@ public class FlagSummon extends Flag
                 {
                     if(type != EntityType.PIG)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'saddle' on non-pig creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'saddle' on non-pig creature!");
                         continue;
                     }
                     
@@ -1164,7 +1164,7 @@ public class FlagSummon extends Flag
                         }
                         else
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'saddle' argument with unknown value: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'saddle' argument with unknown value: " + value);
                         }
                     }
                 }
@@ -1183,7 +1183,7 @@ public class FlagSummon extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
                         continue;
                     }
                 }
@@ -1197,7 +1197,7 @@ public class FlagSummon extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'num' argument with invalid value number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'num' argument with invalid value number: " + value);
                     }
                 }
                 else if(value.startsWith("spread"))
@@ -1210,7 +1210,7 @@ public class FlagSummon extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'spread' argument with invalid value number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'spread' argument with invalid value number: " + value);
                     }
                 }
                 else if(value.startsWith("onfire"))
@@ -1223,7 +1223,7 @@ public class FlagSummon extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'onfire' argument with invalid value number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'onfire' argument with invalid value number: " + value);
                     }
                 }
                 else if(value.startsWith("color"))
@@ -1235,7 +1235,7 @@ public class FlagSummon extends Flag
                             break;
                         
                         default:
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'color' on unsupported creature!");
+                            ErrorReporter.warning("Flag " + getType() + " has 'color' on unsupported creature!");
                             continue;
                     }
                     
@@ -1245,14 +1245,14 @@ public class FlagSummon extends Flag
                     
                     if(c.getColor() == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid dye color: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid dye color: " + value);
                     }
                 }
                 else if(value.startsWith("villager"))
                 {
                     if(type != EntityType.VILLAGER)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'villager' argument on non-villager creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'villager' argument on non-villager creature!");
                         continue;
                     }
                     
@@ -1262,14 +1262,14 @@ public class FlagSummon extends Flag
                     
                     if(c.getVillager() == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'villager' argument with invalid type: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'villager' argument with invalid type: " + value);
                     }
                 }
                 else if(value.startsWith("skeleton"))
                 {
                     if(type != EntityType.SKELETON)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'skeleton' argument on non-skeleton creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'skeleton' argument on non-skeleton creature!");
                         continue;
                     }
                     
@@ -1279,14 +1279,14 @@ public class FlagSummon extends Flag
                     
                     if(c.getSkeleton() == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'skeleton' argument with invalid type: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'skeleton' argument with invalid type: " + value);
                     }
                 }
                 else if(value.startsWith("cat"))
                 {
                     if(type != EntityType.OCELOT)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'cat' argument on non-ocelot creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'cat' argument on non-ocelot creature!");
                         continue;
                     }
                     
@@ -1296,7 +1296,7 @@ public class FlagSummon extends Flag
                     
                     if(c.getCat() == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'cat' argument with invalid type: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'cat' argument with invalid type: " + value);
                     }
                 }
                 else if(value.startsWith("name"))
@@ -1319,7 +1319,7 @@ public class FlagSummon extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'hp' argument with invalid number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'hp' argument with invalid number: " + value);
                         continue;
                     }
                     
@@ -1333,7 +1333,7 @@ public class FlagSummon extends Flag
                         }
                         catch(NumberFormatException e)
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'hp' argument with invalid number for maxhp: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'hp' argument with invalid number for maxhp: " + value);
                             continue;
                         }
                     }
@@ -1348,7 +1348,7 @@ public class FlagSummon extends Flag
                     
                     if(effect == null)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid type: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid type: " + value);
                         continue;
                     }
                     
@@ -1365,7 +1365,7 @@ public class FlagSummon extends Flag
                         }
                         catch(NumberFormatException e)
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid number for duration: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid number for duration: " + value);
                             continue;
                         }
                     }
@@ -1380,7 +1380,7 @@ public class FlagSummon extends Flag
                         }
                         catch(NumberFormatException e)
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid number for amplifier: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'potion' argument with invalid number for amplifier: " + value);
                             continue;
                         }
                     }
@@ -1423,7 +1423,7 @@ public class FlagSummon extends Flag
                     
                     if(index < 0)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
                         continue;
                     }
                     
@@ -1455,14 +1455,14 @@ public class FlagSummon extends Flag
                         }
                         catch(NumberFormatException e)
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
+                            ErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
                             continue;
                         }
                     }
                 }
                 else
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+                    ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
                 }
             }
         }
@@ -1474,7 +1474,7 @@ public class FlagSummon extends Flag
                 if(c.isAngry())
                 {
                     c.setAngry(false);
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'angry' with 'pet' on wolf! Argument 'angry' ignored.");
+                    ErrorReporter.warning("Flag " + getType() + " has 'angry' with 'pet' on wolf! Argument 'angry' ignored.");
                 }
             }
             else
@@ -1482,7 +1482,7 @@ public class FlagSummon extends Flag
                 if(c.getColor() != null)
                 {
                     c.setColor(null);
-                    RecipeErrorReporter.warning("Flag " + getType() + " has 'color' argument without wolf being a pet, ignored.");
+                    ErrorReporter.warning("Flag " + getType() + " has 'color' argument without wolf being a pet, ignored.");
                 }
             }
         }

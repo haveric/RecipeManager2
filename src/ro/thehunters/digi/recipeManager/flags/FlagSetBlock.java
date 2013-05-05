@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 
@@ -94,7 +94,7 @@ public class FlagSetBlock extends Flag
         
         if(item == null || !item.getType().isBlock())
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has invalid block material type: " + value, "Note that block materials have IDs from 0 to 255.");
+            ErrorReporter.error("Flag " + getType() + " has invalid block material type: " + value, "Note that block materials have IDs from 0 to 255.");
             return false;
         }
         

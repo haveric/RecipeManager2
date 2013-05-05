@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagNeedMoney extends Flag
@@ -120,7 +120,7 @@ public class FlagNeedMoney extends Flag
     {
         if(!RecipeManager.getEconomy().isEnabled())
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
+            ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
         
         String[] split = value.split("\\|");
@@ -140,7 +140,7 @@ public class FlagNeedMoney extends Flag
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid min required money number: " + value);
+            ErrorReporter.error("The " + getType() + " flag has invalid min required money number: " + value);
             return false;
         }
         
@@ -154,14 +154,14 @@ public class FlagNeedMoney extends Flag
             }
             catch(NumberFormatException e)
             {
-                RecipeErrorReporter.error("The " + getType() + " flag has invalid max required money number: " + value);
+                ErrorReporter.error("The " + getType() + " flag has invalid max required money number: " + value);
                 return false;
             }
         }
         
         if((getMinMoney() <= 0 && getMaxMoney() <= 0) || getMaxMoney() < getMinMoney())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
         

@@ -93,7 +93,7 @@ public class RecipeProcessor implements Runnable
             task.cancel();
         }
         
-        RecipeErrorReporter.startCatching();
+        ErrorReporter.startCatching();
         
         if(RecipeManager.getSettings().MULTITHREADING)
         {
@@ -165,13 +165,13 @@ public class RecipeProcessor implements Runnable
                     }
                 }
                 
-                int errors = RecipeErrorReporter.getCatchedAmount();
+                int errors = ErrorReporter.getCatchedAmount();
                 
                 if(errors > 0)
                 {
                     Messages.sendAndLog(sender, ChatColor.YELLOW + (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
                     
-                    RecipeErrorReporter.print(FILE_ERRORLOG);
+                    ErrorReporter.print(FILE_ERRORLOG);
                 }
                 else
                 {
@@ -185,7 +185,7 @@ public class RecipeProcessor implements Runnable
                     }
                 }
                 
-                RecipeErrorReporter.stopCatching();
+                ErrorReporter.stopCatching();
                 
                 if(!lastModified.isEmpty())
                 {
@@ -308,7 +308,7 @@ public class RecipeProcessor implements Runnable
         reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(root + fileName))));
         currentFile = Tools.removeExtensions(fileName, Files.FILE_RECIPE_EXTENSIONS);
         lineNum = 0;
-        RecipeErrorReporter.setFile(currentFile);
+        ErrorReporter.setFile(currentFile);
         fileFlags = new Flags();
         commentBlock = false;
         boolean added = false;
@@ -350,18 +350,18 @@ public class RecipeProcessor implements Runnable
             }
             else
             {
-                RecipeErrorReporter.warning("Unexpected directive: '" + line + "'", "This might be caused by previous errors.");
+                ErrorReporter.warning("Unexpected directive: '" + line + "'", "This might be caused by previous errors.");
             }
             
             if(!added)
             {
-                RecipeErrorReporter.error("Recipe was not added! Review previous errors and fix them.", "Warnings do not prevent recipe creation but they should be fixed as well!");
+                ErrorReporter.error("Recipe was not added! Review previous errors and fix them.", "Warnings do not prevent recipe creation but they should be fixed as well!");
             }
         }
         
         if(lineNum == 0)
         {
-            RecipeErrorReporter.warning("Recipe file '" + fileName + "' is empty.");
+            ErrorReporter.warning("Recipe file '" + fileName + "' is empty.");
         }
         
         reader.close();
@@ -393,7 +393,7 @@ public class RecipeProcessor implements Runnable
     private boolean readNextLine()
     {
         lineNum++;
-        RecipeErrorReporter.setLine(lineNum);
+        ErrorReporter.setLine(lineNum);
         
         try
         {
@@ -510,7 +510,7 @@ public class RecipeProcessor implements Runnable
             
             if(line == null)
             {
-                return RecipeErrorReporter.error("No ingredients defined!");
+                return ErrorReporter.error("No ingredients defined!");
             }
             
             if(line.charAt(0) == '=') // if we bump into the result prematurely (smaller recipes)
@@ -524,7 +524,7 @@ public class RecipeProcessor implements Runnable
             if(rowLen > 3) // if we find more than 3 ingredients warn the user and limit it to 3
             {
                 rowLen = 3;
-                RecipeErrorReporter.warning("You can't have more than 3 ingredients on a row, ingredient(s) ignored.", "Remove the extra ingredient(s).");
+                ErrorReporter.warning("You can't have more than 3 ingredients on a row, ingredient(s) ignored.", "Remove the extra ingredient(s).");
             }
             
             for(int i = 0; i < rowLen; i++) // go through each ingredient on the line
@@ -549,12 +549,12 @@ public class RecipeProcessor implements Runnable
         
         if(ingredientErrors) // invalid ingredients found
         {
-            RecipeErrorReporter.error("Recipe has some invalid ingredients, fix them!");
+            ErrorReporter.error("Recipe has some invalid ingredients, fix them!");
             return false;
         }
         else if(ingredientsNum == 0) // no ingredients were processed
         {
-            return RecipeErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
+            return ErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
         }
         else if(ingredientsNum == 2 && !checkIngredients(ingredients))
         {
@@ -575,7 +575,7 @@ public class RecipeProcessor implements Runnable
         
         if(recipe.getFirstResult() == null)
         {
-            return RecipeErrorReporter.error("Recipe must have at least one non-air result!");
+            return ErrorReporter.error("Recipe must have at least one non-air result!");
         }
         
         // check if the recipe already exists...
@@ -619,7 +619,7 @@ public class RecipeProcessor implements Runnable
             
             if((items += item.getAmount()) > 9)
             {
-                RecipeErrorReporter.error("Combine recipes can't have more than 9 ingredients !", "If you're using stacks make sure they don't exceed 9 items in total.");
+                ErrorReporter.error("Combine recipes can't have more than 9 ingredients !", "If you're using stacks make sure they don't exceed 9 items in total.");
                 return false;
             }
             
@@ -645,7 +645,7 @@ public class RecipeProcessor implements Runnable
         
         if(recipe.getFirstResult() == null)
         {
-            return RecipeErrorReporter.error("Recipe must have at least one non-air result!");
+            return ErrorReporter.error("Recipe must have at least one non-air result!");
         }
         
         // check if recipe already exists
@@ -676,7 +676,7 @@ public class RecipeProcessor implements Runnable
             {
                 if(toolType == i.getType())
                 {
-                    RecipeErrorReporter.error("Recipes can't have exacly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEPITEM + " flag to keep it.");
+                    ErrorReporter.error("Recipes can't have exacly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEPITEM + " flag to keep it.");
                     return false;
                 }
                 else
@@ -699,7 +699,7 @@ public class RecipeProcessor implements Runnable
         
         if(split.length == 0)
         {
-            return RecipeErrorReporter.error("Smeling recipe doesn't have an ingredient !");
+            return ErrorReporter.error("Smeling recipe doesn't have an ingredient !");
         }
         
         ItemStack ingredient = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
@@ -711,7 +711,7 @@ public class RecipeProcessor implements Runnable
         
         if(ingredient.getTypeId() == 0)
         {
-            return RecipeErrorReporter.error("Recipe does not accept AIR as ingredients !");
+            return ErrorReporter.error("Recipe does not accept AIR as ingredients !");
         }
         
         recipe.setIngredient(ingredient);
@@ -741,7 +741,7 @@ public class RecipeProcessor implements Runnable
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Invalid burn time float number! Smelt time left as default.");
+                        ErrorReporter.warning("Invalid burn time float number! Smelt time left as default.");
                         minTime = Vanilla.FURNACE_RECIPE_TIME;
                         maxTime = -1;
                     }
@@ -753,7 +753,7 @@ public class RecipeProcessor implements Runnable
                 
                 if(maxTime > -1.0 && minTime >= maxTime)
                 {
-                    return RecipeErrorReporter.error("Smelting recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
+                    return ErrorReporter.error("Smelting recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
                 }
             }
             
@@ -773,7 +773,7 @@ public class RecipeProcessor implements Runnable
                 
                 if(fuelItem.getTypeId() == 0)
                 {
-                    return RecipeErrorReporter.error("Fuel can not be air!");
+                    return ErrorReporter.error("Fuel can not be air!");
                 }
                 
                 recipe.setFuel(fuelItem);
@@ -786,7 +786,7 @@ public class RecipeProcessor implements Runnable
         
         if(isRemove) // ignore result errors if we have @remove
         {
-            RecipeErrorReporter.setIgnoreErrors(true);
+            ErrorReporter.setIgnoreErrors(true);
         }
         
         boolean hasResults = parseResults(recipe, results, false, true);
@@ -803,7 +803,7 @@ public class RecipeProcessor implements Runnable
         
         if(isRemove) // un-ignore result errors
         {
-            RecipeErrorReporter.setIgnoreErrors(false);
+            ErrorReporter.setIgnoreErrors(false);
         }
         
         // check if the recipe already exists
@@ -845,7 +845,7 @@ public class RecipeProcessor implements Runnable
             {
                 if(split.length < 2 || split[1] == null)
                 {
-                    RecipeErrorReporter.error("Burn time not set !", "It must be set after the ingredient like: ingredient % burntime");
+                    ErrorReporter.error("Burn time not set !", "It must be set after the ingredient like: ingredient % burntime");
                     continue;
                 }
                 
@@ -865,20 +865,20 @@ public class RecipeProcessor implements Runnable
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Invalid burn time float number!");
+                    ErrorReporter.error("Invalid burn time float number!");
                     continue;
                 }
                 
                 if(minTime <= 0)
                 {
-                    RecipeErrorReporter.error("Fuels can't burn for negative or 0 seconds!");
+                    ErrorReporter.error("Fuels can't burn for negative or 0 seconds!");
                     continue;
                 }
                 
                 if(maxTime > -1 && minTime >= maxTime)
                 {
                     maxTime = -1;
-                    RecipeErrorReporter.warning("Fuel has minimum time less or equal to maximum time!", "Use a single number if you want a fixed value");
+                    ErrorReporter.warning("Fuel has minimum time less or equal to maximum time!", "Use a single number if you want a fixed value");
                 }
                 
                 recipe.setMinTime(minTime);
@@ -895,7 +895,7 @@ public class RecipeProcessor implements Runnable
             
             if(ingredient.getTypeId() == 0)
             {
-                RecipeErrorReporter.error("Can not use AIR as ingredient!");
+                ErrorReporter.error("Can not use AIR as ingredient!");
                 continue;
             }
             
@@ -943,7 +943,7 @@ public class RecipeProcessor implements Runnable
             
             if(result.getTypeId() == 0)
             {
-                RecipeErrorReporter.error("Recipe has invalid item to remove!");
+                ErrorReporter.error("Recipe has invalid item to remove!");
                 continue;
             }
             
@@ -992,7 +992,7 @@ public class RecipeProcessor implements Runnable
             
             if(!allowAir && result.getTypeId() == 0)
             {
-                RecipeErrorReporter.error("Result can not be AIR in this recipe!");
+                ErrorReporter.error("Result can not be AIR in this recipe!");
                 return false;
             }
             
@@ -1013,12 +1013,12 @@ public class RecipeProcessor implements Runnable
         
         if(results.isEmpty())
         {
-            return RecipeErrorReporter.error("Found the '=' character but with no result!");
+            return ErrorReporter.error("Found the '=' character but with no result!");
         }
         
         if(totalPercentage > 100)
         {
-            return RecipeErrorReporter.error("Total result items' chance exceeds 100% !", "If you want some results to be split evenly automatically you can avoid the chance number.");
+            return ErrorReporter.error("Total result items' chance exceeds 100% !", "If you want some results to be split evenly automatically you can avoid the chance number.");
         }
         
         // Spread remaining chance to results that have undefined chance
@@ -1054,11 +1054,11 @@ public class RecipeProcessor implements Runnable
             
             if(foundAir)
             {
-                RecipeErrorReporter.warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + " !", "You can remove the chance for AIR to auto-calculate it");
+                ErrorReporter.warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + " !", "You can remove the chance for AIR to auto-calculate it");
             }
             else
             {
-                RecipeErrorReporter.warning("Results do not stack up to 100% and no fail chance defined, recipe now has " + (100.0f - totalPercentage) + "% chance to fail.", "You should extend or remove the chance for other results if you do not want fail chance instead!");
+                ErrorReporter.warning("Results do not stack up to 100% and no fail chance defined, recipe now has " + (100.0f - totalPercentage) + "% chance to fail.", "You should extend or remove the chance for other results if you do not want fail chance instead!");
                 
                 results.add(new ItemResult(Material.AIR, 0, 0, (100.0f - totalPercentage)));
             }
@@ -1066,7 +1066,7 @@ public class RecipeProcessor implements Runnable
         
         if(oneResult && results.size() > 1)
         {
-            RecipeErrorReporter.warning("Can't have more than 1 result! The rest were ignored.");
+            ErrorReporter.warning("Can't have more than 1 result! The rest were ignored.");
         }
         
         return true; // valid results
@@ -1074,7 +1074,7 @@ public class RecipeProcessor implements Runnable
     
     private boolean recipeExists(BaseRecipe recipe)
     {
-        RecipeErrorReporter.setLine(directiveLine); // set the line to point to the directive rather than the last read line!
+        ErrorReporter.setLine(directiveLine); // set the line to point to the directive rather than the last read line!
         RecipeInfo registered = getRecipeFromMap(recipe, RecipeManager.getRecipes().index);
         
         if(recipe.hasFlag(FlagType.OVERRIDE) || recipe.hasFlag(FlagType.REMOVE))
@@ -1084,13 +1084,13 @@ public class RecipeProcessor implements Runnable
                 recipe.getFlags().removeFlag(FlagType.REMOVE);
                 recipe.getFlags().removeFlag(FlagType.OVERRIDE);
                 
-                RecipeErrorReporter.warning("Recipe was not found, can't override/remove it! Added as new recipe.", "Use 'rmextract' command to see the exact ingredients needed");
+                ErrorReporter.warning("Recipe was not found, can't override/remove it! Added as new recipe.", "Use 'rmextract' command to see the exact ingredients needed");
                 
                 return true; // allow recipe to be added
             }
             else if(registered.getOwner() == RecipeOwner.RECIPEMANAGER && registered.getStatus() == null)
             {
-                RecipeErrorReporter.error("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
+                ErrorReporter.error("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
                 
                 return false; // can't re-add recipes
             }
@@ -1108,7 +1108,7 @@ public class RecipeProcessor implements Runnable
                     
 //                    Messages.debug(currentFile + " | " + registered.getAdder()); // TODO remove
                     
-                    RecipeErrorReporter.error("Recipe already created with this plugin, file: " + registered.getAdder());
+                    ErrorReporter.error("Recipe already created with this plugin, file: " + registered.getAdder());
                     
                     return false; // can't re-add recipes
                 }
@@ -1117,7 +1117,7 @@ public class RecipeProcessor implements Runnable
             {
                 recipe.getFlags().addFlag(new FlagOverride());
                 
-                RecipeErrorReporter.warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
+                ErrorReporter.warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
                 
                 return true; // allow to be added since we're overwriting it
             }
@@ -1127,7 +1127,7 @@ public class RecipeProcessor implements Runnable
         
         if(queued != null)
         {
-            RecipeErrorReporter.error("Recipe already created with this plugin, file: " + queued.getAdder());
+            ErrorReporter.error("Recipe already created with this plugin, file: " + queued.getAdder());
             
             return false; // can't re-add recipes
         }

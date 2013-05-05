@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagBiome extends Flag
@@ -151,7 +151,7 @@ public class FlagBiome extends Flag
             
             if(biome == null)
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has unknown biome: " + arg);
+                ErrorReporter.warning("Flag " + getType() + " has unknown biome: " + arg);
                 continue;
             }
             

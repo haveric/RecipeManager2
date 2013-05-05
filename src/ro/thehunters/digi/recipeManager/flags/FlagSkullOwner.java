@@ -2,7 +2,7 @@ package ro.thehunters.digi.recipeManager.flags;
 
 import org.bukkit.inventory.meta.SkullMeta;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagSkullOwner extends Flag
@@ -78,7 +78,7 @@ public class FlagSkullOwner extends Flag
         
         if(result == null || result.getItemMeta() instanceof SkullMeta == false || result.getDurability() != 3)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " needs a SKULL_ITEM with data value 3 to work!");
+            return ErrorReporter.error("Flag " + getType() + " needs a SKULL_ITEM with data value 3 to work!");
         }
         
         return true;

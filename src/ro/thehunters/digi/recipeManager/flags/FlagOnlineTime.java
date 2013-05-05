@@ -2,7 +2,7 @@ package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Players;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagOnlineTime extends Flag
 {
@@ -112,7 +112,7 @@ public class FlagOnlineTime extends Flag
         }
         catch(NumberFormatException e)
         {
-            return RecipeErrorReporter.error("Flag " + getType() + " has invalid min time number: " + value);
+            return ErrorReporter.error("Flag " + getType() + " has invalid min time number: " + value);
         }
         
         if(split.length > 1)
@@ -125,7 +125,7 @@ public class FlagOnlineTime extends Flag
             }
             catch(NumberFormatException e)
             {
-                return RecipeErrorReporter.error("Flag " + getType() + " has invalid max time number: " + value);
+                return ErrorReporter.error("Flag " + getType() + " has invalid max time number: " + value);
             }
         }
         

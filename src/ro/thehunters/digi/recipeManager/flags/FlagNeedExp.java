@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagNeedExp extends Flag
@@ -129,7 +129,7 @@ public class FlagNeedExp extends Flag
         
         if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+            ErrorReporter.error("The " + getType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
             return false;
         }
         
@@ -140,7 +140,7 @@ public class FlagNeedExp extends Flag
         }
         catch(NumberFormatException e)
         {
-            RecipeErrorReporter.error("The " + getType() + " flag has invalid min req exp number: " + value);
+            ErrorReporter.error("The " + getType() + " flag has invalid min req exp number: " + value);
             return false;
         }
         
@@ -150,7 +150,7 @@ public class FlagNeedExp extends Flag
             
             if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
             {
-                RecipeErrorReporter.error("The " + getType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+                ErrorReporter.error("The " + getType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
                 return false;
             }
             
@@ -160,14 +160,14 @@ public class FlagNeedExp extends Flag
             }
             catch(NumberFormatException e)
             {
-                RecipeErrorReporter.error("The " + getType() + " flag has invalid max req exp number: " + value);
+                ErrorReporter.error("The " + getType() + " flag has invalid max req exp number: " + value);
                 return false;
             }
         }
         
         if((getMinExp() <= 0 && getMaxExp() <= 0) || getMaxExp() < getMinExp())
         {
-            RecipeErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
         

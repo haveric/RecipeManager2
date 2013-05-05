@@ -8,7 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagPotionEffect extends Flag
@@ -141,7 +141,7 @@ public class FlagPotionEffect extends Flag
         
         if(type == null)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has invalid effect type: " + value);
+            ErrorReporter.error("Flag " + getType() + " has invalid effect type: " + value);
             return false;
         }
         
@@ -170,7 +170,7 @@ public class FlagPotionEffect extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has invalid chance value number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has invalid chance value number: " + value);
                         continue;
                     }
                     
@@ -178,7 +178,7 @@ public class FlagPotionEffect extends Flag
                     {
                         chance = Math.min(Math.max(chance, 0.01f), 100.0f);
                         
-                        RecipeErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
+                        ErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
                     }
                 }
                 else if(value.startsWith("amplifier"))
@@ -191,14 +191,14 @@ public class FlagPotionEffect extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has invalid amplifier value number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has invalid amplifier value number: " + value);
                     }
                 }
                 else if(value.startsWith("duration"))
                 {
                     if(type.isInstant())
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has effect type '" + type.toString() + "' which is instant, it can't have duration, ignored.");
+                        ErrorReporter.warning("Flag " + getType() + " has effect type '" + type.toString() + "' which is instant, it can't have duration, ignored.");
                         continue;
                     }
                     
@@ -211,7 +211,7 @@ public class FlagPotionEffect extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.warning("Flag " + getType() + " has invalid duration value number: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has invalid duration value number: " + value);
                     }
                 }
             }

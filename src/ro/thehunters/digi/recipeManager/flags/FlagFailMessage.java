@@ -1,6 +1,6 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
@@ -96,7 +96,7 @@ public class FlagFailMessage extends Flag
         
         if(recipe instanceof MultiResultRecipe == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " can only be used on multi-result recipes, which can fail.");
+            ErrorReporter.error("Flag " + getType() + " can only be used on multi-result recipes, which can fail.");
             return false;
         }
         

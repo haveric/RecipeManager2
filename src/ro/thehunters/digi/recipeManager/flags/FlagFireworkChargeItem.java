@@ -7,7 +7,7 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -96,7 +96,7 @@ public class FlagFireworkChargeItem extends Flag
         
         if(result == null || result.getItemMeta() instanceof FireworkEffectMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs a FIREWORK_CHARGE item!");
+            ErrorReporter.error("Flag " + getType() + " needs a FIREWORK_CHARGE item!");
             return false;
         }
         

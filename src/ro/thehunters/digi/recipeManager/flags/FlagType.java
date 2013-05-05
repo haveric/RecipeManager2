@@ -48,18 +48,18 @@ public enum FlagType
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
     SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"),
     TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"),
+    PROXIMITY(FlagProximity.class, Bit.NONE, "distance", "nearby"), // TODO
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
     BROADCAST(FlagBroadcast.class, Bit.NONE, "announce"),
     SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
     DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
     
     // Recipe only flags
-    RECIPEBOOK(FlagRecipeBook.class, Bit.RECIPE | Bit.NO_SKIP_PERMISSION, "bookrecipe"),
+    ADDTOBOOK(FlagAddToBook.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipebook"),
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"), // TODO finish
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
     RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "disable", "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
-    PROXIMITY(FlagProximity.class, Bit.RECIPE, "distance", "nearby"), // TODO
     
     // Result only flags
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -138,7 +138,7 @@ public class FlagBookItem extends Flag
         
         if(result == null || result.getItemMeta() instanceof BookMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK or BOOK_AND_QUILL item!");
+            ErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK or BOOK_AND_QUILL item!");
             return false;
         }
         
@@ -170,13 +170,13 @@ public class FlagBookItem extends Flag
         {
             if(result.getType() == Material.BOOK_AND_QUILL)
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " can not have title or author set on BOOK_AND_QUILL, only WRITTEN_BOOK.");
+                ErrorReporter.warning("Flag " + getType() + " can not have title or author set on BOOK_AND_QUILL, only WRITTEN_BOOK.");
                 return true;
             }
             
             if(value.length() > 64)
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has '" + (setTitle ? "title" : "author") + "' with over 64 characters, trimmed.");
+                ErrorReporter.warning("Flag " + getType() + " has '" + (setTitle ? "title" : "author") + "' with over 64 characters, trimmed.");
                 value = value.substring(0, 64);
             }
             
@@ -193,12 +193,12 @@ public class FlagBookItem extends Flag
         {
             if(pages.size() == 50)
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has over 50 pages added, they will be trimmed.");
+                ErrorReporter.warning("Flag " + getType() + " has over 50 pages added, they will be trimmed.");
             }
             
             if(value.length() > 256)
             {
-                RecipeErrorReporter.warning("Flag " + getType() + " has 'addpage' with over 256 characters! It will be trimmed.");
+                ErrorReporter.warning("Flag " + getType() + " has 'addpage' with over 256 characters! It will be trimmed.");
             }
             
             addPage(value);

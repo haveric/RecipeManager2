@@ -4,7 +4,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.Permissions;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
@@ -233,7 +233,7 @@ public class Flag implements Cloneable
         
         if(!getType().hasBit(Bit.NO_VALUE) && value == null)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs a value!");
+            ErrorReporter.error("Flag " + getType() + " needs a value!");
             return false;
         }
         
@@ -252,13 +252,13 @@ public class Flag implements Cloneable
         
         if(getType().hasBit(Bit.RESULT) && flaggable instanceof ItemResult == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " only works on results!");
+            ErrorReporter.error("Flag " + getType() + " only works on results!");
             return false;
         }
         
         if(getType().hasBit(Bit.RECIPE) && flaggable instanceof BaseRecipe == false && flaggable instanceof ItemResult)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " only works on recipes!");
+            ErrorReporter.error("Flag " + getType() + " only works on recipes!");
             return false;
         }
         

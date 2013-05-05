@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
@@ -145,7 +145,7 @@ public class FlagModMoney extends Flag
     {
         if(!RecipeManager.getEconomy().isEnabled())
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
+            ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
         
         String[] split = value.split("\\|");
@@ -176,7 +176,7 @@ public class FlagModMoney extends Flag
         
         if(value.length() > String.valueOf(Integer.MAX_VALUE).length())
         {
-            return RecipeErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
+            return ErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
         }
         
         float amount = 0;
@@ -187,12 +187,12 @@ public class FlagModMoney extends Flag
         }
         catch(NumberFormatException e)
         {
-            return RecipeErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            return ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
         }
         
         if(mod != '=' && amount == 0)
         {
-            return RecipeErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
+            return ErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
         }
         
         setAmount(mod, amount);

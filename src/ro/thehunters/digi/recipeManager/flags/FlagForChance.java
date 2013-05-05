@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.Validate;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
@@ -206,7 +206,7 @@ public class FlagForChance extends Flag
     
     /**
      * Attempts to add a flag to this flag list for the chance group.<br>
-     * Adds an error to the {@link RecipeErrorReporter} class if flag is not compatible with recipe/result.
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      * 
      * @param group
      *            the chance group, can be null for no group/individual
@@ -220,7 +220,7 @@ public class FlagForChance extends Flag
     
     /**
      * Attempts to add a flag to this flag list for the chance group.<br>
-     * Adds an error to the {@link RecipeErrorReporter} class if flag is not compatible with recipe/result.
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      * 
      * @param group
      *            the chance group, can be null for no group/individual
@@ -282,7 +282,7 @@ public class FlagForChance extends Flag
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has invalid chance number: " + arg);
+                    ErrorReporter.error("Flag " + getType() + " has invalid chance number: " + arg);
                     return false;
                 }
                 
@@ -290,14 +290,14 @@ public class FlagForChance extends Flag
                 {
                     chance = Math.min(Math.max(chance, 0.01f), 100.0f);
                     
-                    RecipeErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
+                    ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
                 }
                 
                 arg = value.substring(i + 1).trim(); // get the string after the first space
                 
                 if(!arg.startsWith("@") && !arg.startsWith("!@")) // we need a flag declaration at this point
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
+                    ErrorReporter.error("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
                     return false;
                 }
                 
@@ -331,7 +331,7 @@ public class FlagForChance extends Flag
                     
                     if(i == -1)
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " has neither a flag nor a chance argument: " + value);
+                        ErrorReporter.error("Flag " + getType() + " has neither a flag nor a chance argument: " + value);
                         return false;
                     }
                     
@@ -343,7 +343,7 @@ public class FlagForChance extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " has invalid chance number: " + chanceString);
+                        ErrorReporter.error("Flag " + getType() + " has invalid chance number: " + chanceString);
                         return false;
                     }
                     
@@ -351,7 +351,7 @@ public class FlagForChance extends Flag
                     {
                         chance = Math.min(Math.max(chance, 0.01f), 100.0f);
                         
-                        RecipeErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
+                        ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
                     }
                     
                     if(arg.length() > (i + 1))
@@ -370,7 +370,7 @@ public class FlagForChance extends Flag
                         }
                         else
                         {
-                            RecipeErrorReporter.warning("Flag " + getType() + " has unknown last argument, expected flag: " + arg);
+                            ErrorReporter.warning("Flag " + getType() + " has unknown last argument, expected flag: " + arg);
                         }
                     }
                 }
@@ -389,13 +389,13 @@ public class FlagForChance extends Flag
             
             if(type == null)
             {
-                RecipeErrorReporter.error("Flag " + getType() + " has unknown flag type: " + flagString);
+                ErrorReporter.error("Flag " + getType() + " has unknown flag type: " + flagString);
                 return false;
             }
             
             if(type.hasBit(Bit.NO_FOR))
             {
-                return RecipeErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
+                return ErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
             }
             
             if(flags != null)
@@ -413,7 +413,7 @@ public class FlagForChance extends Flag
                             
                             if(chance != null)
                             {
-                                RecipeErrorReporter.warning("Flag " + getType() + " has flag " + flagChance.getFlag().getType() + " with chance defined, chance will be ignored because flag will be added to/overwritten in the storage !", "Prefix the flag with '!' character to create a new fresh flag instead, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
+                                ErrorReporter.warning("Flag " + getType() + " has flag " + flagChance.getFlag().getType() + " with chance defined, chance will be ignored because flag will be added to/overwritten in the storage !", "Prefix the flag with '!' character to create a new fresh flag instead, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
                             }
                             
                             break;
@@ -442,7 +442,7 @@ public class FlagForChance extends Flag
                     
                     if(totalChance >= 100)
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " already has 100% chance for this group!");
+                        ErrorReporter.error("Flag " + getType() + " already has 100% chance for this group!");
                         return false;
                     }
                     
@@ -483,7 +483,7 @@ public class FlagForChance extends Flag
                 {
                     if(c.getFlag() == null)
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " already has a blank flag for this group!");
+                        ErrorReporter.error("Flag " + getType() + " already has a blank flag for this group!");
                         return false;
                     }
                 }
@@ -637,7 +637,7 @@ public class FlagForChance extends Flag
                 
                 if(totalChance < 100)
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has total chance less than 100% " + (e.getKey() == null ? "" : "for group '" + e.getKey() + "'") + ".");
+                    ErrorReporter.warning("Flag " + getType() + " has total chance less than 100% " + (e.getKey() == null ? "" : "for group '" + e.getKey() + "'") + ".");
                 }
                 
                 float random = RecipeManager.random.nextFloat() * totalChance;

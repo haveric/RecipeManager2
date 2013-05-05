@@ -8,7 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -105,7 +105,7 @@ public class FlagEnchantedBook extends Flag
         
         if(result == null || result.getItemMeta() instanceof EnchantmentStorageMeta == false)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " needs an enchantable book!");
+            ErrorReporter.error("Flag " + getType() + " needs an enchantable book!");
             return false;
         }
         
@@ -121,7 +121,7 @@ public class FlagEnchantedBook extends Flag
         
         if(enchant == null)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+            ErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
             return false;
         }
         
@@ -139,7 +139,7 @@ public class FlagEnchantedBook extends Flag
                 }
                 catch(NumberFormatException e)
                 {
-                    RecipeErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
+                    ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
                     return false;
                 }
             }

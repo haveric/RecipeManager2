@@ -4,7 +4,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Sound;
 
 import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 
 public class FlagSound extends Flag
 {
@@ -108,7 +108,7 @@ public class FlagSound extends Flag
     {
         if(volume < 0 || volume > 4)
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " has invalid 'volume' number range, must be between 0.0 and 1.0, trimmed.");
+            ErrorReporter.warning("Flag " + getType() + " has invalid 'volume' number range, must be between 0.0 and 1.0, trimmed.");
             
             this.volume = Math.min(Math.max(volume, 0.0f), 4.0f);
         }
@@ -134,7 +134,7 @@ public class FlagSound extends Flag
     {
         if(pitch < 0 || pitch > 4)
         {
-            RecipeErrorReporter.warning("Flag " + getType() + " has invalid 'pitch' number range, must be between 0.0 and 4.0, trimmed.");
+            ErrorReporter.warning("Flag " + getType() + " has invalid 'pitch' number range, must be between 0.0 and 4.0, trimmed.");
             
             this.pitch = Math.min(Math.max(pitch, 0.0f), 4.0f);
         }
@@ -167,7 +167,7 @@ public class FlagSound extends Flag
         }
         catch(IllegalArgumentException e)
         {
-            RecipeErrorReporter.error("Flag " + getType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
+            ErrorReporter.error("Flag " + getType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
             return false;
         }
         
@@ -187,7 +187,7 @@ public class FlagSound extends Flag
                     
                     if(value.isEmpty())
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " has 'volume' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.error("Flag " + getType() + " has 'volume' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
                     
@@ -197,7 +197,7 @@ public class FlagSound extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.error("Flag " + getType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
                 }
@@ -207,7 +207,7 @@ public class FlagSound extends Flag
                     
                     if(value.isEmpty())
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " has 'pitch' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.error("Flag " + getType() + " has 'pitch' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
                     
@@ -217,13 +217,13 @@ public class FlagSound extends Flag
                     }
                     catch(NumberFormatException e)
                     {
-                        RecipeErrorReporter.error("Flag " + getType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.error("Flag " + getType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
                 }
                 else
                 {
-                    RecipeErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                    ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
                 }
             }
         }

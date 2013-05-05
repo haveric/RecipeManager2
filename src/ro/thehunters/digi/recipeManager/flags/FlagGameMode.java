@@ -7,7 +7,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.RecipeErrorReporter;
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagGameMode extends Flag
@@ -146,7 +146,7 @@ public class FlagGameMode extends Flag
                     }
                     catch(IllegalArgumentException e)
                     {
-                        return RecipeErrorReporter.error("Flag " + getType() + " has unknown game mode: " + value);
+                        return ErrorReporter.error("Flag " + getType() + " has unknown game mode: " + value);
                     }
                 }
             }

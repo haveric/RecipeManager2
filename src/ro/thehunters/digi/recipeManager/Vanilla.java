@@ -22,6 +22,8 @@ import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * Control for bukkit recipes to avoid confusion with RecipeManager's recipes
  */
@@ -427,5 +429,13 @@ public class Vanilla
             // TODO maybe check if recipe is already in server ?
             Bukkit.addRecipe(entry.getKey().getBukkitRecipe());
         }
+    }
+    
+    /**
+     * @return a copy of the initial recipes map.
+     */
+    public static Map<BaseRecipe, RecipeInfo> getInitialRecipes()
+    {
+        return ImmutableMap.copyOf(initialRecipes);
     }
 }
