@@ -425,7 +425,7 @@ public class CraftRecipe extends WorkbenchRecipe
             }
             else
             {
-                String print = Tools.Item.print(ingredients[i], ChatColor.RED, ChatColor.BLACK, true);
+                String print = Tools.Item.print(ingredients[i], ChatColor.RED, ChatColor.BLACK, false);
                 Integer get = charItems.get(print);
                 
                 if(get == null)
@@ -435,7 +435,7 @@ public class CraftRecipe extends WorkbenchRecipe
                     num++;
                 }
                 
-                s.append('[').append(ChatColor.RED).append(get).append(ChatColor.GRAY).append(']');
+                s.append('[').append(ChatColor.DARK_PURPLE).append(get).append(ChatColor.GRAY).append(']');
             }
         }
         
@@ -444,7 +444,7 @@ public class CraftRecipe extends WorkbenchRecipe
         
         for(Entry<String, Integer> entry : charItems.entrySet())
         {
-            s.append('\n').append(ChatColor.RED).append(entry.getValue()).append(ChatColor.GRAY).append(": ").append(entry.getKey());
+            s.append('\n').append(ChatColor.DARK_PURPLE).append(entry.getValue()).append(ChatColor.GRAY).append(": ").append(entry.getKey());
         }
         
         return s.toString();

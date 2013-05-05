@@ -259,9 +259,11 @@ public class SmeltRecipe extends SingleResultRecipe
         }
         */
         
+        s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
-        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
+        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, false));
         
+        s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_COOKTIME.get()).append(ChatColor.BLACK);
         s.append('\n');
         
@@ -290,6 +292,7 @@ public class SmeltRecipe extends SingleResultRecipe
         
         if(hasFuel())
         {
+            s.append('\n');
             s.append('\n').append(Messages.RECIPEBOOK_HEADER_REQUIREFUEL.get()).append(ChatColor.BLACK);
             s.append('\n').append(Tools.Item.print(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
         }

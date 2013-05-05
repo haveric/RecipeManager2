@@ -159,7 +159,7 @@ public class FuelRecipe extends BaseRecipe
     @Override
     public String printBookIndex()
     {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getIngredient());
+        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getIngredient()) + " Fuel";
     }
     
     @Override
@@ -174,9 +174,11 @@ public class FuelRecipe extends BaseRecipe
             s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
         }
         
+        s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
-        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, true));
+        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, false));
         
+        s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_BURNTIME.get()).append(ChatColor.BLACK);
         s.append('\n');
         

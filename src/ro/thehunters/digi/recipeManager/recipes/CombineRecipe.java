@@ -264,7 +264,7 @@ public class CombineRecipe extends WorkbenchRecipe
         {
             ItemStack item = e.getKey();
             item.setAmount(e.getValue().intValue());
-            s.append('\n').append(Tools.Item.print(item, ChatColor.RED, ChatColor.BLACK, true));
+            s.append('\n').append(Tools.Item.print(item, ChatColor.RED, ChatColor.BLACK, false));
         }
         
         return s.toString();

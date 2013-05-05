@@ -9,6 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 ** If you have 1ms or more at average please PM me your avg,min,max and number of furnaces that were running and number of furnaces that are stored (see at 'saving X furnaces' on shutdown or reload)
 * Finished @summon flag.
 * Redesigned recipe books system, see 'recipe books.html'.
+* Redesigned @recipebook flag, review its documentation in 'recipe flags.html'.
 * Fixed @needlevel and @needmoney not checking for level/money properly.
 * Fixed @needexp, @modexp, @needlevel and @modlevel not working in certain conditions.
 * Renamed nodes from messages.yml, flag.reqexp/level/money to flag.needexp/level/money to be consistent with flag's main name.

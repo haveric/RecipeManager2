@@ -1,13 +1,9 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import java.util.List;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
 
-import ro.thehunters.digi.recipeManager.RecipeManager;
-import ro.thehunters.digi.recipeManager.data.Book;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -133,6 +129,8 @@ public class FlagGetRecipeBook extends Flag
         return true;
     }
     
+    // TODO
+    /*
     @Override
     protected void onRegistered()
     {
@@ -179,4 +177,5 @@ public class FlagGetRecipeBook extends Flag
         
         a.result().setItemMeta(book.getBookItem(volume).getItemMeta());
     }
+    */
 }

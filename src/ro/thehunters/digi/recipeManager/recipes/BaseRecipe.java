@@ -3,6 +3,7 @@ package ro.thehunters.digi.recipeManager.recipes;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Recipe;
 
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Recipes;
 import ro.thehunters.digi.recipeManager.flags.Args;
@@ -128,6 +129,20 @@ public class BaseRecipe implements Flaggable
      */
     public void setName(String name)
     {
+        name = name.trim();
+        
+        while(name.charAt(0) == '+')
+        {
+            ErrorReporter.error("Recipe names can not start with '+' character, removed!");
+            name = name.substring(1);
+        }
+        
+        if(name.isEmpty())
+        {
+            ErrorReporter.error("Recipe names can not be empty!");
+            return;
+        }
+        
         this.name = name;
         customName = true;
     }

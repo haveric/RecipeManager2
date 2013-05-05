@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
-import ro.thehunters.digi.recipeManager.data.Book;
+import ro.thehunters.digi.recipeManager.data.RecipeBook;
 
 public class GetBookCommand implements CommandExecutor
 {
@@ -58,7 +58,7 @@ public class GetBookCommand implements CommandExecutor
             bookName = bookName.substring(0, index).trim();
         }
         
-        List<Book> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(bookName);
+        List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(bookName);
         
         if(books.isEmpty())
         {
@@ -69,7 +69,7 @@ public class GetBookCommand implements CommandExecutor
         {
             Messages.CMD_GETBOOK_MANYMATCHES.print(sender, null, "{num}", books.size(), "{arg}", bookName);
             
-            for(Book b : books)
+            for(RecipeBook b : books)
             {
                 Messages.send(sender, "<red> - <reset>" + b.getTitle());
             }

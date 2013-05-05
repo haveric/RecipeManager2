@@ -149,6 +149,7 @@ public enum Messages
     
     RECIPEBOOK_VOLUME("Volume {volume}"),
     RECIPEBOOK_VOLUMEOFVOLUMES("Volume {volume} of {volumes}"),
+    RECIPEBOOK_HEADER_CONTENTS("<black><bold><underline>CONTENTS INDEX"),
     RECIPEBOOK_HEADER_SHAPED("<black><bold>SHAPED RECIPE"),
     RECIPEBOOK_HEADER_SHAPELESS("<black><bold>SHAPELESS RECIPE"),
     RECIPEBOOK_HEADER_SMELT("<black><bold>FURNACE RECIPE"),
@@ -175,8 +176,8 @@ public enum Messages
     EVENTS_UPDATEBOOK_EXTINCT("<red>Your '<yellow>{title}<red>' recipe book does not exist anymore, it won't be updated further."),
     EVENTS_UPDATEBOOK_NOVOLUME("<red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> anymore, it won't be updated further."),
     EVENTS_UPDATEBOOK_DONE("<gray>Your held recipe book has been updated!"),
-    EVENTS_UPDATEBOOK_CHANGED_TITLE("<gray>Its title changed from '<red>{oldtitle}<gray>' to '<yellow>{newtitle}<gray>'."),
-    EVENTS_UPDATEBOOK_CHANGED_PAGES("<gray>It now has <green>{newpages}<gray> pages instead of <red>{oldpages}<gray> pages."),
+    EVENTS_UPDATEBOOK_CHANGED_TITLE("<gray>Title changed from '<reset>{oldtitle}<gray>' to '<reset>{newtitle}<gray>'."),
+    EVENTS_UPDATEBOOK_CHANGED_PAGES("<gray>Pages change from <red>{oldpages}<gray> pages to <green>{newpages}<gray> pages."),
     
     CMD_BOOKS_NOBOOKS("<red>No generated books."),
     CMD_BOOKS_HEADER("<yellow>Generated recipe books ({number}):"),
