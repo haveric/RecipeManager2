@@ -95,6 +95,8 @@ public class Files
         createFile(FILE_INFO_BOOKS, overwrite);
         createFile(FILE_CHANGELOG, overwrite);
         
+        // TODO warn of unused 'aliases.yml'
+        
         if(overwrite)
         {
             Messages.sendAndLog(sender, "<gray>New version installed, information files and changelog have been overwritten.");

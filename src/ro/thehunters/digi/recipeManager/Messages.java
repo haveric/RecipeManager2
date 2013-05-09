@@ -189,11 +189,12 @@ public enum Messages
     CMD_EXTRACT_NORECIPES("<yellow>No recipes to extract."),
     CMD_EXTRACT_DONE("<green>Done! Recipes saved to '<white>{file}<green>'."),
     
-    CMD_RMFINDITEM_USAGE("<yellow>Usage: <white>/{command} <gray>"),
-    CMD_RMFINDITEM_INVALIDHELDITEM(""),
-    CMD_RMFINDITEM_HEADER(""),
-    CMD_RMFINDITEM_LIST(""),
-    CMD_RMFINDITEM_NOTFOUND(""),
+    CMD_RMFINDITEM_USAGE("<yellow>Usage: <gray>/{command} <white><item partial name>"),
+    CMD_RMFINDITEM_INVALIDHELDITEM("<yellow>You need to hold an item to use the '<white>this<yellow>' argument."),
+    CMD_RMFINDITEM_HEADER("Found <green>{matches}<white> materials matching '<green>{argument}<white>':"),
+    CMD_RMFINDITEM_LIST("<gray>#<red>{id} <green>{material}<gray>, max durability <yellow>{maxdata}<gray>, max stack <yellow>{maxstack}"),
+    CMD_RMFINDITEM_FOUNDMORE("<yellow>... and <green>{matches}<yellow> more, be more specific in your search."),
+    CMD_RMFINDITEM_NOTFOUND("<yellow>No material found by '<white>{argument}<yellow>'."),
     
     ;
     
@@ -592,6 +593,6 @@ public enum Messages
         // TODO debug switch
         StackTraceElement[] e = new Exception().getStackTrace();
         int i = 1;
-        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[i].getFileName() + ":" + e[i].getLineNumber() + ChatColor.RESET + " " + ChatColor.RED + e[i].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
+        Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.GREEN + "[DEBUG]" + ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[i].getFileName() + ":" + e[i].getLineNumber() + ChatColor.RESET + " " + ChatColor.RED + e[i].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));
     }
 }

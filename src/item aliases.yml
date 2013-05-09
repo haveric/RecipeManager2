@@ -283,7 +283,7 @@ hopper_minecart: minecart with hopper
 redstone_comparator: comparator
 daylight_detector: daylight sensor
 
-# add your own if you want.
+# add your own aliases if you want.
 
 
 

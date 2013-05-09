@@ -52,8 +52,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dispenser;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import ro.thehunters.digi.recipeManager.apievents.RMCraftEvent;
-import ro.thehunters.digi.recipeManager.apievents.RMCraftEventPost;
+import ro.thehunters.digi.recipeManager.api.events.RMCraftEvent;
+import ro.thehunters.digi.recipeManager.api.events.RMCraftEventPost;
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
@@ -157,7 +157,7 @@ public class Events implements Listener
             
             if(result != null)
             {
-                a = Args.create().player(player).inventory(inv).location(location).recipe(recipe).result(result).build();
+                a.setResult(result);
                 
                 if(!recipe.sendPrepare(a))
                 {
@@ -484,7 +484,6 @@ public class Events implements Listener
                     if(!recipe.hasNoShiftBit())
                     {
                         Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
-//                        Messages.send(player, "<red>Shift+click is not allowed !"); // TODO to Messages
                         event.setCancelled(true);
                         return 0;
                     }

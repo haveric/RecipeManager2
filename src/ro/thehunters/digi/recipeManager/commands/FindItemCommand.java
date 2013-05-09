@@ -1,6 +1,7 @@
 package ro.thehunters.digi.recipeManager.commands;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import ro.thehunters.digi.recipeManager.Messages;
+import ro.thehunters.digi.recipeManager.Tools;
 
 public class FindItemCommand implements CommandExecutor
 {
@@ -22,9 +24,8 @@ public class FindItemCommand implements CommandExecutor
             return true;
         }
         
-        ArrayList<Material> found = new ArrayList<Material>();
+        List<Material> found = new ArrayList<Material>();
         String find = args[0].trim();
-        Material match = null;
         
         if(find.equalsIgnoreCase("this"))
         {
@@ -42,37 +43,63 @@ public class FindItemCommand implements CommandExecutor
                 return true;
             }
             
-            match = item.getType();
+            found.add(item.getType());
         }
         else
         {
-            match = Material.matchMaterial(find);
-        }
-        
-        if(match == null)
-        {
-            find = find.toUpperCase();
+            int id = 0;
             
-            for(Material material : Material.values())
+            try
             {
-                if(material.name().contains(find))
-                    found.add(material);
+                id = Integer.valueOf(find);
+            }
+            catch(NumberFormatException e)
+            {
+            }
+            
+            if(id > 0)
+            {
+                Material mat = Material.getMaterial(id);
+                
+                if(mat != null)
+                {
+                    found.add(mat);
+                }
+                else
+                {
+                    Messages.CMD_RMFINDITEM_NOTFOUND.print(sender, null, "{argument}", id);
+                }
             }
         }
-        else
+        
+        if(found.isEmpty())
         {
-            found.add(match);
+            find = Tools.parseAliasName(find);
+            
+            for(Material mat : Material.values())
+            {
+                String matName = Tools.parseAliasName(mat.name());
+                
+                if(matName.contains(find))
+                {
+                    found.add(mat);
+                }
+            }
         }
         
-        int foundSize = found.size();
-        
-        if(foundSize > 0)
+        if(!found.isEmpty())
         {
-            Messages.CMD_RMFINDITEM_HEADER.print(sender, null, "{matches}", foundSize, "{argument}", find);
+            Messages.CMD_RMFINDITEM_HEADER.print(sender, null, "{matches}", found.size(), "{argument}", find);
             
-            for(Material material : found)
+            for(int i = 0; i < Math.min(found.size(), 10); i++)
             {
-                Messages.CMD_RMFINDITEM_LIST.print(sender, null, "{id}", material.getId(), "{material}", material.name().toLowerCase(), "{maxdata}", material.getMaxDurability(), "{maxstack}", material.getMaxStackSize());
+                Material m = found.get(i);
+                Messages.CMD_RMFINDITEM_LIST.print(sender, null, "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
+            }
+            
+            if(found.size() > 10)
+            {
+                Messages.CMD_RMFINDITEM_FOUNDMORE.print(sender, null, "{matches}", (found.size() - 10));
             }
         }
         else
