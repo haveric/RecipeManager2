@@ -15,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 import ro.thehunters.digi.recipeManager.Vanilla;
@@ -52,14 +52,14 @@ public class FlagIngredientCondition extends Flag
             "Conditions must be separated by | and can be specified in any order.",
             "Condition list:",
             "",
-            "  data <[!][&]min[-max]>, [...]",
+            "  data <[!][&]num or min-max>, [...]",
             "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
             "    One number is required, you can add another number separated by - character to make a number range.",
             "    Additionally instead of the number you can specify 'item:data' to use the named data value.",
             "    Prefixing with '&' would make a bitwise operation on the data value.",
             "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
             "",
-            "  enchant <name> [[!]min[-max]], [...]",
+            "  enchant <name> [[!]num or min-max], [...]",
             "    Condition for applied enchantments (not stored in books).",
             "    This argument can be used more than once to add more enchantments as conditions.",
             "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
@@ -79,13 +79,15 @@ public class FlagIngredientCondition extends Flag
             "  failmsg <text>                   = overwrite message sent to crafter when failing to provide required ingredient.",
             "",
             "NOTE: if an ingredient exists more than once in the recipe then the conditions will apply to all of them.",
+            "NOTE: this flag can not be used in recipe header, needs to be defined on individual results or recipes.",
         };
         
         E = new String[]
         {
-            "{flag} iron_sword | data 0-25 // only accepts iron swords that have 0 to 25 damage.",
-            "{flag} dirt | amount 64 // needs a full stack of dirt to work.",
+            "{flag} wood | data 3 // pointless use of this flag, just use wood:3 as ingredient.",
             "{flag} dirt | data 1-3, 39, 100 // this adds a data condition to the previous one.",
+            "{flag} dirt | amount 64 // needs a full stack of dirt to work.",
+            "{flag} iron_sword | data 0-25 // only accepts iron swords that have 0 to 25 damage.",
             "{flag} wool | data !wool:red // no red wool",
             "{flag} potion | data &16384, !&64 // checks if potion is splash and NOT extended (see http://www.minecraftwiki.net/wiki/Data_value#Potions)",
             "{flag} diamond_helmet | enchant fire_resistance 1-3 | enchant thorns | data 0, 5, 50-100 // makes ingredient require 2 enchantments and some specific data values.",
@@ -897,16 +899,21 @@ public class FlagIngredientCondition extends Flag
             return ErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions !", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
         
+        // TODO remove ?
+        /*
+        BaseRecipe recipe = getRecipeDeep();
+        
+        if(recipe == null)
+        {
+            ErrorReporter.error("Flag " + getType() + " can't be used in recipe header because it needs to find the specified ingredient!");
+            this.remove();
+        }
+        */
+        
         ItemStack item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(item == null)
         {
-            return false;
-        }
-        
-        if(Tools.findItemInIngredients(getRecipeDeep(), item.getType(), item.getDurability()) == 0)
-        {
-            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(item));
             return false;
         }
         
@@ -1182,6 +1189,19 @@ public class FlagIngredientCondition extends Flag
         }
         
         return true;
+    }
+    
+    @Override
+    protected void onRegistered()
+    {
+        // TODO ?
+        /*
+        if(Tools.findItemInIngredients(recipe, item.getType(), item.getDurability()) == 0)
+        {
+            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(item));
+            this.remove();
+        }
+        */
     }
     
     public void setIngredientConditions(ItemStack item, Conditions cond)

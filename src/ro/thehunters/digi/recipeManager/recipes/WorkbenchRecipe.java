@@ -230,11 +230,11 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 {
                     Conditions cond = flag.getIngredientConditions(item);
                     
-                    if(cond != null && cond.getAmount() > 0)
+                    if(cond != null && cond.getAmount() > 1)
                     {
-                        Messages.debug("flag removed amount " + cond.getAmount() + " from " + Tools.Item.print(item));
+//                        Messages.debug("flag removed amount " + cond.getAmount() + " from " + Tools.Item.print(item)); // TODO remove
                         
-                        newAmt -= cond.getAmount();
+                        newAmt -= (cond.getAmount() - 1);
                     }
                 }
                 
@@ -242,7 +242,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 {
                     newAmt -= 1;
                     
-                    Messages.debug("extra removed amount 1 from " + Tools.Item.print(item));
+//                    Messages.debug("extra removed amount 1 from " + Tools.Item.print(item)); // TODO remove
                 }
                 
                 if(amt != newAmt)

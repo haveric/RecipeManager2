@@ -517,7 +517,7 @@ public class Events implements Listener
                 }
             }
             
-            recipe.subtractIngredients(inv, false); // subtract from ingredients manually
+            recipe.subtractIngredients(inv, true); // subtract from ingredients manually
             
             // update displayed result
             // TODO need accurate reading if there is a recipe!
