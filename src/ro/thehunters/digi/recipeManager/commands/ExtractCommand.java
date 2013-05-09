@@ -166,12 +166,9 @@ public class ExtractCommand implements CommandExecutor
         {
             try
             {
-                if(!file.createNewFile())
-                {
-                    Messages.log("<red>Couldn't create file: " + file.getPath());
-                }
+                file.getParentFile().mkdirs();
                 
-                BufferedWriter stream = new BufferedWriter(new FileWriter(file));
+                BufferedWriter stream = new BufferedWriter(new FileWriter(file, false));
                 
                 stream.write("// You can uncomment one of the following lines to apply a flag to the entire file:" + Files.NL);
                 stream.write("//@remove   // remove these recipes from the server." + Files.NL);
@@ -200,13 +197,13 @@ public class ExtractCommand implements CommandExecutor
                 }
                 
                 stream.close();
+                
+                Messages.CMD_EXTRACT_DONE.print(sender, null, "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
             }
             catch(Throwable e)
             {
-                e.printStackTrace();
+                Messages.error(sender, e, "Error writing '" + file.getName() + "'");
             }
-            
-            Messages.CMD_EXTRACT_DONE.print(sender, null, "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
         }
         
         return true;

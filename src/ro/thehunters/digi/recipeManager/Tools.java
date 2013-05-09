@@ -1,6 +1,7 @@
 package ro.thehunters.digi.recipeManager;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -1444,7 +1445,9 @@ public class Tools
     {
         try
         {
-            BufferedWriter stream = new BufferedWriter(new FileWriter(filePath, false));
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            BufferedWriter stream = new BufferedWriter(new FileWriter(file, false));
             stream.write(text);
             stream.close();
             return true;
