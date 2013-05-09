@@ -14,10 +14,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.apievents.RecipeManagerEnabledEvent;
 import ro.thehunters.digi.recipeManager.commands.BooksCommand;
+import ro.thehunters.digi.recipeManager.commands.CheckCommand;
 import ro.thehunters.digi.recipeManager.commands.ExtractCommand;
+import ro.thehunters.digi.recipeManager.commands.FindItemCommand;
 import ro.thehunters.digi.recipeManager.commands.GetBookCommand;
 import ro.thehunters.digi.recipeManager.commands.HelpCommand;
 import ro.thehunters.digi.recipeManager.commands.RecipeCommand;
+import ro.thehunters.digi.recipeManager.commands.ReloadBooksCommand;
 import ro.thehunters.digi.recipeManager.commands.ReloadCommand;
 import ro.thehunters.digi.recipeManager.commands.UpdateCommand;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
@@ -99,10 +102,11 @@ public class RecipeManager extends JavaPlugin
         
         // Register commands
         getCommand("rm").setExecutor(new HelpCommand());
-        getCommand("rmrecipes").setExecutor(new RecipeCommand());
-//        getCommand("rmfinditem").setExecutor(new FindItemCommand()); // TODO
-//        getCommand("rmcheck").setExecutor(new CheckCommand()); // TODO
+        getCommand("rmrecipes").setExecutor(new RecipeCommand()); // TODO
+        getCommand("rmfinditem").setExecutor(new FindItemCommand());
+        getCommand("rmcheck").setExecutor(new CheckCommand()); // TODO
         getCommand("rmreload").setExecutor(new ReloadCommand());
+        getCommand("rmreloadbooks").setExecutor(new ReloadBooksCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());
         getCommand("rmgetbook").setExecutor(new GetBookCommand());
         getCommand("rmbooks").setExecutor(new BooksCommand());

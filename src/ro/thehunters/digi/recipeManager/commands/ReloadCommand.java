@@ -12,8 +12,6 @@ public class ReloadCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        boolean books = false;
-        boolean check = false;
         boolean force = false;
         
         if(args.length > 0)
@@ -26,14 +24,6 @@ public class ReloadCommand implements CommandExecutor
                 {
                     force = true;
                 }
-                else if(arg.equals("check"))
-                {
-                    check = true;
-                }
-                else if(arg.equals("books"))
-                {
-                    books = true;
-                }
                 else
                 {
                     Messages.send(sender, "<red>Unknown argument: " + arg);
@@ -41,19 +31,7 @@ public class ReloadCommand implements CommandExecutor
             }
         }
         
-        if(books)
-        {
-            if(check || force)
-            {
-                Messages.send(sender, "<yellow>NOTE<reset> Using 'check' or 'force' arguments with 'books' does nothing.");
-            }
-            
-            RecipeManager.getRecipeBooks().reload(sender);
-        }
-        else
-        {
-            RecipeManager.getPlugin().reload(sender, check, force);
-        }
+        RecipeManager.getPlugin().reload(sender, false, force);
         
         return true;
     }

@@ -15,7 +15,7 @@ commands:
     permission: recipemanager.command.rm
   rmrecipes:
     aliases: [recipe, recipes]
-    description: find custom recipes that use the specified item
+    description: find recipes that use the specified item
     usage: /<command> <item> [i]
     permission: recipemanager.command.rmrecipes
   rmfinditem:
@@ -30,9 +30,14 @@ commands:
     permission: recipemanager.command.rmecheck
   rmreload:
     aliases: [reloadrecipes]
-    description: reload recipes/settings/etc or recipe books or check recipes.
-    usage: /<command> [check/force/books]
+    description: reload recipes/settings/etc.
+    usage: /<command> [force]
     permission: recipemanager.command.rmreload
+  rmreloadbooks:
+    aliases: [reloadbooks]
+    description: reload only recipe books.
+    usage: /<command>
+    permission: recipemanager.command.rmreloadbooks
   rmextract:
     aliases: [rmimport, importrecipes, extractrecipes]
     description: makes all recipes from other plugins or mods into a text file to allow overriding and editing
@@ -70,6 +75,7 @@ permissions:
     children:
       recipemanager.command.rmecheck: true
       recipemanager.command.rmreload: true
+      recipemanager.command.rmreloadbooks: true
       recipemanager.command.rmextract: true
       recipemanager.command.rmgetbook: true
       recipemanager.command.rmbooks: true
@@ -93,6 +99,9 @@ permissions:
     description:
     default: op
   recipemanager.command.rmreload:
+    description:
+    default: op
+  recipemanager.command.rmreloadbooks:
     description:
     default: op
   recipemanager.command.rmextract:

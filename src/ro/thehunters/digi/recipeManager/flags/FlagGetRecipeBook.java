@@ -1,10 +1,13 @@
 package ro.thehunters.digi.recipeManager.flags;
 
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
-import org.bukkit.inventory.meta.BookMeta;
 
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.data.RecipeBook;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
 public class FlagGetRecipeBook extends Flag
@@ -22,29 +25,28 @@ public class FlagGetRecipeBook extends Flag
         
         A = new String[]
         {
-            "{flag} <book> [volume <num>]",
+            "{flag} <book id> [volume <num>]",
         };
         
         D = new String[]
         {
             "Overwrites result with the specified recipe book.",
             "",
-            "For the '<book>' argument you need to specify the book ID or if ID is not set for that book you can specify the title.",
-            "You can write partial IDs or titles and the book will still be found.",
+            "For the '<book id>' argument you need to specify the book ID, case insensitive and partial matching supported.",
             "",
             "Optionally you can set which volume to give, will give first by default, using a bigger number thant the number of volumes will pick the last volume.",
         };
         
         E = new String[]
         {
-            "{flag} recipestu // matches a 'Recipe Stuff' book for example.",
-            "{flag} vanilla rec volume 2 // matches a 'Vanilla Recipes Volume 2' book for example.",
+            "{flag} recipestu // matches a 'Recipe Stuff.yml' book for example.",
+            "{flag} vanilla rec volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.",
         };
     }
     
     // Flag code
     
-    private String bookName = null;
+    private String bookID;
     private int volume = 1;
     
     public FlagGetRecipeBook()
@@ -53,7 +55,8 @@ public class FlagGetRecipeBook extends Flag
     
     public FlagGetRecipeBook(FlagGetRecipeBook flag)
     {
-        bookName = flag.bookName;
+        bookID = flag.bookID;
+        volume = flag.volume;
     }
     
     @Override
@@ -68,16 +71,15 @@ public class FlagGetRecipeBook extends Flag
         return TYPE;
     }
     
-    public String getBookName()
+    public String getBookID()
     {
-        return bookName;
+        return bookID;
     }
     
-    public void setBookName(String name)
+    public void setBookID(String id)
     {
-        Validate.notNull(name, "The 'name' argument must not be null!");
-        
-        bookName = name;
+        Validate.notNull(id, "The 'id' argument must not be null!");
+        bookID = id;
     }
     
     public int getVolume()
@@ -95,7 +97,7 @@ public class FlagGetRecipeBook extends Flag
     {
         ItemResult result = getResult();
         
-        if(result == null || result.getType() != Material.WRITTEN_BOOK || result.getItemMeta() instanceof BookMeta == false)
+        if(result == null || result.getType() != Material.WRITTEN_BOOK)
         {
             return ErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK to work!");
         }
@@ -107,7 +109,7 @@ public class FlagGetRecipeBook extends Flag
     protected boolean onParse(String value)
     {
         value = value.toLowerCase();
-        String bookName = value;
+        String id = value;
         int index = value.lastIndexOf("volume");
         
         if(index > 0)
@@ -117,46 +119,44 @@ public class FlagGetRecipeBook extends Flag
             try
             {
                 setVolume(Integer.valueOf(value));
-                bookName = bookName.substring(0, index).trim();
+                id = id.substring(0, index).trim();
             }
             catch(NumberFormatException e)
             {
             }
         }
         
-        setBookName(bookName);
+        setBookID(id);
         
         return true;
     }
     
-    // TODO
-    /*
     @Override
     protected void onRegistered()
     {
-        List<Book> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookName());
+        List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookID());
         
         if(books.isEmpty())
         {
-            ErrorReporter.warning("Flag " + getType() + " could not find book title containing '" + bookName + "', flag ignored.");
+            ErrorReporter.warning("Flag " + getType() + " could not find book ID containing '" + bookID + "', flag ignored.");
             remove();
             return;
         }
         
-        Book book = books.get(0);
+        RecipeBook book = books.get(0);
         
         if(books.size() > 1)
         {
-            ErrorReporter.warning("Flag " + getType() + " found " + books.size() + " books matching '" + bookName + "', using first: " + book.getTitle());
+            ErrorReporter.warning("Flag " + getType() + " found " + books.size() + " books matching ID '" + bookID + "', using first: " + book.getTitle());
         }
     }
     
     @Override
     protected void onPrepare(Args a)
     {
-        if(getBookName() == null)
+        if(getBookID() == null)
         {
-            a.addCustomReason("Book name not set!");
+            a.addCustomReason("Book ID not set!");
             return;
         }
         
@@ -166,16 +166,15 @@ public class FlagGetRecipeBook extends Flag
             return;
         }
         
-        List<Book> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookName());
+        List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookID());
         
         if(books.isEmpty())
         {
             return;
         }
         
-        Book book = books.get(0);
+        RecipeBook book = books.get(0);
         
         a.result().setItemMeta(book.getBookItem(volume).getItemMeta());
     }
-    */
 }
