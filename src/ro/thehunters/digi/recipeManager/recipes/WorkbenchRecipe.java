@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.flags.Args;
-import ro.thehunters.digi.recipeManager.flags.FlagDebug;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition.Conditions;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
@@ -55,7 +54,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
             return Tools.createItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
             */
             
-            FlagDebug.grabReasons(a.playerName(), this, a.reasons());
+//            FlagDebug.grabReasons(a.playerName(), this, a.reasons()); TODO
             
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
             
@@ -134,7 +133,7 @@ public class WorkbenchRecipe extends MultiResultRecipe
                     
                     if(!r.hasFlag(FlagType.SECRET))
                     {
-                        FlagDebug.grabReasons(a.playerName(), r, a.reasons());
+//                        FlagDebug.grabReasons(a.playerName(), r, a.reasons()); TODO
                         
                         a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                     }
@@ -232,8 +231,6 @@ public class WorkbenchRecipe extends MultiResultRecipe
                     
                     if(cond != null && cond.getAmount() > 1)
                     {
-//                        Messages.debug("flag removed amount " + cond.getAmount() + " from " + Tools.Item.print(item)); // TODO remove
-                        
                         newAmt -= (cond.getAmount() - 1);
                     }
                 }
@@ -241,8 +238,6 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 if(!onlyExtra)
                 {
                     newAmt -= 1;
-                    
-//                    Messages.debug("extra removed amount 1 from " + Tools.Item.print(item)); // TODO remove
                 }
                 
                 if(amt != newAmt)
