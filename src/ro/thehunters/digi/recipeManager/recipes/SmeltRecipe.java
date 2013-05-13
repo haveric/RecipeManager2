@@ -223,7 +223,7 @@ public class SmeltRecipe extends SingleResultRecipe
     @Override
     public boolean isValid()
     {
-        return hasIngredient() && (hasFlag(FlagType.REMOVE) ? true : hasResult());
+        return hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
     }
     
     @Override

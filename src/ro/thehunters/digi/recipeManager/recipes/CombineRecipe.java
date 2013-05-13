@@ -208,7 +208,7 @@ public class CombineRecipe extends WorkbenchRecipe
     @Override
     public boolean isValid()
     {
-        return hasIngredients() && hasResults();
+        return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
     }
     
     @Override
