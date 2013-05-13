@@ -65,8 +65,8 @@ public enum Messages
     FLAG_HOLD("<red>Need in hand: <yellow>{items}"),
     FLAG_NOHOLD("<red>Unallowed in hand: <yellow>{items}"),
     
-    FLAG_COMMAND_PLAYER("Executes command on crafter: {command}"),
-    FLAG_COMMAND_SERVER("Executes console command: {command}"),
+    FLAG_COMMAND_PLAYER("Executes command on crafter: <yellow>{command}"),
+    FLAG_COMMAND_SERVER("Executes console command: <yellow>{command}"),
     
     FLAG_INGREDIENTCONDITIONS_NODATA("<yellow>{item}<red> needs data values: <yellow>{data}"),
     FLAG_INGREDIENTCONDITIONS_NOAMOUNT("<yellow>{item}<red> needs amount: <yellow>{amount}"),
@@ -75,23 +75,23 @@ public enum Messages
     FLAG_INGREDIENTCONDITIONS_NOLORE("<yellow>{item}<red> needs lore: <yellow>{lore}"),
     FLAG_INGREDIENTCONDITIONS_NOCOLOR("<yellow>{item}<red> needs color: <yellow>{color}"),
     
-    FLAG_NEEDEXP("<red>Need EXP: {exp}"),
+    FLAG_NEEDEXP("<red>Need EXP: <yellow>{exp}"),
     
-    FLAG_MODEXP_ADD("<green>+{amount} EXP"),
-    FLAG_MODEXP_SUB("<red>-{amount} EXP"),
-    FLAG_MODEXP_SET("<yellow>EXP set to {amount}"),
+    FLAG_MODEXP_ADD("<green>+{amount}<reset> EXP"),
+    FLAG_MODEXP_SUB("<yellow>-{amount}<reset> EXP"),
+    FLAG_MODEXP_SET("<reset>EXP set to <yellow>{amount}"),
     
-    FLAG_NEEDLEVEL("<red>Need level: {level}"),
+    FLAG_NEEDLEVEL("<red>Need level: <yellow>{level}"),
     
-    FLAG_MODLEVEL_ADD("<green>+{amount} level(s)"),
-    FLAG_MODLEVEL_SUB("<red>-{amount} level(s)"),
-    FLAG_MODLEVEL_SET("<yellow>Level set to {amount}"),
+    FLAG_MODLEVEL_ADD("<green>+{amount}<reset> level(s)"),
+    FLAG_MODLEVEL_SUB("<red>-{amount}<reset> level(s)"),
+    FLAG_MODLEVEL_SET("<reset>Level set to <yellow>{amount}"),
     
-    FLAG_NEEDMONEY("<red>Need money: {money}"),
+    FLAG_NEEDMONEY("<red>Need money: <yellow>{money}"),
     
     FLAG_MODMONEY_ADD("<green>+{money}"),
     FLAG_MODMONEY_SUB("<red>-{money}"),
-    FLAG_MODMONEY_SET("<yellow>Money set to {money}"),
+    FLAG_MODMONEY_SET("<reset>Money set to <yellow>{money}"),
     
     FLAG_PLAYERBUKKITMETA("<red>You need to be special..."),
     FLAG_NOPLAYERBUKKITMETA("<red>You're too special..."),
@@ -113,6 +113,7 @@ public enum Messages
     
     FLAG_PREFIX_RECIPE("<gray>(Recipe) <reset>"),
     FLAG_PREFIX_RESULT("<gray>(Result {item}<gray>) <reset>"),
+    FLAG_PREFIX_FURNACE("<gray>(Furnace {location}) <reset>"),
     
     // Crafting
     
@@ -142,6 +143,8 @@ public enum Messages
     
     SMELT_FUEL_NEEDINGREDIENT("<red>Fuel {fuel}<red> needs specific ingredient: {ingredient}"),
     SMELT_FUEL_NEEDFUEL("<red>Ingredient {ingredient}<red> needs specific fuel: {fuel}"),
+    
+    SMELT_FROZEN("<red>Furnace at <yellow>{location} <red>will be frozen until you re-place the ingredient."),
     
     ITEM_ANYDATA("<gray>any"),
     

@@ -46,8 +46,8 @@ public class Files
     private final CommandSender sender;
     private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
     
-    public static final String LASTCHANGED_CONFIG = "2.0alpha1";
-    public static final String LASTCHANGED_MESSAGES = "2.0alpha2";
+    public static final String LASTCHANGED_CONFIG = "2.0beta";
+    public static final String LASTCHANGED_MESSAGES = "2.0beta";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.0alpha3";
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.0alpha3";
     
