@@ -68,17 +68,9 @@ class FurnaceWorker implements Runnable
         stop();
     }
     
-    // benchmark
-    private long average = 0;
-    private long min = Long.MAX_VALUE;
-    private long max = 0;
-    private int printDelay = 0;
-    
     @Override
     public void run()
     {
-        long time = System.nanoTime();
-        
         Iterator<Entry<BlockID, FurnaceData>> iterator = Furnaces.getFurnaces().entrySet().iterator();
         
         while(iterator.hasNext())
@@ -166,19 +158,6 @@ class FurnaceWorker implements Runnable
                     }
                 }
             }
-        }
-        
-        // benchmark
-        time = System.nanoTime() - time;
-        
-        average = (average == 0 ? time : (average + time) / 2);
-        min = Math.min(min, time);
-        max = Math.max(max, time);
-        
-        if(++printDelay > 20 * 60)
-        {
-            printDelay = 0;
-            Messages.debug(String.format("benchmark | average=%.3fms | min=%.3fms | max=%.3fms", (average / 1000000.0), (min / 1000000.0), (max / 1000000.0)));
         }
     }
     
