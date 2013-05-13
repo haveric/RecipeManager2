@@ -1,4 +1,4 @@
-lastchanged: 2.0alpha1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.0beta # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -22,7 +22,7 @@ sounds:
   failed: true          # play a denied-like sound when a recipe fails ?
   failed_click: true    # play a denied-like sound when clicking a failed result information ?
   repair: true          # play a faster avil repair sound when repairing items in a workbench ?
-  
+
 
 # As of version v2 the plugin generates books with recipes.
 # If you add or remove recipes from a book, all book's copies won't be updated because each book is individual (unlike maps).
