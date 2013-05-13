@@ -702,7 +702,7 @@ public class RecipeProcessor implements Runnable
             return ErrorReporter.error("Smeling recipe doesn't have an ingredient !");
         }
         
-        ItemStack ingredient = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+        ItemStack ingredient = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_DATA | ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(ingredient == null)
         {
