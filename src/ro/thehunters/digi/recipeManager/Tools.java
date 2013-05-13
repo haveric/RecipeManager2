@@ -627,7 +627,7 @@ public class Tools
         {
             if((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS)
             {
-                ErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or aliases.yml for material names.");
+                ErrorReporter.error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
             }
             
             return null;
@@ -689,7 +689,7 @@ public class Tools
             {
                 if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                 {
-                    ErrorReporter.warning("Item '" + material + "' can't have data value defined in this recipe's slot, data value ignored.");
+                    ErrorReporter.warning("Item '" + material + "' can't have data value defined here, data value ignored.");
                 }
             }
         }
@@ -718,7 +718,7 @@ public class Tools
             {
                 if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                 {
-                    ErrorReporter.warning("Item '" + material + "' can't have amount defined in this recipe's slot, amount ignored.");
+                    ErrorReporter.warning("Item '" + material + "' can't have amount defined here, amount ignored.");
                 }
             }
         }
