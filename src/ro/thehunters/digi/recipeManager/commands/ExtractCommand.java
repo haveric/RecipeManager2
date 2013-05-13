@@ -148,7 +148,7 @@ public class ExtractCommand implements CommandExecutor
                 FurnaceRecipe recipe = (FurnaceRecipe)r;
                 StringBuilder recipeString = new StringBuilder(RecipeType.SMELT.getDirective()).append(Files.NL);
                 
-                recipeString.append(parseIngredient(recipe.getInput()));
+                recipeString.append(parseFurnaceIngredient(recipe.getInput()));
                 recipeString.append(Files.NL);
                 parseResult(recipe.getResult(), recipeString);
                 
@@ -209,9 +209,14 @@ public class ExtractCommand implements CommandExecutor
         return true;
     }
     
+    private String parseFurnaceIngredient(ItemStack item)
+    {
+        return (item == null || item.getTypeId() == 0 ? "air" : item.getType().toString().toLowerCase()); // TODO change to below method when furnace-data is pulled.
+    }
+    
     private String parseIngredient(ItemStack item)
     {
-        return (item == null || item.getTypeId() == 0 ? "air" : item.getType().toString().toLowerCase() + ":" + (item.getDurability() == Vanilla.DATA_WILDCARD ? "*" : item.getDurability()) + (item.getAmount() != 1 ? ":" + item.getAmount() : ""));
+        return (item == null || item.getTypeId() == 0 ? "air" : item.getType().toString().toLowerCase() + ":" + (item.getDurability() == -1 || item.getDurability() == Vanilla.DATA_WILDCARD ? "*" : item.getDurability()) + (item.getAmount() != 1 ? ":" + item.getAmount() : ""));
     }
     
     private void parseResult(ItemStack result, StringBuilder recipeString)
