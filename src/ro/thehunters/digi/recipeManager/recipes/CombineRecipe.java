@@ -149,7 +149,7 @@ public class CombineRecipe extends WorkbenchRecipe
             
             if(item != null)
             {
-                s.append(item.getTypeId()); // item.getType().toString().toLowerCase());
+                s.append(item.getTypeId());
                 
                 if(item.getDurability() != Vanilla.DATA_WILDCARD)
                 {

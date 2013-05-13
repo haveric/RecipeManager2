@@ -41,20 +41,6 @@ public class RecipeBook
         this.id = id;
     }
     
-    /*
-    /**
-     * Loads book data from file.<br>
-     * You need to register/update it on {@link RecipeBooks} class.
-     * 
-     * @param file
-     */
-    /*
-    public RecipeBook(File file)
-    {
-        RecipeManager.getRecipeBooks().load(file);
-    }
-    */
-    
     /**
      * @return True if book is valid, false otherwise.
      */
