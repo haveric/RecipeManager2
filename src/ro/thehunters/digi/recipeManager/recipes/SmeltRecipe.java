@@ -137,10 +137,9 @@ public class SmeltRecipe extends SingleResultRecipe
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
         
-        s.append("smelt");
-        s.append(" (");
+        s.append("smelt ");
         
-        s.append(ingredient.getTypeId());
+        s.append(ingredient.getType().toString().toLowerCase());
         
         /* TODO when furnace-data is pulled
         if(ingredient.getDurability() != Vanilla.DATA_WILDCARD)
@@ -149,7 +148,7 @@ public class SmeltRecipe extends SingleResultRecipe
         }
         */
         
-        s.append(") ");
+        s.append(" to ");
         
         if(!removed)
         {
