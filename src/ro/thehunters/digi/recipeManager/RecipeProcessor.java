@@ -225,6 +225,10 @@ public class RecipeProcessor implements Runnable
                 }
             }
         }
+        catch(Throwable e)
+        {
+            Messages.error(sender, e, "Code error while processing recipes");
+        }
         finally
         {
             task = null;
