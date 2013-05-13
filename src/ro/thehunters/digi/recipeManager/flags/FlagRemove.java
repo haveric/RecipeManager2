@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
 
@@ -48,6 +48,16 @@ public class FlagRemove extends Flag
     {
     }
     
+    public FlagRemove(FlagRemove flag)
+    {
+    }
+    
+    @Override
+    public FlagRemove clone()
+    {
+        return new FlagRemove(this);
+    }
+    
     @Override
     public FlagType getType()
     {
@@ -78,7 +88,7 @@ public class FlagRemove extends Flag
         
         if(recipe == null)
         {
-            Messages.debug("ERROR: invalid recipe pointer: " + recipe);
+            Messages.error(null, new IllegalAccessError(), "ERROR: invalid recipe pointer: " + recipe);
             remove();
         }
         

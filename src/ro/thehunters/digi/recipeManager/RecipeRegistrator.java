@@ -288,6 +288,8 @@ public class RecipeRegistrator implements Runnable
                 {
                     Messages.debug("Couldn't find shaped recipe to remove: " + recipe.getName());
                 }
+                
+                removedNum++;
             }
             
             if(add)
@@ -296,6 +298,11 @@ public class RecipeRegistrator implements Runnable
                 
                 RecipeManager.getRecipes().registerRecipe(recipe, info);
                 addedNum++;
+                
+                if(remove)
+                {
+                    removedNum--;
+                }
             }
             
             time = System.currentTimeMillis();

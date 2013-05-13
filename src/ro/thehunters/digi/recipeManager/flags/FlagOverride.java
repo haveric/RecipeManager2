@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
 
@@ -44,6 +44,16 @@ public class FlagOverride extends Flag
     
     public FlagOverride()
     {
+    }
+    
+    public FlagOverride(FlagOverride flag)
+    {
+    }
+    
+    @Override
+    public FlagOverride clone()
+    {
+        return new FlagOverride(this);
     }
     
     @Override

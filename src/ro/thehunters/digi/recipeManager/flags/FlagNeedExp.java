@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagNeedExp extends Flag
@@ -96,12 +96,12 @@ public class FlagNeedExp extends Flag
     
     public String getExpString()
     {
-        return getMinExp() + (getMaxExp() > getMinExp() ? " - " + getMaxExp() : "");
+        return getMinExp() + (maxExp > minExp ? " - " + getMaxExp() : "");
     }
     
     public boolean checkExp(int exp)
     {
-        return (exp >= minExp && exp <= maxExp);
+        return exp >= minExp && (maxExp > minExp ? exp <= maxExp : true);
     }
     
     public String getFailMessage()

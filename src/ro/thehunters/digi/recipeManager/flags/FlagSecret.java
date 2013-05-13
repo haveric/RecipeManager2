@@ -38,6 +38,16 @@ public class FlagSecret extends Flag
     {
     }
     
+    public FlagSecret(FlagSecret flag)
+    {
+    }
+    
+    @Override
+    public FlagSecret clone()
+    {
+        return new FlagSecret(this);
+    }
+    
     @Override
     public FlagType getType()
     {
