@@ -51,7 +51,8 @@ public class SmeltRecipe extends SingleResultRecipe
     {
         this.ingredient = ingredient;
         
-        hash = ("smelt" + ingredient.getTypeId() + ":" + ingredient.getDurability()).hashCode();
+        // TODO add data value when furnace-data is pulled
+        hash = ("smelt" + ingredient.getTypeId()).hashCode();
     }
     
     public ItemResult getFuel()
@@ -141,10 +142,12 @@ public class SmeltRecipe extends SingleResultRecipe
         
         s.append(ingredient.getTypeId());
         
+        /* TODO when furnace-data is pulled
         if(ingredient.getDurability() != Vanilla.DATA_WILDCARD)
         {
             s.append(":").append(ingredient.getDurability());
         }
+        */
         
         s.append(") ");
         
