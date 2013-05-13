@@ -167,6 +167,12 @@ public class BaseRecipe implements Flaggable
     }
     
     @Override
+    public String toString()
+    {
+        return getType() + "{" + getName() + "}";
+    }
+    
+    @Override
     public int hashCode()
     {
         return hash;
