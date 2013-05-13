@@ -2,8 +2,8 @@ package ro.thehunters.digi.recipeManager.flags;
 
 import org.bukkit.entity.Player;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModExp extends Flag
@@ -218,10 +218,6 @@ public class FlagModExp extends Flag
         {
             case '+':
             {
-                /*
-                p.giveExp(amount);
-                */
-                
                 exp = Tools.Exp.getTotalExperience(p) + amount;
                 
                 a.addEffect(Messages.FLAG_MODEXP_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
@@ -231,22 +227,6 @@ public class FlagModExp extends Flag
             
             case '-':
             {
-                /*
-                int diff = p.getTotalExperience() - amount;
-                
-                p.setTotalExperience(0);
-                p.setLevel(0);
-                
-                if(diff > 0)
-                {
-                    p.giveExp(diff);
-                }
-                else
-                {
-                    p.setExp(0);
-                }
-                */
-                
                 exp = Math.max(Tools.Exp.getTotalExperience(p) - amount, 0);
                 
                 a.addEffect(Messages.FLAG_MODEXP_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
@@ -256,16 +236,6 @@ public class FlagModExp extends Flag
             
             case '=':
             {
-                /*
-                p.setTotalExperience(0);
-                p.setLevel(0);
-                
-                if(amount > 0)
-                {
-                    p.giveExp(amount);
-                }
-                */
-                
                 exp = Math.max(amount, 0);
                 
                 a.addEffect(Messages.FLAG_MODEXP_SET, failMessage, "{amount}", amount, "{modifier}", mod);

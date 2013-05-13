@@ -13,8 +13,6 @@ import ro.thehunters.digi.recipeManager.Permissions;
 
 public enum FlagType
 {
-//    TEST(FlagTest.class, Bit.NO_VALUE), // TODO remove
-    
     // Shared flags
     COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"),
     KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"),
@@ -32,14 +30,11 @@ public enum FlagType
     MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "setmoney", "money"),
     NEEDMONEY(FlagNeedMoney.class, Bit.NONE, "reqmoney", "moneyreq"),
     COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"),
-    REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"),
-    ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
     HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
     GAMEMODE(FlagGameMode.class, Bit.NONE, "needgm"),
     LIGHTLEVEL(FlagLightLevel.class, Bit.NONE, "blocklight", "sunlight", "light"),
-    BIOME(FlagBiome.class, Bit.NONE), // TODO finish
+    BIOME(FlagBiome.class, Bit.NONE),
     WEATHER(FlagWeather.class, Bit.NONE),
-    WORLDTIME(FlagWorldTime.class, Bit.NONE), // TODO finish
     EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"),
     SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
     SUMMON(FlagSummon.class, Bit.NO_SHIFT, "spawn", "creature", "mob", "animal"),
@@ -48,11 +43,14 @@ public enum FlagType
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
     SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"),
     TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"),
-    PROXIMITY(FlagProximity.class, Bit.NONE, "distance", "nearby"), // TODO
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
     BROADCAST(FlagBroadcast.class, Bit.NONE, "announce"),
     SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
-    DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
+//  REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"), // TODO
+//  ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
+//  WORLDTIME(FlagWorldTime.class, Bit.NONE),
+//  PROXIMITY(FlagProximity.class, Bit.NONE, "distance", "nearby"),
+//  DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
     
     // Recipe only flags
     ADDTOBOOK(FlagAddToBook.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipebook"),
