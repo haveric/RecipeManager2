@@ -512,6 +512,11 @@ public class Tools
         return NumberFormat.getNumberInstance().format(number);
     }
     
+    public static String printLocation(Location l)
+    {
+        return l.getWorld().getName() + ":" + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
+    }
+    
     public static String replaceVariables(String msg, Object... variables)
     {
         if(variables != null && variables.length > 0)
