@@ -742,6 +742,10 @@ public class Events implements Listener
                         event.setCancelled(true); // cancel only if we're going to mess with the items
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     }
+                    else
+                    {
+                        event.setCancelled(true);
+                    }
                 }
                 else
                 {
