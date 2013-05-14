@@ -161,21 +161,25 @@ public class RecipeBooks
         
         // set defaults
         yml.addDefault("title", id);
+        yml.addDefault("author", "RecipeManager");
         yml.addDefault("description", "");
         yml.addDefault("settings.pervolume", 50);
         yml.addDefault("settings.cover", true);
         yml.addDefault("settings.contents", true);
         yml.addDefault("settings.end", true);
+        yml.addDefault("settings.customend", "");
         
         // Create RecipeBook object and asign basic info
         RecipeBook book = new RecipeBook(id);
         
         book.setTitle(Tools.parseColors(yml.getString("title"), false));
         book.setDescription(Tools.parseColors(yml.getString("description"), false));
+        book.setAuthor(Tools.parseColors(yml.getString("author"), false));
         book.setRecipesPerVolume(yml.getInt("settings.pervolume"));
         book.setCoverPage(yml.getBoolean("settings.cover"));
         book.setContentsPage(yml.getBoolean("settings.contents"));
         book.setEndPage(yml.getBoolean("settings.end"));
+        book.setCustomEndPage(Tools.parseColors(yml.getString("settings.customend").replace("\\n", "\n"), false));
         
         // Loading recipes from volumes...
         Map<Integer, List<String>> volumesMap = new HashMap<Integer, List<String>>(); // need List for saving to YAML properly
@@ -614,58 +618,62 @@ public class RecipeBooks
             return;
         }
         
-        Matcher match = Pattern.compile(BOOK_MARKER + " ([\\d\\w]+) ([0-9]+) ([0-9]+)").matcher(Tools.unhideString(meta.getAuthor()));
+        Matcher match = Pattern.compile("(.*) ([\\d\\w]+) ([0-9]+) ([0-9]+)").matcher(Tools.unhideString(meta.getAuthor()));
         
-        if(match.find() && match.groupCount() >= 3)
+        if(match.find() && match.groupCount() >= 4)
         {
+            String id = match.group(2);
+            RecipeBook book = getBook(id);
+            
+            if(book == null)
+            {
+                Messages.RECIPEBOOK_UPDATE_EXTINCT.printOnce(player, null, "{title}", meta.getTitle());
+                return;
+            }
+            
+            int volume = 0;
+            int updated = 0;
+            
             try
             {
-                String id = match.group(1);
-                RecipeBook book = getBook(id);
-                
-                if(book == null)
-                {
-                    Messages.EVENTS_UPDATEBOOK_EXTINCT.printOnce(player, null, "{title}", meta.getTitle());
-                    return;
-                }
-                
-                Integer volume = Integer.valueOf(match.group(2));
-                Integer lastUpdate = Integer.valueOf(match.group(3));
-                
-                if(generated > lastUpdate)
-                {
-                    if(volume > book.getVolumesNum())
-                    {
-                        Messages.EVENTS_UPDATEBOOK_NOVOLUME.printOnce(player, null, "{title}", meta.getTitle(), "{volume}", volume);
-                        return;
-                    }
-                    
-                    ItemStack bookItem = book.getBookItem(volume);
-                    BookMeta bookMeta = (BookMeta)bookItem.getItemMeta();
-                    
-                    boolean titleDiff = !bookMeta.getTitle().equals(meta.getTitle());
-                    
-                    if(titleDiff || !bookMeta.getPages().equals(meta.getPages()))
-                    {
-                        Messages.EVENTS_UPDATEBOOK_DONE.print(player);
-                        
-                        if(titleDiff)
-                        {
-                            Messages.EVENTS_UPDATEBOOK_CHANGED_TITLE.print(player, null, "{oldtitle}", meta.getTitle(), "{newtitle}", bookMeta.getTitle());
-                        }
-                        
-                        if(meta.getPageCount() != bookMeta.getPageCount())
-                        {
-                            Messages.EVENTS_UPDATEBOOK_CHANGED_PAGES.print(player, null, "{oldpages}", meta.getPageCount(), "{newpages}", bookMeta.getPageCount());
-                        }
-                    }
-                    
-                    item.setItemMeta(bookMeta);
-                }
+                volume = Integer.valueOf(match.group(3));
+                updated = Integer.valueOf(match.group(4));
             }
             catch(NumberFormatException e)
             {
-                e.printStackTrace();
+                Messages.error(null, e, "Error while parsing " + player.getName() + "'s held book details.");
+                return;
+            }
+            
+            if(generated > updated)
+            {
+                if(volume > book.getVolumesNum())
+                {
+                    Messages.RECIPEBOOK_UPDATE_NOVOLUME.printOnce(player, null, "{title}", meta.getTitle(), "{volume}", volume);
+                    return;
+                }
+                
+                ItemStack bookItem = book.getBookItem(volume);
+                BookMeta bookMeta = (BookMeta)bookItem.getItemMeta();
+                
+                boolean titleDiff = !bookMeta.getTitle().equals(meta.getTitle());
+                
+                if(titleDiff || !bookMeta.getPages().equals(meta.getPages()))
+                {
+                    Messages.RECIPEBOOK_UPDATE_DONE.print(player);
+                    
+                    if(titleDiff)
+                    {
+                        Messages.RECIPEBOOK_UPDATE_CHANGED_TITLE.print(player, null, "{oldtitle}", meta.getTitle(), "{newtitle}", bookMeta.getTitle());
+                    }
+                    
+                    if(meta.getPageCount() != bookMeta.getPageCount())
+                    {
+                        Messages.RECIPEBOOK_UPDATE_CHANGED_PAGES.print(player, null, "{oldpages}", meta.getPageCount(), "{newpages}", bookMeta.getPageCount());
+                    }
+                }
+                
+                item.setItemMeta(bookMeta);
             }
         }
     }

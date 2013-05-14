@@ -24,7 +24,9 @@ public class RecipeBook
 {
     private String id;
     private String title;
+    private String author;
     private String description;
+    private String customEnd;
     private List<Set<String>> volumes = new ArrayList<Set<String>>();
     private int recipesPerVolume = 50;
     private boolean cover = true;
@@ -68,6 +70,16 @@ public class RecipeBook
     public void setTitle(String title)
     {
         this.title = title;
+    }
+    
+    public String getAuthor()
+    {
+        return author;
+    }
+    
+    public void setAuthor(String author)
+    {
+        this.author = author;
     }
     
     public String getDescription()
@@ -128,6 +140,16 @@ public class RecipeBook
     public void setEndPage(boolean set)
     {
         end = set;
+    }
+    
+    public String getCustomEndPage()
+    {
+        return customEnd;
+    }
+    
+    public void setCustomEndPage(String string)
+    {
+        this.customEnd = (string == null || string.isEmpty() ? null : string);
     }
     
     /**
@@ -235,7 +257,7 @@ public class RecipeBook
         BookMeta meta = (BookMeta)Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
         
         meta.setTitle(this.getTitle() + (getVolumesNum() > 1 ? " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", volume) : ""));
-        meta.setAuthor(RecipeBooks.BOOK_MARKER + Tools.hideString(" " + this.getId() + " " + volume + " " + (System.currentTimeMillis() / 1000)));
+        meta.setAuthor(this.getAuthor() + Tools.hideString(" " + this.getId() + " " + volume + " " + (System.currentTimeMillis() / 1000)));
         
         // Cover page
         if(cover)
@@ -249,7 +271,7 @@ public class RecipeBook
                 cover.append('\n').append(ChatColor.BLACK).append("  ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", volume, "{volumes}", getVolumesNum()));
             }
             
-            cover.append('\n').append(ChatColor.GRAY).append("       Published by\n        RecipeManager");
+            cover.append('\n').append(ChatColor.GRAY).append("        Published by\n        RecipeManager");
             
             if(this.getDescription() != null)
             {
@@ -287,7 +309,7 @@ public class RecipeBook
                 }
                 
                 String indexName = recipe.printBookIndex();
-                index.get(i).append(p).append(". ").append(indexName).append(ChatColor.BLACK).append('\n');
+                index.get(i).append(ChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
                 r += (indexName.length() >= 18 ? 2 : 1);
                 p += 1;
             }
@@ -326,9 +348,18 @@ public class RecipeBook
             meta.addPage(s);
         }
         
-        if(end)
+        if(hasEndPage())
         {
-            meta.addPage(String.format("\n\n\n\n\n\n        %s%s%s", ChatColor.BOLD, ChatColor.UNDERLINE, "THE END"));
+            if(customEnd == null)
+            {
+                meta.addPage(String.format("\n\n\n\n\n\n        %s%s%s", ChatColor.BOLD, ChatColor.UNDERLINE, "THE END"));
+            }
+            else
+            {
+                // TODO split ?
+                
+                meta.addPage(customEnd);
+            }
         }
         
         return meta;

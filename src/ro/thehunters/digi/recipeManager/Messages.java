@@ -170,17 +170,16 @@ public enum Messages
     RECIPEBOOK_SMELT_TIME_RANDOM("<red>{min} <black>to <red>{max} <black>seconds"),
     RECIPEBOOK_FUEL_TIME_FIXED("<dark_green>{time} <black>seconds"),
     RECIPEBOOK_FUEL_TIME_RANDOM("<dark_green>{min} <black>to <dark_green>{max} <black>seconds"),
+    RECIPEBOOK_UPDATE_EXTINCT("<red>Your '<yellow>{title}<red>' recipe book does not exist anymore, it won't be updated further."),
+    RECIPEBOOK_UPDATE_NOVOLUME("<red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> anymore, it won't be updated further."),
+    RECIPEBOOK_UPDATE_DONE("<gray>Your held recipe book has been updated!"),
+    RECIPEBOOK_UPDATE_CHANGED_TITLE("<gray>Title changed from '<reset>{oldtitle}<gray>' to '<reset>{newtitle}<gray>'."),
+    RECIPEBOOK_UPDATE_CHANGED_PAGES("<gray>Pages change from <red>{oldpages}<gray> pages to <green>{newpages}<gray> pages."),
     
     CMD_GETBOOK_INVALIDNUMBER("<red>Volume argument must be a number!"),
     CMD_GETBOOK_NOTEXIST("<red>No books found by '{arg}'."),
     CMD_GETBOOK_MANYMATCHES("<red>Found {num} books by '{arg}':"),
     CMD_GETBOOK_GIVEN("<green>Got book: {title}"),
-    
-    EVENTS_UPDATEBOOK_EXTINCT("<red>Your '<yellow>{title}<red>' recipe book does not exist anymore, it won't be updated further."),
-    EVENTS_UPDATEBOOK_NOVOLUME("<red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> anymore, it won't be updated further."),
-    EVENTS_UPDATEBOOK_DONE("<gray>Your held recipe book has been updated!"),
-    EVENTS_UPDATEBOOK_CHANGED_TITLE("<gray>Title changed from '<reset>{oldtitle}<gray>' to '<reset>{newtitle}<gray>'."),
-    EVENTS_UPDATEBOOK_CHANGED_PAGES("<gray>Pages change from <red>{oldpages}<gray> pages to <green>{newpages}<gray> pages."),
     
     CMD_BOOKS_NOBOOKS("<red>No generated books."),
     CMD_BOOKS_HEADER("<yellow>Generated recipe books ({number}):"),

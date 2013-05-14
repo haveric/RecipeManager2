@@ -18,6 +18,7 @@ This is useful when editing books that players already have which the plugin wil
 
 A book's .yml file can have:
 <div id="code">title: The Book Title
+author: RecipeManager
 description: Book description written on the first page
 
 # book settings and their defaults
@@ -26,6 +27,7 @@ settings:
   cover: true
   contents: true
   end: true
+  customend: ''
 
 # list of recipes to be automatically distributed in volumes
 recipes:
@@ -47,15 +49,19 @@ volume ...
 
 Note that a book can not contain the same recipe twice.
 
-'title' (optional, default file name) must not be longer than 64 characters, supports colors.
+'<b>title</b>' (optional, default file name) must not be longer than 64 characters, supports colors.
 
-'description' (optional, default nothing) must not be longer than 100 characters, supports colors.
+'<b>author</b>' (optional, default "RecipeManager"), must not be longer than 64 characters, supports colors.
 
-'pervolume' (optional, default 50) defines the max amount of recipes per volume the 'recipes' node allocates.
+'<b>description</b>' (optional, default nothing) must not be longer than 100 characters, supports colors.
+
+'<b>pervolume</b> (optional, default 50) defines the max amount of recipes per volume the 'recipes' node allocates.
 This does not limit you from adding more recipes in volumes.
 
-'cover', 'contents' and 'end' (optional, default all true) toggle if the cover, contents or end pages are generated for the book.
+'<b>cover</b>', '<b>contents</b>' and '<b>end</b>' (optional, default all true) toggle if the cover, contents or end pages are generated for the book.
 You can toggle them any time but you need to reload the books for them to have effect.
+
+'<b>customend</b>' sets a custom text for the last page, only works if 'end' is true. Supports colors and \n for newlines.
 
 Then you can use 'recipes' node to list the recipes you want to add or use special arguments (see below).
 Once 'recipes' is defined and book is loaded, the node will be deleted and will auto-generate the volumes according to the recipe-per-volume limit.
