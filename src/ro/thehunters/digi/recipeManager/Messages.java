@@ -148,8 +148,6 @@ public enum Messages
     
     ITEM_ANYDATA("<gray>any"),
     
-    LASTCHANGED(Files.LASTCHANGED_MESSAGES),
-    
     RECIPEBOOK_VOLUME("Volume {volume}"),
     RECIPEBOOK_VOLUMEOFVOLUMES("Volume {volume} of {volumes}"),
     RECIPEBOOK_HEADER_CONTENTS("<black><bold><underline>CONTENTS INDEX"),
@@ -191,14 +189,16 @@ public enum Messages
     CMD_EXTRACT_NORECIPES("<yellow>No recipes to extract."),
     CMD_EXTRACT_DONE("<green>Done! Recipes saved to '<white>{file}<green>'."),
     
-    CMD_RMFINDITEM_USAGE("<yellow>Usage: <gray>/{command} <white><item partial name>"),
-    CMD_RMFINDITEM_INVALIDHELDITEM("<yellow>You need to hold an item to use the '<white>this<yellow>' argument."),
-    CMD_RMFINDITEM_HEADER("Found <green>{matches}<white> materials matching '<green>{argument}<white>':"),
-    CMD_RMFINDITEM_LIST("<gray>#<red>{id} <green>{material}<gray>, max durability <yellow>{maxdata}<gray>, max stack <yellow>{maxstack}"),
-    CMD_RMFINDITEM_FOUNDMORE("<yellow>... and <green>{matches}<yellow> more, be more specific in your search."),
-    CMD_RMFINDITEM_NOTFOUND("<yellow>No material found by '<white>{argument}<yellow>'."),
+    CMD_RMRECIPES_USAGE("<yellow>Usage: <gray>/{command} <white><???>"),
     
-    ;
+    CMD_FINDITEM_USAGE("<yellow>Usage: <gray>/{command} <white><item partial name>"),
+    CMD_FINDITEM_INVALIDHELDITEM("<yellow>You need to hold an item to use the '<white>this<yellow>' argument."),
+    CMD_FINDITEM_HEADER("Found <green>{matches}<white> materials matching '<green>{argument}<white>':"),
+    CMD_FINDITEM_LIST("<gray>#<red>{id} <green>{material}<gray>, max durability <yellow>{maxdata}<gray>, max stack <yellow>{maxstack}"),
+    CMD_FINDITEM_FOUNDMORE("<yellow>... and <green>{matches}<yellow> more, be more specific in your search."),
+    CMD_FINDITEM_NOTFOUND("<yellow>No material found by '<white>{argument}<yellow>'."),
+    
+    LASTCHANGED(null);
     
     private static final Map<String, Set<String>> sent = new HashMap<String, Set<String>>();
     private static FileConfiguration yml;
@@ -223,13 +223,13 @@ public enum Messages
     }
     
     /**
-     * (Re)Loads all messages from messages.yml
+     * (Re)Loads all messages
      * 
      * @param force
      */
     public static void reload(CommandSender sender)
     {
-        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "messages.yml");
+        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + Files.FILE_MESSAGES);
         
         if(!file.exists())
         {
@@ -242,16 +242,18 @@ public enum Messages
                 yml.set(msg.path, msg.message);
             }
             
+            yml.set("lastchanged", Files.LASTCHANGED_MESSAGES);
+            
             try
             {
                 yml.save(file);
             }
             catch(Throwable e)
             {
-                error(sender, e, "Couldn't save 'messages.yml' !");
+                error(sender, e, "Couldn't save '" + Files.FILE_MESSAGES + "' file!");
             }
             
-            sendAndLog(sender, ChatColor.GREEN + "Generated 'messages.yml' file.");
+            sendAndLog(sender, ChatColor.GREEN + "Generated '" + Files.FILE_MESSAGES + "' file.");
         }
         else
         {
@@ -263,16 +265,9 @@ public enum Messages
             msg.asign();
         }
         
-        try
+        if(LASTCHANGED == null || LASTCHANGED.message == null || !LASTCHANGED.message.equals(Files.LASTCHANGED_MESSAGES))
         {
-            if(LASTCHANGED == null || LASTCHANGED.message == null || !LASTCHANGED.message.equals(Files.LASTCHANGED_MESSAGES))
-            {
-                sendAndLog(sender, "<yellow>messages.yml has changed! You should delete it, use 'rmreload' to re-generate it and then re-configure it, and then rmreload again.");
-            }
-        }
-        catch(Throwable e)
-        {
-            sendAndLog(sender, "<yellow>Error reading messages.yml's version! You should delete it to allow it to re-generate the newest version!");
+            sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_MESSAGES + "' file is outdated, please delete it to allow it to be generated again.");
         }
     }
     
@@ -308,14 +303,14 @@ public enum Messages
     {
         String msg = get();
         
-        if(customMessage != null) // recipe has custom message
+        if(customMessage != null) // has custom message
         {
             // if flag message is set to "false" then don't show the message
             msg = (customMessage.equals("false") ? null : customMessage);
         }
         else if(msg != null && msg.equals("false"))
         {
-            // message from messages.yml is "false", don't show the message
+            // message is "false", don't show the message
             msg = null;
         }
         
@@ -324,7 +319,7 @@ public enum Messages
     
     /**
      * Send the selected enum message to a player or console. <br>
-     * Will not be displayed if the message is set to "false" in the messages.yml.
+     * Will not be displayed if the message is set to "false".
      * 
      * @param sender
      *            player or console
@@ -343,50 +338,50 @@ public enum Messages
     }
     
     /**
-     * Send the selected enum message to a player or console with an overwriteable message from a recipe. <br>
-     * The recipeMessage has priority if it's not null. <br>
+     * Send the selected enum message to a player or console with an overwriteable message.<br>
+     * The customMessage has priority if it's not null.<br>
      * If the priority message is "false" it will not be displayed.
      * 
      * @param sender
      *            player or console
-     * @param recipeMessage
+     * @param customMessage
      *            overwrite message, ignored if null, don't display if "false"
      */
-    public void print(CommandSender sender, String recipeMessage)
+    public void print(CommandSender sender, String customMessage)
     {
         if(sender == null)
         {
             return;
         }
         
-        if(recipeMessage != null) // recipe has custom message ?
+        if(customMessage != null) // has custom message ?
         {
-            if(!recipeMessage.equals("false")) // if it's not "false" send it, otherwise don't.
+            if(!customMessage.equals("false")) // if it's not "false" send it, otherwise don't.
             {
-                send(sender, recipeMessage);
+                send(sender, customMessage);
             }
         }
-        else if(message != null) // message not set to "false" in messages.yml (replaced with null to save memory)
+        else if(message != null) // message not set to "false" (replaced with null to save memory)
         {
             send(sender, message);
         }
     }
     
     /**
-     * Send the selected enum message to a player or console with an overwriteable message from a recipe. <br>
-     * The recipeMessage has priority if it's not null. <br>
-     * If the priority message is "false" it will not be displayed. <br>
-     * Additionally you can specify variables to replace in the message. <br>
+     * Send the selected enum message to a player or console with an overwriteable message.<br>
+     * The customMessage has priority if it's not null.<br>
+     * If the priority message is "false" it will not be displayed.<br>
+     * Additionally you can specify variables to replace in the message.<br>
      * The variable param must be a 2D String array that has pairs of 2 strings, variable and replacement value.
      * 
      * @param sender
      *            player or console
-     * @param recipeMessage
+     * @param customMessage
      *            overwrite message, ignored if null, don't display if "false"
      * @param variables
      *            the variables array
      */
-    public void print(CommandSender sender, String recipeMessage, Object... variables)
+    public void print(CommandSender sender, String customMessage, Object... variables)
     {
         if(sender == null)
         {
@@ -395,16 +390,16 @@ public enum Messages
         
         String msg = message;
         
-        if(recipeMessage != null) // recipe has custom message
+        if(customMessage != null) // has custom message
         {
-            if(recipeMessage.equals("false")) // if recipe message is set to "false" then don't show the message
+            if(customMessage.equals("false")) // if custom message is set to "false" then don't show the message
             {
                 return;
             }
             
-            msg = recipeMessage;
+            msg = customMessage;
         }
-        else if(msg == null) // message from messages.yml is "false", don't show the message
+        else if(msg == null) // message is "false", don't show the message
         {
             return;
         }
@@ -428,10 +423,10 @@ public enum Messages
      * Send this message only once per connection.
      * 
      * @param sender
-     * @param recipeMessage
+     * @param customMessage
      * @param variables
      */
-    public void printOnce(CommandSender sender, String recipeMessage, Object... variables)
+    public void printOnce(CommandSender sender, String customMessage, Object... variables)
     {
         if(sender == null)
         {
@@ -449,7 +444,7 @@ public enum Messages
         if(!set.contains(path))
         {
             set.add(path);
-            print(sender, recipeMessage, variables);
+            print(sender, customMessage, variables);
         }
     }
     

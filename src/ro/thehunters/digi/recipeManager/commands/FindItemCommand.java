@@ -20,7 +20,7 @@ public class FindItemCommand implements CommandExecutor
     {
         if(args.length <= 0)
         {
-            Messages.CMD_RMFINDITEM_USAGE.print(sender, null, "{command}", label);
+            Messages.CMD_FINDITEM_USAGE.print(sender, null, "{command}", label);
             return true;
         }
         
@@ -39,7 +39,7 @@ public class FindItemCommand implements CommandExecutor
             
             if(item == null || item.getTypeId() == 0)
             {
-                Messages.CMD_RMFINDITEM_INVALIDHELDITEM.print(sender);
+                Messages.CMD_FINDITEM_INVALIDHELDITEM.print(sender);
                 return true;
             }
             
@@ -67,7 +67,7 @@ public class FindItemCommand implements CommandExecutor
                 }
                 else
                 {
-                    Messages.CMD_RMFINDITEM_NOTFOUND.print(sender, null, "{argument}", id);
+                    Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", id);
                 }
             }
         }
@@ -89,22 +89,22 @@ public class FindItemCommand implements CommandExecutor
         
         if(!found.isEmpty())
         {
-            Messages.CMD_RMFINDITEM_HEADER.print(sender, null, "{matches}", found.size(), "{argument}", find);
+            Messages.CMD_FINDITEM_HEADER.print(sender, null, "{matches}", found.size(), "{argument}", find);
             
             for(int i = 0; i < Math.min(found.size(), 10); i++)
             {
                 Material m = found.get(i);
-                Messages.CMD_RMFINDITEM_LIST.print(sender, null, "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
+                Messages.CMD_FINDITEM_LIST.print(sender, null, "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
             }
             
             if(found.size() > 10)
             {
-                Messages.CMD_RMFINDITEM_FOUNDMORE.print(sender, null, "{matches}", (found.size() - 10));
+                Messages.CMD_FINDITEM_FOUNDMORE.print(sender, null, "{matches}", (found.size() - 10));
             }
         }
         else
         {
-            Messages.CMD_RMFINDITEM_NOTFOUND.print(sender, null, "{argument}", find);
+            Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", find);
         }
         
         return true;

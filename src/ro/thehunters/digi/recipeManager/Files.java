@@ -52,6 +52,7 @@ public class Files
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.0alpha3";
     
     public static final String FILE_CONFIG = "config.yml";
+    public static final String FILE_MESSAGES = "messages.yml";
     
     public static final String FILE_ITEM_ALIASES = "item aliases.yml";
     public static final String FILE_ENCHANT_ALIASES = "enchant aliases.yml";
