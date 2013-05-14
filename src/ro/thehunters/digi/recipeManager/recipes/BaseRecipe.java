@@ -88,32 +88,6 @@ public class BaseRecipe implements Flaggable
     }
     
     /**
-     * If it's the auto-generated name it returns it without the ingredients.<br>
-     * Returns full name if it's a custom name or a fuel recipe.
-     * 
-     * @return parsed generated name or original custom name
-     */
-    public String getNameNoIngredients()
-    {
-        String name = getName();
-        
-        if(customName || this instanceof FuelRecipe)
-        {
-            return name;
-        }
-        
-        int first = name.indexOf('(') - 1; // trim a space too
-        int last = name.lastIndexOf(')') + 1;
-        
-        if(first > 0 && last > 0)
-        {
-            name = name.substring(0, first) + name.substring(last);
-        }
-        
-        return name;
-    }
-    
-    /**
      * @return true if recipe has custom name or false if it's auto-generated.
      */
     public boolean hasCustomName()
