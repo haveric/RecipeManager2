@@ -1513,8 +1513,7 @@ public class Events implements Listener
             
             if(newVersion != null)
             {
-                Messages.send(player, "<green>New version available: " + newVersion + " ! You're using " + RecipeManager.getPlugin().getDescription().getVersion());
-                Messages.send(player, "<green>Grab it at: " + UpdateChecker.getNewLink());
+                Messages.send(player, "[RecipeManager] New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + RecipeManager.getPlugin().getDescription().getVersion() + "<reset>, grab it at: <light_purple>" + UpdateChecker.getNewLink());
             }
         }
     }
