@@ -148,7 +148,7 @@ public class Settings
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
         
-        /*
+        /* TODO remove
         for(Material m : Material.values())
         {
             materialNames.put(String.valueOf(m.getId()), m);
@@ -216,7 +216,7 @@ public class Settings
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
         
-        /*
+        /* TODO remove
         for(Enchantment e : Enchantment.values())
         {
             enchantNames.put(String.valueOf(e.getId()), e);
