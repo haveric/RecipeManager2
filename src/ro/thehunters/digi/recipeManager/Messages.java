@@ -554,21 +554,35 @@ public enum Messages
     
     public static void error(CommandSender sender, Throwable thrown, String message)
     {
-        message = "<red>" + (message == null ? thrown.getMessage() : message + " (" + thrown.getMessage() + ")");
-        
-        if(sender != null)
+        try
         {
+            message = "<red>" + (message == null ? thrown.getMessage() : message + " (" + thrown.getMessage() + ")");
+            
+            if(sender != null)
+            {
+                info(message);
+            }
+            
+            sendAndLog(sender, message);
+            notifyDebuggers(message);
+            
+            thrown.printStackTrace();
+            
+            message = ChatColor.LIGHT_PURPLE + "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
             info(message);
+            notifyDebuggers(message);
         }
-        
-        sendAndLog(sender, message);
-        notifyDebuggers(message);
-        
-        thrown.printStackTrace();
-        
-        message = ChatColor.LIGHT_PURPLE + "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
-        info(message);
-        notifyDebuggers(message);
+        catch(Throwable e)
+        {
+            System.out.print("Error while printing error !");
+            System.out.print("Initial error:");
+            thrown.printStackTrace();
+            
+            System.out.print("Error printing error:");
+            e.printStackTrace();
+            
+            System.out.print("If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/");
+        }
     }
     
     /**

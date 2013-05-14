@@ -129,7 +129,7 @@ public class Files
         }
         catch(Throwable e)
         {
-            e.printStackTrace();
+            Messages.error(null, e, null);
         }
         
         return newVersion;

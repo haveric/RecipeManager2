@@ -161,7 +161,7 @@ public class RecipeProcessor implements Runnable
                     }
                     catch(Throwable e)
                     {
-                        e.printStackTrace();
+                        Messages.error(sender, e, "Error while reading recipe files!");
                     }
                 }
                 
@@ -406,7 +406,7 @@ public class RecipeProcessor implements Runnable
         }
         catch(Throwable e)
         {
-            e.printStackTrace();
+            Messages.error(null, e, null);
             return false;
         }
     }

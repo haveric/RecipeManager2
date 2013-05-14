@@ -1459,7 +1459,7 @@ public class Tools
         }
         catch(Throwable e)
         {
-            e.printStackTrace();
+            Messages.error(null, e, null);
         }
         
         return false;

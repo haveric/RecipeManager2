@@ -145,7 +145,7 @@ public enum FlagType
         }
         catch(Throwable e)
         {
-            e.printStackTrace();
+            Messages.error(null, e, null);
         }
         
         return null;

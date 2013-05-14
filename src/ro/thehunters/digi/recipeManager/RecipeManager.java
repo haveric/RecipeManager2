@@ -278,7 +278,7 @@ public class RecipeManager extends JavaPlugin
         }
         catch(Throwable e)
         {
-            e.printStackTrace();
+            Messages.error(null, e, null);
         }
     }
     
