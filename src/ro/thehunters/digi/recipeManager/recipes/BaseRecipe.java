@@ -299,4 +299,18 @@ public class BaseRecipe implements Flaggable
     {
         return ChatColor.RED + "(undefined)";
     }
+    
+    /**
+     * @return Recipe detail string that can fit in the chat.
+     */
+    public String printChat()
+    {
+        String print = printBook();
+        
+        print = print.replace(ChatColor.WHITE.toString(), ChatColor.MAGIC.toString());
+        print = print.replace(ChatColor.BLACK.toString(), ChatColor.WHITE.toString());
+        print = print.replace(ChatColor.MAGIC.toString(), ChatColor.BLACK.toString());
+        
+        return print;
+    }
 }

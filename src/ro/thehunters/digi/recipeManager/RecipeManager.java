@@ -249,9 +249,9 @@ public class RecipeManager extends JavaPlugin
             Furnaces.save();
             Furnaces.clean();
             
-            Events.clean();
             FurnaceWorker.clean();
             Workbenches.clean();
+            Players.clean();
             Vanilla.clean();
             UpdateChecker.clean();
             
@@ -264,6 +264,7 @@ public class RecipeManager extends JavaPlugin
             recipeBooks.clean();
             recipeBooks = null;
             
+            events.clean();
             events = null;
             
             settings = null;

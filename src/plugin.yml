@@ -16,7 +16,7 @@ commands:
   rmrecipes:
     aliases: [recipe, recipes]
     description: find recipes that use the specified item
-    usage: /<command> <item> [i]
+    usage: /<command> <material>:[data]:[amount] [i]
     permission: recipemanager.command.rmrecipes
   rmfinditem:
     aliases: [finditem, item]

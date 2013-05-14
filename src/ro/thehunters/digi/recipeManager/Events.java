@@ -80,16 +80,15 @@ public class Events implements Listener
         }
     }
     
-    protected static void reload()
+    protected void clean()
     {
-        clean();
-        
-        Bukkit.getPluginManager().registerEvents(RecipeManager.events, RecipeManager.getPlugin());
+        HandlerList.unregisterAll(this);
     }
     
-    protected static void clean()
+    protected static void reload()
     {
         HandlerList.unregisterAll(RecipeManager.events);
+        Bukkit.getPluginManager().registerEvents(RecipeManager.events, RecipeManager.getPlugin());
     }
     
     /*
@@ -621,7 +620,7 @@ public class Events implements Listener
     {
         Player player = event.getPlayer();
         
-        Players.removeJoined(player);
+        Players.remove(player);
         Workbenches.remove(player);
         Recipes.recipeResetResult(player.getName());
         Messages.clearPlayer(player.getName());
