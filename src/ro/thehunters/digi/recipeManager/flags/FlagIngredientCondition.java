@@ -347,7 +347,7 @@ public class FlagIngredientCondition extends Flag
          */
         public boolean checkData(short data)
         {
-            if(!dataBits.isEmpty())
+            if(hasDataBits())
             {
                 for(Entry<Short, Boolean> e : dataBits.entrySet())
                 {
@@ -360,7 +360,7 @@ public class FlagIngredientCondition extends Flag
                 }
             }
             
-            if(!dataValues.isEmpty())
+            if(hasDataValues())
             {
                 Boolean is = dataValues.get(data);
                 
@@ -459,33 +459,33 @@ public class FlagIngredientCondition extends Flag
         
         public boolean checkEnchants(Map<Enchantment, Integer> enchants)
         {
-            if(this.enchants.isEmpty())
+            if(!hasEnchants())
             {
-                return true; // no enchantment conditions
+                return true;
             }
             
-            if(enchants.isEmpty())
+            if(enchants != null && !enchants.isEmpty())
             {
-                return false; // this flag requires enchantments but item has none
-            }
-            
-            for(Entry<Enchantment, Map<Short, Boolean>> e : this.enchants.entrySet())
-            {
-                Integer level = enchants.get(e.getKey());
-                
-                if(level == null)
+                for(Entry<Enchantment, Map<Short, Boolean>> e : this.enchants.entrySet())
                 {
-                    return false;
-                }
-                else if(!e.getValue().isEmpty())
-                {
-                    Boolean is = e.getValue().get(level.shortValue());
+                    Integer level = enchants.get(e.getKey());
                     
-                    return (is == null ? false : is.booleanValue());
+                    // TODO test if proper
+                    
+                    if(level == null)
+                    {
+                        return false;
+                    }
+                    else if(!e.getValue().isEmpty())
+                    {
+                        Boolean is = e.getValue().get(level.shortValue());
+                        
+                        return (is == null ? false : is.booleanValue());
+                    }
                 }
             }
             
-            return true;
+            return false;
         }
         
         public String getEnchantsString()
@@ -547,12 +547,12 @@ public class FlagIngredientCondition extends Flag
         
         public boolean checkName(String name)
         {
-            if(this.name == null)
+            if(!hasName())
             {
                 return true;
             }
             
-            if(this.name.equalsIgnoreCase(name) || name.matches(this.name))
+            if(name != null && (this.name.equalsIgnoreCase(name) || name.matches(this.name)))
             {
                 return true;
             }
@@ -582,16 +582,14 @@ public class FlagIngredientCondition extends Flag
                 return true;
             }
             
-            if(lore == null || lore.isEmpty())
+            if(lore != null && !lore.isEmpty())
             {
-                return false;
-            }
-            
-            for(String l : lore)
-            {
-                if(l.equalsIgnoreCase(this.lore) || l.matches(this.lore))
+                for(String l : lore)
                 {
-                    return true;
+                    if(l != null && (l.equalsIgnoreCase(this.lore) || l.matches(this.lore)))
+                    {
+                        return true;
+                    }
                 }
             }
             
@@ -676,7 +674,7 @@ public class FlagIngredientCondition extends Flag
          */
         public String getColorString()
         {
-            if(minColor == null)
+            if(!hasColor())
             {
                 return null;
             }
@@ -709,28 +707,28 @@ public class FlagIngredientCondition extends Flag
         
         public boolean checkColor(Color color)
         {
-            if(color == null)
-            {
-                return false;
-            }
-            
-            if(minColor == null)
+            if(!hasColor())
             {
                 return true;
             }
             
-            int r = color.getRed();
-            int g = color.getGreen();
-            int b = color.getBlue();
+            if(color != null)
+            {
+                int r = color.getRed();
+                int g = color.getGreen();
+                int b = color.getBlue();
+                
+                if(maxColor == null)
+                {
+                    return (minColor.getRed() == r && minColor.getGreen() == g && minColor.getBlue() == b);
+                }
+                else
+                {
+                    return (minColor.getRed() <= r && maxColor.getRed() >= r && minColor.getGreen() <= g && maxColor.getGreen() >= g && minColor.getBlue() <= b && maxColor.getBlue() >= b);
+                }
+            }
             
-            if(maxColor == null)
-            {
-                return (minColor.getRed() == r && minColor.getGreen() == g && minColor.getBlue() == b);
-            }
-            else
-            {
-                return (minColor.getRed() <= r && maxColor.getRed() >= r && minColor.getGreen() <= g && maxColor.getGreen() >= g && minColor.getBlue() <= b && maxColor.getBlue() >= b);
-            }
+            return false;
         }
         
         /**
