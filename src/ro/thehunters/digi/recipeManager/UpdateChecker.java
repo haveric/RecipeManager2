@@ -1,8 +1,6 @@
 package ro.thehunters.digi.recipeManager;
 
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -127,7 +125,9 @@ public class UpdateChecker extends BukkitRunnable
         else
         {
             if(RecipeManager.getPlugin() == null)
+            {
                 return;
+            }
             
             String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
             
@@ -144,12 +144,15 @@ public class UpdateChecker extends BukkitRunnable
             }
             else
             {
-                Messages.sendAndLog(sender, "<green>New version available: " + newVersion + " ! You're using " + currentVersion);
-                Messages.sendAndLog(sender, "<green>Grab it at: " + newLink);
+                Messages.sendAndLog(sender, "New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + currentVersion);
+                Messages.sendAndLog(sender, "Grab it at: <green>" + newLink);
             }
         }
         
-        Messages.sendAndLog(sender, "<gray>You can disable this check from config.yml.");
+        if(sender == null)
+        {
+            Messages.sendAndLog(sender, "<gray>You can disable this check from config.yml.");
+        }
     }
     
     private boolean getLatestVersion()
@@ -171,15 +174,7 @@ public class UpdateChecker extends BukkitRunnable
             nodes = ((Element)nodes.item(0)).getChildNodes();
             String version = nodes.item(0).getNodeValue();
             
-            // Look for the version inside the title
-            Matcher m = Pattern.compile("([\\d\\.]+)([a-z]+|)").matcher(version);
-            
-            if(!m.find())
-            {
-                return false; // version was not found !
-            }
-            
-            newVersion = m.group();
+            newVersion = version.substring(1);
             
             nodes = ((Element)node).getElementsByTagName("link");
             nodes = ((Element)nodes.item(0)).getChildNodes();
