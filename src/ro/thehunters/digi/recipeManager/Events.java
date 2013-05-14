@@ -59,6 +59,7 @@ import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
+import ro.thehunters.digi.recipeManager.flags.Flaggable;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
@@ -814,13 +815,37 @@ public class Events implements Listener
         ItemStack ingredient = Tools.Item.nullIfAir(slot == 0 ? item : inv.getSmelting());
         ItemStack fuel = Tools.Item.nullIfAir(slot == 1 ? item : inv.getFuel());
         
+        // TODO remove
         /*
         if(slot == 0)
-            Messages.debug("<green>Placed ingredient: " + Tools.printItem(ingredient));
+        {
+            Messages.debug("<green>Placed ingredient: " + Tools.Item.print(ingredient));
+        }
         
         if(slot == 1)
-            Messages.debug("<green>Placed fuel: " + Tools.printItem(fuel));
+        {
+            Messages.debug("<green>Placed fuel: " + Tools.Item.print(fuel));
+        }
         */
+        
+        FurnaceData data = Furnaces.get(furnace.getLocation());
+        
+        if(slot == 0)
+        {
+            data.setFrozen(false);
+            
+            if(ingredient != null)
+            {
+                data.setSmelter(player);
+                data.setSmelting(ingredient);
+            }
+        }
+        
+        if(slot == 1 && fuel != null)
+        {
+            data.setFueler(player);
+            data.setFuel(fuel);
+        }
         
         SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
         Location location = furnace.getLocation();
@@ -832,8 +857,8 @@ public class Events implements Listener
         
         if(smeltRecipe != null)
         {
-//            Messages.debug("INGR = " + Tools.printItem(smeltRecipe.getIngredient()) + " | " + Tools.printItem(ingredient) + " | " + Tools.itemSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient));
-//            Messages.debug("FUEL = " + Tools.printItem(smeltRecipe.getFuel()) + " | " + Tools.printItem(fuel) + " | " + Tools.itemSimilarDataWildcard(smeltRecipe.getFuel(), fuel));
+//            Messages.debug("INGR = " + Tools.Item.print(smeltRecipe.getIngredient()) + " | " + Tools.Item.print(ingredient));
+//            Messages.debug("FUEL = " + Tools.Item.print(smeltRecipe.getFuel()) + " | " + Tools.Item.print(fuel));
             
             if(smeltRecipe.hasFuel() && fuel != null && ingredient != null)
             {
@@ -850,19 +875,31 @@ public class Events implements Listener
                 }
             }
             
-            Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
-            
-            if(smeltRecipe.checkFlags(a))
+            if(slot == 0)
             {
-                a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                a.clear();
-                smeltRecipe.sendPrepare(a);
-                return true;
-            }
-            else
-            {
-                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                return false;
+                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
+                
+                if(smeltRecipe.checkFlags(a))
+                {
+                    a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
+                    a.clear();
+                    
+                    if(smeltRecipe.sendPrepare(a))
+                    {
+                        a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
+                        return true;
+                    }
+                    else
+                    {
+                        a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                        return false;
+                    }
+                }
+                else
+                {
+                    a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                    return false;
+                }
             }
         }
         
@@ -870,21 +907,87 @@ public class Events implements Listener
         
         if(fuelRecpe != null)
         {
-            Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
-            
-            if(fuelRecpe.checkFlags(a))
+            if(slot == 1)
             {
-                a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                a.clear();
-                fuelRecpe.sendPrepare(a);
-                return true;
+                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
+                
+                if(fuelRecpe.checkFlags(a))
+                {
+                    a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
+                    a.clear();
+                    
+                    if(fuelRecpe.sendPrepare(a))
+                    {
+                        a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
+                        return true;
+                    }
+                    else
+                    {
+                        a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                        return false;
+                    }
+                }
+                else
+                {
+                    a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft)
+    {
+        if(flaggable == null)
+        {
+            Messages.debug("flaggable is null!"); // TODO remove
+            return false;
+        }
+        
+        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location())); // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
+        
+        a.clear();
+        
+        if(flaggable.checkFlags(a))
+        {
+            a.sendEffects(a.player(), msg);
+        }
+        else
+        {
+            a.sendReasons(a.player(), msg);
+            return false;
+        }
+        
+        a.clear();
+        
+        if(flaggable.sendPrepare(a))
+        {
+            a.sendEffects(a.player(), msg);
+        }
+        else
+        {
+            a.sendReasons(a.player(), msg);
+            return false;
+        }
+        
+        if(craft)
+        {
+            a.clear();
+            
+            if(flaggable.sendCrafted(a))
+            {
+                a.sendEffects(a.player(), msg);
             }
             else
             {
-                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                a.sendReasons(a.player(), msg);
                 return false;
             }
         }
+        
+        a.clear();
         
         return true;
     }
@@ -896,73 +999,22 @@ public class Events implements Listener
         {
             Furnace furnace = (Furnace)event.getBlock().getState();
             FurnaceData data = Furnaces.get(furnace.getLocation());
-            FuelRecipe fr = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+            int time = furnaceBurnTime(event, furnace, data);
             
-            if(fr != null)
+            if(time == -1)
             {
-                // Fuel recipe
-                int time = (fr.hasFlag(FlagType.REMOVE) ? 0 : fr.getBurnTicks());
-                
-                Args a = Args.create().location(event.getBlock().getLocation()).recipe(fr).inventory(furnace.getInventory()).build();
-                
-                // TODO rethink all of this ? 
-                boolean cancel = false;
-                
-                if(fr.checkFlags(a))
-                {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
-                }
-                else
-                {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
-                    cancel = true;
-                }
-                
-                a.clear();
-                
-                if(fr.sendPrepare(a))
-                {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
-                }
-                else
-                {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
-                    cancel = true;
-                }
-                
-                if(cancel)
-                {
-                    event.setCancelled(true);
-                }
-                else
-                {
-                    event.setBurnTime(time);
-                    event.setBurning(time > 0);
-                }
+                data.setBurnTicks(furnace.getBurnTime());
+                return;
+            }
+            
+            if(time == 0)
+            {
+                event.setCancelled(true);
             }
             else
             {
-                // Smelting recipe with specific fuel
-                ItemStack ingredient = furnace.getInventory().getSmelting();
-                SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
-                
-                if(sr != null)
-                {
-                    if(!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel()))
-                    {
-                        event.setCancelled(true);
-                    }
-                    else
-                    {
-                        event.setBurning(true);
-                        event.setBurnTime(Short.MAX_VALUE);
-                        
-                        // TODO send craft and stuff!
-                        
-                        ItemStack fuel = furnace.getInventory().getFuel();
-                        fuel.setAmount(fuel.getAmount() + 1);
-                    }
-                }
+                event.setBurning(true);
+                event.setBurnTime(time);
             }
             
             data.setBurnTicks(!event.isCancelled() && event.isBurning() ? event.getBurnTime() : 0);
@@ -972,6 +1024,59 @@ public class Events implements Listener
             event.setCancelled(true);
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
+    }
+    
+    private int furnaceBurnTime(FurnaceBurnEvent event, Furnace furnace, FurnaceData data)
+    {
+        FuelRecipe fr = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+        
+        if(fr != null)
+        {
+            if(fr.hasFlag(FlagType.REMOVE))
+            {
+                return 0;
+            }
+            
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(furnace.getInventory()).build();
+            
+            if(!furnaceHandleFlaggable(fr, a, true))
+            {
+                return 0;
+            }
+            
+            return fr.getBurnTicks();
+        }
+        else
+        {
+            // Smelting recipe with specific fuel
+            ItemStack ingredient = furnace.getInventory().getSmelting();
+            SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+            
+            if(sr != null)
+            {
+                if(!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel()))
+                {
+                    return 0;
+                }
+                else
+                {
+                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(furnace.getInventory()).build();
+                    
+                    if(!furnaceHandleFlaggable(sr, a, true))
+                    {
+                        return 0;
+                    }
+                    
+                    ItemStack fuel = furnace.getInventory().getFuel();
+                    fuel.setAmount(fuel.getAmount() + 1);
+                    data.setFuel(fuel);
+                    
+                    return Short.MAX_VALUE;
+                }
+            }
+        }
+        
+        return -1;
     }
     
     @EventHandler(priority = EventPriority.LOW)
@@ -989,6 +1094,7 @@ public class Events implements Listener
             Furnace furnace = (Furnace)event.getBlock().getState();
             FurnaceInventory inv = furnace.getInventory();
             
+            // Special handling if the recipe has a predefined fuel in it
             if(recipe.hasFuel())
             {
                 ItemStack fuel = Tools.Item.nullIfAir(inv.getFuel());
@@ -1027,44 +1133,19 @@ public class Events implements Listener
                 }
             }
             
-            // TODO finish this
+            ItemResult result = recipe.getResult();
+            FurnaceData data = Furnaces.get(furnace.getLocation());
+            Args a = Args.create().player(data.getSmelter()).location(furnace.getLocation()).recipe(recipe).inventory(inv).result(result).build();
             
-            Args a = Args.create().location(event.getBlock().getLocation()).recipe(recipe).inventory(inv).result(event.getResult()).build();
-            
-            ItemResult result = recipe.getResult(); // (a);
-            
-            a.setResult(result);
-            a.clear();
-            
-            recipe.sendCrafted(a);
-            
-            if(a.hasResult())
+            if(!furnaceHandleFlaggable(recipe, a, true) || !furnaceHandleFlaggable(result, a, true))
             {
-                a.clear();
-                
-                if(recipe.sendCrafted(a))
+                if(a.hasPlayer())
                 {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+                    Messages.SMELT_FROZEN.print(a.player(), null, "{location}", Tools.printLocation(a.location()));
                 }
                 
-                a.clear();
-                
-                if(result.sendPrepare(a))
-                {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
-                }
-                
-                a.clear();
-                
-                if(result.sendCrafted(a))
-                {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
-                }
-                
-                if(a.result().sendPrepare(a))
-                {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get());
-                }
+                data.setFrozen(true);
+                event.setCancelled(true);
             }
         }
         catch(Throwable e)

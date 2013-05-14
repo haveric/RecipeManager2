@@ -6,7 +6,10 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import ro.thehunters.digi.recipeManager.Messages;
 
 /**
  * Stores data about a furnace
@@ -27,6 +30,10 @@ public class FurnaceData implements ConfigurationSerializable
     private Float cookTime = null;
     private float cookProgress = 0;
     
+    // Non-saveable fields
+    private boolean frozen = false;
+    
+    // Constants
     private static final String ID_SMELTER = "smelter";
     private static final String ID_FUELER = "fueler";
     private static final String ID_SMELTING = "smelting";
@@ -106,8 +113,7 @@ public class FurnaceData implements ConfigurationSerializable
         }
         catch(Throwable e)
         {
-            // TODO remove ?
-            e.printStackTrace();
+            Messages.error(null, e, null);
         }
     }
     
@@ -174,6 +180,11 @@ public class FurnaceData implements ConfigurationSerializable
         this.fueler = fueler;
     }
     
+    public void setFueler(Player fueler)
+    {
+        this.fueler = (fueler == null ? null : fueler.getName());
+    }
+    
     public String getSmelter()
     {
         return smelter;
@@ -184,6 +195,11 @@ public class FurnaceData implements ConfigurationSerializable
         this.smelter = smelter;
     }
     
+    public void setSmelter(Player smelter)
+    {
+        this.smelter = (smelter == null ? null : smelter.getName());
+    }
+    
     public ItemStack getSmelting()
     {
         return smelting;
@@ -191,7 +207,7 @@ public class FurnaceData implements ConfigurationSerializable
     
     public void setSmelting(ItemStack smelting)
     {
-        this.smelting = smelting;
+        this.smelting = (smelting == null ? null : smelting.clone());
     }
     
     public ItemStack getFuel()
@@ -201,7 +217,7 @@ public class FurnaceData implements ConfigurationSerializable
     
     public void setFuel(ItemStack fuel)
     {
-        this.fuel = fuel;
+        this.fuel = (fuel == null ? null : fuel.clone());
     }
     
     public boolean isBurning()
@@ -250,5 +266,15 @@ public class FurnaceData implements ConfigurationSerializable
     public short getCookProgressForFurnace()
     {
         return (short)Math.min(Math.max(Math.round(cookProgress), 1), 200);
+    }
+    
+    public boolean isFrozen()
+    {
+        return frozen;
+    }
+    
+    public void setFrozen(boolean frozen)
+    {
+        this.frozen = frozen;
     }
 }

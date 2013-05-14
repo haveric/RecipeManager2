@@ -91,6 +91,13 @@ class FurnaceWorker implements Runnable
                 continue;
             }
             
+            if(data.isFrozen())
+            {
+                furnace.setCookTime((short)(190 - (tickRate / 10)));
+                furnace.setBurnTime((short)(furnace.getBurnTime() + (tickRate / 10)));
+                continue;
+            }
+            
             FurnaceInventory inventory = furnace.getInventory();
             ItemStack smelt = inventory.getSmelting();
             
@@ -116,11 +123,11 @@ class FurnaceWorker implements Runnable
             else
             */
             {
-                ItemResult recipeResult = recipe.getResult();
-                ItemStack result = inventory.getResult();
+                ItemResult result = recipe.getResult();
+                ItemStack resultSlot = inventory.getResult();
                 
                 // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
-                if(result != null && (!recipeResult.isSimilar(result) || result.getAmount() >= result.getType().getMaxStackSize()))
+                if(resultSlot != null && (!result.isSimilar(resultSlot) || resultSlot.getAmount() >= resultSlot.getType().getMaxStackSize()))
                 {
                     data.setCookProgress(0);
                     continue;

@@ -196,14 +196,14 @@ public class Furnaces
             }
         }
         
-        Messages.debug("loaded " + furnaces.size() + " furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        Messages.log("Loaded " + furnaces.size() + " furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
     
     public static void save()
     {
         long start = System.currentTimeMillis();
         
-        Messages.debug("saving " + furnaces.size() + " furnaces...");
+        Messages.log("Saving " + furnaces.size() + " furnaces...");
         
         Map<UUID, Map<String, FurnaceData>> mapWorld = new HashMap<UUID, Map<String, FurnaceData>>();
         Map<String, FurnaceData> mapCoords;
@@ -251,11 +251,11 @@ public class Furnaces
             }
             catch(Throwable e)
             {
-                Messages.error(null, e, "Failed to create " + file.getPath() + " file!");
-                break;
+                Messages.error(null, e, "Failed to create '" + file.getPath() + "' file!");
+                continue;
             }
         }
         
-        Messages.debug("saved furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        Messages.log("Saved furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 }
