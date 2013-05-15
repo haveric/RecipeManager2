@@ -58,6 +58,7 @@ public class FlagIngredientCondition extends Flag
             "    Additionally instead of the number you can specify 'item:data' to use the named data value.",
             "    Prefixing with '&' would make a bitwise operation on the data value.",
             "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
+            "    Optionally you can add more data conditions separated by ',' that the ingredient must match against one to proceed.",
             "",
             "  enchant <name> [[!]num or min-max], [...]",
             "    Condition for applied enchantments (not stored in books).",
@@ -347,16 +348,39 @@ public class FlagIngredientCondition extends Flag
          */
         public boolean checkData(short data)
         {
+            boolean ok = false;
+            
             if(hasDataBits())
             {
                 for(Entry<Short, Boolean> e : dataBits.entrySet())
                 {
                     short d = e.getKey().shortValue();
                     
-                    if(e.getValue() ? (data & d) == d : (data & d) != d)
+                    if(e.getValue())
+                    {
+                        if(!ok && (data & d) == d)
+                        {
+                            ok = true;
+                        }
+                    }
+                    else if((data & d) == d)
                     {
                         return false;
                     }
+                    
+                    /* Old way - makes all bitwise operations required TODO remove
+                    // If its allowed and doesn't match then return false
+                    // Or if it's not allowed and matches then also return false
+                    if(e.getValue() != ((data & d) == d))
+                    {
+                        return false;
+                    }
+                    */
+                }
+                
+                if(!ok)
+                {
+                    return false;
                 }
             }
             
@@ -364,7 +388,8 @@ public class FlagIngredientCondition extends Flag
             {
                 Boolean is = dataValues.get(data);
                 
-                return is == null ? false : is.booleanValue(); // if value not found return false otherwise return true/false if value should/not be there
+                // If value not found return false otherwise return if value should be there
+                return is == null ? false : is.booleanValue();
             }
             
             return true;
@@ -949,11 +974,19 @@ public class FlagIngredientCondition extends Flag
                         val = val.substring(1).trim();
                     }
                     
-                    ItemStack match = Tools.parseItem(val, 0, ParseBit.NO_AMOUNT | ParseBit.NO_META | ParseBit.NO_PRINT);
-                    
-                    if(match != null)
+                    if(val.matches("(.*):(.*)"))
                     {
-                        cond.addDataValue(match.getDurability(), !not);
+                        ItemStack match = Tools.parseItem(val, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+                        
+                        if(match != null && match.getDurability() != Vanilla.DATA_WILDCARD)
+                        {
+                            cond.addDataValue(match.getDurability(), !not);
+                        }
+                        else
+                        {
+//                            ErrorReporter.warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
+                            continue;
+                        }
                     }
                     else
                     {
@@ -971,13 +1004,13 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                ErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid numbers: " + val);
+                                ErrorReporter.warning("Flag " + getType() + " has 'data' argument with invalid numbers: " + val);
                                 continue;
                             }
                             
                             if(min > max)
                             {
-                                ErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number range: " + min + " to " + max);
+                                ErrorReporter.warning("Flag " + getType() + " has 'data' argument with invalid number range: " + min + " to " + max);
                                 break;
                             }
                             
@@ -997,16 +1030,16 @@ public class FlagIngredientCondition extends Flag
                             {
                                 if(bitwise)
                                 {
-                                    cond.addDataBit(Short.valueOf(val), not);
+                                    cond.addDataBit(Short.valueOf(val), !not);
                                 }
                                 else
                                 {
-                                    cond.addDataValue(Short.valueOf(val), not);
+                                    cond.addDataValue(Short.valueOf(val), !not);
                                 }
                             }
                             catch(NumberFormatException e)
                             {
-                                ErrorReporter.error("Flag " + getType() + " has 'data' argument with invalid number: " + val);
+                                ErrorReporter.warning("Flag " + getType() + " has 'data' argument with invalid number: " + val);
                                 continue;
                             }
                         }
@@ -1039,7 +1072,7 @@ public class FlagIngredientCondition extends Flag
                 
                 if(enchant == null)
                 {
-                    ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid name: " + value);
+                    ErrorReporter.warning("Flag " + getType() + " has 'enchant' argument with invalid name: " + value);
                     continue;
                 }
                 
@@ -1071,13 +1104,13 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid numbers: " + s);
+                                ErrorReporter.warning("Flag " + getType() + " has 'enchant' argument with invalid numbers: " + s);
                                 continue;
                             }
                             
                             if(min > max)
                             {
-                                ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
+                                ErrorReporter.warning("Flag " + getType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
                                 continue;
                             }
                             
@@ -1091,7 +1124,7 @@ public class FlagIngredientCondition extends Flag
                             }
                             catch(NumberFormatException e)
                             {
-                                ErrorReporter.error("Flag " + getType() + " has 'enchant' argument with invalid number: " + s);
+                                ErrorReporter.warning("Flag " + getType() + " has 'enchant' argument with invalid number: " + s);
                                 continue;
                             }
                         }
