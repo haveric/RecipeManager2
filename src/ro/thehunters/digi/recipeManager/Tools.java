@@ -676,7 +676,7 @@ public class Tools
                         {
                             if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
                             {
-                                ErrorReporter.warning("Item '" + material + " has data value that is not a number: '" + value + "', defaulting to " + defaultData);
+                                ErrorReporter.warning("Item '" + material + " has unknown data number/alias: '" + value + "', defaulting to " + defaultData);
                             }
                         }
                     }
