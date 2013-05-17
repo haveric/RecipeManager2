@@ -904,7 +904,6 @@ public class Tools
                 try
                 {
                     duration = Float.valueOf(value);
-                    duration /= effectType.getDurationModifier(); // compensate for effect's duration modifier
                 }
                 catch(NumberFormatException e)
                 {
