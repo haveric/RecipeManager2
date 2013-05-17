@@ -1146,6 +1146,10 @@ public class Events implements Listener
                 data.setFrozen(true);
                 event.setCancelled(true);
             }
+            else
+            {
+                event.setResult(a.result());
+            }
         }
         catch(Throwable e)
         {
