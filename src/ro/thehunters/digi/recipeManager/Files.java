@@ -554,7 +554,9 @@ public class Files
         for(PotionType t : PotionType.values())
         {
             if(t != null)
+            {
                 s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), (t.getEffectType() == null ? "" : t.getEffectType().getName()), t.getDamageValue()));
+            }
         }
         
         s.append(NL);
@@ -567,7 +569,9 @@ public class Files
         for(PotionEffectType t : PotionEffectType.values())
         {
             if(t != null)
+            {
                 s.append(NL).append(String.format(" %-5d %-24s %-10s %.2f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
+            }
         }
         
         s.append(NL);

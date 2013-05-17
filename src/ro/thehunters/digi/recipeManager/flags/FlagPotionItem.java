@@ -7,8 +7,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
-import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 
@@ -48,9 +48,9 @@ public class FlagPotionItem extends Flag
             "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
             "",
             "",
-            "Building a custom potion requires adding individual effects.",
+            "Building a custom potion requires adding individual effects:",
             "",
-            "However, basic potion still affect the custom potion:",
+            "A basic potion still affects the custom potion like the following:",
             "- If no basic potion is defined the bottle will look like 'water bottle' with no effects listed, effects still apply when drank",
             "- Basic potion's type affects bottle liquid color",
             "- Basic potion's splash still affects if the bottle is throwable instead of drinkable",
@@ -58,15 +58,13 @@ public class FlagPotionItem extends Flag
             "- The first custom effect added is the potion's name, rest of effects are in description (of course you can use @name to change the item name)",
             "",
             "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
-            "Similar syntax to basic effect, arguments separated by | character, can be in any order.",
             "",
+            "Similar syntax to basic effect, arguments separated by | character, can be in any order.",
             "Arguments for custom effect:",
             "  type <effect type>  = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE !)",
             "  duration <float>    = (optional) Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
             "  amplify <number>    = (optional) Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
             "  ambient             = (optional) Adds extra visual particles",
-            "",
-            "Setting to 'false' will remove all potion effects - reverting it to plain water bottle.",
         };
         
         E = new String[]
