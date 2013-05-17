@@ -101,42 +101,39 @@ public class WorkbenchRecipe extends MultiResultRecipe
         
         for(ItemResult r : getResults())
         {
-            if(r.getTypeId() == 0)
+            r = r.clone();
+            a.clearReasons();
+            a.setResult(r);
+            r.sendPrepare(a);
+            
+            if(r.checkFlags(a))
             {
-                failChance = r.getChance();
-            }
-            else
-            {
-                r = r.clone();
-                a.clearReasons();
-                a.setResult(r);
-                r.sendPrepare(a);
-                
-                if(r.checkFlags(a))
+                if(r.hasFlag(FlagType.SECRET))
                 {
-                    if(r.hasFlag(FlagType.SECRET))
-                    {
-                        secretNum++;
-                        secretChance += r.getChance();
-                    }
-                    else
-                    {
-                        displayResults.add(r);
-                        
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
-                    }
+                    secretNum++;
+                    secretChance += r.getChance();
+                }
+                else if(r.getTypeId() == 0)
+                {
+                    failChance = r.getChance();
                 }
                 else
                 {
-                    unavailableNum++;
-                    unavailableChance += r.getChance();
+                    displayResults.add(r);
                     
-                    if(!r.hasFlag(FlagType.SECRET))
-                    {
+                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
+                }
+            }
+            else
+            {
+                unavailableNum++;
+                unavailableChance += r.getChance();
+                
+                if(!r.hasFlag(FlagType.SECRET))
+                {
 //                        FlagDebug.grabReasons(a.playerName(), r, a.reasons()); TODO
-                        
-                        a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
-                    }
+                    
+                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                 }
             }
         }
