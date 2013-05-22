@@ -203,9 +203,16 @@ public enum FlagType
      */
     public static void init()
     {
-        Permission parent = new Permission(Permissions.SKIPFLAG_ALL, PermissionDefault.FALSE);
-        parent.setDescription("Ignores all flags.");
-        Bukkit.getPluginManager().addPermission(parent);
+        Permission parent = Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_ALL);
+        
+        if(parent == null)
+        {
+            parent = new Permission(Permissions.SKIPFLAG_ALL, PermissionDefault.FALSE);
+            parent.setDescription("Ignores all flags.");
+            
+            Bukkit.getPluginManager().addPermission(parent);
+        }
+        
         Permission p;
         
         for(FlagType type : values())
@@ -223,7 +230,6 @@ public enum FlagType
                 
                 if(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + name) != null)
                 {
-                    Messages.debug("permission for flag " + name + " already exists!");
                     continue;
                 }
                 
