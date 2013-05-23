@@ -4,25 +4,16 @@ import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
-import com.earth2me.essentials.Essentials;
-import com.iCo6.iConomy;
-import com.iCo6.system.Accounts;
 
 public class Economy
 {
     private boolean enabled = false;
     private net.milkbowl.vault.economy.Economy vault = null;
-    private com.iCo6.system.Accounts iConomy = null;
-    private boolean essentials = false;
     
     protected Economy()
     {
-        Plugin plugin;
-        
-        if((plugin = Bukkit.getPluginManager().getPlugin("Vault")) instanceof Vault)
+        if(Bukkit.getPluginManager().getPlugin("Vault") instanceof Vault)
         {
             RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> service = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             
@@ -44,34 +35,13 @@ public class Economy
                 }
             }
         }
-        else if((plugin = Bukkit.getPluginManager().getPlugin("iConomy")) instanceof iConomy)
-        {
-            iConomy = new Accounts();
-            
-            if(iConomy != null)
-            {
-                Messages.log("iConomy detected and connected, economy features are available.");
-            }
-        }
-        else if((plugin = Bukkit.getPluginManager().getPlugin("Essentials")) instanceof Essentials)
-        {
-            if(plugin.isEnabled())
-            {
-                essentials = true;
-                Messages.log("Essentials detected and connected, economy features are available.");
-            }
-            else
-            {
-                Messages.log("Essentials detected but it's not enabled, economy features are not available.");
-            }
-        }
         
-        enabled = (essentials || vault != null || iConomy != null);
+        enabled = (vault != null);
         
         if(!enabled)
         {
-            Messages.log("Vault nor iConomy nor EssentialsEco was not found, economy features are not available.");
             clear();
+            Messages.log("Vault was not found, economy features are not available.");
         }
     }
     
@@ -79,8 +49,6 @@ public class Economy
     {
         enabled = false;
         vault = null;
-        iConomy = null;
-        essentials = false;
     }
     
     /**
@@ -108,20 +76,7 @@ public class Economy
             return null;
         }
         
-        if(vault != null)
-        {
-            return vault.format(amount);
-        }
-        else if(iConomy != null)
-        {
-            return com.iCo6.iConomy.format(amount);
-        }
-        else if(essentials)
-        {
-            return com.earth2me.essentials.api.Economy.format(amount);
-        }
-        
-        return null;
+        return vault.format(amount);
     }
     
     /**
@@ -139,29 +94,7 @@ public class Economy
             return 0;
         }
         
-        if(vault != null)
-        {
-            return vault.getBalance(playerName);
-        }
-        else if(iConomy != null)
-        {
-            return iConomy.get(playerName).getHoldings().getBalance();
-        }
-        else if(essentials)
-        {
-            if(com.earth2me.essentials.api.Economy.playerExists(playerName))
-            {
-                try
-                {
-                    return com.earth2me.essentials.api.Economy.getMoney(playerName);
-                }
-                catch(Throwable e)
-                {
-                }
-            }
-        }
-        
-        return 0;
+        return vault.getBalance(playerName);
     }
     
     /**
@@ -181,54 +114,20 @@ public class Economy
             return;
         }
         
-        if(vault != null)
+        EconomyResponse error;
+        
+        if(amount > 0)
         {
-            EconomyResponse error;
-            
-            if(amount > 0)
-            {
-                error = vault.depositPlayer(playerName, amount);
-            }
-            else
-            {
-                error = vault.withdrawPlayer(playerName, Math.abs(amount));
-            }
-            
-            if(error != null && !error.transactionSuccess())
-            {
-                Messages.info("<red>Economy error: " + error.errorMessage);
-            }
+            error = vault.depositPlayer(playerName, amount);
         }
-        else if(iConomy != null)
+        else
         {
-            if(amount > 0)
-            {
-                iConomy.get(playerName).getHoldings().add(amount);
-            }
-            else
-            {
-                iConomy.get(playerName).getHoldings().subtract(Math.abs(amount));
-            }
+            error = vault.withdrawPlayer(playerName, Math.abs(amount));
         }
-        else if(essentials)
+        
+        if(error != null && !error.transactionSuccess())
         {
-            if(com.earth2me.essentials.api.Economy.playerExists(playerName))
-            {
-                try
-                {
-                    if(amount > 0)
-                    {
-                        com.earth2me.essentials.api.Economy.add(playerName, amount);
-                    }
-                    else
-                    {
-                        com.earth2me.essentials.api.Economy.subtract(playerName, Math.abs(amount));
-                    }
-                }
-                catch(Throwable e)
-                {
-                }
-            }
+            Messages.info("<red>Economy error: " + error.errorMessage);
         }
     }
 }
