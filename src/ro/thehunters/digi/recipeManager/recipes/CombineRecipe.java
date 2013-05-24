@@ -134,12 +134,6 @@ public class CombineRecipe extends WorkbenchRecipe
         for(ItemStack item : ingredients)
         {
             str.append(item.getTypeId()).append(':').append(item.getDurability()).append(';');
-            
-            // TODO remove
-            if(item.getDurability() == -1)
-            {
-                Messages.debug("found an item with data value -1 | result=" + getFirstResult());
-            }
         }
         
         hash = str.toString().hashCode();

@@ -37,19 +37,6 @@ update-books: true
 color-console: true
 
 
-# Return empty item when used in a recipe
-#   all default: true
-return-empty:
-  buckets: true        # water/lava/milk bucket -> empty bucket (default behaviour of MC)
-  potions: true        # any potion -> empty bottle
-  bowl: true           # mushroom soup -> bowl
-
-
-# Return empty bucket when water/lava/milk bucket is used as a fuel in furnace
-#   default true
-fuel-return-buckets: true
-
-
 # When Shift+Clicking an item in the inventory while a furnace is opened, where should the item go ?
 # Values for this setting:
 #   fuel - if item is a fuel, will go in fuel slot, otherwise in the ingredient slot (default, like vaniila MC) NOTE: it can get confusing when creating fuels with items that are also ingredients.
@@ -78,7 +65,7 @@ multithreading: true
 fix-mod-results: false
 
 
-# If you want to remove all existing recipes (except special ones configured above) from the server, then set this to true.
+# If you want to remove all existing recipes (except your custom recipes and except special ones configured above) from the server, then set this to true.
 # Recipes added by this plugin will not be affected of course.
 #   default: false
 clear-recipes: false

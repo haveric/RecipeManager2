@@ -606,8 +606,6 @@ public enum Messages
     
     public static void debug(String message)
     {
-        // TODO print stack trace
-        // TODO debug switch
         StackTraceElement[] e = new Exception().getStackTrace();
         int i = 1;
         Bukkit.getConsoleSender().sendMessage(Tools.parseColors(ChatColor.GREEN + "[DEBUG]" + ChatColor.AQUA + "" + ChatColor.UNDERLINE + e[i].getFileName() + ":" + e[i].getLineNumber() + ChatColor.RESET + " " + ChatColor.RED + e[i].getMethodName() + "() " + ChatColor.WHITE + Tools.parseColors(message, false), false));

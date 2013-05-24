@@ -206,8 +206,6 @@ public class RecipeManager extends JavaPlugin
         {
             trace = traces[i];
             
-            Messages.debug(trace.getClassName() + " | " + trace.getMethodName());
-            
             if(trace.getMethodName().equals(method) && traces.length >= i)
             {
                 trace = traces[++i];

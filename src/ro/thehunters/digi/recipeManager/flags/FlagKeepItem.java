@@ -13,7 +13,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
@@ -299,12 +298,8 @@ public class FlagKeepItem extends Flag
         }
         else if(a.inventory() instanceof FurnaceInventory)
         {
-            // TODO test
-            
             FurnaceInventory inv = (FurnaceInventory)a.inventory();
             ReturnTask task = new ReturnTask(inv);
-            
-            Messages.debug("recipe = " + a.recipe());
             
             if(a.recipe() instanceof SmeltRecipe)
             {

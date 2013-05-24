@@ -377,7 +377,6 @@ public class Files
             
             if(data == null)
             {
-                Messages.debug("command " + e.getKey() + " has data = null !");
                 continue;
             }
             

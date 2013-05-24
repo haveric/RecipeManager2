@@ -223,7 +223,7 @@ public class Events implements Listener
                 return true;
             }
             
-            Messages.debug("Results don't match, special recipe ? " + recipeResult + " vs " + result);
+            Messages.debug("Results don't match, special recipe ? " + recipeResult + " vs " + result); // TODO
         }
         
         return false;
@@ -941,7 +941,6 @@ public class Events implements Listener
     {
         if(flaggable == null)
         {
-            Messages.debug("flaggable is null!"); // TODO remove
             return false;
         }
         
@@ -1290,7 +1289,7 @@ public class Events implements Listener
                         FurnaceInventory inv = (FurnaceInventory)event.getDestination();
                         Furnace furnace = (Furnace)inv.getHolder();
                         
-                        // TODO get player somehow...
+                        // TODO get player somehow ?
                         
                         if(!furnaceModifySlot(furnace, inv, null, slot, event.getItem()))
                         {

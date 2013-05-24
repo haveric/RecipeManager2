@@ -10,7 +10,6 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
@@ -324,7 +323,7 @@ public class FlagCloneIngredient extends Flag
     {
         if(!a.hasResult() || !a.hasInventory()) // || a.inventory() instanceof CraftingInventory == false)
         {
-            Messages.debug("Needs inventory and result!");
+            a.addCustomReason("Needs inventory and result!");
             return;
         }
         

@@ -6,9 +6,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
 
-import ro.thehunters.digi.recipeManager.Files;
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagEnchantItem extends Flag
@@ -131,8 +130,6 @@ public class FlagEnchantItem extends Flag
             a.addCustomReason("Needs result!");
             return;
         }
-        
-        Messages.debug("Enchanted " + Tools.Item.print(a.result()) + " with " + enchants.size() + " enchants.");
         
         for(Entry<Enchantment, Integer> e : enchants.entrySet())
         {

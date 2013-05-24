@@ -32,12 +32,6 @@ public class Settings
     public final boolean UPDATE_BOOKS;
     public final boolean COLOR_CONSOLE;
     
-    public final boolean RETURN_BUCKETS;
-    public final boolean RETURN_POTIONS;
-    public final boolean RETURN_BOWL;
-    
-    public final boolean FUEL_RETURN_BUCKETS;
-    
     public final char FURNACE_SHIFT_CLICK;
     public final int FURNACE_TICKS;
     
@@ -90,11 +84,6 @@ public class Settings
         UPDATE_BOOKS = yml.getBoolean("update-books", true);
         COLOR_CONSOLE = yml.getBoolean("color-console", true);
         
-        RETURN_BUCKETS = yml.getBoolean("return-empty.buckets", true);
-        RETURN_POTIONS = yml.getBoolean("return-empty.potions", true);
-        RETURN_BOWL = yml.getBoolean("return-empty.bowl", true);
-        
-        FUEL_RETURN_BUCKETS = yml.getBoolean("fuel-return-buckets", true);
         FURNACE_SHIFT_CLICK = yml.getString("furnace-shift-click", "f").charAt(0);
         
         int ticks = yml.getInt("furnace-ticks", 1);
@@ -133,10 +122,6 @@ public class Settings
         Messages.log("    fix-mod-results: " + FIX_MOD_RESULTS);
         Messages.log("    update-books: " + UPDATE_BOOKS);
         Messages.log("    color-console: " + COLOR_CONSOLE);
-        Messages.log("    return-empty.buckets: " + RETURN_BUCKETS);
-        Messages.log("    return-empty.potions: " + RETURN_POTIONS);
-        Messages.log("    return-empty.bowl: " + RETURN_BOWL);
-        Messages.log("    fuel-return-buckets: " + FUEL_RETURN_BUCKETS);
         Messages.log("    furnace-shift-click: " + FURNACE_SHIFT_CLICK);
         Messages.log("    furnace-ticks: " + FURNACE_TICKS);
         Messages.log("    metrics: " + METRICS);

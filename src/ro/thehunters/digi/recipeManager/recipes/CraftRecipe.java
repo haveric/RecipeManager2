@@ -210,12 +210,6 @@ public class CraftRecipe extends WorkbenchRecipe
                     height = Math.max(height, h);
                     
                     str.append(item.getTypeId()).append(':').append(item.getDurability());
-                    
-                    // TODO remove
-                    if(item.getDurability() == -1)
-                    {
-                        Messages.debug("found an item with data value -1 | result=" + getFirstResult());
-                    }
                 }
                 
                 str.append(';');

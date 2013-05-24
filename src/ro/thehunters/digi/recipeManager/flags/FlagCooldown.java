@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.mutable.MutableInt;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagCooldown extends Flag
@@ -165,8 +165,6 @@ public class FlagCooldown extends Flag
     
     private String timeToString(int time)
     {
-        Messages.debug("time = " + time);
-        
         if(time < 1)
         {
             return "0s";
@@ -329,8 +327,6 @@ public class FlagCooldown extends Flag
         {
             get.setValue(diff);
         }
-        
-        Messages.debug("{time} = " + timeToString(getCooldownTime()) + " | cooldown = " + getCooldownTime());
         
         a.addEffect((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER), getCraftMessage(), "{time}", timeToString(getCooldownTime()));
     }

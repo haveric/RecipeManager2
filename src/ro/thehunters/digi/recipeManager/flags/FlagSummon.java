@@ -35,9 +35,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.Messages;
-import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
@@ -256,7 +256,7 @@ public class FlagSummon extends Flag
                     
                     if(!found)
                     {
-                        Messages.debug("Can't find suitable location after " + (spread * 10) + " tries !");
+                        Messages.debug("Couldn't find suitable location after " + (spread * 10) + " tries, using center.");
                     }
                     
                     location.add(0.5, 0, 0.5);
