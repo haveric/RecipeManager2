@@ -564,12 +564,6 @@ public enum Messages
         try
         {
             message = "<red>" + (message == null ? thrown.getMessage() : message + " (" + thrown.getMessage() + ")");
-            
-            if(sender != null)
-            {
-                info(message);
-            }
-            
             sendAndLog(sender, message);
             notifyDebuggers(message);
             

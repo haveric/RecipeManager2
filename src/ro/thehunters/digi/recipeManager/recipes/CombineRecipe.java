@@ -22,8 +22,6 @@ public class CombineRecipe extends WorkbenchRecipe
 {
     private List<ItemStack> ingredients;
     
-    private ShapelessRecipe bukkitRecipe;
-    
     public CombineRecipe()
     {
     }
@@ -38,7 +36,12 @@ public class CombineRecipe extends WorkbenchRecipe
     {
         super(recipe);
         
-        // TODO clone this extension
+        if(recipe instanceof CombineRecipe)
+        {
+            CombineRecipe r = (CombineRecipe)recipe;
+            
+            ingredients = r.getIngredients();
+        }
     }
     
     public CombineRecipe(Flags flags)
@@ -46,9 +49,19 @@ public class CombineRecipe extends WorkbenchRecipe
         super(flags);
     }
     
+    /**
+     * @return clone of ingredients list
+     */
     public List<ItemStack> getIngredients()
     {
-        return ingredients;
+        List<ItemStack> clone = new ArrayList<ItemStack>();
+        
+        for(ItemStack i : ingredients)
+        {
+            clone.add(i.clone());
+        }
+        
+        return clone;
     }
     
     public void addIngredient(Material type)
@@ -183,12 +196,7 @@ public class CombineRecipe extends WorkbenchRecipe
     }
     
     @Override
-    public ShapelessRecipe getBukkitRecipe()
-    {
-        return bukkitRecipe == null ? toShapelessRecipe() : bukkitRecipe;
-    }
-    
-    public ShapelessRecipe toShapelessRecipe()
+    public ShapelessRecipe toBukkitRecipe()
     {
         ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
         

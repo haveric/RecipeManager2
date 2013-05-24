@@ -19,9 +19,10 @@ import ro.thehunters.digi.recipeManager.recipes.CombineRecipe;
 import ro.thehunters.digi.recipeManager.recipes.CraftRecipe;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
+import ro.thehunters.digi.recipeManager.recipes.MultiResultRecipe;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
-import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeStatus;
+import ro.thehunters.digi.recipeManager.recipes.SingleResultRecipe;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
@@ -277,7 +278,7 @@ public class Recipes
      */
     public void registerRecipe(BaseRecipe recipe)
     {
-        String adder = "TODO"; // TODO
+        String adder = RecipeManager.getPlugin().getPluginCaller("registerRecipe");
         
         registerRecipe(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
     }
@@ -291,32 +292,7 @@ public class Recipes
      */
     public void registerRecipe(BaseRecipe recipe, RecipeInfo info)
     {
-        boolean queued = info.getStatus() == RecipeStatus.QUEUED;
-        
-        if(index.containsKey(recipe) && !queued)
-        {
-            Messages.debug("recipe already exists: " + recipe.getName());
-            return;
-        }
-        
-        if(queued)
-        {
-            info.setStatus(null);
-        }
-        
-        /* replaced by sendRegistered()  TODO remove ?
-        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
-        
-        if(isRemove)
-        {
-            info.setStatus(RecipeStatus.REMOVED);
-        }
-        else if(recipe.hasFlag(FlagType.OVERRIDE))
-        {
-            info.setStatus(RecipeStatus.OVERRIDDEN);
-        }
-        */
-        
+        index.remove(recipe);
         index.put(recipe, info); // Add to main index
         
         // Add to quickfind index if it's not removed
@@ -342,11 +318,6 @@ public class Recipes
                 {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
                 }
-                
-                if(r.hasCustomTime())
-                {
-                    FurnaceWorker.start();
-                }
             }
             else if(recipe instanceof FuelRecipe)
             {
@@ -354,19 +325,65 @@ public class Recipes
             }
         }
         
-        // Add to server if appliable
-        Recipe bukkitRecipe = recipe.getBukkitRecipe();
-        
-        if(bukkitRecipe != null)
+        // Remove original recipe
+        if(recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))
         {
-            Vanilla.removeCustomRecipe(recipe);
+            recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
+        }
+        
+        // Add to server if appliable
+        if(!recipe.hasFlag(FlagType.REMOVE))
+        {
+            Recipe bukkitRecipe = recipe.getBukkitRecipe();
             
-            Bukkit.addRecipe(bukkitRecipe);
+            if(bukkitRecipe != null)
+            {
+                Bukkit.addRecipe(bukkitRecipe);
+            }
+        }
+        
+        if(recipe.hasFlags())
+        {
+            recipe.getFlags().sendRegistered();
+        }
+        
+        if(recipe instanceof SingleResultRecipe)
+        {
+            SingleResultRecipe rec = (SingleResultRecipe)recipe;
+            ItemResult result = rec.getResult();
+            
+            if(result.hasFlags())
+            {
+                result.getFlags().sendRegistered();
+            }
+        }
+        else if(recipe instanceof MultiResultRecipe)
+        {
+            MultiResultRecipe rec = (MultiResultRecipe)recipe;
+            
+            for(ItemResult result : rec.getResults())
+            {
+                if(result.hasFlags())
+                {
+                    result.getFlags().sendRegistered();
+                }
+            }
         }
     }
     
-    public boolean removeRecipe(BaseRecipe recipe)
+    /**
+     * Removes a recipe from the server.
+     * 
+     * @param recipe
+     * @return removed recipe or null if not found
+     */
+    public Recipe removeRecipe(BaseRecipe recipe)
     {
+        if(recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))
+        {
+            Bukkit.getServer().addRecipe(recipe.getBukkitRecipe());
+        }
+        
         index.remove(recipe); // Remove from main index
         indexName.remove(recipe.getName().toLowerCase()); // Remove from name index
         
@@ -388,8 +405,15 @@ public class Recipes
             indexFuels.remove(((FuelRecipe)recipe).getIndexString());
         }
         
-        // Remove from server
-        return Vanilla.removeCustomRecipe(recipe);
+        // Remove from server if appliable
+        if(recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))
+        {
+            return null;
+        }
+        else
+        {
+            return Vanilla.removeCustomRecipe(recipe);
+        }
     }
     
     protected static ItemResult recipeGetResult(Args a, WorkbenchRecipe recipe)

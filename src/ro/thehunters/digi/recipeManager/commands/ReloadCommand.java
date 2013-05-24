@@ -4,7 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class ReloadCommand implements CommandExecutor
@@ -12,6 +11,7 @@ public class ReloadCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        /*
         boolean force = false;
         
         if(args.length > 0)
@@ -30,8 +30,9 @@ public class ReloadCommand implements CommandExecutor
                 }
             }
         }
+        */
         
-        RecipeManager.getPlugin().reload(sender, false, force);
+        RecipeManager.getPlugin().reload(sender, false);
         
         return true;
     }

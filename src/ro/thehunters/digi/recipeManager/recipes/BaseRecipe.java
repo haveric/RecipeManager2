@@ -41,6 +41,7 @@ public class BaseRecipe implements Flaggable
     protected boolean customName;
     private Flags flags;
     protected int hash;
+    protected Recipe recipe;
     
     public BaseRecipe()
     {
@@ -48,7 +49,11 @@ public class BaseRecipe implements Flaggable
     
     public BaseRecipe(BaseRecipe recipe)
     {
-        this.flags = recipe.getFlags().clone(this);
+        this.flags = (recipe.hasFlags() ? recipe.getFlags().clone(this) : null);
+        this.name = recipe.name;
+        this.customName = recipe.customName;
+        this.hash = recipe.hash;
+        this.recipe = recipe.recipe;
     }
     
     public BaseRecipe(Flags flags)
@@ -186,9 +191,9 @@ public class BaseRecipe implements Flaggable
      * Remove this recipe from the server and from RecipeManager.<br>
      * Alias for: RecipeManager.getRecipes().removeRecipe(this);
      * 
-     * @return if recipe was succesfully removed
+     * @return removed recipe or null if not found
      */
-    public boolean remove()
+    public Recipe remove()
     {
         return RecipeManager.getRecipes().removeRecipe(this);
     }
@@ -200,6 +205,16 @@ public class BaseRecipe implements Flaggable
      *         Bukkit API version of the recipe
      */
     public Recipe getBukkitRecipe()
+    {
+        return (recipe == null ? toBukkitRecipe() : recipe);
+    }
+    
+    public void setBukkitRecipe(Recipe recipe)
+    {
+        this.recipe = recipe;
+    }
+    
+    public Recipe toBukkitRecipe()
     {
         return null;
     }
@@ -250,7 +265,7 @@ public class BaseRecipe implements Flaggable
     @Override
     public void addFlag(Flag flag)
     {
-        flags.addFlag(flag);
+        getFlags().addFlag(flag);
     }
     
     @Override

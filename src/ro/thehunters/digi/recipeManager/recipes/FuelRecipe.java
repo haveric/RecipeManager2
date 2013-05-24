@@ -47,7 +47,14 @@ public class FuelRecipe extends BaseRecipe
     {
         super(recipe);
         
-        // TODO clone this extension
+        if(recipe instanceof FuelRecipe)
+        {
+            FuelRecipe r = (FuelRecipe)recipe;
+            
+            ingredient = (r.ingredient == null ? null : r.ingredient.clone());
+            minTime = r.minTime;
+            maxTime = r.maxTime;
+        }
     }
     
     public FuelRecipe(Flags flags)

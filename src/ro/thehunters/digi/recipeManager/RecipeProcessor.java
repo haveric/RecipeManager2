@@ -6,13 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -44,7 +39,6 @@ public class RecipeProcessor implements Runnable
 {
     private final CommandSender sender;
     private final boolean check;
-    private final boolean force;
     
     private String currentFile;
     private BufferedReader reader;
@@ -58,12 +52,7 @@ public class RecipeProcessor implements Runnable
     
     // Storage
     private volatile RecipeRegistrator registrator = null;
-    private final Set<String> foundFiles = new HashSet<String>();
     private final List<String> fileList = new ArrayList<String>();
-    private final HashSet<String> changedFiles = new HashSet<String>();
-    
-    // Static storage
-    private final static Map<String, Integer> lastModified = new HashMap<String, Integer>();
     
     // Constants
     private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
@@ -77,16 +66,15 @@ public class RecipeProcessor implements Runnable
     
     private static BukkitTask task;
     
-    protected static void reload(CommandSender sender, boolean check, boolean force)
+    protected static void reload(CommandSender sender, boolean check)
     {
-        new RecipeProcessor(sender, check, force);
+        new RecipeProcessor(sender, check);
     }
     
-    private RecipeProcessor(CommandSender sender, boolean check, boolean force)
+    private RecipeProcessor(CommandSender sender, boolean check)
     {
         this.sender = sender;
         this.check = check;
-        this.force = force;
         
         if(task != null)
         {
@@ -112,7 +100,7 @@ public class RecipeProcessor implements Runnable
         
         try
         {
-            Messages.sendAndLog(sender, (check ? "Checking" : "Loading") + " " + (force ? "all" : "changed") + " recipes...");
+            Messages.sendAndLog(sender, (check ? "Checking" : "Loading") + " " + "all recipes...");
             
             File dir = new File(DIR_RECIPES);
             
@@ -121,21 +109,12 @@ public class RecipeProcessor implements Runnable
                 Messages.sendAndLog(sender, ChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
             }
             
-            if(force)
-            {
-                lastModified.clear();
-            }
-            
             // Scan for files
             analyzeDirectory(dir);
             
-//            Messages.debug("fileList size     = " + fileList.size());
-//            Messages.debug("foundFiles size   = " + foundFiles.size());
-//            Messages.debug("lastModified size = " + lastModified.size());
-            
-            if(!fileList.isEmpty() || foundFiles.size() != lastModified.size())
+            if(!fileList.isEmpty())
             {
-                registrator = new RecipeRegistrator(sender);
+                registrator = new RecipeRegistrator();
                 
                 long lastDisplay = System.currentTimeMillis();
                 long time;
@@ -186,43 +165,10 @@ public class RecipeProcessor implements Runnable
                 }
                 
                 ErrorReporter.stopCatching();
-                
-                if(!lastModified.isEmpty())
-                {
-                    // Clean up last modified list of inexistent files
-                    Iterator<Entry<String, Integer>> iterator = lastModified.entrySet().iterator();
-                    String name;
-                    
-                    while(iterator.hasNext())
-                    {
-                        name = iterator.next().getKey();
-                        
-                        if(!foundFiles.contains(name))
-                        {
-                            changedFiles.add(name); // mark as changed
-                            
-                            foundFiles.remove(name); // remove from found files
-                            
-                            iterator.remove(); // remove from last modified
-                        }
-                    }
-                }
             }
             else
             {
-                if(foundFiles.isEmpty())
-                {
-                    Messages.sendAndLog(sender, "Done (" + (System.currentTimeMillis() - start) / 1000.0 + "s), no recipe files exist in the recipes folder!");
-                }
-                else
-                {
-                    Messages.sendAndLog(sender, "Done (" + (System.currentTimeMillis() - start) / 1000.0 + "s), no modified recipe files to " + (check ? "check" : "load") + ".");
-                    
-                    if(!force)
-                    {
-                        Messages.sendAndLog(sender, "You can use 'force' argument for 'rmreload' command to re-check all files regardless of modified state.");
-                    }
-                }
+                Messages.sendAndLog(sender, "<yellow>No recipe files exist in the recipes folder.");
             }
         }
         catch(Throwable e)
@@ -238,11 +184,6 @@ public class RecipeProcessor implements Runnable
                 return;
             }
             
-            if(fileList.size() != foundFiles.size())
-            {
-                changedFiles.addAll(fileList);
-            }
-            
             // Calling registerRecipesToServer() in main thread...
             if(RecipeManager.getSettings().MULTITHREADING)
             {
@@ -251,23 +192,19 @@ public class RecipeProcessor implements Runnable
                     @Override
                     public void run()
                     {
-                        registrator.registerRecipesToServer(sender, start, changedFiles);
+                        registrator.registerRecipesToServer(sender, start);
                     }
                 }.runTask(RecipeManager.getPlugin());
             }
             else
             {
-                registrator.registerRecipesToServer(sender, start, changedFiles);
+                registrator.registerRecipesToServer(sender, start);
             }
         }
     }
     
     private void analyzeDirectory(File dir)
     {
-        String fileName;
-        Integer lastMod;
-        int fileMod;
-        
         for(File file : dir.listFiles())
         {
             if(file.isDirectory())
@@ -287,21 +224,7 @@ public class RecipeProcessor implements Runnable
                     continue;
                 }
                 
-                fileName = file.getPath().replace(DIR_RECIPES, ""); // get the relative path+filename
-                foundFiles.add(fileName); // add to found files list to clean the lastmodified file later
-                
-                fileMod = Math.round(file.lastModified() / 1000);
-                lastMod = lastModified.get(fileName);
-                
-                if(lastMod == null)
-                {
-                    lastModified.put(fileName, fileMod);
-                }
-                else if(lastMod == fileMod)
-                {
-                    continue;
-                }
-                
+                String fileName = file.getPath().replace(DIR_RECIPES, ""); // get the relative path+filename
                 fileList.add(fileName); // add to the processing file list
             }
         }
@@ -514,7 +437,14 @@ public class RecipeProcessor implements Runnable
             
             if(line == null)
             {
-                return ErrorReporter.error("No ingredients defined!");
+                if(rows == 0)
+                {
+                    return ErrorReporter.error("No ingredients defined!");
+                }
+                else
+                {
+                    break;
+                }
             }
             
             if(line.charAt(0) == '=') // if we bump into the result prematurely (smaller recipes)
@@ -567,19 +497,22 @@ public class RecipeProcessor implements Runnable
         
         recipe.setIngredients(ingredients); // done with ingredients, set'em
         
-        // get results
-        List<ItemResult> results = new ArrayList<ItemResult>();
-        
-        if(!parseResults(recipe, results, true, false)) // results have errors
+        if(!recipe.hasFlag(FlagType.REMOVE))
         {
-            return false;
-        }
-        
-        recipe.setResults(results); // done with results, set'em
-        
-        if(recipe.getFirstResult() == null)
-        {
-            return ErrorReporter.error("Recipe must have at least one non-air result!");
+            // get results
+            List<ItemResult> results = new ArrayList<ItemResult>();
+            
+            if(!parseResults(recipe, results, true, false)) // results have errors
+            {
+                return false;
+            }
+            
+            recipe.setResults(results); // done with results, set'em
+            
+            if(recipe.getFirstResult() == null)
+            {
+                return ErrorReporter.error("Recipe must have at least one non-air result!");
+            }
         }
         
         // check if the recipe already exists...
@@ -925,7 +858,7 @@ public class RecipeProcessor implements Runnable
         return (added > 0);
     }
     
-    // TODO
+    // TODO - maybe
     private boolean parseRemoveResults() throws Throwable
     {
         RemoveResultRecipe recipe;
@@ -975,6 +908,11 @@ public class RecipeProcessor implements Runnable
     
     private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Throwable
     {
+        if(line == null)
+        {
+            return false;
+        }
+        
         if(line.charAt(0) != '=') // check if current line is a result, if not move on
         {
             nextLine();
@@ -1108,10 +1046,6 @@ public class RecipeProcessor implements Runnable
             {
                 if(!currentFile.equals(registered.getAdder()))
                 {
-                    // TODO fix this OR ditch the lastmodified system
-                    
-//                    Messages.debug(currentFile + " | " + registered.getAdder()); // TODO remove
-                    
                     ErrorReporter.error("Recipe already created with this plugin, file: " + registered.getAdder());
                     
                     return false; // can't re-add recipes

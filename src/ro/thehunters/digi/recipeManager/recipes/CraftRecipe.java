@@ -22,15 +22,13 @@ public class CraftRecipe extends WorkbenchRecipe
     private int height;
     private boolean mirror = false;
     
-    private ShapedRecipe bukkitRecipe;
-    
     public CraftRecipe()
     {
     }
     
     public CraftRecipe(ShapedRecipe recipe)
     {
-        bukkitRecipe = recipe;
+        setBukkitRecipe(recipe);
         setIngredients(Tools.convertShapedRecipeToItemMatrix(recipe));
         setResult(recipe.getResult());
     }
@@ -39,7 +37,15 @@ public class CraftRecipe extends WorkbenchRecipe
     {
         super(recipe);
         
-        // TODO clone this extension
+        if(recipe instanceof CraftRecipe)
+        {
+            CraftRecipe r = (CraftRecipe)recipe;
+            
+            ingredients = r.getIngredients();
+            width = r.width;
+            height = r.height;
+            mirror = r.mirror;
+        }
     }
     
     public CraftRecipe(Flags flags)
@@ -47,9 +53,24 @@ public class CraftRecipe extends WorkbenchRecipe
         super(flags);
     }
     
+    /**
+     * @return clone of ingredients array's elements
+     */
     public ItemStack[] getIngredients()
     {
-        return ingredients;
+        if(ingredients != null)
+        {
+            ItemStack[] items = new ItemStack[ingredients.length];
+            
+            for(int i = 0; i < ingredients.length; i++)
+            {
+                items[i] = (ingredients[i] == null ? null : ingredients[i].clone());
+            }
+            
+            return items;
+        }
+        
+        return null;
     }
     
     /**
@@ -88,7 +109,7 @@ public class CraftRecipe extends WorkbenchRecipe
      */
     public void setIngredient(int slot, Material type)
     {
-        setIngredient(slot, type, -1);
+        setIngredient(slot, type, Vanilla.DATA_WILDCARD);
     }
     
     /**
@@ -114,12 +135,21 @@ public class CraftRecipe extends WorkbenchRecipe
             ingredients = new ItemStack[9];
         }
         
+        // TODO remember WHY is this required
         if(slot != 0 && ingredients[0] == null)
         {
             throw new IllegalArgumentException("A plugin is using setIngredient() with index NOT starting at 0, shape is corupted!!!");
         }
         
-        ingredients[slot] = new ItemStack(type, 1, (short)data);
+        if(type == null)
+        {
+            ingredients[slot] = null;
+        }
+        else
+        {
+            ingredients[slot] = new ItemStack(type, 1, (short)data);
+        }
+        
         calculate();
     }
     
@@ -271,12 +301,7 @@ public class CraftRecipe extends WorkbenchRecipe
     }
     
     @Override
-    public ShapedRecipe getBukkitRecipe()
-    {
-        return bukkitRecipe == null ? toShapedRecipe() : bukkitRecipe;
-    }
-    
-    private ShapedRecipe toShapedRecipe()
+    public ShapedRecipe toBukkitRecipe()
     {
         ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
         

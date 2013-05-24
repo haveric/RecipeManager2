@@ -96,15 +96,15 @@ public class RecipeManager extends JavaPlugin
         Players.init();
         Workbenches.init();
         
-        reload(null, false, true); // load data
+        reload(null, false); // load data
         
         getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
         
         // Register commands
         getCommand("rm").setExecutor(new HelpCommand());
-        getCommand("rmrecipes").setExecutor(new RecipeCommand()); // TODO
+        getCommand("rmrecipes").setExecutor(new RecipeCommand());
         getCommand("rmfinditem").setExecutor(new FindItemCommand());
-        getCommand("rmcheck").setExecutor(new CheckCommand()); // TODO
+        getCommand("rmcheck").setExecutor(new CheckCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
         getCommand("rmreloadbooks").setExecutor(new ReloadBooksCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());
@@ -127,10 +127,8 @@ public class RecipeManager extends JavaPlugin
      *            To whom to send the messages to, null = console.
      * @param check
      *            Set to true to only check recipes, settings are un affected.
-     * @param force
-     *            Force re-loading/checking all recipes
      */
-    public void reload(CommandSender sender, boolean check, boolean force)
+    public void reload(CommandSender sender, boolean check)
     {
         boolean previousClearRecipes = (settings == null ? false : settings.CLEAR_RECIPES);
         
@@ -174,7 +172,7 @@ public class RecipeManager extends JavaPlugin
             }
         }
         
-        RecipeProcessor.reload(sender, check, force); // (re)parse recipe files
+        RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
     }
     
@@ -201,8 +199,6 @@ public class RecipeManager extends JavaPlugin
         String pluginName;
         StackTraceElement[] traces = new Exception().getStackTrace();
         StackTraceElement trace;
-        
-        Messages.debug("tracing..."); // TODO
         
         for(int i = 0; i < traces.length; i++)
         {

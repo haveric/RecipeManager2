@@ -165,9 +165,9 @@ public class Vanilla
      * @param recipe
      *            RecipeManager recipe
      * @return
-     *         true if recipe was found and removed
+     *         removed recipe or null if not found
      */
-    public static boolean removeCustomRecipe(BaseRecipe recipe)
+    public static Recipe removeCustomRecipe(BaseRecipe recipe)
     {
         if(recipe instanceof CraftRecipe)
         {
@@ -184,7 +184,7 @@ public class Vanilla
             return removeSmeltRecipe((SmeltRecipe)recipe);
         }
         
-        return false;
+        return null;
     }
     
     /**
@@ -194,9 +194,9 @@ public class Vanilla
      * @param recipe
      *            Bukkit recipe
      * @return
-     *         true if recipe was found and removed
+     *         removed recipe or null if not found
      */
-    public static boolean removeBukkitRecipe(Recipe recipe)
+    public static Recipe removeBukkitRecipe(Recipe recipe)
     {
         if(recipe instanceof ShapedRecipe)
         {
@@ -213,7 +213,7 @@ public class Vanilla
             return removeFurnaceRecipe((FurnaceRecipe)recipe);
         }
         
-        return false;
+        return null;
     }
     
     /**
@@ -222,9 +222,9 @@ public class Vanilla
      * 
      * @param recipe
      *            Bukkit recipe
-     * @return true if recipe was found and removed
+     * @return removed recipe or null if not found
      */
-    public static boolean removeShapedRecipe(ShapedRecipe recipe)
+    public static Recipe removeShapedRecipe(ShapedRecipe recipe)
     {
         return removeCraftRecipe(new CraftRecipe(recipe));
     }
@@ -234,16 +234,16 @@ public class Vanilla
      * 
      * @param recipe
      *            RecipeManager recipe
-     * @return true if recipe was found and removed
+     * @return removed recipe or null if not found
      */
-    public static boolean removeCraftRecipe(CraftRecipe recipe)
+    public static Recipe removeCraftRecipe(CraftRecipe recipe)
     {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapedRecipe sr;
         Recipe r;
         String[] sh;
         
-        ItemStack[] matrix = recipe.getIngredients().clone();
+        ItemStack[] matrix = recipe.getIngredients();
         Tools.trimItemMatrix(matrix);
         ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
         int height = recipe.getHeight();
@@ -261,13 +261,12 @@ public class Vanilla
                 if(sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))
                 {
                     iterator.remove();
-                    return true;
+                    return sr;
                 }
             }
         }
         
-        iterator = null;
-        return false;
+        return null;
     }
     
     /**
@@ -276,9 +275,9 @@ public class Vanilla
      * 
      * @param recipe
      *            Bukkit recipe
-     * @return true if recipe was found and removed
+     * @return removed recipe or null if not found
      */
-    public static boolean removeShapelessRecipe(ShapelessRecipe recipe)
+    public static Recipe removeShapelessRecipe(ShapelessRecipe recipe)
     {
         return removeCombineRecipe(new CombineRecipe(recipe));
     }
@@ -288,9 +287,9 @@ public class Vanilla
      * 
      * @param recipe
      *            RecipeManager recipe
-     * @return true if recipe was found and removed
+     * @return removed recipe or null if not found
      */
-    public static boolean removeCombineRecipe(CombineRecipe recipe)
+    public static Recipe removeCombineRecipe(CombineRecipe recipe)
     {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapelessRecipe sr;
@@ -309,13 +308,12 @@ public class Vanilla
                 if(Tools.compareIngredientList(items, sr.getIngredientList()))
                 {
                     iterator.remove();
-                    return true;
+                    return sr;
                 }
             }
         }
         
-        iterator = null;
-        return false;
+        return null;
     }
     
     /**
@@ -324,9 +322,9 @@ public class Vanilla
      * 
      * @param recipe
      *            Bukkit recipe
-     * @return true if recipe was found and removed
+     * @return removed recipe or null if not found
      */
-    public static boolean removeFurnaceRecipe(FurnaceRecipe recipe)
+    public static Recipe removeFurnaceRecipe(FurnaceRecipe recipe)
     {
         return removeFurnaceRecipe(recipe.getInput());
     }
@@ -336,14 +334,14 @@ public class Vanilla
      * 
      * @param recipe
      *            RecipeManager recipe
-     * @return true if recipe was found and removed
+     * @return removed recipe or null if not found
      */
-    public static boolean removeSmeltRecipe(SmeltRecipe recipe)
+    public static Recipe removeSmeltRecipe(SmeltRecipe recipe)
     {
         return removeFurnaceRecipe(recipe.getIngredient());
     }
     
-    private static boolean removeFurnaceRecipe(ItemStack ingredient)
+    private static Recipe removeFurnaceRecipe(ItemStack ingredient)
     {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         FurnaceRecipe fr;
@@ -360,13 +358,12 @@ public class Vanilla
                 if(ingredient.getTypeId() == fr.getInput().getTypeId())
                 {
                     iterator.remove();
-                    return true;
+                    return fr;
                 }
             }
         }
         
-        iterator = null;
-        return false;
+        return null;
     }
     
     /**

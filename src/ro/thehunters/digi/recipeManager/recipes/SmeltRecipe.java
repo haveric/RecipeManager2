@@ -20,8 +20,6 @@ public class SmeltRecipe extends SingleResultRecipe
     private float maxTime = -1;
     private int hash;
     
-    private FurnaceRecipe bukkitRecipe;
-    
     public SmeltRecipe()
     {
     }
@@ -29,6 +27,17 @@ public class SmeltRecipe extends SingleResultRecipe
     public SmeltRecipe(BaseRecipe recipe)
     {
         super(recipe);
+        
+        if(recipe instanceof SmeltRecipe)
+        {
+            SmeltRecipe r = (SmeltRecipe)recipe;
+            
+            ingredient = (r.ingredient == null ? null : r.ingredient.clone());
+            fuel = (r.fuel == null ? null : r.fuel.clone());
+            minTime = r.minTime;
+            maxTime = r.maxTime;
+            hash = r.hash;
+        }
     }
     
     public SmeltRecipe(Flags flags)
@@ -202,12 +211,7 @@ public class SmeltRecipe extends SingleResultRecipe
     }
     
     @Override
-    public FurnaceRecipe getBukkitRecipe()
-    {
-        return bukkitRecipe == null ? toFurnaceRecipe() : bukkitRecipe;
-    }
-    
-    public FurnaceRecipe toFurnaceRecipe()
+    public FurnaceRecipe toBukkitRecipe()
     {
         return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability());
     }

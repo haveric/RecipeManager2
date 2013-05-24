@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.recipes.RecipeInfo.RecipeOwner;
@@ -80,7 +81,7 @@ public class RemoveResultRecipe extends BaseRecipe
     }
     
     @Override
-    public boolean remove()
+    public Recipe remove()
     {
         if(removed == null)
         {

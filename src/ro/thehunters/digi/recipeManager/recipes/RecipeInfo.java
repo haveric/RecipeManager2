@@ -4,7 +4,6 @@ public class RecipeInfo
 {
     public enum RecipeStatus
     {
-        QUEUED,
         OVERRIDDEN,
         REMOVED;
     }

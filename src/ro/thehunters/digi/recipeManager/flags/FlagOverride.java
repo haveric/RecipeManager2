@@ -89,8 +89,10 @@ public class FlagOverride extends Flag
             Messages.debug("ERROR: invalid recipe pointer: " + recipe);
             remove();
         }
-        
-        recipe.getInfo().setStatus(RecipeStatus.OVERRIDDEN);
+        else
+        {
+            recipe.getInfo().setStatus(RecipeStatus.OVERRIDDEN);
+        }
     }
     
     /*

@@ -229,7 +229,7 @@ public class MultiResultRecipe extends BaseRecipe
      * 
      * @param a
      *            dynamic arguments, use {@link ArgBuilder#create()} to build arguments for this.
-     * @return the result as a clone, never null.
+     * @return the result as a clone or null.
      */
     public ItemResult getResult(Args a)
     {

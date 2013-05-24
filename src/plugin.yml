@@ -26,16 +26,16 @@ commands:
   rmcheck:
     aliases: [checkrecipes]
     description: simulates loading recipe files to check for errors
-    usage: /<command> [force]
+    usage: /<command>
     permission: recipemanager.command.rmecheck
   rmreload:
     aliases: [reloadrecipes]
-    description: reload recipes/settings/etc.
-    usage: /<command> [force]
+    description: reload recipes/settings/books/etc.
+    usage: /<command>
     permission: recipemanager.command.rmreload
   rmreloadbooks:
     aliases: [reloadbooks]
-    description: reload only recipe books.
+    description: reload only recipe books
     usage: /<command>
     permission: recipemanager.command.rmreloadbooks
   rmextract:
