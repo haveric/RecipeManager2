@@ -98,6 +98,8 @@ public class RecipeManager extends JavaPlugin
         
         reload(null, false); // load data
         
+        FurnaceWorker.start(); // keep furnace worker running at all times because it has alot of jobs
+        
         getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
         
         // Register commands

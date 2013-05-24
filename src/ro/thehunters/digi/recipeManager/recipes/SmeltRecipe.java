@@ -2,6 +2,7 @@ package ro.thehunters.digi.recipeManager.recipes;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,6 +10,8 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
+import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition.Conditions;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -304,5 +307,44 @@ public class SmeltRecipe extends SingleResultRecipe
         }
         
         return s.toString();
+    }
+    
+    public void subtractIngredient(FurnaceInventory inv, boolean onlyExtra)
+    {
+        FlagIngredientCondition flag = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
+        ItemStack item = inv.getSmelting();
+        
+        if(item != null)
+        {
+            int amt = item.getAmount();
+            int newAmt = amt;
+            
+            if(flag != null)
+            {
+                Conditions cond = flag.getIngredientConditions(item);
+                
+                if(cond != null && cond.getAmount() > 1)
+                {
+                    newAmt -= (cond.getAmount() - 1);
+                }
+            }
+            
+            if(!onlyExtra)
+            {
+                newAmt -= 1;
+            }
+            
+            if(amt != newAmt)
+            {
+                if(newAmt > 0)
+                {
+                    item.setAmount(newAmt);
+                }
+                else
+                {
+                    inv.setSmelting(null);
+                }
+            }
+        }
     }
 }

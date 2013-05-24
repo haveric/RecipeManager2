@@ -3,6 +3,8 @@ package ro.thehunters.digi.recipeManager.recipes;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 
+import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
 public class SingleResultRecipe extends BaseRecipe
@@ -36,6 +38,23 @@ public class SingleResultRecipe extends BaseRecipe
     public ItemResult getResult()
     {
         return result == null ? null : result.clone();
+    }
+    
+    /**
+     * @param a
+     * @return result as clone or null if failed by chance or failed by flag check
+     */
+    public ItemResult getResult(Args a)
+    {
+        if(result == null)
+        {
+            return null;
+        }
+        
+        float rand = RecipeManager.random.nextFloat() * 100f;
+        ItemResult r = (result.getChance() >= rand ? result.clone() : null);
+        
+        return r;
     }
     
     public void setResult(ItemStack result)

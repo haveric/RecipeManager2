@@ -122,7 +122,8 @@ diamond + diamond
 <div id="code">SMELT [recipe name]
 &lt;material&gt; % [time]
 &amp; [material:data]
-= &lt;material:data:amount&gt;</div>
+= [chance%] &lt;material:data:amount&gt;
+// one result tops!</div>
 
 
   The first 'material:data' is the ingredient.
@@ -140,7 +141,7 @@ gold_ingot
 smelt Exp Bottle Alchemy
 glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
 &amp; potion:water // fuel, 'water' data value from 'aliases.yml'
-= exp_bottle</div>
+= 25% exp_bottle // 25% chance to get the result, rest 75% will result in nothing</div>
 
 
 <h3>FUEL RECIPE - furnace fuel</h3>

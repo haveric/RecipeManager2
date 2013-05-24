@@ -1132,11 +1132,15 @@ public class Events implements Listener
                 }
             }
             
-            ItemResult result = recipe.getResult();
             FurnaceData data = Furnaces.get(furnace.getLocation());
-            Args a = Args.create().player(data.getSmelter()).location(furnace.getLocation()).recipe(recipe).inventory(inv).result(result).build();
             
-            if(!furnaceHandleFlaggable(recipe, a, true) || !furnaceHandleFlaggable(result, a, true))
+            Args a = Args.create().player(data.getSmelter()).location(furnace.getLocation()).recipe(recipe).inventory(inv).build();
+            
+            ItemResult result = recipe.getResult(a);
+            
+            a.setResult(result);
+            
+            if(!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true)))
             {
                 if(a.hasPlayer())
                 {
@@ -1148,7 +1152,16 @@ public class Events implements Listener
             }
             else
             {
-                event.setResult(a.result());
+                if(result == null)
+                {
+                    recipe.subtractIngredient(inv, false);
+                    event.setCancelled(true);
+                }
+                else
+                {
+                    recipe.subtractIngredient(inv, true);
+                    event.setResult(a.result());
+                }
             }
         }
         catch(Throwable e)

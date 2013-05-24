@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
+import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 
@@ -115,23 +116,19 @@ class FurnaceWorker implements Runnable
                 continue;
             }
             
-            /*
-            if(recipe.isMultiResult())
+            ItemResult result = recipe.getResult();
+            
+            Args a = Args.create().inventory(inventory).location(furnace.getLocation()).player(data.getSmelter()).recipe(recipe).result(result).build();
+            
+            result.sendPrepare(a);
+            
+            ItemStack resultSlot = inventory.getResult();
+            
+            // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
+            if(resultSlot != null && (!result.isSimilar(resultSlot) || resultSlot.getAmount() >= resultSlot.getType().getMaxStackSize()))
             {
-                // TODO ...
-            }
-            else
-            */
-            {
-                ItemResult result = recipe.getResult();
-                ItemStack resultSlot = inventory.getResult();
-                
-                // If we have a result and it's not the same as what we're making or it's at max stack size then skip furnace
-                if(resultSlot != null && (!result.isSimilar(resultSlot) || resultSlot.getAmount() >= resultSlot.getType().getMaxStackSize()))
-                {
-                    data.setCookProgress(0);
-                    continue;
-                }
+                data.setCookProgress(0);
+                continue;
             }
             
             if(recipe.getMinTime() <= 0.0) // instant smelting
