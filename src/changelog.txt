@@ -1,6 +1,32 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+
+=== v2.0beta ===
+
+* Removed 'return-empty.*' and 'fuel-return-buckets' sections from config.yml because it doesn't do anything anymore, use @keepitem flag instead
+* Set 'update-check.enabled' back to true as default in config.yml
+* Fixed 'rmextract' command extracting data values for smelt recipe ingredients (they don't have data values)
+* Fixed smelt recipes not printing warning about using data values on ingredients
+* Fixed craft, combine and smelt recipes giving exceptions in console when used with @remove or @restrict flags
+* Fixed @remove flag not removing the recipes and not counting towards removed value in the message
+* Removed unfinished flags (@debug, @realtime, @online, @worldtime, @proximity)
+* Removed benchmark debug messages from furnace worker
+* Fixed @needexp not checking experience properly when used with a single value
+* Added variable support for @itemlore and @itemname
+* Fixed multi-result recipes not subtracting ingredients
+* Fixed shift+clicking items in furnace GUI allowing them to be placed in the slot even if flags won't allow it
+* Added option to edit author and last page of recipe books, edited 'recipe books.html' accordingly
+* Fixed furnaces not working with certain flags (like @modexp)
+* Finished 'recipe' command
+* Fixed @ingredientcondition flag which read data values wrong
+* Changed @ingredientcondition to require 'regex:' prefix to use regex patterns
+* Removed last changed checking when reloading recipes
+* Removed 'force' argument from 'rmreload' and 'rmcheck' because of the previous change
+* Fixed furnace recipes not reducing ingredients on @ingredientcondition with amount setting
+* Added failure chance option for furnace recipes' result, also added this change in the documentation
+
+
 === v2.0alpha3 ===
 
 * Added a benchmark for the furnace worker, it prints code execution time each minute in console.
