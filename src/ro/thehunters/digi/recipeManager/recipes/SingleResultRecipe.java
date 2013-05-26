@@ -1,8 +1,10 @@
 package ro.thehunters.digi.recipeManager.recipes;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.Flags;
@@ -52,7 +54,15 @@ public class SingleResultRecipe extends BaseRecipe
         }
         
         float rand = RecipeManager.random.nextFloat() * 100f;
-        ItemResult r = (result.getChance() >= rand ? result.clone() : null);
+        
+        ItemResult r = (result.getChance() >= rand ? result.clone() : new ItemResult(Material.AIR, 1, 0, (100 - result.getChance())));
+        a.setResult(r);
+        
+        if(r.getTypeId() == 0 && this.hasFlags())
+        {
+            this.sendFailed(a);
+            a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+        }
         
         return r;
     }

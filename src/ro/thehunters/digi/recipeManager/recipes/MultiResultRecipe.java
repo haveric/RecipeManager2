@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
+import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.flags.ArgBuilder;
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.Flags;
@@ -264,7 +266,20 @@ public class MultiResultRecipe extends BaseRecipe
         
         a.clear();
         a.setResult(result);
-        result.sendPrepare(a);
+        
+        if(result != null)
+        {
+            if(result.sendPrepare(a))
+            {
+                a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
+            }
+            
+            if(result.getTypeId() == 0 && this.hasFlags())
+            {
+                this.sendFailed(a);
+                a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+            }
+        }
         
         return result;
     }

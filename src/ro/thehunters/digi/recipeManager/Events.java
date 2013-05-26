@@ -780,7 +780,7 @@ public class Events implements Listener
         {
 //            Messages.debug("furnace is burning...");
             
-            ItemStack i = Tools.Item.nullIfAir(inv.getSmelting());
+            ItemStack i = Tools.Item.nullIfAir(slot == 0 ? item : inv.getSmelting());
             ItemStack f = Tools.Item.nullIfAir(inv.getFuel());
             
             SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(i);
@@ -792,7 +792,9 @@ public class Events implements Listener
             
             if(sr != null && sr.hasFuel())
             {
-                if(item != null && item.isSimilar(slot == 0 ? i : f))
+//                Messages.debug("recipe is smelt+fuel...");
+                
+                if(item != null && item.isSimilar(slot == 0 ? inv.getSmelting() : f))
                 {
 //                    Messages.debug("recipe is smelt+fuel but added similar items!");
                 }
@@ -1130,8 +1132,6 @@ public class Events implements Listener
             
             ItemResult result = recipe.getResult(a);
             
-            a.setResult(result);
-            
             if(!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true)))
             {
                 if(a.hasPlayer())
@@ -1144,7 +1144,7 @@ public class Events implements Listener
             }
             else
             {
-                if(result == null)
+                if(result == null || result.getTypeId() == 0)
                 {
                     recipe.subtractIngredient(inv, false);
                     event.setCancelled(true);
@@ -1163,7 +1163,6 @@ public class Events implements Listener
         }
     }
     
-    // TODO split this up to trigger 'take result' by hoppers too !
     @EventHandler(priority = EventPriority.LOW)
     public void furnaceTakeResult(FurnaceExtractEvent event)
     {
@@ -1181,48 +1180,9 @@ public class Events implements Listener
                 return; // highly unlikely but better safe than sorry
             }
             
-            Furnace furnace = (Furnace)state;
-            ItemStack ingredient = Tools.Item.nullIfAir(furnace.getInventory().getSmelting());
-            SmeltRecipe smeltRecipe = null;
-            ItemStack result = furnace.getInventory().getResult();
+            SmeltRecipe recipe = furnaceResultRecipe((Furnace)state);
             
-            if(ingredient == null)
-            {
-                if(result == null)
-                {
-                    return;
-                }
-                
-                for(SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values())
-                {
-                    if(result.isSimilar(r.getResult()))
-                    {
-                        smeltRecipe = r;
-                        break;
-                    }
-                    
-                    /*
-                    if(r.isMultiResult())
-                    {
-                        // TODO trace recipe backwards by ID stored in chest...
-                    }
-                    else
-                    {
-                        if(result.isSimilar(r.getFirstResult()))
-                        {
-                            smeltRecipe = r;
-                            break;
-                        }
-                    }
-                    */
-                }
-            }
-            else
-            {
-                smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
-            }
-            
-            if(smeltRecipe != null)
+            if(recipe != null)
             {
                 event.setExpToDrop(0);
             }
@@ -1233,64 +1193,76 @@ public class Events implements Listener
         }
     }
     
+    private SmeltRecipe furnaceResultRecipe(Furnace furnace)
+    {
+        ItemStack ingredient = Tools.Item.nullIfAir(furnace.getInventory().getSmelting());
+        SmeltRecipe smeltRecipe = null;
+        ItemStack result = furnace.getInventory().getResult();
+        
+        if(ingredient == null)
+        {
+            // Guess recipe by result - inaccurate
+            
+            if(result == null)
+            {
+                return null;
+            }
+            
+            for(SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values())
+            {
+                if(result.isSimilar(r.getResult()))
+                {
+                    smeltRecipe = r;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+        }
+        
+        return smeltRecipe;
+    }
+    
     // TODO find a way to detect if event actually moved an item !
-//    @EventHandler
+    @EventHandler
     public void inventoryItemMove(InventoryMoveItemEvent event)
     {
-        Messages.debug("is canceled = " + event.isCancelled());
-        
         try
         {
             if(event.getDestination() instanceof FurnaceInventory)
             {
-                Messages.debug("MOVED ITEM TO FURNACE: " + event.getItem());
+                int slot = hopperFurnaceSlot(event.getSource(), false);
                 
-                Inventory hopperInv = event.getSource();
-                
-                if(hopperInv != null)
+                if(slot < 0)
                 {
-                    InventoryHolder hopperHolder = event.getSource().getHolder();
-                    
-                    if(hopperHolder instanceof Hopper)
-                    {
-                        Hopper hopper = ((Hopper)hopperHolder);
-                        Dispenser dir = new Dispenser(0, hopper.getRawData());
-                        int slot = 0;
-                        
-                        switch(dir.getFacing())
-                        {
-                            case NORTH:
-                            case SOUTH:
-                            case EAST:
-                            case WEST:
-                            {
-                                slot = 0;
-                                break;
-                            }
-                            
-                            case DOWN:
-                            {
-                                slot = 1;
-                                break;
-                            }
-                            
-                            case UP:
-                            {
-                            }
-                        }
-                        
-                        FurnaceInventory inv = (FurnaceInventory)event.getDestination();
-                        Furnace furnace = (Furnace)inv.getHolder();
-                        
-                        // TODO get player somehow ?
-                        
-                        if(!furnaceModifySlot(furnace, inv, null, slot, event.getItem()))
-                        {
-                            event.setCancelled(true);
-                        }
-                    }
+                    return;
+                }
+                
+                FurnaceInventory inv = (FurnaceInventory)event.getDestination();
+                Furnace furnace = (Furnace)inv.getHolder();
+                
+                // TODO get player that placed the initial item in the hopper ?
+                
+                if(!furnaceModifySlot(furnace, inv, null, slot, event.getItem()))
+                {
+                    event.setCancelled(true);
                 }
             }
+            /*
+            else if(event.getSource() instanceof FurnaceInventory)
+            {
+                SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
+                
+                if(slot == null)
+                {
+                    return;
+                }
+                
+                Messages.debug("RESULT TAKEN FROM FURNACE: " + event.getItem());
+            }
+            */
         }
         catch(Throwable e)
         {
@@ -1299,24 +1271,37 @@ public class Events implements Listener
         }
     }
     
-//    @EventHandler
-    public void inventoryPickup(InventoryPickupItemEvent event)
+    private int hopperFurnaceSlot(Inventory inventory, boolean take)
     {
-        try
+        if(inventory != null)
         {
-            if(event.getInventory() instanceof FurnaceInventory)
+            InventoryHolder hopperHolder = inventory.getHolder();
+            
+            if(hopperHolder instanceof Hopper)
             {
+                if(take)
+                {
+                    return 2; // RESULT
+                }
                 
-                // TODO !!!!!!!
+                Hopper hopper = ((Hopper)hopperHolder);
+                Dispenser dir = new Dispenser(0, hopper.getRawData());
                 
-                Messages.debug("PICKED UP ITEM: " + event.getItem());
+                switch(dir.getFacing())
+                {
+                    case NORTH:
+                    case SOUTH:
+                    case EAST:
+                    case WEST:
+                        return 1; // FUEL
+                        
+                    case DOWN:
+                        return 0; // CRAFTING
+                }
             }
         }
-        catch(Throwable e)
-        {
-            event.setCancelled(true);
-            Messages.error(null, e, event.getEventName() + " cancelled due to error:");
-        }
+        
+        return -1;
     }
     
     /*
