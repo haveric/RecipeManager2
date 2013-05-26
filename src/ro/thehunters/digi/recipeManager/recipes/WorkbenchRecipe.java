@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.flags.Args;
+import ro.thehunters.digi.recipeManager.flags.FlagDisplayResult;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition.Conditions;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
@@ -41,55 +42,14 @@ public class WorkbenchRecipe extends MultiResultRecipe
     {
         a.clear();
         
+        FlagDisplayResult flag = (a.hasRecipe() ? a.recipe().getFlag(FlagDisplayResult.class) : null);
+        
         if(!checkFlags(a))
         {
-            /*
-            List<String> lore = new ArrayList<String>();
-            
-            for(String r : a.reasons())
-            {
-                lore.add(Messages.CRAFT_RESULT_DENIED_REASON.get("{reason}", r));
-            }
-            
-            return Tools.createItemStackWithMeta(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), lore);
-            */
-            
-//            FlagDebug.grabReasons(a.playerName(), this, a.reasons()); TODO
-            
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
             
             return Tools.Item.create(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
-        
-        /*
-        if(!isMultiResult())
-        {
-            ItemResult result = getFirstResult();
-            
-            if(result == null)
-            {
-                return null;
-            }
-            
-            if(!result.hasFlag(FlagType.SECRET))
-            {
-                if(result.checkFlags(a))
-                {
-                    result.sendPrepare(a);
-                    
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(result)));
-                    
-                    return result;
-                }
-                else
-                {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.printItem(result)));
-                }
-                
-                return null;
-            }
-        }
-        */
         
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
         float failChance = 0;
@@ -131,14 +91,32 @@ public class WorkbenchRecipe extends MultiResultRecipe
                 
                 if(!r.hasFlag(FlagType.SECRET))
                 {
-//                        FlagDebug.grabReasons(a.playerName(), r, a.reasons()); TODO
-                    
                     a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                 }
             }
         }
         
         displayNum = displayResults.size();
+        boolean recieve = (secretNum + displayNum) > 0;
+        
+        if(flag != null)
+        {
+            if(!recieve && flag.isSilentFail())
+            {
+                return null;
+            }
+            
+            ItemStack display = flag.getDisplayItem();
+            
+            if(display != null)
+            {
+                return new ItemResult(display);
+            }
+            else if(displayNum > 0)
+            {
+                return displayResults.get(0);
+            }
+        }
         
         if(unavailableNum == 0 && failChance == 0)
         {
@@ -154,7 +132,6 @@ public class WorkbenchRecipe extends MultiResultRecipe
         
         List<String> lore = new ArrayList<String>();
         String title = null;
-        boolean recieve = (secretNum + displayResults.size()) > 0;
         
         if(recieve)
         {
