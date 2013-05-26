@@ -247,6 +247,7 @@ public class Flags implements Cloneable
     public boolean checkFlags(Args a)
     {
         Player p = a.player();
+        a.clear();
         
         for(Flag flag : flags.values())
         {
@@ -261,6 +262,8 @@ public class Flags implements Cloneable
     
     public boolean sendPrepare(Args a)
     {
+        a.clear();
+        
         for(Flag flag : flags.values())
         {
             flag.prepare(a);
@@ -279,6 +282,8 @@ public class Flags implements Cloneable
      */
     public boolean sendCrafted(Args a)
     {
+        a.clear();
+        
         for(Flag flag : flags.values())
         {
             flag.crafted(a);
@@ -295,6 +300,8 @@ public class Flags implements Cloneable
      */
     public void sendFailed(Args a)
     {
+        a.clear();
+        
         for(Flag flag : flags.values())
         {
             flag.failed(a);

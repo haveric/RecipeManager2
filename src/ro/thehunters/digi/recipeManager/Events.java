@@ -159,22 +159,15 @@ public class Events implements Listener
             {
                 a.setResult(result);
                 
-                if(!recipe.sendPrepare(a))
+                if(recipe.sendPrepare(a))
                 {
-                    result = null;
-                }
-                
-                // TODO remove ?
-                /*
-                if(result != null)
-                {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE);
+                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
                 }
                 else
                 {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE);
+                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+                    result = null;
                 }
-                */
             }
             
             inv.setResult(result);

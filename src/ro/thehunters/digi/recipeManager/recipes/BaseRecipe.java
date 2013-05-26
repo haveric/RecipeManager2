@@ -242,13 +242,13 @@ public class BaseRecipe implements Flaggable
     @Override
     public Flag getFlag(FlagType type)
     {
-        return flags.getFlag(type);
+        return (flags == null ? null : flags.getFlag(type));
     }
     
     @Override
     public <T extends Flag>T getFlag(Class<T> flagClass)
     {
-        return flags.getFlag(flagClass);
+        return (flags == null ? null : flags.getFlag(flagClass));
     }
     
     @Override
