@@ -48,7 +48,6 @@ public class FlagCooldown extends Flag
             "  msg <text>        = overwrites the information message; false to hide; supports colors; use {time} variable to display the new cooldown time.",
             "",
             "  failmsg <text>    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.",
-            "",
         };
         
         E = new String[]

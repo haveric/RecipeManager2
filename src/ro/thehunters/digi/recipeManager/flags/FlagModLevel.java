@@ -2,8 +2,8 @@ package ro.thehunters.digi.recipeManager.flags;
 
 import org.bukkit.entity.Player;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagModLevel extends Flag
@@ -22,7 +22,6 @@ public class FlagModLevel extends Flag
         A = new String[]
         {
             "{flag} [modifier]<number> | [fail message]",
-            "{flag} false",
         };
         
         D = new String[]

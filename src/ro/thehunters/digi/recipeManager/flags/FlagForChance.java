@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 
-import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
@@ -35,12 +35,12 @@ public class FlagForChance extends Flag
         
         D = new String[]
         {
-            // TODO rewrite this...
+            // TODO rewrite documentation ?
             "Adds other flags that are triggered by random chance.",
             "Basically this is a storage for flags and will only trigger them by specified chance.",
             "You can add a pile of random flags to be triggered how they want or you can use groups to trigger only one of the specified flag from a group depending on its chance.",
             "",
-            "First off, grouped flags:",
+            "First, grouped flags:",
             "The <group> argument can any combination of letters and numbers (except '<num>%' which is the 2nd type of arguments).",
             "Grouping more flags into a group would pick only one flag per trigger.",
             "The '0.01-100%' arg is the chance, which it's applied to the individual flag defined later, if you don't define it then the chance will be evenly calculated.",
@@ -55,8 +55,6 @@ public class FlagForChance extends Flag
             "The <flag declaration> must be a flag that will work on the current recipe or result.",
             "",
             "Also, you can add a '!' before the flag declaration to create a new flag instead of adding to/overwriting the previous same flag declaration.",
-            "",
-            "Using 'false' will disable the flag.",
         };
         
         E = new String[]

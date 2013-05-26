@@ -32,10 +32,8 @@ public class FlagHoldItem extends Flag
             "",
             "This flag can be used more than once to add more items, the player will need to hold one to craft.",
             "",
-            "The <item> argument can be in this format: material:data:amount | enchantment:level | ...",
+            "The <item> argument can be in this format: material:data:amount",
             "Just like recipe results, not all values from the item are required.",
-            "",
-            "Using 'false' will disable the flag.",
         };
         
         E = new String[]

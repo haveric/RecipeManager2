@@ -41,8 +41,6 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
-;
-
 public class FlagSummon extends Flag
 {
     // Flag definition and documentation

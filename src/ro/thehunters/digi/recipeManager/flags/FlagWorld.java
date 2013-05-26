@@ -37,8 +37,6 @@ public class FlagWorld extends Flag
             "The messages can have the following variables:",
             "  {world}   = current world.",
             "  {worlds}  = a comma separated list of the required or unallowed worlds.",
-            "",
-            "Using 'false' will disable the flag.",
         };
         
         E = new String[]

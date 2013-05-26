@@ -29,7 +29,6 @@ public class FlagPotionItem extends Flag
         {
             "{flag} <basic effect>",
             "{flag} custom <custom effect>",
-            "{flag} false",
         };
         
         D = new String[]

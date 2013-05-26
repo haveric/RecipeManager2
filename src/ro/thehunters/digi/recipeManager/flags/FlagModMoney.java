@@ -1,7 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
@@ -21,7 +21,6 @@ public class FlagModMoney extends Flag
         A = new String[]
         {
             "{flag} [modifier]<float number> | [fail message]",
-            "{flag} false",
         };
         
         D = new String[]

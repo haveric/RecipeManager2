@@ -22,7 +22,6 @@ public class FlagModExp extends Flag
         A = new String[]
         {
             "{flag} [modifier]<amount> | [fail message]",
-            "{flag} false",
         };
         
         D = new String[]

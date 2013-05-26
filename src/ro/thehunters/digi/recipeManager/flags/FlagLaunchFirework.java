@@ -8,8 +8,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.RecipeManager;
 import ro.thehunters.digi.recipeManager.Tools;
 
@@ -30,7 +30,6 @@ public class FlagLaunchFirework extends Flag
         {
             "{flag} effect <effects>",
             "{flag} power <number 0-128>",
-            "{flag} false",
         };
         
         D = new String[]
@@ -51,8 +50,6 @@ public class FlagLaunchFirework extends Flag
             "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
             "",
             "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds, values above 4 are NOT recommended because it heavily affects client performance.",
-            "",
-            "Setting it to false will remove disable the flag.",
         };
         
         E = new String[]

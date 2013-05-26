@@ -66,8 +66,6 @@ public class Settings
         // Load/reload/generate config.yml
         FileConfiguration yml = loadYML(Files.FILE_CONFIG);
         
-//        RecipeManager.plugin.reloadConfig(); // TODO WTF ?
-        
         SPECIAL_REPAIR = yml.getBoolean("special-recipes.repair", true);
         SPECIAL_REPAIR_METADATA = yml.getBoolean("special-recipes.repair-metadata", false);
         

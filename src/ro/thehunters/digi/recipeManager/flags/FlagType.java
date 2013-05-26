@@ -19,8 +19,8 @@ public enum FlagType
     INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"),
     PERMISSION(FlagPermission.class, Bit.NONE, "permissions", "perm"),
     FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm"),
-    FORCHANCE(FlagForChance.class, Bit.NO_SHIFT, "chance"),
-    GROUP(FlagGroup.class, Bit.NONE, "groups", "permissiongroup"),
+    FORCHANCE(FlagForChance.class, Bit.NO_SHIFT, "bychance", "chance"),
+    GROUP(FlagGroup.class, Bit.NONE, "groups", "permissiongroup", "permgroup"),
     WORLD(FlagWorld.class, Bit.NONE, "needworld", "worlds"),
     HEIGHT(FlagHeight.class, Bit.NONE, "depth"),
     MODEXP(FlagModExp.class, Bit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp"),
@@ -42,22 +42,22 @@ public enum FlagType
     POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"),
     LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
     SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"),
-    TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"),
-    MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg"),
-    BROADCAST(FlagBroadcast.class, Bit.NONE, "announce"),
+    MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg", "msg"),
+    BROADCAST(FlagBroadcast.class, Bit.NONE, "announce", "msgall"),
     SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
-//  REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"), // TODO
-//  ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
-//  WORLDTIME(FlagWorldTime.class, Bit.NONE),
-//  PROXIMITY(FlagProximity.class, Bit.NONE, "distance", "nearby"),
-//  DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
+//    TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"), // TODO finish flag
+//    REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"),
+//    ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
+//    WORLDTIME(FlagWorldTime.class, Bit.NONE),
+//    PROXIMITY(FlagProximity.class, Bit.NONE, "distance", "nearby"),
+//    DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
     
     // Recipe only flags
     ADDTOBOOK(FlagAddToBook.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipebook"),
     FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"),
     DISPLAYRESULT(FlagDisplayResult.class, Bit.RECIPE, "resultdisplay", "showresult"),
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
-    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "disable", "denied", "deny"),
+    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "disable", "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
     
     // Result only flags
@@ -66,7 +66,7 @@ public enum FlagType
     ITEMLORE(FlagItemLore.class, Bit.RESULT, "lore", "itemdesc"),
     LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour"),
     BOOKITEM(FlagBookItem.class, Bit.RESULT, "book"),
-    MAPITEM(FlagMapItem.class, Bit.RESULT, "map"), // TODO
+//    MAPITEM(FlagMapItem.class, Bit.RESULT, "map"), // TODO finish this flag
     FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"),
     FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT, "fireworkcharge", "fireworkeffect"),
     SKULLOWNER(FlagSkullOwner.class, Bit.RESULT, "skullitem"),

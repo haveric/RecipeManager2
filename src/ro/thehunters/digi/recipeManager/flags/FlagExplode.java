@@ -42,8 +42,6 @@ public class FlagExplode extends Flag
             "  nodamage [self]        = (defualt not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
             "  fail                   = (defualt not set) Explode if recipe failed as opposed to succeed.",
             "All arguments are optional and you can specify these arguments in any order.",
-            "",
-            "Using 'false' instead of arguments will disable the flag.",
         };
         
         E = new String[]

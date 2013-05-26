@@ -356,7 +356,7 @@ public class RecipeBook
             }
             else
             {
-                // TODO split ?
+                // TODO split into pages ?
                 
                 meta.addPage(customEnd);
             }

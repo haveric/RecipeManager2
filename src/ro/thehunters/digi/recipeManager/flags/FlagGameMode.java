@@ -6,8 +6,8 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 
-import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 
 public class FlagGameMode extends Flag
@@ -41,8 +41,6 @@ public class FlagGameMode extends Flag
             "Additionally you can use the following variables in the message:",
             "  {playergm}  = player's game mode (which is not allowed)",
             "  {gamemodes}  = list of required game modes",
-            "",
-            "Using 'false' as value will disable the flag.",
         };
         
         E = new String[]

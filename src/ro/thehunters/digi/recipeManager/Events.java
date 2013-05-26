@@ -31,7 +31,6 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -216,7 +215,7 @@ public class Events implements Listener
                 return true;
             }
             
-            Messages.debug("Results don't match, special recipe ? " + recipeResult + " vs " + result); // TODO
+            Messages.debug("Results don't match, special recipe ? " + recipeResult + " vs " + result); // TODO remove this debug
         }
         
         return false;
@@ -809,7 +808,7 @@ public class Events implements Listener
         ItemStack ingredient = Tools.Item.nullIfAir(slot == 0 ? item : inv.getSmelting());
         ItemStack fuel = Tools.Item.nullIfAir(slot == 1 ? item : inv.getFuel());
         
-        // TODO remove
+        // TODO remove this debug
         /*
         if(slot == 0)
         {

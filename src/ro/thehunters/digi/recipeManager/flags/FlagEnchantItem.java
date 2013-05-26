@@ -143,7 +143,7 @@ public class FlagEnchantItem extends Flag
     {
         List<String> list = new ArrayList<String>(1);
         
-        list.add("enchant..."); // TODO
+        list.add("enchant...");
         
         return list;
     }

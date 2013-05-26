@@ -39,7 +39,6 @@ public class FlagKeepItem extends Flag
             "{flag} <ingredient>",
             "{flag} <ingredient> | damage <num>",
             "{flag} <ingredient> | replace <item>",
-            "{flag} false",
         };
         
         D = new String[]
@@ -56,8 +55,6 @@ public class FlagKeepItem extends Flag
             "For the optional 'replace <item>' argument you can specify an item that will replace the ingredient.",
             "The <item> on 'replace' argument can support material:data:amount and enchantments, just like recipe results.",
             "This argument only works for unstackable ingredients. The item specified as replacement can be stackable.",
-            "",
-            "Setting this to 'false' will disable the flag.",
         };
         
         E = new String[]

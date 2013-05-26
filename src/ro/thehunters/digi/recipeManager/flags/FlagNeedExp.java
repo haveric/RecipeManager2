@@ -20,7 +20,6 @@ public class FlagNeedExp extends Flag
         A = new String[]
         {
             "{flag} <min or min-max> | [message]",
-            "{flag} false",
         };
         
         D = new String[]

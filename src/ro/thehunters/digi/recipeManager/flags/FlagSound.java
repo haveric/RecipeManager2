@@ -3,8 +3,8 @@ package ro.thehunters.digi.recipeManager.flags;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Sound;
 
-import ro.thehunters.digi.recipeManager.Files;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Files;
 
 public class FlagSound extends Flag
 {
@@ -22,7 +22,6 @@ public class FlagSound extends Flag
         A = new String[]
         {
             "{flag} <sound> | [arguments]",
-            "{flag} false",
         };
         
         D = new String[]
@@ -37,8 +36,6 @@ public class FlagSound extends Flag
             "  pitch <0.0 to 4.0>    = (default 0.0) sound pitch value.",
             "  player                = (default not set) if set it will only play the sound to the crafter.",
             "You can specify these arguments in any order and they're completly optional.",
-            "",
-            "Setting to 'false' will disable the flag.",
         };
         
         E = new String[]
