@@ -99,7 +99,7 @@ public class FlagEnchantItem extends Flag
         {
             value = split[1].toLowerCase().trim();
             
-            if(!value.equalsIgnoreCase("max"))
+            if(!value.equals("max"))
             {
                 try
                 {
@@ -107,7 +107,7 @@ public class FlagEnchantItem extends Flag
                 }
                 catch(NumberFormatException e)
                 {
-                    ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
+                    ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number: " + value);
                     return false;
                 }
             }

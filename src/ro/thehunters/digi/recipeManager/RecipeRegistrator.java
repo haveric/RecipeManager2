@@ -126,22 +126,22 @@ public class RecipeRegistrator
         RecipeInfo info;
         
         // Remove old custom recipes/re-add old original recipes
+        iterator = RecipeManager.getRecipes().index.entrySet().iterator();
+        
+        while(iterator.hasNext())
         {
-            iterator = RecipeManager.getRecipes().index.entrySet().iterator();
+            entry = iterator.next();
+            info = entry.getValue();
+            recipe = entry.getKey();
             
-            while(iterator.hasNext())
+            if(info.getOwner() == RecipeOwner.RECIPEMANAGER)
             {
-                entry = iterator.next();
-                info = entry.getValue();
-                recipe = entry.getKey();
-                
-                if(info.getOwner() == RecipeOwner.RECIPEMANAGER)
-                {
-                    iterator.remove();
-                    recipe.remove();
-                }
+                iterator.remove();
+                recipe.remove();
             }
         }
+        
+        // TODO registering event or something to re-register plugin recipes
         
         iterator = queuedRecipes.entrySet().iterator();
         long lastDisplay = System.currentTimeMillis();

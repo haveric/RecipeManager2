@@ -42,8 +42,6 @@ public class WorkbenchRecipe extends MultiResultRecipe
     {
         a.clear();
         
-        FlagDisplayResult flag = (a.hasRecipe() ? a.recipe().getFlag(FlagDisplayResult.class) : null);
-        
         if(!checkFlags(a))
         {
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
@@ -98,6 +96,8 @@ public class WorkbenchRecipe extends MultiResultRecipe
         
         displayNum = displayResults.size();
         boolean recieve = (secretNum + displayNum) > 0;
+        
+        FlagDisplayResult flag = (a.hasRecipe() ? a.recipe().getFlag(FlagDisplayResult.class) : null);
         
         if(flag != null)
         {
