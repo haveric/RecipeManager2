@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
@@ -564,7 +566,7 @@ public class FlagIngredientCondition extends Flag
         
         public void setName(String name)
         {
-            this.name = name;
+            this.name = (name == null ? null : Tools.parseColors(name, false));
         }
         
         public boolean hasName()
@@ -583,7 +585,16 @@ public class FlagIngredientCondition extends Flag
             {
                 if(this.name.startsWith("regex:"))
                 {
-                    return name.matches(this.name.substring("regex:".length()));
+                    try
+                    {
+                        Pattern pattern = Pattern.compile(this.name.substring("regex:".length()));
+                        return pattern.matcher(name).matches();
+                    }
+                    catch(PatternSyntaxException e)
+                    {
+                        ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
+                        return false;
+                    }
                 }
                 else
                 {
@@ -601,7 +612,7 @@ public class FlagIngredientCondition extends Flag
         
         public void setLore(String lore)
         {
-            this.lore = lore;
+            this.lore = (lore == null ? null : Tools.parseColors(lore, false));
         }
         
         public boolean hasLore()
@@ -616,22 +627,37 @@ public class FlagIngredientCondition extends Flag
                 return true;
             }
             
+            Pattern pattern = null;
+            
+            if(this.lore.startsWith("regex:"))
+            {
+                try
+                {
+                    pattern = Pattern.compile(this.name.substring("regex:".length()));
+                }
+                catch(PatternSyntaxException e)
+                {
+                    ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
+                    return false;
+                }
+            }
+            
             if(lore != null && !lore.isEmpty())
             {
-                for(String l : lore)
+                for(String line : lore)
                 {
-                    if(l != null)
+                    if(line != null)
                     {
                         if(this.lore.startsWith("regex:"))
                         {
-                            if(l.matches(this.lore.substring("regex:".length())))
+                            if(pattern.matcher(line).matches())
                             {
                                 return true;
                             }
                         }
                         else
                         {
-                            if(this.lore.equalsIgnoreCase(l))
+                            if(this.lore.equalsIgnoreCase(line))
                             {
                                 return true;
                             }
