@@ -129,7 +129,7 @@ public class UpdateChecker extends BukkitRunnable
                 return;
             }
             
-            String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
+            String currentVersion = RecipeManager.getPlugin().getDescription().getVersion().trim();
             
             if(currentVersion.equalsIgnoreCase(newVersion))
             {
@@ -174,7 +174,7 @@ public class UpdateChecker extends BukkitRunnable
             nodes = ((Element)nodes.item(0)).getChildNodes();
             String version = nodes.item(0).getNodeValue();
             
-            newVersion = version.substring(1);
+            newVersion = version.substring(1).trim();
             
             nodes = ((Element)node).getElementsByTagName("link");
             nodes = ((Element)nodes.item(0)).getChildNodes();
@@ -184,6 +184,8 @@ public class UpdateChecker extends BukkitRunnable
         }
         catch(Throwable e)
         {
+            Messages.error(null, e, "Error while checking for updates");
+            Messages.info("You can disable the update checker in config.yml, but please report the error.");
         }
         
         return false;

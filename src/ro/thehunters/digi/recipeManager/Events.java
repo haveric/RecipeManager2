@@ -1499,13 +1499,14 @@ public class Events implements Listener
         
         Players.addJoined(player);
         
-        if(player.isOp())
+        if(player.hasPermission("recipemanager.command.rmupdate"))
         {
-            final String newVersion = UpdateChecker.getNewVersion();
+            String version = RecipeManager.getPlugin().getDescription().getVersion();
+            String newVersion = UpdateChecker.getNewVersion();
             
-            if(newVersion != null)
+            if(!version.equalsIgnoreCase(newVersion))
             {
-                Messages.send(player, "[RecipeManager] New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + RecipeManager.getPlugin().getDescription().getVersion() + "<reset>, grab it at: <light_purple>" + UpdateChecker.getNewLink());
+                Messages.send(player, "[RecipeManager] New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + version + "<reset>, grab it at: <light_purple>" + UpdateChecker.getNewLink());
             }
         }
     }
