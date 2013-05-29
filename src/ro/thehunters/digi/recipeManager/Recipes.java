@@ -300,7 +300,11 @@ public class Recipes
      */
     public void registerRecipe(BaseRecipe recipe, RecipeInfo info)
     {
-        index.remove(recipe);
+        if(index.remove(recipe) != null)
+        {
+            recipe.remove();
+        }
+        
         index.put(recipe, info); // Add to main index
         
         // Add to quickfind index if it's not removed
