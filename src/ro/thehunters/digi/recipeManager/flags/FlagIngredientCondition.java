@@ -841,6 +841,11 @@ public class FlagIngredientCondition extends Flag
             
             ItemMeta meta = item.getItemMeta();
             
+            if(meta == null)
+            {
+                return false;
+            }
+            
             if(!checkName(meta.getDisplayName()))
             {
                 if(a == null)

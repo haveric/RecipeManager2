@@ -1468,7 +1468,13 @@ public class Events implements Listener
         }
         
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = item.getItemMeta().getLore();
+        
+        if(meta == null)
+        {
+            return;
+        }
+        
+        List<String> lore = meta.getLore();
         
         if(lore == null || lore.isEmpty())
         {

@@ -249,6 +249,11 @@ public class Tools
             ItemResult item = new ItemResult(type, amount, (short)data, 100);
             ItemMeta meta = item.getItemMeta();
             
+            if(meta == null)
+            {
+                return item;
+            }
+            
             if(lore != null)
             {
                 meta.setLore(lore);
@@ -305,7 +310,7 @@ public class Tools
             
             ItemMeta meta = item.getItemMeta();
             
-            if(meta.hasDisplayName())
+            if(meta != null && meta.hasDisplayName())
             {
                 name = ChatColor.ITALIC + meta.getDisplayName();
             }
@@ -365,7 +370,7 @@ public class Tools
             
             ItemMeta meta = item.getItemMeta();
             
-            if(meta.hasDisplayName())
+            if(meta != null && meta.hasDisplayName())
             {
                 name = ChatColor.ITALIC + meta.getDisplayName();
             }
@@ -1153,6 +1158,13 @@ public class Tools
     {
         result = result.clone();
         ItemMeta meta = result.getItemMeta();
+        
+        if(meta == null)
+        {
+            Messages.error(null, new IllegalAccessError(), "Can't mark result because it doesn't support item meta!");
+            return result;
+        }
+        
         List<String> lore = meta.getLore();
         
         if(lore == null)
@@ -1174,7 +1186,14 @@ public class Tools
             return -1;
         }
         
-        List<String> lore = result.getItemMeta().getLore();
+        ItemMeta meta = result.getItemMeta();
+        
+        if(meta == null)
+        {
+            return -1;
+        }
+        
+        List<String> lore = meta.getLore();
         
         if(lore == null || lore.isEmpty())
         {

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
@@ -86,14 +87,21 @@ public class Recipes
      */
     public boolean isCustomWorkbenchRecipe(ItemStack result)
     {
-        if(result == null)
+        if(result == null || !result.hasItemMeta())
         {
             return false;
         }
         
-        List<String> desc = result.getItemMeta().getLore();
+        ItemMeta meta = result.getItemMeta();
         
-        return (desc == null ? false : desc.get(desc.size() - 1).startsWith(RECIPE_ID_STRING));
+        if(!meta.hasLore())
+        {
+            return false;
+        }
+        
+        List<String> lore = meta.getLore();
+        
+        return lore.get(lore.size() - 1).startsWith(RECIPE_ID_STRING);
     }
     
     /**

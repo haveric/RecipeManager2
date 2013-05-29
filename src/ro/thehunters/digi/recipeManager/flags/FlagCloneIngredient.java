@@ -439,6 +439,11 @@ public class FlagCloneIngredient extends Flag
         ItemMeta ingredientMeta = ingredient.getItemMeta();
         ItemMeta resultMeta = result.getItemMeta();
         
+        if(ingredientMeta == null || resultMeta == null)
+        {
+            return true;
+        }
+        
         if(this.hasCopyBit(Bit.ENCHANTS))
         {
             for(Entry<Enchantment, Integer> e : ingredientMeta.getEnchants().entrySet())
