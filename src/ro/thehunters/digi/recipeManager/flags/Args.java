@@ -29,6 +29,7 @@ public class Args
     private RecipeType recipeType;
     private Inventory inventory;
     private ItemResult result;
+    private Object extra;
     
     private List<String> reasons;
     private List<String> effects;
@@ -74,6 +75,11 @@ public class Args
     public void setResult(ItemResult result)
     {
         this.result = result;
+    }
+    
+    public void setExtra(Object extra)
+    {
+        this.extra = extra;
     }
     
     /**
@@ -154,6 +160,16 @@ public class Args
     public boolean hasResult()
     {
         return result != null;
+    }
+    
+    public Object extra()
+    {
+        return extra;
+    }
+    
+    public boolean hasExtra()
+    {
+        return extra != null;
     }
     
     public List<String> reasons()

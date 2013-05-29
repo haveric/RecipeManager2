@@ -870,7 +870,7 @@ public class Events implements Listener
             
             if(slot == 0)
             {
-                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
+                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(ingredient).build();
                 
                 if(smeltRecipe.checkFlags(a))
                 {
@@ -902,7 +902,7 @@ public class Events implements Listener
         {
             if(slot == 1)
             {
-                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).build();
+                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(fuel).build();
                 
                 if(fuelRecpe.checkFlags(a))
                 {
@@ -1021,6 +1021,7 @@ public class Events implements Listener
     private int furnaceBurnTime(FurnaceBurnEvent event, Furnace furnace, FurnaceData data)
     {
         FuelRecipe fr = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+        FurnaceInventory inv = furnace.getInventory();
         
         if(fr != null)
         {
@@ -1029,7 +1030,7 @@ public class Events implements Listener
                 return 0;
             }
             
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(furnace.getInventory()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
             
             if(!furnaceHandleFlaggable(fr, a, true))
             {
@@ -1052,7 +1053,7 @@ public class Events implements Listener
                 }
                 else
                 {
-                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(furnace.getInventory()).build();
+                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
                     
                     if(!furnaceHandleFlaggable(sr, a, true))
                     {
@@ -1127,7 +1128,7 @@ public class Events implements Listener
             
             FurnaceData data = Furnaces.get(furnace.getLocation());
             
-            Args a = Args.create().player(data.getSmelter()).location(furnace.getLocation()).recipe(recipe).inventory(inv).build();
+            Args a = Args.create().player(data.getSmelter()).location(furnace.getLocation()).recipe(recipe).inventory(inv).extra(inv.getSmelting()).build();
             
             ItemResult result = recipe.getResult(a);
             
@@ -1143,7 +1144,7 @@ public class Events implements Listener
             }
             else
             {
-                if(result == null || result.getTypeId() == 0)
+                if(a.result() == null || a.result().getTypeId() == 0)
                 {
                     recipe.subtractIngredient(inv, false);
                     event.setCancelled(true);

@@ -50,6 +50,7 @@ public class ArgBuilder
         a.setRecipeType(a.recipeType());
         a.setInventory(a.inventory());
         a.setResult(a.result().clone());
+        a.setExtra(a.extra());
     }
     
     public ArgBuilder player(String player)
@@ -99,6 +100,12 @@ public class ArgBuilder
     public ArgBuilder result(ItemResult result)
     {
         a.setResult(result);
+        return this;
+    }
+    
+    public ArgBuilder extra(Object extra)
+    {
+        a.setExtra(extra);
         return this;
     }
     
