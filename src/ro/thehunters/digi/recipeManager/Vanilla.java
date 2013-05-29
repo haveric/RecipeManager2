@@ -139,7 +139,6 @@ public class Vanilla
             
             if(recipe == null)
             {
-                Messages.debug("Unknown recipe class found: " + r); // TODO remove
                 continue;
             }
             
