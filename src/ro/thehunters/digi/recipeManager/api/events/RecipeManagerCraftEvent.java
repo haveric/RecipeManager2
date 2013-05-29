@@ -1,39 +1,42 @@
 package ro.thehunters.digi.recipeManager.api.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
+import ro.thehunters.digi.recipeManager.recipes.ItemResult;
 import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 
 /**
- * Event triggered when RecipeManager's custom recipes are crafted/combined in the workbench.<br>
+ * Event triggered before RecipeManager's custom recipes are crafted/combined in the workbench.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
  * Event can be cancelled to prevent the action.<br>
  * Event is triggered when a result is processed, it won't guarantee that the player will get the result !
  * 
  * @author Digi
  */
-public class RMCraftEventPost extends Event
+public class RecipeManagerCraftEvent extends Event implements Cancellable
 {
     private static final HandlerList handlers = new HandlerList();
     
+    private boolean cancelled = false;
     private boolean shiftClick = false;
-    private boolean rightClick = false;
-    private ItemStack result;
+    private int mouseButton = 0;
+    private ItemResult result;
     private ItemStack cursor;
     private WorkbenchRecipe recipe;
     private Player player;
     
-    public RMCraftEventPost(WorkbenchRecipe recipe, ItemStack item, Player player, ItemStack cursor, boolean shiftClick, boolean rightClick)
+    public RecipeManagerCraftEvent(WorkbenchRecipe recipe, ItemResult result, Player player, ItemStack cursor, boolean shiftClick, int mouseButton)
     {
         this.recipe = recipe;
-        this.result = item;
+        this.result = result;
         this.player = player;
         this.cursor = cursor;
         this.shiftClick = shiftClick;
-        this.rightClick = rightClick;
+        this.mouseButton = mouseButton;
     }
     
     @Override
@@ -45,6 +48,18 @@ public class RMCraftEventPost extends Event
     public static HandlerList getHandlerList()
     {
         return handlers;
+    }
+    
+    @Override
+    public boolean isCancelled()
+    {
+        return cancelled;
+    }
+    
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled = cancelled;
     }
     
     /**
@@ -66,9 +81,21 @@ public class RMCraftEventPost extends Event
     /**
      * @return result item or AIR if chance of failure occured
      */
-    public ItemStack getResult()
+    public ItemResult getResult()
     {
         return result;
+    }
+    
+    /**
+     * Sets the result to the specified item.<br>
+     * Set to AIR or NULL to force the recipe to fail.
+     * 
+     * @param result
+     *            the new result or null
+     */
+    public void setResult(ItemStack result)
+    {
+        this.result = (result == null ? null : (result instanceof ItemResult ? (ItemResult)result : new ItemResult(result)));
     }
     
     /**
@@ -88,13 +115,19 @@ public class RMCraftEventPost extends Event
     }
     
     /**
-     * Shortcut for: !isRightClick()
-     * 
+     * @return the mouse button used in the event.
+     */
+    public int getMouseButton()
+    {
+        return mouseButton;
+    }
+    
+    /**
      * @return Was the click a LeftClick ?
      */
     public boolean isLeftClick()
     {
-        return !rightClick;
+        return mouseButton == 0;
     }
     
     /**
@@ -102,6 +135,6 @@ public class RMCraftEventPost extends Event
      */
     public boolean isRightClick()
     {
-        return rightClick;
+        return mouseButton == 1;
     }
 }

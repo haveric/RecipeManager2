@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import ro.thehunters.digi.recipeManager.apievents.RecipeManagerEnabledEvent;
+import ro.thehunters.digi.recipeManager.api.events.RecipeManagerEnabledEvent;
 import ro.thehunters.digi.recipeManager.commands.BooksCommand;
 import ro.thehunters.digi.recipeManager.commands.CheckCommand;
 import ro.thehunters.digi.recipeManager.commands.ExtractCommand;

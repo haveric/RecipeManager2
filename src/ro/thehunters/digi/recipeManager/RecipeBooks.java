@@ -25,8 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import ro.thehunters.digi.recipeManager.api.events.RMReloadBooksEvent;
-import ro.thehunters.digi.recipeManager.api.events.RMReloadBooksEventPost;
+import ro.thehunters.digi.recipeManager.api.events.RecipeManagerReloadBooksEvent;
 import ro.thehunters.digi.recipeManager.data.RecipeBook;
 import ro.thehunters.digi.recipeManager.flags.FlagAddToBook;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
@@ -73,7 +72,7 @@ public class RecipeBooks
     
     public void reload(CommandSender sender)
     {
-        Bukkit.getPluginManager().callEvent(new RMReloadBooksEvent(sender));
+        Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEvent(sender));
         
         clean();
         
@@ -127,7 +126,8 @@ public class RecipeBooks
         
         Messages.sendAndLog(sender, "Parsed " + books.size() + " recipe books" + (errors > 0 ? " with " + errors + " errors/warnings." : "."));
         
-        Bukkit.getPluginManager().callEvent(new RMReloadBooksEventPost(sender));
+        // TODO post event ?
+        // Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEventPost(sender));
     }
     
     /**

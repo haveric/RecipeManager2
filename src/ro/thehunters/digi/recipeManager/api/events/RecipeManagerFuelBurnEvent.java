@@ -1,4 +1,4 @@
-package ro.thehunters.digi.recipeManager.apievents;
+package ro.thehunters.digi.recipeManager.api.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;

@@ -51,9 +51,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dispenser;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import ro.thehunters.digi.recipeManager.api.events.RMCraftEvent;
-import ro.thehunters.digi.recipeManager.api.events.RMCraftEventPost;
-import ro.thehunters.digi.recipeManager.apievents.RecipeManagerPrepareCraftEvent;
+import ro.thehunters.digi.recipeManager.api.events.RecipeManagerCraftEvent;
+import ro.thehunters.digi.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
 import ro.thehunters.digi.recipeManager.flags.Args;
@@ -326,7 +325,7 @@ public class Events implements Listener
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
             
             // Call the PRE event
-            RMCraftEvent callEvent = new RMCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick());
+            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0); // TODO upgrade to MouseButton when PR is pulled
             Bukkit.getPluginManager().callEvent(callEvent);
             
             if(callEvent.isCancelled()) // if event was canceled by some other plugin then cancel this event
@@ -373,8 +372,8 @@ public class Events implements Listener
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
                     }
                     
-                    // Call the POST event
-                    Bukkit.getPluginManager().callEvent(new RMCraftEventPost(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick()));
+                    // TODO call post-event ?
+                    // Bukkit.getPluginManager().callEvent(new RecipeManagerCraftEventPost(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0));
                 }
             }
             
