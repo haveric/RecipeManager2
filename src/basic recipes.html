@@ -59,11 +59,11 @@ div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
 
 <h3>CRAFT RECIPE - shaped workbench recipe</h3>
 <div id="code">CRAFT [recipe name]
-&lt;material:data&gt; + [material:data] + [material:data]
-[material:data] + [material:data] + [material:data]
-[material:data] + [material:data] + [material:data]
-= [chance%] &lt;material:data:amount&gt;
-...</div>
+&lt;material:[data]&gt; + [material:[data]] + [material:[data]]
+[material:[data]] + [material:[data]] + [material:[data]]
+[material:[data]] + [material:[data]] + [material:[data]]
+= [chance]% &lt;material:[data]:[amount]&gt;
+[...]</div>
     
   The ingredients are in the shape of the recipe grid, it will also work if horizontally mirroed.
   Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.
@@ -93,14 +93,14 @@ air + stick
 
 <h3>COMBINE RECIPE - shapeless workbench recipe</h3>
 <div id="code">COMBINE [recipe name]
-&lt;material:data:amount&gt; + [...]
-= [chance%] &lt;material:data:amount&gt;
-...</div>
+&lt;material:[data]:[amount]&gt; + [...]
+= [chance]% &lt;material:[data]:[amount]&gt;
+[...]</div>
 
   Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.
   You can specify up to 9 items added up.
   
-  This recipe alkso supports multiple results just like shaped recipe, read above for information. 
+  This recipe also supports multiple results just like shaped recipe, read above for information. 
 
   <b>Examples:</b>
 <div id="code">// 3 sulphur + 2 sand = 2 TNT
@@ -121,15 +121,15 @@ diamond + diamond
 <h3>SMELT RECIPE - furnace smelting recipe</h3>
 <div id="code">SMELT [recipe name]
 &lt;material&gt; % [time]
-&amp; [material:data]
-= [chance%] &lt;material:data:amount&gt;
-// one result tops!</div>
+&amp; [material:[data]]
+= [chance]% &lt;material:[data]:[amount]&gt;
+// one result max!</div>
 
 
-  The first 'material:data' is the ingredient.
-  (optional) '% time' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash.
-  (optional) '&amp; material:data' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)
-  And obviously '= material:data' is the result, this recipe type only supports 1 result type.
+  The first '&lt;material&gt;' is the ingredient, it can't have data values because the game doesn't support it but you can use <a href="recipe flags.html#ingredientcondition">@ingredientcondition flag</a>.
+  (optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash.
+  (optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)
+  And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!
   
   <b>Examples:</b>
 <div id="code">// smelt gold_ingot to ore
