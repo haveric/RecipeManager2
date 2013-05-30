@@ -92,7 +92,9 @@ public class ArgBuilder
     public ArgBuilder result(ItemStack result)
     {
         if(result != null)
+        {
             a.setResult(result instanceof ItemResult ? (ItemResult)result : new ItemResult(result));
+        }
         
         return this;
     }

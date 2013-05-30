@@ -396,10 +396,14 @@ public class RecipeProcessor implements Runnable
             index = line.indexOf(comment);
             
             if(index == 0)
+            {
                 return null;
+            }
             
             if(index > -1)
+            {
                 return line.substring(0, index).trim(); // partial comment, return filtered data
+            }
         }
         
         return line;

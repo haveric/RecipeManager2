@@ -104,7 +104,9 @@ public class BlockID
         World world = getWorld();
         
         if(world == null)
+        {
             return null;
+        }
         
         return new Location(world, x, y, z);
     }

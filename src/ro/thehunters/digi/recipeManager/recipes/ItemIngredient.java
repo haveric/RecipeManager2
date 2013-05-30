@@ -24,10 +24,14 @@ public class ItemIngredient extends ItemStack
     public boolean isSimilar(ItemStack item)
     {
         if(item == null)
+        {
             return false;
+        }
         
         if(item == this)
+        {
             return true;
+        }
         
         return getTypeId() == item.getTypeId() && (getDurability() == Vanilla.DATA_WILDCARD ? true : getDurability() == item.getDurability()) && hasItemMeta() == item.hasItemMeta() && (hasItemMeta() ? Bukkit.getItemFactory().equals(getItemMeta(), item.getItemMeta()) : true);
     }

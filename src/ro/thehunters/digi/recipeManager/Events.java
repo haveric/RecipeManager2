@@ -575,7 +575,9 @@ public class Events implements Listener
                         }
                         
                         if(block.getType() == Material.WORKBENCH)
+                        {
                             Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
+                        }
                         
                         break;
                     }
@@ -1240,7 +1242,7 @@ public class Events implements Listener
                 }
                 
                 FurnaceInventory inv = (FurnaceInventory)event.getDestination();
-                Furnace furnace = (Furnace)inv.getHolder();
+                Furnace furnace = inv.getHolder();
                 
                 // TODO get player that placed the initial item in the hopper ?
                 

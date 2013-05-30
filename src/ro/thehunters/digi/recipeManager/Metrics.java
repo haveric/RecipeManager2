@@ -232,11 +232,15 @@ public class Metrics
         {
             // Did we opt out?
             if(isOptOut())
+            {
                 return false;
+            }
             
             // Is metrics already running?
             if(task != null)
+            {
                 return true;
+            }
             
             // Begin hitting the server with glorious data
             task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable()
@@ -276,7 +280,9 @@ public class Metrics
                     catch(IOException e)
                     {
                         if(debug)
+                        {
                             Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+                        }
                     }
                 }
             }, 0, PING_INTERVAL * 1200);

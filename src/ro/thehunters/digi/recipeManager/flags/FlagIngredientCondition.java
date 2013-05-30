@@ -153,6 +153,7 @@ public class FlagIngredientCondition extends Flag
             maxColor = original.maxColor;
         }
         
+        @Override
         public Conditions clone()
         {
             return new Conditions(this);

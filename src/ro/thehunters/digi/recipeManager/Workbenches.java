@@ -59,13 +59,17 @@ public class Workbenches
     public static Location get(HumanEntity human)
     {
         if(human == null)
+        {
             return null;
+        }
         
         BlockID blockID = workbenches.get(human.getName());
         Location playerLoc = human.getLocation();
         
         if(blockID == null || !blockID.getWorldID().equals(human.getWorld().getUID()))
+        {
             return playerLoc;
+        }
         
         Block block = blockID.toBlock();
         

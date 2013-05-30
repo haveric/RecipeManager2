@@ -57,7 +57,7 @@ public class RemoveResultRecipe extends BaseRecipe
                 }
                 
                 // TODO  if smeltrecipe gets back to single result
-                /* 
+                /*
                 else if(recipe instanceof SmeltRecipe)
                 {
                     SmeltRecipe r = (SmeltRecipe)recipe;
