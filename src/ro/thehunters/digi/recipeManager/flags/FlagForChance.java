@@ -28,14 +28,29 @@ public class FlagForChance extends Flag
         
         A = new String[]
         {
-            "{flag} <group> [0.01-100]% [[!]@flag declaration]",
-            "{flag} <0.01-100>% <[!]@flag declaration>",
-            "{flag} false",
+            "{flag} <group> [chance]% [^]@[flag declaration]",
+            "{flag} <chance>% [^]@<flag declaration>",
         };
         
         D = new String[]
         {
-            // TODO rewrite documentation ?
+            "Triggers other flags or groups of flags by specified chance.",
+            "Using this flag more than once will add more flags.",
+            "",
+            "The 'group' argument defines a group for the flags (not permission related), can be any combination of letters only, no spaces either.",
+            "Grouping flags makes the system pick only one flag from the bunch which means it's also limited to 100% total chance.",
+            "If a group is not defined then the flags will be added to the default group which is a special group that will trigger flags randomly according to their chance, it can trigger all at once or even none at all.",
+            "",
+            "The 'chance' argument suggests a chance value that can be between 0.01 and 100 and the '%' suffix is required.",
+            "The chance argument is only optional if there's a group defined, then the remaining chance will be evenly split between all flags with undefined chance.",
+            "",
+            "The 'flag declaration' is a flag like you'd add a flag to a recipe or result, you can even add this flag into itself to make multi-chance structures.",
+            "The flag declaration argument is only optional if there's a group defined and will act as literally nothing.",
+            "Optionally you can prefix the flag declaration with the '^' character to append the data from the flag to the previous flag of the same type from the same group (no group is still a group, but a special one).",
+            "",
+            "NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.",
+            "NOTE: In a group there must be at least a chance value or a flag declaration.",
+        /*
             "Adds other flags that are triggered by random chance.",
             "Basically this is a storage for flags and will only trigger them by specified chance.",
             "You can add a pile of random flags to be triggered how they want or you can use groups to trigger only one of the specified flag from a group depending on its chance.",
@@ -55,20 +70,30 @@ public class FlagForChance extends Flag
             "The <flag declaration> must be a flag that will work on the current recipe or result.",
             "",
             "Also, you can add a '!' before the flag declaration to create a new flag instead of adding to/overwriting the previous same flag declaration.",
+        */
         };
         
         E = new String[]
         {
-            "// some simple examples",
+            "// some simple example",
             "{flag} 25% " + FlagType.EXPLODE + " // 25% chance to explode",
-            "// add 2 new individual flags that will trigger at their individual chances, they can both trigger or even none at all, depends on the chance.",
-            "{flag} 80% " + FlagType.COMMAND + " say high chance message...",
-            "{flag} 50% !" + FlagType.COMMAND + " say 50-50 message... // this is prefixed with '!' and makes a new flag instead of adding command to the previous command flag",
-            "{flag} " + FlagType.COMMAND + " say rare message ! // this is triggered along with the 50% one !",
+            "// appending to flags example",
+            "{flag} 80% " + FlagType.COMMAND + " say high chance message!",
+            "{flag} 50% " + FlagType.COMMAND + " say 50-50 message... // this is a totally new flag, individual from the previous one.",
+            "{flag}    ^" + FlagType.COMMAND + " say extra message ! // this command will be appended to the previous command flag.",
+            "{flag}    ^" + FlagType.COMMAND + " say extra-large message !!! // this will also add append to the same previous command flag, now it has 3 commands.",
             "// all flags in a group must have a total of 100% chance since only one triggers, in this case the chance is calculated and it would be 33.33% for each.",
-            "{flag} mystuff !" + FlagType.SOUND + " level_up",
-            "{flag} mystuff !" + FlagType.SOUND + " note_bass",
-            "{flag} mystuff !" + FlagType.SOUND + " hurt",
+            "{flag} mystuff " + FlagType.SOUND + " level_up",
+            "{flag} mystuff " + FlagType.SOUND + " note_bass",
+            "{flag} mystuff " + FlagType.SOUND + " hurt",
+            "// example of empty flag definition as nothing chance",
+            "{flag} dostuff " + FlagType.BROADCAST + " yey !",
+            "{flag} dostuff 75% // this sets the 'dostuff' group to do nothing 75% of the time",
+            "// forchanception",
+            "{flag} 50% {flag} 25% {flag} test " + FlagType.BROADCAST + " chanception occured!",
+            "// example of randomly random",
+            "",
+            "// NOTE all of the examples above can be used in a single recipe if you want, there's no limit to the combinations!",
         };
     }
     
@@ -260,7 +285,7 @@ public class FlagForChance extends Flag
         String flagDeclaration = null;
         String group = null;
         Float chance = null;
-        boolean newFlag = false;
+        boolean appendFlag = false;
         
         if(i < 0)
         {
@@ -270,78 +295,31 @@ public class FlagForChance extends Flag
         {
             String arg = value.substring(0, i);
             
-            if(arg.charAt(i - 1) == '%') // check if character before space is a '%'
+            if(arg.charAt(0) == '@')
             {
-                arg = arg.substring(0, i - 1).trim(); // get the string between begining of string and the space - 1 character to skip the '%' char
-                
-                try
-                {
-                    chance = Float.valueOf(arg);
-                }
-                catch(NumberFormatException e)
-                {
-                    ErrorReporter.error("Flag " + getType() + " has invalid chance number: " + arg);
-                    return false;
-                }
-                
-                if(chance < 0.01f || chance > 100)
-                {
-                    chance = Math.min(Math.max(chance, 0.01f), 100.0f);
-                    
-                    ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
-                }
-                
-                arg = value.substring(i + 1).trim(); // get the string after the first space
-                
-                if(!arg.startsWith("@") && !arg.startsWith("!@")) // we need a flag declaration at this point
-                {
-                    ErrorReporter.error("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
-                    return false;
-                }
-                
-                if(arg.charAt(0) == '!')
-                {
-                    arg = arg.substring(1);
-                    newFlag = true;
-                }
-                
+                ErrorReporter.warning("Flag " + getType() + " has invalid group name that resembles a flag: " + arg);
+                return false;
+            }
+            
+            if(arg.startsWith("^@"))
+            {
+                arg = value.substring(1);
                 flagDeclaration = arg;
+                appendFlag = true;
             }
             else
             {
-                group = arg; // otherwise it must be a group!
-                
-                arg = value.substring(i + 1).trim(); // get the string after the space
-                
-                if(arg.startsWith("@") || arg.startsWith("!@"))
+                if(arg.charAt(i - 1) == '%') // check if character before space is a '%'
                 {
-                    if(arg.charAt(0) == '!')
-                    {
-                        arg = arg.substring(1);
-                        newFlag = true;
-                    }
-                    
-                    flagDeclaration = arg;
-                }
-                else
-                {
-                    i = arg.indexOf('%'); // get location of first '%' char...
-                    
-                    if(i == -1)
-                    {
-                        ErrorReporter.error("Flag " + getType() + " has neither a flag nor a chance argument: " + value);
-                        return false;
-                    }
-                    
-                    String chanceString = arg.substring(0, i); // get string between group and '%' char...
+                    arg = arg.substring(0, i - 1).trim(); // get the string between begining of string and the space - 1 character to skip the '%' char
                     
                     try
                     {
-                        chance = Float.valueOf(chanceString);
+                        chance = Float.valueOf(arg);
                     }
                     catch(NumberFormatException e)
                     {
-                        ErrorReporter.error("Flag " + getType() + " has invalid chance number: " + chanceString);
+                        ErrorReporter.warning("Flag " + getType() + " has invalid chance number: " + arg);
                         return false;
                     }
                     
@@ -352,23 +330,85 @@ public class FlagForChance extends Flag
                         ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
                     }
                     
-                    if(arg.length() > (i + 1))
+                    arg = value.substring(i + 1).trim(); // get the string after the first space
+                    
+                    if(!arg.startsWith("@") && !arg.startsWith("^@")) // we need a flag declaration at this point
                     {
-                        arg = arg.substring(i + 1).trim(); // get string after '%' char
-                        
-                        if(arg.startsWith("@") || arg.startsWith("!@"))
+                        ErrorReporter.warning("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
+                        return false;
+                    }
+                    
+                    if(arg.charAt(0) == '^')
+                    {
+                        arg = arg.substring(1);
+                        appendFlag = true;
+                    }
+                    
+                    flagDeclaration = arg;
+                }
+                else
+                {
+                    group = arg; // otherwise it must be a group!
+                    
+                    arg = value.substring(i + 1).trim(); // get the string after the space
+                    
+                    if(arg.startsWith("@") || arg.startsWith("^@"))
+                    {
+                        if(arg.charAt(0) == '^')
                         {
-                            if(arg.charAt(0) == '!')
-                            {
-                                arg = arg.substring(1);
-                                newFlag = true;
-                            }
-                            
-                            flagDeclaration = arg;
+                            arg = arg.substring(1);
+                            appendFlag = true;
                         }
-                        else
+                        
+                        flagDeclaration = arg;
+                    }
+                    else
+                    {
+                        i = arg.indexOf('%'); // get location of first '%' char...
+                        
+                        if(i == -1)
                         {
-                            ErrorReporter.warning("Flag " + getType() + " has unknown last argument, expected flag: " + arg);
+                            ErrorReporter.warning("Flag " + getType() + " has neither a flag nor a chance argument: " + value);
+                            return false;
+                        }
+                        
+                        String chanceString = arg.substring(0, i); // get string between group and '%' char...
+                        
+                        try
+                        {
+                            chance = Float.valueOf(chanceString);
+                        }
+                        catch(NumberFormatException e)
+                        {
+                            ErrorReporter.warning("Flag " + getType() + " has invalid chance number: " + chanceString);
+                            return false;
+                        }
+                        
+                        if(chance < 0.01f || chance > 100)
+                        {
+                            chance = Math.min(Math.max(chance, 0.01f), 100.0f);
+                            
+                            ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
+                        }
+                        
+                        if(arg.length() > (i + 1))
+                        {
+                            arg = arg.substring(i + 1).trim(); // get string after '%' char
+                            
+                            if(arg.startsWith("@") || arg.startsWith("^@"))
+                            {
+                                if(arg.charAt(0) == '^')
+                                {
+                                    arg = arg.substring(1);
+                                    appendFlag = true;
+                                }
+                                
+                                flagDeclaration = arg;
+                            }
+                            else
+                            {
+                                ErrorReporter.warning("Flag " + getType() + " has unknown last argument, expected flag: " + arg);
+                            }
                         }
                     }
                 }
@@ -387,18 +427,19 @@ public class FlagForChance extends Flag
             
             if(type == null)
             {
-                ErrorReporter.error("Flag " + getType() + " has unknown flag type: " + flagString);
+                ErrorReporter.warning("Flag " + getType() + " has unknown flag type: " + flagString);
                 return false;
             }
             
             if(type.hasBit(Bit.NO_FOR))
             {
-                return ErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
+                ErrorReporter.warning("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
+                return false;
             }
             
             if(flags != null)
             {
-                if(!newFlag)
+                if(appendFlag)
                 {
                     // Loop through flags backwards to get the last added flag
                     for(i = flags.size() - 1; i >= 0; i--)
@@ -411,7 +452,7 @@ public class FlagForChance extends Flag
                             
                             if(chance != null)
                             {
-                                ErrorReporter.warning("Flag " + getType() + " has flag " + flagChance.getFlag().getType() + " with chance defined, chance will be ignored because flag will be added to/overwritten in the storage !", "Prefix the flag with '!' character to create a new fresh flag instead, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
+                                ErrorReporter.warning("Flag " + getType() + " has flag " + flagChance.getFlag().getType() + " with chance defined, chance will be ignored because flag will append the previous one!", "Or remove the '^' prefix to create a new fresh flag, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
                             }
                             
                             break;
@@ -427,9 +468,14 @@ public class FlagForChance extends Flag
             
             Flag flag = null;
             
-            if(newFlag || flagChance == null)
+            if(appendFlag && flagChance == null)
             {
-                if(chance != null)
+                ErrorReporter.warning("Flag " + getType() + " can't append to " + type + " flag because it hasn't been defined for this group!");
+            }
+            
+            if(!appendFlag || flagChance == null)
+            {
+                if(group != null)
                 {
                     float totalChance = 0;
                     
@@ -438,13 +484,24 @@ public class FlagForChance extends Flag
                         totalChance += c.getChance();
                     }
                     
-                    if(totalChance >= 100)
+                    if(chance != null)
                     {
-                        ErrorReporter.error("Flag " + getType() + " already has 100% chance for this group!");
-                        return false;
+                        totalChance += chance;
+                        
+                        if(totalChance > 100)
+                        {
+                            ErrorReporter.warning("Flag " + getType() + " exceeds 100% chance for '" + group + "' group!", "Reduce the chance or remove it to be auto-calculated.");
+                            return false;
+                        }
                     }
-                    
-                    chance = 100 - totalChance;
+                    else
+                    {
+                        if(totalChance >= 100)
+                        {
+                            ErrorReporter.warning("Flag " + getType() + " already has 100% chance for '" + group + "' group!", "You can't add more flags to it until you reduce the chance of one or more flags.");
+                            return false;
+                        }
+                    }
                 }
                 
                 flag = type.createFlagClass(); // create a new instance of the flag does not exist
@@ -470,8 +527,11 @@ public class FlagForChance extends Flag
                 return false;
             }
             
-            flags.add(flagChance);
-            recalculateChances(group, flags);
+            if(!appendFlag)
+            {
+                flags.add(flagChance);
+                recalculateChances(group, flags);
+            }
         }
         else
         {
@@ -481,7 +541,7 @@ public class FlagForChance extends Flag
                 {
                     if(c.getFlag() == null)
                     {
-                        ErrorReporter.error("Flag " + getType() + " already has a blank flag for this group!");
+                        ErrorReporter.warning("Flag " + getType() + " already has a blank flag for this group!");
                         return false;
                     }
                 }
@@ -534,54 +594,6 @@ public class FlagForChance extends Flag
                 }
             }
         }
-        
-        /*
-        List<ChanceFlag> calc = new ArrayList<ChanceFlag>();
-        
-        for(Entry<String, List<ChanceFlag>> e : flagMap.entrySet())
-        {
-            if(e.getKey() == null)
-            {
-                continue;
-            }
-            
-            float totalChance = 100;
-            
-            for(ChanceFlag c : e.getValue())
-            {
-                if(c.isAutoChance())
-                {
-                    calc.add(c);
-                }
-                else
-                {
-                    totalChance -= c.getChance();
-                }
-            }
-            
-            if(!calc.isEmpty())
-            {
-                float chance = totalChance / calc.size();
-                float extra = totalChance % calc.size();
-                
-                Messages.debug(e.getKey() + " | chance=" + chance + " | extra=" + extra);
-                
-                for(int i = 0; i < calc.size(); i++)
-                {
-                    if(i == 0 && extra > 0)
-                    {
-                        calc.get(0).chance = (chance + extra);
-                    }
-                    else
-                    {
-                        calc.get(0).chance = chance;
-                    }
-                }
-                
-                calc.clear();
-            }
-        }
-        */
     }
     
     @Override
@@ -616,9 +628,10 @@ public class FlagForChance extends Flag
             
             if(e.getKey() == null)
             {
+                // flags without group, get all flags that match the chance
                 for(ChanceFlag c : flags)
                 {
-                    if(c.getChance() >= (RecipeManager.random.nextFloat() * 100.0f))
+                    if(c.getChance() >= (RecipeManager.random.nextFloat() * 100))
                     {
                         trigger(c.getFlag(), a, method);
                     }
@@ -626,19 +639,8 @@ public class FlagForChance extends Flag
             }
             else
             {
-                float totalChance = 0;
-                
-                for(ChanceFlag c : flags)
-                {
-                    totalChance += c.getChance();
-                }
-                
-                if(totalChance < 100)
-                {
-                    ErrorReporter.warning("Flag " + getType() + " has total chance less than 100% " + (e.getKey() == null ? "" : "for group '" + e.getKey() + "'") + ".");
-                }
-                
-                float random = RecipeManager.random.nextFloat() * totalChance;
+                // grouped flags, get one flag
+                float random = RecipeManager.random.nextFloat() * 100;
                 float chance = 0;
                 
                 for(ChanceFlag c : flags)
