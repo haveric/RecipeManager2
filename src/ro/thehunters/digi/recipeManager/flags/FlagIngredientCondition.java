@@ -1,6 +1,7 @@
 package ro.thehunters.digi.recipeManager.flags;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,6 +24,7 @@ import ro.thehunters.digi.recipeManager.Messages;
 import ro.thehunters.digi.recipeManager.Tools;
 import ro.thehunters.digi.recipeManager.Tools.ParseBit;
 import ro.thehunters.digi.recipeManager.Vanilla;
+import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 
 public class FlagIngredientCondition extends Flag
 {
@@ -105,6 +107,7 @@ public class FlagIngredientCondition extends Flag
     
     public class Conditions implements Cloneable
     {
+        private ItemStack ingredient;
         private String failMessage;
         private Map<Short, Boolean> dataValues = new HashMap<Short, Boolean>();
         private Map<Short, Boolean> dataBits = new HashMap<Short, Boolean>();
@@ -126,6 +129,8 @@ public class FlagIngredientCondition extends Flag
         
         public Conditions(Conditions original)
         {
+            ingredient = original.ingredient.clone();
+            
             failMessage = original.failMessage;
             
             dataValues.putAll(original.dataValues);
@@ -151,6 +156,11 @@ public class FlagIngredientCondition extends Flag
         public Conditions clone()
         {
             return new Conditions(this);
+        }
+        
+        protected void setIngredient(ItemStack ingredient)
+        {
+            this.ingredient = ingredient;
         }
         
         public String getFailMessage()
@@ -975,17 +985,6 @@ public class FlagIngredientCondition extends Flag
             return ErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions !", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
         
-        // TODO remove ?
-        /*
-        BaseRecipe recipe = getRecipeDeep();
-        
-        if(recipe == null)
-        {
-            ErrorReporter.error("Flag " + getType() + " can't be used in recipe header because it needs to find the specified ingredient!");
-            this.remove();
-        }
-        */
-        
         ItemStack item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         
         if(item == null)
@@ -1000,6 +999,8 @@ public class FlagIngredientCondition extends Flag
             cond = new Conditions();
             setIngredientConditions(item, cond);
         }
+        
+        cond.setIngredient(item);
         
         for(int i = 1; i < args.length; i++)
         {
@@ -1278,14 +1279,19 @@ public class FlagIngredientCondition extends Flag
     @Override
     protected void onRegistered()
     {
-        // TODO remove ?
-        /*
-        if(Tools.findItemInIngredients(recipe, item.getType(), item.getDurability()) == 0)
+        Iterator<Conditions> it = conditions.values().iterator();
+        BaseRecipe recipe = getRecipeDeep();
+        
+        while(it.hasNext())
         {
-            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(item));
-            this.remove();
+            Conditions c = it.next();
+            
+            if(c.ingredient != null && Tools.findItemInIngredients(recipe, c.ingredient.getType(), c.ingredient.getDurability()) == 0)
+            {
+                ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(c.ingredient));
+                it.remove();
+            }
         }
-        */
     }
     
     public void setIngredientConditions(ItemStack item, Conditions cond)
