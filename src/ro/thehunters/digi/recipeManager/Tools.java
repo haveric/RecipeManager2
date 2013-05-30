@@ -616,8 +616,8 @@ public class Tools
             return null;
         }
         
-        String[] argSplit = value.split("\\|");
-        String[] split = argSplit[0].trim().split(":");
+        String[] args = value.split(";");
+        String[] split = args[0].trim().split(":");
         
         if(split.length <= 0 || split[0].isEmpty())
         {
@@ -735,14 +735,88 @@ public class Tools
         
         ItemStack item = new ItemStack(type, amount, (short)data);
         
-        if(argSplit.length > 1)
+        if(args.length > 1)
         {
-            // TODO ?
+            ItemMeta meta = item.getItemMeta();
             
-            if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
+            if(meta == null && (settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
             {
-                ErrorReporter.warning("Can't define enchants directly on items, use " + FlagType.ENCHANTITEM + " instead (if appliable)", "Probably in the future I will add support for enchants, name and other stuff defineable in the item directly.");
+                ErrorReporter.warning("The " + type + " material doesn't support item meta, name/lore/enchants ignored.");
+                return item;
             }
+            
+            String original;
+            
+            for(int i = 1; i < args.length; i++)
+            {
+                original = args[i].trim();
+                value = original.toLowerCase();
+                
+                if(value.startsWith("name"))
+                {
+                    value = original.substring("name".length()).trim();
+                    
+                    meta.setDisplayName(Tools.parseColors(value, false));
+                }
+                else if(value.startsWith("lore"))
+                {
+                    value = original.substring("lore".length()).trim();
+                    
+                    List<String> lore = meta.getLore();
+                    
+                    if(lore == null)
+                    {
+                        lore = new ArrayList<String>();
+                    }
+                    
+                    lore.add(Tools.parseColors(value, false));
+                    meta.setLore(lore);
+                }
+                else if(value.startsWith("enchant"))
+                {
+                    split = value.substring("enchant".length()).trim().split(" ");
+                    value = split[0].trim();
+                    
+                    Enchantment enchant = Tools.parseEnchant(value);
+                    
+                    if(enchant == null && (settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
+                    {
+                        ErrorReporter.error("Invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+                        continue;
+                    }
+                    
+                    int level = enchant.getStartLevel();
+                    
+                    if(split.length > 1)
+                    {
+                        value = split[1].trim();
+                        
+                        if(!value.equals("max"))
+                        {
+                            try
+                            {
+                                level = Integer.valueOf(value);
+                            }
+                            catch(NumberFormatException e)
+                            {
+                                if((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS)
+                                {
+                                    ErrorReporter.error("Invalid enchantment level number: " + value);
+                                    continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            level = enchant.getMaxLevel();
+                        }
+                    }
+                    
+                    item.addUnsafeEnchantment(enchant, level);
+                }
+            }
+            
+            item.setItemMeta(meta);
         }
         
         return item;
