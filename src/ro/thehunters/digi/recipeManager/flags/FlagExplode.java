@@ -9,8 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.RecipeManager;
 
 public class FlagExplode extends Flag
 {
@@ -201,23 +203,36 @@ public class FlagExplode extends Flag
     }
     
     @Override
-    protected void onCrafted(Args a)
+    protected void onCrafted(final Args a)
     {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                boom(a);
+            }
+        }.runTaskLater(RecipeManager.getPlugin(), 1);
+    }
+    
+    private void boom(Args a)
+    {
+        
         if(!a.hasLocation())
         {
             a.addCustomReason("Need a location!");
             return;
         }
         
-        if(!a.hasResult())
+        if(failure && !a.hasResult())
         {
             a.addCustomReason("Needs a result!");
             return;
         }
         
-        boolean failed = a.result().getType() == Material.AIR;
+        boolean failed = (failure ? a.result().getType() == Material.AIR : failure);
         
-        if(!failure || failure == failed)
+        if(failure == failed)
         {
             Map<LivingEntity, Integer> entities = new HashMap<LivingEntity, Integer>();
             Location loc = a.location();
