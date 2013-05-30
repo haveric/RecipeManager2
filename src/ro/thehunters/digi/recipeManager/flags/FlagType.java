@@ -204,12 +204,12 @@ public enum FlagType
      */
     public static void init()
     {
-        Permission parent = Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_ALL);
+        Permission parent = Bukkit.getPluginManager().getPermission(Permissions.FLAG_ALL);
         
         if(parent == null)
         {
-            parent = new Permission(Permissions.SKIPFLAG_ALL, PermissionDefault.FALSE);
-            parent.setDescription("Ignores all flags.");
+            parent = new Permission(Permissions.FLAG_ALL, PermissionDefault.TRUE);
+            parent.setDescription("Allows use of flag.");
             
             Bukkit.getPluginManager().addPermission(parent);
         }
@@ -229,13 +229,13 @@ public enum FlagType
                     continue;
                 }
                 
-                if(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + name) != null)
+                if(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + name) != null)
                 {
                     continue;
                 }
                 
-                p = new Permission(Permissions.SKIPFLAG_PREFIX + name, PermissionDefault.FALSE);
-                p.setDescription("Ignores the " + type + " flag.");
+                p = new Permission(Permissions.FLAG_PREFIX + name, PermissionDefault.TRUE);
+                p.setDescription("Allows use of the " + type + " flag.");
                 p.addParent(parent, true);
                 Bukkit.getPluginManager().addPermission(p);
             }

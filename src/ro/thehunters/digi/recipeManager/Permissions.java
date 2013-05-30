@@ -8,8 +8,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Permissions
 {
-    public static final String SKIPFLAG_PREFIX = "recipemanager.skipflag.";
-    public static final String SKIPFLAG_ALL = SKIPFLAG_PREFIX + "*";
+    public static final String FLAG_PREFIX = "recipemanager.skipflag.";
+    public static final String FLAG_ALL = FLAG_PREFIX + "*";
     
     private Permission permissions = null;
     

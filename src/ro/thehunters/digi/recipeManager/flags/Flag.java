@@ -3,8 +3,8 @@ package ro.thehunters.digi.recipeManager.flags;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
-import ro.thehunters.digi.recipeManager.Permissions;
 import ro.thehunters.digi.recipeManager.ErrorReporter;
+import ro.thehunters.digi.recipeManager.Permissions;
 import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 import ro.thehunters.digi.recipeManager.recipes.BaseRecipe;
 import ro.thehunters.digi.recipeManager.recipes.ItemResult;
@@ -49,27 +49,27 @@ public class Flag implements Cloneable
      * @param player
      * @return
      */
-    final public boolean hasSkipPermission(Player player)
+    final public boolean hasFlagPermission(Player player)
     {
         if(player == null)
         {
             return false; // no player, no skip
         }
         
-        if(player.hasPermission(Permissions.SKIPFLAG_ALL))
+        if(player.hasPermission(Permissions.FLAG_ALL))
         {
-            return true; // has skip permission for all flags
+            return true; // has permission for all flags
         }
         
         for(String name : getType().getNames())
         {
-            if(player.hasPermission(Permissions.SKIPFLAG_PREFIX + name))
+            if(player.hasPermission(Permissions.FLAG_PREFIX + name))
             {
-                return true; // has skip permission for this flag
+                return true; // has permission for this flag
             }
         }
         
-        return false; // don't skip flag
+        return false; // no permission for flag
     }
     
     /**
@@ -82,8 +82,10 @@ public class Flag implements Cloneable
      */
     final public void check(Args a)
     {
-        if(!hasSkipPermission(a.player()))
+        if(hasFlagPermission(a.player()))
+        {
             onCheck(a);
+        }
     }
     
     /**
@@ -94,7 +96,7 @@ public class Flag implements Cloneable
      */
     final public void prepare(Args a)
     {
-        if(!hasSkipPermission(a.player()))
+        if(hasFlagPermission(a.player()))
         {
             onPrepare(a);
         }
@@ -110,7 +112,7 @@ public class Flag implements Cloneable
      */
     final public void crafted(Args a)
     {
-        if(!hasSkipPermission(a.player()))
+        if(hasFlagPermission(a.player()))
         {
             onCrafted(a);
         }

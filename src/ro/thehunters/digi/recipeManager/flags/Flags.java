@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.ErrorReporter;
 import ro.thehunters.digi.recipeManager.Files;
@@ -246,15 +245,11 @@ public class Flags implements Cloneable
      */
     public boolean checkFlags(Args a)
     {
-        Player p = a.player();
         a.clear();
         
         for(Flag flag : flags.values())
         {
-            if(!flag.hasSkipPermission(p))
-            {
-                flag.check(a);
-            }
+            flag.check(a);
         }
         
         return !a.hasReasons();

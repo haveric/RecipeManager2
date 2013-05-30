@@ -419,7 +419,7 @@ public class Files
         
         perms.addAll(permissions);
         
-        perms.add(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + "*"));
+        perms.add(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + "*"));
         
         for(FlagType type : FlagType.values())
         {
@@ -428,7 +428,7 @@ public class Files
                 continue;
             }
             
-            perms.add(Bukkit.getPluginManager().getPermission(Permissions.SKIPFLAG_PREFIX + type.getName()));
+            perms.add(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + type.getName()));
         }
         
         for(Permission p : perms)
@@ -464,8 +464,8 @@ public class Files
         
         s.append(NL).append("</table>");
         s.append(NL);
-        s.append(NL).append("For the skipflag permissions you can use the flag's aliases as well, I filtered them from this list because it would've become too long, but the permissions are there.");
-        s.append(NL).append("For example, <i>recipemanager.skipflag.modexp</i> and <i>recipemanager.skipflag.xp</i> both affect the same flag, the @modexp flag, since 'xp' is an alias for 'modexp'.");
+        s.append(NL).append("For the flag permissions you can use the flag's aliases as well, I filtered them from this list because it would've become too long, but the permissions are there.");
+        s.append(NL).append("For example, <i>recipemanager.flag.modexp</i> and <i>recipemanager.flag.xp</i> both affect the same flag, the @modexp flag, since 'xp' is an alias for 'modexp'.");
         s.append(NL);
         s.append(NL);
         s.append("</pre>");
