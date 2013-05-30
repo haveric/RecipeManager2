@@ -6,7 +6,7 @@ website: http://dev.bukkit.org/server-mods/recipemanager/
 dev-url: http://dev.bukkit.org/server-mods/recipemanager/
 main: ro.thehunters.digi.recipeManager.RecipeManager
 load: postworld
-softdepend: [Vault, iConomy]
+softdepend: [Vault]
 commands:
   rm:
     description: plugin info and available commands
