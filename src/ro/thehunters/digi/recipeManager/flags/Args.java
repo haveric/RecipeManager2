@@ -189,6 +189,8 @@ public class Args
             reasons = new ArrayList<String>();
         }
         
+        debug("reason", message);
+        
         reasons.add(message);
     }
     
@@ -226,6 +228,8 @@ public class Args
         {
             effects = new ArrayList<String>();
         }
+        
+        debug("effect", message);
         
         effects.add(message);
     }
@@ -327,5 +331,10 @@ public class Args
         }
         
         return this;
+    }
+    
+    private void debug(String type, String message)
+    {
+//        Messages.debug(type + " | " + message);
     }
 }
