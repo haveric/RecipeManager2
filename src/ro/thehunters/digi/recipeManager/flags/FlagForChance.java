@@ -50,27 +50,6 @@ public class FlagForChance extends Flag
             "",
             "NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.",
             "NOTE: In a group there must be at least a chance value or a flag declaration.",
-        /*
-            "Adds other flags that are triggered by random chance.",
-            "Basically this is a storage for flags and will only trigger them by specified chance.",
-            "You can add a pile of random flags to be triggered how they want or you can use groups to trigger only one of the specified flag from a group depending on its chance.",
-            "",
-            "First, grouped flags:",
-            "The <group> argument can any combination of letters and numbers (except '<num>%' which is the 2nd type of arguments).",
-            "Grouping more flags into a group would pick only one flag per trigger.",
-            "The '0.01-100%' arg is the chance, which it's applied to the individual flag defined later, if you don't define it then the chance will be evenly calculated.",
-            "Flags in a group must have a total of 100% chance.",
-            "The 'flag declaration' is optional but if defined it must be a flag that can be applied on the current recipe or result.",
-            "Not specifying a flag declaration would allow you to set a chance for the group to do absolutely nothing.",
-            "",
-            "For extra awesomeness you can nest this flag with itself to make groups of groups, see examples.",
-            "",
-            "For individually and randomly picked flags you can just specify chance and flag declaration.",
-            "This will make flags have individual chance and will trigger if their chance was picked regardless if any other flag was triggered too.",
-            "The <flag declaration> must be a flag that will work on the current recipe or result.",
-            "",
-            "Also, you can add a '!' before the flag declaration to create a new flag instead of adding to/overwriting the previous same flag declaration.",
-        */
         };
         
         E = new String[]
@@ -91,8 +70,6 @@ public class FlagForChance extends Flag
             "{flag} dostuff 75% // this sets the 'dostuff' group to do nothing 75% of the time",
             "// forchanception",
             "{flag} 50% {flag} 25% {flag} test " + FlagType.BROADCAST + " chanception occured!",
-            "// example of randomly random",
-            "",
             "// NOTE all of the examples above can be used in a single recipe if you want, there's no limit to the combinations!",
         };
     }
