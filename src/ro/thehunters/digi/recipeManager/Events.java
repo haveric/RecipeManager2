@@ -1507,10 +1507,10 @@ public class Events implements Listener
         
         Players.addJoined(player);
         
-        if(player.hasPermission("recipemanager.command.rmupdate"))
+        if(RecipeManager.getSettings().UPDATE_CHECK_ENABLED && player.hasPermission("recipemanager.command.rmupdate"))
         {
-            String version = RecipeManager.getPlugin().getDescription().getVersion();
             String newVersion = UpdateChecker.getNewVersion();
+            String version = RecipeManager.getPlugin().getDescription().getVersion();
             
             if(!version.equalsIgnoreCase(newVersion))
             {

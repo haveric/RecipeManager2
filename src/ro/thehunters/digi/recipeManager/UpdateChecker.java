@@ -1,5 +1,6 @@
 package ro.thehunters.digi.recipeManager;
 
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -115,7 +116,7 @@ public class UpdateChecker extends BukkitRunnable
         {
             if(sender != null) // send this message only if it's a requested update check
             {
-                Messages.sendAndLog(sender, "<dark_red>Unable to check for updates, please check manually by visiting: " + URL_FILES);
+                Messages.sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + URL_FILES);
             }
             else
             {
@@ -159,8 +160,19 @@ public class UpdateChecker extends BukkitRunnable
     {
         try
         {
+            InputStream stream = null;
+            
+            try
+            {
+                stream = new URL(URL_FILES_RSS).openStream();
+            }
+            catch(Throwable e)
+            {
+                return false;
+            }
+            
             // Credits to Vault for simple files.rss reading technique
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new URL(URL_FILES_RSS).openConnection().getInputStream());
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
             doc.getDocumentElement().normalize();
             NodeList nodes = doc.getElementsByTagName("item");
             Node node = nodes.item(0);
