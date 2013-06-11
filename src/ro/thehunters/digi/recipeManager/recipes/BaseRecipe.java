@@ -262,6 +262,11 @@ public class BaseRecipe implements Flaggable
         return flags;
     }
     
+    public void clearFlags()
+    {
+        flags = null;
+    }
+    
     @Override
     public void addFlag(Flag flag)
     {

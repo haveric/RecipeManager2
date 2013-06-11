@@ -40,6 +40,11 @@ public interface Flaggable
     public Flags getFlags();
     
     /**
+     * Removes all flags.
+     */
+    public void clearFlags();
+    
+    /**
      * Shortcut for {@link Flags#addFlag(Flag)}
      */
     public void addFlag(Flag flag);

@@ -132,6 +132,11 @@ public class ItemResult extends ItemStack implements Flaggable
         return flags;
     }
     
+    public void clearFlags()
+    {
+        flags = null;
+    }
+    
     @Override
     public void addFlag(Flag flag)
     {
