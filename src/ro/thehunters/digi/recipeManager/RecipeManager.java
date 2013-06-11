@@ -95,6 +95,7 @@ public class RecipeManager extends JavaPlugin
         Files.init();
         Players.init();
         Workbenches.init();
+        Metrics.init();
         
         reload(null, false); // load data
         
@@ -268,8 +269,11 @@ public class RecipeManager extends JavaPlugin
             permissions.clean();
             permissions = null;
             
-            metrics.stop();
-            metrics = null;
+            if(metrics != null)
+            {
+                metrics.stop();
+                metrics = null;
+            }
             
             plugin = null;
         }

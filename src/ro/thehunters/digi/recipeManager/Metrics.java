@@ -125,6 +125,10 @@ public class Metrics
      */
     private volatile BukkitTask task = null;
     
+    public static void init()
+    {
+    }
+    
     public Metrics(final Plugin plugin)
     {
         this.plugin = plugin;
