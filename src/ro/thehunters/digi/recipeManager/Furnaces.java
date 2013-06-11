@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.block.Furnace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.FurnaceInventory;
 
 import ro.thehunters.digi.recipeManager.data.BlockID;
 import ro.thehunters.digi.recipeManager.data.FurnaceData;
@@ -85,6 +86,13 @@ public class Furnaces
             id = BlockID.fromLocation(furnace.getLocation());
         }
         
+        FurnaceInventory inv = furnace.getInventory();
+        
+        if(inv == null)
+        {
+            return; // invalid furnace, no inventory
+        }
+        
         FurnaceData data = furnaces.get(id);
         
         if(data == null)
@@ -95,12 +103,12 @@ public class Furnaces
         
         if(data.getFuel() == null)
         {
-            data.setFuel(furnace.getInventory().getFuel());
+            data.setFuel(inv.getFuel());
         }
         
         if(data.getSmelting() == null)
         {
-            data.setSmelting(furnace.getInventory().getSmelting());
+            data.setSmelting(inv.getSmelting());
         }
         
         data.setBurnTicks(furnace.getBurnTime());
