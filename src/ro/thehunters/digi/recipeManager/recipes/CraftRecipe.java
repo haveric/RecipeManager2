@@ -297,6 +297,11 @@ public class CraftRecipe extends WorkbenchRecipe
     @Override
     public ShapedRecipe toBukkitRecipe()
     {
+        if(!hasIngredients() || !hasResults())
+        {
+            return null;
+        }
+        
         ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
         
         switch(height)

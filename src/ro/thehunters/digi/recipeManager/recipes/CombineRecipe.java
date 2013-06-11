@@ -192,6 +192,11 @@ public class CombineRecipe extends WorkbenchRecipe
     @Override
     public ShapelessRecipe toBukkitRecipe()
     {
+        if(!hasIngredients() || !hasResults())
+        {
+            return null;
+        }
+        
         ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
         
         for(ItemStack item : ingredients)

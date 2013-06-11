@@ -216,6 +216,11 @@ public class SmeltRecipe extends SingleResultRecipe
     @Override
     public FurnaceRecipe toBukkitRecipe()
     {
+        if(!hasIngredient() || !hasResult())
+        {
+            return null;
+        }
+        
         return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability());
     }
     
