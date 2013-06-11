@@ -92,7 +92,7 @@ public class FlagIngredientCondition extends Flag
         E = new String[]
         {
             "{flag} wood | data 3 // pointless use of this flag, just use wood:3 as ingredient.",
-            "{flag} dirt | data 1-3, 39, 100 // this adds a data condition to the previous one.",
+            "{flag} wood | data 1-3, 39, 100 // this overwrites the data condition to the previous one.",
             "{flag} dirt | amount 64 // needs a full stack of dirt to work.",
             "{flag} iron_sword | data 0-25 // only accepts iron swords that have 0 to 25 damage.",
             "{flag} wool | data !wool:red // no red wool",
@@ -644,7 +644,7 @@ public class FlagIngredientCondition extends Flag
             {
                 try
                 {
-                    pattern = Pattern.compile(this.name.substring("regex:".length()));
+                    pattern = Pattern.compile(this.lore.substring("regex:".length()));
                 }
                 catch(PatternSyntaxException e)
                 {
