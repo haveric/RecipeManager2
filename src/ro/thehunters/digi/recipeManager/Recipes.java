@@ -300,6 +300,11 @@ public class Recipes
      */
     public void registerRecipe(BaseRecipe recipe, RecipeInfo info)
     {
+        if(!recipe.isValid())
+        {
+            throw new IllegalArgumentException("Recipe is invalid ! Check ingredients and results.");
+        }
+        
         if(index.remove(recipe) != null)
         {
             recipe.remove();

@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
  */
 public class UpdateChecker extends BukkitRunnable
 {
-    private static final String URL_PLUGIN = "http://dev.bukkit.org/server-mods/recipemanager/";
+    private static final String URL_PLUGIN = "http://dev.bukkit.org/bukkit-mods/recipemanager/";
     private static final String URL_FILES = URL_PLUGIN + "files";
     private static final String URL_FILES_RSS = URL_FILES + ".rss";
     private static UpdateChecker instance;

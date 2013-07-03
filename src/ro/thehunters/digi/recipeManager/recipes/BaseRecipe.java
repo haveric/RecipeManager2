@@ -179,11 +179,6 @@ public class BaseRecipe implements Flaggable
      */
     public void register()
     {
-        if(!isValid())
-        {
-            throw new IllegalArgumentException("Recipe is invalid ! Check ingredients and results.");
-        }
-        
         RecipeManager.getRecipes().registerRecipe(this);
     }
     
