@@ -408,7 +408,7 @@ public class Events implements Listener
                     if(Tools.playerCanAddItem(player, result))
                     {
                         player.getInventory().addItem(result);
-                        recipe.subtractIngredients(inv, false); // subtract from ingredients manually
+                        recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
                         
                         return 1;
                     }
@@ -452,7 +452,7 @@ public class Events implements Listener
                 
                 if(recipe.hasFlag(FlagType.INGREDIENTCONDITION))
                 {
-                    recipe.subtractIngredients(inv, true);
+                    recipe.subtractIngredients(inv, result, true);
                 }
             }
         }
@@ -507,7 +507,7 @@ public class Events implements Listener
                 }
             }
             
-            recipe.subtractIngredients(inv, false); // subtract from ingredients manually
+            recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
             
             // update displayed result
             // TODO need accurate reading if there is a recipe!

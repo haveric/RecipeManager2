@@ -106,6 +106,18 @@ public class FlagKeepItem extends Flag
         this.keepItems = keepItems;
     }
     
+    public Object getItem(ItemStack item)
+    {
+        Object obj = keepItems.get(String.valueOf(item.getTypeId() + ":" + item.getDurability()));
+        
+        if(obj == null)
+        {
+            return keepItems.get(String.valueOf(item.getTypeId()));
+        }
+        
+        return obj;
+    }
+    
     /**
      * @param ingredient
      * @param object
@@ -208,12 +220,7 @@ public class FlagKeepItem extends Flag
             return;
         }
         
-        Object obj = keepItems.get(String.valueOf(item.getTypeId() + ":" + item.getDurability()));
-        
-        if(obj == null)
-        {
-            obj = keepItems.get(String.valueOf(item.getTypeId()));
-        }
+        Object obj = getItem(item);
         
         if(obj != null)
         {

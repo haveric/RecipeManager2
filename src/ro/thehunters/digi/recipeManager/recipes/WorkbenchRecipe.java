@@ -13,6 +13,7 @@ import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagDisplayResult;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition;
 import ro.thehunters.digi.recipeManager.flags.FlagIngredientCondition.Conditions;
+import ro.thehunters.digi.recipeManager.flags.FlagKeepItem;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
@@ -186,9 +187,20 @@ public class WorkbenchRecipe extends MultiResultRecipe
         return craftAmount;
     }
     
-    public void subtractIngredients(CraftingInventory inv, boolean onlyExtra)
+    public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra)
     {
-        FlagIngredientCondition flag = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
+        FlagIngredientCondition flagIC = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
+        FlagKeepItem flagKI = (hasFlag(FlagType.KEEPITEM) ? getFlag(FlagKeepItem.class) : null);
+        
+        if(flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION))
+        {
+            flagIC = result.getFlag(FlagIngredientCondition.class);
+        }
+        
+        if(flagKI == null && result != null && result.hasFlag(FlagType.KEEPITEM))
+        {
+            flagKI = result.getFlag(FlagKeepItem.class);
+        }
         
         for(int i = 1; i < 10; i++)
         {
@@ -196,12 +208,20 @@ public class WorkbenchRecipe extends MultiResultRecipe
             
             if(item != null)
             {
+                if(flagKI != null)
+                {
+                    if(flagKI.getItem(item) != null)
+                    {
+                        continue;
+                    }
+                }
+                
                 int amt = item.getAmount();
                 int newAmt = amt;
                 
-                if(flag != null)
+                if(flagIC != null)
                 {
-                    Conditions cond = flag.getIngredientConditions(item);
+                    Conditions cond = flagIC.getIngredientConditions(item);
                     
                     if(cond != null && cond.getAmount() > 1)
                     {
