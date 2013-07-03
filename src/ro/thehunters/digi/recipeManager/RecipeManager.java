@@ -191,7 +191,8 @@ public class RecipeManager extends JavaPlugin
             }
             
             packageName = plugin.getDescription().getMain();
-            packageName = packageName.substring(0, packageName.lastIndexOf('.'));
+            int i = packageName.lastIndexOf('.');
+            packageName = (i > 0 ? packageName.substring(0, i) : packageName);
             plugins.put(packageName, plugin.getName());
         }
     }
