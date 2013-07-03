@@ -19,7 +19,7 @@ commands:
     usage: /<command> <material>:[data]:[amount] [i]
     permission: recipemanager.command.rmrecipes
   rmfinditem:
-    aliases: [finditem, item]
+    aliases: [finditem]
     description: search for items by name or id
     usage: /<command> <name>
     permission: recipemanager.command.rmfinditem
