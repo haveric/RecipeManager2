@@ -69,11 +69,13 @@ Once 'recipes' is defined and book is loaded, the node will be deleted and will 
 You can add the 'recipes' node again to append recipes to the existing volumes automatically or you can just add them directly to the volumes you want.
 
 
+To add recipes to a book, give it a custom name or use the <a href="recipe flags.html#addtobook">@addtobook</a> flag.
+
 Recipe names must be unique when defined in their recipe files, but if recipes do not have a name defined they will have a uniquely generated name.
 That generated name contains the recipe type, its ingredient(s) and its result(s).
 
-Nobody expects you to guess the generated recipe names, here's where the special arguments come in.
-The available special arguments are:
+
+You can also use special arguments to add alot of recipes at once, the available special arguments are:
 
   <b>+existing &lt;all/workbench/smelt/fuel&gt;</b>
     This is replaced by existing recipes matching the type specified.
@@ -86,11 +88,11 @@ The available special arguments are:
   <b>+file &lt;/path/to/file.ext&gt;</b>
   <b>+folder &lt;/path/to/folder&gt;</b>
     These are replaced by the recipes defined in the recipe file defined or the recipe files from the defined folder.
-    Paths are relative to '/plugins/RecipeManager/recipes' so defining '/' as path would mean the of 'recipes' folder.
+    Paths are relative to '/plugins/RecipeManager/recipes' so defining '/' as path would mean the root of 'recipes' folder.
 
-Once book is loaded by the server, these arguments will be replaced in the file with the recipes they find.
+Once the book is loaded by the server, these arguments will be replaced in the file with the recipes they find.
 
-If you use any + argument in 'recipes' node they will be automatically distributed throughout volumes as defined by the 'recipes-per-volume' limit.
+If you use any +argument in 'recipes' node they will be automatically distributed throughout volumes as defined by the 'recipes-per-volume' limit.
 However, if you add them directly to volumes they will be added to that volume directly because you are not bound by the volume limit, only the 'recipes' node is.
 
 Also, when a book file is loaded it will have a header comment appended to it specifying the last date/time it was read.
@@ -101,21 +103,23 @@ Now your book should be ready.
 
 To see available recipe books type 'rmbooks' in server console or as an operator.
 
-You can use @getrecipebook in recipes to make a recipe that creates a recipe book.
+You can use <a href="recipe flags.html#getrecipebook">@getrecipebook</a> flag in a recipe to craft a recipe book.
 
 Additionally you can get books with the 'rmgetbook' command, available to operators.
 
 <b>Example book:</b>
 
 'swords.yml'
-<div id="code">title: Evolution of Swords
-description: History, materials and recipes!
+<div id="code">title: Stuff!
+description: Random things.
 recipes:
+- flaming sword of doom
+- oblivion ice axe
+- shaped 3x2 (76 331:0 76 / 1 1 1) diode
 - shaped 1x3 (5 / 5 / 280:0) wood_sword
+- shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
+- some inexistent recipe name here
 - shaped 1x3 (4 / 4 / 280:0) stone_sword
-- shaped 1x3 (265:0 / 265:0 / 280:0) iron_sword
-- shaped 1x3 (266:0 / 266:0 / 280:0) gold_sword
-- shaped 1x3 (264:0 / 264:0 / 280:0) diamond_sword
 </div>
 
 Which, after using reload, rmreload or rmreloadbooks command, the book's contents will be converted to:
@@ -123,18 +127,23 @@ Which, after using reload, rmreload or rmreloadbooks command, the book's content
 <div id="code"># Recipe book configuration (last loaded at May 2, 2013 12:19:45 PM)
 # Read 'recipe books.html' file to learn how to configure books.
 
-title: Evolution of Swords
-description: History, materials and recipes!
+title: Stuff!
+description: Random things.
 volume 1:
+- flaming sword of doom
+- oblivion ice axe
+- shaped 3x2 (76 331:0 76 / 1 1 1) diode
 - shaped 1x3 (5 / 5 / 280:0) wood_sword
+- shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
 - shaped 1x3 (4 / 4 / 280:0) stone_sword
-- shaped 1x3 (265:0 / 265:0 / 280:0) iron_sword
-- shaped 1x3 (266:0 / 266:0 / 280:0) gold_sword
-- shaped 1x3 (264:0 / 264:0 / 280:0) diamond_sword
 </div>
 
+<b>NOTE</b> You're not supposed to write the auto-generated recipe names manually!
+As said before, you can give them a custom name or use the <a href="recipe flags.html#addtobook">@addtobook</a> flag.
+For existing recipes you can use the +existing special argument to get all the names then remove the ones you don't need.
+
 After that you can still change its contents, rearange recipes, remove recipes, change its title, description, whatever you want !
-Just be sure not to rename the file if people already have copies of the book, in that case their books won't update!
+Just be sure that you do not rename the file if people already have copies of the book, in that case their books won't update!
 
 
 

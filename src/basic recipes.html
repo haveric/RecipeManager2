@@ -33,7 +33,12 @@ div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
   - (optional) 'data' = data name (from 'aliases.yml'), number or * for any data value (default)
   - (optional) 'amount' = number, default 1
 
-  For more advanced settings like name, lore, enchantments, etc, see <a href="recipe flags.html">recipe flags.html</a>
+  Item definitions also support names, lore and enchantments.
+  Full format is: <b>&lt;material&gt;:&lt;data&gt;:&lt;amount&gt; ; name &lt;name&gt; ; lore &lt;line&gt; ; enchant &lt;enchant&gt; &lt;level&gt;</b>
+  Where lore and enchant can be repeated.
+  And of course all meta definitions are optional and order does not matter (unlike material:data:amount).
+
+  For more stuff that can be set using flags on items, see <a href="recipe flags.html">recipe flags.html</a>.
 
 
 <b>ABOUT MULTI-RESULTS</b>
@@ -64,8 +69,9 @@ div#code { border: 1px dashed #999999; margin-left:20px; padding:10px; }
 [material:[data]] + [material:[data]] + [material:[data]]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]</div>
-    
+  
   The ingredients are in the shape of the recipe grid, it will also work if horizontally mirroed.
+  <b>NOTE:</b> The recipe is exacly the same if you place the ingredients reversed horizontally, it's how the game works.
   Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.
   Specifying a square of 4 or smaller makes it work in player's inventory crafting.
   
