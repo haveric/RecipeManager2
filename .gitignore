@@ -38,6 +38,8 @@ local.properties
 # PDT-specific
 .buildpath
 
+# Ant build
+build.xml
 
 #################
 ## Visual Studio
