@@ -136,7 +136,7 @@ public class FlagBiome extends Flag {
 
         if (set == null) {
             a.addReason(Messages.FLAG_BIOME_ALLOWED, failMessage, "{biomes}", getBiomesString(true));
-        } else if (set == false) {
+        } else if (!set) {
             a.addReason(Messages.FLAG_BIOME_UNALLOWED, failMessage, "{biomes}", getBiomesString(false));
         }
     }

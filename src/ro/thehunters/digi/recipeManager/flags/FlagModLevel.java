@@ -58,7 +58,7 @@ public class FlagModLevel extends Flag {
 
     /**
      * The amount modified.<br> Use {@link #getModifier()} to get the type of modifier (+, -, =).
-     * 
+     *
      * @return amount
      */
     public int getAmount() {
@@ -67,7 +67,7 @@ public class FlagModLevel extends Flag {
 
     /**
      * Set the amount, can be negative.
-     * 
+     *
      * @param amount
      */
     public void setAmount(int amount) {
@@ -84,13 +84,10 @@ public class FlagModLevel extends Flag {
         switch (mod) {
             case '-':
             case '=':
-            case '+': {
+            case '+':
                 break;
-            }
-
-            default: {
+            default:
                 throw new IllegalArgumentException("mod can only be '+', '-', '=' !");
-            }
         }
 
         if (mod != '=' && amount == 0) {
@@ -123,14 +120,11 @@ public class FlagModLevel extends Flag {
         switch (mod) {
             case '-':
             case '=':
-            case '+': {
+            case '+':
                 value = value.substring(1).trim(); // remove modifier from string
                 break;
-            }
-
-            default: {
+            default:
                 mod = '+'; // set default modifier if it's not defined
-            }
         }
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
@@ -168,15 +162,13 @@ public class FlagModLevel extends Flag {
         Player p = a.player();
 
         switch (mod) {
-            case '+': {
+            case '+':
                 p.giveExpLevels(amount);
 
                 a.addEffect(Messages.FLAG_MODLEVEL_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
-            }
-
-            case '-': {
+            case '-':
                 int level = Math.max(p.getLevel() - amount, 0);
 
                 p.setLevel(level);
@@ -184,24 +176,21 @@ public class FlagModLevel extends Flag {
                 a.addEffect(Messages.FLAG_MODLEVEL_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", level);
 
                 break;
-            }
-
-            case '=': {
+            case '=':
                 p.setLevel(amount);
 
                 a.addEffect(Messages.FLAG_MODLEVEL_SET, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
-            }
         }
     }
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * switch(mod) { case '+': list.add(Messages.FLAG_MODLEVEL_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(Messages.FLAG_MODLEVEL_SUB.get("{amount}", amount,
      * "{modifier}", mod, "{actualamount}", amount)); break; case '=': list.add(Messages.FLAG_MODLEVEL_SET.get("{amount}", amount, "{modifier}", mod)); break; }
-     * 
+     *
      * return list; }
      */
 }

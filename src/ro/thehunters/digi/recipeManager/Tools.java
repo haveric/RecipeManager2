@@ -946,6 +946,7 @@ public class Tools {
 
                 return Color.fromRGB(r, g, b);
             } catch (Throwable e) {
+                // TODO: Handle error
             }
         }
 

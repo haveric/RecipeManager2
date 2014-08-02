@@ -62,7 +62,7 @@ public class FlagFailMessage extends Flag {
     protected boolean onValidate() {
         BaseRecipe recipe = getRecipe();
 
-        if (recipe instanceof MultiResultRecipe == false && recipe instanceof SingleResultRecipe == false) {
+        if (!(recipe instanceof MultiResultRecipe) && !(recipe instanceof SingleResultRecipe)) {
             ErrorReporter.error("Flag " + getType() + " can only be used on recipes that support failure chance.");
             return false;
         }
@@ -78,7 +78,7 @@ public class FlagFailMessage extends Flag {
 
     @Override
     protected void onFailed(Args a) {
-        if (!a.hasResult() || !a.hasRecipe() || (a.recipe() instanceof MultiResultRecipe == false && a.recipe() instanceof SingleResultRecipe == false)) {
+        if (!a.hasResult() || !a.hasRecipe() || (!(a.recipe() instanceof MultiResultRecipe) && !(a.recipe() instanceof SingleResultRecipe))) {
             a.addCustomReason("Needs fail-supporting recipe and result!");
             return;
         }

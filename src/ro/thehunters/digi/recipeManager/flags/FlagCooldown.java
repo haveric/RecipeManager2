@@ -70,7 +70,7 @@ public class FlagCooldown extends Flag {
      *            Set the cooldown time in seconds
      */
     public void setCooldownTime(int seconds) {
-        this.cooldown = seconds;
+        cooldown = seconds;
     }
 
     public boolean isGlobal() {
@@ -83,7 +83,7 @@ public class FlagCooldown extends Flag {
 
     /**
      * Gets the cooldown time in seconds for specified player or for global if null is specified and global is enabled.
-     * 
+     *
      * @param playerName
      *            if global is enabled this value is ignored, can be null.
      * @return -1 if there is a problem otherwise 0 or more specifies seconds left
@@ -107,7 +107,7 @@ public class FlagCooldown extends Flag {
 
     /**
      * Gets the cooldown time as formatted string for specified player or for global if null is specified and global is enabled.
-     * 
+     *
      * @param playerName
      *            if global is enabled this value is ignored, can be null.
      * @return '#h #m #s' format of remaining time.
@@ -130,7 +130,7 @@ public class FlagCooldown extends Flag {
 
     /**
      * Checks countdown time for player or globally if null is supplied and global is enabled.
-     * 
+     *
      * @param playerName
      *            if global is enabled this value is ignored, can be null.
      * @return true if can be used, false otherwise.
@@ -152,7 +152,7 @@ public class FlagCooldown extends Flag {
     }
 
     public void setFailMessage(String message) {
-        this.failMessage = message;
+        failMessage = message;
     }
 
     public String getCraftMessage() {
@@ -160,7 +160,7 @@ public class FlagCooldown extends Flag {
     }
 
     public void setCraftMessage(String message) {
-        this.craftMessage = message;
+        craftMessage = message;
     }
 
     @Override
@@ -175,13 +175,13 @@ public class FlagCooldown extends Flag {
             case 'm':
                 multiplier = 60.0f;
                 break;
-
             case 'h':
                 multiplier = 3600.0f;
                 break;
-
             case 's':
                 multiplier = 1;
+                break;
+            default:
                 break;
         }
 
@@ -253,9 +253,9 @@ public class FlagCooldown extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * list.add((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER).get("{time}", timeToString(getCooldownTime())));
-     * 
+     *
      * return list; }
      */
 }

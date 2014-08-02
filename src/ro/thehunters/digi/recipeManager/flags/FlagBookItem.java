@@ -87,14 +87,14 @@ public class FlagBookItem extends Flag {
     }
 
     public void addPage(String page) {
-        this.pages.add(Tools.parseColors(page.replace("\\n", "\n"), false));
+        pages.add(Tools.parseColors(page.replace("\\n", "\n"), false));
     }
 
     @Override
     protected boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof BookMeta == false) {
+        if (result == null || !(result.getItemMeta() instanceof BookMeta)) {
             ErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK or BOOK_AND_QUILL item!");
             return false;
         }
@@ -159,7 +159,7 @@ public class FlagBookItem extends Flag {
 
         ItemMeta meta = a.result().getItemMeta();
 
-        if (meta instanceof BookMeta == false) {
+        if (!(meta instanceof BookMeta)) {
             a.addCustomReason("Needs BookMeta supported item!");
             return;
         }

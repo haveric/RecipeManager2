@@ -52,7 +52,7 @@ public class FlagLeatherColor extends Flag {
     protected boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof LeatherArmorMeta == false) {
+        if (result == null || !(result.getItemMeta() instanceof LeatherArmorMeta)) {
             return ErrorReporter.error("Flag " + getType() + " needs a leather armor item!");
         }
 
@@ -85,7 +85,7 @@ public class FlagLeatherColor extends Flag {
     private boolean applyOnItem(ItemStack item, Color color) {
         ItemMeta meta = item.getItemMeta();
 
-        if (meta instanceof LeatherArmorMeta == false) {
+        if (!(meta instanceof LeatherArmorMeta)) {
             return false;
         }
 

@@ -37,10 +37,10 @@ public class BaseRecipe implements Flaggable {
     }
 
     public BaseRecipe(BaseRecipe recipe) {
-        this.flags = (recipe.hasFlags() ? recipe.getFlags().clone(this) : null);
-        this.name = recipe.name;
-        this.customName = recipe.customName;
-        this.hash = recipe.hash;
+        flags = (recipe.hasFlags() ? recipe.getFlags().clone(this) : null);
+        name = recipe.name;
+        customName = recipe.customName;
+        hash = recipe.hash;
         this.recipe = recipe.recipe;
     }
 
@@ -50,7 +50,7 @@ public class BaseRecipe implements Flaggable {
 
     /**
      * See: {@link Recipes #getRecipeInfo(BaseRecipe)}
-     * 
+     *
      * @return Recipe info or null if doesn't exist
      */
     public RecipeInfo getInfo() {
@@ -63,7 +63,7 @@ public class BaseRecipe implements Flaggable {
 
     /**
      * Returns the auto-generated name or the custom name (if set) of the recipe.
-     * 
+     *
      * @return recipe name, never null.
      */
     public String getName() {
@@ -83,7 +83,7 @@ public class BaseRecipe implements Flaggable {
 
     /**
      * Set the name of this recipe.
-     * 
+     *
      * @param name
      *            should be an UNIQUE name
      */
@@ -136,7 +136,7 @@ public class BaseRecipe implements Flaggable {
             return true;
         }
 
-        if (obj == null || obj instanceof BaseRecipe == false) {
+        if (obj == null || !(obj instanceof BaseRecipe)) {
             return false;
         }
 
@@ -152,7 +152,7 @@ public class BaseRecipe implements Flaggable {
 
     /**
      * Remove this recipe from the server and from RecipeManager.<br> Alias for: RecipeManager.getRecipes().removeRecipe(this);
-     * 
+     *
      * @return removed recipe or null if not found
      */
     public Recipe remove() {
@@ -161,7 +161,7 @@ public class BaseRecipe implements Flaggable {
 
     /**
      * You usually won't need this, but just in case you do, here it is.
-     * 
+     *
      * @return Bukkit API version of the recipe
      */
     public Recipe getBukkitRecipe() {
@@ -238,7 +238,7 @@ public class BaseRecipe implements Flaggable {
 
     /**
      * Notify flags that the recipe failed.
-     * 
+     *
      * @param a
      */
     public void sendFailed(Args a) {

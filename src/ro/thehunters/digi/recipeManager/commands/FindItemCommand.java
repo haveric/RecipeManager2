@@ -25,7 +25,7 @@ public class FindItemCommand implements CommandExecutor {
         String find = args[0].trim();
 
         if (find.equalsIgnoreCase("this")) {
-            if (sender instanceof Player == false) {
+            if (!(sender instanceof Player)) {
                 sender.sendMessage("Only players can use the 'this' argument.");
                 return true;
             }
@@ -44,6 +44,7 @@ public class FindItemCommand implements CommandExecutor {
             try {
                 id = Integer.valueOf(find);
             } catch (NumberFormatException e) {
+                // TODO: Handle error
             }
 
             if (id > 0) {

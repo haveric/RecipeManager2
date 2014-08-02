@@ -99,13 +99,12 @@ public class FlagGameMode extends Flag {
                     addGameMode(GameMode.SURVIVAL);
                     break;
 
-                default: {
+                default:
                     try {
                         addGameMode(GameMode.valueOf(arg));
                     } catch (IllegalArgumentException e) {
                         return ErrorReporter.error("Flag " + getType() + " has unknown game mode: " + value);
                     }
-                }
             }
         }
 
@@ -128,9 +127,9 @@ public class FlagGameMode extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * list.add(Messages.FLAG_GAMEMODE.get("{gamemodes}", Tools.collectionToString(getGameModes())));
-     * 
+     *
      * return list; }
      */
 }

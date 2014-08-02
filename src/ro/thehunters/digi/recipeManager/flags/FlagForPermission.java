@@ -189,17 +189,16 @@ public class FlagForPermission extends Flag {
                         case 'c':
                             f.check(a);
                             break;
-
                         case 'p':
                             f.prepare(a);
                             break;
-
                         case 'r':
                             f.crafted(a);
                             break;
-
                         case 'f':
                             f.failed(a);
+                            break;
+                        default:
                             break;
                     }
                 }

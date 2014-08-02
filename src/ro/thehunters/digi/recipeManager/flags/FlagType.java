@@ -28,9 +28,7 @@ public enum FlagType {
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
     ITEMNAME(FlagItemName.class, Bit.RESULT, "name", "displayname"), ITEMLORE(FlagItemLore.class, Bit.RESULT, "lore", "itemdesc"), LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour"), BOOKITEM(FlagBookItem.class, Bit.RESULT, "book"),
     // MAPITEM(FlagMapItem.class, Bit.RESULT, "map"), // TODO finish this flag
-    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"), FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT, "fireworkcharge", "fireworkeffect"), SKULLOWNER(FlagSkullOwner.class, Bit.RESULT, "skullitem"), POTIONITEM(FlagPotionItem.class, Bit.RESULT, "potion"), ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"), ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"), GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult"),
-
-    ;
+    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"), FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT, "fireworkcharge", "fireworkeffect"), SKULLOWNER(FlagSkullOwner.class, Bit.RESULT, "skullitem"), POTIONITEM(FlagPotionItem.class, Bit.RESULT, "potion"), ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"), ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"), GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult");
 
     /*
      * FlagType related methods
@@ -44,17 +42,17 @@ public enum FlagType {
         this.flagClass = flagClass;
         this.bits = bits;
 
-        this.names = new String[aliases.length + 1];
-        this.names[0] = name().toLowerCase();
+        names = new String[aliases.length + 1];
+        names[0] = name().toLowerCase();
 
         for (int i = 0; i < aliases.length; i++) {
-            this.names[i + 1] = aliases[i];
+            names[i + 1] = aliases[i];
         }
     }
 
     /**
      * Checks if flag type has a special bit.
-     * 
+     *
      * @param bit
      *            See {@link Bit}
      * @return
@@ -173,7 +171,7 @@ public enum FlagType {
 
     /**
      * Get the FlagType object for a flag name or alias.
-     * 
+     *
      * @param flag
      *            flag name or alias
      * @return FlagType if found or null
@@ -190,7 +188,7 @@ public enum FlagType {
 
     /**
      * Get the FlagType object for the specified class.
-     * 
+     *
      * @param flagClass
      *            flag's .class
      * @return FlagType if found or null

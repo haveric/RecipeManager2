@@ -147,7 +147,7 @@ public class FlagSummon extends Flag {
         }
 
         public List<LivingEntity> spawn(Location location, Player player) {
-            List<LivingEntity> entities = new ArrayList<LivingEntity>(this.num);
+            List<LivingEntity> entities = new ArrayList<LivingEntity>(num);
             World world = location.getWorld();
 
             for (int num = 0; num < this.num; num++) {
@@ -371,7 +371,7 @@ public class FlagSummon extends Flag {
                             eq.setBootsDropChance(drop[i]);
                             break;
 
-                        case 4: {
+                        case 4:
                             if (ent instanceof Enderman) {
                                 Enderman npc = (Enderman) ent;
                                 npc.setCarriedMaterial(item.getData());
@@ -381,7 +381,6 @@ public class FlagSummon extends Flag {
                             }
 
                             break;
-                        }
                     }
                 }
             }
@@ -526,7 +525,7 @@ public class FlagSummon extends Flag {
         }
 
         public void setAgeLock(boolean lock) {
-            this.ageLock = lock;
+            ageLock = lock;
         }
 
         public ItemStack[] getEquip() {
@@ -662,7 +661,7 @@ public class FlagSummon extends Flag {
         }
 
         public void setPigAnger(int anger) {
-            this.pigAnger = anger;
+            pigAnger = anger;
         }
 
         public boolean isMountNext() {
@@ -717,9 +716,9 @@ public class FlagSummon extends Flag {
 
     public void setSpawnList(List<Customization> list) {
         if (list == null) {
-            this.remove();
+            remove();
         } else {
-            this.spawn = list;
+            spawn = list;
         }
     }
 
@@ -1076,6 +1075,8 @@ public class FlagSummon extends Flag {
                                 case 'a':
                                     index = 4;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
 
@@ -1090,6 +1091,8 @@ public class FlagSummon extends Flag {
                         case 'b':
                         case 'f':
                             index = 3;
+                            break;
+                        default:
                             break;
                     }
 

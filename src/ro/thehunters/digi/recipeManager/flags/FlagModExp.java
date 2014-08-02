@@ -59,7 +59,7 @@ public class FlagModExp extends Flag {
 
     /**
      * Set the amount, can be negative.
-     * 
+     *
      * @param amount
      */
     public void setAmount(int amount) {
@@ -76,13 +76,10 @@ public class FlagModExp extends Flag {
         switch (mod) {
             case '-':
             case '=':
-            case '+': {
+            case '+':
                 break;
-            }
-
-            default: {
+            default:
                 throw new IllegalArgumentException("mod can only be '+', '-', '=' !");
-            }
         }
 
         if (mod != '=' && amount == 0) {
@@ -98,7 +95,7 @@ public class FlagModExp extends Flag {
     }
 
     public void setFailMessage(String message) {
-        this.failMessage = message;
+        failMessage = message;
     }
 
     @Override
@@ -115,14 +112,11 @@ public class FlagModExp extends Flag {
         switch (mod) {
             case '-':
             case '=':
-            case '+': {
+            case '+':
                 value = value.substring(1).trim(); // remove modifier from string
                 break;
-            }
-
-            default: {
+            default:
                 mod = '+'; // set default modifier if it's not defined
-            }
         }
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
@@ -161,29 +155,24 @@ public class FlagModExp extends Flag {
         int exp = 0;
 
         switch (mod) {
-            case '+': {
+            case '+':
                 exp = Tools.Exp.getTotalExperience(p) + amount;
 
                 a.addEffect(Messages.FLAG_MODEXP_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
-            }
-
-            case '-': {
+            case '-':
                 exp = Math.max(Tools.Exp.getTotalExperience(p) - amount, 0);
 
                 a.addEffect(Messages.FLAG_MODEXP_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
 
                 break;
-            }
-
-            case '=': {
+            case '=':
                 exp = Math.max(amount, 0);
 
                 a.addEffect(Messages.FLAG_MODEXP_SET, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
-            }
         }
 
         Tools.Exp.setTotalExperience(p, exp);
@@ -191,10 +180,10 @@ public class FlagModExp extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * switch(mod) { case '+': list.add(Messages.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(Messages.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}",
      * mod, "{actualamount}", amount)); break; case '=': list.add(Messages.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod)); break; }
-     * 
+     *
      * return list; }
      */
 }

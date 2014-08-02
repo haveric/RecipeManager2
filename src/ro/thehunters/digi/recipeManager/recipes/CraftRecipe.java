@@ -66,7 +66,7 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     /**
      * Set the ingredients matrix. <br> This also calculates the width and height of the shape matrix.<br> <b>NOTE: Array must have exacly 9 elements, use null for empty slots.</b>
-     * 
+     *
      * @param ingredients
      *            ingredients matrix, this also defines the shape, width and height.
      */
@@ -83,7 +83,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      * Sets an ingredient slot to material with wildcard data value.<br> Slots are like:<br> <code>| 0 1 2 |<br> | 3 4 5 |<br> | 6 7 8 |</code> <br> Null slots are ignored and allow the recipe to be
      * used in a smaller grid (inventory's 2x2 for example)<br> <br> <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br> This is required because ingredients
      * are shifted to top-left corner of the 2D matrix on each call of this method.
-     * 
+     *
      * @param slot
      *            start with 0, then use any index from 1 to 8
      * @param type
@@ -96,7 +96,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      * Sets an ingredient slot to material with specific data value.<br> Slots are like:<br> <code>| 0 1 2 |<br> | 3 4 5 |<br> | 6 7 8 |</code> <br> Null slots are ignored and allow the recipe to be
      * used in a smaller grid (inventory's 2x2 for example)<br> <br> <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br> This is required because ingredients
      * are shifted to top-left corner of the 2D matrix on each call of this method.
-     * 
+     *
      * @param slot
      *            start with 0, then use any index from 1 to 8
      * @param type
@@ -130,7 +130,7 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     /**
      * Mirror the ingredients shape.<br> Useful for matching recipes, no other real effect.<br> This triggers a hashCode recalculation.
-     * 
+     *
      * @param mirror
      */
     public void setMirrorShape(boolean mirror) {
@@ -213,7 +213,7 @@ public class CraftRecipe extends WorkbenchRecipe {
         s.append(") ");
 
         if (!removed) {
-            s.append(this.getResultsString());
+            s.append(getResultsString());
         } else {
             s.append("removed recipe");
         }
@@ -245,7 +245,7 @@ public class CraftRecipe extends WorkbenchRecipe {
         ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
 
         switch (height) {
-            case 1: {
+            case 1:
                 switch (width) {
                     case 1:
                         bukkitRecipe.shape("a");
@@ -260,9 +260,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                 }
 
                 break;
-            }
-
-            case 2: {
+            case 2:
                 switch (width) {
                     case 1:
                         bukkitRecipe.shape("a", "b");
@@ -276,9 +274,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                         bukkitRecipe.shape("abc", "def");
                 }
                 break;
-            }
-
-            case 3: {
+            case 3:
                 switch (width) {
                     case 1:
                         bukkitRecipe.shape("a", "b", "c");
@@ -291,7 +287,6 @@ public class CraftRecipe extends WorkbenchRecipe {
                     case 3:
                         bukkitRecipe.shape("abc", "def", "ghi");
                 }
-            }
         }
 
         ItemStack item;

@@ -342,7 +342,7 @@ public class RecipeProcessor implements Runnable {
         parseFlags(recipe.getFlags()); // parse recipe's flags
 
         ItemStack[] ingredients = new ItemStack[9];
-        String split[];
+        String[] split;
         ItemStack item;
         int rows = 0;
         int ingredientsNum = 0;

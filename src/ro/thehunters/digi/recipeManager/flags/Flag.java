@@ -149,7 +149,7 @@ public class Flag implements Cloneable {
             return true;
         }
 
-        if (obj == null || obj instanceof Flag == false) {
+        if (obj == null || !(obj instanceof Flag)) {
             return false;
         }
 
@@ -211,12 +211,12 @@ public class Flag implements Cloneable {
     final protected boolean validate() {
         Flaggable flaggable = getFlaggable();
 
-        if (getType().hasBit(Bit.RESULT) && flaggable instanceof ItemResult == false) {
+        if (getType().hasBit(Bit.RESULT) && !(flaggable instanceof ItemResult)) {
             ErrorReporter.error("Flag " + getType() + " only works on results!");
             return false;
         }
 
-        if (getType().hasBit(Bit.RECIPE) && flaggable instanceof BaseRecipe == false && flaggable instanceof ItemResult) {
+        if (getType().hasBit(Bit.RECIPE) && !(flaggable instanceof BaseRecipe) && flaggable instanceof ItemResult) {
             ErrorReporter.error("Flag " + getType() + " only works on recipes!");
             return false;
         }

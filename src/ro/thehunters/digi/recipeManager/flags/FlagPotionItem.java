@@ -74,14 +74,14 @@ public class FlagPotionItem extends Flag {
     }
 
     public void addEffect(PotionEffect effect) {
-        this.effects.add(effect);
+        effects.add(effect);
     }
 
     @Override
     protected boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof PotionMeta == false) {
+        if (result == null || !(result.getItemMeta() instanceof PotionMeta)) {
             ErrorReporter.error("Flag " + getType() + " needs a POTION item!");
             return false;
         }

@@ -138,7 +138,7 @@ public class SmeltRecipe extends SingleResultRecipe {
         s.append(" to ");
 
         if (!removed) {
-            s.append(this.getResultString());
+            s.append(getResultString());
         } else {
             s.append("removed recipe");
         }
@@ -167,7 +167,7 @@ public class SmeltRecipe extends SingleResultRecipe {
             return true;
         }
 
-        if (obj == null || obj instanceof SmeltRecipe == false) {
+        if (obj == null || !(obj instanceof SmeltRecipe)) {
             return false;
         }
 

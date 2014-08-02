@@ -16,7 +16,7 @@ import ro.thehunters.digi.recipeManager.data.RecipeBook;
 public class GetBookCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player == false) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("Command can only be used by players.");
             return true;
         }

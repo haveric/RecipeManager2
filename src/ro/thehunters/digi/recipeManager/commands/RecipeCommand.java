@@ -190,19 +190,14 @@ public class RecipeCommand implements CommandExecutor {
 
             for (RecipeInfo info : RecipeManager.getRecipes().getRecipeList().values()) {
                 switch (info.getOwner()) {
-                    case MINECRAFT: {
+                    case MINECRAFT:
                         mc++;
                         break;
-                    }
-
-                    case RECIPEMANAGER: {
+                    case RECIPEMANAGER:
                         rm++;
                         break;
-                    }
-
-                    default: {
+                    default:
                         other++;
-                    }
                 }
             }
 

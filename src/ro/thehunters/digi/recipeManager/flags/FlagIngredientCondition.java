@@ -924,7 +924,7 @@ public class FlagIngredientCondition extends Flag {
                     cond.addEnchant(enchant);
                 }
             } else if (arg.startsWith("color")) {
-                if (item.getItemMeta() instanceof LeatherArmorMeta == false) {
+                if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
                     ErrorReporter.warning("Flag " + getType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
                     continue;
                 }
@@ -1065,7 +1065,7 @@ public class FlagIngredientCondition extends Flag {
 
             return;
         } else if (a.inventory() instanceof FurnaceInventory) {
-            if (a.extra() instanceof ItemStack == false) {
+            if (!(a.extra() instanceof ItemStack)) {
                 a.addCustomReason("Extra object is not an itemstack!");
             }
 

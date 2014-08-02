@@ -25,7 +25,7 @@ public class BlockID {
     }
 
     public BlockID(World world, int x, int y, int z) {
-        this.wid = world.getUID();
+        wid = world.getUID();
         this.x = x;
         this.y = y;
         this.z = z;
@@ -43,14 +43,14 @@ public class BlockID {
         Validate.notNull(id, "id argument must not be null!");
         Validate.notNull(coords, "coords argument must not be null!");
 
-        this.wid = id;
+        wid = id;
 
         try {
             String[] s = coords.split(",", 3);
 
-            this.x = Integer.parseInt(s[0]);
-            this.y = Integer.parseInt(s[1]);
-            this.z = Integer.parseInt(s[2]);
+            x = Integer.parseInt(s[0]);
+            y = Integer.parseInt(s[1]);
+            z = Integer.parseInt(s[2]);
         } catch (Throwable e) {
             throw new IllegalArgumentException("Coords argument must have 3 numbers separated by commas!");
         }
@@ -61,10 +61,10 @@ public class BlockID {
     private void parseLocation(Location location) {
         Validate.notNull(location, "location argument must not be null!");
 
-        this.wid = location.getWorld().getUID();
-        this.x = location.getBlockX();
-        this.y = location.getBlockY();
-        this.z = location.getBlockZ();
+        wid = location.getWorld().getUID();
+        x = location.getBlockX();
+        y = location.getBlockY();
+        z = location.getBlockZ();
 
         buildHash();
     }
@@ -98,7 +98,7 @@ public class BlockID {
 
     /**
      * Gets the block at the stored coordinates
-     * 
+     *
      * @return
      */
     public Block toBlock() {
@@ -136,7 +136,7 @@ public class BlockID {
 
     /**
      * Get world by the world ID stored
-     * 
+     *
      * @return world or null if world isn't loaded
      */
     public World getWorld() {
@@ -145,7 +145,7 @@ public class BlockID {
 
     /**
      * Returns the world's name
-     * 
+     *
      * @return world name or null if world isn't loaded
      */
     public String getWorldName() {
@@ -169,7 +169,7 @@ public class BlockID {
             return false;
         }
 
-        if (obj instanceof BlockID == false) {
+        if (!(obj instanceof BlockID)) {
             return false;
         }
 

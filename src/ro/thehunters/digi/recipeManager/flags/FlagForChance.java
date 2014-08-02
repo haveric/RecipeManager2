@@ -484,17 +484,16 @@ public class FlagForChance extends Flag {
             case 'c':
                 flag.check(a);
                 break;
-
             case 'p':
                 flag.prepare(a);
                 break;
-
             case 'r':
                 flag.crafted(a);
                 break;
-
             case 'f':
                 flag.failed(a);
+                break;
+            default:
                 break;
         }
     }

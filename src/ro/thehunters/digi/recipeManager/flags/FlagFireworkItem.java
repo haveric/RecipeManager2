@@ -80,7 +80,7 @@ public class FlagFireworkItem extends Flag {
     public boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof FireworkMeta == false) {
+        if (result == null || !(result.getItemMeta() instanceof FireworkMeta)) {
             ErrorReporter.error("Flag " + getType() + " needs a FIREWORK item!");
             return false;
         }
@@ -108,6 +108,7 @@ public class FlagFireworkItem extends Flag {
             try {
                 setPower(Integer.valueOf(value));
             } catch (NumberFormatException e) {
+                // TODO: Handle exception
             }
 
             if (getPower() < 0 || getPower() > 128) {
@@ -130,7 +131,7 @@ public class FlagFireworkItem extends Flag {
 
         ItemMeta meta = a.result().getItemMeta();
 
-        if (meta instanceof FireworkMeta == false) {
+        if (!(meta instanceof FireworkMeta)) {
             a.addCustomReason("Needs FireworkMeta supported item!");
             return;
         }

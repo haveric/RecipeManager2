@@ -52,7 +52,7 @@ public class FlagAddToBook extends Flag {
 
     /**
      * Set the book name, will be forced as lowercase.<br> Setting this to null, "false" or "remove" will remove the flag from its container.
-     * 
+     *
      * @param name
      */
     public void setBookName(String name) {
@@ -61,7 +61,7 @@ public class FlagAddToBook extends Flag {
             return;
         }
 
-        this.bookName = name.toLowerCase();
+        bookName = name.toLowerCase();
     }
 
     /**
@@ -73,7 +73,7 @@ public class FlagAddToBook extends Flag {
 
     /**
      * Set the book volume to add the recipe too.
-     * 
+     *
      * @param volume
      *            book volume from 1 or 0 to allocate automatically.
      */
@@ -94,6 +94,7 @@ public class FlagAddToBook extends Flag {
                 setVolume(Integer.valueOf(value));
                 bookName = bookName.substring(0, index).trim();
             } catch (NumberFormatException e) {
+                // TODO: Handle error
             }
         }
 

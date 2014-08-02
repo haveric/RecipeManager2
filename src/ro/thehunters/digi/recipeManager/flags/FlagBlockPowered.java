@@ -101,18 +101,14 @@ public class FlagBlockPowered extends Flag {
         switch (block.getType()) {
             case WORKBENCH:
             case FURNACE:
-            case BURNING_FURNACE: {
+            case BURNING_FURNACE:
                 if (isIndirect() ? !block.isBlockIndirectlyPowered() : !block.isBlockPowered()) {
                     a.addReason(block.getType() == Material.WORKBENCH ? Messages.FLAG_BLOCKPOWERED_WORKBENCH : Messages.FLAG_BLOCKPOWERED_FURNACE, failMessage);
                 }
-
                 break;
-            }
-
-            default: {
+            default:
                 a.addReason(Messages.FLAG_BLOCKPOWERED_WORKBENCH, failMessage);
                 return;
-            }
         }
     }
 }

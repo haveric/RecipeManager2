@@ -148,7 +148,7 @@ class FurnaceWorker implements Runnable {
 
         BlockState blockState = block.getState();
 
-        if (blockState instanceof Furnace == false) {
+        if (!(blockState instanceof Furnace)) {
             return null; // not really a furnace
         }
 

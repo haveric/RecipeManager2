@@ -207,7 +207,7 @@ public class Events implements Listener {
         if (RecipeManager.getSettings().SPECIAL_REPAIR_METADATA) {
             ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];
-            int repair[] = new int[2];
+            int[] repair = new int[2];
             int repairIndex = 0;
 
             for (int i = 0; i < matrix.length; i++) {
@@ -281,10 +281,8 @@ public class Events implements Listener {
 
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
 
-            // Call the PRE event
-            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0); // TODO upgrade to
-                                                                                                                                                                            // MouseButton when PR is
-                                                                                                                                                                            // pulled
+            // Call the PRE event TODO upgrade to MouseButton when PR is pulled
+            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0);
             Bukkit.getPluginManager().callEvent(callEvent);
 
             if (callEvent.isCancelled()) { // if event was canceled by some other plugin then cancel this event
@@ -459,7 +457,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerIntereact(PlayerInteractEvent event) {
         switch (event.getAction()) {
-            case RIGHT_CLICK_BLOCK: {
+            case RIGHT_CLICK_BLOCK:
                 Player player = event.getPlayer();
                 Block block = event.getClickedBlock();
 
@@ -469,7 +467,7 @@ public class Events implements Listener {
                     case BURNING_FURNACE:
                     case BREWING_STAND:
                     case ENCHANTMENT_TABLE:
-                    case ANVIL: {
+                    case ANVIL:
                         if (!RecipeManager.getPlugin().canCraft(player)) {
                             event.setCancelled(true);
                             return;
@@ -480,18 +478,18 @@ public class Events implements Listener {
                         }
 
                         break;
-                    }
+                    default:
+                        break;
                 }
 
                 break;
-            }
+
 
             case PHYSICAL:
                 break;
 
-            default: {
+            default:
                 Workbenches.remove(event.getPlayer());
-            }
         }
     }
 
@@ -530,7 +528,7 @@ public class Events implements Listener {
                 if (holder != null && holder instanceof Furnace) {
                     HumanEntity ent = event.getWhoClicked();
 
-                    if (ent == null || ent instanceof Player == false) {
+                    if (ent == null || !(ent instanceof Player)) {
                         return;
                     }
 
@@ -564,7 +562,6 @@ public class Events implements Listener {
         switch (slot) {
             case 0: // INGREDIENT slot
             case 1: // FUEL slot
-            {
                 // TODO middle click detection required
                 if (event.isShiftClick() /* || event.isMiddleClick() */) {
                     cursor = null; // if you're shift+clicking or using middle click on the slot then you're not placing anything
@@ -578,15 +575,11 @@ public class Events implements Listener {
                 }
 
                 return;
-            }
 
             case 2: // RESULT slot
-            {
                 return;
-            }
 
             default: // player inventory - Shift+Click handling in player inventory while having furnace UI opened
-            {
                 if (slot == -999 || !event.isShiftClick() || clicked == null || clicked.getTypeId() == 0) {
                     return; // abort if clicked outside of inventory OR not shift+click OR clicked on empty slot
                 }
@@ -639,7 +632,6 @@ public class Events implements Listener {
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     }
                 }
-            }
         }
     }
 
@@ -958,7 +950,7 @@ public class Events implements Listener {
 
             BlockState state = event.getBlock().getState();
 
-            if (state instanceof Furnace == false) {
+            if (!(state instanceof Furnace)) {
                 return; // highly unlikely but better safe than sorry
             }
 
@@ -1051,6 +1043,8 @@ public class Events implements Listener {
 
                     case DOWN:
                         return 0; // CRAFTING
+                    default:
+                        break;
                 }
             }
         }
@@ -1075,13 +1069,15 @@ public class Events implements Listener {
     private void placeOrBreakFurnace(Block block, boolean place) {
         switch (block.getType()) {
             case BURNING_FURNACE:
-            case FURNACE: {
+            case FURNACE:
                 if (place) {
                     Furnaces.add(block.getLocation());
                 } else {
                     Furnaces.remove(block.getLocation());
                 }
-            }
+                break;
+            default:
+                break;
         }
     }
 
@@ -1103,7 +1099,7 @@ public class Events implements Listener {
     }
 
     protected void worldLoad(World world) {
-        Chunk chunks[] = world.getLoadedChunks();
+        Chunk[] chunks = world.getLoadedChunks();
 
         for (Chunk chunk : chunks) {
             findFurnaces(chunk, true);
@@ -1120,9 +1116,8 @@ public class Events implements Listener {
         // Workaround for CB issues with block states.
         try {
             tileEntities = chunk.getTileEntities();
-        }
         // Loading Error for chunk at chunk.getX(), chunk.getZ(). Attempting workaround...
-        catch (Throwable e) {
+        } catch (Throwable e) {
             List<BlockState> list = new ArrayList<BlockState>(32);
             int maxY = chunk.getWorld().getMaxHeight();
 
@@ -1133,10 +1128,11 @@ public class Events implements Listener {
 
                         switch (block.getType()) {
                             case FURNACE:
-                            case BURNING_FURNACE: {
+                            case BURNING_FURNACE:
                                 list.add(block.getState());
                                 break;
-                            }
+                            default:
+                                break;
                         }
                     }
                 }

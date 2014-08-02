@@ -71,7 +71,7 @@ public class FlagEnchantedBook extends Flag {
     protected boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof EnchantmentStorageMeta == false) {
+        if (result == null || !(result.getItemMeta() instanceof EnchantmentStorageMeta)) {
             ErrorReporter.error("Flag " + getType() + " needs an enchantable book!");
             return false;
         }

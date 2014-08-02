@@ -56,7 +56,7 @@ public class FlagSkullOwner extends Flag {
     protected boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof SkullMeta == false || result.getDurability() != 3) {
+        if (result == null || !(result.getItemMeta() instanceof SkullMeta) || result.getDurability() != 3) {
             return ErrorReporter.error("Flag " + getType() + " needs a SKULL_ITEM with data value 3 to work!");
         }
 

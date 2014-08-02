@@ -62,7 +62,7 @@ public class FlagFireworkChargeItem extends Flag {
     public boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getItemMeta() instanceof FireworkEffectMeta == false) {
+        if (result == null || !(result.getItemMeta() instanceof FireworkEffectMeta)) {
             ErrorReporter.error("Flag " + getType() + " needs a FIREWORK_CHARGE item!");
             return false;
         }
@@ -92,7 +92,7 @@ public class FlagFireworkChargeItem extends Flag {
 
         ItemMeta meta = a.result().getItemMeta();
 
-        if (meta instanceof FireworkEffectMeta == false) {
+        if (!(meta instanceof FireworkEffectMeta)) {
             a.addCustomReason("Needs FireworkEffectMeta supported item!");
             return;
         }

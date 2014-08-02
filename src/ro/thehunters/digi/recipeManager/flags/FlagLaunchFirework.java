@@ -93,6 +93,7 @@ public class FlagLaunchFirework extends Flag {
             try {
                 power = Integer.valueOf(value);
             } catch (NumberFormatException e) {
+                // TODO: Handle Exception
             }
 
             if (power < 0 || power > 128) {
@@ -107,6 +108,7 @@ public class FlagLaunchFirework extends Flag {
             try {
                 setChance(Float.valueOf(value));
             } catch (NumberFormatException e) {
+                // TODO: Handle Exception
             }
 
             if (getChance() < 0 || getChance() > 100) {
