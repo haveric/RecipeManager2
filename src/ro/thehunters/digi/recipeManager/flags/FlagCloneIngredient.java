@@ -81,7 +81,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Checks if the copy bitsum has the requested bit.
-     * 
+     *
      * @param bit
      *            use {@link Bit} enums
      * @return true if bit is present, false otherwise
@@ -92,7 +92,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Set what to copy from the ingredient to the result.<br> You should use {@link Bit} class for values!
-     * 
+     *
      * @param bitsum
      *            use {@link Bit} enums
      */
@@ -102,7 +102,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Pick something to copy from the ingredient to the result.<br> You should use {@link Bit} class for values!
-     * 
+     *
      * @param bit
      *            use {@link Bit} enums
      */
@@ -112,7 +112,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Data value modifier for final result.
-     * 
+     *
      * @return integer array of exacly 2 elements, first is the +/-/= char and second is the data value
      */
     public int[] getDataModifier() {
@@ -121,7 +121,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Modify the final result's data value by using symbol as math operator.
-     * 
+     *
      * @param symbol
      *            can be: +, -, *, /, %
      * @param data
@@ -134,7 +134,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Amount modifier for final result.
-     * 
+     *
      * @return integer array of exacly 2 elements, first is the +/-/= char and second is the amount
      */
     public int[] getAmountModifier() {
@@ -143,7 +143,7 @@ public class FlagCloneIngredient extends Flag {
 
     /**
      * Modify the final result's amount by using symbol as math operator.
-     * 
+     *
      * @param symbol
      *            can be: +, -, *, /, %
      * @param data
@@ -165,7 +165,7 @@ public class FlagCloneIngredient extends Flag {
 
         /*
          * BaseRecipe recipe = result.getRecipe();
-         * 
+         *
          * if(recipe instanceof WorkbenchRecipe == false) { RecipeErrorReporter.error("Flag " + getType() + " only works on workbench (craft and combine) recipes!"); return false; }
          */
 
@@ -243,8 +243,7 @@ public class FlagCloneIngredient extends Flag {
 
     @Override
     protected void onPrepare(Args a) {
-        if (!a.hasResult() || !a.hasInventory()) // || a.inventory() instanceof CraftingInventory == false)
-        {
+        if (!a.hasResult() || !a.hasInventory()) { // || a.inventory() instanceof CraftingInventory == false)
             a.addCustomReason("Needs inventory and result!");
             return;
         }
@@ -285,9 +284,9 @@ public class FlagCloneIngredient extends Flag {
             return false;
         }
 
-        if (this.hasCopyBit(Bit.DATA)) {
+        if (hasCopyBit(Bit.DATA)) {
             int data = ingredient.getDurability();
-            int[] mod = this.getDataModifier();
+            int[] mod = getDataModifier();
 
             switch (mod[0]) {
                 case '-':
@@ -314,9 +313,9 @@ public class FlagCloneIngredient extends Flag {
             result.setDurability((short) data);
         }
 
-        if (this.hasCopyBit(Bit.AMOUNT)) {
+        if (hasCopyBit(Bit.AMOUNT)) {
             int amount = ingredient.getAmount();
-            int[] mod = this.getAmountModifier();
+            int[] mod = getAmountModifier();
 
             switch (mod[0]) {
                 case '-':
@@ -350,21 +349,21 @@ public class FlagCloneIngredient extends Flag {
             return true;
         }
 
-        if (this.hasCopyBit(Bit.ENCHANTS)) {
+        if (hasCopyBit(Bit.ENCHANTS)) {
             for (Entry<Enchantment, Integer> e : ingredientMeta.getEnchants().entrySet()) {
                 resultMeta.addEnchant(e.getKey(), e.getValue(), true);
             }
         }
 
-        if (this.hasCopyBit(Bit.NAME)) {
+        if (hasCopyBit(Bit.NAME)) {
             resultMeta.setDisplayName(ingredientMeta.getDisplayName());
         }
 
-        if (this.hasCopyBit(Bit.LORE)) {
+        if (hasCopyBit(Bit.LORE)) {
             resultMeta.setLore(ingredientMeta.getLore());
         }
 
-        if (this.hasCopyBit(Bit.SPECIAL)) {
+        if (hasCopyBit(Bit.SPECIAL)) {
             ingredientMeta.setDisplayName(resultMeta.getDisplayName());
             ingredientMeta.setLore(resultMeta.getLore());
 

@@ -117,7 +117,7 @@ public class RecipeBooks {
 
     /**
      * Parses a YAML file into a RecipeBook object.<br> It can have any extension and its name will be the ID.<br> Uses {@link ErrorReporter} to trigger errors.
-     * 
+     *
      * @param file
      *            the file.
      * @return RecipeBook object if succesfully loaded or null if failed.
@@ -482,7 +482,7 @@ public class RecipeBooks {
 
     /**
      * Updates (if available) the supplied book item with the latest changes
-     * 
+     *
      * @param player
      *            must not be null and must have 'recipemanager.updatebooks' permission.
      * @param item
@@ -569,7 +569,7 @@ public class RecipeBooks {
 
     /**
      * Gets a recipe book by ID or partial ID string.
-     * 
+     *
      * @param id
      * @return list of found recipe books matching ID.
      */
@@ -579,17 +579,17 @@ public class RecipeBooks {
 
         if (book != null) {
             return Arrays.asList(book);
-        } else {
-            // partial match
-            List<RecipeBook> found = new ArrayList<RecipeBook>(books.size());
-
-            for (Entry<String, RecipeBook> e : books.entrySet()) {
-                if (e.getKey().contains(id)) {
-                    found.add(e.getValue());
-                }
-            }
-
-            return found;
         }
+
+        // partial match
+        List<RecipeBook> found = new ArrayList<RecipeBook>(books.size());
+
+        for (Entry<String, RecipeBook> e : books.entrySet()) {
+            if (e.getKey().contains(id)) {
+                found.add(e.getValue());
+            }
+        }
+
+        return found;
     }
 }

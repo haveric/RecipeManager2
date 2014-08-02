@@ -39,8 +39,7 @@ public class GetBookCommand implements CommandExecutor {
         int volume = 1;
         int index = bookName.lastIndexOf('#');
 
-        if (index > 0) // found and not the first character
-        {
+        if (index > 0) { // found and not the first character
             try {
                 volume = Integer.valueOf(bookName.substring(index + 1));
             } catch (Throwable e) {

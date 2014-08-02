@@ -29,7 +29,7 @@ public class UpdateChecker extends BukkitRunnable {
 
     /**
      * Constructor for calling update check one time only
-     * 
+     *
      * @param sender
      *            who to send messages to, use null for server console
      */
@@ -99,8 +99,7 @@ public class UpdateChecker extends BukkitRunnable {
         }
 
         if (newVersion == null) {
-            if (sender != null) // send this message only if it's a requested update check
-            {
+            if (sender != null) { // send this message only if it's a requested update check
                 Messages.sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + URL_FILES);
             } else {
                 return; // block the disable message
@@ -113,8 +112,7 @@ public class UpdateChecker extends BukkitRunnable {
             String currentVersion = RecipeManager.getPlugin().getDescription().getVersion().trim();
 
             if (currentVersion.equalsIgnoreCase(newVersion)) {
-                if (sender != null) // send this message only if it's a requested update check
-                {
+                if (sender != null) { // send this message only if it's a requested update check
                     Messages.sendAndLog(sender, "<gray>Using the latest version: " + newVersion);
                 } else {
                     return; // block the disable message

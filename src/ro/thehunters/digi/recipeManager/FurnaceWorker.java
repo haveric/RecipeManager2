@@ -73,8 +73,7 @@ class FurnaceWorker implements Runnable {
 
             Furnace furnace = convertBlockIdToFurnace(entry.getKey()); // convert blockID to Furnace block object
 
-            if (furnace == null) // the burning furnace no longer exists for whatever reason
-            {
+            if (furnace == null) { // the burning furnace no longer exists for whatever reason
                 iterator.remove();
                 continue;
             }
@@ -88,16 +87,14 @@ class FurnaceWorker implements Runnable {
             FurnaceInventory inventory = furnace.getInventory();
             ItemStack smelt = inventory.getSmelting();
 
-            if (smelt == null || smelt.getType() == Material.AIR) // if there's nothing to smelt, skip furnace
-            {
+            if (smelt == null || smelt.getType() == Material.AIR) { // if there's nothing to smelt, skip furnace
                 data.setCookProgress(0);
                 continue;
             }
 
             SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(smelt);
 
-            if (recipe == null || !recipe.hasCustomTime()) // No custom recipe for item or it has default time
-            {
+            if (recipe == null || !recipe.hasCustomTime()) { // No custom recipe for item or it has default time
                 data.setCookProgress(0);
                 continue;
             }
@@ -116,8 +113,7 @@ class FurnaceWorker implements Runnable {
                 continue;
             }
 
-            if (recipe.getMinTime() <= 0.0) // instant smelting
-            {
+            if (recipe.getMinTime() <= 0.0) {// instant smelting
                 furnace.setCookTime((short) 200);
             } else {
                 float progress = data.getCookProgress();

@@ -42,7 +42,7 @@ public class FlagForChance extends Flag {
             this.flag = flag;
 
             if (chance == null) {
-                this.autoChance = true;
+                autoChance = true;
             } else {
                 this.chance = chance;
             }
@@ -79,7 +79,7 @@ public class FlagForChance extends Flag {
                 if (c.getFlag() == null) {
                     flags.add(null);
                 } else {
-                    flags.add(new ChanceFlag(c.getFlag().clone(this.getFlagsContainer()), c.isAutoChance() ? null : c.getChance()));
+                    flags.add(new ChanceFlag(c.getFlag().clone(getFlagsContainer()), c.isAutoChance() ? null : c.getChance()));
                 }
             }
 
@@ -100,7 +100,7 @@ public class FlagForChance extends Flag {
 
     /**
      * The flag map, map keys are groups and values are lists of ChanceFlag classes which contain a Flag object and a chance float value.
-     * 
+     *
      * @return
      */
     public Map<String, List<ChanceFlag>> getFlagMap() {
@@ -109,7 +109,7 @@ public class FlagForChance extends Flag {
 
     /**
      * Gets the first flag matching FlagType or the last if reverse is set to true.<br> There can be more instances of the same type of flag.
-     * 
+     *
      * @param group
      *            the chance group, can be null for no group/individual
      * @return flag list or null if group doesn't exist
@@ -130,7 +130,7 @@ public class FlagForChance extends Flag {
 
     /**
      * Checks if the flag can be added to this flag list.<br>
-     * 
+     *
      * @param flag
      * @return false if flag can only be added on specific flaggables
      */
@@ -140,7 +140,7 @@ public class FlagForChance extends Flag {
 
     /**
      * Attempts to add a flag to this flag list for the chance group.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
-     * 
+     *
      * @param group
      *            the chance group, can be null for no group/individual
      * @param flag
@@ -152,7 +152,7 @@ public class FlagForChance extends Flag {
 
     /**
      * Attempts to add a flag to this flag list for the chance group.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
-     * 
+     *
      * @param group
      *            the chance group, can be null for no group/individual
      * @param flag
@@ -171,7 +171,7 @@ public class FlagForChance extends Flag {
                 flagMap.put(group, flags);
             }
 
-            flag.flagsContainer = this.getFlagsContainer();
+            flag.flagsContainer = getFlagsContainer();
 
             if (chance != null) {
                 chance = Math.min(Math.max(chance, 0.01f), 100.0f);
@@ -205,8 +205,7 @@ public class FlagForChance extends Flag {
                 flagDeclaration = arg;
                 appendFlag = true;
             } else {
-                if (arg.charAt(i - 1) == '%') // check if character before space is a '%'
-                {
+                if (arg.charAt(i - 1) == '%') { // check if character before space is a '%'
                     arg = arg.substring(0, i - 1).trim(); // get the string between begining of string and the space - 1 character to skip the '%' char
 
                     try {
@@ -224,8 +223,7 @@ public class FlagForChance extends Flag {
 
                     arg = value.substring(i + 1).trim(); // get the string after the first space
 
-                    if (!arg.startsWith("@") && !arg.startsWith("^@")) // we need a flag declaration at this point
-                    {
+                    if (!arg.startsWith("@") && !arg.startsWith("^@")) { // we need a flag declaration at this point
                         ErrorReporter.warning("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
                         return false;
                     }
@@ -361,7 +359,7 @@ public class FlagForChance extends Flag {
                 }
 
                 flag = type.createFlagClass(); // create a new instance of the flag does not exist
-                flag.flagsContainer = this.getFlagsContainer(); // set container before hand to allow checks
+                flag.flagsContainer = getFlagsContainer(); // set container before hand to allow checks
                 flagChance = new ChanceFlag(flag, chance);
             } else {
                 flag = flagChance.getFlag();

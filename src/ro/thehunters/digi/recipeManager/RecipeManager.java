@@ -117,7 +117,7 @@ public class RecipeManager extends JavaPlugin {
 
     /**
      * Reload RecipeManager's settings, messages, etc and re-parse recipes.
-     * 
+     *
      * @param sender
      *            To whom to send the messages to, null = console.
      * @param check
@@ -137,8 +137,7 @@ public class RecipeManager extends JavaPlugin {
         }
 
         if (metrics == null) {
-            if (settings.METRICS) // start/stop metrics accordingly
-            {
+            if (settings.METRICS) { // start/stop metrics accordingly
                 try {
                     metrics = new Metrics(this);
                     metrics.start();
@@ -277,7 +276,7 @@ public class RecipeManager extends JavaPlugin {
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     * 
+     *
      * @return RecipeBooks class
      */
     public static RecipeBooks getRecipeBooks() {
@@ -287,7 +286,7 @@ public class RecipeManager extends JavaPlugin {
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     * 
+     *
      * @return Configured settings
      */
     public static Settings getSettings() {
@@ -297,7 +296,7 @@ public class RecipeManager extends JavaPlugin {
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     * 
+     *
      * @return Economy methods
      */
     public static Economy getEconomy() {
@@ -307,7 +306,7 @@ public class RecipeManager extends JavaPlugin {
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     * 
+     *
      * @return hooked permissions from Vault
      */
     public static Permissions getPermissions() {
@@ -330,7 +329,7 @@ public class RecipeManager extends JavaPlugin {
 
     /**
      * Checks sender's <i>recipemanager.craft</i> permission
-     * 
+     *
      * @param sender
      * @return True if sender has the permission.
      */

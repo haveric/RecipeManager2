@@ -73,8 +73,7 @@ public class CombineRecipe extends WorkbenchRecipe {
             ingredients = new ArrayList<ItemStack>();
         }
 
-        if ((ingredients.size() + amount) > 9) // check if they're more than they should...
-        {
+        if ((ingredients.size() + amount) > 9) {// check if they're more than they should...
             throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
         }
 
@@ -98,8 +97,7 @@ public class CombineRecipe extends WorkbenchRecipe {
             }
         }
 
-        if (this.ingredients.size() > 9) // check if they're more than they should...
-        {
+        if (this.ingredients.size() > 9) {// check if they're more than they should...
             throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
         }
 
@@ -151,7 +149,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         s.append(") ");
 
         if (!removed) {
-            s.append(this.getResultsString());
+            s.append(getResultsString());
         } else {
             s.append("removed recipe");
         }

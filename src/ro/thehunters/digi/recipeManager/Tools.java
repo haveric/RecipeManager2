@@ -48,7 +48,7 @@ import ro.thehunters.digi.recipeManager.recipes.SmeltRecipe;
 public class Tools {
     /**
      * Proper experience methods.
-     * 
+     *
      * @author Essentials<br> https://github.com/essentials/Essentials/blob/master/Essentials/src/net/ess3/craftbukkit/SetExpFix.java
      */
     public static class Exp {
@@ -229,7 +229,7 @@ public class Tools {
          * Displays the itemstack in a user-friendly and colorful manner.<br> If item is null or air it will print "nothing" in gray.<br> If item is enchanted it will have aqua color instead of
          * white.<br> Uses aliases to display data values as well.<br> Uses item's display name in italic font if available.<br> <br> NOTE: Will have a RESET color at the end, use
          * {@link #print(ItemStack, ChatColor)} to use a diferent end-color instead.
-         * 
+         *
          * @param item
          *            the item to print, can be null
          * @return user-friendly item print
@@ -241,7 +241,7 @@ public class Tools {
         /**
          * Displays the itemstack in a user-friendly and colorful manner.<br> If item is null or air it will print "nothing" in gray.<br> If item is enchanted it will have aqua color instead of
          * white.<br> Uses aliases to display data values as well.<br> Uses item's display name in italic font if available.
-         * 
+         *
          * @param item
          *            the item to print, can be null
          * @param defColor
@@ -433,8 +433,7 @@ public class Tools {
                 throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
             }
 
-            for (int i = 0; i < variables.length; i += 2) // loop 2 by 2
-            {
+            for (int i = 0; i < variables.length; i += 2) { // loop 2 by 2
                 msg = msg.replace(variables[i].toString(), variables[i + 1].toString());
             }
         }

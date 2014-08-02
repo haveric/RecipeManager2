@@ -120,7 +120,7 @@ public enum Messages {
     private String message;
 
     private Messages(String message) {
-        this.path = name().replace('_', '.').toLowerCase();
+        path = name().replace('_', '.').toLowerCase();
         this.message = message;
     }
 
@@ -134,7 +134,7 @@ public enum Messages {
 
     /**
      * (Re)Loads all messages
-     * 
+     *
      * @param force
      */
     public static void reload(CommandSender sender) {
@@ -173,7 +173,7 @@ public enum Messages {
 
     /**
      * Gets the message for the selected enum.<br> Processes colors as well.
-     * 
+     *
      * @return
      */
     public String get() {
@@ -187,7 +187,7 @@ public enum Messages {
 
     /**
      * Gets the message for the selected enum.<br> Processes colors and variables as well.
-     * 
+     *
      * @return
      */
     public String get(Object... variables) {
@@ -197,8 +197,7 @@ public enum Messages {
     public String getCustom(String customMessage, Object... variables) {
         String msg = get();
 
-        if (customMessage != null) // has custom message
-        {
+        if (customMessage != null) { // has custom message
             // if flag message is set to "false" then don't show the message
             msg = (customMessage.equals("false") ? null : customMessage);
         } else if (msg != null && msg.equals("false")) {
@@ -211,7 +210,7 @@ public enum Messages {
 
     /**
      * Send the selected enum message to a player or console. <br> Will not be displayed if the message is set to "false".
-     * 
+     *
      * @param sender
      *            player or console
      */
@@ -228,7 +227,7 @@ public enum Messages {
     /**
      * Send the selected enum message to a player or console with an overwriteable message.<br> The customMessage has priority if it's not null.<br> If the priority message is "false" it will not be
      * displayed.
-     * 
+     *
      * @param sender
      *            player or console
      * @param customMessage
@@ -239,14 +238,11 @@ public enum Messages {
             return;
         }
 
-        if (customMessage != null) // has custom message ?
-        {
-            if (!customMessage.equals("false")) // if it's not "false" send it, otherwise don't.
-            {
+        if (customMessage != null) { // has custom message ?
+            if (!customMessage.equals("false")) { // if it's not "false" send it, otherwise don't.
                 send(sender, customMessage);
             }
-        } else if (message != null) // message not set to "false" (replaced with null to save memory)
-        {
+        } else if (message != null) { // message not set to "false" (replaced with null to save memory)
             send(sender, message);
         }
     }
@@ -254,7 +250,7 @@ public enum Messages {
     /**
      * Send the selected enum message to a player or console with an overwriteable message.<br> The customMessage has priority if it's not null.<br> If the priority message is "false" it will not be
      * displayed.<br> Additionally you can specify variables to replace in the message.<br> The variable param must be a 2D String array that has pairs of 2 strings, variable and replacement value.
-     * 
+     *
      * @param sender
      *            player or console
      * @param customMessage
@@ -269,16 +265,13 @@ public enum Messages {
 
         String msg = message;
 
-        if (customMessage != null) // has custom message
-        {
-            if (customMessage.equals("false")) // if custom message is set to "false" then don't show the message
-            {
+        if (customMessage != null) { // has custom message
+            if (customMessage.equals("false")) { // if custom message is set to "false" then don't show the message
                 return;
             }
 
             msg = customMessage;
-        } else if (msg == null) // message is "false", don't show the message
-        {
+        } else if (msg == null) { // message is "false", don't show the message
             return;
         }
 
@@ -289,7 +282,7 @@ public enum Messages {
 
     /**
      * Send this message only once per connection.
-     * 
+     *
      * @param sender
      */
     public void printOnce(CommandSender sender) {
@@ -298,7 +291,7 @@ public enum Messages {
 
     /**
      * Send this message only once per connection.
-     * 
+     *
      * @param sender
      * @param customMessage
      * @param variables
@@ -327,7 +320,7 @@ public enum Messages {
 
     /**
      * Sends an array of messages to a player or console.<br> Message supports &lt;color&gt; codes.
-     * 
+     *
      * @param sender
      * @param messages
      */
@@ -347,7 +340,7 @@ public enum Messages {
 
     /**
      * Sends a message to a player or console.<br> Message supports &lt;color&gt; codes.
-     * 
+     *
      * @param sender
      * @param message
      */
@@ -391,7 +384,7 @@ public enum Messages {
 
     /**
      * Used by plugin to log messages, shouldn't be used by other plugins unless really needed to send e message tagged by RecipeManager
-     * 
+     *
      * @param message
      */
     public static void info(String message) {
@@ -427,7 +420,7 @@ public enum Messages {
 
     /**
      * Notifies all online operators and people having "recipemanager.debugger" permission
-     * 
+     *
      * @param message
      */
     protected static void notifyDebuggers(String message) {

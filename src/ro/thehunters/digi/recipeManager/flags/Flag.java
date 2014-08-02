@@ -28,7 +28,7 @@ public class Flag implements Cloneable {
 
     /**
      * Parses a string to get the values for this flag.<br> Has diferent effects for each extension of Flag object.
-     * 
+     *
      * @param value
      *            the flag's value (not containing the <code>@flag</code> string)
      * @return
@@ -40,7 +40,7 @@ public class Flag implements Cloneable {
 
     /**
      * Check if player has the required permissions to skip this flag
-     * 
+     *
      * @param player
      * @return
      */
@@ -65,7 +65,7 @@ public class Flag implements Cloneable {
     /**
      * Check if the flag allows to craft with these arguments.<br> Any and all arguments can be null if you don't have values for them.<br> To make the check fail you <b>must</b> add a reason to the
      * argument!
-     * 
+     *
      * @param a
      *            the arguments class for easily maintainable argument class
      */
@@ -77,7 +77,7 @@ public class Flag implements Cloneable {
 
     /**
      * Apply the flag's effects - triggered when recipe is prepared or result is displayed
-     * 
+     *
      * @param a
      *            the arguments class for easily maintainable argument class
      */
@@ -89,7 +89,7 @@ public class Flag implements Cloneable {
 
     /**
      * Apply the flag's effects to the arguments.<br> Any and all arguments can be null if you don't have values for them.<br> To make the check fail you <b>must</b> add a reason to the argument!
-     * 
+     *
      * @param a
      *            the arguments class for easily maintainable argument class
      */
@@ -102,7 +102,7 @@ public class Flag implements Cloneable {
     /**
      * Trigger flag failure as if it failed due to multi-result chance.<br> Any and all arguments can be null if you don't have values for them.<br> Adding reasons to this will display them to the
      * crafter.
-     * 
+     *
      * @param a
      */
     final public void failed(Args a) {
@@ -122,7 +122,7 @@ public class Flag implements Cloneable {
 
     /**
      * Clones the flag and asigns it to a new flag container
-     * 
+     *
      * @param container
      * @return
      */
@@ -175,12 +175,12 @@ public class Flag implements Cloneable {
 
         if (flaggable instanceof BaseRecipe) {
             return (BaseRecipe) flaggable;
-        } else {
-            ItemResult result = getResult();
+        }
 
-            if (result != null) {
-                return result.getRecipe();
-            }
+        ItemResult result = getResult();
+
+        if (result != null) {
+            return result.getRecipe();
         }
 
         return null;
@@ -241,7 +241,7 @@ public class Flag implements Cloneable {
 
     /*
      * /** Human friendly information about what the flag does with its current settings.
-     * 
+     *
      * @return list of strings which represent individual lines or null if not defined.
      */
     /*

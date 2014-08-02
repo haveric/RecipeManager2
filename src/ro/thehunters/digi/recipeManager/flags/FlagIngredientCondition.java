@@ -122,20 +122,20 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Sets the new data values map.<br> If the map is null the values will be cleared.
-         * 
+         *
          * @param map
          */
         public void setDataValues(Map<Short, Boolean> map) {
             if (map == null) {
-                this.dataValues.clear();
+                dataValues.clear();
             } else {
-                this.dataValues = map;
+                dataValues = map;
             }
         }
 
         /**
          * Adds data value as requirement.
-         * 
+         *
          * @param data
          */
         public void addDataValue(short data) {
@@ -144,7 +144,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Adds data value as requirement/restriction.
-         * 
+         *
          * @param data
          * @param allow
          *            true if requirement, false if restricted
@@ -155,7 +155,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Adds data values range as requirement.<br> Note: max >= min
-         * 
+         *
          * @param min
          * @param max
          */
@@ -165,7 +165,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Adds data values range as requirement/restriction.<br> Note: max >= min
-         * 
+         *
          * @param min
          * @param max
          * @param allow
@@ -194,20 +194,20 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Sets the new data bits map.<br> If the map is null the values will be cleared.
-         * 
+         *
          * @param map
          */
         public void setDataBits(Map<Short, Boolean> map) {
             if (map == null) {
-                this.dataBits.clear();
+                dataBits.clear();
             } else {
-                this.dataBits = map;
+                dataBits = map;
             }
         }
 
         /**
          * Adds data bit as requirement.
-         * 
+         *
          * @param data
          */
         public void addDataBit(short data) {
@@ -216,7 +216,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Adds data bit as requirement/restriction.
-         * 
+         *
          * @param data
          * @param allow
          *            true if requirement, false if restricted
@@ -264,7 +264,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Checks if the supplied data value can be used with this condition.
-         * 
+         *
          * @param data
          *            ingredient's data value
          * @return true if value is permitted, false otherwise.
@@ -330,7 +330,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Set the enchants map.<br> Setting to null will clear the map contents.
-         * 
+         *
          * @param enchants
          */
         public void setEnchants(Map<Enchantment, Map<Short, Boolean>> enchants) {
@@ -457,9 +457,9 @@ public class FlagIngredientCondition extends Flag {
                         ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
                         return false;
                     }
-                } else {
-                    return this.name.equalsIgnoreCase(name);
                 }
+
+                return this.name.equalsIgnoreCase(name);
             }
 
             return false;
@@ -514,7 +514,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Set the color ranges.<br>
-         * 
+         *
          * @param minColor
          *            color for min-range or null to disable color checking.
          * @param maxColor
@@ -527,7 +527,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Sets the color required.<br> NOTE: This sets maxColor to null.
-         * 
+         *
          * @param r
          *            0-255
          * @param g
@@ -542,7 +542,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Sets the color range required.
-         * 
+         *
          * @param minR
          *            0 to 255
          * @param maxR
@@ -621,9 +621,9 @@ public class FlagIngredientCondition extends Flag {
 
                 if (maxColor == null) {
                     return (minColor.getRed() == r && minColor.getGreen() == g && minColor.getBlue() == b);
-                } else {
-                    return (minColor.getRed() <= r && maxColor.getRed() >= r && minColor.getGreen() <= g && maxColor.getGreen() >= g && minColor.getBlue() <= b && maxColor.getBlue() >= b);
                 }
+
+                return (minColor.getRed() <= r && maxColor.getRed() >= r && minColor.getGreen() <= g && maxColor.getGreen() >= g && minColor.getBlue() <= b && maxColor.getBlue() >= b);
             }
 
             return false;
@@ -631,7 +631,7 @@ public class FlagIngredientCondition extends Flag {
 
         /**
          * Check the supplied item with supplied arguments against this condition class.
-         * 
+         *
          * @param item
          *            the ingredient, must not be null.
          * @param a
@@ -1009,7 +1009,7 @@ public class FlagIngredientCondition extends Flag {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
 
-        this.conditions.put(Tools.convertItemToStringId(item), cond);
+        conditions.put(Tools.convertItemToStringId(item), cond);
     }
 
     public Conditions getIngredientConditions(ItemStack item) {

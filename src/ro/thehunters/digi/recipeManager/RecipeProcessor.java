@@ -198,8 +198,7 @@ public class RecipeProcessor implements Runnable {
 
         parseFlags(fileFlags); // parse file header flags that applies to all recipes
 
-        while (searchRecipes()) // search for recipes...
-        {
+        while (searchRecipes()) { // search for recipes...
             directiveLine = lineNum;
             String directive = line.toLowerCase();
             recipeName = null;
@@ -349,8 +348,7 @@ public class RecipeProcessor implements Runnable {
         int ingredientsNum = 0;
         boolean ingredientErrors = false;
 
-        while (rows < 3) // loop until we find 3 rows of ingredients (or bump into the result along the way)
-        {
+        while (rows < 3) { // loop until we find 3 rows of ingredients (or bump into the result along the way)
             if (rows > 0) {
                 nextLine();
             }
@@ -358,31 +356,27 @@ public class RecipeProcessor implements Runnable {
             if (line == null) {
                 if (rows == 0) {
                     return ErrorReporter.error("No ingredients defined!");
-                } else {
-                    break;
                 }
+
+                break;
             }
 
-            if (line.charAt(0) == '=') // if we bump into the result prematurely (smaller recipes)
-            {
+            if (line.charAt(0) == '=') { // if we bump into the result prematurely (smaller recipes)
                 break;
             }
 
             split = line.split("\\+"); // split ingredients by the + sign
             int rowLen = split.length;
 
-            if (rowLen > 3) // if we find more than 3 ingredients warn the user and limit it to 3
-            {
+            if (rowLen > 3) { // if we find more than 3 ingredients warn the user and limit it to 3
                 rowLen = 3;
                 ErrorReporter.warning("You can't have more than 3 ingredients on a row, ingredient(s) ignored.", "Remove the extra ingredient(s).");
             }
 
-            for (int i = 0; i < rowLen; i++) // go through each ingredient on the line
-            {
+            for (int i = 0; i < rowLen; i++) { // go through each ingredient on the line
                 item = Tools.parseItem(split[i], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
-                if (item == null) // invalid item
-                {
+                if (item == null) { // invalid item
                     ingredientErrors = true;
                 }
 
@@ -396,12 +390,10 @@ public class RecipeProcessor implements Runnable {
             rows++;
         }
 
-        if (ingredientErrors) // invalid ingredients found
-        {
+        if (ingredientErrors) { // invalid ingredients found
             ErrorReporter.error("Recipe has some invalid ingredients, fix them!");
             return false;
-        } else if (ingredientsNum == 0) // no ingredients were processed
-        {
+        } else if (ingredientsNum == 0) { // no ingredients were processed
             return ErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
         } else if (ingredientsNum == 2 && !checkIngredients(ingredients)) {
             return false;
@@ -413,8 +405,7 @@ public class RecipeProcessor implements Runnable {
             // get results
             List<ItemResult> results = new ArrayList<ItemResult>();
 
-            if (!parseResults(recipe, results, true, false)) // results have errors
-            {
+            if (!parseResults(recipe, results, true, false)) { // results have errors
                 return false;
             }
 
@@ -510,9 +501,9 @@ public class RecipeProcessor implements Runnable {
                 if (toolType == i.getType()) {
                     ErrorReporter.error("Recipes can't have exacly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEPITEM + " flag to keep it.");
                     return false;
-                } else {
-                    toolType = i.getType();
                 }
+
+                toolType = i.getType();
             }
         }
 
@@ -545,8 +536,7 @@ public class RecipeProcessor implements Runnable {
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
         // get min-max or fixed smelting time
-        if (!isRemove) // if it's got @remove we don't care about burn time or fuel
-        {
+        if (!isRemove) { // if it's got @remove we don't care about burn time or fuel
             float minTime = Vanilla.FURNACE_RECIPE_TIME;
             float maxTime = -1;
 
@@ -579,8 +569,7 @@ public class RecipeProcessor implements Runnable {
 
             nextLine();
 
-            if (line.charAt(0) == '&') // check if we have a fuel
-            {
+            if (line.charAt(0) == '&') { // check if we have a fuel
                 ItemStack fuelItem = Tools.parseItem(line.substring(1), 0, ParseBit.NO_AMOUNT);
 
                 if (fuelItem == null) {
@@ -599,15 +588,13 @@ public class RecipeProcessor implements Runnable {
         // get result or move current line after them if we got @remove and results
         List<ItemResult> results = new ArrayList<ItemResult>();
 
-        if (isRemove) // ignore result errors if we have @remove
-        {
+        if (isRemove) { // ignore result errors if we have @remove
             ErrorReporter.setIgnoreErrors(true);
         }
 
         boolean hasResults = parseResults(recipe, results, false, true);
 
-        if (!isRemove) // ignore results if we have @remove
-        {
+        if (!isRemove) { // ignore results if we have @remove
             if (!hasResults) {
                 return false;
             }
@@ -615,8 +602,7 @@ public class RecipeProcessor implements Runnable {
             recipe.setResult(results.get(0));
         }
 
-        if (isRemove) // un-ignore result errors
-        {
+        if (isRemove) { // un-ignore result errors
             ErrorReporter.setIgnoreErrors(false);
         }
 
@@ -650,8 +636,7 @@ public class RecipeProcessor implements Runnable {
 
             String[] split = line.split("%");
 
-            if (!recipe.hasFlag(FlagType.REMOVE)) // if it's got @remove we don't care about burn time
-            {
+            if (!recipe.hasFlag(FlagType.REMOVE)) { // if it's got @remove we don't care about burn time
                 if (split.length < 2 || split[1] == null) {
                     ErrorReporter.error("Burn time not set !", "It must be set after the ingredient like: ingredient % burntime");
                     continue;
@@ -763,8 +748,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (line.charAt(0) != '=') // check if current line is a result, if not move on
-        {
+        if (line.charAt(0) != '=') { // check if current line is a result, if not move on
             nextLine();
         }
 

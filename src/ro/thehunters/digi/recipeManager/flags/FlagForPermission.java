@@ -40,7 +40,7 @@ public class FlagForPermission extends Flag {
             Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
 
             for (Flag f : e.getValue().values()) {
-                flags.put(f.getType(), f.clone(this.getFlagsContainer()));
+                flags.put(f.getType(), f.clone(getFlagsContainer()));
             }
 
             flagMap.put(e.getKey(), flags);
@@ -81,7 +81,7 @@ public class FlagForPermission extends Flag {
 
     /**
      * Checks if the flag can be added to this flag list.<br>
-     * 
+     *
      * @param flag
      * @return false if flag can only be added on specific flaggables
      */
@@ -91,7 +91,7 @@ public class FlagForPermission extends Flag {
 
     /**
      * Attempts to add a flag to this flag list for the permission.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
-     * 
+     *
      * @param permission
      * @param flag
      */
@@ -106,7 +106,7 @@ public class FlagForPermission extends Flag {
                 flagMap.put(permission, flags);
             }
 
-            flag.flagsContainer = this.getFlagsContainer();
+            flag.flagsContainer = getFlagsContainer();
             flags.put(flag.getType(), flag);
         }
     }
@@ -124,8 +124,7 @@ public class FlagForPermission extends Flag {
         String flagString = '@' + split[0].trim(); // format flag name
         FlagType type = FlagType.getByName(flagString); // Find the current flag
 
-        if (type == null) // If no valid flag was found
-        {
+        if (type == null) { // If no valid flag was found
             return ErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
         }
 
@@ -137,7 +136,7 @@ public class FlagForPermission extends Flag {
 
         if (flag == null) {
             flag = type.createFlagClass(); // create a new instance of the flag does not exist
-            flag.flagsContainer = this.getFlagsContainer(); // set container before hand to allow checks
+            flag.flagsContainer = getFlagsContainer(); // set container before hand to allow checks
         }
 
         value = (split.length > 1 ? split[1].trim() : null);

@@ -43,7 +43,7 @@ public class Workbenches {
 
     /**
      * Get open workbench location of player if available.
-     * 
+     *
      * @param human
      *            the crafter, can be null but will make the method return null
      * @return workbench location if available or in-range, otherwise player's location or null if player is null
@@ -62,8 +62,7 @@ public class Workbenches {
 
         Block block = blockID.toBlock();
 
-        if (block.getType() != Material.WORKBENCH) // Workbench doesn't exist anymore
-        {
+        if (block.getType() != Material.WORKBENCH) { // Workbench doesn't exist anymore
             workbenches.remove(human.getName());
             return playerLoc;
         }

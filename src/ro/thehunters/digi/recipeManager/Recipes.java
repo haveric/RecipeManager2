@@ -67,7 +67,7 @@ public class Recipes {
 
     /**
      * Alias for RecipeManager.getRecipes()
-     * 
+     *
      * @return
      */
     public static Recipes getInstance() {
@@ -76,7 +76,7 @@ public class Recipes {
 
     /**
      * Checks if result is part of a recipe added by RecipeManager by checking item's lore.
-     * 
+     *
      * @param result
      *            must be the actual result from recipe.
      * @return
@@ -100,7 +100,7 @@ public class Recipes {
     /**
      * Checks if recipe is added by RecipeManager, works for workbench and furnace recipes.<br> Does not work for fuels because they do not exist in Bukkit API, they're a custom system by
      * RecipeManager.
-     * 
+     *
      * @param recipe
      *            must be the actual recipe, because it checks for result's lore.
      * @return
@@ -119,7 +119,7 @@ public class Recipes {
 
     /**
      * Checks if item can be used as a fuel. Alias for getFuelRecipe(item) != null
-     * 
+     *
      * @param item
      * @return
      */
@@ -130,7 +130,7 @@ public class Recipes {
     /**
      * Get the RecipeManager workbench recipe for the bukkit recipe inputted.<br> Can be either craft or combine recipe.<br> If you know the specific type you can use
      * {@link #getCraftRecipe(ItemStack)} or {@link #getCombineRecipe(ItemStack)}
-     * 
+     *
      * @param recipe
      * @return Workbench recipe, otherwise it can be null if doesn't exist or you inputted a furnace recipe
      */
@@ -148,7 +148,7 @@ public class Recipes {
 
     /**
      * Get the RecipeManager craft recipe for the result inputted.<br> The result must be the one from the bukkit recipe retrieved as it needs to check for result lore for the ID.<br>
-     * 
+     *
      * @param result
      * @return Craft recipe or null if doesn't exist
      */
@@ -158,7 +158,7 @@ public class Recipes {
 
     /**
      * Get the RecipeManager combine recipe for the result inputted.<br> The result must be the one from the bukkit recipe retrieved as it needs to check for result lore for the ID.<br>
-     * 
+     *
      * @param result
      * @return Combine recipe or null if doesn't exist
      */
@@ -168,7 +168,7 @@ public class Recipes {
 
     /**
      * Get RecipeManager's furnace smelt recipe for the specified ingredient
-     * 
+     *
      * @param ingredient
      * @return Smelt recipe or null if doesn't exist
      */
@@ -192,7 +192,7 @@ public class Recipes {
 
     /**
      * Get RecipeManager's furnace fuel recipe for the specified item.
-     * 
+     *
      * @param fuel
      *            fuel
      * @return Fuel recipe or null if doesn't exist
@@ -213,7 +213,7 @@ public class Recipes {
 
     /**
      * Gets a recipe by its name.<br> The name can be an auto-generated name or a custom name.
-     * 
+     *
      * @param name
      *            recipe name
      * @return the recipe matching name
@@ -225,7 +225,7 @@ public class Recipes {
     /**
      * Gets the recipe's information (owner, adder, status, etc).<br> You can use this on bukkit recipes by converting them to RecipeManager format using:<br> <code>new
      * BaseRecipe(bukkitRecipe);</code>
-     * 
+     *
      * @param recipe
      *            a RecipeManager recipe
      * @return Recipe's info or null if doesn't exist
@@ -237,7 +237,7 @@ public class Recipes {
     /**
      * Gets a copy of RecipeManager's recipe list.<br> Returned values are mutable so you can edit individual recipes.<br> Removing from this list does nothing, see {@link BaseRecipe #remove()} method
      * instead.
-     * 
+     *
      * @return copy of hashmap
      */
     public Map<BaseRecipe, RecipeInfo> getRecipeList() {
@@ -246,7 +246,7 @@ public class Recipes {
 
     /**
      * Register a recipe.
-     * 
+     *
      * @param recipe
      */
     public void registerRecipe(BaseRecipe recipe) {
@@ -257,7 +257,7 @@ public class Recipes {
 
     /**
      * Registers a recipe with custom recipe info object.<br> NOTE: You should not use this if you don't know what the recipe info object REALLY does.
-     * 
+     *
      * @param recipe
      * @param info
      */
@@ -331,7 +331,7 @@ public class Recipes {
 
     /**
      * Removes a recipe from the server.
-     * 
+     *
      * @param recipe
      * @return removed recipe or null if not found
      */
@@ -357,9 +357,9 @@ public class Recipes {
         // Remove from server if appliable
         if (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE)) {
             return null;
-        } else {
-            return Vanilla.removeCustomRecipe(recipe);
         }
+
+        return Vanilla.removeCustomRecipe(recipe);
     }
 
     protected static ItemResult recipeGetResult(Args a, WorkbenchRecipe recipe) {

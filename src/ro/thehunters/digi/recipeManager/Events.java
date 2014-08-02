@@ -163,8 +163,7 @@ public class Events implements Listener {
     }
 
     private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult) {
-        if (!result.equals(recipeResult)) // result was processed by the game and it doesn't match the original recipe
-        {
+        if (!result.equals(recipeResult)) { // result was processed by the game and it doesn't match the original recipe
             if (!RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
                 Messages.CRAFT_SPECIAL_LEATHERDYE.printOnce(player);
                 inv.setResult(null);
@@ -288,8 +287,7 @@ public class Events implements Listener {
                                                                                                                                                                             // pulled
             Bukkit.getPluginManager().callEvent(callEvent);
 
-            if (callEvent.isCancelled()) // if event was canceled by some other plugin then cancel this event
-            {
+            if (callEvent.isCancelled()) { // if event was canceled by some other plugin then cancel this event
                 event.setCancelled(true);
                 return;
             }
@@ -357,9 +355,9 @@ public class Events implements Listener {
                         recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
 
                         return 1;
-                    } else {
-                        return 0;
                     }
+
+                    return 0;
                 }
 
                 int craftAmount = recipe.getCraftableTimes(inv); // Calculate how many times the recipe can be crafted
@@ -373,22 +371,22 @@ public class Events implements Listener {
                 if (crafted > 0) {
                     event.setCurrentItem(result);
                     return crafted;
-                } else {
-                    return 0;
                 }
+
+                return 0;
+            }
+
+            ItemStack cursor = event.getCursor();
+            ItemStack merged = Tools.Item.merge(cursor, result);
+
+            if (merged != null) {
+                event.setCurrentItem(result);
             } else {
-                ItemStack cursor = event.getCursor();
-                ItemStack merged = Tools.Item.merge(cursor, result);
+                return 0;
+            }
 
-                if (merged != null) {
-                    event.setCurrentItem(result);
-                } else {
-                    return 0;
-                }
-
-                if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
-                    recipe.subtractIngredients(inv, result, true);
-                }
+            if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                recipe.subtractIngredients(inv, result, true);
             }
         } else {
             // more special treatment needed for multi-result ones...
@@ -608,8 +606,7 @@ public class Events implements Listener {
                     similarItems = clicked.isSimilar(item); // update similarity check
                 }
 
-                if (item == null || item.getTypeId() == 0) // If targeted item slot is empty
-                {
+                if (item == null || item.getTypeId() == 0) { // If targeted item slot is empty
                     // Check if item is allowed to be placed on that slot
                     if (furnaceModifySlot(furnace, inv, player, targetSlot, clicked)) {
                         inv.setItem(targetSlot, clicked); // send the item to the slot
@@ -625,8 +622,7 @@ public class Events implements Listener {
                     int maxStack = Math.max(inv.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
                     int itemAmount = item.getAmount(); // get how many items there are in the stack
 
-                    if (similarItems && itemAmount < maxStack) // if item has room for more and they're similar
-                    {
+                    if (similarItems && itemAmount < maxStack) { // if item has room for more and they're similar
                         event.setCancelled(true); // cancel only if we're going to mess with the items
 
                         int amount = itemAmount + clicked.getAmount(); // add the stacks together
@@ -680,7 +676,7 @@ public class Events implements Listener {
         // TODO remove this debug
         /*
          * if(slot == 0) { Messages.debug("<green>Placed ingredient: " + Tools.Item.print(ingredient)); }
-         * 
+         *
          * if(slot == 1) { Messages.debug("<green>Placed fuel: " + Tools.Item.print(fuel)); }
          */
 
@@ -733,14 +729,14 @@ public class Events implements Listener {
                     if (smeltRecipe.sendPrepare(a)) {
                         a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return true;
-                    } else {
-                        a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                        return false;
                     }
-                } else {
+
                     a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                     return false;
                 }
+
+                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                return false;
             }
         }
 
@@ -757,14 +753,14 @@ public class Events implements Listener {
                     if (fuelRecpe.sendPrepare(a)) {
                         a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return true;
-                    } else {
-                        a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                        return false;
                     }
-                } else {
+
                     a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                     return false;
                 }
+
+                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+                return false;
             }
         }
 
@@ -855,28 +851,28 @@ public class Events implements Listener {
             }
 
             return fr.getBurnTicks();
-        } else {
-            // Smelting recipe with specific fuel
-            ItemStack ingredient = furnace.getInventory().getSmelting();
-            SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+        }
 
-            if (sr != null) {
-                if (!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel())) {
-                    return 0;
-                } else {
-                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
+        // Smelting recipe with specific fuel
+        ItemStack ingredient = furnace.getInventory().getSmelting();
+        SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
 
-                    if (!furnaceHandleFlaggable(sr, a, true)) {
-                        return 0;
-                    }
-
-                    ItemStack fuel = furnace.getInventory().getFuel();
-                    fuel.setAmount(fuel.getAmount() + 1);
-                    data.setFuel(fuel);
-
-                    return Short.MAX_VALUE;
-                }
+        if (sr != null) {
+            if (!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel())) {
+                return 0;
             }
+
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
+
+            if (!furnaceHandleFlaggable(sr, a, true)) {
+                return 0;
+            }
+
+            ItemStack fuel = furnace.getInventory().getFuel();
+            fuel.setAmount(fuel.getAmount() + 1);
+            data.setFuel(fuel);
+
+            return Short.MAX_VALUE;
         }
 
         return -1;
@@ -1023,9 +1019,9 @@ public class Events implements Listener {
             }
             /*
              * else if(event.getSource() instanceof FurnaceInventory) { SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
-             * 
+             *
              * if(slot == null) { return; }
-             * 
+             *
              * Messages.debug("RESULT TAKEN FROM FURNACE: " + event.getItem()); }
              */
         } catch (Throwable e) {
