@@ -11,120 +11,103 @@ import org.bukkit.inventory.ItemStack;
 import ro.thehunters.digi.recipeManager.recipes.FuelRecipe;
 
 /**
- * Event triggered when RecipeManager's custom fuel recipes are burnt.<br>
- * Player can return null in certain situations, so be sure to prepare for that situation.<br>
- * Event can be cancelled to prevent the action.
+ * Event triggered when RecipeManager's custom fuel recipes are burnt.<br> Player can return null in certain situations, so be sure to prepare for that situation.<br> Event can be cancelled to prevent
+ * the action.
  * 
  * @author Digi
  */
-public class RecipeManagerFuelBurnEvent extends Event implements Cancellable
-{
+public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     private FuelRecipe recipe;
     private int burnTicks;
     private Block block;
     private String fueler;
-    
-    public RecipeManagerFuelBurnEvent(FuelRecipe recipe, int burnTicks, Block block, String fueler)
-    {
+
+    public RecipeManagerFuelBurnEvent(FuelRecipe recipe, int burnTicks, Block block, String fueler) {
         this.recipe = recipe;
         this.burnTicks = burnTicks;
         this.block = block;
         this.fueler = fueler;
     }
-    
+
     /**
      * @return RecipeManager's Fuel class recipe
      */
-    public FuelRecipe getRecipe()
-    {
+    public FuelRecipe getRecipe() {
         return recipe;
     }
-    
+
     /**
      * Shortcut from: event.getRecipe().getFuel().getItemStack();
      * 
      * @return fuel as ItemStack
      */
-    public ItemStack getFuel()
-    {
+    public ItemStack getFuel() {
         return recipe.getIngredient();
     }
-    
+
     /**
-     * Get the ticks that the furnace will run for.<br>
-     * Can be different every time depending on the recipe.
+     * Get the ticks that the furnace will run for.<br> Can be different every time depending on the recipe.
      * 
      * @return fuel burning ticks
      */
-    public int getBurnTicks()
-    {
+    public int getBurnTicks() {
         return burnTicks;
     }
-    
+
     /**
      * Change the ticks that the furnace will burn for
      * 
      * @param burnTicks
      *            time in ticks
      */
-    public void setBurnTicks(int burnTicks)
-    {
+    public void setBurnTicks(int burnTicks) {
         this.burnTicks = burnTicks;
     }
-    
+
     /**
      * @return furnace block of the involved event
      */
-    public Block getBlock()
-    {
+    public Block getBlock() {
         return block;
     }
-    
+
     /**
-     * Get the player's name that initially placed the fuel.<br>
-     * Can be null in certain situatinos!
+     * Get the player's name that initially placed the fuel.<br> Can be null in certain situatinos!
      * 
      * @return fueler's name
      */
-    public String getFuelerName()
-    {
+    public String getFuelerName() {
         return fueler;
     }
-    
+
     /**
-     * Get the Player object of the player that placed the fuel.<br>
-     * NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name only.<br>
-     * Shortcut for: Bukkit.getPlayerExact(event.getFuelerName());
+     * Get the Player object of the player that placed the fuel.<br> NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name
+     * only.<br> Shortcut for: Bukkit.getPlayerExact(event.getFuelerName());
      * 
      * @return Player object of the fueler
      */
-    public Player getFueler()
-    {
+    public Player getFueler() {
         return (fueler == null ? null : Bukkit.getPlayerExact(fueler));
     }
-    
+
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
-    
-    public static HandlerList getHandlerList()
-    {
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
-    
+
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return cancelled;
     }
-    
+
     @Override
-    public void setCancelled(boolean cancelled)
-    {
+    public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
 }

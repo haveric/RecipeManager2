@@ -20,8 +20,7 @@ import ro.thehunters.digi.recipeManager.recipes.ItemResult;
  * 
  * @author Digi
  */
-public class Args
-{
+public class Args {
     private Player player;
     private String playerName;
     private Location location;
@@ -30,254 +29,206 @@ public class Args
     private Inventory inventory;
     private ItemResult result;
     private Object extra;
-    
+
     private List<String> reasons;
     private List<String> effects;
-    
-    protected Args()
-    {
+
+    protected Args() {
     }
-    
-    public static void init()
-    {
+
+    public static void init() {
     }
-    
-    public void setPlayer(Player player)
-    {
+
+    public void setPlayer(Player player) {
         this.player = player;
     }
-    
-    public void setPlayerName(String playerName)
-    {
+
+    public void setPlayerName(String playerName) {
         this.playerName = playerName;
     }
-    
-    public void setLocation(Location location)
-    {
+
+    public void setLocation(Location location) {
         this.location = location;
     }
-    
-    public void setRecipe(BaseRecipe recipe)
-    {
+
+    public void setRecipe(BaseRecipe recipe) {
         this.recipe = recipe;
     }
-    
-    public void setRecipeType(RecipeType recipeType)
-    {
+
+    public void setRecipeType(RecipeType recipeType) {
         this.recipeType = recipeType;
     }
-    
-    public void setInventory(Inventory inventory)
-    {
+
+    public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
-    
-    public void setResult(ItemResult result)
-    {
+
+    public void setResult(ItemResult result) {
         this.result = result;
     }
-    
-    public void setExtra(Object extra)
-    {
+
+    public void setExtra(Object extra) {
         this.extra = extra;
     }
-    
+
     /**
      * Gets the Player object from either player() or playerName()
      * 
      * @return player object or null if player just doesn't exist
      */
-    public Player player()
-    {
+    public Player player() {
         return player;
     }
-    
-    public boolean hasPlayer()
-    {
+
+    public boolean hasPlayer() {
         return player != null;
     }
-    
-    public String playerName()
-    {
+
+    public String playerName() {
         return playerName;
     }
-    
-    public boolean hasPlayerName()
-    {
+
+    public boolean hasPlayerName() {
         return playerName != null;
     }
-    
+
     /**
      * Gets a location from either location, player or playername arguments.
      * 
      * @return null in case no location could be generated
      */
-    public Location location()
-    {
+    public Location location() {
         return location;
     }
-    
-    public boolean hasLocation()
-    {
+
+    public boolean hasLocation() {
         return location != null;
     }
-    
-    public RecipeType recipeType()
-    {
+
+    public RecipeType recipeType() {
         return recipeType;
     }
-    
-    public boolean hasRecipeType()
-    {
+
+    public boolean hasRecipeType() {
         return recipeType != null;
     }
-    
-    public BaseRecipe recipe()
-    {
+
+    public BaseRecipe recipe() {
         return recipe;
     }
-    
-    public boolean hasRecipe()
-    {
+
+    public boolean hasRecipe() {
         return recipe != null;
     }
-    
-    public Inventory inventory()
-    {
+
+    public Inventory inventory() {
         return inventory;
     }
-    
-    public boolean hasInventory()
-    {
+
+    public boolean hasInventory() {
         return inventory != null;
     }
-    
-    public ItemResult result()
-    {
+
+    public ItemResult result() {
         return result;
     }
-    
-    public boolean hasResult()
-    {
+
+    public boolean hasResult() {
         return result != null;
     }
-    
-    public Object extra()
-    {
+
+    public Object extra() {
         return extra;
     }
-    
-    public boolean hasExtra()
-    {
+
+    public boolean hasExtra() {
         return extra != null;
     }
-    
-    public List<String> reasons()
-    {
+
+    public List<String> reasons() {
         return reasons;
     }
-    
-    public boolean hasReasons()
-    {
+
+    public boolean hasReasons() {
         return (reasons != null && !reasons.isEmpty());
     }
-    
-    public void addCustomReason(String message)
-    {
-        if(reasons == null)
-        {
+
+    public void addCustomReason(String message) {
+        if (reasons == null) {
             reasons = new ArrayList<String>();
         }
-        
+
         debug("reason", message);
-        
+
         reasons.add(message);
     }
-    
-    public void addReason(Messages globalMessage, String customMessage, Object... variables)
-    {
+
+    public void addReason(Messages globalMessage, String customMessage, Object... variables) {
         addCustomReason(globalMessage.getCustom(customMessage, variables));
     }
-    
-    public void clearReasons()
-    {
-        if(reasons != null)
-        {
+
+    public void clearReasons() {
+        if (reasons != null) {
             reasons.clear();
         }
     }
-    
-    public void sendReasons(CommandSender sender, String prefix)
-    {
+
+    public void sendReasons(CommandSender sender, String prefix) {
         sendList(sender, prefix, reasons);
     }
-    
-    public List<String> effects()
-    {
+
+    public List<String> effects() {
         return effects;
     }
-    
-    public boolean hasEffects()
-    {
+
+    public boolean hasEffects() {
         return (effects != null && !effects.isEmpty());
     }
-    
-    public void addCustomEffect(String message)
-    {
-        if(effects == null)
-        {
+
+    public void addCustomEffect(String message) {
+        if (effects == null) {
             effects = new ArrayList<String>();
         }
-        
+
         debug("effect", message);
-        
+
         effects.add(message);
     }
-    
-    public void addEffect(Messages globalMessage, String customMessage, Object... variables)
-    {
+
+    public void addEffect(Messages globalMessage, String customMessage, Object... variables) {
         addCustomEffect(globalMessage.getCustom(customMessage, variables));
     }
-    
-    public void clearEffects()
-    {
-        if(effects != null)
-        {
+
+    public void clearEffects() {
+        if (effects != null) {
             effects.clear();
         }
     }
-    
-    public void sendEffects(CommandSender sender, String prefix)
-    {
+
+    public void sendEffects(CommandSender sender, String prefix) {
         sendList(sender, prefix, effects);
     }
-    
-    public void clear()
-    {
+
+    public void clear() {
         clearReasons();
         clearEffects();
     }
-    
-    private void sendList(CommandSender sender, String prefix, List<String> list)
-    {
-        if(sender == null || list == null)
-        {
+
+    private void sendList(CommandSender sender, String prefix, List<String> list) {
+        if (sender == null || list == null) {
             return;
         }
-        
-        for(String s : list)
-        {
-            if(s != null)
-            {
+
+        for (String s : list) {
+            if (s != null) {
                 Messages.send(sender, prefix + s);
             }
         }
     }
-    
-    public String parseVariables(String string)
-    {
+
+    public String parseVariables(String string) {
         String name = (hasPlayerName() ? playerName() : "(nobody)");
-        
+
         string = string.replace("{player}", name);
         string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
         string = string.replace("{result}", Tools.Item.print(result()));
@@ -288,53 +239,46 @@ public class Args
         string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "(?)"));
         string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "(?)"));
         string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "(?)"));
-        
+
         return string;
     }
-    
+
     /**
      * Start building an argument class for flag events
      * 
      * @return linkable methods
      */
-    public static ArgBuilder create()
-    {
+    public static ArgBuilder create() {
         return new ArgBuilder();
     }
-    
+
     /**
-     * Re-processes the arguments to asign them in as many places as possible.<br>
-     * For example, if you only set player name, the player() will still be null, but by triggering this it will try to asign player() to an Player object.
+     * Re-processes the arguments to asign them in as many places as possible.<br> For example, if you only set player name, the player() will still be null, but by triggering this it will try to
+     * asign player() to an Player object.
      * 
      * @return same instance
      */
-    public Args processArgs()
-    {
-        if(player() == null && playerName() != null)
-        {
+    public Args processArgs() {
+        if (player() == null && playerName() != null) {
             setPlayer(Bukkit.getPlayerExact(playerName()));
         }
-        
-        if(playerName() == null && player() != null)
-        {
+
+        if (playerName() == null && player() != null) {
             setPlayerName(player().getName());
         }
-        
-        if(location() == null && player() != null)
-        {
+
+        if (location() == null && player() != null) {
             setLocation(player().getLocation());
         }
-        
-        if(recipeType() == null && recipe() != null)
-        {
+
+        if (recipeType() == null && recipe() != null) {
             setRecipeType(recipe().getType());
         }
-        
+
         return this;
     }
-    
-    private void debug(String type, String message)
-    {
-//        Messages.debug(type + " | " + message);
+
+    private void debug(String type, String message) {
+        // Messages.debug(type + " | " + message);
     }
 }

@@ -37,8 +37,7 @@ import ro.thehunters.digi.recipeManager.flags.FlagType.Bit;
 
 import com.google.common.collect.Sets;
 
-public class Files
-{
+public class Files {
     public static final String NL = System.getProperty("line.separator");
     public static final String PAD1 = "  ";
     public static final String PAD2 = "    ";
@@ -72,17 +71,14 @@ public class Files
 
     public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
 
-    protected static void init()
-    {
+    protected static void init() {
     }
 
-    protected static void reload(CommandSender sender)
-    {
+    protected static void reload(CommandSender sender) {
         new Files(sender);
     }
 
-    private Files(CommandSender sender)
-    {
+    private Files(CommandSender sender) {
         this.sender = sender;
 
         createDirectories();
@@ -99,46 +95,38 @@ public class Files
 
         // TODO warn of unused 'aliases.yml'
 
-        if(overwrite)
-        {
+        if (overwrite) {
             Messages.sendAndLog(sender, "<gray>New version installed, information files and changelog have been overwritten.");
         }
     }
 
-    private boolean isNewVersion()
-    {
+    private boolean isNewVersion() {
         boolean newVersion = true;
 
-        try
-        {
+        try {
             File file = new File(DIR_PLUGIN + FILE_USED_VERSION);
             String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
 
-            if(file.exists())
-            {
+            if (file.exists()) {
                 BufferedReader b = new BufferedReader(new FileReader(file));
                 String version = b.readLine();
                 b.close();
                 newVersion = (version == null || !version.equals(currentVersion));
             }
 
-            if(newVersion || file.exists())
-            {
+            if (newVersion || file.exists()) {
                 BufferedWriter b = new BufferedWriter(new FileWriter(file, false));
                 b.write(currentVersion);
                 b.close();
             }
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             Messages.error(null, e, null);
         }
 
         return newVersion;
     }
 
-    private void createDirectories()
-    {
+    private void createDirectories() {
         // Create base directories
         File file = new File(DIR_PLUGIN + "recipes" + File.separator + "disabled");
         file.mkdirs();
@@ -146,75 +134,51 @@ public class Files
         // Create disable directory info file
         file = new File(file.getPath() + File.separator + "Recipe files in here are ignored !");
 
-        if(!file.exists())
-        {
+        if (!file.exists()) {
             Tools.saveTextToFile("In the disabled folder you can place recipe files you don't want to load, instead of deleting them.", file.getPath());
         }
     }
 
-    private boolean fileExists(String file, boolean overwrite)
-    {
-        if(overwrite)
-        {
+    private boolean fileExists(String file, boolean overwrite) {
+        if (overwrite) {
             return false;
         }
 
         return new File(DIR_PLUGIN + file).exists();
     }
 
-    private void createFile(String file, boolean overwrite)
-    {
-        if(fileExists(file, overwrite))
-        {
+    private void createFile(String file, boolean overwrite) {
+        if (fileExists(file, overwrite)) {
             return;
         }
 
         RecipeManager.getPlugin().saveResource(file, true);
     }
 
-    private void createRecipeFlags(boolean overwrite)
-    {
-        if(fileExists(FILE_INFO_FLAGS, overwrite))
-        {
+    private void createRecipeFlags(boolean overwrite) {
+        if (fileExists(FILE_INFO_FLAGS, overwrite)) {
             return;
         }
 
         StringBuilder s = new StringBuilder(32000);
         Map<String, List<FlagType>> flags = new LinkedHashMap<String, List<FlagType>>();
 
-        String[] category = new String[]
-        {
-            "SHARED FLAGS",
-            "RECIPE ONLY FLAGS",
-            "RESULT ONLY FLAGS",
-        };
+        String[] category = new String[] { "SHARED FLAGS", "RECIPE ONLY FLAGS", "RESULT ONLY FLAGS", };
 
-        String[] description = new String[]
-        {
-            "Usable on anything - file header, recipe header or result items.",
-            "Usable only on file headers or recipe headers. Can not be used on result items.",
-            "Usable only on recipe's result items. Can not be used on recipes or file header.",
-        };
+        String[] description = new String[] { "Usable on anything - file header, recipe header or result items.", "Usable only on file headers or recipe headers. Can not be used on result items.", "Usable only on recipe's result items. Can not be used on recipes or file header.", };
 
         int size = FlagType.values().length;
 
-        for(String c : category)
-        {
+        for (String c : category) {
             flags.put(c, new ArrayList<FlagType>(size));
         }
 
-        for(FlagType flag : FlagType.values())
-        {
-            if(flag.hasBit(Bit.RECIPE))
-            {
+        for (FlagType flag : FlagType.values()) {
+            if (flag.hasBit(Bit.RECIPE)) {
                 flags.get(category[1]).add(flag);
-            }
-            else if(flag.hasBit(Bit.RESULT))
-            {
+            } else if (flag.hasBit(Bit.RESULT)) {
                 flags.get(category[2]).add(flag);
-            }
-            else
-            {
+            } else {
                 flags.get(category[0]).add(flag);
             }
         }
@@ -247,14 +211,12 @@ public class Files
         s.append(NL);
         s.append(NL).append("<a name=\"contents\"></a><h3>CONTENTS</h3>");
 
-        for(String c : category)
-        {
+        for (String c : category) {
             String key = c.replace(' ', '_').toLowerCase();
 
             s.append(NL).append("<a href=\"#").append(key).append("\"><b>").append(c).append("</b></a>");
 
-            for(FlagType flag : flags.get(c))
-            {
+            for (FlagType flag : flags.get(c)) {
                 s.append(NL).append("- <a href=\"#").append(flag.getName()).append("\"><b>@").append(flag.getName()).append("</b></a>");
             }
 
@@ -263,15 +225,13 @@ public class Files
 
         s.append(NL);
 
-        for(int t = 0; t < category.length; t++)
-        {
+        for (int t = 0; t < category.length; t++) {
             String key = category[t].replace(' ', '_').toLowerCase();
 
             s.append(NL).append("<a name=\"").append(key).append("\"></a><hr>  <b>").append(category[t]).append("</b>");
             s.append(NL).append("    ").append(description[t]);
 
-            for(FlagType flag : flags.get(category[t]))
-            {
+            for (FlagType flag : flags.get(category[t])) {
                 String[] args = flag.getArguments();
                 String[] desc = flag.getDescription();
                 String[] ex = flag.getExamples();
@@ -281,57 +241,43 @@ public class Files
                 s.append(NL);
                 s.append(NL);
 
-                if(args != null)
-                {
-                    for(String a : args)
-                    {
+                if (args != null) {
+                    for (String a : args) {
                         s.append(NL).append("  <b>").append(StringEscapeUtils.escapeHtml(a.replace("{flag}", flag.toString()))).append("</b>");
                     }
                 }
 
-                if(desc == null)
-                {
-                    desc = new String[]
-                    {
-                        "Flag not yet documented...",
-                    };
+                if (desc == null) {
+                    desc = new String[] { "Flag not yet documented...", };
                 }
 
                 s.append(NL);
 
-                for(String d : desc)
-                {
+                for (String d : desc) {
                     s.append(NL);
 
-                    if(d != null)
-                    {
+                    if (d != null) {
                         s.append("    ").append(StringEscapeUtils.escapeHtml(d));
                     }
                 }
 
-                if(!flag.hasBit(Bit.NO_FALSE))
-                {
+                if (!flag.hasBit(Bit.NO_FALSE)) {
                     s.append(NL).append(NL).append("    Setting to 'false' or 'remove' will disable the flag.");
                 }
 
-                if(ex != null)
-                {
+                if (ex != null) {
                     s.append(NL).append(NL).append("    <b>Examples:</b>");
 
-                    for(String e : ex)
-                    {
+                    for (String e : ex) {
                         s.append(NL).append("      ").append(StringEscapeUtils.escapeHtml(e.replace("{flag}", flag.toString())));
                     }
                 }
 
-                if(flag.getNames().length > 1)
-                {
+                if (flag.getNames().length > 1) {
                     s.append(NL).append(NL).append("    <b>Aliases:</b> ");
 
-                    for(int i = 1; i < flag.getNames().length; i++)
-                    {
-                        if(i != 1)
-                        {
+                    for (int i = 1; i < flag.getNames().length; i++) {
+                        if (i != 1) {
                             s.append(", ");
                         }
 
@@ -351,10 +297,8 @@ public class Files
         Messages.sendAndLog(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
     }
 
-    private void createCommands(boolean overwrite)
-    {
-        if(fileExists(FILE_INFO_COMMANDS, overwrite))
-        {
+    private void createCommands(boolean overwrite) {
+        if (fileExists(FILE_INFO_COMMANDS, overwrite)) {
             return;
         }
 
@@ -372,12 +316,10 @@ public class Files
         Map<String, Map<String, Object>> cmds = desc.getCommands();
         Map<String, Object> data;
 
-        for(Entry<String, Map<String, Object>> e : cmds.entrySet())
-        {
+        for (Entry<String, Map<String, Object>> e : cmds.entrySet()) {
             data = e.getValue();
 
-            if(data == null)
-            {
+            if (data == null) {
                 continue;
             }
 
@@ -392,7 +334,7 @@ public class Files
 
             obj = data.get("aliases");
             @SuppressWarnings("unchecked")
-            List<String> aliases = (obj instanceof List ? (List<String>)obj : null);
+            List<String> aliases = (obj instanceof List ? (List<String>) obj : null);
 
             s.append(NL).append("<tr>");
             s.append("<td width=\"40%\"><b>");
@@ -422,20 +364,16 @@ public class Files
 
         perms.add(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + "*"));
 
-        for(FlagType type : FlagType.values())
-        {
-            if(type.hasBit(Bit.NO_SKIP_PERMISSION))
-            {
+        for (FlagType type : FlagType.values()) {
+            if (type.hasBit(Bit.NO_SKIP_PERMISSION)) {
                 continue;
             }
 
             perms.add(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + type.getName()));
         }
 
-        for(Permission p : perms)
-        {
-            if(!p.getName().startsWith("recipemanager."))
-            {
+        for (Permission p : perms) {
+            if (!p.getName().startsWith("recipemanager.")) {
                 continue;
             }
 
@@ -443,8 +381,7 @@ public class Files
             s.append("<td>").append(p.getName()).append("</td>");
             s.append("<td>");
 
-            switch(p.getDefault())
-            {
+            switch (p.getDefault()) {
                 case TRUE:
                     s.append("Everybody");
                     break;
@@ -476,10 +413,8 @@ public class Files
         Messages.sendAndLog(sender, ChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
     }
 
-    private void createNameIndex(boolean overwrite)
-    {
-        if(fileExists(FILE_INFO_NAMES, overwrite))
-        {
+    private void createNameIndex(boolean overwrite) {
+        if (fileExists(FILE_INFO_NAMES, overwrite)) {
             return;
         }
 
@@ -514,8 +449,7 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-24s %-5s %s", "ID", "Name", "Alias", "Stack", "Max durability"));
 
-        for(Material m : Material.values())
-        {
+        for (Material m : Material.values()) {
             String alias = RecipeManager.settings.materialPrint.get(m);
 
             s.append(NL).append(String.format(" %-5d %-24s %-24s %-5d %s", m.getId(), m.toString(), (alias == null ? "" : alias), m.getMaxStackSize(), (m.getMaxDurability() == 0 ? "" : m.getMaxDurability())));
@@ -530,17 +464,14 @@ public class Files
 
         List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
-        Collections.sort(enchantments, new Comparator<Enchantment>()
-        {
+        Collections.sort(enchantments, new Comparator<Enchantment>() {
             @Override
-            public int compare(Enchantment e1, Enchantment e2)
-            {
+            public int compare(Enchantment e1, Enchantment e2) {
                 return (e1.getId() > e2.getId() ? 1 : -1);
             }
         });
 
-        for(Enchantment e : enchantments)
-        {
+        for (Enchantment e : enchantments) {
             EnchantmentTarget target = e.getItemTarget();
             if (target == null) {
                 // Fall back to all if the target is null.
@@ -556,10 +487,8 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type", "Data value"));
 
-        for(PotionType t : PotionType.values())
-        {
-            if(t != null)
-            {
+        for (PotionType t : PotionType.values()) {
+            if (t != null) {
                 s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), (t.getEffectType() == null ? "" : t.getEffectType().getName()), t.getDamageValue()));
             }
         }
@@ -571,10 +500,8 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-10s %s", "ID", "Name", "Instant ?", "Duration modifier"));
 
-        for(PotionEffectType t : PotionEffectType.values())
-        {
-            if(t != null)
-            {
+        for (PotionEffectType t : PotionEffectType.values()) {
+            if (t != null) {
                 s.append(NL).append(String.format(" %-5d %-24s %-10s %.2f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
             }
         }
@@ -589,8 +516,7 @@ public class Files
         s.append("<a href=\"http://jd.bukkit.org/rb/apidocs/org/bukkit/FireworkEffect.Type.html\">BukkitAPI / FireworkEffect.Type</a>");
         s.append(NL);
 
-        for(FireworkEffect.Type t : FireworkEffect.Type.values())
-        {
+        for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
             s.append(NL).append(" ").append(t.toString());
         }
 
@@ -601,8 +527,7 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s", "ID", "Name"));
 
-        for(Biome b : Biome.values())
-        {
+        for (Biome b : Biome.values()) {
             s.append(NL).append(String.format(" %-5d %-24s", b.ordinal(), b.name()));
         }
 
@@ -614,8 +539,7 @@ public class Files
 
         Sound[] sounds = Sound.values();
 
-        for(int i = 0; i < sounds.length; i += 4)
-        {
+        for (int i = 0; i < sounds.length; i += 4) {
             s.append(NL).append(String.format(" %-24s%-24s%-24s%s", sounds[i].name(), (i + 1 < sounds.length ? sounds[i + 1].name() : ""), (i + 2 < sounds.length ? sounds[i + 2].name() : ""), (i + 3 < sounds.length ? sounds[i + 3].name() : "")));
         }
 
@@ -626,10 +550,8 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-24s %s", "ID", "Constant", "Name", "Alive ?"));
 
-        for(EntityType e : EntityType.values())
-        {
-            if(e.getTypeId() > 0)
-            {
+        for (EntityType e : EntityType.values()) {
+            if (e.getTypeId() > 0) {
                 s.append(NL).append(String.format(" %-5s %-24s %-24s %s", e.getTypeId(), e.name(), e.getName(), e.isAlive()));
             }
         }
@@ -641,8 +563,7 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-16s %-12s %-12s %s", "Name", "Color R G B", "Wool data", "Dye data"));
 
-        for(DyeColor c : DyeColor.values())
-        {
+        for (DyeColor c : DyeColor.values()) {
             s.append(NL).append(String.format(" %-14s %-4d %-4d %-4d %-12d %d", c.name(), c.getColor().getRed(), c.getColor().getGreen(), c.getColor().getBlue(), c.getWoolData(), c.getDyeData()));
         }
 
@@ -653,8 +574,7 @@ public class Files
         s.append(NL);
         s.append(NL).append(String.format(" %-16s %s", "Name", "Color character"));
 
-        for(ChatColor c : ChatColor.values())
-        {
+        for (ChatColor c : ChatColor.values()) {
             s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
         }
 

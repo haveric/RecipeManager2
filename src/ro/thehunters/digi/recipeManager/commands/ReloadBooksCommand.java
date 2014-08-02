@@ -6,13 +6,11 @@ import org.bukkit.command.CommandSender;
 
 import ro.thehunters.digi.recipeManager.RecipeManager;
 
-public class ReloadBooksCommand implements CommandExecutor
-{
+public class ReloadBooksCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-    {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         RecipeManager.getRecipeBooks().reload(sender);
-        
+
         return true;
     }
 }

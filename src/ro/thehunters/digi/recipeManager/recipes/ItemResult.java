@@ -9,155 +9,130 @@ import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flaggable;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
-public class ItemResult extends ItemStack implements Flaggable
-{
+public class ItemResult extends ItemStack implements Flaggable {
     private Flags flags;
     private float chance = 100;
     private BaseRecipe recipe;
-    
-    public ItemResult()
-    {
+
+    public ItemResult() {
     }
-    
-    public ItemResult(ItemStack item)
-    {
+
+    public ItemResult(ItemStack item) {
         super(item);
     }
-    
-    public ItemResult(ItemResult result)
-    {
+
+    public ItemResult(ItemResult result) {
         super(result);
-        
+
         flags = result.hasFlags() ? result.getFlags().clone(this) : null;
         chance = result.chance;
         recipe = result.recipe; // don't clone, needs to be a pointer
     }
-    
-    public ItemResult(ItemStack item, float chance)
-    {
+
+    public ItemResult(ItemStack item, float chance) {
         super(item);
-        
+
         setChance(chance);
     }
-    
-    public ItemResult(Material type, int amount, int data, float chance)
-    {
-        super(type, amount, (short)data);
-        
+
+    public ItemResult(Material type, int amount, int data, float chance) {
+        super(type, amount, (short) data);
+
         setChance(chance);
     }
-    
-    public ItemResult(ItemStack item, Flags flags)
-    {
+
+    public ItemResult(ItemStack item, Flags flags) {
         super(item);
-        
+
         this.flags = flags.clone(this);
     }
-    
+
     @Override
-    public ItemResult clone()
-    {
+    public ItemResult clone() {
         return new ItemResult(this);
     }
-    
-    public void setItemStack(ItemStack item)
-    {
+
+    public void setItemStack(ItemStack item) {
         setTypeId(item.getTypeId());
         setDurability(item.getDurability());
         setAmount(item.getAmount());
         setItemMeta(item.getItemMeta());
     }
-    
-    public void setChance(float chance)
-    {
+
+    public void setChance(float chance) {
         this.chance = chance;
     }
-    
-    public float getChance()
-    {
+
+    public float getChance() {
         return chance;
     }
-    
-    public BaseRecipe getRecipe()
-    {
+
+    public BaseRecipe getRecipe() {
         return recipe;
     }
-    
-    public ItemResult setRecipe(BaseRecipe recipe)
-    {
+
+    public ItemResult setRecipe(BaseRecipe recipe) {
         this.recipe = recipe;
         return this;
     }
-    
+
     // From Flaggable interface
-    
+
     @Override
-    public boolean hasFlag(FlagType type)
-    {
+    public boolean hasFlag(FlagType type) {
         return (flags == null ? false : flags.hasFlag(type));
     }
-    
+
     @Override
-    public boolean hasFlags()
-    {
+    public boolean hasFlags() {
         return (flags != null);
     }
-    
+
     @Override
-    public boolean hasNoShiftBit()
-    {
+    public boolean hasNoShiftBit() {
         return (flags == null ? true : flags.hasNoShiftBit());
     }
-    
+
     @Override
-    public Flag getFlag(FlagType type)
-    {
+    public Flag getFlag(FlagType type) {
         return flags.getFlag(type);
     }
-    
+
     @Override
-    public <T extends Flag>T getFlag(Class<T> flagClass)
-    {
+    public <T extends Flag> T getFlag(Class<T> flagClass) {
         return flags.getFlag(flagClass);
     }
-    
+
     @Override
-    public Flags getFlags()
-    {
-        if(flags == null)
-        {
+    public Flags getFlags() {
+        if (flags == null) {
             flags = new Flags(this);
         }
-        
+
         return flags;
     }
-    
-    public void clearFlags()
-    {
+
+    public void clearFlags() {
         flags = null;
     }
-    
+
     @Override
-    public void addFlag(Flag flag)
-    {
+    public void addFlag(Flag flag) {
         flags.addFlag(flag);
     }
-    
+
     @Override
-    public boolean checkFlags(Args a)
-    {
+    public boolean checkFlags(Args a) {
         return (flags == null ? true : flags.checkFlags(a));
     }
-    
+
     @Override
-    public boolean sendCrafted(Args a)
-    {
+    public boolean sendCrafted(Args a) {
         return (flags == null ? true : flags.sendCrafted(a));
     }
-    
+
     @Override
-    public boolean sendPrepare(Args a)
-    {
+    public boolean sendPrepare(Args a) {
         return (flags == null ? true : flags.sendPrepare(a));
     }
 }

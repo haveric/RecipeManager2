@@ -17,39 +17,33 @@ import ro.thehunters.digi.recipeManager.flags.FlagKeepItem;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 import ro.thehunters.digi.recipeManager.flags.Flags;
 
-public class WorkbenchRecipe extends MultiResultRecipe
-{
-    protected WorkbenchRecipe()
-    {
+public class WorkbenchRecipe extends MultiResultRecipe {
+    protected WorkbenchRecipe() {
     }
-    
-    public WorkbenchRecipe(BaseRecipe recipe)
-    {
+
+    public WorkbenchRecipe(BaseRecipe recipe) {
         super(recipe);
     }
-    
-    public WorkbenchRecipe(Flags flags)
-    {
+
+    public WorkbenchRecipe(Flags flags) {
         super(flags);
     }
-    
+
     /**
      * Generate a display result for showing off all results (if available).
      * 
      * @param a
      * @return the result if it's only one or a special multi-result information item
      */
-    public ItemResult getDisplayResult(Args a)
-    {
+    public ItemResult getDisplayResult(Args a) {
         a.clear();
-        
-        if(!checkFlags(a))
-        {
+
+        if (!checkFlags(a)) {
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
-            
+
             return Tools.Item.create(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
-        
+
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
         float failChance = 0;
         int secretNum = 0;
@@ -57,191 +51,147 @@ public class WorkbenchRecipe extends MultiResultRecipe
         int unavailableNum = 0;
         float unavailableChance = 0;
         int displayNum = 0;
-        
-        for(ItemResult r : getResults())
-        {
+
+        for (ItemResult r : getResults()) {
             r = r.clone();
             a.clearReasons();
             a.setResult(r);
             r.sendPrepare(a);
-            
-            if(r.checkFlags(a))
-            {
-                if(r.hasFlag(FlagType.SECRET))
-                {
+
+            if (r.checkFlags(a)) {
+                if (r.hasFlag(FlagType.SECRET)) {
                     secretNum++;
                     secretChance += r.getChance();
-                }
-                else if(r.getTypeId() == 0)
-                {
+                } else if (r.getTypeId() == 0) {
                     failChance = r.getChance();
-                }
-                else
-                {
+                } else {
                     displayResults.add(r);
-                    
+
                     a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                 }
-            }
-            else
-            {
+            } else {
                 unavailableNum++;
                 unavailableChance += r.getChance();
-                
-                if(!r.hasFlag(FlagType.SECRET))
-                {
+
+                if (!r.hasFlag(FlagType.SECRET)) {
                     a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
                 }
             }
         }
-        
+
         displayNum = displayResults.size();
         boolean recieve = (secretNum + displayNum) > 0;
-        
+
         FlagDisplayResult flag = (a.hasRecipe() ? a.recipe().getFlag(FlagDisplayResult.class) : null);
-        
-        if(flag != null)
-        {
-            if(!recieve && flag.isSilentFail())
-            {
+
+        if (flag != null) {
+            if (!recieve && flag.isSilentFail()) {
                 return null;
             }
-            
+
             ItemStack display = flag.getDisplayItem();
-            
-            if(display != null)
-            {
+
+            if (display != null) {
                 return new ItemResult(display);
-            }
-            else if(displayNum > 0)
-            {
+            } else if (displayNum > 0) {
                 return displayResults.get(0);
             }
         }
-        
-        if(unavailableNum == 0 && failChance == 0)
-        {
-            if(displayNum == 1 && secretNum == 0)
-            {
+
+        if (unavailableNum == 0 && failChance == 0) {
+            if (displayNum == 1 && secretNum == 0) {
                 return displayResults.get(0);
-            }
-            else if(secretNum == 1 && displayNum == 0)
-            {
+            } else if (secretNum == 1 && displayNum == 0) {
                 return Tools.Item.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE_UNKNOWN.get());
             }
         }
-        
+
         List<String> lore = new ArrayList<String>();
         String title = null;
-        
-        if(recieve)
-        {
+
+        if (recieve) {
             title = Messages.CRAFT_RESULT_RECIEVE_TITLE_RANDOM.get();
-        }
-        else
-        {
+        } else {
             title = Messages.CRAFT_RESULT_NORECIEVE_TITLE.get();
             lore.add(Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
-        
-        for(ItemResult r : displayResults)
-        {
+
+        for (ItemResult r : displayResults) {
             lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.Item.print(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
         }
-        
-        if(failChance > 0)
-        {
+
+        if (failChance > 0) {
             lore.add(Messages.CRAFT_RESULT_LIST_FAILURE.get("{chance}", formatChance(failChance)));
         }
-        
-        if(secretNum > 0)
-        {
+
+        if (secretNum > 0) {
             lore.add(Messages.CRAFT_RESULT_LIST_SECRETS.get("{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
         }
-        
-        if(unavailableNum > 0)
-        {
+
+        if (unavailableNum > 0) {
             lore.add(Messages.CRAFT_RESULT_LIST_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
-        
+
         return Tools.Item.create(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
     }
-    
-    private String formatChance(float chance)
-    {
+
+    private String formatChance(float chance) {
         return chance == 100 ? "100%" : String.format((Math.round(chance) == chance ? "%4.0f%%" : "%4.1f%%"), chance);
     }
-    
-    public int getCraftableTimes(CraftingInventory inv)
-    {
+
+    public int getCraftableTimes(CraftingInventory inv) {
         int craftAmount = inv.getMaxStackSize();
-        
-        for(ItemStack i : inv.getMatrix())
-        {
-            if(i != null && i.getTypeId() != 0)
-            {
+
+        for (ItemStack i : inv.getMatrix()) {
+            if (i != null && i.getTypeId() != 0) {
                 craftAmount = Math.min(i.getAmount(), craftAmount);
             }
         }
-        
+
         return craftAmount;
     }
-    
-    public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra)
-    {
+
+    public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra) {
         FlagIngredientCondition flagIC = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
         FlagKeepItem flagKI = (hasFlag(FlagType.KEEPITEM) ? getFlag(FlagKeepItem.class) : null);
-        
-        if(flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION))
-        {
+
+        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION)) {
             flagIC = result.getFlag(FlagIngredientCondition.class);
         }
-        
-        if(flagKI == null && result != null && result.hasFlag(FlagType.KEEPITEM))
-        {
+
+        if (flagKI == null && result != null && result.hasFlag(FlagType.KEEPITEM)) {
             flagKI = result.getFlag(FlagKeepItem.class);
         }
-        
-        for(int i = 1; i < 10; i++)
-        {
+
+        for (int i = 1; i < 10; i++) {
             ItemStack item = inv.getItem(i);
-            
-            if(item != null)
-            {
-                if(flagKI != null)
-                {
-                    if(flagKI.getItem(item) != null)
-                    {
+
+            if (item != null) {
+                if (flagKI != null) {
+                    if (flagKI.getItem(item) != null) {
                         continue;
                     }
                 }
-                
+
                 int amt = item.getAmount();
                 int newAmt = amt;
-                
-                if(flagIC != null)
-                {
+
+                if (flagIC != null) {
                     Conditions cond = flagIC.getIngredientConditions(item);
-                    
-                    if(cond != null && cond.getAmount() > 1)
-                    {
+
+                    if (cond != null && cond.getAmount() > 1) {
                         newAmt -= (cond.getAmount() - 1);
                     }
                 }
-                
-                if(!onlyExtra)
-                {
+
+                if (!onlyExtra) {
                     newAmt -= 1;
                 }
-                
-                if(amt != newAmt)
-                {
-                    if(newAmt > 0)
-                    {
+
+                if (amt != newAmt) {
+                    if (newAmt > 0) {
                         item.setAmount(newAmt);
-                    }
-                    else
-                    {
+                    } else {
                         inv.clear(i);
                     }
                 }

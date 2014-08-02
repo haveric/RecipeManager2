@@ -27,48 +27,44 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Control for bukkit recipes to avoid confusion with RecipeManager's recipes
  */
-public class Vanilla
-{
+public class Vanilla {
     protected static Map<BaseRecipe, RecipeInfo> initialRecipes = new HashMap<BaseRecipe, RecipeInfo>();
-    
+
     /**
      * Leather dyeing's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short)0);
-    
+    public static final ItemStack RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short) 0);
+
     /**
      * Map cloning's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPCLONE = new ItemStack(Material.MAP, 0, (short)-1);
-    
+    public static final ItemStack RECIPE_MAPCLONE = new ItemStack(Material.MAP, 0, (short) -1);
+
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 0, (short)0);
-    
+    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 0, (short) 0);
+
     /**
      * Fireworks' special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short)0);
-    
+    public static final ItemStack RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short) 0);
+
     /**
-     * Default time a furnace recipe burns for.<br>
-     * This is a game constant.
+     * Default time a furnace recipe burns for.<br> This is a game constant.
      */
     public static final float FURNACE_RECIPE_TIME = 9.25f;
-    
+
     /**
-     * The data value wildcard for recipe ingredients.<br>
-     * If an ingredient has this data value its data value will be ignored.
+     * The data value wildcard for recipe ingredients.<br> If an ingredient has this data value its data value will be ignored.
      */
     public static final short DATA_WILDCARD = Short.MAX_VALUE;
-    
-    protected static void init()
-    {
+
+    protected static void init() {
         clean();
-        
+
         RecipeInfo info = new RecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
-        
+
         // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite an unexistent one
         initialRecipes.put(new FuelRecipe(Material.COAL, 80), info);
         initialRecipes.put(new FuelRecipe(Material.LOG, 15), info);
@@ -100,134 +96,111 @@ public class Vanilla
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
         initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
         initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
-        
+
         // Index fuel recipes
-        for(BaseRecipe recipe : initialRecipes.keySet())
-        {
-            if(recipe instanceof FuelRecipe)
-            {
-                RecipeManager.getRecipes().indexFuels.put(((FuelRecipe)recipe).getIndexString(), (FuelRecipe)recipe);
+        for (BaseRecipe recipe : initialRecipes.keySet()) {
+            if (recipe instanceof FuelRecipe) {
+                RecipeManager.getRecipes().indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
             }
         }
-        
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe r;
-        
-        while(iterator.hasNext())
-        {
+
+        while (iterator.hasNext()) {
             r = iterator.next();
-            
-            if(r == null || (RecipeManager.getRecipes() != null && RecipeManager.getRecipes().isCustomRecipe(r)))
-            {
+
+            if (r == null || (RecipeManager.getRecipes() != null && RecipeManager.getRecipes().isCustomRecipe(r))) {
                 continue;
             }
-            
+
             BaseRecipe recipe = null;
-            
-            if(r instanceof ShapedRecipe)
-            {
-                recipe = new CraftRecipe((ShapedRecipe)r);
+
+            if (r instanceof ShapedRecipe) {
+                recipe = new CraftRecipe((ShapedRecipe) r);
+            } else if (r instanceof ShapelessRecipe) {
+                recipe = new CombineRecipe((ShapelessRecipe) r);
+            } else if (r instanceof FurnaceRecipe) {
+                recipe = new SmeltRecipe((FurnaceRecipe) r);
             }
-            else if(r instanceof ShapelessRecipe)
-            {
-                recipe = new CombineRecipe((ShapelessRecipe)r);
-            }
-            else if(r instanceof FurnaceRecipe)
-            {
-                recipe = new SmeltRecipe((FurnaceRecipe)r);
-            }
-            
-            if(recipe == null)
-            {
+
+            if (recipe == null) {
                 continue;
             }
-            
+
             initialRecipes.put(recipe, info);
         }
-        
-        for(Entry<BaseRecipe, RecipeInfo> e : initialRecipes.entrySet())
-        {
+
+        for (Entry<BaseRecipe, RecipeInfo> e : initialRecipes.entrySet()) {
             BaseRecipe recipe = e.getKey();
             RecipeManager.getRecipes().index.put(recipe, e.getValue());
             RecipeManager.getRecipes().indexName.put(recipe.getName(), recipe);
         }
     }
-    
-    protected static void clean()
-    {
+
+    protected static void clean() {
         initialRecipes.clear();
     }
-    
+
     /**
      * Removes a RecipeManager recipe from the <b>server</b>
      * 
      * @param recipe
      *            RecipeManager recipe
-     * @return
-     *         removed recipe or null if not found
+     * @return removed recipe or null if not found
      */
-    public static Recipe removeCustomRecipe(BaseRecipe recipe)
-    {
-        if(recipe instanceof CraftRecipe)
-        {
-            return removeCraftRecipe((CraftRecipe)recipe);
+    public static Recipe removeCustomRecipe(BaseRecipe recipe) {
+        if (recipe instanceof CraftRecipe) {
+            return removeCraftRecipe((CraftRecipe) recipe);
         }
-        
-        if(recipe instanceof CombineRecipe)
-        {
-            return removeCombineRecipe((CombineRecipe)recipe);
+
+        if (recipe instanceof CombineRecipe) {
+            return removeCombineRecipe((CombineRecipe) recipe);
         }
-        
-        if(recipe instanceof SmeltRecipe)
-        {
-            return removeSmeltRecipe((SmeltRecipe)recipe);
+
+        if (recipe instanceof SmeltRecipe) {
+            return removeSmeltRecipe((SmeltRecipe) recipe);
         }
-        
+
         return null;
     }
-    
+
     /**
-     * Removes a Bukkit recipe from the <b>server</b>
-     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the BaseRecipe object you should use {@link #removeCustomRecipe(BaseRecipe)}</b>
-     * 
-     * @param recipe
-     *            Bukkit recipe
-     * @return
-     *         removed recipe or null if not found
-     */
-    public static Recipe removeBukkitRecipe(Recipe recipe)
-    {
-        if(recipe instanceof ShapedRecipe)
-        {
-            return removeShapedRecipe((ShapedRecipe)recipe);
-        }
-        
-        if(recipe instanceof ShapelessRecipe)
-        {
-            return removeShapelessRecipe((ShapelessRecipe)recipe);
-        }
-        
-        if(recipe instanceof FurnaceRecipe)
-        {
-            return removeFurnaceRecipe((FurnaceRecipe)recipe);
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Removes a Bukkit recipe from the <b>server</b><br>
-     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CraftRecipe object you should use {@link #removeCraftRecipe(CraftRecipe)}</b>
+     * Removes a Bukkit recipe from the <b>server</b> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the BaseRecipe object you should use
+     * {@link #removeCustomRecipe(BaseRecipe)}</b>
      * 
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeShapedRecipe(ShapedRecipe recipe)
-    {
+    public static Recipe removeBukkitRecipe(Recipe recipe) {
+        if (recipe instanceof ShapedRecipe) {
+            return removeShapedRecipe((ShapedRecipe) recipe);
+        }
+
+        if (recipe instanceof ShapelessRecipe) {
+            return removeShapelessRecipe((ShapelessRecipe) recipe);
+        }
+
+        if (recipe instanceof FurnaceRecipe) {
+            return removeFurnaceRecipe((FurnaceRecipe) recipe);
+        }
+
+        return null;
+    }
+
+    /**
+     * Removes a Bukkit recipe from the <b>server</b><br> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CraftRecipe object you should use
+     * {@link #removeCraftRecipe(CraftRecipe)}</b>
+     * 
+     * @param recipe
+     *            Bukkit recipe
+     * @return removed recipe or null if not found
+     */
+    public static Recipe removeShapedRecipe(ShapedRecipe recipe) {
         return removeCraftRecipe(new CraftRecipe(recipe));
     }
-    
+
     /**
      * Removes a RecipeManager recipe from the <b>server</b>
      * 
@@ -235,52 +208,47 @@ public class Vanilla
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeCraftRecipe(CraftRecipe recipe)
-    {
+    public static Recipe removeCraftRecipe(CraftRecipe recipe) {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapedRecipe sr;
         Recipe r;
         String[] sh;
-        
+
         ItemStack[] matrix = recipe.getIngredients();
         Tools.trimItemMatrix(matrix);
         ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
         int height = recipe.getHeight();
         int width = recipe.getWidth();
-        
-        while(iterator.hasNext())
-        {
+
+        while (iterator.hasNext()) {
             r = iterator.next();
-            
-            if(r instanceof ShapedRecipe)
-            {
-                sr = (ShapedRecipe)r;
+
+            if (r instanceof ShapedRecipe) {
+                sr = (ShapedRecipe) r;
                 sh = sr.getShape();
-                
-                if(sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))
-                {
+
+                if (sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
                     iterator.remove();
                     return sr;
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
-     * Removes a Bukkit recipe from the <b>server</b><br>
-     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CombineRecipe object you should use {@link #removeCombineRecipe(CombineRecipe)}</b>
+     * Removes a Bukkit recipe from the <b>server</b><br> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CombineRecipe object you should use
+     * {@link #removeCombineRecipe(CombineRecipe)}</b>
      * 
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeShapelessRecipe(ShapelessRecipe recipe)
-    {
+    public static Recipe removeShapelessRecipe(ShapelessRecipe recipe) {
         return removeCombineRecipe(new CombineRecipe(recipe));
     }
-    
+
     /**
      * Removes a RecipeManager recipe from the <b>server</b>
      * 
@@ -288,46 +256,41 @@ public class Vanilla
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeCombineRecipe(CombineRecipe recipe)
-    {
+    public static Recipe removeCombineRecipe(CombineRecipe recipe) {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapelessRecipe sr;
         Recipe r;
-        
+
         List<ItemStack> items = recipe.getIngredients();
-        
-        while(iterator.hasNext())
-        {
+
+        while (iterator.hasNext()) {
             r = iterator.next();
-            
-            if(r instanceof ShapelessRecipe)
-            {
-                sr = (ShapelessRecipe)r;
-                
-                if(Tools.compareIngredientList(items, sr.getIngredientList()))
-                {
+
+            if (r instanceof ShapelessRecipe) {
+                sr = (ShapelessRecipe) r;
+
+                if (Tools.compareIngredientList(items, sr.getIngredientList())) {
                     iterator.remove();
                     return sr;
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
-     * Removes a Bukkit furnace recipe from the <b>server</b><br>
-     * Unlike {@link #removeShapedRecipe(ShapedRecipe)} and {@link #removeShapelessRecipe(ShapelessRecipe)} this method does not convert recipes since it only needs the ingredient.
+     * Removes a Bukkit furnace recipe from the <b>server</b><br> Unlike {@link #removeShapedRecipe(ShapedRecipe)} and {@link #removeShapelessRecipe(ShapelessRecipe)} this method does not convert
+     * recipes since it only needs the ingredient.
      * 
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeFurnaceRecipe(FurnaceRecipe recipe)
-    {
+    public static Recipe removeFurnaceRecipe(FurnaceRecipe recipe) {
         return removeFurnaceRecipe(recipe.getInput());
     }
-    
+
     /**
      * Removes a RecipeManager smelt recipe from the <b>server</b>
      * 
@@ -335,103 +298,87 @@ public class Vanilla
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeSmeltRecipe(SmeltRecipe recipe)
-    {
+    public static Recipe removeSmeltRecipe(SmeltRecipe recipe) {
         return removeFurnaceRecipe(recipe.getIngredient());
     }
-    
-    private static Recipe removeFurnaceRecipe(ItemStack ingredient)
-    {
+
+    private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         FurnaceRecipe fr;
         Recipe r;
-        
-        while(iterator.hasNext())
-        {
+
+        while (iterator.hasNext()) {
             r = iterator.next();
-            
-            if(r instanceof FurnaceRecipe)
-            {
-                fr = (FurnaceRecipe)r;
-                
-                if(ingredient.getTypeId() == fr.getInput().getTypeId())
-                {
+
+            if (r instanceof FurnaceRecipe) {
+                fr = (FurnaceRecipe) r;
+
+                if (ingredient.getTypeId() == fr.getInput().getTypeId()) {
                     iterator.remove();
                     return fr;
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Remove all RecipeManager recipes from the server.
      */
-    public static void removeCustomRecipes()
-    {
-        if(RecipeManager.getRecipes() == null)
-        {
+    public static void removeCustomRecipes() {
+        if (RecipeManager.getRecipes() == null) {
             return;
         }
-        
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
-        
-        while(iterator.hasNext())
-        {
+
+        while (iterator.hasNext()) {
             recipe = iterator.next();
-            
-            if(recipe != null && RecipeManager.getRecipes().isCustomRecipe(recipe))
-            {
+
+            if (recipe != null && RecipeManager.getRecipes().isCustomRecipe(recipe)) {
                 iterator.remove();
             }
         }
     }
-    
+
     /**
      * Remove all recipes from the server except special ones
      */
-    public static void removeAllButSpecialRecipes()
-    {
+    public static void removeAllButSpecialRecipes() {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
-        
-        while(iterator.hasNext())
-        {
+
+        while (iterator.hasNext()) {
             recipe = iterator.next();
-            
-            if(recipe != null)
-            {
+
+            if (recipe != null) {
                 ItemStack result = recipe.getResult();
-                
-                if(result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND))
-                {
+
+                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND)) {
                     continue;
                 }
-                
+
                 iterator.remove();
             }
         }
     }
-    
+
     /**
      * Adds all recipes that already existed when the plugin was enabled.
      */
-    public static void restoreInitialRecipes()
-    {
-        for(Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet())
-        {
+    public static void restoreInitialRecipes() {
+        for (Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet()) {
             // TODO maybe check if recipe is already in server ?
             Bukkit.addRecipe(entry.getKey().getBukkitRecipe());
         }
     }
-    
+
     /**
      * @return a copy of the initial recipes map.
      */
-    public static Map<BaseRecipe, RecipeInfo> getInitialRecipes()
-    {
+    public static Map<BaseRecipe, RecipeInfo> getInitialRecipes() {
         return ImmutableMap.copyOf(initialRecipes);
     }
 }

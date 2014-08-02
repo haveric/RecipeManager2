@@ -8,46 +8,38 @@ import org.bukkit.entity.Player;
 
 import ro.thehunters.digi.recipeManager.commands.RecipeCommand;
 
-public class Players
-{
+public class Players {
     private static final Map<String, Integer> joined = new HashMap<String, Integer>();
-    
-    private Players()
-    {
+
+    private Players() {
     }
-    
-    protected static void init()
-    {
+
+    protected static void init() {
     }
-    
-    protected static void clean()
-    {
+
+    protected static void clean() {
         joined.clear();
         RecipeCommand.clean();
     }
-    
-    protected static void remove(Player player)
-    {
+
+    protected static void remove(Player player) {
         removeJoined(player);
         RecipeCommand.clean(player.getName());
     }
-    
-    public static void addJoined(Player player)
-    {
+
+    public static void addJoined(Player player) {
         Validate.notNull(player, "player can not be null");
-        
-        joined.put(player.getName(), (int)System.currentTimeMillis() / 1000);
+
+        joined.put(player.getName(), (int) System.currentTimeMillis() / 1000);
     }
-    
-    public static void removeJoined(Player player)
-    {
+
+    public static void removeJoined(Player player) {
         Validate.notNull(player, "player can not be null");
-        
+
         joined.remove(player.getName());
     }
-    
-    public static Integer getJoinedTime(Player player)
-    {
+
+    public static Integer getJoinedTime(Player player) {
         return joined.get(player.getName());
     }
 }

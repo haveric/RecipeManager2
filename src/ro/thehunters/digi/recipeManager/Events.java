@@ -66,86 +66,73 @@ import ro.thehunters.digi.recipeManager.recipes.WorkbenchRecipe;
 /**
  * RecipeManager handled events
  */
-public class Events implements Listener
-{
-    protected Events()
-    {
+public class Events implements Listener {
+    protected Events() {
         // events are registered in the reload() method
 
-        for(World world : Bukkit.getWorlds())
-        {
+        for (World world : Bukkit.getWorlds()) {
             worldLoad(world);
         }
     }
 
-    protected void clean()
-    {
+    protected void clean() {
         HandlerList.unregisterAll(this);
     }
 
-    protected static void reload()
-    {
+    protected static void reload() {
         HandlerList.unregisterAll(RecipeManager.events);
         Bukkit.getPluginManager().registerEvents(RecipeManager.events, RecipeManager.getPlugin());
     }
 
     /*
-     *  Workbench craft events
+     * Workbench craft events
      */
 
     @EventHandler(priority = EventPriority.LOW)
-    public void prepareCraft(PrepareItemCraftEvent event)
-    {
-        try
-        {
+    public void prepareCraft(PrepareItemCraftEvent event) {
+        try {
             CraftingInventory inv = event.getInventory();
 
-            if(inv.getResult() == null)
-            {
+            if (inv.getResult() == null) {
                 return; // event was canceled by some other plugin
             }
 
-            Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
+            Player player = (event.getView() == null ? null : (Player) event.getView().getPlayer());
 
-            if(!RecipeManager.getPlugin().canCraft(player))
-            {
+            if (!RecipeManager.getPlugin().canCraft(player)) {
                 inv.setResult(null);
                 return; // player not allowed to craft, stop here
             }
 
             Location location = (inv.getSize() > 9 ? Workbenches.get(player) : null); // get workbench location or null
 
-            if(event.isRepair())
-            {
+            if (event.isRepair()) {
                 prepareRepairRecipe(player, inv, location);
                 return; // if it's a repair recipe we don't need to move on
             }
 
             Recipe bukkitRecipe = event.getRecipe();
 
-            if(bukkitRecipe == null)
-            {
+            if (bukkitRecipe == null) {
                 return; // bukkit recipe is null ! skip it
             }
 
             ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
             ItemStack recipeResult = bukkitRecipe.getResult();
 
-            if(prepareSpecialRecipe(player, inv, result, recipeResult))
-            {
+            if (prepareSpecialRecipe(player, inv, result, recipeResult)) {
                 return; // stop here if it's a special recipe
             }
 
             WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
 
-            if(recipe == null)
-            {
+            if (recipe == null) {
                 return; // not a custom recipe or recipe not found, no need to move on
             }
 
             Args a = Args.create().player(player).inventory(inv).location(location).recipe(recipe).build();
 
-            result = recipe.getDisplayResult(a);  // get the result from recipe
+            result = recipe.getDisplayResult(a); // get the result from recipe
 
             // Call the RecipeManagerPrepareCraftEvent
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
@@ -153,62 +140,50 @@ public class Events implements Listener
 
             result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
 
-            if(result != null)
-            {
+            if (result != null) {
                 a.setResult(result);
 
-                if(recipe.sendPrepare(a))
-                {
+                if (recipe.sendPrepare(a)) {
                     a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
-                }
-                else
-                {
+                } else {
                     a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
                     result = null;
                 }
             }
 
             inv.setResult(result);
-        }
-        catch(Throwable e)
-        {
-            if(event.getInventory() != null)
-            {
+        } catch (Throwable e) {
+            if (event.getInventory() != null) {
                 event.getInventory().setResult(null);
             }
 
-            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
+            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player) event.getView().getPlayer() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
-    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult)
-    {
-        if(!result.equals(recipeResult)) // result was processed by the game and it doesn't match the original recipe
+    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult) {
+        if (!result.equals(recipeResult)) // result was processed by the game and it doesn't match the original recipe
         {
-            if(!RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE))
-            {
+            if (!RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
                 Messages.CRAFT_SPECIAL_LEATHERDYE.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
 
-            if(!RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE))
-            {
+            if (!RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE)) {
                 Messages.CRAFT_SPECIAL_MAP_CLONING.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
 
-            if(!RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND))
-            {
+            if (!RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
                 Messages.CRAFT_SPECIAL_MAP_EXTENDING.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
 
-            if(!RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS))
-            {
+            if (!RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
                 Messages.CRAFT_SPECIAL_FIREWORKS.printOnce(player);
                 inv.setResult(null);
                 return true;
@@ -220,10 +195,8 @@ public class Events implements Listener
         return false;
     }
 
-    private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) throws Throwable
-    {
-        if(!RecipeManager.getSettings().SPECIAL_REPAIR)
-        {
+    private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) throws Throwable {
+        if (!RecipeManager.getSettings().SPECIAL_REPAIR) {
             Messages.sendDenySound(player, location);
             Messages.CRAFT_REPAIR_DISABLED.printOnce(player);
             inv.setResult(null);
@@ -232,42 +205,33 @@ public class Events implements Listener
 
         ItemStack result = inv.getRecipe().getResult();
 
-        if(RecipeManager.getSettings().SPECIAL_REPAIR_METADATA)
-        {
+        if (RecipeManager.getSettings().SPECIAL_REPAIR_METADATA) {
             ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];
             int repair[] = new int[2];
             int repairIndex = 0;
 
-            for(int i = 0; i < matrix.length; i++)
-            {
-                if(matrix[i] != null && matrix[i].getTypeId() != 0)
-                {
+            for (int i = 0; i < matrix.length; i++) {
+                if (matrix[i] != null && matrix[i].getTypeId() != 0) {
                     repair[repairIndex] = i;
                     repaired[repairIndex] = matrix[i];
 
-                    if(++repairIndex > 1)
-                    {
+                    if (++repairIndex > 1) {
                         break;
                     }
                 }
             }
 
-            if(repaired[0] != null && repaired[1] != null)
-            {
+            if (repaired[0] != null && repaired[1] != null) {
                 ItemMeta meta = null;
 
-                if(repaired[0].hasItemMeta())
-                {
+                if (repaired[0].hasItemMeta()) {
                     meta = repaired[0].getItemMeta();
-                }
-                else if(repaired[1].hasItemMeta())
-                {
+                } else if (repaired[1].hasItemMeta()) {
                     meta = repaired[1].getItemMeta();
                 }
 
-                if(meta != null)
-                {
+                if (meta != null) {
                     result = inv.getResult();
                     result.setItemMeta(meta);
                 }
@@ -279,8 +243,7 @@ public class Events implements Listener
 
         result = callEvent.getResult();
 
-        if(result != null)
-        {
+        if (result != null) {
             Messages.sendRepairSound(player, location);
         }
 
@@ -288,17 +251,14 @@ public class Events implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void craftFinish(CraftItemEvent event)
-    {
-        try
-        {
+    public void craftFinish(CraftItemEvent event) {
+        try {
             CraftingInventory inv = event.getInventory();
             ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
-            final Player player = (event.getView() == null ? null : (Player)event.getView().getPlayer());
+            final Player player = (event.getView() == null ? null : (Player) event.getView().getPlayer());
             Location location = Workbenches.get(player);
 
-            if(result == null)
-            {
+            if (result == null) {
                 event.setCancelled(true);
                 Messages.sendDenySound(player, location);
                 return;
@@ -307,16 +267,14 @@ public class Events implements Listener
             Recipe bukkitRecipe = event.getRecipe();
             WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
 
-            if(recipe == null)
-            {
+            if (recipe == null) {
                 return;
             }
 
             Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
 
-            if(!recipe.checkFlags(a))
-            {
-//                a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE); // Disabled - spammy
+            if (!recipe.checkFlags(a)) {
+                // a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE); // Disabled - spammy
                 Messages.sendDenySound(player, location);
                 event.setCancelled(true);
                 return;
@@ -325,10 +283,12 @@ public class Events implements Listener
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
 
             // Call the PRE event
-            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0); // TODO upgrade to MouseButton when PR is pulled
+            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0); // TODO upgrade to
+                                                                                                                                                                            // MouseButton when PR is
+                                                                                                                                                                            // pulled
             Bukkit.getPluginManager().callEvent(callEvent);
 
-            if(callEvent.isCancelled()) // if event was canceled by some other plugin then cancel this event
+            if (callEvent.isCancelled()) // if event was canceled by some other plugin then cancel this event
             {
                 event.setCancelled(true);
                 return;
@@ -340,35 +300,29 @@ public class Events implements Listener
 
             int times = craftResult(event, inv, player, recipe, result, a); // craft the result
 
-            if(result != null)
-            {
+            if (result != null) {
                 a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
 
-                if(times > 0)
-                {
+                if (times > 0) {
                     Recipes.recipeResetResult(a.playerName());
                 }
 
-                while(--times >= 0)
-                {
+                while (--times >= 0) {
                     a.clear();
 
-                    if(recipe.sendCrafted(a))
-                    {
+                    if (recipe.sendCrafted(a)) {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
                     }
 
                     a.clear();
 
-                    if(result.sendPrepare(a))
-                    {
+                    if (result.sendPrepare(a)) {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
                     }
 
                     a.clear();
 
-                    if(result.sendCrafted(a))
-                    {
+                    if (result.sendCrafted(a)) {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
                     }
 
@@ -378,42 +332,32 @@ public class Events implements Listener
             }
 
             new UpdateInventory(player, 2); // update inventory 2 ticks later
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             event.setCancelled(true);
-            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player)event.getView().getPlayer() : null);
+            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player) event.getView().getPlayer() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
-    private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable
-    {
-        if(!recipe.isMultiResult())
-        {
-            if(result == null || result.getTypeId() == 0)
-            {
+    private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
+        if (!recipe.isMultiResult()) {
+            if (result == null || result.getTypeId() == 0) {
                 event.setCurrentItem(null);
                 return 0;
             }
 
-            if(event.isShiftClick())
-            {
-                if(recipe.hasNoShiftBit())
-                {
+            if (event.isShiftClick()) {
+                if (recipe.hasNoShiftBit()) {
                     Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
 
                     event.setCancelled(true); // cancel regardless just to be safe
 
-                    if(Tools.playerCanAddItem(player, result))
-                    {
+                    if (Tools.playerCanAddItem(player, result)) {
                         player.getInventory().addItem(result);
                         recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
 
                         return 1;
-                    }
-                    else
-                    {
+                    } else {
                         return 0;
                     }
                 }
@@ -424,56 +368,40 @@ public class Events implements Listener
                 item.setAmount(result.getAmount() * craftAmount);
 
                 int space = Tools.playerFreeSpaceForItem(player, item);
-                int crafted = Math.min((int)Math.ceil(Float.valueOf(space) / result.getAmount()), craftAmount);
+                int crafted = Math.min((int) Math.ceil(Float.valueOf(space) / result.getAmount()), craftAmount);
 
-                if(crafted > 0)
-                {
+                if (crafted > 0) {
                     event.setCurrentItem(result);
                     return crafted;
-                }
-                else
-                {
+                } else {
                     return 0;
                 }
-            }
-            else
-            {
+            } else {
                 ItemStack cursor = event.getCursor();
                 ItemStack merged = Tools.Item.merge(cursor, result);
 
-                if(merged != null)
-                {
+                if (merged != null) {
                     event.setCurrentItem(result);
-                }
-                else
-                {
+                } else {
                     return 0;
                 }
 
-                if(recipe.hasFlag(FlagType.INGREDIENTCONDITION))
-                {
+                if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
                     recipe.subtractIngredients(inv, result, true);
                 }
             }
-        }
-        else
-        {
+        } else {
             // more special treatment needed for multi-result ones...
 
             event.setCancelled(true); // need to cancel this from the start.
 
             // check if result is air / recipe failed
-            if(result == null || result.getTypeId() == 0)
-            {
+            if (result == null || result.getTypeId() == 0) {
                 Messages.CRAFT_RECIPE_MULTI_FAILED.printOnce(player);
                 Messages.sendFailSound(player, a.location());
-            }
-            else
-            {
-                if(event.isShiftClick())
-                {
-                    if(!recipe.hasNoShiftBit())
-                    {
+            } else {
+                if (event.isShiftClick()) {
+                    if (!recipe.hasNoShiftBit()) {
                         Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
                         event.setCancelled(true);
                         return 0;
@@ -481,26 +409,18 @@ public class Events implements Listener
 
                     Messages.CRAFT_RECIPE_MULTI_NOSHIFTCLICK.printOnce(player);
 
-                    if(Tools.playerCanAddItem(player, result))
-                    {
+                    if (Tools.playerCanAddItem(player, result)) {
                         player.getInventory().addItem(result);
-                    }
-                    else
-                    {
+                    } else {
                         return 0;
                     }
-                }
-                else
-                {
+                } else {
                     ItemStack cursor = event.getCursor();
                     ItemStack merged = Tools.Item.merge(cursor, result);
 
-                    if(merged != null)
-                    {
+                    if (merged != null) {
                         event.setCursor(merged);
-                    }
-                    else
-                    {
+                    } else {
                         Messages.CRAFT_RECIPE_MULTI_CURSORFULL.printOnce(player);
                         return 0;
                     }
@@ -512,70 +432,52 @@ public class Events implements Listener
             // update displayed result
             // TODO need accurate reading if there is a recipe!
             /*
-            if(inv.getResult() != null && inv.getResult().getTypeId() != 0)
-            {
-                event.setCurrentItem(recipe.getDisplayResult(a));
-            }
-            else
-            {
-                event.setCurrentItem(null);
-            }
-            */
+             * if(inv.getResult() != null && inv.getResult().getTypeId() != 0) { event.setCurrentItem(recipe.getDisplayResult(a)); } else { event.setCurrentItem(null); }
+             */
         }
 
         return 1;
     }
 
     /*
-     *  Workbench monitor events
+     * Workbench monitor events
      */
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void inventoryClose(InventoryCloseEvent event)
-    {
+    public void inventoryClose(InventoryCloseEvent event) {
         HumanEntity human = event.getPlayer();
 
-        if(event.getView().getType() == InventoryType.WORKBENCH)
-        {
+        if (event.getView().getType() == InventoryType.WORKBENCH) {
             Workbenches.remove(human);
         }
 
-        if(RecipeManager.getSettings().FIX_MOD_RESULTS)
-        {
-            for(ItemStack item : human.getInventory().getContents())
-            {
+        if (RecipeManager.getSettings().FIX_MOD_RESULTS) {
+            for (ItemStack item : human.getInventory().getContents()) {
                 itemProcess(item);
             }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void playerIntereact(PlayerInteractEvent event)
-    {
-        switch(event.getAction())
-        {
-            case RIGHT_CLICK_BLOCK:
-            {
+    public void playerIntereact(PlayerInteractEvent event) {
+        switch (event.getAction()) {
+            case RIGHT_CLICK_BLOCK: {
                 Player player = event.getPlayer();
                 Block block = event.getClickedBlock();
 
-                switch(block.getType())
-                {
+                switch (block.getType()) {
                     case WORKBENCH:
                     case FURNACE:
                     case BURNING_FURNACE:
                     case BREWING_STAND:
                     case ENCHANTMENT_TABLE:
-                    case ANVIL:
-                    {
-                        if(!RecipeManager.getPlugin().canCraft(player))
-                        {
+                    case ANVIL: {
+                        if (!RecipeManager.getPlugin().canCraft(player)) {
                             event.setCancelled(true);
                             return;
                         }
 
-                        if(block.getType() == Material.WORKBENCH)
-                        {
+                        if (block.getType() == Material.WORKBENCH) {
                             Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
                         }
 
@@ -589,28 +491,24 @@ public class Events implements Listener
             case PHYSICAL:
                 break;
 
-            default:
-            {
+            default: {
                 Workbenches.remove(event.getPlayer());
             }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void playerTeleport(PlayerTeleportEvent event)
-    {
+    public void playerTeleport(PlayerTeleportEvent event) {
         Workbenches.remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void playerDeath(PlayerDeathEvent event)
-    {
+    public void playerDeath(PlayerDeathEvent event) {
         Workbenches.remove(event.getEntity());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void playerQuit(PlayerQuitEvent event)
-    {
+    public void playerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
         Players.remove(player);
@@ -620,53 +518,43 @@ public class Events implements Listener
     }
 
     /*
-     *  Furnace craft events
+     * Furnace craft events
      */
 
     @EventHandler
-    public void inventoryClick(InventoryClickEvent event)
-    {
-        try
-        {
+    public void inventoryClick(InventoryClickEvent event) {
+        try {
             Inventory inv = event.getInventory();
 
-            if(inv instanceof FurnaceInventory)
-            {
+            if (inv instanceof FurnaceInventory) {
                 InventoryHolder holder = inv.getHolder();
 
-                if(holder != null && holder instanceof Furnace)
-                {
+                if (holder != null && holder instanceof Furnace) {
                     HumanEntity ent = event.getWhoClicked();
 
-                    if(ent == null || ent instanceof Player == false)
-                    {
+                    if (ent == null || ent instanceof Player == false) {
                         return;
                     }
 
-                    furnaceClick(event, (Furnace)holder, (Player)ent);
+                    furnaceClick(event, (Furnace) holder, (Player) ent);
                 }
 
                 return;
             }
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             event.setCancelled(true);
-            CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player)event.getWhoClicked() : null);
+            CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player) event.getWhoClicked() : null);
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
-    private void furnaceClick(InventoryClickEvent event, Furnace furnace, Player player) throws Throwable
-    {
-        if(!RecipeManager.getPlugin().canCraft(player))
-        {
+    private void furnaceClick(InventoryClickEvent event, Furnace furnace, Player player) throws Throwable {
+        if (!RecipeManager.getPlugin().canCraft(player)) {
             event.setCancelled(true);
             return;
         }
 
-        if(event.getRawSlot() == -1)
-        {
+        if (event.getRawSlot() == -1) {
             return;
         }
 
@@ -675,20 +563,17 @@ public class Events implements Listener
         ItemStack clicked = event.getCurrentItem();
         int slot = event.getRawSlot();
 
-        switch(slot)
-        {
+        switch (slot) {
             case 0: // INGREDIENT slot
             case 1: // FUEL slot
             {
                 // TODO middle click detection required
-                if(event.isShiftClick() /* || event.isMiddleClick() */)
-                {
+                if (event.isShiftClick() /* || event.isMiddleClick() */) {
                     cursor = null; // if you're shift+clicking or using middle click on the slot then you're not placing anything
                 }
 
-                if(!furnaceModifySlot(furnace, inv, player, slot, cursor))
-                {
-//                    Messages.debug("CANCELLED!");
+                if (!furnaceModifySlot(furnace, inv, player, slot, cursor)) {
+                    // Messages.debug("CANCELLED!");
                     event.setCancelled(true);
                     new UpdateInventory(player, 0);
                     return;
@@ -704,8 +589,7 @@ public class Events implements Listener
 
             default: // player inventory - Shift+Click handling in player inventory while having furnace UI opened
             {
-                if(slot == -999 || !event.isShiftClick() || clicked == null || clicked.getTypeId() == 0)
-                {
+                if (slot == -999 || !event.isShiftClick() || clicked == null || clicked.getTypeId() == 0) {
                     return; // abort if clicked outside of inventory OR not shift+click OR clicked on empty slot
                 }
 
@@ -718,36 +602,30 @@ public class Events implements Listener
                 boolean similarItems = clicked.isSimilar(item); // Check if the clicked item is similar to the item at the targeted slot
 
                 // Check if it's normal shift+click mode setting and if targeted slot is the fuel slot and there is an item there but it's not similar to our clicked item
-                if(RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' && targetSlot == 1 && item != null && !similarItems)
-                {
+                if (RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' && targetSlot == 1 && item != null && !similarItems) {
                     targetSlot = 0; // change the target slot to ingredient slot
                     item = inv.getItem(targetSlot); // get the item at the new set slot
                     similarItems = clicked.isSimilar(item); // update similarity check
                 }
 
-                if(item == null || item.getTypeId() == 0) // If targeted item slot is empty
+                if (item == null || item.getTypeId() == 0) // If targeted item slot is empty
                 {
                     // Check if item is allowed to be placed on that slot
-                    if(furnaceModifySlot(furnace, inv, player, targetSlot, clicked))
-                    {
+                    if (furnaceModifySlot(furnace, inv, player, targetSlot, clicked)) {
                         inv.setItem(targetSlot, clicked); // send the item to the slot
                         event.setCurrentItem(null); // clear the clicked slot
                         event.setCancelled(true); // cancel only if we're going to mess with the items
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
-                    }
-                    else
-                    {
+                    } else {
                         event.setCancelled(true);
                     }
-                }
-                else
-                {
+                } else {
                     // Otherwise the targeted slot contains some item, need to identify if we can stack over it
 
                     int maxStack = Math.max(inv.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
                     int itemAmount = item.getAmount(); // get how many items there are in the stack
 
-                    if(similarItems && itemAmount < maxStack) // if item has room for more and they're similar
+                    if (similarItems && itemAmount < maxStack) // if item has room for more and they're similar
                     {
                         event.setCancelled(true); // cancel only if we're going to mess with the items
 
@@ -756,12 +634,9 @@ public class Events implements Listener
 
                         item.setAmount(Math.min(amount, maxStack)); // set the amount of targeted slot to the added amount OR max stack if it's exceeded
 
-                        if(diff > 0)
-                        {
+                        if (diff > 0) {
                             clicked.setAmount(diff); // reduce stack amount from clicked stack if there are leftovers
-                        }
-                        else
-                        {
+                        } else {
                             event.setCurrentItem(null); // entirely remove the clicked stack if there are no leftovers
                         }
 
@@ -772,36 +647,29 @@ public class Events implements Listener
         }
     }
 
-    private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable
-    {
+    private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
         // TODO NOTE: Don't rely on AMOUNTS until the event is updated!
 
-        if(furnace.getBurnTime() > 0)
-        {
-//            Messages.debug("furnace is burning...");
+        if (furnace.getBurnTime() > 0) {
+            // Messages.debug("furnace is burning...");
 
             ItemStack i = Tools.Item.nullIfAir(slot == 0 ? item : inv.getSmelting());
             ItemStack f = Tools.Item.nullIfAir(inv.getFuel());
 
             SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(i);
 
-            if(sr == null && f != null)
-            {
+            if (sr == null && f != null) {
                 sr = RecipeManager.getRecipes().getSmeltRecipeWithFuel(f);
             }
 
-            if(sr != null && sr.hasFuel())
-            {
-//                Messages.debug("recipe is smelt+fuel...");
+            if (sr != null && sr.hasFuel()) {
+                // Messages.debug("recipe is smelt+fuel...");
 
-                if(item != null && item.isSimilar(slot == 0 ? inv.getSmelting() : f))
-                {
-//                    Messages.debug("recipe is smelt+fuel but added similar items!");
-                }
-                else
-                {
-//                    Messages.debug("recipe is a smelt+fuel recipe, removing active burntime...");
-                    furnace.setBurnTime((short)0);
+                if (item != null && item.isSimilar(slot == 0 ? inv.getSmelting() : f)) {
+                    // Messages.debug("recipe is smelt+fuel but added similar items!");
+                } else {
+                    // Messages.debug("recipe is a smelt+fuel recipe, removing active burntime...");
+                    furnace.setBurnTime((short) 0);
                 }
             }
         }
@@ -811,32 +679,23 @@ public class Events implements Listener
 
         // TODO remove this debug
         /*
-        if(slot == 0)
-        {
-            Messages.debug("<green>Placed ingredient: " + Tools.Item.print(ingredient));
-        }
-
-        if(slot == 1)
-        {
-            Messages.debug("<green>Placed fuel: " + Tools.Item.print(fuel));
-        }
-        */
+         * if(slot == 0) { Messages.debug("<green>Placed ingredient: " + Tools.Item.print(ingredient)); }
+         * 
+         * if(slot == 1) { Messages.debug("<green>Placed fuel: " + Tools.Item.print(fuel)); }
+         */
 
         FurnaceData data = Furnaces.get(furnace.getLocation());
 
-        if(slot == 0)
-        {
+        if (slot == 0) {
             data.setFrozen(false);
 
-            if(ingredient != null)
-            {
+            if (ingredient != null) {
                 data.setSmelter(player);
                 data.setSmelting(ingredient);
             }
         }
 
-        if(slot == 1 && fuel != null)
-        {
+        if (slot == 1 && fuel != null) {
             data.setFueler(player);
             data.setFuel(fuel);
         }
@@ -844,53 +703,41 @@ public class Events implements Listener
         SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
         Location location = furnace.getLocation();
 
-        if(smeltRecipe == null && fuel != null)
-        {
+        if (smeltRecipe == null && fuel != null) {
             smeltRecipe = RecipeManager.getRecipes().getSmeltRecipeWithFuel(fuel);
         }
 
-        if(smeltRecipe != null)
-        {
-//            Messages.debug("INGR = " + Tools.Item.print(smeltRecipe.getIngredient()) + " | " + Tools.Item.print(ingredient));
-//            Messages.debug("FUEL = " + Tools.Item.print(smeltRecipe.getFuel()) + " | " + Tools.Item.print(fuel));
+        if (smeltRecipe != null) {
+            // Messages.debug("INGR = " + Tools.Item.print(smeltRecipe.getIngredient()) + " | " + Tools.Item.print(ingredient));
+            // Messages.debug("FUEL = " + Tools.Item.print(smeltRecipe.getFuel()) + " | " + Tools.Item.print(fuel));
 
-            if(smeltRecipe.hasFuel() && fuel != null && ingredient != null)
-            {
-                if(!Tools.Item.isSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient))
-                {
+            if (smeltRecipe.hasFuel() && fuel != null && ingredient != null) {
+                if (!Tools.Item.isSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient)) {
                     Messages.SMELT_FUEL_NEEDINGREDIENT.print(player, null, "{ingredient}", Tools.Item.print(smeltRecipe.getIngredient()), "{fuel}", Tools.Item.print(smeltRecipe.getFuel()));
                     return false;
                 }
 
-                if(!Tools.Item.isSimilarDataWildcard(smeltRecipe.getFuel(), fuel))
-                {
+                if (!Tools.Item.isSimilarDataWildcard(smeltRecipe.getFuel(), fuel)) {
                     Messages.SMELT_FUEL_NEEDFUEL.print(player, null, "{ingredient}", Tools.Item.print(smeltRecipe.getIngredient()), "{fuel}", Tools.Item.print(smeltRecipe.getFuel()));
                     return false;
                 }
             }
 
-            if(slot == 0)
-            {
+            if (slot == 0) {
                 Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(ingredient).build();
 
-                if(smeltRecipe.checkFlags(a))
-                {
+                if (smeltRecipe.checkFlags(a)) {
                     a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                     a.clear();
 
-                    if(smeltRecipe.sendPrepare(a))
-                    {
+                    if (smeltRecipe.sendPrepare(a)) {
                         a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return false;
                     }
-                }
-                else
-                {
+                } else {
                     a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                     return false;
                 }
@@ -899,30 +746,22 @@ public class Events implements Listener
 
         FuelRecipe fuelRecpe = RecipeManager.getRecipes().getFuelRecipe(fuel);
 
-        if(fuelRecpe != null)
-        {
-            if(slot == 1)
-            {
+        if (fuelRecpe != null) {
+            if (slot == 1) {
                 Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(fuel).build();
 
-                if(fuelRecpe.checkFlags(a))
-                {
+                if (fuelRecpe.checkFlags(a)) {
                     a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                     a.clear();
 
-                    if(fuelRecpe.sendPrepare(a))
-                    {
+                    if (fuelRecpe.sendPrepare(a)) {
                         a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return false;
                     }
-                }
-                else
-                {
+                } else {
                     a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                     return false;
                 }
@@ -932,49 +771,38 @@ public class Events implements Listener
         return true;
     }
 
-    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft)
-    {
-        if(flaggable == null)
-        {
+    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft) {
+        if (flaggable == null) {
             return false;
         }
 
-        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location())); // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
+        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location())); // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}",
+                                                                                                        // Tools.Item.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
 
         a.clear();
 
-        if(flaggable.checkFlags(a))
-        {
+        if (flaggable.checkFlags(a)) {
             a.sendEffects(a.player(), msg);
-        }
-        else
-        {
+        } else {
             a.sendReasons(a.player(), msg);
             return false;
         }
 
         a.clear();
 
-        if(flaggable.sendPrepare(a))
-        {
+        if (flaggable.sendPrepare(a)) {
             a.sendEffects(a.player(), msg);
-        }
-        else
-        {
+        } else {
             a.sendReasons(a.player(), msg);
             return false;
         }
 
-        if(craft)
-        {
+        if (craft) {
             a.clear();
 
-            if(flaggable.sendCrafted(a))
-            {
+            if (flaggable.sendCrafted(a)) {
                 a.sendEffects(a.player(), msg);
-            }
-            else
-            {
+            } else {
                 a.sendReasons(a.player(), msg);
                 return false;
             }
@@ -986,78 +814,59 @@ public class Events implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void furnaceBurn(FurnaceBurnEvent event)
-    {
-        try
-        {
-            Furnace furnace = (Furnace)event.getBlock().getState();
+    public void furnaceBurn(FurnaceBurnEvent event) {
+        try {
+            Furnace furnace = (Furnace) event.getBlock().getState();
             FurnaceData data = Furnaces.get(furnace.getLocation());
             int time = furnaceBurnTime(event, furnace, data);
 
-            if(time == -1)
-            {
+            if (time == -1) {
                 data.setBurnTicks(furnace.getBurnTime());
                 return;
             }
 
-            if(time == 0)
-            {
+            if (time == 0) {
                 event.setCancelled(true);
-            }
-            else
-            {
+            } else {
                 event.setBurning(true);
                 event.setBurnTime(time);
             }
 
             data.setBurnTicks(!event.isCancelled() && event.isBurning() ? event.getBurnTime() : 0);
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             event.setCancelled(true);
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
-    private int furnaceBurnTime(FurnaceBurnEvent event, Furnace furnace, FurnaceData data)
-    {
+    private int furnaceBurnTime(FurnaceBurnEvent event, Furnace furnace, FurnaceData data) {
         FuelRecipe fr = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
         FurnaceInventory inv = furnace.getInventory();
 
-        if(fr != null)
-        {
-            if(fr.hasFlag(FlagType.REMOVE))
-            {
+        if (fr != null) {
+            if (fr.hasFlag(FlagType.REMOVE)) {
                 return 0;
             }
 
             Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
 
-            if(!furnaceHandleFlaggable(fr, a, true))
-            {
+            if (!furnaceHandleFlaggable(fr, a, true)) {
                 return 0;
             }
 
             return fr.getBurnTicks();
-        }
-        else
-        {
+        } else {
             // Smelting recipe with specific fuel
             ItemStack ingredient = furnace.getInventory().getSmelting();
             SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
 
-            if(sr != null)
-            {
-                if(!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel()))
-                {
+            if (sr != null) {
+                if (!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel())) {
                     return 0;
-                }
-                else
-                {
+                } else {
                     Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
 
-                    if(!furnaceHandleFlaggable(sr, a, true))
-                    {
+                    if (!furnaceHandleFlaggable(sr, a, true)) {
                         return 0;
                     }
 
@@ -1074,53 +883,42 @@ public class Events implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void furnaceSmelt(FurnaceSmeltEvent event)
-    {
-        try
-        {
+    public void furnaceSmelt(FurnaceSmeltEvent event) {
+        try {
             SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(event.getSource());
 
-            if(recipe == null)
-            {
+            if (recipe == null) {
                 return;
             }
 
-            Furnace furnace = (Furnace)event.getBlock().getState();
+            Furnace furnace = (Furnace) event.getBlock().getState();
             FurnaceInventory inv = furnace.getInventory();
 
             // Special handling if the recipe has a predefined fuel in it
-            if(recipe.hasFuel())
-            {
+            if (recipe.hasFuel()) {
                 ItemStack fuel = Tools.Item.nullIfAir(inv.getFuel());
 
-                if(fuel != null)
-                {
+                if (fuel != null) {
                     int amount = fuel.getAmount() - 1;
 
-                    if(amount > 0)
-                    {
+                    if (amount > 0) {
                         fuel.setAmount(amount);
-                    }
-                    else
-                    {
+                    } else {
                         inv.setFuel(null);
                     }
 
                     ItemStack smelting = Tools.Item.nullIfAir(inv.getSmelting());
 
-                    if(smelting != null && smelting.getAmount() <= 1)
-                    {
+                    if (smelting != null && smelting.getAmount() <= 1) {
                         smelting = null;
                     }
 
-                    if(inv.getFuel() == null || smelting == null)
-                    {
-                        furnace.setBurnTime((short)0);
+                    if (inv.getFuel() == null || smelting == null) {
+                        furnace.setBurnTime((short) 0);
 
                         FurnaceData data = Furnaces.get(furnace.getLocation());
 
-                        if(data != null)
-                        {
+                        if (data != null) {
                             data.setBurnTicks(0);
                         }
                     }
@@ -1133,93 +931,70 @@ public class Events implements Listener
 
             ItemResult result = recipe.getResult(a);
 
-            if(!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true)))
-            {
-                if(a.hasPlayer())
-                {
+            if (!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true))) {
+                if (a.hasPlayer()) {
                     Messages.SMELT_FROZEN.print(a.player(), null, "{location}", Tools.printLocation(a.location()));
                 }
 
                 data.setFrozen(true);
                 event.setCancelled(true);
-            }
-            else
-            {
-                if(a.result() == null || a.result().getTypeId() == 0)
-                {
+            } else {
+                if (a.result() == null || a.result().getTypeId() == 0) {
                     recipe.subtractIngredient(inv, false);
                     event.setCancelled(true);
-                }
-                else
-                {
+                } else {
                     recipe.subtractIngredient(inv, true);
                     event.setResult(a.result());
                 }
             }
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             event.setCancelled(true);
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void furnaceTakeResult(FurnaceExtractEvent event)
-    {
-        try
-        {
-            if(event.getExpToDrop() == 0)
-            {
+    public void furnaceTakeResult(FurnaceExtractEvent event) {
+        try {
+            if (event.getExpToDrop() == 0) {
                 return;
             }
 
             BlockState state = event.getBlock().getState();
 
-            if(state instanceof Furnace == false)
-            {
+            if (state instanceof Furnace == false) {
                 return; // highly unlikely but better safe than sorry
             }
 
-            SmeltRecipe recipe = furnaceResultRecipe((Furnace)state);
+            SmeltRecipe recipe = furnaceResultRecipe((Furnace) state);
 
-            if(recipe != null)
-            {
+            if (recipe != null) {
                 event.setExpToDrop(0);
             }
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
-    private SmeltRecipe furnaceResultRecipe(Furnace furnace)
-    {
+    private SmeltRecipe furnaceResultRecipe(Furnace furnace) {
         ItemStack ingredient = Tools.Item.nullIfAir(furnace.getInventory().getSmelting());
         SmeltRecipe smeltRecipe = null;
         ItemStack result = furnace.getInventory().getResult();
 
-        if(ingredient == null)
-        {
+        if (ingredient == null) {
             // Guess recipe by result - inaccurate
 
-            if(result == null)
-            {
+            if (result == null) {
                 return null;
             }
 
-            for(SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values())
-            {
-                if(result.isSimilar(r.getResult()))
-                {
+            for (SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values()) {
+                if (result.isSimilar(r.getResult())) {
                     smeltRecipe = r;
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
         }
 
@@ -1228,68 +1003,50 @@ public class Events implements Listener
 
     // TODO find a way to detect if event actually moved an item !
     @EventHandler
-    public void inventoryItemMove(InventoryMoveItemEvent event)
-    {
-        try
-        {
-            if(event.getDestination() instanceof FurnaceInventory)
-            {
+    public void inventoryItemMove(InventoryMoveItemEvent event) {
+        try {
+            if (event.getDestination() instanceof FurnaceInventory) {
                 int slot = hopperFurnaceSlot(event.getSource(), false);
 
-                if(slot < 0)
-                {
+                if (slot < 0) {
                     return;
                 }
 
-                FurnaceInventory inv = (FurnaceInventory)event.getDestination();
+                FurnaceInventory inv = (FurnaceInventory) event.getDestination();
                 Furnace furnace = inv.getHolder();
 
                 // TODO get player that placed the initial item in the hopper ?
 
-                if(!furnaceModifySlot(furnace, inv, null, slot, event.getItem()))
-                {
+                if (!furnaceModifySlot(furnace, inv, null, slot, event.getItem())) {
                     event.setCancelled(true);
                 }
             }
             /*
-            else if(event.getSource() instanceof FurnaceInventory)
-            {
-                SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
-
-                if(slot == null)
-                {
-                    return;
-                }
-
-                Messages.debug("RESULT TAKEN FROM FURNACE: " + event.getItem());
-            }
-            */
-        }
-        catch(Throwable e)
-        {
+             * else if(event.getSource() instanceof FurnaceInventory) { SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
+             * 
+             * if(slot == null) { return; }
+             * 
+             * Messages.debug("RESULT TAKEN FROM FURNACE: " + event.getItem()); }
+             */
+        } catch (Throwable e) {
             event.setCancelled(true);
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
-    private int hopperFurnaceSlot(Inventory inventory, boolean take)
-    {
-        if(inventory != null)
-        {
+    private int hopperFurnaceSlot(Inventory inventory, boolean take) {
+        if (inventory != null) {
             InventoryHolder hopperHolder = inventory.getHolder();
 
-            if(hopperHolder instanceof Hopper)
-            {
-                if(take)
-                {
+            if (hopperHolder instanceof Hopper) {
+                if (take) {
                     return 2; // RESULT
                 }
 
-                Hopper hopper = ((Hopper)hopperHolder);
+                Hopper hopper = ((Hopper) hopperHolder);
                 Dispenser dir = new Dispenser(0, hopper.getRawData());
 
-                switch(dir.getFacing())
-                {
+                switch (dir.getFacing()) {
                     case NORTH:
                     case SOUTH:
                     case EAST:
@@ -1306,34 +1063,26 @@ public class Events implements Listener
     }
 
     /*
-     *  Furnace monitor events
+     * Furnace monitor events
      */
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void blockPlace(BlockPlaceEvent event)
-    {
+    public void blockPlace(BlockPlaceEvent event) {
         placeOrBreakFurnace(event.getBlock(), true);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void blockBreak(BlockBreakEvent event)
-    {
+    public void blockBreak(BlockBreakEvent event) {
         placeOrBreakFurnace(event.getBlock(), false);
     }
 
-    private void placeOrBreakFurnace(Block block, boolean place)
-    {
-        switch(block.getType())
-        {
+    private void placeOrBreakFurnace(Block block, boolean place) {
+        switch (block.getType()) {
             case BURNING_FURNACE:
-            case FURNACE:
-            {
-                if(place)
-                {
+            case FURNACE: {
+                if (place) {
                     Furnaces.add(block.getLocation());
-                }
-                else
-                {
+                } else {
                     Furnaces.remove(block.getLocation());
                 }
             }
@@ -1341,69 +1090,54 @@ public class Events implements Listener
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void worldLoad(WorldLoadEvent event)
-    {
+    public void worldLoad(WorldLoadEvent event) {
         worldLoad(event.getWorld());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void chunkLoad(ChunkLoadEvent event)
-    {
-        if(!event.isNewChunk())
-        {
+    public void chunkLoad(ChunkLoadEvent event) {
+        if (!event.isNewChunk()) {
             findFurnaces(event.getChunk(), true);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void chunkUnload(ChunkUnloadEvent event)
-    {
+    public void chunkUnload(ChunkUnloadEvent event) {
         findFurnaces(event.getChunk(), false);
     }
 
-    protected void worldLoad(World world)
-    {
+    protected void worldLoad(World world) {
         Chunk chunks[] = world.getLoadedChunks();
 
-        for(Chunk chunk : chunks)
-        {
+        for (Chunk chunk : chunks) {
             findFurnaces(chunk, true);
         }
     }
 
-    private void findFurnaces(final Chunk chunk, final boolean add)
-    {
-        if(chunk == null || !chunk.isLoaded())
-        {
+    private void findFurnaces(final Chunk chunk, final boolean add) {
+        if (chunk == null || !chunk.isLoaded()) {
             return;
         }
 
         BlockState[] tileEntities = null;
 
         // Workaround for CB issues with block states.
-        try
-        {
+        try {
             tileEntities = chunk.getTileEntities();
         }
         // Loading Error for chunk at chunk.getX(), chunk.getZ(). Attempting workaround...
-        catch(Throwable e)
-        {
+        catch (Throwable e) {
             List<BlockState> list = new ArrayList<BlockState>(32);
             int maxY = chunk.getWorld().getMaxHeight();
 
-            for(int x = 0; x < 16; x++)
-            {
-                for(int z = 0; z < 16; z++)
-                {
-                    for(int y = 0; y < maxY; y++)
-                    {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    for (int y = 0; y < maxY; y++) {
                         Block block = chunk.getBlock(x, y, z);
 
-                        switch(block.getType())
-                        {
+                        switch (block.getType()) {
                             case FURNACE:
-                            case BURNING_FURNACE:
-                            {
+                            case BURNING_FURNACE: {
                                 list.add(block.getState());
                                 break;
                             }
@@ -1417,77 +1151,62 @@ public class Events implements Listener
 
         Set<BlockID> added = (add ? new HashSet<BlockID>(tileEntities.length) : null);
 
-        for(BlockState state : tileEntities)
-        {
-            if(state instanceof Furnace)
-            {
+        for (BlockState state : tileEntities) {
+            if (state instanceof Furnace) {
                 BlockID id = BlockID.fromLocation(state.getLocation());
 
-                if(add)
-                {
-                    Furnaces.set(id, (Furnace)state);
+                if (add) {
+                    Furnaces.set(id, (Furnace) state);
                     added.add(id);
-                }
-                else
-                {
+                } else {
                     Furnaces.remove(id);
                 }
             }
         }
 
-        if(add)
-        {
+        if (add) {
             Furnaces.cleanChunk(chunk, added);
         }
     }
 
     /*
-     *  Marked item monitor events
+     * Marked item monitor events
      */
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void playerItemHeld(PlayerItemHeldEvent event)
-    {
+    public void playerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
-        if(RecipeManager.getSettings().UPDATE_BOOKS)
-        {
+        if (RecipeManager.getSettings().UPDATE_BOOKS) {
             RecipeManager.getRecipeBooks().updateBook(player, player.getInventory().getItem(event.getNewSlot()));
         }
 
-        if(RecipeManager.getSettings().FIX_MOD_RESULTS)
-        {
+        if (RecipeManager.getSettings().FIX_MOD_RESULTS) {
             itemProcess(event.getPlayer().getInventory().getItem(event.getNewSlot()));
         }
     }
 
-    private void itemProcess(ItemStack item)
-    {
-        if(item == null || !item.hasItemMeta())
-        {
+    private void itemProcess(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
             return;
         }
 
         ItemMeta meta = item.getItemMeta();
 
-        if(meta == null)
-        {
+        if (meta == null) {
             return;
         }
 
         List<String> lore = meta.getLore();
 
-        if(lore == null || lore.isEmpty())
-        {
+        if (lore == null || lore.isEmpty()) {
             return;
         }
 
-        for(int i = 0; i < lore.size(); i++)
-        {
+        for (int i = 0; i < lore.size(); i++) {
             String s = lore.get(i);
 
-            if(s != null && s.startsWith(Recipes.RECIPE_ID_STRING))
-            {
+            if (s != null && s.startsWith(Recipes.RECIPE_ID_STRING)) {
                 lore.remove(i);
                 meta.setLore(lore);
                 item.setItemMeta(meta);
@@ -1496,54 +1215,45 @@ public class Events implements Listener
     }
 
     /*
-     *  Update check notifier
+     * Update check notifier
      */
 
     @EventHandler
-    public void playerJoin(PlayerJoinEvent event)
-    {
+    public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         Players.addJoined(player);
 
-        if(RecipeManager.getSettings().UPDATE_CHECK_ENABLED && player.hasPermission("recipemanager.command.rmupdate"))
-        {
+        if (RecipeManager.getSettings().UPDATE_CHECK_ENABLED && player.hasPermission("recipemanager.command.rmupdate")) {
             String newVersion = UpdateChecker.getNewVersion();
             String version = RecipeManager.getPlugin().getDescription().getVersion();
 
-            if(!version.equalsIgnoreCase(newVersion))
-            {
+            if (!version.equalsIgnoreCase(newVersion)) {
                 Messages.send(player, "[RecipeManager] New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + version + "<reset>, grab it at: <light_purple>" + UpdateChecker.getNewLink());
             }
         }
     }
 
     /*
-     *  Update inventory inner helper class
+     * Update inventory inner helper class
      */
 
-    private class UpdateInventory extends BukkitRunnable
-    {
+    private class UpdateInventory extends BukkitRunnable {
         private final Player player;
 
-        public UpdateInventory(Player player, int ticks)
-        {
+        public UpdateInventory(Player player, int ticks) {
             this.player = player;
 
-            if(ticks <= 0)
-            {
+            if (ticks <= 0) {
                 run();
-            }
-            else
-            {
+            } else {
                 runTaskLater(RecipeManager.getPlugin(), ticks);
             }
         }
 
         @SuppressWarnings("deprecation")
         @Override
-        public void run()
-        {
+        public void run() {
             player.updateInventory();
         }
     }

@@ -30,11 +30,9 @@ import ro.thehunters.digi.recipeManager.flags.Args;
 import ro.thehunters.digi.recipeManager.flags.FlagType;
 
 /**
- * RecipeManager's main class<br>
- * It has static methods for the API.
+ * RecipeManager's main class<br> It has static methods for the API.
  */
-public class RecipeManager extends JavaPlugin
-{
+public class RecipeManager extends JavaPlugin {
     protected static RecipeManager plugin;
     protected static Recipes recipes;
     protected static RecipeBooks recipeBooks;
@@ -50,27 +48,22 @@ public class RecipeManager extends JavaPlugin
     public static final Random random = new Random();
 
     @Override
-    public void onEnable()
-    {
-        if(plugin != null)
-        {
+    public void onEnable() {
+        if (plugin != null) {
             Messages.info(ChatColor.RED + "Plugin is already enabled!");
             return;
         }
 
         // wait for all plugins to load then init this...
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 onEnablePost();
             }
         }.runTask(this);
     }
 
-    private void onEnablePost()
-    {
+    private void onEnablePost() {
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         plugin = this;
@@ -117,38 +110,34 @@ public class RecipeManager extends JavaPlugin
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-    {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage("Please wait for the plugin to fully (re)initialize...");
         return true;
     }
 
     /**
      * Reload RecipeManager's settings, messages, etc and re-parse recipes.
-     *
+     * 
      * @param sender
      *            To whom to send the messages to, null = console.
      * @param check
      *            Set to true to only check recipes, settings are un affected.
      */
-    public void reload(CommandSender sender, boolean check)
-    {
+    public void reload(CommandSender sender, boolean check) {
         boolean previousClearRecipes = (settings == null ? false : settings.CLEAR_RECIPES);
 
         Settings.reload(sender); // (re)load settings
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
 
-        if(settings.UPDATE_CHECK_ENABLED)
-        {
+        if (settings.UPDATE_CHECK_ENABLED) {
             UpdateChecker.start();
 
             new UpdateChecker(sender);
         }
 
-        if(metrics == null)
-        {
-            if(settings.METRICS) // start/stop metrics accordingly
+        if (metrics == null) {
+            if (settings.METRICS) // start/stop metrics accordingly
             {
                 try {
                     metrics = new Metrics(this);
@@ -157,21 +146,15 @@ public class RecipeManager extends JavaPlugin
                     e.printStackTrace();
                 }
             }
-        }
-        else if(metrics != null)
-        {
+        } else if (metrics != null) {
             metrics.stop();
         }
 
-        if(previousClearRecipes != settings.CLEAR_RECIPES)
-        {
-            if(settings.CLEAR_RECIPES)
-            {
+        if (previousClearRecipes != settings.CLEAR_RECIPES) {
+            if (settings.CLEAR_RECIPES) {
                 Vanilla.removeAllButSpecialRecipes();
                 Recipes.getInstance().clean();
-            }
-            else
-            {
+            } else {
                 Vanilla.restoreInitialRecipes();
                 Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
 
@@ -183,14 +166,11 @@ public class RecipeManager extends JavaPlugin
         Events.reload(); // (re)register events
     }
 
-    private void scanPlugins()
-    {
+    private void scanPlugins() {
         String packageName;
 
-        for(Plugin plugin : getServer().getPluginManager().getPlugins())
-        {
-            if(plugin instanceof RecipeManager)
-            {
+        for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
+            if (plugin instanceof RecipeManager) {
                 continue;
             }
 
@@ -201,27 +181,23 @@ public class RecipeManager extends JavaPlugin
         }
     }
 
-    protected String getPluginCaller(String method)
-    {
+    protected String getPluginCaller(String method) {
         String packageName;
         String pluginName;
         StackTraceElement[] traces = new Exception().getStackTrace();
         StackTraceElement trace;
 
-        for(int i = 0; i < traces.length; i++)
-        {
+        for (int i = 0; i < traces.length; i++) {
             trace = traces[i];
 
-            if(trace.getMethodName().equals(method) && traces.length >= i)
-            {
+            if (trace.getMethodName().equals(method) && traces.length >= i) {
                 trace = traces[++i];
 
                 packageName = trace.getClassName();
                 packageName = packageName.substring(0, packageName.lastIndexOf('.'));
                 pluginName = plugins.get(packageName);
 
-                if(pluginName != null)
-                {
+                if (pluginName != null) {
                     return pluginName;
                 }
 
@@ -235,14 +211,11 @@ public class RecipeManager extends JavaPlugin
     }
 
     @Override
-    public void onDisable()
-    {
-        try
-        {
+    public void onDisable() {
+        try {
             Bukkit.getScheduler().cancelTasks(this);
 
-            if(plugin == null)
-            {
+            if (plugin == null) {
                 return;
             }
 
@@ -274,16 +247,13 @@ public class RecipeManager extends JavaPlugin
             permissions.clean();
             permissions = null;
 
-            if(metrics != null)
-            {
+            if (metrics != null) {
                 metrics.stop();
                 metrics = null;
             }
 
             plugin = null;
-        }
-        catch(Throwable e)
-        {
+        } catch (Throwable e) {
             Messages.error(null, e, null);
         }
     }
@@ -292,8 +262,7 @@ public class RecipeManager extends JavaPlugin
      * @return plugin's main class
      * @throws
      */
-    public static RecipeManager getPlugin()
-    {
+    public static RecipeManager getPlugin() {
         validatePluginEnabled();
         return plugin;
     }
@@ -301,60 +270,53 @@ public class RecipeManager extends JavaPlugin
     /**
      * @return Recipes class
      */
-    public static Recipes getRecipes()
-    {
+    public static Recipes getRecipes() {
         validatePluginEnabled();
         return recipes;
     }
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
+     * 
      * @return RecipeBooks class
      */
-    public static RecipeBooks getRecipeBooks()
-    {
+    public static RecipeBooks getRecipeBooks() {
         validatePluginEnabled();
         return recipeBooks;
     }
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
+     * 
      * @return Configured settings
      */
-    public static Settings getSettings()
-    {
+    public static Settings getSettings() {
         validatePluginEnabled();
         return settings;
     }
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
+     * 
      * @return Economy methods
      */
-    public static Economy getEconomy()
-    {
+    public static Economy getEconomy() {
         validatePluginEnabled();
         return economy;
     }
 
     /**
      * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
+     * 
      * @return hooked permissions from Vault
      */
-    public static Permissions getPermissions()
-    {
+    public static Permissions getPermissions() {
         validatePluginEnabled();
         return permissions;
     }
 
-    private static void validatePluginEnabled()
-    {
-        if(!isPluginFullyEnabled())
-        {
+    private static void validatePluginEnabled() {
+        if (!isPluginFullyEnabled()) {
             throw new IllegalAccessError("RecipeManager is not fully enabled at this point! Listen to RecipeManagerEnabledEvent.");
         }
     }
@@ -362,19 +324,17 @@ public class RecipeManager extends JavaPlugin
     /**
      * @return True if plugin is fully enabled and can be used
      */
-    public static boolean isPluginFullyEnabled()
-    {
+    public static boolean isPluginFullyEnabled() {
         return plugin != null;
     }
 
     /**
      * Checks sender's <i>recipemanager.craft</i> permission
-     *
+     * 
      * @param sender
      * @return True if sender has the permission.
      */
-    public boolean canCraft(CommandSender sender)
-    {
+    public boolean canCraft(CommandSender sender) {
         return (sender == null ? true : sender.hasPermission("recipemanager.craft"));
     }
 }
