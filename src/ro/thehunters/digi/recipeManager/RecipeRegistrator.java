@@ -43,7 +43,7 @@ public class RecipeRegistrator {
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid ! Needs at least one result and exacly 9 ingredient slots, empty ones can be null.");
+            throw new IllegalArgumentException("Recipe is invalid ! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
         }
 
         queuedRecipes.remove(recipe); // if exists, update key too !

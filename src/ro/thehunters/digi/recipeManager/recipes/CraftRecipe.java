@@ -65,14 +65,14 @@ public class CraftRecipe extends WorkbenchRecipe {
     }
 
     /**
-     * Set the ingredients matrix. <br> This also calculates the width and height of the shape matrix.<br> <b>NOTE: Array must have exacly 9 elements, use null for empty slots.</b>
+     * Set the ingredients matrix. <br> This also calculates the width and height of the shape matrix.<br> <b>NOTE: Array must have exactly 9 elements, use null for empty slots.</b>
      *
      * @param ingredients
      *            ingredients matrix, this also defines the shape, width and height.
      */
     public void setIngredients(ItemStack[] ingredients) {
         if (ingredients.length != 9) {
-            throw new IllegalArgumentException("Recipe must have exacly 9 items, use null to specify empty slots!");
+            throw new IllegalArgumentException("Recipe must have exactly 9 items, use null to specify empty slots!");
         }
 
         this.ingredients = ingredients;

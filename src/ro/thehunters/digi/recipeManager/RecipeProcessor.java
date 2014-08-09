@@ -499,7 +499,7 @@ public class RecipeProcessor implements Runnable {
         for (ItemStack i : ingredients) {
             if (i != null && i.getType().getMaxDurability() > 0) {
                 if (toolType == i.getType()) {
-                    ErrorReporter.error("Recipes can't have exacly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEPITEM + " flag to keep it.");
+                    ErrorReporter.error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEPITEM + " flag to keep it.");
                     return false;
                 }
 
