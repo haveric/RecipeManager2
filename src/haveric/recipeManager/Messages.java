@@ -124,7 +124,7 @@ public enum Messages {
         this.message = message;
     }
 
-    private void asign() {
+    private void assign() {
         message = yml.getString(path, message); // get the message or use the predefined one if doesn't exist
 
         if (message != null && (message.isEmpty() || message.equals("false"))) {
@@ -163,7 +163,7 @@ public enum Messages {
         }
 
         for (Messages msg : values()) {
-            msg.asign();
+            msg.assign();
         }
 
         if (LASTCHANGED == null || LASTCHANGED.message == null || !LASTCHANGED.message.equals(Files.LASTCHANGED_MESSAGES)) {

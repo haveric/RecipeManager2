@@ -9,8 +9,8 @@ import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.RecipeInfo;
-import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import haveric.recipeManager.recipes.SmeltRecipe;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -36,7 +36,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-
 
 import com.google.common.collect.Sets;
 
@@ -150,7 +149,7 @@ public class RecipeBooks {
         yml.addDefault("settings.end", true);
         yml.addDefault("settings.customend", "");
 
-        // Create RecipeBook object and asign basic info
+        // Create RecipeBook object and assign basic info
         RecipeBook book = new RecipeBook(id);
 
         book.setTitle(Tools.parseColors(yml.getString("title"), false));

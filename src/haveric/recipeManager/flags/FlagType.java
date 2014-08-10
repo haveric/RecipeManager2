@@ -63,7 +63,7 @@ public enum FlagType {
     }
 
     /**
-     * @return the class asigned to this type (not the instance)
+     * @return the class assigned to this type (not the instance)
      */
     public Class<? extends Flag> getFlagClass() {
         return flagClass;
@@ -84,7 +84,7 @@ public enum FlagType {
     }
 
     /**
-     * @return a new instance of the class asigned to this type or null if failed and prints stack trace.
+     * @return a new instance of the class assigned to this type or null if failed and prints stack trace.
      */
     public Flag createFlagClass() {
         try {

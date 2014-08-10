@@ -122,7 +122,7 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Clones the flag and asigns it to a new flag container
+     * Clones the flag and assigns it to a new flag container
      *
      * @param container
      * @return

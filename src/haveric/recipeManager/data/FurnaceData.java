@@ -49,7 +49,7 @@ public class FurnaceData implements ConfigurationSerializable {
 
     /**
      * Deserialization constructor
-     * 
+     *
      * @param map
      */
     @SuppressWarnings("unchecked")
@@ -195,11 +195,11 @@ public class FurnaceData implements ConfigurationSerializable {
     }
 
     public void setBurnTicks(float ticks) {
-        this.burnTicks = ticks;
+        burnTicks = ticks;
     }
 
     /**
-     * @return furnace's total cooking time or null if not asigned.
+     * @return furnace's total cooking time or null if not assigned.
      */
     public Float getCookTime() {
         return cookTime;
@@ -207,7 +207,7 @@ public class FurnaceData implements ConfigurationSerializable {
 
     /**
      * Set furnace's total cooking time or null to unset.
-     * 
+     *
      * @param cookTime
      */
     public void setCookTime(Float cookTime) {
@@ -219,7 +219,7 @@ public class FurnaceData implements ConfigurationSerializable {
     }
 
     public void setCookProgress(float ticks) {
-        this.cookProgress = ticks;
+        cookProgress = ticks;
     }
 
     public short getCookProgressForFurnace() {

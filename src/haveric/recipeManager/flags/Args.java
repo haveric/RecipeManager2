@@ -3,8 +3,8 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
+import haveric.recipeManager.recipes.ItemResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.Inventory;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
- * 
+ *
  * @author Digi
  */
 public class Args {
@@ -74,7 +74,7 @@ public class Args {
 
     /**
      * Gets the Player object from either player() or playerName()
-     * 
+     *
      * @return player object or null if player just doesn't exist
      */
     public Player player() {
@@ -95,7 +95,7 @@ public class Args {
 
     /**
      * Gets a location from either location, player or playername arguments.
-     * 
+     *
      * @return null in case no location could be generated
      */
     public Location location() {
@@ -246,7 +246,7 @@ public class Args {
 
     /**
      * Start building an argument class for flag events
-     * 
+     *
      * @return linkable methods
      */
     public static ArgBuilder create() {
@@ -254,9 +254,9 @@ public class Args {
     }
 
     /**
-     * Re-processes the arguments to asign them in as many places as possible.<br> For example, if you only set player name, the player() will still be null, but by triggering this it will try to
-     * asign player() to an Player object.
-     * 
+     * Re-processes the arguments to assign them in as many places as possible.<br> For example, if you only set player name, the player() will still be null, but by triggering this it will try to
+     * assign player() to an Player object.
+     *
      * @return same instance
      */
     public Args processArgs() {
