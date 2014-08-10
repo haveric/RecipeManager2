@@ -331,11 +331,9 @@ public enum Messages {
 
         boolean removeColors = (!RecipeManager.getSettings().COLOR_CONSOLE && sender instanceof ConsoleCommandSender);
 
-        /* TODO: This doesn't do anything, should it?
-        for (String message : messages) {
-            message = Tools.parseColors(message, removeColors);
+        for (int i = 0; i < messages.length; i++) {
+            messages[i] = Tools.parseColors(messages[i], removeColors);
         }
-        */
 
         sender.sendMessage(messages);
     }
