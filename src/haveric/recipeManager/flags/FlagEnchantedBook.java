@@ -125,5 +125,7 @@ public class FlagEnchantedBook extends Flag {
         for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
             meta.addStoredEnchant(e.getKey(), e.getValue(), true);
         }
+
+        a.result().setItemMeta(meta);
     }
 }
