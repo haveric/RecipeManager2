@@ -5,9 +5,11 @@ import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -260,15 +262,24 @@ public class Args {
      * @return same instance
      */
     public Args processArgs() {
-        if (player() == null && playerName() != null) {
-            setPlayer(Bukkit.getPlayerExact(playerName()));
+        Player player = player();
+        String playerName = playerName();
+
+        if (player == null && playerName != null) {
+            try {
+                UUID uuid = UUIDFetcher.getUUIDOf(playerName);
+                setPlayer(Bukkit.getPlayer(uuid));
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
-        if (playerName() == null && player() != null) {
+        if (playerName == null && player != null) {
             setPlayerName(player().getName());
         }
 
-        if (location() == null && player() != null) {
+        if (location() == null && player != null) {
             setLocation(player().getLocation());
         }
 
