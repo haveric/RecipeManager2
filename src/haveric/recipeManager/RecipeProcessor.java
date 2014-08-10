@@ -5,15 +5,15 @@ import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeInfo;
+import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import haveric.recipeManager.recipes.RemoveResultRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
-import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -402,7 +402,9 @@ public class RecipeProcessor implements Runnable {
 
         recipe.setIngredients(ingredients); // done with ingredients, set'em
 
-        if (!recipe.hasFlag(FlagType.REMOVE)) {
+        if (recipe.hasFlag(FlagType.REMOVE)) {
+            nextLine(); // Skip the results line, if it exists
+        } else {
             // get results
             List<ItemResult> results = new ArrayList<ItemResult>();
 
