@@ -1,7 +1,8 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +105,7 @@ public class FlagHoldItem extends Flag {
 
             if (held != null) {
                 for (int i = 0; i < items.size(); i++) {
-                    if (Tools.Item.isSimilarDataWildcard(items.get(i), held)) {
+                    if (ToolsItem.isSimilarDataWildcard(items.get(i), held)) {
                         found = true;
                         break;
                     }
@@ -113,7 +114,7 @@ public class FlagHoldItem extends Flag {
                         s.append(", ");
                     }
 
-                    s.append(Tools.Item.print(items.get(i)));
+                    s.append(ToolsItem.print(items.get(i)));
                 }
             }
         }

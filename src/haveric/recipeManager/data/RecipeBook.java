@@ -3,8 +3,8 @@ package haveric.recipeManager.data;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeBooks;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -2,11 +2,12 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.Tools.ParseBit;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.tools.ParseBit;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class FlagKeepItem extends Flag {
         String key = item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());
 
         if (keepItems.containsKey(key)) {
-            ErrorReporter.warning("Flag " + getType() + " already has the '" + Tools.Item.print(item) + "' ingredient added.");
+            ErrorReporter.warning("Flag " + getType() + " already has the '" + ToolsItem.print(item) + "' ingredient added.");
             return false;
         }
 
@@ -126,13 +127,13 @@ public class FlagKeepItem extends Flag {
                         ErrorReporter.warning("Flag " + getType() + " has invalid damage number: " + value + ", ignored.");
                     }
                 } else {
-                    ErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + Tools.Item.print(item) + ", ignored.");
+                    ErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + ToolsItem.print(item) + ", ignored.");
                 }
 
                 keepItems.put(key, damage);
             } else if (value.startsWith("replace")) {
                 if (item.getType().getMaxStackSize() > 1) {
-                    ErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + Tools.Item.print(item));
+                    ErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + ToolsItem.print(item));
                     return false;
                 }
 

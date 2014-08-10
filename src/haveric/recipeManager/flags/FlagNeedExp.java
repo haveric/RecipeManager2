@@ -2,7 +2,8 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsExp;
 
 public class FlagNeedExp extends Flag {
     // Flag definition and documentation
@@ -129,7 +130,7 @@ public class FlagNeedExp extends Flag {
 
     @Override
     protected void onCheck(Args a) {
-        if (!a.hasPlayer() || !checkExp(Tools.Exp.getTotalExperience(a.player()))) { // p.getTotalExperience()
+        if (!a.hasPlayer() || !checkExp(ToolsExp.getTotalExperience(a.player()))) { // p.getTotalExperience()
             a.addReason(Messages.FLAG_NEEDEXP, failMessage, "{exp}", getExpString(), "{minexp}", getMinExp(), "{maxexp}", getMaxExp());
         }
     }

@@ -3,7 +3,7 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
 
 public class FlagModMoney extends Flag {
     // Flag definition and documentation

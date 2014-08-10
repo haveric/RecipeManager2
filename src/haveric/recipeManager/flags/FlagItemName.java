@@ -1,6 +1,6 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
 
 import org.bukkit.inventory.meta.ItemMeta;
 

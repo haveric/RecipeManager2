@@ -1,8 +1,9 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -180,10 +181,10 @@ public class FlagCloneIngredient extends Flag {
         int found = Tools.findItemInIngredients(getResult().getRecipe(), getResult().getType(), null);
 
         if (found == 0) {
-            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(getResult()));
+            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + ToolsItem.print(getResult()));
             return false;
         } else if (found > 1) {
-            ErrorReporter.warning("Flag " + getType() + " has found the " + Tools.Item.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
+            ErrorReporter.warning("Flag " + getType() + " has found the " + ToolsItem.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
         }
 
         for (String arg : args) {

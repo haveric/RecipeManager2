@@ -2,10 +2,11 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -71,7 +72,7 @@ public class FuelRecipe extends BaseRecipe {
 
     /**
      * Set minimum time it can burn (or fixed if max not defined).
-     * 
+     *
      * @param minTime
      *            float value in seconds
      */
@@ -85,7 +86,7 @@ public class FuelRecipe extends BaseRecipe {
 
     /**
      * Set maximum time it can burn.<br> NOTE: minimum time must be smaller than this and higher than -1
-     * 
+     *
      * @param maxTime
      *            float value in seconds
      */
@@ -95,7 +96,7 @@ public class FuelRecipe extends BaseRecipe {
 
     /**
      * Get the burn time value, randomized if supported, in ticks (multiplied by 20).
-     * 
+     *
      * @return burn time in ticks
      */
     public int getBurnTicks() {
@@ -143,7 +144,7 @@ public class FuelRecipe extends BaseRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getIngredient()) + " Fuel";
+        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getIngredient()) + " Fuel";
     }
 
     @Override
@@ -158,7 +159,7 @@ public class FuelRecipe extends BaseRecipe {
 
         s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
-        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, false));
+        s.append('\n').append(ToolsItem.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, false));
 
         s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_BURNTIME.get()).append(ChatColor.BLACK);

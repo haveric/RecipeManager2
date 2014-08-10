@@ -3,7 +3,7 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
 
 import java.util.Arrays;
 import java.util.EnumMap;

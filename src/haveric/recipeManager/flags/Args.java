@@ -1,10 +1,10 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 
 import java.util.ArrayList;
@@ -234,7 +234,7 @@ public class Args {
 
         string = string.replace("{player}", name);
         string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
-        string = string.replace("{result}", Tools.Item.print(result()));
+        string = string.replace("{result}", ToolsItem.print(result()));
         string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(unknown)"));
         string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
         string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(unknown)"));

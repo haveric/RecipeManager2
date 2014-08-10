@@ -1,10 +1,11 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -324,7 +325,7 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getFirstResult());
+        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getFirstResult());
     }
 
     @Override
@@ -337,7 +338,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
         }
 
-        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(Tools.Item.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ToolsItem.print(getFirstResult(), ChatColor.DARK_GREEN, null, true));
 
         if (isMultiResult()) {
             s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
@@ -362,7 +363,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             if (ingredients[i] == null) {
                 s.append('[').append(ChatColor.WHITE).append('_').append(ChatColor.GRAY).append(']');
             } else {
-                String print = Tools.Item.print(ingredients[i], ChatColor.RED, ChatColor.BLACK, false);
+                String print = ToolsItem.print(ingredients[i], ChatColor.RED, ChatColor.BLACK, false);
                 Integer get = charItems.get(print);
 
                 if (get == null) {

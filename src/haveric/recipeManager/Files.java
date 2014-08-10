@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.FlagType.Bit;
+import haveric.recipeManager.tools.Tools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

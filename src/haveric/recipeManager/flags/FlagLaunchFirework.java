@@ -3,7 +3,7 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;

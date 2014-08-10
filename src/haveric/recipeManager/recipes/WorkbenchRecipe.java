@@ -1,14 +1,14 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagDisplayResult;
 import haveric.recipeManager.flags.FlagIngredientCondition;
+import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
 import haveric.recipeManager.flags.FlagKeepItem;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
+
 
 
 public class WorkbenchRecipe extends MultiResultRecipe {
@@ -32,7 +33,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
     /**
      * Generate a display result for showing off all results (if available).
-     * 
+     *
      * @param a
      * @return the result if it's only one or a special multi-result information item
      */
@@ -42,7 +43,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (!checkFlags(a)) {
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
 
-            return Tools.Item.create(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
+            return ToolsItem.create(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
 
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
@@ -68,14 +69,14 @@ public class WorkbenchRecipe extends MultiResultRecipe {
                 } else {
                     displayResults.add(r);
 
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
+                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(r)));
                 }
             } else {
                 unavailableNum++;
                 unavailableChance += r.getChance();
 
                 if (!r.hasFlag(FlagType.SECRET)) {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(r)));
+                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(r)));
                 }
             }
         }
@@ -103,7 +104,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResults.get(0);
             } else if (secretNum == 1 && displayNum == 0) {
-                return Tools.Item.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE_UNKNOWN.get());
+                return ToolsItem.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE_UNKNOWN.get());
             }
         }
 
@@ -118,7 +119,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         for (ItemResult r : displayResults) {
-            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", Tools.Item.print(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
+            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
         }
 
         if (failChance > 0) {
@@ -133,7 +134,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             lore.add(Messages.CRAFT_RESULT_LIST_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
 
-        return Tools.Item.create(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
+        return ToolsItem.create(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
     }
 
     private String formatChance(float chance) {

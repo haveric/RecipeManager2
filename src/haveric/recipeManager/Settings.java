@@ -1,5 +1,7 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.tools.Tools;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,12 +47,12 @@ public class Settings {
 
     protected final String LASTCHANGED;
 
-    protected Map<String, Material> materialNames = new HashMap<String, Material>();
-    protected Map<Material, Map<String, Short>> materialDataNames = new HashMap<Material, Map<String, Short>>();
-    protected Map<String, Enchantment> enchantNames = new HashMap<String, Enchantment>();
+    public Map<String, Material> materialNames = new HashMap<String, Material>();
+    public Map<Material, Map<String, Short>> materialDataNames = new HashMap<Material, Map<String, Short>>();
+    public Map<String, Enchantment> enchantNames = new HashMap<String, Enchantment>();
 
-    protected Map<Material, String> materialPrint = new HashMap<Material, String>();
-    protected Map<Material, Map<Short, String>> materialDataPrint = new HashMap<Material, Map<Short, String>>();
+    public Map<Material, String> materialPrint = new HashMap<Material, String>();
+    public Map<Material, Map<Short, String>> materialDataPrint = new HashMap<Material, Map<Short, String>>();
     protected Map<Enchantment, String> enchantPrint = new HashMap<Enchantment, String>();
 
     public static void reload(CommandSender sender) {

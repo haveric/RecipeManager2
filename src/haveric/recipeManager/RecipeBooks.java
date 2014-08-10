@@ -11,6 +11,7 @@ import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.RecipeInfo;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.tools.Tools;
 
 import java.io.File;
 import java.text.DateFormat;

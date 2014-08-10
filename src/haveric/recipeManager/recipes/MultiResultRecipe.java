@@ -2,10 +2,10 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +55,11 @@ public class MultiResultRecipe extends BaseRecipe {
      */
     /*
      * TODO remove ? public List<ItemResult> getResults(Args a) { List<ItemResult> list = new ArrayList<ItemResult>(results.size());
-     * 
+     *
      * for(ItemResult r : results) { r = r.clone(); a = ArgBuilder.create(a).result(r).build();
-     * 
+     *
      * if(r.checkFlags(a)) { list.add(r); } }
-     * 
+     *
      * return list; }
      */
 
@@ -82,7 +82,7 @@ public class MultiResultRecipe extends BaseRecipe {
 
     /**
      * Removes all other results and add the specified result.
-     * 
+     *
      * @param result
      */
     public void setResult(ItemStack result) {
@@ -92,7 +92,7 @@ public class MultiResultRecipe extends BaseRecipe {
 
     /**
      * Adds the specified result to the list.
-     * 
+     *
      * @param result
      *            result item, must not be null.
      */
@@ -165,7 +165,7 @@ public class MultiResultRecipe extends BaseRecipe {
         // TODO remove ?
         /*
          * for(ItemResult r : results) { if(r.getTypeId() != 0 && !r.hasFlag(FlagType.SECRET)) { return r; } }
-         * 
+         *
          * // if no non-secret result was found, then we must return something...
          */
         for (ItemResult r : results) {
@@ -179,7 +179,7 @@ public class MultiResultRecipe extends BaseRecipe {
 
     /**
      * Get a random result from the list.<br> Returns AIR if failure chance occured.
-     * 
+     *
      * @param a
      *            dynamic arguments, use {@link ArgBuilder#create()} to build arguments for this.
      * @return the result as a clone or null.
@@ -215,11 +215,11 @@ public class MultiResultRecipe extends BaseRecipe {
 
         if (result != null) {
             if (result.sendPrepare(a)) {
-                a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
+                a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
             }
 
-            if (result.getTypeId() == 0 && this.hasFlags()) {
-                this.sendFailed(a);
+            if (result.getTypeId() == 0 && hasFlags()) {
+                sendFailed(a);
                 a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
             }
         }

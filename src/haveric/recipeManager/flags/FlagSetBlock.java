@@ -3,8 +3,8 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
-import haveric.recipeManager.Tools.ParseBit;
+import haveric.recipeManager.tools.ParseBit;
+import haveric.recipeManager.tools.Tools;
 
 import org.bukkit.block.Block;
 import org.bukkit.inventory.CraftingInventory;

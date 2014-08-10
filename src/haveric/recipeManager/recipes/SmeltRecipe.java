@@ -2,12 +2,13 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagIngredientCondition;
+import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
@@ -208,7 +209,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : Tools.Item.getName(getResult());
+        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getResult());
     }
 
     @Override
@@ -221,7 +222,7 @@ public class SmeltRecipe extends SingleResultRecipe {
             s.append('\n').append(ChatColor.DARK_BLUE).append(getName()).append(ChatColor.BLACK);
         }
 
-        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(Tools.Item.print(getResult(), ChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(ChatColor.GRAY).append('=').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ToolsItem.print(getResult(), ChatColor.DARK_GREEN, null, true));
 
         /*
          * if(isMultiResult()) { s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
@@ -229,7 +230,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(ChatColor.BLACK);
-        s.append('\n').append(Tools.Item.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, false));
+        s.append('\n').append(ToolsItem.print(getIngredient(), ChatColor.RED, ChatColor.BLACK, false));
 
         s.append('\n');
         s.append('\n').append(Messages.RECIPEBOOK_HEADER_COOKTIME.get()).append(ChatColor.BLACK);
@@ -252,7 +253,7 @@ public class SmeltRecipe extends SingleResultRecipe {
         if (hasFuel()) {
             s.append('\n');
             s.append('\n').append(Messages.RECIPEBOOK_HEADER_REQUIREFUEL.get()).append(ChatColor.BLACK);
-            s.append('\n').append(Tools.Item.print(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
+            s.append('\n').append(ToolsItem.print(getFuel(), ChatColor.RED, ChatColor.BLACK, true));
         }
 
         return s.toString();

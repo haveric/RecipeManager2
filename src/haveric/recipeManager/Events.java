@@ -11,6 +11,8 @@ import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -314,13 +316,13 @@ public class Events implements Listener {
                     a.clear();
 
                     if (result.sendPrepare(a)) {
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
                     }
 
                     a.clear();
 
                     if (result.sendCrafted(a)) {
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", Tools.Item.print(result)));
+                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
                     }
 
                     // TODO call post-event ?
@@ -376,7 +378,7 @@ public class Events implements Listener {
             }
 
             ItemStack cursor = event.getCursor();
-            ItemStack merged = Tools.Item.merge(cursor, result);
+            ItemStack merged = ToolsItem.merge(cursor, result);
 
             if (merged != null) {
                 event.setCurrentItem(result);
@@ -413,7 +415,7 @@ public class Events implements Listener {
                     }
                 } else {
                     ItemStack cursor = event.getCursor();
-                    ItemStack merged = Tools.Item.merge(cursor, result);
+                    ItemStack merged = ToolsItem.merge(cursor, result);
 
                     if (merged != null) {
                         event.setCursor(merged);
@@ -642,8 +644,8 @@ public class Events implements Listener {
         if (furnace.getBurnTime() > 0) {
             // Messages.debug("furnace is burning...");
 
-            ItemStack i = Tools.Item.nullIfAir(slot == 0 ? item : inv.getSmelting());
-            ItemStack f = Tools.Item.nullIfAir(inv.getFuel());
+            ItemStack i = ToolsItem.nullIfAir(slot == 0 ? item : inv.getSmelting());
+            ItemStack f = ToolsItem.nullIfAir(inv.getFuel());
 
             SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(i);
 
@@ -663,14 +665,14 @@ public class Events implements Listener {
             }
         }
 
-        ItemStack ingredient = Tools.Item.nullIfAir(slot == 0 ? item : inv.getSmelting());
-        ItemStack fuel = Tools.Item.nullIfAir(slot == 1 ? item : inv.getFuel());
+        ItemStack ingredient = ToolsItem.nullIfAir(slot == 0 ? item : inv.getSmelting());
+        ItemStack fuel = ToolsItem.nullIfAir(slot == 1 ? item : inv.getFuel());
 
         // TODO remove this debug
         /*
-         * if(slot == 0) { Messages.debug("<green>Placed ingredient: " + Tools.Item.print(ingredient)); }
+         * if(slot == 0) { Messages.debug("<green>Placed ingredient: " + ToolsItem.print(ingredient)); }
          *
-         * if(slot == 1) { Messages.debug("<green>Placed fuel: " + Tools.Item.print(fuel)); }
+         * if(slot == 1) { Messages.debug("<green>Placed fuel: " + ToolsItem.print(fuel)); }
          */
 
         FurnaceData data = Furnaces.get(furnace.getLocation());
@@ -697,17 +699,17 @@ public class Events implements Listener {
         }
 
         if (smeltRecipe != null) {
-            // Messages.debug("INGR = " + Tools.Item.print(smeltRecipe.getIngredient()) + " | " + Tools.Item.print(ingredient));
-            // Messages.debug("FUEL = " + Tools.Item.print(smeltRecipe.getFuel()) + " | " + Tools.Item.print(fuel));
+            // Messages.debug("INGR = " + ToolsItem.print(smeltRecipe.getIngredient()) + " | " + ToolsItem.print(ingredient));
+            // Messages.debug("FUEL = " + ToolsItem.print(smeltRecipe.getFuel()) + " | " + ToolsItem.print(fuel));
 
             if (smeltRecipe.hasFuel() && fuel != null && ingredient != null) {
-                if (!Tools.Item.isSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient)) {
-                    Messages.SMELT_FUEL_NEEDINGREDIENT.print(player, null, "{ingredient}", Tools.Item.print(smeltRecipe.getIngredient()), "{fuel}", Tools.Item.print(smeltRecipe.getFuel()));
+                if (!ToolsItem.isSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient)) {
+                    Messages.SMELT_FUEL_NEEDINGREDIENT.print(player, null, "{ingredient}", ToolsItem.print(smeltRecipe.getIngredient()), "{fuel}", ToolsItem.print(smeltRecipe.getFuel()));
                     return false;
                 }
 
-                if (!Tools.Item.isSimilarDataWildcard(smeltRecipe.getFuel(), fuel)) {
-                    Messages.SMELT_FUEL_NEEDFUEL.print(player, null, "{ingredient}", Tools.Item.print(smeltRecipe.getIngredient()), "{fuel}", Tools.Item.print(smeltRecipe.getFuel()));
+                if (!ToolsItem.isSimilarDataWildcard(smeltRecipe.getFuel(), fuel)) {
+                    Messages.SMELT_FUEL_NEEDFUEL.print(player, null, "{ingredient}", ToolsItem.print(smeltRecipe.getIngredient()), "{fuel}", ToolsItem.print(smeltRecipe.getFuel()));
                     return false;
                 }
             }
@@ -766,7 +768,7 @@ public class Events implements Listener {
         }
 
         String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location())); // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}",
-                                                                                                        // Tools.Item.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
+                                                                                                        // ToolsItem.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
 
         a.clear();
 
@@ -885,7 +887,7 @@ public class Events implements Listener {
 
             // Special handling if the recipe has a predefined fuel in it
             if (recipe.hasFuel()) {
-                ItemStack fuel = Tools.Item.nullIfAir(inv.getFuel());
+                ItemStack fuel = ToolsItem.nullIfAir(inv.getFuel());
 
                 if (fuel != null) {
                     int amount = fuel.getAmount() - 1;
@@ -896,7 +898,7 @@ public class Events implements Listener {
                         inv.setFuel(null);
                     }
 
-                    ItemStack smelting = Tools.Item.nullIfAir(inv.getSmelting());
+                    ItemStack smelting = ToolsItem.nullIfAir(inv.getSmelting());
 
                     if (smelting != null && smelting.getAmount() <= 1) {
                         smelting = null;
@@ -966,7 +968,7 @@ public class Events implements Listener {
     }
 
     private SmeltRecipe furnaceResultRecipe(Furnace furnace) {
-        ItemStack ingredient = Tools.Item.nullIfAir(furnace.getInventory().getSmelting());
+        ItemStack ingredient = ToolsItem.nullIfAir(furnace.getInventory().getSmelting());
         SmeltRecipe smeltRecipe = null;
         ItemStack result = furnace.getInventory().getResult();
 

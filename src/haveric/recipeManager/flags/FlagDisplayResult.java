@@ -1,9 +1,9 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.tools.Tools;
 
 import org.bukkit.inventory.ItemStack;
 

@@ -1,6 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.Tools.ParseBit;
 import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
@@ -14,6 +13,8 @@ import haveric.recipeManager.recipes.RecipeInfo;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import haveric.recipeManager.recipes.RemoveResultRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.tools.ParseBit;
+import haveric.recipeManager.tools.Tools;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

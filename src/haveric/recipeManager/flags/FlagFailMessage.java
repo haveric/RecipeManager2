@@ -1,11 +1,11 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
+import haveric.recipeManager.tools.Tools;
 
 public class FlagFailMessage extends Flag {
     // Flag definition and documentation

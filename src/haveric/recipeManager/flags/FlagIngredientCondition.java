@@ -3,10 +3,11 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.Tools.ParseBit;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.ParseBit;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -647,7 +648,7 @@ public class FlagIngredientCondition extends Flag {
                     return false;
                 }
 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NODATA, getFailMessage(), "{item}", Tools.Item.print(item), "{data}", getDataString());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NODATA, getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getDataString());
                 ok = false;
 
                 if (getFailMessage() != null) {
@@ -660,7 +661,7 @@ public class FlagIngredientCondition extends Flag {
                     return false;
                 }
 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOAMOUNT, getFailMessage(), "{item}", Tools.Item.print(item), "{amount}", getAmount());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOAMOUNT, getFailMessage(), "{item}", ToolsItem.print(item), "{amount}", getAmount());
                 ok = false;
 
                 if (getFailMessage() != null) {
@@ -673,7 +674,7 @@ public class FlagIngredientCondition extends Flag {
                     return false;
                 }
 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", Tools.Item.print(item), "{enchants}", getEnchantsString());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
                 ok = false;
 
                 if (getFailMessage() != null) {
@@ -692,7 +693,7 @@ public class FlagIngredientCondition extends Flag {
                     return false;
                 }
 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NONAME, getFailMessage(), "{item}", Tools.Item.print(item), "{name}", getName());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NONAME, getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getName());
                 ok = false;
 
                 if (getFailMessage() != null) {
@@ -705,7 +706,7 @@ public class FlagIngredientCondition extends Flag {
                     return false;
                 }
 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOLORE, getFailMessage(), "{item}", Tools.Item.print(item), "{lore}", getLore());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOLORE, getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLore());
                 ok = false;
 
                 if (getFailMessage() != null) {
@@ -729,7 +730,7 @@ public class FlagIngredientCondition extends Flag {
                         return false;
                     }
 
-                    a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOCOLOR, getFailMessage(), "{item}", Tools.Item.print(item), "{color}", getColorString());
+                    a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOCOLOR, getFailMessage(), "{item}", ToolsItem.print(item), "{color}", getColorString());
                     ok = false;
 
                     if (getFailMessage() != null) {
@@ -1000,7 +1001,7 @@ public class FlagIngredientCondition extends Flag {
             Conditions c = it.next();
 
             if (c.ingredient != null && Tools.findItemInIngredients(recipe, c.ingredient.getType(), c.ingredient.getDurability()) == 0) {
-                ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + Tools.Item.print(c.ingredient));
+                ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + ToolsItem.print(c.ingredient));
                 it.remove();
             }
         }
@@ -1070,7 +1071,7 @@ public class FlagIngredientCondition extends Flag {
                 a.addCustomReason("Extra object is not an itemstack!");
             }
 
-            ItemStack smelting = Tools.Item.nullIfAir((ItemStack) a.extra());
+            ItemStack smelting = ToolsItem.nullIfAir((ItemStack) a.extra());
 
             if (smelting != null) {
                 checkIngredientConditions(smelting, a);

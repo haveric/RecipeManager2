@@ -1,7 +1,7 @@
 package haveric.recipeManager.commands;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,6 +13,7 @@ import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import haveric.recipeManager.tools.Tools;
 
 import java.util.HashMap;
 import java.util.List;

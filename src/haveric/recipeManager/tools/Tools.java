@@ -1,5 +1,11 @@
-package haveric.recipeManager;
+package haveric.recipeManager.tools;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
@@ -12,7 +18,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +27,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -47,92 +51,6 @@ import org.bukkit.potion.PotionType;
  * Collection of conversion and useful methods
  */
 public class Tools {
-    /**
-     * Proper experience methods.
-     *
-     * @author Essentials<br> https://github.com/essentials/Essentials/blob/master/Essentials/src/net/ess3/craftbukkit/SetExpFix.java
-     */
-    public static class Exp {
-        // This method is used to update both the recorded total experience and displayed total experience.
-        // We reset both types to prevent issues.
-        public static void setTotalExperience(final Player player, final int exp) {
-            if (exp < 0) {
-                throw new IllegalArgumentException("Experience is negative!");
-            }
-
-            player.setExp(0);
-            player.setLevel(0);
-            player.setTotalExperience(0);
-
-            // This following code is technically redundant now, as bukkit now calculates levels more or less correctly
-            // At larger numbers however... player.getExp(3000), only seems to give 2999, putting the below calculations off.
-            int amount = exp;
-
-            while (amount > 0) {
-                final int expToLevel = getExpAtLevel(player);
-                amount -= expToLevel;
-
-                if (amount >= 0) {
-                    // give until next level
-                    player.giveExp(expToLevel);
-                } else {
-                    // give the rest
-                    amount += expToLevel;
-                    player.giveExp(amount);
-                    amount = 0;
-                }
-            }
-        }
-
-        private static int getExpAtLevel(final Player player) {
-            return getExpAtLevel(player.getLevel());
-        }
-
-        public static int getExpAtLevel(final int level) {
-            if (level > 29) {
-                return 62 + (level - 30) * 7;
-            }
-
-            if (level > 15) {
-                return 17 + (level - 15) * 3;
-            }
-
-            return 17;
-        }
-
-        public static int getExpToLevel(final int level) {
-            int currentLevel = 0;
-            int exp = 0;
-
-            while (currentLevel < level) {
-                exp += getExpAtLevel(currentLevel);
-                currentLevel++;
-            }
-
-            return exp;
-        }
-
-        // This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
-        // Without this people would be able to use exp and then still sell it.
-        public static int getTotalExperience(final Player player) {
-            int exp = Math.round(getExpAtLevel(player) * player.getExp());
-            int currentLevel = player.getLevel();
-
-            while (currentLevel > 0) {
-                currentLevel--;
-                exp += getExpAtLevel(currentLevel);
-            }
-
-            return exp;
-        }
-
-        public static int getExpUntilNextLevel(final Player player) {
-            int exp = Math.round(getExpAtLevel(player) * player.getExp());
-            int nextLevel = player.getLevel();
-
-            return getExpAtLevel(nextLevel) - exp;
-        }
-    }
 
     public static <T> T parseEnum(String name, T[] values) {
         if (name != null && !name.isEmpty()) {
@@ -203,177 +121,7 @@ public class Tools {
         return string.replace(String.valueOf(ChatColor.COLOR_CHAR), "");
     }
 
-    public static class Item {
-        public static ItemResult create(Material type, int data, int amount, String name, String... lore) {
-            return create(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
-        }
 
-        public static ItemResult create(Material type, int data, int amount, String name, List<String> lore) {
-            ItemResult item = new ItemResult(type, amount, (short) data, 100);
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta == null) {
-                return item;
-            }
-
-            if (lore != null) {
-                meta.setLore(lore);
-            }
-
-            meta.setDisplayName(name);
-            item.setItemMeta(meta);
-
-            return item;
-        }
-
-        /**
-         * Displays the itemstack in a user-friendly and colorful manner.<br> If item is null or air it will print "nothing" in gray.<br> If item is enchanted it will have aqua color instead of
-         * white.<br> Uses aliases to display data values as well.<br> Uses item's display name in italic font if available.<br> <br> NOTE: Will have a RESET color at the end, use
-         * {@link #print(ItemStack, ChatColor)} to use a different end-color instead.
-         *
-         * @param item
-         *            the item to print, can be null
-         * @return user-friendly item print
-         */
-        public static String print(ItemStack item) {
-            return print(item, ChatColor.WHITE, ChatColor.RESET, false);
-        }
-
-        /**
-         * Displays the itemstack in a user-friendly and colorful manner.<br> If item is null or air it will print "nothing" in gray.<br> If item is enchanted it will have aqua color instead of
-         * white.<br> Uses aliases to display data values as well.<br> Uses item's display name in italic font if available.
-         *
-         * @param item
-         *            the item to print, can be null
-         * @param defColor
-         *            default color, usually white
-         * @param endColor
-         *            will be appended at the end of string, should be your text color
-         * @return user-friendly item print
-         */
-        public static String print(ItemStack item, ChatColor defColor, ChatColor endColor, boolean alwaysShowAmount) {
-            if (item == null || item.getTypeId() == 0) {
-                return ChatColor.GRAY + "(nothing)";
-            }
-
-            String name = null;
-            String itemData = null;
-
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta != null && meta.hasDisplayName()) {
-                name = ChatColor.ITALIC + meta.getDisplayName();
-            } else {
-                name = RecipeManager.getSettings().materialPrint.get(item.getType());
-
-                if (name == null) {
-                    name = parseAliasPrint(item.getType().toString());
-                }
-            }
-
-            Map<Short, String> dataMap = RecipeManager.getSettings().materialDataPrint.get(item.getType());
-
-            if (dataMap != null) {
-                itemData = dataMap.get(item.getDurability());
-
-                if (itemData != null) {
-                    itemData = itemData + " " + name;
-                }
-            }
-
-            if (itemData == null) {
-                short data = item.getDurability();
-
-                if (data != 0) {
-                    if (data == Vanilla.DATA_WILDCARD) {
-                        itemData = name + ChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
-                    } else {
-                        itemData = name + ChatColor.GRAY + ":" + data;
-                    }
-                } else {
-                    itemData = name;
-                }
-            }
-
-            String amount = (alwaysShowAmount || item.getAmount() > 1 ? item.getAmount() + "x " : "");
-            ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : defColor);
-
-            return amount + color + itemData + (endColor == null ? "" : endColor);
-        }
-
-        public static String getName(ItemStack item) {
-            String name = null;
-            String itemData = null;
-
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta != null && meta.hasDisplayName()) {
-                name = ChatColor.ITALIC + meta.getDisplayName();
-            } else {
-                name = RecipeManager.getSettings().materialPrint.get(item.getType());
-
-                if (name == null) {
-                    name = parseAliasPrint(item.getType().toString());
-                }
-            }
-
-            Map<Short, String> dataMap = RecipeManager.getSettings().materialDataPrint.get(item.getType());
-
-            if (dataMap != null) {
-                itemData = dataMap.get(item.getDurability());
-
-                if (itemData != null) {
-                    itemData = itemData + " " + name;
-                }
-            }
-
-            return (item.getEnchantments().size() > 0 ? ChatColor.AQUA : "") + (itemData == null ? name : itemData);
-        }
-
-        public static boolean isSimilarDataWildcard(ItemStack source, ItemStack item) {
-            if (item == null) {
-                return false;
-            }
-
-            if (item == source) {
-                return true;
-            }
-
-            return source.getTypeId() == item.getTypeId() && (source.getDurability() == Vanilla.DATA_WILDCARD ? true : source.getDurability() == item.getDurability()) && source.hasItemMeta() == item.hasItemMeta() && (source.hasItemMeta() ? Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta()) : true);
-        }
-
-        public static ItemStack nullIfAir(ItemStack item) {
-            return (item == null || item.getTypeId() == 0 ? null : item);
-        }
-
-        public static ItemStack merge(ItemStack into, ItemStack item) {
-            if (into == null || into.getTypeId() == 0) {
-                return item;
-            }
-
-            if (item.isSimilar(into) && item.getAmount() <= (into.getMaxStackSize() - into.getAmount())) {
-                ItemStack clone = item.clone();
-
-                clone.setAmount(into.getAmount() + item.getAmount());
-
-                return clone;
-            }
-
-            return null;
-        }
-
-        public static boolean canMerge(ItemStack intoItem, ItemStack item) {
-            if (intoItem == null || intoItem.getTypeId() == 0) {
-                return true;
-            }
-
-            if (intoItem.isSimilar(item) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount())) {
-                return true;
-            }
-
-            return false;
-        }
-    }
 
     public static int playerFreeSpaceForItem(Player player, ItemStack item) {
         Inventory inv = player.getInventory();
@@ -440,21 +188,6 @@ public class Tools {
         }
 
         return msg;
-    }
-
-    public class ParseBit {
-        public static final byte NO_ERRORS = 1 << 0;
-        public static final byte NO_WARNINGS = 1 << 1;
-        public static final byte NO_PRINT = NO_ERRORS | NO_WARNINGS;
-
-        public static final byte NO_DATA = 1 << 2;
-        public static final byte NO_AMOUNT = 1 << 3;
-
-        public static final byte NO_ENCHANTMENTS = 1 << 5;
-        public static final byte NO_NAME = 1 << 6;
-        public static final short NO_LORE = 1 << 7;
-        public static final short NO_COLOR = 1 << 8;
-        public static final short NO_META = NO_ENCHANTMENTS | NO_NAME | NO_LORE | NO_COLOR;
     }
 
     public static ItemResult parseItemResult(String string, int defaultData) {

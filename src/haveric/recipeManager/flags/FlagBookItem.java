@@ -1,8 +1,8 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.List;

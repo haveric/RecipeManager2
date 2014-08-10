@@ -2,9 +2,7 @@ package haveric.recipeManager.commands;
 
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Tools;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.Tools.ParseBit;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
@@ -13,6 +11,9 @@ import haveric.recipeManager.recipes.RecipeInfo;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.tools.ParseBit;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,7 +114,7 @@ public class RecipeCommand implements CommandExecutor {
                 if (pages != null) {
                     if (next ? pages.hasNext() : pages.hasPrev()) {
                         String page = (next ? pages.next() : pages.prev());
-                        Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", Tools.Item.print(pages.item), "{num}", (pages.page + 1), "{total}", pages.pages.length);
+                        Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", ToolsItem.print(pages.item), "{num}", (pages.page + 1), "{total}", pages.pages.length);
                         Messages.send(sender, page);
 
                         if (pages.hasNext()) {
@@ -172,7 +173,7 @@ public class RecipeCommand implements CommandExecutor {
                     Pages pages = new Pages(name, item, list);
                     pagination.put(name, pages);
 
-                    Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", Tools.Item.print(pages.item), "{num}", 1, "{total}", pages.pages.length);
+                    Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", ToolsItem.print(pages.item), "{num}", 1, "{total}", pages.pages.length);
                     Messages.send(sender, pages.next());
 
                     if (pages.hasNext()) {
@@ -181,7 +182,7 @@ public class RecipeCommand implements CommandExecutor {
                         Messages.CMD_RECIPES_END.print(sender);
                     }
                 } else {
-                    Messages.CMD_RECIPES_NORESULTS.print(sender, null, "{item}", Tools.Item.print(item));
+                    Messages.CMD_RECIPES_NORESULTS.print(sender, null, "{item}", ToolsItem.print(item));
                 }
             }
         } else {

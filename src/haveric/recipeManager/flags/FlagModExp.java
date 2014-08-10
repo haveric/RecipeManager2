@@ -2,7 +2,8 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Tools;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsExp;
 
 import org.bukkit.entity.Player;
 
@@ -157,13 +158,13 @@ public class FlagModExp extends Flag {
 
         switch (mod) {
             case '+':
-                exp = Tools.Exp.getTotalExperience(p) + amount;
+                exp = ToolsExp.getTotalExperience(p) + amount;
 
                 a.addEffect(Messages.FLAG_MODEXP_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
-                exp = Math.max(Tools.Exp.getTotalExperience(p) - amount, 0);
+                exp = Math.max(ToolsExp.getTotalExperience(p) - amount, 0);
 
                 a.addEffect(Messages.FLAG_MODEXP_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
 
@@ -176,7 +177,7 @@ public class FlagModExp extends Flag {
                 break;
         }
 
-        Tools.Exp.setTotalExperience(p, exp);
+        ToolsExp.setTotalExperience(p, exp);
     }
 
     /*
