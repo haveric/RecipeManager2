@@ -1,6 +1,9 @@
 package haveric.recipeManager.api.events;
 
 import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
+
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -84,13 +87,23 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the Player object of the player that placed the fuel.<br> NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name
-     * only.<br> Shortcut for: Bukkit.getPlayerExact(event.getFuelerName());
+     * Get the Player object of the player that placed the fuel.<br> NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name only.
      *
      * @return Player object of the fueler
      */
     public Player getFueler() {
-        return (fueler == null ? null : Bukkit.getPlayerExact(fueler));
+        Player player = null;
+        if (fueler != null) {
+            try {
+                UUID uuid = UUIDFetcher.getUUIDOf(fueler);
+                player = Bukkit.getPlayer(uuid);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return player;
     }
 
     @Override
