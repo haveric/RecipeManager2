@@ -27,7 +27,7 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Parses a string to get the values for this flag.<br> Has diferent effects for each extension of Flag object.
+     * Parses a string to get the values for this flag.<br> Has different effects for each extension of Flag object.
      *
      * @param value
      *            the flag's value (not containing the <code>@flag</code> string)

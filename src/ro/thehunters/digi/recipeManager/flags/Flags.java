@@ -54,7 +54,7 @@ public class Flags implements Cloneable {
 
     /**
      * Gets a flag by its type.<br> For automated casting you should use {@link #getFlag(Class)}
-     * 
+     *
      * @param type
      * @return Flag object
      */
@@ -64,7 +64,7 @@ public class Flags implements Cloneable {
 
     /**
      * Gets a flag by its class name.<br> This is useful for easy auto-casting, example:<br> <br> <code>FlagCommands flag = flags.getFlag(FlagCommands.class);</code>
-     * 
+     *
      * @param flagClass
      *            the class of the flag
      * @return Flag object
@@ -75,7 +75,7 @@ public class Flags implements Cloneable {
 
     /**
      * Checks if flag exists in this flag list.
-     * 
+     *
      * @param type
      * @return
      */
@@ -85,7 +85,7 @@ public class Flags implements Cloneable {
 
     /**
      * Checks if the flag can be added to this flag list.<br>
-     * 
+     *
      * @param flag
      * @return false if flag can only be added on specific flaggables
      */
@@ -95,7 +95,7 @@ public class Flags implements Cloneable {
 
     /**
      * Attempts to add a flag to this flag list.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
-     * 
+     *
      * @param flag
      */
     public void addFlag(Flag flag) {
@@ -111,7 +111,7 @@ public class Flags implements Cloneable {
 
     /**
      * Parses a string to create/get a flag and add to/update the list.<br> This is used by RecipeManager's file processor.
-     * 
+     *
      * @param value
      *            flag expression string like the ones in recipe files
      */
@@ -131,7 +131,7 @@ public class Flags implements Cloneable {
 
         // If no valid flag was found
         if (type == null) {
-            ErrorReporter.warning("Unknown flag: " + flagString, "Name might be diferent, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
+            ErrorReporter.warning("Unknown flag: " + flagString, "Name might be different, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
             return;
         }
 
@@ -157,7 +157,7 @@ public class Flags implements Cloneable {
 
     /**
      * Removes the specified flag from this flag list.<br> Alias for {@link #removeFlag(FlagType)}
-     * 
+     *
      * @param flag
      */
     public void removeFlag(Flag flag) {
@@ -170,7 +170,7 @@ public class Flags implements Cloneable {
 
     /**
      * Removes the specified flag type from this flag list
-     * 
+     *
      * @param type
      */
     public void removeFlag(FlagType type) {
@@ -188,7 +188,7 @@ public class Flags implements Cloneable {
 
     /**
      * Gets the Recipe or ItemResult that uses this flag list.<br> You must check and cast accordingly.
-     * 
+     *
      * @return Flaggable object or null if undefined
      */
     public Flaggable getFlaggable() {
@@ -198,7 +198,7 @@ public class Flags implements Cloneable {
     /**
      * Checks all flags and compiles a list of failure reasons while returning if the list is empty (no errors). Note: not all arguments are used, you may use null wherever you don't have anything to
      * give.
-     * 
+     *
      * @param a
      *            arguments class
      * @return true if recipe/result can be crafted by the arguments with the current flags
@@ -226,7 +226,7 @@ public class Flags implements Cloneable {
     /**
      * Applies all flags to player/location/result and compiles a list of failure reasons while returning if the list is empty (no errors). Note: not all arguments are used, you may use null wherever
      * you don't have anything to give.
-     * 
+     *
      * @param a
      *            arguments class
      * @return false if something was absolutely required and crafting should be cancelled
@@ -243,7 +243,7 @@ public class Flags implements Cloneable {
 
     /**
      * Sends failure notification to all flags
-     * 
+     *
      * @param a
      *            arguments class
      */
@@ -266,7 +266,7 @@ public class Flags implements Cloneable {
 
     /**
      * Copy this flag storage and give it a new container.<br>
-     * 
+     *
      * @param newContainer
      * @return
      */
