@@ -1,6 +1,14 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== v2.1 ===
+* Changed Integer to Double as getLastDamage() now returns a Double.
+* Fix DURABILITY enchantment returning a null EnchantmentTarget. Default any null EnchantmentTargets to ALL.
+* Remove Debug message from furnaces.
+* Updated to Metrics R7
+* Updated Metrics to work with updated getOnlinePlayers
+* Update to UUID support with Vault
+
 === v2.0 ===
 
 * Added hopper handling for furnaces;

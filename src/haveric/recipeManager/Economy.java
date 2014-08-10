@@ -1,9 +1,14 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
+
+import java.util.UUID;
+
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Economy {
@@ -43,7 +48,7 @@ public class Economy {
 
     /**
      * Checks if you can use economy methods.
-     * 
+     *
      * @return true if economy plugin detected, false otherwise
      */
     public boolean isEnabled() {
@@ -52,7 +57,7 @@ public class Economy {
 
     /**
      * Gets the format of the money, defined by the economy plugin used.<br> If economy is not enabled this method will return null.
-     * 
+     *
      * @param amount
      *            money amount to format
      * @return String with formatted money
@@ -67,22 +72,32 @@ public class Economy {
 
     /**
      * Gets how much money a player has.<br> If economy is not enabled this method will return 0.
-     * 
+     *
      * @param playerName
      *            player's name
      * @return money player has, 0 if no economy plugin was found
      */
     public double getMoney(String playerName) {
-        if (!isEnabled()) {
-            return 0;
+        double money = 0;
+
+        if (isEnabled()) {
+            try {
+                UUID uuid = UUIDFetcher.getUUIDOf(playerName);
+                OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+
+                money = vault.getBalance(player);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
-        return vault.getBalance(playerName);
+        return money;
     }
 
     /**
      * Give or take money.<br> Use negative values to take money.<br> If economy is not enabled or amount is 0, this method won't do anything
-     * 
+     *
      * @param playerName
      *            player's name
      * @param amount
@@ -93,12 +108,19 @@ public class Economy {
             return;
         }
 
-        EconomyResponse error;
+        EconomyResponse error = null;
 
-        if (amount > 0) {
-            error = vault.depositPlayer(playerName, amount);
-        } else {
-            error = vault.withdrawPlayer(playerName, Math.abs(amount));
+        try {
+            UUID uuid = UUIDFetcher.getUUIDOf(playerName);
+            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            if (amount > 0) {
+                error = vault.depositPlayer(player, amount);
+            } else {
+                error = vault.withdrawPlayer(player, Math.abs(amount));
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         if (error != null && !error.transactionSuccess()) {
