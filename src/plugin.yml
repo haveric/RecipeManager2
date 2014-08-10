@@ -5,7 +5,6 @@ authors: [haveric, Digi]
 website: http://dev.bukkit.org/server-mods/recipemanager/
 dev-url: http://dev.bukkit.org/server-mods/recipemanager/
 main: ro.thehunters.digi.recipeManager.RecipeManager
-load: postworld
 softdepend: [Vault]
 commands:
   rm:
