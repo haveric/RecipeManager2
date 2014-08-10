@@ -21,7 +21,7 @@ special-recipes:
 sounds:
   failed: true          # play a denied-like sound when a recipe fails ?
   failed_click: true    # play a denied-like sound when clicking a failed result information ?
-  repair: true          # play a faster avil repair sound when repairing items in a workbench ?
+  repair: true          # play a faster anvil repair sound when repairing items in a workbench ?
 
 
 # As of version v2 the plugin generates books with recipes.
@@ -39,13 +39,13 @@ color-console: true
 
 # When Shift+Clicking an item in the inventory while a furnace is opened, where should the item go ?
 # Values for this setting:
-#   fuel - if item is a fuel, will go in fuel slot, otherwise in the ingredient slot (default, like vaniila MC) NOTE: it can get confusing when creating fuels with items that are also ingredients.
-#   click - click type determins where the item should go, Shift+LeftClick to ingredient slot and Shift+RightClick to fuel slot.
+#   fuel - if item is a fuel, will go in fuel slot, otherwise in the ingredient slot (default, like vanilla MC) NOTE: it can get confusing when creating fuels with items that are also ingredients.
+#   click - click type determines where the item should go, Shift+LeftClick to ingredient slot and Shift+RightClick to fuel slot.
 furnace-shift-click: fuel
 
 
 # Ticks that the furnace task runs at, 20 ticks is 1 second. Valid values are between 1 and 20.
-# Use 2 or more if you have a very slow server OR alot of burning furnaces at once cause lag.
+# Use 2 or more if you have a very slow server OR a lot of burning furnaces at once cause lag.
 #   default: 1
 furnace-ticks: 1
 
