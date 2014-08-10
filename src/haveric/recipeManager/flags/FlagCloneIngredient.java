@@ -214,7 +214,7 @@ public class FlagCloneIngredient extends Flag {
             if (isDataArg || arg.startsWith("amount")) {
                 addCopyBit(isDataArg ? Bit.DATA : Bit.AMOUNT);
 
-                Pattern pattern = Pattern.compile("[+-*/%]");
+                Pattern pattern = Pattern.compile("[-+*/%]");
                 Matcher match = pattern.matcher(arg);
 
                 if (match.find()) {

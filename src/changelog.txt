@@ -2,6 +2,22 @@
 This file will be automatically overwritten when a new version is installed.
 
 === v2.1 ===
+(THDigi)
+* Fixed @ingredientcondition's lore argument with 'regex:' prefix checking name's regex pattern instead, giving an error if name arg not defined
+* Also fixed a probably confusing example.
+* Fixed shutdown error when metrics is disabled in config.yml. 
+* Fixed possible issues with reload and re-enabling metrics.
+* Possible fix for errors when loading furnaces without inventories.
+* Fixed update checker printing new 'null' version to joining OPs when it is disabled;
+* Added permission for update notify receivers: 'recipemanager.command.rmupdate'
+* Added check for connection to print a user-friendly error if it can't establish a connection.
+* API: Added clearFlags() method for Flaggable interface (use by ItemResult and BaseRecipe).
+* Added check to ensure recipe is complete before generating the bukkit recipe.
+* Removed 'item' alias for 'rmfinditem' to prevent collisions with more important commands from other plugins
+* Possible fix for an startup error that triggers if you have a plugin with no package name, just the main class.
+* Fixed @keepitem flag not woking if set on results
+* Fixed @ingredientcondition not subtracting ingredients if used on results
+(Haveric)
 * Changed Integer to Double as getLastDamage() now returns a Double.
 * Fix DURABILITY enchantment returning a null EnchantmentTarget. Default any null EnchantmentTargets to ALL.
 * Remove Debug message from furnaces.
@@ -9,6 +25,7 @@ This file will be automatically overwritten when a new version is installed.
 * Updated Metrics to work with updated getOnlinePlayers
 * Update to UUID support with Vault
 * Fixed a potential bug with colors not being supported in messages
+* Fixed regex for @cloneingredient data and @cloneingredient amount
 
 === v2.0 ===
 
