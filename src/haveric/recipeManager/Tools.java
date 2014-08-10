@@ -508,7 +508,7 @@ public class Tools {
         String[] split = args[0].trim().split(":");
 
         if (split.length <= 0 || split[0].isEmpty()) {
-            return new ItemStack(0);
+            return new ItemStack(Material.AIR);
         }
 
         value = split[0].trim();
@@ -530,7 +530,7 @@ public class Tools {
         int type = material.getId();
 
         if (type <= 0) {
-            return new ItemStack(0);
+            return new ItemStack(Material.AIR);
         }
 
         int data = defaultData;
