@@ -35,7 +35,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-
 import com.google.common.collect.Sets;
 
 public class Files {
@@ -47,10 +46,10 @@ public class Files {
     private final CommandSender sender;
     private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
 
-    public static final String LASTCHANGED_CONFIG = "2.0beta";
-    public static final String LASTCHANGED_MESSAGES = "2.0beta";
-    public static final String LASTCHANGED_ITEM_ALIASES = "2.0alpha3";
-    public static final String LASTCHANGED_ENCHANT_ALIASES = "2.0alpha3";
+    public static final String LASTCHANGED_CONFIG = "2.1";
+    public static final String LASTCHANGED_MESSAGES = "2.1";
+    public static final String LASTCHANGED_ITEM_ALIASES = "2.1";
+    public static final String LASTCHANGED_ENCHANT_ALIASES = "2.1";
 
     public static final String FILE_CONFIG = "config.yml";
     public static final String FILE_MESSAGES = "messages.yml";
