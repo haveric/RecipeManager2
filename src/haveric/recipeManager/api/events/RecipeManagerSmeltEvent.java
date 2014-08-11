@@ -103,10 +103,7 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
             try {
                 UUID uuid = UUIDFetcher.getUUIDOf(smelter);
                 player = Bukkit.getPlayer(uuid);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            } catch (Exception e) {}
         }
 
         return player;
@@ -134,10 +131,7 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
             try {
                 UUID uuid = UUIDFetcher.getUUIDOf(fueler);
                 player = Bukkit.getPlayer(uuid);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            } catch (Exception e) {}
         }
 
         return player;

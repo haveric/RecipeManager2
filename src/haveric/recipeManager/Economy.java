@@ -86,10 +86,7 @@ public class Economy {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
                 money = vault.getBalance(player);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            } catch (Exception e) {}
         }
 
         return money;
@@ -118,10 +115,7 @@ public class Economy {
             } else {
                 error = vault.withdrawPlayer(player, Math.abs(amount));
             }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
 
         if (error != null && !error.transactionSuccess()) {
             Messages.info("<red>Economy error: " + error.errorMessage);
