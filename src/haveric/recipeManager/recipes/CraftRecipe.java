@@ -288,6 +288,8 @@ public class CraftRecipe extends WorkbenchRecipe {
 
                     case 3:
                         bukkitRecipe.shape("abc", "def", "ghi");
+                    default:
+                        break;
                 }
         }
 

@@ -33,7 +33,7 @@ public class Flag implements Cloneable {
      * @param value
      *            the flag's value (not containing the <code>@flag</code> string)
      * @return
-     * @return false if an error occured and the flag should not be added
+     * @return false if an error occurred and the flag should not be added
      */
     final public boolean parse(String value) {
         return onParse(value);

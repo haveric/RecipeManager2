@@ -908,10 +908,7 @@ public class Events implements Listener {
                         furnace.setBurnTime((short) 0);
 
                         FurnaceData data = Furnaces.get(furnace.getLocation());
-
-                        if (data != null) {
-                            data.setBurnTicks(0);
-                        }
+                        data.setBurnTicks(0);
                     }
                 }
             }

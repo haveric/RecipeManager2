@@ -183,6 +183,8 @@ public class FlagModMoney extends Flag {
                 a.addEffect(Messages.FLAG_MODMONEY_SET, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
+            default:
+                break;
         }
     }
 

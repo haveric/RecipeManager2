@@ -146,7 +146,7 @@ public class RecipeManager extends JavaPlugin {
                     e.printStackTrace();
                 }
             }
-        } else if (metrics != null) {
+        } else {
             metrics.stop();
         }
 

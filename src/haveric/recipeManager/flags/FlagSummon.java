@@ -382,6 +382,8 @@ public class FlagSummon extends Flag {
                             }
 
                             break;
+                        default:
+                            break;
                     }
                 }
             }

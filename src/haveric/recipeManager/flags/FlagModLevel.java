@@ -183,6 +183,8 @@ public class FlagModLevel extends Flag {
                 a.addEffect(Messages.FLAG_MODLEVEL_SET, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
+            default:
+                break;
         }
     }
 

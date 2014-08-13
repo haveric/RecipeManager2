@@ -175,6 +175,8 @@ public class FlagModExp extends Flag {
                 a.addEffect(Messages.FLAG_MODEXP_SET, failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
+            default:
+                break;
         }
 
         ToolsExp.setTotalExperience(p, exp);
