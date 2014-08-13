@@ -5,8 +5,8 @@ import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.RecipeInfo;
-import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.tools.Tools;
 
 import java.util.HashMap;
@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-
 
 import com.google.common.collect.ImmutableMap;
 
@@ -67,11 +66,12 @@ public class Vanilla {
 
         RecipeInfo info = new RecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
 
-        // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite an unexistent one
+        // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite an nonexistent one
         initialRecipes.put(new FuelRecipe(Material.COAL, 80), info);
         initialRecipes.put(new FuelRecipe(Material.LOG, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.LOG_2, 15), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_STEP, 5), info);
+        initialRecipes.put(new FuelRecipe(Material.WOOD_STEP, 7.5f), info);
         initialRecipes.put(new FuelRecipe(Material.SAPLING, 5), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_AXE, 10), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_HOE, 10), info);
@@ -83,21 +83,24 @@ public class Vanilla {
         initialRecipes.put(new FuelRecipe(Material.FENCE, 15), info);
         initialRecipes.put(new FuelRecipe(Material.FENCE_GATE, 15), info);
         initialRecipes.put(new FuelRecipe(Material.WOOD_STAIRS, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.ACACIA_STAIRS, 15), info);
         initialRecipes.put(new FuelRecipe(Material.BIRCH_WOOD_STAIRS, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.DARK_OAK_STAIRS, 15), info);
         initialRecipes.put(new FuelRecipe(Material.SPRUCE_WOOD_STAIRS, 15), info);
         initialRecipes.put(new FuelRecipe(Material.JUNGLE_WOOD_STAIRS, 15), info);
         initialRecipes.put(new FuelRecipe(Material.TRAP_DOOR, 15), info);
         initialRecipes.put(new FuelRecipe(Material.WORKBENCH, 15), info);
         initialRecipes.put(new FuelRecipe(Material.BOOKSHELF, 15), info);
         initialRecipes.put(new FuelRecipe(Material.CHEST, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
         initialRecipes.put(new FuelRecipe(Material.JUKEBOX, 15), info);
         initialRecipes.put(new FuelRecipe(Material.NOTE_BLOCK, 15), info);
         initialRecipes.put(new FuelRecipe(Material.HUGE_MUSHROOM_1, 15), info);
         initialRecipes.put(new FuelRecipe(Material.HUGE_MUSHROOM_2, 15), info);
         initialRecipes.put(new FuelRecipe(Material.BLAZE_ROD, 120), info);
+        initialRecipes.put(new FuelRecipe(Material.COAL_BLOCK, 800), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
-        initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
 
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
@@ -146,7 +149,7 @@ public class Vanilla {
 
     /**
      * Removes a RecipeManager recipe from the <b>server</b>
-     * 
+     *
      * @param recipe
      *            RecipeManager recipe
      * @return removed recipe or null if not found
@@ -170,7 +173,7 @@ public class Vanilla {
     /**
      * Removes a Bukkit recipe from the <b>server</b> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the BaseRecipe object you should use
      * {@link #removeCustomRecipe(BaseRecipe)}</b>
-     * 
+     *
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
@@ -194,7 +197,7 @@ public class Vanilla {
     /**
      * Removes a Bukkit recipe from the <b>server</b><br> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CraftRecipe object you should use
      * {@link #removeCraftRecipe(CraftRecipe)}</b>
-     * 
+     *
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
@@ -205,7 +208,7 @@ public class Vanilla {
 
     /**
      * Removes a RecipeManager recipe from the <b>server</b>
-     * 
+     *
      * @param recipe
      *            RecipeManager recipe
      * @return removed recipe or null if not found
@@ -242,7 +245,7 @@ public class Vanilla {
     /**
      * Removes a Bukkit recipe from the <b>server</b><br> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CombineRecipe object you should use
      * {@link #removeCombineRecipe(CombineRecipe)}</b>
-     * 
+     *
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
@@ -253,7 +256,7 @@ public class Vanilla {
 
     /**
      * Removes a RecipeManager recipe from the <b>server</b>
-     * 
+     *
      * @param recipe
      *            RecipeManager recipe
      * @return removed recipe or null if not found
@@ -284,7 +287,7 @@ public class Vanilla {
     /**
      * Removes a Bukkit furnace recipe from the <b>server</b><br> Unlike {@link #removeShapedRecipe(ShapedRecipe)} and {@link #removeShapelessRecipe(ShapelessRecipe)} this method does not convert
      * recipes since it only needs the ingredient.
-     * 
+     *
      * @param recipe
      *            Bukkit recipe
      * @return removed recipe or null if not found
@@ -295,7 +298,7 @@ public class Vanilla {
 
     /**
      * Removes a RecipeManager smelt recipe from the <b>server</b>
-     * 
+     *
      * @param recipe
      *            RecipeManager recipe
      * @return removed recipe or null if not found
