@@ -134,7 +134,8 @@ public enum FlagType {
     private static final Map<Class<? extends Flag>, FlagType> classMap = new HashMap<Class<? extends Flag>, FlagType>();
 
     /**
-     * You should not call this method.<br> <br> It is used by the plugin to add the flags to an index map then create and add individual no-flag permissions.
+     * You should not call this method.<br> <br>
+     * It is used by the plugin to add the flags to an index map then create and add individual no-flag permissions.
      */
     public static void init() {
         Permission parent = Bukkit.getPluginManager().getPermission(Permissions.FLAG_ALL);

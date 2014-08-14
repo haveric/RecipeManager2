@@ -28,7 +28,8 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Parses a string to get the values for this flag.<br> Has different effects for each extension of Flag object.
+     * Parses a string to get the values for this flag.<br>
+     * Has different effects for each extension of Flag object.
      *
      * @param value
      *            the flag's value (not containing the <code>@flag</code> string)
@@ -64,8 +65,9 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Check if the flag allows to craft with these arguments.<br> Any and all arguments can be null if you don't have values for them.<br> To make the check fail you <b>must</b> add a reason to the
-     * argument!
+     * Check if the flag allows to craft with these arguments.<br>
+     * Any and all arguments can be null if you don't have values for them.<br>
+     * To make the check fail you <b>must</b> add a reason to the argument!
      *
      * @param a
      *            the arguments class for easily maintainable argument class
@@ -89,7 +91,9 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Apply the flag's effects to the arguments.<br> Any and all arguments can be null if you don't have values for them.<br> To make the check fail you <b>must</b> add a reason to the argument!
+     * Apply the flag's effects to the arguments.<br>
+     * Any and all arguments can be null if you don't have values for them.<br>
+     * To make the check fail you <b>must</b> add a reason to the argument!
      *
      * @param a
      *            the arguments class for easily maintainable argument class
@@ -101,8 +105,9 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Trigger flag failure as if it failed due to multi-result chance.<br> Any and all arguments can be null if you don't have values for them.<br> Adding reasons to this will display them to the
-     * crafter.
+     * Trigger flag failure as if it failed due to multi-result chance.<br>
+     * Any and all arguments can be null if you don't have values for them.<br>
+     * Adding reasons to this will display them to the crafter.
      *
      * @param a
      */
@@ -111,8 +116,9 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Removes the flag from its flag list container.<br> This also notifies the flag of removal, it might do some stuff before removal.<br> If the flag hasn't been added to any flag list, this method
-     * won't do anything.
+     * Removes the flag from its flag list container.<br>
+     * This also notifies the flag of removal, it might do some stuff before removal.<br>
+     * If the flag hasn't been added to any flag list, this method won't do anything.
      */
     final public void remove() {
         if (flagsContainer != null) {

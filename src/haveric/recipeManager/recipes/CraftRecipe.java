@@ -67,7 +67,9 @@ public class CraftRecipe extends WorkbenchRecipe {
     }
 
     /**
-     * Set the ingredients matrix. <br> This also calculates the width and height of the shape matrix.<br> <b>NOTE: Array must have exactly 9 elements, use null for empty slots.</b>
+     * Set the ingredients matrix. <br>
+     * This also calculates the width and height of the shape matrix.<br>
+     * <b>NOTE: Array must have exactly 9 elements, use null for empty slots.</b>
      *
      * @param ingredients
      *            ingredients matrix, this also defines the shape, width and height.
@@ -82,9 +84,16 @@ public class CraftRecipe extends WorkbenchRecipe {
     }
 
     /**
-     * Sets an ingredient slot to material with wildcard data value.<br> Slots are like:<br> <code>| 0 1 2 |<br> | 3 4 5 |<br> | 6 7 8 |</code> <br> Null slots are ignored and allow the recipe to be
-     * used in a smaller grid (inventory's 2x2 for example)<br> <br> <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br> This is required because ingredients
-     * are shifted to top-left corner of the 2D matrix on each call of this method.
+     * Sets an ingredient slot to material with wildcard data value.<br>
+     * Slots are like:<br>
+     * <code>
+     * | 0 1 2 |<br>
+     * | 3 4 5 |<br>
+     * | 6 7 8 |</code> <br>
+     * Null slots are ignored and allow the recipe to be
+     * used in a smaller grid (inventory's 2x2 for example)<br> <br>
+     * <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br>
+     * This is required because ingredients are shifted to top-left corner of the 2D matrix on each call of this method.
      *
      * @param slot
      *            start with 0, then use any index from 1 to 8
@@ -95,9 +104,16 @@ public class CraftRecipe extends WorkbenchRecipe {
     }
 
     /**
-     * Sets an ingredient slot to material with specific data value.<br> Slots are like:<br> <code>| 0 1 2 |<br> | 3 4 5 |<br> | 6 7 8 |</code> <br> Null slots are ignored and allow the recipe to be
-     * used in a smaller grid (inventory's 2x2 for example)<br> <br> <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br> This is required because ingredients
-     * are shifted to top-left corner of the 2D matrix on each call of this method.
+     * Sets an ingredient slot to material with specific data value.<br>
+     * Slots are like:<br>
+     * <code>
+     * | 0 1 2 |<br>
+     * | 3 4 5 |<br>
+     * | 6 7 8 |</code> <br>
+     * Null slots are ignored and allow the recipe to be
+     * used in a smaller grid (inventory's 2x2 for example)<br> <br>
+     * <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br>
+     * This is required because ingredients are shifted to top-left corner of the 2D matrix on each call of this method.
      *
      * @param slot
      *            start with 0, then use any index from 1 to 8
@@ -131,7 +147,9 @@ public class CraftRecipe extends WorkbenchRecipe {
     }
 
     /**
-     * Mirror the ingredients shape.<br> Useful for matching recipes, no other real effect.<br> This triggers a hashCode recalculation.
+     * Mirror the ingredients shape.<br>
+     * Useful for matching recipes, no other real effect.<br>
+     * This triggers a hashCode recalculation.
      *
      * @param mirror
      */

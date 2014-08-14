@@ -9,10 +9,10 @@ import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.RecipeInfo;
+import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
-import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import haveric.recipeManager.tools.Tools;
 
 import java.util.HashMap;
@@ -27,7 +27,6 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-
 
 import com.google.common.collect.ImmutableMap;
 
@@ -100,8 +99,8 @@ public class Recipes {
     }
 
     /**
-     * Checks if recipe is added by RecipeManager, works for workbench and furnace recipes.<br> Does not work for fuels because they do not exist in Bukkit API, they're a custom system by
-     * RecipeManager.
+     * Checks if recipe is added by RecipeManager, works for workbench and furnace recipes.<br>
+     * Does not work for fuels because they do not exist in Bukkit API, they're a custom system by RecipeManager.
      *
      * @param recipe
      *            must be the actual recipe, because it checks for result's lore.
@@ -130,8 +129,9 @@ public class Recipes {
     }
 
     /**
-     * Get the RecipeManager workbench recipe for the bukkit recipe inputted.<br> Can be either craft or combine recipe.<br> If you know the specific type you can use
-     * {@link #getCraftRecipe(ItemStack)} or {@link #getCombineRecipe(ItemStack)}
+     * Get the RecipeManager workbench recipe for the bukkit recipe inputted.<br>
+     * Can be either craft or combine recipe.<br>
+     * If you know the specific type you can use {@link #getCraftRecipe(ItemStack)} or {@link #getCombineRecipe(ItemStack)}
      *
      * @param recipe
      * @return Workbench recipe, otherwise it can be null if doesn't exist or you inputted a furnace recipe
@@ -149,7 +149,8 @@ public class Recipes {
     }
 
     /**
-     * Get the RecipeManager craft recipe for the result inputted.<br> The result must be the one from the bukkit recipe retrieved as it needs to check for result lore for the ID.<br>
+     * Get the RecipeManager craft recipe for the result inputted.<br>
+     * The result must be the one from the bukkit recipe retrieved as it needs to check for result lore for the ID.
      *
      * @param result
      * @return Craft recipe or null if doesn't exist
@@ -159,7 +160,8 @@ public class Recipes {
     }
 
     /**
-     * Get the RecipeManager combine recipe for the result inputted.<br> The result must be the one from the bukkit recipe retrieved as it needs to check for result lore for the ID.<br>
+     * Get the RecipeManager combine recipe for the result inputted.<br>
+     * The result must be the one from the bukkit recipe retrieved as it needs to check for result lore for the ID.
      *
      * @param result
      * @return Combine recipe or null if doesn't exist
@@ -214,7 +216,8 @@ public class Recipes {
     }
 
     /**
-     * Gets a recipe by its name.<br> The name can be an auto-generated name or a custom name.
+     * Gets a recipe by its name.<br>
+     * The name can be an auto-generated name or a custom name.
      *
      * @param name
      *            recipe name
@@ -225,8 +228,9 @@ public class Recipes {
     }
 
     /**
-     * Gets the recipe's information (owner, adder, status, etc).<br> You can use this on bukkit recipes by converting them to RecipeManager format using:<br> <code>new
-     * BaseRecipe(bukkitRecipe);</code>
+     * Gets the recipe's information (owner, adder, status, etc).<br>
+     * You can use this on bukkit recipes by converting them to RecipeManager format using:<br>
+     * <code>new BaseRecipe(bukkitRecipe);</code>
      *
      * @param recipe
      *            a RecipeManager recipe
@@ -237,8 +241,9 @@ public class Recipes {
     }
 
     /**
-     * Gets a copy of RecipeManager's recipe list.<br> Returned values are mutable so you can edit individual recipes.<br> Removing from this list does nothing, see {@link BaseRecipe #remove()} method
-     * instead.
+     * Gets a copy of RecipeManager's recipe list.<br>
+     * Returned values are mutable so you can edit individual recipes.<br>
+     * Removing from this list does nothing, see {@link BaseRecipe #remove()} method instead.
      *
      * @return copy of hashmap
      */
@@ -258,7 +263,8 @@ public class Recipes {
     }
 
     /**
-     * Registers a recipe with custom recipe info object.<br> NOTE: You should not use this if you don't know what the recipe info object REALLY does.
+     * Registers a recipe with custom recipe info object.<br>
+     * NOTE: You should not use this if you don't know what the recipe info object REALLY does.
      *
      * @param recipe
      * @param info

@@ -7,8 +7,9 @@ public interface Flaggable {
     public boolean hasFlag(FlagType type);
 
     /**
-     * Checks if flag storage is null.<br> This is useful to check if {@link #getFlags()} would create a new Flags object when called.<br>
-     * 
+     * Checks if flag storage is null.<br>
+     * This is useful to check if {@link #getFlags()} would create a new Flags object when called.
+     *
      * @return flags != null
      */
     public boolean hasFlags();
@@ -29,8 +30,10 @@ public interface Flaggable {
     public <T extends Flag> T getFlag(Class<T> flagClass);
 
     /**
-     * Gets the Flag object that holds a list of flags.<br> Can't be null but creates a new instance of Flag when called.<br> You can check if flags is null with {@link #hasFlags()}
-     * 
+     * Gets the Flag object that holds a list of flags.<br>
+     * Can't be null but creates a new instance of Flag when called.<br>
+     * You can check if flags is null with {@link #hasFlags()}
+     *
      * @return Flag object, never null
      */
     public Flags getFlags();
@@ -47,7 +50,7 @@ public interface Flaggable {
 
     /**
      * Check with flags if recipe/result can be crafted/used
-     * 
+     *
      * @param a
      *            use {@link Args#create()}
      * @return if recipe can be crafted
@@ -56,7 +59,7 @@ public interface Flaggable {
 
     /**
      * Apply flags when recipe/result is crafted/taken
-     * 
+     *
      * @param a
      *            use {@link Args#create()}
      * @return
@@ -65,7 +68,7 @@ public interface Flaggable {
 
     /**
      * Apply flags when recipe/result is prepared/displayed
-     * 
+     *
      * @param ause
      *            {@link Args#create()}
      * @return

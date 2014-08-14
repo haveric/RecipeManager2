@@ -9,7 +9,8 @@ import org.bukkit.event.HandlerList;
 
 
 /**
- * Triggered when RecipeManager is fully enabled.<br> It is useful if you need to add recipes through this plugin.
+ * Triggered when RecipeManager is fully enabled.<br>
+ * It is useful if you need to add recipes through this plugin.
  */
 public class RecipeManagerEnabledEvent extends Event {
     private static final HandlerList handlers = new HandlerList();

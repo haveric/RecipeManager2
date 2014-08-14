@@ -145,14 +145,16 @@ public class BaseRecipe implements Flaggable {
     }
 
     /**
-     * Register recipe with the server and RecipeManager.<br> Alias for RecipeManager.getRecipes().registerRecipe(this);
+     * Register recipe with the server and RecipeManager.<br>
+     * Alias for RecipeManager.getRecipes().registerRecipe(this);
      */
     public void register() {
         RecipeManager.getRecipes().registerRecipe(this);
     }
 
     /**
-     * Remove this recipe from the server and from RecipeManager.<br> Alias for: RecipeManager.getRecipes().removeRecipe(this);
+     * Remove this recipe from the server and from RecipeManager.<br>
+     * Alias for: RecipeManager.getRecipes().removeRecipe(this);
      *
      * @return removed recipe or null if not found
      */

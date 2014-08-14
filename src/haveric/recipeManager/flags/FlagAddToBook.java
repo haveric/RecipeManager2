@@ -51,7 +51,8 @@ public class FlagAddToBook extends Flag {
     }
 
     /**
-     * Set the book name, will be forced as lowercase.<br> Setting this to null, "false" or "remove" will remove the flag from its container.
+     * Set the book name, will be forced as lowercase.<br>
+     * Setting this to null, "false" or "remove" will remove the flag from its container.
      *
      * @param name
      */

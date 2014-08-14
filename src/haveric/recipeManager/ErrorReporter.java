@@ -10,8 +10,9 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 
 /**
- * This class is used by RecipeManager to display recipe errors.<br> Errors can be caught to be displayed in a single chunk along with file name and lines.<br> When errors are not caught they'll be
- * directly displayed to console.
+ * This class is used by RecipeManager to display recipe errors.<br>
+ * Errors can be caught to be displayed in a single chunk along with file name and lines.<br>
+ * When errors are not caught they'll be directly displayed to console.
  */
 public class ErrorReporter {
     private static HashMap<String, List<String>> fileErrors;
@@ -20,7 +21,8 @@ public class ErrorReporter {
     private static boolean ignore = false;
 
     /**
-     * Starts catching reported errors and stores them in a list for later printing.<br> This also resets file to null and line to 0
+     * Starts catching reported errors and stores them in a list for later printing.<br>
+     * This also resets file to null and line to 0
      */
     public static void startCatching() {
         stopCatching();
@@ -28,7 +30,8 @@ public class ErrorReporter {
     }
 
     /**
-     * Stops catching the errors and ditches any catched errors so far !<br> Calling this requires calling {@link #startCatching()} again to queue errors.
+     * Stops catching the errors and ditches any caught errors so far!<br>
+     * Calling this requires calling {@link #startCatching()} again to queue errors.
      */
     public static void stopCatching() {
         fileErrors = null;
@@ -38,8 +41,8 @@ public class ErrorReporter {
     }
 
     /**
-     * Check if class catched any errors.
-     * 
+     * Check if class caught any errors.
+     *
      * @return true if catching, false otherwise
      */
     public static boolean isCatching() {
@@ -48,7 +51,7 @@ public class ErrorReporter {
 
     /**
      * Gets the amount of queued errors.
-     * 
+     *
      * @return 0 if no errors, -1 if not catching at all
      */
     public static int getCatchedAmount() {
@@ -57,7 +60,7 @@ public class ErrorReporter {
 
     /**
      * Print the queued errors (if any)
-     * 
+     *
      * @param logFile
      */
     public static void print(String logFile) {
@@ -122,8 +125,9 @@ public class ErrorReporter {
     }
 
     /**
-     * Set the current file path/name - printed in queued errors.<br> This also resets line to 0.
-     * 
+     * Set the current file path/name - printed in queued errors.<br>
+     * This also resets line to 0.
+     *
      * @param line
      */
     public static void setFile(String file) {
@@ -139,8 +143,9 @@ public class ErrorReporter {
     }
 
     /**
-     * Set the current line - printed in queued errors.<br> This will be reset to 0 after calling {@link #setFile()}
-     * 
+     * Set the current line - printed in queued errors.<br>
+     * This will be reset to 0 after calling {@link #setFile()}
+     *
      * @param line
      */
     public static void setLine(int line) {
@@ -155,8 +160,9 @@ public class ErrorReporter {
     }
 
     /**
-     * This can be used to temporary ignore any errors that are stored.<br> <b>NOTE: Only works when catching errors, use with care.</b>
-     * 
+     * This can be used to temporarily ignore any errors that are stored.<br>
+     * <b>NOTE: Only works when catching errors, use with care.</b>
+     *
      * @param set
      */
     protected static void setIgnoreErrors(boolean set) {
@@ -179,7 +185,7 @@ public class ErrorReporter {
 
     /**
      * Queue error or print it directly if queue was not started.
-     * 
+     *
      * @param error
      * @return always returns false, useful for quick returns
      */
@@ -189,7 +195,7 @@ public class ErrorReporter {
 
     /**
      * Queue error or print it directly if queue was not started.
-     * 
+     *
      * @param error
      *            the error message
      * @param tip

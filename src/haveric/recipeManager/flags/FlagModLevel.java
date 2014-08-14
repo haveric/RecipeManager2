@@ -58,7 +58,8 @@ public class FlagModLevel extends Flag {
     }
 
     /**
-     * The amount modified.<br> Use {@link #getModifier()} to get the type of modifier (+, -, =).
+     * The amount modified.<br>
+     * Use {@link #getModifier()} to get the type of modifier (+, -, =).
      *
      * @return amount
      */

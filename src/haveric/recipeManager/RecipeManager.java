@@ -31,7 +31,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
- * RecipeManager's main class<br> It has static methods for the API.
+ * RecipeManager's main class<br>
+ * It has static methods for the API.
  */
 public class RecipeManager extends JavaPlugin {
     protected static RecipeManager plugin;

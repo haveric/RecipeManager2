@@ -256,8 +256,8 @@ public class Args {
     }
 
     /**
-     * Re-processes the arguments to assign them in as many places as possible.<br> For example, if you only set player name, the player() will still be null, but by triggering this it will try to
-     * assign player() to an Player object.
+     * Re-processes the arguments to assign them in as many places as possible.<br>
+     * For example, if you only set player name, the player() will still be null, but by triggering this it will try to assign player() to an Player object.
      *
      * @return same instance
      */

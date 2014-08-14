@@ -56,7 +56,8 @@ public class Economy {
     }
 
     /**
-     * Gets the format of the money, defined by the economy plugin used.<br> If economy is not enabled this method will return null.
+     * Gets the format of the money, defined by the economy plugin used.<br>
+     * If economy is not enabled this method will return null.
      *
      * @param amount
      *            money amount to format
@@ -71,7 +72,8 @@ public class Economy {
     }
 
     /**
-     * Gets how much money a player has.<br> If economy is not enabled this method will return 0.
+     * Gets how much money a player has.<br>
+     * If economy is not enabled this method will return 0.
      *
      * @param playerName
      *            player's name
@@ -93,7 +95,9 @@ public class Economy {
     }
 
     /**
-     * Give or take money.<br> Use negative values to take money.<br> If economy is not enabled or amount is 0, this method won't do anything
+     * Give or take money.<br>
+     * Use negative values to take money.<br>
+     * If economy is not enabled or amount is 0, this method won't do anything
      *
      * @param playerName
      *            player's name

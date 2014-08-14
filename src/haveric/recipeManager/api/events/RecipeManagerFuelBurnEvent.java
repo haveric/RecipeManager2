@@ -15,8 +15,9 @@ import org.bukkit.inventory.ItemStack;
 
 
 /**
- * Event triggered when RecipeManager's custom fuel recipes are burnt.<br> Player can return null in certain situations, so be sure to prepare for that situation.<br> Event can be cancelled to prevent
- * the action.
+ * Event triggered when RecipeManager's custom fuel recipes are burned.<br>
+ * Player can return null in certain situations, so be sure to prepare for that situation.<br>
+ * Event can be cancelled to prevent the action.
  *
  * @author Digi
  */
@@ -52,7 +53,8 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the ticks that the furnace will run for.<br> Can be different every time depending on the recipe.
+     * Get the ticks that the furnace will run for.<br>
+     * Can be different every time depending on the recipe.
      *
      * @return fuel burning ticks
      */
@@ -78,7 +80,8 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the player's name that initially placed the fuel.<br> Can be null in certain situatinos!
+     * Get the player's name that initially placed the fuel.<br>
+     * Can be null in certain situations!
      *
      * @return fueler's name
      */
@@ -87,7 +90,8 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the Player object of the player that placed the fuel.<br> NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name only.
+     * Get the Player object of the player that placed the fuel.<br>
+     * NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name only.
      *
      * @return Player object of the fueler
      */

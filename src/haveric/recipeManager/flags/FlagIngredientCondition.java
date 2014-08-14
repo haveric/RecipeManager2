@@ -123,7 +123,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Sets the new data values map.<br> If the map is null the values will be cleared.
+         * Sets the new data values map.<br>
+         * If the map is null the values will be cleared.
          *
          * @param map
          */
@@ -156,7 +157,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Adds data values range as requirement.<br> Note: max >= min
+         * Adds data values range as requirement.<br>
+         * Note: max >= min
          *
          * @param min
          * @param max
@@ -166,7 +168,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Adds data values range as requirement/restriction.<br> Note: max >= min
+         * Adds data values range as requirement/restriction.<br>
+         * Note: max >= min
          *
          * @param min
          * @param max
@@ -195,7 +198,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Sets the new data bits map.<br> If the map is null the values will be cleared.
+         * Sets the new data bits map.<br>
+         * If the map is null the values will be cleared.
          *
          * @param map
          */
@@ -331,7 +335,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Set the enchants map.<br> Setting to null will clear the map contents.
+         * Set the enchants map.<br>
+         * Setting to null will clear the map contents.
          *
          * @param enchants
          */
@@ -515,7 +520,7 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Set the color ranges.<br>
+         * Set the color ranges.
          *
          * @param minColor
          *            color for min-range or null to disable color checking.
@@ -528,7 +533,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         /**
-         * Sets the color required.<br> NOTE: This sets maxColor to null.
+         * Sets the color required.<br>
+         * NOTE: This sets maxColor to null.
          *
          * @param r
          *            0-255

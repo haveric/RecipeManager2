@@ -117,7 +117,9 @@ public class RecipeBooks {
     }
 
     /**
-     * Parses a YAML file into a RecipeBook object.<br> It can have any extension and its name will be the ID.<br> Uses {@link ErrorReporter} to trigger errors.
+     * Parses a YAML file into a RecipeBook object.<br>
+     * It can have any extension and its name will be the ID.<br>
+     * Uses {@link ErrorReporter} to trigger errors.
      *
      * @param file
      *            the file.

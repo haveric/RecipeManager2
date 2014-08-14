@@ -50,25 +50,27 @@ public class FlagMessage extends Flag {
 
     /**
      * Set the message list.
-     * 
+     *
      * @param messages
      */
     public void setMessages(List<String> messages) {
         if (messages == null) {
-            this.remove();
+            remove();
         } else {
             this.messages = messages;
         }
     }
 
     /**
-     * Set the message.<br> Supports parsable color tags and codes.<br> You can use null, "false" or "remove" to remove the entire flag.
-     * 
+     * Set the message.<br>
+     * Supports parsable color tags and codes.<br>
+     * You can use null, "false" or "remove" to remove the entire flag.
+     *
      * @param message
      */
     public void addMessage(String message) {
         if (message == null || message.equalsIgnoreCase("false") || message.equalsIgnoreCase("remove")) {
-            this.remove();
+            remove();
         } else {
             if (messages == null) {
                 messages = new ArrayList<String>();

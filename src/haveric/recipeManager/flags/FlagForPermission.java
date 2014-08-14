@@ -81,7 +81,7 @@ public class FlagForPermission extends Flag {
     }
 
     /**
-     * Checks if the flag can be added to this flag list.<br>
+     * Checks if the flag can be added to this flag list.
      *
      * @param flag
      * @return false if flag can only be added on specific flaggables
@@ -91,7 +91,8 @@ public class FlagForPermission extends Flag {
     }
 
     /**
-     * Attempts to add a flag to this flag list for the permission.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
+     * Attempts to add a flag to this flag list for the permission.<br>
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      *
      * @param permission
      * @param flag

@@ -52,26 +52,28 @@ public class FlagCommand extends Flag {
     }
 
     /**
-     * Set the command list.<br> You can use null to remove the entire flag.
-     * 
+     * Set the command list.<br>
+     * You can use null to remove the entire flag.
+     *
      * @param commands
      */
     public void setCommands(List<String> commands) {
         if (commands == null) {
-            this.remove();
+            remove();
         } else {
             this.commands = commands;
         }
     }
 
     /**
-     * Adds a command to the list.<br> You can use null, "false" or "remove" to remove the entire flag.
-     * 
+     * Adds a command to the list.<br>
+     * You can use null, "false" or "remove" to remove the entire flag.
+     *
      * @param command
      */
     public void addCommand(String command) {
         if (command == null || command.equalsIgnoreCase("false") || command.equalsIgnoreCase("remove")) {
-            this.remove();
+            remove();
         } else {
             commands.add(command);
         }
@@ -110,12 +112,12 @@ public class FlagCommand extends Flag {
 
     /*
      * @Override public List<String> information() { if(commands.isEmpty()) { return null; }
-     * 
+     *
      * List<String> list = new ArrayList<String>(commands.size());
-     * 
+     *
      * for(String command : commands) { if(command.charAt(0) == '/') { list.add(Messages.FLAG_COMMAND_PLAYER.get("{command}", command)); } else { list.add(Messages.FLAG_COMMAND_SERVER.get("{command}",
      * command)); } }
-     * 
+     *
      * return list; }
      */
 }

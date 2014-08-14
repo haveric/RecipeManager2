@@ -109,7 +109,8 @@ public class FlagForChance extends Flag {
     }
 
     /**
-     * Gets the first flag matching FlagType or the last if reverse is set to true.<br> There can be more instances of the same type of flag.
+     * Gets the first flag matching FlagType or the last if reverse is set to true.<br>
+     * There can be more instances of the same type of flag.
      *
      * @param group
      *            the chance group, can be null for no group/individual
@@ -130,7 +131,7 @@ public class FlagForChance extends Flag {
     }
 
     /**
-     * Checks if the flag can be added to this flag list.<br>
+     * Checks if the flag can be added to this flag list.
      *
      * @param flag
      * @return false if flag can only be added on specific flaggables
@@ -140,7 +141,8 @@ public class FlagForChance extends Flag {
     }
 
     /**
-     * Attempts to add a flag to this flag list for the chance group.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
+     * Attempts to add a flag to this flag list for the chance group.<br>
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      *
      * @param group
      *            the chance group, can be null for no group/individual
@@ -152,7 +154,8 @@ public class FlagForChance extends Flag {
     }
 
     /**
-     * Attempts to add a flag to this flag list for the chance group.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
+     * Attempts to add a flag to this flag list for the chance group.<br>
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      *
      * @param group
      *            the chance group, can be null for no group/individual

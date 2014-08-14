@@ -39,9 +39,12 @@ public class ToolsItem {
     }
 
     /**
-     * Displays the itemstack in a user-friendly and colorful manner.<br> If item is null or air it will print "nothing" in gray.<br> If item is enchanted it will have aqua color instead of
-     * white.<br> Uses aliases to display data values as well.<br> Uses item's display name in italic font if available.<br> <br> NOTE: Will have a RESET color at the end, use
-     * {@link #print(ItemStack, ChatColor)} to use a different end-color instead.
+     * Displays the itemstack in a user-friendly and colorful manner.<br>
+     * If item is null or air it will print "nothing" in gray.<br>
+     * If item is enchanted it will have aqua color instead of white.<br>
+     * Uses aliases to display data values as well.<br>
+     * Uses item's display name in italic font if available.<br> <br>
+     * NOTE: Will have a RESET color at the end, use {@link #print(ItemStack, ChatColor)} to use a different end-color instead.
      *
      * @param item
      *            the item to print, can be null
@@ -52,8 +55,11 @@ public class ToolsItem {
     }
 
     /**
-     * Displays the itemstack in a user-friendly and colorful manner.<br> If item is null or air it will print "nothing" in gray.<br> If item is enchanted it will have aqua color instead of
-     * white.<br> Uses aliases to display data values as well.<br> Uses item's display name in italic font if available.
+     * Displays the itemstack in a user-friendly and colorful manner.<br>
+     * If item is null or air it will print "nothing" in gray.<br>
+     * If item is enchanted it will have aqua color instead of white.<br>
+     * Uses aliases to display data values as well.<br>
+     * Uses item's display name in italic font if available.
      *
      * @param item
      *            the item to print, can be null

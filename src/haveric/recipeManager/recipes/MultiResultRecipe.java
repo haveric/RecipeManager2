@@ -178,7 +178,8 @@ public class MultiResultRecipe extends BaseRecipe {
     }
 
     /**
-     * Get a random result from the list.<br> Returns AIR if failure chance occurred.
+     * Get a random result from the list.<br>
+     * Returns AIR if failure chance occurred.
      *
      * @param a
      *            dynamic arguments, use {@link ArgBuilder#create()} to build arguments for this.

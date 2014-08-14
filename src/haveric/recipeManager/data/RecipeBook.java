@@ -18,7 +18,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-
 import com.google.common.collect.ImmutableList;
 
 public class RecipeBook {
@@ -34,7 +33,9 @@ public class RecipeBook {
     private boolean end = true;
 
     /**
-     * Blank recipe book.<br> Use methods to add recipes to book, set title, etc.<br> Then register/update it on {@link RecipeBooks} class.
+     * Blank recipe book.<br>
+     * Use methods to add recipes to book, set title, etc.<br>
+     * Then register/update it on {@link RecipeBooks} class.
      */
     public RecipeBook(String id) {
         this.id = id;
@@ -90,8 +91,9 @@ public class RecipeBook {
     }
 
     /**
-     * Sets how many recipes are added per volume.<br> This only affects recipes that are added by {@link #addRecipe(BaseRecipe)} method or 'recipe' node in the yml file.
-     * 
+     * Sets how many recipes are added per volume.<br>
+     * This only affects recipes that are added by {@link #addRecipe(BaseRecipe)} method or 'recipe' node in the yml file.
+     *
      * @param recipesPerVolume
      */
     public void setRecipesPerVolume(int recipesPerVolume) {
@@ -127,12 +129,12 @@ public class RecipeBook {
     }
 
     public void setCustomEndPage(String string) {
-        this.customEnd = (string == null || string.isEmpty() ? null : string);
+        customEnd = (string == null || string.isEmpty() ? null : string);
     }
 
     /**
      * Add specified recipe to the book.
-     * 
+     *
      * @param recipe
      *            a valid recipe.
      * @return true if added, false if it already exists in the book.
@@ -219,14 +221,14 @@ public class RecipeBook {
         int volumeID = volume - 1;
         BookMeta meta = (BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
 
-        meta.setTitle(this.getTitle() + (getVolumesNum() > 1 ? " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", volume) : ""));
-        meta.setAuthor(this.getAuthor() + Tools.hideString(" " + this.getId() + " " + volume + " " + (System.currentTimeMillis() / 1000)));
+        meta.setTitle(getTitle() + (getVolumesNum() > 1 ? " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", volume) : ""));
+        meta.setAuthor(getAuthor() + Tools.hideString(" " + getId() + " " + volume + " " + (System.currentTimeMillis() / 1000)));
 
         // Cover page
         if (cover) {
             StringBuilder cover = new StringBuilder(256);
 
-            cover.append('\n').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append(this.getTitle());
+            cover.append('\n').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append(getTitle());
 
             if (getVolumesNum() > 1) {
                 cover.append('\n').append(ChatColor.BLACK).append("  ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", volume, "{volumes}", getVolumesNum()));
@@ -234,8 +236,8 @@ public class RecipeBook {
 
             cover.append('\n').append(ChatColor.GRAY).append("        Published by\n        RecipeManager");
 
-            if (this.getDescription() != null) {
-                cover.append('\n').append(ChatColor.DARK_BLUE).append(this.getDescription());
+            if (getDescription() != null) {
+                cover.append('\n').append(ChatColor.DARK_BLUE).append(getDescription());
             }
 
             meta.addPage(cover.toString());

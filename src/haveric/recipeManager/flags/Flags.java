@@ -54,7 +54,8 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Gets a flag by its type.<br> For automated casting you should use {@link #getFlag(Class)}
+     * Gets a flag by its type.<br>
+     * For automated casting you should use {@link #getFlag(Class)}
      *
      * @param type
      * @return Flag object
@@ -64,7 +65,9 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Gets a flag by its class name.<br> This is useful for easy auto-casting, example:<br> <br> <code>FlagCommands flag = flags.getFlag(FlagCommands.class);</code>
+     * Gets a flag by its class name.<br>
+     * This is useful for easy auto-casting, example:<br> <br>
+     * <code>FlagCommands flag = flags.getFlag(FlagCommands.class);</code>
      *
      * @param flagClass
      *            the class of the flag
@@ -85,7 +88,7 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Checks if the flag can be added to this flag list.<br>
+     * Checks if the flag can be added to this flag list.
      *
      * @param flag
      * @return false if flag can only be added on specific flaggables
@@ -95,7 +98,8 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Attempts to add a flag to this flag list.<br> Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
+     * Attempts to add a flag to this flag list.<br>
+     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
      *
      * @param flag
      */
@@ -111,7 +115,8 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Parses a string to create/get a flag and add to/update the list.<br> This is used by RecipeManager's file processor.
+     * Parses a string to create/get a flag and add to/update the list.<br>
+     * This is used by RecipeManager's file processor.
      *
      * @param value
      *            flag expression string like the ones in recipe files
@@ -157,7 +162,8 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Removes the specified flag from this flag list.<br> Alias for {@link #removeFlag(FlagType)}
+     * Removes the specified flag from this flag list.<br>
+     * Alias for {@link #removeFlag(FlagType)}
      *
      * @param flag
      */
@@ -188,7 +194,8 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Gets the Recipe or ItemResult that uses this flag list.<br> You must check and cast accordingly.
+     * Gets the Recipe or ItemResult that uses this flag list.<br>
+     * You must check and cast accordingly.
      *
      * @return Flaggable object or null if undefined
      */
@@ -257,7 +264,8 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Notifies all flags that the recipe was registered.<br> Shouldn't really be triggered manually.
+     * Notifies all flags that the recipe was registered.<br>
+     * Shouldn't really be triggered manually.
      */
     public void sendRegistered() {
         for (Flag flag : flags.values()) {
@@ -266,7 +274,7 @@ public class Flags implements Cloneable {
     }
 
     /**
-     * Copy this flag storage and give it a new container.<br>
+     * Copy this flag storage and give it a new container.
      *
      * @param newContainer
      * @return

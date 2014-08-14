@@ -93,7 +93,8 @@ public class FlagCloneIngredient extends Flag {
     }
 
     /**
-     * Set what to copy from the ingredient to the result.<br> You should use {@link Bit} class for values!
+     * Set what to copy from the ingredient to the result.<br>
+     * You should use {@link Bit} class for values!
      *
      * @param bitsum
      *            use {@link Bit} enums
@@ -103,7 +104,8 @@ public class FlagCloneIngredient extends Flag {
     }
 
     /**
-     * Pick something to copy from the ingredient to the result.<br> You should use {@link Bit} class for values!
+     * Pick something to copy from the ingredient to the result.<br>
+     * You should use {@link Bit} class for values!
      *
      * @param bit
      *            use {@link Bit} enums

@@ -10,9 +10,10 @@ import org.bukkit.inventory.ItemStack;
 
 
 /**
- * Event triggered when RecipeManager's custom recipes' ingredients are placed in the workbench and the result is displayed.<br> Player can return null in certain situations, so be sure to prepare for
- * that situation.<br> Event can be cancelled by setting the result to null to prevent player from crafting the recipe.
- * 
+ * Event triggered when RecipeManager's custom recipes' ingredients are placed in the workbench and the result is displayed.<br>
+ * Player can return null in certain situations, so be sure to prepare for that situation.<br>
+ * Event can be cancelled by setting the result to null to prevent player from crafting the recipe.
+ *
  * @author Digi
  */
 public class RecipeManagerPrepareCraftEvent extends Event {
@@ -27,7 +28,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
         this.recipe = recipe;
         this.result = result;
         this.player = player;
-        this.setWorkbenchLocation(workbench);
+        setWorkbenchLocation(workbench);
     }
 
     @Override
@@ -54,8 +55,9 @@ public class RecipeManagerPrepareCraftEvent extends Event {
     }
 
     /**
-     * The recipe result.<br> This may also return a special item that is used to print multi-results into one item's lore!
-     * 
+     * The recipe result.<br>
+     * This may also return a special item that is used to print multi-results into one item's lore!
+     *
      * @return result item or null if player doesn't have access to recipe
      */
     public ItemStack getResult() {
@@ -63,8 +65,9 @@ public class RecipeManagerPrepareCraftEvent extends Event {
     }
 
     /**
-     * Sets the display result.<br> Setting this to null will prevent the player from crafting the recipe.
-     * 
+     * Sets the display result.<br>
+     * Setting this to null will prevent the player from crafting the recipe.
+     *
      * @param result
      *            ItemStack displayed result or null to 'cancel' event
      */
@@ -81,7 +84,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
 
     /**
      * The workbench location is used by the recipe flags.
-     * 
+     *
      * @param workbench
      *            the new workbench location
      */

@@ -5,8 +5,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Triggered before Recipe Books are regenerated.<br> Useful when editing/adding recipe books through plugins because reloading recipe books erases all previous recipe books.
- * 
+ * Triggered before Recipe Books are regenerated.<br>
+ * Useful when editing/adding recipe books through plugins because reloading recipe books erases all previous recipe books.
+ *
  * @author Digi
  */
 public class RecipeManagerReloadBooksEvent extends Event {

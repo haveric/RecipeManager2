@@ -17,8 +17,9 @@ import org.bukkit.inventory.ItemStack;
 
 
 /**
- * Event triggered when RecipeManager's custom furnace recipes are being smelted.<br> Player can return null in certain situations, so be sure to prepare for that situation.<br> Event can be
- * cancelled to prevent the action.
+ * Event triggered when RecipeManager's custom furnace recipes are being smelted.<br>
+ * Player can return null in certain situations, so be sure to prepare for that situation.<br>
+ * Event can be cancelled to prevent the action.
  *
  * @author Digi
  */
@@ -65,7 +66,8 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     }
 
     /**
-     * Sets the result of the recipe.<br> Set to NULL to mark as failed.
+     * Sets the result of the recipe.<br>
+     * Set to NULL to mark as failed.
      *
      * @param item
      *            ItemResult or ItemStack
@@ -82,7 +84,8 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the player's name that initially placed the ingredient for this recipe.<br> Can be null in certain situatinos!
+     * Get the player's name that initially placed the ingredient for this recipe.<br>
+     * Can be null in certain situations!
      *
      * @return smelter's name or null
      */
@@ -91,8 +94,9 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the Player object of the player that placed the ingredient.<br> NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getSmelterName() to get his
-     * name only.<br> Shortcut for: Bukkit.getPlayerExact(event.getSmelterName());
+     * Get the Player object of the player that placed the ingredient.<br>
+     * NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getSmelterName() to get his name only.<br>
+     * Shortcut for: Bukkit.getPlayerExact(event.getSmelterName());
      *
      * @return Player object of the smelter or null
      */
@@ -110,7 +114,8 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the player's name that placed the fuel powering this recipe.<br> Can be null in certain situatinos!
+     * Get the player's name that placed the fuel powering this recipe.<br>
+     * Can be null in certain situations!
      *
      * @return fueler's name or null
      */
@@ -119,8 +124,9 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the Player object of the player that placed the fuel powering this recipe.<br> NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName()
-     * to get his name only.<br> Shortcut for: Bukkit.getPlayerExact(event.getSmelterName());
+     * Get the Player object of the player that placed the fuel powering this recipe.<br>
+     * NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name only.<br>
+     * Shortcut for: Bukkit.getPlayerExact(event.getSmelterName());
      *
      * @return Player object of the fueler or null
      */

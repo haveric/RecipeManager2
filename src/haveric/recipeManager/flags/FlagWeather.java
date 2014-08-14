@@ -58,8 +58,8 @@ public class FlagWeather extends Flag {
     }
 
     /**
-     * Get the set weather requirement.<br>
-     * 
+     * Get the set weather requirement.
+     *
      * @return 0 = none, 1 = rain/snow, 2 = thunder
      */
     public byte getWeather() {
@@ -67,8 +67,8 @@ public class FlagWeather extends Flag {
     }
 
     /**
-     * Set the weather requirement.<br>
-     * 
+     * Set the weather requirement.
+     *
      * @param weather
      *            0 = none, 1 = rain/snow, 2 = thunder
      */
@@ -162,9 +162,9 @@ public class FlagWeather extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * list.add(Messages.FLAG_WEATHER.get("{weather}", getWeatherString()));
-     * 
+     *
      * return list; }
      */
 }

@@ -174,7 +174,8 @@ public enum Messages {
     }
 
     /**
-     * Gets the message for the selected enum.<br> Processes colors as well.
+     * Gets the message for the selected enum.<br>
+     * Processes colors as well.
      *
      * @return
      */
@@ -188,7 +189,8 @@ public enum Messages {
     }
 
     /**
-     * Gets the message for the selected enum.<br> Processes colors and variables as well.
+     * Gets the message for the selected enum.<br>
+     * Processes colors and variables as well.
      *
      * @return
      */
@@ -211,7 +213,8 @@ public enum Messages {
     }
 
     /**
-     * Send the selected enum message to a player or console. <br> Will not be displayed if the message is set to "false".
+     * Send the selected enum message to a player or console. <br>
+     * Will not be displayed if the message is set to "false".
      *
      * @param sender
      *            player or console
@@ -227,8 +230,9 @@ public enum Messages {
     }
 
     /**
-     * Send the selected enum message to a player or console with an overwriteable message.<br> The customMessage has priority if it's not null.<br> If the priority message is "false" it will not be
-     * displayed.
+     * Send the selected enum message to a player or console with an overwriteable message.<br>
+     * The customMessage has priority if it's not null.<br>
+     * If the priority message is "false" it will not be displayed.
      *
      * @param sender
      *            player or console
@@ -250,8 +254,11 @@ public enum Messages {
     }
 
     /**
-     * Send the selected enum message to a player or console with an overwriteable message.<br> The customMessage has priority if it's not null.<br> If the priority message is "false" it will not be
-     * displayed.<br> Additionally you can specify variables to replace in the message.<br> The variable param must be a 2D String array that has pairs of 2 strings, variable and replacement value.
+     * Send the selected enum message to a player or console with an overwriteable message.<br>
+     * The customMessage has priority if it's not null.<br>
+     * If the priority message is "false" it will not be displayed.<br>
+     * Additionally you can specify variables to replace in the message.<br>
+     * The variable param must be a 2D String array that has pairs of 2 strings, variable and replacement value.
      *
      * @param sender
      *            player or console
@@ -321,7 +328,8 @@ public enum Messages {
     }
 
     /**
-     * Sends an array of messages to a player or console.<br> Message supports &lt;color&gt; codes.
+     * Sends an array of messages to a player or console.<br>
+     * Message supports &lt;color&gt; codes.
      *
      * @param sender
      * @param messages
@@ -341,7 +349,8 @@ public enum Messages {
     }
 
     /**
-     * Sends a message to a player or console.<br> Message supports &lt;color&gt; codes.
+     * Sends a message to a player or console.<br>
+     * Message supports &lt;color&gt; codes.
      *
      * @param sender
      * @param message

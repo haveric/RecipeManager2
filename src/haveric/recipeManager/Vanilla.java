@@ -52,12 +52,14 @@ public class Vanilla {
     public static final ItemStack RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short) 0);
 
     /**
-     * Default time a furnace recipe burns for.<br> This is a game constant.
+     * Default time a furnace recipe burns for.<br>
+     * This is a game constant.
      */
     public static final float FURNACE_RECIPE_TIME = 9.25f;
 
     /**
-     * The data value wildcard for recipe ingredients.<br> If an ingredient has this data value its data value will be ignored.
+     * The data value wildcard for recipe ingredients.<br>
+     * If an ingredient has this data value its data value will be ignored.
      */
     public static final short DATA_WILDCARD = Short.MAX_VALUE;
 
@@ -195,8 +197,8 @@ public class Vanilla {
     }
 
     /**
-     * Removes a Bukkit recipe from the <b>server</b><br> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CraftRecipe object you should use
-     * {@link #removeCraftRecipe(CraftRecipe)}</b>
+     * Removes a Bukkit recipe from the <b>server</b><br>
+     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CraftRecipe object you should use {@link #removeCraftRecipe(CraftRecipe)}</b>
      *
      * @param recipe
      *            Bukkit recipe
@@ -243,8 +245,8 @@ public class Vanilla {
     }
 
     /**
-     * Removes a Bukkit recipe from the <b>server</b><br> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CombineRecipe object you should use
-     * {@link #removeCombineRecipe(CombineRecipe)}</b>
+     * Removes a Bukkit recipe from the <b>server</b><br>
+     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CombineRecipe object you should use {@link #removeCombineRecipe(CombineRecipe)}</b>
      *
      * @param recipe
      *            Bukkit recipe
@@ -285,8 +287,8 @@ public class Vanilla {
     }
 
     /**
-     * Removes a Bukkit furnace recipe from the <b>server</b><br> Unlike {@link #removeShapedRecipe(ShapedRecipe)} and {@link #removeShapelessRecipe(ShapelessRecipe)} this method does not convert
-     * recipes since it only needs the ingredient.
+     * Removes a Bukkit furnace recipe from the <b>server</b><br>
+     * Unlike {@link #removeShapedRecipe(ShapedRecipe)} and {@link #removeShapelessRecipe(ShapelessRecipe)} this method does not convert recipes since it only needs the ingredient.
      *
      * @param recipe
      *            Bukkit recipe

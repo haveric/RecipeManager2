@@ -85,7 +85,8 @@ public class FuelRecipe extends BaseRecipe {
     }
 
     /**
-     * Set maximum time it can burn.<br> NOTE: minimum time must be smaller than this and higher than -1
+     * Set maximum time it can burn.<br>
+     * NOTE: minimum time must be smaller than this and higher than -1
      *
      * @param maxTime
      *            float value in seconds
