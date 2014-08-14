@@ -64,7 +64,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
                 if (r.hasFlag(FlagType.SECRET)) {
                     secretNum++;
                     secretChance += r.getChance();
-                } else if (r.getTypeId() == 0) {
+                } else if (r.getType() == Material.AIR) {
                     failChance = r.getChance();
                 } else {
                     displayResults.add(r);

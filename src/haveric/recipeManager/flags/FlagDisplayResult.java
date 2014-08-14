@@ -5,6 +5,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -93,7 +94,7 @@ public class FlagDisplayResult extends Flag {
         if (!value.equals("first")) {
             ItemStack item = Tools.parseItem(value, 0);
 
-            if (item == null || item.getTypeId() == 0) {
+            if (item == null || item.getType() == Material.AIR) {
                 ErrorReporter.warning("Flag " + getType() + " has invalid item defined!");
                 return false;
             }

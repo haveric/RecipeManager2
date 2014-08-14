@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
@@ -162,7 +163,7 @@ public class FlagCloneIngredient extends Flag {
     protected boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getTypeId() == 0) {
+        if (result == null || result.getType() == Material.AIR) {
             ErrorReporter.error("Flag " + getType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
             return false;
         }

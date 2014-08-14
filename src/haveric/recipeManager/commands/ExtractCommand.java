@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -183,7 +184,7 @@ public class ExtractCommand implements CommandExecutor {
     private String parseFurnaceIngredient(ItemStack item) {
         String name;
 
-        if (item == null || item.getTypeId() == 0) {
+        if (item == null || item.getType() == Material.AIR) {
             name = "air";
         } else {
             name = item.getType().toString().toLowerCase();
@@ -195,7 +196,7 @@ public class ExtractCommand implements CommandExecutor {
     private String parseIngredient(ItemStack item) {
         String name;
 
-        if (item == null || item.getTypeId() == 0) {
+        if (item == null || item.getType() == Material.AIR) {
             name = "air";
         } else {
             name = item.getType().toString().toLowerCase() + ":";

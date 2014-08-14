@@ -7,6 +7,8 @@ import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.Tools;
 
+import org.bukkit.Material;
+
 public class FlagFailMessage extends Flag {
     // Flag definition and documentation
 
@@ -96,7 +98,7 @@ public class FlagFailMessage extends Flag {
             MultiResultRecipe recipe = (MultiResultRecipe) a.recipe();
 
             for (ItemResult r : recipe.getResults()) {
-                if (r.getTypeId() == 0) {
+                if (r.getType() == Material.AIR) {
                     failChance = r.getChance();
                 } else {
                     successChance += r.getChance();

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -150,7 +151,7 @@ public class MultiResultRecipe extends BaseRecipe {
      */
     public float getFailChance() {
         for (ItemResult r : results) {
-            if (r.getTypeId() == 0) {
+            if (r.getType() == Material.AIR) {
                 return r.getChance();
             }
         }
@@ -219,7 +220,7 @@ public class MultiResultRecipe extends BaseRecipe {
                 a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
             }
 
-            if (result.getTypeId() == 0 && hasFlags()) {
+            if (result.getType() == Material.AIR && hasFlags()) {
                 sendFailed(a);
                 a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
             }

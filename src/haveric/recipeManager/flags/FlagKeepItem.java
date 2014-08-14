@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.CraftingInventory;
@@ -141,7 +142,7 @@ public class FlagKeepItem extends Flag {
 
                 ItemStack replace = Tools.parseItem(value, 0);
 
-                if (replace == null || replace.getTypeId() == 0) {
+                if (replace == null || replace.getType() == Material.AIR) {
                     return false;
                 }
 
@@ -160,7 +161,7 @@ public class FlagKeepItem extends Flag {
     private void parse(ReturnTask task, Inventory inv, Args a, int index) {
         ItemStack item = inv.getItem(index);
 
-        if (item == null || item.getTypeId() == 0) {
+        if (item == null || item.getType() == Material.AIR) {
             return;
         }
 

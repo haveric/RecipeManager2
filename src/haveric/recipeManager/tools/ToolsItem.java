@@ -70,7 +70,7 @@ public class ToolsItem {
      * @return user-friendly item print
      */
     public static String print(ItemStack item, ChatColor defColor, ChatColor endColor, boolean alwaysShowAmount) {
-        if (item == null || item.getTypeId() == 0) {
+        if (item == null || item.getType() == Material.AIR) {
             return ChatColor.GRAY + "(nothing)";
         }
 
@@ -161,11 +161,11 @@ public class ToolsItem {
     }
 
     public static ItemStack nullIfAir(ItemStack item) {
-        return (item == null || item.getTypeId() == 0 ? null : item);
+        return (item == null || item.getType() == Material.AIR ? null : item);
     }
 
     public static ItemStack merge(ItemStack into, ItemStack item) {
-        if (into == null || into.getTypeId() == 0) {
+        if (into == null || into.getType() == Material.AIR) {
             return item;
         }
 
@@ -181,7 +181,7 @@ public class ToolsItem {
     }
 
     public static boolean canMerge(ItemStack intoItem, ItemStack item) {
-        if (intoItem == null || intoItem.getTypeId() == 0) {
+        if (intoItem == null || intoItem.getType() == Material.AIR) {
             return true;
         }
 

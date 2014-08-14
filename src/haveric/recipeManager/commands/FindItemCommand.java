@@ -33,7 +33,7 @@ public class FindItemCommand implements CommandExecutor {
 
             ItemStack item = ((Player) sender).getItemInHand();
 
-            if (item == null || item.getTypeId() == 0) {
+            if (item == null || item.getType() == Material.AIR) {
                 Messages.CMD_FINDITEM_INVALIDHELDITEM.print(sender);
                 return true;
             }

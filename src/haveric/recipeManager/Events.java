@@ -340,7 +340,7 @@ public class Events implements Listener {
 
     private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
         if (!recipe.isMultiResult()) {
-            if (result == null || result.getTypeId() == 0) {
+            if (result == null || result.getType() == Material.AIR) {
                 event.setCurrentItem(null);
                 return 0;
             }
@@ -395,7 +395,7 @@ public class Events implements Listener {
             event.setCancelled(true); // need to cancel this from the start.
 
             // check if result is air / recipe failed
-            if (result == null || result.getTypeId() == 0) {
+            if (result == null || result.getType() == Material.AIR) {
                 Messages.CRAFT_RECIPE_MULTI_FAILED.printOnce(player);
                 Messages.sendFailSound(player, a.location());
             } else {
@@ -583,7 +583,7 @@ public class Events implements Listener {
                 return;
 
             default: // player inventory - Shift+Click handling in player inventory while having furnace UI opened
-                if (slot == -999 || !event.isShiftClick() || clicked == null || clicked.getTypeId() == 0) {
+                if (slot == -999 || !event.isShiftClick() || clicked == null || clicked.getType() == Material.AIR) {
                     return; // abort if clicked outside of inventory OR not shift+click OR clicked on empty slot
                 }
 
@@ -602,7 +602,7 @@ public class Events implements Listener {
                     similarItems = clicked.isSimilar(item); // update similarity check
                 }
 
-                if (item == null || item.getTypeId() == 0) { // If targeted item slot is empty
+                if (item == null || item.getType() == Material.AIR) { // If targeted item slot is empty
                     // Check if item is allowed to be placed on that slot
                     if (furnaceModifySlot(furnace, inv, player, targetSlot, clicked)) {
                         inv.setItem(targetSlot, clicked); // send the item to the slot
@@ -927,7 +927,7 @@ public class Events implements Listener {
                 data.setFrozen(true);
                 event.setCancelled(true);
             } else {
-                if (a.result() == null || a.result().getTypeId() == 0) {
+                if (a.result() == null || a.result().getType() == Material.AIR) {
                     recipe.subtractIngredient(inv, false);
                     event.setCancelled(true);
                 } else {

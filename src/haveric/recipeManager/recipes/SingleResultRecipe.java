@@ -51,8 +51,8 @@ public class SingleResultRecipe extends BaseRecipe {
         ItemResult r = (result.getChance() >= rand ? result.clone() : new ItemResult(Material.AIR, 1, 0, (100 - result.getChance())));
         a.setResult(r);
 
-        if (r.getTypeId() == 0 && this.hasFlags()) {
-            this.sendFailed(a);
+        if (r.getType() == Material.AIR && hasFlags()) {
+            sendFailed(a);
             a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
         }
 

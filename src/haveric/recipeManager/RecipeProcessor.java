@@ -450,7 +450,7 @@ public class RecipeProcessor implements Runnable {
         for (String str : ingredientsRaw) {
             item = Tools.parseItem(str, Vanilla.DATA_WILDCARD, ParseBit.NO_META);
 
-            if (item == null || item.getTypeId() == 0) {
+            if (item == null || item.getType() == Material.AIR) {
                 continue;
             }
 
@@ -531,7 +531,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (ingredient.getTypeId() == 0) {
+        if (ingredient.getType() == Material.AIR) {
             return ErrorReporter.error("Recipe does not accept AIR as ingredients !");
         }
 
@@ -580,7 +580,7 @@ public class RecipeProcessor implements Runnable {
                     return false;
                 }
 
-                if (fuelItem.getTypeId() == 0) {
+                if (fuelItem.getType() == Material.AIR) {
                     return ErrorReporter.error("Fuel can not be air!");
                 }
 
@@ -683,7 +683,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (ingredient.getTypeId() == 0) {
+            if (ingredient.getType() == Material.AIR) {
                 ErrorReporter.error("Can not use AIR as ingredient!");
                 continue;
             }
@@ -723,7 +723,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (result.getTypeId() == 0) {
+            if (result.getType() == Material.AIR) {
                 ErrorReporter.error("Recipe has invalid item to remove!");
                 continue;
             }
@@ -768,7 +768,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (!allowAir && result.getTypeId() == 0) {
+            if (!allowAir && result.getType() == Material.AIR) {
                 ErrorReporter.error("Result can not be AIR in this recipe!");
                 return false;
             }
@@ -811,7 +811,7 @@ public class RecipeProcessor implements Runnable {
             boolean foundAir = false;
 
             for (ItemResult r : results) {
-                if (r.getTypeId() == 0) {
+                if (r.getType() == Material.AIR) {
                     r.setChance(100.0f - totalPercentage);
                     foundAir = true;
                     break;
