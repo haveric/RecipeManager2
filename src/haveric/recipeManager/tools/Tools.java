@@ -696,7 +696,7 @@ public class Tools {
     }
 
     /**
-     * For use in furnace smelting and fuel recipes hashmap
+     * For use in furnace smelting and fuel recipes HashMap
      */
     public static String convertItemToStringId(ItemStack item) {
         return item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());

@@ -117,7 +117,7 @@ public class Events implements Listener {
             Recipe bukkitRecipe = event.getRecipe();
 
             if (bukkitRecipe == null) {
-                return; // bukkit recipe is null ! skip it
+                return; // Bukkit recipe is null ! skip it
             }
 
             ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
@@ -659,7 +659,7 @@ public class Events implements Listener {
                 if (item != null && item.isSimilar(slot == 0 ? inv.getSmelting() : f)) {
                     // Messages.debug("recipe is smelt+fuel but added similar items!");
                 } else {
-                    // Messages.debug("recipe is a smelt+fuel recipe, removing active burntime...");
+                    // Messages.debug("recipe is a smelt+fuel recipe, removing active burn time...");
                     furnace.setBurnTime((short) 0);
                 }
             }
@@ -767,8 +767,8 @@ public class Events implements Listener {
             return false;
         }
 
-        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location())); // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}",
-                                                                                                        // ToolsItem.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
+        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
+        // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
 
         a.clear();
 

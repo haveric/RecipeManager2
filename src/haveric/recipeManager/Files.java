@@ -194,7 +194,7 @@ public class Files {
         s.append(NL);
         s.append(NL).append("<b>USING FLAGS</b>");
         s.append(NL).append("  Flags can be added in 3 'zones':");
-        s.append(NL).append("  - at the begining of the file - which are copied to all recipes from that file");
+        s.append(NL).append("  - at the beginning of the file - which are copied to all recipes from that file");
         s.append(NL).append("  - after recipe type (CRAFT, COMBINE, etc) - where they affect that specific recipe, you may even overwrite file flags for that specific recipe!");
         s.append(NL).append("  - after recipe's individual results - to apply flags for the result items.");
         s.append(NL);

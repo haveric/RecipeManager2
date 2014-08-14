@@ -210,7 +210,7 @@ public class FlagForChance extends Flag {
                 appendFlag = true;
             } else {
                 if (arg.charAt(i - 1) == '%') { // check if character before space is a '%'
-                    arg = arg.substring(0, i - 1).trim(); // get the string between begining of string and the space - 1 character to skip the '%' char
+                    arg = arg.substring(0, i - 1).trim(); // get the string between beginning of string and the space - 1 character to skip the '%' char
 
                     try {
                         chance = Float.valueOf(arg);

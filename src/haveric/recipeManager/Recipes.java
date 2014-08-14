@@ -245,7 +245,7 @@ public class Recipes {
      * Returned values are mutable so you can edit individual recipes.<br>
      * Removing from this list does nothing, see {@link BaseRecipe #remove()} method instead.
      *
-     * @return copy of hashmap
+     * @return copy of HashMap
      */
     public Map<BaseRecipe, RecipeInfo> getRecipeList() {
         return ImmutableMap.copyOf(index);
@@ -306,7 +306,7 @@ public class Recipes {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
 
-        // Add to server if appliable
+        // Add to server if applicable
         if (!recipe.hasFlag(FlagType.REMOVE)) {
             Recipe bukkitRecipe = recipe.getBukkitRecipe();
 
@@ -362,7 +362,7 @@ public class Recipes {
             indexFuels.remove(((FuelRecipe) recipe).getIndexString());
         }
 
-        // Remove from server if appliable
+        // Remove from server if applicable
         if (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE)) {
             return null;
         }

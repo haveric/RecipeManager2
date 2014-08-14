@@ -230,7 +230,7 @@ public enum Messages {
     }
 
     /**
-     * Send the selected enum message to a player or console with an overwriteable message.<br>
+     * Send the selected enum message to a player or console with an overwritable message.<br>
      * The customMessage has priority if it's not null.<br>
      * If the priority message is "false" it will not be displayed.
      *
@@ -254,7 +254,7 @@ public enum Messages {
     }
 
     /**
-     * Send the selected enum message to a player or console with an overwriteable message.<br>
+     * Send the selected enum message to a player or console with an overwritable message.<br>
      * The customMessage has priority if it's not null.<br>
      * If the priority message is "false" it will not be displayed.<br>
      * Additionally you can specify variables to replace in the message.<br>

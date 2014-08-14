@@ -110,7 +110,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         // sort by type and data
         Tools.sortIngredientList(ingredients);
 
-        // build hashcode
+        // build hashCode
         StringBuilder str = new StringBuilder("combine");
 
         for (ItemStack item : ingredients) {

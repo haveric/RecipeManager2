@@ -123,7 +123,7 @@ public class RecipeBooks {
      *
      * @param file
      *            the file.
-     * @return RecipeBook object if succesfully loaded or null if failed.
+     * @return RecipeBook object if successfully loaded or null if failed.
      * @throws IllegalArgumentException
      *             if File object does not point to a file.
      */

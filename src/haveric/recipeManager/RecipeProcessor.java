@@ -433,7 +433,7 @@ public class RecipeProcessor implements Runnable {
         registrator.queueCraftRecipe(recipe, currentFile);
         loaded++;
 
-        return true; // succesfully added
+        return true; // successfully added
     }
 
     private boolean parseCombineRecipe() throws Throwable {
@@ -761,7 +761,7 @@ public class RecipeProcessor implements Runnable {
         int splitChanceBy = 0;
 
         while (line != null && line.charAt(0) == '=') {
-            result = Tools.parseItemResult(line, 0); // convert result to ItemResult, grabbing chance and whatother stuff
+            result = Tools.parseItemResult(line, 0); // convert result to ItemResult, grabbing chance and what other stuff
 
             if (result == null) {
                 nextLine();

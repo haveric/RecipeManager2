@@ -39,7 +39,7 @@ public class ToolsItem {
     }
 
     /**
-     * Displays the itemstack in a user-friendly and colorful manner.<br>
+     * Displays the ItemStack in a user-friendly and colorful manner.<br>
      * If item is null or air it will print "nothing" in gray.<br>
      * If item is enchanted it will have aqua color instead of white.<br>
      * Uses aliases to display data values as well.<br>
@@ -55,7 +55,7 @@ public class ToolsItem {
     }
 
     /**
-     * Displays the itemstack in a user-friendly and colorful manner.<br>
+     * Displays the ItemStack in a user-friendly and colorful manner.<br>
      * If item is null or air it will print "nothing" in gray.<br>
      * If item is enchanted it will have aqua color instead of white.<br>
      * Uses aliases to display data values as well.<br>

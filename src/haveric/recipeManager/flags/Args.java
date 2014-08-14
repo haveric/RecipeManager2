@@ -96,7 +96,7 @@ public class Args {
     }
 
     /**
-     * Gets a location from either location, player or playername arguments.
+     * Gets a location from either location, player or playerName arguments.
      *
      * @return null in case no location could be generated
      */

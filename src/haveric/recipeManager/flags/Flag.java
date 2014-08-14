@@ -140,7 +140,7 @@ public class Flag implements Cloneable {
     }
 
     /**
-     * Returns the hashcode of the flag's type enum.
+     * Returns the hashCode of the flag's type enum.
      */
     @Override
     public int hashCode() {
@@ -236,7 +236,7 @@ public class Flag implements Cloneable {
     }
 
     /*
-     * Overwriteable methods/events
+     * Overwritable methods/events
      */
 
     /**

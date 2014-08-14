@@ -200,7 +200,7 @@ public enum FlagType {
     }
 
     /**
-     * Flag bits to configure special behaviour
+     * Flag bits to configure special behavior
      */
     public class Bit {
         public static final byte NONE = 0;

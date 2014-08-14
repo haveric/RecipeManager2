@@ -145,7 +145,7 @@ public class Metrics {
 
     /**
      * Construct and create a Graph that can be used to separate specific plotters to their own graphs on the metrics website. Plotters can be added to the graph object returned.
-     * 
+     *
      * @param name
      *            The name of the graph
      * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
@@ -167,7 +167,7 @@ public class Metrics {
 
     /**
      * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend
-     * 
+     *
      * @param graph
      *            The name of the graph
      */
@@ -182,7 +182,7 @@ public class Metrics {
     /**
      * Start measuring statistics. This will immediately create an async repeating task as the plugin and send the initial data to the metrics backend, and then after that it will post in increments
      * of PING_INTERVAL * 1200 ticks.
-     * 
+     *
      * @return True if statistics measuring is running, otherwise false.
      */
     public boolean start() {
@@ -239,7 +239,7 @@ public class Metrics {
 
     /**
      * Has the server owner denied plugin metrics?
-     * 
+     *
      * @return true if metrics should be opted out of it
      */
     public boolean isOptOut() {
@@ -264,7 +264,7 @@ public class Metrics {
 
     /**
      * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
-     * 
+     *
      * @throws java.io.IOException
      */
     public void enable() throws IOException {
@@ -285,7 +285,7 @@ public class Metrics {
 
     /**
      * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
-     * 
+     *
      * @throws java.io.IOException
      */
     public void disable() throws IOException {
@@ -314,11 +314,11 @@ public class Metrics {
 
     /**
      * Gets the File object of the config file that should be used to store data such as the GUID and opt-out status
-     * 
+     *
      * @return the File object for the config file
      */
     public File getConfigFile() {
-        // I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
+        // I believe the easiest way to get the base folder (e.g CraftBukkit set via -P) for plugins to use
         // is to abuse the plugin object we already have
         // plugin.getDataFolder() => base/plugins/PluginA/
         // pluginsFolder => base/plugins/
@@ -347,7 +347,7 @@ public class Metrics {
         StringBuilder json = new StringBuilder(1024);
         json.append('{');
 
-        // The plugin's description file containg all of the plugin data such as name, version, author, etc
+        // The plugin's description file contains all of the plugin data such as name, version, author, etc
         appendJSONPair(json, "guid", guid);
         appendJSONPair(json, "plugin_version", pluginVersion);
         appendJSONPair(json, "server_version", serverVersion);
@@ -360,7 +360,7 @@ public class Metrics {
         String java_version = System.getProperty("java.version");
         int coreCount = Runtime.getRuntime().availableProcessors();
 
-        // normalize os arch .. amd64 -> x86_64
+        // normalize OS arch .. amd64 -> x86_64
         if (osarch.equals("amd64")) {
             osarch = "x86_64";
         }
@@ -491,7 +491,7 @@ public class Metrics {
 
     /**
      * GZip compress a string of bytes
-     * 
+     *
      * @param input
      * @return
      */
@@ -517,9 +517,9 @@ public class Metrics {
     }
 
     /**
-     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
-     * 
-     * @return true if mineshafter is installed on the server
+     * Check if Mineshafter is present. If it is, we need to bypass it to send POST requests
+     *
+     * @return true if Mineshafter is installed on the server
      */
     private boolean isMineshafterPresent() {
         try {
@@ -532,7 +532,7 @@ public class Metrics {
 
     /**
      * Appends a json encoded key/value pair to the given string builder.
-     * 
+     *
      * @param json
      * @param key
      * @param value
@@ -566,7 +566,7 @@ public class Metrics {
 
     /**
      * Escape a string to create a valid JSON string
-     * 
+     *
      * @param text
      * @return
      */
@@ -612,7 +612,7 @@ public class Metrics {
 
     /**
      * Encode text as UTF-8
-     * 
+     *
      * @param text
      *            the text to encode
      * @return the encoded text, as UTF-8
@@ -642,7 +642,7 @@ public class Metrics {
 
         /**
          * Gets the graph's name
-         * 
+         *
          * @return the Graph's name
          */
         public String getName() {
@@ -651,7 +651,7 @@ public class Metrics {
 
         /**
          * Add a plotter to the graph, which will be used to plot entries
-         * 
+         *
          * @param plotter
          *            the plotter to add to the graph
          */
@@ -661,7 +661,7 @@ public class Metrics {
 
         /**
          * Remove a plotter from the graph
-         * 
+         *
          * @param plotter
          *            the plotter to remove from the graph
          */
@@ -671,7 +671,7 @@ public class Metrics {
 
         /**
          * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
-         * 
+         *
          * @return an unmodifiable {@link java.util.Set} of the plotter objects
          */
         public Set<Plotter> getPlotters() {
@@ -719,7 +719,7 @@ public class Metrics {
 
         /**
          * Construct a plotter with a specific plot name
-         * 
+         *
          * @param name
          *            the name of the plotter to use, which will show up on the website
          */
@@ -730,14 +730,14 @@ public class Metrics {
         /**
          * Get the current value for the plotted point. Since this function defers to an external function it may or may not return immediately thus cannot be guaranteed to be thread friendly or safe.
          * This function can be called from any thread so care should be taken when accessing resources that need to be synchronized.
-         * 
+         *
          * @return the current value for the point to be plotted.
          */
         public abstract int getValue();
 
         /**
          * Get the column name for the plotted point
-         * 
+         *
          * @return the plotted point's column name
          */
         public String getColumnName() {
