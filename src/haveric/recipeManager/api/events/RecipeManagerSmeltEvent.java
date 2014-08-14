@@ -73,7 +73,11 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *            ItemResult or ItemStack
      */
     public void setResult(ItemStack item) {
-        result = (item == null ? null : new ItemResult(item));
+        if (item == null) {
+            result = null;
+        } else {
+            result = new ItemResult(item);
+        }
     }
 
     /**

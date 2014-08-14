@@ -149,9 +149,13 @@ public class BlockID {
      * @return world name or null if world isn't loaded
      */
     public String getWorldName() {
+        String worldName = null;
         World world = getWorld();
 
-        return (world == null ? null : world.getName());
+        if (world != null) {
+            worldName = world.getName();
+        }
+        return worldName;
     }
 
     @Override

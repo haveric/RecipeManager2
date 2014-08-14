@@ -129,7 +129,11 @@ public class RecipeBook {
     }
 
     public void setCustomEndPage(String string) {
-        customEnd = (string == null || string.isEmpty() ? null : string);
+        if (string == null || string.isEmpty()) {
+            customEnd = null;
+        } else {
+            customEnd = string;
+        }
     }
 
     /**
@@ -221,7 +225,11 @@ public class RecipeBook {
         int volumeID = volume - 1;
         BookMeta meta = (BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
 
-        meta.setTitle(getTitle() + (getVolumesNum() > 1 ? " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", volume) : ""));
+        String bookVolume = "";
+        if (getVolumesNum() > 1) {
+            bookVolume = " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", volume);
+        }
+        meta.setTitle(getTitle() + bookVolume);
         meta.setAuthor(getAuthor() + Tools.hideString(" " + getId() + " " + volume + " " + (System.currentTimeMillis() / 1000)));
 
         // Cover page
@@ -268,7 +276,13 @@ public class RecipeBook {
 
                 String indexName = recipe.printBookIndex();
                 index.get(i).append(ChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
-                r += (indexName.length() >= 18 ? 2 : 1);
+
+                if (indexName.length() >= 18) {
+                    r += 2;
+                } else {
+                    r += 1;
+                }
+
                 p += 1;
             }
 

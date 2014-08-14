@@ -104,7 +104,10 @@ public class RecipeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
-            String name = (sender instanceof Player ? sender.getName() : null);
+            String name = null;
+            if (sender instanceof Player) {
+                name = sender.getName();
+            }
 
             boolean next = args[0].equalsIgnoreCase("next");
 

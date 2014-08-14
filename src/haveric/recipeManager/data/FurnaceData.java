@@ -154,8 +154,12 @@ public class FurnaceData implements ConfigurationSerializable {
         this.fueler = fueler;
     }
 
-    public void setFueler(Player fueler) {
-        this.fueler = (fueler == null ? null : fueler.getName());
+    public void setFueler(Player newFueler) {
+        if (newFueler == null) {
+            fueler = null;
+        } else {
+            fueler = newFueler.getName();
+        }
     }
 
     public String getSmelter() {
@@ -166,24 +170,36 @@ public class FurnaceData implements ConfigurationSerializable {
         this.smelter = smelter;
     }
 
-    public void setSmelter(Player smelter) {
-        this.smelter = (smelter == null ? null : smelter.getName());
+    public void setSmelter(Player newSmelter) {
+        if (newSmelter == null) {
+            smelter = null;
+        } else {
+            smelter = newSmelter.getName();
+        }
     }
 
     public ItemStack getSmelting() {
         return smelting;
     }
 
-    public void setSmelting(ItemStack smelting) {
-        this.smelting = (smelting == null ? null : smelting.clone());
+    public void setSmelting(ItemStack newSmelting) {
+        if (newSmelting == null) {
+            smelting = null;
+        } else {
+            smelting = newSmelting.clone();
+        }
     }
 
     public ItemStack getFuel() {
         return fuel;
     }
 
-    public void setFuel(ItemStack fuel) {
-        this.fuel = (fuel == null ? null : fuel.clone());
+    public void setFuel(ItemStack newFuel) {
+        if (newFuel == null) {
+            fuel = null;
+        } else {
+            fuel = newFuel.clone();
+        }
     }
 
     public boolean isBurning() {

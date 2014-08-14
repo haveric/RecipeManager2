@@ -85,8 +85,14 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
      * @param result
      *            the new result or null
      */
-    public void setResult(ItemStack result) {
-        this.result = (result == null ? null : (result instanceof ItemResult ? (ItemResult) result : new ItemResult(result)));
+    public void setResult(ItemStack newResult) {
+        if (newResult == null) {
+            result = null;
+        } else if (newResult instanceof ItemResult) {
+            result = (ItemResult) newResult;
+        } else {
+            result = new ItemResult(newResult);
+        }
     }
 
     /**
