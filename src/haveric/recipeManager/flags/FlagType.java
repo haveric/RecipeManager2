@@ -39,9 +39,9 @@ public enum FlagType {
     private final String[] names;
     private final int bits;
 
-    private FlagType(Class<? extends Flag> flagClass, int bits, String... aliases) {
-        this.flagClass = flagClass;
-        this.bits = bits;
+    private FlagType(Class<? extends Flag> newFlagClass, int newBits, String... aliases) {
+        flagClass = newFlagClass;
+        bits = newBits;
 
         names = new String[aliases.length + 1];
         names[0] = name().toLowerCase();

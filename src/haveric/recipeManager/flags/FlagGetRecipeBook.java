@@ -65,8 +65,8 @@ public class FlagGetRecipeBook extends Flag {
         return volume;
     }
 
-    public void setVolume(int volume) {
-        this.volume = Math.max(volume, 1);
+    public void setVolume(int newVolume) {
+        volume = Math.max(newVolume, 1);
     }
 
     @Override

@@ -37,15 +37,15 @@ public class ArgBuilder {
     public ArgBuilder() {
     }
 
-    public ArgBuilder(Args a) {
-        a.setPlayerName(a.playerName());
-        a.setPlayer(a.player());
-        a.setLocation(a.location().clone());
-        a.setRecipe(a.recipe());
-        a.setRecipeType(a.recipeType());
-        a.setInventory(a.inventory());
-        a.setResult(a.result().clone());
-        a.setExtra(a.extra());
+    public ArgBuilder(Args newArgs) {
+        a.setPlayerName(newArgs.playerName());
+        a.setPlayer(newArgs.player());
+        a.setLocation(newArgs.location().clone());
+        a.setRecipe(newArgs.recipe());
+        a.setRecipeType(newArgs.recipeType());
+        a.setInventory(newArgs.inventory());
+        a.setResult(newArgs.result().clone());
+        a.setExtra(newArgs.extra());
     }
 
     public ArgBuilder player(String player) {

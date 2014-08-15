@@ -58,19 +58,19 @@ public class FlagPotionItem extends Flag {
         return data;
     }
 
-    public void setData(short data) {
-        this.data = data;
+    public void setData(short newData) {
+        data = newData;
     }
 
     public List<PotionEffect> getEffects() {
         return effects;
     }
 
-    public void setEffects(List<PotionEffect> effects) {
-        if (effects == null) {
-            this.effects.clear();
+    public void setEffects(List<PotionEffect> newEffects) {
+        if (newEffects == null) {
+            effects.clear();
         } else {
-            this.effects = effects;
+            effects = newEffects;
         }
     }
 

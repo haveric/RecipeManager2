@@ -83,7 +83,7 @@ public class FlagLeatherColor extends Flag {
         }
     }
 
-    private boolean applyOnItem(ItemStack item, Color color) {
+    private boolean applyOnItem(ItemStack item, Color newColor) {
         ItemMeta meta = item.getItemMeta();
 
         if (!(meta instanceof LeatherArmorMeta)) {
@@ -92,7 +92,7 @@ public class FlagLeatherColor extends Flag {
 
         LeatherArmorMeta leather = (LeatherArmorMeta) meta;
 
-        leather.setColor(color);
+        leather.setColor(newColor);
 
         item.setItemMeta(leather);
 

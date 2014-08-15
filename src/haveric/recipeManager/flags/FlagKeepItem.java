@@ -75,8 +75,8 @@ public class FlagKeepItem extends Flag {
         return keepItems;
     }
 
-    public void setKeepItems(Map<String, Object> keepItems) {
-        this.keepItems = keepItems;
+    public void setKeepItems(Map<String, Object> newKeepItems) {
+        keepItems = newKeepItems;
     }
 
     public Object getItem(ItemStack item) {
@@ -261,8 +261,8 @@ public class FlagKeepItem extends Flag {
         private boolean taskRequired = false;
         private Inventory inv;
 
-        public ReturnTask(Inventory inv) {
-            this.inv = inv;
+        public ReturnTask(Inventory newInv) {
+            inv = newInv;
         }
 
         public void setItem(int index, ItemStack replace) {

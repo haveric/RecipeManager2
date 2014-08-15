@@ -60,10 +60,10 @@ public class FlagBiome extends Flag {
         return biomes;
     }
 
-    public void setBiomes(EnumMap<Biome, Boolean> biomes) {
-        Validate.notNull(biomes, "The 'biomes' argument must not be null!");
+    public void setBiomes(EnumMap<Biome, Boolean> newBiomes) {
+        Validate.notNull(newBiomes, "The 'biomes' argument must not be null!");
 
-        this.biomes = biomes;
+        biomes = newBiomes;
     }
 
     public void addBiome(Biome biome, boolean allowed) {
@@ -90,8 +90,8 @@ public class FlagBiome extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

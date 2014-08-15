@@ -23,7 +23,7 @@ public class Flag implements Cloneable {
     /**
      * @return The Flags object that holds this flag
      */
-    final public Flags getFlagsContainer() {
+    public final Flags getFlagsContainer() {
         return flagsContainer;
     }
 
@@ -36,7 +36,7 @@ public class Flag implements Cloneable {
      * @return
      * @return false if an error occurred and the flag should not be added
      */
-    final public boolean parse(String value) {
+    public final boolean parse(String value) {
         return onParse(value);
     }
 
@@ -46,7 +46,7 @@ public class Flag implements Cloneable {
      * @param player
      * @return
      */
-    final public boolean hasFlagPermission(Player player) {
+    public final boolean hasFlagPermission(Player player) {
         if (player == null) {
             return false; // no player, no skip
         }
@@ -72,7 +72,7 @@ public class Flag implements Cloneable {
      * @param a
      *            the arguments class for easily maintainable argument class
      */
-    final public void check(Args a) {
+    public final void check(Args a) {
         if (hasFlagPermission(a.player())) {
             onCheck(a);
         }
@@ -84,7 +84,7 @@ public class Flag implements Cloneable {
      * @param a
      *            the arguments class for easily maintainable argument class
      */
-    final public void prepare(Args a) {
+    public final void prepare(Args a) {
         if (hasFlagPermission(a.player())) {
             onPrepare(a);
         }
@@ -98,7 +98,7 @@ public class Flag implements Cloneable {
      * @param a
      *            the arguments class for easily maintainable argument class
      */
-    final public void crafted(Args a) {
+    public final void crafted(Args a) {
         if (hasFlagPermission(a.player())) {
             onCrafted(a);
         }
@@ -111,7 +111,7 @@ public class Flag implements Cloneable {
      *
      * @param a
      */
-    final public void failed(Args a) {
+    public final void failed(Args a) {
         onFailed(a);
     }
 
@@ -120,7 +120,7 @@ public class Flag implements Cloneable {
      * This also notifies the flag of removal, it might do some stuff before removal.<br>
      * If the flag hasn't been added to any flag list, this method won't do anything.
      */
-    final public void remove() {
+    public final void remove() {
         if (flagsContainer != null) {
             flagsContainer.removeFlag(this);
             onRemove();
@@ -133,7 +133,7 @@ public class Flag implements Cloneable {
      * @param container
      * @return
      */
-    final public Flag clone(Flags container) {
+    public final Flag clone(Flags container) {
         Flag flag = clone();
         flag.flagsContainer = container;
         return flag;

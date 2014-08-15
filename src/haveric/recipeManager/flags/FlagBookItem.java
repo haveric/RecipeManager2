@@ -61,28 +61,28 @@ public class FlagBookItem extends Flag {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = Tools.parseColors(title, false);
+    public void setTitle(String newTitle) {
+        title = Tools.parseColors(newTitle, false);
     }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = Tools.parseColors(author, false);
+    public void setAuthor(String newAuthor) {
+        author = Tools.parseColors(newAuthor, false);
     }
 
     public List<String> getPages() {
         return pages;
     }
 
-    public void setPages(List<String> pages) {
-        Validate.notNull(pages, "The 'pages' argument must not be null!");
+    public void setPages(List<String> newPages) {
+        Validate.notNull(newPages, "The 'pages' argument must not be null!");
 
-        this.pages.clear();
+        pages.clear();
 
-        for (String page : pages) {
+        for (String page : newPages) {
             addPage(page);
         }
     }

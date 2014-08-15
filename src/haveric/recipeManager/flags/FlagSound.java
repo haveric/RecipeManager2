@@ -57,10 +57,10 @@ public class FlagSound extends Flag {
         return sound;
     }
 
-    public void setSound(Sound sound) {
-        Validate.notNull(sound, "The sound argument can not be null!");
+    public void setSound(Sound newSound) {
+        Validate.notNull(newSound, "The sound argument can not be null!");
 
-        this.sound = sound;
+        sound = newSound;
     }
 
     /**

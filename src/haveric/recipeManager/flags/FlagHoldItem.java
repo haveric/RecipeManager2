@@ -58,8 +58,8 @@ public class FlagHoldItem extends Flag {
         return items;
     }
 
-    public void setItems(List<ItemStack> items) {
-        this.items = items;
+    public void setItems(List<ItemStack> newItems) {
+        items = newItems;
     }
 
     public void addItem(ItemStack item) {
@@ -70,8 +70,8 @@ public class FlagHoldItem extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

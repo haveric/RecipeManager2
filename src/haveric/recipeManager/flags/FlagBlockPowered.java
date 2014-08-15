@@ -52,16 +52,16 @@ public class FlagBlockPowered extends Flag {
         return indirect;
     }
 
-    public void setIndirect(boolean indirect) {
-        this.indirect = indirect;
+    public void setIndirect(boolean newIndirect) {
+        indirect = newIndirect;
     }
 
     public String getFailMessage() {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

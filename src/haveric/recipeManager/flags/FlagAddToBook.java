@@ -78,14 +78,14 @@ public class FlagAddToBook extends Flag {
      * @param volume
      *            book volume from 1 or 0 to allocate automatically.
      */
-    public void setVolume(int volume) {
-        this.volume = volume;
+    public void setVolume(int newVolume) {
+        volume = newVolume;
     }
 
     @Override
     protected boolean onParse(String value) {
         value = value.toLowerCase();
-        String bookName = value;
+        String newBookName = value;
         int index = value.lastIndexOf("volume");
 
         if (index > 0) {
@@ -93,13 +93,13 @@ public class FlagAddToBook extends Flag {
 
             try {
                 setVolume(Integer.valueOf(value));
-                bookName = bookName.substring(0, index).trim();
+                newBookName = newBookName.substring(0, index).trim();
             } catch (NumberFormatException e) {
                 // TODO: Handle error
             }
         }
 
-        setBookName(bookName);
+        setBookName(newBookName);
 
         return true;
     }

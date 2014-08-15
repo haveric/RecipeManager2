@@ -49,8 +49,8 @@ public class FlagSkullOwner extends Flag {
         return owner;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwner(String newOwner) {
+        owner = newOwner;
     }
 
     @Override

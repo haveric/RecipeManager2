@@ -59,18 +59,18 @@ public class FlagLaunchFirework extends Flag {
         return firework;
     }
 
-    public void setFirework(FireworkMeta firework) {
-        Validate.notNull(firework);
+    public void setFirework(FireworkMeta newFirework) {
+        Validate.notNull(newFirework);
 
-        this.firework = firework;
+        firework = newFirework;
     }
 
     public float getChance() {
         return chance;
     }
 
-    public void setChance(float chance) {
-        this.chance = chance;
+    public void setChance(float newChance) {
+        chance = newChance;
     }
 
     @Override

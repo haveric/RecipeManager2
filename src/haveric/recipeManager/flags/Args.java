@@ -42,36 +42,36 @@ public class Args {
     public static void init() {
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayer(Player newPlayer) {
+        player = newPlayer;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setPlayerName(String newPlayerName) {
+        playerName = newPlayerName;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocation(Location newLocation) {
+        location = newLocation;
     }
 
-    public void setRecipe(BaseRecipe recipe) {
-        this.recipe = recipe;
+    public void setRecipe(BaseRecipe newRecipe) {
+        recipe = newRecipe;
     }
 
-    public void setRecipeType(RecipeType recipeType) {
-        this.recipeType = recipeType;
+    public void setRecipeType(RecipeType newRecipeType) {
+        recipeType = newRecipeType;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public void setInventory(Inventory newInventory) {
+        inventory = newInventory;
     }
 
-    public void setResult(ItemResult result) {
-        this.result = result;
+    public void setResult(ItemResult newResult) {
+        result = newResult;
     }
 
-    public void setExtra(Object extra) {
-        this.extra = extra;
+    public void setExtra(Object newExtra) {
+        extra = newExtra;
     }
 
     /**

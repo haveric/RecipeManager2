@@ -57,11 +57,11 @@ public class FlagCommand extends Flag {
      *
      * @param commands
      */
-    public void setCommands(List<String> commands) {
-        if (commands == null) {
+    public void setCommands(List<String> newCommands) {
+        if (newCommands == null) {
             remove();
         } else {
-            this.commands = commands;
+            commands = newCommands;
         }
     }
 

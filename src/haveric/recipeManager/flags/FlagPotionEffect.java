@@ -57,11 +57,11 @@ public class FlagPotionEffect extends Flag {
         return effects;
     }
 
-    public void setEffects(Map<PotionEffect, Float> effects) {
-        if (effects == null) {
-            this.remove();
+    public void setEffects(Map<PotionEffect, Float> newEffects) {
+        if (newEffects == null) {
+            remove();
         } else {
-            this.effects = effects;
+            effects = newEffects;
         }
     }
 
@@ -77,8 +77,8 @@ public class FlagPotionEffect extends Flag {
         return clear;
     }
 
-    public void setClear(boolean clear) {
-        this.clear = clear;
+    public void setClear(boolean newClear) {
+        clear = newClear;
     }
 
     @Override

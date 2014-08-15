@@ -72,8 +72,8 @@ public class FlagWeather extends Flag {
      * @param weather
      *            0 = none, 1 = rain/snow, 2 = thunder
      */
-    public void setWeather(int weather) {
-        this.weather = (byte) weather;
+    public void setWeather(int newWeather) {
+        weather = (byte) newWeather;
     }
 
     public String getWeatherString() {
@@ -98,8 +98,8 @@ public class FlagWeather extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

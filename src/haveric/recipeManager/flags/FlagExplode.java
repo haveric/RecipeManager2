@@ -66,32 +66,32 @@ public class FlagExplode extends Flag {
         return power;
     }
 
-    public void setPower(float power) {
-        this.power = power;
+    public void setPower(float newPower) {
+        power = newPower;
     }
 
     public boolean getFire() {
         return fire;
     }
 
-    public void setFire(boolean fire) {
-        this.fire = fire;
+    public void setFire(boolean newFire) {
+        fire = newFire;
     }
 
     public boolean getFailure() {
         return failure;
     }
 
-    public void setFailure(boolean failure) {
-        this.failure = failure;
+    public void setFailure(boolean newFailure) {
+        failure = newFailure;
     }
 
     public boolean getNoBreak() {
         return noBreak;
     }
 
-    public void setNoBreak(boolean noBreak) {
-        this.noBreak = noBreak;
+    public void setNoBreak(boolean newNoBreak) {
+        noBreak = newNoBreak;
     }
 
     public boolean isNoDamageEnabled() {

@@ -101,8 +101,8 @@ public class FlagSummon extends Flag {
         private float[] drop = new float[5];
         private List<PotionEffect> potions = new ArrayList<PotionEffect>();
 
-        public Customization(EntityType type) {
-            this.type = type;
+        public Customization(EntityType newType) {
+            type = newType;
         }
 
         public Customization(Customization c) {
@@ -151,7 +151,7 @@ public class FlagSummon extends Flag {
             List<LivingEntity> entities = new ArrayList<LivingEntity>(num);
             World world = location.getWorld();
 
-            for (int num = 0; num < this.num; num++) {
+            for (int i = 0; i < num; i++) {
                 if (spread > 0) {
                     int minX = location.getBlockX() - spread / 2;
                     int minY = location.getBlockY() - spread / 2;
@@ -344,32 +344,32 @@ public class FlagSummon extends Flag {
 
                 EntityEquipment eq = ent.getEquipment();
 
-                for (int i = 0; i < equip.length; i++) {
-                    ItemStack item = equip[i];
+                for (int j = 0; j < equip.length; j++) {
+                    ItemStack item = equip[j];
 
                     if (item == null) {
                         continue;
                     }
 
-                    switch (i) {
+                    switch (j) {
                         case 0:
                             eq.setHelmet(item);
-                            eq.setHelmetDropChance(drop[i]);
+                            eq.setHelmetDropChance(drop[j]);
                             break;
 
                         case 1:
                             eq.setChestplate(item);
-                            eq.setChestplateDropChance(drop[i]);
+                            eq.setChestplateDropChance(drop[j]);
                             break;
 
                         case 2:
                             eq.setLeggings(item);
-                            eq.setLeggingsDropChance(drop[i]);
+                            eq.setLeggingsDropChance(drop[j]);
                             break;
 
                         case 3:
                             eq.setBoots(item);
-                            eq.setBootsDropChance(drop[i]);
+                            eq.setBootsDropChance(drop[j]);
                             break;
 
                         case 4:
@@ -378,7 +378,7 @@ public class FlagSummon extends Flag {
                                 npc.setCarriedMaterial(item.getData());
                             } else {
                                 eq.setItemInHand(item);
-                                eq.setItemInHandDropChance(drop[i]);
+                                eq.setItemInHandDropChance(drop[j]);
                             }
 
                             break;
@@ -395,37 +395,37 @@ public class FlagSummon extends Flag {
             return type;
         }
 
-        public void setType(EntityType type) {
-            this.type = type;
+        public void setType(EntityType newType) {
+            type = newType;
         }
 
         public boolean isNoEffect() {
             return noEffect;
         }
 
-        public void setNoEffect(boolean noEffect) {
-            this.noEffect = noEffect;
+        public void setNoEffect(boolean newNoEffect) {
+            noEffect = newNoEffect;
         }
 
         public boolean isNoRemove() {
             return noRemove;
         }
 
-        public void setNoRemove(boolean noRemove) {
-            this.noRemove = noRemove;
+        public void setNoRemove(boolean newNoRemove) {
+            noRemove = newNoRemove;
         }
 
         public float getChance() {
             return chance;
         }
 
-        public void setChance(float chance) {
-            if (chance < 0.01f || chance > 100.0f) {
-                this.chance = Math.min(Math.max(chance, 0.01f), 100.0f);
+        public void setChance(float newChance) {
+            if (newChance < 0.01f || newChance > 100.0f) {
+                chance = Math.min(Math.max(newChance, 0.01f), 100.0f);
 
                 ErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
             } else {
-                this.chance = chance;
+                chance = newChance;
             }
         }
 
@@ -433,13 +433,13 @@ public class FlagSummon extends Flag {
             return num;
         }
 
-        public void setNum(int num) {
-            if (num < 1) {
-                this.num = 1;
+        public void setNum(int newNum) {
+            if (newNum < 1) {
+                num = 1;
 
                 ErrorReporter.warning("The " + getType() + " flag can't have 'num' argument less than 1, set to 1.");
             } else {
-                this.num = num;
+                num = newNum;
             }
         }
 
@@ -447,80 +447,80 @@ public class FlagSummon extends Flag {
             return spread;
         }
 
-        public void setSpread(int spread) {
-            this.spread = spread;
+        public void setSpread(int newSpread) {
+            spread = newSpread;
         }
 
         public boolean isTarget() {
             return target;
         }
 
-        public void setTarget(boolean target) {
-            this.target = target;
+        public void setTarget(boolean newTarget) {
+            target = newTarget;
         }
 
         public boolean isPet() {
             return pet;
         }
 
-        public void setPet(boolean pet) {
-            this.pet = pet;
+        public void setPet(boolean newPet) {
+            pet = newPet;
         }
 
         public boolean isSaddle() {
             return saddle;
         }
 
-        public void setSaddle(boolean saddle) {
-            this.saddle = saddle;
+        public void setSaddle(boolean newSaddle) {
+            saddle = newSaddle;
         }
 
         public boolean isMount() {
             return mount;
         }
 
-        public void setMount(boolean mount) {
-            this.mount = mount;
+        public void setMount(boolean newMount) {
+            mount = newMount;
         }
 
         public String getName() {
             return name;
         }
 
-        public void setName(String name) {
-            this.name = Tools.parseColors(name, false);
+        public void setName(String newName) {
+            name = Tools.parseColors(newName, false);
         }
 
         public boolean isNoHideName() {
             return noHideName;
         }
 
-        public void setNoHideName(boolean noHideName) {
-            this.noHideName = noHideName;
+        public void setNoHideName(boolean newNoHideName) {
+            noHideName = newNoHideName;
         }
 
         public int getHp() {
             return hp;
         }
 
-        public void setHp(int hp) {
-            this.hp = hp;
+        public void setHp(int newHp) {
+            hp = newHp;
         }
 
         public int getMaxHp() {
             return maxHp;
         }
 
-        public void setMaxHp(int maxHp) {
-            this.maxHp = maxHp;
+        public void setMaxHp(int newMaxHp) {
+            maxHp = newMaxHp;
         }
 
         public boolean isBaby() {
             return baby;
         }
 
-        public void setBaby(boolean baby) {
-            this.baby = baby;
+        public void setBaby(boolean newBaby) {
+            baby = newBaby;
         }
 
         public boolean isAgeLock() {
@@ -535,16 +535,16 @@ public class FlagSummon extends Flag {
             return equip;
         }
 
-        public void setEquip(ItemStack[] equip) {
-            this.equip = equip;
+        public void setEquip(ItemStack[] newEquip) {
+            equip = newEquip;
         }
 
         public float[] getDrop() {
             return drop;
         }
 
-        public void setDrop(float[] drop) {
-            this.drop = drop;
+        public void setDrop(float[] newDrop) {
+            drop = newDrop;
         }
 
         public List<PotionEffect> getPotionEffects() {
@@ -559,104 +559,104 @@ public class FlagSummon extends Flag {
             }
         }
 
-        public void addPotionEffect(PotionEffectType type, float duration, int amplifier) {
-            potions.add(new PotionEffect(type, (int) Math.ceil((duration * 20) / type.getDurationModifier()), amplifier));
+        public void addPotionEffect(PotionEffectType newType, float duration, int amplifier) {
+            potions.add(new PotionEffect(newType, (int) Math.ceil((duration * 20) / newType.getDurationModifier()), amplifier));
         }
 
         public float getOnFire() {
             return onFire;
         }
 
-        public void setOnFire(float onFire) {
-            this.onFire = onFire;
+        public void setOnFire(float newOnFire) {
+            onFire = newOnFire;
         }
 
         public Boolean getPickup() {
             return pickup;
         }
 
-        public void setPickup(Boolean pickup) {
-            this.pickup = pickup;
+        public void setPickup(Boolean newPickup) {
+            pickup = newPickup;
         }
 
         public boolean isNoSit() {
             return noSit;
         }
 
-        public void setNoSit(boolean noSit) {
-            this.noSit = noSit;
+        public void setNoSit(boolean newNoSit) {
+            noSit = newNoSit;
         }
 
         public boolean isAngry() {
             return angry;
         }
 
-        public void setAngry(boolean angry) {
-            this.angry = angry;
+        public void setAngry(boolean newAngry) {
+            angry = newAngry;
         }
 
         public Ocelot.Type getCat() {
             return cat;
         }
 
-        public void setCat(Ocelot.Type cat) {
-            this.cat = cat;
+        public void setCat(Ocelot.Type newCat) {
+            cat = newCat;
         }
 
         public DyeColor getColor() {
             return color;
         }
 
-        public void setColor(DyeColor color) {
-            this.color = color;
+        public void setColor(DyeColor newColor) {
+            color = newColor;
         }
 
         public boolean isShearedSheep() {
             return shearedSheep;
         }
 
-        public void setShearedSheep(boolean shearedSheep) {
-            this.shearedSheep = shearedSheep;
+        public void setShearedSheep(boolean newShearedSheep) {
+            shearedSheep = newShearedSheep;
         }
 
         public SkeletonType getSkeleton() {
             return skeleton;
         }
 
-        public void setSkeleton(SkeletonType skeleton) {
-            this.skeleton = skeleton;
+        public void setSkeleton(SkeletonType newSkeleton) {
+            skeleton = newSkeleton;
         }
 
         public boolean isZombieVillager() {
             return zombieVillager;
         }
 
-        public void setZombieVillager(boolean zombieVillager) {
-            this.zombieVillager = zombieVillager;
+        public void setZombieVillager(boolean newZombieVillager) {
+            zombieVillager = newZombieVillager;
         }
 
         public Villager.Profession getVillager() {
             return villager;
         }
 
-        public void setVillager(Villager.Profession villager) {
-            this.villager = villager;
+        public void setVillager(Villager.Profession newVillager) {
+            villager = newVillager;
         }
 
         public boolean isPoweredCreeper() {
             return poweredCreeper;
         }
 
-        public void setPoweredCreeper(boolean poweredCreeper) {
-            this.poweredCreeper = poweredCreeper;
+        public void setPoweredCreeper(boolean newPoweredCreeper) {
+            poweredCreeper = newPoweredCreeper;
         }
 
         public boolean isPlayerIronGolem() {
             return playerIronGolem;
         }
 
-        public void setPlayerIronGolem(boolean playerIronGolem) {
-            this.playerIronGolem = playerIronGolem;
+        public void setPlayerIronGolem(boolean newPlayerIronGolem) {
+            playerIronGolem = newPlayerIronGolem;
         }
 
         public int getPigAnger() {
@@ -671,24 +671,24 @@ public class FlagSummon extends Flag {
             return mountNext;
         }
 
-        public void setMountNext(boolean mountNext) {
-            this.mountNext = mountNext;
+        public void setMountNext(boolean newMountNext) {
+            mountNext = newMountNext;
         }
 
         public boolean isHit() {
             return hit;
         }
 
-        public void setHit(boolean hit) {
-            this.hit = hit;
+        public void setHit(boolean newHit) {
+            hit = newHit;
         }
 
         public boolean isNoBreed() {
             return noBreed;
         }
 
-        public void setNoBreed(boolean noBreed) {
-            this.noBreed = noBreed;
+        public void setNoBreed(boolean newNoBreed) {
+            noBreed = newNoBreed;
         }
     }
 
@@ -725,10 +725,10 @@ public class FlagSummon extends Flag {
         }
     }
 
-    public void addSpawn(Customization spawn) {
-        Validate.notNull(spawn, "'spawn' can not be null!");
+    public void addSpawn(Customization newSpawn) {
+        Validate.notNull(newSpawn, "'spawn' can not be null!");
 
-        this.spawn.add(spawn);
+        spawn.add(newSpawn);
     }
 
     @Override

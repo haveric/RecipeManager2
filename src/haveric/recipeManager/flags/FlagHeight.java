@@ -50,16 +50,16 @@ public class FlagHeight extends Flag {
         return minHeight;
     }
 
-    public void setMinHeight(int minHeight) {
-        this.minHeight = minHeight;
+    public void setMinHeight(int newMinHeight) {
+        minHeight = newMinHeight;
     }
 
     public int getMaxHeight() {
         return maxHeight;
     }
 
-    public void setMaxHeight(int maxHeight) {
-        this.maxHeight = maxHeight;
+    public void setMaxHeight(int newMaxHeight) {
+        maxHeight = newMaxHeight;
     }
 
     public String getHeightString() {
@@ -80,8 +80,8 @@ public class FlagHeight extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

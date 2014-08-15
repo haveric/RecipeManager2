@@ -103,8 +103,8 @@ public class FlagIngredientCondition extends Flag {
             return new Conditions(this);
         }
 
-        protected void setIngredient(ItemStack ingredient) {
-            this.ingredient = ingredient;
+        protected void setIngredient(ItemStack newIngredient) {
+            ingredient = newIngredient;
         }
 
         public String getFailMessage() {
@@ -319,16 +319,16 @@ public class FlagIngredientCondition extends Flag {
             return amount;
         }
 
-        public void setAmount(int amount) {
-            this.amount = amount;
+        public void setAmount(int newAmount) {
+            amount = newAmount;
         }
 
         public boolean hasAmount() {
             return amount > 0;
         }
 
-        public boolean checkAmount(int amount) {
-            return (amount >= this.amount);
+        public boolean checkAmount(int amountToCheck) {
+            return (amountToCheck >= amount);
         }
 
         /**
@@ -344,11 +344,11 @@ public class FlagIngredientCondition extends Flag {
          *
          * @param enchants
          */
-        public void setEnchants(Map<Enchantment, Map<Short, Boolean>> enchants) {
-            if (enchants == null) {
-                this.enchants.clear();
+        public void setEnchants(Map<Enchantment, Map<Short, Boolean>> newEnchants) {
+            if (newEnchants == null) {
+                enchants.clear();
             } else {
-                this.enchants = enchants;
+                enchants = newEnchants;
             }
         }
 
@@ -385,14 +385,14 @@ public class FlagIngredientCondition extends Flag {
             return !enchants.isEmpty();
         }
 
-        public boolean checkEnchants(Map<Enchantment, Integer> enchants) {
+        public boolean checkEnchants(Map<Enchantment, Integer> enchantsToCheck) {
             if (!hasEnchants()) {
                 return true;
             }
 
-            if (enchants != null && !enchants.isEmpty()) {
-                for (Entry<Enchantment, Map<Short, Boolean>> e : this.enchants.entrySet()) {
-                    Integer level = enchants.get(e.getKey());
+            if (enchantsToCheck != null && !enchantsToCheck.isEmpty()) {
+                for (Entry<Enchantment, Map<Short, Boolean>> e : enchants.entrySet()) {
+                    Integer level = enchantsToCheck.get(e.getKey());
 
                     // TODO test if proper
 
@@ -462,23 +462,23 @@ public class FlagIngredientCondition extends Flag {
             return name != null;
         }
 
-        public boolean checkName(String name) {
+        public boolean checkName(String nameToCheck) {
             if (!hasName()) {
                 return true;
             }
 
-            if (name != null) {
-                if (this.name.startsWith("regex:")) {
+            if (nameToCheck != null) {
+                if (name.startsWith("regex:")) {
                     try {
-                        Pattern pattern = Pattern.compile(this.name.substring("regex:".length()));
-                        return pattern.matcher(name).matches();
+                        Pattern pattern = Pattern.compile(name.substring("regex:".length()));
+                        return pattern.matcher(nameToCheck).matches();
                     } catch (PatternSyntaxException e) {
                         ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
                         return false;
                     }
                 }
 
-                return this.name.equalsIgnoreCase(name);
+                return name.equalsIgnoreCase(nameToCheck);
             }
 
             return false;
@@ -500,31 +500,31 @@ public class FlagIngredientCondition extends Flag {
             return lore != null;
         }
 
-        public boolean checkLore(List<String> lore) {
+        public boolean checkLore(List<String> loreToCheck) {
             if (!hasLore()) {
                 return true;
             }
 
             Pattern pattern = null;
 
-            if (this.lore.startsWith("regex:")) {
+            if (lore.startsWith("regex:")) {
                 try {
-                    pattern = Pattern.compile(this.lore.substring("regex:".length()));
+                    pattern = Pattern.compile(lore.substring("regex:".length()));
                 } catch (PatternSyntaxException e) {
                     ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
                     return false;
                 }
             }
 
-            if (lore != null && !lore.isEmpty()) {
-                for (String line : lore) {
+            if (loreToCheck != null && !loreToCheck.isEmpty()) {
+                for (String line : loreToCheck) {
                     if (line != null) {
-                        if (this.lore.startsWith("regex:")) {
+                        if (lore.startsWith("regex:")) {
                             if (pattern.matcher(line).matches()) {
                                 return true;
                             }
                         } else {
-                            if (this.lore.equalsIgnoreCase(line)) {
+                            if (lore.equalsIgnoreCase(line)) {
                                 return true;
                             }
                         }
@@ -543,9 +543,9 @@ public class FlagIngredientCondition extends Flag {
          * @param maxColor
          *            color for max-range or null to disable range.
          */
-        public void setColor(Color minColor, Color maxColor) {
-            this.minColor = minColor;
-            this.maxColor = maxColor;
+        public void setColor(Color newMinColor, Color newMaxColor) {
+            minColor = newMinColor;
+            maxColor = newMaxColor;
         }
 
         /**

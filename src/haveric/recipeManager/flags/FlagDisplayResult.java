@@ -61,23 +61,23 @@ public class FlagDisplayResult extends Flag {
      * @param displayItem
      *            item or null to use first available of recipe
      */
-    public void setDisplayItem(ItemStack displayItem) {
-        this.displayItem = displayItem;
+    public void setDisplayItem(ItemStack newDisplayItem) {
+        displayItem = newDisplayItem;
     }
 
     public boolean isSilentFail() {
         return silentFail;
     }
 
-    public void setSilentFail(boolean silentFail) {
-        this.silentFail = silentFail;
+    public void setSilentFail(boolean newSilentFail) {
+        silentFail = newSilentFail;
     }
 
     @Override
     protected boolean onValidate() {
         BaseRecipe recipe = getRecipe();
 
-        if (recipe instanceof WorkbenchRecipe == false) {
+        if (!(recipe instanceof WorkbenchRecipe)) {
             ErrorReporter.error("Flag " + getType() + " can only be used on workbench recipes.");
             return false;
         }

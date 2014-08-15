@@ -56,11 +56,11 @@ public class FlagEnchantedBook extends Flag {
         return enchants;
     }
 
-    public void setEnchants(Map<Enchantment, Integer> enchants) {
-        if (enchants == null) {
-            this.enchants.clear();
+    public void setEnchants(Map<Enchantment, Integer> newEnchants) {
+        if (newEnchants == null) {
+            enchants.clear();
         } else {
-            this.enchants = enchants;
+            enchants = newEnchants;
         }
     }
 

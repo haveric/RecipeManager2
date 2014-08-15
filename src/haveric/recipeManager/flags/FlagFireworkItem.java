@@ -59,18 +59,18 @@ public class FlagFireworkItem extends Flag {
         return power;
     }
 
-    public void setPower(int power) {
-        this.power = power;
+    public void setPower(int newPower) {
+        power = newPower;
     }
 
     public List<FireworkEffect> getEffects() {
         return effects;
     }
 
-    public void setEffects(List<FireworkEffect> effects) {
-        Validate.notNull(effects, "The 'effects' argument must not be null!");
+    public void setEffects(List<FireworkEffect> newEffects) {
+        Validate.notNull(newEffects, "The 'effects' argument must not be null!");
 
-        this.effects = effects;
+        effects = newEffects;
     }
 
     public void addEffect(FireworkEffect effect) {

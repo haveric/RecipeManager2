@@ -52,12 +52,12 @@ public class FlagItemLore extends Flag {
         return lore;
     }
 
-    public void setLore(List<String> lore) {
-        Validate.notNull(lore, "The 'lore' argument must not be null!");
+    public void setLore(List<String> newLore) {
+        Validate.notNull(newLore, "The 'lore' argument must not be null!");
 
-        this.lore.clear();
+        lore.clear();
 
-        for (String value : lore) {
+        for (String value : newLore) {
             addLore(value);
         }
     }
@@ -81,19 +81,19 @@ public class FlagItemLore extends Flag {
         }
 
         ItemMeta meta = a.result().getItemMeta();
-        List<String> lore = meta.getLore();
+        List<String> newLore = meta.getLore();
 
-        if (lore == null) {
-            lore = new ArrayList<String>();
+        if (newLore == null) {
+            newLore = new ArrayList<String>();
         }
 
-        for (String line : this.lore) {
+        for (String line : lore) {
             if (line != null && !line.isEmpty()) {
-                lore.add(a.parseVariables(line));
+                newLore.add(a.parseVariables(line));
             }
         }
 
-        meta.setLore(lore);
+        meta.setLore(newLore);
 
         a.result().setItemMeta(meta);
     }

@@ -55,8 +55,8 @@ public class FlagFireworkChargeItem extends Flag {
         return effect;
     }
 
-    public void setEffect(FireworkEffect effect) {
-        this.effect = effect;
+    public void setEffect(FireworkEffect newEffect) {
+        effect = newEffect;
     }
 
     @Override
@@ -73,13 +73,13 @@ public class FlagFireworkChargeItem extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        FireworkEffect effect = Tools.parseFireworkEffect(value, getType());
+        FireworkEffect newEffect = Tools.parseFireworkEffect(value, getType());
 
-        if (effect == null) {
+        if (newEffect == null) {
             return false;
         }
 
-        setEffect(effect);
+        setEffect(newEffect);
 
         return true;
     }

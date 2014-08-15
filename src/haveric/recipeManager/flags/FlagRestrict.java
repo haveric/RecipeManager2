@@ -45,8 +45,8 @@ public class FlagRestrict extends Flag {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String newMessage) {
+        message = newMessage;
     }
 
     @Override

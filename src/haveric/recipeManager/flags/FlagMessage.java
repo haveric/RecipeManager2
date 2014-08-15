@@ -53,11 +53,11 @@ public class FlagMessage extends Flag {
      *
      * @param messages
      */
-    public void setMessages(List<String> messages) {
-        if (messages == null) {
+    public void setMessages(List<String> newMessages) {
+        if (newMessages == null) {
             remove();
         } else {
-            this.messages = messages;
+            messages = newMessages;
         }
     }
 

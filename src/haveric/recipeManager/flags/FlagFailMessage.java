@@ -52,11 +52,11 @@ public class FlagFailMessage extends Flag {
         return message;
     }
 
-    public void setMessage(String message) {
-        if (message == null) {
+    public void setMessage(String newMessage) {
+        if (newMessage == null) {
             remove();
         } else {
-            this.message = Tools.parseColors(message.replaceAll("\\n", "\n"), false);
+            message = Tools.parseColors(newMessage.replaceAll("\\n", "\n"), false);
         }
     }
 

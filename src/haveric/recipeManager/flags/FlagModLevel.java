@@ -86,8 +86,8 @@ public class FlagModLevel extends Flag {
      * @param amount
      *            the amount, forced as positive number
      */
-    public void setAmount(char mod, int amount) {
-        switch (mod) {
+    public void setAmount(char newMod, int newAmount) {
+        switch (newMod) {
             case '-':
             case '=':
             case '+':
@@ -96,20 +96,20 @@ public class FlagModLevel extends Flag {
                 throw new IllegalArgumentException("mod can only be '+', '-', '=' !");
         }
 
-        if (mod != '=' && amount == 0) {
+        if (newMod != '=' && newAmount == 0) {
             throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
         }
 
-        this.mod = mod;
-        this.amount = Math.abs(amount);
+        mod = newMod;
+        amount = Math.abs(newAmount);
     }
 
     public String getFailMessage() {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override
@@ -121,35 +121,35 @@ public class FlagModLevel extends Flag {
         }
 
         value = split[0].trim();
-        char mod = value.charAt(0);
+        char newMod = value.charAt(0);
 
-        switch (mod) {
+        switch (newMod) {
             case '-':
             case '=':
             case '+':
                 value = value.substring(1).trim(); // remove modifier from string
                 break;
             default:
-                mod = '+'; // set default modifier if it's not defined
+                newMod = '+'; // set default modifier if it's not defined
         }
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
             return ErrorReporter.error("The " + getType() + " flag has level value that is too long: " + value, "Value for integers can be between " + Tools.printNumber(Integer.MIN_VALUE) + " and " + Tools.printNumber(Integer.MAX_VALUE) + ".");
         }
 
-        int amount = 0;
+        int newAmount = 0;
 
         try {
-            amount = Integer.valueOf(value);
+            newAmount = Integer.valueOf(value);
         } catch (NumberFormatException e) {
             return ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
         }
 
-        if (mod != '=' && amount == 0) {
+        if (newMod != '=' && newAmount == 0) {
             return ErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
         }
 
-        setAmount(mod, amount);
+        setAmount(newMod, newAmount);
 
         return true;
     }

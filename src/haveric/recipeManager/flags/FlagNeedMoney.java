@@ -51,16 +51,16 @@ public class FlagNeedMoney extends Flag {
         return minMoney;
     }
 
-    public void setMinMoney(double minMoney) {
-        this.minMoney = minMoney;
+    public void setMinMoney(double newMinMoney) {
+        minMoney = newMinMoney;
     }
 
     public double getMaxMoney() {
         return maxMoney;
     }
 
-    public void setMaxMoney(double maxMoney) {
-        this.maxMoney = maxMoney;
+    public void setMaxMoney(double newMaxMoney) {
+        maxMoney = newMaxMoney;
     }
 
     public String getMoneyString() {
@@ -86,8 +86,8 @@ public class FlagNeedMoney extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

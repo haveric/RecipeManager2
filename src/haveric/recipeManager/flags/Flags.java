@@ -42,8 +42,8 @@ public class Flags implements Cloneable {
     public Flags() {
     }
 
-    public Flags(Flaggable flaggable) {
-        this.flaggable = flaggable;
+    public Flags(Flaggable newFlaggable) {
+        flaggable = newFlaggable;
     }
 
     public boolean hasFlag(Class<? extends Flag> flagClass) {

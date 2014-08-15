@@ -48,8 +48,8 @@ public class FlagItemName extends Flag {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String newName) {
+        name = newName;
     }
 
     @Override

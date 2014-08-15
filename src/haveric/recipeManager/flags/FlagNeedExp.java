@@ -52,16 +52,16 @@ public class FlagNeedExp extends Flag {
         return minExp;
     }
 
-    public void setMinExp(int minExp) {
-        this.minExp = minExp;
+    public void setMinExp(int newMinExp) {
+        minExp = newMinExp;
     }
 
     public int getMaxExp() {
         return maxExp;
     }
 
-    public void setMaxExp(int maxExp) {
-        this.maxExp = maxExp;
+    public void setMaxExp(int newMaxExp) {
+        maxExp = newMaxExp;
     }
 
     public String getExpString() {
@@ -81,8 +81,8 @@ public class FlagNeedExp extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

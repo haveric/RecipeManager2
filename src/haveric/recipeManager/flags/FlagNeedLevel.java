@@ -50,16 +50,16 @@ public class FlagNeedLevel extends Flag {
         return minLevel;
     }
 
-    public void setMinLevel(int minLevel) {
-        this.minLevel = minLevel;
+    public void setMinLevel(int newMinLevel) {
+        minLevel = newMinLevel;
     }
 
     public int getMaxLevel() {
         return maxLevel;
     }
 
-    public void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
+    public void setMaxLevel(int newMaxLevel) {
+        maxLevel = newMaxLevel;
     }
 
     public String getLevelString() {
@@ -81,8 +81,8 @@ public class FlagNeedLevel extends Flag {
         return failMessage;
     }
 
-    public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
+    public void setFailMessage(String newFailMessage) {
+        failMessage = newFailMessage;
     }
 
     @Override

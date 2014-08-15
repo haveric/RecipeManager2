@@ -39,13 +39,13 @@ public class FlagForChance extends Flag {
         private float chance;
         private boolean autoChance = false;
 
-        public ChanceFlag(Flag flag, Float chance) {
-            this.flag = flag;
+        public ChanceFlag(Flag newFlag, Float newChance) {
+            flag = newFlag;
 
-            if (chance == null) {
+            if (newChance == null) {
                 autoChance = true;
             } else {
-                this.chance = chance;
+                chance = newChance;
             }
         }
 
@@ -53,9 +53,9 @@ public class FlagForChance extends Flag {
             return flag;
         }
 
-        public void setFlag(Flag flag, FlagForChance holder) {
-            flag.flagsContainer = holder.getFlagsContainer();
-            this.flag = flag;
+        public void setFlag(Flag flagToSet, FlagForChance holder) {
+            flagToSet.flagsContainer = holder.getFlagsContainer();
+            flag = flagToSet;
         }
 
         public float getChance() {

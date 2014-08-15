@@ -48,16 +48,16 @@ public class FlagBroadcast extends Flag {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String newMessage) {
+        message = newMessage;
     }
 
     public String getPermission() {
         return permission;
     }
 
-    public void setPermission(String permission) {
-        this.permission = permission;
+    public void setPermission(String newPermission) {
+        permission = newPermission;
     }
 
     @Override

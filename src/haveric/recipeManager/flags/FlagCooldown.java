@@ -78,8 +78,8 @@ public class FlagCooldown extends Flag {
         return global;
     }
 
-    public void setGlobal(boolean global) {
-        this.global = global;
+    public void setGlobal(boolean newGlobal) {
+        global = newGlobal;
     }
 
     /**

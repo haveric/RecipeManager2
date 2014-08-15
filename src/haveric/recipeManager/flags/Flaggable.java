@@ -4,7 +4,7 @@ public interface Flaggable {
     /**
      * Shortcut for {@link Flags#hasFlag(FlagType)}
      */
-    public boolean hasFlag(FlagType type);
+    boolean hasFlag(FlagType type);
 
     /**
      * Checks if flag storage is null.<br>
@@ -12,22 +12,22 @@ public interface Flaggable {
      *
      * @return flags != null
      */
-    public boolean hasFlags();
+    boolean hasFlags();
 
     /**
      * @return true if flags prevent shift+click from creating more than one item
      */
-    public boolean hasNoShiftBit();
+    boolean hasNoShiftBit();
 
     /**
      * Shortcut for {@link Flags#getFlag(FlagType)}
      */
-    public Flag getFlag(FlagType type);
+    Flag getFlag(FlagType type);
 
     /**
      * Shortcut for {@link Flags#getFlag(Class)}
      */
-    public <T extends Flag> T getFlag(Class<T> flagClass);
+    <T extends Flag> T getFlag(Class<T> flagClass);
 
     /**
      * Gets the Flag object that holds a list of flags.<br>
@@ -36,17 +36,17 @@ public interface Flaggable {
      *
      * @return Flag object, never null
      */
-    public Flags getFlags();
+    Flags getFlags();
 
     /**
      * Removes all flags.
      */
-    public void clearFlags();
+    void clearFlags();
 
     /**
      * Shortcut for {@link Flags#addFlag(Flag)}
      */
-    public void addFlag(Flag flag);
+    void addFlag(Flag flag);
 
     /**
      * Check with flags if recipe/result can be crafted/used
@@ -55,7 +55,7 @@ public interface Flaggable {
      *            use {@link Args#create()}
      * @return if recipe can be crafted
      */
-    public boolean checkFlags(Args a);
+    boolean checkFlags(Args a);
 
     /**
      * Apply flags when recipe/result is crafted/taken
@@ -64,7 +64,7 @@ public interface Flaggable {
      *            use {@link Args#create()}
      * @return
      */
-    public boolean sendCrafted(Args a);
+    boolean sendCrafted(Args a);
 
     /**
      * Apply flags when recipe/result is prepared/displayed
@@ -73,5 +73,5 @@ public interface Flaggable {
      *            {@link Args#create()}
      * @return
      */
-    public boolean sendPrepare(Args a);
+    boolean sendPrepare(Args a);
 }
