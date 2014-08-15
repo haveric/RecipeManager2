@@ -230,7 +230,12 @@ public class Args {
     }
 
     public String parseVariables(String string) {
-        String name = (hasPlayerName() ? playerName() : "(nobody)");
+        String name;
+        if (hasPlayerName()) {
+            name = playerName();
+        } else {
+            name = "(nobody)";
+        }
 
         string = string.replace("{player}", name);
         string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));

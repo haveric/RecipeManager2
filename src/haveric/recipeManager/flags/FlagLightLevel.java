@@ -68,7 +68,7 @@ public class FlagLightLevel extends Flag {
 
     /**
      * Minimum light level.
-     * 
+     *
      * @param min
      *            0-15
      */
@@ -78,7 +78,7 @@ public class FlagLightLevel extends Flag {
 
     /**
      * Light level range.
-     * 
+     *
      * @param min
      *            0-15
      * @param max
@@ -112,7 +112,11 @@ public class FlagLightLevel extends Flag {
      *             if any other string is specified
      */
     public void setLightType(String type) {
-        lightType = (type == null ? 'a' : type.charAt(0));
+        if (type == null) {
+            lightType = 'a';
+        } else {
+            lightType = type.charAt(0);
+        }
 
         switch (lightType) {
             case 's':
@@ -127,7 +131,14 @@ public class FlagLightLevel extends Flag {
     }
 
     public String getLightString() {
-        return (maxLight > minLight ? minLight + "-" + maxLight : minLight + "+");
+        String lightString;
+
+        if (maxLight > minLight) {
+            lightString = minLight + "-" + maxLight;
+        } else {
+            lightString = minLight + "+";
+        }
+        return lightString;
     }
 
     public String getLightTypeString() {
@@ -148,7 +159,7 @@ public class FlagLightLevel extends Flag {
     }
 
     public void setFailMessage(String message) {
-        this.failMessage = message;
+        failMessage = message;
     }
 
     @Override
@@ -262,9 +273,9 @@ public class FlagLightLevel extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * list.add(Messages.FLAG_LIGHTLEVEL.get("{light}", getLightString(), "{type}", getLightTypeString()));
-     * 
+     *
      * return list; }
      */
 }

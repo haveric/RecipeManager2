@@ -53,7 +53,11 @@ public class FlagKeepItem extends Flag {
         for (Entry<String, Object> e : flag.keepItems.entrySet()) {
             Object obj = e.getValue();
 
-            keepItems.put(e.getKey(), (obj instanceof ItemStack ? ((ItemStack) obj).clone() : obj));
+            if (obj instanceof ItemStack) {
+                keepItems.put(e.getKey(), ((ItemStack) obj).clone());
+            } else {
+                keepItems.put(e.getKey(), obj);
+            }
         }
     }
 
@@ -91,7 +95,11 @@ public class FlagKeepItem extends Flag {
      *            can be Integer or ItemStack object
      */
     public void addItem(ItemStack item, Object object) {
-        String key = item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());
+        String key = "" + item.getTypeId();
+
+        if (item.getDurability() != Vanilla.DATA_WILDCARD) {
+            key += ":" + item.getDurability();
+        }
 
         keepItems.put(key, object);
     }
@@ -106,7 +114,10 @@ public class FlagKeepItem extends Flag {
             return false;
         }
 
-        String key = item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());
+        String key = "" + item.getTypeId();
+        if (item.getDurability() != Vanilla.DATA_WILDCARD) {
+            key += ":" + item.getDurability();
+        }
 
         if (keepItems.containsKey(key)) {
             ErrorReporter.warning("Flag " + getType() + " already has the '" + ToolsItem.print(item) + "' ingredient added.");

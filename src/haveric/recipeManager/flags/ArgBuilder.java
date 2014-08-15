@@ -1,8 +1,8 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
+import haveric.recipeManager.recipes.ItemResult;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class ArgBuilder {
 
     /**
      * Start building an argument class for flag events
-     * 
+     *
      * @return linkable methods
      */
     public static ArgBuilder create() {
@@ -31,7 +31,7 @@ public class ArgBuilder {
 
     /**
      * Start building an argument class for flag events
-     * 
+     *
      * @return linkable methods
      */
     public ArgBuilder() {
@@ -80,7 +80,11 @@ public class ArgBuilder {
 
     public ArgBuilder result(ItemStack result) {
         if (result != null) {
-            a.setResult(result instanceof ItemResult ? (ItemResult) result : new ItemResult(result));
+            if (result instanceof ItemResult) {
+                a.setResult((ItemResult) result);
+            } else {
+                a.setResult(new ItemResult(result));
+            }
         }
 
         return this;
@@ -98,7 +102,7 @@ public class ArgBuilder {
 
     /**
      * Compile the arguments and get them.
-     * 
+     *
      * @return
      */
     public Args build() {

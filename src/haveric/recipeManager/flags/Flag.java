@@ -144,7 +144,15 @@ public class Flag implements Cloneable {
      */
     @Override
     public int hashCode() {
-        return (getType() == null ? 0 : getType().hashCode());
+        int hashCode;
+
+        if (getType() == null) {
+            hashCode = getType().hashCode();
+        } else {
+            hashCode = 0;
+        }
+
+        return hashCode;
     }
 
     /**
@@ -167,17 +175,25 @@ public class Flag implements Cloneable {
      * Non-public tools/final methods
      */
 
-    final protected Flaggable getFlaggable() {
-        return (flagsContainer != null ? flagsContainer.flaggable : null);
+    protected final Flaggable getFlaggable() {
+        Flaggable flaggable = null;
+        if (flagsContainer != null) {
+            flaggable = flagsContainer.flaggable;
+        }
+        return flaggable;
     }
 
-    final protected BaseRecipe getRecipe() {
+    protected final BaseRecipe getRecipe() {
         Flaggable flaggable = getFlaggable();
+        BaseRecipe baseRecipe = null;
+        if (flaggable instanceof BaseRecipe) {
+            baseRecipe = (BaseRecipe) flaggable;
+        }
 
-        return (flaggable instanceof BaseRecipe ? (BaseRecipe) flaggable : null);
+        return baseRecipe;
     }
 
-    final protected BaseRecipe getRecipeDeep() {
+    protected final BaseRecipe getRecipeDeep() {
         Flaggable flaggable = getFlaggable();
 
         if (flaggable instanceof BaseRecipe) {
@@ -193,13 +209,16 @@ public class Flag implements Cloneable {
         return null;
     }
 
-    final protected ItemResult getResult() {
+    protected final ItemResult getResult() {
         Flaggable flaggable = getFlaggable();
-
-        return (flaggable instanceof ItemResult ? (ItemResult) flaggable : null);
+        ItemResult itemResult = null;
+        if (flaggable instanceof ItemResult) {
+            itemResult = (ItemResult) flaggable;
+        }
+        return itemResult;
     }
 
-    final protected boolean validateParse(String value) {
+    protected final boolean validateParse(String value) {
         Validate.notNull(getType(), "This can't be used on a blank flag!");
 
         if (!getType().hasBit(Bit.NO_VALUE) && value == null) {
@@ -215,7 +234,7 @@ public class Flag implements Cloneable {
         return validate();
     }
 
-    final protected boolean validate() {
+    protected final boolean validate() {
         Flaggable flaggable = getFlaggable();
 
         if (getType().hasBit(Bit.RESULT) && !(flaggable instanceof ItemResult)) {
@@ -231,7 +250,7 @@ public class Flag implements Cloneable {
         return onValidate();
     }
 
-    final protected void registered() {
+    protected final void registered() {
         onRegistered();
     }
 

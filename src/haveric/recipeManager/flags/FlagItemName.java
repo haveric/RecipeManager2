@@ -67,7 +67,13 @@ public class FlagItemName extends Flag {
 
         ItemMeta meta = a.result().getItemMeta();
 
-        meta.setDisplayName(getName() == null ? null : Tools.parseColors(a.parseVariables(getName()), false));
+        String displayName;
+        if (getName() == null) {
+            displayName = null;
+        } else {
+            displayName = Tools.parseColors(a.parseVariables(getName()), false);
+        }
+        meta.setDisplayName(displayName);
 
         a.result().setItemMeta(meta);
     }

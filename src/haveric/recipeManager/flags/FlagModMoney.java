@@ -61,8 +61,12 @@ public class FlagModMoney extends Flag {
      *
      * @param amount
      */
-    public void setAmount(float amount) {
-        setAmount(amount < 0 ? '-' : '+', amount);
+    public void setAmount(float newAmount) {
+        if (newAmount < 0) {
+            setAmount('-', newAmount);
+        } else {
+            setAmount('+', newAmount);
+        }
     }
 
     /**

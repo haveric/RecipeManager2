@@ -305,7 +305,11 @@ public class FlagIngredientCondition extends Flag {
                 Boolean is = dataValues.get(data);
 
                 // If value not found return false otherwise return if value should be there
-                return is == null ? false : is.booleanValue();
+                if (is == null) {
+                    return false;
+                }
+
+                return is.booleanValue();
             }
 
             return true;
@@ -397,7 +401,11 @@ public class FlagIngredientCondition extends Flag {
                     } else if (!e.getValue().isEmpty()) {
                         Boolean is = e.getValue().get(level.shortValue());
 
-                        return (is == null ? false : is.booleanValue());
+                        if (is == null) {
+                            return false;
+                        }
+
+                        return is.booleanValue();
                     }
                 }
             }
@@ -442,8 +450,12 @@ public class FlagIngredientCondition extends Flag {
             return name;
         }
 
-        public void setName(String name) {
-            this.name = (name == null ? null : Tools.parseColors(name, false));
+        public void setName(String newName) {
+            if (newName == null) {
+                name = null;
+            } else {
+                name = Tools.parseColors(newName, false);
+            }
         }
 
         public boolean hasName() {
@@ -476,8 +488,12 @@ public class FlagIngredientCondition extends Flag {
             return lore;
         }
 
-        public void setLore(String lore) {
-            this.lore = (lore == null ? null : Tools.parseColors(lore, false));
+        public void setLore(String newLore) {
+            if (newLore == null) {
+                lore = null;
+            } else {
+                lore = Tools.parseColors(newLore, false);
+            }
         }
 
         public boolean hasLore() {

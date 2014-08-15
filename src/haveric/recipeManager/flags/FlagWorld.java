@@ -82,7 +82,12 @@ public class FlagWorld extends Flag {
     @Override
     protected boolean onParse(String value) {
         String[] split = value.split("\\|");
-        String message = (split.length > 1 ? split[1].trim() : null);
+        String message;
+        if (split.length > 1) {
+            message = split[1].trim();
+        } else {
+            message = null;
+        }
         split = split[0].toLowerCase().split(",");
 
         for (String arg : split) {
@@ -122,15 +127,15 @@ public class FlagWorld extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(2);
-     * 
+     *
      * String allowed = getWorldsString(true); String unallowed = getWorldsString(false);
-     * 
+     *
      * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String world = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(Messages.FLAG_WORLD_ALLOWED.get("{world}", world,
      * "{worlds}", allowed)); }
-     * 
+     *
      * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String world = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(Messages.FLAG_WORLD_UNALLOWED.get("{world}", world,
      * "{worlds}", unallowed)); }
-     * 
+     *
      * return list; }
      */
 }

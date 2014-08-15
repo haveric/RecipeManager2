@@ -72,8 +72,12 @@ public class FlagModLevel extends Flag {
      *
      * @param amount
      */
-    public void setAmount(int amount) {
-        setAmount(amount < 0 ? '-' : '+', amount);
+    public void setAmount(int newAmount) {
+        if (newAmount < 0) {
+            setAmount('-', amount);
+        } else {
+            setAmount('+', amount);
+        }
     }
 
     /**

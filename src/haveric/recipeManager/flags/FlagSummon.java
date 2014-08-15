@@ -1194,7 +1194,11 @@ public class FlagSummon extends Flag {
                 }
             }
 
-            toMount = c.mountNext ? spawned : null;
+            if (c.mountNext) {
+                toMount = spawned;
+            } else {
+                toMount = null;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 
 
@@ -175,8 +176,13 @@ public class FlagSound extends Flag {
                 a.addCustomReason("Needs player!");
                 return;
             }
-
-            a.player().playSound(a.hasLocation() ? a.location() : a.player().getLocation(), sound, volume, pitch);
+            Location location;
+            if (a.hasLocation()) {
+                location = a.location();
+            } else {
+                location = a.player().getLocation();
+            }
+            a.player().playSound(location, sound, volume, pitch);
         } else {
             if (!a.hasLocation()) {
                 a.addCustomReason("Needs location!");

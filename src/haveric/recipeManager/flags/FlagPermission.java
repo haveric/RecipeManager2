@@ -84,7 +84,13 @@ public class FlagPermission extends Flag {
     @Override
     protected boolean onParse(String value) {
         String[] split = value.split("\\|");
-        String message = (split.length > 1 ? split[1].trim() : null);
+
+        String message;
+        if (split.length > 1) {
+            message = split[1].trim();
+        } else {
+            message = null;
+        }
         split = split[0].toLowerCase().split(",");
 
         for (String arg : split) {
@@ -97,7 +103,7 @@ public class FlagPermission extends Flag {
 
             /*
              * Permission permission = Bukkit.getPluginManager().getPermission(arg);
-             * 
+             *
              * if(permission == null) { permission = new Permission(arg, PermissionDefault.FALSE); Bukkit.getPluginManager().addPermission(permission); //RecipeErrorReporter.warning("Flag " +
              * getType() + " has permission '" + arg + "' which is not registered!"); }
              */
@@ -125,15 +131,15 @@ public class FlagPermission extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(2);
-     * 
+     *
      * String allowed = getPermissionsString(true); String unallowed = getPermissionsString(false);
-     * 
+     *
      * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String permission = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(Messages.FLAG_PERMISSION_ALLOWED.get("{permission}",
      * permission, "{permissions}", allowed)); }
-     * 
+     *
      * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String permission = unallowed.substring(0, (i > 0 ? i : unallowed.length()));
      * list.add(Messages.FLAG_PERMISSION_UNALLOWED.get("{permission}", permission, "{permissions}", unallowed)); }
-     * 
+     *
      * return list; }
      */
 }

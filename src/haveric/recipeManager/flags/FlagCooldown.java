@@ -118,15 +118,30 @@ public class FlagCooldown extends Flag {
     }
 
     private String timeToString(int time) {
+        String timeString = null;
         if (time < 1) {
-            return "0s";
+            timeString = "0s";
+        } else {
+            int seconds = time % 60;
+            int minutes = time % 3600 / 60;
+            int hours = time / 3600;
+
+            if (hours > 0) {
+                timeString = hours + "h ";
+            }
+
+            if (minutes > 0) {
+                timeString += minutes + "m ";
+            }
+
+            if (seconds > 0) {
+                timeString += seconds + "s";
+            }
+
+            timeString = timeString.trim();
         }
 
-        int seconds = time % 60;
-        int minutes = time % 3600 / 60;
-        int hours = time / 3600;
-
-        return ((hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "")).trim();
+        return timeString;
     }
 
     /**
@@ -145,7 +160,11 @@ public class FlagCooldown extends Flag {
 
         MutableInt get = cooldownTime.get(playerName);
 
-        return (get == null ? true : (System.currentTimeMillis() / 1000) >= get.intValue());
+        if (get == null) {
+            return true;
+        }
+
+        return (System.currentTimeMillis() / 1000) >= get.intValue();
     }
 
     public String getFailMessage() {
@@ -202,7 +221,11 @@ public class FlagCooldown extends Flag {
             return false;
         }
 
-        cooldown = Math.round(multiplier > 0 ? multiplier * time : time);
+        if (multiplier > 0) {
+            cooldown = Math.round(multiplier * time);
+        } else {
+            cooldown = Math.round(time);
+        }
 
         if (time <= 0.0f) {
             ErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0 !");
@@ -229,7 +252,13 @@ public class FlagCooldown extends Flag {
     @Override
     protected void onCheck(Args a) {
         if (!hasCooldown(a.playerName())) {
-            a.addReason((global ? Messages.FLAG_COOLDOWN_FAIL_GLOBAL : Messages.FLAG_COOLDOWN_FAIL_PERPLAYER), getFailMessage(), "{time}", getTimeLeftStringFor(a.playerName()));
+            Messages message;
+            if (global) {
+                message = Messages.FLAG_COOLDOWN_FAIL_GLOBAL;
+            } else {
+                message = Messages.FLAG_COOLDOWN_FAIL_PERPLAYER;
+            }
+            a.addReason(message, getFailMessage(), "{time}", getTimeLeftStringFor(a.playerName()));
         }
     }
 
@@ -239,17 +268,29 @@ public class FlagCooldown extends Flag {
             return;
         }
 
-        MutableInt get = cooldownTime.get(global ? null : a.playerName());
+        String playerName = null;
+        if (global) {
+            playerName = null;
+        } else {
+            playerName = a.playerName();
+        }
+        MutableInt get = cooldownTime.get(playerName);
         int diff = (int) (System.currentTimeMillis() / 1000) + getCooldownTime();
 
         if (get == null) {
             get = new MutableInt(diff);
-            cooldownTime.put(global ? null : a.playerName(), get);
+            cooldownTime.put(playerName, get);
         } else {
             get.setValue(diff);
         }
 
-        a.addEffect((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER), getCraftMessage(), "{time}", timeToString(getCooldownTime()));
+        Messages message;
+        if (global) {
+            message = Messages.FLAG_COOLDOWN_SET_GLOBAL;
+        } else {
+            message = Messages.FLAG_COOLDOWN_SET_PERPLAYER;
+        }
+        a.addEffect(message, getCraftMessage(), "{time}", timeToString(getCooldownTime()));
     }
 
     /*

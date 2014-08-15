@@ -141,7 +141,11 @@ public class FlagForPermission extends Flag {
             flag.flagsContainer = getFlagsContainer(); // set container before hand to allow checks
         }
 
-        value = (split.length > 1 ? split[1].trim() : null);
+        if (split.length > 1) {
+            value = split[1].trim();
+        } else {
+            value = null;
+        }
 
         // make sure the flag can be added to this flag list
         if (!flag.validateParse(value)) {

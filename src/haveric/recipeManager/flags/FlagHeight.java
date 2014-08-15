@@ -63,7 +63,13 @@ public class FlagHeight extends Flag {
     }
 
     public String getHeightString() {
-        return getMinHeight() + (getMaxHeight() > getMinHeight() ? " - " + getMaxHeight() : "");
+        String heightString = "" + getMinHeight();
+
+        if (getMaxHeight() > getMinHeight()) {
+            heightString += " - " + getMaxHeight();
+        }
+
+        return heightString;
     }
 
     public boolean checkHeight(int height) {

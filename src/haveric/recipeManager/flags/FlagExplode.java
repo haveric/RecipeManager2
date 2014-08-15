@@ -107,7 +107,15 @@ public class FlagExplode extends Flag {
     }
 
     public void setNoDamage(boolean enable, boolean self) {
-        noDamage = (byte) (enable ? (self ? 2 : 1) : 0);
+        if (enable) {
+            if (self) {
+                noDamage = 2;
+            } else {
+                noDamage = 1;
+            }
+        } else {
+            noDamage = 0;
+        }
     }
 
     @Override
@@ -170,7 +178,12 @@ public class FlagExplode extends Flag {
             return;
         }
 
-        boolean failed = (failure ? a.result().getType() == Material.AIR : failure);
+        boolean failed;
+        if (failure) {
+            failed = a.result().getType() == Material.AIR;
+        } else {
+            failed = false;
+        }
 
         if (failure == failed) {
             Map<LivingEntity, Double> entities = new HashMap<LivingEntity, Double>();

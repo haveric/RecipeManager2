@@ -64,11 +64,18 @@ public class FlagNeedMoney extends Flag {
     }
 
     public String getMoneyString() {
+        String moneyString;
         if (!RecipeManager.getEconomy().isEnabled()) {
-            return null;
+            moneyString = null;
+        } else {
+            moneyString = RecipeManager.getEconomy().getFormat(getMinMoney());
+
+            if (getMaxMoney() > getMinMoney()) {
+                moneyString += " - " + RecipeManager.getEconomy().getFormat(getMaxMoney());
+            }
         }
 
-        return RecipeManager.getEconomy().getFormat(getMinMoney()) + (getMaxMoney() > getMinMoney() ? " - " + RecipeManager.getEconomy().getFormat(getMaxMoney()) : "");
+        return moneyString;
     }
 
     public boolean checkMoney(double money) {

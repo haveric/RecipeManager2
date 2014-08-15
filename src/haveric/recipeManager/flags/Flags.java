@@ -29,7 +29,14 @@ public class Flags implements Cloneable {
             s.append(f.getType());
         }
 
-        return (s.length() > 0 ? s.toString() : "empty");
+        String toReturn;
+        if (s.length() > 0) {
+            toReturn =  s.toString();
+        } else {
+            toReturn = "empty";
+        }
+
+        return toReturn;
     }
 
     public Flags() {
@@ -148,7 +155,11 @@ public class Flags implements Cloneable {
         }
 
         flag.flagsContainer = this; // set container before hand to allow checks
-        value = (split.length > 1 ? split[1].trim() : null);
+        if (split.length > 1) {
+            value = split[1].trim();
+        } else {
+            value = null;
+        }
 
         // make sure the flag can be added to this flag list
         if (!flag.validateParse(value)) {

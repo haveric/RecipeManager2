@@ -80,7 +80,13 @@ public class FlagForChance extends Flag {
                 if (c.getFlag() == null) {
                     flags.add(null);
                 } else {
-                    flags.add(new ChanceFlag(c.getFlag().clone(getFlagsContainer()), c.isAutoChance() ? null : c.getChance()));
+                    Float chance;
+                    if (c.isAutoChance()) {
+                        chance = null;
+                    } else {
+                        chance = c.getChance();
+                    }
+                    flags.add(new ChanceFlag(c.getFlag().clone(getFlagsContainer()), chance));
                 }
             }
 
@@ -369,7 +375,11 @@ public class FlagForChance extends Flag {
                 flag = flagChance.getFlag();
             }
 
-            value = (split.length > 1 ? split[1].trim() : null);
+            if (split.length > 1) {
+                value = split[1].trim();
+            } else {
+                value = null;
+            }
 
             // make sure the flag can be added to this flag list
             if (!flag.validateParse(value)) {

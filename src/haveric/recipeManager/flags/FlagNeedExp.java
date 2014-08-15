@@ -65,7 +65,12 @@ public class FlagNeedExp extends Flag {
     }
 
     public String getExpString() {
-        return getMinExp() + (maxExp > minExp ? " - " + getMaxExp() : "");
+        String expString = "" + getMinExp();
+
+        if (maxExp > minExp) {
+            expString += " - " + getMaxExp();
+        }
+        return expString;
     }
 
     public boolean checkExp(int exp) {

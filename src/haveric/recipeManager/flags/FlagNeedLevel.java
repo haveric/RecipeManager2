@@ -63,7 +63,12 @@ public class FlagNeedLevel extends Flag {
     }
 
     public String getLevelString() {
-        return getMinLevel() + (getMaxLevel() > getMinLevel() ? " - " + getMaxLevel() : "");
+        String levelString = "" + getMinLevel();
+
+        if (getMaxLevel() > getMinLevel()) {
+            levelString += " - " + getMaxLevel();
+        }
+        return levelString;
     }
 
     public boolean checkLevel(int level) {
