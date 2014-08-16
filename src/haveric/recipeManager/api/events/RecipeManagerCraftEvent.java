@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Digi
  */
 public class RecipeManagerCraftEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+    private static HandlerList handlers = new HandlerList();
 
     private boolean cancelled = false;
     private boolean shiftClick = false;
@@ -29,13 +29,13 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
     private WorkbenchRecipe recipe;
     private Player player;
 
-    public RecipeManagerCraftEvent(WorkbenchRecipe recipe, ItemResult result, Player player, ItemStack cursor, boolean shiftClick, int mouseButton) {
-        this.recipe = recipe;
-        this.result = result;
-        this.player = player;
-        this.cursor = cursor;
-        this.shiftClick = shiftClick;
-        this.mouseButton = mouseButton;
+    public RecipeManagerCraftEvent(WorkbenchRecipe newRecipe, ItemResult newResult, Player newPlayer, ItemStack newCursor, boolean newShiftClick, int newMouseButton) {
+        recipe = newRecipe;
+        result = newResult;
+        player = newPlayer;
+        cursor = newCursor;
+        shiftClick = newShiftClick;
+        mouseButton = newMouseButton;
     }
 
     @Override
@@ -53,8 +53,8 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setCancelled(boolean newCancelled) {
+        cancelled = newCancelled;
     }
 
     /**

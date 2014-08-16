@@ -22,18 +22,18 @@ import org.bukkit.inventory.ItemStack;
  * @author Digi
  */
 public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+    private static HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     private FuelRecipe recipe;
     private int burnTicks;
     private Block block;
     private String fueler;
 
-    public RecipeManagerFuelBurnEvent(FuelRecipe recipe, int burnTicks, Block block, String fueler) {
-        this.recipe = recipe;
-        this.burnTicks = burnTicks;
-        this.block = block;
-        this.fueler = fueler;
+    public RecipeManagerFuelBurnEvent(FuelRecipe newRecipe, int newBurnTicks, Block newBlock, String newFueler) {
+        recipe = newRecipe;
+        burnTicks = newBurnTicks;
+        block = newBlock;
+        fueler = newFueler;
     }
 
     /**
@@ -68,8 +68,8 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
      * @param burnTicks
      *            time in ticks
      */
-    public void setBurnTicks(int burnTicks) {
-        this.burnTicks = burnTicks;
+    public void setBurnTicks(int newBurnTicks) {
+        burnTicks = newBurnTicks;
     }
 
     /**
@@ -122,7 +122,7 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setCancelled(boolean newCancelled) {
+        cancelled = newCancelled;
     }
 }

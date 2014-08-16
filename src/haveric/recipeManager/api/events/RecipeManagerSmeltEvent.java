@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Digi
  */
 public class RecipeManagerSmeltEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+    private static HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     private SmeltRecipe recipe;
     private FuelRecipe fuelRecipe;
@@ -33,13 +33,13 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     private String smelter;
     private String fueler;
 
-    public RecipeManagerSmeltEvent(SmeltRecipe recipe, FuelRecipe fuelRecipe, ItemResult result, Block block, String smelter, String fueler) {
-        this.recipe = recipe;
-        this.fuelRecipe = fuelRecipe;
-        this.result = result;
-        this.block = block;
-        this.smelter = smelter;
-        this.fueler = fueler;
+    public RecipeManagerSmeltEvent(SmeltRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock, String newSmelter, String newFueler) {
+        recipe = newRecipe;
+        fuelRecipe = newFuelRecipe;
+        result = newResult;
+        block = newBlock;
+        smelter = newSmelter;
+        fueler = newFueler;
     }
 
     /**
@@ -162,7 +162,7 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setCancelled(boolean newCancelled) {
+        cancelled = newCancelled;
     }
 }

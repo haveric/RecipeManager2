@@ -86,20 +86,20 @@ public class CombineRecipe extends WorkbenchRecipe {
         sort();
     }
 
-    public void setIngredients(List<ItemStack> ingredients) {
+    public void setIngredients(List<ItemStack> newIngredients) {
         // unstack ingredients
-        this.ingredients = new ArrayList<ItemStack>();
+        ingredients = new ArrayList<ItemStack>();
         int amount;
 
-        for (ItemStack ingredient : ingredients) {
+        for (ItemStack ingredient : newIngredients) {
             amount = ingredient.getAmount();
 
             while (amount-- > 0) {
-                this.ingredients.add(new ItemStack(ingredient.getType(), 1, ingredient.getDurability()));
+                ingredients.add(new ItemStack(ingredient.getType(), 1, ingredient.getDurability()));
             }
         }
 
-        if (this.ingredients.size() > 9) { // check if they're more than they should...
+        if (ingredients.size() > 9) { // check if they're more than they should...
             throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
         }
 
@@ -191,7 +191,15 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getFirstResult());
+        String print;
+
+        if (hasCustomName()) {
+            print = ChatColor.ITALIC + getName();
+        } else {
+            print = ToolsItem.getName(getFirstResult());
+        }
+
+        return print;
     }
 
     @Override

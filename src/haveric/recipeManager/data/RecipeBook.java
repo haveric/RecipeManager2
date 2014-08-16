@@ -37,8 +37,8 @@ public class RecipeBook {
      * Use methods to add recipes to book, set title, etc.<br>
      * Then register/update it on {@link RecipeBooks} class.
      */
-    public RecipeBook(String id) {
-        this.id = id;
+    public RecipeBook(String newId) {
+        id = newId;
     }
 
     /**
@@ -62,16 +62,16 @@ public class RecipeBook {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String newTitle) {
+        title = newTitle;
     }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthor(String newAuthor) {
+        author = newAuthor;
     }
 
     public String getDescription() {
@@ -82,8 +82,8 @@ public class RecipeBook {
      * @param description
      *            Book description for first page.
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String newDescription) {
+        description = newDescription;
     }
 
     public int getRecipesPerVolume() {
@@ -96,8 +96,8 @@ public class RecipeBook {
      *
      * @param recipesPerVolume
      */
-    public void setRecipesPerVolume(int recipesPerVolume) {
-        this.recipesPerVolume = recipesPerVolume;
+    public void setRecipesPerVolume(int newRecipesPerVolume) {
+        recipesPerVolume = newRecipesPerVolume;
     }
 
     public boolean hasCoverPage() {
@@ -234,21 +234,21 @@ public class RecipeBook {
 
         // Cover page
         if (cover) {
-            StringBuilder cover = new StringBuilder(256);
+            StringBuilder coverString = new StringBuilder(256);
 
-            cover.append('\n').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append(getTitle());
+            coverString.append('\n').append(ChatColor.BLACK).append(ChatColor.BOLD).append(ChatColor.UNDERLINE).append(getTitle());
 
             if (getVolumesNum() > 1) {
-                cover.append('\n').append(ChatColor.BLACK).append("  ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", volume, "{volumes}", getVolumesNum()));
+                coverString.append('\n').append(ChatColor.BLACK).append("  ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", volume, "{volumes}", getVolumesNum()));
             }
 
-            cover.append('\n').append(ChatColor.GRAY).append("        Published by\n        RecipeManager");
+            coverString.append('\n').append(ChatColor.GRAY).append("        Published by\n        RecipeManager");
 
             if (getDescription() != null) {
-                cover.append('\n').append(ChatColor.DARK_BLUE).append(getDescription());
+                coverString.append('\n').append(ChatColor.DARK_BLUE).append(getDescription());
             }
 
-            meta.addPage(cover.toString());
+            meta.addPage(coverString.toString());
         }
 
         // Build contents index and page content

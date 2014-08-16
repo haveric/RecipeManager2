@@ -150,8 +150,8 @@ public class FurnaceData implements ConfigurationSerializable {
         return fueler;
     }
 
-    public void setFueler(String fueler) {
-        this.fueler = fueler;
+    public void setFueler(String newFueler) {
+        fueler = newFueler;
     }
 
     public void setFueler(Player newFueler) {
@@ -166,8 +166,8 @@ public class FurnaceData implements ConfigurationSerializable {
         return smelter;
     }
 
-    public void setSmelter(String smelter) {
-        this.smelter = smelter;
+    public void setSmelter(String newSmelter) {
+        smelter = newSmelter;
     }
 
     public void setSmelter(Player newSmelter) {
@@ -226,8 +226,8 @@ public class FurnaceData implements ConfigurationSerializable {
      *
      * @param cookTime
      */
-    public void setCookTime(Float cookTime) {
-        this.cookTime = cookTime;
+    public void setCookTime(Float newCookTime) {
+        cookTime = newCookTime;
     }
 
     public float getCookProgress() {
@@ -246,7 +246,7 @@ public class FurnaceData implements ConfigurationSerializable {
         return frozen;
     }
 
-    public void setFrozen(boolean frozen) {
-        this.frozen = frozen;
+    public void setFrozen(boolean newFrozen) {
+        frozen = newFrozen;
     }
 }

@@ -13,7 +13,7 @@ import org.bukkit.event.HandlerList;
  * It is useful if you need to add recipes through this plugin.
  */
 public class RecipeManagerEnabledEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    private static HandlerList handlers = new HandlerList();
 
     public RecipeManagerEnabledEvent() {
     }

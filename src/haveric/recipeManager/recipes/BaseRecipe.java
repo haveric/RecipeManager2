@@ -19,8 +19,8 @@ public class BaseRecipe implements Flaggable {
 
         private final String directive;
 
-        private RecipeType(String directive) {
-            this.directive = directive;
+        private RecipeType(String newDirective) {
+            directive = newDirective;
         }
 
         public String getDirective() {
@@ -37,16 +37,21 @@ public class BaseRecipe implements Flaggable {
     public BaseRecipe() {
     }
 
-    public BaseRecipe(BaseRecipe recipe) {
-        flags = (recipe.hasFlags() ? recipe.getFlags().clone(this) : null);
-        name = recipe.name;
-        customName = recipe.customName;
-        hash = recipe.hash;
-        this.recipe = recipe.recipe;
+    public BaseRecipe(BaseRecipe newRecipe) {
+        if (newRecipe.hasFlags()) {
+            flags = newRecipe.getFlags().clone(this);
+        } else {
+            flags = null;
+        }
+        name = newRecipe.name;
+        customName = newRecipe.customName;
+        hash = newRecipe.hash;
+
+        recipe = newRecipe.recipe;
     }
 
-    public BaseRecipe(Flags flags) {
-        this.flags = flags.clone(this);
+    public BaseRecipe(Flags newFlags) {
+        flags = newFlags.clone(this);
     }
 
     /**
@@ -88,20 +93,20 @@ public class BaseRecipe implements Flaggable {
      * @param name
      *            should be an UNIQUE name
      */
-    public void setName(String name) {
-        name = name.trim();
+    public void setName(String newName) {
+        newName = newName.trim();
 
-        while (name.charAt(0) == '+') {
+        while (newName.charAt(0) == '+') {
             ErrorReporter.error("Recipe names can not start with '+' character, removed!");
-            name = name.substring(1);
+            newName = newName.substring(1);
         }
 
-        if (name.isEmpty()) {
+        if (newName.isEmpty()) {
             ErrorReporter.error("Recipe names can not be empty!");
             return;
         }
 
-        this.name = name;
+        name = newName;
         customName = true;
     }
 
@@ -168,11 +173,18 @@ public class BaseRecipe implements Flaggable {
      * @return Bukkit API version of the recipe
      */
     public Recipe getBukkitRecipe() {
-        return (recipe == null ? toBukkitRecipe() : recipe);
+        Recipe bukkitRecipe;
+        if (recipe == null) {
+            bukkitRecipe = toBukkitRecipe();
+        } else {
+            bukkitRecipe = recipe;
+        }
+
+        return bukkitRecipe;
     }
 
-    public void setBukkitRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void setBukkitRecipe(Recipe newRecipe) {
+        recipe = newRecipe;
     }
 
     public Recipe toBukkitRecipe() {
@@ -183,7 +195,13 @@ public class BaseRecipe implements Flaggable {
 
     @Override
     public boolean hasFlag(FlagType type) {
-        return (flags == null ? false : flags.hasFlag(type));
+        boolean hasFlag = false;
+
+        if (flags != null) {
+            hasFlag = flags.hasFlag(type);
+        }
+
+        return hasFlag;
     }
 
     @Override
@@ -193,17 +211,35 @@ public class BaseRecipe implements Flaggable {
 
     @Override
     public boolean hasNoShiftBit() {
-        return (flags == null ? true : flags.hasNoShiftBit());
+        boolean hasNoShiftBit = true;
+
+        if (flags != null) {
+            hasNoShiftBit = flags.hasNoShiftBit();
+        }
+
+        return hasNoShiftBit;
     }
 
     @Override
     public Flag getFlag(FlagType type) {
-        return (flags == null ? null : flags.getFlag(type));
+        Flag flag = null;
+
+        if (flags != null) {
+            flag = flags.getFlag(type);
+        }
+
+        return flag;
     }
 
     @Override
     public <T extends Flag> T getFlag(Class<T> flagClass) {
-        return (flags == null ? null : flags.getFlag(flagClass));
+        T t = null;
+
+        if (flags != null) {
+            t = flags.getFlag(flagClass);
+        }
+
+        return t;
     }
 
     @Override
@@ -226,17 +262,35 @@ public class BaseRecipe implements Flaggable {
 
     @Override
     public boolean checkFlags(Args a) {
-        return (flags == null ? true : flags.checkFlags(a));
+        boolean checkFlags = true;
+
+        if (flags != null) {
+            checkFlags = flags.checkFlags(a);
+        }
+
+        return checkFlags;
     }
 
     @Override
     public boolean sendCrafted(Args a) {
-        return (flags == null ? true : flags.sendCrafted(a));
+        boolean sendCrafted = true;
+
+        if (flags != null) {
+            sendCrafted = flags.sendCrafted(a);
+        }
+
+        return sendCrafted;
     }
 
     @Override
     public boolean sendPrepare(Args a) {
-        return (flags == null ? true : flags.sendPrepare(a));
+        boolean sendPrepare = true;
+
+        if (flags != null) {
+            sendPrepare = flags.sendPrepare(a);
+        }
+
+        return sendPrepare;
     }
 
     /**

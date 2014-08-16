@@ -17,18 +17,18 @@ import org.bukkit.inventory.ItemStack;
  * @author Digi
  */
 public class RecipeManagerPrepareCraftEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    private static HandlerList handlers = new HandlerList();
 
     private WorkbenchRecipe recipe;
     private ItemStack result;
     private Player player;
     private Location workbench;
 
-    public RecipeManagerPrepareCraftEvent(WorkbenchRecipe recipe, ItemStack result, Player player, Location workbench) {
-        this.recipe = recipe;
-        this.result = result;
-        this.player = player;
-        setWorkbenchLocation(workbench);
+    public RecipeManagerPrepareCraftEvent(WorkbenchRecipe newRecipe, ItemStack newResult, Player newPlayer, Location newWorkbench) {
+        recipe = newRecipe;
+        result = newResult;
+        player = newPlayer;
+        setWorkbenchLocation(newWorkbench);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class RecipeManagerPrepareCraftEvent extends Event {
      * @param result
      *            ItemStack displayed result or null to 'cancel' event
      */
-    public void setResult(ItemStack result) {
-        this.result = result;
+    public void setResult(ItemStack newResult) {
+        result = newResult;
     }
 
     /**
@@ -88,7 +88,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
      * @param workbench
      *            the new workbench location
      */
-    public void setWorkbenchLocation(Location workbench) {
-        this.workbench = workbench;
+    public void setWorkbenchLocation(Location newWorkbench) {
+        workbench = newWorkbench;
     }
 }

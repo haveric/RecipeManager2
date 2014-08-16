@@ -33,7 +33,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 
 public class RecipeCommand implements CommandExecutor {
-    private static final Map<String, Pages> pagination = new HashMap<String, Pages>();
+    private static Map<String, Pages> pagination = new HashMap<String, Pages>();
 
     public static void clean(String name) {
         pagination.remove(name);
@@ -50,10 +50,10 @@ public class RecipeCommand implements CommandExecutor {
         private String[] pages;
         private BukkitTask task;
 
-        public Pages(String name, ItemStack item, List<String> pages) {
-            this.name = name;
-            this.item = item;
-            this.pages = pages.toArray(new String[0]);
+        public Pages(String newName, ItemStack newItem, List<String> newPages) {
+            name = newName;
+            item = newItem;
+            pages = newPages.toArray(new String[0]);
         }
 
         private void doTask() {

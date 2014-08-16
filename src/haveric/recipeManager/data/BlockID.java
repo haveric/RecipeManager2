@@ -24,11 +24,11 @@ public class BlockID {
         parseLocation(location);
     }
 
-    public BlockID(World world, int x, int y, int z) {
+    public BlockID(World world, int newX, int newY, int newZ) {
         wid = world.getUID();
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        x = newX;
+        y = newY;
+        z = newZ;
 
         buildHash();
     }
@@ -70,7 +70,6 @@ public class BlockID {
     }
 
     private void buildHash() {
-        // hash = new HashCodeBuilder().append(wid).append(x).append(y).append(z).toHashCode();
         hash = (wid.toString() + ":" + x + ":" + y + ":" + z + ":").hashCode();
     }
 

@@ -11,12 +11,12 @@ import org.bukkit.event.HandlerList;
  * @author Digi
  */
 public class RecipeManagerReloadBooksEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    private static HandlerList handlers = new HandlerList();
 
     private CommandSender sender;
 
-    public RecipeManagerReloadBooksEvent(CommandSender sender) {
-        this.sender = sender;
+    public RecipeManagerReloadBooksEvent(CommandSender newSender) {
+        sender = newSender;
     }
 
     @Override
