@@ -67,9 +67,9 @@ public class RecipeProcessor implements Runnable {
         new RecipeProcessor(sender, check);
     }
 
-    private RecipeProcessor(CommandSender sender, boolean check) {
-        this.sender = sender;
-        this.check = check;
+    private RecipeProcessor(CommandSender newSender, boolean newCheck) {
+        sender = newSender;
+        check = newCheck;
 
         if (task != null) {
             task.cancel();
@@ -89,7 +89,13 @@ public class RecipeProcessor implements Runnable {
         final long start = System.currentTimeMillis();
 
         try {
-            Messages.sendAndLog(sender, (check ? "Checking" : "Loading") + " " + "all recipes...");
+            String message;
+            if (check) {
+                message = "Checking";
+            } else {
+                message = "Loading";
+            }
+            Messages.sendAndLog(sender, message + " all recipes...");
 
             File dir = new File(DIR_RECIPES);
 
@@ -128,12 +134,18 @@ public class RecipeProcessor implements Runnable {
 
                 int errors = ErrorReporter.getCatchedAmount();
 
+                String parsed;
+                if (check) {
+                    parsed = "Checked";
+                } else {
+                    parsed = "Parsed";
+                }
                 if (errors > 0) {
-                    Messages.sendAndLog(sender, ChatColor.YELLOW + (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
+                    Messages.sendAndLog(sender, ChatColor.YELLOW + parsed + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
 
                     ErrorReporter.print(FILE_ERRORLOG);
                 } else {
-                    Messages.sendAndLog(sender, (check ? "Checked" : "Parsed") + " " + loaded + " recipes from " + fileList.size() + " files without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
+                    Messages.sendAndLog(sender, parsed + " " + loaded + " recipes from " + fileList.size() + " files without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
 
                     File log = new File(FILE_ERRORLOG);
 
@@ -177,7 +189,12 @@ public class RecipeProcessor implements Runnable {
                 }
             } else {
                 int i = file.getName().lastIndexOf('.');
-                String ext = (i > 0 ? file.getName().substring(i).toLowerCase() : file.getName());
+                String ext;
+                if (i > 0) {
+                    ext = file.getName().substring(i).toLowerCase();
+                } else {
+                    ext = file.getName();
+                }
 
                 if (!Files.FILE_RECIPE_EXTENSIONS.contains(ext)) {
                     continue;
@@ -281,7 +298,9 @@ public class RecipeProcessor implements Runnable {
     }
 
     private String parseComments() {
-        line = (line == null ? null : line.trim());
+        if (line != null) {
+            line.trim();
+        }
 
         if (line == null || line.isEmpty()) {
             return null;
@@ -295,7 +314,14 @@ public class RecipeProcessor implements Runnable {
 
             if (index >= 0) {
                 commentBlock = false;
-                return (index == 0 ? null : line.substring(0, index).trim());
+
+                String comment;
+                if (index == 0) {
+                    comment = null;
+                } else {
+                    comment = line.substring(0, index).trim();
+                }
+                return comment;
             }
 
             return null;
@@ -311,7 +337,13 @@ public class RecipeProcessor implements Runnable {
             }
 
             commentBlock = true;
-            return (index == 0 ? null : line.substring(0, index).trim());
+            String comment;
+            if (index == 0) {
+                comment = null;
+            } else {
+                comment = line.substring(0, index).trim();
+            }
+            return comment;
         }
 
         // now check for in-line comments
@@ -454,7 +486,8 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if ((items += item.getAmount()) > 9) {
+            items += item.getAmount();
+            if (items > 9) {
                 ErrorReporter.error("Combine recipes can't have more than 9 ingredients !", "If you're using stacks make sure they don't exceed 9 items in total.");
                 return false;
             }
@@ -696,7 +729,11 @@ public class RecipeProcessor implements Runnable {
             }
 
             if (recipeName != null) {
-                recipe.setName(recipeName + (added > 1 ? " (" + added + ")" : "")); // set recipe's name if defined
+                String name = recipeName;
+                if (added > 1) {
+                    name += " (" + added + ")";
+                }
+                recipe.setName(name); // set recipe's name if defined
             }
 
             registrator.queuFuelRecipe(recipe, currentFile);
@@ -736,7 +773,11 @@ public class RecipeProcessor implements Runnable {
             }
 
             if (recipeName != null) {
-                recipe.setName(recipeName + (added > 1 ? " (" + added + ")" : "")); // set recipe's name if defined
+                String name = recipeName;
+                if (added > 1) {
+                    name += " (" + added + ")";
+                }
+                recipe.setName(name); // set recipe's name if defined
             }
 
             // registrator.queueRemoveResultRecipe(recipe, currentFile);

@@ -79,8 +79,8 @@ public class Files {
         new Files(sender);
     }
 
-    private Files(CommandSender sender) {
-        this.sender = sender;
+    private Files(CommandSender newSender) {
+        sender = newSender;
 
         createDirectories();
 
@@ -97,7 +97,7 @@ public class Files {
         // TODO warn of unused 'aliases.yml'
 
         if (overwrite) {
-            Messages.sendAndLog(sender, "<gray>New version installed, information files and changelog have been overwritten.");
+            Messages.sendAndLog(newSender, "<gray>New version installed, information files and changelog have been overwritten.");
         }
     }
 
@@ -325,23 +325,50 @@ public class Files {
             }
 
             Object obj = data.get("permission");
-            String permission = (obj == null ? null : obj.toString());
+            String permission;
+            if (obj == null) {
+                permission = null;
+            } else {
+                permission = obj.toString();
+            }
 
             obj = data.get("usage");
-            String usage = (obj == null ? null : obj.toString().replace("<command>", e.getKey()));
+            String usage;
+            if (obj == null) {
+                usage = null;
+            } else {
+                usage = obj.toString().replace("<command>", e.getKey());
+            }
 
             obj = data.get("description");
-            String info = (obj == null ? null : obj.toString());
+            String info;
+            if (obj == null) {
+                info = null;
+            } else {
+                info = obj.toString();
+            }
 
             obj = data.get("aliases");
             @SuppressWarnings("unchecked")
-            List<String> aliases = (obj instanceof List ? (List<String>) obj : null);
+            List<String> aliases;
+            if (obj instanceof List) {
+                aliases = (List<String>) obj;
+            } else {
+                aliases = null;
+            }
+
+            String aliasesString;
+            if (aliases == null) {
+                aliasesString = "N/A";
+            } else {
+                aliasesString = Tools.collectionToString(aliases);
+            }
 
             s.append(NL).append("<tr>");
             s.append("<td width=\"40%\"><b>");
             s.append(StringEscapeUtils.escapeHtml(usage)).append("</b><span style=\"font-size:14px;\">");
             s.append("<br>Permission: ").append(permission);
-            s.append("<br>Aliases: ").append(aliases == null ? "N/A" : Tools.collectionToString(aliases));
+            s.append("<br>Aliases: ").append(aliasesString);
             s.append("</span></td>");
             s.append("<td>").append(StringEscapeUtils.escapeHtml(info)).append("</td>");
             s.append("</tr>");
@@ -453,7 +480,19 @@ public class Files {
         for (Material m : Material.values()) {
             String alias = RecipeManager.settings.materialPrint.get(m);
 
-            s.append(NL).append(String.format(" %-5d %-24s %-24s %-5d %s", m.getId(), m.toString(), (alias == null ? "" : alias), m.getMaxStackSize(), (m.getMaxDurability() == 0 ? "" : m.getMaxDurability())));
+            String aliasString;
+            if (alias == null) {
+                aliasString = "";
+            } else {
+                aliasString = alias;
+            }
+
+            String durabilityString = "";
+            if (m.getMaxDurability() != 0) {
+                durabilityString += m.getMaxDurability();
+            }
+
+            s.append(NL).append(String.format(" %-5d %-24s %-24s %-5d %s", m.getId(), m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
         }
 
         s.append(NL);
@@ -468,7 +507,13 @@ public class Files {
         Collections.sort(enchantments, new Comparator<Enchantment>() {
             @Override
             public int compare(Enchantment e1, Enchantment e2) {
-                return (e1.getId() > e2.getId() ? 1 : -1);
+                int compare;
+                if (e1.getId() > e2.getId()) {
+                    compare = 1;
+                } else {
+                    compare = -1;
+                }
+                return compare;
             }
         });
 
@@ -490,7 +535,13 @@ public class Files {
 
         for (PotionType t : PotionType.values()) {
             if (t != null) {
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), (t.getEffectType() == null ? "" : t.getEffectType().getName()), t.getDamageValue()));
+                String effectType;
+                if (t.getEffectType() == null) {
+                    effectType = "";
+                } else {
+                    effectType = t.getEffectType().getName();
+                }
+                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), effectType, t.getDamageValue()));
             }
         }
 
@@ -541,7 +592,21 @@ public class Files {
         Sound[] sounds = Sound.values();
 
         for (int i = 0; i < sounds.length; i += 4) {
-            s.append(NL).append(String.format(" %-24s%-24s%-24s%s", sounds[i].name(), (i + 1 < sounds.length ? sounds[i + 1].name() : ""), (i + 2 < sounds.length ? sounds[i + 2].name() : ""), (i + 3 < sounds.length ? sounds[i + 3].name() : "")));
+            String sounds1 = "";
+            String sounds2 = "";
+            String sounds3 = "";
+
+            if (i + 1 < sounds.length) {
+                sounds1 = sounds[i + 1].name();
+            }
+            if (i + 2 < sounds.length) {
+                sounds2 = sounds[i + 2].name();
+            }
+
+            if (i + 3 < sounds.length) {
+                sounds3 = sounds[i + 3].name();
+            }
+            s.append(NL).append(String.format(" %-24s%-24s%-24s%s", sounds[i].name(), sounds1, sounds2, sounds3));
         }
 
         s.append(NL);

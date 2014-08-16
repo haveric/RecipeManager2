@@ -115,15 +115,15 @@ public enum Messages {
 
     LASTCHANGED(null);
 
-    private static final Map<String, Set<String>> sent = new HashMap<String, Set<String>>();
+    private static Map<String, Set<String>> sent = new HashMap<String, Set<String>>();
     private static FileConfiguration yml;
 
     private String path;
     private String message;
 
-    private Messages(String message) {
+    private Messages(String newMessage) {
         path = name().replace('_', '.').toLowerCase();
-        this.message = message;
+        message = newMessage;
     }
 
     private void assign() {
@@ -203,13 +203,24 @@ public enum Messages {
 
         if (customMessage != null) { // has custom message
             // if flag message is set to "false" then don't show the message
-            msg = (customMessage.equals("false") ? null : customMessage);
+            if (customMessage.equals("false")) {
+                msg = null;
+            } else {
+                msg = customMessage;
+            }
         } else if (msg != null && msg.equals("false")) {
             // message is "false", don't show the message
             msg = null;
         }
 
-        return msg == null ? null : Tools.replaceVariables(msg, variables);
+        String finalCustom;
+        if (msg == null) {
+            finalCustom = null;
+        } else {
+            finalCustom = Tools.replaceVariables(msg, variables);
+        }
+
+        return finalCustom;
     }
 
     /**
@@ -389,7 +400,10 @@ public enum Messages {
 
     private static void sendSound(Player player, Location location, Sound sound, float volume, float pitch, boolean condition) {
         if (player != null && condition) {
-            player.playSound(location == null ? player.getLocation() : location, sound, volume, pitch);
+            if (location == null) {
+                location = player.getLocation();
+            }
+            player.playSound(location, sound, volume, pitch);
         }
     }
 
@@ -408,7 +422,12 @@ public enum Messages {
 
     public static void error(CommandSender sender, Throwable thrown, String message) {
         try {
-            message = "<red>" + (message == null ? thrown.getMessage() : message + " (" + thrown.getMessage() + ")");
+            if (message == null) {
+                message = "<red>" + thrown.getMessage();
+            } else {
+                message = "<red>" + message + " (" + thrown.getMessage() + ")";
+            }
+
             sendAndLog(sender, message);
             notifyDebuggers(message);
 

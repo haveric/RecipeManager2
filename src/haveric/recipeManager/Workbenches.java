@@ -16,7 +16,7 @@ import org.bukkit.entity.HumanEntity;
  * Stores in-use workbench locations to be used with flags.
  */
 public class Workbenches {
-    private static final Map<String, BlockID> workbenches = new HashMap<String, BlockID>();
+    private static Map<String, BlockID> workbenches = new HashMap<String, BlockID>();
 
     private Workbenches() {
     }
@@ -70,6 +70,10 @@ public class Workbenches {
 
         Location loc = block.getLocation();
 
-        return (loc == null || loc.distanceSquared(playerLoc) > 36 ? playerLoc : loc); // 6 squared
+        if (loc == null || loc.distanceSquared(playerLoc) > 36) { // 6 squared
+            loc = playerLoc;
+        }
+
+        return loc;
     }
 }

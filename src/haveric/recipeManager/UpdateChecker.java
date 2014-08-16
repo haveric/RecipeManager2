@@ -33,8 +33,8 @@ public class UpdateChecker extends BukkitRunnable {
      * @param sender
      *            who to send messages to, use null for server console
      */
-    public UpdateChecker(CommandSender sender) {
-        this.sender = sender;
+    public UpdateChecker(CommandSender newSender) {
+        sender = newSender;
         runTaskAsynchronously(RecipeManager.getPlugin());
     }
 

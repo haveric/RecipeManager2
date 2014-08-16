@@ -100,14 +100,25 @@ public class Events implements Listener {
                 return; // event was canceled by some other plugin
             }
 
-            Player player = (event.getView() == null ? null : (Player) event.getView().getPlayer());
+            Player player;
+            if (event.getView() == null) {
+                player = null;
+            } else {
+                player = (Player) event.getView().getPlayer();
+            }
 
             if (!RecipeManager.getPlugin().canCraft(player)) {
                 inv.setResult(null);
                 return; // player not allowed to craft, stop here
             }
 
-            Location location = (inv.getSize() > 9 ? Workbenches.get(player) : null); // get workbench location or null
+            Location location;
+            // get workbench location or null
+            if (inv.getSize() > 9) {
+                location = Workbenches.get(player);
+            } else {
+                location = null;
+            }
 
             if (event.isRepair()) {
                 prepareRepairRecipe(player, inv, location);
@@ -120,7 +131,13 @@ public class Events implements Listener {
                 return; // Bukkit recipe is null ! skip it
             }
 
-            ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
+            ItemResult result;
+            if (inv.getResult() == null) {
+                result = null;
+            } else {
+                result = new ItemResult(inv.getResult());
+            }
+
             ItemStack recipeResult = bukkitRecipe.getResult();
 
             if (prepareSpecialRecipe(player, inv, result, recipeResult)) {
@@ -141,7 +158,11 @@ public class Events implements Listener {
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
             Bukkit.getPluginManager().callEvent(callEvent);
 
-            result = (callEvent.getResult() == null ? null : new ItemResult(callEvent.getResult()));
+            if (callEvent.getResult() == null) {
+                result = null;
+            } else {
+                result = new ItemResult(callEvent.getResult());
+            }
 
             if (result != null) {
                 a.setResult(result);
@@ -160,7 +181,13 @@ public class Events implements Listener {
                 event.getInventory().setResult(null);
             }
 
-            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player) event.getView().getPlayer() : null);
+            CommandSender sender;
+            if (event.getView() != null && event.getView().getPlayer() instanceof Player) {
+                sender = (Player) event.getView().getPlayer();
+            } else {
+                sender = null;
+            }
+
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
@@ -256,8 +283,20 @@ public class Events implements Listener {
     public void craftFinish(CraftItemEvent event) {
         try {
             CraftingInventory inv = event.getInventory();
-            ItemResult result = (inv.getResult() == null ? null : new ItemResult(inv.getResult()));
-            final Player player = (event.getView() == null ? null : (Player) event.getView().getPlayer());
+            ItemResult result;
+            if (inv.getResult() == null) {
+                result = null;
+            } else {
+                result = new ItemResult(inv.getResult());
+            }
+
+            final Player player;
+            if (event.getView() == null) {
+                player = null;
+            } else {
+                player = (Player) event.getView().getPlayer();
+            }
+
             Location location = Workbenches.get(player);
 
             if (result == null) {
@@ -284,8 +323,14 @@ public class Events implements Listener {
 
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
 
+            int mouseButton;
+            if (event.isRightClick()) {
+                mouseButton = 1;
+            } else {
+                mouseButton = 0;
+            }
             // Call the PRE event TODO upgrade to MouseButton when PR is pulled
-            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0);
+            RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), mouseButton);
             Bukkit.getPluginManager().callEvent(callEvent);
 
             if (callEvent.isCancelled()) { // if event was canceled by some other plugin then cancel this event
@@ -333,7 +378,13 @@ public class Events implements Listener {
             new UpdateInventory(player, 2); // update inventory 2 ticks later
         } catch (Throwable e) {
             event.setCancelled(true);
-            CommandSender sender = (event.getView() != null && event.getView().getPlayer() instanceof Player ? (Player) event.getView().getPlayer() : null);
+            CommandSender sender;
+            if (event.getView() != null && event.getView().getPlayer() instanceof Player) {
+                sender = (Player) event.getView().getPlayer();
+            } else {
+                sender = null;
+            }
+
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
@@ -542,7 +593,13 @@ public class Events implements Listener {
             }
         } catch (Throwable e) {
             event.setCancelled(true);
-            CommandSender sender = (event.getWhoClicked() instanceof Player ? (Player) event.getWhoClicked() : null);
+            CommandSender sender;
+            if (event.getWhoClicked() instanceof Player) {
+                sender = (Player) event.getWhoClicked();
+            } else {
+                sender = null;
+            }
+
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
@@ -591,7 +648,13 @@ public class Events implements Listener {
                 // First checks if the setting is for normal shift+click mode
                 // Then checks if the clicked item is a fuel recipe and sends it to fuel slot if so, otherwise to ingredient slot
                 // If it's left/right click mode then see if it's right click and send to fuel slot otherwise to ingredient slot
-                int targetSlot = ((RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' ? RecipeManager.getRecipes().getFuelRecipe(clicked) != null : event.isRightClick()) ? 1 : 0);
+                int targetSlot = 0;
+                if (RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f') {
+                    if (RecipeManager.getRecipes().getFuelRecipe(clicked) != null || event.isRightClick()) {
+                        targetSlot = 1;
+                    }
+                }
+
                 ItemStack item = inv.getItem(targetSlot); // Get the item at the target slot
                 boolean similarItems = clicked.isSimilar(item); // Check if the clicked item is similar to the item at the targeted slot
 
@@ -644,7 +707,13 @@ public class Events implements Listener {
         if (furnace.getBurnTime() > 0) {
             // Messages.debug("furnace is burning...");
 
-            ItemStack i = ToolsItem.nullIfAir(slot == 0 ? item : inv.getSmelting());
+            ItemStack itemToTest;
+            if (slot == 0) {
+                itemToTest = item;
+            } else {
+                itemToTest = inv.getSmelting();
+            }
+            ItemStack i = ToolsItem.nullIfAir(itemToTest);
             ItemStack f = ToolsItem.nullIfAir(inv.getFuel());
 
             SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(i);
@@ -656,7 +725,13 @@ public class Events implements Listener {
             if (sr != null && sr.hasFuel()) {
                 // Messages.debug("recipe is smelt+fuel...");
 
-                if (item != null && item.isSimilar(slot == 0 ? inv.getSmelting() : f)) {
+                ItemStack fuelToTest;
+                if (slot == 0) {
+                    fuelToTest = inv.getSmelting();
+                } else {
+                    fuelToTest = f;
+                }
+                if (item != null && item.isSimilar(fuelToTest)) {
                     // Messages.debug("recipe is smelt+fuel but added similar items!");
                 } else {
                     // Messages.debug("recipe is a smelt+fuel recipe, removing active burn time...");
@@ -665,8 +740,21 @@ public class Events implements Listener {
             }
         }
 
-        ItemStack ingredient = ToolsItem.nullIfAir(slot == 0 ? item : inv.getSmelting());
-        ItemStack fuel = ToolsItem.nullIfAir(slot == 1 ? item : inv.getFuel());
+        ItemStack ingredientToTest;
+        if (slot == 0) {
+            ingredientToTest = item;
+        } else {
+            ingredientToTest = inv.getSmelting();
+        }
+        ItemStack ingredient = ToolsItem.nullIfAir(ingredientToTest);
+
+        ItemStack testFuel;
+        if (slot == 1) {
+            testFuel = item;
+        } else {
+            testFuel = inv.getFuel();
+        }
+        ItemStack fuel = ToolsItem.nullIfAir(testFuel);
 
         // TODO remove this debug
         /*
@@ -822,8 +910,14 @@ public class Events implements Listener {
                 event.setBurning(true);
                 event.setBurnTime(time);
             }
+            int burnTicks;
+            if (!event.isCancelled() && event.isBurning()) {
+                burnTicks = event.getBurnTime();
+            } else {
+                burnTicks = 0;
+            }
 
-            data.setBurnTicks(!event.isCancelled() && event.isBurning() ? event.getBurnTime() : 0);
+            data.setBurnTicks(burnTicks);
         } catch (Throwable e) {
             event.setCancelled(true);
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
@@ -1141,7 +1235,12 @@ public class Events implements Listener {
             tileEntities = list.toArray(new BlockState[0]);
         }
 
-        Set<BlockID> added = (add ? new HashSet<BlockID>(tileEntities.length) : null);
+        Set<BlockID> added;
+        if (add) {
+            added = new HashSet<BlockID>(tileEntities.length);
+        } else {
+            added = null;
+        }
 
         for (BlockState state : tileEntities) {
             if (state instanceof Furnace) {
@@ -1233,8 +1332,8 @@ public class Events implements Listener {
     private class UpdateInventory extends BukkitRunnable {
         private final Player player;
 
-        public UpdateInventory(Player player, int ticks) {
-            this.player = player;
+        public UpdateInventory(Player newPlayer, int ticks) {
+            player = newPlayer;
 
             if (ticks <= 0) {
                 run();

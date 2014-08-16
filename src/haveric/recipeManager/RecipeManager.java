@@ -15,6 +15,7 @@ import haveric.recipeManager.data.FurnaceData;
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.metrics.Metrics;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -44,10 +45,10 @@ public class RecipeManager extends JavaPlugin {
     protected static Permissions permissions;
     protected static Metrics metrics;
 
-    private final HashMap<String, String> plugins = new HashMap<String, String>();
+    private HashMap<String, String> plugins = new HashMap<String, String>();
 
     // constants
-    public static final Random random = new Random();
+    public static Random random = new Random();
 
     @Override
     public void onEnable() {
@@ -126,7 +127,12 @@ public class RecipeManager extends JavaPlugin {
      *            Set to true to only check recipes, settings are un affected.
      */
     public void reload(CommandSender sender, boolean check) {
-        boolean previousClearRecipes = (settings == null ? false : settings.CLEAR_RECIPES);
+        boolean previousClearRecipes;
+        if (settings == null) {
+            previousClearRecipes = false;
+        } else {
+            previousClearRecipes = settings.CLEAR_RECIPES;
+        }
 
         Settings.reload(sender); // (re)load settings
         Files.reload(sender); // (re)generate info files if they do not exist
@@ -170,15 +176,17 @@ public class RecipeManager extends JavaPlugin {
     private void scanPlugins() {
         String packageName;
 
-        for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
-            if (plugin instanceof RecipeManager) {
+        for (Plugin scanPlugin : getServer().getPluginManager().getPlugins()) {
+            if (scanPlugin instanceof RecipeManager) {
                 continue;
             }
 
-            packageName = plugin.getDescription().getMain();
+            packageName = scanPlugin.getDescription().getMain();
             int i = packageName.lastIndexOf('.');
-            packageName = (i > 0 ? packageName.substring(0, i) : packageName);
-            plugins.put(packageName, plugin.getName());
+            if (i > 0) {
+                packageName = packageName.substring(0, i);
+            }
+            plugins.put(packageName, scanPlugin.getName());
         }
     }
 
@@ -336,6 +344,12 @@ public class RecipeManager extends JavaPlugin {
      * @return True if sender has the permission.
      */
     public boolean canCraft(CommandSender sender) {
-        return (sender == null ? true : sender.hasPermission("recipemanager.craft"));
+        boolean canCraft = true;
+
+        if (sender != null) {
+            canCraft = sender.hasPermission("recipemanager.craft");
+        }
+
+        return canCraft;
     }
 }

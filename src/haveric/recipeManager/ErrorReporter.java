@@ -55,7 +55,15 @@ public class ErrorReporter {
      * @return 0 if no errors, -1 if not catching at all
      */
     public static int getCatchedAmount() {
-        return (isCatching() ? fileErrors.size() : -1);
+        int caught;
+
+        if (isCatching()) {
+            caught = fileErrors.size();
+        } else {
+            caught = -1;
+        }
+
+        return caught;
     }
 
     /**
@@ -209,7 +217,12 @@ public class ErrorReporter {
 
     private static void entry(String type, String message, String tip) {
         if (!isCatching()) {
-            Messages.info(type + ":" + ChatColor.RESET + " " + message + (tip != null ? ChatColor.DARK_GREEN + " TIP: " + ChatColor.GRAY + tip : ""));
+            String infoMessage = type + ":" + ChatColor.RESET + " " + message;
+
+            if (tip != null) {
+                infoMessage += ChatColor.DARK_GREEN + " TIP: " + ChatColor.GRAY + tip;
+            }
+            Messages.info(infoMessage);
         } else if (!ignore) {
             List<String> errors = fileErrors.get(currentFile);
 
@@ -217,7 +230,12 @@ public class ErrorReporter {
                 errors = new ArrayList<String>();
             }
 
-            errors.add("line " + String.format("%-5d", currentLine) + type + ": " + ChatColor.RESET + message + (tip != null ? Files.NL + ChatColor.DARK_GREEN + "          TIP: " + ChatColor.GRAY + tip : ""));
+            String errorMessage = "line " + String.format("%-5d", currentLine) + type + ": " + ChatColor.RESET + message;
+
+            if (tip != null) {
+                errorMessage += Files.NL + ChatColor.DARK_GREEN + "          TIP: " + ChatColor.GRAY + tip;
+            }
+            errors.add(errorMessage);
 
             fileErrors.put(currentFile, errors);
         }

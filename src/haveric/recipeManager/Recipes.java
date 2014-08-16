@@ -156,7 +156,13 @@ public class Recipes {
      * @return Craft recipe or null if doesn't exist
      */
     public CraftRecipe getCraftRecipe(ItemStack result) {
-        return (result == null ? null : indexCraft.get(Tools.getRecipeIdFromItem(result)));
+        CraftRecipe recipe = null;
+
+        if (result != null) {
+            recipe = indexCraft.get(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipe;
     }
 
     /**
@@ -167,7 +173,13 @@ public class Recipes {
      * @return Combine recipe or null if doesn't exist
      */
     public CombineRecipe getCombineRecipe(ItemStack result) {
-        return (result == null ? null : indexCombine.get(Tools.getRecipeIdFromItem(result)));
+        CombineRecipe recipe = null;
+
+        if (result != null) {
+            recipe = indexCombine.get(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipe;
     }
 
     /**
@@ -177,7 +189,12 @@ public class Recipes {
      * @return Smelt recipe or null if doesn't exist
      */
     public SmeltRecipe getSmeltRecipe(ItemStack ingredient) {
-        return (ingredient == null ? null : indexSmelt.get(ingredient.getTypeId()));
+        SmeltRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexSmelt.get(ingredient.getTypeId());
+        }
+        return recipe;
     }
 
     public SmeltRecipe getSmeltRecipeWithFuel(ItemStack fuel) {
@@ -378,7 +395,11 @@ public class Recipes {
             staticResults.put(a.playerName(), result);
         }
 
-        return (result == null ? null : result.clone());
+        if (result == null) {
+            return null;
+        }
+
+        return result.clone();
     }
 
     protected static void recipeResetResult(String name) {

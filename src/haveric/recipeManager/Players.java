@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 
 public class Players {
-    private static final Map<String, Integer> joined = new HashMap<String, Integer>();
+    private static Map<String, Integer> joined = new HashMap<String, Integer>();
 
     private Players() {
     }

@@ -62,7 +62,7 @@ public class Furnaces {
 
     /**
      * Add/update existing furnace.
-     * 
+     *
      * @param furnace
      */
     public static void set(Furnace furnace) {
@@ -103,7 +103,7 @@ public class Furnaces {
 
     /**
      * Add new furnace
-     * 
+     *
      * @param id
      */
     public static void add(BlockID id) {
@@ -114,7 +114,7 @@ public class Furnaces {
 
     /**
      * Add new furnace
-     * 
+     *
      * @param id
      */
     public static void add(Location location) {
@@ -219,7 +219,14 @@ public class Furnaces {
                 yml.set("coords." + f.getKey(), f.getValue());
             }
 
-            File file = new File(dir.getPath() + File.separator + (world == null ? w.getKey().toString() : world.getName()) + SAVE_EXTENSION);
+            String worldString;
+            if (world == null) {
+                worldString = w.getKey().toString();
+            } else {
+                worldString = world.getName();
+            }
+
+            File file = new File(dir.getPath() + File.separator + worldString + SAVE_EXTENSION);
 
             try {
                 yml.save(file);

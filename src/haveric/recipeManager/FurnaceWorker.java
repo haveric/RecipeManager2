@@ -114,7 +114,7 @@ class FurnaceWorker implements Runnable {
                 continue;
             }
 
-            if (recipe.getMinTime() <= 0.0) {// instant smelting
+            if (recipe.getMinTime() <= 0.0) { // instant smelting
                 furnace.setCookTime((short) 200);
             } else {
                 float progress = data.getCookProgress();

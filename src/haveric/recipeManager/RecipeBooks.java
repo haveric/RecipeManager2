@@ -84,7 +84,12 @@ public class RecipeBooks {
         for (File file : dir.listFiles()) {
             if (file.isFile()) {
                 int i = file.getName().lastIndexOf('.');
-                String ext = (i > 0 ? file.getName().substring(i).toLowerCase() : file.getName());
+                String ext;
+                if (i > 0) {
+                    ext = file.getName().substring(i).toLowerCase();
+                } else {
+                    ext = file.getName();
+                }
 
                 if (ext.equals(".yml")) {
                     files.put(Tools.removeExtensions(file.getName(), Sets.newHashSet(".yml")), file);
@@ -110,7 +115,11 @@ public class RecipeBooks {
             }
         }
 
-        Messages.sendAndLog(sender, "Parsed " + books.size() + " recipe books" + (errors > 0 ? " with " + errors + " errors/warnings." : "."));
+        String bookErrors = "";
+        if (errors > 0) {
+            bookErrors = " with " + errors + " errors/warnings";
+        }
+        Messages.sendAndLog(sender, "Parsed " + books.size() + " recipe books" + bookErrors + ".");
 
         // TODO post event ?
         // Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEventPost(sender));
@@ -422,7 +431,11 @@ public class RecipeBooks {
                         i = adder.lastIndexOf('/');
 
                         if (i > -1) {
-                            adder = adder.substring(0, (i == 0 ? i + 1 : i));
+                            if (i == 0) {
+                                adder = adder.substring(0, i + 1);
+                            } else {
+                                adder = adder.substring(0, i);
+                            }
                         }
 
                         if (value.equals(adder)) {
@@ -568,7 +581,13 @@ public class RecipeBooks {
     public ItemStack getBookItem(String id, int volume) {
         RecipeBook book = getBook(id);
 
-        return (book == null ? null : book.getBookItem(volume));
+        ItemStack bookItem;
+        if (book == null) {
+            bookItem = null;
+        } else {
+            bookItem = book.getBookItem(volume);
+        }
+        return bookItem;
     }
 
     /**
