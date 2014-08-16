@@ -320,7 +320,7 @@ public class Vanilla {
             if (r instanceof FurnaceRecipe) {
                 fr = (FurnaceRecipe) r;
 
-                if (ingredient.getTypeId() == fr.getInput().getTypeId()) {
+                if (ingredient.getType() == fr.getInput().getType()) {
                     iterator.remove();
                     return fr;
                 }

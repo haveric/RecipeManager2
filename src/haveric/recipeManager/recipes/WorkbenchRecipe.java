@@ -170,7 +170,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         int craftAmount = inv.getMaxStackSize();
 
         for (ItemStack i : inv.getMatrix()) {
-            if (i != null && i.getTypeId() != 0) {
+            if (i != null && i.getType() != Material.AIR) {
                 craftAmount = Math.min(i.getAmount(), craftAmount);
             }
         }

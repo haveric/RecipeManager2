@@ -415,7 +415,7 @@ public class RecipeProcessor implements Runnable {
                 }
 
                 // no point in adding more ingredients if there are errors
-                if (!ingredientErrors && item.getTypeId() != 0) {
+                if (!ingredientErrors && item.getType() != Material.AIR) {
                     ingredients[(rows * 3) + i] = item;
                     ingredientsNum++;
                 }

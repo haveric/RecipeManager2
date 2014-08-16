@@ -251,7 +251,7 @@ public class RecipeCommand implements CommandExecutor {
 
     private boolean containsItem(Collection<? extends ItemStack> items, ItemStack item, boolean ingredient) {
         for (ItemStack i : items) {
-            if (i != null && i.getTypeId() == item.getTypeId() && (item.getDurability() == Vanilla.DATA_WILDCARD || i.getDurability() == item.getDurability()) && (ingredient || item.getAmount() == 1 || item.getAmount() == i.getAmount())) {
+            if (i != null && i.getType() == item.getType() && (item.getDurability() == Vanilla.DATA_WILDCARD || i.getDurability() == item.getDurability()) && (ingredient || item.getAmount() == 1 || item.getAmount() == i.getAmount())) {
                 return true;
             }
         }

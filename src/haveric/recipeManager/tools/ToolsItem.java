@@ -185,7 +185,7 @@ public class ToolsItem {
             if (item == source) {
                 isSimilar = true;
             } else {
-                if (source.getTypeId() == item.getTypeId()) {
+                if (source.getType() == item.getType()) {
                     if (source.getDurability() == Vanilla.DATA_WILDCARD || source.getDurability() == item.getDurability()) {
                         if (source.hasItemMeta() == item.hasItemMeta()) {
                             if (source.hasItemMeta()) {

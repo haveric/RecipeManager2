@@ -273,7 +273,7 @@ public class FlagCloneIngredient extends Flag {
             CraftingInventory inv = (CraftingInventory) a.inventory();
 
             for (ItemStack i : inv.getMatrix()) {
-                if (i != null && result.getTypeId() == i.getTypeId()) {
+                if (i != null && result.getType() == i.getType()) {
                     ingredient = i;
                     break;
                 }
@@ -282,7 +282,7 @@ public class FlagCloneIngredient extends Flag {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
             ItemStack i = inv.getSmelting();
 
-            if (i != null && result.getTypeId() == i.getTypeId()) {
+            if (i != null && result.getType() == i.getType()) {
                 ingredient = i;
             }
         } else {

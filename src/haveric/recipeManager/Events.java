@@ -241,7 +241,7 @@ public class Events implements Listener {
             int repairIndex = 0;
 
             for (int i = 0; i < matrix.length; i++) {
-                if (matrix[i] != null && matrix[i].getTypeId() != 0) {
+                if (matrix[i] != null && matrix[i].getType() != Material.AIR) {
                     repair[repairIndex] = i;
                     repaired[repairIndex] = matrix[i];
 
@@ -482,7 +482,7 @@ public class Events implements Listener {
             // update displayed result
             // TODO need accurate reading if there is a recipe!
             /*
-             * if(inv.getResult() != null && inv.getResult().getTypeId() != 0) { event.setCurrentItem(recipe.getDisplayResult(a)); } else { event.setCurrentItem(null); }
+             * if(inv.getResult() != null && inv.getResult().getType() != Material.AIR) { event.setCurrentItem(recipe.getDisplayResult(a)); } else { event.setCurrentItem(null); }
              */
         }
 

@@ -165,12 +165,12 @@ public class MultiResultRecipe extends BaseRecipe {
     public ItemResult getFirstResult() {
         // TODO remove ?
         /*
-         * for(ItemResult r : results) { if(r.getTypeId() != 0 && !r.hasFlag(FlagType.SECRET)) { return r; } }
+         * for(ItemResult r : results) { if(r.getType() != Material.AIR && !r.hasFlag(FlagType.SECRET)) { return r; } }
          *
          * // if no non-secret result was found, then we must return something...
          */
         for (ItemResult r : results) {
-            if (r.getTypeId() != 0) {
+            if (r.getType() != Material.AIR) {
                 return r.clone();
             }
         }
