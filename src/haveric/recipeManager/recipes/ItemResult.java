@@ -25,27 +25,32 @@ public class ItemResult extends ItemStack implements Flaggable {
     public ItemResult(ItemResult result) {
         super(result);
 
-        flags = result.hasFlags() ? result.getFlags().clone(this) : null;
+        if (result.hasFlags()) {
+            flags = result.getFlags().clone(this);
+        } else {
+            flags = null;
+        }
+
         chance = result.chance;
         recipe = result.recipe; // don't clone, needs to be a pointer
     }
 
-    public ItemResult(ItemStack item, float chance) {
+    public ItemResult(ItemStack item, float newChance) {
         super(item);
 
-        setChance(chance);
+        setChance(newChance);
     }
 
-    public ItemResult(Material type, int amount, int data, float chance) {
+    public ItemResult(Material type, int amount, int data, float newChance) {
         super(type, amount, (short) data);
 
-        setChance(chance);
+        setChance(newChance);
     }
 
-    public ItemResult(ItemStack item, Flags flags) {
+    public ItemResult(ItemStack item, Flags newFlags) {
         super(item);
 
-        this.flags = flags.clone(this);
+        flags = newFlags.clone(this);
     }
 
     @Override
@@ -60,8 +65,8 @@ public class ItemResult extends ItemStack implements Flaggable {
         setItemMeta(item.getItemMeta());
     }
 
-    public void setChance(float chance) {
-        this.chance = chance;
+    public void setChance(float newChance) {
+        chance = newChance;
     }
 
     public float getChance() {
@@ -72,8 +77,8 @@ public class ItemResult extends ItemStack implements Flaggable {
         return recipe;
     }
 
-    public ItemResult setRecipe(BaseRecipe recipe) {
-        this.recipe = recipe;
+    public ItemResult setRecipe(BaseRecipe newRecipe) {
+        recipe = newRecipe;
         return this;
     }
 
@@ -81,7 +86,13 @@ public class ItemResult extends ItemStack implements Flaggable {
 
     @Override
     public boolean hasFlag(FlagType type) {
-        return (flags == null ? false : flags.hasFlag(type));
+        boolean hasFlag = false;
+
+        if (flags != null) {
+            hasFlag = flags.hasFlag(type);
+        }
+
+        return hasFlag;
     }
 
     @Override
@@ -91,7 +102,13 @@ public class ItemResult extends ItemStack implements Flaggable {
 
     @Override
     public boolean hasNoShiftBit() {
-        return (flags == null ? true : flags.hasNoShiftBit());
+        boolean hasNoShiftBit = true;
+
+        if (flags != null) {
+            hasNoShiftBit = flags.hasNoShiftBit();
+        }
+
+        return hasNoShiftBit;
     }
 
     @Override
@@ -124,16 +141,34 @@ public class ItemResult extends ItemStack implements Flaggable {
 
     @Override
     public boolean checkFlags(Args a) {
-        return (flags == null ? true : flags.checkFlags(a));
+        boolean checkFlags = true;
+
+        if (flags != null) {
+            checkFlags = flags.checkFlags(a);
+        }
+
+        return checkFlags;
     }
 
     @Override
     public boolean sendCrafted(Args a) {
-        return (flags == null ? true : flags.sendCrafted(a));
+        boolean sendCrafted = true;
+
+        if (flags != null) {
+            sendCrafted = flags.sendCrafted(a);
+        }
+
+        return sendCrafted;
     }
 
     @Override
     public boolean sendPrepare(Args a) {
-        return (flags == null ? true : flags.sendPrepare(a));
+        boolean sendPrepare = true;
+
+        if (flags != null) {
+            sendPrepare = flags.sendPrepare(a);
+        }
+
+        return sendPrepare;
     }
 }

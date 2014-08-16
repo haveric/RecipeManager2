@@ -33,8 +33,18 @@ public class SmeltRecipe extends SingleResultRecipe {
         if (recipe instanceof SmeltRecipe) {
             SmeltRecipe r = (SmeltRecipe) recipe;
 
-            ingredient = (r.ingredient == null ? null : r.ingredient.clone());
-            fuel = (r.fuel == null ? null : r.fuel.clone());
+            if (r.ingredient == null) {
+                ingredient = null;
+            } else {
+                ingredient = r.ingredient.clone();
+            }
+
+            if (r.fuel == null) {
+                fuel = null;
+            } else {
+                fuel = r.fuel.clone();
+            }
+
             minTime = r.minTime;
             maxTime = r.maxTime;
             hash = r.hash;
@@ -54,24 +64,24 @@ public class SmeltRecipe extends SingleResultRecipe {
         return ingredient;
     }
 
-    public void setIngredient(ItemStack ingredient) {
-        this.ingredient = ingredient;
+    public void setIngredient(ItemStack newIngredient) {
+        ingredient = newIngredient;
 
         // TODO add data value when furnace-data is pulled
-        hash = ("smelt" + ingredient.getTypeId()).hashCode();
+        hash = ("smelt" + newIngredient.getTypeId()).hashCode();
     }
 
     public ItemResult getFuel() {
         return fuel;
     }
 
-    public void setFuel(ItemStack fuel) {
-        Validate.notNull(fuel);
+    public void setFuel(ItemStack newFuel) {
+        Validate.notNull(newFuel);
 
-        if (fuel instanceof ItemResult) {
-            this.fuel = ((ItemResult) fuel).setRecipe(this);
+        if (newFuel instanceof ItemResult) {
+            fuel = ((ItemResult) newFuel).setRecipe(this);
         } else {
-            this.fuel = new ItemResult(fuel).setRecipe(this);
+            fuel = new ItemResult(newFuel).setRecipe(this);
         }
     }
 
@@ -87,8 +97,8 @@ public class SmeltRecipe extends SingleResultRecipe {
      * @param minTime
      *            min random time range (seconds)
      */
-    public void setMinTime(float minTime) {
-        this.minTime = minTime;
+    public void setMinTime(float newMinTime) {
+        minTime = newMinTime;
     }
 
     public float getMaxTime() {
@@ -99,8 +109,8 @@ public class SmeltRecipe extends SingleResultRecipe {
      * @param maxTime
      *            max random time range (seconds) or set to -1 to disable
      */
-    public void setMaxTime(float maxTime) {
-        this.maxTime = maxTime;
+    public void setMaxTime(float newMaxTime) {
+        maxTime = newMaxTime;
     }
 
     /**
@@ -114,7 +124,15 @@ public class SmeltRecipe extends SingleResultRecipe {
      * @return min time or if hasRandomTime() gets a random between min and max time.
      */
     public float getCookTime() {
-        return (hasRandomTime() ? minTime + ((maxTime - minTime) * RecipeManager.random.nextFloat()) : minTime);
+        float time;
+
+        if (hasRandomTime()) {
+            time = minTime + ((maxTime - minTime) * RecipeManager.random.nextFloat());
+        } else {
+            time = minTime;
+        }
+
+        return time;
     }
 
     /**
@@ -155,7 +173,13 @@ public class SmeltRecipe extends SingleResultRecipe {
     }
 
     public String getFuelIndex() {
-        return fuel.getTypeId() + (fuel.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + fuel.getDurability());
+        String fuelIndex = "" + fuel.getTypeId();
+
+        if (fuel.getDurability() != Vanilla.DATA_WILDCARD) {
+            fuelIndex += ":" + fuel.getDurability();
+        }
+
+        return fuelIndex;
     }
 
     @Override
@@ -209,7 +233,15 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getResult());
+        String print;
+
+        if (hasCustomName()) {
+            print = ChatColor.ITALIC + getName();
+        } else {
+            print = ToolsItem.getName(getResult());
+        }
+
+        return print;
     }
 
     @Override
@@ -260,7 +292,13 @@ public class SmeltRecipe extends SingleResultRecipe {
     }
 
     public void subtractIngredient(FurnaceInventory inv, boolean onlyExtra) {
-        FlagIngredientCondition flag = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
+        FlagIngredientCondition flag;
+        if (hasFlag(FlagType.INGREDIENTCONDITION)) {
+            flag = getFlag(FlagIngredientCondition.class);
+        } else {
+            flag = null;
+        }
+
         ItemStack item = inv.getSmelting();
 
         if (item != null) {

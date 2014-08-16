@@ -17,7 +17,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class ToolsItem {
     public static ItemResult create(Material type, int data, int amount, String name, String... lore) {
-        return create(type, data, amount, name, (lore != null && lore.length > 0 ? Arrays.asList(lore) : null));
+        List<String> loreArray;
+
+        if (lore != null && lore.length > 0) {
+            loreArray = Arrays.asList(lore);
+        } else {
+            loreArray = null;
+        }
+
+        return create(type, data, amount, name, loreArray);
     }
 
     public static ItemResult create(Material type, int data, int amount, String name, List<String> lore) {
@@ -113,10 +121,23 @@ public class ToolsItem {
             }
         }
 
-        String amount = (alwaysShowAmount || item.getAmount() > 1 ? item.getAmount() + "x " : "");
-        ChatColor color = (item.getEnchantments().size() > 0 ? ChatColor.AQUA : defColor);
+        String amount = "";
+        if (alwaysShowAmount || item.getAmount() > 1) {
+            amount = item.getAmount() + "x ";
+        }
 
-        return amount + color + itemData + (endColor == null ? "" : endColor);
+        ChatColor color;
+        if (item.getEnchantments().size() > 0) {
+            color = ChatColor.AQUA;
+        } else {
+            color = defColor;
+        }
+
+        String endTextColor = "";
+        if (endColor != null) {
+            endTextColor += endColor;
+        }
+        return amount + color + itemData + endTextColor;
     }
 
     public static String getName(ItemStack item) {
@@ -145,23 +166,52 @@ public class ToolsItem {
             }
         }
 
-        return (item.getEnchantments().size() > 0 ? ChatColor.AQUA : "") + (itemData == null ? name : itemData);
+        String enchantsName = "";
+        if (item.getEnchantments().size() > 0) {
+            enchantsName += ChatColor.AQUA;
+        }
+        if (itemData == null) {
+            enchantsName += name;
+        } else {
+            enchantsName += itemData;
+        }
+        return enchantsName;
     }
 
     public static boolean isSimilarDataWildcard(ItemStack source, ItemStack item) {
-        if (item == null) {
-            return false;
+        boolean isSimilar = false;
+
+        if (item != null) {
+            if (item == source) {
+                isSimilar = true;
+            } else {
+                if (source.getTypeId() == item.getTypeId()) {
+                    if (source.getDurability() == Vanilla.DATA_WILDCARD || source.getDurability() == item.getDurability()) {
+                        if (source.hasItemMeta() == item.hasItemMeta()) {
+                            if (source.hasItemMeta()) {
+                                isSimilar = Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta());
+                            } else {
+                                isSimilar = true;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        if (item == source) {
-            return true;
-        }
-
-        return source.getTypeId() == item.getTypeId() && (source.getDurability() == Vanilla.DATA_WILDCARD ? true : source.getDurability() == item.getDurability()) && source.hasItemMeta() == item.hasItemMeta() && (source.hasItemMeta() ? Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta()) : true);
+        return isSimilar;
     }
 
     public static ItemStack nullIfAir(ItemStack item) {
-        return (item == null || item.getType() == Material.AIR ? null : item);
+        ItemStack nullIfAir;
+
+        if (item == null || item.getType() == Material.AIR) {
+            nullIfAir = null;
+        } else {
+            nullIfAir = item;
+        }
+
+        return nullIfAir;
     }
 
     public static ItemStack merge(ItemStack into, ItemStack item) {

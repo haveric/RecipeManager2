@@ -84,7 +84,12 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         displayNum = displayResults.size();
         boolean recieve = (secretNum + displayNum) > 0;
 
-        FlagDisplayResult flag = (a.hasRecipe() ? a.recipe().getFlag(FlagDisplayResult.class) : null);
+        FlagDisplayResult flag;
+        if (a.hasRecipe()) {
+            flag = a.recipe().getFlag(FlagDisplayResult.class);
+        } else {
+            flag = null;
+        }
 
         if (flag != null) {
             if (!recieve && flag.isSilentFail()) {
@@ -119,7 +124,11 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         for (ItemResult r : displayResults) {
-            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r), "{clone}", (r.hasFlag(FlagType.CLONEINGREDIENT) ? Messages.FLAG_CLONE_RESULTDISPLAY.get() : "")));
+            String cloneMessage = "";
+            if (r.hasFlag(FlagType.CLONEINGREDIENT)) {
+                cloneMessage = Messages.FLAG_CLONE_RESULTDISPLAY.get();
+            }
+            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r), "{clone}", cloneMessage));
         }
 
         if (failChance > 0) {
@@ -134,11 +143,27 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             lore.add(Messages.CRAFT_RESULT_LIST_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
 
-        return ToolsItem.create(recieve ? Material.CHEST : Material.FIRE, 0, 0, title, lore);
+        Material displayMaterial;
+        if (recieve) {
+            displayMaterial = Material.CHEST;
+        } else {
+            displayMaterial = Material.FIRE;
+        }
+        return ToolsItem.create(displayMaterial, 0, 0, title, lore);
     }
 
     private String formatChance(float chance) {
-        return chance == 100 ? "100%" : String.format((Math.round(chance) == chance ? "%4.0f%%" : "%4.1f%%"), chance);
+        String formatString;
+
+        if (chance == 100) {
+            formatString = "100%";
+        } else if (Math.round(chance) == chance) {
+            formatString = String.format("%4.0f%%", chance);
+        } else {
+            formatString = String.format("%4.1f%%", chance);
+        }
+
+        return formatString;
     }
 
     public int getCraftableTimes(CraftingInventory inv) {
@@ -154,8 +179,18 @@ public class WorkbenchRecipe extends MultiResultRecipe {
     }
 
     public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra) {
-        FlagIngredientCondition flagIC = (hasFlag(FlagType.INGREDIENTCONDITION) ? getFlag(FlagIngredientCondition.class) : null);
-        FlagKeepItem flagKI = (hasFlag(FlagType.KEEPITEM) ? getFlag(FlagKeepItem.class) : null);
+        FlagIngredientCondition flagIC;
+        if (hasFlag(FlagType.INGREDIENTCONDITION)) {
+            flagIC = getFlag(FlagIngredientCondition.class);
+        } else {
+            flagIC = null;
+        }
+        FlagKeepItem flagKI;
+        if (hasFlag(FlagType.KEEPITEM)) {
+            flagKI = getFlag(FlagKeepItem.class);
+        } else {
+            flagKI = null;
+        }
 
         if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION)) {
             flagIC = result.getFlag(FlagIngredientCondition.class);

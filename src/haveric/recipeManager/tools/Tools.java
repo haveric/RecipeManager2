@@ -111,7 +111,11 @@ public class Tools {
 
         for (int i = 0; i < data.length; i += 2) {
             data[i] = ChatColor.COLOR_CHAR;
-            data[i + 1] = string.charAt(i == 0 ? 0 : i / 2);
+            if (i == 0) {
+                data[i + 1] = string.charAt(0);
+            } else {
+                data[i + 1] = string.charAt(i / 2);
+            }
         }
 
         return new String(data);
@@ -276,7 +280,12 @@ public class Tools {
                     data = Vanilla.DATA_WILDCARD;
                 } else {
                     Map<String, Short> dataMap = RecipeManager.getSettings().materialDataNames.get(material);
-                    Short dataValue = (dataMap != null ? dataMap.get(Tools.parseAliasName(value)) : null);
+                    Short dataValue;
+                    if (dataMap != null) {
+                        dataValue = dataMap.get(Tools.parseAliasName(value));
+                    } else {
+                        dataValue = null;
+                    }
 
                     if (dataValue != null) {
                         data = dataValue.shortValue();
@@ -689,17 +698,33 @@ public class Tools {
 
     public static String parseColors(String message, boolean removeColors) {
         for (ChatColor color : ChatColor.values()) {
-            message = message.replaceAll("(?i)<" + color.name() + ">", (removeColors ? "" : color.toString()));
+            String colorString = "";
+            if (!removeColors) {
+                colorString = color.toString();
+            }
+            message = message.replaceAll("(?i)<" + color.name() + ">", colorString);
         }
 
-        return removeColors ? ChatColor.stripColor(message) : ChatColor.translateAlternateColorCodes('&', message);
+        String parsedColors;
+        if (removeColors) {
+            parsedColors = ChatColor.stripColor(message);
+        } else {
+            parsedColors = ChatColor.translateAlternateColorCodes('&', message);
+        }
+        return parsedColors;
     }
 
     /**
      * For use in furnace smelting and fuel recipes HashMap
      */
     public static String convertItemToStringId(ItemStack item) {
-        return item.getTypeId() + (item.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + item.getDurability());
+        String stringId = "" + item.getTypeId();
+
+        if (item.getDurability() != Vanilla.DATA_WILDCARD) {
+            stringId += ":" + item.getDurability();
+        }
+
+        return stringId;
     }
 
     /**
@@ -771,7 +796,7 @@ public class Tools {
                     continue;
                 }
 
-                if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD ? true : i.getDurability() == data)) {
+                if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || i.getDurability() == data)) {
                     found++;
                 }
             }
@@ -783,7 +808,7 @@ public class Tools {
                     continue;
                 }
 
-                if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD ? true : i.getDurability() == data)) {
+                if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || i.getDurability() == data)) {
                     found++;
                 }
             }
@@ -791,7 +816,7 @@ public class Tools {
             SmeltRecipe r = (SmeltRecipe) recipe;
             ItemStack i = r.getIngredient();
 
-            if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD ? true : i.getDurability() == data)) {
+            if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || i.getDurability() == data)) {
                 found++;
             }
         }
@@ -909,15 +934,25 @@ public class Tools {
 
     public static void sortIngredientList(List<ItemStack> ingredients) {
         Collections.sort(ingredients, new Comparator<ItemStack>() {
-            int id1;
-            int id2;
-
             @Override
             public int compare(ItemStack item1, ItemStack item2) {
-                id1 = item1.getTypeId();
-                id2 = item2.getTypeId();
+                int id1 = item1.getTypeId();
+                int id2 = item2.getTypeId();
 
-                return (id1 == id2 ? (item1.getDurability() > item2.getDurability() ? -1 : 1) : (id1 > id2 ? -1 : 1));
+                int compare;
+                if (id1 == id2) {
+                    if (item1.getDurability() > item2.getDurability()) {
+                        compare = -1;
+                    } else {
+                        compare = 1;
+                    }
+                } else if (id1 > id2) {
+                    compare = -1;
+                } else {
+                    compare = 1;
+                }
+
+                return compare;
             }
         });
     }

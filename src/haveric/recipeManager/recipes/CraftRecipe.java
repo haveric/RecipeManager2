@@ -57,7 +57,11 @@ public class CraftRecipe extends WorkbenchRecipe {
             ItemStack[] items = new ItemStack[ingredients.length];
 
             for (int i = 0; i < ingredients.length; i++) {
-                items[i] = (ingredients[i] == null ? null : ingredients[i].clone());
+                if (ingredients[i] == null) {
+                    items[i] = null;
+                } else {
+                    items[i] = ingredients[i].clone();
+                }
             }
 
             return items;
@@ -74,12 +78,12 @@ public class CraftRecipe extends WorkbenchRecipe {
      * @param ingredients
      *            ingredients matrix, this also defines the shape, width and height.
      */
-    public void setIngredients(ItemStack[] ingredients) {
-        if (ingredients.length != 9) {
+    public void setIngredients(ItemStack[] newIngredients) {
+        if (newIngredients.length != 9) {
             throw new IllegalArgumentException("Recipe must have exactly 9 items, use null to specify empty slots!");
         }
 
-        this.ingredients = ingredients;
+        ingredients = newIngredients;
         calculate();
     }
 
@@ -153,8 +157,8 @@ public class CraftRecipe extends WorkbenchRecipe {
      *
      * @param mirror
      */
-    public void setMirrorShape(boolean mirror) {
-        this.mirror = mirror;
+    public void setMirrorShape(boolean newMirror) {
+        mirror = newMirror;
         calculate();
     }
 
@@ -277,6 +281,9 @@ public class CraftRecipe extends WorkbenchRecipe {
 
                     case 3:
                         bukkitRecipe.shape("abc");
+                        break;
+                    default:
+                        break;
                 }
 
                 break;
@@ -292,6 +299,9 @@ public class CraftRecipe extends WorkbenchRecipe {
 
                     case 3:
                         bukkitRecipe.shape("abc", "def");
+                        break;
+                    default:
+                        break;
                 }
                 break;
             case 3:
@@ -306,9 +316,13 @@ public class CraftRecipe extends WorkbenchRecipe {
 
                     case 3:
                         bukkitRecipe.shape("abc", "def", "ghi");
+                        break;
                     default:
                         break;
                 }
+                break;
+            default:
+                break;
         }
 
         ItemStack item;
@@ -345,7 +359,14 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getFirstResult());
+        String print;
+
+        if (hasCustomName()) {
+            print = ChatColor.ITALIC + getName();
+        } else {
+            print = ToolsItem.getName(getFirstResult());
+        }
+        return print;
     }
 
     @Override

@@ -68,15 +68,15 @@ public class MultiResultRecipe extends BaseRecipe {
      * @param results
      *            the results list or null if you want to clear results
      */
-    public void setResults(List<ItemResult> results) {
-        if (results == null) {
-            this.results.clear();
+    public void setResults(List<ItemResult> newResults) {
+        if (newResults == null) {
+            results.clear();
             return;
         }
 
-        this.results = results;
+        results = newResults;
 
-        for (ItemResult r : this.results) {
+        for (ItemResult r : results) {
             r.setRecipe(this);
         }
     }
@@ -206,7 +206,9 @@ public class MultiResultRecipe extends BaseRecipe {
         float chance = 0;
 
         for (ItemResult r : list) {
-            if ((chance += r.getChance()) >= rand) {
+            chance += r.getChance();
+
+            if (chance >= rand) {
                 result = r.clone();
                 break;
             }

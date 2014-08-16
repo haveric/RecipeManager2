@@ -23,10 +23,10 @@ public class FuelRecipe extends BaseRecipe {
         setMinTime(burnTime);
     }
 
-    public FuelRecipe(Material type, float minTime, float maxTime) {
+    public FuelRecipe(Material type, float newMinTime, float newMaxTime) {
         setIngredient(new ItemStack(type, 1, Vanilla.DATA_WILDCARD));
-        setMinTime(minTime);
-        setMaxTime(maxTime);
+        setMinTime(newMinTime);
+        setMaxTime(newMaxTime);
     }
 
     public FuelRecipe(Material type, short data, float burnTime) {
@@ -34,10 +34,10 @@ public class FuelRecipe extends BaseRecipe {
         setMinTime(burnTime);
     }
 
-    public FuelRecipe(Material type, short data, float minTime, float maxTime) {
+    public FuelRecipe(Material type, short data, float newMinTime, float newMaxTime) {
         setIngredient(new ItemStack(type, 1, data));
-        setMinTime(minTime);
-        setMaxTime(maxTime);
+        setMinTime(newMinTime);
+        setMaxTime(newMaxTime);
     }
 
     public FuelRecipe(BaseRecipe recipe) {
@@ -46,7 +46,12 @@ public class FuelRecipe extends BaseRecipe {
         if (recipe instanceof FuelRecipe) {
             FuelRecipe r = (FuelRecipe) recipe;
 
-            ingredient = (r.ingredient == null ? null : r.ingredient.clone());
+            if (r.ingredient == null) {
+                ingredient = null;
+            } else {
+                ingredient = r.ingredient.clone();
+            }
+
             minTime = r.minTime;
             maxTime = r.maxTime;
         }
@@ -60,10 +65,10 @@ public class FuelRecipe extends BaseRecipe {
         return ingredient;
     }
 
-    public void setIngredient(ItemStack ingredient) {
-        this.ingredient = ingredient;
+    public void setIngredient(ItemStack newIngredient) {
+        ingredient = newIngredient;
 
-        hash = ("fuel" + ingredient.getTypeId() + ":" + ingredient.getDurability()).hashCode();
+        hash = ("fuel" + newIngredient.getTypeId() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     public float getMinTime() {
@@ -76,8 +81,8 @@ public class FuelRecipe extends BaseRecipe {
      * @param minTime
      *            float value in seconds
      */
-    public void setMinTime(float minTime) {
-        this.minTime = minTime;
+    public void setMinTime(float newMinTime) {
+        minTime = newMinTime;
     }
 
     public float getMaxTime() {
@@ -91,8 +96,8 @@ public class FuelRecipe extends BaseRecipe {
      * @param maxTime
      *            float value in seconds
      */
-    public void setMaxTime(float maxTime) {
-        this.maxTime = maxTime;
+    public void setMaxTime(float newMaxTime) {
+        maxTime = newMaxTime;
     }
 
     /**
@@ -101,11 +106,25 @@ public class FuelRecipe extends BaseRecipe {
      * @return burn time in ticks
      */
     public int getBurnTicks() {
-        return (int) Math.round(20.0 * (maxTime > minTime ? minTime + (maxTime - minTime) * RecipeManager.random.nextFloat() : minTime));
+        float time;
+
+        if (maxTime > minTime) {
+            time = minTime + (maxTime - minTime) * RecipeManager.random.nextFloat();
+        } else {
+            time = minTime;
+        }
+
+        return (int) Math.round(20.0 * time);
     }
 
     public String getIndexString() {
-        return ingredient.getTypeId() + (ingredient.getDurability() == Vanilla.DATA_WILDCARD ? "" : ":" + ingredient.getDurability());
+        String indexString = "" + ingredient.getTypeId();
+
+        if (ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
+            indexString += ":" + ingredient.getDurability();
+        }
+
+        return indexString;
     }
 
     @Override
@@ -145,7 +164,15 @@ public class FuelRecipe extends BaseRecipe {
 
     @Override
     public String printBookIndex() {
-        return hasCustomName() ? ChatColor.ITALIC + getName() : ToolsItem.getName(getIngredient()) + " Fuel";
+        String print;
+
+        if (hasCustomName()) {
+            print = ChatColor.ITALIC + getName();
+        } else {
+            print = ToolsItem.getName(getIngredient()) + " Fuel";
+        }
+
+        return print;
     }
 
     @Override

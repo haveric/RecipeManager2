@@ -16,10 +16,10 @@ public class RemoveResultRecipe extends BaseRecipe {
     private Map<BaseRecipe, RecipeInfo> removed;
     private ItemStack result;
 
-    public RemoveResultRecipe(ItemStack result) {
-        Validate.notNull(result, "Result must not be null!");
+    public RemoveResultRecipe(ItemStack newResult) {
+        Validate.notNull(newResult, "Result must not be null!");
 
-        this.result = result;
+        result = newResult;
     }
 
     /**
@@ -42,21 +42,21 @@ public class RemoveResultRecipe extends BaseRecipe {
             RecipeInfo info = e.getValue();
 
             if (info.getOwner() != RecipeOwner.RECIPEMANAGER) {
-                ItemStack result = null;
+                ItemStack resultItem = null;
 
                 if (recipe instanceof MultiResultRecipe) {
                     MultiResultRecipe r = (MultiResultRecipe) recipe;
-                    result = r.getFirstResult();
+                    resultItem = r.getFirstResult();
                 }
 
                 // TODO if smeltrecipe gets back to single result
                 /*
                  * else if(recipe instanceof SmeltRecipe) { SmeltRecipe r = (SmeltRecipe)recipe;
-                 * 
+                 *
                  * result = r.getResult(); }
                  */
 
-                if (result != null && result.equals(this.result)) {
+                if (resultItem != null && resultItem.equals(result)) {
                     removeRecipe(recipe, info);
                 }
             }

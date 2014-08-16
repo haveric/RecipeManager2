@@ -34,7 +34,13 @@ public class SingleResultRecipe extends BaseRecipe {
      * @return result as clone
      */
     public ItemResult getResult() {
-        return result == null ? null : result.clone();
+        ItemResult itemResult = null;
+
+        if (result != null) {
+            itemResult = result.clone();
+        }
+
+        return itemResult;
     }
 
     /**
@@ -48,7 +54,13 @@ public class SingleResultRecipe extends BaseRecipe {
 
         float rand = RecipeManager.random.nextFloat() * 100f;
 
-        ItemResult r = (result.getChance() >= rand ? result.clone() : new ItemResult(Material.AIR, 1, 0, (100 - result.getChance())));
+        ItemResult r;
+        if (result.getChance() >= rand) {
+            r = result.clone();
+        } else {
+            r = new ItemResult(Material.AIR, 1, 0, (100 - result.getChance()));
+        }
+
         a.setResult(r);
 
         if (r.getType() == Material.AIR && hasFlags()) {
@@ -59,13 +71,13 @@ public class SingleResultRecipe extends BaseRecipe {
         return r;
     }
 
-    public void setResult(ItemStack result) {
-        Validate.notNull(result);
+    public void setResult(ItemStack newResult) {
+        Validate.notNull(newResult);
 
-        if (result instanceof ItemResult) {
-            this.result = ((ItemResult) result).setRecipe(this);
+        if (newResult instanceof ItemResult) {
+            result = ((ItemResult) newResult).setRecipe(this);
         } else {
-            this.result = new ItemResult(result).setRecipe(this);
+            result = new ItemResult(newResult).setRecipe(this);
         }
     }
 
