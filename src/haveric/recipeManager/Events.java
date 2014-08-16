@@ -1205,7 +1205,7 @@ public class Events implements Listener {
             return;
         }
 
-        BlockState[] tileEntities = null;
+        BlockState[] tileEntities;
 
         // Workaround for CB issues with block states.
         try {

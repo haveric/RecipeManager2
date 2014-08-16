@@ -16,6 +16,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Creeper;
@@ -169,7 +170,9 @@ public class FlagSummon extends Flag {
                         int y = 0;
 
                         for (y = maxY; y >= minY; y--) {
-                            if (!Material.getMaterial(world.getBlockTypeIdAt(x, y, z)).isSolid()) {
+                            Block block = world.getBlockAt(x, y, z);
+                            Material material = block.getType();
+                            if (!material.isSolid()) {
                                 found = true;
                                 break;
                             }

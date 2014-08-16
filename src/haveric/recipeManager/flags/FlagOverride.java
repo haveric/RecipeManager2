@@ -69,9 +69,9 @@ public class FlagOverride extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * list.add(Messages.FLAG_OVERRIDE.get());
-     * 
+     *
      * return list; }
      */
 }

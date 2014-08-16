@@ -269,11 +269,10 @@ public class FlagCooldown extends Flag {
         }
 
         String playerName = null;
-        if (global) {
-            playerName = null;
-        } else {
+        if (!global) {
             playerName = a.playerName();
         }
+
         MutableInt get = cooldownTime.get(playerName);
         int diff = (int) (System.currentTimeMillis() / 1000) + getCooldownTime();
 
