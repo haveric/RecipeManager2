@@ -147,9 +147,9 @@ public class Flag implements Cloneable {
         int hashCode;
 
         if (getType() == null) {
-            hashCode = getType().hashCode();
-        } else {
             hashCode = 0;
+        } else {
+            hashCode = getType().hashCode();
         }
 
         return hashCode;
