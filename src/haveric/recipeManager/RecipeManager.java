@@ -28,7 +28,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
@@ -57,16 +56,6 @@ public class RecipeManager extends JavaPlugin {
             return;
         }
 
-        // wait for all plugins to load then init this...
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                onEnablePost();
-            }
-        }.runTask(this);
-    }
-
-    private void onEnablePost() {
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         plugin = this;
