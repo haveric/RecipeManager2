@@ -43,7 +43,7 @@ public class RecipeManager extends JavaPlugin {
     protected static Settings settings;
     protected static Economy economy;
     protected static Permissions permissions;
-    protected static Metrics metrics;
+    private Metrics metrics;
 
     private HashMap<String, String> plugins = new HashMap<String, String>();
 

@@ -628,7 +628,6 @@ public class Events implements Listener {
                 }
 
                 if (!furnaceModifySlot(furnace, inv, player, slot, cursor)) {
-                    // Messages.debug("CANCELLED!");
                     event.setCancelled(true);
                     new UpdateInventory(player, 0);
                     return;
@@ -704,9 +703,8 @@ public class Events implements Listener {
     private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
         // TODO NOTE: Don't rely on AMOUNTS until the event is updated!
 
+        // Furnace is burning
         if (furnace.getBurnTime() > 0) {
-            // Messages.debug("furnace is burning...");
-
             ItemStack itemToTest;
             if (slot == 0) {
                 itemToTest = item;
@@ -723,7 +721,7 @@ public class Events implements Listener {
             }
 
             if (sr != null && sr.hasFuel()) {
-                // Messages.debug("recipe is smelt+fuel...");
+                // recipe is smelt+fuel
 
                 ItemStack fuelToTest;
                 if (slot == 0) {
@@ -732,9 +730,9 @@ public class Events implements Listener {
                     fuelToTest = f;
                 }
                 if (item != null && item.isSimilar(fuelToTest)) {
-                    // Messages.debug("recipe is smelt+fuel but added similar items!");
+                    // recipe is smelt+fuel but added similar items!
                 } else {
-                    // Messages.debug("recipe is a smelt+fuel recipe, removing active burn time...");
+                    // recipe is a smelt+fuel recipe, removing active burn time
                     furnace.setBurnTime((short) 0);
                 }
             }
@@ -755,13 +753,6 @@ public class Events implements Listener {
             testFuel = inv.getFuel();
         }
         ItemStack fuel = ToolsItem.nullIfAir(testFuel);
-
-        // TODO remove this debug
-        /*
-         * if(slot == 0) { Messages.debug("<green>Placed ingredient: " + ToolsItem.print(ingredient)); }
-         *
-         * if(slot == 1) { Messages.debug("<green>Placed fuel: " + ToolsItem.print(fuel)); }
-         */
 
         FurnaceData data = Furnaces.get(furnace.getLocation());
 
@@ -787,9 +778,6 @@ public class Events implements Listener {
         }
 
         if (smeltRecipe != null) {
-            // Messages.debug("INGR = " + ToolsItem.print(smeltRecipe.getIngredient()) + " | " + ToolsItem.print(ingredient));
-            // Messages.debug("FUEL = " + ToolsItem.print(smeltRecipe.getFuel()) + " | " + ToolsItem.print(fuel));
-
             if (smeltRecipe.hasFuel() && fuel != null && ingredient != null) {
                 if (!ToolsItem.isSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient)) {
                     Messages.SMELT_FUEL_NEEDINGREDIENT.print(player, null, "{ingredient}", ToolsItem.print(smeltRecipe.getIngredient()), "{fuel}", ToolsItem.print(smeltRecipe.getFuel()));
