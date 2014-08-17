@@ -77,7 +77,7 @@ public class RecipeManager extends JavaPlugin {
         FlagType.init();
         RecipeBooks.init();
         FurnaceWorker.init();
-        UpdateChecker.init();
+
         Files.init();
         Players.init();
         Workbenches.init();
@@ -127,11 +127,7 @@ public class RecipeManager extends JavaPlugin {
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
 
-        if (settings.UPDATE_CHECK_ENABLED) {
-            UpdateChecker.start();
-
-            new UpdateChecker(sender);
-        }
+        Updater.init(32835, null);
 
         if (metrics == null) {
             if (settings.METRICS) { // start/stop metrics accordingly
@@ -226,7 +222,6 @@ public class RecipeManager extends JavaPlugin {
             Workbenches.clean();
             Players.clean();
             Vanilla.clean();
-            UpdateChecker.clean();
 
             economy.clear();
             economy = null;

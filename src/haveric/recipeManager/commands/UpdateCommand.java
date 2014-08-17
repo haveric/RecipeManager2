@@ -1,7 +1,7 @@
 package haveric.recipeManager.commands;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.UpdateChecker;
+import haveric.recipeManager.Updater;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,7 +14,7 @@ public class UpdateCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Messages.sendAndLog(sender, ChatColor.GRAY + "Checking for updates...");
 
-        new UpdateChecker(sender);
+        Updater.query(sender);
 
         return true;
     }
