@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== v2.1.1 ===
+* Update user agent for RecipeManager Updater
+
 === v2.1 ===
 (THDigi)
 * Fixed @ingredientcondition's lore argument with 'regex:' prefix checking name's regex pattern instead, giving an error if name arg not defined

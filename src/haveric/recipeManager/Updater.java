@@ -100,7 +100,7 @@ public class Updater {
                 }
 
                 // Add the user-agent to identify the program
-                conn.addRequestProperty("User-Agent", "ServerModsAPI-Example (by Gravity)");
+                conn.addRequestProperty("User-Agent", "RecipeManager");
 
                 // Read the response of the query
                 // The response will be in a JSON format, so only reading one line is necessary.
