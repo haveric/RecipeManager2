@@ -1304,11 +1304,13 @@ public class Events implements Listener {
         Players.addJoined(player);
 
         if (RecipeManager.getSettings().UPDATE_CHECK_ENABLED && player.hasPermission("recipemanager.command.rmupdate")) {
-            String newVersion = Updater.getNewVersion();
-            String version = RecipeManager.getPlugin().getDescription().getVersion();
+            String latestVersion = Updater.getLatestVersion();
+            String currentVersion = Updater.getCurrentVersion();
 
-            if (newVersion != null && !version.equalsIgnoreCase(newVersion)) {
-                Messages.send(player, "[RecipeManager] New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + version + "<reset>, grab it at: <light_purple>" + Updater.getNewLink());
+            int compare = Updater.compareVersions();
+
+            if (latestVersion != null && compare == -1) {
+                Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
             }
         }
     }

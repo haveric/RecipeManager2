@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -32,8 +34,8 @@ public class Updater {
     private static final String URL_PLUGIN = "http://dev.bukkit.org/bukkit-mods/recipemanager/";
     private static final String URL_FILES = URL_PLUGIN + "files";
 
-    private static String newVersion;
-    private static String newLink;
+    private static String latestVersion;
+    private static String latestLink;
     private static int taskId = -1;
 
     private Updater() { } // Private constructor for utility class
@@ -45,8 +47,8 @@ public class Updater {
      * @param apiKey Your ServerMods API key, found at https://dev.bukkit.org/home/servermods-apikey/
      */
     public static void init(int newProjectID, String newApiKey) {
-        newVersion = null;
-        newLink = null;
+        latestVersion = null;
+        latestLink = null;
         projectID = newProjectID;
         apiKey = newApiKey;
         stop();
@@ -72,12 +74,76 @@ public class Updater {
         }
     }
 
-    public static String getNewVersion() {
-        return newVersion;
+    public static String getCurrentVersion() {
+        Pattern pattern = Pattern.compile("v([0-9.]*)");
+        String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
+
+        Matcher matcher = pattern.matcher(currentVersion);
+        if (matcher.find()) {
+            currentVersion = matcher.group(1);
+        }
+
+        return currentVersion;
     }
 
-    public static String getNewLink() {
-        return newLink;
+    public static String getLatestVersion() {
+        Pattern pattern = Pattern.compile("v([0-9.]*)");
+        String latest = latestVersion;
+
+        Matcher matcher = pattern.matcher(latest);
+        if (matcher.find()) {
+            latest = matcher.group(1);
+        }
+
+        return latest;
+    }
+
+    /**
+     *
+     * @return compare<br>
+     *  1: Current version is newer than the BukkitDev<br>
+     *  0: Same version as BukkitDev<br>
+     * -1: BukkitDev is newer than current version
+     *  2: Error occurred
+     */
+    public static int compareVersions() {
+        int compare = -2;
+
+        String current = getCurrentVersion();
+        String latest = getLatestVersion();
+
+        if (latest != null) {
+            if (current.equals(latest)) {
+                compare = 0;
+            } else {
+                String[] currentArray = current.split("\\.");
+                String[] latestArray = latest.split("\\.");
+
+                int longest = currentArray.length;
+                if (latestArray.length > longest) {
+                    longest = latestArray.length;
+                }
+
+                for (int i = 0; i < longest; i++) {
+                    int c = Integer.parseInt(currentArray[i]);
+                    int l = Integer.parseInt(latestArray[i]);
+
+                    if (c > l) {
+                        compare = 1;
+                        break;
+                    } else if (l > c) {
+                        compare = -1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return compare;
+    }
+
+    public static String getLatestLink() {
+        return latestLink;
     }
 
     /**
@@ -115,31 +181,34 @@ public class Updater {
                     JSONObject latest = (JSONObject) array.get(array.size() - 1);
 
                     // Get the version's title
-                    String versionName = (String) latest.get(API_NAME_VALUE);
-                    newVersion = versionName.substring(1).trim();
+                    latestVersion = (String) latest.get(API_NAME_VALUE);
 
                     // Get the version's link
-                    newLink = (String) latest.get(API_LINK_VALUE);
+                    latestLink = (String) latest.get(API_LINK_VALUE);
                 }
 
-                if (newVersion == null) {
+                if (latestVersion == null) {
                     if (sender != null) { // send this message only if it's a requested update check
                         Messages.sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + URL_FILES);
                     } else {
                         return; // block the disable message
                     }
                 } else {
-                    String currentVersion = RecipeManager.getPlugin().getDescription().getVersion().trim();
+                    String currentVersion = getCurrentVersion();
+                    String latest = getLatestVersion();
+                    int compare = compareVersions();
 
-                    if (currentVersion.equalsIgnoreCase(newVersion)) {
+                    if (compare == 0) {
                         if (sender != null) { // send this message only if it's a requested update check
-                            Messages.sendAndLog(sender, "<gray>Using the latest version: " + newVersion);
+                            Messages.sendAndLog(sender, "<gray>Using the latest version: " + latest);
                         } else {
                             return; // block the disable message
                         }
-                    } else {
-                        Messages.sendAndLog(sender, "New version: <green>" + newVersion + "<reset> ! You're using <yellow>" + currentVersion);
-                        Messages.sendAndLog(sender, "Grab it at: <green>" + newLink);
+                    } else if (compare == -1) {
+                        Messages.sendAndLog(sender, "New version: <green>" + latest + "<reset>! You're using <yellow>" + currentVersion);
+                        Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                    } else if (compare == 1) {
+                        Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
                     }
                 }
 
