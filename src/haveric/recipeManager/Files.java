@@ -133,7 +133,7 @@ public class Files {
         file.mkdirs();
 
         // Create disable directory info file
-        file = new File(file.getPath() + File.separator + "Recipe files in here are ignored !");
+        file = new File(file.getPath() + File.separator + "Recipe files in here are ignored!");
 
         if (!file.exists()) {
             Tools.saveTextToFile("In the disabled folder you can place recipe files you don't want to load, instead of deleting them.", file.getPath());
@@ -189,7 +189,7 @@ public class Files {
         s.append(NL).append("<h1>Recipe flags</h1>");
         s.append(NL);
         s.append(NL).append("<b>WHAT ARE FLAGS ?</b>");
-        s.append(NL).append("  Flags are the stuff that make a recipe very special ! You can add various features to a recipe by using flags.");
+        s.append(NL).append("  Flags are the stuff that make a recipe very special! You can add various features to a recipe by using flags.");
         s.append(NL).append("  For examples see <a href=\"advanced recipes.html\"><b>advanced recipes.html</b></a>.");
         s.append(NL);
         s.append(NL).append("<b>USING FLAGS</b>");
@@ -451,7 +451,7 @@ public class Files {
         s.append("<title>Name index</title><pre style=\"font-family:Lucida Console;font-size:16px;width:100%;\">");
         s.append(NL).append("<a href=\"basic recipes.html\">Basic Recipes</a> | <a href=\"advanced recipes.html\">Advanced Recipes</a> | <a href=\"recipe flags.html\">Recipe Flags</a> | <a href=\"recipe books.html\">Recipe Books</a> | <b>Name Index</b> | <a href=\"commands & permissions.html\">Commands &amp; Permissions</a>");
         s.append(NL).append("<h1>Name index</h1>");
-        s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods !");
+        s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods!");
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
         s.append(NL);
         s.append(NL).append("<hr>");

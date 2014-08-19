@@ -464,7 +464,7 @@ public class Tools {
         }
 
         if (potion.getType() == null) {
-            ErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+            ErrorReporter.error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
             return null;
         }
 
@@ -550,7 +550,7 @@ public class Tools {
         }
 
         if (effectType == null) {
-            ErrorReporter.error("Flag " + type + " is missing 'type' argument !", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+            ErrorReporter.error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
             return null;
         }
 

@@ -24,7 +24,7 @@ public class FlagEnchantItem extends Flag {
 
         A = new String[] { "{flag} <enchantment> [level]", "{flag} false", };
 
-        D = new String[] { "Enchants the result with the specified enchantment at specified level.", "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.", "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.", "", "Enchantments are forced and there is no level cap!", "This flag may be used more times to add more enchantments to the item.", "Setting to 'false' will do nothing !", };
+        D = new String[] { "Enchants the result with the specified enchantment at specified level.", "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.", "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.", "", "Enchantments are forced and there is no level cap!", "This flag may be used more times to add more enchantments to the item.", "Setting to 'false' will do nothing!", };
 
         E = new String[] { "{flag} OXYGEN // enchant with oxygen at level 1", "{flag} DIG_SPEED max // enchant with dig speed at max valid level", "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127", };
     }
@@ -103,9 +103,9 @@ public class FlagEnchantItem extends Flag {
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     * 
+     *
      * list.add("enchant...");
-     * 
+     *
      * return list; }
      */
 }

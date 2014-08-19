@@ -200,7 +200,7 @@ public class RecipeManager extends JavaPlugin {
             }
         }
 
-        Messages.debug("<red>Couldn't find caller of " + method + " !");
+        Messages.debug("<red>Couldn't find caller of " + method + "!");
         return null;
     }
 

@@ -5,8 +5,8 @@ import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.RecipeInfo;
-import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
+import haveric.recipeManager.recipes.SmeltRecipe;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,7 +32,7 @@ public class RecipeRegistrator {
         } else if (recipe instanceof SmeltRecipe) {
             queueSmeltRecipe((SmeltRecipe) recipe, adder);
         } else if (recipe instanceof FuelRecipe) {
-            queuFuelRecipe((FuelRecipe) recipe, adder);
+            queueFuelRecipe((FuelRecipe) recipe, adder);
         } else {
             throw new IllegalArgumentException("Unknown recipe!");
         }
@@ -44,7 +44,7 @@ public class RecipeRegistrator {
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid ! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
+            throw new IllegalArgumentException("Recipe is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
         }
 
         queuedRecipes.remove(recipe); // if exists, update key too !
@@ -57,7 +57,7 @@ public class RecipeRegistrator {
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid ! Needs at least one result and ingredient!");
+            throw new IllegalArgumentException("Recipe is invalid! Needs at least one result and ingredient!");
         }
 
         queuedRecipes.remove(recipe);
@@ -70,20 +70,20 @@ public class RecipeRegistrator {
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid ! Needs a result and ingredient!");
+            throw new IllegalArgumentException("Recipe is invalid! Needs a result and ingredient!");
         }
 
         queuedRecipes.remove(recipe);
         queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
     }
 
-    protected void queuFuelRecipe(FuelRecipe recipe, String adder) {
+    protected void queueFuelRecipe(FuelRecipe recipe, String adder) {
         if (registered) {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid ! Needs an ingredient!");
+            throw new IllegalArgumentException("Recipe is invalid! Needs an ingredient!");
         }
 
         queuedRecipes.remove(recipe);

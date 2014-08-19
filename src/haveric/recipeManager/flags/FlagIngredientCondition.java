@@ -791,7 +791,7 @@ public class FlagIngredientCondition extends Flag {
         String[] args = value.split("\\|");
 
         if (args.length <= 1) {
-            return ErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions !", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
+            return ErrorReporter.error("Flag " + getType() + " needs an item and some arguments for conditions!", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
 
         ItemStack item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);

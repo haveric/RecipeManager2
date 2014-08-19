@@ -96,7 +96,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      * | 6 7 8 |</code> <br>
      * Null slots are ignored and allow the recipe to be
      * used in a smaller grid (inventory's 2x2 for example)<br> <br>
-     * <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br>
+     * <b>NOTE: always start with index 0!</b> Then you can use whatever index you want up to 8.<br>
      * This is required because ingredients are shifted to top-left corner of the 2D matrix on each call of this method.
      *
      * @param slot
@@ -116,7 +116,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      * | 6 7 8 |</code> <br>
      * Null slots are ignored and allow the recipe to be
      * used in a smaller grid (inventory's 2x2 for example)<br> <br>
-     * <b>NOTE: always start with index 0 !</b> Then you can use whatever index you want up to 8.<br>
+     * <b>NOTE: always start with index 0!</b> Then you can use whatever index you want up to 8.<br>
      * This is required because ingredients are shifted to top-left corner of the 2D matrix on each call of this method.
      *
      * @param slot
@@ -131,7 +131,7 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         // TODO remember WHY is this required
         if (slot != 0 && ingredients[0] == null) {
-            throw new IllegalArgumentException("A plugin is using setIngredient() with index NOT starting at 0, shape is corupted!!!");
+            throw new IllegalArgumentException("A plugin is using setIngredient() with index NOT starting at 0, shape is corrupted!!!");
         }
 
         if (type == null) {

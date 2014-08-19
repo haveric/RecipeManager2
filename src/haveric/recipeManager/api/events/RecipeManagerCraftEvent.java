@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
  * Event triggered before RecipeManager's custom recipes are crafted/combined in the workbench.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
  * Event can be cancelled to prevent the action.<br>
- * Event is triggered when a result is processed, it won't guarantee that the player will get the result !
+ * Event is triggered when a result is processed, it won't guarantee that the player will get the result!
  *
  * @author Digi
  */

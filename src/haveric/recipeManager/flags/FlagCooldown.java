@@ -228,7 +228,7 @@ public class FlagCooldown extends Flag {
         }
 
         if (time <= 0.0f) {
-            ErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0 !");
+            ErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0!");
             return false;
         }
 

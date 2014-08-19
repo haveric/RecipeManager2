@@ -428,7 +428,7 @@ public class RecipeProcessor implements Runnable {
             ErrorReporter.error("Recipe has some invalid ingredients, fix them!");
             return false;
         } else if (ingredientsNum == 0) { // no ingredients were processed
-            return ErrorReporter.error("Recipe doesn't have ingredients !", "Consult readme.txt for proper recipe syntax.");
+            return ErrorReporter.error("Recipe doesn't have ingredients!", "Consult readme.txt for proper recipe syntax.");
         } else if (ingredientsNum == 2 && !checkIngredients(ingredients)) {
             return false;
         }
@@ -488,7 +488,7 @@ public class RecipeProcessor implements Runnable {
 
             items += item.getAmount();
             if (items > 9) {
-                ErrorReporter.error("Combine recipes can't have more than 9 ingredients !", "If you're using stacks make sure they don't exceed 9 items in total.");
+                ErrorReporter.error("Combine recipes can't have more than 9 ingredients!", "If you're using stacks make sure they don't exceed 9 items in total.");
                 return false;
             }
 
@@ -555,7 +555,7 @@ public class RecipeProcessor implements Runnable {
         String[] split = line.split("%");
 
         if (split.length == 0) {
-            return ErrorReporter.error("Smeling recipe doesn't have an ingredient !");
+            return ErrorReporter.error("Smelting recipe doesn't have an ingredient !");
         }
 
         ItemStack ingredient = Tools.parseItem(split[0], Vanilla.DATA_WILDCARD, ParseBit.NO_DATA | ParseBit.NO_AMOUNT | ParseBit.NO_META);
@@ -565,7 +565,7 @@ public class RecipeProcessor implements Runnable {
         }
 
         if (ingredient.getType() == Material.AIR) {
-            return ErrorReporter.error("Recipe does not accept AIR as ingredients !");
+            return ErrorReporter.error("Recipe does not accept AIR as ingredients!");
         }
 
         recipe.setIngredient(ingredient);
@@ -675,7 +675,7 @@ public class RecipeProcessor implements Runnable {
 
             if (!recipe.hasFlag(FlagType.REMOVE)) { // if it's got @remove we don't care about burn time
                 if (split.length < 2 || split[1] == null) {
-                    ErrorReporter.error("Burn time not set !", "It must be set after the ingredient like: ingredient % burntime");
+                    ErrorReporter.error("Burn time not set!", "It must be set after the ingredient like: ingredient % burntime");
                     continue;
                 }
 
@@ -736,7 +736,7 @@ public class RecipeProcessor implements Runnable {
                 recipe.setName(name); // set recipe's name if defined
             }
 
-            registrator.queuFuelRecipe(recipe, currentFile);
+            registrator.queueFuelRecipe(recipe, currentFile);
             loaded++;
             added++;
         } while (nextLine());
@@ -831,7 +831,7 @@ public class RecipeProcessor implements Runnable {
         }
 
         if (totalPercentage > 100) {
-            return ErrorReporter.error("Total result items' chance exceeds 100% !", "If you want some results to be split evenly automatically you can avoid the chance number.");
+            return ErrorReporter.error("Total result items' chance exceeds 100%!", "If you want some results to be split evenly automatically you can avoid the chance number.");
         }
 
         // Spread remaining chance to results that have undefined chance
@@ -860,7 +860,7 @@ public class RecipeProcessor implements Runnable {
             }
 
             if (foundAir) {
-                ErrorReporter.warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + " !", "You can remove the chance for AIR to auto-calculate it");
+                ErrorReporter.warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + "!", "You can remove the chance for AIR to auto-calculate it");
             } else {
                 ErrorReporter.warning("Results do not stack up to 100% and no fail chance defined, recipe now has " + (100.0f - totalPercentage) + "% chance to fail.", "You should extend or remove the chance for other results if you do not want fail chance instead!");
 

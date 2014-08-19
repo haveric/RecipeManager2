@@ -82,11 +82,11 @@ public class FlagModMoney extends Flag {
             case '+':
                 break;
             default:
-                throw new IllegalArgumentException("mod can only be '+', '-', '=' !");
+                throw new IllegalArgumentException("mod can only be '+', '-', '='!");
         }
 
         if (newMod != '=' && newAmount == 0) {
-            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
+            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-'!");
         }
 
         mod = newMod;
@@ -150,7 +150,7 @@ public class FlagModMoney extends Flag {
     @Override
     protected void onCrafted(Args a) {
         if (mod != '=' && amount == 0) {
-            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-' !");
+            throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-'!");
         }
 
         if (!RecipeManager.getEconomy().isEnabled()) {

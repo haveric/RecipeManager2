@@ -19,7 +19,7 @@ public class FlagNeedMoney extends Flag {
 
         D = new String[] { "Checks if crafter has at least 'min' money and optionally at most 'max' money.", "Using this flag more than once will overwrite the previous one.", "", "Optionally you can overwrite the fail message or you can use 'false' to hide it.", "In the message the following variables can be used:", "  {money}      = money or money range; formatted with currency.", "", "NOTE: Vault with a supported economy plugin is required for this flag to work.", };
 
-        E = new String[] { "{flag} 0.25", "{flag} 0.1 - 1000 | <red>Need {money} !", };
+        E = new String[] { "{flag} 0.25", "{flag} 0.1 - 1000 | <red>Need {money}!", };
     }
 
     // Flag code
