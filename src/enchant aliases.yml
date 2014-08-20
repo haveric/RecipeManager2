@@ -12,26 +12,27 @@ lastchanged: 2.1.1 # Please do not edit this value - it is used by the plugin to
 # "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".
 #------------------------------------------------------------------------------------------------------------------------
 
-damage_all: sharpness
 arrow_damage: power
-protection_fire: fire protection
-protection_fall: feather falling
-protection_environmental: protection
-protection_explosions: blast protection
-protection_projectile: projectile protection
-oxygen: respiration
+arrow_fire: flame
 arrow_infinite: infinity
-water_worker: aqua affinity
-durability: unbreaking
-damage_undead: smite
+arrow_knockback: punch
+damage_all: sharpness
 damage_arthropods: bane of arthropods
+damage_undead: smite
 dig_speed: efficiency
+durability: unbreaking
 fire_aspect: fire aspect
-silk_touch: silk touch
 loot_bonus_blocks: fortune
 loot_bonus_mobs: looting
-arrow_knockback: punch
-arrow_fire: flame
+luck: luck of the sea
+oxygen: respiration
+protection_environmental: protection
+protection_explosions: blast protection
+protection_fall: feather falling
+protection_fire: fire protection
+protection_projectile: projectile protection
+silk_touch: silk touch
+water_worker: aqua affinity
 
 # add your own aliases if you want.
 
