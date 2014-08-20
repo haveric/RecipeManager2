@@ -1,4 +1,4 @@
-lastchanged: 2.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.1.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager enchant aliases
 #
@@ -24,7 +24,7 @@ arrow_infinite: infinity
 water_worker: aqua affinity
 durability: unbreaking
 damage_undead: smite
-damage_arthropods: bane of anthropods
+damage_arthropods: bane of arthropods
 dig_speed: efficiency
 fire_aspect: fire aspect
 silk_touch: silk touch
