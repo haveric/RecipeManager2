@@ -1,4 +1,4 @@
-lastchanged: 2.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.1.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -131,6 +131,8 @@ wood_step:
   1: spruce, pine, dark
   2: birch, white
   3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
 
 wood_double_step:
   names: wood double step, wood double steps
@@ -138,25 +140,35 @@ wood_double_step:
   1: spruce, pine, dark
   2: birch, white
   3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
 
 wood:
   names: wood planks, wood plank, plank, planks
   0: oak, normal
-  1: spruce, pine, dark
+  1: spruce, pine
   2: birch, white
   3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
 
 sapling:
   0: oak, normal
   1: spruce, pine, dark
   2: birch, white
   3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
 
 log:
   0: oak, normal
   1: spruce, pine, dark
   2: birch, white
   3: jungle, pink
+  
+log_2:
+  0: acacia, orange
+  1: dark oak, dark
 
 leaves:
   names: leaf
@@ -164,6 +176,10 @@ leaves:
   1: spruce, pine, dark
   2: birch, white
   3: jungle, pink
+
+leaves_2:
+  0: acacia, orange
+  1: dark oak, dark
 
 # spade to shovel aliases
 wood_spade: wood shovel
@@ -178,15 +194,22 @@ monster_egg:
   50: creeper
   51: skeleton
   52: spider
+  53: giant
   54: zombie
   55: slime
   56: ghast
-  57: zombie pig
+  57: zombie pig, zombie pigman
   58: ender man
   59: cave spider
   60: silver fish
   61: blaze
   62: magma cube
+  63: ender dragon
+  64: wither
+  65: bat
+  66: witch
+  67: ender mite
+  68: guardian
   90: pig
   91: sheep
   92: cow
@@ -194,7 +217,11 @@ monster_egg:
   94: squid
   95: wolf
   96: mooshroom, mushroom cow
+  97: snow golem, snow man
   98: ocelot, cat
+  99: iron golem
+  100: horse
+  101: rabbit
   120: villager, npc
 
 # silverfish blocks
@@ -219,7 +246,7 @@ potion:
 skull_item:
   names: skull, head
   0: skeleton
-  1: wither
+  1: wither, wither skeleton
   2: zombie
   3: human, player
   4: creeper
