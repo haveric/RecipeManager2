@@ -22,9 +22,19 @@ public class FlagDisplayResult extends Flag {
 
         A = new String[] { "{flag} <item or first> | [silentfail]", };
 
-        D = new String[] { "Sets the display result of the recipe.", "Using this flag more than once will overwrite the previous message.", "", "As 'item' argument you can define an item like in a result, material:data:amount.", "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having " + FlagType.INGREDIENTCONDITION + " flag on them.", "", "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like " + FlagType.INGREDIENTCONDITION + ").", "", "NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.", "NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.", };
+        D = new String[] { "Sets the display result of the recipe.",
+                           "Using this flag more than once will overwrite the previous message.",
+                           "",
+                           "As 'item' argument you can define an item like in a result, material:data:amount.",
+                           "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having " + FlagType.INGREDIENTCONDITION + " flag on them.",
+                           "",
+                           "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like " + FlagType.INGREDIENTCONDITION + ").",
+                           "",
+                           "NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.",
+                           "NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.", };
 
-        E = new String[] { "{flag} first // displays the first available result", "{flag} diamond_helmet:120 // damaged diamond helmet", };
+        E = new String[] { "{flag} first // displays the first available result",
+                           "{flag} diamond_helmet:120 // damaged diamond helmet", };
     }
 
     // Flag code

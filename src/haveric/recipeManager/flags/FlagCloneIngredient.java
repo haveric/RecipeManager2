@@ -30,9 +30,30 @@ public class FlagCloneIngredient extends Flag {
 
         A = new String[] { "{flag} <arguments>", };
 
-        D = new String[] { "Clones the ingredient matching material of the result used on.", "Using this flag more than once will overwrite the previous one.", "", "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.", "Arguments can be one or more of the following, separated by | character:", "  data [<mod> <value>]   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.", "  amount [<mod> <value>] = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.", "  enchants               = copies the enchantments.", "  name                   = copies the custom item name.", "  lore                   = copies the custom item lore/description.", "  special                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.", "  allmeta                = copies enchants, name, lore and special.", "  all                    = copies entire item (data, amount, enchants, name, lore, special)", "", "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.", "", "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENTCONDITION + " flag too.", };
+        D = new String[] { "Clones the ingredient matching material of the result used on.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.",
+                           "Arguments can be one or more of the following, separated by | character:",
+                           "  data [<mod> <value>]   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+                           "  amount [<mod> <value>] = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+                           "  enchants               = copies the enchantments.",
+                           "  name                   = copies the custom item name.",
+                           "  lore                   = copies the custom item lore/description.",
+                           "  special                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
+                           "  allmeta                = copies enchants, name, lore and special.",
+                           "  all                    = copies entire item (data, amount, enchants, name, lore, special)",
+                           "",
+                           "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
+                           "",
+                           "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENTCONDITION + " flag too.", };
 
-        E = new String[] { "{flag} data // just copy data value", "{flag} data +2 // copy data value and add 2 to it", "{flag} amount * 2 // copy amount and multiply it by 2", "{flag} data % 2 // get the remainer from data divided by 2.", "{flag} data | amount | lore // only copy these things", "{flag} all // copy entire ingredient", };
+        E = new String[] { "{flag} data // just copy data value",
+                           "{flag} data +2 // copy data value and add 2 to it",
+                           "{flag} amount * 2 // copy amount and multiply it by 2",
+                           "{flag} data % 2 // get the remainer from data divided by 2.",
+                           "{flag} data | amount | lore // only copy these things",
+                           "{flag} all // copy entire ingredient", };
     }
 
     // Flag code

@@ -26,9 +26,19 @@ public class FlagEnchantedBook extends Flag {
 
         A = new String[] { "{flag} <enchant> [level or max]", };
 
-        D = new String[] { "Adds stored enchantments in a enchanted book item.", "This flag may be used more times to add more enchantments to the item.", "", "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.", "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.", "", "Enchantments are forced and there is no level cap!", "", "Specific item: enchanted_book", };
+        D = new String[] { "Adds stored enchantments in a enchanted book item.",
+                           "This flag may be used more times to add more enchantments to the item.",
+                           "",
+                           "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
+                           "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
+                           "",
+                           "Enchantments are forced and there is no level cap!",
+                           "",
+                           "Specific item: enchanted_book", };
 
-        E = new String[] { "{flag} efficiency // dig_speed alias", "{flag} damage_all max", "{flag} arrow_fire 127", };
+        E = new String[] { "{flag} efficiency // dig_speed alias",
+                           "{flag} damage_all max",
+                           "{flag} arrow_fire 127", };
     }
 
     // Flag code

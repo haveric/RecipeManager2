@@ -18,9 +18,22 @@ public class FlagModMoney extends Flag {
 
         A = new String[] { "{flag} [modifier]<float number> | [fail message]", };
 
-        D = new String[] { "Modifies crafter's money.", "Using this flag more than once will overwrite the previous one.", "", "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).", "The '<number>' argument must be the amount of money to modify.", "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.", "For the fail message you can use the following arguments:", "  {amount}       = amount defined in the flag, never has modifier prefix.", "  {modifier}     = the modifier prefix.", "", "NOTE: Vault with a supported economy plugin is required for this flag to work.", "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.NEEDMONEY.toString() + " if you want to check.", };
+        D = new String[] { "Modifies crafter's money.", "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+                           "The '<number>' argument must be the amount of money to modify.",
+                           "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+                           "For the fail message you can use the following arguments:",
+                           "  {amount}       = amount defined in the flag, never has modifier prefix.",
+                           "  {modifier}     = the modifier prefix.",
+                           "",
+                           "NOTE: Vault with a supported economy plugin is required for this flag to work.",
+                           "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.NEEDMONEY.toString() + " if you want to check.", };
 
-        E = new String[] { "{flag} 0.5 // gives 0.5 currency or 50 minor currency money to crafter", "{flag} +0.5 // exactly the same as above", "{flag} -2.5 | <red>You lost {money}!  // takes at most 2.5 currency from crafter, if he does not have that amount it will be set to 0.", "{flag} = 0 | <red>You lost all your money!  // sets crafter's money to 0, that space is valid there too.", };
+        E = new String[] { "{flag} 0.5 // gives 0.5 currency or 50 minor currency money to crafter",
+                           "{flag} +0.5 // exactly the same as above",
+                           "{flag} -2.5 | <red>You lost {money}!  // takes at most 2.5 currency from crafter, if he does not have that amount it will be set to 0.",
+                           "{flag} = 0 | <red>You lost all your money!  // sets crafter's money to 0, that space is valid there too.", };
     }
 
     // Flag code

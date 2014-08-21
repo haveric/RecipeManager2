@@ -22,11 +22,24 @@ public class FlagGameMode extends Flag {
     static {
         TYPE = FlagType.GAMEMODE;
 
-        A = new String[] { "{flag} <game mode>", "{flag} <game mode> | [message]", "{flag} false", };
+        A = new String[] { "{flag} <game mode>",
+                           "{flag} <game mode> | [message]",
+                           "{flag} false", };
 
-        D = new String[] { "Requires the crafter to be in a specific game mode.", "Using this flag more than once will overwrite the previous ones.", "", "Values for <game mode> can be: c or creative, a or adventure, s or survival", "", "Optionally you can specify a failure message, should be short because it prints in the display result.", "Additionally you can use the following variables in the message:", "  {playergm}  = player's game mode (which is not allowed)", "  {gamemodes}  = list of required game modes", };
+        D = new String[] { "Requires the crafter to be in a specific game mode.",
+                           "Using this flag more than once will overwrite the previous ones.",
+                           "",
+                           "Values for <game mode> can be: c or creative, a or adventure, s or survival",
+                           "",
+                           "Optionally you can specify a failure message, should be short because it prints in the display result.",
+                           "Additionally you can use the following variables in the message:",
+                           "  {playergm}  = player's game mode (which is not allowed)",
+                           "  {gamemodes}  = list of required game modes", };
 
-        E = new String[] { "{flag} creative // only creative", "{flag} s // only survival", "{flag} a,s // only adventure and survival", "{flag} false // disable flag, allow all gamemodes", };
+        E = new String[] { "{flag} creative // only creative",
+                           "{flag} s // only survival",
+                           "{flag} a,s // only adventure and survival",
+                           "{flag} false // disable flag, allow all gamemodes", };
     }
 
     // Flag code

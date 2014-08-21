@@ -25,9 +25,23 @@ public class FlagFireworkChargeItem extends Flag {
 
         A = new String[] { "{flag} <effect arguments>", };
 
-        D = new String[] { "Configures firework charge's effect.", "Using this flag more than once will overwrite previous changes since the item only supports one effect.", "", "Replace '<effect arguments>' with the following arguments separated by | character.", "Effects can be:", "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.", "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.", "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + Tools.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)", "  trail                                     = (Optional) Adds a trail to the explosion", "  flicker                                   = (Optional) Adds a flicker to explosion", "Effects can be listed in any order.", "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.", "", "Specific item: firework_charge.", };
+        D = new String[] { "Configures firework charge's effect.",
+                           "Using this flag more than once will overwrite previous changes since the item only supports one effect.",
+                           "",
+                           "Replace '<effect arguments>' with the following arguments separated by | character.",
+                           "Effects can be:",
+                           "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.",
+                           "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
+                           "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + Tools.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)",
+                           "  trail                                     = (Optional) Adds a trail to the explosion",
+                           "  flicker                                   = (Optional) Adds a flicker to explosion",
+                           "Effects can be listed in any order.",
+                           "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
+                           "",
+                           "Specific item: firework_charge.", };
 
-        E = new String[] { "{flag} trail | color 255 0 0, 0 255 0 | type ball_large", "{flag} type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker", };
+        E = new String[] { "{flag} trail | color 255 0 0, 0 255 0 | type ball_large",
+                           "{flag} type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker", };
     }
 
     // Flag code

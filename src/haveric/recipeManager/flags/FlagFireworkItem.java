@@ -26,11 +26,31 @@ public class FlagFireworkItem extends Flag {
     static {
         TYPE = FlagType.FIREWORKITEM;
 
-        A = new String[] { "{flag} effect <effect data>", "{flag} power <0-128>", };
+        A = new String[] { "{flag} effect <effect data>",
+                           "{flag} power <0-128>", };
 
-        D = new String[] { "Configures firework rocket's effects.", "Using this flag more than once will append changes to the item.", "", "The 'effect' setting adds an effect to the rocket.", "Replace '<effect arguments>' with the following arguments separated by | character.", "Effects can be:", "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.", "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.", "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + Tools.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)", "  trail                                     = (Optional) Adds a trail to the explosion", "  flicker                                   = (Optional) Adds a flicker to explosion", "Effects can be listed in any order.", "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.", "", "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.", "", "Specific item: firework.", };
+        D = new String[] { "Configures firework rocket's effects.",
+                           "Using this flag more than once will append changes to the item.",
+                           "",
+                           "The 'effect' setting adds an effect to the rocket.",
+                           "Replace '<effect arguments>' with the following arguments separated by | character.",
+                           "Effects can be:",
+                           "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.",
+                           "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
+                           "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + Tools.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)",
+                           "  trail                                     = (Optional) Adds a trail to the explosion",
+                           "  flicker                                   = (Optional) Adds a flicker to explosion",
+                           "Effects can be listed in any order.",
+                           "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
+                           "",
+                           "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.",
+                           "",
+                           "Specific item: firework.", };
 
-        E = new String[] { "{flag} effect color 0 255 0", "{flag} effect trail | color 255 0 0 | type burst", "{flag} effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0", "{flag} power 1", };
+        E = new String[] { "{flag} effect color 0 255 0",
+                           "{flag} effect trail | color 255 0 0 | type burst",
+                           "{flag} effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0",
+                           "{flag} power 1", };
     }
 
     // Flag code

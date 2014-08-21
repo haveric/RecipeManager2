@@ -20,9 +20,14 @@ public class FlagBlockPowered extends Flag {
 
         A = new String[] { "{flag} [arguments]", };
 
-        D = new String[] { "Requires the workbench or furnace block to be powered by redstone.", "", "Optionally you can use the following arguments separated by | character and in any order:", "  indirect          = check for indirect redstone power, through other blocks.", "  failmsg <message> = overwrite the failure message.", };
+        D = new String[] { "Requires the workbench or furnace block to be powered by redstone.",
+                           "",
+                           "Optionally you can use the following arguments separated by | character and in any order:",
+                           "  indirect          = check for indirect redstone power, through other blocks.",
+                           "  failmsg <message> = overwrite the failure message.", };
 
-        E = new String[] { "{flag}", "{flag} failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect", };
+        E = new String[] { "{flag}",
+                           "{flag} failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect", };
     }
 
     // Flag code

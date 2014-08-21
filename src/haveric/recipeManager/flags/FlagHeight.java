@@ -16,9 +16,15 @@ public class FlagHeight extends Flag {
 
         A = new String[] { "{flag} <min or min-max> | [fail message]", };
 
-        D = new String[] { "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.", "Using this flag more than once will overwrite the previous one.", "", "Optionally you can overwrite the fail message or you can use 'false' to hide it.", "In the message the following variables can be used:", "  {height}  = height or height range", };
+        D = new String[] { "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+                           "In the message the following variables can be used:",
+                           "  {height}  = height or height range", };
 
-        E = new String[] { "{flag} 200 // must be high in the sky", "{flag} 0-30 | <red>You need to be deep underground!", };
+        E = new String[] { "{flag} 200 // must be high in the sky",
+                           "{flag} 0-30 | <red>You need to be deep underground!", };
     }
 
     // Flag code

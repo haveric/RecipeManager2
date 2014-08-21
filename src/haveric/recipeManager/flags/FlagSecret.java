@@ -13,7 +13,10 @@ public class FlagSecret extends Flag {
 
         A = new String[] { "{flag} [true or false]", };
 
-        D = new String[] { "Hides the recipe or result from common info sources.", "Recipes are hidden from commands, books, etc.", "Results are also hidden from commands, books and most importantly from multiresult item display.", "This also means recipes/results won't give out any fail craft reasons!", };
+        D = new String[] { "Hides the recipe or result from common info sources.",
+                           "Recipes are hidden from commands, books, etc.",
+                           "Results are also hidden from commands, books and most importantly from multiresult item display.",
+                           "This also means recipes/results won't give out any fail craft reasons!", };
 
         E = new String[] { "{flag}", };
     }

@@ -25,11 +25,42 @@ public class FlagForChance extends Flag {
     static {
         TYPE = FlagType.FORCHANCE;
 
-        A = new String[] { "{flag} <group> [chance]% [^]@[flag declaration]", "{flag} <chance>% [^]@<flag declaration>", };
+        A = new String[] { "{flag} <group> [chance]% [^]@[flag declaration]",
+                           "{flag} <chance>% [^]@<flag declaration>", };
 
-        D = new String[] { "Triggers other flags or groups of flags by specified chance.", "Using this flag more than once will add more flags.", "", "The 'group' argument defines a group for the flags (not permission related), can be any combination of letters only, no spaces either.", "Grouping flags makes the system pick only one flag from the bunch which means it's also limited to 100% total chance.", "If a group is not defined then the flags will be added to the default group which is a special group that will trigger flags randomly according to their chance, it can trigger all at once or even none at all.", "", "The 'chance' argument suggests a chance value that can be between 0.01 and 100 and the '%' suffix is required.", "The chance argument is only optional if there's a group defined, then the remaining chance will be evenly split between all flags with undefined chance.", "", "The 'flag declaration' is a flag like you'd add a flag to a recipe or result, you can even add this flag into itself to make multi-chance structures.", "The flag declaration argument is only optional if there's a group defined and will act as literally nothing.", "Optionally you can prefix the flag declaration with the '^' character to append the data from the flag to the previous flag of the same type from the same group (no group is still a group, but a special one).", "", "NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.", "NOTE: In a group there must be at least a chance value or a flag declaration.", };
+        D = new String[] { "Triggers other flags or groups of flags by specified chance.",
+                           "Using this flag more than once will add more flags.",
+                           "",
+                           "The 'group' argument defines a group for the flags (not permission related), can be any combination of letters only, no spaces either.",
+                           "Grouping flags makes the system pick only one flag from the bunch which means it's also limited to 100% total chance.",
+                           "If a group is not defined then the flags will be added to the default group which is a special group that will trigger flags randomly according to their chance, it can trigger all at once or even none at all.",
+                           "",
+                           "The 'chance' argument suggests a chance value that can be between 0.01 and 100 and the '%' suffix is required.",
+                           "The chance argument is only optional if there's a group defined, then the remaining chance will be evenly split between all flags with undefined chance.",
+                           "",
+                           "The 'flag declaration' is a flag like you'd add a flag to a recipe or result, you can even add this flag into itself to make multi-chance structures.",
+                           "The flag declaration argument is only optional if there's a group defined and will act as literally nothing.",
+                           "Optionally you can prefix the flag declaration with the '^' character to append the data from the flag to the previous flag of the same type from the same group (no group is still a group, but a special one).",
+                           "",
+                           "NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.",
+                           "NOTE: In a group there must be at least a chance value or a flag declaration.", };
 
-        E = new String[] { "// some simple example", "{flag} 25% " + FlagType.EXPLODE + " // 25% chance to explode", "// appending to flags example", "{flag} 80% " + FlagType.COMMAND + " say high chance message!", "{flag} 50% " + FlagType.COMMAND + " say 50-50 message... // this is a totally new flag, individual from the previous one.", "{flag}    ^" + FlagType.COMMAND + " say extra message! // this command will be appended to the previous command flag.", "{flag}    ^" + FlagType.COMMAND + " say extra-large message!!! // this will also add append to the same previous command flag, now it has 3 commands.", "// all flags in a group must have a total of 100% chance since only one triggers, in this case the chance is calculated and it would be 33.33% for each.", "{flag} mystuff " + FlagType.SOUND + " level_up", "{flag} mystuff " + FlagType.SOUND + " note_bass", "{flag} mystuff " + FlagType.SOUND + " hurt", "// example of empty flag definition as nothing chance", "{flag} dostuff " + FlagType.BROADCAST + " yay!", "{flag} dostuff 75% // this sets the 'dostuff' group to do nothing 75% of the time", "// forchanception", "{flag} 50% {flag} 25% {flag} test " + FlagType.BROADCAST + " chanception occurred!", "// NOTE all of the examples above can be used in a single recipe if you want, there's no limit to the combinations!", };
+        E = new String[] { "// some simple example",
+                           "{flag} 25% " + FlagType.EXPLODE + " // 25% chance to explode",
+                           "// appending to flags example",
+                           "{flag} 80% " + FlagType.COMMAND + " say high chance message!",
+                           "{flag} 50% " + FlagType.COMMAND + " say 50-50 message... // this is a totally new flag, individual from the previous one.",
+                           "{flag}    ^" + FlagType.COMMAND + " say extra message! // this command will be appended to the previous command flag.",
+                           "{flag}    ^" + FlagType.COMMAND + " say extra-large message!!! // this will also add append to the same previous command flag, now it has 3 commands.",
+                           "// all flags in a group must have a total of 100% chance since only one triggers, in this case the chance is calculated and it would be 33.33% for each.",
+                           "{flag} mystuff " + FlagType.SOUND + " level_up",
+                           "{flag} mystuff " + FlagType.SOUND + " note_bass",
+                           "{flag} mystuff " + FlagType.SOUND + " hurt",
+                           "// example of empty flag definition as nothing chance",
+                           "{flag} dostuff " + FlagType.BROADCAST + " yay!",
+                           "{flag} dostuff 75% // this sets the 'dostuff' group to do nothing 75% of the time",
+                           "// forchanception", "{flag} 50% {flag} 25% {flag} test " + FlagType.BROADCAST + " chanception occurred!",
+                           "// NOTE all of the examples above can be used in a single recipe if you want, there's no limit to the combinations!", };
     }
 
     // Flag code

@@ -16,9 +16,17 @@ public class FlagNeedLevel extends Flag {
 
         A = new String[] { "{flag} <min or min-max> | [fail message]", };
 
-        D = new String[] { "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.", "Using this flag more than once will overwrite the previous one.", "", "Optionally you can overwrite the fail message or you can use 'false' to hide it.", "In the message the following variables can be used:", "  {level}  = level or level range", "", "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
+        D = new String[] { "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+                           "In the message the following variables can be used:",
+                           "  {level}  = level or level range",
+                           "",
+                           "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
 
-        E = new String[] { "{flag} 1", "{flag} 25-100 | <red>Need level 25 to 100!", };
+        E = new String[] { "{flag} 1",
+                           "{flag} 25-100 | <red>Need level 25 to 100!", };
     }
 
     // Flag code

@@ -19,9 +19,11 @@ public class FlagSkullOwner extends Flag {
 
         A = new String[] { "{flag} <name>", };
 
-        D = new String[] { "Sets the human skull's owner to apply the skin.", "If you set it to '{player}' then it will use crafter's name.", };
+        D = new String[] { "Sets the human skull's owner to apply the skin.",
+                           "If you set it to '{player}' then it will use crafter's name.", };
 
-        E = new String[] { "{flag} Notch", "{flag} {player}", };
+        E = new String[] { "{flag} Notch",
+                           "{flag} {player}", };
     }
 
     // Flag code

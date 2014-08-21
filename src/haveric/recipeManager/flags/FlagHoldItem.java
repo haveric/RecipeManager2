@@ -23,9 +23,17 @@ public class FlagHoldItem extends Flag {
 
         A = new String[] { "{flag} <item or false>", };
 
-        D = new String[] { "Makes the recipe require crafter to hold an item.", "", "This flag can be used more than once to add more items, the player will need to hold one to craft.", "", "The <item> argument can be in this format: material:data:amount", "Just like recipe results, not all values from the item are required.", };
+        D = new String[] { "Makes the recipe require crafter to hold an item.",
+                           "",
+                           "This flag can be used more than once to add more items, the player will need to hold one to craft.",
+                           "",
+                           "The <item> argument can be in this format: material:data:amount",
+                           "Just like recipe results, not all values from the item are required.", };
 
-        E = new String[] { "{flag} iron_pickaxe // any data/damage value", "{flag} iron_axe:0 // only undamaged axe!", "{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1", "{flag} false // makes all previous statements useless", };
+        E = new String[] { "{flag} iron_pickaxe // any data/damage value",
+                           "{flag} iron_axe:0 // only undamaged axe!",
+                           "{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1",
+                           "{flag} false // makes all previous statements useless", };
     }
 
     // Flag code

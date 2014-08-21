@@ -18,7 +18,15 @@ public class FlagRemove extends Flag {
 
         A = new String[] { "{flag} [true or false]", };
 
-        D = new String[] { "Removes an existing recipe that was added by vanilla Minecraft or other plugins/mods. ", "The recipe definition must have the exact ingredients of the recipe you want to overwrite.", "", "Results and smelt time will be ignored and you don't have to delete them if you want to keep them for later.", "", "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.", "Value is optional, if value is not specified it will just be enabled.", "", "This can't be used along with " + FlagType.OVERRIDE + " flag.", };
+        D = new String[] { "Removes an existing recipe that was added by vanilla Minecraft or other plugins/mods. ",
+                           "The recipe definition must have the exact ingredients of the recipe you want to overwrite.",
+                           "",
+                           "Results and smelt time will be ignored and you don't have to delete them if you want to keep them for later.",
+                           "",
+                           "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.",
+                           "Value is optional, if value is not specified it will just be enabled.",
+                           "",
+                           "This can't be used along with " + FlagType.OVERRIDE + " flag.", };
 
         E = new String[] { "{flag}", };
     }

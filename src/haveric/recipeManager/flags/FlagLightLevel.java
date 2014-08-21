@@ -20,9 +20,20 @@ public class FlagLightLevel extends Flag {
 
         A = new String[] { "{flag} <min or min-max> [type] | [fail message]", };
 
-        D = new String[] { "Checks for the light level.", "Using this flag more than once will overwrite the previous one.", "", "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.", "", "Optionally you can set the  [type] argument to specify light type:", "  any    = (default) any kind of light.", "  sun    = sun light only.", "  blocks = light form blocks (torches, furnaces, etc) only.", "", "You can also overwrite the fail message or use 'false' to hide it.", };
+        D = new String[] { "Checks for the light level.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.",
+                           "",
+                           "Optionally you can set the  [type] argument to specify light type:",
+                           "  any    = (default) any kind of light.",
+                           "  sun    = sun light only.",
+                           "  blocks = light form blocks (torches, furnaces, etc) only.",
+                           "",
+                           "You can also overwrite the fail message or use 'false' to hide it.", };
 
-        E = new String[] { "{flag} 14 sun", "{flag} 0-4 blocks | <red>Kill the lights!", };
+        E = new String[] { "{flag} 14 sun",
+                           "{flag} 0-4 blocks | <red>Kill the lights!", };
     }
 
     // Flag code

@@ -18,9 +18,20 @@ public class FlagNeedExp extends Flag {
 
         A = new String[] { "{flag} <min or min-max> | [message]", };
 
-        D = new String[] { "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.", "Using this flag more than once will overwrite the previous one.", "", "Optionally you can overwrite the fail message or you can use 'false' to hide it.", "In the message the following variables can be used:", "  {exp}    = exp or exp range.", "  {minexp} = defined min exp range.", "  {maxexp} = defined max exp range.", "", "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
+        D = new String[] { "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+                           "In the message the following variables can be used:",
+                           "  {exp}    = exp or exp range.",
+                           "  {minexp} = defined min exp range.",
+                           "  {maxexp} = defined max exp range.",
+                           "",
+                           "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
 
-        E = new String[] { "{flag} 100 // player needs to have at least 100 experience to craft", "{flag} 0-500 // player can only craft if he has between 0 and 500 experience", "{flag} 1000 | <red>Need {exp} exp!", };
+        E = new String[] { "{flag} 100 // player needs to have at least 100 experience to craft",
+                           "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
+                           "{flag} 1000 | <red>Need {exp} exp!", };
     }
 
     // Flag code

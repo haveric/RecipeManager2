@@ -15,9 +15,18 @@ public class FlagAddToBook extends Flag {
 
         A = new String[] { "{flag} <book title> [volume <num>]", };
 
-        D = new String[] { "This flag is a shortcut for quickly adding recipe(s) to books.", "Using this flag more than once will overwrite the previous one.", "", "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' how to do that.", "", "The '<book title>' argument must be an existing book's name, partial matching can be used.", "Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.", "", "NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.", };
+        D = new String[] { "This flag is a shortcut for quickly adding recipe(s) to books.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' how to do that.",
+                           "",
+                           "The '<book title>' argument must be an existing book's name, partial matching can be used.",
+                           "Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.",
+                           "",
+                           "NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.", };
 
-        E = new String[] { "{flag} testingbook // can match a 'Testing Book' book for example", "{flag} random stuf volume 3 // can match a 'Random Stuff volume 3' book for example", };
+        E = new String[] { "{flag} testingbook // can match a 'Testing Book' book for example",
+                           "{flag} random stuf volume 3 // can match a 'Random Stuff volume 3' book for example", };
     }
 
     // Flag code

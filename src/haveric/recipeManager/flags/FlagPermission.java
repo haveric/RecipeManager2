@@ -20,9 +20,24 @@ public class FlagPermission extends Flag {
 
         A = new String[] { "{flag} [!]<permission>, [...] | [fail message]", };
 
-        D = new String[] { "Makes the recipe or item require the crafter to have a permission.", "Using this flag more than once will add more permissions, the player must have at least one to allow crafting.", "", "The '<permission>' argument must be an permission node, regardless if it exists or not.", "", "Adding ! character as prefix to individual permission nodes will do the opposite check, if crafter has permission it will not craft.", "", "You can also specify more permissions separated by , character.", "", "Optionally you can specify a failure message that will be used on the specific permission(s) defined.", "The messages can have the following variables:", "  {permission}  = permission that was not found or was found and it's unallowed.", "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes.", };
+        D = new String[] { "Makes the recipe or item require the crafter to have a permission.",
+                           "Using this flag more than once will add more permissions, the player must have at least one to allow crafting.",
+                           "",
+                           "The '<permission>' argument must be an permission node, regardless if it exists or not.",
+                           "",
+                           "Adding ! character as prefix to individual permission nodes will do the opposite check, if crafter has permission it will not craft.",
+                           "",
+                           "You can also specify more permissions separated by , character.",
+                           "",
+                           "Optionally you can specify a failure message that will be used on the specific permission(s) defined.",
+                           "The messages can have the following variables:",
+                           "  {permission}  = permission that was not found or was found and it's unallowed.",
+                           "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes.", };
 
-        E = new String[] { "{flag} ranks.vip", "{flag} !jobs.builder | <red>Builders can't use this!", "{flag} jobs.famer, jobs.trader | <red>You must be a farmer or trader!", "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
+        E = new String[] { "{flag} ranks.vip",
+                           "{flag} !jobs.builder | <red>Builders can't use this!",
+                           "{flag} jobs.famer, jobs.trader | <red>You must be a farmer or trader!",
+                           "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
     }
 
     // Flag code

@@ -28,9 +28,17 @@ public class FlagBiome extends Flag {
 
         A = new String[] { "{flag} <types> | [fail message]", };
 
-        D = new String[] { "Sets the biome required to allow crafting.", "Using this flag more than once will overwrite the previous one.", "", "For '<types>' you can list the biomes you want to allow or disallow.", "It needs at least one biome name and you can add more separated by , character.", "Also you can disallow biomes by prefixing them with ! character.", "Biomes: " + Tools.collectionToString(Arrays.asList(Biome.values())).toLowerCase(), "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
+        D = new String[] { "Sets the biome required to allow crafting.",
+                           "Using this flag more than once will overwrite the previous one.",
+                           "",
+                           "For '<types>' you can list the biomes you want to allow or disallow.",
+                           "It needs at least one biome name and you can add more separated by , character.",
+                           "Also you can disallow biomes by prefixing them with ! character.",
+                           "Biomes: " + Tools.collectionToString(Arrays.asList(Biome.values())).toLowerCase(),
+                           "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
 
-        E = new String[] { "{flag} jungle, jungle_hills", "{flag} !mushroom_island, !mushroom_shore", };
+        E = new String[] { "{flag} jungle, jungle_hills",
+                           "{flag} !mushroom_island, !mushroom_shore", };
     }
 
     // Flag code

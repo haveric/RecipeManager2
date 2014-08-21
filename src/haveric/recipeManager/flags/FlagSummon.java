@@ -58,9 +58,57 @@ public class FlagSummon extends Flag {
 
         String argFormat = "  %-26s = %s";
 
-        D = new String[] { "Summons a creature.", "Using this flag more than once will add more creatures.", "", "The <type> argument can be a living entity type, you can find all entity types in '" + Files.FILE_INFO_NAMES + "' file.", "", "Optionally you can add some arguments separated by | character, those being:", String.format(argFormat, "noeffect", "no spawning particle effects on creature."), String.format(argFormat, "noremove", "prevents creature from being removed if nobody is near it."), String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."), String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."), String.format(argFormat, "num <number>", "spawn more cloned creatures."), String.format(argFormat, "spread <range>", "spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"), String.format(argFormat, "target", "creature targets crafter, that means monsters attack and animals follow and the rest do nothing"), String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."), String.format(argFormat, "onfire <time>", "spawn creature on fire for <time> amount of seconds, value can be float."), String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."), String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for wolf and ocelot, optionally specify 'nosit' to not spawn creature in sit stance."), String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."), String.format(argFormat, "cat <type>", "ocelot type, available values: " + Tools.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()), String.format(argFormat, "saddle [mount]", "adds saddle on creature, only works for pig, optionally you can specify 'mount' to make crafter mount creature."), String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."), String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."), String.format(argFormat, "villager <type>", "set the villager profession, values: " + Tools.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()), String.format(argFormat, "skeleton <type>", "set the skeleton type, values: " + Tools.collectionToString(Arrays.asList(SkeletonType.values())).toLowerCase()), String.format(argFormat, "zombievillager", "makes zombie a zombie villager, only works on zombies."), String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."), String.format(argFormat, "playerirongolem", "marks iron golem as player-made."), String.format(argFormat, "name <text>", "sets the creature's name, supports colors (<red>, &3, etc)."), String.format(argFormat, "nohidename", "don't hide name plate when not aiming at creature."), String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health"), String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies."), String.format(argFormat, "agelock", "prevent the creature from maturing or getting ready for mating, works with animals and villagers."), String.format(argFormat, "nobreed", "prevent the creature being able to breed, works for animals and villagers."), String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."), String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."), String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."), String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."), String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."), String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."), "", "These arguments can be used in any order and they're all optional.", };
+        D = new String[] { "Summons a creature.",
+                           "Using this flag more than once will add more creatures.",
+                           "",
+                           "The <type> argument can be a living entity type, you can find all entity types in '" + Files.FILE_INFO_NAMES + "' file.",
+                           "",
+                           "Optionally you can add some arguments separated by | character, those being:",
+                           String.format(argFormat, "noeffect", "no spawning particle effects on creature."),
+                           String.format(argFormat, "noremove", "prevents creature from being removed if nobody is near it."),
+                           String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
+                           String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
+                           String.format(argFormat, "num <number>", "spawn more cloned creatures."),
+                           String.format(argFormat, "spread <range>", "spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
+                           String.format(argFormat, "target", "creature targets crafter, that means monsters attack and animals follow and the rest do nothing"),
+                           String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."),
+                           String.format(argFormat, "onfire <time>", "spawn creature on fire for <time> amount of seconds, value can be float."),
+                           String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
+                           String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for wolf and ocelot, optionally specify 'nosit' to not spawn creature in sit stance."),
+                           String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
+                           String.format(argFormat, "cat <type>", "ocelot type, available values: " + Tools.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
+                           String.format(argFormat, "saddle [mount]", "adds saddle on creature, only works for pig, optionally you can specify 'mount' to make crafter mount creature."),
+                           String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
+                           String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
+                           String.format(argFormat, "villager <type>", "set the villager profession, values: " + Tools.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
+                           String.format(argFormat, "skeleton <type>", "set the skeleton type, values: " + Tools.collectionToString(Arrays.asList(SkeletonType.values())).toLowerCase()),
+                           String.format(argFormat, "zombievillager", "makes zombie a zombie villager, only works on zombies."),
+                           String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
+                           String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
+                           String.format(argFormat, "name <text>", "sets the creature's name, supports colors (<red>, &3, etc)."),
+                           String.format(argFormat, "nohidename", "don't hide name plate when not aiming at creature."),
+                           String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health"),
+                           String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies."),
+                           String.format(argFormat, "agelock", "prevent the creature from maturing or getting ready for mating, works with animals and villagers."),
+                           String.format(argFormat, "nobreed", "prevent the creature being able to breed, works for animals and villagers."),
+                           String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
+                           String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
+                           String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
+                           String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
+                           String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."),
+                           String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
+                           "",
+                           "These arguments can be used in any order and they're all optional.", };
 
-        E = new String[] { "{flag} cow", "{flag} skeleton | hand bow // skeletons spawn without weapons, you need to give it one", "{flag} zombie | zombievillager | baby | chest chainmail_chestplate 25% | legs chainmail_leggings 25% | hand iron_sword 50% // baby villager zombie warrior", "{flag} sheep | color pink | name <light_purple>Pony", "{flag} ocelot | cat redcat | pet | potion speed 30 5", "// chicken on a villager and villager on a cow:", "{flag} chicken | mountnext", "{flag} villager | mountnext", "{flag} cow", };
+        E = new String[] { "{flag} cow",
+                           "{flag} skeleton | hand bow // skeletons spawn without weapons, you need to give it one",
+                           "{flag} zombie | zombievillager | baby | chest chainmail_chestplate 25% | legs chainmail_leggings 25% | hand iron_sword 50% // baby villager zombie warrior",
+                           "{flag} sheep | color pink | name <light_purple>Pony",
+                           "{flag} ocelot | cat redcat | pet | potion speed 30 5",
+                           "// chicken on a villager and villager on a cow:",
+                           "{flag} chicken | mountnext",
+                           "{flag} villager | mountnext",
+                           "{flag} cow", };
     }
 
     // Flag code

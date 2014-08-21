@@ -22,7 +22,17 @@ public class FlagFailMessage extends Flag {
 
         A = new String[] { "{flag} [message or false]", };
 
-        D = new String[] { "Changes the message when recipe fails due to failure chance.", "Using this flag more than once will overwrite the previous message.", "", "The message supports colors (<red>, &3, etc).", "", "You can also use the following variables inside the message:", "  {failchance}    = recipe's chance of failure as a number.", "  {successchance} = recipe's chance of success as a number.", "  {resultchance}  = result's chance of success as a number.", "", "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.", };
+        D = new String[] { "Changes the message when recipe fails due to failure chance.",
+                           "Using this flag more than once will overwrite the previous message.",
+                           "",
+                           "The message supports colors (<red>, &3, etc).",
+                           "",
+                           "You can also use the following variables inside the message:",
+                           "  {failchance}    = recipe's chance of failure as a number.",
+                           "  {successchance} = recipe's chance of success as a number.",
+                           "  {resultchance}  = result's chance of success as a number.",
+                           "",
+                           "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.", };
 
         E = new String[] { "{flag} <red>YOU FAILED, MWaHahahah!", };
     }

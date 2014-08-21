@@ -15,9 +15,13 @@ public class FlagRestrict extends Flag {
 
         A = new String[] { "{flag} [fail message]", };
 
-        D = new String[] { "Restricts the recipe to everybody.", "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.", "", "Optionally you can overwrite the default restrict message.", };
+        D = new String[] { "Restricts the recipe to everybody.",
+                           "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.",
+                           "",
+                           "Optionally you can overwrite the default restrict message.", };
 
-        E = new String[] { "{flag}", "{flag} <red>Access denied!", };
+        E = new String[] { "{flag}",
+                           "{flag} <red>Access denied!", };
     }
 
     // Flag code

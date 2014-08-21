@@ -23,11 +23,26 @@ public class FlagPotionEffect extends Flag {
     static {
         TYPE = FlagType.POTIONEFFECT;
 
-        A = new String[] { "{flag} <effect type> | [arguments]", "{flag} clear", };
+        A = new String[] { "{flag} <effect type> | [arguments]",
+                           "{flag} clear", };
 
-        D = new String[] { "Adds potion effects to crafter.", "This flag can be used more than once to add more effects.", "", "Using 'clear' will remove all potion effects from player before adding any defined ones.", "", "The <effect type> argument must be an effect type, names for them can be found in '" + Files.FILE_INFO_NAMES + "' file at 'POTION EFFECT TYPE'.", "", "Optionally you can add more arguments separated by | character in any order:", "  duration <float>    = (default 3.0) potion effect duration in seconds, only works on non-instant effect types.", "  amplifier <num>     = (default 0) potion effect amplifier.", "  chance <0.01-100>%  = (default 100%) chance that the effect will be applied, this chance is individual for this effect.", "  morefx              = (default not set) more ambient particle effects, more screen intrusive.", };
+        D = new String[] { "Adds potion effects to crafter.",
+                           "This flag can be used more than once to add more effects.",
+                           "",
+                           "Using 'clear' will remove all potion effects from player before adding any defined ones.",
+                           "",
+                           "The <effect type> argument must be an effect type, names for them can be found in '" + Files.FILE_INFO_NAMES + "' file at 'POTION EFFECT TYPE'.",
+                           "",
+                           "Optionally you can add more arguments separated by | character in any order:",
+                           "  duration <float>    = (default 3.0) potion effect duration in seconds, only works on non-instant effect types.",
+                           "  amplifier <num>     = (default 0) potion effect amplifier.",
+                           "  chance <0.01-100>%  = (default 100%) chance that the effect will be applied, this chance is individual for this effect.",
+                           "  morefx              = (default not set) more ambient particle effects, more screen intrusive.", };
 
-        E = new String[] { "{flag} clear // remove all player's potion effects beforehand", "{flag} heal", "{flag} blindness | duration 60 | amplifier 5", "{flag} poison | chance 6.66% | morefx | amplifier 666 | duration 6.66", };
+        E = new String[] { "{flag} clear // remove all player's potion effects beforehand",
+                           "{flag} heal",
+                           "{flag} blindness | duration 60 | amplifier 5",
+                           "{flag} poison | chance 6.66% | morefx | amplifier 666 | duration 6.66", };
     }
 
     // Flag code
