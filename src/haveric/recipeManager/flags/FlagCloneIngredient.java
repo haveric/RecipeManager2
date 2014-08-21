@@ -51,7 +51,7 @@ public class FlagCloneIngredient extends Flag {
         E = new String[] { "{flag} data // just copy data value",
                            "{flag} data +2 // copy data value and add 2 to it",
                            "{flag} amount * 2 // copy amount and multiply it by 2",
-                           "{flag} data % 2 // get the remainer from data divided by 2.",
+                           "{flag} data % 2 // get the remainder from data divided by 2.",
                            "{flag} data | amount | lore // only copy these things",
                            "{flag} all // copy entire ingredient", };
     }

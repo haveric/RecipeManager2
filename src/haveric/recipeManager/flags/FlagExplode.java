@@ -33,10 +33,10 @@ public class FlagExplode extends Flag {
                            "",
                            "Replace <arguments> with the following arguments separated by | character:",
                            "  power <0.0 to ...>     = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
-                           "  fire                   = (defualt not set) Explosion sets fires.",
-                           "  nobreak                = (defualt not set) Makes explosion not break blocks.",
-                           "  nodamage [self]        = (defualt not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
-                           "  fail                   = (defualt not set) Explode if recipe failed as opposed to succeed.",
+                           "  fire                   = (default not set) Explosion sets fires.",
+                           "  nobreak                = (default not set) Makes explosion not break blocks.",
+                           "  nodamage [self]        = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
+                           "  fail                   = (default not set) Explode if recipe failed as opposed to succeed.",
                            "All arguments are optional and you can specify these arguments in any order.", };
 
         E = new String[] { "{flag} // will explode when recipe succeeeds with power 2, 100% chance and breaks blocks",

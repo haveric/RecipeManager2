@@ -18,7 +18,7 @@ public class FlagAddToBook extends Flag {
         D = new String[] { "This flag is a shortcut for quickly adding recipe(s) to books.",
                            "Using this flag more than once will overwrite the previous one.",
                            "",
-                           "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' how to do that.",
+                           "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' for how to do that.",
                            "",
                            "The '<book title>' argument must be an existing book's name, partial matching can be used.",
                            "Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.",
