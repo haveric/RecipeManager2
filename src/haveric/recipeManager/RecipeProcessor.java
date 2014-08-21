@@ -141,7 +141,13 @@ public class RecipeProcessor implements Runnable {
                     parsed = "Parsed";
                 }
                 if (errors > 0) {
-                    Messages.sendAndLog(sender, ChatColor.YELLOW + parsed + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + (sender == null ? ", see below:" : ", see console."));
+                    String senderMessage;
+                    if (sender == null) {
+                        senderMessage = ", see below:";
+                    } else {
+                        senderMessage = ", see console.";
+                    }
+                    Messages.sendAndLog(sender, ChatColor.YELLOW + parsed + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + senderMessage);
 
                     ErrorReporter.print(FILE_ERRORLOG);
                 } else {

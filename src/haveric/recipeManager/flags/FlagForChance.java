@@ -480,7 +480,8 @@ public class FlagForChance extends Flag {
                 float chance = 0;
 
                 for (ChanceFlag c : flags) {
-                    if ((chance += c.getChance()) >= random) {
+                    chance += c.getChance();
+                    if (chance >= random) {
                         trigger(c.getFlag(), a, method);
                         break;
                     }
