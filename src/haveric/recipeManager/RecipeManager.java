@@ -85,7 +85,7 @@ public class RecipeManager extends JavaPlugin {
         Players.init();
         Workbenches.init();
 
-        reload(null, false); // load data
+        reload(null, false, true); // load data
 
         FurnaceWorker.start(); // keep furnace worker running at all times because it has a lot of jobs
 
@@ -118,7 +118,7 @@ public class RecipeManager extends JavaPlugin {
      * @param check
      *            Set to true to only check recipes, settings are un affected.
      */
-    public void reload(CommandSender sender, boolean check) {
+    public void reload(CommandSender sender, boolean check, boolean firstTime) {
         Settings.getInstance().reload(sender); // (re)load settings
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
@@ -138,14 +138,16 @@ public class RecipeManager extends JavaPlugin {
             metrics.stop();
         }
 
-        if (Settings.getInstance().getClearRecipes()) {
-            Vanilla.removeAllButSpecialRecipes();
-            Recipes.getInstance().clean();
-        } else {
-            Vanilla.restoreInitialRecipes();
-            Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+        if (!firstTime) {
+            if (Settings.getInstance().getClearRecipes()) {
+                Vanilla.removeAllButSpecialRecipes();
+                Recipes.getInstance().clean();
+            } else {
+                Vanilla.restoreInitialRecipes();
+                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
 
-            Messages.sendAndLog(sender, "<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
+                Messages.sendAndLog(sender, "<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
+            }
         }
 
 
