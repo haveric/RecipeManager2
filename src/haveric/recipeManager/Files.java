@@ -478,7 +478,7 @@ public class Files {
         s.append(NL).append(String.format(" %-5s %-24s %-24s %-5s %s", "ID", "Name", "Alias", "Stack", "Max durability"));
 
         for (Material m : Material.values()) {
-            String alias = RecipeManager.settings.materialPrint.get(m);
+            String alias = Settings.getInstance().getMaterialPrint(m);
 
             String aliasString;
             if (alias == null) {
@@ -523,7 +523,7 @@ public class Files {
                 // Fall back to all if the target is null.
                 target = EnchantmentTarget.ALL;
             }
-            s.append(NL).append(String.format(" %-5d %-26s %-24s %-12s %s", e.getId(), e.getName(), RecipeManager.settings.enchantPrint.get(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
+            s.append(NL).append(String.format(" %-5d %-26s %-24s %-12s %s", e.getId(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
         }
 
         s.append(NL);

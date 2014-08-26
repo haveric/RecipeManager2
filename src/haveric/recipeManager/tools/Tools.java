@@ -3,8 +3,8 @@ package haveric.recipeManager.tools;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -78,7 +78,7 @@ public class Tools {
         } catch (NumberFormatException e) {
             value = Tools.parseAliasName(value);
 
-            enchant = RecipeManager.getSettings().enchantNames.get(value);
+            enchant = Settings.getInstance().getEnchantment(value);
         }
 
         if (enchant != null) {
@@ -250,7 +250,7 @@ public class Tools {
 
         value = split[0].trim();
 
-        Material material = RecipeManager.getSettings().materialNames.get(Tools.parseAliasName(value));
+        Material material = Settings.getInstance().getMaterial(value);
 
         if (material == null) {
             material = Material.matchMaterial(value);
@@ -279,7 +279,7 @@ public class Tools {
                 if (value.charAt(0) == '*' || value.equals("any")) {
                     data = Vanilla.DATA_WILDCARD;
                 } else {
-                    Map<String, Short> dataMap = RecipeManager.getSettings().materialDataNames.get(material);
+                    Map<String, Short> dataMap = Settings.getInstance().getMaterialDataNames(material);
                     Short dataValue;
                     if (dataMap != null) {
                         dataValue = dataMap.get(Tools.parseAliasName(value));

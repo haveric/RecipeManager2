@@ -17,50 +17,69 @@ import org.bukkit.enchantments.Enchantment;
  * RecipeManager's settings loaded from its config.yml, values are read-only.
  */
 public class Settings {
-    public final boolean SPECIAL_REPAIR;
-    public final boolean SPECIAL_REPAIR_METADATA;
+    public boolean SPECIAL_REPAIR;
+    public boolean SPECIAL_REPAIR_METADATA;
 
-    public final boolean SPECIAL_LEATHER_DYE;
-    public final boolean SPECIAL_FIREWORKS;
-    public final boolean SPECIAL_MAP_CLONING;
-    public final boolean SPECIAL_MAP_EXTENDING;
+    public boolean SPECIAL_LEATHER_DYE;
+    public boolean SPECIAL_FIREWORKS;
+    public boolean SPECIAL_MAP_CLONING;
+    public boolean SPECIAL_MAP_EXTENDING;
 
-    public final boolean SOUNDS_REPAIR;
-    public final boolean SOUNDS_FAILED;
-    public final boolean SOUNDS_FAILED_CLICK;
+    public boolean SOUNDS_REPAIR;
+    public boolean SOUNDS_FAILED;
+    public boolean SOUNDS_FAILED_CLICK;
 
-    public final boolean FIX_MOD_RESULTS;
-    public final boolean UPDATE_BOOKS;
-    public final boolean COLOR_CONSOLE;
+    public boolean FIX_MOD_RESULTS;
+    public boolean UPDATE_BOOKS;
+    public boolean COLOR_CONSOLE;
 
-    public final char FURNACE_SHIFT_CLICK;
-    public final int FURNACE_TICKS;
+    public char FURNACE_SHIFT_CLICK;
+    public int FURNACE_TICKS;
 
-    public final boolean MULTITHREADING;
+    public boolean MULTITHREADING;
 
-    public final boolean CLEAR_RECIPES;
+    public boolean CLEAR_RECIPES;
 
-    public final boolean UPDATE_CHECK_ENABLED;
-    public final int UPDATE_CHECK_FREQUENCY;
+    public boolean UPDATE_CHECK_ENABLED;
+    public int UPDATE_CHECK_FREQUENCY;
 
-    public final boolean METRICS;
+    public boolean METRICS;
 
-    protected final String LASTCHANGED;
+    protected String LASTCHANGED;
 
-    public Map<String, Material> materialNames = new HashMap<String, Material>();
-    public Map<Material, Map<String, Short>> materialDataNames = new HashMap<Material, Map<String, Short>>();
-    public Map<String, Enchantment> enchantNames = new HashMap<String, Enchantment>();
+    private static Settings instance;
 
-    public Map<Material, String> materialPrint = new HashMap<Material, String>();
-    public Map<Material, Map<Short, String>> materialDataPrint = new HashMap<Material, Map<Short, String>>();
-    protected Map<Enchantment, String> enchantPrint = new HashMap<Enchantment, String>();
+    private Map<String, Material> materialNames;
+    private Map<Material, Map<String, Short>> materialDataNames;
+    private Map<String, Enchantment> enchantNames;
 
-    public static void reload(CommandSender sender) {
-        new Settings(sender);
+    private Map<Material, String> materialPrint;
+    private Map<Material, Map<Short, String>> materialDataPrint;
+    private Map<Enchantment, String> enchantPrint;
+
+    protected Settings() {
+       // Exists only to defeat instantiation.
     }
 
-    private Settings(CommandSender sender) {
-        RecipeManager.settings = this;
+    public static Settings getInstance() {
+        if (instance == null) {
+            instance = new Settings();
+        }
+
+        return instance;
+    }
+
+    public static void tearDown() {
+        instance = null;
+    }
+
+    public void reload(CommandSender sender) {
+        materialNames = new HashMap<String, Material>();
+        materialDataNames = new HashMap<Material, Map<String, Short>>();
+        enchantNames = new HashMap<String, Enchantment>();
+        materialPrint = new HashMap<Material, String>();
+        materialDataPrint = new HashMap<Material, Map<Short, String>>();
+        enchantPrint = new HashMap<Enchantment, String>();
 
         // Load/reload/generate config.yml
         FileConfiguration yml = loadYML(Files.FILE_CONFIG);
@@ -127,10 +146,10 @@ public class Settings {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
-        /*
-         * TODO remove for(Material m : Material.values()) { materialNames.put(String.valueOf(m.getId()), m); materialNames.put(Tools.parseAliasName(m.toString()), m); materialPrint.put(m,
-         * Tools.parseAliasPrint(m.toString())); }
-         */
+        //
+        // TODO remove for(Material m : Material.values()) { materialNames.put(String.valueOf(m.getId()), m); materialNames.put(Tools.parseAliasName(m.toString()), m); materialPrint.put(m,
+        // Tools.parseAliasPrint(m.toString())); }
+        //
 
         for (String arg : yml.getKeys(false)) {
             if (arg.equals("lastchanged")) {
@@ -175,10 +194,10 @@ public class Settings {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
-        /*
-         * TODO remove for(Enchantment e : Enchantment.values()) { enchantNames.put(String.valueOf(e.getId()), e); enchantNames.put(Tools.parseAliasName(e.toString()), e); enchantPrint.put(e,
-         * Tools.parseAliasPrint(e.toString())); }
-         */
+        //
+        // TODO remove for(Enchantment e : Enchantment.values()) { enchantNames.put(String.valueOf(e.getId()), e); enchantNames.put(Tools.parseAliasName(e.toString()), e); enchantPrint.put(e,
+        // Tools.parseAliasPrint(e.toString())); }
+        //
 
         for (String arg : yml.getKeys(false)) {
             if (arg.equals("lastchanged")) {
@@ -286,5 +305,29 @@ public class Settings {
         }
 
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+    public Enchantment getEnchantment(String name) {
+        return enchantNames.get(name);
+    }
+
+    public Material getMaterial(String name) {
+        return materialNames.get(Tools.parseAliasName(name));
+    }
+
+    public Map<String, Short> getMaterialDataNames(Material material) {
+        return materialDataNames.get(material);
+    }
+
+    public String getMaterialPrint(Material material) {
+        return materialPrint.get(material);
+    }
+
+    public Map<Short, String> getMaterialDataPrint(Material material) {
+        return materialDataPrint.get(material);
+    }
+
+    public String getEnchantPrint(Enchantment enchant) {
+        return enchantPrint.get(enchant);
     }
 }

@@ -36,7 +36,7 @@ public class RecipeManagerEnabledEvent extends Event {
      * @return RecipeManager.getSettings();
      */
     public Settings getSettings() {
-        return RecipeManager.getSettings();
+        return Settings.getInstance();
     }
 
     @Override

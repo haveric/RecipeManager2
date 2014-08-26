@@ -1,7 +1,7 @@
 package haveric.recipeManager.tools;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.recipes.ItemResult;
 
@@ -90,14 +90,14 @@ public class ToolsItem {
         if (meta != null && meta.hasDisplayName()) {
             name = ChatColor.ITALIC + meta.getDisplayName();
         } else {
-            name = RecipeManager.getSettings().materialPrint.get(item.getType());
+            name = Settings.getInstance().getMaterialPrint(item.getType());
 
             if (name == null) {
                 name = Tools.parseAliasPrint(item.getType().toString());
             }
         }
 
-        Map<Short, String> dataMap = RecipeManager.getSettings().materialDataPrint.get(item.getType());
+        Map<Short, String> dataMap = Settings.getInstance().getMaterialDataPrint(item.getType());
 
         if (dataMap != null) {
             itemData = dataMap.get(item.getDurability());
@@ -149,14 +149,14 @@ public class ToolsItem {
         if (meta != null && meta.hasDisplayName()) {
             name = ChatColor.ITALIC + meta.getDisplayName();
         } else {
-            name = RecipeManager.getSettings().materialPrint.get(item.getType());
+            name = Settings.getInstance().getMaterialPrint(item.getType());
 
             if (name == null) {
                 name = Tools.parseAliasPrint(item.getType().toString());
             }
         }
 
-        Map<Short, String> dataMap = RecipeManager.getSettings().materialDataPrint.get(item.getType());
+        Map<Short, String> dataMap = Settings.getInstance().getMaterialDataPrint(item.getType());
 
         if (dataMap != null) {
             itemData = dataMap.get(item.getDurability());

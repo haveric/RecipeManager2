@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,10 +40,10 @@ public class RecipeManager extends JavaPlugin {
     protected static Recipes recipes;
     protected static RecipeBooks recipeBooks;
     protected static Events events;
-    protected static Settings settings;
     protected static Economy economy;
     protected static Permissions permissions;
     private Metrics metrics;
+    static Logger log;
 
     private HashMap<String, String> plugins = new HashMap<String, String>();
 
@@ -55,6 +56,8 @@ public class RecipeManager extends JavaPlugin {
             Messages.info(ChatColor.RED + "Plugin is already enabled!");
             return;
         }
+
+        log = getLogger();
 
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
@@ -116,21 +119,15 @@ public class RecipeManager extends JavaPlugin {
      *            Set to true to only check recipes, settings are un affected.
      */
     public void reload(CommandSender sender, boolean check) {
-        boolean previousClearRecipes;
-        if (settings == null) {
-            previousClearRecipes = false;
-        } else {
-            previousClearRecipes = settings.CLEAR_RECIPES;
-        }
-
-        Settings.reload(sender); // (re)load settings
+        RecipeManager.log.info("Reloading.......");
+        Settings.getInstance().reload(sender); // (re)load settings
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
 
         Updater.init(32835, null);
 
         if (metrics == null) {
-            if (settings.METRICS) { // start/stop metrics accordingly
+            if (Settings.getInstance().METRICS) { // start/stop metrics accordingly
                 try {
                     metrics = new Metrics(this);
                     metrics.start();
@@ -142,17 +139,16 @@ public class RecipeManager extends JavaPlugin {
             metrics.stop();
         }
 
-        if (previousClearRecipes != settings.CLEAR_RECIPES) {
-            if (settings.CLEAR_RECIPES) {
-                Vanilla.removeAllButSpecialRecipes();
-                Recipes.getInstance().clean();
-            } else {
-                Vanilla.restoreInitialRecipes();
-                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+        if (Settings.getInstance().CLEAR_RECIPES) {
+            Vanilla.removeAllButSpecialRecipes();
+            Recipes.getInstance().clean();
+        } else {
+            Vanilla.restoreInitialRecipes();
+            Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
 
-                Messages.sendAndLog(sender, "<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
-            }
+            Messages.sendAndLog(sender, "<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
         }
+
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
@@ -235,7 +231,7 @@ public class RecipeManager extends JavaPlugin {
             events.clean();
             events = null;
 
-            settings = null;
+            Settings.tearDown();
 
             permissions.clean();
             permissions = null;
@@ -276,16 +272,6 @@ public class RecipeManager extends JavaPlugin {
     public static RecipeBooks getRecipeBooks() {
         validatePluginEnabled();
         return recipeBooks;
-    }
-
-    /**
-     * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
-     * @return Configured settings
-     */
-    public static Settings getSettings() {
-        validatePluginEnabled();
-        return settings;
     }
 
     /**

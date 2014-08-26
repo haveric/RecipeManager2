@@ -77,7 +77,7 @@ public class RecipeProcessor implements Runnable {
 
         ErrorReporter.startCatching();
 
-        if (RecipeManager.getSettings().MULTITHREADING) {
+        if (Settings.getInstance().MULTITHREADING) {
             task = Bukkit.getScheduler().runTaskAsynchronously(RecipeManager.getPlugin(), this);
         } else {
             run();
@@ -174,7 +174,7 @@ public class RecipeProcessor implements Runnable {
             }
 
             // Calling registerRecipesToServer() in main thread...
-            if (RecipeManager.getSettings().MULTITHREADING) {
+            if (Settings.getInstance().MULTITHREADING) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {

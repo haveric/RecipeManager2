@@ -29,7 +29,7 @@ class FurnaceWorker implements Runnable {
     private FurnaceWorker() {
         stop();
 
-        int ticks = RecipeManager.getSettings().FURNACE_TICKS;
+        int ticks = Settings.getInstance().FURNACE_TICKS;
         tickRate = 10 * ticks;
         task = Bukkit.getScheduler().runTaskTimer(RecipeManager.getPlugin(), this, 0, ticks);
     }

@@ -408,12 +408,12 @@ public enum Messages {
     public void printOnce(CommandSender sender, String customMessage, Object... variables) {
         if (sender != null) {
             Set<String> set = sent.get(sender.getName());
-    
+
             if (set == null) {
                 set = new HashSet<String>();
                 sent.put(sender.getName(), set);
             }
-    
+
             if (!set.contains(path)) {
                 set.add(path);
                 print(sender, customMessage, variables);
@@ -437,7 +437,7 @@ public enum Messages {
             sender = Bukkit.getConsoleSender();
         }
 
-        boolean removeColors = (!RecipeManager.getSettings().COLOR_CONSOLE && sender instanceof ConsoleCommandSender);
+        boolean removeColors = (!Settings.getInstance().COLOR_CONSOLE && sender instanceof ConsoleCommandSender);
 
         for (int i = 0; i < messages.length; i++) {
             messages[i] = Tools.parseColors(messages[i], removeColors);
@@ -462,7 +462,7 @@ public enum Messages {
             message = "[RecipeManager] " + message;
         }
 
-        sender.sendMessage(Tools.parseColors(message, (sender instanceof ConsoleCommandSender && !RecipeManager.getSettings().COLOR_CONSOLE)));
+        sender.sendMessage(Tools.parseColors(message, (sender instanceof ConsoleCommandSender && !Settings.getInstance().COLOR_CONSOLE)));
     }
 
     public static void sendAndLog(CommandSender sender, String message) {
@@ -474,15 +474,15 @@ public enum Messages {
     }
 
     public static void sendDenySound(Player player, Location location) {
-        sendSound(player, location, Sound.NOTE_BASS, 0.8f, 4, RecipeManager.getSettings().SOUNDS_FAILED_CLICK);
+        sendSound(player, location, Sound.NOTE_BASS, 0.8f, 4, Settings.getInstance().SOUNDS_FAILED_CLICK);
     }
 
     public static void sendFailSound(Player player, Location location) {
-        sendSound(player, location, Sound.NOTE_PLING, 0.8f, 4, RecipeManager.getSettings().SOUNDS_FAILED);
+        sendSound(player, location, Sound.NOTE_PLING, 0.8f, 4, Settings.getInstance().SOUNDS_FAILED);
     }
 
     public static void sendRepairSound(Player player, Location location) {
-        sendSound(player, location, Sound.ANVIL_USE, 0.8f, 4, RecipeManager.getSettings().SOUNDS_REPAIR);
+        sendSound(player, location, Sound.ANVIL_USE, 0.8f, 4, Settings.getInstance().SOUNDS_REPAIR);
     }
 
     private static void sendSound(Player player, Location location, Sound sound, float volume, float pitch, boolean condition) {

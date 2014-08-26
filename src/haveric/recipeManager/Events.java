@@ -194,25 +194,25 @@ public class Events implements Listener {
 
     private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult) {
         if (!result.equals(recipeResult)) { // result was processed by the game and it doesn't match the original recipe
-            if (!RecipeManager.getSettings().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
+            if (!Settings.getInstance().SPECIAL_LEATHER_DYE && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
                 Messages.CRAFT_SPECIAL_LEATHERDYE.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
 
-            if (!RecipeManager.getSettings().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE)) {
+            if (!Settings.getInstance().SPECIAL_MAP_CLONING && recipeResult.equals(Vanilla.RECIPE_MAPCLONE)) {
                 Messages.CRAFT_SPECIAL_MAP_CLONING.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
 
-            if (!RecipeManager.getSettings().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
+            if (!Settings.getInstance().SPECIAL_MAP_EXTENDING && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
                 Messages.CRAFT_SPECIAL_MAP_EXTENDING.printOnce(player);
                 inv.setResult(null);
                 return true;
             }
 
-            if (!RecipeManager.getSettings().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
+            if (!Settings.getInstance().SPECIAL_FIREWORKS && recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
                 Messages.CRAFT_SPECIAL_FIREWORKS.printOnce(player);
                 inv.setResult(null);
                 return true;
@@ -225,7 +225,7 @@ public class Events implements Listener {
     }
 
     private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) throws Throwable {
-        if (!RecipeManager.getSettings().SPECIAL_REPAIR) {
+        if (!Settings.getInstance().SPECIAL_REPAIR) {
             Messages.sendDenySound(player, location);
             Messages.CRAFT_REPAIR_DISABLED.printOnce(player);
             inv.setResult(null);
@@ -234,7 +234,7 @@ public class Events implements Listener {
 
         ItemStack result = inv.getRecipe().getResult();
 
-        if (RecipeManager.getSettings().SPECIAL_REPAIR_METADATA) {
+        if (Settings.getInstance().SPECIAL_REPAIR_METADATA) {
             ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];
             int[] repair = new int[2];
@@ -501,7 +501,7 @@ public class Events implements Listener {
             Workbenches.remove(human);
         }
 
-        if (RecipeManager.getSettings().FIX_MOD_RESULTS) {
+        if (Settings.getInstance().FIX_MOD_RESULTS) {
             for (ItemStack item : human.getInventory().getContents()) {
                 itemProcess(item);
             }
@@ -648,7 +648,7 @@ public class Events implements Listener {
                 // Then checks if the clicked item is a fuel recipe and sends it to fuel slot if so, otherwise to ingredient slot
                 // If it's left/right click mode then see if it's right click and send to fuel slot otherwise to ingredient slot
                 int targetSlot = 0;
-                if (RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f') {
+                if (Settings.getInstance().FURNACE_SHIFT_CLICK == 'f') {
                     if (RecipeManager.getRecipes().getFuelRecipe(clicked) != null || event.isRightClick()) {
                         targetSlot = 1;
                     }
@@ -658,7 +658,7 @@ public class Events implements Listener {
                 boolean similarItems = clicked.isSimilar(item); // Check if the clicked item is similar to the item at the targeted slot
 
                 // Check if it's normal shift+click mode setting and if targeted slot is the fuel slot and there is an item there but it's not similar to our clicked item
-                if (RecipeManager.getSettings().FURNACE_SHIFT_CLICK == 'f' && targetSlot == 1 && item != null && !similarItems) {
+                if (Settings.getInstance().FURNACE_SHIFT_CLICK == 'f' && targetSlot == 1 && item != null && !similarItems) {
                     targetSlot = 0; // change the target slot to ingredient slot
                     item = inv.getItem(targetSlot); // get the item at the new set slot
                     similarItems = clicked.isSimilar(item); // update similarity check
@@ -1256,11 +1256,11 @@ public class Events implements Listener {
     public void playerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
-        if (RecipeManager.getSettings().UPDATE_BOOKS) {
+        if (Settings.getInstance().UPDATE_BOOKS) {
             RecipeManager.getRecipeBooks().updateBook(player, player.getInventory().getItem(event.getNewSlot()));
         }
 
-        if (RecipeManager.getSettings().FIX_MOD_RESULTS) {
+        if (Settings.getInstance().FIX_MOD_RESULTS) {
             itemProcess(event.getPlayer().getInventory().getItem(event.getNewSlot()));
         }
     }
@@ -1303,7 +1303,7 @@ public class Events implements Listener {
 
         Players.addJoined(player);
 
-        if (RecipeManager.getSettings().UPDATE_CHECK_ENABLED && player.hasPermission("recipemanager.command.rmupdate")) {
+        if (Settings.getInstance().UPDATE_CHECK_ENABLED && player.hasPermission("recipemanager.command.rmupdate")) {
             String latestVersion = Updater.getLatestVersion();
             String currentVersion = Updater.getCurrentVersion();
 
