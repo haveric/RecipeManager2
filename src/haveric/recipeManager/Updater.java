@@ -55,7 +55,7 @@ public class Updater {
 
         query(null); // Do one initial check
 
-        int time = Settings.getInstance().UPDATE_CHECK_FREQUENCY;
+        int time = Settings.getInstance().getUpdateCheckFrequency();
 
         if (time > 0) {
             time *= 60 * 60 * 20;
@@ -150,7 +150,7 @@ public class Updater {
      * Query the API to find the latest approved file's details.
      */
     public static void query(CommandSender sender) {
-        if (Settings.getInstance().UPDATE_CHECK_ENABLED) {
+        if (Settings.getInstance().getUpdateCheckEnabled()) {
             URL url = null;
 
             try {

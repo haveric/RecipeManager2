@@ -119,7 +119,6 @@ public class RecipeManager extends JavaPlugin {
      *            Set to true to only check recipes, settings are un affected.
      */
     public void reload(CommandSender sender, boolean check) {
-        RecipeManager.log.info("Reloading.......");
         Settings.getInstance().reload(sender); // (re)load settings
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
@@ -127,7 +126,7 @@ public class RecipeManager extends JavaPlugin {
         Updater.init(32835, null);
 
         if (metrics == null) {
-            if (Settings.getInstance().METRICS) { // start/stop metrics accordingly
+            if (Settings.getInstance().getMetrics()) { // start/stop metrics accordingly
                 try {
                     metrics = new Metrics(this);
                     metrics.start();
@@ -139,7 +138,7 @@ public class RecipeManager extends JavaPlugin {
             metrics.stop();
         }
 
-        if (Settings.getInstance().CLEAR_RECIPES) {
+        if (Settings.getInstance().getClearRecipes()) {
             Vanilla.removeAllButSpecialRecipes();
             Recipes.getInstance().clean();
         } else {

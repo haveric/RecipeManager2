@@ -56,10 +56,10 @@ public class RecipeProcessor implements Runnable {
     private final List<String> fileList = new ArrayList<String>();
 
     // Constants
-    private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
-    private final String DIR_RECIPES = DIR_PLUGIN + "recipes" + File.separator;
-    private final String FILE_ERRORLOG = DIR_RECIPES + "errors.log";
-    private final String[] COMMENTS = { "//", "#" };
+    private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private static final String DIR_RECIPES = DIR_PLUGIN + "recipes" + File.separator;
+    private static final String FILE_ERRORLOG = DIR_RECIPES + "errors.log";
+    private static final String[] COMMENTS = { "//", "#" };
 
     private static BukkitTask task;
 
@@ -77,7 +77,7 @@ public class RecipeProcessor implements Runnable {
 
         ErrorReporter.startCatching();
 
-        if (Settings.getInstance().MULTITHREADING) {
+        if (Settings.getInstance().getMultithreading()) {
             task = Bukkit.getScheduler().runTaskAsynchronously(RecipeManager.getPlugin(), this);
         } else {
             run();
@@ -174,7 +174,7 @@ public class RecipeProcessor implements Runnable {
             }
 
             // Calling registerRecipesToServer() in main thread...
-            if (Settings.getInstance().MULTITHREADING) {
+            if (Settings.getInstance().getMultithreading()) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {

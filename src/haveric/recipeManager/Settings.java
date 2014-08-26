@@ -17,45 +17,46 @@ import org.bukkit.enchantments.Enchantment;
  * RecipeManager's settings loaded from its config.yml, values are read-only.
  */
 public class Settings {
-    public boolean SPECIAL_REPAIR;
-    public boolean SPECIAL_REPAIR_METADATA;
+    private static final boolean SPECIAL_REPAIR_DEFAULT = true;
+    private static final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
 
-    public boolean SPECIAL_LEATHER_DYE;
-    public boolean SPECIAL_FIREWORKS;
-    public boolean SPECIAL_MAP_CLONING;
-    public boolean SPECIAL_MAP_EXTENDING;
+    private static final boolean SPECIAL_LEATHER_DYE_DEFAULT = true;
+    private static final boolean SPECIAL_FIREWORKS_DEFAULT = true;
+    private static final boolean SPECIAL_MAP_CLONING_DEFAULT = true;
+    private static final boolean SPECIAL_MAP_EXTENDING_DEFAULT = true;
 
-    public boolean SOUNDS_REPAIR;
-    public boolean SOUNDS_FAILED;
-    public boolean SOUNDS_FAILED_CLICK;
+    private static final boolean SOUNDS_REPAIR_DEFAULT = true;
+    private static final boolean SOUNDS_FAILED_DEFAULT = true;
+    private static final boolean SOUNDS_FAILED_CLICK_DEFAULT = true;
 
-    public boolean FIX_MOD_RESULTS;
-    public boolean UPDATE_BOOKS;
-    public boolean COLOR_CONSOLE;
+    private static final boolean FIX_MOD_RESULTS_DEFAULT = false;
+    private static final boolean UPDATE_BOOKS_DEFAULT = true;
+    private static final boolean COLOR_CONSOLE_DEFAULT = true;
 
-    public char FURNACE_SHIFT_CLICK;
-    public int FURNACE_TICKS;
+    private static final String FURNACE_SHIFT_CLICK_DEFAULT = "f";
+    private static final int FURNACE_TICKS_DEFAULT = 1;
 
-    public boolean MULTITHREADING;
+    private static final boolean MULTITHREADING_DEFAULT = true;
 
-    public boolean CLEAR_RECIPES;
+    private static final boolean CLEAR_RECIPES_DEFAULT = false;
 
-    public boolean UPDATE_CHECK_ENABLED;
-    public int UPDATE_CHECK_FREQUENCY;
+    private static final boolean UPDATE_CHECK_ENABLED_DEFAULT = true;
+    private static final int UPDATE_CHECK_FREQUENCY_DEFAULT = 6;
 
-    public boolean METRICS;
+    private static final boolean METRICS_DEFAULT = true;
 
-    protected String LASTCHANGED;
-
+    private static FileConfiguration fileConfig;
+    private static FileConfiguration itemAliasesConfig;
+    private static FileConfiguration enchantAliasesConfig;
     private static Settings instance;
 
-    private Map<String, Material> materialNames;
-    private Map<Material, Map<String, Short>> materialDataNames;
-    private Map<String, Enchantment> enchantNames;
+    private static Map<String, Material> materialNames;
+    private static Map<Material, Map<String, Short>> materialDataNames;
+    private static Map<String, Enchantment> enchantNames;
 
-    private Map<Material, String> materialPrint;
-    private Map<Material, Map<Short, String>> materialDataPrint;
-    private Map<Enchantment, String> enchantPrint;
+    private static Map<Material, String> materialPrint;
+    private static Map<Material, Map<Short, String>> materialDataPrint;
+    private static Map<Enchantment, String> enchantPrint;
 
     protected Settings() {
        // Exists only to defeat instantiation.
@@ -64,6 +65,8 @@ public class Settings {
     public static Settings getInstance() {
         if (instance == null) {
             instance = new Settings();
+
+            init();
         }
 
         return instance;
@@ -73,7 +76,7 @@ public class Settings {
         instance = null;
     }
 
-    public void reload(CommandSender sender) {
+    private static void init() {
         materialNames = new HashMap<String, Material>();
         materialDataNames = new HashMap<Material, Map<String, Short>>();
         enchantNames = new HashMap<String, Enchantment>();
@@ -82,67 +85,42 @@ public class Settings {
         enchantPrint = new HashMap<Enchantment, String>();
 
         // Load/reload/generate config.yml
-        FileConfiguration yml = loadYML(Files.FILE_CONFIG);
+        fileConfig = loadYML(Files.FILE_CONFIG);
+    }
 
-        SPECIAL_REPAIR = yml.getBoolean("special-recipes.repair", true);
-        SPECIAL_REPAIR_METADATA = yml.getBoolean("special-recipes.repair-metadata", false);
+    public void reload(CommandSender sender) {
+        init();
 
-        SPECIAL_LEATHER_DYE = yml.getBoolean("special-recipes.leather-armor-dye", true);
-        SPECIAL_FIREWORKS = yml.getBoolean("special-recipes.fireworks", true);
-        SPECIAL_MAP_CLONING = yml.getBoolean("special-recipes.map-cloning", true);
-        SPECIAL_MAP_EXTENDING = yml.getBoolean("special-recipes.map-extending", true);
+        String lastChanged = fileConfig.getString("lastchanged");
 
-        SOUNDS_REPAIR = yml.getBoolean("sounds.repair", true);
-        SOUNDS_FAILED = yml.getBoolean("sounds.failed", true);
-        SOUNDS_FAILED_CLICK = yml.getBoolean("sounds.failed_click", true);
-
-        FIX_MOD_RESULTS = yml.getBoolean("fix-mod-results", false);
-        UPDATE_BOOKS = yml.getBoolean("update-books", true);
-        COLOR_CONSOLE = yml.getBoolean("color-console", true);
-
-        FURNACE_SHIFT_CLICK = yml.getString("furnace-shift-click", "f").charAt(0);
-
-        int ticks = yml.getInt("furnace-ticks", 1);
-
-        if (ticks < 1 || ticks > 20) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CONFIG + "' has invalid value for 'furnace-ticks', it must be between 1 and 20");
-        }
-
-        FURNACE_TICKS = ticks;
-
-        MULTITHREADING = yml.getBoolean("multithreading", true);
-
-        CLEAR_RECIPES = yml.getBoolean("clear-recipes", false);
-
-        UPDATE_CHECK_ENABLED = yml.getBoolean("update-check.enabled", true);
-        UPDATE_CHECK_FREQUENCY = Math.max(yml.getInt("update-check.frequency", 6), 0);
-
-        METRICS = yml.getBoolean("metrics", true);
-
-        LASTCHANGED = yml.getString("lastchanged");
-
-        if (!Files.LASTCHANGED_CONFIG.equals(LASTCHANGED)) {
+        if (!Files.LASTCHANGED_CONFIG.equals(lastChanged)) {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CONFIG + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
-        // TODO fill all settings into these
         Messages.log("config.yml settings:");
-        Messages.log("    special-recipes.repair: " + SPECIAL_REPAIR);
-        Messages.log("    special-recipes.repair-metadata: " + SPECIAL_REPAIR_METADATA);
-        Messages.log("    special-recipes.leather-dye: " + SPECIAL_LEATHER_DYE);
-        Messages.log("    special-recipes.fireworks: " + SPECIAL_FIREWORKS);
-        Messages.log("    special-recipes.map-cloning: " + SPECIAL_MAP_CLONING);
-        Messages.log("    special-recipes.map-extending: " + SPECIAL_MAP_EXTENDING);
-        Messages.log("    fix-mod-results: " + FIX_MOD_RESULTS);
-        Messages.log("    update-books: " + UPDATE_BOOKS);
-        Messages.log("    color-console: " + COLOR_CONSOLE);
-        Messages.log("    furnace-shift-click: " + FURNACE_SHIFT_CLICK);
-        Messages.log("    furnace-ticks: " + FURNACE_TICKS);
-        Messages.log("    metrics: " + METRICS);
+        Messages.log("    special-recipes.repair: " + getSpecialRepair());
+        Messages.log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
+        Messages.log("    special-recipes.leather-dye: " + getSpecialLeatherDye());
+        Messages.log("    special-recipes.fireworks: " + getSpecialFireworks());
+        Messages.log("    special-recipes.map-cloning: " + getSpecialMapCloning());
+        Messages.log("    special-recipes.map-extending: " + getSpecialMapExtending());
+        Messages.log("    sounds.failed: " + getSoundsFailed());
+        Messages.log("    sounds.failed_click: " + getSoundsFailedClick());
+        Messages.log("    sounds.repair: " + getSoundsRepair());
+        Messages.log("    update-books: " + getUpdateBooks());
+        Messages.log("    color-console: " + getColorConsole());
+        Messages.log("    furnace-shift-click: " + getFurnaceShiftClick());
+        Messages.log("    furnace-ticks: " + getFurnaceTicks(sender));
+        Messages.log("    multithreading: " + getMultithreading());
+        Messages.log("    fix-mod-results: " + getFixModResults());
+        Messages.log("    clear-recipes: " + getClearRecipes());
+        Messages.log("    update-check.enabled: " + getUpdateCheckEnabled());
+        Messages.log("    update-check.frequency: " + getUpdateCheckFrequency());
+        Messages.log("    metrics: " + getMetrics());
 
-        yml = loadYML(Files.FILE_ITEM_ALIASES);
+        itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
 
-        if (!Files.LASTCHANGED_ITEM_ALIASES.equals(yml.get("lastchanged"))) {
+        if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.get("lastchanged"))) {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
@@ -151,7 +129,7 @@ public class Settings {
         // Tools.parseAliasPrint(m.toString())); }
         //
 
-        for (String arg : yml.getKeys(false)) {
+        for (String arg : itemAliasesConfig.getKeys(false)) {
             if (arg.equals("lastchanged")) {
                 continue;
             }
@@ -163,7 +141,7 @@ public class Settings {
                 continue;
             }
 
-            Object value = yml.get(arg);
+            Object value = itemAliasesConfig.get(arg);
 
             if (value instanceof String) {
                 parseMaterialNames(sender, (String) value, material);
@@ -188,9 +166,9 @@ public class Settings {
             }
         }
 
-        yml = loadYML(Files.FILE_ENCHANT_ALIASES);
+        enchantAliasesConfig = loadYML(Files.FILE_ENCHANT_ALIASES);
 
-        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(yml.get("lastchanged"))) {
+        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.get("lastchanged"))) {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
@@ -199,7 +177,7 @@ public class Settings {
         // Tools.parseAliasPrint(e.toString())); }
         //
 
-        for (String arg : yml.getKeys(false)) {
+        for (String arg : enchantAliasesConfig.getKeys(false)) {
             if (arg.equals("lastchanged")) {
                 continue;
             }
@@ -211,7 +189,7 @@ public class Settings {
                 continue;
             }
 
-            String names = yml.getString(arg);
+            String names = enchantAliasesConfig.getString(arg);
             String[] split = names.split(",");
 
             for (String str : split) {
@@ -294,7 +272,7 @@ public class Settings {
         }
     }
 
-    private FileConfiguration loadYML(String fileName) {
+    private static FileConfiguration loadYML(String fileName) {
         File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + fileName);
 
         if (!file.exists()) {
@@ -306,6 +284,89 @@ public class Settings {
 
         return YamlConfiguration.loadConfiguration(file);
     }
+
+    public boolean getSpecialRepair() {
+        return fileConfig.getBoolean("special-recipes.repair", SPECIAL_REPAIR_DEFAULT);
+    }
+
+    public boolean getSpecialRepairMetadata() {
+        return fileConfig.getBoolean("special-recipes.repair-metadata", SPECIAL_REPAIR_METADATA_DEFAULT);
+    }
+
+    public boolean getSpecialLeatherDye() {
+        return fileConfig.getBoolean("special-recipes.leather-armor-dye", SPECIAL_LEATHER_DYE_DEFAULT);
+    }
+
+    public boolean getSpecialFireworks() {
+        return fileConfig.getBoolean("special-recipes.fireworks", SPECIAL_FIREWORKS_DEFAULT);
+    }
+
+    public boolean getSpecialMapCloning() {
+        return fileConfig.getBoolean("special-recipes.map-cloning", SPECIAL_MAP_CLONING_DEFAULT);
+    }
+
+    public boolean getSpecialMapExtending() {
+        return fileConfig.getBoolean("special-recipes.map-extending", SPECIAL_MAP_EXTENDING_DEFAULT);
+    }
+
+    public boolean getSoundsRepair() {
+        return fileConfig.getBoolean("sounds.repair", SOUNDS_REPAIR_DEFAULT);
+    }
+
+    public boolean getSoundsFailed() {
+        return fileConfig.getBoolean("sounds.failed", SOUNDS_FAILED_DEFAULT);
+    }
+
+    public boolean getSoundsFailedClick() {
+        return fileConfig.getBoolean("sounds.failed_click", SOUNDS_FAILED_CLICK_DEFAULT);
+    }
+
+    public boolean getFixModResults() {
+        return fileConfig.getBoolean("fix-mod-results", FIX_MOD_RESULTS_DEFAULT);
+    }
+
+    public boolean getUpdateBooks() {
+        return fileConfig.getBoolean("update-books", UPDATE_BOOKS_DEFAULT);
+    }
+
+    public boolean getColorConsole() {
+        return fileConfig.getBoolean("color-console", COLOR_CONSOLE_DEFAULT);
+    }
+
+    public char getFurnaceShiftClick() {
+        return fileConfig.getString("furnace-shift-click", FURNACE_SHIFT_CLICK_DEFAULT).charAt(0);
+    }
+
+    public int getFurnaceTicks(CommandSender sender) {
+        int ticks = fileConfig.getInt("furnace-ticks", FURNACE_TICKS_DEFAULT);
+
+        if (ticks < 1 || ticks > 20) {
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CONFIG + "' has invalid value for 'furnace-ticks', it must be between 1 and 20");
+        }
+
+        return ticks;
+    }
+
+    public boolean getMultithreading() {
+        return fileConfig.getBoolean("multithreading", MULTITHREADING_DEFAULT);
+    }
+
+    public boolean getClearRecipes() {
+        return fileConfig.getBoolean("clear-recipes", CLEAR_RECIPES_DEFAULT);
+    }
+
+    public boolean getUpdateCheckEnabled() {
+        return fileConfig.getBoolean("update-check.enabled", UPDATE_CHECK_ENABLED_DEFAULT);
+    }
+
+    public int getUpdateCheckFrequency() {
+        return Math.max(fileConfig.getInt("update-check.frequency", UPDATE_CHECK_FREQUENCY_DEFAULT), 0);
+    }
+
+    public boolean getMetrics() {
+        return fileConfig.getBoolean("metrics", METRICS_DEFAULT);
+    }
+
 
     public Enchantment getEnchantment(String name) {
         return enchantNames.get(name);
