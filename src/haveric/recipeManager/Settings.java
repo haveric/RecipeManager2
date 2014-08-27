@@ -341,7 +341,8 @@ public class Settings {
         int ticks = fileConfig.getInt("furnace-ticks", FURNACE_TICKS_DEFAULT);
 
         if (ticks < 1 || ticks > 20) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CONFIG + "' has invalid value for 'furnace-ticks', it must be between 1 and 20");
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CONFIG + "' has invalid value for 'furnace-ticks', it must be between 1 and 20. Defaulting to 1.");
+            ticks = 1;
         }
 
         return ticks;
