@@ -27,7 +27,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -45,8 +44,6 @@ public class RecipeManager extends JavaPlugin {
     protected static Recipes recipes;
     protected static RecipeBooks recipeBooks;
     protected static Events events;
-    //protected static Economy economy;
-    //protected static Permissions permissions;
     private Metrics metrics;
     static Logger log;
 
@@ -57,17 +54,12 @@ public class RecipeManager extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (plugin != null) {
-            Messages.info(ChatColor.RED + "Plugin is already enabled!");
-            return;
-        }
-
+        plugin = this;
         log = getLogger();
 
         PluginManager pm = getServer().getPluginManager();
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
-        plugin = this;
 
         FurnaceData.init(); // dummy caller
         Furnaces.load(); // load saved furnaces...
@@ -76,9 +68,6 @@ public class RecipeManager extends JavaPlugin {
         recipes = new Recipes();
 
         setupVault(pm);
-
-        //economy = new Economy();
-        //permissions = new Permissions();
 
         Vanilla.init(); // get initial recipes...
 
