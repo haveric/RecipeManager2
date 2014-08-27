@@ -63,7 +63,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dispenser;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
@@ -1312,30 +1311,6 @@ public class Events implements Listener {
             if (latestVersion != null && compare == -1) {
                 Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
             }
-        }
-    }
-
-    /*
-     * Update inventory inner helper class
-     */
-
-    private class UpdateInventory extends BukkitRunnable {
-        private final Player player;
-
-        public UpdateInventory(Player newPlayer, int ticks) {
-            player = newPlayer;
-
-            if (ticks <= 0) {
-                run();
-            } else {
-                runTaskLater(RecipeManager.getPlugin(), ticks);
-            }
-        }
-
-        @SuppressWarnings("deprecation")
-        @Override
-        public void run() {
-            player.updateInventory();
         }
     }
 }
