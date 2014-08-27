@@ -51,12 +51,15 @@ public class RecipeBooks {
     // Constants
     public static final String BOOK_MARKER = "RecipeManager";
 
+    /* TODO: This is strange, turn this into a singleton perhaps? */
     protected static void init() {
-        if (RecipeManager.recipeBooks != null) {
-            RecipeManager.recipeBooks.clean();
+        RecipeBooks recipeBooks = RecipeManager.getRecipeBooks();
+        if (recipeBooks != null) {
+            recipeBooks.clean();
         }
 
-        RecipeManager.recipeBooks = new RecipeBooks();
+        recipeBooks = new RecipeBooks();
+        RecipeManager.setRecipeBooks(recipeBooks);
     }
 
     private RecipeBooks() {

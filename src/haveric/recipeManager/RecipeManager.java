@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
-import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -40,12 +39,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  * It has static methods for the API.
  */
 public class RecipeManager extends JavaPlugin {
-    protected static RecipeManager plugin;
-    protected static Recipes recipes;
-    protected static RecipeBooks recipeBooks;
-    protected static Events events;
+    private static RecipeManager plugin;
+    private static Recipes recipes;
+    private static RecipeBooks recipeBooks;
+    private static Events events;
     private Metrics metrics;
-    static Logger log;
 
     private HashMap<String, String> plugins = new HashMap<String, String>();
 
@@ -55,7 +53,6 @@ public class RecipeManager extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        log = getLogger();
 
         PluginManager pm = getServer().getPluginManager();
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
@@ -288,6 +285,10 @@ public class RecipeManager extends JavaPlugin {
         return recipeBooks;
     }
 
+    public static void setRecipeBooks(RecipeBooks newRecipeBooks) {
+        recipeBooks = newRecipeBooks;
+    }
+
     private static void validatePluginEnabled() {
         if (!isPluginFullyEnabled()) {
             throw new IllegalAccessError("RecipeManager is not fully enabled at this point! Listen to RecipeManagerEnabledEvent.");
@@ -315,5 +316,9 @@ public class RecipeManager extends JavaPlugin {
         }
 
         return canCraft;
+    }
+
+    public static Events getEvents() {
+        return events;
     }
 }

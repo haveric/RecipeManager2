@@ -82,8 +82,8 @@ public class Events implements Listener {
     }
 
     protected static void reload() {
-        HandlerList.unregisterAll(RecipeManager.events);
-        Bukkit.getPluginManager().registerEvents(RecipeManager.events, RecipeManager.getPlugin());
+        HandlerList.unregisterAll(RecipeManager.getEvents());
+        Bukkit.getPluginManager().registerEvents(RecipeManager.getEvents(), RecipeManager.getPlugin());
     }
 
     /*
