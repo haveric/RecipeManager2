@@ -72,7 +72,7 @@ public class Settings {
         return instance;
     }
 
-    public static void tearDown() {
+    public static void clean() {
         instance = null;
     }
 

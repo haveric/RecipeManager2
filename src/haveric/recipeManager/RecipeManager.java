@@ -232,7 +232,7 @@ public class RecipeManager extends JavaPlugin {
             events.clean();
             events = null;
 
-            Settings.tearDown();
+            Settings.clean();
 
             permissions.clean();
             permissions = null;
