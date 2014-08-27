@@ -1,8 +1,8 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.Econ;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagModMoney extends Flag {
@@ -116,7 +116,7 @@ public class FlagModMoney extends Flag {
 
     @Override
     protected boolean onParse(String value) {
-        if (!RecipeManager.getEconomy().isEnabled()) {
+        if (!Econ.getInstance().isEnabled()) {
             ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
 
@@ -166,7 +166,7 @@ public class FlagModMoney extends Flag {
             throw new IllegalArgumentException("The amount can not be 0 while mod is '+' or '-'!");
         }
 
-        if (!RecipeManager.getEconomy().isEnabled()) {
+        if (!Econ.getInstance().isEnabled()) {
             return;
         }
 
@@ -177,27 +177,27 @@ public class FlagModMoney extends Flag {
 
         switch (mod) {
             case '+':
-                RecipeManager.getEconomy().modMoney(a.playerName(), amount);
+                Econ.getInstance().modMoney(a.playerName(), amount);
 
-                a.addEffect(Messages.FLAG_MODMONEY_ADD, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect(Messages.FLAG_MODMONEY_ADD, failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
-                RecipeManager.getEconomy().modMoney(a.playerName(), -amount);
+                Econ.getInstance().modMoney(a.playerName(), -amount);
 
-                a.addEffect(Messages.FLAG_MODMONEY_SUB, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect(Messages.FLAG_MODMONEY_SUB, failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '=':
-                double money = RecipeManager.getEconomy().getMoney(a.playerName());
+                double money = Econ.getInstance().getMoney(a.playerName());
 
-                RecipeManager.getEconomy().modMoney(a.playerName(), -money);
+                Econ.getInstance().modMoney(a.playerName(), -money);
 
                 if (amount > 0) {
-                    RecipeManager.getEconomy().modMoney(a.playerName(), amount);
+                    Econ.getInstance().modMoney(a.playerName(), amount);
                 }
 
-                a.addEffect(Messages.FLAG_MODMONEY_SET, failMessage, "{money}", RecipeManager.getEconomy().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect(Messages.FLAG_MODMONEY_SET, failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             default:

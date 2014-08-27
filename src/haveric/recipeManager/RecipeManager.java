@@ -23,11 +23,16 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -40,8 +45,8 @@ public class RecipeManager extends JavaPlugin {
     protected static Recipes recipes;
     protected static RecipeBooks recipeBooks;
     protected static Events events;
-    protected static Economy economy;
-    protected static Permissions permissions;
+    //protected static Economy economy;
+    //protected static Permissions permissions;
     private Metrics metrics;
     static Logger log;
 
@@ -59,6 +64,7 @@ public class RecipeManager extends JavaPlugin {
 
         log = getLogger();
 
+        PluginManager pm = getServer().getPluginManager();
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         plugin = this;
@@ -68,8 +74,11 @@ public class RecipeManager extends JavaPlugin {
 
         events = new Events();
         recipes = new Recipes();
-        economy = new Economy();
-        permissions = new Permissions();
+
+        setupVault(pm);
+
+        //economy = new Economy();
+        //permissions = new Permissions();
 
         Vanilla.init(); // get initial recipes...
 
@@ -89,7 +98,7 @@ public class RecipeManager extends JavaPlugin {
 
         FurnaceWorker.start(); // keep furnace worker running at all times because it has a lot of jobs
 
-        getServer().getPluginManager().callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
+        pm.callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
 
         // Register commands
         getCommand("rm").setExecutor(new HelpCommand());
@@ -108,6 +117,23 @@ public class RecipeManager extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage("Please wait for the plugin to fully (re)initialize...");
         return true;
+    }
+
+    private void setupVault(PluginManager pm) {
+        if (pm.getPlugin("Vault") == null) {
+            Messages.log("Vault was not found, economy features are not available.");
+            pm.disablePlugin(this);
+        } else {
+            RegisteredServiceProvider<Economy> econProvider = getServer().getServicesManager().getRegistration(Economy.class);
+            if (econProvider != null) {
+                Econ.getInstance().init(econProvider.getProvider());
+            }
+
+            RegisteredServiceProvider<Permission> permProvider = getServer().getServicesManager().getRegistration(Permission.class);
+            if (permProvider != null) {
+                Perms.getInstance().init(permProvider.getProvider());
+            }
+        }
     }
 
     /**
@@ -220,8 +246,7 @@ public class RecipeManager extends JavaPlugin {
             Players.clean();
             Vanilla.clean();
 
-            economy.clear();
-            economy = null;
+            Econ.getInstance().clean();
 
             recipes.clean();
             recipes = null;
@@ -234,8 +259,7 @@ public class RecipeManager extends JavaPlugin {
 
             Settings.clean();
 
-            permissions.clean();
-            permissions = null;
+            Perms.getInstance().clean();
 
             if (metrics != null) {
                 metrics.stop();
@@ -273,26 +297,6 @@ public class RecipeManager extends JavaPlugin {
     public static RecipeBooks getRecipeBooks() {
         validatePluginEnabled();
         return recipeBooks;
-    }
-
-    /**
-     * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
-     * @return Economy methods
-     */
-    public static Economy getEconomy() {
-        validatePluginEnabled();
-        return economy;
-    }
-
-    /**
-     * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
-     * @return hooked permissions from Vault
-     */
-    public static Permissions getPermissions() {
-        validatePluginEnabled();
-        return permissions;
     }
 
     private static void validatePluginEnabled() {

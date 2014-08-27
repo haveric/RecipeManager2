@@ -2,7 +2,7 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Perms;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,7 +104,7 @@ public class FlagGroup extends Flag {
 
     @Override
     protected boolean onParse(String value) {
-        if (!RecipeManager.getPermissions().isEnabled()) {
+        if (!Perms.getInstance().isEnabled()) {
             ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported permission plugin was detected.");
         }
 
@@ -134,17 +134,17 @@ public class FlagGroup extends Flag {
 
     @Override
     protected void onCheck(Args a) {
-        if (!RecipeManager.getPermissions().isEnabled()) {
+        if (!Perms.getInstance().isEnabled()) {
             return;
         }
 
         for (Entry<String, Boolean> e : groups.entrySet()) {
             if (e.getValue().booleanValue()) {
-                if (!a.hasPlayerName() || !RecipeManager.getPermissions().playerInGroup(a.playerName(), e.getKey())) {
+                if (!a.hasPlayerName() || !Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
                     a.addReason(Messages.FLAG_GROUP_ALLOWED, getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(true));
                 }
             } else {
-                if (a.hasPlayerName() && RecipeManager.getPermissions().playerInGroup(a.playerName(), e.getKey())) {
+                if (a.hasPlayerName() && Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
                     a.addReason(Messages.FLAG_GROUP_UNALLOWED, getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(false));
                 }
             }

@@ -1,7 +1,7 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.Permissions;
+import haveric.recipeManager.Perms;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -126,10 +126,6 @@ public enum FlagType {
         return '@' + names[0];
     }
 
-    /*
-     * Static stuff
-     */
-
     private static final Map<String, FlagType> nameMap = new HashMap<String, FlagType>();
     private static final Map<Class<? extends Flag>, FlagType> classMap = new HashMap<Class<? extends Flag>, FlagType>();
 
@@ -138,10 +134,10 @@ public enum FlagType {
      * It is used by the plugin to add the flags to an index map then create and add individual no-flag permissions.
      */
     public static void init() {
-        Permission parent = Bukkit.getPluginManager().getPermission(Permissions.FLAG_ALL);
+        Permission parent = Bukkit.getPluginManager().getPermission(Perms.FLAG_ALL);
 
         if (parent == null) {
-            parent = new Permission(Permissions.FLAG_ALL, PermissionDefault.TRUE);
+            parent = new Permission(Perms.FLAG_ALL, PermissionDefault.TRUE);
             parent.setDescription("Allows use of flag.");
 
             Bukkit.getPluginManager().addPermission(parent);
@@ -159,11 +155,11 @@ public enum FlagType {
                     continue;
                 }
 
-                if (Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + name) != null) {
+                if (Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + name) != null) {
                     continue;
                 }
 
-                p = new Permission(Permissions.FLAG_PREFIX + name, PermissionDefault.TRUE);
+                p = new Permission(Perms.FLAG_PREFIX + name, PermissionDefault.TRUE);
                 p.setDescription("Allows use of the " + type + " flag.");
                 p.addParent(parent, true);
                 Bukkit.getPluginManager().addPermission(p);

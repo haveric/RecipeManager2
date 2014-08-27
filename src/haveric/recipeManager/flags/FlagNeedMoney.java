@@ -1,8 +1,8 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.Econ;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
 
 public class FlagNeedMoney extends Flag {
     // Flag definition and documentation
@@ -73,13 +73,13 @@ public class FlagNeedMoney extends Flag {
 
     public String getMoneyString() {
         String moneyString;
-        if (!RecipeManager.getEconomy().isEnabled()) {
+        if (!Econ.getInstance().isEnabled()) {
             moneyString = null;
         } else {
-            moneyString = RecipeManager.getEconomy().getFormat(getMinMoney());
+            moneyString = Econ.getInstance().getFormat(getMinMoney());
 
             if (getMaxMoney() > getMinMoney()) {
-                moneyString += " - " + RecipeManager.getEconomy().getFormat(getMaxMoney());
+                moneyString += " - " + Econ.getInstance().getFormat(getMaxMoney());
             }
         }
 
@@ -100,7 +100,7 @@ public class FlagNeedMoney extends Flag {
 
     @Override
     protected boolean onParse(String value) {
-        if (!RecipeManager.getEconomy().isEnabled()) {
+        if (!Econ.getInstance().isEnabled()) {
             ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
 
@@ -142,11 +142,11 @@ public class FlagNeedMoney extends Flag {
 
     @Override
     protected void onCheck(Args a) {
-        if (!RecipeManager.getEconomy().isEnabled()) {
+        if (!Econ.getInstance().isEnabled()) {
             return;
         }
 
-        if (!a.hasPlayerName() || !checkMoney(RecipeManager.getEconomy().getMoney(a.playerName()))) {
+        if (!a.hasPlayerName() || !checkMoney(Econ.getInstance().getMoney(a.playerName()))) {
             a.addReason(Messages.FLAG_NEEDMONEY, failMessage, "{money}", getMoneyString());
         }
     }

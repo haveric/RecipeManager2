@@ -4,46 +4,42 @@ import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 
 import java.util.UUID;
 
-import net.milkbowl.vault.Vault;
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class Economy {
-    private boolean enabled = false;
-    private net.milkbowl.vault.economy.Economy vault = null;
+public class Econ {
+    private Economy economy = null;
 
-    protected Economy() {
-        if (Bukkit.getPluginManager().getPlugin("Vault") instanceof Vault) {
-            RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> service = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+    private static Econ instance;
 
-            if (service != null) {
-                vault = service.getProvider();
+    protected Econ() {
+        // Exists only to defeat instantiation.
+    }
 
-                if (vault != null) {
-                    if (vault.isEnabled()) {
-                        Messages.log("Vault detected and connected to " + vault.getName() + ", economy features available.");
-                    } else {
-                        vault = null;
-                        Messages.log("Vault detected but does not have an economy plugin connected, economy features are not available.");
-                    }
-                }
-            }
+    public static Econ getInstance() {
+        if (instance == null) {
+            instance = new Econ();
         }
 
-        enabled = (vault != null);
+        return instance;
+    }
 
-        if (!enabled) {
-            clear();
-            Messages.log("Vault was not found, economy features are not available.");
+    public void init(Economy newEconomy) {
+        if (newEconomy != null) {
+            if (newEconomy.isEnabled()) {
+                economy = newEconomy;
+                Messages.log("Vault detected and connected to " + economy.getName() + ", economy features available.");
+            } else {
+                Messages.log("Vault detected but does not have an economy plugin connected, economy features are not available.");
+            }
         }
     }
 
-    protected void clear() {
-        enabled = false;
-        vault = null;
+    protected void clean() {
+        economy = null;
     }
 
     /**
@@ -52,7 +48,7 @@ public class Economy {
      * @return true if economy plugin detected, false otherwise
      */
     public boolean isEnabled() {
-        return enabled;
+        return economy != null;
     }
 
     /**
@@ -68,7 +64,7 @@ public class Economy {
             return null;
         }
 
-        return vault.format(amount);
+        return economy.format(amount);
     }
 
     /**
@@ -87,7 +83,7 @@ public class Economy {
                 UUID uuid = UUIDFetcher.getUUIDOf(playerName);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
-                money = vault.getBalance(player);
+                money = economy.getBalance(player);
             } catch (Exception e) {}
         }
 
@@ -115,9 +111,9 @@ public class Economy {
             UUID uuid = UUIDFetcher.getUUIDOf(playerName);
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
             if (amount > 0) {
-                error = vault.depositPlayer(player, amount);
+                error = economy.depositPlayer(player, amount);
             } else {
-                error = vault.withdrawPlayer(player, Math.abs(amount));
+                error = economy.withdrawPlayer(player, Math.abs(amount));
             }
         } catch (Exception e) {}
 

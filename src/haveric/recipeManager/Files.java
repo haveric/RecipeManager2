@@ -45,7 +45,7 @@ public class Files {
     public static final String PAD3 = "      ";
 
     private final CommandSender sender;
-    private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
 
     public static final String LASTCHANGED_CONFIG = "2.1";
     public static final String LASTCHANGED_MESSAGES = "2.1";
@@ -390,14 +390,14 @@ public class Files {
 
         perms.addAll(permissions);
 
-        perms.add(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + "*"));
+        perms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + "*"));
 
         for (FlagType type : FlagType.values()) {
             if (type.hasBit(Bit.NO_SKIP_PERMISSION)) {
                 continue;
             }
 
-            perms.add(Bukkit.getPluginManager().getPermission(Permissions.FLAG_PREFIX + type.getName()));
+            perms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + type.getName()));
         }
 
         for (Permission p : perms) {

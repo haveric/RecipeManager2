@@ -1,7 +1,7 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Permissions;
+import haveric.recipeManager.Perms;
 import haveric.recipeManager.flags.FlagType.Bit;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -51,12 +51,12 @@ public class Flag implements Cloneable {
             return false; // no player, no skip
         }
 
-        if (player.hasPermission(Permissions.FLAG_ALL)) {
+        if (Perms.hasFlagAll(player)) {
             return true; // has permission for all flags
         }
 
         for (String name : getType().getNames()) {
-            if (player.hasPermission(Permissions.FLAG_PREFIX + name)) {
+            if (Perms.hasFlagPrefix(player, name)) {
                 return true; // has permission for this flag
             }
         }
