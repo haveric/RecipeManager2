@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== v2.1.1 ===
+=== v2.1.1 dev1 ===
 * Update user agent for RecipeManager Updater
 * Better version detection
 * Fixed settings not getting initialized soon enough.

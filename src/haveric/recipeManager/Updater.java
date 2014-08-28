@@ -36,6 +36,11 @@ public class Updater {
 
     private static String latestVersion;
     private static String latestLink;
+    private static String currentBetaStatus = "";
+    private static String latestBetaStatus = "";
+
+    private static String versionRegex = "[^de0-9 ]?[v]?([0-9\\.]+[^\\.a-z -])(?:[ -])?([dev|alpha|beta]*[-]*[0-9]*)?";
+
     private static int taskId = -1;
 
     private Updater() { } // Private constructor for utility class
@@ -75,24 +80,38 @@ public class Updater {
     }
 
     public static String getCurrentVersion() {
-        Pattern pattern = Pattern.compile("v([0-9.]*)");
+        Pattern pattern = Pattern.compile(versionRegex);
         String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
 
         Matcher matcher = pattern.matcher(currentVersion);
         if (matcher.find()) {
-            currentVersion = matcher.group(1);
+            currentVersion = matcher.group(1).replaceAll(" v", "");
+
+            currentBetaStatus = matcher.group(2);
+            if (currentBetaStatus == null) {
+                currentBetaStatus = "";
+            } else {
+                currentBetaStatus = currentBetaStatus.replaceAll(" -", "");
+            }
         }
 
         return currentVersion;
     }
 
     public static String getLatestVersion() {
-        Pattern pattern = Pattern.compile("v([0-9.]*)");
+        Pattern pattern = Pattern.compile(versionRegex);
         String latest = latestVersion;
 
         Matcher matcher = pattern.matcher(latest);
         if (matcher.find()) {
-            latest = matcher.group(1);
+            latest = matcher.group(1).replaceAll(" v", "");
+
+            latestBetaStatus = matcher.group(2);
+            if (latestBetaStatus == null) {
+                latestBetaStatus = "";
+            } else {
+                latestBetaStatus = latestBetaStatus.replaceAll(" -", "");
+            }
         }
 
         return latest;
@@ -101,10 +120,12 @@ public class Updater {
     /**
      *
      * @return compare<br>
+     *  3: Current and BukkitDev are running different beta versions
+     *  2: BukkitDev has a new beta
      *  1: Current version is newer than the BukkitDev<br>
      *  0: Same version as BukkitDev<br>
      * -1: BukkitDev is newer than current version
-     *  2: Error occurred
+     * -2: Error occurred
      */
     public static int compareVersions() {
         int compare = -2;
@@ -114,17 +135,25 @@ public class Updater {
 
         if (latest != null) {
             if (current.equals(latest)) {
-                compare = 0;
+                if (currentBetaStatus.equals(latestBetaStatus)) {
+                    compare = 0;
+                } else if (!currentBetaStatus.equals("") && latestBetaStatus.equals("")) {
+                    compare = -1;
+                } else if (currentBetaStatus.equals("") && !latestBetaStatus.equals("")) {
+                    compare = 2;
+                } else {
+                    compare = 3;
+                }
             } else {
                 String[] currentArray = current.split("\\.");
                 String[] latestArray = latest.split("\\.");
 
-                int longest = currentArray.length;
-                if (latestArray.length > longest) {
-                    longest = latestArray.length;
+                int shortest = currentArray.length;
+                if (latestArray.length < shortest) {
+                    shortest = latestArray.length;
                 }
 
-                for (int i = 0; i < longest; i++) {
+                for (int i = 0; i < shortest; i++) {
                     int c = Integer.parseInt(currentArray[i]);
                     int l = Integer.parseInt(latestArray[i]);
 
@@ -136,10 +165,27 @@ public class Updater {
                         break;
                     }
                 }
+
+                // Same up to the shortest version
+                if (compare == -2) {
+                    if (currentArray.length > latestArray.length) {
+                        compare = 1;
+                    } else {
+                        compare = -1;
+                    }
+                }
             }
         }
 
         return compare;
+    }
+
+    public static String getLatestBetaStatus() {
+        return latestBetaStatus;
+    }
+
+    public static String getCurrentBetaStatus() {
+        return currentBetaStatus;
     }
 
     public static String getLatestLink() {
@@ -209,6 +255,13 @@ public class Updater {
                         Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                     } else if (compare == 1) {
                         Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
+                        Messages.sendAndLog(sender, "<gray>Thanks for helping to test RecipeManager!");
+                    } else if (compare == 2) {
+                        Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                        Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                    } else if (compare == 3) {
+                        Messages.send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                        Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                     }
                 }
 

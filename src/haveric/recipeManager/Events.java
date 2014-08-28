@@ -1308,8 +1308,14 @@ public class Events implements Listener {
 
             int compare = Updater.compareVersions();
 
-            if (latestVersion != null && compare == -1) {
-                Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+            if (latestVersion != null) {
+                if (compare == -1) {
+                    Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                } else if (compare == 2) {
+                    Messages.send(player, "[RecipeManager] New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                } else if (compare == 3) {
+                    Messages.send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                }
             }
         }
     }
