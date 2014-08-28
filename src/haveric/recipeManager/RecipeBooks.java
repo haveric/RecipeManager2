@@ -41,9 +41,9 @@ import org.bukkit.inventory.meta.BookMeta;
 import com.google.common.collect.Sets;
 
 public class RecipeBooks {
-    private final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
-    private final String DIR_BOOKS = DIR_PLUGIN + "books" + File.separator;
-    private final String FILE_ERRORLOG = DIR_BOOKS + "errors.log";
+    private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
+    private static final String DIR_BOOKS = DIR_PLUGIN + "books" + File.separator;
+    private static final String FILE_ERRORLOG = DIR_BOOKS + "errors.log";
 
     private final Map<String, RecipeBook> books = new HashMap<String, RecipeBook>();
     private final int generated = (int) (System.currentTimeMillis() / 1000);
