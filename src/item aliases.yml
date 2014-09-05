@@ -128,7 +128,7 @@ cobble_wall:
 wood_step:
   names: wood slab
   0: oak, normal
-  1: spruce, pine, dark
+  1: spruce, pine
   2: birch, white
   3: jungle, pink
   4: acacia, orange
@@ -137,7 +137,7 @@ wood_step:
 wood_double_step:
   names: wood double step, wood double steps
   0: oak, normal
-  1: spruce, pine, dark
+  1: spruce, pine
   2: birch, white
   3: jungle, pink
   4: acacia, orange
@@ -154,7 +154,7 @@ wood:
 
 sapling:
   0: oak, normal
-  1: spruce, pine, dark
+  1: spruce, pine
   2: birch, white
   3: jungle, pink
   4: acacia, orange
@@ -162,7 +162,7 @@ sapling:
 
 log:
   0: oak, normal
-  1: spruce, pine, dark
+  1: spruce, pine
   2: birch, white
   3: jungle, pink
   
@@ -173,7 +173,7 @@ log_2:
 leaves:
   names: leaf
   0: oak, normal
-  1: spruce, pine, dark
+  1: spruce, pine
   2: birch, white
   3: jungle, pink
 

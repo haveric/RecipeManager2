@@ -49,8 +49,8 @@ public class Files {
 
     public static final String LASTCHANGED_CONFIG = "2.1";
     public static final String LASTCHANGED_MESSAGES = "2.1";
-    public static final String LASTCHANGED_ITEM_ALIASES = "2.1";
-    public static final String LASTCHANGED_ENCHANT_ALIASES = "2.1";
+    public static final String LASTCHANGED_ITEM_ALIASES = "2.1.1";
+    public static final String LASTCHANGED_ENCHANT_ALIASES = "2.1.1";
 
     public static final String FILE_CONFIG = "config.yml";
     public static final String FILE_MESSAGES = "messages.yml";
