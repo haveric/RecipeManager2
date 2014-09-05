@@ -150,18 +150,15 @@ public class RecipeManager extends JavaPlugin {
             metrics.stop();
         }
 
-        if (!firstTime) {
-            if (Settings.getInstance().getClearRecipes()) {
-                Vanilla.removeAllButSpecialRecipes();
-                Recipes.getInstance().clean();
-            } else {
-                Vanilla.restoreInitialRecipes();
-                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
-
-                Messages.sendAndLog(sender, "<green>Previous recipes restored! <gray>(due to clear-recipes set from true to false)");
-            }
+        if ((firstTime && Settings.getInstance().getClearRecipes()) || !firstTime) {
+            Vanilla.removeAllButSpecialRecipes();
+            Recipes.getInstance().clean();
         }
 
+        if (!firstTime && !Settings.getInstance().getClearRecipes()) {
+            Vanilla.restoreInitialRecipes();
+            Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+        }
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
