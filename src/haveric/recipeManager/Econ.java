@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class Econ {
-    private Economy economy = null;
+    private static Economy economy = null;
 
     private static Econ instance;
 
@@ -38,7 +38,7 @@ public class Econ {
         }
     }
 
-    protected void clean() {
+    protected static void clean() {
         economy = null;
     }
 

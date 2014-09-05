@@ -229,7 +229,7 @@ public class RecipeManager extends JavaPlugin {
             Players.clean();
             Vanilla.clean();
 
-            Econ.getInstance().clean();
+            Econ.clean();
 
             recipes.clean();
             recipes = null;
