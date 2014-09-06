@@ -3,6 +3,7 @@ package haveric.recipeManager;
 import haveric.recipeManager.tools.Tools;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -543,11 +544,28 @@ public enum Messages {
     protected static void notifyDebuggers(String message) {
         message = ChatColor.DARK_RED + "(RecipeManager debug) " + ChatColor.RESET + message;
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.hasPermission("recipemanager.debugger")) {
-                send(p, message);
+        try {
+            // Use reflection to use the proper version of getOnlinePlayers - credit to Maxim Roncacé (ShadyPotato)
+            if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+                Collection<?> onlinePlayers = ((Collection<?>)Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+
+                for (Object p : onlinePlayers) {
+                    if (p instanceof Player) {
+                        Player player = (Player) p;
+                        if (player.hasPermission("recipemanager.debugger")) {
+                            send(player, message);
+                        }
+                    }
+                }
+            } else {
+                Player[] onlinePlayers = ((Player[])Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                for (Player p : onlinePlayers) {
+                    if (p.hasPermission("recipemanager.debugger")) {
+                        send(p, message);
+                    }
+                }
             }
-        }
+        } catch (Exception e) { }
     }
 
     public static void debug(String message) {
