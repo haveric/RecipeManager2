@@ -96,14 +96,14 @@ public class BaseRecipe implements Flaggable {
     public void setName(String newName) {
         newName = newName.trim();
 
-        while (newName.charAt(0) == '+') {
-            ErrorReporter.error("Recipe names can not start with '+' character, removed!");
-            newName = newName.substring(1);
-        }
-
         if (newName.isEmpty()) {
             ErrorReporter.error("Recipe names can not be empty!");
             return;
+        }
+
+        while (newName.charAt(0) == '+') {
+            ErrorReporter.error("Recipe names can not start with '+' character, removed!");
+            newName = newName.substring(1);
         }
 
         name = newName;
