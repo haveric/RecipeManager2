@@ -14,7 +14,37 @@ import org.bukkit.permissions.PermissionDefault;
 
 public enum FlagType {
     // Shared flags
-    COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"), KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"), INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"), PERMISSION(FlagPermission.class, Bit.NONE, "permissions", "perm"), FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm"), FORCHANCE(FlagForChance.class, Bit.NO_SHIFT, "bychance", "chance"), GROUP(FlagGroup.class, Bit.NONE, "groups", "permissiongroup", "permgroup"), WORLD(FlagWorld.class, Bit.NONE, "needworld", "worlds"), HEIGHT(FlagHeight.class, Bit.NONE, "depth"), MODEXP(FlagModExp.class, Bit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp"), NEEDEXP(FlagNeedExp.class, Bit.NONE, "needxp", "reqexp", "expreq", "reqxp", "xpreq"), MODLEVEL(FlagModLevel.class, Bit.NO_SHIFT, "levelmod", "setlevel", "level"), NEEDLEVEL(FlagNeedLevel.class, Bit.NONE, "reqlevel", "levelreq"), MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "setmoney", "money"), NEEDMONEY(FlagNeedMoney.class, Bit.NONE, "reqmoney", "moneyreq"), COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"), HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"), GAMEMODE(FlagGameMode.class, Bit.NONE, "needgm"), LIGHTLEVEL(FlagLightLevel.class, Bit.NONE, "blocklight", "sunlight", "light"), BIOME(FlagBiome.class, Bit.NONE), WEATHER(FlagWeather.class, Bit.NONE), EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"), SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"), SUMMON(FlagSummon.class, Bit.NO_SHIFT, "spawn", "creature", "mob", "animal"), BLOCKPOWERED(FlagBlockPowered.class, Bit.NO_VALUE, "poweredblock", "blockpower", "redstonepowered"), POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"), LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"), SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"), MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg", "msg"), BROADCAST(FlagBroadcast.class, Bit.NONE, "announce", "msgall"), SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
+    COMMAND(FlagCommand.class, Bit.NONE, "cmd", "commands"),
+    KEEPITEM(FlagKeepItem.class, Bit.NO_SHIFT, "returnitem", "replaceitem"),
+    INGREDIENTCONDITION(FlagIngredientCondition.class, Bit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr"),
+    PERMISSION(FlagPermission.class, Bit.NONE, "permissions", "perm"),
+    FORPERMISSION(FlagForPermission.class, Bit.NO_SHIFT, "forperm"),
+    FORCHANCE(FlagForChance.class, Bit.NO_SHIFT, "bychance", "chance"),
+    GROUP(FlagGroup.class, Bit.NONE, "groups", "permissiongroup", "permgroup"),
+    WORLD(FlagWorld.class, Bit.NONE, "needworld", "worlds"),
+    HEIGHT(FlagHeight.class, Bit.NONE, "depth"),
+    MODEXP(FlagModExp.class, Bit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp"),
+    NEEDEXP(FlagNeedExp.class, Bit.NONE, "needxp", "reqexp", "expreq", "reqxp", "xpreq"),
+    MODLEVEL(FlagModLevel.class, Bit.NO_SHIFT, "levelmod", "setlevel", "level"),
+    NEEDLEVEL(FlagNeedLevel.class, Bit.NONE, "reqlevel", "levelreq"),
+    MODMONEY(FlagModMoney.class, Bit.NO_SHIFT, "moneymod", "setmoney", "money"),
+    NEEDMONEY(FlagNeedMoney.class, Bit.NONE, "reqmoney", "moneyreq"),
+    COOLDOWN(FlagCooldown.class, Bit.NO_SHIFT, "cooltime", "delay"),
+    HOLDITEM(FlagHoldItem.class, Bit.NONE, "hold"),
+    GAMEMODE(FlagGameMode.class, Bit.NONE, "needgm"),
+    LIGHTLEVEL(FlagLightLevel.class, Bit.NONE, "blocklight", "sunlight", "light"),
+    BIOME(FlagBiome.class, Bit.NONE),
+    WEATHER(FlagWeather.class, Bit.NONE),
+    EXPLODE(FlagExplode.class, Bit.NO_SHIFT | Bit.NO_VALUE, "explosion", "boom", "tnt"),
+    SOUND(FlagSound.class, Bit.NO_SHIFT, "playsound"),
+    SUMMON(FlagSummon.class, Bit.NO_SHIFT, "spawn", "creature", "mob", "animal"),
+    BLOCKPOWERED(FlagBlockPowered.class, Bit.NO_VALUE, "poweredblock", "blockpower", "redstonepowered"),
+    POTIONEFFECT(FlagPotionEffect.class, Bit.NONE, "potionfx"),
+    LAUNCHFIREWORK(FlagLaunchFirework.class, Bit.NO_SHIFT, "setfirework"),
+    SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"),
+    MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg", "msg"),
+    BROADCAST(FlagBroadcast.class, Bit.NONE, "announce", "msgall"),
+    SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
     // TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"), // TODO finish flag
     // REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"),
     // ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
@@ -23,13 +53,27 @@ public enum FlagType {
     // DEBUG(FlagDebug.class, Bit.NO_VALUE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "monitor", "log"),
 
     // Recipe only flags
-    ADDTOBOOK(FlagAddToBook.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipebook"), FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"), DISPLAYRESULT(FlagDisplayResult.class, Bit.RECIPE, "resultdisplay", "showresult"), REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"), RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "disable", "denied", "deny"), OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
+    ADDTOBOOK(FlagAddToBook.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_SKIP_PERMISSION, "recipebook"),
+    FAILMESSAGE(FlagFailMessage.class, Bit.RECIPE, "failmsg"),
+    DISPLAYRESULT(FlagDisplayResult.class, Bit.RECIPE, "resultdisplay", "showresult"),
+    REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
+    RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "disable", "denied", "deny"),
+    OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
 
     // Result only flags
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
-    ITEMNAME(FlagItemName.class, Bit.RESULT, "name", "displayname"), ITEMLORE(FlagItemLore.class, Bit.RESULT, "lore", "itemdesc"), LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour"), BOOKITEM(FlagBookItem.class, Bit.RESULT, "book"),
+    ITEMNAME(FlagItemName.class, Bit.RESULT, "name", "displayname"),
+    ITEMLORE(FlagItemLore.class, Bit.RESULT, "lore", "itemdesc"),
+    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "leathercolor", "color", "colour"),
+    BOOKITEM(FlagBookItem.class, Bit.RESULT, "book"),
     // MAPITEM(FlagMapItem.class, Bit.RESULT, "map"), // TODO finish this flag
-    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"), FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT, "fireworkcharge", "fireworkeffect"), SKULLOWNER(FlagSkullOwner.class, Bit.RESULT, "skullitem"), POTIONITEM(FlagPotionItem.class, Bit.RESULT, "potion"), ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"), ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"), GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult");
+    FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"),
+    FIREWORKCHARGEITEM(FlagFireworkChargeItem.class, Bit.RESULT, "fireworkcharge", "fireworkeffect"),
+    SKULLOWNER(FlagSkullOwner.class, Bit.RESULT, "skullitem"),
+    POTIONITEM(FlagPotionItem.class, Bit.RESULT, "potion"),
+    ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"),
+    ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"),
+    GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult");
 
     /*
      * FlagType related methods
