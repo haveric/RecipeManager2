@@ -64,7 +64,7 @@ public enum FlagType {
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
     ITEMNAME(FlagItemName.class, Bit.RESULT, "name", "displayname"),
     ITEMLORE(FlagItemLore.class, Bit.RESULT, "lore", "itemdesc"),
-    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "leathercolor", "color", "colour"),
+    LEATHERCOLOR(FlagLeatherColor.class, Bit.RESULT, "leathercolour", "color", "colour"),
     BOOKITEM(FlagBookItem.class, Bit.RESULT, "book"),
     // MAPITEM(FlagMapItem.class, Bit.RESULT, "map"), // TODO finish this flag
     FIREWORKITEM(FlagFireworkItem.class, Bit.RESULT, "firework", "fireworkrocket"),
