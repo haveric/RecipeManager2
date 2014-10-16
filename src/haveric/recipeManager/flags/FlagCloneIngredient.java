@@ -205,7 +205,7 @@ public class FlagCloneIngredient extends Flag {
         int found = Tools.findItemInIngredients(getResult().getRecipe(), getResult().getType(), null);
 
         if (found == 0) {
-            ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + ToolsItem.print(getResult()));
+            ErrorReporter.error("Flag " + getType() + " couldn't find ingredient: " + ToolsItem.print(getResult()));
             return false;
         } else if (found > 1) {
             ErrorReporter.warning("Flag " + getType() + " has found the " + ToolsItem.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
