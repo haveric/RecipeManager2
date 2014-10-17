@@ -458,7 +458,7 @@ public class RecipeBooks {
             BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(value);
 
             if (recipe == null) {
-                ErrorReporter.warning("Book '" + id + "' has a recipe that does not exist anymore: '" + value + "', removed.");
+                ErrorReporter.warning("Book '" + id + "' has a recipe that does not exist any more: '" + value + "', removed.");
             } else {
                 if (allRecipes.contains(value)) {
                     ErrorReporter.warning("Book '" + id + "' already has recipe '" + value + "' added, removed.");

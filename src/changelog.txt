@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 === v2.1.2 ===
 * Updated Metrics to handle old getOnlinePlayers (provides backward support for old versions of CraftBukkit)
 * Fixed error messages not showing up when a recipe name isn't set.
+* Misc. spelling fixes
 
 === v2.1.1 ===
 * Update user agent for RecipeManager Updater
@@ -73,7 +74,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === v2.0beta ===
 
-* Removed 'return-empty.*' and 'fuel-return-buckets' sections from config.yml because it doesn't do anything anymore, use @keepitem flag instead
+* Removed 'return-empty.*' and 'fuel-return-buckets' sections from config.yml because it doesn't do anything any more, use @keepitem flag instead
 * Set 'update-check.enabled' back to true as default in config.yml
 * Fixed 'rmextract' command extracting data values for smelt recipe ingredients (they don't have data values)
 * Fixed smelt recipes not printing warning about using data values on ingredients
@@ -114,7 +115,7 @@ This file will be automatically overwritten when a new version is installed.
 * Finished @cloneingredient flag, wrote documentation too.
 * Tweaked @ingredientcondition flag and added documentation.
 * Removed @description flag because you can now use recipe's name as both name and description.
-* And alot of other stuff that I forgot to note here :}
+* And a lot of other stuff that I forgot to note here :}
 
 
 === v2.0alpha2 ===
@@ -128,12 +129,12 @@ This file will be automatically overwritten when a new version is installed.
 * Fixed setting 'furnace-ticks' above 1 slowing down smelting
 * Added warning if using only 2 identical tools as ingredients
 * Changed how crafting denial reasons are displayed, they're now shown in chat instead of in display result.
-* Added documentation to alot of flags and renamed some flags.
+* Added documentation to a lot of flags and renamed some flags.
 * Added more name lists to 'name index.html'
 * Redesigned @permission, @world and @group - they should also work, not fully tested though
 * Added @keepitem to allow items to be kept in crafting grid when recipe is used
-** This also supports damaging kept items OR replacing item with a diferent item
-* Added @summon to spawn creatures - alot of customization!
+** This also supports damaging kept items OR replacing item with a different item
+* Added @summon to spawn creatures - a lot of customization!
 * Added @forchance to trigger flags on random chances
 ** Not working with result flags - working on it
 * Added @ingredientcondition flag to set additional conditions on ingredients!
@@ -156,7 +157,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Replaced ability to return empty versions of some predefined items with @keepitem flag which has more options!
 
 * Improvements for recipe files:
-** Recipe files now don't care about spaces and new lines even more ! You can format the recipes as you like using tabs, empty lines between them or no empty lines at all ! The only thing that is required is for diferent statements to be on new lines.
+** Recipe files now don't care about spaces and new lines even more ! You can format the recipes as you like using tabs, empty lines between them or no empty lines at all ! The only thing that is required is for different statements to be on new lines.
 ** Added block comment support for recipe file, you can now use /* and */ to comment anything in between on any number of lines
 
 * Improvements for fuel recipes:
@@ -335,7 +336,7 @@ NOTE: Previous version should've been v1.23 because it contains a lot of new fea
 \\
 
 === v1.22c ===
-NOTE: You can delete smelters.dat, fuelers.dat and fueled.dat files since they're not used anymore
+NOTE: You can delete smelters.dat, fuelers.dat and fueled.dat files since they're not used any more
 
 * Replaced smelters.dat, fuelers.dat and fueled.dat with furnacedata.dat
 * Fixed furnace recipes not working with big time values
@@ -401,14 +402,14 @@ NOTE: You can delete smelters.dat, fuelers.dat and fueled.dat files since they'r
 * Added @command, @message and @log flags for recipes, see readme.txt for details.
 * Added customizable success/failure messages for individual flags (like @giveexp), see readme.txt for details.
 * Replaced lang_*.yml system with a simple messages.yml file, removed "language: <val>" from config.yml as well
-* Removed check for item compatibility against enchantments, it adds enchantments regardless of item (but still checks for amount as that glitches alot of stuff)
+* Removed check for item compatibility against enchantments, it adds enchantments regardless of item (but still checks for amount as that glitches a lot of stuff)
 * Removed cap on enchantment levels, you can now use any value, you can also use "MAX" to use the maximum valid enchantment level.
 * Removed cap on result percentages (was 1-100), you can now specify 0% items that'll be just for display there (or you can just not specify any percentage for the first item and specify 100% for the next item(s))
 * Improved 'existing-recipes' change detection on rmreload, it now properly detects when changed from "nothing" to "replace"
 * Improved format of readme.txt, added examples for recipes.
 * Improved code that monitors and processes furnaces each tick
 * Added ability to track down who placed the smelting ingredient and fuel so you can use commands, messages, rewards, etc on them, they're also saved between server restarts BUT this won't work for items already in furnaces before the update, only those added after this update.
-* Added error handling for recipe crafting, if any error occurs it will cancel the event so players won't recieve unwanted items
+* Added error handling for recipe crafting, if any error occurs it will cancel the event so players won't receive unwanted items
 * Recoded some stuff to reduce the amount of static variables & methods
 * Added an API for developers to use, currently it only gives out methods used by the plugin itself, if you need more stuff just ask.
 
@@ -476,7 +477,7 @@ NOTE: You can delete smelters.dat, fuelers.dat and fueled.dat files since they'r
 * Removed printing recipes in server.log when loading, it now offers minimal details in server.log
 * Temporary fix for shift+clicking recipes acting weird, until Bukkit fixes it.
 * Added language files that also have versions, lang_en.yml will always be overwritten and is the fallback in case of other files are outdated/don't exist
-* Added alot of useful itemdata aliases in the aliases.yml
+* Added a lot of useful itemdata aliases in the aliases.yml
 * Various other minor fixes and adjustments from the beta
 
 \\
@@ -492,7 +493,7 @@ NOTE: You can delete smelters.dat, fuelers.dat and fueled.dat files since they'r
 * Added ability to edit and remove default recipes instead of restricting them
 * Added aliases.yml to use shortcuts for item:data (like bonemeal for ink_sack:15)
 * Replaced "debug" messages with fine/finer/finest style logging, only chosen level (bukkit.yml) is printed in the server console but all messages are logged in server.log
-* No longer uses Spout, it was removed completly
+* No longer uses Spout, it was removed completely
 * Added ability to smelt items with result AIR (nothing)
 * Many more code changes for the better that I lost track of
 

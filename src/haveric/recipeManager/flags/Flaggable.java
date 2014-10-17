@@ -69,7 +69,7 @@ public interface Flaggable {
     /**
      * Apply flags when recipe/result is prepared/displayed
      *
-     * @param ause
+     * @param a
      *            {@link Args#create()}
      * @return
      */

@@ -82,7 +82,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         displayNum = displayResults.size();
-        boolean recieve = (secretNum + displayNum) > 0;
+        boolean receive = (secretNum + displayNum) > 0;
 
         FlagDisplayResult flag;
         if (a.hasRecipe()) {
@@ -92,7 +92,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         if (flag != null) {
-            if (!recieve && flag.isSilentFail()) {
+            if (!receive && flag.isSilentFail()) {
                 return null;
             }
 
@@ -109,17 +109,17 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResults.get(0);
             } else if (secretNum == 1 && displayNum == 0) {
-                return ToolsItem.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECIEVE_TITLE_UNKNOWN.get());
+                return ToolsItem.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
             }
         }
 
         List<String> lore = new ArrayList<String>();
         String title = null;
 
-        if (recieve) {
-            title = Messages.CRAFT_RESULT_RECIEVE_TITLE_RANDOM.get();
+        if (receive) {
+            title = Messages.CRAFT_RESULT_RECEIVE_TITLE_RANDOM.get();
         } else {
-            title = Messages.CRAFT_RESULT_NORECIEVE_TITLE.get();
+            title = Messages.CRAFT_RESULT_NORECEIVE_TITLE.get();
             lore.add(Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
 
@@ -144,7 +144,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         Material displayMaterial;
-        if (recieve) {
+        if (receive) {
             displayMaterial = Material.CHEST;
         } else {
             displayMaterial = Material.FIRE;

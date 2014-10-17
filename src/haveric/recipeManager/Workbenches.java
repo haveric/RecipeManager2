@@ -63,7 +63,7 @@ public class Workbenches {
 
         Block block = blockID.toBlock();
 
-        if (block.getType() != Material.WORKBENCH) { // Workbench doesn't exist anymore
+        if (block.getType() != Material.WORKBENCH) { // Workbench doesn't exist any more
             workbenches.remove(human.getName());
             return playerLoc;
         }

@@ -28,7 +28,7 @@ public class FlagGetRecipeBook extends Flag {
                            "",
                            "For the '<book id>' argument you need to specify the book ID, case insensitive and partial matching supported.",
                            "",
-                           "Optionally you can set which volume to give, will give first by default, using a bigger number thant the number of volumes will pick the last volume.", };
+                           "Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.", };
 
         E = new String[] { "{flag} recipestu // matches a 'Recipe Stuff.yml' book for example.",
                            "{flag} vanilla rec volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };

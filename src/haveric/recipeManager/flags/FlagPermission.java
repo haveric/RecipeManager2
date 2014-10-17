@@ -36,7 +36,7 @@ public class FlagPermission extends Flag {
 
         E = new String[] { "{flag} ranks.vip",
                            "{flag} !jobs.builder | <red>Builders can't use this!",
-                           "{flag} jobs.famer, jobs.trader | <red>You must be a farmer or trader!",
+                           "{flag} jobs.farmer, jobs.trader | <red>You must be a farmer or trader!",
                            "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
     }
 

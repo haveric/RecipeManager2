@@ -29,7 +29,7 @@ public class FurnaceData implements ConfigurationSerializable {
     private Float cookTime = null;
     private float cookProgress = 0;
 
-    // Non-saveable fields
+    // Non-savable fields
     private boolean frozen = false;
 
     // Constants

@@ -6,7 +6,9 @@ public class RecipeInfo {
     }
 
     public enum RecipeOwner {
-        MINECRAFT("Minecraft"), RECIPEMANAGER("RecipeManager"), UNKNOWN("Unknown plugin");
+        MINECRAFT("Minecraft"),
+        RECIPEMANAGER("RecipeManager"),
+        UNKNOWN("Unknown plugin");
 
         private String name;
 

@@ -27,10 +27,10 @@ public class FlagSound extends Flag {
                            "The <sound> argument must be a sound name, you can find them in '" + Files.FILE_INFO_NAMES + "' file at 'SOUND LIST' section.",
                            "",
                            "Optionally you can specify some arguments separated by | character:",
-                           "  volume <0.0 to 100.0> = (default 1.0) sound volume, if exeeeds 1.0 it extends range, each 1.0 extends range by about 10 blocks.",
+                           "  volume <0.0 to 100.0> = (default 1.0) sound volume, if exceeds 1.0 it extends range, each 1.0 extends range by about 10 blocks.",
                            "  pitch <0.0 to 4.0>    = (default 0.0) sound pitch value.",
                            "  player                = (default not set) if set it will only play the sound to the crafter.",
-                           "You can specify these arguments in any order and they're completly optional.", };
+                           "You can specify these arguments in any order and they're completely optional.", };
 
         E = new String[] { "{flag} level_up",
                            "{flag} wolf_howl | volume 5 // can be heard loudly at 50 blocks away",

@@ -439,7 +439,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        recipe.setIngredients(ingredients); // done with ingredients, set'em
+        recipe.setIngredients(ingredients); // done with ingredients, set 'em
 
         if (recipe.hasFlag(FlagType.REMOVE)) {
             nextLine(); // Skip the results line, if it exists
@@ -451,7 +451,7 @@ public class RecipeProcessor implements Runnable {
                 return false;
             }
 
-            recipe.setResults(results); // done with results, set'em
+            recipe.setResults(results); // done with results, set 'em
 
             if (recipe.getFirstResult() == null) {
                 return ErrorReporter.error("Recipe must have at least one non-air result!");

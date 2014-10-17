@@ -39,7 +39,7 @@ public class FlagExplode extends Flag {
                            "  fail                   = (default not set) Explode if recipe failed as opposed to succeed.",
                            "All arguments are optional and you can specify these arguments in any order.", };
 
-        E = new String[] { "{flag} // will explode when recipe succeeeds with power 2, 100% chance and breaks blocks",
+        E = new String[] { "{flag} // will explode when recipe succeeds with power 2, 100% chance and breaks blocks",
                            "{flag} nobreak | fire | chance 25% | power 6 // will explode 25% of time without block damage but sets fires",
                            "{flag} fail | power 2 | chance 75% // will explode 75% of the time when recipe fails", };
     }

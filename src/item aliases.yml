@@ -1,4 +1,4 @@
-lastchanged: 2.1.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.1.2 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -8,7 +8,7 @@ lastchanged: 2.1.1 # Please do not edit this value - it is used by the plugin to
 #
 # The first names of each material or data will also be used when this plugin prints item name/data.
 #
-# NOTE: This file is not like 1.xx versions anymore, see examples below.
+# NOTE: This file is not like 1.xx versions any more, see examples below.
 #
 # Examples:
 #  dye:red    - valid: rose red dyes. (dye is material alias)

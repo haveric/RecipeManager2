@@ -128,7 +128,7 @@ public class RecipeManager extends JavaPlugin {
      * @param sender
      *            To whom to send the messages to, null = console.
      * @param check
-     *            Set to true to only check recipes, settings are un affected.
+     *            Set to true to only check recipes, settings are unaffected.
      */
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
         Settings.getInstance().reload(sender); // (re)load settings

@@ -96,7 +96,7 @@ public class Events implements Listener {
             CraftingInventory inv = event.getInventory();
 
             if (inv.getResult() == null) {
-                return; // event was canceled by some other plugin
+                return; // event was cancelled by some other plugin
             }
 
             Player player;
@@ -320,7 +320,7 @@ public class Events implements Listener {
                 return;
             }
 
-            result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously canceled
+            result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously cancelled
 
             int mouseButton;
             if (event.isRightClick()) {
@@ -332,7 +332,7 @@ public class Events implements Listener {
             RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), mouseButton);
             Bukkit.getPluginManager().callEvent(callEvent);
 
-            if (callEvent.isCancelled()) { // if event was canceled by some other plugin then cancel this event
+            if (callEvent.isCancelled()) { // if event was cancelled by some other plugin then cancel this event
                 event.setCancelled(true);
                 return;
             }
