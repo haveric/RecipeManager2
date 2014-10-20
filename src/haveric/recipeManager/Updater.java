@@ -101,6 +101,10 @@ public class Updater {
     public static String getLatestVersion() {
         Pattern pattern = Pattern.compile(versionRegex);
         String latest = latestVersion;
+        if (latest == null) {
+            query(null);
+            latest = latestVersion;
+        }
 
         Matcher matcher = pattern.matcher(latest);
         if (matcher.find()) {
