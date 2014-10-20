@@ -110,7 +110,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResults.get(0);
             } else if (secretNum == 1 && displayNum == 0) {
-                return ToolsItem.create(Material.CHEST, 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
+                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
             }
         }
 
@@ -146,7 +146,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
         Material displayMaterial;
         if (receive) {
-            displayMaterial = Material.CHEST;
+            displayMaterial = Settings.getInstance().getMultipleResultsMaterial();
         } else {
             displayMaterial = Settings.getInstance().getFailMaterial();
         }

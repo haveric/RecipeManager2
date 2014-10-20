@@ -46,6 +46,8 @@ public class Settings {
     private static final boolean METRICS_DEFAULT = true;
 
     private static final Material MATERIAL_FAIL_DEFAULT = Material.FIRE;
+    private static final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
+    private static final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
 
     private static FileConfiguration fileConfig;
     private static FileConfiguration itemAliasesConfig;
@@ -120,6 +122,9 @@ public class Settings {
         Messages.log("    update-check.frequency: " + getUpdateCheckFrequency());
         Messages.log("    metrics: " + getMetrics());
         Messages.log("    material.fail: " + getFailMaterial());
+        Messages.log("    material.secret: " + getSecretMaterial());
+        Messages.log("    material.multiple-results: " + getMultipleResultsMaterial());
+
 
         itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
 
@@ -209,10 +214,21 @@ public class Settings {
 
 
         String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
-
         Material failMaterial = Material.matchMaterial(failString);
         if (failMaterial == null) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to FIRE.");
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to " + MATERIAL_FAIL_DEFAULT.toString() + ".");
+        }
+
+        String secretString = fileConfig.getString("material.secret", MATERIAL_SECRET_DEFAULT.toString());
+        Material secretMaterial = Material.matchMaterial(secretString);
+        if (secretMaterial == null) {
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT.toString() + ".");
+        }
+
+        String multipleResultsString = fileConfig.getString("material.multiple-results", MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString());
+        Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
+        if (multipleResultsMaterial == null) {
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString() + ".");
         }
     }
 
@@ -386,6 +402,29 @@ public class Settings {
         return failMaterial;
     }
 
+    public Material getSecretMaterial() {
+        String secretString = fileConfig.getString("material.secret", MATERIAL_SECRET_DEFAULT.toString());
+
+        Material secretMaterial = Material.matchMaterial(secretString);
+
+        if (secretMaterial == null) {
+            secretMaterial = MATERIAL_SECRET_DEFAULT;
+        }
+
+        return secretMaterial;
+    }
+
+    public Material getMultipleResultsMaterial() {
+        String multipleResultsString = fileConfig.getString("material.multiple-results", MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString());
+
+        Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
+
+        if (multipleResultsMaterial == null) {
+            multipleResultsMaterial = MATERIAL_MULTIPLE_RESULTS_DEFAULT;
+        }
+
+        return multipleResultsMaterial;
+    }
 
     public Enchantment getEnchantment(String name) {
         return enchantNames.get(name);

@@ -84,7 +84,9 @@ metrics: true
 # Customize materials used when crafting recipes
 # Material names reference: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
 material:
-  fail: FIRE #Sets the material to show on failed recipes (default: FIRE)
+  fail: FIRE              # Material shown on failed recipes (default: FIRE)
+  secret: CHEST           # Material shown on secret recipes (default: CHEST)
+  multiple-results: CHEST # Material shown on recipes with multiple results (default: CHEST)
 
 
 
