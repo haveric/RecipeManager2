@@ -87,7 +87,16 @@ public class FlagNeedMoney extends Flag {
     }
 
     public boolean checkMoney(double money) {
-        return (money >= minMoney && money <= maxMoney);
+        boolean check = false;
+
+        if (minMoney == maxMoney) {
+            if (money >= minMoney) {
+                check = true;
+            }
+        } else if (money >= minMoney && money <= maxMoney){
+            check = true;
+        }
+        return check;
     }
 
     public String getFailMessage() {
