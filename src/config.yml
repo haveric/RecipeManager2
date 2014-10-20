@@ -81,6 +81,10 @@ update-check:
 #   default: true
 metrics: true
 
+# Customize materials used when crafting recipes
+# Material names reference: http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
+material:
+  fail: FIRE #Sets the material to show on failed recipes (default: FIRE)
 
 
 

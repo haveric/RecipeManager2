@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagDisplayResult;
 import haveric.recipeManager.flags.FlagIngredientCondition;
@@ -43,7 +44,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (!checkFlags(a)) {
             a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
 
-            return ToolsItem.create(Material.FIRE, 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
+            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
         }
 
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
@@ -147,7 +148,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (receive) {
             displayMaterial = Material.CHEST;
         } else {
-            displayMaterial = Material.FIRE;
+            displayMaterial = Settings.getInstance().getFailMaterial();
         }
         return ToolsItem.create(displayMaterial, 0, 0, title, lore);
     }

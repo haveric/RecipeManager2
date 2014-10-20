@@ -45,6 +45,8 @@ public class Settings {
 
     private static final boolean METRICS_DEFAULT = true;
 
+    private static final Material MATERIAL_FAIL_DEFAULT = Material.FIRE;
+
     private static FileConfiguration fileConfig;
     private static FileConfiguration itemAliasesConfig;
     private static FileConfiguration enchantAliasesConfig;
@@ -117,17 +119,13 @@ public class Settings {
         Messages.log("    update-check.enabled: " + getUpdateCheckEnabled());
         Messages.log("    update-check.frequency: " + getUpdateCheckFrequency());
         Messages.log("    metrics: " + getMetrics());
+        Messages.log("    material.fail: " + getFailMaterial());
 
         itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
 
         if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.get("lastchanged"))) {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
-
-        //
-        // TODO remove for(Material m : Material.values()) { materialNames.put(String.valueOf(m.getId()), m); materialNames.put(Tools.parseAliasName(m.toString()), m); materialPrint.put(m,
-        // Tools.parseAliasPrint(m.toString())); }
-        //
 
         for (String arg : itemAliasesConfig.getKeys(false)) {
             if (arg.equals("lastchanged")) {
@@ -207,6 +205,14 @@ public class Settings {
                     enchantPrint.put(enchant, Tools.parseAliasPrint(str));
                 }
             }
+        }
+
+
+        String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
+
+        Material failMaterial = Material.matchMaterial(failString);
+        if (failMaterial == null) {
+            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to FIRE.");
         }
     }
 
@@ -366,6 +372,18 @@ public class Settings {
 
     public boolean getMetrics() {
         return fileConfig.getBoolean("metrics", METRICS_DEFAULT);
+    }
+
+    public Material getFailMaterial() {
+        String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
+
+        Material failMaterial = Material.matchMaterial(failString);
+
+        if (failMaterial == null) {
+            failMaterial = MATERIAL_FAIL_DEFAULT;
+        }
+
+        return failMaterial;
     }
 
 
