@@ -371,7 +371,7 @@ public class RecipeProcessor implements Runnable {
     private void parseFlags(Flags flags) throws Throwable {
         nextLine();
 
-        while (line != null && line.charAt(0) == '@') {
+        while (line != null && line.trim().charAt(0) == '@') {
             flags.parseFlag(line);
             nextLine();
         }
