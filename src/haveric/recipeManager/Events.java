@@ -1306,9 +1306,9 @@ public class Events implements Listener {
             String latestVersion = Updater.getLatestVersion();
             String currentVersion = Updater.getCurrentVersion();
 
-            int compare = Updater.compareVersions();
-
             if (latestVersion != null) {
+                int compare = Updater.compareVersions();
+
                 if (compare == -1) {
                     Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 } else if (compare == 2) {

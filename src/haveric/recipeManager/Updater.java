@@ -101,20 +101,18 @@ public class Updater {
     public static String getLatestVersion() {
         Pattern pattern = Pattern.compile(versionRegex);
         String latest = latestVersion;
-        if (latest == null) {
-            query(null);
-            latest = latestVersion;
-        }
 
-        Matcher matcher = pattern.matcher(latest);
-        if (matcher.find()) {
-            latest = matcher.group(1).replaceAll(" v", "");
+        if (latest != null) {
+            Matcher matcher = pattern.matcher(latest);
+            if (matcher.find()) {
+                latest = matcher.group(1).replaceAll(" v", "");
 
-            latestBetaStatus = matcher.group(2);
-            if (latestBetaStatus == null) {
-                latestBetaStatus = "";
-            } else {
-                latestBetaStatus = latestBetaStatus.replaceAll(" -", "");
+                latestBetaStatus = matcher.group(2);
+                if (latestBetaStatus == null) {
+                    latestBetaStatus = "";
+                } else {
+                    latestBetaStatus = latestBetaStatus.replaceAll(" -", "");
+                }
             }
         }
 
@@ -246,26 +244,29 @@ public class Updater {
                 } else {
                     String currentVersion = getCurrentVersion();
                     String latest = getLatestVersion();
-                    int compare = compareVersions();
 
-                    if (compare == 0) {
-                        if (sender != null) { // send this message only if it's a requested update check
-                            Messages.sendAndLog(sender, "<gray>Using the latest version: " + latest);
-                        } else {
-                            return; // block the disable message
+                    if (latest != null) {
+                        int compare = compareVersions();
+
+                        if (compare == 0) {
+                            if (sender != null) { // send this message only if it's a requested update check
+                                Messages.sendAndLog(sender, "<gray>Using the latest version: " + latest);
+                            } else {
+                                return; // block the disable message
+                            }
+                        } else if (compare == -1) {
+                            Messages.sendAndLog(sender, "New version: <green>" + latest + "<reset>! You're using <yellow>" + currentVersion);
+                            Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                        } else if (compare == 1) {
+                            Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
+                            Messages.sendAndLog(sender, "<gray>Thanks for helping to test RecipeManager!");
+                        } else if (compare == 2) {
+                            Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                            Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                        } else if (compare == 3) {
+                            Messages.send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                            Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         }
-                    } else if (compare == -1) {
-                        Messages.sendAndLog(sender, "New version: <green>" + latest + "<reset>! You're using <yellow>" + currentVersion);
-                        Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
-                    } else if (compare == 1) {
-                        Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
-                        Messages.sendAndLog(sender, "<gray>Thanks for helping to test RecipeManager!");
-                    } else if (compare == 2) {
-                        Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
-                        Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
-                    } else if (compare == 3) {
-                        Messages.send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
-                        Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                     }
                 }
 
