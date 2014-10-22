@@ -463,7 +463,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (recipeName != null || !recipeName.equals("")) {
+        if (recipeName != null && !recipeName.equals("")) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 
@@ -525,7 +525,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (recipeName != null || !recipeName.equals("")) {
+        if (recipeName != null && !recipeName.equals("")) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 
@@ -654,7 +654,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (recipeName != null || !recipeName.equals("")) {
+        if (recipeName != null && !recipeName.equals("")) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 
@@ -734,7 +734,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (recipeName != null || !recipeName.equals("")) {
+            if (recipeName != null && !recipeName.equals("")) {
                 String name = recipeName;
                 if (added > 1) {
                     name += " (" + added + ")";
@@ -778,7 +778,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (recipeName != null || !recipeName.equals("")) {
+            if (recipeName != null && !recipeName.equals("")) {
                 String name = recipeName;
                 if (added > 1) {
                     name += " (" + added + ")";
