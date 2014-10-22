@@ -463,7 +463,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (recipeName != null) {
+        if (recipeName != null || !recipeName.trim().equals("")) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 
@@ -525,7 +525,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (recipeName != null) {
+        if (recipeName != null || !recipeName.trim().equals("")) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 
@@ -654,7 +654,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (recipeName != null) {
+        if (recipeName != null || !recipeName.trim().equals("")) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 

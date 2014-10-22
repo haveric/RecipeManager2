@@ -3,7 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === v2.1.2 ===
 * Updated Metrics to handle old getOnlinePlayers (provides backward support for old versions of CraftBukkit)
-* Fixed error messages not showing up when a recipe name isn't set
+* Fixed spaces breaking recipe names
 * Fixed @needmoney not working with only the min value set
 * Fixed an Updater bug when a player joined too early
 * Added material.fail config to allow changing the Material shown when a recipe fails
