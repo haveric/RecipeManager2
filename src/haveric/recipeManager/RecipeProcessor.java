@@ -734,7 +734,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (recipeName != null) {
+            if (recipeName != null || !recipeName.trim().equals("")) {
                 String name = recipeName;
                 if (added > 1) {
                     name += " (" + added + ")";
@@ -778,7 +778,7 @@ public class RecipeProcessor implements Runnable {
                 continue;
             }
 
-            if (recipeName != null) {
+            if (recipeName != null || !recipeName.trim().equals("")) {
                 String name = recipeName;
                 if (added > 1) {
                     name += " (" + added + ")";
