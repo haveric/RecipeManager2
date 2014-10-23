@@ -508,7 +508,7 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void playerIntereact(PlayerInteractEvent event) {
+    public void playerInteract(PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 Player player = event.getPlayer();
