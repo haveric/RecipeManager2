@@ -128,7 +128,7 @@ public class ExtractCommand implements CommandExecutor {
                 FurnaceRecipe recipe = (FurnaceRecipe) r;
                 StringBuilder recipeString = new StringBuilder(RecipeType.SMELT.getDirective()).append(Files.NL);
 
-                recipeString.append(parseFurnaceIngredient(recipe.getInput()));
+                recipeString.append(parseIngredient(recipe.getInput()));
                 recipeString.append(Files.NL);
                 parseResult(recipe.getResult(), recipeString);
 
@@ -178,19 +178,6 @@ public class ExtractCommand implements CommandExecutor {
         }
 
         return true;
-    }
-
-    // TODO change to below method when furnace-data is pulled.
-    private String parseFurnaceIngredient(ItemStack item) {
-        String name;
-
-        if (item == null || item.getType() == Material.AIR) {
-            name = "air";
-        } else {
-            name = item.getType().toString().toLowerCase();
-        }
-
-        return name;
     }
 
     private String parseIngredient(ItemStack item) {

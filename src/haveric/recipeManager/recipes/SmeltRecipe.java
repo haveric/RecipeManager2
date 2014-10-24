@@ -66,9 +66,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
-
-        // TODO add data value when furnace-data is pulled
-        hash = ("smelt" + newIngredient.getTypeId()).hashCode();
+        hash = ("smelt" + newIngredient.getTypeId() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     public ItemResult getFuel() {
@@ -151,9 +149,9 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         s.append(ingredient.getType().toString().toLowerCase());
 
-        /*
-         * TODO when furnace-data is pulled if(ingredient.getDurability() != Vanilla.DATA_WILDCARD) { s.append(":").append(ingredient.getDurability()); }
-         */
+        if(ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
+            s.append(":").append(ingredient.getDurability());
+        }
 
         s.append(" to ");
 
@@ -170,6 +168,10 @@ public class SmeltRecipe extends SingleResultRecipe {
     @Override
     public int getIndex() {
         return ingredient.getTypeId();
+    }
+
+    public String getIndexString() {
+        return ingredient.getTypeId() + ":" + ingredient.getDurability();
     }
 
     public String getFuelIndex() {

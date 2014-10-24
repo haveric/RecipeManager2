@@ -10,6 +10,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added material.secret config to allow changing the Material shown for secret recipes
 * Added material.multiple-results config to allow changing the Material shown for recipes with multiple results
 * Fixed parsing of flags with spaces in front of the @ symbol
+* Support for data values in furnace recipes.
 * Misc. spelling fixes
 
 === v2.1.1 ===

@@ -47,7 +47,7 @@ public class Recipes {
     // Quick-find index
     protected Map<Integer, CraftRecipe> indexCraft = new HashMap<Integer, CraftRecipe>();
     protected Map<Integer, CombineRecipe> indexCombine = new HashMap<Integer, CombineRecipe>();
-    protected Map<Integer, SmeltRecipe> indexSmelt = new HashMap<Integer, SmeltRecipe>();
+    protected Map<String, SmeltRecipe> indexSmelt = new HashMap<String, SmeltRecipe>();
     protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<String, SmeltRecipe>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<String, FuelRecipe>();
     protected Map<String, BaseRecipe> indexName = new HashMap<String, BaseRecipe>();
@@ -192,7 +192,7 @@ public class Recipes {
         SmeltRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexSmelt.get(ingredient.getTypeId());
+            recipe = indexSmelt.get(ingredient.getTypeId() + ":" + ingredient.getDurability());
         }
         return recipe;
     }
@@ -308,7 +308,7 @@ public class Recipes {
             } else if (recipe instanceof SmeltRecipe) {
                 SmeltRecipe r = (SmeltRecipe) recipe;
 
-                indexSmelt.put(recipe.getIndex(), r);
+                indexSmelt.put(((SmeltRecipe) recipe).getIndexString(), r);
 
                 if (r.hasFuel()) {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
