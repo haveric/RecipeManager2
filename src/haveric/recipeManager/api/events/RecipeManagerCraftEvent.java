@@ -15,8 +15,6 @@ import org.bukkit.inventory.ItemStack;
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
  * Event can be cancelled to prevent the action.<br>
  * Event is triggered when a result is processed, it won't guarantee that the player will get the result!
- *
- * @author Digi
  */
 public class RecipeManagerCraftEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();

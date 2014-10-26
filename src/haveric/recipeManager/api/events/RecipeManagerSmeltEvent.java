@@ -20,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
  * Event triggered when RecipeManager's custom furnace recipes are being smelted.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
  * Event can be cancelled to prevent the action.
- *
- * @author Digi
  */
 public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();

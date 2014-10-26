@@ -13,8 +13,6 @@ import org.bukkit.inventory.ItemStack;
  * Event triggered when RecipeManager's custom recipes' ingredients are placed in the workbench and the result is displayed.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
  * Event can be cancelled by setting the result to null to prevent player from crafting the recipe.
- *
- * @author Digi
  */
 public class RecipeManagerPrepareCraftEvent extends Event {
     private static HandlerList handlers = new HandlerList();

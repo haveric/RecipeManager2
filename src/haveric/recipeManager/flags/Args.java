@@ -20,8 +20,6 @@ import org.bukkit.inventory.Inventory;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
- *
- * @author Digi
  */
 public class Args {
     private Player player;
