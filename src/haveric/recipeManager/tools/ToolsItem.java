@@ -219,7 +219,7 @@ public class ToolsItem {
             return item;
         }
 
-        if (item.isSimilar(into) && item.getAmount() <= (into.getMaxStackSize() - into.getAmount())) {
+        if (ToolsItem.isSameItem(into, item, true) && item.getAmount() <= (into.getMaxStackSize() - into.getAmount())) {
             ItemStack clone = item.clone();
 
             clone.setAmount(into.getAmount() + item.getAmount());
@@ -235,10 +235,43 @@ public class ToolsItem {
             return true;
         }
 
-        if (intoItem.isSimilar(item) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount())) {
+        if (ToolsItem.isSameItem(intoItem, item, true) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount())) {
             return true;
         }
 
         return false;
+    }
+
+    public static boolean isSameItem(ItemStack one, ItemStack two, boolean negativeDurAllowed) {
+        boolean same = false;
+
+        if (one != null && two != null) {
+            boolean sameType = one.getType() == two.getType();
+            boolean sameDur = one.getDurability() == two.getDurability();
+            boolean negativeDur = (one.getDurability() == Short.MAX_VALUE) || (two.getDurability() == Short.MAX_VALUE);
+
+            boolean sameEnchant = false;
+            boolean noEnchant = one.getEnchantments() == null && two.getEnchantments() == null;
+            if (!noEnchant) {
+                sameEnchant = one.getEnchantments().equals(two.getEnchantments());
+            }
+
+            boolean sameMeta = false;
+            boolean noMeta = one.getItemMeta() == null && two.getItemMeta() == null;
+
+            if (!noMeta) {
+                // Handles an empty slot being compared
+                if (one.getItemMeta() == null || two.getItemMeta() == null) {
+                    sameMeta = false;
+                } else {
+                    sameMeta = one.getItemMeta().equals(two.getItemMeta());
+                }
+            }
+
+            if (sameType && (sameDur || (negativeDurAllowed && negativeDur)) && (sameEnchant || noEnchant) && (sameMeta || noMeta)) {
+                same = true;
+            }
+        }
+        return same;
     }
 }
