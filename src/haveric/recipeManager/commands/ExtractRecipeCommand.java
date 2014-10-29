@@ -33,7 +33,9 @@ public class ExtractRecipeCommand implements CommandExecutor {
         if (sender instanceof Player) {
             ItemStack holdingStack = ((Player) sender).getItemInHand();
 
-            if (holdingStack != null) {
+            if (holdingStack == null || holdingStack.getType() == Material.AIR) {
+                Messages.send(sender, "No item to extract a recipe from.");
+            } else {
                 File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted item (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
 
                 if (file.exists()) {
@@ -103,14 +105,16 @@ public class ExtractRecipeCommand implements CommandExecutor {
         }
 
         ItemMeta meta = result.getItemMeta();
-        if (meta.hasDisplayName()) {
-            recipeString.append(Files.NL).append("  @").append(FlagType.ITEMNAME.getName()).append(' ').append(meta.getDisplayName());
-        }
+        if (meta != null) {
+            if (meta.hasDisplayName()) {
+                recipeString.append(Files.NL).append("  @").append(FlagType.ITEMNAME.getName()).append(' ').append(meta.getDisplayName());
+            }
 
-        if (meta.hasLore()) {
-            List<String> lores = meta.getLore();
-            for (String lore : lores) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ITEMLORE.getName()).append(' ').append(lore);
+            if (meta.hasLore()) {
+                List<String> lores = meta.getLore();
+                for (String lore : lores) {
+                    recipeString.append(Files.NL).append("  @").append(FlagType.ITEMLORE.getName()).append(' ').append(lore);
+                }
             }
         }
 
