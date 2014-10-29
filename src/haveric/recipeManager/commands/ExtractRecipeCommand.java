@@ -100,20 +100,20 @@ public class ExtractRecipeCommand implements CommandExecutor {
 
         if (enchantments > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ENCHANTITEM.getName()).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
+                recipeString.append(Files.NL).append("  @").append(FlagType.ENCHANTITEM.getNames()[1]).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
             }
         }
 
         ItemMeta meta = result.getItemMeta();
         if (meta != null) {
             if (meta.hasDisplayName()) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ITEMNAME.getName()).append(' ').append(meta.getDisplayName());
+                recipeString.append(Files.NL).append("  @").append(FlagType.ITEMNAME.getNames()[1]).append(' ').append(meta.getDisplayName());
             }
 
             if (meta.hasLore()) {
                 List<String> lores = meta.getLore();
                 for (String lore : lores) {
-                    recipeString.append(Files.NL).append("  @").append(FlagType.ITEMLORE.getName()).append(' ').append(lore);
+                    recipeString.append(Files.NL).append("  @").append(FlagType.ITEMLORE.getNames()[1]).append(' ').append(lore);
                 }
             }
         }

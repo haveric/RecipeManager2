@@ -209,7 +209,7 @@ public class ExtractCommand implements CommandExecutor {
 
         if (enchantments > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ENCHANTITEM.getName()).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
+                recipeString.append(Files.NL).append("  @").append(FlagType.ENCHANTITEM.getNames()[1]).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
             }
         }
 
