@@ -45,7 +45,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
                 }
 
                 StringBuilder recipeString = new StringBuilder(RecipeType.CRAFT.getDirective()).append(Files.NL);
-                recipeString.append(parseIngredient(holdingStack));
+                parseIngredient(holdingStack, recipeString);
                 recipeString.append(Files.NL);
                 parseResult(holdingStack, recipeString);
 
@@ -69,8 +69,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
         return false;
     }
 
-    // TODO: Move to shared space to remove duplicate code
-    private String parseIngredient(ItemStack item) {
+    private void parseIngredient(ItemStack item, StringBuilder recipeString) {
         String name;
 
         if (item == null || item.getType() == Material.AIR) {
@@ -87,33 +86,61 @@ public class ExtractRecipeCommand implements CommandExecutor {
             if (item.getAmount() != 1) {
                 name += ":" + item.getAmount();
             }
+
+            String ingredientCondition = "";
+
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                if (meta.hasDisplayName()) {
+                    ingredientCondition += " | name " + meta.getDisplayName();
+                }
+
+                if (meta.hasLore()) {
+                    List<String> lores = meta.getLore();
+                    for (String lore : lores) {
+                        ingredientCondition += " | lore " + lore;
+                    }
+                }
+            }
+
+            int enchantments = item.getEnchantments().size();
+            if (enchantments > 0) {
+                for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
+                    ingredientCondition += " | enchant " + entry.getKey().getName() + " " + entry.getValue();
+                }
+            }
+
+            int strLength = ingredientCondition.length();
+            if (strLength > 0) {
+                recipeString.append("@").append(FlagType.INGREDIENTCONDITION.getName()).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
+                recipeString.append(Files.NL);
+            }
+
         }
 
-        return name;
+        recipeString.append(name);
     }
 
-    // TODO: Move to shared space to remove duplicate code
     private void parseResult(ItemStack result, StringBuilder recipeString) {
         recipeString.append("= ").append(result.getType().toString().toLowerCase()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
 
         int enchantments = result.getEnchantments().size();
-
         if (enchantments > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ENCHANTITEM.getNames()[1]).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
+                recipeString.append(Files.NL).append("  @enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
             }
         }
 
         ItemMeta meta = result.getItemMeta();
         if (meta != null) {
             if (meta.hasDisplayName()) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ITEMNAME.getNames()[1]).append(' ').append(meta.getDisplayName());
+                recipeString.append(Files.NL).append("  @name ").append(meta.getDisplayName());
             }
 
             if (meta.hasLore()) {
                 List<String> lores = meta.getLore();
                 for (String lore : lores) {
-                    recipeString.append(Files.NL).append("  @").append(FlagType.ITEMLORE.getNames()[1]).append(' ').append(lore);
+                    recipeString.append(Files.NL).append("  @lore ").append(lore);
                 }
             }
         }

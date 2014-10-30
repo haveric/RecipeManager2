@@ -9,6 +9,7 @@ import haveric.recipeManager.tools.ParseBit;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -104,7 +105,7 @@ public class FlagIngredientCondition extends Flag {
         private int amount;
         private Map<Enchantment, Map<Short, Boolean>> enchants = new HashMap<Enchantment, Map<Short, Boolean>>();
         private String name;
-        private String lore;
+        private List<String> lores = new ArrayList<String>();
         private Color minColor;
         private Color maxColor;
 
@@ -134,7 +135,7 @@ public class FlagIngredientCondition extends Flag {
 
             name = original.name;
 
-            lore = original.lore;
+            lores = original.lores;
 
             minColor = original.minColor;
             maxColor = original.maxColor;
@@ -526,20 +527,19 @@ public class FlagIngredientCondition extends Flag {
             return false;
         }
 
-        public String getLore() {
-            return lore;
+        public List<String> getLores() {
+            return lores;
         }
 
-        public void setLore(String newLore) {
-            if (newLore == null) {
-                lore = null;
-            } else {
-                lore = Tools.parseColors(newLore, false);
+        public void addLore(String newLore) {
+            if (newLore != null) {
+                lores.add(Tools.parseColors(newLore, false));
             }
+
         }
 
         public boolean hasLore() {
-            return lore != null;
+            return lores != null && !lores.isEmpty();
         }
 
         public boolean checkLore(List<String> loreToCheck) {
@@ -549,29 +549,40 @@ public class FlagIngredientCondition extends Flag {
 
             Pattern pattern = null;
 
-            if (lore.startsWith("regex:")) {
-                try {
-                    pattern = Pattern.compile(lore.substring("regex:".length()));
-                } catch (PatternSyntaxException e) {
-                    ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
-                    return false;
+            int matchedLoreChecks = 0;
+            int totalLoreChecks = lores.size();
+            for (String lore : lores) {
+                if (lore.startsWith("regex:")) {
+                    try {
+                        pattern = Pattern.compile(lore.substring("regex:".length()));
+                    } catch (PatternSyntaxException e) {
+                        ErrorReporter.error("Flag " + getType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
+                        return false;
+                    }
                 }
-            }
 
-            if (loreToCheck != null && !loreToCheck.isEmpty()) {
-                for (String line : loreToCheck) {
-                    if (line != null) {
-                        if (lore.startsWith("regex:")) {
-                            if (pattern.matcher(line).matches()) {
-                                return true;
-                            }
-                        } else {
-                            if (lore.equalsIgnoreCase(line)) {
-                                return true;
+                if (loreToCheck != null && !loreToCheck.isEmpty()) {
+                    for (String line : loreToCheck) {
+                        if (line != null) {
+                            if (lore.startsWith("regex:")) {
+                                if (pattern.matcher(line).matches()) {
+                                    matchedLoreChecks ++;
+                                    break;
+                                }
+                            } else {
+                                if (lore.equalsIgnoreCase(line)) {
+                                    Messages.send(null, " equal lore");
+                                    matchedLoreChecks ++;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+            }
+
+            if (matchedLoreChecks == totalLoreChecks) {
+                return true;
             }
 
             return false;
@@ -770,7 +781,7 @@ public class FlagIngredientCondition extends Flag {
                     return false;
                 }
 
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOLORE, getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLore());
+                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOLORE, getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLores());
                 ok = false;
 
                 if (getFailMessage() != null) {
@@ -1043,7 +1054,7 @@ public class FlagIngredientCondition extends Flag {
             } else if (arg.startsWith("lore")) {
                 value = args[i].trim().substring("lore".length()).trim(); // preserve case for regex
 
-                cond.setLore(value);
+                cond.addLore(value);
             } else if (arg.startsWith("failmsg")) {
                 value = args[i].trim().substring("failmsg".length()).trim(); // preserve case... because it's a message
 

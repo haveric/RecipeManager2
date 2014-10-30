@@ -4,7 +4,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 
 import java.io.BufferedWriter;
@@ -29,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class ExtractCommand implements CommandExecutor {
@@ -206,10 +206,23 @@ public class ExtractCommand implements CommandExecutor {
         recipeString.append("= ").append(result.getType().toString().toLowerCase()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
 
         int enchantments = result.getEnchantments().size();
-
         if (enchantments > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
-                recipeString.append(Files.NL).append("  @").append(FlagType.ENCHANTITEM.getNames()[1]).append(' ').append(entry.getKey().toString()).append(' ').append(entry.getValue());
+                recipeString.append(Files.NL).append("  @enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
+            }
+        }
+
+        ItemMeta meta = result.getItemMeta();
+        if (meta != null) {
+            if (meta.hasDisplayName()) {
+                recipeString.append(Files.NL).append("  @name ").append(meta.getDisplayName());
+            }
+
+            if (meta.hasLore()) {
+                List<String> lores = meta.getLore();
+                for (String lore : lores) {
+                    recipeString.append(Files.NL).append("  @lore ").append(lore);
+                }
             }
         }
 

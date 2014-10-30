@@ -11,6 +11,9 @@ This file will be automatically overwritten when a new version is installed.
 * Added material.multiple-results config to allow changing the Material shown for recipes with multiple results
 * Fixed parsing of flags with spaces in front of the @ symbol
 * Support for data values in furnace recipes.
+* Fixed enchantments and improved recipe extraction for /rmextract
+* Added /rmextractrecipe (Alias: /extractrecipe) to extract a recipe for the item the player is currently holding.
+* Allow multiple lore checks in @ingredientcondition
 * Misc. spelling fixes
 
 === v2.1.1 ===
