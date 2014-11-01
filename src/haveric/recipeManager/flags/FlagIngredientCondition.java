@@ -571,7 +571,6 @@ public class FlagIngredientCondition extends Flag {
                                 }
                             } else {
                                 if (lore.equalsIgnoreCase(line)) {
-                                    Messages.send(null, " equal lore");
                                     matchedLoreChecks ++;
                                     break;
                                 }
@@ -1081,11 +1080,10 @@ public class FlagIngredientCondition extends Flag {
             }
         }
     }
-
+    // TODO: Better handle conditions to allow multiple recipes per item:dur
     public void setIngredientConditions(ItemStack item, Conditions cond) {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
-
         conditions.put(Tools.convertItemToStringId(item), cond);
     }
 

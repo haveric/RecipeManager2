@@ -36,13 +36,13 @@ class FurnaceWorker implements Runnable {
 
     protected static void start() {
         if (!isRunning()) {
-            new FurnaceWorker();
+            //new FurnaceWorker();
         }
     }
 
     protected static void restart() {
         stop();
-        new FurnaceWorker();
+        //new FurnaceWorker();
     }
 
     protected static boolean isRunning() {
@@ -129,7 +129,7 @@ class FurnaceWorker implements Runnable {
                     progress += (tickRate / data.getCookTime());
 
                     data.setCookProgress(progress);
-
+                    // TODO: Figure out why this creates more results as more furnaces are running
                     furnace.setCookTime(data.getCookProgressForFurnace());
 
                     if (recipe.hasFuel()) {

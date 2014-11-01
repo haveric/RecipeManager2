@@ -38,6 +38,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
@@ -613,33 +614,82 @@ public class Events implements Listener {
             return;
         }
 
-        FurnaceInventory inv = furnace.getInventory();
+        FurnaceInventory inventory = furnace.getInventory();
         ItemStack cursor = event.getCursor();
         ItemStack clicked = event.getCurrentItem();
         int slot = event.getRawSlot();
 
         switch (slot) {
             case 0: // INGREDIENT slot
+                if (event.getClick() == ClickType.NUMBER_KEY) {
+                    if (clicked == null || clicked.getType() == Material.AIR) {
+                        int hotbarButton = event.getHotbarButton();
+                        ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
+
+                        if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
+                            SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(hotbarItem);
+
+                            if (recipe != null) {
+                                if (recipe.hasFlag(FlagType.REMOVE)) {
+                                    event.setCancelled(true);
+                                }
+
+                                FurnaceData data = Furnaces.get(furnace.getLocation());
+
+                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+
+                                if (!furnaceHandleFlaggable(recipe, a, true)) {
+                                    event.setCancelled(true);
+                                }
+
+                                furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                            }
+                        }
+                    }
+
+                } else if (cursor != null && cursor.getType() != Material.AIR) {
+                    if (clicked == null || clicked.getType() == Material.AIR || !ToolsItem.isSameItem(cursor, clicked, true)) {
+                        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
+
+                        if (recipe != null) {
+                            if (recipe.hasFlag(FlagType.REMOVE)) {
+                                event.setCancelled(true);
+                            }
+
+                            FurnaceData data = Furnaces.get(furnace.getLocation());
+
+                            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+
+                            if (!furnaceHandleFlaggable(recipe, a, true)) {
+                                event.setCancelled(true);
+                            }
+
+                            furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                        }
+                    }
+                }
+                break;
             case 1: // FUEL slot
                 // TODO middle click detection required
                 if (event.isShiftClick() /* || event.isMiddleClick() */) {
                     cursor = null; // if you're shift+clicking or using middle click on the slot then you're not placing anything
                 }
-
+                /** TODO removed for now
                 if (!furnaceModifySlot(furnace, inv, player, slot, cursor)) {
                     event.setCancelled(true);
                     new UpdateInventory(player, 0);
                     return;
                 }
+                */
 
-                return;
+                break;
 
             case 2: // RESULT slot
-                return;
+                break;
 
             default: // player inventory - Shift+Click handling in player inventory while having furnace UI opened
                 if (slot == -999 || !event.isShiftClick() || clicked == null || clicked.getType() == Material.AIR) {
-                    return; // abort if clicked outside of inventory OR not shift+click OR clicked on empty slot
+                    break; // abort if clicked outside of inventory OR not shift+click OR clicked on empty slot
                 }
 
                 // Get the target slot for the shift+click
@@ -653,18 +703,19 @@ public class Events implements Listener {
                     }
                 }
 
-                ItemStack item = inv.getItem(targetSlot); // Get the item at the target slot
+                ItemStack item = inventory.getItem(targetSlot); // Get the item at the target slot
                 boolean similarItems = clicked.isSimilar(item); // Check if the clicked item is similar to the item at the targeted slot
 
                 // Check if it's normal shift+click mode setting and if targeted slot is the fuel slot and there is an item there but it's not similar to our clicked item
                 if (Settings.getInstance().getFurnaceShiftClick() == 'f' && targetSlot == 1 && item != null && !similarItems) {
                     targetSlot = 0; // change the target slot to ingredient slot
-                    item = inv.getItem(targetSlot); // get the item at the new set slot
+                    item = inventory.getItem(targetSlot); // get the item at the new set slot
                     similarItems = clicked.isSimilar(item); // update similarity check
                 }
 
                 if (item == null || item.getType() == Material.AIR) { // If targeted item slot is empty
                     // Check if item is allowed to be placed on that slot
+                    /** TODO: removed for now
                     if (furnaceModifySlot(furnace, inv, player, targetSlot, clicked)) {
                         inv.setItem(targetSlot, clicked); // send the item to the slot
                         event.setCurrentItem(null); // clear the clicked slot
@@ -673,10 +724,11 @@ public class Events implements Listener {
                     } else {
                         event.setCancelled(true);
                     }
+                    */
                 } else {
                     // Otherwise the targeted slot contains some item, need to identify if we can stack over it
 
-                    int maxStack = Math.max(inv.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
+                    int maxStack = Math.max(inventory.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
                     int itemAmount = item.getAmount(); // get how many items there are in the stack
 
                     if (similarItems && itemAmount < maxStack) { // if item has room for more and they're similar
@@ -698,7 +750,7 @@ public class Events implements Listener {
                 }
         }
     }
-
+/*
     private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
         // TODO NOTE: Don't rely on AMOUNTS until the event is updated!
 
@@ -836,7 +888,7 @@ public class Events implements Listener {
 
         return true;
     }
-
+    */
     private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft) {
         if (flaggable == null) {
             return false;
@@ -881,122 +933,70 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void furnaceBurn(FurnaceBurnEvent event) {
-        try {
-            Furnace furnace = (Furnace) event.getBlock().getState();
-            FurnaceData data = Furnaces.get(furnace.getLocation());
-            int time = furnaceBurnTime(event, furnace, data);
+        short burnTime = 0;
+        short cookTime = 0;
+        Furnace furnace = (Furnace) event.getBlock().getState();
+        FurnaceInventory inventory = furnace.getInventory();
+        FurnaceData data = Furnaces.get(furnace.getLocation());
 
-            if (time == -1) {
-                data.setBurnTicks(furnace.getBurnTime());
-                return;
-            }
-
-            if (time == 0) {
+        FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+        if (fuelRecipe != null) {
+            if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
-            } else {
-                event.setBurning(true);
-                event.setBurnTime(time);
-            }
-            int burnTicks;
-            if (!event.isCancelled() && event.isBurning()) {
-                burnTicks = event.getBurnTime();
-            } else {
-                burnTicks = 0;
             }
 
-            data.setBurnTicks(burnTicks);
-        } catch (Throwable e) {
-            event.setCancelled(true);
-            Messages.error(null, e, event.getEventName() + " cancelled due to error:");
-        }
-    }
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
-    private int furnaceBurnTime(FurnaceBurnEvent event, Furnace furnace, FurnaceData data) {
-        FuelRecipe fr = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
-        FurnaceInventory inv = furnace.getInventory();
-
-        if (fr != null) {
-            if (fr.hasFlag(FlagType.REMOVE)) {
-                return 0;
+            if (!furnaceHandleFlaggable(fuelRecipe, a, true)) {
+                event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
-
-            if (!furnaceHandleFlaggable(fr, a, true)) {
-                return 0;
-            }
-
-            return fr.getBurnTicks();
+            burnTime = (short) fuelRecipe.getBurnTicks();
         }
 
-        // Smelting recipe with specific fuel
-        ItemStack ingredient = furnace.getInventory().getSmelting();
-        SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+        ItemStack ingredient = inventory.getSmelting();
+        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
 
-        if (sr != null) {
-            if (!sr.hasFuel() || !sr.getFuel().isSimilar(event.getFuel())) {
-                return 0;
+        if (recipe != null) {
+            if (recipe.hasFlag(FlagType.REMOVE)) {
+                event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fr).inventory(inv).extra(inv.getSmelting()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
-            if (!furnaceHandleFlaggable(sr, a, true)) {
-                return 0;
+            if (!furnaceHandleFlaggable(recipe, a, true)) {
+                event.setCancelled(true);
             }
 
-            ItemStack fuel = furnace.getInventory().getFuel();
-            fuel.setAmount(fuel.getAmount() + 1);
-            data.setFuel(fuel);
-
-            return Short.MAX_VALUE;
+            cookTime = (short) (200 - recipe.getCookTicks());
         }
 
-        return -1;
+        if (fuelRecipe != null) {
+            event.setBurnTime(burnTime);
+        }
+
+        if (recipe != null) {
+            furnace.setCookTime(cookTime);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void furnaceSmelt(FurnaceSmeltEvent event) {
-        try {
-            SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(event.getSource());
+        Furnace furnace = (Furnace) event.getBlock().getState();
+        FurnaceInventory inventory = furnace.getInventory();
 
-            if (recipe == null) {
-                return;
-            }
+        short cookTime = 0;
+        ItemStack ingredient = inventory.getSmelting();
+        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
 
-            Furnace furnace = (Furnace) event.getBlock().getState();
-            FurnaceInventory inv = furnace.getInventory();
-
-            // Special handling if the recipe has a predefined fuel in it
-            if (recipe.hasFuel()) {
-                ItemStack fuel = ToolsItem.nullIfAir(inv.getFuel());
-
-                if (fuel != null) {
-                    int amount = fuel.getAmount() - 1;
-
-                    if (amount > 0) {
-                        fuel.setAmount(amount);
-                    } else {
-                        inv.setFuel(null);
-                    }
-
-                    ItemStack smelting = ToolsItem.nullIfAir(inv.getSmelting());
-
-                    if (smelting != null && smelting.getAmount() <= 1) {
-                        smelting = null;
-                    }
-
-                    if (inv.getFuel() == null || smelting == null) {
-                        furnace.setBurnTime((short) 0);
-
-                        FurnaceData data = Furnaces.get(furnace.getLocation());
-                        data.setBurnTicks(0);
-                    }
-                }
+        if (recipe != null) {
+            if (recipe.hasFlag(FlagType.REMOVE)) {
+                event.setCancelled(true);
             }
 
             FurnaceData data = Furnaces.get(furnace.getLocation());
 
-            Args a = Args.create().player(data.getSmelter()).location(furnace.getLocation()).recipe(recipe).inventory(inv).extra(inv.getSmelting()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
             ItemResult result = recipe.getResult(a);
 
@@ -1009,16 +1009,17 @@ public class Events implements Listener {
                 event.setCancelled(true);
             } else {
                 if (a.result() == null || a.result().getType() == Material.AIR) {
-                    recipe.subtractIngredient(inv, false);
+                    recipe.subtractIngredient(inventory, false);
                     event.setCancelled(true);
-                } else {
-                    recipe.subtractIngredient(inv, true);
-                    event.setResult(a.result());
                 }
             }
-        } catch (Throwable e) {
-            event.setCancelled(true);
-            Messages.error(null, e, event.getEventName() + " cancelled due to error:");
+
+
+            cookTime = (short) (200 - recipe.getCookTicks());
+        }
+
+        if (recipe != null) {
+            furnace.setCookTime(cookTime);
         }
     }
 
@@ -1085,10 +1086,11 @@ public class Events implements Listener {
                 Furnace furnace = inv.getHolder();
 
                 // TODO get player that placed the initial item in the hopper ?
-
+                /** TODO remove for now
                 if (!furnaceModifySlot(furnace, inv, null, slot, event.getItem())) {
                     event.setCancelled(true);
                 }
+                */
             }
             /*
              * else if(event.getSource() instanceof FurnaceInventory) { SlotType slot = hopperFurnaceSlot(event.getDestination(), true);

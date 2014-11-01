@@ -1,5 +1,7 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.flags.FlagIngredientCondition;
+import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
 import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
@@ -24,12 +26,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -371,7 +376,7 @@ public class RecipeProcessor implements Runnable {
     private void parseFlags(Flags flags) throws Throwable {
         nextLine();
 
-        while (line != null && line.trim().charAt(0) == '@') {
+        while (line != null && line.trim().length() > 0 && line.trim().charAt(0) == '@') {
             flags.parseFlag(line);
             nextLine();
         }
@@ -415,13 +420,40 @@ public class RecipeProcessor implements Runnable {
 
             for (int i = 0; i < rowLen; i++) { // go through each ingredient on the line
                 item = Tools.parseItem(split[i], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
-
                 if (item == null) { // invalid item
                     ingredientErrors = true;
                 }
 
                 // no point in adding more ingredients if there are errors
                 if (!ingredientErrors && item.getType() != Material.AIR) {
+                    if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                        Conditions conditions = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(item);
+                        ItemMeta meta = item.getItemMeta();
+
+                        if (conditions.hasName()) {
+                            meta.setDisplayName(conditions.getName());
+                        }
+
+                        if (conditions.hasEnchants()) {
+                            Map<Enchantment, Map<Short, Boolean>> enchants = conditions.getEnchants();
+                            for (Entry<Enchantment, Map<Short, Boolean>> entry : enchants.entrySet()) {
+                                Enchantment enchant = entry.getKey();
+                                Map<Short, Boolean> value = entry.getValue();
+
+                                for (Entry<Short, Boolean> enchantEntry : value.entrySet()) {
+                                    short level = enchantEntry.getKey();
+                                    boolean ignore = enchantEntry.getValue();
+                                    meta.addEnchant(enchant, level, ignore);
+                                }
+                            }
+                        }
+
+                        if (conditions.hasLore()) {
+                            meta.setLore(conditions.getLores());
+                        }
+
+                        item.setItemMeta(meta);
+                    }
                     ingredients[(rows * 3) + i] = item;
                     ingredientsNum++;
                 }
@@ -498,6 +530,35 @@ public class RecipeProcessor implements Runnable {
                 return false;
             }
 
+            if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                Conditions conditions = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(item);
+                ItemMeta meta = item.getItemMeta();
+
+                if (conditions.hasName()) {
+                    meta.setDisplayName(conditions.getName());
+                }
+
+                if (conditions.hasEnchants()) {
+                    Map<Enchantment, Map<Short, Boolean>> enchants = conditions.getEnchants();
+                    for (Entry<Enchantment, Map<Short, Boolean>> entry : enchants.entrySet()) {
+                        Enchantment enchant = entry.getKey();
+                        Map<Short, Boolean> value = entry.getValue();
+
+                        for (Entry<Short, Boolean> enchantEntry : value.entrySet()) {
+                            short level = enchantEntry.getKey();
+                            boolean ignore = enchantEntry.getValue();
+                            meta.addEnchant(enchant, level, ignore);
+                        }
+                    }
+                }
+
+                if (conditions.hasLore()) {
+                    meta.setLore(conditions.getLores());
+                }
+
+                item.setItemMeta(meta);
+            }
+
             ingredients.add(item);
         }
 
@@ -572,6 +633,35 @@ public class RecipeProcessor implements Runnable {
 
         if (ingredient.getType() == Material.AIR) {
             return ErrorReporter.error("Recipe does not accept AIR as ingredients!");
+        }
+
+        if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
+            Conditions conditions = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(ingredient);
+            ItemMeta meta = ingredient.getItemMeta();
+
+            if (conditions.hasName()) {
+                meta.setDisplayName(conditions.getName());
+            }
+
+            if (conditions.hasEnchants()) {
+                Map<Enchantment, Map<Short, Boolean>> enchants = conditions.getEnchants();
+                for (Entry<Enchantment, Map<Short, Boolean>> entry : enchants.entrySet()) {
+                    Enchantment enchant = entry.getKey();
+                    Map<Short, Boolean> value = entry.getValue();
+
+                    for (Entry<Short, Boolean> enchantEntry : value.entrySet()) {
+                        short level = enchantEntry.getKey();
+                        boolean ignore = enchantEntry.getValue();
+                        meta.addEnchant(enchant, level, ignore);
+                    }
+                }
+            }
+
+            if (conditions.hasLore()) {
+                meta.setLore(conditions.getLores());
+            }
+
+            ingredient.setItemMeta(meta);
         }
 
         recipe.setIngredient(ingredient);

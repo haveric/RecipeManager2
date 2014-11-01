@@ -8,13 +8,16 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class CraftRecipe extends WorkbenchRecipe {
@@ -190,6 +193,27 @@ public class CraftRecipe extends WorkbenchRecipe {
                     height = Math.max(height, h);
 
                     str.append(item.getTypeId()).append(':').append(item.getDurability());
+
+                    if (item.getEnchantments().size() > 0) {
+                        for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
+                            str.append("enchant:").append(entry.getKey().getName()).append(':').append(entry.getValue());
+                        }
+                    }
+
+                    if (item.hasItemMeta()) {
+                        ItemMeta meta = item.getItemMeta();
+
+                        if (meta.hasDisplayName()) {
+                            str.append("name:").append(meta.getDisplayName());
+                        }
+
+                        if (meta.hasLore()) {
+                            List<String> lores = meta.getLore();
+                            for (String lore : lores) {
+                                str.append("lore:").append(lore);
+                            }
+                        }
+                    }
                 }
 
                 str.append(';');
