@@ -1002,7 +1002,9 @@ public class RecipeProcessor implements Runnable {
             } else {
                 recipe.getFlags().addFlag(new FlagOverride());
 
-                ErrorReporter.warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
+                if (!Settings.getInstance().getDisableOverrideWarnings()) {
+                    ErrorReporter.warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
+                }
 
                 return true; // allow to be added since we're overwriting it
             }

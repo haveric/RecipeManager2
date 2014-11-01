@@ -49,6 +49,8 @@ public class Settings {
     private static final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
     private static final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
 
+    private static final boolean DISABLE_OVERRIDE_WARNINGS_DEFAULT = false;
+
     private static FileConfiguration fileConfig;
     private static FileConfiguration itemAliasesConfig;
     private static FileConfiguration enchantAliasesConfig;
@@ -124,6 +126,7 @@ public class Settings {
         Messages.log("    material.fail: " + getFailMaterial());
         Messages.log("    material.secret: " + getSecretMaterial());
         Messages.log("    material.multiple-results: " + getMultipleResultsMaterial());
+        Messages.log("    disable-override-warnings: " + getDisableOverrideWarnings());
 
 
         itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
@@ -425,6 +428,11 @@ public class Settings {
 
         return multipleResultsMaterial;
     }
+
+    public boolean getDisableOverrideWarnings() {
+        return fileConfig.getBoolean("disable-override-warnings", DISABLE_OVERRIDE_WARNINGS_DEFAULT);
+    }
+
 
     public Enchantment getEnchantment(String name) {
         return enchantNames.get(name);

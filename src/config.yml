@@ -88,5 +88,7 @@ material:
   secret: CHEST           # Material shown on secret recipes (default: CHEST)
   multiple-results: CHEST # Material shown on recipes with multiple results (default: CHEST)
 
-
+# Disable 'Recipe already created by <plugin>, recipe overwritten!' warnings
+#   default: false
+disable-override-warnings: false
 
