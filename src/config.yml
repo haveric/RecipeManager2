@@ -44,12 +44,6 @@ color-console: true
 furnace-shift-click: fuel
 
 
-# Ticks that the furnace task runs at, 20 ticks is 1 second. Valid values are between 1 and 20.
-# Use 2 or more if you have a very slow server OR a lot of burning furnaces at once cause lag.
-#   default: 1
-furnace-ticks: 1
-
-
 # Multithreading allows server to do certain tasks in another thread (background) which would avoid freezing the server if it takes too long.
 # This is currently used for loading recipes, however if you encounter any weird problems you can disable this to make it run in the main thread.
 # Don't take this as a magic-fix! If you don't understand your problem then post it here: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/

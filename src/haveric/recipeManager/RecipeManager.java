@@ -75,15 +75,12 @@ public class RecipeManager extends JavaPlugin {
         ArgBuilder.init();
         FlagType.init();
         RecipeBooks.init();
-        FurnaceWorker.init();
 
         Files.init();
         Players.init();
         Workbenches.init();
 
         reload(null, false, true); // load data
-
-        FurnaceWorker.start(); // keep furnace worker running at all times because it has a lot of jobs
 
         pm.callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
 
@@ -226,7 +223,6 @@ public class RecipeManager extends JavaPlugin {
             Furnaces.save();
             Furnaces.clean();
 
-            FurnaceWorker.clean();
             Workbenches.clean();
             Players.clean();
             Vanilla.clean();

@@ -34,7 +34,6 @@ public class Settings {
     private static final boolean COLOR_CONSOLE_DEFAULT = true;
 
     private static final String FURNACE_SHIFT_CLICK_DEFAULT = "f";
-    private static final int FURNACE_TICKS_DEFAULT = 1;
 
     private static final boolean MULTITHREADING_DEFAULT = true;
 
@@ -116,7 +115,6 @@ public class Settings {
         Messages.log("    update-books: " + getUpdateBooks());
         Messages.log("    color-console: " + getColorConsole());
         Messages.log("    furnace-shift-click: " + getFurnaceShiftClick());
-        Messages.log("    furnace-ticks: " + getFurnaceTicks(sender));
         Messages.log("    multithreading: " + getMultithreading());
         Messages.log("    fix-mod-results: " + getFixModResults());
         Messages.log("    clear-recipes: " + getClearRecipes());
@@ -360,17 +358,6 @@ public class Settings {
 
     public char getFurnaceShiftClick() {
         return fileConfig.getString("furnace-shift-click", FURNACE_SHIFT_CLICK_DEFAULT).charAt(0);
-    }
-
-    public int getFurnaceTicks(CommandSender sender) {
-        int ticks = fileConfig.getInt("furnace-ticks", FURNACE_TICKS_DEFAULT);
-
-        if (ticks < 1 || ticks > 20) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CONFIG + "' has invalid value for 'furnace-ticks', it must be between 1 and 20. Defaulting to 1.");
-            ticks = 1;
-        }
-
-        return ticks;
     }
 
     public boolean getMultithreading() {

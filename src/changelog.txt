@@ -15,6 +15,8 @@ This file will be automatically overwritten when a new version is installed.
 * Added /rmextractrecipe (Alias: /extractrecipe) to extract a recipe for the item the player is currently holding.
 * Allow multiple lore checks in @ingredientcondition
 * Added disable-override-warnings config to disable 'Recipe already created by <plugin>, recipe overwritten!' warnings
+* Reworked furnace smelt/fuel recipes
+** Removed furnace-ticks config
 * Misc. spelling fixes
 
 === v2.1.1 ===
