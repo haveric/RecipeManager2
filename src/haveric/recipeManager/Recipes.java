@@ -194,6 +194,11 @@ public class Recipes {
         if (ingredient != null) {
             recipe = indexSmelt.get(ingredient.getTypeId() + ":" + ingredient.getDurability());
         }
+
+        if (recipe == null) {
+            recipe = indexSmelt.get(ingredient.getTypeId() + ":" + Vanilla.DATA_WILDCARD);
+        }
+
         return recipe;
     }
 
