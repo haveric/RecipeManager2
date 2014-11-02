@@ -147,12 +147,19 @@ public class RecipeProcessor implements Runnable {
                 }
                 if (errors > 0) {
                     String senderMessage;
-                    if (sender == null) {
-                        senderMessage = ", see below:";
+                    if (errors == 1) {
+                        senderMessage = " error was found";
                     } else {
-                        senderMessage = ", see console.";
+                        senderMessage = " errors were found";
                     }
-                    Messages.sendAndLog(sender, ChatColor.YELLOW + parsed + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + " errors were found" + senderMessage);
+
+                    if (sender == null) {
+                        senderMessage += ", see below:";
+                    } else {
+                        senderMessage += ", see console.";
+                    }
+
+                    Messages.sendAndLog(sender, ChatColor.YELLOW + parsed + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + senderMessage);
 
                     ErrorReporter.print(FILE_ERRORLOG);
                 } else {
