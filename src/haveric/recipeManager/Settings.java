@@ -129,7 +129,7 @@ public class Settings {
 
         itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
 
-        if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.get("lastchanged"))) {
+        if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.getString("lastchanged"))) {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
@@ -172,7 +172,7 @@ public class Settings {
 
         enchantAliasesConfig = loadYML(Files.FILE_ENCHANT_ALIASES);
 
-        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.get("lastchanged"))) {
+        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.getString("lastchanged"))) {
             Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 

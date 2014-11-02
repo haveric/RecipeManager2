@@ -15,9 +15,12 @@ This file will be automatically overwritten when a new version is installed.
 * Allow multiple lore checks in @ingredientcondition
 * Added disable-override-warnings config to disable 'Recipe already created by <plugin>, recipe overwritten!' warnings
 * Reworked furnace smelt/fuel recipes
+** Significant performance improvements
+** Removes issue with furnaces smelting multiple items
 ** Removed furnace-ticks config
-** Support for data values in furnace recipes.
+** Support for data values in furnace recipes
 ** Some flags may not work right now with furnaces
+* Fixed files not detecting the version correctly
 * Misc. spelling fixes
 
 === v2.1.1 ===
