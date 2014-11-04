@@ -163,14 +163,14 @@ diamond + diamond
     <h3>SMELT RECIPE - furnace smelting recipe</h3>
 <pre>
 SMELT [recipe name]
-&lt;material&gt; % [time]
+&lt;material&gt;:[data] % [time]
 &amp; [material:[data]]
 = [chance]% &lt;material:[data]:[amount]&gt;
 // one result max!
 </pre>
     
     <ul>
-        <li>The first '&lt;material&gt;' is the ingredient, it can't have data values because the game doesn't support it but you can use <a href="recipe flags.html#ingredientcondition">@ingredientcondition flag</a>.</li>
+        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data.</li>
         <li>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash.</li>
         <li>(optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)</li>
         <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!</li>
