@@ -674,13 +674,12 @@ public class Events implements Listener {
                 if (event.isShiftClick() /* || event.isMiddleClick() */) {
                     cursor = null; // if you're shift+clicking or using middle click on the slot then you're not placing anything
                 }
-                /** TODO removed for now
-                if (!furnaceModifySlot(furnace, inv, player, slot, cursor)) {
+
+                if (!furnaceModifySlot(furnace, inventory, player, slot, cursor)) {
                     event.setCancelled(true);
                     new UpdateInventory(player, 0);
                     return;
                 }
-                */
 
                 break;
 
@@ -715,16 +714,15 @@ public class Events implements Listener {
 
                 if (item == null || item.getType() == Material.AIR) { // If targeted item slot is empty
                     // Check if item is allowed to be placed on that slot
-                    /** TODO: removed for now
-                    if (furnaceModifySlot(furnace, inv, player, targetSlot, clicked)) {
-                        inv.setItem(targetSlot, clicked); // send the item to the slot
+
+                    if (furnaceModifySlot(furnace, inventory, player, targetSlot, clicked)) {
+                        inventory.setItem(targetSlot, clicked); // send the item to the slot
                         event.setCurrentItem(null); // clear the clicked slot
                         event.setCancelled(true); // cancel only if we're going to mess with the items
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     } else {
                         event.setCancelled(true);
                     }
-                    */
                 } else {
                     // Otherwise the targeted slot contains some item, need to identify if we can stack over it
 
@@ -750,10 +748,8 @@ public class Events implements Listener {
                 }
         }
     }
-/*
-    private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
-        // TODO NOTE: Don't rely on AMOUNTS until the event is updated!
 
+    private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
         // Furnace is burning
         if (furnace.getBurnTime() > 0) {
             ItemStack itemToTest;
@@ -862,17 +858,17 @@ public class Events implements Listener {
             }
         }
 
-        FuelRecipe fuelRecpe = RecipeManager.getRecipes().getFuelRecipe(fuel);
+        FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
 
-        if (fuelRecpe != null) {
+        if (fuelRecipe != null) {
             if (slot == 1) {
                 Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(fuel).build();
 
-                if (fuelRecpe.checkFlags(a)) {
+                if (fuelRecipe.checkFlags(a)) {
                     a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                     a.clear();
 
-                    if (fuelRecpe.sendPrepare(a)) {
+                    if (fuelRecipe.sendPrepare(a)) {
                         a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
                         return true;
                     }
@@ -888,14 +884,13 @@ public class Events implements Listener {
 
         return true;
     }
-    */
+
     private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft) {
         if (flaggable == null) {
             return false;
         }
 
         String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
-        // (flaggable instanceof ItemResult ? Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print((ItemResult)flaggable)) : Messages.FLAG_PREFIX_RECIPE.get());
 
         a.clear();
 
@@ -940,6 +935,7 @@ public class Events implements Listener {
         FurnaceData data = Furnaces.get(furnace.getLocation());
 
         FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+
         if (fuelRecipe != null) {
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
@@ -1086,11 +1082,9 @@ public class Events implements Listener {
                 Furnace furnace = inv.getHolder();
 
                 // TODO get player that placed the initial item in the hopper ?
-                /** TODO remove for now
                 if (!furnaceModifySlot(furnace, inv, null, slot, event.getItem())) {
                     event.setCancelled(true);
                 }
-                */
             }
             /*
              * else if(event.getSource() instanceof FurnaceInventory) { SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
