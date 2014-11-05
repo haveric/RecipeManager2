@@ -107,7 +107,6 @@ public class RecipeManager extends JavaPlugin {
     private void setupVault(PluginManager pm) {
         if (pm.getPlugin("Vault") == null) {
             Messages.log("Vault was not found, economy features are not available.");
-            pm.disablePlugin(this);
         } else {
             RegisteredServiceProvider<Economy> econProvider = getServer().getServicesManager().getRegistration(Economy.class);
             if (econProvider != null) {
