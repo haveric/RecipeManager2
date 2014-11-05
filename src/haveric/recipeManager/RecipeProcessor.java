@@ -290,6 +290,10 @@ public class RecipeProcessor implements Runnable {
         return false;
     }
 
+    private boolean lineIsFlag() {
+        return line.trim().startsWith("@");
+    }
+
     private boolean readNextLine() {
         lineNum++;
         ErrorReporter.setLine(lineNum);
@@ -768,7 +772,7 @@ public class RecipeProcessor implements Runnable {
         int added = 0;
 
         do {
-            if (lineIsRecipe()) {
+            if (lineIsRecipe() || lineIsFlag()) {
                 break;
             }
 
