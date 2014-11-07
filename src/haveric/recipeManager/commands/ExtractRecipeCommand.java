@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,6 +26,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class ExtractRecipeCommand implements CommandExecutor {
 
@@ -101,6 +104,15 @@ public class ExtractRecipeCommand implements CommandExecutor {
                         ingredientCondition += " | lore " + lore;
                     }
                 }
+
+                if (meta instanceof LeatherArmorMeta) {
+                    LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
+                    Color color = leatherMeta.getColor();
+
+                    if (color != Bukkit.getItemFactory().getDefaultLeatherColor()) {
+                        ingredientCondition += " | color " + color.getRed() + "," + color.getGreen() + "," + color.getBlue();
+                    }
+                }
             }
 
             int enchantments = item.getEnchantments().size();
@@ -141,6 +153,15 @@ public class ExtractRecipeCommand implements CommandExecutor {
                 List<String> lores = meta.getLore();
                 for (String lore : lores) {
                     recipeString.append(Files.NL).append("  @lore ").append(lore);
+                }
+            }
+
+            if (meta instanceof LeatherArmorMeta) {
+                LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
+                Color color = leatherMeta.getColor();
+
+                if (color != Bukkit.getItemFactory().getDefaultLeatherColor()) {
+                    recipeString.append(Files.NL).append("  @leathercolor ").append(color.getRed() + " " + color.getGreen() + " " + color.getBlue());
                 }
             }
         }
