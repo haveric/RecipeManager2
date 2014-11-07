@@ -2,7 +2,8 @@
 This file will be automatically overwritten when a new version is installed.
 
 === v2.2.2 ===
-* Add support for leather color when extracting recipes. 
+* Add support for leather color when extracting recipes.
+* Don't try to load RecipeManager last as it breaks reload. If other plugins want their recipes to work with RecipeManager, they can use depend or softdepend
 
 === v2.2.1 ===
 * Fixed an error where the plugin would disable if Vault wasn't installed.
