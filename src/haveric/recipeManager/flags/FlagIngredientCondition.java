@@ -108,6 +108,10 @@ public class FlagIngredientCondition extends Flag {
         private List<String> lores = new ArrayList<String>();
         private Color minColor;
         private Color maxColor;
+        private boolean noMeta = false;
+        private boolean noName = false;
+        private boolean noLore = false;
+        private boolean noEnchant = false;
 
         // TODO mark
         // private boolean extinctRecipeBook;
@@ -139,6 +143,11 @@ public class FlagIngredientCondition extends Flag {
 
             minColor = original.minColor;
             maxColor = original.maxColor;
+
+            noMeta = original.noMeta;
+            noName = original.noName;
+            noLore = original.noLore;
+            noEnchant = original.noEnchant;
         }
 
         @Override
@@ -429,6 +438,12 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkEnchants(Map<Enchantment, Integer> enchantsToCheck) {
+            if (enchantsToCheck != null && !enchantsToCheck.isEmpty()) {
+                if (noMeta || noEnchant) {
+                    return false;
+                }
+            }
+
             if (!hasEnchants()) {
                 return true;
             }
@@ -506,6 +521,11 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkName(String nameToCheck) {
+            if (nameToCheck != null) {
+                if (noMeta || noName) {
+                    return false;
+                }
+            }
             if (!hasName()) {
                 return true;
             }
@@ -543,6 +563,12 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkLore(List<String> loreToCheck) {
+            if (loreToCheck != null && !loreToCheck.isEmpty()) {
+                if (noMeta || noLore) {
+                    return false;
+                }
+            }
+
             if (!hasLore()) {
                 return true;
             }
@@ -942,6 +968,8 @@ public class FlagIngredientCondition extends Flag {
                     ErrorReporter.warning("Flag " + getType() + " has 'amount' argument with invalid number: " + value);
                     continue;
                 }
+            } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
+                cond.noEnchant = true;
             } else if (arg.startsWith("enchant")) {
                 value = arg.substring("enchant".length()).trim();
 
@@ -1046,14 +1074,20 @@ public class FlagIngredientCondition extends Flag {
                         }
                     }
                 }
+            } else if (arg.startsWith("!name") || arg.startsWith("noname")) {
+                cond.noName = true;
             } else if (arg.startsWith("name")) {
                 value = args[i].trim().substring("name".length()).trim(); // preserve case for regex
 
                 cond.setName(value);
+            } else if (arg.startsWith("!lore") || arg.startsWith("nolore")) {
+                cond.noLore = true;
             } else if (arg.startsWith("lore")) {
                 value = args[i].trim().substring("lore".length()).trim(); // preserve case for regex
 
                 cond.addLore(value);
+            } else if (arg.startsWith("!meta") || arg.startsWith("nometa")) {
+                cond.noMeta = true;
             } else if (arg.startsWith("failmsg")) {
                 value = args[i].trim().substring("failmsg".length()).trim(); // preserve case... because it's a message
 
