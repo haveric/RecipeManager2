@@ -10,6 +10,7 @@ This file will be automatically overwritten when a new version is installed.
 ** noenchant: requires the ingredient not have any enchants.
 ** nocolor: requires the ingredient not have a color set (leather armor only)
 ** nometa: equivalent to noenchant | noname | nolore | nocolor
+* Fixed an @ingredientcondition bug with recipes having two or more ingredients and not having conditions on all of them
 
 === v2.2.1 ===
 * Fixed an error where the plugin would disable if Vault wasn't installed.
