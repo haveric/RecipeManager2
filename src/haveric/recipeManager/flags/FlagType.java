@@ -117,7 +117,7 @@ public enum FlagType {
      * @return array of flags names, index 0 is always the main name
      */
     public String[] getNames() {
-        return names;
+        return names.clone();
     }
 
     /**

@@ -547,7 +547,7 @@ public enum Messages {
         try {
             // Use reflection to use the proper version of getOnlinePlayers - credit to Maxim Roncacé (ShadyPotato)
             if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
-                Collection<?> onlinePlayers = ((Collection<?>)Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                Collection<?> onlinePlayers = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
 
                 for (Object p : onlinePlayers) {
                     if (p instanceof Player) {
@@ -558,7 +558,7 @@ public enum Messages {
                     }
                 }
             } else {
-                Player[] onlinePlayers = ((Player[])Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                Player[] onlinePlayers = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
                 for (Player p : onlinePlayers) {
                     if (p.hasPermission("recipemanager.debugger")) {
                         send(p, message);

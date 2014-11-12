@@ -583,19 +583,19 @@ public class FlagSummon extends Flag {
         }
 
         public ItemStack[] getEquip() {
-            return equip;
+            return equip.clone();
         }
 
         public void setEquip(ItemStack[] newEquip) {
-            equip = newEquip;
+            equip = newEquip.clone();
         }
 
         public float[] getDrop() {
-            return drop;
+            return drop.clone();
         }
 
         public void setDrop(float[] newDrop) {
-            drop = newDrop;
+            drop = newDrop.clone();
         }
 
         public List<PotionEffect> getPotionEffects() {

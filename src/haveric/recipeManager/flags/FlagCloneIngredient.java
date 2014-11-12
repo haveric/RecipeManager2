@@ -142,7 +142,7 @@ public class FlagCloneIngredient extends Flag {
      * @return integer array of exactly 2 elements, first is the +/-/= char and second is the data value
      */
     public int[] getDataModifier() {
-        return dataModifier;
+        return dataModifier.clone();
     }
 
     /**
@@ -164,7 +164,7 @@ public class FlagCloneIngredient extends Flag {
      * @return integer array of exactly 2 elements, first is the +/-/= char and second is the amount
      */
     public int[] getAmountModifier() {
-        return amountModifier;
+        return amountModifier.clone();
     }
 
     /**

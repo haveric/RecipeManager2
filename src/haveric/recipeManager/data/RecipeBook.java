@@ -315,7 +315,7 @@ public class RecipeBook {
 
         if (hasEndPage()) {
             if (customEnd == null) {
-                meta.addPage(String.format("\n\n\n\n\n\n        %s%s%s", ChatColor.BOLD, ChatColor.UNDERLINE, "THE END"));
+                meta.addPage(String.format("%n%n%n%n%n%n        %s%s%s", ChatColor.BOLD, ChatColor.UNDERLINE, "THE END"));
             } else {
                 // TODO split into pages ?
 

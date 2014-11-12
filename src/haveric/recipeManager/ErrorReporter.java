@@ -46,7 +46,7 @@ public class ErrorReporter {
      * @return true if catching, false otherwise
      */
     public static boolean isCatching() {
-        return (fileErrors != null);
+        return fileErrors != null;
     }
 
     /**
@@ -83,9 +83,8 @@ public class ErrorReporter {
         int similarErrors;
 
         StringBuilder buffer;
-        StringBuilder text = new StringBuilder(errors * 128); // .append(ChatColor.RED).append("There were ").append(errors).append(" errors while processing the files: ");
+        StringBuilder text = new StringBuilder(errors * 128);
         Messages.info(text.toString());
-        // text.append(Files.NL).append(Files.NL);
 
         for (Entry<String, List<String>> entry : fileErrors.entrySet()) {
             buffer = new StringBuilder();

@@ -315,7 +315,6 @@ public class Events implements Listener {
             Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
 
             if (!recipe.checkFlags(a)) {
-                // a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE); // Disabled - spammy
                 Messages.sendDenySound(player, location);
                 event.setCancelled(true);
                 return;
@@ -512,7 +511,6 @@ public class Events implements Listener {
     public void playerInteract(PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
-                Player player = event.getPlayer();
                 Block block = event.getClickedBlock();
 
                 switch (block.getType()) {
@@ -522,7 +520,7 @@ public class Events implements Listener {
                     case BREWING_STAND:
                     case ENCHANTMENT_TABLE:
                     case ANVIL:
-                        if (!RecipeManager.getPlugin().canCraft(player)) {
+                        if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
                             event.setCancelled(true);
                             return;
                         }
@@ -1250,13 +1248,14 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void playerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItem(event.getNewSlot());
 
         if (Settings.getInstance().getUpdateBooks()) {
-            RecipeManager.getRecipeBooks().updateBook(player, player.getInventory().getItem(event.getNewSlot()));
+            RecipeManager.getRecipeBooks().updateBook(player, item);
         }
 
         if (Settings.getInstance().getFixModResults()) {
-            itemProcess(event.getPlayer().getInventory().getItem(event.getNewSlot()));
+            itemProcess(item);
         }
     }
 
