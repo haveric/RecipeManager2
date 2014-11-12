@@ -93,7 +93,7 @@ public class FlagNeedMoney extends Flag {
             if (money >= minMoney) {
                 check = true;
             }
-        } else if (money >= minMoney && money <= maxMoney){
+        } else if (money >= minMoney && money <= maxMoney) {
             check = true;
         }
         return check;

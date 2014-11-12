@@ -149,7 +149,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         s.append(ingredient.getType().toString().toLowerCase());
 
-        if(ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
+        if (ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
             s.append(":").append(ingredient.getDurability());
         }
 

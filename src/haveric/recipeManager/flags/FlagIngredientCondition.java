@@ -622,12 +622,12 @@ public class FlagIngredientCondition extends Flag {
                         if (line != null) {
                             if (lore.startsWith("regex:")) {
                                 if (pattern.matcher(line).matches()) {
-                                    matchedLoreChecks ++;
+                                    matchedLoreChecks++;
                                     break;
                                 }
                             } else {
                                 if (lore.equalsIgnoreCase(line)) {
-                                    matchedLoreChecks ++;
+                                    matchedLoreChecks++;
                                     break;
                                 }
                             }

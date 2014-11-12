@@ -85,13 +85,13 @@ public class FlagSound extends Flag {
      * @param volume
      *            from 0.0 to 1.0
      */
-    public void setVolume(float volume) {
-        if (volume < 0 || volume > 4) {
+    public void setVolume(float newVolume) {
+        if (newVolume < 0 || newVolume > 4) {
             ErrorReporter.warning("Flag " + getType() + " has invalid 'volume' number range, must be between 0.0 and 1.0, trimmed.");
 
-            this.volume = Math.min(Math.max(volume, 0.0f), 4.0f);
+            volume = Math.min(Math.max(newVolume, 0.0f), 4.0f);
         } else {
-            this.volume = volume;
+            volume = newVolume;
         }
     }
 
@@ -106,13 +106,13 @@ public class FlagSound extends Flag {
      * @param pitch
      *            from 0.0 to 4.0
      */
-    public void setPitch(float pitch) {
-        if (pitch < 0 || pitch > 4) {
+    public void setPitch(float newPitch) {
+        if (newPitch < 0 || newPitch > 4) {
             ErrorReporter.warning("Flag " + getType() + " has invalid 'pitch' number range, must be between 0.0 and 4.0, trimmed.");
 
-            this.pitch = Math.min(Math.max(pitch, 0.0f), 4.0f);
+            pitch = Math.min(Math.max(newPitch, 0.0f), 4.0f);
         } else {
-            this.pitch = pitch;
+            pitch = newPitch;
         }
     }
 
@@ -120,8 +120,8 @@ public class FlagSound extends Flag {
         return onlyPlayer;
     }
 
-    public void setOnlyPlayer(boolean onlyPlayer) {
-        this.onlyPlayer = onlyPlayer;
+    public void setOnlyPlayer(boolean newOnlyPlayer) {
+        onlyPlayer = newOnlyPlayer;
     }
 
     @Override
