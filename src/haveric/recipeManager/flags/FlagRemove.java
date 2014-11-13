@@ -68,7 +68,7 @@ public class FlagRemove extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (recipe == null) {
-            Messages.error(null, new IllegalAccessError(), "ERROR: invalid recipe pointer: " + recipe);
+            Messages.error(null, new IllegalAccessError(), "ERROR: invalid recipe pointer");
             remove();
         } else {
             recipe.getInfo().setStatus(RecipeStatus.REMOVED);

@@ -271,7 +271,7 @@ public class Updater {
                 }
 
                 if (sender == null) {
-                    Messages.sendAndLog(sender, "<gray>You can disable this check from config.yml.");
+                    Messages.sendAndLog(null, "<gray>You can disable this check from config.yml.");
                 }
             } catch (MalformedURLException e) {
                 Messages.error(null, e, "Error while checking for updates");

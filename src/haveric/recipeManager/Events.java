@@ -217,8 +217,6 @@ public class Events implements Listener {
                 inv.setResult(null);
                 return true;
             }
-
-            Messages.debug("Results don't match, special recipe ? " + recipeResult + " vs " + result); // TODO remove this debug
         }
 
         return false;

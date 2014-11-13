@@ -66,7 +66,7 @@ public class FlagOverride extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (recipe == null) {
-            Messages.debug("ERROR: invalid recipe pointer: " + recipe);
+            Messages.debug("ERROR: invalid recipe pointer");
             remove();
         } else {
             recipe.getInfo().setStatus(RecipeStatus.OVERRIDDEN);
