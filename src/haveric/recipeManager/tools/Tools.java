@@ -369,8 +369,10 @@ public class Tools {
 
                     Enchantment enchant = Tools.parseEnchant(value);
 
-                    if (enchant == null && (settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                        ErrorReporter.error("Invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+                    if (enchant == null) {
+                        if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
+                            ErrorReporter.error("Invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+                        }
                         continue;
                     }
 
