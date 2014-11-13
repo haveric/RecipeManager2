@@ -321,7 +321,7 @@ public class RecipeProcessor implements Runnable {
 
     private String parseComments() {
         if (line != null) {
-            line.trim();
+            line = line.trim();
         }
 
         if (line == null || line.isEmpty()) {
@@ -341,7 +341,7 @@ public class RecipeProcessor implements Runnable {
                 if (index == 0) {
                     comment = null;
                 } else {
-                    comment = line.substring(0, index).trim();
+                    comment = line.substring(0, index);
                 }
                 return comment;
             }
@@ -363,7 +363,7 @@ public class RecipeProcessor implements Runnable {
             if (index == 0) {
                 comment = null;
             } else {
-                comment = line.substring(0, index).trim();
+                comment = line.substring(0, index);
             }
             return comment;
         }
@@ -377,7 +377,7 @@ public class RecipeProcessor implements Runnable {
             }
 
             if (index > -1) {
-                return line.substring(0, index).trim(); // partial comment, return filtered data
+                return line.substring(0, index); // partial comment, return filtered data
             }
         }
 
