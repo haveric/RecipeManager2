@@ -46,10 +46,6 @@ public class Flags implements Cloneable {
         flaggable = newFlaggable;
     }
 
-    public boolean hasFlag(Class<? extends Flag> flagClass) {
-        return flags.containsKey(flagClass);
-    }
-
     public boolean hasNoShiftBit() {
         for (FlagType t : flags.keySet()) {
             if (t.hasBit(Bit.NO_SHIFT)) {
