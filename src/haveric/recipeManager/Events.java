@@ -1211,7 +1211,7 @@ public class Events implements Listener {
                 }
             }
 
-            tileEntities = list.toArray(new BlockState[0]);
+            tileEntities = list.toArray(new BlockState[list.size()]);
         }
 
         Set<BlockID> added;
