@@ -379,7 +379,7 @@ public class Recipes {
         } else if (recipe instanceof CombineRecipe) {
             indexCombine.remove(recipe.getIndex());
         } else if (recipe instanceof SmeltRecipe) {
-            indexSmelt.remove(recipe.getIndex());
+            indexSmelt.remove(((SmeltRecipe) recipe).getIndexString());
         } else if (recipe instanceof FuelRecipe) {
             indexFuels.remove(((FuelRecipe) recipe).getIndexString());
         }

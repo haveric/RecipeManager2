@@ -12,6 +12,7 @@ This file will be automatically overwritten when a new version is installed.
 ** nometa: equivalent to noenchant | noname | nolore | nocolor
 * Fixed an @ingredientcondition bug with recipes having two or more ingredients and not having conditions on all of them
 * Fixed a potential issue with invalid enchants
+* Fixed smelting/fuel issues when reloading
 
 === v2.2.1 ===
 * Fixed an error where the plugin would disable if Vault wasn't installed.
