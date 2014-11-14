@@ -345,14 +345,14 @@ public class Recipes {
             SingleResultRecipe rec = (SingleResultRecipe) recipe;
             ItemResult result = rec.getResult();
 
-            if (result.hasFlags()) {
+            if (result != null && result.hasFlags()) {
                 result.getFlags().sendRegistered();
             }
         } else if (recipe instanceof MultiResultRecipe) {
             MultiResultRecipe rec = (MultiResultRecipe) recipe;
 
             for (ItemResult result : rec.getResults()) {
-                if (result.hasFlags()) {
+                if (result != null && result.hasFlags()) {
                     result.getFlags().sendRegistered();
                 }
             }
