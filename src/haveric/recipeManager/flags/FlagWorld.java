@@ -10,32 +10,27 @@ import java.util.Map.Entry;
 public class FlagWorld extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.WORLD;
+    protected static final String[] A = new String[] {
+        "{flag} [!]<world>, [...] | [fail message]", };
 
-    static {
-        TYPE = FlagType.WORLD;
+    protected static final String[] D = new String[] {
+        "Makes the recipe or item work only in certain worlds.",
+        "Using this flag more than once will add more worlds.",
+        "",
+        "The '<world>' argument can be a world name.",
+        "Adding ! character as prefix to individual worlds will do the opposite check, will not craft in specified world.",
+        "You should require or disallow worlds, using both would be logically pointless.",
+        "",
+        "Optionally you can specify a failure message that will be used on the specific world(s) defined.",
+        "The messages can have the following variables:",
+        "  {world}   = current world.",
+        "  {worlds}  = a comma separated list of the required or unallowed worlds.", };
 
-        A = new String[] { "{flag} [!]<world>, [...] | [fail message]", };
-
-        D = new String[] { "Makes the recipe or item work only in certain worlds.",
-                           "Using this flag more than once will add more worlds.",
-                           "",
-                           "The '<world>' argument can be a world name.",
-                           "Adding ! character as prefix to individual worlds will do the opposite check, will not craft in specified world.",
-                           "You should require or disallow worlds, using both would be logically pointless.",
-                           "",
-                           "Optionally you can specify a failure message that will be used on the specific world(s) defined.",
-                           "The messages can have the following variables:",
-                           "  {world}   = current world.",
-                           "  {worlds}  = a comma separated list of the required or unallowed worlds.", };
-
-        E = new String[] { "{flag} world // only allows 'world'",
-                           "{flag} !world_nether // disallows 'world_nether'",
-                           "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds", };
-    }
+    protected static final String[] E = new String[] {
+        "{flag} world // only allows 'world'",
+        "{flag} !world_nether // disallows 'world_nether'",
+        "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds", };
 
     private Map<String, Boolean> worlds = new HashMap<String, Boolean>();
     private Map<String, String> messages = new HashMap<String, String>();
@@ -50,6 +45,7 @@ public class FlagWorld extends Flag {
 
     @Override
     public FlagWorld clone() {
+        super.clone();
         return new FlagWorld(this);
     }
 

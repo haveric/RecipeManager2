@@ -187,7 +187,7 @@ public class RecipeBooks {
                 int volume = 0;
 
                 try {
-                    volume = Integer.valueOf(volString);
+                    volume = Integer.parseInt(volString);
                 } catch (NumberFormatException e) {
                     // TODO: Handle exception and/or prevent following code from running?
                 }
@@ -534,8 +534,8 @@ public class RecipeBooks {
             int updated = 0;
 
             try {
-                volume = Integer.valueOf(match.group(3));
-                updated = Integer.valueOf(match.group(4));
+                volume = Integer.parseInt(match.group(3));
+                updated = Integer.parseInt(match.group(4));
             } catch (NumberFormatException e) {
                 Messages.error(null, e, "Error while parsing " + player.getName() + "'s held book details.");
                 return;

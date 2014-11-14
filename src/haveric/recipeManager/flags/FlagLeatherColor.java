@@ -13,22 +13,18 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class FlagLeatherColor extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.LEATHERCOLOR;
+    protected static final String[] A = new String[] {
+        "{flag} <red> <green> <blue>", };
 
-    static {
-        TYPE = FlagType.LEATHERCOLOR;
+    protected static final String[] D = new String[] {
+        "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
+        "",
+        "Specific items: leather armor.", };
 
-        A = new String[] { "{flag} <red> <green> <blue>", };
+    protected static final String[] E = new String[] {
+        "{flag} 255 100 50", };
 
-        D = new String[] { "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
-                           "",
-                           "Specific items: leather armor.", };
-
-        E = new String[] { "{flag} 255 100 50", };
-    }
 
     // Flag code
 
@@ -43,6 +39,7 @@ public class FlagLeatherColor extends Flag {
 
     @Override
     public FlagLeatherColor clone() {
+        super.clone();
         return new FlagLeatherColor(this);
     }
 

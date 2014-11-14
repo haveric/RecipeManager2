@@ -8,31 +8,27 @@ import haveric.recipeManager.tools.ToolsExp;
 public class FlagNeedExp extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.NEEDEXP;
+    protected static final String[] A = new String[] {
+        "{flag} <min or min-max> | [message]", };
 
-    static {
-        TYPE = FlagType.NEEDEXP;
+    protected static final String[] D = new String[] {
+        "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+        "In the message the following variables can be used:",
+        "  {exp}    = exp or exp range.",
+        "  {minexp} = defined min exp range.",
+        "  {maxexp} = defined max exp range.",
+        "",
+        "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
 
-        A = new String[] { "{flag} <min or min-max> | [message]", };
+    protected static final String[] E = new String[] {
+        "{flag} 100 // player needs to have at least 100 experience to craft",
+        "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
+        "{flag} 1000 | <red>Need {exp} exp!", };
 
-        D = new String[] { "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-                           "In the message the following variables can be used:",
-                           "  {exp}    = exp or exp range.",
-                           "  {minexp} = defined min exp range.",
-                           "  {maxexp} = defined max exp range.",
-                           "",
-                           "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
-
-        E = new String[] { "{flag} 100 // player needs to have at least 100 experience to craft",
-                           "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
-                           "{flag} 1000 | <red>Need {exp} exp!", };
-    }
 
     // Flag code
 
@@ -51,6 +47,7 @@ public class FlagNeedExp extends Flag {
 
     @Override
     public FlagNeedExp clone() {
+        super.clone();
         return new FlagNeedExp(this);
     }
 
@@ -113,7 +110,7 @@ public class FlagNeedExp extends Flag {
         }
 
         try {
-            setMinExp(Integer.valueOf(value));
+            setMinExp(Integer.parseInt(value));
             setMaxExp(getMinExp());
         } catch (NumberFormatException e) {
             ErrorReporter.error("The " + getType() + " flag has invalid min req exp number: " + value);
@@ -129,7 +126,7 @@ public class FlagNeedExp extends Flag {
             }
 
             try {
-                setMaxExp(Integer.valueOf(value));
+                setMaxExp(Integer.parseInt(value));
             } catch (NumberFormatException e) {
                 ErrorReporter.error("The " + getType() + " flag has invalid max req exp number: " + value);
                 return false;

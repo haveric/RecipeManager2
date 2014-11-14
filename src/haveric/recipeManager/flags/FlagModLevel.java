@@ -10,35 +10,31 @@ import org.bukkit.entity.Player;
 public class FlagModLevel extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.MODLEVEL;;
+    protected static final String[] A = new String[] {
+        "{flag} [modifier]<number> | [fail message]", };
 
-    static {
-        TYPE = FlagType.MODLEVEL;
+    protected static final String[] D = new String[] {
+        "Modifies crafter's level.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+        "The '<number>' argument must be the amount of levels to modify.",
+        "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+        "For the fail message you can use the following arguments:",
+        "  {amount}       = amount defined in the flag, never has modifier prefix.",
+        "  {modifier}     = the modifier prefix.",
+        "  {actualamount} = (only works for - modifier) the actual amount lost.",
+        "",
+        "NOTE: This is for experience levels, for experience points use " + FlagType.MODEXP.toString(),
+        "NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with " + FlagType.NEEDLEVEL.toString() + " if you want to check.", };
 
-        A = new String[] { "{flag} [modifier]<number> | [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag} 1 // gives 1 level to crafter",
+        "{flag} +1 // exactly the same as above",
+        "{flag} -2 | <red>You lost {amount} levels.  // takes at most 2 levels from crafter, if he does not have that amount it will be set to 0.",
+        "{flag} = 0 | <red>You've been set to level 0!  // sets crafter's level to 0, that space is valid there too.", };
 
-        D = new String[] { "Modifies crafter's level.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
-                           "The '<number>' argument must be the amount of levels to modify.",
-                           "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
-                           "For the fail message you can use the following arguments:",
-                           "  {amount}       = amount defined in the flag, never has modifier prefix.",
-                           "  {modifier}     = the modifier prefix.",
-                           "  {actualamount} = (only works for - modifier) the actual amount lost.",
-                           "",
-                           "NOTE: This is for experience levels, for experience points use " + FlagType.MODEXP.toString(),
-                           "NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with " + FlagType.NEEDLEVEL.toString() + " if you want to check.", };
-
-        E = new String[] { "{flag} 1 // gives 1 level to crafter",
-                           "{flag} +1 // exactly the same as above",
-                           "{flag} -2 | <red>You lost {amount} levels.  // takes at most 2 levels from crafter, if he does not have that amount it will be set to 0.",
-                           "{flag} = 0 | <red>You've been set to level 0!  // sets crafter's level to 0, that space is valid there too.", };
-    }
 
     // Flag code
 
@@ -57,6 +53,7 @@ public class FlagModLevel extends Flag {
 
     @Override
     public FlagModLevel clone() {
+        super.clone();
         return new FlagModLevel(this);
     }
 
@@ -155,7 +152,7 @@ public class FlagModLevel extends Flag {
         int newAmount = 0;
 
         try {
-            newAmount = Integer.valueOf(value);
+            newAmount = Integer.parseInt(value);
         } catch (NumberFormatException e) {
             return ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
         }

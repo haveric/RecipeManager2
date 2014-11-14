@@ -10,25 +10,20 @@ import org.bukkit.block.Block;
 public class FlagBlockPowered extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.BLOCKPOWERED;
+    protected static final String[] A = new String[] {
+        "{flag} [arguments]", };
 
-    static {
-        TYPE = FlagType.BLOCKPOWERED;
+    protected static final String[] D = new String[] {
+        "Requires the workbench or furnace block to be powered by redstone.",
+        "",
+        "Optionally you can use the following arguments separated by | character and in any order:",
+        "  indirect          = check for indirect redstone power, through other blocks.",
+        "  failmsg <message> = overwrite the failure message.", };
 
-        A = new String[] { "{flag} [arguments]", };
+    protected static final String[] E = new String[] { "{flag}",
+        "{flag} failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect", };
 
-        D = new String[] { "Requires the workbench or furnace block to be powered by redstone.",
-                           "",
-                           "Optionally you can use the following arguments separated by | character and in any order:",
-                           "  indirect          = check for indirect redstone power, through other blocks.",
-                           "  failmsg <message> = overwrite the failure message.", };
-
-        E = new String[] { "{flag}",
-                           "{flag} failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect", };
-    }
 
     // Flag code
 
@@ -45,6 +40,7 @@ public class FlagBlockPowered extends Flag {
 
     @Override
     public FlagBlockPowered clone() {
+        super.clone();
         return new FlagBlockPowered(this);
     }
 

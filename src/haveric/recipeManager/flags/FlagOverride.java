@@ -8,26 +8,22 @@ import haveric.recipeManager.recipes.RecipeInfo.RecipeStatus;
 public class FlagOverride extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.OVERRIDE;
+    protected static final String[] A = new String[] {
+        "{flag} [true or false]", };
 
-    static {
-        TYPE = FlagType.OVERRIDE;
+    protected static final String[] D = new String[] {
+        "Overwrites an existing recipe from vanilla Minecraft or other plugins/mods.",
+        "The recipe definition must have the exact ingredients of the recipe you want to overwrite.",
+        "",
+        "You may set whatever result(s) you want and add any other flags, this flag allows RecipeManager to take control over that recipe.",
+        "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.",
+        "",
+        "Value is optional, if value is not specified it will just be enabled.", };
 
-        A = new String[] { "{flag} [true or false]", };
+    protected static final String[] E = new String[] {
+        "{flag}", };
 
-        D = new String[] { "Overwrites an existing recipe from vanilla Minecraft or other plugins/mods.",
-                           "The recipe definition must have the exact ingredients of the recipe you want to overwrite.",
-                           "",
-                           "You may set whatever result(s) you want and add any other flags, this flag allows RecipeManager to take control over that recipe.",
-                           "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.",
-                           "",
-                           "Value is optional, if value is not specified it will just be enabled.", };
-
-        E = new String[] { "{flag}", };
-    }
 
     // Flag code
 
@@ -39,6 +35,7 @@ public class FlagOverride extends Flag {
 
     @Override
     public FlagOverride clone() {
+        super.clone();
         return new FlagOverride(this);
     }
 

@@ -18,31 +18,26 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class FlagExplode extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.EXPLODE;;
+    protected static final String[] A = new String[] {
+        "{flag} <arguments or false>", };
 
-    static {
-        TYPE = FlagType.EXPLODE;
+    protected static final String[] D = new String[] {
+        "Makes the workbench/furnace/player explode when recipe is crafted.",
+        "This flag can only be declared once per recipe and once per result.",
+        "",
+        "Replace <arguments> with the following arguments separated by | character:",
+        "  power <0.0 to ...>     = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
+        "  fire                   = (default not set) Explosion sets fires.",
+        "  nobreak                = (default not set) Makes explosion not break blocks.",
+        "  nodamage [self]        = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
+        "  fail                   = (default not set) Explode if recipe failed as opposed to succeed.",
+        "All arguments are optional and you can specify these arguments in any order.", };
 
-        A = new String[] { "{flag} <arguments or false>", };
-
-        D = new String[] { "Makes the workbench/furnace/player explode when recipe is crafted.",
-                           "This flag can only be declared once per recipe and once per result.",
-                           "",
-                           "Replace <arguments> with the following arguments separated by | character:",
-                           "  power <0.0 to ...>     = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
-                           "  fire                   = (default not set) Explosion sets fires.",
-                           "  nobreak                = (default not set) Makes explosion not break blocks.",
-                           "  nodamage [self]        = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
-                           "  fail                   = (default not set) Explode if recipe failed as opposed to succeed.",
-                           "All arguments are optional and you can specify these arguments in any order.", };
-
-        E = new String[] { "{flag} // will explode when recipe succeeds with power 2, 100% chance and breaks blocks",
-                           "{flag} nobreak | fire | chance 25% | power 6 // will explode 25% of time without block damage but sets fires",
-                           "{flag} fail | power 2 | chance 75% // will explode 75% of the time when recipe fails", };
-    }
+    protected static final String[] E = new String[] {
+        "{flag} // will explode when recipe succeeds with power 2, 100% chance and breaks blocks",
+        "{flag} nobreak | fire | chance 25% | power 6 // will explode 25% of time without block damage but sets fires",
+        "{flag} fail | power 2 | chance 75% // will explode 75% of the time when recipe fails", };
 
     // Flag code
 
@@ -65,6 +60,7 @@ public class FlagExplode extends Flag {
 
     @Override
     public FlagExplode clone() {
+        super.clone();
         return new FlagExplode(this);
     }
 

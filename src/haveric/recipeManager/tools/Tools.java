@@ -74,7 +74,7 @@ public class Tools {
         Enchantment enchant = null;
 
         try {
-            enchant = Enchantment.getById(Integer.valueOf(value));
+            enchant = Enchantment.getById(Integer.parseInt(value));
         } catch (NumberFormatException e) {
             value = Tools.parseAliasName(value);
 
@@ -291,7 +291,7 @@ public class Tools {
                         data = dataValue.shortValue();
                     } else {
                         try {
-                            data = Integer.valueOf(value);
+                            data = Integer.parseInt(value);
                         } catch (NumberFormatException e) {
                             if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
                                 ErrorReporter.warning("Item '" + material + " has unknown data number/alias: '" + value + "', defaulting to " + defaultData);
@@ -319,7 +319,7 @@ public class Tools {
                 value = split[2].trim();
 
                 try {
-                    amount = Integer.valueOf(value);
+                    amount = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
                         ErrorReporter.warning("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
@@ -383,7 +383,7 @@ public class Tools {
 
                         if (!value.equals("max")) {
                             try {
-                                level = Integer.valueOf(value);
+                                level = Integer.parseInt(value);
                             } catch (NumberFormatException e) {
                                 if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
                                     ErrorReporter.error("Invalid enchantment level number: " + value);
@@ -455,7 +455,7 @@ public class Tools {
                     level = 9999;
                 } else {
                     try {
-                        level = Integer.valueOf(value);
+                        level = Integer.parseInt(value);
                     } catch (NumberFormatException e) {
                         ErrorReporter.error("Flag " + type + " has invalid 'level' number: " + value);
                     }
@@ -685,9 +685,9 @@ public class Tools {
 
         if (split.length == 3) {
             try {
-                int r = Integer.valueOf(split[0].trim());
-                int g = Integer.valueOf(split[1].trim());
-                int b = Integer.valueOf(split[2].trim());
+                int r = Integer.parseInt(split[0].trim());
+                int g = Integer.parseInt(split[1].trim());
+                int b = Integer.parseInt(split[2].trim());
 
                 return Color.fromRGB(r, g, b);
             } catch (Throwable e) {
@@ -776,7 +776,7 @@ public class Tools {
 
             if (s != null && s.startsWith(Recipes.RECIPE_ID_STRING)) {
                 try {
-                    return Integer.valueOf(s.substring(Recipes.RECIPE_ID_STRING.length()));
+                    return Integer.parseInt(s.substring(Recipes.RECIPE_ID_STRING.length()));
                 } catch (Throwable e) {
                     Messages.debug("Invalid recipe identifier found: " + s);
                     break;

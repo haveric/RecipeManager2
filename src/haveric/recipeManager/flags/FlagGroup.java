@@ -12,37 +12,33 @@ import java.util.Map.Entry;
 public class FlagGroup extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.GROUP;
+    protected static final String[] A = new String[] {
+        "{flag} [!]<group>, [...] | [fail message]", };
 
-    static {
-        TYPE = FlagType.GROUP;
+    protected static final String[] D = new String[] {
+        "Makes the recipe or item require the crafter to be in a permission group.",
+        "Using this flag more than once will add more groups, the player must be in at least one group.",
+        "",
+        "The '<group>' argument must be a permission group.",
+        "",
+        "Adding ! character as prefix to individual groups will do the opposite check, if crafter is in group it will not craft.",
+        "",
+        "You can also specify more groups separated by , character.",
+        "",
+        "Optionally you can specify a failure message that will be used on the specific group(s) defined.",
+        "The messages can have the following variables:",
+        "  {group}   = group that was not found or was found and it's unallowed.",
+        "  {groups}  = a comma separated list of the allowed or unallowed groups.",
+        "",
+        "NOTE: Vault with a supported permission plugin is required for this flag to work.", };
 
-        A = new String[] { "{flag} [!]<group>, [...] | [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag} ranks.vip",
+        "{flag} !jobs.builder | <red>Builders can't use this!",
+        "{flag} jobs.farmer, jobs.trader | <red>You must be a farmer or trader!",
+        "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
 
-        D = new String[] { "Makes the recipe or item require the crafter to be in a permission group.",
-                           "Using this flag more than once will add more groups, the player must be in at least one group.",
-                           "",
-                           "The '<group>' argument must be a permission group.",
-                           "",
-                           "Adding ! character as prefix to individual groups will do the opposite check, if crafter is in group it will not craft.",
-                           "",
-                           "You can also specify more groups separated by , character.",
-                           "",
-                           "Optionally you can specify a failure message that will be used on the specific group(s) defined.",
-                           "The messages can have the following variables:",
-                           "  {group}   = group that was not found or was found and it's unallowed.",
-                           "  {groups}  = a comma separated list of the allowed or unallowed groups.",
-                           "",
-                           "NOTE: Vault with a supported permission plugin is required for this flag to work.", };
-
-        E = new String[] { "{flag} ranks.vip",
-                           "{flag} !jobs.builder | <red>Builders can't use this!",
-                           "{flag} jobs.farmer, jobs.trader | <red>You must be a farmer or trader!",
-                           "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
-    }
 
     // Flag code
 
@@ -61,6 +57,7 @@ public class FlagGroup extends Flag {
 
     @Override
     public FlagGroup clone() {
+        super.clone();
         return new FlagGroup(this);
     }
 

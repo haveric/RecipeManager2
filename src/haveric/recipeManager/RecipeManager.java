@@ -49,7 +49,7 @@ public class RecipeManager extends JavaPlugin {
     private HashMap<String, String> plugins = new HashMap<String, String>();
 
     // constants
-    public static Random random = new Random();
+    public static final Random random = new Random();
 
     @Override
     public void onEnable() {

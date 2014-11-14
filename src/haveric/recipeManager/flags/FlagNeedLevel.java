@@ -6,28 +6,24 @@ import haveric.recipeManager.Messages;
 public class FlagNeedLevel extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.NEEDLEVEL;;
+    protected static final String[] A = new String[] {
+        "{flag} <min or min-max> | [fail message]", };
 
-    static {
-        TYPE = FlagType.NEEDLEVEL;
+    protected static final String[] D = new String[] {
+        "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+        "In the message the following variables can be used:",
+        "  {level}  = level or level range",
+        "",
+        "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
 
-        A = new String[] { "{flag} <min or min-max> | [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag} 1",
+        "{flag} 25-100 | <red>Need level 25 to 100!", };
 
-        D = new String[] { "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-                           "In the message the following variables can be used:",
-                           "  {level}  = level or level range",
-                           "",
-                           "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
-
-        E = new String[] { "{flag} 1",
-                           "{flag} 25-100 | <red>Need level 25 to 100!", };
-    }
 
     // Flag code
 
@@ -46,6 +42,7 @@ public class FlagNeedLevel extends Flag {
 
     @Override
     public FlagNeedLevel clone() {
+        super.clone();
         return new FlagNeedLevel(this);
     }
 
@@ -105,7 +102,7 @@ public class FlagNeedLevel extends Flag {
         value = split[0].trim();
 
         try {
-            setMinLevel(Integer.valueOf(value));
+            setMinLevel(Integer.parseInt(value));
             setMaxLevel(getMinLevel());
         } catch (NumberFormatException e) {
             ErrorReporter.error("The " + getType() + " flag has invalid min required level number: " + value);
@@ -116,7 +113,7 @@ public class FlagNeedLevel extends Flag {
             value = split[1].trim();
 
             try {
-                setMaxLevel(Integer.valueOf(value));
+                setMaxLevel(Integer.parseInt(value));
             } catch (NumberFormatException e) {
                 ErrorReporter.error("The " + getType() + " flag has invalid max required level number: " + value);
                 return false;

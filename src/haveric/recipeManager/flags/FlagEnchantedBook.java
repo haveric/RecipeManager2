@@ -16,30 +16,26 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 public class FlagEnchantedBook extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.ENCHANTEDBOOK;
+    protected static final String[] A = new String[] {
+        "{flag} <enchant> [level or max]", };
 
-    static {
-        TYPE = FlagType.ENCHANTEDBOOK;
+    protected static final String[] D = new String[] {
+        "Adds stored enchantments in a enchanted book item.",
+        "This flag may be used more times to add more enchantments to the item.",
+        "",
+        "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
+        "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
+        "",
+        "Enchantments are forced and there is no level cap!",
+        "",
+        "Specific item: enchanted_book", };
 
-        A = new String[] { "{flag} <enchant> [level or max]", };
+    protected static final String[] E = new String[] {
+        "{flag} efficiency // dig_speed alias",
+        "{flag} damage_all max",
+        "{flag} arrow_fire 127", };
 
-        D = new String[] { "Adds stored enchantments in a enchanted book item.",
-                           "This flag may be used more times to add more enchantments to the item.",
-                           "",
-                           "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
-                           "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
-                           "",
-                           "Enchantments are forced and there is no level cap!",
-                           "",
-                           "Specific item: enchanted_book", };
-
-        E = new String[] { "{flag} efficiency // dig_speed alias",
-                           "{flag} damage_all max",
-                           "{flag} arrow_fire 127", };
-    }
 
     // Flag code
 
@@ -54,6 +50,7 @@ public class FlagEnchantedBook extends Flag {
 
     @Override
     public Flag clone() {
+        super.clone();
         return new FlagEnchantedBook(this);
     }
 
@@ -108,7 +105,7 @@ public class FlagEnchantedBook extends Flag {
 
             if (!value.equalsIgnoreCase("max")) {
                 try {
-                    level = Integer.valueOf(value);
+                    level = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
                     return false;

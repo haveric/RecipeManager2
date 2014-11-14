@@ -20,41 +20,37 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class FlagCloneIngredient extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.CLONEINGREDIENT;;
+    protected static final String[] A = new String[] {
+        "{flag} <arguments>", };
 
-    static {
-        TYPE = FlagType.CLONEINGREDIENT;
+    protected static final String[] D = new String[] {
+        "Clones the ingredient matching material of the result used on.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.",
+        "Arguments can be one or more of the following, separated by | character:",
+        "  data [<mod> <value>]   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+        "  amount [<mod> <value>] = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+        "  enchants               = copies the enchantments.",
+        "  name                   = copies the custom item name.",
+        "  lore                   = copies the custom item lore/description.",
+        "  special                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
+        "  allmeta                = copies enchants, name, lore and special.",
+        "  all                    = copies entire item (data, amount, enchants, name, lore, special)",
+        "",
+        "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
+        "",
+        "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENTCONDITION + " flag too.", };
 
-        A = new String[] { "{flag} <arguments>", };
+    protected static final String[] E = new String[] {
+        "{flag} data // just copy data value",
+        "{flag} data +2 // copy data value and add 2 to it",
+        "{flag} amount * 2 // copy amount and multiply it by 2",
+        "{flag} data % 2 // get the remainder from data divided by 2.",
+        "{flag} data | amount | lore // only copy these things",
+        "{flag} all // copy entire ingredient", };
 
-        D = new String[] { "Clones the ingredient matching material of the result used on.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.",
-                           "Arguments can be one or more of the following, separated by | character:",
-                           "  data [<mod> <value>]   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
-                           "  amount [<mod> <value>] = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
-                           "  enchants               = copies the enchantments.",
-                           "  name                   = copies the custom item name.",
-                           "  lore                   = copies the custom item lore/description.",
-                           "  special                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
-                           "  allmeta                = copies enchants, name, lore and special.",
-                           "  all                    = copies entire item (data, amount, enchants, name, lore, special)",
-                           "",
-                           "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
-                           "",
-                           "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENTCONDITION + " flag too.", };
-
-        E = new String[] { "{flag} data // just copy data value",
-                           "{flag} data +2 // copy data value and add 2 to it",
-                           "{flag} amount * 2 // copy amount and multiply it by 2",
-                           "{flag} data % 2 // get the remainder from data divided by 2.",
-                           "{flag} data | amount | lore // only copy these things",
-                           "{flag} all // copy entire ingredient", };
-    }
 
     // Flag code
 
@@ -88,6 +84,7 @@ public class FlagCloneIngredient extends Flag {
 
     @Override
     public FlagCloneIngredient clone() {
+        super.clone();
         return new FlagCloneIngredient(this);
     }
 
@@ -254,9 +251,9 @@ public class FlagCloneIngredient extends Flag {
 
                     try {
                         if (isDataArg) {
-                            setDataModifier(match.group(0).charAt(0), Math.abs(Integer.valueOf(value)));
+                            setDataModifier(match.group(0).charAt(0), Math.abs(Integer.parseInt(value)));
                         } else {
-                            setAmountModifier(match.group(0).charAt(0), Math.abs(Integer.valueOf(value)));
+                            setAmountModifier(match.group(0).charAt(0), Math.abs(Integer.parseInt(value)));
                         }
                     } catch (Throwable e) {
                         ErrorReporter.warning("Flag " + getType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);

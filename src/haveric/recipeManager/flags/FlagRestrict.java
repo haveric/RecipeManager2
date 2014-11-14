@@ -5,24 +5,20 @@ import haveric.recipeManager.Messages;
 public class FlagRestrict extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.RESTRICT;
+    protected static final String[] A = new String[] {
+        "{flag} [fail message]", };
 
-    static {
-        TYPE = FlagType.RESTRICT;
+    protected static final String[] D = new String[] {
+        "Restricts the recipe to everybody.",
+        "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.",
+        "",
+        "Optionally you can overwrite the default restrict message.", };
 
-        A = new String[] { "{flag} [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag}",
+        "{flag} <red>Access denied!", };
 
-        D = new String[] { "Restricts the recipe to everybody.",
-                           "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.",
-                           "",
-                           "Optionally you can overwrite the default restrict message.", };
-
-        E = new String[] { "{flag}",
-                           "{flag} <red>Access denied!", };
-    }
 
     // Flag code
 
@@ -37,6 +33,7 @@ public class FlagRestrict extends Flag {
 
     @Override
     public FlagRestrict clone() {
+        super.clone();
         return new FlagRestrict(this);
     }
 

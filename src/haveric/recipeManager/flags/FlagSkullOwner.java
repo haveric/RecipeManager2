@@ -9,22 +9,17 @@ import org.bukkit.inventory.meta.SkullMeta;
 public class FlagSkullOwner extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.SKULLOWNER;
+    protected static final String[] A = new String[] {
+        "{flag} <name>", };
 
-    static {
-        TYPE = FlagType.SKULLOWNER;
+    protected static final String[] D = new String[] {
+        "Sets the human skull's owner to apply the skin.",
+        "If you set it to '{player}' then it will use crafter's name.", };
 
-        A = new String[] { "{flag} <name>", };
-
-        D = new String[] { "Sets the human skull's owner to apply the skin.",
-                           "If you set it to '{player}' then it will use crafter's name.", };
-
-        E = new String[] { "{flag} Notch",
-                           "{flag} {player}", };
-    }
+    protected static final String[] E = new String[] {
+        "{flag} Notch",
+        "{flag} {player}", };
 
     // Flag code
 
@@ -39,6 +34,7 @@ public class FlagSkullOwner extends Flag {
 
     @Override
     public FlagSkullOwner clone() {
+        super.clone();
         return new FlagSkullOwner(this);
     }
 

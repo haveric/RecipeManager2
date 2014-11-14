@@ -27,36 +27,32 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class FlagKeepItem extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.KEEPITEM;
+    protected static final String[] A = new String[] {
+        "{flag} <ingredient>",
+        "{flag} <ingredient> | damage <num>",
+        "{flag} <ingredient> | replace <item>", };
 
-    static {
-        TYPE = FlagType.KEEPITEM;
+    protected static final String[] D = new String[] {
+        "Keeps the specified ingredient material from being used when crafting.",
+        "This flag can be used more than once to specify more ingredients.",
+        "",
+        "The <ingredient> argument can be a material:data combination of the ingredient, data value being optional, just like defining an ingredient.",
+        "",
+        "For the optional 'damage <num>' argument you can specify the amount of damage to add or remove from a damageable item.",
+        "Damaging the item beyond its max durability will break it.",
+        "This argument only works for damageable items and the <num> can be a positive number to damage the item or negative to repair it.",
+        "",
+        "For the optional 'replace <item>' argument you can specify an item that will replace the ingredient.",
+        "The <item> on 'replace' argument can support material:data:amount and enchantments, just like recipe results.",
+        "This argument only works for unstackable ingredients. The item specified as replacement can be stackable.", };
 
-        A = new String[] { "{flag} <ingredient>",
-                           "{flag} <ingredient> | damage <num>",
-                           "{flag} <ingredient> | replace <item>", };
+    protected static final String[] E = new String[] {
+        "{flag} iron_axe  // makes the iron_axe ingredient persistent",
+        "{flag} potion | replace bottle // using any kind of potion would return an empty bottle",
+        "{flag} diamond_pickaxe | damage 5  // keeps the diamond pickaxe but damages it by 5 points",
+        "{flag} shears | damage -99999 // keeps shears and fully repairs it", };
 
-        D = new String[] { "Keeps the specified ingredient material from being used when crafting.",
-                           "This flag can be used more than once to specify more ingredients.",
-                           "",
-                           "The <ingredient> argument can be a material:data combination of the ingredient, data value being optional, just like defining an ingredient.",
-                           "",
-                           "For the optional 'damage <num>' argument you can specify the amount of damage to add or remove from a damageable item.",
-                           "Damaging the item beyond its max durability will break it.",
-                           "This argument only works for damageable items and the <num> can be a positive number to damage the item or negative to repair it.",
-                           "",
-                           "For the optional 'replace <item>' argument you can specify an item that will replace the ingredient.",
-                           "The <item> on 'replace' argument can support material:data:amount and enchantments, just like recipe results.",
-                           "This argument only works for unstackable ingredients. The item specified as replacement can be stackable.", };
-
-        E = new String[] { "{flag} iron_axe  // makes the iron_axe ingredient persistent",
-                           "{flag} potion | replace bottle // using any kind of potion would return an empty bottle",
-                           "{flag} diamond_pickaxe | damage 5  // keeps the diamond pickaxe but damages it by 5 points",
-                           "{flag} shears | damage -99999 // keeps shears and fully repairs it", };
-    }
 
     // Flag code
 
@@ -79,6 +75,7 @@ public class FlagKeepItem extends Flag {
 
     @Override
     public FlagKeepItem clone() {
+        super.clone();
         return new FlagKeepItem(this);
     }
 
@@ -144,13 +141,13 @@ public class FlagKeepItem extends Flag {
             value = split[1].trim();
 
             if (value.startsWith("damage")) {
-                Integer damage = 0;
+                int damage = 0;
 
                 if (item.getType().getMaxDurability() > 0) {
                     value = value.substring("damage".length()).trim();
 
                     try {
-                        damage = Integer.valueOf(value);
+                        damage = Integer.parseInt(value);
                     } catch (NumberFormatException e) {
                         ErrorReporter.warning("Flag " + getType() + " has invalid damage number: " + value + ", ignored.");
                     }

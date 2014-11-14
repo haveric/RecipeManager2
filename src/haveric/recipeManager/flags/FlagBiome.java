@@ -18,28 +18,23 @@ import org.bukkit.block.Block;
 public class FlagBiome extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.BIOME;
+    protected static final String[] A = new String[] {
+        "{flag} <types> | [fail message]", };
 
-    static {
-        TYPE = FlagType.BIOME;
+    protected static final String[] D = new String[] {
+        "Sets the biome required to allow crafting.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "For '<types>' you can list the biomes you want to allow or disallow.",
+        "It needs at least one biome name and you can add more separated by , character.",
+        "Also you can disallow biomes by prefixing them with ! character.",
+        "Biomes: " + Tools.collectionToString(Arrays.asList(Biome.values())).toLowerCase(),
+        "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
 
-        A = new String[] { "{flag} <types> | [fail message]", };
-
-        D = new String[] { "Sets the biome required to allow crafting.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "For '<types>' you can list the biomes you want to allow or disallow.",
-                           "It needs at least one biome name and you can add more separated by , character.",
-                           "Also you can disallow biomes by prefixing them with ! character.",
-                           "Biomes: " + Tools.collectionToString(Arrays.asList(Biome.values())).toLowerCase(),
-                           "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
-
-        E = new String[] { "{flag} jungle, jungle_hills",
-                           "{flag} !mushroom_island, !mushroom_shore", };
-    }
+    protected static final String[] E = new String[] {
+        "{flag} jungle, jungle_hills",
+        "{flag} !mushroom_island, !mushroom_shore", };
 
     // Flag code
 
@@ -56,6 +51,7 @@ public class FlagBiome extends Flag {
 
     @Override
     public FlagBiome clone() {
+        super.clone();
         return new FlagBiome(this);
     }
 

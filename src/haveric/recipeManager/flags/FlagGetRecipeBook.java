@@ -14,25 +14,21 @@ import org.bukkit.Material;
 public class FlagGetRecipeBook extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.GETRECIPEBOOK;
+    protected static final String[] A = new String[] {
+        "{flag} <book id> [volume <num>]", };
 
-    static {
-        TYPE = FlagType.GETRECIPEBOOK;
+    protected static final String[] D = new String[] {
+        "Overwrites result with the specified recipe book.",
+        "",
+        "For the '<book id>' argument you need to specify the book ID, case insensitive and partial matching supported.",
+        "",
+        "Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.", };
 
-        A = new String[] { "{flag} <book id> [volume <num>]", };
+    protected static final String[] E = new String[] {
+        "{flag} recipestu // matches a 'Recipe Stuff.yml' book for example.",
+        "{flag} vanilla rec volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };
 
-        D = new String[] { "Overwrites result with the specified recipe book.",
-                           "",
-                           "For the '<book id>' argument you need to specify the book ID, case insensitive and partial matching supported.",
-                           "",
-                           "Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.", };
-
-        E = new String[] { "{flag} recipestu // matches a 'Recipe Stuff.yml' book for example.",
-                           "{flag} vanilla rec volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };
-    }
 
     // Flag code
 
@@ -49,6 +45,7 @@ public class FlagGetRecipeBook extends Flag {
 
     @Override
     public FlagGetRecipeBook clone() {
+        super.clone();
         return new FlagGetRecipeBook(this);
     }
 
@@ -95,7 +92,7 @@ public class FlagGetRecipeBook extends Flag {
             value = value.substring(index + "volume".length()).trim();
 
             try {
-                setVolume(Integer.valueOf(value));
+                setVolume(Integer.parseInt(value));
                 id = id.substring(0, index).trim();
             } catch (NumberFormatException e) {
                 // TODO: Handle exception

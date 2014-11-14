@@ -10,31 +10,27 @@ import org.bukkit.block.BlockFace;
 public class FlagLightLevel extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.LIGHTLEVEL;
+    protected static final String[] A = new String[] {
+        "{flag} <min or min-max> [type] | [fail message]", };
 
-    static {
-        TYPE = FlagType.LIGHTLEVEL;
+    protected static final String[] D = new String[] {
+        "Checks for the light level.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.",
+        "",
+        "Optionally you can set the  [type] argument to specify light type:",
+        "  any    = (default) any kind of light.",
+        "  sun    = sun light only.",
+        "  blocks = light form blocks (torches, furnaces, etc) only.",
+        "",
+        "You can also overwrite the fail message or use 'false' to hide it.", };
 
-        A = new String[] { "{flag} <min or min-max> [type] | [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag} 14 sun",
+        "{flag} 0-4 blocks | <red>Kill the lights!", };
 
-        D = new String[] { "Checks for the light level.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.",
-                           "",
-                           "Optionally you can set the  [type] argument to specify light type:",
-                           "  any    = (default) any kind of light.",
-                           "  sun    = sun light only.",
-                           "  blocks = light form blocks (torches, furnaces, etc) only.",
-                           "",
-                           "You can also overwrite the fail message or use 'false' to hide it.", };
-
-        E = new String[] { "{flag} 14 sun",
-                           "{flag} 0-4 blocks | <red>Kill the lights!", };
-    }
 
     // Flag code
 
@@ -55,6 +51,7 @@ public class FlagLightLevel extends Flag {
 
     @Override
     public FlagLightLevel clone() {
+        super.clone();
         return new FlagLightLevel(this);
     }
 

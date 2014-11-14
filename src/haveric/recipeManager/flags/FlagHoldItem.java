@@ -13,28 +13,24 @@ import org.bukkit.inventory.ItemStack;
 public class FlagHoldItem extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.HOLDITEM;
+    protected static final String[] A = new String[] {
+        "{flag} <item or false>", };
 
-    static {
-        TYPE = FlagType.HOLDITEM;
+    protected static final String[] D = new String[] {
+        "Makes the recipe require crafter to hold an item.",
+        "",
+        "This flag can be used more than once to add more items, the player will need to hold one to craft.",
+        "",
+        "The <item> argument can be in this format: material:data:amount",
+        "Just like recipe results, not all values from the item are required.", };
 
-        A = new String[] { "{flag} <item or false>", };
+    protected static final String[] E = new String[] {
+        "{flag} iron_pickaxe // any data/damage value",
+        "{flag} iron_axe:0 // only undamaged axe!",
+        "{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1",
+        "{flag} false // makes all previous statements useless", };
 
-        D = new String[] { "Makes the recipe require crafter to hold an item.",
-                           "",
-                           "This flag can be used more than once to add more items, the player will need to hold one to craft.",
-                           "",
-                           "The <item> argument can be in this format: material:data:amount",
-                           "Just like recipe results, not all values from the item are required.", };
-
-        E = new String[] { "{flag} iron_pickaxe // any data/damage value",
-                           "{flag} iron_axe:0 // only undamaged axe!",
-                           "{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1",
-                           "{flag} false // makes all previous statements useless", };
-    }
 
     // Flag code
 
@@ -54,6 +50,7 @@ public class FlagHoldItem extends Flag {
 
     @Override
     public FlagHoldItem clone() {
+        super.clone();
         return new FlagHoldItem(this);
     }
 

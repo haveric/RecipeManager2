@@ -42,7 +42,7 @@ public class GetBookCommand implements CommandExecutor {
 
         if (index > 0) { // found and not the first character
             try {
-                volume = Integer.valueOf(bookName.substring(index + 1));
+                volume = Integer.parseInt(bookName.substring(index + 1));
             } catch (Throwable e) {
                 Messages.CMD_GETBOOK_INVALIDNUMBER.print(sender);
             }

@@ -16,55 +16,51 @@ import org.bukkit.potion.PotionEffect;
 public class FlagPotionItem extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.POTIONITEM;
+    protected static final String[] A = new String[] {
+        "{flag} <basic effect>",
+        "{flag} custom <custom effect>", };
 
-    static {
-        TYPE = FlagType.POTIONITEM;
+    protected static final String[] D = new String[] {
+        "Builds a potion item, only works with POTION item.",
+        "",
+        "There are 2 types of potions... basic potions which have 1 effect and custom potions which can have multiple effects.",
+        "",
+        "Building a basic potion:",
+        "",
+        "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
+        "Arguments for basic effect:",
+        "  type <potion type>     = (REQUIRED) Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
+        "  level <number or max>  = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
+        "  extended               = (optional) Potion has extended duration",
+        "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
+        "",
+        "",
+        "Building a custom potion requires adding individual effects:",
+        "",
+        "A basic potion still affects the custom potion like the following:",
+        "- If no basic potion is defined the bottle will look like 'water bottle' with no effects listed, effects still apply when drank",
+        "- Basic potion's type affects bottle liquid color",
+        "- Basic potion's splash still affects if the bottle is throwable instead of drinkable",
+        "- Basic potion's extended and level do absolutely nothing.",
+        "- The first custom effect added is the potion's name, rest of effects are in description (of course you can use @name to change the item name)",
+        "",
+        "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
+        "",
+        "Similar syntax to basic effect, arguments separated by | character, can be in any order.",
+        "Arguments for custom effect:",
+        "  type <effect type>  = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE !)",
+        "  duration <float>    = (optional) Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
+        "  amplify <number>    = (optional) Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+        "  ambient             = (optional) Adds extra visual particles", };
 
-        A = new String[] { "{flag} <basic effect>",
-                           "{flag} custom <custom effect>", };
+    protected static final String[] E = new String[] {
+        "{flag} level max | type FIRE_RESISTANCE | extended // basic extended fire resistance potion",
+        "// advanced potion example:",
+        "{flag} type POISON | splash // set the bottle design and set it as splash",
+        "{flag} custom type WITHER | duration 10 // add wither effect",
+        "{flag} custom duration 2.5 | type BLINDNESS | amplify 5 // add blindness effect", };
 
-        D = new String[] { "Builds a potion item, only works with POTION item.",
-                           "",
-                           "There are 2 types of potions... basic potions which have 1 effect and custom potions which can have multiple effects.",
-                           "",
-                           "Building a basic potion:",
-                           "",
-                           "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
-                           "Arguments for basic effect:",
-                           "  type <potion type>     = (REQUIRED) Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
-                           "  level <number or max>  = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
-                           "  extended               = (optional) Potion has extended duration",
-                           "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
-                           "",
-                           "",
-                           "Building a custom potion requires adding individual effects:",
-                           "",
-                           "A basic potion still affects the custom potion like the following:",
-                           "- If no basic potion is defined the bottle will look like 'water bottle' with no effects listed, effects still apply when drank",
-                           "- Basic potion's type affects bottle liquid color",
-                           "- Basic potion's splash still affects if the bottle is throwable instead of drinkable",
-                           "- Basic potion's extended and level do absolutely nothing.",
-                           "- The first custom effect added is the potion's name, rest of effects are in description (of course you can use @name to change the item name)",
-                           "",
-                           "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
-                           "",
-                           "Similar syntax to basic effect, arguments separated by | character, can be in any order.",
-                           "Arguments for custom effect:",
-                           "  type <effect type>  = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE !)",
-                           "  duration <float>    = (optional) Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
-                           "  amplify <number>    = (optional) Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
-                           "  ambient             = (optional) Adds extra visual particles", };
-
-        E = new String[] { "{flag} level max | type FIRE_RESISTANCE | extended // basic extended fire resistance potion",
-                           "// advanced potion example:",
-                           "{flag} type POISON | splash // set the bottle design and set it as splash",
-                           "{flag} custom type WITHER | duration 10 // add wither effect",
-                           "{flag} custom duration 2.5 | type BLINDNESS | amplify 5 // add blindness effect", };
-    }
 
     // Flag code
 
@@ -81,6 +77,7 @@ public class FlagPotionItem extends Flag {
 
     @Override
     public FlagPotionItem clone() {
+        super.clone();
         return new FlagPotionItem(this);
     }
 

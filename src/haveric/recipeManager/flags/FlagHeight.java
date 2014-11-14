@@ -6,26 +6,22 @@ import haveric.recipeManager.Messages;
 public class FlagHeight extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.HEIGHT;
+    protected static final String[] A = new String[] {
+        "{flag} <min or min-max> | [fail message]", };
 
-    static {
-        TYPE = FlagType.HEIGHT;
+    protected static final String[] D = new String[] {
+        "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+        "In the message the following variables can be used:",
+        "  {height}  = height or height range", };
 
-        A = new String[] { "{flag} <min or min-max> | [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag} 200 // must be high in the sky",
+        "{flag} 0-30 | <red>You need to be deep underground!", };
 
-        D = new String[] { "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-                           "In the message the following variables can be used:",
-                           "  {height}  = height or height range", };
-
-        E = new String[] { "{flag} 200 // must be high in the sky",
-                           "{flag} 0-30 | <red>You need to be deep underground!", };
-    }
 
     // Flag code
 
@@ -44,6 +40,7 @@ public class FlagHeight extends Flag {
 
     @Override
     public FlagHeight clone() {
+        super.clone();
         return new FlagHeight(this);
     }
 
@@ -102,7 +99,7 @@ public class FlagHeight extends Flag {
         value = split[0].trim();
 
         try {
-            setMinHeight(Integer.valueOf(value));
+            setMinHeight(Integer.parseInt(value));
             setMaxHeight(getMinHeight());
         } catch (NumberFormatException e) {
             ErrorReporter.error("The " + getType() + " flag has invalid min required height number: " + value);
@@ -113,7 +110,7 @@ public class FlagHeight extends Flag {
             value = split[1].trim();
 
             try {
-                setMaxHeight(Integer.valueOf(value));
+                setMaxHeight(Integer.parseInt(value));
             } catch (NumberFormatException e) {
                 ErrorReporter.error("The " + getType() + " flag has invalid max required height number: " + value);
                 return false;

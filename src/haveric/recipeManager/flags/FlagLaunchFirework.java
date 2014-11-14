@@ -17,39 +17,35 @@ import org.bukkit.inventory.meta.FireworkMeta;
 public class FlagLaunchFirework extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.LAUNCHFIREWORK;
+    protected static final String[] A = new String[] {
+        "{flag} effect <effects>",
+        "{flag} power <number 0-128>", };
 
-    static {
-        TYPE = FlagType.LAUNCHFIREWORK;
+    protected static final String[] D = new String[] {
+        "Launches a firework from workbench/player/furnace when recipe or result item is crafted.",
+        "This flag can be defined multiple times add effects and set power to the same rocket.",
+        "",
+        "The 'effect' setting adds an effect to the rocket.",
+        "Replace <effects> with the effects separated by | character.",
+        "Effects can be:",
+        "  color <red> <green> <blue>, ...           = (Required at least 1 color) Sets the primary explosion color(s), you can define more colors separated by comma.",
+        "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
+        "  type <explode type>                       = (Optional) Shape/size of explosion, can be: BALL, BALL_LARGE, BURST, CREEPER or STAR... or see " + Files.FILE_INFO_NAMES + " file.",
+        "  trail                                     = (Optional) Adds a trail to the explosion",
+        "  flicker                                   = (Optional) Adds a flicker to explosion",
+        "",
+        "Effects can be listed in any order.",
+        "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
+        "",
+        "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds, values above 4 are NOT recommended because it heavily affects client performance.", };
 
-        A = new String[] { "{flag} effect <effects>",
-                           "{flag} power <number 0-128>", };
+    protected static final String[] E = new String[] {
+        "{flag} effect color 0 255 0",
+        "{flag} effect trail | color 255 0 0 | type burst",
+        "{flag} effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0",
+        "{flag} power 2", };
 
-        D = new String[] { "Launches a firework from workbench/player/furnace when recipe or result item is crafted.",
-                           "This flag can be defined multiple times add effects and set power to the same rocket.",
-                           "",
-                           "The 'effect' setting adds an effect to the rocket.",
-                           "Replace <effects> with the effects separated by | character.",
-                           "Effects can be:",
-                           "  color <red> <green> <blue>, ...           = (Required at least 1 color) Sets the primary explosion color(s), you can define more colors separated by comma.",
-                           "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
-                           "  type <explode type>                       = (Optional) Shape/size of explosion, can be: BALL, BALL_LARGE, BURST, CREEPER or STAR... or see " + Files.FILE_INFO_NAMES + " file.",
-                           "  trail                                     = (Optional) Adds a trail to the explosion",
-                           "  flicker                                   = (Optional) Adds a flicker to explosion",
-                           "",
-                           "Effects can be listed in any order.",
-                           "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
-                           "",
-                           "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds, values above 4 are NOT recommended because it heavily affects client performance.", };
-
-        E = new String[] { "{flag} effect color 0 255 0",
-                           "{flag} effect trail | color 255 0 0 | type burst",
-                           "{flag} effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0",
-                           "{flag} power 2", };
-    }
 
     // Flag code
 
@@ -66,6 +62,7 @@ public class FlagLaunchFirework extends Flag {
 
     @Override
     public FlagLaunchFirework clone() {
+        super.clone();
         return new FlagLaunchFirework(this);
     }
 
@@ -111,7 +108,7 @@ public class FlagLaunchFirework extends Flag {
             int power = -1;
 
             try {
-                power = Integer.valueOf(value);
+                power = Integer.parseInt(value);
             } catch (NumberFormatException e) {
                 // TODO: Handle Exception
             }

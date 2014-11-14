@@ -14,31 +14,27 @@ import org.bukkit.inventory.ItemStack;
 public class FlagSetBlock extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.SETBLOCK;
+    protected static final String[] A = new String[] {
+        "{flag} <block material>:[data] | [arguments]", };
 
-    static {
-        TYPE = FlagType.SETBLOCK;
+    protected static final String[] D = new String[] {
+        "Changes the workbench/furnace/block-at-player into other block type.",
+        "Using this flag more than once will overwrite the previous flag.",
+        "",
+        "Replace '<block material>' with a block material (not item!), see '" + Files.FILE_INFO_NAMES + "' for list, IDs up to 255 are blocks, after that they're items.",
+        "Optionally you can define a data value which defines its skin, direction and other stuff, see the 'Minecraft Wiki / Data Values' link from the '" + Files.FILE_INFO_NAMES + "' file.",
+        "You can also use aliases for materials and data values too.",
+        "",
+        "Additionally you can define a set of arguments separated by | character:",
+        "  drop            = breaks the existing block and drops its item.",
+        "  noinv [failmsg] = prevent inventory crafting, if this is not set, the flag will set the block at player location too; optionally you can overwrite the failure message for this condition.", };
 
-        A = new String[] { "{flag} <block material>:[data] | [arguments]", };
+    protected static final String[] E = new String[] {
+        "{flag} gold_block",
+        "{flag} planks:jungle | noinv // set to jungle wood planks and prevent inventory crafting",
+        "{flag} air | drop | noinv <red>Only workbench! // simulate block break", };
 
-        D = new String[] { "Changes the workbench/furnace/block-at-player into other block type.",
-                           "Using this flag more than once will overwrite the previous flag.",
-                           "",
-                           "Replace '<block material>' with a block material (not item!), see '" + Files.FILE_INFO_NAMES + "' for list, IDs up to 255 are blocks, after that they're items.",
-                           "Optionally you can define a data value which defines its skin, direction and other stuff, see the 'Minecraft Wiki / Data Values' link from the '" + Files.FILE_INFO_NAMES + "' file.",
-                           "You can also use aliases for materials and data values too.",
-                           "",
-                           "Additionally you can define a set of arguments separated by | character:",
-                           "  drop            = breaks the existing block and drops its item.",
-                           "  noinv [failmsg] = prevent inventory crafting, if this is not set, the flag will set the block at player location too; optionally you can overwrite the failure message for this condition.", };
-
-        E = new String[] { "{flag} gold_block",
-                           "{flag} planks:jungle | noinv // set to jungle wood planks and prevent inventory crafting",
-                           "{flag} air | drop | noinv <red>Only workbench! // simulate block break", };
-    }
 
     // Flag code
 
@@ -61,6 +57,7 @@ public class FlagSetBlock extends Flag {
 
     @Override
     public FlagSetBlock clone() {
+        super.clone();
         return new FlagSetBlock(this);
     }
 

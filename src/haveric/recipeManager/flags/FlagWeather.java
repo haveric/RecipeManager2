@@ -13,34 +13,30 @@ import org.bukkit.World;
 public class FlagWeather extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.WEATHER;
+    protected static final String[] A = new String[] {
+        "{flag} <type>, [type] | [fail message]", };
 
-    static {
-        TYPE = FlagType.WEATHER;
+    protected static final String[] D = new String[] {
+        "Sets the weather type(s) required to allow crafting.",
+        "Using this flag more than once will overwrite the previous one.",
+        "",
+        "The 'type' argument can be:",
+        "  clear    = clear skies, no precipitation.",
+        "  downfall = precipitation (rain/snow depends on biome).",
+        "  thunder  = precipitation + thundering.",
+        "You can set more than one type separated by , character, but setting all of them is pointless.",
+        "",
+        "Optionally you can set the 'fail message' argument to overwrite the failure message or set it to 'false' to hide it.",
+        "In the fail message you can use the following variables:",
+        "  {weather} = the weather type required.",
+        "",
+        "NOTE: If you need to check if it's raining or snowing then use the " + FlagType.BIOME + " flag.", };
 
-        A = new String[] { "{flag} <type>, [type] | [fail message]", };
+    protected static final String[] E = new String[] {
+        "{flag} downfall // works only if it's raining peacefully.",
+        "{flag} clear, thunder | <red>To be struck by lightning... or to be not.", };
 
-        D = new String[] { "Sets the weather type(s) required to allow crafting.",
-                           "Using this flag more than once will overwrite the previous one.",
-                           "",
-                           "The 'type' argument can be:",
-                           "  clear    = clear skies, no precipitation.",
-                           "  downfall = precipitation (rain/snow depends on biome).",
-                           "  thunder  = precipitation + thundering.",
-                           "You can set more than one type separated by , character, but setting all of them is pointless.",
-                           "",
-                           "Optionally you can set the 'fail message' argument to overwrite the failure message or set it to 'false' to hide it.",
-                           "In the fail message you can use the following variables:",
-                           "  {weather} = the weather type required.",
-                           "",
-                           "NOTE: If you need to check if it's raining or snowing then use the " + FlagType.BIOME + " flag.", };
-
-        E = new String[] { "{flag} downfall // works only if it's raining peacefully.",
-                           "{flag} clear, thunder | <red>To be struck by lightning... or to be not.", };
-    }
 
     // Flag code
 
@@ -63,6 +59,7 @@ public class FlagWeather extends Flag {
 
     @Override
     public FlagWeather clone() {
+        super.clone();
         return new FlagWeather(this);
     }
 

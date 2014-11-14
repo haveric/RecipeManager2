@@ -43,7 +43,7 @@ public class FindItemCommand implements CommandExecutor {
             int id = 0;
 
             try {
-                id = Integer.valueOf(find);
+                id = Integer.parseInt(find);
             } catch (NumberFormatException e) {
                 // TODO: Handle error
             }

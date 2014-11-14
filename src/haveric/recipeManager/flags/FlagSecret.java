@@ -3,23 +3,19 @@ package haveric.recipeManager.flags;
 public class FlagSecret extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE;
-    protected static final String[] A;
-    protected static final String[] D;
-    protected static final String[] E;
+    private static final FlagType TYPE = FlagType.SECRET;
+    protected static final String[] A = new String[] {
+        "{flag} [true or false]", };
 
-    static {
-        TYPE = FlagType.SECRET;
+    protected static final String[] D = new String[] {
+        "Hides the recipe or result from common info sources.",
+        "Recipes are hidden from commands, books, etc.",
+        "Results are also hidden from commands, books and most importantly from multiresult item display.",
+        "This also means recipes/results won't give out any fail craft reasons!", };
 
-        A = new String[] { "{flag} [true or false]", };
+    protected static final String[] E = new String[] {
+        "{flag}", };
 
-        D = new String[] { "Hides the recipe or result from common info sources.",
-                           "Recipes are hidden from commands, books, etc.",
-                           "Results are also hidden from commands, books and most importantly from multiresult item display.",
-                           "This also means recipes/results won't give out any fail craft reasons!", };
-
-        E = new String[] { "{flag}", };
-    }
 
     // Flag code
 
@@ -31,6 +27,7 @@ public class FlagSecret extends Flag {
 
     @Override
     public FlagSecret clone() {
+        super.clone();
         return new FlagSecret(this);
     }
 
