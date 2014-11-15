@@ -6,7 +6,7 @@ import haveric.recipeManager.Messages;
 public class FlagNeedLevel extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE = FlagType.NEEDLEVEL;;
+    private static final FlagType TYPE = FlagType.NEEDLEVEL;
     protected static final String[] A = new String[] {
         "{flag} <min or min-max> | [fail message]", };
 
@@ -21,7 +21,8 @@ public class FlagNeedLevel extends Flag {
         "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
 
     protected static final String[] E = new String[] {
-        "{flag} 1",
+        "{flag} 1 // Requires a minimum level of 1",
+        "{flag} 5-5 // Requires exactly level 5",
         "{flag} 25-100 | <red>Need level 25 to 100!", };
 
 
@@ -29,6 +30,8 @@ public class FlagNeedLevel extends Flag {
 
     private int minLevel;
     private int maxLevel;
+    private boolean setBoth = false;
+
     private String failMessage;
 
     public FlagNeedLevel() {
@@ -38,6 +41,7 @@ public class FlagNeedLevel extends Flag {
         minLevel = flag.minLevel;
         maxLevel = flag.maxLevel;
         failMessage = flag.failMessage;
+        setBoth = flag.setBoth;
     }
 
     @Override
@@ -77,9 +81,15 @@ public class FlagNeedLevel extends Flag {
     }
 
     public boolean checkLevel(int level) {
-        // return !((minLevel > 0 && level < minLevel) || (maxLevel > 0 && level > maxLevel));
+        boolean isValid = false;
 
-        return (level >= minLevel && level <= maxLevel);
+        isValid = level >= minLevel;
+
+        if (isValid && setBoth) {
+            isValid = level <= maxLevel;
+        }
+
+        return isValid;
     }
 
     public String getFailMessage() {
@@ -88,6 +98,22 @@ public class FlagNeedLevel extends Flag {
 
     public void setFailMessage(String newFailMessage) {
         failMessage = newFailMessage;
+    }
+
+    public String getResultString() {
+        String resultString = "Need ";
+
+        if (setBoth) {
+            resultString += "exact ";
+        }
+
+        resultString += "level: " + getMinLevel();
+
+        if (getMaxLevel() > getMinLevel()) {
+            resultString += "-" + getMaxLevel();
+        }
+
+        return resultString;
     }
 
     @Override
@@ -114,6 +140,7 @@ public class FlagNeedLevel extends Flag {
 
             try {
                 setMaxLevel(Integer.parseInt(value));
+                setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.error("The " + getType() + " flag has invalid max required level number: " + value);
                 return false;
