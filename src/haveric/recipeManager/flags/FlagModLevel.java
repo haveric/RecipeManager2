@@ -124,6 +124,10 @@ public class FlagModLevel extends Flag {
         failMessage = newFailMessage;
     }
 
+    public String getResultString() {
+        return "Mod Level: " + getModifier() + " " + getAmount();
+    }
+
     @Override
     protected boolean onParse(String value) {
         String[] split = value.split("\\|");

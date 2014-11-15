@@ -26,6 +26,7 @@ public class FlagNeedExp extends Flag {
 
     protected static final String[] E = new String[] {
         "{flag} 100 // player needs to have at least 100 experience to craft",
+        "{flag} 250-250 // player needs to have exactly 250 experience to craft",
         "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
         "{flag} 1000 | <red>Need {exp} exp!", };
 
@@ -35,6 +36,7 @@ public class FlagNeedExp extends Flag {
     private int minExp;
     private int maxExp;
     private String failMessage;
+    private boolean setBoth = false;
 
     public FlagNeedExp() {
     }
@@ -43,6 +45,7 @@ public class FlagNeedExp extends Flag {
         minExp = flag.minExp;
         maxExp = flag.maxExp;
         failMessage = flag.failMessage;
+        setBoth = flag.setBoth;
     }
 
     @Override
@@ -82,7 +85,15 @@ public class FlagNeedExp extends Flag {
     }
 
     public boolean checkExp(int exp) {
-        return exp >= minExp && (maxExp > minExp ? exp <= maxExp : true);
+        boolean isValid = false;
+
+        isValid = exp >= minExp;
+
+        if (isValid && setBoth) {
+            isValid = exp <= maxExp;
+        }
+
+        return isValid;
     }
 
     public String getFailMessage() {
@@ -91,6 +102,22 @@ public class FlagNeedExp extends Flag {
 
     public void setFailMessage(String newFailMessage) {
         failMessage = newFailMessage;
+    }
+
+    public String getResultString() {
+        String resultString = "Need ";
+
+        if (setBoth) {
+            resultString += "exact ";
+        }
+
+        resultString += "exp: " + getMinExp();
+
+        if (getMaxExp() > getMinExp()) {
+            resultString += "-" + getMaxExp();
+        }
+
+        return resultString;
     }
 
     @Override
@@ -127,6 +154,7 @@ public class FlagNeedExp extends Flag {
 
             try {
                 setMaxExp(Integer.parseInt(value));
+                setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.error("The " + getType() + " flag has invalid max req exp number: " + value);
                 return false;

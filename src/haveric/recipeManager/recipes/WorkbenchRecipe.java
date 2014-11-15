@@ -7,7 +7,10 @@ import haveric.recipeManager.flags.FlagDisplayResult;
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
 import haveric.recipeManager.flags.FlagKeepItem;
+import haveric.recipeManager.flags.FlagModExp;
+import haveric.recipeManager.flags.FlagModLevel;
 import haveric.recipeManager.flags.FlagModMoney;
+import haveric.recipeManager.flags.FlagNeedExp;
 import haveric.recipeManager.flags.FlagNeedLevel;
 import haveric.recipeManager.flags.FlagNeedMoney;
 import haveric.recipeManager.flags.FlagType;
@@ -77,6 +80,18 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
                 if (r.hasFlag(FlagType.NEEDLEVEL)) {
                     lore.add(r.getFlag(FlagNeedLevel.class).getResultString());
+                }
+
+                if (r.hasFlag(FlagType.MODLEVEL)) {
+                    lore.add(r.getFlag(FlagModLevel.class).getResultString());
+                }
+
+                if (r.hasFlag(FlagType.NEEDEXP)) {
+                    lore.add(r.getFlag(FlagNeedExp.class).getResultString());
+                }
+
+                if (r.hasFlag(FlagType.MODEXP)) {
+                    lore.add(r.getFlag(FlagModExp.class).getResultString());
                 }
 
                 if (r.hasFlag(FlagType.SECRET)) {

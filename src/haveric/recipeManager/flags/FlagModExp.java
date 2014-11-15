@@ -157,6 +157,10 @@ public class FlagModExp extends Flag {
         return true;
     }
 
+    public String getResultString() {
+        return "Mod Exp: " + getModifier() + " " + getAmount();
+    }
+
     @Override
     protected void onCrafted(Args a) {
         if (mod != '=' && amount == 0) {
