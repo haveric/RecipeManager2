@@ -23,6 +23,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 
 
@@ -124,7 +125,10 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             flag = null;
         }
 
-        if (flag != null) {
+        ItemResult displayResult = null;
+        if (flag == null) {
+            displayResult = displayResults.get(0);
+        } else {
             if (!receive && flag.isSilentFail()) {
                 return null;
             }
@@ -132,17 +136,32 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             ItemStack display = flag.getDisplayItem();
 
             if (display != null) {
-                return new ItemResult(display);
+                displayResult = new ItemResult(display);
             } else if (displayNum > 0) {
-                return displayResults.get(0);
+                displayResult = displayResults.get(0);
             }
+        }
+
+        ItemMeta meta = displayResult.getItemMeta();
+        List<String> oldLores = meta.getLore();
+
+        List<String> combinedLores = new ArrayList<String>();
+        if (oldLores != null) {
+            combinedLores.addAll(oldLores);
+        }
+        if (lore != null) {
+            combinedLores.addAll(lore);
+        }
+        meta.setLore(combinedLores);
+        displayResult.setItemMeta(meta);
+
+        if (flag != null) {
+            return displayResult;
         }
 
         if (unavailableNum == 0 && failChance == 0) {
             if (displayNum == 1 && secretNum == 0) {
-                ItemResult display = displayResults.get(0);
-
-                return ToolsItem.create(display.getType(), display.getDurability(), 0, "", lore);
+                return displayResult;
             } else if (secretNum == 1 && displayNum == 0) {
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
             }
