@@ -7,6 +7,8 @@ import haveric.recipeManager.flags.FlagDisplayResult;
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
 import haveric.recipeManager.flags.FlagKeepItem;
+import haveric.recipeManager.flags.FlagModMoney;
+import haveric.recipeManager.flags.FlagNeedMoney;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
 import haveric.recipeManager.tools.ToolsItem;
@@ -55,6 +57,8 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         float unavailableChance = 0;
         int displayNum = 0;
 
+        List<String> lore = new ArrayList<String>();
+
         for (ItemResult r : getResults()) {
             r = r.clone();
             a.clearReasons();
@@ -62,6 +66,14 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             r.sendPrepare(a);
 
             if (r.checkFlags(a)) {
+                if (r.hasFlag(FlagType.NEEDMONEY)) {
+                    lore.add(r.getFlags().getFlag(FlagNeedMoney.class).getResultString());
+                }
+
+                if (r.hasFlag(FlagType.MODMONEY)) {
+                    lore.add(r.getFlags().getFlag(FlagModMoney.class).getResultString());
+                }
+
                 if (r.hasFlag(FlagType.SECRET)) {
                     secretNum++;
                     secretChance += r.getChance();
@@ -108,13 +120,14 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
         if (unavailableNum == 0 && failChance == 0) {
             if (displayNum == 1 && secretNum == 0) {
-                return displayResults.get(0);
+                ItemResult display = displayResults.get(0);
+
+                return ToolsItem.create(display.getType(), display.getDurability(), 0, "", lore);
             } else if (secretNum == 1 && displayNum == 0) {
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
             }
         }
 
-        List<String> lore = new ArrayList<String>();
         String title = null;
 
         if (receive) {
@@ -150,6 +163,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         } else {
             displayMaterial = Settings.getInstance().getFailMaterial();
         }
+
         return ToolsItem.create(displayMaterial, 0, 0, title, lore);
     }
 

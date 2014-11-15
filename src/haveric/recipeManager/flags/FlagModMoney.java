@@ -111,6 +111,10 @@ public class FlagModMoney extends Flag {
         failMessage = message;
     }
 
+    public String getResultString() {
+        return "Mod Money: " + getModifier() + " " + getAmount();
+    }
+
     @Override
     protected boolean onParse(String value) {
         if (!Econ.getInstance().isEnabled()) {

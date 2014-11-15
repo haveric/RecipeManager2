@@ -83,6 +83,10 @@ public class FlagNeedMoney extends Flag {
         return moneyString;
     }
 
+    public String getResultString() {
+        return "Need Money: " + getMoneyString();
+    }
+
     public boolean checkMoney(double money) {
         boolean check = false;
 

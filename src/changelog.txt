@@ -3,6 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === v2.2.3 ===
 * Fixed @remove not always working
+* Show @needmoney and @modmoney on recipe results
 
 === v2.2.2 ===
 * Add support for leather color when extracting recipes.
