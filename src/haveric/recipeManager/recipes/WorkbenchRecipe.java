@@ -149,9 +149,8 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (oldLores != null) {
             combinedLores.addAll(oldLores);
         }
-        if (lore != null) {
-            combinedLores.addAll(lore);
-        }
+        combinedLores.addAll(lore);
+
         meta.setLore(combinedLores);
         displayResult.setItemMeta(meta);
 
