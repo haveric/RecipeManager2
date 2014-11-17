@@ -42,6 +42,10 @@ public class FlagEnchantItem extends Flag {
         enchants.putAll(flag.enchants);
     }
 
+    public Map<Enchantment, Integer> getEnchants() {
+        return enchants;
+    }
+
     @Override
     public FlagEnchantItem clone() {
         super.clone();

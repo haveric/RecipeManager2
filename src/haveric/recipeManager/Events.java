@@ -632,13 +632,13 @@ public class Events implements Listener {
 
                                 FurnaceData data = Furnaces.get(furnace.getLocation());
 
-                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
-                                if (!furnaceHandleFlaggable(recipe, a, true)) {
-                                    event.setCancelled(true);
+                                if (furnaceHandleFlaggable(recipe, a, true)) {
+                                    furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                                } else {
+                                    furnace.setCookTime((short) 0);
                                 }
-
-                                furnace.setCookTime((short) (200 - recipe.getCookTicks()));
                             }
                         }
                     }
@@ -654,13 +654,13 @@ public class Events implements Listener {
 
                             FurnaceData data = Furnaces.get(furnace.getLocation());
 
-                            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+                            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
-                            if (!furnaceHandleFlaggable(recipe, a, true)) {
-                                event.setCancelled(true);
+                            if (furnaceHandleFlaggable(recipe, a, true)) {
+                                furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                            } else {
+                                furnace.setCookTime((short) 0);
                             }
-
-                            furnace.setCookTime((short) (200 - recipe.getCookTicks()));
                         }
                     }
                 }
@@ -886,6 +886,20 @@ public class Events implements Listener {
             return false;
         }
 
+        ItemStack smelted = a.inventory().getItem(2);
+
+        if (smelted != null && smelted.getType() != Material.AIR) {
+            ItemResult result = a.result();
+            if (result != null) {
+                boolean isSame = ToolsItem.isSameItem(smelted, result, true);
+
+                if (!isSame) {
+                    return false;
+                }
+            }
+        }
+
+
         String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
 
         a.clear();
@@ -954,7 +968,7 @@ public class Events implements Listener {
                 event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
             if (!furnaceHandleFlaggable(recipe, a, true)) {
                 event.setCancelled(true);
@@ -992,20 +1006,24 @@ public class Events implements Listener {
 
             ItemResult result = recipe.getResult(a);
 
+            event.setResult(event.getResult());
+
             if (!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true))) {
+                // Frozen?
+                /*
                 if (a.hasPlayer()) {
                     Messages.SMELT_FROZEN.print(a.player(), null, "{location}", Tools.printLocation(a.location()));
                 }
 
                 data.setFrozen(true);
                 event.setCancelled(true);
+                */
             } else {
                 if (a.result() == null || a.result().getType() == Material.AIR) {
                     recipe.subtractIngredient(inventory, false);
                     event.setCancelled(true);
                 }
             }
-
 
             cookTime = (short) (200 - recipe.getCookTicks());
         }

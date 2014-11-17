@@ -1,7 +1,10 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.flags.FlagEnchantItem;
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
+import haveric.recipeManager.flags.FlagItemLore;
+import haveric.recipeManager.flags.FlagItemName;
 import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
@@ -746,7 +749,26 @@ public class RecipeProcessor implements Runnable {
                 return false;
             }
 
-            recipe.setResult(results.get(0));
+            ItemResult result = results.get(0);
+            ItemMeta meta = result.getItemMeta();
+
+            if (result.hasFlag(FlagType.ITEMNAME)) {
+                meta.setDisplayName(result.getFlag(FlagItemName.class).getName());
+            }
+
+            if (result.hasFlag(FlagType.ITEMLORE)) {
+                meta.setLore(result.getFlag(FlagItemLore.class).getLore());
+            }
+
+            if (result.hasFlag(FlagType.ENCHANTITEM)) {
+                Map<Enchantment, Integer> enchants = result.getFlag(FlagEnchantItem.class).getEnchants();
+                for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+                    meta.addEnchant(entry.getKey(), entry.getValue(), true);
+                }
+            }
+
+            result.setItemMeta(meta);
+            recipe.setResult(result);
         }
 
         if (isRemove) { // un-ignore result errors
