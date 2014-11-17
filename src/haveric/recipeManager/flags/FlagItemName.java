@@ -30,7 +30,7 @@ public class FlagItemName extends Flag {
         "  {z}              = event location's Z coord or '(?)' if not available", };
 
     protected static final String[] E = new String[] {
-        "{flag} <light_pruple>Weird Item",
+        "{flag} <light_purple>Weird Item",
         "{flag} <yellow>{player}'s Sword", };
 
 
