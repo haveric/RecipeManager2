@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class FlagModLevel extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE = FlagType.MODLEVEL;;
+    private static final FlagType TYPE = FlagType.MODLEVEL;
     protected static final String[] A = new String[] {
         "{flag} [modifier]<number> | [fail message]", };
 

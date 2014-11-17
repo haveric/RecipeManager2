@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class FlagCloneIngredient extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE = FlagType.CLONEINGREDIENT;;
+    private static final FlagType TYPE = FlagType.CLONEINGREDIENT;
     protected static final String[] A = new String[] {
         "{flag} <arguments>", };
 

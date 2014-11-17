@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class FlagExplode extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE = FlagType.EXPLODE;;
+    private static final FlagType TYPE = FlagType.EXPLODE;
     protected static final String[] A = new String[] {
         "{flag} <arguments or false>", };
 

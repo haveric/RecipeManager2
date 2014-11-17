@@ -7,7 +7,7 @@ import haveric.recipeManager.Messages;
 public class FlagNeedMoney extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE = FlagType.NEEDMONEY;;
+    private static final FlagType TYPE = FlagType.NEEDMONEY;
     protected static final String[] A = new String[] {
         "{flag} <min or min-max> | [fail message]", };
 
