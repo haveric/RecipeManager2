@@ -873,7 +873,7 @@ public class RecipeProcessor implements Runnable {
             added++;
         } while (nextLine());
 
-        return (added > 0);
+        return added > 0;
     }
 
     // TODO - maybe
@@ -917,7 +917,7 @@ public class RecipeProcessor implements Runnable {
             added++;
         } while (nextLine());
 
-        return (added > 0);
+        return added > 0;
     }
 
     private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Throwable {

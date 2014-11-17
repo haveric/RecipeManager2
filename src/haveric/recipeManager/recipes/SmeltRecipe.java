@@ -115,7 +115,7 @@ public class SmeltRecipe extends SingleResultRecipe {
      * @return if recipe has random time range
      */
     public boolean hasRandomTime() {
-        return (maxTime > minTime);
+        return maxTime > minTime;
     }
 
     /**

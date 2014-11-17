@@ -13,8 +13,7 @@ import org.bukkit.entity.Player;
 public class Flag implements Cloneable {
     protected Flags flagsContainer;
 
-    protected Flag() {
-    }
+    protected Flag() {}
 
     /*
      * Public tools/final methods
@@ -287,21 +286,15 @@ public class Flag implements Cloneable {
         return false; // it didn't parse anything
     }
 
-    protected void onRegistered() {
-    }
+    protected void onRegistered() {}
 
-    protected void onRemove() {
-    }
+    protected void onRemove() {}
 
-    protected void onCheck(Args a) {
-    }
+    protected void onCheck(Args a) {}
 
-    protected void onPrepare(Args a) {
-    }
+    protected void onPrepare(Args a) {}
 
-    protected void onCrafted(Args a) {
-    }
+    protected void onCrafted(Args a) {}
 
-    protected void onFailed(Args a) {
-    }
+    protected void onFailed(Args a) {}
 }

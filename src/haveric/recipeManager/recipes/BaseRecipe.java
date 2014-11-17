@@ -212,7 +212,7 @@ public class BaseRecipe implements Flaggable {
 
     @Override
     public boolean hasFlags() {
-        return (flags != null);
+        return flags != null;
     }
 
     @Override

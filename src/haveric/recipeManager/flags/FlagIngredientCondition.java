@@ -366,11 +366,6 @@ public class FlagIngredientCondition extends Flag {
                     } else if ((data & d) == d) {
                         return false;
                     }
-
-                    /*
-                     * Old way - makes all bitwise operations required TODO remove // If its allowed and doesn't match then return false // Or if it's not allowed and matches then also return false
-                     * if(e.getValue() != ((data & d) == d)) { return false; }
-                     */
                 }
 
                 if (!ok) {
@@ -405,7 +400,7 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkAmount(int amountToCheck) {
-            return (amountToCheck >= amount);
+            return amountToCheck >= amount;
         }
 
         /**

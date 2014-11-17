@@ -71,7 +71,7 @@ public class RecipeCommand implements CommandExecutor {
         }
 
         public boolean hasNext() {
-            return (pages.length > (page + 1));
+            return pages.length > (page + 1);
         }
 
         public String next() {
@@ -86,7 +86,7 @@ public class RecipeCommand implements CommandExecutor {
         }
 
         public boolean hasPrev() {
-            return (page > 0);
+            return page > 0;
         }
 
         public String prev() {
