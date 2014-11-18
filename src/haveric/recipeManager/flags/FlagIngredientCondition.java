@@ -458,10 +458,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkEnchants(Map<Enchantment, Integer> enchantsToCheck) {
-            if (enchantsToCheck != null && !enchantsToCheck.isEmpty()) {
-                if (noMeta || noEnchant) {
-                    return false;
-                }
+            if (noMeta || noEnchant) {
+                return enchantsToCheck == null || enchantsToCheck.isEmpty();
             }
 
             if (!hasEnchants()) {
@@ -541,11 +539,10 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkName(String nameToCheck) {
-            if (nameToCheck != null) {
-                if (noMeta || noName) {
-                    return false;
-                }
+            if (noMeta || noName) {
+                return nameToCheck == null;
             }
+
             if (!hasName()) {
                 return true;
             }
@@ -583,10 +580,8 @@ public class FlagIngredientCondition extends Flag {
         }
 
         public boolean checkLore(List<String> loreToCheck) {
-            if (loreToCheck != null && !loreToCheck.isEmpty()) {
-                if (noMeta || noLore) {
-                    return false;
-                }
+            if (noMeta || noLore) {
+                return loreToCheck == null || loreToCheck.isEmpty();
             }
 
             if (!hasLore()) {
@@ -734,11 +729,7 @@ public class FlagIngredientCondition extends Flag {
         public boolean checkColor(Color color) {
             if (color != null && (noColor || noMeta)) {
                 Color defaultColor = Bukkit.getItemFactory().getDefaultLeatherColor();
-                if (color == defaultColor) {
-                     return true;
-                }
-
-                return false;
+                return color == defaultColor;
             }
 
             if (!hasColor()) {
