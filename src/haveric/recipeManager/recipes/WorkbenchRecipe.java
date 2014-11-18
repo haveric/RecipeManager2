@@ -127,7 +127,12 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
         ItemResult displayResult = null;
         if (flag == null) {
-            displayResult = displayResults.get(0);
+            if (displayNum > 0) {
+                displayResult = displayResults.get(0);
+            } else {
+                ItemStack air = new ItemStack(Material.AIR);
+                return new ItemResult(air);
+            }
         } else {
             if (!receive && flag.isSilentFail()) {
                 return null;
