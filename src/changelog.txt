@@ -11,6 +11,7 @@ This file will be automatically overwritten when a new version is installed.
 * Upgraded @needexp to work with exact exp similar to @needlevel
 * Add support for @name, @lore, and @enchant in smelting recipes
 * Fixed nometa + variants not overriding name, lore, etc. correctly
+* Removed some reason messages as they aren't necessary anymore.
 
 === v2.2.2 ===
 * Add support for leather color when extracting recipes.

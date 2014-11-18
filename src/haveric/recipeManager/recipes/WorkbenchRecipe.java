@@ -108,10 +108,6 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             } else {
                 unavailableNum++;
                 unavailableChance += r.getChance();
-
-                if (!r.hasFlag(FlagType.SECRET)) {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(r)));
-                }
             }
         }
 
