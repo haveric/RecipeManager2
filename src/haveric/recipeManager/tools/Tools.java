@@ -181,13 +181,16 @@ public class Tools {
     }
 
     public static String replaceVariables(String msg, Object... variables) {
-        if (variables != null && variables.length > 0) {
-            if (variables.length % 2 > 0) {
-                throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
-            }
+        if (variables != null) {
+            int variablesLength = variables.length;
+            if (variablesLength > 0) {
+                if (variablesLength % 2 > 0) {
+                    throw new IllegalArgumentException("Variables argument must have pairs of 2 arguments!");
+                }
 
-            for (int i = 0; i < variables.length; i += 2) { // loop 2 by 2
-                msg = msg.replace(variables[i].toString(), variables[i + 1].toString());
+                for (int i = 0; i < variablesLength; i += 2) { // loop 2 by 2
+                    msg = msg.replace(variables[i].toString(), variables[i + 1].toString());
+                }
             }
         }
 
@@ -344,7 +347,8 @@ public class Tools {
 
             String original;
 
-            for (int i = 1; i < args.length; i++) {
+            int argsLength = args.length;
+            for (int i = 1; i < argsLength; i++) {
                 original = args[i].trim();
                 value = original.toLowerCase();
 
@@ -771,7 +775,8 @@ public class Tools {
             return -1;
         }
 
-        for (int i = 0; i < lore.size(); i++) {
+        int loreSize = lore.size();
+        for (int i = 0; i < loreSize; i++) {
             String s = lore.get(i);
 
             if (s != null && s.startsWith(Recipes.RECIPE_ID_STRING)) {
@@ -858,7 +863,8 @@ public class Tools {
         String[] shape = bukkitRecipe.getShape();
         int slot = 0;
 
-        for (int r = 0; r < shape.length; r++) {
+        int shapeLength = shape.length;
+        for (int r = 0; r < shapeLength; r++) {
             for (char col : shape[r].toCharArray()) {
                 matrix[slot] = items.get(col);
                 slot++;

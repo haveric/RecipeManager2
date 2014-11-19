@@ -92,12 +92,13 @@ public class ExtractCommand implements CommandExecutor {
                 for (String element : shape) {
                     cols = element.toCharArray();
 
-                    for (int c = 0; c < cols.length; c++) {
+                    int colsLength = cols.length;
+                    for (int c = 0; c < colsLength; c++) {
                         item = items.get(cols[c]);
 
                         recipeString.append(parseIngredient(item));
 
-                        if ((c + 1) < cols.length) {
+                        if ((c + 1) < colsLength) {
                             recipeString.append(" + ");
                         }
                     }
@@ -112,8 +113,8 @@ public class ExtractCommand implements CommandExecutor {
                 ShapelessRecipe recipe = (ShapelessRecipe) r;
                 StringBuilder recipeString = new StringBuilder(RecipeType.COMBINE.getDirective()).append(Files.NL);
                 List<ItemStack> ingredients = recipe.getIngredientList();
-                int size = ingredients.size();
 
+                int size = ingredients.size();
                 for (int i = 0; i < size; i++) {
                     recipeString.append(parseIngredient(ingredients.get(i)));
 
@@ -207,8 +208,7 @@ public class ExtractCommand implements CommandExecutor {
     private void parseResult(ItemStack result, StringBuilder recipeString) {
         recipeString.append("= ").append(result.getType().toString().toLowerCase()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
 
-        int enchantments = result.getEnchantments().size();
-        if (enchantments > 0) {
+        if (result.getEnchantments().size() > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
                 recipeString.append(Files.NL).append("  @enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
             }

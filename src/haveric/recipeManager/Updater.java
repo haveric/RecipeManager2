@@ -151,8 +151,9 @@ public class Updater {
                 String[] latestArray = latest.split("\\.");
 
                 int shortest = currentArray.length;
-                if (latestArray.length < shortest) {
-                    shortest = latestArray.length;
+                int latestLength = latestArray.length;
+                if (latestLength < shortest) {
+                    shortest = latestLength;
                 }
 
                 for (int i = 0; i < shortest; i++) {
@@ -170,7 +171,7 @@ public class Updater {
 
                 // Same up to the shortest version
                 if (compare == -2) {
-                    if (currentArray.length > latestArray.length) {
+                    if (currentArray.length > latestLength) {
                         compare = 1;
                     } else {
                         compare = -1;

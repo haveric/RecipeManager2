@@ -115,15 +115,13 @@ public class ExtractRecipeCommand implements CommandExecutor {
                 }
             }
 
-            int enchantments = item.getEnchantments().size();
-            if (enchantments > 0) {
+            if (item.getEnchantments().size() > 0) {
                 for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                     ingredientCondition += " | enchant " + entry.getKey().getName() + " " + entry.getValue();
                 }
             }
 
-            int strLength = ingredientCondition.length();
-            if (strLength > 0) {
+            if (ingredientCondition.length() > 0) {
                 recipeString.append("@").append(FlagType.INGREDIENTCONDITION.getName()).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
                 recipeString.append(Files.NL);
             }
@@ -136,8 +134,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
     private void parseResult(ItemStack result, StringBuilder recipeString) {
         recipeString.append("= ").append(result.getType().toString().toLowerCase()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
 
-        int enchantments = result.getEnchantments().size();
-        if (enchantments > 0) {
+        if (result.getEnchantments().size() > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
                 recipeString.append(Files.NL).append("  @enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
             }

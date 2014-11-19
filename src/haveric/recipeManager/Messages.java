@@ -440,7 +440,8 @@ public enum Messages {
 
         boolean removeColors = (!Settings.getInstance().getColorConsole() && sender instanceof ConsoleCommandSender);
 
-        for (int i = 0; i < messages.length; i++) {
+        int messagesLength = messages.length;
+        for (int i = 0; i < messagesLength; i++) {
             messages[i] = Tools.parseColors(messages[i], removeColors);
         }
 

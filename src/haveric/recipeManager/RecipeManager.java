@@ -185,10 +185,11 @@ public class RecipeManager extends JavaPlugin {
         StackTraceElement[] traces = new Exception().getStackTrace();
         StackTraceElement trace;
 
-        for (int i = 0; i < traces.length; i++) {
+        int tracesLength = traces.length;
+        for (int i = 0; i < tracesLength; i++) {
             trace = traces[i];
 
-            if (trace.getMethodName().equals(method) && traces.length >= i) {
+            if (trace.getMethodName().equals(method) && tracesLength >= i) {
                 trace = traces[++i];
 
                 packageName = trace.getClassName();

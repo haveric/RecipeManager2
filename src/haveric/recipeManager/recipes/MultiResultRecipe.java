@@ -51,20 +51,6 @@ public class MultiResultRecipe extends BaseRecipe {
     }
 
     /**
-     * @param a
-     * @return list of cloned results available for specified arguments
-     */
-    /*
-     * TODO remove ? public List<ItemResult> getResults(Args a) { List<ItemResult> list = new ArrayList<ItemResult>(results.size());
-     *
-     * for(ItemResult r : results) { r = r.clone(); a = ArgBuilder.create(a).result(r).build();
-     *
-     * if(r.checkFlags(a)) { list.add(r); } }
-     *
-     * return list; }
-     */
-
-    /**
      * @param results
      *            the results list or null if you want to clear results
      */

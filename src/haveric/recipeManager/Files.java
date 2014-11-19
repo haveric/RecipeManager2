@@ -226,7 +226,8 @@ public class Files {
 
         s.append(NL);
 
-        for (int t = 0; t < category.length; t++) {
+        int categoryLength = category.length;
+        for (int t = 0; t < categoryLength; t++) {
             String key = category[t].replace(' ', '_').toLowerCase();
 
             s.append(NL).append("<a name='").append(key).append("'></a><hr>  <b>").append(category[t]).append("</b>");
@@ -274,10 +275,11 @@ public class Files {
                     }
                 }
 
-                if (flag.getNames().length > 1) {
+                int flagNamesLength = flag.getNames().length;
+                if (flagNamesLength > 1) {
                     s.append(NL).append(NL).append("    <b>Aliases:</b> ");
 
-                    for (int i = 1; i < flag.getNames().length; i++) {
+                    for (int i = 1; i < flagNamesLength; i++) {
                         if (i != 1) {
                             s.append(", ");
                         }
@@ -591,19 +593,20 @@ public class Files {
 
         Sound[] sounds = Sound.values();
 
-        for (int i = 0; i < sounds.length; i += 4) {
+        int soundsLength = sounds.length;
+        for (int i = 0; i < soundsLength; i += 4) {
             String sounds1 = "";
             String sounds2 = "";
             String sounds3 = "";
 
-            if (i + 1 < sounds.length) {
+            if (i + 1 < soundsLength) {
                 sounds1 = sounds[i + 1].name();
             }
-            if (i + 2 < sounds.length) {
+            if (i + 2 < soundsLength) {
                 sounds2 = sounds[i + 2].name();
             }
 
-            if (i + 3 < sounds.length) {
+            if (i + 3 < soundsLength) {
                 sounds3 = sounds[i + 3].name();
             }
             s.append(NL).append(String.format(" %-24s%-24s%-24s%s", sounds[i].name(), sounds1, sounds2, sounds3));

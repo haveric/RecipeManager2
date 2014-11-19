@@ -72,15 +72,16 @@ public class FindItemCommand implements CommandExecutor {
         }
 
         if (!found.isEmpty()) {
-            Messages.CMD_FINDITEM_HEADER.print(sender, null, "{matches}", found.size(), "{argument}", find);
+            int foundSize = found.size();
+            Messages.CMD_FINDITEM_HEADER.print(sender, null, "{matches}", foundSize, "{argument}", find);
 
-            for (int i = 0; i < Math.min(found.size(), 10); i++) {
+            for (int i = 0; i < Math.min(foundSize, 10); i++) {
                 Material m = found.get(i);
                 Messages.CMD_FINDITEM_LIST.print(sender, null, "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
             }
 
-            if (found.size() > 10) {
-                Messages.CMD_FINDITEM_FOUNDMORE.print(sender, null, "{matches}", (found.size() - 10));
+            if (foundSize > 10) {
+                Messages.CMD_FINDITEM_FOUNDMORE.print(sender, null, "{matches}", (foundSize - 10));
             }
         } else {
             Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", find);

@@ -238,7 +238,8 @@ public class Events implements Listener {
             int[] repair = new int[2];
             int repairIndex = 0;
 
-            for (int i = 0; i < matrix.length; i++) {
+            int matrixLength = matrix.length;
+            for (int i = 0; i < matrixLength; i++) {
                 if (matrix[i] != null && matrix[i].getType() != Material.AIR) {
                     repair[repairIndex] = i;
                     repaired[repairIndex] = matrix[i];

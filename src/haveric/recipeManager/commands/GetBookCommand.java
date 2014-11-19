@@ -22,17 +22,18 @@ public class GetBookCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length == 0) {
+        int argsLength = args.length;
+        if (argsLength == 0) {
             return false;
         }
 
         Player player = (Player) sender;
 
-        StringBuilder s = new StringBuilder(args.length * 10);
+        StringBuilder s = new StringBuilder(argsLength * 10);
 
         s.append(args[0]);
 
-        for (int i = 1; i < args.length; i++) {
+        for (int i = 1; i < argsLength; i++) {
             s.append(' ').append(args[i]);
         }
 

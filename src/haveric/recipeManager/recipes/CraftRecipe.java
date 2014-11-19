@@ -57,9 +57,10 @@ public class CraftRecipe extends WorkbenchRecipe {
      */
     public ItemStack[] getIngredients() {
         if (ingredients != null) {
-            ItemStack[] items = new ItemStack[ingredients.length];
+            int ingredientsLength = ingredients.length;
+            ItemStack[] items = new ItemStack[ingredientsLength];
 
-            for (int i = 0; i < ingredients.length; i++) {
+            for (int i = 0; i < ingredientsLength; i++) {
                 if (ingredients[i] == null) {
                     items[i] = null;
                 } else {
@@ -416,7 +417,8 @@ public class CraftRecipe extends WorkbenchRecipe {
         int num = 1;
         boolean smallGrid = getWidth() <= 2 && getHeight() <= 2;
 
-        for (int i = 0; i < ingredients.length; i++) {
+        int ingredientsLength = ingredients.length;
+        for (int i = 0; i < ingredientsLength; i++) {
             if (smallGrid && (i == 2 || i >= 5)) {
                 continue;
             }
