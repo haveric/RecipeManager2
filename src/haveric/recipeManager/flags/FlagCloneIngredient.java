@@ -317,27 +317,7 @@ public class FlagCloneIngredient extends Flag {
             int data = ingredient.getDurability();
             int[] mod = getDataModifier();
 
-            switch (mod[0]) {
-                case '-':
-                    data -= mod[1];
-                    break;
-
-                case '*':
-                    data *= mod[1];
-                    break;
-
-                case '/':
-                    data /= mod[1];
-                    break;
-
-                case '%':
-                    data %= mod[1];
-                    break;
-
-                default:
-                    data += mod[1];
-                    break;
-            }
+            data = modValue(data, mod);
 
             result.setDurability((short) data);
         }
@@ -346,27 +326,7 @@ public class FlagCloneIngredient extends Flag {
             int amount = ingredient.getAmount();
             int[] mod = getAmountModifier();
 
-            switch (mod[0]) {
-                case '-':
-                    amount -= mod[1];
-                    break;
-
-                case '*':
-                    amount *= mod[1];
-                    break;
-
-                case '/':
-                    amount /= mod[1];
-                    break;
-
-                case '%':
-                    amount %= mod[1];
-                    break;
-
-                default:
-                    amount += mod[1];
-                    break;
-            }
+            amount = modValue(amount, mod);
 
             result.setAmount(amount);
         }
@@ -412,5 +372,30 @@ public class FlagCloneIngredient extends Flag {
         result.setItemMeta(resultMeta);
 
         return true;
+    }
+
+    private int modValue(int value, int[] mod) {
+        switch (mod[0]) {
+            case '-':
+                value -= mod[1];
+                break;
+
+            case '*':
+                value *= mod[1];
+                break;
+
+            case '/':
+                value /= mod[1];
+                break;
+
+            case '%':
+                value %= mod[1];
+                break;
+
+            default:
+                value += mod[1];
+                break;
+        }
+        return value;
     }
 }
