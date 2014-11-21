@@ -667,17 +667,7 @@ public class Events implements Listener {
                 }
                 break;
             case 1: // FUEL slot
-                // TODO middle click detection required
-                if (event.isShiftClick() /* || event.isMiddleClick() */) {
-                    cursor = null; // if you're shift+clicking or using middle click on the slot then you're not placing anything
-                }
-
-                if (!furnaceModifySlot(furnace, inventory, player, slot, cursor)) {
-                    event.setCancelled(true);
-                    new UpdateInventory(player, 0);
-                    return;
-                }
-
+                furnaceModifySlot(furnace, inventory, player, slot, cursor);
                 break;
 
             case 2: // RESULT slot
@@ -945,7 +935,8 @@ public class Events implements Listener {
         FurnaceInventory inventory = furnace.getInventory();
         FurnaceData data = Furnaces.get(furnace.getLocation());
 
-        FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(event.getFuel());
+        ItemStack fuel = event.getFuel();
+        FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
 
         if (fuelRecipe != null) {
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
@@ -967,6 +958,13 @@ public class Events implements Listener {
         if (recipe != null) {
             if (recipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
+            }
+
+            ItemStack recipeFuel = recipe.getFuel();
+            if (recipeFuel != null) {
+                if (!ToolsItem.isSameItem(recipeFuel, fuel, true)) {
+                    event.setCancelled(true);
+                }
             }
 
             Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
@@ -1030,6 +1028,14 @@ public class Events implements Listener {
         }
 
         if (recipe != null) {
+
+            ItemStack recipeFuel = recipe.getFuel();
+            if (recipeFuel != null) {
+                if (!ToolsItem.isSameItem(recipeFuel, inventory.getFuel(), true)) {
+                   cookTime = 0;
+                }
+            }
+
             furnace.setCookTime(cookTime);
         }
     }
