@@ -3,6 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === v2.2.4 ===
 * Fixed furnace recipe fuel restrictions. It will only restrict the recipe it is applied to now
+* Fixed an issue with @ingredientcondition's nometa (plus variants) causing exceptions with certain recipes
 
 === v2.2.3 ===
 * Fixed @remove not always working

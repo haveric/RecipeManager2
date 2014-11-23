@@ -189,7 +189,9 @@ public class Tools {
                 }
 
                 for (int i = 0; i < variablesLength; i += 2) { // loop 2 by 2
-                    msg = msg.replace(variables[i].toString(), variables[i + 1].toString());
+                    if (variables[i] != null && variables[i + 1] != null) {
+                        msg = msg.replace(variables[i].toString(), variables[i + 1].toString());
+                    }
                 }
             }
         }
