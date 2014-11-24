@@ -1199,10 +1199,6 @@ public class FlagIngredientCondition extends Flag {
 
             return;
         } else if (a.inventory() instanceof FurnaceInventory) {
-            if (!(a.extra() instanceof ItemStack)) {
-                a.addCustomReason("Extra object is not an itemstack!");
-            }
-
             ItemStack smelting = ToolsItem.nullIfAir((ItemStack) a.extra());
 
             if (smelting != null) {
