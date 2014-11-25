@@ -240,7 +240,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                 ItemStack item = ingredients[(h * 3) + w];
 
                 if (item != null) {
-                    s.append(item.getTypeId()); // item.getType().toString().toLowerCase());
+                    s.append(item.getTypeId());
 
                     if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                         s.append(":").append(item.getDurability());

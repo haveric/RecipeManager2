@@ -526,7 +526,7 @@ public enum Messages {
             info(message);
             notifyDebuggers(message);
         } catch (Throwable e) {
-            System.out.print("Error while printing error !");
+            System.out.print("Error while printing error!");
             System.out.print("Initial error:");
             thrown.printStackTrace();
 

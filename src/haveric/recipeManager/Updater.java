@@ -262,10 +262,10 @@ public class Updater {
                             Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
                             Messages.sendAndLog(sender, "<gray>Thanks for helping to test RecipeManager!");
                         } else if (compare == 2) {
-                            Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                            Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                             Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         } else if (compare == 3) {
-                            Messages.send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                            Messages.send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                             Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         }
                     }

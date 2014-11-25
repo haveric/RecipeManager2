@@ -221,7 +221,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Removed the need for ":" character, e.g. "@flag value", but it still works with it.
 ** Most flags now have dynamic arguments that can be used in any order with descriptive action, e.g. @flag create stuff | enablethis | color 0 55 255
 ** Created recipemanager.noflag.<flag> permission where flag can be flag name or alias, default to nobody.
-*** Who has this permission will completely avoid the flag from doing anything when crafting !
+*** Who has this permission will completely avoid the flag from doing anything when crafting!
 *** You can also use the recipemanager.noflag.* permission to ignore all flags.
 *** However, does NOT work for most result-only flags - those affect the item directly (name, lore, enchants, book, etc) since they're stored in the result directly for maximum compatibility
 
@@ -234,7 +234,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Added calc% or *% to specify that the percentage of that item should be calculated automatically (just like not defining percentage at all)
 ** Added option to auto-calculate chance for more than one item, the remaining chance will be split evenly.
 ** Added flag support for individual results!
-** Added serval result-only flags: @name, @lore, @enchant, @book, @leathercolor, @firework, @potion, and more !
+** Added several result-only flags: @name, @lore, @enchant, @book, @leathercolor, @firework, @potion, and more !
 ** Flags are triggered in the order they are defined and all checking flags will be triggered and their collective bad results will be printed (if any)
 
 * The API was overhauled:
@@ -595,7 +595,7 @@ Configuration notes: all .txt files have something changed in them, I recommend 
 
 * Added possibility to add custom fuels, new file: custom_fuels.txt
 * Added possibility to set time on furnace recipes, custom or existing (in custom_recipes.txt as furnace recipe).
-* Changed behavior of restricting recipes, now you restrict the recipe matrix, not the result !
+* Changed behavior of restricting recipes, now you restrict the recipe matrix, not the result!
 ** NOTE: if you restricted some recipes, please delete and re-edit your uncraftable.txt file.
 * Added possibility to create any size of recipes from 1x1 to 3x3.
 * Added specifying no character at all for a item to be handled as AIR

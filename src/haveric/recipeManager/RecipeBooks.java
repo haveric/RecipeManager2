@@ -336,7 +336,7 @@ public class RecipeBooks {
         try {
             yml.save(file);
         } catch (Throwable e) {
-            Messages.error(sender, e, "<red>Couldn't save '" + id + ".yml' !");
+            Messages.error(sender, e, "<red>Couldn't save '" + id + ".yml'!");
         }
 
         if (volumesMap.size() == 0) {

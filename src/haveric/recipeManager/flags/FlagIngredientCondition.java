@@ -674,9 +674,9 @@ public class FlagIngredientCondition extends Flag {
          *            minG to 255
          */
         public void setColor(int minR, int maxR, int minG, int maxG, int minB, int maxB) {
-            Validate.isTrue(maxR >= minR, "minR is bigger than maxR !");
-            Validate.isTrue(maxG >= minG, "minG is bigger than maxG !");
-            Validate.isTrue(maxB >= minB, "minB is bigger than maxB !");
+            Validate.isTrue(maxR >= minR, "minR is bigger than maxR!");
+            Validate.isTrue(maxG >= minG, "minG is bigger than maxG!");
+            Validate.isTrue(maxB >= minB, "minB is bigger than maxB!");
 
             minColor = Color.fromRGB(minR, minG, minB);
             maxColor = Color.fromRGB(maxR, maxG, maxB);

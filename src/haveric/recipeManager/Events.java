@@ -643,7 +643,6 @@ public class Events implements Listener {
                             }
                         }
                     }
-
                 } else if (cursor != null && cursor.getType() != Material.AIR) {
                     if (clicked == null || clicked.getType() == Material.AIR || !ToolsItem.isSameItem(cursor, clicked, true)) {
                         SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
@@ -1328,11 +1327,11 @@ public class Events implements Listener {
                 int compare = Updater.compareVersions();
 
                 if (compare == -1) {
-                    Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                    Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 } else if (compare == 2) {
-                    Messages.send(player, "[RecipeManager] New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                    Messages.send(player, "[RecipeManager] New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 } else if (compare == 3) {
-                    Messages.send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset> ! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                    Messages.send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 }
             }
         }

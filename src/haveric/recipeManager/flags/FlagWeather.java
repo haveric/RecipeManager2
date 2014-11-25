@@ -163,10 +163,10 @@ public class FlagWeather extends Flag {
             return;
         }
 
-        World w = a.location().getWorld();
+        World world = a.location().getWorld();
         byte weather;
-        if (w.hasStorm()) {
-            if (w.isThundering()) {
+        if (world.hasStorm()) {
+            if (world.isThundering()) {
                 weather = Bit.THUNDER;
             } else {
                 weather = Bit.DOWNFALL;

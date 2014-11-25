@@ -236,7 +236,7 @@ public class FlagKeepItem extends Flag {
     @Override
     protected void onCrafted(final Args a) {
         if (!a.hasInventory()) {
-            a.addCustomReason("Needs an inventory !");
+            a.addCustomReason("Needs an inventory!");
             return;
         }
 
@@ -259,13 +259,13 @@ public class FlagKeepItem extends Flag {
             } else if (a.recipe() instanceof FuelRecipe) {
                 parse(task, inv, a, 1);
             } else {
-                a.addCustomReason("Needs a recipe !");
+                a.addCustomReason("Needs a recipe!");
                 return;
             }
 
             task.startIfRequired();
         } else {
-            a.addCustomReason("Needs a crafting or furnace inventory !");
+            a.addCustomReason("Needs a crafting or furnace inventory!");
         }
     }
 

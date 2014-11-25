@@ -54,7 +54,7 @@ multithreading: true
 # Internally results are tagged with a lore line to identify the recipe quickly.
 # Certain mods/plugins might craft recipes manually and give you the results with that lore line, the line is invisible but it will prevent items from stacking with similar items.
 # This setting monitors items in inventories and removes the plugin's lore line if found, it won't affect any other items.
-# Use this only if you have plugins or mods that craft results manually !
+# Use this only if you have plugins or mods that craft results manually!
 #   default: false
 fix-mod-results: false
 
