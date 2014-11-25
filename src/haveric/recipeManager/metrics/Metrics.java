@@ -481,10 +481,10 @@ public class Metrics {
         os.close();
         reader.close();
 
-        if (response == null || response.startsWith("ERR") || response.startsWith("7")) {
+        if (response == null || response.startsWith("ERR") || response.charAt(0) == '7') {
             if (response == null) {
                 response = "null";
-            } else if (response.startsWith("7")) {
+            } else if (response.charAt(0) == '7') {
                 response = response.substring(response.startsWith("7,") ? 2 : 1);
             }
 

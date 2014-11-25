@@ -711,9 +711,9 @@ public class FlagIngredientCondition extends Flag {
                 s.append(minColor.getGreen()).append(", ");
                 s.append(minColor.getBlue());
             } else {
-                s.append(minColor.getRed()).append("-").append(maxColor.getRed()).append(", ");
-                s.append(minColor.getGreen()).append("-").append(maxColor.getGreen()).append(", ");
-                s.append(minColor.getBlue()).append("-").append(maxColor.getBlue());
+                s.append(minColor.getRed()).append('-').append(maxColor.getRed()).append(", ");
+                s.append(minColor.getGreen()).append('-').append(maxColor.getGreen()).append(", ");
+                s.append(minColor.getBlue()).append('-').append(maxColor.getBlue());
             }
 
             return s.toString();

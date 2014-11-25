@@ -231,7 +231,7 @@ public class CraftRecipe extends WorkbenchRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append("shaped ").append(getWidth()).append("x").append(getHeight());
+        s.append("shaped ").append(getWidth()).append('x').append(getHeight());
 
         s.append(" (");
 
@@ -243,14 +243,14 @@ public class CraftRecipe extends WorkbenchRecipe {
                     s.append(item.getTypeId());
 
                     if (item.getDurability() != Vanilla.DATA_WILDCARD) {
-                        s.append(":").append(item.getDurability());
+                        s.append(':').append(item.getDurability());
                     }
                 } else {
-                    s.append("0");
+                    s.append('0');
                 }
 
                 if (w < (width - 1)) {
-                    s.append(" ");
+                    s.append(' ');
                 }
             }
 

@@ -294,7 +294,7 @@ public class RecipeProcessor implements Runnable {
     }
 
     private boolean lineIsFlag() {
-        return line.trim().startsWith("@");
+        return line.trim().charAt(0) == '@';
     }
 
     private boolean readNextLine() {

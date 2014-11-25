@@ -90,13 +90,13 @@ public class SingleResultRecipe extends BaseRecipe {
 
         if (result != null) {
             if (result.getAmount() > 1) {
-                s.append("x").append(result.getAmount()).append(" ");
+                s.append('x').append(result.getAmount()).append(' ');
             }
 
             s.append(result.getType().toString().toLowerCase());
 
             if (result.getDurability() != 0) {
-                s.append(":").append(result.getDurability());
+                s.append(':').append(result.getDurability());
             }
         }
 

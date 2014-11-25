@@ -261,7 +261,7 @@ public class FlagForChance extends Flag {
 
                     arg = value.substring(i + 1).trim(); // get the string after the first space
 
-                    if (!arg.startsWith("@") && !arg.startsWith("^@")) { // we need a flag declaration at this point
+                    if (arg.charAt(0) != '@' && !arg.startsWith("^@")) { // we need a flag declaration at this point
                         ErrorReporter.warning("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
                         return false;
                     }
@@ -277,7 +277,7 @@ public class FlagForChance extends Flag {
 
                     arg = value.substring(i + 1).trim(); // get the string after the space
 
-                    if (arg.startsWith("@") || arg.startsWith("^@")) {
+                    if (arg.charAt(0) == '@' || arg.startsWith("^@")) {
                         if (arg.charAt(0) == '^') {
                             arg = arg.substring(1);
                             appendFlag = true;
@@ -310,7 +310,7 @@ public class FlagForChance extends Flag {
                         if (arg.length() > (i + 1)) {
                             arg = arg.substring(i + 1).trim(); // get string after '%' char
 
-                            if (arg.startsWith("@") || arg.startsWith("^@")) {
+                            if (arg.charAt(0) == '@' || arg.startsWith("^@")) {
                                 if (arg.charAt(0) == '^') {
                                     arg = arg.substring(1);
                                     appendFlag = true;

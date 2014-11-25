@@ -122,7 +122,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
             }
 
             if (ingredientCondition.length() > 0) {
-                recipeString.append("@").append(FlagType.INGREDIENTCONDITION.getName()).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
+                recipeString.append('@').append(FlagType.INGREDIENTCONDITION.getName()).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
                 recipeString.append(Files.NL);
             }
 

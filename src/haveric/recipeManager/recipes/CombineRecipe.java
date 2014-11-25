@@ -137,14 +137,14 @@ public class CombineRecipe extends WorkbenchRecipe {
                 s.append(item.getTypeId());
 
                 if (item.getDurability() != Vanilla.DATA_WILDCARD) {
-                    s.append(":").append(item.getDurability());
+                    s.append(':').append(item.getDurability());
                 }
             } else {
-                s.append("0");
+                s.append('0');
             }
 
             if (i < (size - 1)) {
-                s.append(" ");
+                s.append(' ');
             }
         }
 

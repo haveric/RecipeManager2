@@ -571,7 +571,7 @@ public class Files {
         s.append(NL);
 
         for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
-            s.append(NL).append(" ").append(t.toString());
+            s.append(NL).append(' ').append(t.toString());
         }
 
         s.append(NL);

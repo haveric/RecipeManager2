@@ -972,12 +972,12 @@ public class Tools {
 
         for (Entry<Character, ItemStack> entry : recipe.getIngredientMap().entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null) {
-                str.append(entry.getKey()).append("=").append(entry.getValue().getTypeId()).append(":").append(entry.getValue().getDurability()).append(";");
+                str.append(entry.getKey()).append('=').append(entry.getValue().getTypeId()).append(':').append(entry.getValue().getDurability()).append(';');
             }
         }
 
         for (String row : recipe.getShape()) {
-            str.append(row).append(";");
+            str.append(row).append(';');
         }
 
         return str.toString();
@@ -991,7 +991,7 @@ public class Tools {
                 continue;
             }
 
-            str.append(ingredient.getTypeId()).append(":").append(ingredient.getDurability()).append(";");
+            str.append(ingredient.getTypeId()).append(':').append(ingredient.getDurability()).append(';');
         }
 
         return str.toString();
