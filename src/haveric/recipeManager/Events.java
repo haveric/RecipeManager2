@@ -388,7 +388,51 @@ public class Events implements Listener {
     }
 
     private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
-        if (!recipe.isMultiResult()) {
+        if (recipe.isMultiResult()) {
+            // more special treatment needed for multi-result ones...
+
+            event.setCancelled(true); // need to cancel this from the start.
+
+            // check if result is air / recipe failed
+            if (result == null || result.getType() == Material.AIR) {
+                Messages.CRAFT_RECIPE_MULTI_FAILED.printOnce(player);
+                Messages.sendFailSound(player, a.location());
+            } else {
+                if (event.isShiftClick()) {
+                    if (!recipe.hasNoShiftBit()) {
+                        Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
+                        event.setCancelled(true);
+                        return 0;
+                    }
+
+                    Messages.CRAFT_RECIPE_MULTI_NOSHIFTCLICK.printOnce(player);
+
+                    if (Tools.playerCanAddItem(player, result)) {
+                        player.getInventory().addItem(result);
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    ItemStack cursor = event.getCursor();
+                    ItemStack merged = ToolsItem.merge(cursor, result);
+
+                    if (merged == null) {
+                        Messages.CRAFT_RECIPE_MULTI_CURSORFULL.printOnce(player);
+                        return 0;
+                    }
+
+                    event.setCursor(merged);
+                }
+            }
+
+            recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
+
+            // update displayed result
+            // TODO need accurate reading if there is a recipe!
+            /*
+             * if(inv.getResult() != null && inv.getResult().getType() != Material.AIR) { event.setCurrentItem(recipe.getDisplayResult(a)); } else { event.setCurrentItem(null); }
+             */
+        } else {
             if (result == null || result.getType() == Material.AIR) {
                 event.setCurrentItem(null);
                 return 0;
@@ -429,59 +473,15 @@ public class Events implements Listener {
             ItemStack cursor = event.getCursor();
             ItemStack merged = ToolsItem.merge(cursor, result);
 
-            if (merged != null) {
-                event.setCurrentItem(result);
-            } else {
+            if (merged == null) {
                 return 0;
             }
+
+            event.setCurrentItem(result);
 
             if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
                 recipe.subtractIngredients(inv, result, true);
             }
-        } else {
-            // more special treatment needed for multi-result ones...
-
-            event.setCancelled(true); // need to cancel this from the start.
-
-            // check if result is air / recipe failed
-            if (result == null || result.getType() == Material.AIR) {
-                Messages.CRAFT_RECIPE_MULTI_FAILED.printOnce(player);
-                Messages.sendFailSound(player, a.location());
-            } else {
-                if (event.isShiftClick()) {
-                    if (!recipe.hasNoShiftBit()) {
-                        Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
-                        event.setCancelled(true);
-                        return 0;
-                    }
-
-                    Messages.CRAFT_RECIPE_MULTI_NOSHIFTCLICK.printOnce(player);
-
-                    if (Tools.playerCanAddItem(player, result)) {
-                        player.getInventory().addItem(result);
-                    } else {
-                        return 0;
-                    }
-                } else {
-                    ItemStack cursor = event.getCursor();
-                    ItemStack merged = ToolsItem.merge(cursor, result);
-
-                    if (merged != null) {
-                        event.setCursor(merged);
-                    } else {
-                        Messages.CRAFT_RECIPE_MULTI_CURSORFULL.printOnce(player);
-                        return 0;
-                    }
-                }
-            }
-
-            recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
-
-            // update displayed result
-            // TODO need accurate reading if there is a recipe!
-            /*
-             * if(inv.getResult() != null && inv.getResult().getType() != Material.AIR) { event.setCurrentItem(recipe.getDisplayResult(a)); } else { event.setCurrentItem(null); }
-             */
         }
 
         return 1;
@@ -576,10 +576,10 @@ public class Events implements Listener {
             if (inv instanceof FurnaceInventory) {
                 InventoryHolder holder = inv.getHolder();
 
-                if (holder != null && holder instanceof Furnace) {
+                if (holder instanceof Furnace) {
                     HumanEntity ent = event.getWhoClicked();
 
-                    if (ent == null || !(ent instanceof Player)) {
+                    if (!(ent instanceof Player)) {
                         return;
                     }
 
@@ -960,10 +960,8 @@ public class Events implements Listener {
             }
 
             ItemStack recipeFuel = recipe.getFuel();
-            if (recipeFuel != null) {
-                if (!ToolsItem.isSameItem(recipeFuel, fuel, true)) {
-                    event.setCancelled(true);
-                }
+            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
+                event.setCancelled(true);
             }
 
             Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
@@ -1027,12 +1025,10 @@ public class Events implements Listener {
         }
 
         if (recipe != null) {
-
             ItemStack recipeFuel = recipe.getFuel();
-            if (recipeFuel != null) {
-                if (!ToolsItem.isSameItem(recipeFuel, inventory.getFuel(), true)) {
-                   cookTime = 0;
-                }
+
+            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, inventory.getFuel(), true)) {
+               cookTime = 0;
             }
 
             furnace.setCookTime(cookTime);
