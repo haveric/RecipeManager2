@@ -109,7 +109,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
                     LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
                     Color color = leatherMeta.getColor();
 
-                    if (color != Bukkit.getItemFactory().getDefaultLeatherColor()) {
+                    if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
                         ingredientCondition += " | color " + color.getRed() + "," + color.getGreen() + "," + color.getBlue();
                     }
                 }
@@ -157,7 +157,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
                 LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
                 Color color = leatherMeta.getColor();
 
-                if (color != Bukkit.getItemFactory().getDefaultLeatherColor()) {
+                if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
                     recipeString.append(Files.NL).append("  @leathercolor ").append(color.getRed() + " " + color.getGreen() + " " + color.getBlue());
                 }
             }

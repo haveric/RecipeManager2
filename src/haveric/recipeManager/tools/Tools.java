@@ -562,7 +562,7 @@ public class Tools {
             return null;
         }
 
-        if (duration != 1 && (effectType == PotionEffectType.HEAL || effectType == PotionEffectType.HARM)) {
+        if (duration != 1 && (effectType.equals(PotionEffectType.HEAL) || effectType.equals(PotionEffectType.HARM))) {
             ErrorReporter.warning("Flag " + type + " can't have duration on HEAL or HARM because they're instant!");
         }
 

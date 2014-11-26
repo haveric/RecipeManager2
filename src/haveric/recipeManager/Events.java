@@ -289,7 +289,7 @@ public class Events implements Listener {
                 result = new ItemResult(inv.getResult());
             }
 
-            final Player player;
+            Player player;
             if (event.getView() == null) {
                 player = null;
             } else {
@@ -846,26 +846,24 @@ public class Events implements Listener {
 
         FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
 
-        if (fuelRecipe != null) {
-            if (slot == 1) {
-                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(fuel).build();
+        if (fuelRecipe != null && slot == 1) {
+            Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(fuel).build();
 
-                if (fuelRecipe.checkFlags(a)) {
+            if (fuelRecipe.checkFlags(a)) {
+                a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
+                a.clear();
+
+                if (fuelRecipe.sendPrepare(a)) {
                     a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                    a.clear();
-
-                    if (fuelRecipe.sendPrepare(a)) {
-                        a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                        return true;
-                    }
-
-                    a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                    return false;
+                    return true;
                 }
 
                 a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
                 return false;
             }
+
+            a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
+            return false;
         }
 
         return true;

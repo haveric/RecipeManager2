@@ -182,7 +182,7 @@ public class ToolsItem {
         boolean isSimilar = false;
 
         if (item != null) {
-            if (item == source) {
+            if (item.equals(source)) {
                 isSimilar = true;
             } else {
                 if (source.getType() == item.getType()) {
