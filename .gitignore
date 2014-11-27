@@ -5,3 +5,5 @@
 .settings
 reports
 build.xml
+
+node_modules
