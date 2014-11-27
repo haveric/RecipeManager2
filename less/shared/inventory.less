@@ -1,0 +1,115 @@
+.inventory {
+    .clearfix;
+    background: #c6c6c6;
+    
+    #itemTooltip {
+        border: 2px solid #1e0f1e;
+        border: 2px solid rgba(16,0,16,0.941);
+        background: #1e0f1e;
+        background: rgba(16,0,16,0.941);
+        .clearfix;
+        border-radius: 3px;
+        display: none;
+        position: absolute;
+        z-index: 100;
+        
+        > .inn {
+            padding: 5px;
+            .clearfix;
+            border: 2px solid #1e0f1e;
+            border: 2px solid rgba(37,0,95,0.961);
+        }
+        
+        .line {
+            float: left;
+            clear: both;
+            color: #fff;
+            height: 20px;
+            .fontMCShadow;
+            font-size: 16px;
+            line-height: 16px;
+            
+            &.description,
+            &.time,
+            &.enchantment {
+                color: #aaa;
+                .textShadow(#2a2a2a);
+            }
+            &.bonus {
+                color: #55f;
+                .textShadow(#15153f);
+            }
+            
+            &.negative {
+                color: #f55;
+                .textShadow(#3f1515);
+            }
+            
+            // Music Disk + Golden Apple
+            &.rare,
+            &.enchanted {
+                color: #5ff;
+                .textShadow(#153f3f);
+            }
+            
+            &.enchantedApple {
+                color: #f5f;
+                .textShadow(#e3f153f);
+            }
+            
+            &.potionApply {
+                color: #a0a;
+                .textShadow(#2a002a);
+            }
+            
+            &.enchantedBook {
+                color: #ff5;
+                .textShadow(#3f3f15);
+            }
+            
+            &.customName {
+                font-style: italic;
+            }
+        }
+    }
+    h1 {
+        margin: 0 0 5px;
+        font-weight: normal;
+        font-size: 20px;
+        line-height: 24px;
+        .fontMC;
+    }
+    .row {
+        clear: both;
+    }
+    .slot {
+        background-color: #8b8b8b;
+        float: left;
+        width: 32px;
+        height: 32px;
+        border-left: 2px solid #373737;
+        border-top: 2px solid #373737;
+        border-right: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+        position: relative;
+        
+        &:hover {
+            background-color: #c5c5c5;
+        }
+        
+        .detail {
+            display: none;
+        }
+    }
+    
+    .amount {
+        position: absolute;
+        bottom: 0px;
+        right: -2px;
+        color: #fff;
+        .fontMCShadow;
+        font-size: 16px;
+        line-height: 16px;
+        cursor: default;
+    }
+}

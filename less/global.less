@@ -1,0 +1,37 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    margin: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@font-face {
+    font-family: 'minecraftfont';
+
+    src: url('../../fonts/minecraftfont.eot');
+    src: url('../../fonts/minecraftfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/minecraftfont.woff') format('woff'),
+         url('../../fonts/minecraftfont.ttf') format('truetype');
+}
+
+.fontMC() {
+    font-family: 'minecraftfont';
+    font-smooth: never;
+    -webkit-font-smoothing : none;
+}
+
+.textShadow(@color, @xOff: 2px, @yOff:2px) {
+    text-shadow: @xOff @yOff 0px @color;
+}
+
+.fontMCShadow() {
+    .fontMC;
+    .textShadow(#373737);
+}
