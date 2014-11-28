@@ -2,7 +2,7 @@ $(function() {
     var $itemToolTip = $("#itemTooltip");
     var $itemToolTipInn = $itemToolTip.find(".inn");
     
-    $('.slot').on({
+    $('.inventory .slot').on({
         mouseenter: function(e) {
             var $this = $(this);
             var $parent = $this.parents(".inventory");
@@ -24,6 +24,24 @@ $(function() {
                 updateTooltipPosition(e.pageX, e.pageY, $parent);
             }
         }
+    });
+    
+    $(".inventory .slot").droppable({
+    	hoverClass: 'dropHover',
+    	drop: function( event, ui ) {
+			var $this = $(this);
+			var $draggable = ui.draggable;
+			var img = $draggable.find("img").attr('src');
+			var $detail = $draggable.find(".detail").html();
+			
+			$this.find(".detail").html($detail);
+			$this.find("img").attr('src', img);
+		}
+    });
+    
+    $(".search .item").draggable({
+    	revert: true,
+    	revertDuration: 0
     });
 
     function updateTooltipPosition(mouseX, mouseY, $inventory) { 

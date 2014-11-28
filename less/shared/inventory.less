@@ -93,7 +93,8 @@
         border-bottom: 2px solid #fff;
         position: relative;
         
-        &:hover {
+        &:hover,
+        &.dropHover {
             background-color: #c5c5c5;
         }
         
@@ -112,4 +113,15 @@
         line-height: 16px;
         cursor: default;
     }
+}
+
+.search {
+	.item {
+		.clearfix;
+		
+		img,
+		.detail {
+			float: left;
+		}
+	}
 }
