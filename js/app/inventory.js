@@ -1,4 +1,9 @@
+
+
 $(function() {
+	String.prototype.startsWith = function(str) 
+	{return (this.match("^"+str)==str)}
+
     var $itemToolTip = $("#itemTooltip");
     var $itemToolTipInn = $itemToolTip.find(".inn");
     
@@ -40,13 +45,37 @@ $(function() {
 		}
     });
     
-    $(".search .item").draggable({
-    	helper: "clone",
-    	appendTo: ".container",
-    	zIndex: 100,
-    	revert: true,
-    	revertDuration: 0
+    
+    $.getJSON("http://api.wurstmineberg.de/minecraft/items/all.json", function(items) {
+    	var searchHtml = "";
+    	// console.log("Items: " + items.count, items.minecraft);
+    	$.each(items.minecraft, function(item) {
+    		searchHtml += '<div class="item">';
+    		var image = this.image;
+
+    		if (image && !image.startsWith("http")) {
+    			image = "http://assets.wurstmineberg.de/img/grid/" + image;
+    		}
+    		searchHtml += '<img src="' + image + '" />';
+    		searchHtml += '<div class="detail">';
+            searchHtml += '<span class="line">' + this.name + '</span>';
+            searchHtml += '</div></div>';
+	    });
+	    
+	    $(".search").html(searchHtml);
+	    
+	    $(".search .item").draggable({
+	    	helper: "clone",
+	    	appendTo: ".container",
+	    	zIndex: 100,
+	    	revert: true,
+	    	revertDuration: 0
+	    });
     });
+    
+    
+    
+    
 
     function updateTooltipPosition(mouseX, mouseY, $inventory) { 
         var inventoryWidth = $inventory.width();
