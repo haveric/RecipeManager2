@@ -1714,18 +1714,18 @@ body .ui-tooltip {
   line-height: 16px;
   cursor: default;
 }
-.search .item {
+.item {
   zoom: 1;
 }
-.search .item:before,
-.search .item:after {
+.item:before,
+.item:after {
   content: " ";
   display: table;
 }
-.search .item:after {
+.item:after {
   clear: both;
 }
-.search .item img,
-.search .item .detail {
+.item img,
+.item .detail {
   float: left;
 }

@@ -27,6 +27,7 @@ $(function() {
     });
     
     $(".inventory .slot").droppable({
+    	tolerance: "pointer",
     	hoverClass: 'dropHover',
     	drop: function( event, ui ) {
 			var $this = $(this);
@@ -40,6 +41,9 @@ $(function() {
     });
     
     $(".search .item").draggable({
+    	helper: "clone",
+    	appendTo: ".container",
+    	zIndex: 100,
     	revert: true,
     	revertDuration: 0
     });
