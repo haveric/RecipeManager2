@@ -1583,6 +1583,8 @@ body .ui-tooltip {
 .inventory {
   zoom: 1;
   background: #c6c6c6;
+  float: left;
+  padding: 4px;
 }
 .inventory:before,
 .inventory:after {
@@ -1591,6 +1593,12 @@ body .ui-tooltip {
 }
 .inventory:after {
   clear: both;
+}
+.inventory.result {
+  padding: 4px 40px 40px;
+}
+.inventory.result h1 {
+  padding-bottom: 36px;
 }
 .inventory #itemTooltip {
   border: 2px solid #1e0f1e;
@@ -1728,4 +1736,25 @@ body .ui-tooltip {
 .item img,
 .item .detail {
   float: left;
+}
+.crafting-wrap {
+  width: 70%;
+  float: left;
+}
+.search {
+  width: 30%;
+  float: left;
+}
+#editItem {
+  zoom: 1;
+  clear: both;
+  padding-top: 20px;
+}
+#editItem:before,
+#editItem:after {
+  content: " ";
+  display: table;
+}
+#editItem:after {
+  clear: both;
 }

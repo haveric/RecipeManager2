@@ -1,6 +1,16 @@
 .inventory {
     .clearfix;
     background: #c6c6c6;
+    float: left;
+    padding: 4px;
+    
+    &.result {
+        padding: 4px 40px 40px;
+        
+        h1 {
+            padding-bottom: 36px;
+        }
+    }
     
     #itemTooltip {
         border: 2px solid #1e0f1e;
@@ -115,7 +125,6 @@
     }
 }
 
-
 .item {
     .clearfix;
     
@@ -123,4 +132,20 @@
     .detail {
         float: left;
     }
+}
+
+.crafting-wrap {
+    width: 70%;
+    float: left;
+}
+
+.search {
+    width: 30%;
+    float: left;
+}
+
+#editItem {
+    .clearfix;
+    clear: both;
+    padding-top: 20px;
 }
