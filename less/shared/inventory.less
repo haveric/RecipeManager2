@@ -108,6 +108,19 @@
             background-color: #c5c5c5;
         }
         
+        &.selected {
+            border-left-color: #616F5E;
+            border-top-color: #616F5E;
+            border-right-color: #CFE2CA;
+            border-bottom-color: #CFE2CA;
+            outline: 2px solid #A1B29D;
+            z-index: 10;
+        }
+        
+        img {
+            margin-bottom: -2px; // Offset the slot's outline
+        }
+        
         .detail {
             display: none;
         }

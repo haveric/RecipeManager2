@@ -28,6 +28,18 @@ $(function() {
             if (e && $itemToolTip.hasClass("active")) {
                 updateTooltipPosition(e.pageX, e.pageY, $parent);
             }
+        },
+        click: function(e) {
+            var $this = $(this);
+            $(".slot").removeClass("selected");
+            $this.addClass("selected");
+            
+            var name = $this.find(".title").text();
+            var customName = $this.find(".customTitle").text();
+            
+            $("#defaultTitle").text(name);
+            $("#customTitle").text(customName);
+            
         }
     });
     
@@ -58,7 +70,7 @@ $(function() {
             }
             searchHtml += '<img src="' + image + '" />';
             searchHtml += '<div class="detail">';
-            searchHtml += '<span class="line">' + this.name + '</span>';
+            searchHtml += '<span class="line title">' + this.name + '</span>';
             searchHtml += '</div></div>';
         });
         
