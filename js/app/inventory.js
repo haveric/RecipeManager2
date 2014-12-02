@@ -57,17 +57,24 @@ $(function() {
         }
     });
     
-    
     $.getJSON("http://api.wurstmineberg.de/minecraft/items/all.json", function(items) {
         var searchHtml = "";
-        // console.log("Items: " + items.count, items.minecraft);
+
         $.each(items.minecraft, function(item) {
             searchHtml += '<div class="item">';
             var image = this.image;
 
+            // Default to air for any missing images
+            if (image === undefined) {
+                image = "air.png";
+                console.error("Missing image for: ", item);
+            }
+            
             if (image && !image.startsWith("http")) {
                 image = "http://assets.wurstmineberg.de/img/grid/" + image;
             }
+            
+            
             searchHtml += '<img src="' + image + '" />';
             searchHtml += '<div class="detail">';
             searchHtml += '<span class="line title">' + this.name + '</span>';
