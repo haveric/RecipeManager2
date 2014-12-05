@@ -42,6 +42,13 @@ $(function() {
             
         }
     });
+    $(".inventory .slot").draggable({
+        helper: "clone",
+        appendTo: ".container",
+        zIndex: 100,
+        revert: true,
+        revertDuration: 0
+    });
     
     $(".inventory .slot").droppable({
         tolerance: "pointer",
@@ -54,6 +61,14 @@ $(function() {
             
             $this.find(".detail").html($detail);
             $this.find("img").attr('src', img);
+            
+            $this.draggable({
+                helper: "clone",
+                appendTo: ".container",
+                zIndex: 100,
+                revert: true,
+                revertDuration: 0
+            });
         }
     });
     
