@@ -1,5 +1,6 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
@@ -103,9 +104,21 @@ public class Vanilla {
         initialRecipes.put(new FuelRecipe(Material.BLAZE_ROD, 120), info);
         initialRecipes.put(new FuelRecipe(Material.COAL_BLOCK, 800), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
-        
+
         try {
             initialRecipes.put(new FuelRecipe(Material.BANNER, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE_GATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE_GATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE_GATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE_GATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
         } catch (NoSuchFieldError e) {
             // Does not support 1.8 items
         }
