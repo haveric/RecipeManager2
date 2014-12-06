@@ -103,6 +103,12 @@ public class Vanilla {
         initialRecipes.put(new FuelRecipe(Material.BLAZE_ROD, 120), info);
         initialRecipes.put(new FuelRecipe(Material.COAL_BLOCK, 800), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
+        
+        try {
+            initialRecipes.put(new FuelRecipe(Material.BANNER, 15), info);
+        } catch (NoSuchFieldError e) {
+            // Does not support 1.8 items
+        }
 
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
