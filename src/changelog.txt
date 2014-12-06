@@ -7,6 +7,7 @@ This file will be automatically overwritten when a new version is installed.
 * Removed "Extra object is not an itemstack!" for smelting recipes
 * Added 1.8 banners, fences, and gates to vanilla fuel recipes
 * Added Depth Strider to Enchantment aliases
+* Added 1.8 items to item aliases
 
 === v2.2.3 ===
 * Fixed @remove not always working

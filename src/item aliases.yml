@@ -1,4 +1,4 @@
-lastchanged: 2.2 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.2.4 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -90,8 +90,8 @@ cobblestone_stairs: cobble stone stairs, cobble stairs
 smooth_brick:
   names: smooth brick, stone brick
   0: stone, normal
-  1: cracked, crack
-  2: mossy, moss
+  1: mossy, moss
+  2: cracked, crack
   3: chiseled, decor
 
 smooth_stairs: smooth stairs, stone stairs, smooth stone stairs, smooth brick stairs, stone brick stairs
@@ -181,6 +181,65 @@ leaves_2:
   0: acacia, orange
   1: dark oak, dark
 
+stone:
+  0:
+  1: granite
+  2: polished granite
+  3: diorite
+  4: polished diorite
+  5: andesite
+  6: polished andesite
+
+dirt:
+  0:
+  1: coarse
+  2: podzol
+  
+sand:
+  0:
+  1: red
+
+red_rose:
+  names: flower, flowers
+  0: poppy
+  1: blue orchid
+  2: allium
+  3: azure bluet
+  4: red tulip
+  5: orange tulip
+  6: white tulip
+  7: pink tulip
+  8: oxeye daisy
+
+double_plant:
+  names: tall flower, tall flowers
+  0: sunflower
+  1: lilac
+  2: double tallgrass
+  3: large fern
+  4: rose bush
+  5: peony
+
+prismarine:
+  0:
+  1: brick, bricks
+  2: dark
+
+sponge:
+  0:
+  1: wet
+
+raw_fish:
+  0:
+  1: raw salmon, salmon
+  2: clownfish
+  3: pufferfish
+
+anvil:
+  0:
+  1: slightly damaged
+  2: very damaged
+
 # spade to shovel aliases
 wood_spade: wood shovel
 stone_spade: stone shovel
@@ -230,6 +289,9 @@ monster_eggs:
   0: stone
   1: cobble, cobble stone
   2: stone brick, smooth brick
+  3: mossy stone brick, mossy brick
+  4: cracked stone brick, cracked brick
+  5: chiseled stone brick, chiseled brick
 
 # alchemy
 brewing_stand_item: brewing stand    # overwrites brewing_stand material which represents the block, not the item!
