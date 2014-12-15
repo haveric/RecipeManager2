@@ -1016,6 +1016,8 @@ public class Events implements Listener {
                 if (a.result() == null || a.result().getType() == Material.AIR) {
                     recipe.subtractIngredient(inventory, false);
                     event.setCancelled(true);
+                } else {
+                    event.setResult(result);
                 }
             }
 
