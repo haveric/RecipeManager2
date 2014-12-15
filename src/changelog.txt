@@ -9,6 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added Depth Strider to Enchantment aliases
 * Added 1.8 items to item aliases
 * Fixed colors not being set on smelting recipes
+* Fixed setting messages to false throwing an error.
 
 === v2.2.3 ===
 * Fixed @remove not always working

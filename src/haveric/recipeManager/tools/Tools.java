@@ -705,20 +705,26 @@ public class Tools {
     }
 
     public static String parseColors(String message, boolean removeColors) {
-        for (ChatColor color : ChatColor.values()) {
-            String colorString = "";
-            if (!removeColors) {
-                colorString = color.toString();
+        String parsedColors = null;
+
+        if (message != null) {
+            for (ChatColor color : ChatColor.values()) {
+                String colorString = "";
+
+                if (!removeColors) {
+                    colorString = color.toString();
+                }
+
+                message = message.replaceAll("(?i)<" + color.name() + ">", colorString);
             }
-            message = message.replaceAll("(?i)<" + color.name() + ">", colorString);
+
+            if (removeColors) {
+                parsedColors = ChatColor.stripColor(message);
+            } else {
+                parsedColors = ChatColor.translateAlternateColorCodes('&', message);
+            }
         }
 
-        String parsedColors;
-        if (removeColors) {
-            parsedColors = ChatColor.stripColor(message);
-        } else {
-            parsedColors = ChatColor.translateAlternateColorCodes('&', message);
-        }
         return parsedColors;
     }
 
