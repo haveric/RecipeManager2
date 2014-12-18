@@ -133,7 +133,7 @@ public class RecipeManager extends JavaPlugin {
         Files.reload(sender); // (re)generate info files if they do not exist
         Messages.reload(sender); // (re)load messages from messages.yml
 
-        Updater.init(32835, null);
+        Updater.init(this, 32835, null);
 
         if (metrics == null) {
             if (Settings.getInstance().getMetrics()) { // start/stop metrics accordingly

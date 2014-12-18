@@ -31,8 +31,9 @@ public class Updater {
     private static final String API_HOST = "https://api.curseforge.com";
 
     // Only used to link the user to manually download files
-    private static final String URL_PLUGIN = "http://dev.bukkit.org/bukkit-mods/recipemanager/";
-    private static final String URL_FILES = URL_PLUGIN + "files";
+    private static String urlFiles;
+    private static RecipeManager plugin;
+    private static String pluginName;
 
     private static String latestVersion;
     private static String latestLink;
@@ -51,7 +52,10 @@ public class Updater {
      * @param projectID The BukkitDev Project ID, found in the "Facts" panel on the right-side of your project page.
      * @param apiKey Your ServerMods API key, found at https://dev.bukkit.org/home/servermods-apikey/
      */
-    public static void init(int newProjectID, String newApiKey) {
+    public static void init(RecipeManager newPlugin, int newProjectID, String newApiKey) {
+        plugin = newPlugin;
+        urlFiles = plugin.getDescription().getWebsite() + "files";
+        pluginName = plugin.getDescription().getName();
         latestVersion = null;
         latestLink = null;
         projectID = newProjectID;
@@ -64,7 +68,7 @@ public class Updater {
 
         if (time > 0) {
             time *= 60 * 60 * 20;
-            taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(RecipeManager.getPlugin(), new Runnable() {
+            taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
                 @Override public void run() {
                     query(null);
                 }
@@ -81,7 +85,7 @@ public class Updater {
 
     public static String getCurrentVersion() {
         Pattern pattern = Pattern.compile(versionRegex);
-        String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
+        String currentVersion = plugin.getDescription().getVersion();
 
         Matcher matcher = pattern.matcher(currentVersion);
         if (matcher.find()) {
@@ -215,7 +219,7 @@ public class Updater {
                 }
 
                 // Add the user-agent to identify the program
-                conn.addRequestProperty("User-Agent", "RecipeManager");
+                conn.addRequestProperty("User-Agent", pluginName);
 
                 // Read the response of the query
                 // The response will be in a JSON format, so only reading one line is necessary.
@@ -238,7 +242,7 @@ public class Updater {
 
                 if (latestVersion == null) {
                     if (sender != null) { // send this message only if it's a requested update check
-                        Messages.sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + URL_FILES);
+                        Messages.sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + urlFiles);
                     } else {
                         return; // block the disable message
                     }
@@ -260,7 +264,6 @@ public class Updater {
                             Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         } else if (compare == 1) {
                             Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
-                            Messages.sendAndLog(sender, "<gray>Thanks for helping to test RecipeManager!");
                         } else if (compare == 2) {
                             Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                             Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
