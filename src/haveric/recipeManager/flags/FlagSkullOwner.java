@@ -3,6 +3,15 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.ItemResult;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 
@@ -75,19 +84,47 @@ public class FlagSkullOwner extends Flag {
             return;
         }
 
-        SkullMeta meta = (SkullMeta) a.result().getItemMeta();
-
+        String owner;
         if (getOwner().equalsIgnoreCase("{player}")) {
             if (!a.hasPlayerName()) {
                 a.addCustomReason("Needs player name!");
                 return;
             }
 
-            meta.setOwner(a.playerName());
+            owner = a.playerName();
         } else {
-            meta.setOwner(getOwner());
+            owner = getOwner();
         }
 
-        a.result().setItemMeta(meta);
+        Player player = a.player();
+        Location playerLocation = player.getLocation();
+        Location loc = new Location(player.getWorld(), playerLocation.getBlockX(), 0, playerLocation.getBlockZ());
+        Block block = loc.getBlock();
+        BlockState originalState = block.getState();
+
+        // If the block is an inventory, we don't want to replace it in order to prevent item loss.
+        // Instead, let the non-updated texture be set with default setOwner behavior.
+        // Ideally, this block will always be bedrock or air, so this won't be needed.
+        if (originalState instanceof InventoryHolder) {
+            SkullMeta meta = (SkullMeta) a.result().getItemMeta();
+            meta.setOwner(owner);
+        } else {
+            // Sets the block to the skull and retrieves the updated ItemStack from the drops.
+            // This is needed because setOwner will not update the inventory texture.
+            block.setType(Material.SKULL);
+            block.setData((byte) 3);
+            Skull s = (Skull) loc.getBlock().getState();
+            s.setOwner(owner);
+            s.update();
+
+            java.util.Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
+            ItemStack result = iter.next();
+            ItemMeta cloned = result.getItemMeta().clone();
+            a.result().setItemMeta(cloned);
+
+            block.setType(originalState.getType());
+            block.setData(originalState.getRawData());
+            originalState.update();
+        }
     }
 }

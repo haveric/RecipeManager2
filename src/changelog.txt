@@ -10,6 +10,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added 1.8 items to item aliases
 * Fixed colors not being set on smelting recipes
 * Fixed setting messages to false throwing an error.
+* Fix player skulls not showing the correct texture in the inventory
 
 === v2.2.3 ===
 * Fixed @remove not always working
