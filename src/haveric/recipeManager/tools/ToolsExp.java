@@ -1,5 +1,6 @@
 package haveric.recipeManager.tools;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -9,6 +10,8 @@ import org.bukkit.entity.Player;
  *         https://github.com/essentials/Essentials/blob/master/Essentials/src/net/ess3/craftbukkit/SetExpFix.java
  */
 public class ToolsExp {
+    private static String xpModel = null;
+
     // This method is used to update both the recorded total experience and displayed total experience.
     // We reset both types to prevent issues.
     public static void setTotalExperience(final Player player, final int exp) {
@@ -45,6 +48,25 @@ public class ToolsExp {
     }
 
     public static int getExpAtLevel(final int level) {
+        int xp;
+        String model = getXpModel();
+
+        if (model.equals("1.8")) {
+            xp = getExpAtLevel18(level);
+        } else {
+            xp = getExpAtLevel17(level);
+        }
+
+        return xp;
+    }
+
+    /**
+     * Minecraft 1.7's model of calculating xp
+     *
+     * @param level
+     * @return
+     */
+    private static int getExpAtLevel17(final int level) {
         if (level > 29) {
             return 62 + (level - 30) * 7;
         }
@@ -54,6 +76,24 @@ public class ToolsExp {
         }
 
         return 17;
+    }
+
+    /**
+     * Minecraft 1.8's model of calculating xp
+     *
+     * @param level
+     * @return
+     */
+    private static int getExpAtLevel18(final int level) {
+        if (level > 30) {
+            return (9 * level) - 158;
+        }
+
+        if (level > 15) {
+            return (5 * level) - 38;
+        }
+
+        return (2 * level) + 7;
     }
 
     public static int getExpToLevel(final int level) {
@@ -87,5 +127,24 @@ public class ToolsExp {
         int nextLevel = player.getLevel();
 
         return getExpAtLevel(nextLevel) - exp;
+    }
+
+    private static String getXpModel() {
+        String model;
+
+        if (xpModel == null) {
+            try {
+                @SuppressWarnings("unused")
+                Material slime = Material.SLIME_BLOCK;
+
+                model = "1.8";
+            } catch (NoSuchFieldError e) {
+                model = "1.7";
+            }
+        } else {
+            model = xpModel;
+        }
+
+        return model;
     }
 }

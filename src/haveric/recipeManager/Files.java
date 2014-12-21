@@ -48,7 +48,7 @@ public class Files {
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
 
     public static final String LASTCHANGED_CONFIG = "2.2";
-    public static final String LASTCHANGED_MESSAGES = "2.2";
+    public static final String LASTCHANGED_MESSAGES = "2.2.4";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.2.4";
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.2.4";
 

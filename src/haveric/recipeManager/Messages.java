@@ -77,7 +77,7 @@ public enum Messages {
     FLAG_INGREDIENTCONDITIONS_NOLORE("<yellow>{item}<red> needs lore: <yellow>{lore}"),
     FLAG_INGREDIENTCONDITIONS_NOCOLOR("<yellow>{item}<red> needs color: <yellow>{color}"),
 
-    FLAG_NEEDEXP("<red>Need EXP: <yellow>{exp}"),
+    FLAG_NEEDEXP("<red>Need EXP: <yellow>{exp}<reset>. Current EXP:<yellow> {playerexp}"),
 
     FLAG_MODEXP_ADD("<green>+{amount}<reset> EXP"),
     FLAG_MODEXP_SUB("<yellow>-{amount}<reset> EXP"),
