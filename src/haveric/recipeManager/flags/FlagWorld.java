@@ -117,7 +117,7 @@ public class FlagWorld extends Flag {
         String world = null;
 
         if (a.hasLocation()) {
-            world = a.location().getWorld().toString().toLowerCase();
+            world = a.location().getWorld().getName().toLowerCase();
         }
 
         for (Entry<String, Boolean> e : worlds.entrySet()) {

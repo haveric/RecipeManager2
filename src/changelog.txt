@@ -13,6 +13,7 @@ This file will be automatically overwritten when a new version is installed.
 * Fix player skulls not showing the correct texture in the inventory
 * Updated @needxp flag to handle 1.8 or 1.7 models of xp
 * Added {playerexp} variable to @needxp
+* Fixed @world flag
 
 === v2.2.3 ===
 * Fixed @remove not always working
