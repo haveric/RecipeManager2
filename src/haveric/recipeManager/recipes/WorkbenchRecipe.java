@@ -61,6 +61,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         int unavailableNum = 0;
         float unavailableChance = 0;
         int displayNum = 0;
+        int failedLores = 0;
 
         List<String> lore = new ArrayList<String>();
 
@@ -70,31 +71,33 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             a.setResult(r);
             r.sendPrepare(a);
 
+            int beforeLength = lore.size();
+
+            if (r.hasFlag(FlagType.NEEDMONEY)) {
+                lore.add(r.getFlag(FlagNeedMoney.class).getResultString());
+            }
+
+            if (r.hasFlag(FlagType.MODMONEY)) {
+                lore.add(r.getFlag(FlagModMoney.class).getResultString());
+            }
+
+            if (r.hasFlag(FlagType.NEEDLEVEL)) {
+                lore.add(r.getFlag(FlagNeedLevel.class).getResultString());
+            }
+
+            if (r.hasFlag(FlagType.MODLEVEL)) {
+                lore.add(r.getFlag(FlagModLevel.class).getResultString());
+            }
+
+            if (r.hasFlag(FlagType.NEEDEXP)) {
+                lore.add(r.getFlag(FlagNeedExp.class).getResultString());
+            }
+
+            if (r.hasFlag(FlagType.MODEXP)) {
+                lore.add(r.getFlag(FlagModExp.class).getResultString());
+            }
+
             if (r.checkFlags(a)) {
-                if (r.hasFlag(FlagType.NEEDMONEY)) {
-                    lore.add(r.getFlag(FlagNeedMoney.class).getResultString());
-                }
-
-                if (r.hasFlag(FlagType.MODMONEY)) {
-                    lore.add(r.getFlag(FlagModMoney.class).getResultString());
-                }
-
-                if (r.hasFlag(FlagType.NEEDLEVEL)) {
-                    lore.add(r.getFlag(FlagNeedLevel.class).getResultString());
-                }
-
-                if (r.hasFlag(FlagType.MODLEVEL)) {
-                    lore.add(r.getFlag(FlagModLevel.class).getResultString());
-                }
-
-                if (r.hasFlag(FlagType.NEEDEXP)) {
-                    lore.add(r.getFlag(FlagNeedExp.class).getResultString());
-                }
-
-                if (r.hasFlag(FlagType.MODEXP)) {
-                    lore.add(r.getFlag(FlagModExp.class).getResultString());
-                }
-
                 if (r.hasFlag(FlagType.SECRET)) {
                     secretNum++;
                     secretChance += r.getChance();
@@ -108,11 +111,18 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             } else {
                 unavailableNum++;
                 unavailableChance += r.getChance();
+
+                int afterLength = lore.size();
+
+                if (afterLength > beforeLength) {
+                    failedLores ++;
+                    displayResults.add(r);
+                }
             }
         }
 
         displayNum = displayResults.size();
-        boolean receive = (secretNum + displayNum) > 0;
+        boolean receive = (secretNum + displayNum - failedLores) > 0;
 
         FlagDisplayResult flag;
         if (a.hasRecipe()) {
@@ -165,6 +175,8 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             } else if (secretNum == 1 && displayNum == 0) {
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
             }
+        } else if (unavailableNum == failedLores){
+            return ToolsItem.create(displayResult.getType(), 0, 0, displayResult.getItemMeta().getDisplayName(), lore);
         }
 
         String title = null;
