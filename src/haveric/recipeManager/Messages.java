@@ -44,6 +44,7 @@ public enum Messages {
     FLAG_WORLD_UNALLOWED("<red>Unallowed worlds: <yellow>{worlds}"),
 
     FLAG_WEATHER("<red>Needs weather: <yellow>{weather}"),
+    FLAG_TEMPERATURE("<red>Needs temperature: <yellow>{temperature}<reset>. Current Temperature: <red>{actual}"),
 
     FLAG_BIOME_ALLOWED("<red>Allowed biomes: <yellow>{biomes}"),
     FLAG_BIOME_UNALLOWED("<red>Unallowed biomes: <yellow>{biomes}"),

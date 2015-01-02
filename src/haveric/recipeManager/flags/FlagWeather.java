@@ -31,7 +31,7 @@ public class FlagWeather extends Flag {
         "In the fail message you can use the following variables:",
         "  {weather} = the weather type required.",
         "",
-        "NOTE: If you need to check if it's raining or snowing then use the " + FlagType.BIOME + " flag.", };
+        "NOTE: If you need to check if it's raining or snowing then use the " + FlagType.TEMPERATURE + " flag.", };
 
     protected static final String[] E = new String[] {
         "{flag} downfall // works only if it's raining peacefully.",

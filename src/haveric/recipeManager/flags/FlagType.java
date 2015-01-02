@@ -45,6 +45,7 @@ public enum FlagType {
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg", "msg"),
     BROADCAST(FlagBroadcast.class, Bit.NONE, "announce", "msgall"),
     SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
+    TEMPERATURE(FlagTemperature.class, Bit.NONE, "temp"),
     // TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"), // TODO finish flag
     // REALTIME(FlagRealTime.class, Bit.NONE, "time", "date"),
     // ONLINETIME(FlagOnlineTime.class, Bit.NONE, "playtime", "onlinefor"),
