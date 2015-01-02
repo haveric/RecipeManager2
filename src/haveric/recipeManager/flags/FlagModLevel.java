@@ -124,7 +124,8 @@ public class FlagModLevel extends Flag {
         failMessage = newFailMessage;
     }
 
-    public String getResultString() {
+    @Override
+    public String getResultLore() {
         return "Mod Level: " + getModifier() + " " + getAmount();
     }
 

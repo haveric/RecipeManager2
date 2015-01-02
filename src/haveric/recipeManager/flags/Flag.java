@@ -297,4 +297,8 @@ public class Flag implements Cloneable {
     protected void onCrafted(Args a) {}
 
     protected void onFailed(Args a) {}
+
+    public String getResultLore() {
+        return null;
+    }
 }

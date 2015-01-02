@@ -83,7 +83,8 @@ public class FlagNeedMoney extends Flag {
         return moneyString;
     }
 
-    public String getResultString() {
+    @Override
+    public String getResultLore() {
         return "Need Money: " + getMoneyString();
     }
 

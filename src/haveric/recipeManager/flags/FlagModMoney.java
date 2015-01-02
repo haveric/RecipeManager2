@@ -111,7 +111,8 @@ public class FlagModMoney extends Flag {
         failMessage = message;
     }
 
-    public String getResultString() {
+    @Override
+    public String getResultLore() {
         return "Mod Money: " + getModifier() + " " + getAmount();
     }
 

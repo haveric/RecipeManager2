@@ -100,7 +100,8 @@ public class FlagNeedLevel extends Flag {
         failMessage = newFailMessage;
     }
 
-    public String getResultString() {
+    @Override
+    public String getResultLore() {
         String resultString = "Need ";
 
         if (setBoth) {

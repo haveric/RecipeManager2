@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flags.FlagType.Bit;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -226,6 +227,10 @@ public class Flags implements Cloneable {
         }
 
         return !a.hasReasons();
+    }
+
+    public Collection<Flag> get() {
+        return flags.values();
     }
 
     public boolean sendPrepare(Args a) {

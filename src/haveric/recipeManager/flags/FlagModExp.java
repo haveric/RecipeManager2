@@ -157,7 +157,8 @@ public class FlagModExp extends Flag {
         return true;
     }
 
-    public String getResultString() {
+    @Override
+    public String getResultLore() {
         return "Mod Exp: " + getModifier() + " " + getAmount();
     }
 
