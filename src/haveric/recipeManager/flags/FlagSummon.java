@@ -22,6 +22,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
@@ -72,7 +73,7 @@ public class FlagSummon extends Flag {
         String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for wolf and ocelot, optionally specify 'nosit' to not spawn creature in sit stance."),
         String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
         String.format(argFormat, "cat <type>", "ocelot type, available values: " + Tools.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
-        String.format(argFormat, "saddle [mount]", "adds saddle on creature, only works for pig, optionally you can specify 'mount' to make crafter mount creature."),
+        String.format(argFormat, "saddle [mount]", "adds saddle on creature (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount creature."),
         String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
         String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
         String.format(argFormat, "villager <type>", "set the villager profession, values: " + Tools.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
@@ -92,6 +93,10 @@ public class FlagSummon extends Flag {
         String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
         String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."),
         String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
+        String.format(argFormat, "horsevariant <type>", "set the horse type, values: " + Tools.collectionToString(Arrays.asList(Horse.Variant.values())).toLowerCase()),
+        String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + Tools.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
+        String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + Tools.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
+        String.format(argFormat, "horsechest", "adds a chest to horses (forces horse to be an adult and tamed)."),
         "",
         "These arguments can be used in any order and they're all optional.", };
 
@@ -145,6 +150,10 @@ public class FlagSummon extends Flag {
         private ItemStack[] equip = new ItemStack[5];
         private float[] drop = new float[5];
         private List<PotionEffect> potions = new ArrayList<PotionEffect>();
+        private Horse.Variant horseVariant = null;
+        private Horse.Color horseColor = null;
+        private Horse.Style horseStyle = null;
+        private boolean hasChest = false;
 
         public Customization(EntityType newType) {
             type = newType;
@@ -185,6 +194,10 @@ public class FlagSummon extends Flag {
             System.arraycopy(c.drop, 0, drop, 0, c.drop.length);
             potions.addAll(c.potions);
             mountNext = c.mountNext;
+            horseVariant = c.horseVariant;
+            horseColor = c.horseColor;
+            horseStyle = c.horseStyle;
+            hasChest = c.hasChest;
         }
 
         @Override
@@ -315,12 +328,25 @@ public class FlagSummon extends Flag {
                     }
                 }
 
-                if (saddle && ent instanceof Pig) {
-                    Pig npc = (Pig) ent;
-                    npc.setSaddle(true);
+                if (saddle) {
+                    if (ent instanceof Pig) {
+                        Pig npc = (Pig) ent;
 
-                    if (mount) {
-                        npc.setPassenger(player);
+                        npc.setAdult();
+                        npc.setSaddle(true);
+
+                        if (mount) {
+                            npc.setPassenger(player);
+                        }
+                    } else if (ent instanceof Horse) {
+                        Horse npc = (Horse) ent;
+
+                        npc.setAdult();
+                        npc.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+
+                        if (mount) {
+                            npc.setPassenger(player);
+                        }
                     }
                 }
 
@@ -364,6 +390,29 @@ public class FlagSummon extends Flag {
                 if (skeleton != null && ent instanceof Skeleton) {
                     Skeleton npc = (Skeleton) ent;
                     npc.setSkeletonType(skeleton);
+                }
+
+                if (horseVariant != null && ent instanceof Horse) {
+                    Horse npc = (Horse) ent;
+                    npc.setVariant(horseVariant);
+                }
+
+                if (horseColor != null && ent instanceof Horse) {
+                    Horse npc = (Horse) ent;
+                    npc.setColor(horseColor);
+                }
+
+                if (horseStyle != null && ent instanceof Horse) {
+                    Horse npc = (Horse) ent;
+                    npc.setStyle(horseStyle);
+                }
+
+                if (hasChest && ent instanceof Horse) {
+                    Horse npc = (Horse) ent;
+
+                    npc.setAdult();
+                    npc.setTamed(true);
+                    npc.setCarryingChest(true);
                 }
 
                 if (target && ent instanceof Creature) {
@@ -737,6 +786,34 @@ public class FlagSummon extends Flag {
         public void setNoBreed(boolean newNoBreed) {
             noBreed = newNoBreed;
         }
+
+        public void setHorseVariant(Horse.Variant newVariant) {
+            horseVariant = newVariant;
+        }
+
+        public Horse.Variant getHorseVariant() {
+            return horseVariant;
+        }
+
+        public void setHorseColor(Horse.Color newColor) {
+            horseColor = newColor;
+        }
+
+        public Horse.Color getHorseColor() {
+            return horseColor;
+        }
+
+        public void setHorseStyle(Horse.Style newStyle) {
+            horseStyle = newStyle;
+        }
+
+        public Horse.Style getHorseStyle() {
+            return horseStyle;
+        }
+
+        public void setHasChest(boolean newHasChest) {
+            hasChest = newHasChest;
+        }
     }
 
     private List<Customization> spawn = new ArrayList<Customization>();
@@ -854,6 +931,7 @@ public class FlagSummon extends Flag {
                     switch (type) {
                         case CHICKEN:
                         case COW:
+                        case HORSE:
                         case MUSHROOM_COW:
                         case OCELOT:
                         case PIG:
@@ -873,6 +951,7 @@ public class FlagSummon extends Flag {
                     switch (type) {
                         case CHICKEN:
                         case COW:
+                        case HORSE:
                         case MUSHROOM_COW:
                         case OCELOT:
                         case PIG:
@@ -891,6 +970,7 @@ public class FlagSummon extends Flag {
                     switch (type) {
                         case CHICKEN:
                         case COW:
+                        case HORSE:
                         case MUSHROOM_COW:
                         case OCELOT:
                         case PIG:
@@ -936,8 +1016,8 @@ public class FlagSummon extends Flag {
                         }
                     }
                 } else if (value.startsWith("saddle")) {
-                    if (type != EntityType.PIG) {
-                        ErrorReporter.warning("Flag " + getType() + " has 'saddle' on non-pig creature!");
+                    if (type != EntityType.PIG && type != EntityType.HORSE) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'saddle' on non-pig and non-horse creature!");
                         continue;
                     }
 
@@ -1178,6 +1258,47 @@ public class FlagSummon extends Flag {
                             continue;
                         }
                     }
+                } else if (value.startsWith("horsevariant")) {
+                    if (type != EntityType.HORSE) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'horsevariant' argument on non-horse creature!");
+                        continue;
+                    }
+
+                    value = value.substring("horsevariant".length()).trim();
+
+                    c.setHorseVariant(Tools.parseEnum(value, Horse.Variant.values()));
+
+                    if (c.getHorseVariant() == null) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'horsevariant' argument with invalid type: " + value);
+                    }
+                } else if (value.startsWith("horsecolor")) {
+                    if (type != EntityType.HORSE) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'horsecolor' argument on non-horse creature!");
+                        continue;
+                    }
+
+                    value = value.substring("horsecolor".length()).trim();
+
+                    c.setHorseColor(Tools.parseEnum(value, Horse.Color.values()));
+
+                    if (c.getHorseColor() == null) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'horsecolor' argument with invalid type: " + value);
+                    }
+                } else if (value.startsWith("horsestyle")) {
+                    if (type != EntityType.HORSE) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'horsestyle' argument on non-horse creature!");
+                        continue;
+                    }
+
+                    value = value.substring("horsestyle".length()).trim();
+
+                    c.setHorseStyle(Tools.parseEnum(value, Horse.Style.values()));
+
+                    if (c.getHorseStyle() == null) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'horsestyle' argument with invalid type: " + value);
+                    }
+                } else if (value.equals("horsechest")) {
+                    c.setHasChest(true);
                 } else {
                     ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
                 }
