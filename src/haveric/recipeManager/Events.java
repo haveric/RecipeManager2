@@ -303,6 +303,7 @@ public class Events implements Listener {
                 Messages.sendDenySound(player, location);
                 return;
             }
+            ItemResult originalResult = result.clone();
 
             Recipe bukkitRecipe = event.getRecipe();
             WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
@@ -374,6 +375,11 @@ public class Events implements Listener {
             }
 
             new UpdateInventory(player, 2); // update inventory 2 ticks later
+
+            // Reset display item when item cannot be crafted
+            if (originalResult != null && result == null) {
+                updateResultLater(event.getInventory(), originalResult, 0);
+            }
         } catch (Throwable e) {
             event.setCancelled(true);
             CommandSender sender;
@@ -385,6 +391,15 @@ public class Events implements Listener {
 
             Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
         }
+    }
+
+    private static void updateResultLater(final CraftingInventory inventory, final ItemResult item, final int ticks) {
+        Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
+            @SuppressWarnings("deprecation")
+            @Override public void run() {
+                inventory.setResult(item);
+            }
+        }, ticks);
     }
 
     private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
