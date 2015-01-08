@@ -47,7 +47,7 @@ public class Files {
     private final CommandSender sender;
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
 
-    public static final String LASTCHANGED_CONFIG = "2.2";
+    public static final String LASTCHANGED_CONFIG = "2.3.1";
     public static final String LASTCHANGED_MESSAGES = "2.3.1";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.3";
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.3";
@@ -71,6 +71,8 @@ public class Files {
     public static final String FILE_RECIPES = "recipes.html";
 
     public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
+
+    private static final String bukkitDocs = "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/";
 
     protected static void init() {
     }
@@ -474,7 +476,7 @@ public class Files {
         s.append(NL).append("<hr>");
         s.append(NL);
         s.append(NL).append("<a name='material'></a><a href='#contents'>^ Contents</a><h3>MATERIAL LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html'>BukkitAPI / Material</a>");
+        s.append("<a href='" + bukkitDocs + "Material.html'>BukkitAPI / Material</a>");
         s.append(NL).append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-24s %-5s %s", "ID", "Name", "Alias", "Stack", "Max durability"));
@@ -500,7 +502,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='enchantment'></a><a href='#contents'>^ Contents</a><h3>ENCHANTMENTS LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/enchantments/Enchantment.html'>BukkitAPI / Enchantment</a>");
+        s.append("<a href='" + bukkitDocs + "enchantments/Enchantment.html'>BukkitAPI / Enchantment</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-26s %-24s %-12s %s", "ID", "Name", "Alias", "Item type", "Level range"));
 
@@ -531,7 +533,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='potiontype'></a><a href='#contents'>^ Contents</a><h3>POTION TYPE LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionType.html'>BukkitAPI / PotionType</a>");
+        s.append("<a href='" + bukkitDocs + "potion/PotionType.html'>BukkitAPI / PotionType</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type", "Data value"));
 
@@ -550,7 +552,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='potioneffect'></a><a href='#contents'>^ Contents</a><h3>POTION EFFECT TYPE LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/potion/PotionEffect.html'>BukkitAPI / PotionEffect</a>");
+        s.append("<a href='" + bukkitDocs + "potion/PotionEffect.html'>BukkitAPI / PotionEffect</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-10s %s", "ID", "Name", "Instant ?", "Duration modifier"));
 
@@ -567,7 +569,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='fireworkeffect'></a><a href='#contents'>^ Contents</a><h3>FIREWORK EFFECT TYPE LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/FireworkEffect.Type.html'>BukkitAPI / FireworkEffect.Type</a>");
+        s.append("<a href='" + bukkitDocs + "FireworkEffect.Type.html'>BukkitAPI / FireworkEffect.Type</a>");
         s.append(NL);
 
         for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
@@ -577,7 +579,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='biomes'></a><a href='#contents'>^ Contents</a><h3>BIOMES LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/block/Biome.html'>BukkitAPI / Biome</a>");
+        s.append("<a href='" + bukkitDocs + "block/Biome.html'>BukkitAPI / Biome</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s", "ID", "Name"));
 
@@ -588,7 +590,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='sound'></a><a href='#contents'>^ Contents</a><h3>SOUND LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/Sound.html'>BukkitAPI / Sound</a>");
+        s.append("<a href='" + bukkitDocs + "Sound.html'>BukkitAPI / Sound</a>");
         s.append(NL);
 
         Sound[] sounds = Sound.values();
@@ -615,7 +617,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='entitytype'></a><a href='#contents'>^ Contents</a><h3>ENTITY TYPE LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/entity/EntityType.html'>BukkitAPI / EntityType</a>");
+        s.append("<a href='" + bukkitDocs + "entity/EntityType.html'>BukkitAPI / EntityType</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-5s %-24s %-24s %s", "ID", "Constant", "Name", "Alive ?"));
 
@@ -628,7 +630,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='dyecolor'></a><a href='#contents'>^ Contents</a><h3>DYE COLOR LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/DyeColor.html'>BukkitAPI / DyeColor</a>");
+        s.append("<a href='" + bukkitDocs + "DyeColor.html'>BukkitAPI / DyeColor</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-16s %-12s %-12s %s", "Name", "Color R G B", "Wool data", "Dye data"));
 
@@ -639,7 +641,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<a name='chatcolor'></a><a href='#contents'>^ Contents</a><h3>CHAT COLOR LIST</h3>");
-        s.append("<a href='http://jd.bukkit.org/rb/apidocs/org/bukkit/ChatColor.html'>BukkitAPI / ChatColor</a>");
+        s.append("<a href='" + bukkitDocs + "ChatColor.html'>BukkitAPI / ChatColor</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-16s %s", "Name", "Color character"));
 
