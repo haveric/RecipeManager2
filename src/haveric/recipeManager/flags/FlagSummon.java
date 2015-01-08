@@ -76,6 +76,7 @@ public class FlagSummon extends Flag {
         String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + Tools.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
         String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + Tools.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
         String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
+        String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the creature's jump strength (Only works for horses). 0 = no jump"),
         String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
         String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
         String.format(argFormat, "noeffect", "no spawning particle effects on creature."),
@@ -154,6 +155,7 @@ public class FlagSummon extends Flag {
         private Horse.Color horseColor = null;
         private Horse.Style horseStyle = null;
         private boolean hasChest = false;
+        private Float jumpStrength = null;
 
         public Customization(EntityType newType) {
             type = newType;
@@ -198,6 +200,7 @@ public class FlagSummon extends Flag {
             horseColor = c.horseColor;
             horseStyle = c.horseStyle;
             hasChest = c.hasChest;
+            jumpStrength = c.jumpStrength;
         }
 
         @Override
@@ -392,27 +395,30 @@ public class FlagSummon extends Flag {
                     npc.setSkeletonType(skeleton);
                 }
 
-                if (horse != null && ent instanceof Horse) {
-                    Horse npc = (Horse) ent;
-                    npc.setVariant(horse);
-                }
-
-                if (horseColor != null && ent instanceof Horse) {
-                    Horse npc = (Horse) ent;
-                    npc.setColor(horseColor);
-                }
-
-                if (horseStyle != null && ent instanceof Horse) {
-                    Horse npc = (Horse) ent;
-                    npc.setStyle(horseStyle);
-                }
-
-                if (hasChest && ent instanceof Horse) {
+                if (ent instanceof Horse) {
                     Horse npc = (Horse) ent;
 
-                    npc.setAdult();
-                    npc.setTamed(true);
-                    npc.setCarryingChest(true);
+                    if (horse != null) {
+                        npc.setVariant(horse);
+                    }
+
+                    if (horseColor != null) {
+                        npc.setColor(horseColor);
+                    }
+
+                    if (horseStyle != null) {
+                        npc.setStyle(horseStyle);
+                    }
+
+                    if (hasChest) {
+                        npc.setAdult();
+                        npc.setTamed(true);
+                        npc.setCarryingChest(true);
+                    }
+
+                    if (jumpStrength != null) {
+                        npc.setJumpStrength(jumpStrength);
+                    }
                 }
 
                 if (target && ent instanceof Creature) {
@@ -522,6 +528,20 @@ public class FlagSummon extends Flag {
                 ErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
             } else {
                 chance = newChance;
+            }
+        }
+
+        public float getJumpStrength() {
+            return jumpStrength;
+        }
+
+        public void setJumpStrength(float newJumpStrength) {
+            if (newJumpStrength < 0.0f || newJumpStrength > 100.0f) {
+                jumpStrength = Math.min(Math.max(newJumpStrength, 0.0f), 100.0f);
+
+                ErrorReporter.warning("Flag " + getType() + " has jumpStrength value less than 0.0 or higher than 100.0, value trimmed.");
+            } else {
+                jumpStrength = newJumpStrength;
             }
         }
 
@@ -1044,6 +1064,14 @@ public class FlagSummon extends Flag {
                     } catch (NumberFormatException e) {
                         ErrorReporter.warning("Flag " + getType() + " has 'chance' argument with invalid number: " + value);
                         continue;
+                    }
+                } else if (value.startsWith("jumpstrength")) {
+                    value = value.substring("jumpstrength".length()).trim();
+
+                    try {
+                        c.setJumpStrength(Float.valueOf(value));
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'jumpstrength' argument with invalid number: " + value);
                     }
                 } else if (value.startsWith("num")) {
                     value = value.substring("num".length()).trim();
