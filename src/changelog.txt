@@ -9,7 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 ** @temp >= .15, <= .95 // Must be within a temperature where it can rain
 * Reset display item when item cannot be crafted
 * Add better support for horses in @summon flag
-** Can now use saddle, horsevariant, horsecolor, horsestyle, and horsechest for horses as well as a few other animal options
+** Can now use saddle, horse, horsecolor, horsestyle, and haschest for horses as well as a few other animal options
 * Updated bukkit doc links to spigot's versions for updated 1.8 stuff
 
 === v2.3 ===

@@ -71,10 +71,10 @@ public class FlagSummon extends Flag {
         String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."),
         String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
         String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."),
-        String.format(argFormat, "horsevariant <type>", "set the horse type, values: " + Tools.collectionToString(Arrays.asList(Horse.Variant.values())).toLowerCase()),
+        String.format(argFormat, "haschest", "adds a chest to creature (Only works on horses, forces horse to be an adult and tamed)."),
+        String.format(argFormat, "horse <type>", "set the horse type, values: " + Tools.collectionToString(Arrays.asList(Horse.Variant.values())).toLowerCase()),
         String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + Tools.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
         String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + Tools.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
-        String.format(argFormat, "horsechest", "adds a chest to horses (forces horse to be an adult and tamed)."),
         String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
         String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
         String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
@@ -150,7 +150,7 @@ public class FlagSummon extends Flag {
         private ItemStack[] equip = new ItemStack[5];
         private float[] drop = new float[5];
         private List<PotionEffect> potions = new ArrayList<PotionEffect>();
-        private Horse.Variant horseVariant = null;
+        private Horse.Variant horse = null;
         private Horse.Color horseColor = null;
         private Horse.Style horseStyle = null;
         private boolean hasChest = false;
@@ -194,7 +194,7 @@ public class FlagSummon extends Flag {
             System.arraycopy(c.drop, 0, drop, 0, c.drop.length);
             potions.addAll(c.potions);
             mountNext = c.mountNext;
-            horseVariant = c.horseVariant;
+            horse = c.horse;
             horseColor = c.horseColor;
             horseStyle = c.horseStyle;
             hasChest = c.hasChest;
@@ -392,9 +392,9 @@ public class FlagSummon extends Flag {
                     npc.setSkeletonType(skeleton);
                 }
 
-                if (horseVariant != null && ent instanceof Horse) {
+                if (horse != null && ent instanceof Horse) {
                     Horse npc = (Horse) ent;
-                    npc.setVariant(horseVariant);
+                    npc.setVariant(horse);
                 }
 
                 if (horseColor != null && ent instanceof Horse) {
@@ -788,11 +788,11 @@ public class FlagSummon extends Flag {
         }
 
         public void setHorseVariant(Horse.Variant newVariant) {
-            horseVariant = newVariant;
+            horse = newVariant;
         }
 
         public Horse.Variant getHorseVariant() {
-            return horseVariant;
+            return horse;
         }
 
         public void setHorseColor(Horse.Color newColor) {
@@ -1258,18 +1258,18 @@ public class FlagSummon extends Flag {
                             continue;
                         }
                     }
-                } else if (value.startsWith("horsevariant")) {
+                } else if (value.startsWith("horse")) {
                     if (type != EntityType.HORSE) {
-                        ErrorReporter.warning("Flag " + getType() + " has 'horsevariant' argument on non-horse creature!");
+                        ErrorReporter.warning("Flag " + getType() + " has 'horse' argument on non-horse creature!");
                         continue;
                     }
 
-                    value = value.substring("horsevariant".length()).trim();
+                    value = value.substring("horse".length()).trim();
 
                     c.setHorseVariant(Tools.parseEnum(value, Horse.Variant.values()));
 
                     if (c.getHorseVariant() == null) {
-                        ErrorReporter.warning("Flag " + getType() + " has 'horsevariant' argument with invalid type: " + value);
+                        ErrorReporter.warning("Flag " + getType() + " has 'horse' argument with invalid type: " + value);
                     }
                 } else if (value.startsWith("horsecolor")) {
                     if (type != EntityType.HORSE) {
@@ -1297,7 +1297,7 @@ public class FlagSummon extends Flag {
                     if (c.getHorseStyle() == null) {
                         ErrorReporter.warning("Flag " + getType() + " has 'horsestyle' argument with invalid type: " + value);
                     }
-                } else if (value.equals("horsechest")) {
+                } else if (value.equals("haschest")) {
                     c.setHasChest(true);
                 } else {
                     ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
