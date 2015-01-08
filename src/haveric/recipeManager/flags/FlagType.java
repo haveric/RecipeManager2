@@ -142,6 +142,10 @@ public enum FlagType {
     }
 
     private String[] getField(String name) {
+        if (flagClass.equals(FlagSummon.class) && name.equals("D")) {
+            return FlagSummon.getDescription();
+        }
+
         try {
             return (String[]) flagClass.getDeclaredField(name).get(null);
         } catch (Throwable e) {
