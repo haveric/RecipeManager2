@@ -60,9 +60,10 @@ public class FlagSummon extends Flag {
         "The <type> argument can be a living entity type, you can find all entity types in '" + Files.FILE_INFO_NAMES + "' file.",
         "",
         "Optionally you can add some arguments separated by | character, those being:",
+        String.format(argFormat, "adult", "forces creature to spawn as an adult, works with animals and villagers (works opposite of baby)."),
         String.format(argFormat, "agelock", "prevent the creature from maturing or getting ready for mating, works with animals and villagers."),
         String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
-        String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies."),
+        String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies (works opposite of adult)."),
         String.format(argFormat, "cat <type>", "ocelot type, available values: " + Tools.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
         String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
         String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
@@ -145,6 +146,7 @@ public class FlagSummon extends Flag {
         private boolean noHideName = false;
         private int hp = 0;
         private int maxHp = 0;
+        private boolean adult = false;
         private boolean baby = false;
         private boolean ageLock = false;
         private boolean noBreed = false;
@@ -189,6 +191,7 @@ public class FlagSummon extends Flag {
             noHideName = c.noHideName;
             hp = c.hp;
             maxHp = c.maxHp;
+            adult = c.adult;
             baby = c.baby;
             ageLock = c.ageLock;
             noBreed = c.noBreed;
@@ -320,6 +323,10 @@ public class FlagSummon extends Flag {
 
                     if (baby) {
                         npc.setBaby();
+                    }
+
+                    if (adult) {
+                        npc.setAdult();
                     }
 
                     if (ageLock) {
@@ -629,6 +636,14 @@ public class FlagSummon extends Flag {
 
         public void setMaxHp(int newMaxHp) {
             maxHp = newMaxHp;
+        }
+
+        public boolean isAdult() {
+            return adult;
+        }
+
+        public void setAdult(boolean newAdult) {
+            adult = newAdult;
         }
 
         public boolean isBaby() {
@@ -947,6 +962,25 @@ public class FlagSummon extends Flag {
                     c.setPlayerIronGolem(true);
                 } else if (value.equals("hit")) {
                     c.setHit(true);
+                } else if (value.equals("adult")) {
+                    switch (type) {
+                        case CHICKEN:
+                        case COW:
+                        case HORSE:
+                        case MUSHROOM_COW:
+                        case OCELOT:
+                        case PIG:
+                        case SHEEP:
+                        case VILLAGER:
+                        case WOLF:
+                            break;
+
+                        default:
+                            ErrorReporter.warning("Flag " + getType() + " has 'adult' set on unsupported creature!");
+                            continue;
+                    }
+
+                    c.setAdult(true);
                 } else if (value.equals("baby")) {
                     switch (type) {
                         case CHICKEN:
