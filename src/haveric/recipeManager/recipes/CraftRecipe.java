@@ -239,14 +239,14 @@ public class CraftRecipe extends WorkbenchRecipe {
             for (int w = 0; w < width; w++) {
                 ItemStack item = ingredients[(h * 3) + w];
 
-                if (item != null) {
+                if (item == null) {
+                    s.append('0');
+                } else {
                     s.append(item.getTypeId());
 
                     if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                         s.append(':').append(item.getDurability());
                     }
-                } else {
-                    s.append('0');
                 }
 
                 if (w < (width - 1)) {
@@ -261,10 +261,10 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         s.append(") ");
 
-        if (!removed) {
-            s.append(getResultsString());
-        } else {
+        if (removed) {
             s.append("removed recipe");
+        } else {
+            s.append(getResultsString());
         }
 
         name = s.toString();

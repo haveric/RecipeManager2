@@ -54,7 +54,7 @@ public class Perms {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
                 isPlayerInGroup = permission.playerInGroup((String) null, player, group);
-            } catch (Exception e) {}
+            } catch (Exception e) { }
         }
 
         return isPlayerInGroup;

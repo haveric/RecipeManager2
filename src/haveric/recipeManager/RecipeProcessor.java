@@ -114,7 +114,9 @@ public class RecipeProcessor implements Runnable {
             // Scan for files
             analyzeDirectory(dir);
 
-            if (!fileList.isEmpty()) {
+            if (fileList.isEmpty()) {
+                Messages.sendAndLog(sender, "<yellow>No recipe files exist in the recipes folder.");
+            } else {
                 registrator = new RecipeRegistrator();
 
                 long lastDisplay = System.currentTimeMillis();
@@ -176,8 +178,6 @@ public class RecipeProcessor implements Runnable {
                 }
 
                 ErrorReporter.stopCatching();
-            } else {
-                Messages.sendAndLog(sender, "<yellow>No recipe files exist in the recipes folder.");
             }
         } catch (Throwable e) {
             Messages.error(sender, e, "Code error while processing recipes");
@@ -610,7 +610,9 @@ public class RecipeProcessor implements Runnable {
             if (split.length >= 2) {
                 String[] timeSplit = split[1].trim().toLowerCase().split("-");
 
-                if (!timeSplit[0].equals("instant")) {
+                if (timeSplit[0].equals("instant")) {
+                    minTime = 0;
+                } else {
                     try {
                         minTime = Float.valueOf(timeSplit[0]);
 
@@ -622,8 +624,6 @@ public class RecipeProcessor implements Runnable {
                         minTime = Vanilla.FURNACE_RECIPE_TIME;
                         maxTime = -1;
                     }
-                } else {
-                    minTime = 0;
                 }
 
                 if (maxTime > -1.0 && minTime >= maxTime) {

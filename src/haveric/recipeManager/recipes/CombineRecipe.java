@@ -133,14 +133,14 @@ public class CombineRecipe extends WorkbenchRecipe {
         for (int i = 0; i < size; i++) {
             ItemStack item = ingredients.get(i);
 
-            if (item != null) {
+            if (item == null) {
+                s.append('0');
+            } else {
                 s.append(item.getTypeId());
 
                 if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                     s.append(':').append(item.getDurability());
                 }
-            } else {
-                s.append('0');
             }
 
             if (i < (size - 1)) {
@@ -150,10 +150,10 @@ public class CombineRecipe extends WorkbenchRecipe {
 
         s.append(") ");
 
-        if (!removed) {
-            s.append(getResultsString());
-        } else {
+        if (removed) {
             s.append("removed recipe");
+        } else {
+            s.append(getResultsString());
         }
 
         name = s.toString();

@@ -114,7 +114,9 @@ public class RecipeCommand implements CommandExecutor {
             if (next || args[0].equalsIgnoreCase("prev")) {
                 Pages pages = pagination.get(name);
 
-                if (pages != null) {
+                if (pages == null) {
+                    Messages.CMD_RECIPES_NEEDQUERY.print(sender);
+                } else {
                     if (next ? pages.hasNext() : pages.hasPrev()) {
                         String page = (next ? pages.next() : pages.prev());
                         Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", ToolsItem.print(pages.item), "{num}", (pages.page + 1), "{total}", pages.pages.length);
@@ -132,8 +134,6 @@ public class RecipeCommand implements CommandExecutor {
                             Messages.CMD_RECIPES_NOPREV.print(sender, null, "{command}", "/" + label + " next");
                         }
                     }
-                } else {
-                    Messages.CMD_RECIPES_NEEDQUERY.print(sender);
                 }
             } else {
                 ItemStack item;
@@ -172,7 +172,9 @@ public class RecipeCommand implements CommandExecutor {
                     }
                 }
 
-                if (!list.isEmpty()) {
+                if (list.isEmpty()) {
+                    Messages.CMD_RECIPES_NORESULTS.print(sender, null, "{item}", ToolsItem.print(item));
+                } else {
                     Pages pages = new Pages(name, item, list);
                     pagination.put(name, pages);
 
@@ -184,8 +186,6 @@ public class RecipeCommand implements CommandExecutor {
                     } else {
                         Messages.CMD_RECIPES_END.print(sender);
                     }
-                } else {
-                    Messages.CMD_RECIPES_NORESULTS.print(sender, null, "{item}", ToolsItem.print(item));
                 }
             }
         } else {

@@ -70,14 +70,14 @@ public class FlagNeedMoney extends Flag {
 
     public String getMoneyString() {
         String moneyString;
-        if (!Econ.getInstance().isEnabled()) {
-            moneyString = null;
-        } else {
+        if (Econ.getInstance().isEnabled()) {
             moneyString = Econ.getInstance().getFormat(getMinMoney());
 
             if (getMaxMoney() > getMinMoney()) {
                 moneyString += " - " + Econ.getInstance().getFormat(getMaxMoney());
             }
+        } else {
+            moneyString = null;
         }
 
         return moneyString;

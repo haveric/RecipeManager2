@@ -329,7 +329,23 @@ public class FlagForChance extends Flag {
         List<ChanceFlag> flags = flagMap.get(group); // get flags list for group even if group is null
         ChanceFlag flagChance = null;
 
-        if (flagDeclaration != null) {
+        if (flagDeclaration == null) {
+            if (flags == null) {
+                flags = new ArrayList<ChanceFlag>();
+                flagMap.put(group, flags);
+            } else {
+                for (ChanceFlag c : flags) {
+                    if (c.getFlag() == null) {
+                        ErrorReporter.warning("Flag " + getType() + " already has a blank flag for this group!");
+                        return false;
+                    }
+                }
+            }
+
+            flagChance = new ChanceFlag(null, chance);
+            flags.add(flagChance);
+            recalculateChances(group, flags);
+        } else {
             String[] split = flagDeclaration.split("[:\\s]+", 2); // split by space or : char
             String flagString = split[0].trim(); // format flag name
 
@@ -345,7 +361,10 @@ public class FlagForChance extends Flag {
                 return false;
             }
 
-            if (flags != null) {
+            if (flags == null) {
+                flags = new ArrayList<ChanceFlag>();
+                flagMap.put(group, flags);
+            } else {
                 if (appendFlag) {
                     // Loop through flags backwards to get the last added flag
                     for (i = flags.size() - 1; i >= 0; i--) {
@@ -362,9 +381,6 @@ public class FlagForChance extends Flag {
                         }
                     }
                 }
-            } else {
-                flags = new ArrayList<ChanceFlag>();
-                flagMap.put(group, flags);
             }
 
             Flag flag = null;
@@ -381,16 +397,16 @@ public class FlagForChance extends Flag {
                         totalChance += c.getChance();
                     }
 
-                    if (chance != null) {
+                    if (chance == null) {
+                        if (totalChance >= 100) {
+                            ErrorReporter.warning("Flag " + getType() + " already has 100% chance for '" + group + "' group!", "You can't add more flags to it until you reduce the chance of one or more flags.");
+                            return false;
+                        }
+                    } else {
                         totalChance += chance;
 
                         if (totalChance > 100) {
                             ErrorReporter.warning("Flag " + getType() + " exceeds 100% chance for '" + group + "' group!", "Reduce the chance or remove it to be auto-calculated.");
-                            return false;
-                        }
-                    } else {
-                        if (totalChance >= 100) {
-                            ErrorReporter.warning("Flag " + getType() + " already has 100% chance for '" + group + "' group!", "You can't add more flags to it until you reduce the chance of one or more flags.");
                             return false;
                         }
                     }
@@ -423,22 +439,6 @@ public class FlagForChance extends Flag {
                 flags.add(flagChance);
                 recalculateChances(group, flags);
             }
-        } else {
-            if (flags != null) {
-                for (ChanceFlag c : flags) {
-                    if (c.getFlag() == null) {
-                        ErrorReporter.warning("Flag " + getType() + " already has a blank flag for this group!");
-                        return false;
-                    }
-                }
-            } else {
-                flags = new ArrayList<ChanceFlag>();
-                flagMap.put(group, flags);
-            }
-
-            flagChance = new ChanceFlag(null, chance);
-            flags.add(flagChance);
-            recalculateChances(group, flags);
         }
 
         return true;

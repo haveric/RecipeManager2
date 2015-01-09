@@ -99,7 +99,7 @@ public class RecipeManagerFuelBurnEvent extends Event implements Cancellable {
             try {
                 UUID uuid = UUIDFetcher.getUUIDOf(fueler);
                 player = Bukkit.getPlayer(uuid);
-            } catch (Exception e) {}
+            } catch (Exception e) { }
         }
 
         return player;

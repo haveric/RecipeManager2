@@ -126,7 +126,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "villager <type>", "set the villager profession, values: " + Tools.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
             String.format(argFormat, "zombievillager", "makes zombie a zombie villager, only works on zombies."),
             "",
-            "These arguments can be used in any order and they're all optional.",}, String.class);
+            "These arguments can be used in any order and they're all optional.", }, String.class);
 
         return description;
     }

@@ -51,10 +51,10 @@ public class FindItemCommand implements CommandExecutor {
             if (id > 0) {
                 Material mat = Material.getMaterial(id);
 
-                if (mat != null) {
-                    found.add(mat);
-                } else {
+                if (mat == null) {
                     Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", id);
+                } else {
+                    found.add(mat);
                 }
             }
         }
@@ -71,7 +71,9 @@ public class FindItemCommand implements CommandExecutor {
             }
         }
 
-        if (!found.isEmpty()) {
+        if (found.isEmpty()) {
+            Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", find);
+        } else {
             int foundSize = found.size();
             Messages.CMD_FINDITEM_HEADER.print(sender, null, "{matches}", foundSize, "{argument}", find);
 
@@ -83,8 +85,6 @@ public class FindItemCommand implements CommandExecutor {
             if (foundSize > 10) {
                 Messages.CMD_FINDITEM_FOUNDMORE.print(sender, null, "{matches}", (foundSize - 10));
             }
-        } else {
-            Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", find);
         }
 
         return true;

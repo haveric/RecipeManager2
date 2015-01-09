@@ -286,15 +286,13 @@ public class Tools {
                 } else {
                     Map<String, Short> dataMap = Settings.getInstance().getMaterialDataNames(material);
                     Short dataValue;
-                    if (dataMap != null) {
-                        dataValue = dataMap.get(Tools.parseAliasName(value));
-                    } else {
+                    if (dataMap == null) {
                         dataValue = null;
+                    } else {
+                        dataValue = dataMap.get(Tools.parseAliasName(value));
                     }
 
-                    if (dataValue != null) {
-                        data = dataValue.shortValue();
-                    } else {
+                    if (dataValue == null) {
                         try {
                             data = Integer.parseInt(value);
                         } catch (NumberFormatException e) {
@@ -302,6 +300,8 @@ public class Tools {
                                 ErrorReporter.warning("Item '" + material + " has unknown data number/alias: '" + value + "', defaulting to " + defaultData);
                             }
                         }
+                    } else {
+                        data = dataValue.shortValue();
                     }
 
                     if (data == -1) {
@@ -387,7 +387,9 @@ public class Tools {
                     if (split.length > 1) {
                         value = split[1].trim();
 
-                        if (!value.equals("max")) {
+                        if (value.equals("max")) {
+                            level = enchant.getMaxLevel();
+                        } else {
                             try {
                                 level = Integer.parseInt(value);
                             } catch (NumberFormatException e) {
@@ -396,8 +398,6 @@ public class Tools {
                                     continue;
                                 }
                             }
-                        } else {
-                            level = enchant.getMaxLevel();
                         }
                     }
 

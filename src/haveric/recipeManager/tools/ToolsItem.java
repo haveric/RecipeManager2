@@ -110,14 +110,14 @@ public class ToolsItem {
         if (itemData == null) {
             short data = item.getDurability();
 
-            if (data != 0) {
+            if (data == 0) {
+                itemData = name;
+            } else {
                 if (data == Vanilla.DATA_WILDCARD) {
                     itemData = name + ChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
                 } else {
                     itemData = name + ChatColor.GRAY + ":" + data;
                 }
-            } else {
-                itemData = name;
             }
         }
 

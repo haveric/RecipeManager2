@@ -148,7 +148,7 @@ public class BaseRecipe implements Flaggable {
             return true;
         }
 
-        if (obj == null || !(obj instanceof BaseRecipe)) {
+        if (!(obj instanceof BaseRecipe)) {
             return false;
         }
 

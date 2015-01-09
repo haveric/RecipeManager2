@@ -164,18 +164,18 @@ public class FlagWeather extends Flag {
         }
 
         World world = a.location().getWorld();
-        byte weather;
+        byte checkWeather;
         if (world.hasStorm()) {
             if (world.isThundering()) {
-                weather = Bit.THUNDER;
+                checkWeather = Bit.THUNDER;
             } else {
-                weather = Bit.DOWNFALL;
+                checkWeather = Bit.DOWNFALL;
             }
         } else {
-            weather = Bit.CLEAR;
+            checkWeather = Bit.CLEAR;
         }
 
-        if ((getWeather() & weather) != weather) {
+        if ((getWeather() & checkWeather) != checkWeather) {
             a.addReason(Messages.FLAG_WEATHER, failMessage, "{weather}", getWeatherString());
         }
     }

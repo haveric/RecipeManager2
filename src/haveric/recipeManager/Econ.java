@@ -84,7 +84,7 @@ public class Econ {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
                 money = economy.getBalance(player);
-            } catch (Exception e) {}
+            } catch (Exception e) { }
         }
 
         return money;
@@ -115,7 +115,7 @@ public class Econ {
             } else {
                 error = economy.withdrawPlayer(player, Math.abs(amount));
             }
-        } catch (Exception e) {}
+        } catch (Exception e) { }
 
         if (error != null && !error.transactionSuccess()) {
             Messages.info("<red>Economy error: " + error.errorMessage);

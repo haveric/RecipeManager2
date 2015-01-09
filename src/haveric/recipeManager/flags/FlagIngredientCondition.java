@@ -1062,9 +1062,7 @@ public class FlagIngredientCondition extends Flag {
 
                 DyeColor dye = Tools.parseEnum(value, DyeColor.values());
 
-                if (dye != null) {
-                    cond.setColor(dye.getColor(), null);
-                } else {
+                if (dye == null) {
                     String[] split = value.split(",", 3);
 
                     if (split.length != 3) {
@@ -1098,6 +1096,8 @@ public class FlagIngredientCondition extends Flag {
                             continue;
                         }
                     }
+                } else {
+                    cond.setColor(dye.getColor(), null);
                 }
             } else if (arg.startsWith("!name") || arg.startsWith("noname")) {
                 cond.noName = true;

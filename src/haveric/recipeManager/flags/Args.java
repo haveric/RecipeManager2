@@ -268,7 +268,7 @@ public class Args {
             try {
                 UUID uuid = UUIDFetcher.getUUIDOf(playerName);
                 setPlayer(Bukkit.getPlayer(uuid));
-            } catch (Exception e) {}
+            } catch (Exception e) { }
         }
 
         if (playerName == null && player != null) {

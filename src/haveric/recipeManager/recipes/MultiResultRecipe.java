@@ -101,7 +101,9 @@ public class MultiResultRecipe extends BaseRecipe {
         if (resultNum > 0) {
             ItemStack result = getFirstResult();
 
-            if (result != null) {
+            if (result == null) {
+                s.append("nothing");
+            } else {
                 if (result.getAmount() > 1) {
                     s.append('x').append(result.getAmount()).append(' ');
                 }
@@ -115,8 +117,6 @@ public class MultiResultRecipe extends BaseRecipe {
                 if (resultNum > 1) {
                     s.append(" +").append(resultNum - 1).append(" more");
                 }
-            } else {
-                s.append("nothing");
             }
         } else {
             s.append("no result");

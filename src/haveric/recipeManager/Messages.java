@@ -511,6 +511,7 @@ public enum Messages {
     }
 
     public static void error(CommandSender sender, Throwable thrown, String message) {
+        String reportMessage = "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
         try {
             if (message == null) {
                 message = "<red>" + thrown.getMessage();
@@ -523,7 +524,7 @@ public enum Messages {
 
             thrown.printStackTrace();
 
-            message = ChatColor.LIGHT_PURPLE + "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
+            message = ChatColor.LIGHT_PURPLE + reportMessage;
             info(message);
             notifyDebuggers(message);
         } catch (Throwable e) {
@@ -534,7 +535,7 @@ public enum Messages {
             System.out.print("Error printing error:");
             e.printStackTrace();
 
-            System.out.print("If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/");
+            System.out.print(reportMessage);
         }
     }
 

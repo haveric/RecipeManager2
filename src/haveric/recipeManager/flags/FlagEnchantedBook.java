@@ -103,15 +103,15 @@ public class FlagEnchantedBook extends Flag {
         if (split.length > 1) {
             value = split[1].trim();
 
-            if (!value.equalsIgnoreCase("max")) {
+            if (value.equalsIgnoreCase("max")) {
+                level = enchant.getMaxLevel();
+            } else {
                 try {
                     level = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
                     return false;
                 }
-            } else {
-                level = enchant.getMaxLevel();
             }
         }
 

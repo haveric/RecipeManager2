@@ -205,9 +205,7 @@ public class FlagExplode extends Flag {
                 distanceSquared *= distanceSquared;
 
                 if (isNoDamageSelf()) {
-                    if (!a.hasPlayer()) {
-                        a.addCustomReason("Can't protect crafter, no player!");
-                    } else {
+                    if (a.hasPlayer()) {
                         Player p = a.player();
                         Location l = p.getLocation();
 
@@ -216,6 +214,8 @@ public class FlagExplode extends Flag {
                             p.setNoDamageTicks(p.getMaximumNoDamageTicks());
                             p.setLastDamage(Integer.MAX_VALUE);
                         }
+                    } else {
+                        a.addCustomReason("Can't protect crafter, no player!");
                     }
                 } else {
                     for (LivingEntity e : world.getLivingEntities()) {
