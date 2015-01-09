@@ -12,6 +12,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Can now use saddle, horse, horsecolor, horsestyle, jumpstrength, haschest as well as a few other animal options
 * @FlagSummon: Added adult option for animals and villagers (works similar to baby, but forces creature to be an adult)
 * @FlagSummon: Added support for Rabbits
+* @FlagSummon: Added elder option for Guardians
 * Updated bukkit doc links to spigot's versions for updated 1.8 stuff
 
 === v2.3 ===

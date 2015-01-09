@@ -22,6 +22,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Guardian;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
@@ -84,6 +85,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
             String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
             String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
+            String.format(argFormat, "elder", "sets a guardian as an elder"),
             String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
             String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."),
             String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
@@ -174,6 +176,7 @@ public class FlagSummon extends Flag {
         private boolean hasChest = false;
         private Float jumpStrength = null;
         private Rabbit.Type rabbit = null;
+        private boolean elder = false;
 
         public Customization(EntityType newType) {
             type = newType;
@@ -221,6 +224,7 @@ public class FlagSummon extends Flag {
             hasChest = c.hasChest;
             jumpStrength = c.jumpStrength;
             rabbit = c.rabbit;
+            elder = c.elder;
         }
 
         @Override
@@ -448,6 +452,11 @@ public class FlagSummon extends Flag {
                 if (rabbit != null && ent instanceof Rabbit) {
                     Rabbit npc = (Rabbit) ent;
                     npc.setRabbitType(rabbit);
+                }
+
+                if (elder && ent instanceof Guardian) {
+                    Guardian npc = (Guardian) ent;
+                    npc.setElder(true);
                 }
 
                 if (target && ent instanceof Creature) {
@@ -878,6 +887,14 @@ public class FlagSummon extends Flag {
 
         public Rabbit.Type getRabbit() {
             return rabbit;
+        }
+
+        public void setElder(boolean newElder) {
+            elder = newElder;
+        }
+
+        public boolean isElder() {
+            return elder;
         }
     }
 
@@ -1415,6 +1432,13 @@ public class FlagSummon extends Flag {
                     }
                 } else if (value.equals("haschest")) {
                     c.setHasChest(true);
+                } else if (value.equals("elder")) {
+                    if (type != EntityType.GUARDIAN) {
+                        ErrorReporter.warning("Flag " + getType() + " has 'elder' on non-guardian creature!");
+                        continue;
+                    }
+
+                    c.setPoweredCreeper(true);
                 } else {
                     ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
                 }
