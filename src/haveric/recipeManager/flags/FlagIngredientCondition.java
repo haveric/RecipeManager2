@@ -48,13 +48,20 @@ public class FlagIngredientCondition extends Flag {
         "Conditions must be separated by | and can be specified in any order.",
         "Condition list:",
         "",
-        "  data <[!][&]num or min-max>, [...]",
+        "  data <[!][&]num or min-max or all or vanilla or damaged or new>, [...]",
         "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
         "    One number is required, you can add another number separated by - character to make a number range.",
         "    Additionally instead of the number you can specify 'item:data' to use the named data value.",
+        "    Special data values:",
+        "      all: Flips the data check to allow all data values instead of none initially.",
+        "      vanilla: Only allow data values within the vanilla ranges.",
+        "      new: Equivalent to 0, or an undamaged item.",
+        "      damaged: On weapons and armor, this is everything within vanilla limits that is considered a damaged item.",
         "    Prefixing with '&' would make a bitwise operation on the data value.",
         "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
         "    Optionally you can add more data conditions separated by ',' that the ingredient must match against one to proceed.",
+        "    Defaults to the equivalent of !all.",
+
         "",
         "  enchant <name> [[!]num or min-max], [...]",
         "    Condition for applied enchantments (not stored in books).",
@@ -108,7 +115,10 @@ public class FlagIngredientCondition extends Flag {
         "{flag} wood | data 1-3, 39, 100 // this overwrites the data condition to the previous one.",
         "{flag} dirt | amount 64 // needs a full stack of dirt to work.",
         "{flag} iron_sword | data 0-25 // only accepts iron swords that have 0 to 25 damage.",
-        "{flag} wool | data !wool:red // no red wool",
+        "{flag} wool | data vanilla, !wool:red // no red wool",
+        "{flag} wool | data all, !vanilla // only modded data values",
+        "{flag} iron_sword | data new // Only allow undamaged iron swords",
+        "{flag} gold_sword | data damaged // Only allow damaged gold swords",
         "{flag} potion | data &16384, !&64 // checks if potion is splash and NOT extended (see http://www.minecraftwiki.net/wiki/Data_value#Potions)",
         "{flag} diamond_helmet | enchant fire_resistance 1-3 | enchant thorns | data 0, 5, 50-100 // makes ingredient require 2 enchantments and some specific data values.",
         "{flag} stick | nometa // makes ingredient require a vanilla stick.",
@@ -136,6 +146,7 @@ public class FlagIngredientCondition extends Flag {
         private boolean noLore = false;
         private boolean noEnchant = false;
         private boolean noColor = false;
+        private boolean allSet = false;
 
         // TODO mark
         // private boolean extinctRecipeBook;
@@ -173,6 +184,8 @@ public class FlagIngredientCondition extends Flag {
             noLore = original.noLore;
             noEnchant = original.noEnchant;
             noColor = original.noColor;
+
+            allSet = original.allSet;
         }
 
         @Override
@@ -378,7 +391,7 @@ public class FlagIngredientCondition extends Flag {
 
                 // If value not found return false otherwise return if value should be there
                 if (is == null) {
-                    return false;
+                    return allSet;
                 }
 
                 return is.booleanValue();
@@ -929,7 +942,18 @@ public class FlagIngredientCondition extends Flag {
                         val = val.substring(1).trim();
                     }
 
-                    if (val.matches("(.*):(.*)")) {
+                    short maxDurability = item.getType().getMaxDurability();
+                    if (val.equals("all")) {
+                        cond.allSet = !not;
+                    } else if (val.equals("vanilla")) {
+                        cond.addDataValueRange((short) 0, maxDurability, !not);
+                    } else if (val.equals("damaged")) {
+                        if ((maxDurability - 1) > 0) {
+                            cond.addDataValueRange((short) 1, maxDurability, !not);
+                        }
+                    } else if (val.equals("new")) {
+                        cond.addDataValueRange((short) 0, (short) 0, !not);
+                    } else if (val.matches("(.*):(.*)")) {
                         ItemStack match = Tools.parseItem(val, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
                         if (match != null && match.getDurability() != Vanilla.DATA_WILDCARD) {
