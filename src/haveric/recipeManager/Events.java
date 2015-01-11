@@ -183,7 +183,7 @@ public class Events implements Listener {
 
             CommandSender sender;
             if (event.getView() != null && event.getView().getPlayer() instanceof Player) {
-                sender = (Player) event.getView().getPlayer();
+                sender = event.getView().getPlayer();
             } else {
                 sender = null;
             }
@@ -384,7 +384,7 @@ public class Events implements Listener {
             event.setCancelled(true);
             CommandSender sender;
             if (event.getView() != null && event.getView().getPlayer() instanceof Player) {
-                sender = (Player) event.getView().getPlayer();
+                sender = event.getView().getPlayer();
             } else {
                 sender = null;
             }
@@ -494,7 +494,7 @@ public class Events implements Listener {
 
             event.setCurrentItem(result);
 
-            if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
+            if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
                 recipe.subtractIngredients(inv, result, true);
             }
         }
@@ -607,7 +607,7 @@ public class Events implements Listener {
             event.setCancelled(true);
             CommandSender sender;
             if (event.getWhoClicked() instanceof Player) {
-                sender = (Player) event.getWhoClicked();
+                sender = event.getWhoClicked();
             } else {
                 sender = null;
             }
