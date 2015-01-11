@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class Econ {
-    private static Economy economy = null;
+    private Economy economy = null;
 
     private static Econ instance;
 
@@ -33,12 +33,13 @@ public class Econ {
                 economy = newEconomy;
                 Messages.log("Vault detected and connected to " + economy.getName() + ", economy features available.");
             } else {
+                economy = null;
                 Messages.log("Vault detected but does not have an economy plugin connected, economy features are not available.");
             }
         }
     }
 
-    protected static void clean() {
+    protected void clean() {
         economy = null;
     }
 

@@ -227,7 +227,6 @@ public class RecipeManager extends JavaPlugin {
             Players.clean();
             Vanilla.clean();
 
-            Econ.clean();
 
             recipes.clean();
             recipes = null;
@@ -240,7 +239,9 @@ public class RecipeManager extends JavaPlugin {
 
             Settings.clean();
 
+            Econ.getInstance().clean();
             Perms.getInstance().clean();
+
 
             if (metrics != null) {
                 metrics.stop();
