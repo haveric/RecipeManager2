@@ -27,6 +27,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Biome;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -449,6 +450,14 @@ public class Files {
         if (fileExists(FILE_INFO_NAMES, overwrite)) {
             return;
         }
+        String serverVersion;
+        try {
+            @SuppressWarnings("unused")
+            PatternType[] patterns = PatternType.values();
+            serverVersion = "1.8";
+        } catch (NoClassDefFoundError e) {
+            serverVersion = "1.7";
+        }
 
         StringBuilder s = new StringBuilder(24000);
 
@@ -471,6 +480,11 @@ public class Files {
         s.append(NL).append("- <a href='#entitytype'><b>ENTITY TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#dyecolor'><b>DYE COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
+
+        if (serverVersion.equals("1.8")) {
+            s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
+        }
+
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<hr>");
@@ -647,6 +661,18 @@ public class Files {
 
         for (ChatColor c : ChatColor.values()) {
             s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
+        }
+
+        if (serverVersion.equals("1.8")) {
+            s.append(NL);
+            s.append(NL);
+            s.append(NL).append("<a name='bannerpattern'></a><a href='#contents'>^ Contents</a><h3>BANNER PATTERN LIST</h3>");
+            s.append("<a href='" + BUKKIT_DOCS + "block/banner/PatternType.html'>BukkitAPI / PatternType</a>");
+            s.append(NL);
+
+            for (PatternType p : PatternType.values()) {
+                s.append(NL).append(' ').append(p.name());
+            }
         }
 
         s.append(NL);
