@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* Fixed multi-result recipes only showing the first item.
+
 === v2.3.1 ===
 * Added @temperature flag
 ** @temperature < 0 // Must be in an icy biome

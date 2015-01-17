@@ -154,7 +154,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             } else if (secretNum == 1 && displayNum == 0) {
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
             }
-        } else if (unavailableNum == failedLores) {
+        } else if (displayNum == 1 && failedLores > 0 && unavailableNum == failedLores) {
             return ToolsItem.create(displayResult.getType(), 0, 0, displayResult.getItemMeta().getDisplayName(), lore);
         }
 
