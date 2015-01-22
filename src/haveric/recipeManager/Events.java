@@ -949,6 +949,8 @@ public class Events implements Listener {
         short cookTime = 0;
 
         Furnace furnace = (Furnace) event.getBlock().getState();
+        short currentCookTime = furnace.getCookTime();
+
         FurnaceInventory inventory = furnace.getInventory();
 
         Location furnaceLocation = furnace.getLocation();
@@ -997,7 +999,7 @@ public class Events implements Listener {
             event.setBurnTime(burnTime);
         }
 
-        if (recipe != null) {
+        if (recipe != null && currentCookTime < cookTime) {
             furnace.setCookTime(cookTime);
         }
     }
