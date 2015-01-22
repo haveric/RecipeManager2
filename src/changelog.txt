@@ -3,6 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
 * Fixed multi-result recipes only showing the first item.
+* Only perform UUID lookups when actually needed (Huge performance improvement, especially for furnaces)
 
 === v2.3.1 ===
 * Added @temperature flag

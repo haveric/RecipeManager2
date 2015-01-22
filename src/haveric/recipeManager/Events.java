@@ -13,6 +13,7 @@ import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -572,11 +573,14 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void playerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        String name = player.getName();
 
         Players.remove(player);
         Workbenches.remove(player);
-        Recipes.recipeResetResult(player.getName());
-        Messages.clearPlayer(player.getName());
+        Recipes.recipeResetResult(name);
+        Messages.clearPlayer(name);
+
+        UUIDFetcher.removePlayerFromCache(name);
     }
 
     /*
@@ -943,9 +947,12 @@ public class Events implements Listener {
     public void furnaceBurn(FurnaceBurnEvent event) {
         short burnTime = 0;
         short cookTime = 0;
+
         Furnace furnace = (Furnace) event.getBlock().getState();
         FurnaceInventory inventory = furnace.getInventory();
-        FurnaceData data = Furnaces.get(furnace.getLocation());
+
+        Location furnaceLocation = furnace.getLocation();
+        FurnaceData data = Furnaces.get(furnaceLocation);
 
         ItemStack fuel = event.getFuel();
         FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
@@ -955,7 +962,7 @@ public class Events implements Listener {
                 event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
             if (!furnaceHandleFlaggable(fuelRecipe, a, true)) {
                 event.setCancelled(true);
@@ -977,7 +984,7 @@ public class Events implements Listener {
                 event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
             if (!furnaceHandleFlaggable(recipe, a, true)) {
                 event.setCancelled(true);
@@ -1328,6 +1335,7 @@ public class Events implements Listener {
     public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        UUIDFetcher.addPlayerToCache(player.getName(), player.getUniqueId());
         Players.addJoined(player);
 
         if (Settings.getInstance().getUpdateCheckEnabled() && player.hasPermission("recipemanager.command.rmupdate")) {
