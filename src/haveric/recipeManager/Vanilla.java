@@ -55,7 +55,7 @@ public class Vanilla {
      * Default time a furnace recipe burns for.<br>
      * This is a game constant.
      */
-    public static final float FURNACE_RECIPE_TIME = 9.25f;
+    public static final float FURNACE_RECIPE_TIME = 10f;
 
     /**
      * The data value wildcard for recipe ingredients.<br>
