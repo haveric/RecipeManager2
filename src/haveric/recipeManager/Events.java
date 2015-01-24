@@ -1027,19 +1027,10 @@ public class Events implements Listener {
             event.setResult(event.getResult());
 
             if (!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true))) {
-                // Frozen?
-                /*
-                if (a.hasPlayer()) {
-                    Messages.SMELT_FROZEN.print(a.player(), null, "{location}", Tools.printLocation(a.location()));
-                }
-
-                data.setFrozen(true);
-                event.setCancelled(true);
-                */
+                event.setResult(new ItemStack(Material.AIR));
             } else {
                 if (a.result() == null || a.result().getType() == Material.AIR) {
-                    recipe.subtractIngredient(inventory, false);
-                    event.setCancelled(true);
+                    event.setResult(new ItemStack(Material.AIR));
                 } else {
                     event.setResult(a.result().toItemStack());
                 }
