@@ -66,6 +66,13 @@ public class ItemResult extends ItemStack implements Flaggable {
         setItemMeta(item.getItemMeta());
     }
 
+    public ItemStack toItemStack() {
+        ItemStack converted = new ItemStack(getType(), getAmount(), getDurability());
+        converted.setItemMeta(getItemMeta());
+
+        return converted;
+    }
+
     public void setChance(float newChance) {
         chance = newChance;
     }

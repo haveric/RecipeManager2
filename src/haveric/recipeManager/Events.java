@@ -1041,7 +1041,7 @@ public class Events implements Listener {
                     recipe.subtractIngredient(inventory, false);
                     event.setCancelled(true);
                 } else {
-                    event.setResult(result);
+                    event.setResult(a.result().toItemStack());
                 }
             }
 
