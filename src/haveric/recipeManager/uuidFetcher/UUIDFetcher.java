@@ -5,9 +5,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -17,13 +18,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.google.common.collect.ImmutableList;
-
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private final JSONParser jsonParser = new JSONParser();
-    private final List<String> names;
+    private final ArrayList<String> names;
     private final boolean rateLimiting;
 
     private static HashMap<String, UUID> lookupCache;
@@ -46,12 +45,12 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         }
     }
 
-    public UUIDFetcher(List<String> newNames, boolean newRateLimiting) {
-        names = ImmutableList.copyOf(newNames);
+    public UUIDFetcher(ArrayList<String> newNames, boolean newRateLimiting) {
+        names = newNames;
         rateLimiting = newRateLimiting;
     }
 
-    public UUIDFetcher(List<String> newNames) {
+    public UUIDFetcher(ArrayList<String> newNames) {
         this(newNames, true);
     }
 
@@ -62,13 +61,13 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
         Map<String, UUID> uuidMap = new HashMap<String, UUID>();
 
-        for (int i = 0; i < names.size(); i++) {
-            String name = names.get(i);
+        Iterator<String> iter = names.iterator();
+        while (iter.hasNext()) {
+            String name = iter.next();
 
             if (lookupCache.containsKey(name)) {
                 uuidMap.put(name, lookupCache.get(name));
-                names.remove(i);
-                i--;
+                iter.remove();
             }
         }
 
@@ -134,6 +133,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public static UUID getUUIDOf(String name) throws Exception {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name);
+        return new UUIDFetcher(new ArrayList<String>(Arrays.asList(name))).call().get(name);
     }
 }
