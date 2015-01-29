@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 === Coming soon ===
 * Fixed a UUID issue which caused issues with furnace/fuel recipes
 * Fixed doubled up lores for smelting recipes
+* @Broadcast: Fixed colors not being set
 
 === v2.3.2 ===
 * Fixed multi-result recipes only showing the first item

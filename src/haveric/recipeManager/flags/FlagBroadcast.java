@@ -1,5 +1,7 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.tools.Tools;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 
@@ -92,10 +94,11 @@ public class FlagBroadcast extends Flag {
     protected void onCrafted(Args a) {
         Validate.notNull(message);
 
+        String parsedMessage = Tools.parseColors(a.parseVariables(message), false);
         if (permission == null) {
-            Bukkit.broadcastMessage(a.parseVariables(message));
+            Bukkit.broadcastMessage(parsedMessage);
         } else {
-            Bukkit.broadcast(a.parseVariables(message), permission);
+            Bukkit.broadcast(parsedMessage, permission);
         }
     }
 }
