@@ -1032,7 +1032,7 @@ public class Events implements Listener {
                 if (a.result() == null || a.result().getType() == Material.AIR) {
                     event.setResult(new ItemStack(Material.AIR));
                 } else {
-                    event.setResult(a.result().toItemStack());
+                    event.setResult(result.toItemStack());
                 }
             }
 
