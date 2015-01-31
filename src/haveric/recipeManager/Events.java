@@ -688,7 +688,7 @@ public class Events implements Listener {
                 }
                 break;
             case 1: // FUEL slot
-                furnaceModifySlot(furnace, inventory, player, slot, cursor);
+                //furnaceModifySlot(furnace, inventory, player, slot, cursor);
                 break;
 
             case 2: // RESULT slot
@@ -759,7 +759,7 @@ public class Events implements Listener {
 
     private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
         // Furnace is burning
-        if (furnace.getBurnTime() > 0) {
+        if (furnace.getType() == Material.BURNING_FURNACE) {
             ItemStack itemToTest;
             if (slot == 0) {
                 itemToTest = item;
