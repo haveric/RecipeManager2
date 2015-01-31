@@ -654,7 +654,7 @@ public class Events implements Listener {
 
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
-                                if (furnaceHandleFlaggable(recipe, a, true)) {
+                                if (furnaceHandleFlaggable(recipe, a, true) && isRecipeSameAsResult(a)) {
                                     furnace.setCookTime((short) (200 - recipe.getCookTicks()));
                                 } else {
                                     furnace.setCookTime((short) 0);
@@ -675,7 +675,7 @@ public class Events implements Listener {
 
                             Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
-                            if (furnaceHandleFlaggable(recipe, a, true)) {
+                            if (furnaceHandleFlaggable(recipe, a, true) && isRecipeSameAsResult(a)) {
                                 furnace.setCookTime((short) (200 - recipe.getCookTicks()));
                             } else {
                                 furnace.setCookTime((short) 0);
@@ -888,24 +888,26 @@ public class Events implements Listener {
         return true;
     }
 
-    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft) {
-        if (flaggable == null) {
-            return false;
-        }
-
+    private boolean isRecipeSameAsResult(Args a) {
+        boolean isSame = false;
         ItemStack smelted = a.inventory().getItem(2);
 
         if (smelted != null && smelted.getType() != Material.AIR) {
             ItemResult result = a.result();
             if (result != null) {
-                boolean isSame = ToolsItem.isSameItem(smelted, result, true);
-
-                if (!isSame) {
-                    return false;
-                }
+                isSame = ToolsItem.isSameItem(smelted, result, true);
             }
+        } else {
+            isSame = true;
         }
 
+        return isSame;
+    }
+
+    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft) {
+        if (flaggable == null) {
+            return false;
+        }
 
         String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
 
@@ -985,9 +987,16 @@ public class Events implements Listener {
                 event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+            ItemResult result = recipe.getResult(a);
 
-            if (!furnaceHandleFlaggable(recipe, a, true)) {
+            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, true);
+            boolean resultFlaggable = false;
+            if (result != null) {
+                resultFlaggable = furnaceHandleFlaggable(result, a, true);
+            }
+
+            if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
                 event.setCancelled(true);
             }
 
@@ -1026,7 +1035,13 @@ public class Events implements Listener {
 
             event.setResult(event.getResult());
 
-            if (!furnaceHandleFlaggable(recipe, a, true) || (result != null && !furnaceHandleFlaggable(result, a, true))) {
+            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, true);
+            boolean resultFlaggable = false;
+            if (result != null) {
+                resultFlaggable = furnaceHandleFlaggable(result, a, true);
+            }
+
+            if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
                 event.setResult(new ItemStack(Material.AIR));
             } else {
                 if (a.result() == null || a.result().getType() == Material.AIR) {
