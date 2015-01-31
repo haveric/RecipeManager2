@@ -598,14 +598,10 @@ public class Events implements Listener {
                 if (holder instanceof Furnace) {
                     HumanEntity ent = event.getWhoClicked();
 
-                    if (!(ent instanceof Player)) {
-                        return;
+                    if (ent instanceof Player) {
+                        furnaceClick(event, (Furnace) holder, (Player) ent);
                     }
-
-                    furnaceClick(event, (Furnace) holder, (Player) ent);
                 }
-
-                return;
             }
         } catch (Throwable e) {
             event.setCancelled(true);
@@ -673,12 +669,19 @@ public class Events implements Listener {
 
                             FurnaceData data = Furnaces.get(furnace.getLocation());
 
-                            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                            ItemStack recipeFuel = recipe.getFuel();
 
-                            if (furnaceHandleFlaggable(recipe, a, true) && isRecipeSameAsResult(a)) {
-                                furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, data.getFuel(), true)) {
+                                event.setCancelled(true);
                             } else {
-                                furnace.setCookTime((short) 0);
+                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                ItemResult result = recipe.getResult(a);
+
+                                if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                    furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                                } else {
+                                    furnace.setCookTime((short) 0);
+                                }
                             }
                         }
                     }
@@ -958,6 +961,7 @@ public class Events implements Listener {
         FurnaceData data = Furnaces.get(furnaceLocation);
 
         ItemStack fuel = event.getFuel();
+
         FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
 
         if (fuelRecipe != null) {
@@ -974,6 +978,8 @@ public class Events implements Listener {
             burnTime = (short) fuelRecipe.getBurnTicks();
         }
 
+        data.setFuel(fuel);
+
         ItemStack ingredient = inventory.getSmelting();
         SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
 
@@ -983,6 +989,7 @@ public class Events implements Listener {
             }
 
             ItemStack recipeFuel = recipe.getFuel();
+
             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                 event.setCancelled(true);
             }
