@@ -1,5 +1,3 @@
-
-
 $(function() {
     String.prototype.startsWith = function(str) 
     {return (this.match("^"+str)==str)}
@@ -12,16 +10,20 @@ $(function() {
             var $this = $(this);
             var $parent = $this.parents(".inventory");
             var $detail = $this.find(".detail").html();
+            
             if ($detail && $detail != "") {
                 $itemToolTipInn.html($detail);
                 $itemToolTip.addClass("active");
                 updateTooltipPosition(e.pageX, e.pageY, $parent);
             }
-            
+            $this.addClass("tooltip");
         },
         mouseleave: function() {
+            var $this = $(this);
+            
             $itemToolTip.removeClass("active");
             $itemToolTip.show().hide();
+            $this.removeClass("tooltip");
         },
         mousemove: function(e) {
             var $parent = $(this).parents(".inventory");
@@ -38,7 +40,7 @@ $(function() {
             var customName = $this.find(".customTitle").text();
             
             $("#defaultTitle").text(name);
-            $("#customTitle").text(customName);
+            $("#customTitle").val(customName);
             
         }
     });
@@ -70,6 +72,28 @@ $(function() {
                 revertDuration: 0
             });
         }
+    });
+    
+    $("#customTitle").on("input", function() {
+        var $slotToUpdate = $(".slot.selected");
+        
+        var customTitle = $(this).val();
+        customTitle = parseColors(customTitle);
+        
+        var $slotCustomTitle = $slotToUpdate.find(".customTitle");
+        if (customTitle == "") {
+            $slotCustomTitle.remove();
+        } else {
+            if ($slotCustomTitle.length <= 0) {
+                $slotToUpdate.find(".title").before("<span class='line customTitle'></span>");
+                
+                $slotCustomTitle = $slotToUpdate.find(".customTitle");
+            }
+            
+            $slotCustomTitle.text(customTitle);
+        }
+        
+        updateActiveTooltip();
     });
     
     $.getJSON("http://api.wurstmineberg.de/minecraft/items/all.json", function(items) {
@@ -126,5 +150,15 @@ $(function() {
             left: toolTipLeft,
             top: mouseY - $inventory.offset().top - 30
         });
+    }
+    
+    function updateActiveTooltip() {
+        if ($itemToolTip.hasClass("active")) {
+            var $detail = $(".slot.tooltip").find(".detail").html();
+            $itemToolTipInn.html($detail);
+        }
+    }
+    function parseColors(string) {
+        return string;
     }
 });
