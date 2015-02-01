@@ -2,8 +2,10 @@ $(function() {
     String.prototype.startsWith = function(str) 
     {return (this.match("^"+str)==str)}
 
+    var self = this;
     var $itemToolTip = $("#itemTooltip");
     var $itemToolTipInn = $itemToolTip.find(".inn");
+    var searchTimeout;
     
     $('.inventory .slot').on({
         mouseenter: function(e) {
@@ -107,6 +109,23 @@ $(function() {
         updateActiveTooltip();
     });
     
+    $("#searchInput").on("input", function() {
+        var searchTerm = $(this).val().toLowerCase();
+        
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function () {
+            $("#search-items .item").each(function() {
+                var itemText = $(this).text().toLowerCase();
+
+                if (itemText.indexOf(searchTerm) > -1) {
+                    $(this).removeClass("hidden");
+                } else {
+                    $(this).addClass("hidden");
+                }
+            });
+        }, 150);
+    });
+    
     $.getJSON("http://api.wurstmineberg.de/minecraft/items/all.json", function(items) {
         var searchHtml = "";
 
@@ -131,9 +150,9 @@ $(function() {
             searchHtml += '</div></div>';
         });
         
-        $(".search").html(searchHtml);
+        $("#search-items").html(searchHtml);
         
-        $(".search .item").draggable({
+        $("#search-items .item").draggable({
             helper: "clone",
             appendTo: ".container",
             zIndex: 100,

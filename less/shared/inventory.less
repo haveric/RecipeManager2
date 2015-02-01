@@ -132,6 +132,33 @@
         .detail {
             display: none;
         }
+        
+        @-webkit-keyframes animatedBackground {
+            from { background-position: 200% 0%; }
+            to { background-position: 0% 200%; }
+        }
+        
+        @keyframes animatedBackground {
+            from { background-position: 200% 0; }
+            to { background-position: 0% 0; }
+        }
+        /* Experimental enchantment animation
+        &.enchanted {
+            img {
+                background-blend-mode: screen;
+                background-color: #8525ff;
+                background-image: url("http://assets.wurstmineberg.de/img/grid/goldapple.png"), url("../../img/app/items/enchanted_item_glint.png");
+                -webkit-animation: animatedBackground 4s linear infinite;
+                animation: animatedBackground 4s linear infinite;
+                -webkit-background-composite: "destination-out";
+                background-composite: "destination-out";
+                
+                -webkit-mask-image: url("http://assets.wurstmineberg.de/img/grid/goldapple.png");
+                -moz-mask-image: url("http://assets.wurstmineberg.de/img/grid/goldapple.png");
+                mask-image: url("http://assets.wurstmineberg.de/img/grid/goldapple.png");
+            }
+        }
+        */
     }
     
     .amount {
@@ -260,9 +287,15 @@
     float: left;
 }
 
-.search {
+#search {
     width: 30%;
-    float: left;
+    float: right;
+    
+    .item {
+        &.hidden {
+            display: none;
+        }
+    }
 }
 
 #editItem {
