@@ -174,7 +174,7 @@ $(function() {
         var parsedString = "";
         var split = string.split("&");
         
-        var color = "black";
+        var color = "white";
         var bold = "";
         var underline = "";
         var obfuscated = "";
@@ -188,32 +188,41 @@ $(function() {
             var colorCode = getColorCode(splitToCheck);
             if (i == 0) {
                 parsedString += splitToCheck;
-            } else if (colorCode == "") {
-                parsedString += "&" + splitToCheck;
             } else {
-                if (colorCode == "reset") {
-                    color = "white";
-                    bold = "";
-                    underline = "";
-                    obfuscated = "";
-                    strikethrough = "";
-                    italic = "";
-                } else if (colorCode == "bold") {
-                    bold = " bold";
-                } else if (colorCode == "underline") {
-                    underline = " underline";
-                } else if (colorCode == "obfuscated") {
-                    obfuscated = " obfuscated";
-                } else if (colorCode == "strikethrough") {
-                    strikethrough = " strikethrough";
-                } else if (colorCode == "italic") {
-                    italic = " italic";
+                var actualText = "";
+                if (colorCode == "") {
+                    actualText = "&" + splitToCheck;
                 } else {
-                    color = colorCode;
+                    actualText = splitToCheck.substring(1);
+                    if (colorCode == "reset") {
+                        color = "white";
+                        bold = "";
+                        underline = "";
+                        obfuscated = "";
+                        strikethrough = "";
+                        italic = " noitalic";
+                    } else if (colorCode == "bold") {
+                        bold = " bold";
+                    } else if (colorCode == "underline") {
+                        underline = " underline";
+                    } else if (colorCode == "obfuscated") {
+                        obfuscated = " obfuscated";
+                    } else if (colorCode == "strikethrough") {
+                        strikethrough = " strikethrough";
+                    } else if (colorCode == "italic") {
+                        italic = " italic";
+                    } else {
+                        color = colorCode;
+                        bold = "";
+                        underline = "";
+                        obfuscated = "";
+                        strikethrough = "";
+                        italic = " noitalic";
+                    }
                 }
                 
                 
-                parsedString += "<span class='color-" + colorCode + bold + underline + obfuscated + italic + "'><a class='" + strikethrough + "'>" + splitToCheck.substring(1) + "</a></span>";
+                parsedString += "<span class='color-" + color + bold + underline + obfuscated + italic + "'><a class='" + strikethrough + "'>" + actualText + "</a></span>";
             }
         }
         
