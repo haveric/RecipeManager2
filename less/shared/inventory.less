@@ -77,8 +77,14 @@
                 .textShadow(#3f3f15);
             }
             
-            &.customTitle + .title {
-                display: none;
+            &.customTitle {
+                & + .title {
+                    display: none;
+                }
+                
+                .original {
+                    display: none;
+                }
             }
         }
     }
@@ -135,6 +141,102 @@
         font-size: 16px;
         line-height: 16px;
         cursor: default;
+    }
+    
+    .color-black {
+        color: #000;
+        .textShadow(#000);
+    }
+    
+    .color-darkBlue {
+        color: #00a;
+        .textShadow(#00002a);
+    }
+    
+    .color-darkGreen {
+        color: #0a0;
+        .textShadow(#002a00);
+    }
+    
+    .color-darkAqua {
+        color: #0aa;
+        .textShadow(#002a2a);
+    }
+    
+    .color-darkRed {
+        color: #a00;
+        .textShadow(#2a0000);
+    }
+    
+    .color-darkPurple {
+        color: #a0a;
+        .textShadow(#2a002a);
+    }
+    
+    .color-gold {
+        color: #fa0;
+        .textShadow(#2a2a00);
+    }
+    
+    .color-gray {
+        color: #aaa;
+        .textShadow(#2a2a2a);
+    }
+    
+    .color-darkGray {
+        color: #555;
+        .textShadow(#151515);
+    }
+    
+    .color-blue {
+        color: #55f;
+        .textShadow(#15153f);
+    }
+    
+    .color-green {
+        color: #5f5;
+        .textShadow(#153f15);
+    }
+    
+    .color-aqua {
+        color: #5ff;
+        .textShadow(#153f3f);
+    }
+    
+    .color-red {
+        color: #f55;
+        .textShadow(#3f1515);
+    }
+    
+    .color-lightPurple {
+        color: #f5f;
+        .textShadow(#3f153f);
+    }
+    
+    .color-yellow {
+        color: #ff5;
+        .textShadow(#3f3f15);
+    }
+    
+    .color-white {
+        color: #fff;
+        .textShadow(#3f3f3f);
+    }
+    
+    .bold {
+        font-weight: bold;
+    }
+    
+    .strikethrough {
+        text-decoration: line-through;
+    }
+    
+    .underline {
+        text-decoration: underline;
+    }
+    
+    .italic {
+        font-style: italic;
     }
 }
 

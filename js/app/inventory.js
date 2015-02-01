@@ -37,7 +37,7 @@ $(function() {
             $this.addClass("selected");
             
             var name = $this.find(".title").text();
-            var customName = $this.find(".customTitle").text();
+            var customName = $this.find(".customTitle .original").text();
             
             $("#defaultTitle").text(name);
             $("#customTitle").val(customName);
@@ -78,6 +78,8 @@ $(function() {
         var $slotToUpdate = $(".slot.selected");
         
         var customTitle = $(this).val();
+        var originalTitle = customTitle;
+        
         customTitle = parseColors(customTitle);
         
         var $slotCustomTitle = $slotToUpdate.find(".customTitle");
@@ -90,8 +92,17 @@ $(function() {
                 $slotCustomTitle = $slotToUpdate.find(".customTitle");
             }
             
-            $slotCustomTitle.text(customTitle);
+            $slotCustomTitle.html(customTitle);
         }
+        
+        var $originalTitle = $slotCustomTitle.find(".original");
+        if ($originalTitle.length <= 0) {
+            $slotCustomTitle.append("<span class='original'></span>");
+            
+            $originalTitle = $slotCustomTitle.find(".original");
+        }
+        
+        $originalTitle.text(originalTitle);
         
         updateActiveTooltip();
     });
@@ -158,7 +169,136 @@ $(function() {
             $itemToolTipInn.html($detail);
         }
     }
+    
     function parseColors(string) {
-        return string;
+        var parsedString = "";
+        var split = string.split("&");
+        
+        var color = "black";
+        var bold = "";
+        var underline = "";
+        var obfuscated = "";
+        var strikethrough = "";
+        var italic = "";
+        
+        
+        for (var i = 0; i < split.length; i++) {
+            var splitToCheck = split[i];
+            
+            var colorCode = getColorCode(splitToCheck);
+            if (i == 0) {
+                parsedString += splitToCheck;
+            } else if (colorCode == "") {
+                parsedString += "&" + splitToCheck;
+            } else {
+                if (colorCode == "reset") {
+                    color = "white";
+                    bold = "";
+                    underline = "";
+                    obfuscated = "";
+                    strikethrough = "";
+                    italic = "";
+                } else if (colorCode == "bold") {
+                    bold = " bold";
+                } else if (colorCode == "underline") {
+                    underline = " underline";
+                } else if (colorCode == "obfuscated") {
+                    obfuscated = " obfuscated";
+                } else if (colorCode == "strikethrough") {
+                    strikethrough = " strikethrough";
+                } else if (colorCode == "italic") {
+                    italic = " italic";
+                } else {
+                    color = colorCode;
+                }
+                
+                
+                parsedString += "<span class='color-" + colorCode + bold + underline + obfuscated + italic + "'><a class='" + strikethrough + "'>" + splitToCheck.substring(1) + "</a></span>";
+            }
+        }
+        
+        return parsedString;
+    }
+    
+    function getColorCode(string) {
+        var code = "";
+        if (string.length > 0) {
+            var char = string.charAt(0);
+            
+            switch(char) {
+                case '0':
+                    code = "black";
+                    break;
+                case '1':
+                    code = "darkBlue";
+                    break;
+                case '2':
+                    code = "darkGreen";
+                    break;
+                case '3':
+                    code = "darkAqua";
+                    break;
+                case '4':
+                    code = "darkRed";
+                    break;
+                case '5':
+                    code = "darkPurple";
+                    break;
+                case '6':
+                    code = "gold";
+                    break;
+                case '7':
+                    code = "gray";
+                    break;
+                case '8':
+                    code = "darkGray";
+                    break;
+                case '9':
+                    code = "blue";
+                    break;
+                case 'a':
+                    code = "green";
+                    break;
+                case 'b':
+                    code = "aqua";
+                    break;
+                case 'c':
+                    code = "red";
+                    break;
+                case 'd':
+                    code = "lightPurple";
+                    break;
+                case 'e':
+                    code = "yellow";
+                    break;
+                case 'f':
+                    code = "white";
+                    break;
+                case 'k':
+                    code = "obfuscated";
+                    break;
+                case 'l':
+                    code = "bold";
+                    break;
+                case 'm':
+                    code = "strikethrough";
+                    break;
+                case 'n':
+                    code = "underline";
+                    break;
+                case 'o':
+                    code = "italic";
+                    break;
+                case 'r':
+                    code = "reset";
+                    break;
+                default:
+                    code = "";
+                    break;
+            }
+            
+        }
+        
+        return code;
     }
 });
