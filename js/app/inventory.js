@@ -43,7 +43,6 @@ $(function() {
             
             $("#defaultTitle").text(name);
             $("#customTitle").val(customName);
-            
         }
     });
     $(".inventory .slot").draggable({
@@ -73,6 +72,8 @@ $(function() {
                 revert: true,
                 revertDuration: 0
             });
+            
+            updateOutput();
         }
     });
     
@@ -324,9 +325,52 @@ $(function() {
                     code = "";
                     break;
             }
-            
         }
         
         return code;
+    }
+    
+    function updateOutput() {
+        var $output = $("#recipeOutput");
+        var recipeType;
+        var recipe = "";
+        
+        var $inventory = $(".inventory.active");
+        if ($inventory.hasClass("crafting")) {
+            recipeType = "craft";
+        } else if ($inventory.hasClass("combine")) {
+            recipeType = "combine";
+        } else if ($inventory.hasClass("furnace")) {
+            recipeType = "smelt";
+        }
+        
+        recipe += recipeType + "\n";
+        
+        $inventory.find(".row").each(function() {
+            $(this).find(".slot").each(function(index) {
+                var $this = $(this);
+                var $title = $this.find(".title");
+                if ($title.length <= 0) {
+                    if (recipeType == "craft") {
+                        recipe += "air";
+                    }
+                } else {
+                    recipe += $title.text();
+                }
+                    
+                if (index < 2) {
+                    if (recipeType == "craft") {
+                        recipe += " + ";
+                    } else if (recipeType = "combine") {
+                        recipe += "\n";
+                    }
+                }
+            });
+            recipe += "\n";
+        });
+        
+        recipe += "= ";
+        
+        $output.val(recipe);
     }
 });
