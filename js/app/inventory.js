@@ -131,24 +131,27 @@ $(function() {
         var searchHtml = "";
 
         $.each(items.minecraft, function(item) {
-            searchHtml += '<div class="item">';
-            var image = this.image;
-
-            // Default to air for any missing images
-            if (image === undefined) {
-                image = "air.png";
-                console.error("Missing image for: ", item);
+            var itemId = this.itemID;
+            if (itemId !== undefined) {
+                searchHtml += '<div class="item">';
+                var image = this.image;
+                
+                // Default to air for any missing images
+                if (image === undefined) {
+                    image = "air.png";
+                    console.error("Missing image for: ", item);
+                }
+                
+                if (image && !image.startsWith("http")) {
+                    image = "http://assets.wurstmineberg.de/img/grid/" + image;
+                }
+                
+                searchHtml += '<img src="' + image + '" />';
+                searchHtml += '<div class="detail">';
+                searchHtml += '<span class="itemId">' + itemId + '</span>';
+                searchHtml += '<span class="line title">' + this.name + '</span>';
+                searchHtml += '</div></div>';
             }
-            
-            if (image && !image.startsWith("http")) {
-                image = "http://assets.wurstmineberg.de/img/grid/" + image;
-            }
-            
-            
-            searchHtml += '<img src="' + image + '" />';
-            searchHtml += '<div class="detail">';
-            searchHtml += '<span class="line title">' + this.name + '</span>';
-            searchHtml += '</div></div>';
         });
         
         $("#search-items").html(searchHtml);
@@ -349,13 +352,13 @@ $(function() {
         $inventory.find(".row").each(function() {
             $(this).find(".slot").each(function(index) {
                 var $this = $(this);
-                var $title = $this.find(".title");
-                if ($title.length <= 0) {
+                var $id = $this.find(".itemId");
+                if ($id.length <= 0) {
                     if (recipeType == "craft") {
                         recipe += "air";
                     }
                 } else {
-                    recipe += $title.text();
+                    recipe += $id.text();
                 }
                     
                 if (index < 2) {
