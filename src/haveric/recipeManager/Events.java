@@ -689,7 +689,11 @@ public class Events implements Listener {
                 break;
             case 1: // FUEL slot
                 FurnaceData data = Furnaces.get(furnace.getLocation());
-                data.setFueler(player);
+                ItemStack fuel = ToolsItem.nullIfAir(cursor);
+
+                if (fuel != null) {
+                    data.setFueler(player);
+                }
 
                 break;
 
@@ -824,7 +828,6 @@ public class Events implements Listener {
 
         if (slot == 1 && fuel != null) {
             data.setFueler(player);
-            data.setFuel(fuel);
         }
 
         SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
