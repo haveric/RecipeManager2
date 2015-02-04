@@ -688,7 +688,9 @@ public class Events implements Listener {
                 }
                 break;
             case 1: // FUEL slot
-                //furnaceModifySlot(furnace, inventory, player, slot, cursor);
+                FurnaceData data = Furnaces.get(furnace.getLocation());
+                data.setFueler(player);
+
                 break;
 
             case 2: // RESULT slot
