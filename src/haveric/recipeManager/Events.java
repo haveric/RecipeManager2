@@ -912,7 +912,7 @@ public class Events implements Listener {
         return isSame;
     }
 
-    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft) {
+    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean sendReasons) {
         if (flaggable == null) {
             return false;
         }
@@ -924,7 +924,9 @@ public class Events implements Listener {
         if (flaggable.checkFlags(a)) {
             a.sendEffects(a.player(), msg);
         } else {
-            a.sendReasons(a.player(), msg);
+            if (sendReasons) {
+                a.sendReasons(a.player(), msg);
+            }
             return false;
         }
 
@@ -933,19 +935,21 @@ public class Events implements Listener {
         if (flaggable.sendPrepare(a)) {
             a.sendEffects(a.player(), msg);
         } else {
-            a.sendReasons(a.player(), msg);
+            if (sendReasons) {
+                a.sendReasons(a.player(), msg);
+            }
             return false;
         }
 
-        if (craft) {
-            a.clear();
+        a.clear();
 
-            if (flaggable.sendCrafted(a)) {
-                a.sendEffects(a.player(), msg);
-            } else {
+        if (flaggable.sendCrafted(a)) {
+            a.sendEffects(a.player(), msg);
+        } else {
+            if (sendReasons) {
                 a.sendReasons(a.player(), msg);
-                return false;
             }
+            return false;
         }
 
         a.clear();
@@ -976,7 +980,7 @@ public class Events implements Listener {
 
             Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
-            if (!furnaceHandleFlaggable(fuelRecipe, a, true)) {
+            if (!furnaceHandleFlaggable(fuelRecipe, a, false)) {
                 event.setCancelled(true);
             }
 
@@ -1002,10 +1006,10 @@ public class Events implements Listener {
             Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
             ItemResult result = recipe.getResult(a);
 
-            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, true);
+            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, false);
             boolean resultFlaggable = false;
             if (result != null) {
-                resultFlaggable = furnaceHandleFlaggable(result, a, true);
+                resultFlaggable = furnaceHandleFlaggable(result, a, false);
             }
 
             if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
