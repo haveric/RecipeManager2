@@ -17,7 +17,6 @@ import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -1027,43 +1026,6 @@ public class Events implements Listener {
         boolean isBurning = furnace.getType() == Material.BURNING_FURNACE;
         if (recipe != null && !isBurning) {
             furnace.setCookTime(cookTime);
-        }
-
-        if (isBurning && event.isCancelled()) {
-            event.setBurning(false);
-
-            List<HumanEntity> viewers = new ArrayList<HumanEntity>();
-            viewers.addAll(inventory.getViewers());
-
-            ItemStack fuelClone = null;
-            if (event.getFuel() != null) {
-                fuelClone = event.getFuel().clone();
-            }
-            ItemStack resultClone = null;
-            if (inventory.getResult() != null) {
-                resultClone = inventory.getResult().clone();
-            }
-            ItemStack ingredientClone = null;
-            if (ingredient != null) {
-                ingredientClone = ingredient.clone();
-            }
-            inventory.clear();
-            furnace.setType(Material.FURNACE);
-            furnace.update(true);
-
-            Furnace newFurnace = (Furnace) furnace.getBlock().getState();
-            FurnaceInventory newInventory = newFurnace.getInventory();
-
-            newInventory.setFuel(fuelClone);
-            newInventory.setSmelting(ingredientClone);
-            newInventory.setResult(resultClone);
-
-            Iterator<HumanEntity> iter = viewers.iterator();
-            while (iter.hasNext()) {
-                HumanEntity player = iter.next();
-                player.openInventory(newInventory);
-
-            }
         }
     }
 
