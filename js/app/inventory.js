@@ -127,6 +127,14 @@ $(function() {
         }, 150);
     });
     
+    $("#tabs .tab").on("click", function() {
+        var href = $(this).attr('href');
+        
+        $("." + href).addClass("active").siblings().removeClass("active");
+        
+        return false;
+    });
+    
     $.getJSON("http://api.wurstmineberg.de/minecraft/items/all.json", function(items) {
         var searchHtml = "";
 
@@ -343,7 +351,7 @@ $(function() {
             recipeType = "craft";
         } else if ($inventory.hasClass("combine")) {
             recipeType = "combine";
-        } else if ($inventory.hasClass("furnace")) {
+        } else if ($inventory.hasClass("smelting")) {
             recipeType = "smelt";
         }
         
