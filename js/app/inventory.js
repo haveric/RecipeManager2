@@ -132,6 +132,7 @@ $(function() {
         
         $("." + href).addClass("active").siblings().removeClass("active");
         
+        updateOutput();
         return false;
     });
     
