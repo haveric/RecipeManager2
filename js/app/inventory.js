@@ -358,31 +358,103 @@ $(function() {
         
         recipe += recipeType + "\n";
         
+        var matrix = [];
+        var i = 0;
         $inventory.find(".row").each(function() {
             $(this).find(".slot").each(function(index) {
+                var item = "air";
+                
                 var $this = $(this);
                 var $id = $this.find(".itemId");
                 if ($id.length <= 0) {
                     if (recipeType == "craft") {
-                        recipe += "air";
+                        item = "air";
                     }
                 } else {
-                    recipe += $id.text();
+                    item = $id.text();
                 }
-                    
-                if (index < 2) {
-                    if (recipeType == "craft") {
-                        recipe += " + ";
-                    } else if (recipeType = "combine") {
-                        recipe += "\n";
+                
+                matrix[i] = item;
+                i++;
+            });
+        });
+        matrix = trimMatrix(matrix);
+        
+        if (recipeType == "craft") {
+            var width = 0;
+            var height = 0;
+            for (var h = 0; h < 3; h++) {
+                for (var w = 0; w < 3; w++) {
+                    var item = matrix[(h * 3) + w];
+
+                    if (item != "air") {
+                        width = Math.max(width, w);
+                        height = Math.max(height, h);
                     }
                 }
-            });
-            recipe += "\n";
-        });
+            }
+            
+            width++;
+            height++;
+            
+            for (var h = 0; h < height; h++) {
+                for (var w = 0; w < width; w++) {
+                    var item = matrix[(h * 3) + w];
+                    recipe += item;
+                        
+                    if (w < width - 1) {
+                        recipe += " + ";
+                    }
+                }
+
+                recipe += "\n";
+            }
+        } else if (recipeType == "combine") {
+            for (var i = 0; i < 9; i++) {
+                if (matrix[i] != "air") {
+                    recipe += matrix[i] + "\n";
+                }
+            }
+        }
         
         recipe += "= ";
         
         $output.val(recipe);
+    }
+    
+    function trimMatrix(matrix) {
+        var times = 0;
+        while (matrix[0] == "air" && matrix[1] == "air" && matrix[2] == "air" && times < 3) {
+            matrix[0] = matrix[3];
+            matrix[1] = matrix[4];
+            matrix[2] = matrix[5];
+
+            matrix[3] = matrix[6];
+            matrix[4] = matrix[7];
+            matrix[5] = matrix[8];
+
+            matrix[6] = "air";
+            matrix[7] = "air";
+            matrix[8] = "air";
+            times ++;
+        }
+
+        times = 0;
+        while (matrix[0] == "air" && matrix[3] == "air" && matrix[6] == "air" && times < 3) {
+            matrix[0] = matrix[1];
+            matrix[3] = matrix[4];
+            matrix[6] = matrix[7];
+
+            matrix[1] = matrix[2];
+            matrix[4] = matrix[5];
+            matrix[7] = matrix[8];
+
+            matrix[2] = "air";
+            matrix[5] = "air";
+            matrix[8] = "air";
+            times ++;
+        }
+        
+        return matrix;
     }
 });
