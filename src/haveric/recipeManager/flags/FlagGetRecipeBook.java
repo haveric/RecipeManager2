@@ -21,13 +21,13 @@ public class FlagGetRecipeBook extends Flag {
     protected static final String[] D = new String[] {
         "Overwrites result with the specified recipe book.",
         "",
-        "For the '<book id>' argument you need to specify the book ID, case insensitive and partial matching supported.",
+        "For the '<book id>' argument you need to specify the book ID/filename, case insensitive.",
         "",
         "Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.", };
 
     protected static final String[] E = new String[] {
-        "{flag} recipestu // matches a 'Recipe Stuff.yml' book for example.",
-        "{flag} vanilla rec volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };
+        "{flag} recipe stuff // matches a 'Recipe Stuff.yml' book for example.",
+        "{flag} vanilla_recipes volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };
 
 
     // Flag code
