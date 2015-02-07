@@ -152,7 +152,7 @@ public class RecipeBooks {
 
         // Loading YML file
         FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
-        String id = Tools.removeExtensions(file.getName(), Sets.newHashSet(".yml")); // get filename without extension (book ID)
+        String id = Tools.removeExtensions(file.getName(), Sets.newHashSet(".yml")).toLowerCase(); // get filename without extension (book ID)
 
         // set defaults
         yml.addDefault("title", id);
