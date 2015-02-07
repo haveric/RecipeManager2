@@ -7,7 +7,7 @@ public class FlagAddToBook extends Flag {
 
     private static final FlagType TYPE = FlagType.ADDTOBOOK;
     protected static final String[] A = new String[] {
-        "{flag} <book title> [volume <num>]", };
+        "{flag} <book filename> [volume <num>]", };
 
     protected static final String[] D = new String[] {
         "This flag is a shortcut for quickly adding recipe(s) to books.",
@@ -15,14 +15,14 @@ public class FlagAddToBook extends Flag {
         "",
         "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' for how to do that.",
         "",
-        "The '<book title>' argument must be an existing book's name, partial matching can be used.",
+        "The '<book filename>' argument must be an existing book's file name, case insensitive.",
         "Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.",
         "",
         "NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.", };
 
     protected static final String[] E = new String[] {
-        "{flag} testingbook // can match a 'Testing Book' book for example",
-        "{flag} random stuf volume 3 // can match a 'Random Stuff volume 3' book for example", };
+        "{flag} testing book // can match a 'Testing Book' book for example",
+        "{flag} random stuff volume 3 // can match a 'Random Stuff volume 3' book for example", };
 
 
 
