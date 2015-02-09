@@ -61,6 +61,11 @@ public class Vanilla {
      */
     public static final ItemStack RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
 
+    /**
+     * Book cloning's special recipe
+     */
+    public static final ItemStack RECIPE_BOOKCLONE = new ItemStack(Material.WRITTEN_BOOK, 0, (short) -1);
+
 
     /**
      * Default time a furnace recipe burns for.<br>
@@ -392,7 +397,7 @@ public class Vanilla {
             if (recipe != null) {
                 ItemStack result = recipe.getResult();
 
-                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER)) {
+                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER) || result.equals(RECIPE_BOOKCLONE)) {
                     continue;
                 }
 
@@ -426,7 +431,7 @@ public class Vanilla {
             if (bukkitRecipe != null) {
                 ItemStack result = bukkitRecipe.getResult();
 
-                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER)) {
+                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER) || result.equals(RECIPE_BOOKCLONE)) {
                     continue;
                 }
 
