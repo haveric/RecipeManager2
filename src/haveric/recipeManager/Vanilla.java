@@ -39,7 +39,7 @@ public class Vanilla {
     /**
      * Map cloning's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPCLONE = new ItemStack(Material.MAP, 0, (short) -1);
+    public static final ItemStack RECIPE_MAPCLONE = new ItemStack(Material.EMPTY_MAP, 0, (short) -1);
 
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
