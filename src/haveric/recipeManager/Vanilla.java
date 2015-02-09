@@ -395,13 +395,7 @@ public class Vanilla {
             recipe = iterator.next();
 
             if (recipe != null) {
-                ItemStack result = recipe.getResult();
-
-                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER) || result.equals(RECIPE_BOOKCLONE)) {
-                    continue;
-                }
-
-                if (recipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
+                if (isSpecialRecipe(recipe)) {
                     continue;
                 }
 
@@ -429,15 +423,10 @@ public class Vanilla {
             Recipe bukkitRecipe = recipe.getBukkitRecipe();
 
             if (bukkitRecipe != null) {
-                ItemStack result = bukkitRecipe.getResult();
-
-                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER) || result.equals(RECIPE_BOOKCLONE)) {
+                if (isSpecialRecipe(bukkitRecipe)) {
                     continue;
                 }
 
-                if (bukkitRecipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
-                    continue;
-                }
                 // TODO maybe check if recipe is already in server ?
                 Bukkit.addRecipe(bukkitRecipe);
             }
@@ -449,5 +438,23 @@ public class Vanilla {
      */
     public static Map<BaseRecipe, RecipeInfo> getInitialRecipes() {
         return ImmutableMap.copyOf(initialRecipes);
+    }
+
+    public static boolean isSpecialRecipe(Recipe recipe) {
+        boolean isSpecial = false;
+
+        if (recipe != null) {
+            ItemStack result = recipe.getResult();
+
+            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER) || result.equals(RECIPE_BOOKCLONE)) {
+                isSpecial = true;
+            }
+
+            if (recipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
+                isSpecial = true;
+            }
+        }
+
+        return isSpecial;
     }
 }

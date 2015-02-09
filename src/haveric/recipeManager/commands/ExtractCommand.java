@@ -76,7 +76,7 @@ public class ExtractCommand implements CommandExecutor {
             if (skipSpecial) {
                 result = r.getResult();
 
-                if (result.equals(Vanilla.RECIPE_LEATHERDYE) || result.equals(Vanilla.RECIPE_FIREWORKS) || result.equals(Vanilla.RECIPE_MAPCLONE) || result.equals(Vanilla.RECIPE_MAPEXTEND)) {
+                if (Vanilla.isSpecialRecipe(r)) {
                     continue;
                 }
             }
