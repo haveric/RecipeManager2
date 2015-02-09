@@ -55,6 +55,13 @@ public class Vanilla {
      * Item repair special recipe result (SHAPELESS Recipe)
      */
     public static final ItemStack RECIPE_REPAIR = new ItemStack(Material.LEATHER_HELMET, 1, (short) 0);
+
+    /**
+     * Banner special recipe result
+     */
+    public static final ItemStack RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
+
+
     /**
      * Default time a furnace recipe burns for.<br>
      * This is a game constant.
@@ -385,7 +392,7 @@ public class Vanilla {
             if (recipe != null) {
                 ItemStack result = recipe.getResult();
 
-                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND)) {
+                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER)) {
                     continue;
                 }
 
@@ -419,7 +426,7 @@ public class Vanilla {
             if (bukkitRecipe != null) {
                 ItemStack result = bukkitRecipe.getResult();
 
-                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND)) {
+                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER)) {
                     continue;
                 }
 
