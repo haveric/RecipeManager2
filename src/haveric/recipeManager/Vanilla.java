@@ -52,6 +52,10 @@ public class Vanilla {
     public static final ItemStack RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short) 0);
 
     /**
+     * Item repair special recipe result (SHAPELESS Recipe)
+     */
+    public static final ItemStack RECIPE_REPAIR = new ItemStack(Material.LEATHER_HELMET, 1, (short) 0);
+    /**
      * Default time a furnace recipe burns for.<br>
      * This is a game constant.
      */
@@ -385,6 +389,10 @@ public class Vanilla {
                     continue;
                 }
 
+                if (recipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
+                    continue;
+                }
+
                 iterator.remove();
             }
         }
@@ -397,6 +405,30 @@ public class Vanilla {
         for (Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet()) {
             // TODO maybe check if recipe is already in server ?
             Bukkit.addRecipe(entry.getKey().getBukkitRecipe());
+        }
+    }
+
+    /**
+     * Adds all recipes except special that already existed when the plugin was enabled.
+     */
+    public static void restoreAllButSpecialRecipes() {
+        for (Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet()) {
+            BaseRecipe recipe = entry.getKey();
+            Recipe bukkitRecipe = recipe.getBukkitRecipe();
+
+            if (bukkitRecipe != null) {
+                ItemStack result = bukkitRecipe.getResult();
+
+                if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND)) {
+                    continue;
+                }
+
+                if (bukkitRecipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
+                    continue;
+                }
+                // TODO maybe check if recipe is already in server ?
+                Bukkit.addRecipe(bukkitRecipe);
+            }
         }
     }
 

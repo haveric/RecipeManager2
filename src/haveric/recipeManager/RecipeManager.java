@@ -148,13 +148,13 @@ public class RecipeManager extends JavaPlugin {
             metrics.stop();
         }
 
-        if ((firstTime && Settings.getInstance().getClearRecipes()) || !firstTime) {
+        if (Settings.getInstance().getClearRecipes() || !firstTime) {
             Vanilla.removeAllButSpecialRecipes();
             Recipes.getInstance().clean();
         }
 
         if (!firstTime && !Settings.getInstance().getClearRecipes()) {
-            Vanilla.restoreInitialRecipes();
+            Vanilla.restoreAllButSpecialRecipes();
             Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
         }
 
