@@ -126,6 +126,8 @@ public enum Messages {
     CRAFT_SPECIAL_FIREWORKS("<red>Firework crafting is disabled."),
     CRAFT_SPECIAL_MAP_CLONING("<red>Map cloning is disabled."),
     CRAFT_SPECIAL_MAP_EXTENDING("<red>Map extending is disabled."),
+    CRAFT_SPECIAL_BOOK_CLONING("<red>Book cloning is disabled."),
+    CRAFT_SPECIAL_BANNER("<red>Banner crafting is disabled."),
 
     CRAFT_RESULT_DENIED_TITLE("<yellow><underline>You can't craft this recipe!"),
     CRAFT_RESULT_DENIED_INFO("<green>See chat for reasons."),

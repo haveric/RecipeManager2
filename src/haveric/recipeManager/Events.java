@@ -218,6 +218,18 @@ public class Events implements Listener {
                 inv.setResult(null);
                 return true;
             }
+
+            if (!Settings.getInstance().getSpecialBookCloning() && recipeResult.equals(Vanilla.RECIPE_BOOKCLONE)) {
+                Messages.CRAFT_SPECIAL_BOOK_CLONING.printOnce(player);
+                inv.setResult(null);
+                return true;
+            }
+
+            if (!Settings.getInstance().getSpecialBanner() && recipeResult.equals(Vanilla.RECIPE_BANNER)) {
+                Messages.CRAFT_SPECIAL_BANNER.printOnce(player);
+                inv.setResult(null);
+                return true;
+            }
         }
 
         return false;

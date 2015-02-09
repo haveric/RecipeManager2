@@ -31,9 +31,7 @@ import com.google.common.collect.ImmutableMap;
 public class Vanilla {
     protected static Map<BaseRecipe, RecipeInfo> initialRecipes = new HashMap<BaseRecipe, RecipeInfo>();
 
-    /**
-     * Leather dyeing's special recipe result, you can use it to identify vanilla recipes.
-     */
+    /** Leather dyeing's special recipe result, you can use it to identify vanilla recipes. */
     public static final ItemStack RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short) 0);
 
     /**
