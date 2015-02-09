@@ -23,7 +23,9 @@ public class FlagLightLevel extends Flag {
         "Optionally you can set the  [type] argument to specify light type:",
         "  any    = (default) any kind of light.",
         "  sun    = sun light only.",
-        "  blocks = light form blocks (torches, furnaces, etc) only.",
+        "  blocks = light from blocks (torches, furnaces, etc) only.",
+        "",
+        "Be careful using blocks light level with furnace recipes as the furnace will provide light to itself.",
         "",
         "You can also overwrite the fail message or use 'false' to hide it.", };
 
