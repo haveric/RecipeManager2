@@ -774,7 +774,37 @@ public class Events implements Listener {
                     FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
 
                     if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
+                        if (cursor != null && cursor.getType() != Material.AIR) {
+                            if (clicked == null || clicked.getType() == Material.AIR) {
+                                event.setCurrentItem(cursor.clone());
+                                event.setCursor(new ItemStack(Material.AIR));
+                                event.setResult(Result.DENY);
+                            } else {
+                                if (ToolsItem.isSameItem(cursor, clicked, false)) {
+                                    int clickedAmount = clicked.getAmount();
+                                    int cursorAmount = cursor.getAmount();
 
+                                    int maxStack = clicked.getType().getMaxStackSize();
+
+                                    if (clickedAmount + 1 < maxStack) {
+                                        ItemStack clickedClone = clicked.clone();
+                                        clickedClone.setAmount(clickedAmount + 1);
+                                        event.setCurrentItem(clickedClone);
+
+                                        ItemStack cursorClone = cursor.clone();
+                                        cursorClone.setAmount(cursorAmount - 1);
+                                        event.setCursor(cursorClone);
+                                        event.setResult(Result.DENY);
+                                    }
+                                } else {
+                                    ItemStack clickedClone = clicked.clone();
+                                    ItemStack cursorClone = cursor.clone();
+                                    event.setCurrentItem(cursorClone);
+                                    event.setCursor(clickedClone);
+                                    event.setResult(Result.DENY);
+                                }
+                            }
+                        }
                     }
                 }
 
