@@ -9,6 +9,7 @@ import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flaggable;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
 import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
@@ -32,6 +33,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -705,6 +707,40 @@ public class Events implements Listener {
 
                 if (fuel != null) {
                     data.setFueler(player);
+                }
+
+                if (event.getClick() == ClickType.NUMBER_KEY) {
+                    int hotbarButton = event.getHotbarButton();
+                    ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
+                    //Messages.send(null, "Number, Clicked: " + clicked + ", cursor: " + cursor + ", hotbar: " + hotbarItem);
+
+                    FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(hotbarItem);
+
+                    if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
+                        if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
+                            if (clicked == null || clicked.getType() == Material.AIR) {
+                                event.setCurrentItem(hotbarItem.clone());
+                                ToolsItem.replaceItem(player.getInventory(), hotbarButton, new ItemStack(Material.AIR));
+                                event.setResult(Result.DENY);
+                            }
+                        }
+                    }
+                } else if (event.isLeftClick()) {
+                    //Messages.send(null, "Left, Clicked: " + clicked + ", cursor: " + cursor);
+
+                    FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
+
+                    if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
+
+                    }
+                } else if (event.isRightClick()) {
+                    //Messages.send(null, "Right, Clicked: " + clicked + ", cursor: " + cursor);
+
+                    FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
+
+                    if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
+
+                    }
                 }
 
                 break;

@@ -1,6 +1,7 @@
 package haveric.recipeManager.tools;
 
 import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.recipes.ItemResult;
@@ -12,6 +13,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -273,5 +275,18 @@ public class ToolsItem {
             }
         }
         return same;
+    }
+
+    public static void replaceItem(final Inventory inventory, final int slot, final ItemStack stack) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
+            @Override public void run() {
+                ItemStack slotItem = inventory.getItem(slot);
+
+                // Sanity check to make sure the new item is different;
+                if ((stack != null && slotItem != null && stack.getAmount() != slotItem.getAmount()) || !isSameItem(stack, slotItem, false)) {
+                    inventory.setItem(slot, stack);
+                }
+            }
+        });
     }
 }
