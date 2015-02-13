@@ -712,7 +712,6 @@ public class Events implements Listener {
                 if (event.getClick() == ClickType.NUMBER_KEY) {
                     int hotbarButton = event.getHotbarButton();
                     ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
-                    //Messages.send(null, "Number, Clicked: " + clicked + ", cursor: " + cursor + ", hotbar: " + hotbarItem);
 
                     FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(hotbarItem);
 
@@ -726,16 +725,52 @@ public class Events implements Listener {
                         }
                     }
                 } else if (event.isLeftClick()) {
-                    //Messages.send(null, "Left, Clicked: " + clicked + ", cursor: " + cursor);
-
                     FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
 
                     if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
+                        if (cursor != null && cursor.getType() != Material.AIR) {
+                            if (clicked == null || clicked.getType() == Material.AIR) {
+                                event.setCurrentItem(cursor.clone());
+                                event.setCursor(new ItemStack(Material.AIR));
+                                event.setResult(Result.DENY);
+                            } else {
+                                if (ToolsItem.isSameItem(cursor, clicked, false)) {
+                                    int clickedAmount = clicked.getAmount();
+                                    int cursorAmount = cursor.getAmount();
 
+                                    int total = clickedAmount + cursorAmount;
+                                    int maxStack = clicked.getType().getMaxStackSize();
+                                    if (total <= maxStack) {
+                                        ItemStack combinedClone = clicked.clone();
+                                        combinedClone.setAmount(total);
+                                        event.setCurrentItem(combinedClone);
+                                        event.setCursor(new ItemStack(Material.AIR));
+                                        event.setResult(Result.DENY);
+                                    } else {
+                                        int left = total - maxStack;
+
+                                        ItemStack maxClone = clicked.clone();
+                                        maxClone.setAmount(maxStack);
+                                        event.setCurrentItem(maxClone);
+
+                                        if (left > 0) {
+                                            ItemStack leftClone = clicked.clone();
+                                            leftClone.setAmount(left);
+                                            event.setCursor(leftClone);
+                                        }
+                                        event.setResult(Result.DENY);
+                                    }
+                                } else {
+                                    ItemStack clickedClone = clicked.clone();
+                                    ItemStack cursorClone = cursor.clone();
+                                    event.setCurrentItem(cursorClone);
+                                    event.setCursor(clickedClone);
+                                    event.setResult(Result.DENY);
+                                }
+                            }
+                        }
                     }
                 } else if (event.isRightClick()) {
-                    //Messages.send(null, "Right, Clicked: " + clicked + ", cursor: " + cursor);
-
                     FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
 
                     if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
