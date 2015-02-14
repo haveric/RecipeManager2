@@ -662,9 +662,9 @@ public class Events implements Listener {
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
                                 if (furnaceHandleFlaggable(recipe, a, true) && isRecipeSameAsResult(a)) {
-                                    furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
                                 } else {
-                                    furnace.setCookTime((short) 0);
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
                                 }
                             }
                         }
@@ -679,19 +679,24 @@ public class Events implements Listener {
                             }
 
                             FurnaceData data = Furnaces.get(furnace.getLocation());
+                            ItemStack fuel = data.getFuel();
+
+                            if (fuel == null) {
+                                fuel = inventory.getFuel();
+                            }
 
                             ItemStack recipeFuel = recipe.getFuel();
 
-                            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, data.getFuel(), true)) {
+                            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
-                                    furnace.setCookTime((short) (200 - recipe.getCookTicks()));
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
                                 } else {
-                                    furnace.setCookTime((short) 0);
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
                                 }
                             }
                         }

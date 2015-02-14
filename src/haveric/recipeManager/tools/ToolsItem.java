@@ -13,6 +13,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Furnace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -286,6 +287,14 @@ public class ToolsItem {
                 if ((stack != null && slotItem != null && stack.getAmount() != slotItem.getAmount()) || !isSameItem(stack, slotItem, false)) {
                     inventory.setItem(slot, stack);
                 }
+            }
+        });
+    }
+
+    public static void updateFurnaceCookTimeDelayed(final Furnace furnace, final short time) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
+            @Override public void run() {
+                furnace.setCookTime(time);
             }
         });
     }
