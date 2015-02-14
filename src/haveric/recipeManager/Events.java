@@ -773,8 +773,14 @@ public class Events implements Listener {
                     if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
-                                event.setCurrentItem(cursor.clone());
-                                event.setCursor(new ItemStack(Material.AIR));
+                                int cursorAmount = cursor.getAmount();
+                                ItemStack cursorClone = cursor.clone();
+                                cursorClone.setAmount(cursorAmount - 1);
+
+                                ItemStack singleClone = cursor.clone();
+                                singleClone.setAmount(1);
+                                event.setCurrentItem(singleClone);
+                                event.setCursor(cursorClone);
                                 event.setResult(Result.DENY);
                             } else {
                                 if (ToolsItem.isSameItem(cursor, clicked, false)) {
