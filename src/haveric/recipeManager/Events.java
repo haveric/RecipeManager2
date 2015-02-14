@@ -820,6 +820,7 @@ public class Events implements Listener {
                 // Then checks if the clicked item is a fuel recipe and sends it to fuel slot if so, otherwise to ingredient slot
                 // If it's left/right click mode then see if it's right click and send to fuel slot otherwise to ingredient slot
                 int targetSlot = 0;
+
                 if (Settings.getInstance().getFurnaceShiftClick() == 'f' || event.isRightClick()) {
                     if (RecipeManager.getRecipes().getFuelRecipe(clicked) != null) {
                         targetSlot = 1;

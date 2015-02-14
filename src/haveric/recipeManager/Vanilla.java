@@ -418,15 +418,20 @@ public class Vanilla {
     public static void restoreAllButSpecialRecipes() {
         for (Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
-            Recipe bukkitRecipe = recipe.getBukkitRecipe();
 
-            if (bukkitRecipe != null) {
-                if (isSpecialRecipe(bukkitRecipe)) {
-                    continue;
+            if (recipe instanceof FuelRecipe) {
+                RecipeManager.getRecipes().indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
+            } else {
+                Recipe bukkitRecipe = recipe.getBukkitRecipe();
+
+                if (bukkitRecipe != null) {
+                    if (isSpecialRecipe(bukkitRecipe)) {
+                        continue;
+                    }
+
+                    // TODO maybe check if recipe is already in server ?
+                    Bukkit.addRecipe(bukkitRecipe);
                 }
-
-                // TODO maybe check if recipe is already in server ?
-                Bukkit.addRecipe(bukkitRecipe);
             }
         }
     }
