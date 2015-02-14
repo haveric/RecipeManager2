@@ -97,7 +97,7 @@ public class BaseRecipe implements Flaggable {
      * Set the name of this recipe.
      *
      * @param name
-     *            should be an UNIQUE name
+     *            should be a UNIQUE name
      */
     public void setName(String newName) {
         newName = newName.trim();

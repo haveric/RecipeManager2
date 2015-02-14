@@ -82,7 +82,7 @@ public class Vanilla {
 
         RecipeInfo info = new RecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
 
-        // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite an nonexistent one
+        // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite a nonexistent one
         initialRecipes.put(new FuelRecipe(Material.COAL, 80), info);
         initialRecipes.put(new FuelRecipe(Material.LOG, 15), info);
         initialRecipes.put(new FuelRecipe(Material.LOG_2, 15), info);

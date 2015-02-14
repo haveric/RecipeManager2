@@ -18,7 +18,7 @@ public class FlagPermission extends Flag {
         "Makes the recipe or item require the crafter to have a permission.",
         "Using this flag more than once will add more permissions, the player must have at least one to allow crafting.",
         "",
-        "The '<permission>' argument must be an permission node, regardless if it exists or not.",
+        "The '<permission>' argument must be a permission node, regardless if it exists or not.",
         "",
         "Adding ! character as prefix to individual permission nodes will do the opposite check, if crafter has permission it will not craft.",
         "",
