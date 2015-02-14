@@ -47,6 +47,7 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -597,6 +598,61 @@ public class Events implements Listener {
     /*
      * Furnace craft events
      */
+
+    @EventHandler
+    public void inventoryDrag(InventoryDragEvent event) {
+        Inventory inv = event.getInventory();
+
+        if (inv instanceof FurnaceInventory) {
+            FurnaceInventory inventory = (FurnaceInventory) inv;
+            InventoryHolder holder = inventory.getHolder();
+
+            if (holder instanceof Furnace) {
+                HumanEntity entity = event.getWhoClicked();
+
+                if (entity instanceof Player) {
+                    if (event.getRawSlots().contains(0)) {
+                        ItemStack slot = inventory.getItem(0);
+
+                        if (slot == null || slot.getType() == Material.AIR) {
+                            Furnace furnace = (Furnace) holder;
+                            ItemStack cursor = event.getOldCursor();
+
+                            SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
+
+                            if (recipe != null) {
+                                if (recipe.hasFlag(FlagType.REMOVE)) {
+                                    event.setCancelled(true);
+                                }
+
+                                FurnaceData data = Furnaces.get(furnace.getLocation());
+                                ItemStack fuel = data.getFuel();
+
+                                if (fuel == null) {
+                                    fuel = inventory.getFuel();
+                                }
+
+                                ItemStack recipeFuel = recipe.getFuel();
+
+                                if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
+                                    event.setCancelled(true);
+                                } else {
+                                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                    ItemResult result = recipe.getResult(a);
+
+                                    if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    } else {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void inventoryClick(InventoryClickEvent event) {
