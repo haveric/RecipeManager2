@@ -851,6 +851,34 @@ public class Events implements Listener {
                 if (item == null || item.getType() == Material.AIR) { // If targeted item slot is empty
                     inventory.setItem(targetSlot, clicked); // send the item to the slot
                     event.setCurrentItem(null); // clear the clicked slot
+
+                    if (targetSlot == 0) {
+                        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(clicked);
+                        if (recipe != null) {
+                            data = Furnaces.get(furnace.getLocation());
+                            fuel = data.getFuel();
+
+                            if (fuel == null) {
+                                fuel = inventory.getFuel();
+                            }
+
+                            ItemStack recipeFuel = recipe.getFuel();
+
+                            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
+                                event.setCancelled(true);
+                            } else {
+                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                ItemResult result = recipe.getResult(a);
+
+                                if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                } else {
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                }
+                            }
+                        }
+                    }
+
                     event.setCancelled(true); // cancel only if we're going to mess with the items
                     new UpdateInventory(player, 0); // update inventory to see the changes client-side
                 } else {
