@@ -29,7 +29,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
-import org.bukkit.block.Hopper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -48,7 +47,6 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -66,7 +64,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Dispenser;
 
 
 /**
@@ -840,16 +837,10 @@ public class Events implements Listener {
                 }
 
                 if (item == null || item.getType() == Material.AIR) { // If targeted item slot is empty
-                    // Check if item is allowed to be placed on that slot
-
-                    if (furnaceModifySlot(furnace, inventory, player, targetSlot, clicked)) {
-                        inventory.setItem(targetSlot, clicked); // send the item to the slot
-                        event.setCurrentItem(null); // clear the clicked slot
-                        event.setCancelled(true); // cancel only if we're going to mess with the items
-                        new UpdateInventory(player, 0); // update inventory to see the changes client-side
-                    } else {
-                        event.setCancelled(true);
-                    }
+                    inventory.setItem(targetSlot, clicked); // send the item to the slot
+                    event.setCurrentItem(null); // clear the clicked slot
+                    event.setCancelled(true); // cancel only if we're going to mess with the items
+                    new UpdateInventory(player, 0); // update inventory to see the changes client-side
                 } else {
                     // Otherwise the targeted slot contains some item, need to identify if we can stack over it
 
@@ -874,139 +865,6 @@ public class Events implements Listener {
                     }
                 }
         }
-    }
-
-    private boolean furnaceModifySlot(Furnace furnace, FurnaceInventory inv, Player player, int slot, ItemStack item) throws Throwable {
-        // Furnace is burning
-        if (furnace.getType() == Material.BURNING_FURNACE) {
-            ItemStack itemToTest;
-            if (slot == 0) {
-                itemToTest = item;
-            } else {
-                itemToTest = inv.getSmelting();
-            }
-            ItemStack i = ToolsItem.nullIfAir(itemToTest);
-            ItemStack f = ToolsItem.nullIfAir(inv.getFuel());
-
-            SmeltRecipe sr = RecipeManager.getRecipes().getSmeltRecipe(i);
-
-            if (sr == null && f != null) {
-                sr = RecipeManager.getRecipes().getSmeltRecipeWithFuel(f);
-            }
-
-            if (sr != null && sr.hasFuel()) {
-                // recipe is smelt+fuel
-
-                ItemStack fuelToTest;
-                if (slot == 0) {
-                    fuelToTest = inv.getSmelting();
-                } else {
-                    fuelToTest = f;
-                }
-                if (item != null && item.isSimilar(fuelToTest)) {
-                    // recipe is smelt+fuel but added similar items!
-                } else {
-                    // recipe is a smelt+fuel recipe, removing active burn time
-                    furnace.setBurnTime((short) 0);
-                }
-            }
-        }
-
-        ItemStack ingredientToTest;
-        if (slot == 0) {
-            ingredientToTest = item;
-        } else {
-            ingredientToTest = inv.getSmelting();
-        }
-        ItemStack ingredient = ToolsItem.nullIfAir(ingredientToTest);
-
-        ItemStack testFuel;
-        if (slot == 1) {
-            testFuel = item;
-        } else {
-            testFuel = inv.getFuel();
-        }
-        ItemStack fuel = ToolsItem.nullIfAir(testFuel);
-
-        FurnaceData data = Furnaces.get(furnace.getLocation());
-
-        if (slot == 0) {
-            data.setFrozen(false);
-
-            if (ingredient != null) {
-                data.setSmelter(player);
-                data.setSmelting(ingredient);
-            }
-        }
-
-        if (slot == 1 && fuel != null) {
-            data.setFueler(player);
-        }
-
-        SmeltRecipe smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
-        Location location = furnace.getLocation();
-
-        if (smeltRecipe == null && fuel != null) {
-            smeltRecipe = RecipeManager.getRecipes().getSmeltRecipeWithFuel(fuel);
-        }
-
-        if (smeltRecipe != null) {
-            if (smeltRecipe.hasFuel() && fuel != null && ingredient != null) {
-                if (!ToolsItem.isSimilarDataWildcard(smeltRecipe.getIngredient(), ingredient)) {
-                    Messages.SMELT_FUEL_NEEDINGREDIENT.print(player, null, "{ingredient}", ToolsItem.print(smeltRecipe.getIngredient()), "{fuel}", ToolsItem.print(smeltRecipe.getFuel()));
-                    return false;
-                }
-
-                if (!ToolsItem.isSimilarDataWildcard(smeltRecipe.getFuel(), fuel)) {
-                    Messages.SMELT_FUEL_NEEDFUEL.print(player, null, "{ingredient}", ToolsItem.print(smeltRecipe.getIngredient()), "{fuel}", ToolsItem.print(smeltRecipe.getFuel()));
-                    return false;
-                }
-            }
-
-            if (slot == 0) {
-                Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(ingredient).build();
-
-                if (smeltRecipe.checkFlags(a)) {
-                    a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                    a.clear();
-
-                    if (smeltRecipe.sendPrepare(a)) {
-                        a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                        return true;
-                    }
-
-                    a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                    return false;
-                }
-
-                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                return false;
-            }
-        }
-
-        FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
-
-        if (fuelRecipe != null && slot == 1) {
-            Args a = Args.create().player(player).location(location).inventory(inv).recipe(smeltRecipe).extra(fuel).build();
-
-            if (fuelRecipe.checkFlags(a)) {
-                a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                a.clear();
-
-                if (fuelRecipe.sendPrepare(a)) {
-                    a.sendEffects(player, Messages.FLAG_PREFIX_RECIPE.get());
-                    return true;
-                }
-
-                a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-                return false;
-            }
-
-            a.sendReasons(player, Messages.FLAG_PREFIX_RECIPE.get());
-            return false;
-        }
-
-        return true;
     }
 
     private boolean isRecipeSameAsResult(Args a) {
@@ -1243,6 +1101,7 @@ public class Events implements Listener {
     }
 
     // TODO find a way to detect if event actually moved an item !
+    /* TODO: Replace with something better
     @EventHandler
     public void inventoryItemMove(InventoryMoveItemEvent event) {
         try {
@@ -1261,18 +1120,18 @@ public class Events implements Listener {
                     event.setCancelled(true);
                 }
             }
-            /*
-             * else if(event.getSource() instanceof FurnaceInventory) { SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
-             *
-             * if(slot == null) { return; }
-             *
-             * Messages.debug("RESULT TAKEN FROM FURNACE: " + event.getItem()); }
-             */
+            // else if(event.getSource() instanceof FurnaceInventory) { SlotType slot = hopperFurnaceSlot(event.getDestination(), true);
+            //
+            // if(slot == null) { return; }
+            //
+            // Messages.debug("RESULT TAKEN FROM FURNACE: " + event.getItem()); }
+            //
         } catch (Throwable e) {
             event.setCancelled(true);
             Messages.error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
+
 
     private int hopperFurnaceSlot(Inventory inventory, boolean take) {
         if (inventory != null) {
@@ -1303,6 +1162,7 @@ public class Events implements Listener {
 
         return -1;
     }
+     */
 
     /*
      * Furnace monitor events
