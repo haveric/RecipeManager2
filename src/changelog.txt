@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== v2.3.4 Coming Soon ===
+=== v2.3.4 ===
 * @LightLevel Added a note about using light from blocks with furnaces as they provide light to themselves
 * Fixed vanilla repairing after /rmreload
 * Fixed vanilla banner recipes after /rmreload
