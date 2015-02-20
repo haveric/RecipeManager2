@@ -3,6 +3,8 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.ItemResult;
 
+import java.util.Iterator;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -118,7 +120,7 @@ public class FlagSkullOwner extends Flag {
             s.setOwner(owner);
             s.update();
 
-            java.util.Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
+            Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
             ItemStack result = iter.next();
             ItemMeta cloned = result.getItemMeta().clone();
             a.result().setItemMeta(cloned);
