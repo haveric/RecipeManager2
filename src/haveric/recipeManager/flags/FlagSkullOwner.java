@@ -108,6 +108,7 @@ public class FlagSkullOwner extends Flag {
         if (originalState instanceof InventoryHolder) {
             SkullMeta meta = (SkullMeta) a.result().getItemMeta();
             meta.setOwner(owner);
+            a.result().setItemMeta(meta);
         } else {
             // Sets the block to the skull and retrieves the updated ItemStack from the drops.
             // This is needed because setOwner will not update the inventory texture.
