@@ -390,7 +390,7 @@ public class Events implements Listener {
             new UpdateInventory(player, 2); // update inventory 2 ticks later
 
             // Reset display item when item cannot be crafted
-            if (originalResult != null && result == null) {
+            if (result == null) {
                 updateResultLater(event.getInventory(), originalResult, 0);
             }
         } catch (Throwable e) {
