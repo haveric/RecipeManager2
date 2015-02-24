@@ -1,0 +1,393 @@
+lastchanged: 2.3 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+#-------------------------------------------------------------------------------------------------------------------------
+# RecipeManager item and data aliases
+#
+# This file defines aliases for MATERIAL and DATA usable in recipe ingredients and results.
+# You can use any names specified as values to replace MATERIAL or DATA.
+# You can also use original names with custom data names or vice-versa.
+#
+# The first names of each material or data will also be used when this plugin prints item name/data.
+#
+# NOTE: This file is not like 1.xx versions any more, see examples below.
+#
+# Examples:
+#  dye:red    - valid: rose red dyes. (dye is material alias)
+#  wood:birch - valid: birch wood planks (wood is original material name)
+#  dye:5      - valid: purple dye (numeral data value acceptable)
+#  wood:red   - invalid: will give an error since data value alias "red" isn't defined for material "wood".
+#
+# And of course when defining ingredients you can avoid the data value or use * to allow any data value.
+#
+# This file is great for giving easy-to-use names to items that are added by other plugins or server mods.
+#
+# You can add new aliases or edit existing if you like, see below examples or follow syntax:
+#
+# <material or id>:
+#   names: <alias>, ...
+#   <number>: <alias>, ...
+#   ...
+#
+# If you don't want to give any data values, just aliases:
+#
+# <material or id>: <alias>, ...
+#
+# NOTE: You should split words by space or underscore when defining an alias, it will give you more matches, example:
+# "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".
+#------------------------------------------------------------------------------------------------------------------------
+
+coal:
+  0: # no name for this
+  1: char, log, burnt
+
+ink_sack:
+  names: dye
+  0: black, ink
+  1: red, rose red
+  2: green, cactus green
+  3: brown, cocoa beans
+  4: blue, lapis, lapis lazuli
+  5: purple
+  6: cyan
+  7: light gray
+  8: gray
+  9: pink, light purple
+  10: lime, light green
+  11: yellow, dandelion yellow
+  12: light blue
+  13: magenta
+  14: orange
+  15: white, bone meal
+
+wool:
+  0: white
+  1: orange
+  2: magenta
+  3: light blue
+  4: yellow
+  5: lime
+  6: pink
+  7: gray
+  8: light gray
+  9: cyan
+  10: purple
+  11: blue
+  12: brown
+  13: green
+  14: red
+  15: black
+
+# Sandstone styles
+sandstone:
+  names: sand stone
+  0:                    # when printed, display nothing extra with this data value
+  1: chiseled, decor
+  2: smooth
+
+# shorter names for cobble
+cobblestone: cobble, cobble stone
+cobblestone_stairs: cobble stone stairs, cobble stairs
+
+smooth_brick:
+  names: smooth brick, stone brick
+  0: stone, normal
+  1: mossy, moss
+  2: cracked, crack
+  3: chiseled, decor
+
+smooth_stairs: smooth stairs, stone stairs, smooth stone stairs, smooth brick stairs, stone brick stairs
+
+step:
+  names: slab
+  0: stone
+  1: sand, sandstone
+  2: wood, wooden             # This is the old fire-resistant block, use wood_step material instead
+  3: cobblestone, cobble
+  4: brick. red brick
+  5: smooth brick, stone brick
+  6: nether, nether brick
+  7: quartz, quartz brick
+
+double_step:
+  names: double slab
+  0: stone
+  1: sand, sandstone
+  2: wood, wooden             # This is the old fire-resistant block, use wood_step material instead
+  3: cobblestone, cobble
+  4: brick. red brick
+  5: smooth brick, stone brick
+  6: nether, nether brick
+  7: quartz, quartz brick
+  8: smooth stone, smooth
+  9: smooth sand stone, smooth sand
+
+cobble_wall:
+  names: cobble stone wall, stone wall
+  0: 
+  1: mossy
+
+wood_step:
+  names: wood slab
+  0: oak, normal
+  1: spruce, pine
+  2: birch, white
+  3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
+
+wood_double_step:
+  names: wood double step, wood double steps
+  0: oak, normal
+  1: spruce, pine
+  2: birch, white
+  3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
+
+wood:
+  names: wood planks, wood plank, plank, planks
+  0: oak, normal
+  1: spruce, pine
+  2: birch, white
+  3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
+
+sapling:
+  0: oak, normal
+  1: spruce, pine
+  2: birch, white
+  3: jungle, pink
+  4: acacia, orange
+  5: dark oak, dark
+
+log:
+  0: oak, normal
+  1: spruce, pine
+  2: birch, white
+  3: jungle, pink
+  
+log_2:
+  0: acacia, orange
+  1: dark oak, dark
+
+leaves:
+  names: leaf
+  0: oak, normal
+  1: spruce, pine
+  2: birch, white
+  3: jungle, pink
+
+leaves_2:
+  0: acacia, orange
+  1: dark oak, dark
+
+stone:
+  0:
+  1: granite
+  2: polished granite
+  3: diorite
+  4: polished diorite
+  5: andesite
+  6: polished andesite
+
+dirt:
+  0:
+  1: coarse
+  2: podzol
+  
+sand:
+  0:
+  1: red
+
+red_rose:
+  names: flower, flowers
+  0: poppy
+  1: blue orchid
+  2: allium
+  3: azure bluet
+  4: red tulip
+  5: orange tulip
+  6: white tulip
+  7: pink tulip
+  8: oxeye daisy
+
+double_plant:
+  names: tall flower, tall flowers
+  0: sunflower
+  1: lilac
+  2: double tallgrass
+  3: large fern
+  4: rose bush
+  5: peony
+
+prismarine:
+  0:
+  1: brick, bricks
+  2: dark
+
+sponge:
+  0:
+  1: wet
+
+raw_fish:
+  0:
+  1: raw salmon, salmon
+  2: clownfish
+  3: pufferfish
+
+anvil:
+  0:
+  1: slightly damaged
+  2: very damaged
+
+# spade to shovel aliases
+wood_spade: wood shovel
+stone_spade: stone shovel
+iron_spade: iron shovel
+gold_spade: gold shovel
+diamond_spade: diamond shovel
+
+# spawner egg items
+monster_egg:
+  names: spawner egg, spawn egg, mob egg, egg spawner, egg spawn
+  50: creeper
+  51: skeleton
+  52: spider
+  53: giant
+  54: zombie
+  55: slime
+  56: ghast
+  57: zombie pig, zombie pigman
+  58: ender man
+  59: cave spider
+  60: silver fish
+  61: blaze
+  62: magma cube
+  63: ender dragon
+  64: wither
+  65: bat
+  66: witch
+  67: ender mite
+  68: guardian
+  90: pig
+  91: sheep
+  92: cow
+  93: chicken
+  94: squid
+  95: wolf
+  96: mooshroom, mushroom cow
+  97: snow golem, snow man
+  98: ocelot, cat
+  99: iron golem
+  100: horse
+  101: rabbit
+  120: villager, npc
+
+# silverfish blocks
+monster_eggs:
+  names: trap block
+  0: stone
+  1: cobble, cobble stone
+  2: stone brick, smooth brick
+  3: mossy stone brick, mossy brick
+  4: cracked stone brick, cracked brick
+  5: chiseled stone brick, chiseled brick
+
+# alchemy
+brewing_stand_item: brewing stand    # overwrites brewing_stand material which represents the block, not the item!
+brewing_stand: brewing stand block   # name to make the brewing stand block usable but you won't really need this.
+glass_bottle: empty bottle, bottle
+potion:
+  0: water
+  16: awkward
+  32: thick
+  8192: mundane
+  64: mundane extended
+
+# skulls/heads
+skull_item:
+  names: skull, head
+  0: skeleton
+  1: wither, wither skeleton
+  2: zombie
+  3: human, player
+  4: creeper
+
+# golden apple
+golden_apple:
+  names: golden apple, gold apple
+  0: 
+  1: enchanted
+
+# Music discs
+GOLD_RECORD: music disc 1, disc 1, record 1
+GREEN_RECORD: music disc 2, disc 2, record 2
+RECORD_3: music disc 3, disc 3, record 3
+RECORD_4: music disc 4, disc 4, record 4
+RECORD_5: music disc 5, disc 5, record 5
+RECORD_6: music disc 6, disc 6, record 6
+RECORD_7: music disc 7, disc 7, record 7
+RECORD_8: music disc 8, disc 8, record 8
+RECORD_9: music disc 9, disc 9, record 9
+RECORD_10: music disc 10, disc 10, record 10
+RECORD_11: music disc 11, disc 11, record 11
+RECORD_12: music disc 12, disc 12, record 12
+
+# Flower pots
+flower_pot: flower pot block         # name to make the flower pot block usable but you won't really need this.
+flower_pot_item:                     # overwrites flower_pot material which represents the block, not the item!
+  names: flower pot, pot
+  0: empty
+  1: rose
+  2: dandelion
+  3: oak sapling
+  4: spruce sapling, pine sapling
+  5: birch sapling
+  6: jungle tree sapling, jungle sapling
+  7: red mushroom
+  8: brown mushroom
+  9: cactus
+  10: shrub, dead bush
+  11: fern
+
+# plants
+long_grass:
+  names: plant
+  0: shrub
+  1: long grass
+  2: fern
+
+# misc aliases
+air: fail
+sulphur: gun powder, powder
+redstone_torch_on: redstone torch
+redstone_lamp_off: redstone lamp, lamp
+jack_o_lantern: lantern
+thin_glass: glass pane
+workbench: crafting table, craft table
+storage_minecart: minecart with chest, chest minecart
+powered_minecart: minecart with furnace, furnace minecart
+explosive_minecart: minecart with TNT, tnt minecart
+hopper_minecart: minecart with hopper
+redstone_comparator: comparator
+daylight_detector: daylight sensor
+
+# add your own aliases if you want.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

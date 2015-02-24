@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Recipes - RecipeManager2</title>
+    <style>
+        pre { 
+            border: 1px dashed #999; 
+            font-family: Lucida Console;
+            margin-left:20px; 
+            padding:10px; 
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .container {
+            max-width: 990px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="basic recipes.html">Basic Recipes</a> | <b>Advanced Recipes</b> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+        <h1>Advanced Recipes</h1>
+        
+        If you haven't read the <a href="basic recipes.html">Basic Recipes</a> I suggest you do before reading this tutorial.
+        
+        This page will cover more advanced customization of recipes.
+        
+        You should first know about argument styles that I'm going to be using in this tutorial.
+        Arguments enclosed between &lt; and &gt; are required and those enclosed between [ and ] are optional.
+        Some arguments may have 'or false', that means you can just type false in there to make it do something special (most likely disable the flag or a feature)
+        
+        <hr><h2>Contents</h2>
+        - <a href="#books"><b>Recipe books and named recipes</b></a><br/>
+        - <a href="#flags"><b>Using flags</b></a><br/>
+        - <a href="#flags"><b>Advanced recipe examples</b></a>
+        
+        <hr><a name="books"></a><h2>RECIPE BOOKS AND NAMED RECIPES</h2>
+        
+        You can name recipes by just writing something after the type definition, e.g.:
+        
+        <pre>&lt;recipe definition&gt; [recipe name]</pre>
+        
+        That name can be used in recipe books.
+        
+        To learn more about recipe books, see the <a href="recipe books.html"><b>Recipe Books</b></a> page.
+        
+        
+        <hr><a name="flags"></a><h2>USING FLAGS</h2>
+        
+        Here's the full syntax of a recipe file:
+    
+<pre>
+[@shared or recipe flag]
+[... more flags]
+
+&lt;recipe definition&gt; [recipe name]
+[@shared or recipe flag]
+[... more flags]
+&lt;ingredients&gt;
+= &lt;result&gt;
+  [@shared or result flag]
+  [... more flags]
+[... more results]
+
+[... more recipes]
+</pre>
+    
+    
+        Here's a quick example of the above syntax by using all available options:
+    
+<pre>
+@message You crafted this! // this applies to all recipes within this file
+
+COMBINE
+@broadcast {player} has crafted a fine sword!
+
+iron_ingot + gold_ingot + diamond:*:2
+
+= gold_sword
+  @enchant durability max
+  @name Fine Gold Sword
+  @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
+
+
+CRAFT Some Awesome Recipe
+@modexp +1
+@message false // disable the file-wide flag on this recipe
+
+apple
+
+= apple
+
+</pre>
+    
+        The spacing is not required as I put it but it's recommended because you can see stuff easier.
+        
+        <hr><a name="flags"></a><h2>ADVANCED RECIPE EXAMPLES</h2>
+        
+        <h3>Same ingredients, different names, different results</h3>
+<pre>
+combine
+@displayresult first | silentfail
+gold_nugget:*:3
+= iron_ingot
+  @ingredientcondition gold_nugget | name Silver Nugget | failmsg false
+= diamond
+  @ingredientcondition gold_nugget | name Diamond Nugget | failmsg false
+</pre>
+        This recipe lets you combine 3 gold nuggets named differently to create different results.
+        If you combine 3 unnamed ones nothing will result, but if they're named "Silver Nugget" you'll get an iron_ingot.
+        And if they're named "Diamond Nugget" you'll get a diamond, try it out!
+        
+        
+        <h3>Explosive fuel</h3>
+<pre>
+fuel
+@forchance 25% @explode fire
+sulphur % 30
+</pre>
+        When sulphur burns it has 25% chance of exploding and causing fires.
+        
+        
+        <p>
+            <b>User contributed examples:</b> <a href="http://dev.bukkit.org/server-mods/recipemanager/forum/resources/"><b>RecipeManager / Forum / Resources</b></a>
+        </p>
+    </div>
+</body>
+</html>
