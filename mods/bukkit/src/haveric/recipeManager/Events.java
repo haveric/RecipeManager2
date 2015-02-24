@@ -604,47 +604,43 @@ public class Events implements Listener {
         Inventory inv = event.getInventory();
 
         if (inv instanceof FurnaceInventory) {
-            FurnaceInventory inventory = (FurnaceInventory) inv;
-            InventoryHolder holder = inventory.getHolder();
+            HumanEntity entity = event.getWhoClicked();
 
-            if (holder instanceof Furnace) {
-                HumanEntity entity = event.getWhoClicked();
+            if (entity instanceof Player) {
+                if (event.getRawSlots().contains(0)) {
+                    FurnaceInventory inventory = (FurnaceInventory) inv;
+                    Furnace furnace = inventory.getHolder();
+                    ItemStack slot = inventory.getItem(0);
 
-                if (entity instanceof Player) {
-                    if (event.getRawSlots().contains(0)) {
-                        ItemStack slot = inventory.getItem(0);
+                    if (slot == null || slot.getType() == Material.AIR) {
+                        ItemStack cursor = event.getOldCursor();
 
-                        if (slot == null || slot.getType() == Material.AIR) {
-                            Furnace furnace = (Furnace) holder;
-                            ItemStack cursor = event.getOldCursor();
+                        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
 
-                            SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
+                        if (recipe != null) {
+                            if (recipe.hasFlag(FlagType.REMOVE)) {
+                                event.setCancelled(true);
+                            }
 
-                            if (recipe != null) {
-                                if (recipe.hasFlag(FlagType.REMOVE)) {
-                                    event.setCancelled(true);
-                                }
+                            FurnaceData data = Furnaces.get(furnace.getLocation());
+                            ItemStack fuel = data.getFuel();
 
-                                FurnaceData data = Furnaces.get(furnace.getLocation());
-                                ItemStack fuel = data.getFuel();
+                            if (fuel == null) {
+                                fuel = inventory.getFuel();
+                            }
 
-                                if (fuel == null) {
-                                    fuel = inventory.getFuel();
-                                }
+                            ItemStack recipeFuel = recipe.getFuel();
 
-                                ItemStack recipeFuel = recipe.getFuel();
+                            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
+                                event.setCancelled(true);
+                            } else {
+                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                ItemResult result = recipe.getResult(a);
 
-                                if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
-                                    event.setCancelled(true);
+                                if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
                                 } else {
-                                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
-                                    ItemResult result = recipe.getResult(a);
-
-                                    if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
-                                    } else {
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
-                                    }
+                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
                                 }
                             }
                         }
