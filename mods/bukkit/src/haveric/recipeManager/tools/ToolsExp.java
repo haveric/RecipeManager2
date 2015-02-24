@@ -137,13 +137,13 @@ public class ToolsExp {
                 @SuppressWarnings("unused")
                 Material slime = Material.SLIME_BLOCK;
 
-                model = "1.8";
+                xpModel = "1.8";
             } catch (NoSuchFieldError e) {
-                model = "1.7";
+                xpModel = "1.7";
             }
-        } else {
-            model = xpModel;
         }
+
+        model = xpModel;
 
         return model;
     }
