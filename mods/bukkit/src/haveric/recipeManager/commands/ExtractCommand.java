@@ -62,7 +62,7 @@ public class ExtractCommand implements CommandExecutor {
         List<String> parsedSmeltRecipes = new ArrayList<String>();
 
         Iterator<Recipe> recipes = Bukkit.getServer().recipeIterator();
-        ItemStack result;
+
         Recipe r;
         int recipesNum = 0;
 
@@ -74,8 +74,6 @@ public class ExtractCommand implements CommandExecutor {
             }
 
             if (skipSpecial) {
-                result = r.getResult();
-
                 if (Vanilla.isSpecialRecipe(r)) {
                     continue;
                 }
