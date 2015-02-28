@@ -64,8 +64,10 @@ public class RemoveResultRecipe extends BaseRecipe {
     }
 
     private void removeRecipe(BaseRecipe recipe, RecipeInfo info) {
-        removed.put(recipe, info);
-        recipe.remove();
+        if (removed != null) {
+            removed.put(recipe, info);
+            recipe.remove();
+        }
     }
 
     @Override
