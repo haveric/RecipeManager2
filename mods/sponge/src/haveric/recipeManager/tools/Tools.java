@@ -9,6 +9,13 @@ import java.io.IOException;
 
 public class Tools {
 
+    public static boolean saveTextToFile(String text, String filePath) {
+        File file = new File(filePath);
+        file.getParentFile().mkdirs();
+
+        return saveTextToFile(text, file);
+    }
+
     public static boolean saveTextToFile(String text, File file) {
         boolean success = false;
 
@@ -24,20 +31,4 @@ public class Tools {
 
         return success;
     }
-    /*
-    public static boolean saveTextToFile(String text, String filePath) {
-        try {
-            File file = new File(filePath);
-            file.getParentFile().mkdirs();
-            BufferedWriter stream = new BufferedWriter(new FileWriter(file, false));
-            stream.write(text);
-            stream.close();
-            return true;
-        } catch (Throwable e) {
-            //Messages.error(null, e, null);
-        }
-
-        return false;
-    }
-    */
 }
