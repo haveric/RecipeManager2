@@ -45,4 +45,12 @@ public class Settings {
         }
     }
 
+    public File getDefaultFolder() {
+        return defaultFolder;
+    }
+
+    public String getDefaultFolderPath() {
+        return defaultFolder.getPath();
+    }
+
 }

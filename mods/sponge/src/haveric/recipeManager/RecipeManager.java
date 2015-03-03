@@ -37,6 +37,7 @@ public class RecipeManager {
 
     private Game game;
     private Settings settings;
+    private Files files;
 
     private Commands commands;
 
@@ -50,6 +51,7 @@ public class RecipeManager {
         commands = new Commands(this);
 
         settings = new Settings(this, defaultConfig, configManager);
+        files = new Files(this);
     }
 
     @Subscribe
@@ -63,5 +65,9 @@ public class RecipeManager {
 
     public Game getGame() {
         return game;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }
