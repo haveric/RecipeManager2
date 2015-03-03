@@ -70,4 +70,9 @@ public class RecipeManager {
     public Settings getSettings() {
         return settings;
     }
+
+    //TODO: Grab from @Plugin
+    public String getVersion() {
+        return "3.0";
+    }
 }
