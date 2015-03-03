@@ -3,11 +3,9 @@ package haveric.recipeManager;
 import haveric.recipeManager.tools.Tools;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 
@@ -57,16 +55,14 @@ public class Files {
                 b.close();
                 newVersion = (version == null || !version.equals(currentVersion));
             }
-
-            if (newVersion || file.exists()) {
-                BufferedWriter b = new BufferedWriter(new FileWriter(file, false));
-                b.write(currentVersion);
-                b.close();
-            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (newVersion || file.exists()) {
+            Tools.saveTextToFile(currentVersion, file);
         }
 
         return true;
