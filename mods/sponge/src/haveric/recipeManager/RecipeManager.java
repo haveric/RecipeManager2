@@ -13,9 +13,11 @@ import org.spongepowered.api.event.state.ServerAboutToStartEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.util.event.Subscribe;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 
 
@@ -39,11 +41,17 @@ public class RecipeManager {
     private Settings settings;
     private Files files;
 
+    private PluginContainer pluginManager;
+
     private Commands commands;
 
     @Subscribe
     public void preStartup(ServerAboutToStartEvent event) {
         game = event.getGame();
+        Optional<PluginContainer> optionalPluginContainer = game.getPluginManager().fromInstance(this);
+        if (optionalPluginContainer.isPresent()) {
+            pluginManager = optionalPluginContainer.get();
+        }
     }
 
     @Subscribe
@@ -71,8 +79,7 @@ public class RecipeManager {
         return settings;
     }
 
-    //TODO: Grab from @Plugin
     public String getVersion() {
-        return "3.0";
+        return pluginManager.getVersion();
     }
 }

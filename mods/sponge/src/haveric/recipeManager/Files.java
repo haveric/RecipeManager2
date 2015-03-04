@@ -56,6 +56,7 @@ public class Files {
         File file = new File(DIR_PLUGIN + FILE_USED_VERSION);
         String currentVersion = plugin.getVersion();
 
+
         try {
             if (file.exists()) {
                 BufferedReader b = new BufferedReader(new FileReader(file));
