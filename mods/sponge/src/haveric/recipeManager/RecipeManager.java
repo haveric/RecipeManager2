@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.commands.Commands;
+import haveric.recipeManager.events.RMPlayerJoinQuitEvent;
 
 import java.io.File;
 
@@ -15,6 +16,7 @@ import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.config.DefaultConfig;
+import org.spongepowered.api.service.event.EventManager;
 import org.spongepowered.api.util.event.Subscribe;
 
 import com.google.common.base.Optional;
@@ -56,10 +58,13 @@ public class RecipeManager {
 
     @Subscribe
     public void onStartup(ServerStartingEvent event) {
+        EventManager em = game.getEventManager();
         commands = new Commands(this);
 
         settings = new Settings(this, defaultConfig, configManager);
         files = new Files(this);
+
+        em.register(this, new RMPlayerJoinQuitEvent(this));
     }
 
     @Subscribe
