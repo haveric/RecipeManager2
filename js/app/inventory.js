@@ -172,6 +172,12 @@ $(function() {
             revert: true,
             revertDuration: 0
         });
+        
+        $("#addResult").on("click", function() {
+            var $results = $("#results");
+            var clone = $results.find(".inventory").first().clone;
+            $(this).prepend(clone);
+        });
     });
     
     
