@@ -35,7 +35,7 @@ public class RecipeManager {
     @DefaultConfig(sharedRoot = false)
     private ConfigurationLoader<CommentedConfigurationNode> configManager;
 
-    private File defaultFolder;
+
     @Inject
     private Logger log;
 
