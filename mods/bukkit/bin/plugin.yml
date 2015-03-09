@@ -26,7 +26,7 @@ commands:
     aliases: [checkrecipes]
     description: simulates loading recipe files to check for errors
     usage: /<command>
-    permission: recipemanager.command.rmecheck
+    permission: recipemanager.command.rmcheck
   rmreload:
     aliases: [reloadrecipes]
     description: reload recipes/settings/books/etc.
@@ -77,7 +77,7 @@ permissions:
     description: Access to the admin commands
     default: op
     children:
-      recipemanager.command.rmecheck: true
+      recipemanager.command.rmcheck: true
       recipemanager.command.rmreload: true
       recipemanager.command.rmreloadbooks: true
       recipemanager.command.rmextractrecipe: true
@@ -100,7 +100,7 @@ permissions:
   recipemanager.command.rmfinditem:
     description:
     default: true
-  recipemanager.command.rmecheck:
+  recipemanager.command.rmcheck:
     description:
     default: op
   recipemanager.command.rmreload:
