@@ -7,53 +7,54 @@ $(function() {
     var $itemToolTipInn = $itemToolTip.find(".inn");
     var searchTimeout;
     
-    $('.inventory .slot').on({
-        mouseenter: function(e) {
-            var $this = $(this);
-            var $parent = $this.parents(".inventory");
-            var $detail = $this.find(".detail").html();
-            
-            if ($detail && $detail != "") {
-                $itemToolTipInn.html($detail);
-                $itemToolTip.addClass("active");
-                updateTooltipPosition(e.pageX, e.pageY, $parent);
-            }
-            $this.addClass("tooltip");
-        },
-        mouseleave: function() {
-            var $this = $(this);
-            
-            $itemToolTip.removeClass("active");
-            $itemToolTip.show().hide();
-            $this.removeClass("tooltip");
-        },
-        mousemove: function(e) {
-            var $parent = $(this).parents(".inventory");
-            if (e && $itemToolTip.hasClass("active")) {
-                updateTooltipPosition(e.pageX, e.pageY, $parent);
-            }
-        },
-        click: function(e) {
-            var $this = $(this);
-            $(".slot").removeClass("selected");
-            $this.addClass("selected");
-            
-            var name = $this.find(".title").text();
-            var customName = $this.find(".customTitle .original").text();
-            
-            $("#defaultTitle").text(name);
-            $("#customTitle").val(customName);
+    var $craftingWrap = $(".crafting-wrap");
+    $craftingWrap.on("mouseenter", ".inventory .slot", function(e) {
+        var $this = $(this);
+        var $parent = $this.parents(".inventory");
+        var $detail = $this.find(".detail").html();
+        
+        if ($detail && $detail != "") {
+            $itemToolTipInn.html($detail);
+            $itemToolTip.addClass("active");
+            updateTooltipPosition(e.pageX, e.pageY, $parent);
+        }
+        $this.addClass("tooltip");
+    });
+    $craftingWrap.on("mouseleave", ".inventory .slot", function() {
+        var $this = $(this);
+        
+        $itemToolTip.removeClass("active");
+        $itemToolTip.show().hide();
+        $this.removeClass("tooltip");
+    });
+    $craftingWrap.on("mousemove", ".inventory .slot", function(e) {
+        var $parent = $(this).parents(".inventory");
+        if (e && $itemToolTip.hasClass("active")) {
+            updateTooltipPosition(e.pageX, e.pageY, $parent);
         }
     });
-    $(".inventory .slot").draggable({
+    $craftingWrap.on("click", ".inventory .slot", function(e) {
+        var $this = $(this);
+        $(".slot").removeClass("selected");
+        $this.addClass("selected");
+        
+        var name = $this.find(".title").text();
+        var customName = $this.find(".customTitle .original").text();
+        
+        $("#defaultTitle").text(name);
+        $("#customTitle").val(customName);
+    });
+    
+    var draggableSettings = {
         helper: "clone",
         appendTo: ".container",
         zIndex: 100,
         revert: true,
         revertDuration: 0
-    });
+    }
+    $(".inventory .slot").draggable(draggableSettings);
     
-    $(".inventory .slot").droppable({
+    var droppableSettings = {
         tolerance: "pointer",
         hoverClass: 'dropHover',
         drop: function( event, ui ) {
@@ -75,7 +76,8 @@ $(function() {
             
             updateOutput();
         }
-    });
+    }
+    $(".inventory .slot").droppable(droppableSettings);
     
     $("#customTitle").on("input", function() {
         var $slotToUpdate = $(".slot.selected");
@@ -178,6 +180,10 @@ $(function() {
             var $first = $results.find(".inventory").first();
             var $clone = $first.clone();
             $(this).before($clone);
+            var $slot = $clone.find(".slot");
+            
+            $slot.draggable(draggableSettings);
+            $slot.droppable(droppableSettings);
             
             return false;
         });
@@ -426,7 +432,31 @@ $(function() {
             }
         }
         
-        recipe += "= ";
+        var $results = $("#results").find(".inventory");
+        var resultsLength = $results.length;
+        i = 0;
+        $results.each(function() {
+            recipe += "= ";
+            $(this).find(".slot").each(function(index) {
+                var item = "air";
+                
+                var $this = $(this);
+                var $id = $this.find(".itemId");
+                if ($id.length <= 0) {
+                    item = "air";
+                } else {
+                    item = $id.text();
+                }
+                
+                recipe += item;
+                
+                if (i < resultsLength - 1) {
+                    recipe += "\n";
+                }
+                i++;
+            });
+        });
+        
         
         $output.val(recipe);
     }
