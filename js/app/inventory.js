@@ -175,8 +175,11 @@ $(function() {
         
         $("#addResult").on("click", function() {
             var $results = $("#results");
-            var clone = $results.find(".inventory").first().clone;
-            $(this).prepend(clone);
+            var $first = $results.find(".inventory").first();
+            var $clone = $first.clone();
+            $(this).before($clone);
+            
+            return false;
         });
     });
     
