@@ -144,24 +144,50 @@ $(function() {
         $.each(items.minecraft, function(item) {
             var itemId = this.itemID;
             if (itemId !== undefined) {
-                searchHtml += '<div class="item">';
-                var image = this.image;
+                var damageValues = this.damageValues;
                 
-                // Default to air for any missing images
-                if (image === undefined) {
-                    image = "air.png";
-                    console.error("Missing image for: ", item);
+                if (damageValues === undefined) {
+                    searchHtml += '<div class="item">';
+                    var image = this.image;
+                    
+                    // Default to air for any missing images
+                    if (image === undefined) {
+                        image = "air.png";
+                        console.error("Missing image for: ", item);
+                    }
+                    
+                    if (image && !image.startsWith("http")) {
+                        image = "http://assets.wurstmineberg.de/img/grid/" + image;
+                    }
+                    
+                    searchHtml += '<img src="' + image + '" />';
+                    searchHtml += '<div class="detail">';
+                    searchHtml += '<span class="itemId">' + itemId + '</span>';
+                    searchHtml += '<span class="line title">' + this.name + '</span>';
+                    searchHtml += '</div></div>';
+                } else {
+                    $.each(damageValues, function(subitem) {
+                        searchHtml += '<div class="item">';
+                        var image = this.image;
+                        
+                        // Default to air for any missing images
+                        if (image === undefined) {
+                            image = "air.png";
+                            console.error("Missing image for: ", item);
+                        }
+                        
+                        if (image && !image.startsWith("http")) {
+                            image = "http://assets.wurstmineberg.de/img/grid/" + image;
+                        }
+                        
+                        searchHtml += '<img src="' + image + '" />';
+                        searchHtml += '<div class="detail">';
+                        searchHtml += '<span class="itemId">' + itemId + '</span>';
+                        searchHtml += '<span class="itemData">' + subitem + '</span>';
+                        searchHtml += '<span class="line title">' + this.name + '</span>';
+                        searchHtml += '</div></div>';
+                    });
                 }
-                
-                if (image && !image.startsWith("http")) {
-                    image = "http://assets.wurstmineberg.de/img/grid/" + image;
-                }
-                
-                searchHtml += '<img src="' + image + '" />';
-                searchHtml += '<div class="detail">';
-                searchHtml += '<span class="itemId">' + itemId + '</span>';
-                searchHtml += '<span class="line title">' + this.name + '</span>';
-                searchHtml += '</div></div>';
             }
         });
         
