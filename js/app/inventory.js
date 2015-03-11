@@ -181,6 +181,7 @@ $(function() {
             var $clone = $first.clone();
             $(this).before($clone);
             var $slot = $clone.find(".slot");
+            $slot.removeClass("selected");
             
             $slot.draggable(draggableSettings);
             $slot.droppable(droppableSettings);
