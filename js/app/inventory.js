@@ -167,6 +167,7 @@ $(function() {
                     searchHtml += '</div></div>';
                 } else {
                     var parentImage = this.image;
+                    var parentName = this.name;
                     $.each(damageValues, function(subitem) {
                         searchHtml += '<div class="item">';
                         var image = this.image;
@@ -184,11 +185,16 @@ $(function() {
                             image = "http://assets.wurstmineberg.de/img/grid/" + image;
                         }
                         
+                        var name = this.name;
+                        
+                        if (name === undefined) {
+                            name = parentName;
+                        }
                         searchHtml += '<img src="' + image + '" />';
                         searchHtml += '<div class="detail">';
                         searchHtml += '<span class="itemId">' + itemId + '</span>';
                         searchHtml += '<span class="itemData">' + subitem + '</span>';
-                        searchHtml += '<span class="line title">' + this.name + '</span>';
+                        searchHtml += '<span class="line title">' + name + '</span>';
                         searchHtml += '</div></div>';
                     });
                 }
