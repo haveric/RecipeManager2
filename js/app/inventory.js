@@ -185,13 +185,11 @@ $(function() {
             $slot.draggable(draggableSettings);
             $slot.droppable(droppableSettings);
             
+            updateOutput();
+            
             return false;
         });
     });
-    
-    
-    
-    
 
     function updateTooltipPosition(mouseX, mouseY, $inventory) { 
         var inventoryWidth = $inventory.width();
