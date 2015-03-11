@@ -166,10 +166,14 @@ $(function() {
                     searchHtml += '<span class="line title">' + this.name + '</span>';
                     searchHtml += '</div></div>';
                 } else {
+                    var parentImage = this.image;
                     $.each(damageValues, function(subitem) {
                         searchHtml += '<div class="item">';
                         var image = this.image;
                         
+                        if (image === undefined) {
+                            image = parentImage;
+                        }
                         // Default to air for any missing images
                         if (image === undefined) {
                             image = "air.png";
@@ -412,6 +416,10 @@ $(function() {
                     }
                 } else {
                     item = $id.text();
+                    var $data = $this.find(".itemData");
+                    if ($data && $data.text() != "") {
+                        item += ":" + $data.text();
+                    }
                 }
                 
                 matrix[i] = item;
@@ -471,6 +479,10 @@ $(function() {
                     item = "air";
                 } else {
                     item = $id.text();
+                    var $data = $this.find(".itemData");
+                    if ($data && $data.text() != "") {
+                        item += ":" + $data.text();
+                    }
                 }
                 
                 recipe += item;
