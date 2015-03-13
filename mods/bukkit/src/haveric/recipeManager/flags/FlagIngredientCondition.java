@@ -1094,11 +1094,12 @@ public class FlagIngredientCondition extends Flag {
                         continue;
                     }
 
-                    short[] minColor = new short[3];
-                    short[] maxColor = new short[3];
+                    // TODO: Figure out if these are needed
+                    //short[] minColor = new short[3];
+                    //short[] maxColor = new short[3];
 
-                    for (int c = 0; c < split.length; c++) {
-                        String[] range = split[c].split("-", 2);
+                    for (String element : split) {
+                        String[] range = element.split("-", 2);
 
                         try {
                             short min = Short.valueOf(range[0].trim());
@@ -1113,8 +1114,8 @@ public class FlagIngredientCondition extends Flag {
                                 break;
                             }
 
-                            minColor[c] = min;
-                            maxColor[c] = max;
+                            //minColor[c] = min;
+                            //maxColor[c] = max;
                         } catch (NumberFormatException e) {
                             ErrorReporter.warning("Flag " + getType() + " has 'color' argument with invalid number: " + value);
                             continue;

@@ -248,13 +248,14 @@ public class Events implements Listener {
         if (Settings.getInstance().getSpecialRepairMetadata()) {
             ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];
-            int[] repair = new int[2];
+            // TODO: Figure out why this was here
+            //int[] repair = new int[2];
             int repairIndex = 0;
 
             int matrixLength = matrix.length;
             for (int i = 0; i < matrixLength; i++) {
                 if (matrix[i] != null && matrix[i].getType() != Material.AIR) {
-                    repair[repairIndex] = i;
+                    //repair[repairIndex] = i;
                     repaired[repairIndex] = matrix[i];
 
                     if (++repairIndex > 1) {
