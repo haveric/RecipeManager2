@@ -42,7 +42,6 @@ public class ExtractRecipeCommand implements CommandExecutor {
                 File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted item (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
 
                 if (file.exists()) {
-                    // TODO: add new message
                     Messages.CMD_EXTRACT_WAIT.print(sender);
                     return true;
                 }
@@ -61,8 +60,7 @@ public class ExtractRecipeCommand implements CommandExecutor {
 
                     stream.close();
 
-                    // TODO: add new message
-                    Messages.CMD_EXTRACT_DONE.print(sender, null, "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
+                    Messages.CMD_EXTRACTRECIPE_DONE.print(sender, null, "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
                 } catch (IOException e) {
                     Messages.error(sender, e, "Error writing '" + file.getName() + "'");
                 }

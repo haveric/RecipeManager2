@@ -194,6 +194,8 @@ public enum Messages {
     CMD_EXTRACT_NORECIPES("<yellow>No recipes to extract."),
     CMD_EXTRACT_DONE("<green>Done! Recipes saved to '<white>{file}<green>'."),
 
+    CMD_EXTRACTRECIPE_DONE("<green>Done! Recipe saved to '<white>{file}<green>'."),
+
     CMD_RECIPES_USAGE("<yellow>Usage: <gray>/{command} <white><material>:[data]:[amount]"),
     CMD_RECIPES_STATS_MC("Minecraft: <green>{num}"), CMD_RECIPES_STATS_RM("RecipeManager: <green>{num}"),
     CMD_RECIPES_STATS_OTHER("Other plugins/mods: <green>{num}"),
