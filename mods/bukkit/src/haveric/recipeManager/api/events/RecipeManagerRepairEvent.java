@@ -5,6 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
+// TODO: Implement or remove
 public class RecipeManagerRepairEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();
     private boolean cancelled = false;

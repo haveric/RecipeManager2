@@ -13,7 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-
+// TODO: Reimplement or remove
 /**
  * Event triggered when RecipeManager's custom fuel recipes are burned.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
