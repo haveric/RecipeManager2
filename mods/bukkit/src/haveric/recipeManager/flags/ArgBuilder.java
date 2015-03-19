@@ -1,8 +1,8 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.RecipeType;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

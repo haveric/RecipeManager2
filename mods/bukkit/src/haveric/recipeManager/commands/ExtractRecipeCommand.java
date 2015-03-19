@@ -5,7 +5,7 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.recipes.RecipeType;
+import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 
 import java.io.BufferedWriter;
 import java.io.File;
