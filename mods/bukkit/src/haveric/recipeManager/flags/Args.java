@@ -2,8 +2,8 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.RecipeType;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 

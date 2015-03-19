@@ -1,6 +1,7 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Messages;
 import haveric.recipeManager.recipes.ItemResult;
 
 import java.util.Iterator;
@@ -119,6 +120,9 @@ public class FlagSkullOwner extends Flag {
             Skull s = (Skull) loc.getBlock().getState();
             s.setOwner(owner);
             s.update();
+
+            Messages.send(null, "Owner: " + s.getOwner());
+            Messages.send(null, "Drops: " + s.getBlock().getDrops());
 
             Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
             ItemStack result = iter.next();
