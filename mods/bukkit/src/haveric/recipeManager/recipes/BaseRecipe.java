@@ -16,6 +16,7 @@ import org.bukkit.inventory.Recipe;
 public class BaseRecipe implements Flaggable {
     public enum RecipeType {
         ANY(null),
+        BREW("brew"),
         CRAFT("craft"),
         COMBINE("combine"),
         WORKBENCH(null),

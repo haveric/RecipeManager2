@@ -3,6 +3,7 @@ package haveric.recipeManager;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.BrewRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
@@ -18,6 +19,7 @@ import haveric.recipeManager.tools.Tools;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,6 +52,7 @@ public class Recipes {
     protected Map<String, SmeltRecipe> indexSmelt = new HashMap<String, SmeltRecipe>();
     protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<String, SmeltRecipe>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<String, FuelRecipe>();
+    protected Map<String, BrewRecipe> indexBrew = new HashMap<String, BrewRecipe>();
     protected Map<String, BaseRecipe> indexName = new HashMap<String, BaseRecipe>();
 
     protected Recipes() {
@@ -61,6 +64,7 @@ public class Recipes {
         indexCombine.clear();
         indexSmelt.clear();
         indexFuels.clear();
+        indexBrew.clear();
         indexName.clear();
 
         staticResults.clear();
@@ -202,6 +206,25 @@ public class Recipes {
         return recipe;
     }
 
+    public BrewRecipe getBrewRecipe(ItemStack ingredient) {
+        BrewRecipe recipe = null;
+
+        for (Entry<String, BrewRecipe> entry : indexBrew.entrySet()) {
+            String key = entry.getKey();
+            BrewRecipe value = entry.getValue();
+            Messages.send(null, "BrewRecipe: " + key + ", " + value);
+        }
+        if (ingredient != null) {
+            recipe = indexBrew.get(ingredient.getTypeId() + ":" + ingredient.getDurability());
+
+            if (recipe == null) {
+                recipe = indexBrew.get(ingredient.getTypeId() + ":" + Vanilla.DATA_WILDCARD);
+            }
+        }
+
+        return recipe;
+    }
+
     public SmeltRecipe getSmeltRecipeWithFuel(ItemStack fuel) {
         if (fuel == null) {
             return null;
@@ -318,6 +341,9 @@ public class Recipes {
                 if (r.hasFuel()) {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
                 }
+            } else if (recipe instanceof BrewRecipe) {
+                Messages.send(null, "Add brew recipe: " + recipe);
+                indexBrew.put(((BrewRecipe) recipe).getIndexString(), (BrewRecipe) recipe);
             } else if (recipe instanceof FuelRecipe) {
                 indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
             }
@@ -380,6 +406,8 @@ public class Recipes {
             indexCombine.remove(recipe.getIndex());
         } else if (recipe instanceof SmeltRecipe) {
             indexSmelt.remove(((SmeltRecipe) recipe).getIndexString());
+        } else if (recipe instanceof BrewRecipe) {
+            indexBrew.remove(((BrewRecipe) recipe).getIndexString());
         } else if (recipe instanceof FuelRecipe) {
             indexFuels.remove(((FuelRecipe) recipe).getIndexString());
         }

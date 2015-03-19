@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.BrewRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
@@ -31,6 +32,8 @@ public class RecipeRegistrator {
             queueCombineRecipe((CombineRecipe) recipe, adder);
         } else if (recipe instanceof SmeltRecipe) {
             queueSmeltRecipe((SmeltRecipe) recipe, adder);
+        } else if (recipe instanceof BrewRecipe) {
+            queueBrewRecipe((BrewRecipe) recipe, adder);
         } else if (recipe instanceof FuelRecipe) {
             queueFuelRecipe((FuelRecipe) recipe, adder);
         } else {
@@ -65,6 +68,19 @@ public class RecipeRegistrator {
     }
 
     protected void queueSmeltRecipe(SmeltRecipe recipe, String adder) {
+        if (registered) {
+            throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
+        }
+
+        if (!recipe.isValid()) {
+            throw new IllegalArgumentException("Recipe is invalid! Needs a result and ingredient!");
+        }
+
+        queuedRecipes.remove(recipe);
+        queuedRecipes.put(recipe, new RecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
+    }
+
+    protected void queueBrewRecipe(BrewRecipe recipe, String adder) {
         if (registered) {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
         }

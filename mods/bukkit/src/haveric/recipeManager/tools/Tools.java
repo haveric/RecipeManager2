@@ -8,6 +8,7 @@ import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.BrewRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -829,6 +830,13 @@ public class Tools {
             }
         } else if (recipe instanceof SmeltRecipe) {
             SmeltRecipe r = (SmeltRecipe) recipe;
+            ItemStack i = r.getIngredient();
+
+            if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                found++;
+            }
+        } else if (recipe instanceof BrewRecipe) {
+            BrewRecipe r = (BrewRecipe) recipe;
             ItemStack i = r.getIngredient();
 
             if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || i.getDurability() == data)) {

@@ -7,6 +7,7 @@ import haveric.recipeManager.data.FurnaceData;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flaggable;
+import haveric.recipeManager.recipes.BrewRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeInfo.RecipeOwner;
@@ -40,6 +41,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
@@ -58,6 +60,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
@@ -1450,6 +1453,39 @@ public class Events implements Listener {
                 } else if (compare == 3) {
                     Messages.send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void brewEvent(BrewEvent event) {
+        BrewerInventory inventory = event.getContents();
+
+        ItemStack ingredient = inventory.getIngredient();
+        Messages.send(null, "Ingredient: " + ingredient);
+        BrewRecipe recipe = RecipeManager.getRecipes().getBrewRecipe(ingredient);
+        Messages.send(null, "BrewRecipe: " + recipe);
+        if (recipe != null) {
+            ItemStack potion = recipe.getPotion();
+            ItemStack result = recipe.getResult();
+            ItemStack potion1 = inventory.getItem(0);
+            ItemStack potion2 = inventory.getItem(1);
+            ItemStack potion3 = inventory.getItem(2);
+
+            Messages.send(null, "Potion: " + potion + ", Result: " + result);
+            Messages.send(null, "Potions: " + potion1 + ", " + potion2 + ", " + potion3);
+
+
+            if (ToolsItem.isSameItem(potion, potion1, true)) {
+                inventory.setItem(0, result.clone());
+            }
+
+            if (ToolsItem.isSameItem(potion, potion2, true)) {
+                inventory.setItem(1, result.clone());
+            }
+
+            if (ToolsItem.isSameItem(potion, potion3, true)) {
+                inventory.setItem(2, result.clone());
             }
         }
     }

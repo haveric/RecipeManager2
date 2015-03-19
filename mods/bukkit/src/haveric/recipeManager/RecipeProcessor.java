@@ -7,6 +7,7 @@ import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipe.RecipeType;
+import haveric.recipeManager.recipes.BrewRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
@@ -254,6 +255,8 @@ public class RecipeProcessor implements Runnable {
                 added = parseSmeltRecipe();
             } else if (directive.equals(RecipeType.FUEL.getDirective())) {
                 added = parseFuelRecipe();
+            } else if (directive.equals(RecipeType.BREW.getDirective())) {
+                added = parseBrewRecipe();
             } else if (directive.equals(RecipeType.SPECIAL.getDirective())) {
                 added = parseRemoveResults();
             } else {
@@ -771,6 +774,60 @@ public class RecipeProcessor implements Runnable {
         } while (nextLine());
 
         return added > 0;
+    }
+
+    private boolean parseBrewRecipe() throws Throwable {
+        BrewRecipe recipe = new BrewRecipe();
+        parseFlags(recipe.getFlags());
+
+        if (line == null || line.charAt(0) == '=') {
+            return ErrorReporter.error("No ingredient defined!");
+        }
+
+        ItemStack ingredient = Tools.parseItem(line, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+        if (ingredient == null) {
+            return ErrorReporter.error("Recipe has an invalid ingredient, needs fixing!");
+        }
+        Messages.send(null, "ParseBrew Ingredient: " + ingredient);
+        recipe.setIngredient(ingredient);
+
+        nextLine();
+
+        if (line == null || line.charAt(0) == '=') {
+            return ErrorReporter.error("No ingredient defined!");
+        }
+
+        ItemStack potion = Tools.parseItem(line, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+        if (potion == null) {
+            return ErrorReporter.error("Recipe has an invalid potion, needs fixing!");
+        }
+        Messages.send(null, "ParseBrew Potion: " + potion);
+        recipe.setPotion(potion);
+
+        List<ItemResult> results = new ArrayList<ItemResult>();
+
+        if (!parseResults(recipe, results, true, false)) { // results have errors
+            return false;
+        }
+
+        ItemResult result = results.get(0);
+        Messages.send(null, "ParseBrew Result: " + result);
+        recipe.setResult(result);
+
+        // check if the recipe already exists
+        if (!recipeExists(recipe)) {
+            return false;
+        }
+
+        if (recipeName != null && !recipeName.equals("")) {
+            recipe.setName(recipeName); // set recipe's name if defined
+        }
+
+        // add the recipe to the Recipes class and to the list for later adding to the server
+        registrator.queueBrewRecipe(recipe, currentFile);
+        loaded++;
+
+        return true;
     }
 
     // TODO - maybe
