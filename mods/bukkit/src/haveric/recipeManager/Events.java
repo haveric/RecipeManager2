@@ -1468,11 +1468,8 @@ public class Events implements Listener {
             ItemResult result = recipe.getResult();
             Args a = Args.create().inventory(inventory).location(event.getBlock().getLocation()).recipe(recipe).result(result).build();
 
-            if (recipe.sendPrepare(a)) {
-                boolean recipeCheck = recipe.checkFlags(a);
-                boolean resultCheck = result.checkFlags(a);
-
-                if (recipeCheck && resultCheck) {
+            if (recipe.sendPrepare(a) && result.sendPrepare(a)) {
+                if (recipe.checkFlags(a) && result.checkFlags(a)) {
                     ItemStack potion = recipe.getPotion();
 
                     ItemStack bukkitResult = result.toItemStack();
