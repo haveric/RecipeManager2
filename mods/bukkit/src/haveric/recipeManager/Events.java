@@ -1462,31 +1462,39 @@ public class Events implements Listener {
         BrewerInventory inventory = event.getContents();
 
         ItemStack ingredient = inventory.getIngredient();
-        Messages.send(null, "Ingredient: " + ingredient);
         BrewRecipe recipe = RecipeManager.getRecipes().getBrewRecipe(ingredient);
-        Messages.send(null, "BrewRecipe: " + recipe);
+
         if (recipe != null) {
-            ItemStack potion = recipe.getPotion();
-            ItemStack result = recipe.getResult();
-            ItemStack potion1 = inventory.getItem(0);
-            ItemStack potion2 = inventory.getItem(1);
-            ItemStack potion3 = inventory.getItem(2);
+            ItemResult result = recipe.getResult();
+            Args a = Args.create().inventory(inventory).location(event.getBlock().getLocation()).recipe(recipe).result(result).build();
 
-            Messages.send(null, "Potion: " + potion + ", Result: " + result);
-            Messages.send(null, "Potions: " + potion1 + ", " + potion2 + ", " + potion3);
+            if (recipe.sendPrepare(a)) {
+                boolean recipeCheck = recipe.checkFlags(a);
+                boolean resultCheck = result.checkFlags(a);
 
+                if (recipeCheck && resultCheck) {
+                    ItemStack potion = recipe.getPotion();
 
-            if (ToolsItem.isSameItem(potion, potion1, true)) {
-                inventory.setItem(0, result.clone());
+                    ItemStack bukkitResult = result.toItemStack();
+                    ItemStack potion1 = inventory.getItem(0);
+                    ItemStack potion2 = inventory.getItem(1);
+                    ItemStack potion3 = inventory.getItem(2);
+
+                    if (ToolsItem.isSameItem(potion, potion1, true)) {
+                        inventory.setItem(0, bukkitResult.clone());
+                    }
+
+                    if (ToolsItem.isSameItem(potion, potion2, true)) {
+                        inventory.setItem(1, bukkitResult.clone());
+                    }
+
+                    if (ToolsItem.isSameItem(potion, potion3, true)) {
+                        inventory.setItem(2, bukkitResult.clone());
+                    }
+
+                }
             }
 
-            if (ToolsItem.isSameItem(potion, potion2, true)) {
-                inventory.setItem(1, result.clone());
-            }
-
-            if (ToolsItem.isSameItem(potion, potion3, true)) {
-                inventory.setItem(2, result.clone());
-            }
         }
     }
 }

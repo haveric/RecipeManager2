@@ -788,7 +788,7 @@ public class RecipeProcessor implements Runnable {
         if (ingredient == null) {
             return ErrorReporter.error("Recipe has an invalid ingredient, needs fixing!");
         }
-        Messages.send(null, "ParseBrew Ingredient: " + ingredient);
+
         recipe.setIngredient(ingredient);
 
         nextLine();
@@ -801,7 +801,7 @@ public class RecipeProcessor implements Runnable {
         if (potion == null) {
             return ErrorReporter.error("Recipe has an invalid potion, needs fixing!");
         }
-        Messages.send(null, "ParseBrew Potion: " + potion);
+
         recipe.setPotion(potion);
 
         List<ItemResult> results = new ArrayList<ItemResult>();
@@ -811,7 +811,7 @@ public class RecipeProcessor implements Runnable {
         }
 
         ItemResult result = results.get(0);
-        Messages.send(null, "ParseBrew Result: " + result);
+
         recipe.setResult(result);
 
         // check if the recipe already exists

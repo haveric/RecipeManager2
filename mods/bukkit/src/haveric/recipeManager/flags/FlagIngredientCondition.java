@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
@@ -1228,6 +1229,14 @@ public class FlagIngredientCondition extends Flag {
 
             if (smelting != null) {
                 checkIngredientConditions(smelting, a);
+            }
+
+            return;
+        } else if (a.inventory() instanceof BrewerInventory) {
+            ItemStack ingredient = a.inventory().getItem(3);
+
+            if (ingredient != null) {
+                checkIngredientConditions(ingredient, a);
             }
 
             return;

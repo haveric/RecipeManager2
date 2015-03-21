@@ -19,7 +19,6 @@ import haveric.recipeManager.tools.Tools;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -209,11 +208,6 @@ public class Recipes {
     public BrewRecipe getBrewRecipe(ItemStack ingredient) {
         BrewRecipe recipe = null;
 
-        for (Entry<String, BrewRecipe> entry : indexBrew.entrySet()) {
-            String key = entry.getKey();
-            BrewRecipe value = entry.getValue();
-            Messages.send(null, "BrewRecipe: " + key + ", " + value);
-        }
         if (ingredient != null) {
             recipe = indexBrew.get(ingredient.getTypeId() + ":" + ingredient.getDurability());
 
@@ -342,7 +336,6 @@ public class Recipes {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
                 }
             } else if (recipe instanceof BrewRecipe) {
-                Messages.send(null, "Add brew recipe: " + recipe);
                 indexBrew.put(((BrewRecipe) recipe).getIndexString(), (BrewRecipe) recipe);
             } else if (recipe instanceof FuelRecipe) {
                 indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
