@@ -25,9 +25,6 @@ public class FurnaceData implements ConfigurationSerializable {
     private String fueler = null;
     private ItemStack smelting = null;
     private ItemStack fuel = null;
-    private float burnTicks = 0;
-    private Float cookTime = null;
-    private float cookProgress = 0;
 
     // Non-savable fields
     private boolean frozen = false;
@@ -37,9 +34,6 @@ public class FurnaceData implements ConfigurationSerializable {
     private static final String ID_FUELER = "fueler";
     private static final String ID_SMELTING = "smelting";
     private static final String ID_FUEL = "fuel";
-    private static final String ID_BURNTICKS = "burnTicks";
-    private static final String ID_COOKTIME = "cookTime";
-    private static final String ID_COOKPROGRESS = "cookProgress";
 
     public static void init() {
     }
@@ -80,24 +74,6 @@ public class FurnaceData implements ConfigurationSerializable {
             if (obj instanceof Map) {
                 fuel = ItemStack.deserialize((Map<String, Object>) obj);
             }
-
-            obj = map.get(ID_BURNTICKS);
-
-            if (obj instanceof Double) {
-                burnTicks = ((Double) obj).floatValue();
-            }
-
-            obj = map.get(ID_COOKTIME);
-
-            if (obj instanceof Double) {
-                cookTime = ((Double) obj).floatValue();
-            }
-
-            obj = map.get(ID_COOKPROGRESS);
-
-            if (obj instanceof Double) {
-                cookProgress = ((Double) obj).floatValue();
-            }
         } catch (Throwable e) {
             Messages.error(null, e, null);
         }
@@ -105,7 +81,7 @@ public class FurnaceData implements ConfigurationSerializable {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> map = new HashMap<String, Object>(7);
+        Map<String, Object> map = new HashMap<String, Object>(4);
 
         if (smelter != null) {
             map.put(ID_SMELTER, smelter);
@@ -121,18 +97,6 @@ public class FurnaceData implements ConfigurationSerializable {
 
         if (fuel != null) {
             map.put(ID_FUEL, fuel.serialize());
-        }
-
-        if (burnTicks > 0) {
-            map.put(ID_BURNTICKS, burnTicks);
-        }
-
-        if (cookTime != null) {
-            map.put(ID_COOKTIME, cookTime);
-        }
-
-        if (cookProgress > 0) {
-            map.put(ID_COOKPROGRESS, cookProgress);
         }
 
         return map;
@@ -201,47 +165,7 @@ public class FurnaceData implements ConfigurationSerializable {
             fuel = newFuel.clone();
         }
     }
-
-    public boolean isBurning() {
-        return burnTicks > 0;
-    }
-
-    public float getBurnTicks() {
-        return burnTicks;
-    }
-
-    public void setBurnTicks(float ticks) {
-        burnTicks = ticks;
-    }
-
-    /**
-     * @return furnace's total cooking time or null if not assigned.
-     */
-    public Float getCookTime() {
-        return cookTime;
-    }
-
-    /**
-     * Set furnace's total cooking time or null to unset.
-     *
-     * @param cookTime
-     */
-    public void setCookTime(Float newCookTime) {
-        cookTime = newCookTime;
-    }
-
-    public float getCookProgress() {
-        return cookProgress;
-    }
-
-    public void setCookProgress(float ticks) {
-        cookProgress = ticks;
-    }
-
-    public short getCookProgressForFurnace() {
-        return (short) Math.min(Math.max(Math.round(cookProgress), 1), 200);
-    }
-
+/*
     public boolean isFrozen() {
         return frozen;
     }
@@ -249,4 +173,5 @@ public class FurnaceData implements ConfigurationSerializable {
     public void setFrozen(boolean newFrozen) {
         frozen = newFrozen;
     }
+*/
 }

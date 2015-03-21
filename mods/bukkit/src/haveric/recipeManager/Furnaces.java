@@ -96,9 +96,6 @@ public class Furnaces {
         if (data.getSmelting() == null) {
             data.setSmelting(inv.getSmelting());
         }
-
-        data.setBurnTicks(furnace.getBurnTime());
-        data.setCookProgress(furnace.getCookTime());
     }
 
     /**
