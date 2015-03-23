@@ -27,7 +27,7 @@ public class FurnaceData implements ConfigurationSerializable {
     private ItemStack fuel = null;
 
     // Non-savable fields
-    private boolean frozen = false;
+    //private boolean frozen = false;
 
     // Constants
     private static final String ID_SMELTER = "smelter";

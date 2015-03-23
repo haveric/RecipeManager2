@@ -3,7 +3,10 @@ package haveric.recipeManager;
 import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
 import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
 import haveric.recipeManager.data.BlockID;
+import haveric.recipeManager.data.BrewingStandData;
+import haveric.recipeManager.data.BrewingStands;
 import haveric.recipeManager.data.FurnaceData;
+import haveric.recipeManager.data.Furnaces;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flaggable;
@@ -29,6 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Furnace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
@@ -658,15 +662,19 @@ public class Events implements Listener {
     public void inventoryClick(InventoryClickEvent event) {
         try {
             Inventory inv = event.getInventory();
+            HumanEntity ent = event.getWhoClicked();
 
-            if (inv instanceof FurnaceInventory) {
+            if (ent instanceof Player) {
                 InventoryHolder holder = inv.getHolder();
 
-                if (holder instanceof Furnace) {
-                    HumanEntity ent = event.getWhoClicked();
-
-                    if (ent instanceof Player) {
-                        furnaceClick(event, (Furnace) holder, (Player) ent);
+                if (inv instanceof FurnaceInventory && holder instanceof Furnace) {
+                    furnaceClick(event, (Furnace) holder, (Player) ent);
+                } else if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
+                    Messages.send(null, "Raw: " + event.getRawSlot());
+                    Messages.send(null, "inv size: " + inv.getSize());
+                    if (event.getRawSlot() < inv.getSize()) {
+                        BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
+                        data.setFueler(ent.getName());
                     }
                 }
             }
@@ -1274,23 +1282,36 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void blockPlace(BlockPlaceEvent event) {
-        placeOrBreakFurnace(event.getBlock(), true);
+        Block block = event.getBlock();
+        Material type = block.getType();
+        Location location = block.getLocation();
+
+        switch(type) {
+            case BURNING_FURNACE:
+            case FURNACE:
+                Furnaces.add(location);
+                break;
+            case BREWING_STAND:
+                BrewingStands.add(location);
+                break;
+            default:
+                break;
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void blockBreak(BlockBreakEvent event) {
-        placeOrBreakFurnace(event.getBlock(), false);
-    }
+        Block block = event.getBlock();
+        Material type = block.getType();
+        Location location = block.getLocation();
 
-    private void placeOrBreakFurnace(Block block, boolean place) {
-        switch (block.getType()) {
+        switch(type) {
             case BURNING_FURNACE:
             case FURNACE:
-                if (place) {
-                    Furnaces.add(block.getLocation());
-                } else {
-                    Furnaces.remove(block.getLocation());
-                }
+                Furnaces.remove(location);
+                break;
+            case BREWING_STAND:
+                BrewingStands.remove(location);
                 break;
             default:
                 break;
@@ -1305,24 +1326,24 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void chunkLoad(ChunkLoadEvent event) {
         if (!event.isNewChunk()) {
-            findFurnaces(event.getChunk(), true);
+            findBlocks(event.getChunk(), true);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void chunkUnload(ChunkUnloadEvent event) {
-        findFurnaces(event.getChunk(), false);
+        findBlocks(event.getChunk(), false);
     }
 
     protected void worldLoad(World world) {
         Chunk[] chunks = world.getLoadedChunks();
 
         for (Chunk chunk : chunks) {
-            findFurnaces(chunk, true);
+            findBlocks(chunk, true);
         }
     }
 
-    private void findFurnaces(final Chunk chunk, final boolean add) {
+    private void findBlocks(final Chunk chunk, final boolean add) {
         if (chunk == null || !chunk.isLoaded()) {
             return;
         }
@@ -1347,6 +1368,8 @@ public class Events implements Listener {
                             case BURNING_FURNACE:
                                 list.add(block.getState());
                                 break;
+                            case BREWING_STAND:
+                                list.add(block.getState());
                             default:
                                 break;
                         }
@@ -1373,6 +1396,13 @@ public class Events implements Listener {
                     added.add(id);
                 } else {
                     Furnaces.remove(id);
+                }
+            } else if (state instanceof BrewingStand) {
+                BlockID id = BlockID.fromLocation(state.getLocation());
+                if (add) {
+                    BrewingStands.set(id, (BrewingStand) state);
+                } else {
+                    BrewingStands.remove(id);
                 }
             }
         }
@@ -1465,8 +1495,12 @@ public class Events implements Listener {
         BrewRecipe recipe = RecipeManager.getRecipes().getBrewRecipe(ingredient);
 
         if (recipe != null) {
+            Block block = event.getBlock();
             ItemResult result = recipe.getResult();
-            Args a = Args.create().inventory(inventory).location(event.getBlock().getLocation()).recipe(recipe).result(result).build();
+            Location location = block.getLocation();
+            BrewingStandData data = BrewingStands.get(location);
+
+            Args a = Args.create().inventory(inventory).location(location).player(data.getFueler()).recipe(recipe).result(result).build();
 
             if (recipe.sendPrepare(a) && result.sendPrepare(a)) {
                 if (recipe.checkFlags(a) && result.checkFlags(a)) {

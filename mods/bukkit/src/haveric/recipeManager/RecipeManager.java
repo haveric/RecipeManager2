@@ -12,7 +12,10 @@ import haveric.recipeManager.commands.RecipeCommand;
 import haveric.recipeManager.commands.ReloadBooksCommand;
 import haveric.recipeManager.commands.ReloadCommand;
 import haveric.recipeManager.commands.UpdateCommand;
+import haveric.recipeManager.data.BrewingStandData;
+import haveric.recipeManager.data.BrewingStands;
 import haveric.recipeManager.data.FurnaceData;
+import haveric.recipeManager.data.Furnaces;
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
@@ -60,7 +63,9 @@ public class RecipeManager extends JavaPlugin {
 
 
         FurnaceData.init(); // dummy caller
+        BrewingStandData.init();
         Furnaces.load(); // load saved furnaces...
+        BrewingStands.load();
 
         events = new Events();
         recipes = new Recipes();
@@ -222,6 +227,9 @@ public class RecipeManager extends JavaPlugin {
 
             Furnaces.save();
             Furnaces.clean();
+
+            BrewingStands.save();
+            BrewingStands.clean();
 
             Workbenches.clean();
             Players.clean();

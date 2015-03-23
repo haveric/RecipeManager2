@@ -1,7 +1,7 @@
-package haveric.recipeManager;
+package haveric.recipeManager.data;
 
-import haveric.recipeManager.data.BlockID;
-import haveric.recipeManager.data.FurnaceData;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class Furnaces {
     protected static void init() {
     }
 
-    protected static void clean() {
+    public static void clean() {
         furnaces.clear();
     }
 
@@ -69,7 +69,7 @@ public class Furnaces {
         set(null, furnace);
     }
 
-    protected static void set(BlockID id, Furnace furnace) {
+    public static void set(BlockID id, Furnace furnace) {
         Validate.notNull(furnace, "furnace argument must not be null!");
 
         if (id == null) {
