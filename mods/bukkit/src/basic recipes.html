@@ -209,6 +209,31 @@ lantern % 20 // 'lantern' is alias for 'jack_o_lantern'
 </pre>
 
 
+    <h3>BREW RECIPE - brewing stand recipes</h3>
+<pre>
+BREW [recipe name]
+&lt;material:[data]:[amount]&gt; // ingredient
+&lt;material:[data]&gt; // potion
+= [chance]% &lt;material:[data]:[amount]&gt;
+[...]
+</pre>
+    <ul>
+        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</li>
+        <li>The second '&lt;material&gt;:[data]' is the potion with optional data.</li>
+        <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</li>
+        <li>Note: Currently requires a vanilla brewing recipe, but can have customized items.</li>
+    </ul>
+    <b>Example:</b>
+<pre>
+brew
+nether_warts // aliased in item aliases to bukkit's nether_stalk
+potion:water // water aliased in item aliases
+= stone
+@name &lt;red&gt;Test Stone. Please Ignore
+@ingredientcondition nether_warts | name &cTest
+</pre>
+
+
     <hr>
     <p>
       For more customization options and examples see <a href="advanced recipes.html"><b>advanced recipes.html</b></a>.

@@ -670,8 +670,6 @@ public class Events implements Listener {
                 if (inv instanceof FurnaceInventory && holder instanceof Furnace) {
                     furnaceClick(event, (Furnace) holder, (Player) ent);
                 } else if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
-                    Messages.send(null, "Raw: " + event.getRawSlot());
-                    Messages.send(null, "inv size: " + inv.getSize());
                     if (event.getRawSlot() < inv.getSize()) {
                         BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
                         data.setFueler(ent.getName());

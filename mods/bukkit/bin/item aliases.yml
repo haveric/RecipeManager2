@@ -1,4 +1,4 @@
-lastchanged: 2.3 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.4 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -356,6 +356,10 @@ long_grass:
   0: shrub
   1: long grass
   2: fern
+
+# Fix the terribly named items
+nether_warts: nether warts block        # rename the block form of nether warts, you probably won't need to use this
+nether_stalk: nether warts              # rename the proper item to what it should have been
 
 # misc aliases
 air: fail
