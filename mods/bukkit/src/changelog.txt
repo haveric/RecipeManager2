@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * Fixed some shift clicking issues with furnaces
 * Fixed rmcheck command permissions
+* Added basic brewing recipe support (See 'basic recipes.html' for usage)
 
 === v2.3.4 ===
 * @LightLevel Added a note about using light from blocks with furnaces as they provide light to themselves
