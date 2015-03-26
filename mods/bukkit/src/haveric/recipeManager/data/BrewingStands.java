@@ -43,7 +43,7 @@ public class BrewingStands {
             Entry<BlockID, BrewingStandData> entry = iter.next();
             BlockID id = entry.getKey();
 
-            if (Math.floor(id.getX() / 16.0) == x && Math.floor(id.getZ() / 16) == z && !added.contains(id)) {
+            if (Math.floor(id.getX() / 16.0) == x && Math.floor(id.getZ() / 16.0) == z && !added.contains(id)) {
                 iter.remove();
             }
         }

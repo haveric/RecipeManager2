@@ -1364,10 +1364,9 @@ public class Events implements Listener {
                         switch (block.getType()) {
                             case FURNACE:
                             case BURNING_FURNACE:
-                                list.add(block.getState());
-                                break;
                             case BREWING_STAND:
                                 list.add(block.getState());
+                                break;
                             default:
                                 break;
                         }
