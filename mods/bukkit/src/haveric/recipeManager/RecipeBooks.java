@@ -84,18 +84,21 @@ public class RecipeBooks {
 
         Map<String, File> files = new HashMap<String, File>();
 
-        for (File file : dir.listFiles()) {
-            if (file.isFile()) {
-                int i = file.getName().lastIndexOf('.');
-                String ext;
-                if (i > 0) {
-                    ext = file.getName().substring(i).toLowerCase();
-                } else {
-                    ext = file.getName();
-                }
+        File[] listOfFiles = dir.listFiles();
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    int i = file.getName().lastIndexOf('.');
+                    String ext;
+                    if (i > 0) {
+                        ext = file.getName().substring(i).toLowerCase();
+                    } else {
+                        ext = file.getName();
+                    }
 
-                if (ext.equals(".yml")) {
-                    files.put(Tools.removeExtensions(file.getName(), Sets.newHashSet(".yml")), file);
+                    if (ext.equals(".yml")) {
+                        files.put(Tools.removeExtensions(file.getName(), Sets.newHashSet(".yml")), file);
+                    }
                 }
             }
         }

@@ -201,26 +201,30 @@ public class RecipeProcessor implements Runnable {
     }
 
     private void analyzeDirectory(File dir) {
-        for (File file : dir.listFiles()) {
-            if (file.isDirectory()) {
-                if (!file.getName().equalsIgnoreCase("disabled")) {
-                    analyzeDirectory(file);
-                }
-            } else {
-                int i = file.getName().lastIndexOf('.');
-                String ext;
-                if (i > 0) {
-                    ext = file.getName().substring(i).toLowerCase();
+        File[] listOfFiles = dir.listFiles();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isDirectory()) {
+                    if (!file.getName().equalsIgnoreCase("disabled")) {
+                        analyzeDirectory(file);
+                    }
                 } else {
-                    ext = file.getName();
-                }
+                    int i = file.getName().lastIndexOf('.');
+                    String ext;
+                    if (i > 0) {
+                        ext = file.getName().substring(i).toLowerCase();
+                    } else {
+                        ext = file.getName();
+                    }
 
-                if (!Files.FILE_RECIPE_EXTENSIONS.contains(ext)) {
-                    continue;
-                }
+                    if (!Files.FILE_RECIPE_EXTENSIONS.contains(ext)) {
+                        continue;
+                    }
 
-                String fileName = file.getPath().replace(DIR_RECIPES, ""); // get the relative path+filename
-                fileList.add(fileName); // add to the processing file list
+                    String fileName = file.getPath().replace(DIR_RECIPES, ""); // get the relative path+filename
+                    fileList.add(fileName); // add to the processing file list
+                }
             }
         }
     }

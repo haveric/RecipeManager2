@@ -137,17 +137,20 @@ public class BrewingStands {
         FileConfiguration yml;
         UUID id;
 
-        for (File file : dir.listFiles()) {
-            if (!file.isFile() || !file.getName().endsWith(SAVE_EXTENSION)) {
-                continue;
-            }
+        File[] listOfFiles = dir.listFiles();
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (!file.isFile() || !file.getName().endsWith(SAVE_EXTENSION)) {
+                    continue;
+                }
 
-            yml = YamlConfiguration.loadConfiguration(file);
+                yml = YamlConfiguration.loadConfiguration(file);
 
-            id = UUID.fromString(yml.getString("id"));
+                id = UUID.fromString(yml.getString("id"));
 
-            for (Entry<String, Object> entry : yml.getConfigurationSection("coords").getValues(false).entrySet()) {
-                brewingStands.put(BlockID.fromString(id, entry.getKey()), (BrewingStandData) entry.getValue());
+                for (Entry<String, Object> entry : yml.getConfigurationSection("coords").getValues(false).entrySet()) {
+                    brewingStands.put(BlockID.fromString(id, entry.getKey()), (BrewingStandData) entry.getValue());
+                }
             }
         }
 
