@@ -10,7 +10,7 @@ public class FlagRestrict extends Flag {
         "{flag} [fail message]", };
 
     protected static final String[] D = new String[] {
-        "Restricts the recipe to everybody.",
+        "Restricts the recipe for everybody.",
         "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.",
         "",
         "Optionally you can overwrite the default restrict message.", };

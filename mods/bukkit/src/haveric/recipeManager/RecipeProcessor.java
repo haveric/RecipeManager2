@@ -992,7 +992,7 @@ public class RecipeProcessor implements Runnable {
             } else {
                 recipe.getFlags().addFlag(new FlagOverride());
 
-                if (!Settings.getInstance().getDisableOverrideWarnings()) {
+                if (!(recipe.hasFlag(FlagType.RESTRICT) || Settings.getInstance().getDisableOverrideWarnings())) {
                     ErrorReporter.warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
                 }
 
