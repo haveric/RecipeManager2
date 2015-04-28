@@ -4,9 +4,9 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.entity.player.PlayerJoinEvent;
 import org.spongepowered.api.event.entity.player.PlayerQuitEvent;
-import org.spongepowered.api.util.event.Subscribe;
 
 public class RMPlayerJoinQuitEvent {
 
@@ -19,7 +19,7 @@ public class RMPlayerJoinQuitEvent {
     @Subscribe
     public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        UUIDFetcher.addPlayerToCache(player.getName(), player.getUniqueId());
+        UUIDFetcher.addPlayerToCache(plugin, player.getName(), player.getUniqueId());
     }
 
     @Subscribe

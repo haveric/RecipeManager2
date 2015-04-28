@@ -1,5 +1,7 @@
 package haveric.recipeManager.uuidFetcher;
 
+import haveric.recipeManager.RecipeManager;
+
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -13,13 +15,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import org.spongepowered.api.Game;
+import org.spongepowered.api.Server;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.spongepowered.api.Server;
-import org.spongepowered.mod.SpongeMod;
+
+import com.google.inject.Inject;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
+	
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private final JSONParser jsonParser = new JSONParser();
@@ -28,10 +33,10 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     private static HashMap<String, UUID> lookupCache;
 
-    public static void addPlayerToCache(String name, UUID uuid) {
-        Server server = SpongeMod.instance.getGame().getServer();
+    public static void addPlayerToCache(RecipeManager plugin, String name, UUID uuid) {
+        Server server = plugin.getGame().getServer();
         boolean onlineMode = server.getOnlineMode();
-
+        
         if (onlineMode) {
             if (lookupCache == null) {
                 lookupCache = new HashMap<String, UUID>();

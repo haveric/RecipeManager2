@@ -8,5 +8,8 @@ build.xml
 bin
 node_modules
 downloads/*/dev
-/mods/bukkit/bin
-/mods/bukkit/bin/*
+bin/
+
+# Gradle
+.gradle
+build/

@@ -10,6 +10,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.state.ServerAboutToStartEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
@@ -17,7 +18,6 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.service.event.EventManager;
-import org.spongepowered.api.util.event.Subscribe;
 
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
@@ -39,7 +39,9 @@ public class RecipeManager {
     @Inject
     private Logger log;
 
+    @Inject
     private Game game;
+
     private Settings settings;
     private Files files;
 
@@ -49,7 +51,6 @@ public class RecipeManager {
 
     @Subscribe
     public void preStartup(ServerAboutToStartEvent event) {
-        game = event.getGame();
         Optional<PluginContainer> optionalPluginContainer = game.getPluginManager().fromInstance(this);
         if (optionalPluginContainer.isPresent()) {
             pluginManager = optionalPluginContainer.get();
