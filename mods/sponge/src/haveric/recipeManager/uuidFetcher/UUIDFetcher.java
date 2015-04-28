@@ -19,8 +19,6 @@ import org.json.simple.parser.JSONParser;
 import org.spongepowered.api.Server;
 import org.spongepowered.mod.SpongeMod;
 
-import com.google.common.base.Optional;
-
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
@@ -31,17 +29,15 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static HashMap<String, UUID> lookupCache;
 
     public static void addPlayerToCache(String name, UUID uuid) {
-        Optional<Server> optionalServer = SpongeMod.instance.getGame().getServer();
-        if (optionalServer.isPresent()) {
-            boolean onlineMode = optionalServer.get().getOnlineMode();
+        Server server = SpongeMod.instance.getGame().getServer();
+        boolean onlineMode = server.getOnlineMode();
 
-            if (onlineMode) {
-                if (lookupCache == null) {
-                    lookupCache = new HashMap<String, UUID>();
-                }
-
-                lookupCache.put(name, uuid);
+        if (onlineMode) {
+            if (lookupCache == null) {
+                lookupCache = new HashMap<String, UUID>();
             }
+
+            lookupCache.put(name, uuid);
         }
     }
 

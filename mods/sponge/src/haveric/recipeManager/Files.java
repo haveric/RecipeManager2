@@ -112,7 +112,7 @@ public class Files {
         //s.append("<a href='" + SPONGE_DOCS + "Material.html'>BukkitAPI / Material</a>");
         s.append(NL).append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-34s %-24s %-24s %-5s %s", "Id", "Name", "Alias", "Stack", "Max durability"));
+        s.append(NL).append(String.format(" %-34s %-24s %-24s %-5s", "Id", "Name", "Alias", "Stack"));
 
         for (Field field : ItemTypes.class.getDeclaredFields()) {
             if (field.getType().equals(ItemType.class)) {
@@ -128,12 +128,7 @@ public class Files {
                         aliasString = alias;
                     }
 
-                    String durabilityString = "";
-                    if (item.getMaxDamage() != 0) {
-                        durabilityString += item.getMaxDamage();
-                    }
-
-                    s.append(NL).append(String.format(" %-34s %-24s %-24s %-5d %s", item.getId(), field.getName(), aliasString, item.getMaxStackQuantity(), durabilityString));
+                    s.append(NL).append(String.format(" %-34s %-24s %-24s %-5d", item.getId(), field.getName(), aliasString, item.getMaxStackQuantity()));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
