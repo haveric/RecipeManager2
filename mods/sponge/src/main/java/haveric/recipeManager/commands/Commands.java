@@ -11,7 +11,7 @@ public class Commands {
     public Commands(RecipeManager recipeManager) {
         plugin = recipeManager;
 
-        CommandService service = plugin.getGame().getCommandDispatcher();
+        CommandService service = RecipeManager.getGame().getCommandDispatcher();
 
         service.register(plugin, new BaseCommand(), "rm", "recipemanager", "rmhelp");
 

@@ -39,21 +39,23 @@ public class RecipeManager {
     @Inject
     private Logger log;
 
-    @Inject
-    private Game game;
+    private static Game game;
 
     private Settings settings;
     private Files files;
 
-    private PluginContainer pluginManager;
+    private static PluginContainer pluginContainer;
 
     private Commands commands;
+    private static RecipeManager plugin;
 
     @Subscribe
     public void preStartup(ServerAboutToStartEvent event) {
+        plugin = this;
+        game = event.getGame();
         Optional<PluginContainer> optionalPluginContainer = game.getPluginManager().fromInstance(this);
         if (optionalPluginContainer.isPresent()) {
-            pluginManager = optionalPluginContainer.get();
+            pluginContainer = optionalPluginContainer.get();
         }
     }
 
@@ -77,8 +79,19 @@ public class RecipeManager {
         return log;
     }
 
-    public Game getGame() {
+    public static Game getGame() {
         return game;
+    }
+    
+    public static PluginContainer getPluginContainer() {
+        if (pluginContainer == null) {
+            Optional<PluginContainer> optionalPluginContainer = game.getPluginManager().fromInstance(plugin);
+            if (optionalPluginContainer.isPresent()) {
+                pluginContainer = optionalPluginContainer.get();
+            }
+        }
+        
+        return pluginContainer;
     }
 
     public Settings getSettings() {
@@ -86,6 +99,6 @@ public class RecipeManager {
     }
 
     public String getVersion() {
-        return pluginManager.getVersion();
+        return pluginContainer.getVersion();
     }
 }

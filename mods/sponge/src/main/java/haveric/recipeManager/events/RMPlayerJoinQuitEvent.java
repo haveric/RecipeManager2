@@ -19,7 +19,7 @@ public class RMPlayerJoinQuitEvent {
     @Subscribe
     public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        UUIDFetcher.addPlayerToCache(plugin, player.getName(), player.getUniqueId());
+        UUIDFetcher.addPlayerToCache(player.getName(), player.getUniqueId());
     }
 
     @Subscribe

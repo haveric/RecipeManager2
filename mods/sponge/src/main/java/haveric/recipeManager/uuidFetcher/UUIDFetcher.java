@@ -24,7 +24,7 @@ import org.json.simple.parser.JSONParser;
 import com.google.inject.Inject;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
-	
+    
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private final JSONParser jsonParser = new JSONParser();
@@ -33,8 +33,8 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     private static HashMap<String, UUID> lookupCache;
 
-    public static void addPlayerToCache(RecipeManager plugin, String name, UUID uuid) {
-        Server server = plugin.getGame().getServer();
+    public static void addPlayerToCache(String name, UUID uuid) {
+        Server server = RecipeManager.getGame().getServer();
         boolean onlineMode = server.getOnlineMode();
         
         if (onlineMode) {
