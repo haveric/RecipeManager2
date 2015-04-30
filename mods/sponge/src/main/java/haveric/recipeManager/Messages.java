@@ -1,5 +1,6 @@
 package haveric.recipeManager;
 
+import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.CommandSource;
@@ -12,9 +13,17 @@ public class Messages {
     
     public static void send(CommandSource sender, Text text) {
         if (sender == null) {
-            RecipeManager.getGame().getServer().getConsole().sendMessage(text);
-        } else {
-            sender.sendMessage(text);
+            sender = RecipeManager.getGame().getServer().getConsole();
         }
+    
+        sender.sendMessage(text);
+    }
+    
+    public static void sendAndLog(CommandSource sender, String message) {
+        if (sender instanceof Player) {
+            send(sender, message);
+        }
+        
+        send(null, message);
     }
 }
