@@ -8,9 +8,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Set;
 
+import org.spongepowered.api.GameRegistry;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
+
+import com.google.common.collect.Sets;
 
 
 public class Files {
@@ -19,6 +24,8 @@ public class Files {
     public static final String FILE_USED_VERSION = "used.version";
     public static final String FILE_INFO_NAMES = "name index.html";
 
+    public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
+    
     private static String DIR_PLUGIN;
     private static final String SPONGE_DOCS = "";
 
@@ -27,8 +34,6 @@ public class Files {
     public Files(RecipeManager recipeManager) {
         plugin = recipeManager;
         DIR_PLUGIN = plugin.getSettings().getDefaultFolderPath() + File.separator;
-
-        reload();
     }
 
     public void reload() {
@@ -113,7 +118,7 @@ public class Files {
         s.append(NL).append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
         s.append(NL);
         s.append(NL).append(String.format(" %-34s %-24s %-24s %-5s", "Id", "Name", "Alias", "Stack"));
-
+        
         for (Field field : ItemTypes.class.getDeclaredFields()) {
             if (field.getType().equals(ItemType.class)) {
                 try {
@@ -136,6 +141,22 @@ public class Files {
                 }
             }
         }
+        /*
+        GameRegistry registry = RecipeManager.getGame().getRegistry();
+        Collection<ItemType> allItems = registry.getAllOf(ItemType.class);
+        for (ItemType item: allItems) {
+            String alias = null;//Settings.getInstance().getMaterialPrint(m);
+
+            String aliasString;
+            if (alias == null) {
+                aliasString = "";
+            } else {
+                aliasString = alias;
+            }
+
+            s.append(NL).append(String.format(" %-34s %-24s %-5d", item.getId(), aliasString, item.getMaxStackQuantity()));
+        }
+        */
 
 
         Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_NAMES);

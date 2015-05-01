@@ -1,5 +1,7 @@
 package haveric.recipeManager.commands;
 
+import haveric.recipeManager.RecipeManager;
+
 import java.util.List;
 
 import org.spongepowered.api.text.Text;
@@ -15,7 +17,7 @@ public class ReloadCommand implements CommandCallable {
 
     @Override
     public Optional<CommandResult> process(CommandSource source, String arguments) throws CommandException {
-        //source.sendMessage(Texts.of(TextColors.YELLOW, "------ ", TextColors.WHITE, "Recipe Manager", TextColors.GRAY, " by haveric ", TextColors.YELLOW, "------"));
+        RecipeManager.getPlugin().reload();
         return Optional.of(CommandResult.success());
     }
 

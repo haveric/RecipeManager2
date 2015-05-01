@@ -15,13 +15,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
-import com.google.inject.Inject;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
     
@@ -34,7 +31,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static HashMap<String, UUID> lookupCache;
 
     public static void addPlayerToCache(String name, UUID uuid) {
-        Server server = RecipeManager.getGame().getServer();
+        Server server = RecipeManager.getPlugin().getGame().getServer();
         boolean onlineMode = server.getOnlineMode();
         
         if (onlineMode) {

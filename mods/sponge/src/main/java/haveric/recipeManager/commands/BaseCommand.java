@@ -27,8 +27,8 @@ public class BaseCommand implements CommandCallable{
     public Optional<CommandResult> process(CommandSource source, String arguments) throws CommandException {
         Messages.send(source, Texts.of(TextColors.YELLOW, "------ ", TextColors.WHITE, "Recipe Manager", TextColors.GRAY, " by haveric ", TextColors.YELLOW, "------"));
         
-        CommandService service = RecipeManager.getGame().getCommandDispatcher();
-        PluginContainer pluginContainer = RecipeManager.getPluginContainer();
+        CommandService service = RecipeManager.getPlugin().getGame().getCommandDispatcher();
+        PluginContainer pluginContainer = RecipeManager.getPlugin().getPluginContainer();
         
         Set<CommandMapping> commands = service.getOwnedBy(pluginContainer);
         ArrayList<CommandMapping> commandsList = new ArrayList<CommandMapping>();
