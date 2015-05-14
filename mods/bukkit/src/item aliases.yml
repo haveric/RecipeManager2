@@ -296,6 +296,9 @@ monster_eggs:
 # alchemy
 brewing_stand_item: brewing stand    # overwrites brewing_stand material which represents the block, not the item!
 brewing_stand: brewing stand block   # name to make the brewing stand block usable but you won't really need this.
+cauldron_item: cauldron
+cauldron: cauldron block
+
 glass_bottle: empty bottle, bottle
 potion:
   0: water
@@ -372,6 +375,12 @@ jungle_door: jungle door block
 jungle_door_item: jungle door
 spruce_door: spruce door block
 spruce_door_item: spruce door
+
+# Misc. Fix Items
+carrot: carrot block
+carrot_item: carrot
+potato: potato block
+potato_item: potato
 
 # misc aliases
 air: fail
