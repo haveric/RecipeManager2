@@ -238,7 +238,7 @@ public class RecipeProcessor implements Runnable {
         commentBlock = false;
         boolean added = false;
 
-        parseFlags(fileFlags); // parse file header flags that applies to all recipes
+        parseFlags(fileFlags); // parse file header flags that apply to all recipes
 
         while (searchRecipes()) { // search for recipes...
             directiveLine = lineNum;

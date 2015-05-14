@@ -361,6 +361,18 @@ long_grass:
 nether_warts: nether warts block        # rename the block form of nether warts, you probably won't need to use this
 nether_stalk: nether warts              # rename the proper item to what it should have been
 
+# doors
+acacia_door: acacia door block
+acacia_door_item: acacia door
+birch_door: birch door block
+birch_door_item: birch door
+dark_oak_door: dark oak door block
+dark_oak_door_item: dark oak door
+jungle_door: jungle door block
+jungle_door_item: jungle door
+spruce_door: spruce door block
+spruce_door_item: spruce door
+
 # misc aliases
 air: fail
 sulphur: gun powder, powder
