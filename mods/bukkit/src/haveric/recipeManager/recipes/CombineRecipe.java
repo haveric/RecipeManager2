@@ -161,12 +161,17 @@ public class CombineRecipe extends WorkbenchRecipe {
     }
 
     @Override
-    public ShapelessRecipe toBukkitRecipe() {
+    public ShapelessRecipe toBukkitRecipe(boolean vanilla) {
         if (!hasIngredients() || !hasResults()) {
             return null;
         }
 
-        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+        ShapelessRecipe bukkitRecipe;
+        if (vanilla) {
+            bukkitRecipe = new ShapelessRecipe(getFirstResult());
+        } else {
+            bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+        }
 
         for (ItemStack item : ingredients) {
             bukkitRecipe.addIngredient(item.getAmount(), item.getType(), item.getDurability());

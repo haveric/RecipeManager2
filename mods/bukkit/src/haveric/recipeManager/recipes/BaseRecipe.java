@@ -179,10 +179,10 @@ public class BaseRecipe implements Flaggable {
      *
      * @return Bukkit API version of the recipe
      */
-    public Recipe getBukkitRecipe() {
+    public Recipe getBukkitRecipe(boolean vanilla) {
         Recipe bukkitRecipe;
         if (recipe == null) {
-            bukkitRecipe = toBukkitRecipe();
+            bukkitRecipe = toBukkitRecipe(vanilla);
         } else {
             bukkitRecipe = recipe;
         }
@@ -194,7 +194,7 @@ public class BaseRecipe implements Flaggable {
         recipe = newRecipe;
     }
 
-    public Recipe toBukkitRecipe() {
+    public Recipe toBukkitRecipe(boolean vanilla) {
         return null;
     }
 

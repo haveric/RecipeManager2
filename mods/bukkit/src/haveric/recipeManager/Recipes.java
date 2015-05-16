@@ -349,7 +349,7 @@ public class Recipes {
 
         // Add to server if applicable
         if (!recipe.hasFlag(FlagType.REMOVE)) {
-            Recipe bukkitRecipe = recipe.getBukkitRecipe();
+            Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
 
             if (bukkitRecipe != null) {
                 Bukkit.addRecipe(bukkitRecipe);
@@ -386,7 +386,7 @@ public class Recipes {
      */
     public Recipe removeRecipe(BaseRecipe recipe) {
         if (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE)) {
-            Bukkit.getServer().addRecipe(recipe.getBukkitRecipe());
+            Bukkit.getServer().addRecipe(recipe.getBukkitRecipe(false));
         }
 
         index.remove(recipe); // Remove from main index

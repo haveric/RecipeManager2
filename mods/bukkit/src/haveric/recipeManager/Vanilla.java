@@ -408,7 +408,7 @@ public class Vanilla {
     public static void restoreInitialRecipes() {
         for (Entry<BaseRecipe, RecipeInfo> entry : initialRecipes.entrySet()) {
             // TODO maybe check if recipe is already in server ?
-            Bukkit.addRecipe(entry.getKey().getBukkitRecipe());
+            Bukkit.addRecipe(entry.getKey().getBukkitRecipe(true));
         }
     }
 
@@ -422,7 +422,7 @@ public class Vanilla {
             if (recipe instanceof FuelRecipe) {
                 RecipeManager.getRecipes().indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
             } else {
-                Recipe bukkitRecipe = recipe.getBukkitRecipe();
+                Recipe bukkitRecipe = recipe.getBukkitRecipe(true);
 
                 if (bukkitRecipe != null) {
                     if (isSpecialRecipe(bukkitRecipe)) {

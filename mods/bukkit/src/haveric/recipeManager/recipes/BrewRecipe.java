@@ -15,7 +15,7 @@ public class BrewRecipe extends BaseRecipe {
     }
 
     @Override
-    public Recipe getBukkitRecipe() {
+    public Recipe getBukkitRecipe(boolean vanilla) {
         return null;
     }
 
@@ -25,7 +25,7 @@ public class BrewRecipe extends BaseRecipe {
     }
 
     @Override
-    public Recipe toBukkitRecipe() {
+    public Recipe toBukkitRecipe(boolean vanilla) {
         return null;
     }
 

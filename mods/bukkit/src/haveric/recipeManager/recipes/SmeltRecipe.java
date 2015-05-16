@@ -207,7 +207,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     }
 
     @Override
-    public FurnaceRecipe toBukkitRecipe() {
+    public FurnaceRecipe toBukkitRecipe(boolean vanilla) {
         if (!hasIngredient() || !hasResult()) {
             return null;
         }

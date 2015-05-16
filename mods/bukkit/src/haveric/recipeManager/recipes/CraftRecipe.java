@@ -286,12 +286,17 @@ public class CraftRecipe extends WorkbenchRecipe {
     }
 
     @Override
-    public ShapedRecipe toBukkitRecipe() {
+    public ShapedRecipe toBukkitRecipe(boolean vanilla) {
         if (!hasIngredients() || !hasResults()) {
             return null;
         }
 
-        ShapedRecipe bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+        ShapedRecipe bukkitRecipe;
+        if (vanilla) {
+            bukkitRecipe = new ShapedRecipe(getFirstResult());
+        } else {
+            bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+        }
 
         switch (height) {
             case 1:
