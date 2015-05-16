@@ -122,6 +122,13 @@ public class FlagSkullOwner extends Flag {
 
             Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
             ItemStack result = iter.next();
+            
+            SkullMeta meta = (SkullMeta) result.getItemMeta();
+            if (!meta.hasOwner()) {
+                meta.setOwner(owner);
+                result.setItemMeta(meta);
+            }
+            
             ItemMeta cloned = result.getItemMeta().clone();
             a.result().setItemMeta(cloned);
 
