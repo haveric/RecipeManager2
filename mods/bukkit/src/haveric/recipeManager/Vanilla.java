@@ -57,7 +57,7 @@ public class Vanilla {
     /**
      * Banner special recipe result
      */
-    public static final ItemStack RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
+    public static ItemStack RECIPE_BANNER = null;
 
     /**
      * Book cloning's special recipe
@@ -132,6 +132,8 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE_GATE, 15), info);
             initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE_GATE, 15), info);
             initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
+
+            RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
         } catch (NoSuchFieldError e) {
             // Does not support 1.8 items
         }
@@ -449,7 +451,11 @@ public class Vanilla {
         if (recipe != null) {
             ItemStack result = recipe.getResult();
 
-            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BANNER) || result.equals(RECIPE_BOOKCLONE)) {
+            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BOOKCLONE)) {
+                isSpecial = true;
+            }
+
+            if (RECIPE_BANNER != null && result.equals(RECIPE_BANNER)) {
                 isSpecial = true;
             }
 
