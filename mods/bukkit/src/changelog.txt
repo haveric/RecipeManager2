@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.4 ===
 * Fixed some shift clicking issues with furnaces
 * Fixed rmcheck command permissions
 * Added basic brewing recipe support (See 'basic recipes.html' for usage)
