@@ -1285,7 +1285,7 @@ public class FlagIngredientCondition extends Flag {
         if (a.inventory() instanceof CraftingInventory) {
             Iterator<Entry<String, Conditions>> iter = conditions.entrySet().iterator();
 
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 Entry<String, Conditions> entry = iter.next();
                 Conditions checkConditions = entry.getValue();
                 

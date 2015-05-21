@@ -263,8 +263,8 @@ public class WorkbenchRecipe extends MultiResultRecipe {
                     List<Conditions> condList = flagIC.getIngredientConditions(item);
                     
                     for (Conditions cond : condList) {
-                        if (cond.checkIngredient(item, ArgBuilder.create().build())) {
-                            if (cond != null && cond.getAmount() > 1) {
+                        if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
+                            if (cond.getAmount() > 1) {
                                 newAmt -= (cond.getAmount() - 1);
                             }
                         }
