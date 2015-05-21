@@ -1,10 +1,13 @@
 package haveric.recipeManager.recipes;
 
+import java.util.List;
+
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
+import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
 import haveric.recipeManager.tools.Tools;
@@ -308,10 +311,14 @@ public class SmeltRecipe extends SingleResultRecipe {
             int newAmt = amt;
 
             if (flag != null) {
-                Conditions cond = flag.getIngredientConditions(item);
-
-                if (cond != null && cond.getAmount() > 1) {
-                    newAmt -= (cond.getAmount() - 1);
+                List<Conditions> condList = flag.getIngredientConditions(item);
+                
+                for (Conditions cond : condList) {
+                    if (cond.checkIngredient(item, ArgBuilder.create().build())) {
+                        if (cond != null && cond.getAmount() > 1) {
+                            newAmt -= (cond.getAmount() - 1);
+                        }
+                    }
                 }
             }
 

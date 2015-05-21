@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.Settings;
+import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.Flag;
 import haveric.recipeManager.flags.FlagDisplayResult;
@@ -259,10 +260,14 @@ public class WorkbenchRecipe extends MultiResultRecipe {
                 int newAmt = amt;
 
                 if (flagIC != null) {
-                    Conditions cond = flagIC.getIngredientConditions(item);
-
-                    if (cond != null && cond.getAmount() > 1) {
-                        newAmt -= (cond.getAmount() - 1);
+                    List<Conditions> condList = flagIC.getIngredientConditions(item);
+                    
+                    for (Conditions cond : condList) {
+                        if (cond.checkIngredient(item, ArgBuilder.create().build())) {
+                            if (cond != null && cond.getAmount() > 1) {
+                                newAmt -= (cond.getAmount() - 1);
+                            }
+                        }
                     }
                 }
 

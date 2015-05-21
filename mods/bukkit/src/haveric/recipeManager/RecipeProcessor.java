@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
+import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
@@ -1030,34 +1031,36 @@ public class RecipeProcessor implements Runnable {
 
     private ItemStack parseConditions(BaseRecipe recipe, ItemStack item) {
         if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
-            Conditions conditions = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(item);
+            List<Conditions> conditionsList = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(item);
 
-            if (conditions != null) {
-                ItemMeta meta = item.getItemMeta();
-
-                if (conditions.hasName()) {
-                    meta.setDisplayName(conditions.getName());
-                }
-
-                if (conditions.hasEnchants()) {
-                    Map<Enchantment, Map<Short, Boolean>> enchants = conditions.getEnchants();
-                    for (Entry<Enchantment, Map<Short, Boolean>> entry : enchants.entrySet()) {
-                        Enchantment enchant = entry.getKey();
-                        Map<Short, Boolean> value = entry.getValue();
-
-                        for (Entry<Short, Boolean> enchantEntry : value.entrySet()) {
-                            short level = enchantEntry.getKey();
-                            boolean ignore = enchantEntry.getValue();
-                            meta.addEnchant(enchant, level, ignore);
+            for (Conditions conditions : conditionsList) {
+                if (conditions != null && conditions.checkIngredient(item, ArgBuilder.create().build())) {
+                    ItemMeta meta = item.getItemMeta();
+    
+                    if (conditions.hasName()) {
+                        meta.setDisplayName(conditions.getName());
+                    }
+    
+                    if (conditions.hasEnchants()) {
+                        Map<Enchantment, Map<Short, Boolean>> enchants = conditions.getEnchants();
+                        for (Entry<Enchantment, Map<Short, Boolean>> entry : enchants.entrySet()) {
+                            Enchantment enchant = entry.getKey();
+                            Map<Short, Boolean> value = entry.getValue();
+    
+                            for (Entry<Short, Boolean> enchantEntry : value.entrySet()) {
+                                short level = enchantEntry.getKey();
+                                boolean ignore = enchantEntry.getValue();
+                                meta.addEnchant(enchant, level, ignore);
+                            }
                         }
                     }
+    
+                    if (conditions.hasLore()) {
+                        meta.setLore(conditions.getLores());
+                    }
+    
+                    item.setItemMeta(meta);
                 }
-
-                if (conditions.hasLore()) {
-                    meta.setLore(conditions.getLores());
-                }
-
-                item.setItemMeta(meta);
             }
         }
 
