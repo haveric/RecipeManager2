@@ -62,6 +62,9 @@ commands:
     description: checks if there's a newer version available for the plugin
     usage: /<command>
     permission: recipemanager.command.rmupdate
+  rmcreaterecipe:
+    aliases: [createrecipe]
+    description: creates a recipe from the left 9 ingredients in an inventory and the held item as a result
 permissions:
   recipemanager.craft:
     description: Toggles ability to craft all recipes

@@ -3,6 +3,7 @@ package haveric.recipeManager;
 import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
 import haveric.recipeManager.commands.BooksCommand;
 import haveric.recipeManager.commands.CheckCommand;
+import haveric.recipeManager.commands.CreateRecipeCommand;
 import haveric.recipeManager.commands.ExtractCommand;
 import haveric.recipeManager.commands.ExtractRecipeCommand;
 import haveric.recipeManager.commands.FindItemCommand;
@@ -101,6 +102,7 @@ public class RecipeManager extends JavaPlugin {
         getCommand("rmgetbook").setExecutor(new GetBookCommand());
         getCommand("rmbooks").setExecutor(new BooksCommand());
         getCommand("rmupdate").setExecutor(new UpdateCommand());
+        getCommand("rmcreaterecipe").setExecutor(new CreateRecipeCommand());
     }
 
     @Override
