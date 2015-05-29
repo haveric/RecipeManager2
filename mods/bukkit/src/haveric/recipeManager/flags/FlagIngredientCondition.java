@@ -1208,7 +1208,7 @@ public class FlagIngredientCondition extends Flag {
             Conditions c = it.next();
 
             if (c.ingredient != null && Tools.findItemInIngredients(recipe, c.ingredient.getType(), c.ingredient.getDurability()) == 0) {
-                ErrorReporter.error("Flag " + getType() + " has couldn't find ingredient: " + ToolsItem.print(c.ingredient));
+                ErrorReporter.error("Flag " + getType() + " couldn't find ingredient: " + ToolsItem.print(c.ingredient));
                 it.remove();
             }
         }
