@@ -1493,11 +1493,11 @@ public class Events implements Listener {
 
         if (recipe != null) {
             Block block = event.getBlock();
-            ItemResult result = recipe.getResult();
             Location location = block.getLocation();
             BrewingStandData data = BrewingStands.get(location);
 
-            Args a = Args.create().inventory(inventory).location(location).player(data.getFueler()).recipe(recipe).result(result).build();
+            Args a = Args.create().inventory(inventory).location(location).player(data.getFueler()).recipe(recipe).build();
+            ItemResult result = recipe.getResult(a);
 
             if (recipe.sendPrepare(a) && result.sendPrepare(a)) {
                 if (recipe.checkFlags(a) && result.checkFlags(a)) {

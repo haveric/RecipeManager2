@@ -1,14 +1,15 @@
 package haveric.recipeManager.recipes;
 
+import java.util.Iterator;
+
 import haveric.recipeManager.Vanilla;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-public class BrewRecipe extends BaseRecipe {
+public class BrewRecipe extends MultiResultRecipe {
     private ItemStack ingredient;
     private ItemStack potion;
-    private ItemResult result;
 
     public BrewRecipe() {
 
@@ -47,13 +48,15 @@ public class BrewRecipe extends BaseRecipe {
             s.append(':').append(potion.getDurability());
         }
 
-        s.append(" = ");
-
-        s.append(result.getTypeId());
-
-        if (result.getDurability() != Vanilla.DATA_WILDCARD) {
-            s.append(':').append(result.getDurability());
+        Iterator<ItemResult> iter = getResults().iterator();
+        while (iter.hasNext()) {
+            ItemResult result = iter.next();
+            s.append(" = ").append(result.getTypeId());
+            if (result.getDurability() != Vanilla.DATA_WILDCARD) {
+                s.append(':').append(result.getDurability());
+            }
         }
+
 
         name = s.toString();
         customName = false;
@@ -61,7 +64,7 @@ public class BrewRecipe extends BaseRecipe {
 
     @Override
     public boolean isValid() {
-        return ingredient != null && potion != null && result != null;
+        return ingredient != null && potion != null && hasResults();
     }
 
     @Override
@@ -75,14 +78,6 @@ public class BrewRecipe extends BaseRecipe {
 
     public void setIngredient(ItemStack ingredient) {
         this.ingredient = ingredient;
-    }
-
-    public ItemResult getResult() {
-        return result;
-    }
-
-    public void setResult(ItemResult result) {
-        this.result = result;
     }
 
     public String getIndexString() {

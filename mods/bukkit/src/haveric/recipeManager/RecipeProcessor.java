@@ -815,9 +815,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        ItemResult result = results.get(0);
-
-        recipe.setResult(result);
+        recipe.setResults(results); // done with results, set 'em
 
         // check if the recipe already exists
         if (!recipeExists(recipe)) {
