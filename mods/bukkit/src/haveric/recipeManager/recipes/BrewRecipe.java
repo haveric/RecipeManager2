@@ -1,8 +1,7 @@
 package haveric.recipeManager.recipes;
 
-import java.util.Iterator;
-
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.Flags;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -13,6 +12,21 @@ public class BrewRecipe extends MultiResultRecipe {
 
     public BrewRecipe() {
 
+    }
+    
+    public BrewRecipe(BaseRecipe recipe) {
+        super(recipe);
+        
+        if (recipe instanceof BrewRecipe) {
+            BrewRecipe r = (BrewRecipe) recipe;
+            
+            ingredient = r.ingredient;
+            potion = r.potion;
+        }
+    }
+    
+    public BrewRecipe(Flags flags) {
+        super(flags);
     }
 
     @Override
@@ -47,16 +61,8 @@ public class BrewRecipe extends MultiResultRecipe {
         if (potion.getDurability() != Vanilla.DATA_WILDCARD) {
             s.append(':').append(potion.getDurability());
         }
-
-        Iterator<ItemResult> iter = getResults().iterator();
-        while (iter.hasNext()) {
-            ItemResult result = iter.next();
-            s.append(" = ").append(result.getTypeId());
-            if (result.getDurability() != Vanilla.DATA_WILDCARD) {
-                s.append(':').append(result.getDurability());
-            }
-        }
-
+        
+        s.append(" = ").append(getResultsString());
 
         name = s.toString();
         customName = false;
@@ -78,6 +84,13 @@ public class BrewRecipe extends MultiResultRecipe {
 
     public void setIngredient(ItemStack ingredient) {
         this.ingredient = ingredient;
+        
+        // build hashCode
+        StringBuilder str = new StringBuilder("brew");
+        
+        str.append(ingredient.getTypeId()).append(':').append(ingredient.getDurability()).append(';');
+        
+        hash = str.toString().hashCode();
     }
 
     public String getIndexString() {
