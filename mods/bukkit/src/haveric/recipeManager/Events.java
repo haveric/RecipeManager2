@@ -1498,8 +1498,8 @@ public class Events implements Listener {
 
             Args a = Args.create().inventory(inventory).location(location).player(data.getFueler()).recipe(recipe).build();
             ItemResult result = recipe.getResult(a);
-
-            if (recipe.sendPrepare(a) && result.sendPrepare(a)) {
+            
+            if (result != null && recipe.sendPrepare(a) && result.sendPrepare(a)) {
                 if (recipe.checkFlags(a) && result.checkFlags(a)) {
                     ItemStack potion = recipe.getPotion();
 
@@ -1508,21 +1508,31 @@ public class Events implements Listener {
                     ItemStack potion2 = inventory.getItem(1);
                     ItemStack potion3 = inventory.getItem(2);
 
+                    boolean cancel = false;
                     if (ToolsItem.isSameItem(potion, potion1, true)) {
                         inventory.setItem(0, bukkitResult.clone());
+                        cancel = true;
                     }
 
                     if (ToolsItem.isSameItem(potion, potion2, true)) {
                         inventory.setItem(1, bukkitResult.clone());
+                        cancel = true;
                     }
 
                     if (ToolsItem.isSameItem(potion, potion3, true)) {
                         inventory.setItem(2, bukkitResult.clone());
+                        cancel = true;
                     }
-
+                    
+                    if (cancel) {
+                        event.setCancelled(true);
+                        ItemStack originalIngredient = inventory.getItem(3);
+                        originalIngredient.setAmount(originalIngredient.getAmount() - 1);
+                        
+                        inventory.setItem(3, originalIngredient);
+                    }
                 }
             }
-
         }
     }
 }
