@@ -105,7 +105,7 @@ public class FlagForChance extends Flag {
 
             for (ChanceFlag c : e.getValue()) {
                 if (c.getFlag() == null) {
-                    flags.add(null);
+                    flags.add(new ChanceFlag(null, c.getChance()));
                 } else {
                     Float chance;
                     if (c.isAutoChance()) {
@@ -392,9 +392,11 @@ public class FlagForChance extends Flag {
             if (!appendFlag || flagChance == null) {
                 if (group != null) {
                     float totalChance = 0;
-
+                    
                     for (ChanceFlag c : flags) {
-                        totalChance += c.getChance();
+                        if (!c.isAutoChance()) {
+                            totalChance += c.getChance();
+                        }
                     }
 
                     if (chance == null) {
@@ -462,7 +464,6 @@ public class FlagForChance extends Flag {
 
         if (num > 0) {
             float chance = totalChance / num;
-
             for (ChanceFlag c : flags) {
                 if (c.isAutoChance()) {
                     c.chance = chance;
