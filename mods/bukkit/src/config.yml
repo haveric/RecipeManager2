@@ -88,3 +88,6 @@ material:
 #   default: false
 disable-override-warnings: false
 
+# Characters used as comments in recipe files.
+recipe-comment-characters: ["//", "#"]
+

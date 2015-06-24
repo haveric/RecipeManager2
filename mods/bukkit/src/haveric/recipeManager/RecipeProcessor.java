@@ -66,7 +66,6 @@ public class RecipeProcessor implements Runnable {
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
     private static final String DIR_RECIPES = DIR_PLUGIN + "recipes" + File.separator;
     private static final String FILE_ERRORLOG = DIR_RECIPES + "errors.log";
-    private static final String[] COMMENTS = { "//", "#" };
 
     private static BukkitTask task;
 
@@ -377,7 +376,8 @@ public class RecipeProcessor implements Runnable {
         }
 
         // now check for in-line comments
-        for (String comment : COMMENTS) {
+        List<String> comments = Settings.getInstance().getRecipeCommentCharactersAsList();
+        for (String comment : comments) {
             index = line.indexOf(comment);
 
             if (index == 0) {

@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 ** For Example:
 ** @ingredientcondition sugar | nometa | needed 2 // Recipe will require 2 vanilla sugar
 ** @ingredientcondition sugar | name §fFlour | needed 3 // Also require 3 sugars named §fFlour
+* Added recipe-comment-characters config option for customizing inline comments
 
 === v2.4 ===
 * Fixed some shift clicking issues with furnaces

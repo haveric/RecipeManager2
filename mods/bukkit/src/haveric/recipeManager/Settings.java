@@ -3,7 +3,9 @@ package haveric.recipeManager;
 import haveric.recipeManager.tools.Tools;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
@@ -51,6 +53,8 @@ public class Settings {
     private static final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
 
     private static final boolean DISABLE_OVERRIDE_WARNINGS_DEFAULT = false;
+    
+    private static List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
 
     private static FileConfiguration fileConfig;
     private static FileConfiguration itemAliasesConfig;
@@ -84,6 +88,10 @@ public class Settings {
     }
 
     private static void init() {
+        RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<String>();
+        RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
+        RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
+        
         materialNames = new HashMap<String, Material>();
         materialDataNames = new HashMap<Material, Map<String, Short>>();
         enchantNames = new HashMap<String, Enchantment>();
@@ -129,6 +137,7 @@ public class Settings {
         Messages.log("    material.secret: " + getSecretMaterial());
         Messages.log("    material.multiple-results: " + getMultipleResultsMaterial());
         Messages.log("    disable-override-warnings: " + getDisableOverrideWarnings());
+        Messages.log("    recipe-comment-characters: " + getRecipeCommentCharacters());
 
 
         itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
@@ -430,6 +439,25 @@ public class Settings {
 
     public boolean getDisableOverrideWarnings() {
         return fileConfig.getBoolean("disable-override-warnings", DISABLE_OVERRIDE_WARNINGS_DEFAULT);
+    }
+    
+    public String getRecipeCommentCharacters() {
+        String allComments = "";
+        List<String> comments = getRecipeCommentCharactersAsList();
+        
+        for (int i = 0; i < comments.size(); i++) {
+            if (i > 0) {
+                allComments += ",";
+            }
+            
+            allComments += comments.get(i);
+        }
+        
+        return allComments;
+    }
+    
+    public List<String> getRecipeCommentCharactersAsList() {
+        return (List<String>) fileConfig.getList("recipe-comment-characters", RECIPE_COMMENT_CHARACTERS_DEFAULT);
     }
 
 
