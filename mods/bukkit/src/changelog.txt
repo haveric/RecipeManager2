@@ -11,6 +11,8 @@ This file will be automatically overwritten when a new version is installed.
 * Brewing updates
 ** Fixed multiple brewing recipes and multiple results
 ** Added a note about this being an experimental feature. Expect bugs
+* Added rmcreaterecipe command
+** Creates a recipe with the left 9 items in the inventory being the ingredients and the selected hotbar slot as the result
 
 === v2.4 ===
 * Fixed some shift clicking issues with furnaces
