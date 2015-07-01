@@ -721,6 +721,8 @@ public class Events implements Listener {
 
                                 FurnaceData data = Furnaces.get(furnace.getLocation());
 
+                                data.setFueler(player);
+
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
                                 if (furnaceHandleFlaggable(recipe, a, true) && isRecipeSameAsResult(a)) {
@@ -741,6 +743,9 @@ public class Events implements Listener {
                             }
 
                             FurnaceData data = Furnaces.get(furnace.getLocation());
+
+                            data.setFueler(player);
+
                             ItemStack fuel = data.getFuel();
 
                             if (fuel == null) {
