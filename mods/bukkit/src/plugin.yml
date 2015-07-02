@@ -90,6 +90,7 @@ permissions:
       recipemanager.command.rmgetbook: true
       recipemanager.command.rmbooks: true
       recipemanager.command.rmupdate: true
+      recipemanager.command.rmcreaterecipe: true
   recipemanager.debugger:
     description: Get error messages when online
     default: op
@@ -127,5 +128,8 @@ permissions:
     description:
     default: op
   recipemanager.command.rmupdate:
+    description:
+    default: op
+  recipemanager.command.rmcreaterecipe
     description:
     default: op
