@@ -14,6 +14,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added rmcreaterecipe command
 ** Creates a recipe with the left 9 items in the inventory being the ingredients and the selected hotbar slot as the result
 * Improved furnace permissions. Now updates the fueler when adding fuel or ingredients.
+* Fixed shift click stacking in furnaces (prevents items from stacking higher than their stack should)
 
 === v2.4 ===
 * Fixed some shift clicking issues with furnaces

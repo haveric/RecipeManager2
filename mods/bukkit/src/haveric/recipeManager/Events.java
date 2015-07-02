@@ -959,7 +959,7 @@ public class Events implements Listener {
                 } else {
                     // Otherwise the targeted slot contains some item, need to identify if we can stack over it
 
-                    int maxStack = Math.max(inventory.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
+                    int maxStack = Math.min(inventory.getMaxStackSize(), item.getType().getMaxStackSize()); // see how much we can place on that slot
                     int itemAmount = item.getAmount(); // get how many items there are in the stack
 
                     if (similarItems && itemAmount < maxStack) { // if item has room for more and they're similar
