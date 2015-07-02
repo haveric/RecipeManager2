@@ -37,11 +37,6 @@ commands:
     description: reload only recipe books
     usage: /<command>
     permission: recipemanager.command.rmreloadbooks
-  rmextractrecipe:
-    aliases: [extractrecipe]
-    description: export item in hand to a recipe 
-    usage: /<command>
-    permission: recipemanager.command.rmextractrecipe
   rmextract:
     aliases: [rmimport, importrecipes, extractrecipes]
     description: makes all recipes from other plugins or mods into a text file to allow overriding and editing
@@ -85,7 +80,6 @@ permissions:
       recipemanager.command.rmcheck: true
       recipemanager.command.rmreload: true
       recipemanager.command.rmreloadbooks: true
-      recipemanager.command.rmextractrecipe: true
       recipemanager.command.rmextract: true
       recipemanager.command.rmgetbook: true
       recipemanager.command.rmbooks: true
@@ -115,9 +109,6 @@ permissions:
   recipemanager.command.rmreloadbooks:
     description:
     default: op
-  recipemanager.command.rmextractrecipe:
-    description:
-    default: op
   recipemanager.command.rmextract:
     description:
     default: op
@@ -130,6 +121,6 @@ permissions:
   recipemanager.command.rmupdate:
     description:
     default: op
-  recipemanager.command.rmcreaterecipe
+  recipemanager.command.rmcreaterecipe:
     description:
     default: op

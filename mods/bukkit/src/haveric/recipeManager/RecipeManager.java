@@ -5,7 +5,6 @@ import haveric.recipeManager.commands.BooksCommand;
 import haveric.recipeManager.commands.CheckCommand;
 import haveric.recipeManager.commands.CreateRecipeCommand;
 import haveric.recipeManager.commands.ExtractCommand;
-import haveric.recipeManager.commands.ExtractRecipeCommand;
 import haveric.recipeManager.commands.FindItemCommand;
 import haveric.recipeManager.commands.GetBookCommand;
 import haveric.recipeManager.commands.HelpCommand;
@@ -97,7 +96,6 @@ public class RecipeManager extends JavaPlugin {
         getCommand("rmcheck").setExecutor(new CheckCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());
         getCommand("rmreloadbooks").setExecutor(new ReloadBooksCommand());
-        getCommand("rmextractrecipe").setExecutor(new ExtractRecipeCommand());
         getCommand("rmextract").setExecutor(new ExtractCommand());
         getCommand("rmgetbook").setExecutor(new GetBookCommand());
         getCommand("rmbooks").setExecutor(new BooksCommand());

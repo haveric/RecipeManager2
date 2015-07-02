@@ -11,8 +11,9 @@ This file will be automatically overwritten when a new version is installed.
 * Brewing updates
 ** Fixed multiple brewing recipes and multiple results
 ** Added a note about this being an experimental feature. Expect bugs
-* Added rmcreaterecipe command
+* Added /rmcreaterecipe command
 ** Creates a recipe with the left 9 items in the inventory being the ingredients and the selected hotbar slot as the result
+* Removed /rmextractrecipe in favor of /rmcreaterecipe
 * Improved furnace permissions. Now updates the fueler when adding fuel or ingredients.
 * Fixed shift click stacking in furnaces (prevents items from stacking higher than their stack should)
 
