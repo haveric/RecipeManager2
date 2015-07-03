@@ -132,6 +132,11 @@ public class WorkbenchRecipe extends MultiResultRecipe {
                 displayResult = displayResults.get(0);
             }
         }
+        
+        if (displayResult == null) {
+            ItemStack air = new ItemStack(Material.AIR);
+            return new ItemResult(air);
+        }
 
         ItemMeta meta = displayResult.getItemMeta();
         List<String> oldLores = meta.getLore();
