@@ -919,6 +919,9 @@ public class Events implements Listener {
                     if (targetSlot == 1) {
                         inventory.setItem(targetSlot, clicked); // send the item to the slot
                         event.setCurrentItem(null); // clear the clicked slot
+                        
+                        event.setCancelled(true); // cancel only if we're going to mess with the items
+                        new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     } else if (targetSlot == 0) {
                         SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(clicked);
 
@@ -951,11 +954,10 @@ public class Events implements Listener {
                             } else {
                                 event.setCancelled(true);
                             }
+                            event.setCancelled(true); // cancel only if we're going to mess with the items
+                            new UpdateInventory(player, 0); // update inventory to see the changes client-side
                         }
                     }
-
-                    event.setCancelled(true); // cancel only if we're going to mess with the items
-                    new UpdateInventory(player, 0); // update inventory to see the changes client-side
                 } else {
                     // Otherwise the targeted slot contains some item, need to identify if we can stack over it
 
