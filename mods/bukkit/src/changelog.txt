@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.5 ===
 * @IngredientCondition: Added 'needed' parameter which allows you to match against less than all ingredients of a type
 ** For Example:
 ** @ingredientcondition sugar | nometa | needed 2 // Recipe will require 2 vanilla sugar
