@@ -18,6 +18,7 @@ This file will be automatically overwritten when a new version is installed.
 * Improved furnace permissions. Now updates the fueler when adding fuel or ingredients.
 * Fixed shift click stacking in furnaces (prevents items from stacking higher than their stack should)
 * @permission: Fixed an issue when the crafter didn't have any valid permission
+* Prevent the loading of recipes from getting stuck when invalid items are found
 
 === v2.4 ===
 * Fixed some shift clicking issues with furnaces

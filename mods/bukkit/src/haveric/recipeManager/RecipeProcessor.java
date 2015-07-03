@@ -265,6 +265,7 @@ public class RecipeProcessor implements Runnable {
                 added = parseRemoveResults();
             } else {
                 ErrorReporter.warning("Unexpected directive: '" + line + "'", "This might be caused by previous errors.");
+                nextLine();
             }
 
             if (!added) {
