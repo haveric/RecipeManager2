@@ -7,7 +7,7 @@ reports
 build.xml
 bin
 node_modules
-downloads/*/dev
+downloads/dev
 bin/
 
 # Gradle
