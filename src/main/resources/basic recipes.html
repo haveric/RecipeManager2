@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Recipes - RecipeManager2</title>
+    <style>
+        pre { 
+            border: 1px dashed #999; 
+            font-family: Lucida Console;
+            margin-left:20px; 
+            padding:10px; 
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .container {
+            max-width: 990px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <b>Basic Recipes</b> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+    <h1>Basic Recipes</h1>
+    
+    
+    <h4>HOW TO MAKE A RECIPE FILE</h4>
+    <ul>
+        <li>First go to <b>/plugins/RecipeManager/recipes</b> folder and create a file with the <b>.txt</b> extension.</li>
+        <li>Then you can just open that with a text editor and start writing recipes.</li>
+    </ul>
+    
+    <h4>ABOUT RECIPE FILES</h4>
+    <ul>
+        <li>You can have as many recipe files and recipes per file as you want, you can also create folders for organization.</li>
+      
+        <li>The text in recipe files can be any letter case and can have any amount of spaces, tabs and new lines.</li>
+      
+        <li>They also support different styles of comments: //, /* */ and #</li>
+      
+        <li>Also, <b>&lt; &gt;</b> are used to enclose required arguments and <b>[ ]</b> optional ones.</li>
+        <li><b>Do not type &lt;, &gt;, [ or ] !</b>, anything outside their bounds are constant characters that need to be used, anything inside are variables.</li>
+    
+    </ul>
+    
+    <h4>ABOUT DEFINING ITEMS</h4>
+    <ul>
+      <li>Item formats are usually 'material:data' and results are 'material:data:amount'<br/>
+      - 'material' = name, id or alias (see '<a href="name index.html#material">name index.html</a>' and 'aliases.yml')<br/>
+      - (optional) 'data' = data name (from 'aliases.yml'), number or * for any data value (default)<br/>
+      - (optional) 'amount' = number, default 1</li>
+    
+      <li>Item definitions also support names, lore and enchantments.<br/>
+      Full format is: <b>&lt;material&gt;:&lt;data&gt;:&lt;amount&gt; ; name &lt;name&gt; ; lore &lt;line&gt; ; enchant &lt;enchant&gt; &lt;level&gt;</b><br/>
+      Where lore and enchant can be repeated.<br/>
+      And of course all meta definitions are optional and order does not matter (unlike material:data:amount).</li>
+    
+      <li>For more stuff that can be set using flags on items, see <a href="recipe flags.html">recipe flags.html</a>.</li>
+    </ul>
+    
+    <h4>ABOUT MULTI-RESULTS</h4>
+    <ul>
+        <li>Certain recipes support having multiple results.</li>
+        <li>Only one result type can be crafted at one time, therefore each result has a set chance of success.</li>
+        <li>Additionally you can set 'air' as result to make the recipe fail by that chance, which gives no result item but still decreases ingredients.</li>
+        <li>Chances must be a total of 100%, if you do not define the chance for one or more items the chance will be evenly calculated for the remaining chance up to 100%.</li>
+        <li>The options for this can be extended even more with flags, be sure to see the <a href="advanced recipes.html"><b>advanced recipes.html</b></a> file after reading this one.</li>
+    </ul>
+    
+    <h4>ABOUT RECIPE NAMES</h4>
+    <ul>
+        <li>Recipe names are use by recipe books.</li>
+        <li>If you define a custom name it must be unique and between 3 and 32 characters long (18 recommended).</li>
+        <li>The custom name will be displayed in the books if defined, otherwise it will use the result.</li>
+        <li>In the 'books/*.yml' files the recipe names (custom or auto-generated) are used to add and sort recipes in the books.</li>
+        <li><a href="recipe books.html"><b>More about recipe books...</b></a></li>
+    </ul>
+    
+    <hr><h2>RECIPE SYNTAXES</h2>
+    
+    
+    <h3>CRAFT RECIPE - shaped workbench recipe</h3>
+<pre>
+CRAFT [recipe name]
+&lt;material:[data]&gt; + [material:[data]] + [material:[data]]
+[material:[data]] + [material:[data]] + [material:[data]]
+[material:[data]] + [material:[data]] + [material:[data]]
+= [chance]% &lt;material:[data]:[amount]&gt;
+[...]
+</pre>
+      <ul>
+          <li>The ingredients are in the shape of the recipe grid, it will also work if horizontally mirrored.</li>
+          <li><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</li>
+          <li>Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.</li>
+          <li>Specifying a square of 4 or smaller makes it work in player's inventory crafting.</li>
+          <br/>
+          <li>As for the result the 'chance%' part is optional and if defined then 'chance' must be a number between 0.0 and 100.0 (yes, accepts decimals)</li>
+          <li>The '[...]' part means that you can repeat the previous statement, so you can define more than one result and the recipe will randomly pick one of the results.</li>
+          <li>You can avoid defining the chance number or use *% even to allow it to be calculated.</li>
+          <li>You can also add a chance of failure to the recipe by using fail, air or 0 as one of the results.</li>
+      </ul>
+      <b>Examples:</b>
+<pre>
+// this is just a comment by the way
+// a hoe craftable in player inventory
+craft
+wood + wood
+stick
+= wood_hoe
+
+// fragile bowl named recipe
+craft   Bowl craft attempt
+stick + wood + stick
+air + stick
+= bowl // undefined chance, will be calculated
+= 25% fail // 'fail' is alias for 'air'.
+</pre>
+    
+    
+    
+    <h3>COMBINE RECIPE - shapeless workbench recipe</h3>
+<pre>
+COMBINE [recipe name]
+&lt;material:[data]:[amount]&gt; + [...]
+= [chance]% &lt;material:[data]:[amount]&gt;
+[...]
+</pre>
+    <p>
+      Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.
+      You can specify up to 9 items added up.
+      </p><p>
+      This recipe also supports multiple results just like shaped recipe, read above for information. 
+    </p>
+      <b>Examples:</b>
+<pre>
+// 3 sulphur + 2 sand = 2 TNT
+combine
+sulphur:*:3 + sand + sand
+= TNT:0:2
+
+// smash 2 diamonds and pray for something good
+combine Smash 2 diamonds and pray
+diamond + diamond
+= 0.1% diamond:0:32
+= coal:0:4 // let it calculate the chance evenly for this and the next two
+= iron_ingot
+= gold_ingot
+= 75% fail
+</pre>
+    
+    
+    <h3>SMELT RECIPE - furnace smelting recipe</h3>
+<pre>
+SMELT [recipe name]
+&lt;material&gt;:[data] % [time]
+&amp; [material:[data]]
+= [chance]% &lt;material:[data]:[amount]&gt;
+// one result max!
+</pre>
+    
+    <ul>
+        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data.</li>
+        <li>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash.</li>
+        <li>(optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)</li>
+        <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!</li>
+    </ul>
+      <b>Examples:</b>
+<pre>
+// smelt gold_ingot to ore
+smelt
+gold_ingot
+= gold_ore
+
+// glowstone and water bottle as fuel makes an exp bottle
+smelt Exp Bottle Alchemy
+glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
+&amp; potion:water // fuel, 'water' data value from 'aliases.yml'
+= 25% exp_bottle // 25% chance to get the result, rest 75% will result in nothing
+</pre>
+    
+    
+    <h3>FUEL RECIPE - furnace fuel</h3>
+<pre>
+FUEL [recipe name]
+&lt;material:data&gt; % &lt;time&gt;
+...
+</pre>
+    
+    <ul>
+        <li>Adds a fuel with the specified burn time.</li>
+        <li>'time' is required and can be a float number or a range of float numbers separated by a dash.</li>
+        <li>The '...' part means you can specify more than one item, they are all added just like individual fuel recipes.</li>
+    </ul>
+      <b>Example:</b>
+<pre>FUEL
+sulphur % 0.75 // see 'advanced recipes.html' how to make this EXPLODE!
+lantern % 20 // 'lantern' is alias for 'jack_o_lantern'
+</pre>
+
+
+    <h3>BREW RECIPE - brewing stand recipes</h3>
+    <h4 style="margin: 0; color: red;">This is an experimental feature. Expect bugs and frequent changes.</h4>
+<pre>
+BREW [recipe name]
+&lt;material:[data]:[amount]&gt; // ingredient
+&lt;material:[data]&gt; // potion
+= [chance]% &lt;material:[data]:[amount]&gt;
+[...]
+</pre>
+    <ul>
+        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</li>
+        <li>The second '&lt;material&gt;:[data]' is the potion with optional data.</li>
+        <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</li>
+        <li>Note: Currently requires a vanilla brewing recipe, but can have customized items.</li>
+    </ul>
+    <b>Example:</b>
+<pre>
+brew
+nether_warts // aliased in item aliases to bukkit's nether_stalk
+potion:water // water aliased in item aliases
+= stone
+@name &lt;red&gt;Test Stone. Please Ignore
+@ingredientcondition nether_warts | name &cTest
+</pre>
+
+
+    <hr>
+    <p>
+      For more customization options and examples see <a href="advanced recipes.html"><b>advanced recipes.html</b></a>.
+    </p><p>
+      If you don't get these instructions you can ask people in the <a href="http://dev.bukkit.org/server-mods/recipemanager/"><b>plugin's dev.bukkit.org page</b></a> to make a recipe for you.
+    </p>
+    </div>
+</body>
+</html>

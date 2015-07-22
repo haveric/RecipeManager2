@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Books - RecipeManager2</title>
+    <style>
+        pre { 
+            border: 1px dashed #999999;
+            font-family:Lucida Console;
+            margin-left:20px;
+            padding:10px;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .container {
+            max-width: 990px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="basic recipes.html">Basic Recipes</a> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <b>Recipe Books</b> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+        <h1>Recipe Books</h1>
+        
+        <ul>
+            <li>This plugin auto-generates written book items with recipes written in them.<br/>
+            Books are configured and stored in /plugins/RecipeManager/books/ as .yml files.</li>
+            
+            <li>You can create new books just by creating a new .yml file in that folder but unlike recipes that folder does not support sub-folders.</li>
+            
+            <li>The book's filename defines the book's ID which will be used to identify books even if they're renamed.<br/>
+            This is useful when editing books that players already have which the plugin will automatically update, if you edit the file name their old book items will not be updated any more.</li>
+            
+            <li>A book's .yml file can have:</li>
+        </ul>
+<pre>title: The Book Title
+author: RecipeManager
+description: Book description written on the first page
+
+# book settings and their defaults
+settings:
+  pervolume: 50
+  cover: true
+  contents: true
+  end: true
+  customend: ''
+
+# list of recipes to be automatically distributed in volumes
+recipes:
+- list of
+- recipe names or
+- + special arguments
+
+# or you can directly define individual volumes
+volume 1:
+- recipe name
+- ...
+volume 2:
+- recipe name
+- etc ...
+volume ...
+
+# these are comments by the way but they will not be preserved since the plugin will rewrite the files.
+</pre>
+        <ul>
+            <li>Note that a book can not contain the same recipe twice.</li>
+            
+            <li>'<b>title</b>' (optional, default file name) must not be longer than 64 characters, supports colors.</li>
+            
+            <li>'<b>author</b>' (optional, default "RecipeManager"), must not be longer than 64 characters, supports colors.</li>
+            
+            <li>'<b>description</b>' (optional, default nothing) must not be longer than 100 characters, supports colors.</li>
+            
+            <li>'<b>pervolume</b> (optional, default 50) defines the max amount of recipes per volume the 'recipes' node allocates.<br/>
+            This does not limit you from adding more recipes in volumes.</li>
+            
+            <li>'<b>cover</b>', '<b>contents</b>' and '<b>end</b>' (optional, default all true) toggle if the cover, contents or end pages are generated for the book.<br/>
+            You can toggle them any time but you need to reload the books for them to have effect.</li>
+            
+            <li>'<b>customend</b>' sets a custom text for the last page, only works if 'end' is true. Supports colors and \n for newlines.</li>
+            
+            <li>Then you can use 'recipes' node to list the recipes you want to add or use special arguments (see below).<br/>
+            Once 'recipes' is defined and book is loaded, the node will be deleted and will auto-generate the volumes according to the recipe-per-volume limit.</li>
+            
+            <li>You can add the 'recipes' node again to append recipes to the existing volumes automatically or you can just add them directly to the volumes you want.</li>
+            
+            
+            <li>To add recipes to a book, give it a custom name or use the <a href="recipe flags.html#addtobook">@addtobook</a> flag.</li>
+            
+            <li>Recipe names must be unique when defined in their recipe files, but if recipes do not have a name defined they will have a uniquely generated name.<br/>
+            That generated name contains the recipe type, its ingredient(s) and its result(s).</li>
+            
+            
+            <li>You can also use special arguments to add a lot of recipes at once, the available special arguments are:</li>
+        
+              <li><b>+existing &lt;all/workbench/smelt/fuel&gt;</b><br/>
+                This is replaced by existing recipes matching the type specified.<br/>
+                Using 'all' will add workbench, smelt and fuel recipes in order.</li>
+            
+              <li><b>+custom &lt;all/workbench/smelt/fuel&gt;</b><br/>
+                This is replaced by custom recipes (added with this plugin) matching the type specified.<br/>
+                Using 'all' will add workbench, smelt and fuel recipes in order.</li>
+            
+              <li><b>+file &lt;/path/to/file.ext&gt;</b><br/>
+              <b>+folder &lt;/path/to/folder&gt;</b><br/>
+                These are replaced by the recipes defined in the recipe file defined or the recipe files from the defined folder.<br/>
+                Paths are relative to '/plugins/RecipeManager/recipes' so defining '/' as path would mean the root of 'recipes' folder.</li>
+            
+            <li>Once the book is loaded by the server, these arguments will be replaced in the file with the recipes they find.</li>
+            
+            <li>If you use any +argument in 'recipes' node they will be automatically distributed throughout volumes as defined by the 'recipes-per-volume' limit.
+            However, if you add them directly to volumes they will be added to that volume directly because you are not bound by the volume limit, only the 'recipes' node is.</li>
+            
+            <li>Also, when a book file is loaded it will have a header comment appended to it specifying the last date/time it was read.</li>
+            
+            <li>After adding your recipes you can just move them around or remove them if you want.</li>
+            
+            <li>Now your book should be ready.</li>
+            
+            <li>To see available recipe books type 'rmbooks' in server console or as an operator.</li>
+            
+            <li>You can use <a href="recipe flags.html#getrecipebook">@getrecipebook</a> flag in a recipe to craft a recipe book.</li>
+            
+            <li>Additionally you can get books with the 'rmgetbook' command, available to operators.</li>
+        </ul>
+        
+        <b>Example book:</b>
+        'swords.yml'
+<pre>title: Stuff!
+description: Random things.
+recipes:
+- flaming sword of doom
+- oblivion ice axe
+- shaped 3x2 (76 331:0 76 / 1 1 1) diode
+- shaped 1x3 (5 / 5 / 280:0) wood_sword
+- shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
+- some non-existent recipe name here
+- shaped 1x3 (4 / 4 / 280:0) stone_sword
+</pre>
+
+        Which, after using reload, rmreload or rmreloadbooks command, the book's contents will be converted to:
+
+<pre># Recipe book configuration (last loaded at May 2, 2013 12:19:45 PM)
+# Read 'recipe books.html' file to learn how to configure books.
+
+title: Stuff!
+description: Random things.
+volume 1:
+- flaming sword of doom
+- oblivion ice axe
+- shaped 3x2 (76 331:0 76 / 1 1 1) diode
+- shaped 1x3 (5 / 5 / 280:0) wood_sword
+- shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
+- shaped 1x3 (4 / 4 / 280:0) stone_sword
+</pre>
+        <p>
+            <b>NOTE</b> You're not supposed to write the auto-generated recipe names manually!<br/>
+            As said before, you can give them a custom name or use the <a href="recipe flags.html#addtobook">@addtobook</a> flag.<br/>
+            For existing recipes you can use the +existing special argument to get all the names then remove the ones you don't need.
+        </p>
+        <p>
+            After that you can still change its contents, rearrange recipes, remove recipes, change its title, description, whatever you want!<br/>
+            Just be sure that you do not rename the file if people already have copies of the book, in that case their books won't update!
+        </p>
+    </div>
+</body>
+</html>

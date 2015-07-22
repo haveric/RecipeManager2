@@ -1,0 +1,35 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.6
+version = '2.5'
+
+configurations {
+    extra
+}
+
+// Include dependent libraries in archive.
+jar {
+    from {
+        configurations.extra.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'Spigot/Bukkit maven repo'
+        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+    maven {
+        name 'Vault'
+        url 'http://nexus.theyeticave.net/content/repositories/pub_releases/'
+    }
+}
+
+dependencies {
+    compile project(':RecipeManagerCommon')
+    compile "org.bukkit:bukkit:1.8.7-R0.1-SNAPSHOT"
+    compile "net.milkbowl.vault:VaultAPI:1.5"
+    
+    extra project(':RecipeManagerCommon')
+}
