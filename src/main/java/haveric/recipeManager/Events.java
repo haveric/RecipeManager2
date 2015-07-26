@@ -474,7 +474,7 @@ public class Events implements Listener {
             }
 
             if (event.isShiftClick()) {
-                if (recipe.hasNoShiftBit()) {
+                if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
                     Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
 
                     event.setCancelled(true); // cancel regardless just to be safe
