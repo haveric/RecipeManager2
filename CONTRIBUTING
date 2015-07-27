@@ -54,7 +54,15 @@ To start development on a new feature:
 1. Right click the project. Select Team->Switch To->New Branch and select an appropriate name for the branch pertaining to the feature you are working on and then click Finish
 2. Create updates, fixes, whatever code you need for your development.
 3. If working on multiple features, please use different branches for each feature)
+4. Commit your work to your local git for logical components of your work (Team->Commit) with descriptive commit messages
 
+When done developing a feature:
+1. Commit any uncommitted work (Team->Commit)
+2. Team->Push Branch 'branchname'
+3. Click Next then Finish then OK
+4. Go to your forked project on Github
+5. Select "Compare & pull request"
+6. Leave a descriptive name and comments describing the feature you implemented or bug you fixed
 
 
 For issues or questions:
