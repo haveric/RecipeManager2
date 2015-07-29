@@ -1,11 +1,78 @@
-For issues:
+To Develop with Eclipse:
+1. Fork RecipeManager2: https://github.com/haveric/RecipeManager2 and fork RecipeManagerCommon: https://github.com/haveric/RecipeManagerCommon
+2. Setup Eclipse and install the latest java jre and jdk
+3. Install "Gradle Integration for Eclipse" from the Eclipse Marketplace
 
-  Please use http://dev.bukkit.org/server-mods/recipemanager/tickets/
+Eclipse setup:
+1. Copy the clone url from your forked RecipeManagerCommon. Should look similar to this: https://github.com/UserOrTeamName/RecipeManagerCommon.git
+2. Open/Select File->Import->Git->Projects from Git and then click Next
+3. Select Clone URI and then click Next
+4. The Location information should autofill if you copied the url from step 1
+4a. The URI should match step 1
+4b. Host should be github.com
+4c. Repository path should be similar to UserOrTeamName/RecipeManagerCommon.git
+5. (Optional) Fill out Authentication information so you don't have to every time you commit (and select Store in Secure Store)
+6. Click Next
+7. On the Branch Selection screen, the master branch should already be selected. Click Next
+8. On the Local Destination screen, choose the directory to store the local git project (should default to C:\Users\name\git\RecipeManagerCommon)and click Next
+9. Leave the imort as "Import existing Eclipse projects" and click Next
+10. RecipeManagerCommon should be selected and you can hit finish
+
+11. Repeat steps 1-6 with your forked version of the main project: RecipeManager2
+12. In the branch selection of RecipeManager2, there is a master branch and a gh-pages branch. You only need the master branch for development. gh-pages is for website testing which I may be moving in the future
+13. On the Local Destination screen, make sure you choose the same base directory that you put RecipeManagerCommon in. (for example: C:\Users\name\git\RecipeManager2 where C:\Users\name\git\ is the base directory)
+14. Continue to import the existing project.
+15. You should now have two projects in eclipse: RecipeManagerBukkit and RecipeManagerCommon.
+
+To Build RecipeManager:
+1. Right click RecipeManagerBukkit and select Gradle->Tasks Quick Launcher
+2. Enter "clean build" and make sure the project selected is RecipeManagerBukkit before hitting enter
+3. The jar should get created in build/libs/
+
+Syncing a github fork with latest main project changes:
+Externally with git installed
+Setup Remote for a fork: https://help.github.com/articles/configuring-a-remote-for-a-fork/
+Updating the fork: https://help.github.com/articles/syncing-a-fork/
+
+OR in Eclipse:
+Setup Remote for a fork:
+1. Right click the project. Select Team->Remote->Configure Fetch from Upstream...
+2. Click Change... and update the URI to https://github.com/haveric/RecipeManager2.git or https://github.com/haveric/RecipeManagerCommon.git depending on the project
+3. The information should all get filled out for the project after copying the URI. Press Finish
+3. Click "Add..." Select the Source (master) and click Next and then Finish.
+4. Click Save
+
+Updating the fork:
+1. Right click the project. Select Team->Fetch from Upstream
+2. Right click the project. Select Team->Switch To->master (if not already on master branch)
+3. Right click the project. Select Team->Merge...
+4. Select Remote Tracking->origin/master (if not already selected)
+5. Leave merge and fast forward options set to the top values and click Merge
+6. You should get a Fast-Fowards result with any updates. Click OK to finish
+
+To start development on a new feature:
+1. Right click the project. Select Team->Switch To->New Branch and select an appropriate name for the branch pertaining to the feature you are working on and then click Finish
+2. Create updates, fixes, whatever code you need for your development.
+3. If working on multiple features, please use different branches for each feature)
+4. Commit your work to your local git for logical components of your work (Team->Commit) with descriptive commit messages
+
+When done developing a feature:
+1. Commit any uncommitted work (Team->Commit)
+2. Team->Push Branch 'branchname'
+3. Click Next then Finish then OK
+4. Go to your forked project on Github
+5. Select "Compare & pull request"
+6. Leave a descriptive name and comments describing the feature you implemented or bug you fixed
+
+
+For issues or questions:
+
+  Please use https://github.com/haveric/RecipeManager2/issues
 
 
 
 For pull requests:
 
-  If you've got code fixes or optimizations feel free to submit them!
+  If you have any code fixes, optimizations, or feature implementations, feel free to submit them!
 
-  You can use any format you want, I'll add a commit afterwards to make the format consistent.
+  Try to stay consistent with the current formatting and code styles. If there are slight format differences, I may add a commit afterwards to make the format consistent.
