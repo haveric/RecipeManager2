@@ -49,7 +49,7 @@ public class RecipeBooks {
     private final int generated = (int) (System.currentTimeMillis() / 1000);
 
     // Constants
-    public static final String BOOK_MARKER = "RecipeManager";
+    //public static final String BOOK_MARKER = "RecipeManager";
 
     /* TODO: This is strange, turn this into a singleton perhaps? */
     protected static void init() {
@@ -342,7 +342,7 @@ public class RecipeBooks {
             Messages.error(sender, e, "<red>Couldn't save '" + id + ".yml'!");
         }
 
-        if (volumesMap.size() == 0) {
+        if (volumesMap.isEmpty()) {
             ErrorReporter.error("Book '" + id + "' has no defined recipes!", "See '" + Files.FILE_INFO_BOOKS + "' file to learn about recipe books.");
             return null;
         }

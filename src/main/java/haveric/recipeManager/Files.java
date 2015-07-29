@@ -42,9 +42,9 @@ import com.google.common.collect.Sets;
 
 public class Files {
     public static final String NL = System.getProperty("line.separator");
-    public static final String PAD1 = "  ";
-    public static final String PAD2 = "    ";
-    public static final String PAD3 = "      ";
+    //public static final String PAD1 = "  ";
+    //public static final String PAD2 = "    ";
+    //public static final String PAD3 = "      ";
 
     private final CommandSender sender;
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
@@ -70,7 +70,7 @@ public class Files {
     public static final String FILE_INFO_FLAGS = "recipe flags.html";
     public static final String FILE_INFO_BOOKS = "recipe books.html";
 
-    public static final String FILE_RECIPES = "recipes.html";
+    //public static final String FILE_RECIPES = "recipes.html";
 
     public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
 
@@ -355,7 +355,6 @@ public class Files {
             }
 
             obj = data.get("aliases");
-            @SuppressWarnings("unchecked")
             List<String> aliases;
             if (obj instanceof List) {
                 aliases = (List<String>) obj;

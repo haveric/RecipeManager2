@@ -415,7 +415,6 @@ public class Events implements Listener {
 
     private static void updateResultLater(final CraftingInventory inventory, final ItemResult item, final int ticks) {
         Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
-            @SuppressWarnings("deprecation")
             public void run() {
                 inventory.setResult(item);
             }

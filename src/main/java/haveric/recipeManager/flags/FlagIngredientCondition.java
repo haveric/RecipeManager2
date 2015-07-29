@@ -764,7 +764,7 @@ public class FlagIngredientCondition extends Flag {
         public boolean checkColor(Color color) {
             if (color != null && (noColor || noMeta)) {
                 Color defaultColor = Bukkit.getItemFactory().getDefaultLeatherColor();
-                return color == defaultColor;
+                return color.equals(defaultColor);
             }
 
             if (!hasColor()) {

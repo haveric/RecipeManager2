@@ -36,7 +36,7 @@ import com.google.common.collect.ImmutableMap;
  */
 public class Recipes {
     // constants
-    public static final String FURNACE_OWNER_STRING = RMCChatColor.GRAY + "Placed by: " + RMCChatColor.WHITE;
+    //public static final String FURNACE_OWNER_STRING = RMCChatColor.GRAY + "Placed by: " + RMCChatColor.WHITE;
     public static final String RECIPE_ID_STRING = RMCChatColor.GRAY + "RecipeManager #";
 
     // Remember results for re-use on failure
