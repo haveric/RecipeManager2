@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 sourceCompatibility = 1.6
-version = '2.5'
+version = '2.5.1'
 
 configurations {
     extra
@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     compile project(':RecipeManagerCommon')
-    compile "org.bukkit:bukkit:1.8.7-R0.1-SNAPSHOT"
+    compile "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
     compile "net.milkbowl.vault:VaultAPI:1.5"
     
     extra project(':RecipeManagerCommon')
