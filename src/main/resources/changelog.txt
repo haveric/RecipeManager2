@@ -2,7 +2,16 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
-* @IngredientCondition: Added 'bookenchant' and 'nobookenchant' 
+* @IngredientCondition: Added 'bookenchant' and 'nobookenchant'
+* Added @Hide flag
+** @hide attributes     // Hide attributes like Damage
+** @hide destroys       // Hide what the item can break/destroy
+** @hide enchants       // Hide enchants
+** @hide placedon       // Hide where this item can be placed on
+** @hide potioneffects  // Hide potion effects on this item
+** @hide unbreakable    // Hide the unbreakable state
+** @hide all            // Hides everything
+** @hide placedon | destroys // Removes placed on line and break/destroy lines
 
 === v2.5.1 ===
 * Fixed shift clicking vanilla ingredients into furnaces

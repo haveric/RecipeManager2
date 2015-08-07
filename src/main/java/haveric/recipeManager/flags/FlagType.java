@@ -1,8 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Perms;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +7,9 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.Perms;
 
 public enum FlagType {
     // Shared flags
@@ -73,7 +73,8 @@ public enum FlagType {
     POTIONITEM(FlagPotionItem.class, Bit.RESULT, "potion"),
     ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"),
     ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"),
-    GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult");
+    GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult"),
+    HIDE(FlagHide.class, Bit.RESULT);
 
     /*
      * FlagType related methods
