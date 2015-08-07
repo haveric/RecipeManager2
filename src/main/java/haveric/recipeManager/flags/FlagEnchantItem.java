@@ -1,14 +1,16 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.tools.Tools;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.tools.Tools;
 
 public class FlagEnchantItem extends Flag {
     // Flag definition and documentation
@@ -20,7 +22,10 @@ public class FlagEnchantItem extends Flag {
     protected static final String[] D = new String[] {
         "Enchants the result with the specified enchantment at specified level.",
         "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
-        "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
+        "Optionally you can set the level of enchantment ",
+        "  Default is the enchantment's start level ",
+        "  You can use 'max' to set it to enchantment's max level.",
+        "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
         "",
         "Enchantments are forced and there is no level cap!",
         "This flag may be used more times to add more enchantments to the item.", };
@@ -28,21 +33,28 @@ public class FlagEnchantItem extends Flag {
     protected static final String[] E = new String[] {
         "{flag} OXYGEN // enchant with oxygen at level 1",
         "{flag} DIG_SPEED max // enchant with dig speed at max valid level",
-        "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127", };
+        "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127",
+        "{flag} SHARPNESS remove // removes a sharpness enchant"};
 
     // Flag code
 
     private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
+    private List<Enchantment> enchantsToRemove = new ArrayList<Enchantment>();
 
     public FlagEnchantItem() {
     }
 
     public FlagEnchantItem(FlagEnchantItem flag) {
         enchants.putAll(flag.enchants);
+        enchantsToRemove.addAll(flag.enchantsToRemove);
     }
 
     public Map<Enchantment, Integer> getEnchants() {
         return enchants;
+    }
+
+    public List<Enchantment> getEnchantsToRemove() {
+        return enchantsToRemove;
     }
 
     @Override
@@ -80,6 +92,8 @@ public class FlagEnchantItem extends Flag {
 
             if (value.equals("max")) {
                 level = enchant.getMaxLevel();
+            } else if (value.equals("remove")) {
+                enchantsToRemove.add(enchant);
             } else {
                 try {
                     level = Integer.parseInt(value);
@@ -104,6 +118,10 @@ public class FlagEnchantItem extends Flag {
 
         for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
             a.result().addUnsafeEnchantment(e.getKey(), e.getValue());
+        }
+
+        for (Enchantment e : enchantsToRemove) {
+            a.result().removeEnchantment(e);
         }
     }
 

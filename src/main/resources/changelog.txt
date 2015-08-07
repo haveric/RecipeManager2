@@ -12,6 +12,7 @@ This file will be automatically overwritten when a new version is installed.
 ** @hide unbreakable    // Hide the unbreakable state
 ** @hide all            // Hides everything
 ** @hide placedon | destroys // Removes placed on line and break/destroy lines
+* @Enchant and @EnchantBook Added 'remove' option for cloned ingredients
 
 === v2.5.1 ===
 * Fixed shift clicking vanilla ingredients into furnaces

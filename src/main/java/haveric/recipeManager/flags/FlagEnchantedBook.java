@@ -1,16 +1,18 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
 
 public class FlagEnchantedBook extends Flag {
     // Flag definition and documentation
@@ -24,7 +26,10 @@ public class FlagEnchantedBook extends Flag {
         "This flag may be used more times to add more enchantments to the item.",
         "",
         "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
-        "Optionally you can set the level of enchantment, default is the enchantment's start level or you can use 'max' to set it to enchantment's max level.",
+        "Optionally you can set the level of enchantment",
+        "  Default is the enchantment's start level",
+        "  You can use 'max' to set it to enchantment's max level.",
+        "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
         "",
         "Enchantments are forced and there is no level cap!",
         "",
@@ -33,18 +38,20 @@ public class FlagEnchantedBook extends Flag {
     protected static final String[] E = new String[] {
         "{flag} efficiency // dig_speed alias",
         "{flag} damage_all max",
-        "{flag} arrow_fire 127", };
-
+        "{flag} arrow_fire 127",
+        "{flag} sharpness remove"};
 
     // Flag code
 
     private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
+    private List<Enchantment> enchantsToRemove = new ArrayList<Enchantment>();
 
     public FlagEnchantedBook() {
     }
 
     public FlagEnchantedBook(FlagEnchantedBook flag) {
         enchants.putAll(flag.enchants);
+        enchantsToRemove.addAll(flag.enchantsToRemove);
     }
 
     @Override
@@ -60,6 +67,10 @@ public class FlagEnchantedBook extends Flag {
 
     public Map<Enchantment, Integer> getEnchants() {
         return enchants;
+    }
+
+    public List<Enchantment> getEnchantsToRemove() {
+        return enchantsToRemove;
     }
 
     public void setEnchants(Map<Enchantment, Integer> newEnchants) {
@@ -104,6 +115,8 @@ public class FlagEnchantedBook extends Flag {
 
             if (value.equalsIgnoreCase("max")) {
                 level = enchant.getMaxLevel();
+            } else if (value.equalsIgnoreCase("remove")) {
+                enchantsToRemove.add(enchant);
             } else {
                 try {
                     level = Integer.parseInt(value);
@@ -130,6 +143,10 @@ public class FlagEnchantedBook extends Flag {
 
         for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
             meta.addStoredEnchant(e.getKey(), e.getValue(), true);
+        }
+
+        for (Enchantment e : enchantsToRemove) {
+            meta.removeStoredEnchant(e);
         }
 
         a.result().setItemMeta(meta);
