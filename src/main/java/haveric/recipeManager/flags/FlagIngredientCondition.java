@@ -1,15 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.util.ParseBit;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,8 +18,19 @@ import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagIngredientCondition extends Flag {
     // Flag definition and documentation
@@ -78,6 +79,20 @@ public class FlagIngredientCondition extends Flag {
         "    Ingredient must have no enchantment",
         "    Overrides enchant condition if set",
         "",
+        "  bookenchant <name> [[!]num or min-max], [...]",
+        "    Condition for book enchantments (not applied enchantments)",
+        "    This argument can be used more than once to add more enchantments as conditions.",
+        "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+        "    The 2nd argument is the levels, it's optional",
+        "    A number can be used as level to set that level as requirement.",
+        "    You can also use 'max' to use the max supported level for that enchantment.",
+        "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
+        "    Prefixing with '!' would ban the level or level range.",
+        "",
+        "  nobookenchant or !bookenchant",
+        "    Ingredient must have no book enchantment",
+        "    Overrides bookenchant condition if set",
+        "",
         "  amount <num>                     = stack amount, this will also subtract from the ingredient when crafted!",
         "  name <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
         "  noname or !name",
@@ -97,9 +112,9 @@ public class FlagIngredientCondition extends Flag {
         "    Overrides color condition if set",
         "",
         "  nometa or !meta",
-        "    Ingredient must have no metadata (enchants, name, lore, color)",
+        "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color)",
         "    Overrides enchant, name, lore, color conditions if set",
-        "    Equivalent to noenchant | noname | nolore | nocolor",
+        "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor",
         "",
         "  needed <num>",
         "    Sets the number of ingredients that need to match this condition",
@@ -141,6 +156,7 @@ public class FlagIngredientCondition extends Flag {
         private Map<Short, Boolean> dataBits = new HashMap<Short, Boolean>();
         private int amount;
         private Map<Enchantment, Map<Short, Boolean>> enchants = new HashMap<Enchantment, Map<Short, Boolean>>();
+        private Map<Enchantment, Map<Short, Boolean>> bookEnchants = new HashMap<Enchantment, Map<Short, Boolean>>();
         private String name;
         private List<String> lores = new ArrayList<String>();
         private Color minColor;
@@ -149,6 +165,7 @@ public class FlagIngredientCondition extends Flag {
         private boolean noName = false;
         private boolean noLore = false;
         private boolean noEnchant = false;
+        private boolean noBookEnchant = false;
         private boolean noColor = false;
         private boolean allSet = false;
         private int needed;
@@ -178,6 +195,12 @@ public class FlagIngredientCondition extends Flag {
                 enchants.put(e.getKey(), map);
             }
 
+            for (Entry<Enchantment, Map<Short, Boolean>> e : original.bookEnchants.entrySet()) {
+                Map<Short, Boolean> map = new HashMap<Short, Boolean>(e.getValue().size());
+                map.putAll(e.getValue());
+                bookEnchants.put(e.getKey(), map);
+            }
+
             name = original.name;
 
             lores = original.lores;
@@ -189,6 +212,7 @@ public class FlagIngredientCondition extends Flag {
             noName = original.noName;
             noLore = original.noLore;
             noEnchant = original.noEnchant;
+            noBookEnchant = original.noBookEnchant;
             noColor = original.noColor;
 
             allSet = original.allSet;
@@ -557,6 +581,125 @@ public class FlagIngredientCondition extends Flag {
             return s.toString();
         }
 
+        /**
+         * @return book enchantments map, never null.
+         */
+        public Map<Enchantment, Map<Short, Boolean>> getBookEnchants() {
+            return bookEnchants;
+        }
+
+        /**
+         * Set the book enchants map.<br>
+         * Setting to null will clear the map contents.
+         *
+         * @param enchants
+         */
+        public void setBookEnchants(Map<Enchantment, Map<Short, Boolean>> newEnchants) {
+            if (newEnchants == null) {
+                bookEnchants.clear();
+            } else {
+                bookEnchants = newEnchants;
+            }
+        }
+
+        public void addBookEnchant(Enchantment enchant) {
+            bookEnchants.put(enchant, new HashMap<Short, Boolean>(0));
+        }
+
+        public void addBookEnchantLevel(Enchantment enchant, short level) {
+            addBookEnchantLevel(enchant, level, true);
+        }
+
+        public void addBookEnchantLevel(Enchantment enchant, short level, boolean allow) {
+            addBookEnchantLevelRange(enchant, level, level, allow);
+        }
+
+        public void addBookEnchantLevelRange(Enchantment enchant, short min, short max) {
+            addBookEnchantLevelRange(enchant, min, max, true);
+        }
+
+        public void addBookEnchantLevelRange(Enchantment enchant, short min, short max, boolean allow) {
+            Map<Short, Boolean> levels = bookEnchants.get(enchant);
+
+            if (levels == null) {
+                levels = new HashMap<Short, Boolean>();
+                bookEnchants.put(enchant, levels);
+            }
+
+            for (short i = min; i <= max; i++) {
+                levels.put(i, allow);
+            }
+        }
+
+        public boolean hasBookEnchants() {
+            return !bookEnchants.isEmpty();
+        }
+
+        public boolean checkBookEnchants(Map<Enchantment, Integer> enchantsToCheck) {
+            if (noMeta || noBookEnchant) {
+                return enchantsToCheck == null || enchantsToCheck.isEmpty();
+            }
+
+            if (!hasBookEnchants()) {
+                return true;
+            }
+
+            if (enchantsToCheck != null && !enchantsToCheck.isEmpty()) {
+                for (Entry<Enchantment, Map<Short, Boolean>> e : bookEnchants.entrySet()) {
+                    Integer level = enchantsToCheck.get(e.getKey());
+
+                    // TODO test if proper
+
+                    if (level == null) {
+                        return false;
+                    } else if (!e.getValue().isEmpty()) {
+                        Boolean is = e.getValue().get(level.shortValue());
+
+                        if (is == null) {
+                            return false;
+                        }
+
+                        return is.booleanValue();
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public String getBookEnchantsString() {
+            StringBuilder s = new StringBuilder();
+
+            for (Entry<Enchantment, Map<Short, Boolean>> e : getBookEnchants().entrySet()) {
+                if (s.length() > 0) {
+                    s.append("; ");
+                }
+
+                s.append(e.getKey().getName());
+
+                if (!e.getValue().isEmpty()) {
+                    s.append(' ');
+                    boolean first = true;
+
+                    for (Entry<Short, Boolean> l : e.getValue().entrySet()) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            s.append(", ");
+                        }
+
+                        if (!l.getValue()) {
+                            s.append("! ");
+                        }
+
+                        s.append(l.getKey());
+                    }
+                }
+            }
+
+            return s.toString();
+        }
+
         public String getName() {
             return name;
         }
@@ -834,6 +977,24 @@ public class FlagIngredientCondition extends Flag {
 
                 if (getFailMessage() != null) {
                     return false;
+                }
+            }
+            if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
+                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+
+                if (!checkBookEnchants(meta.getStoredEnchants())) {
+                    if (a == null) {
+                        return false;
+                    }
+
+                    if (addReasons) {
+                        a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
+                    }
+                    ok = false;
+
+                    if (getFailMessage() != null) {
+                        return false;
+                    }
                 }
             }
 
@@ -1120,6 +1281,72 @@ public class FlagIngredientCondition extends Flag {
                     }
                 } else {
                     cond.addEnchant(enchant);
+                }
+            } else if (arg.startsWith("!bookenchant") || arg.startsWith("nobookenchant")) {
+                if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
+                    cond.noBookEnchant = true;
+                }
+            } else if (arg.startsWith("bookenchant")) {
+                if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
+                    ErrorReporter.warning("Flag " + getType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
+                    continue;
+                }
+                
+                value = arg.substring("bookenchant".length()).trim();
+
+                String[] list = value.split(" ", 2);
+
+                value = list[0].trim();
+
+                Enchantment enchant = Tools.parseEnchant(value);
+
+                if (enchant == null) {
+                    ErrorReporter.warning("Flag " + getType() + " has 'bookenchant' argument with invalid name: " + value);
+                    continue;
+                }
+
+                if (list.length > 1) {
+                    list = list[1].split(",");
+
+                    for (String s : list) {
+                        s = s.trim();
+                        boolean not = s.charAt(0) == '!';
+
+                        if (not) {
+                            s = s.substring(1).trim();
+                        }
+
+                        String[] split = s.split("-", 2);
+
+                        if (split.length > 1) {
+                            short min;
+                            short max;
+
+                            try {
+                                min = Short.valueOf(split[0].trim());
+                                max = Short.valueOf(split[1].trim());
+                            } catch (NumberFormatException e) {
+                                ErrorReporter.warning("Flag " + getType() + " has 'bookenchant' argument with invalid numbers: " + s);
+                                continue;
+                            }
+
+                            if (min > max) {
+                                ErrorReporter.warning("Flag " + getType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
+                                continue;
+                            }
+
+                            cond.addBookEnchantLevelRange(enchant, min, max, !not);
+                        } else {
+                            try {
+                                cond.addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                            } catch (NumberFormatException e) {
+                                ErrorReporter.warning("Flag " + getType() + " has 'bookenchant' argument with invalid number: " + s);
+                                continue;
+                            }
+                        }
+                    }
+                } else {
+                    cond.addBookEnchant(enchant);
                 }
             } else if (arg.startsWith("!color") || arg.startsWith("nocolor")) {
                 if (item.getItemMeta() instanceof LeatherArmorMeta) {
