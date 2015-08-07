@@ -105,32 +105,36 @@ public class FlagHide extends Flag {
             return;
         }
 
-        ItemMeta meta = a.result().getItemMeta();
+        try {
+            ItemMeta meta = a.result().getItemMeta();
 
-        if (attributes) {
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            if (attributes) {
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            }
+
+            if (destroys) {
+                meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+            }
+
+            if (enchants) {
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            }
+
+            if (placedon) {
+                meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+            }
+
+            if (potioneffects) {
+                meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            }
+
+            if (unbreakable) {
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            }
+
+            a.result().setItemMeta(meta);
+        } catch (NoClassDefFoundError e) {
+            // No 1.8 support
         }
-
-        if (destroys) {
-            meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-        }
-
-        if (enchants) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        }
-
-        if (placedon) {
-            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-        }
-
-        if (potioneffects) {
-            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        }
-
-        if (unbreakable) {
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        }
-
-        a.result().setItemMeta(meta);
     }
 }
