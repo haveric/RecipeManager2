@@ -13,6 +13,10 @@ This file will be automatically overwritten when a new version is installed.
 ** @hide all            // Hides everything
 ** @hide placedon | destroys // Removes placed on line and break/destroy lines
 * @Enchant and @EnchantBook Added 'remove' option for cloned ingredients
+* Added @BannerItem flag (See 'recipe flags.html' for patterns and colors)
+** @banner black
+** @banner red | circle_middle blue | skull yellow
+** @banner green | half_horizontal yellow | circle_middle orange
 
 === v2.5.1 ===
 * Fixed shift clicking vanilla ingredients into furnaces

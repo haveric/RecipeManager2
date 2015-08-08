@@ -74,7 +74,8 @@ public enum FlagType {
     ENCHANTITEM(FlagEnchantItem.class, Bit.RESULT, "enchant", "enchantment"),
     ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"),
     GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult"),
-    HIDE(FlagHide.class, Bit.RESULT);
+    HIDE(FlagHide.class, Bit.RESULT),
+    BANNER(FlagBannerItem.class, Bit.RESULT, "banner");
 
     /*
      * FlagType related methods
@@ -144,6 +145,10 @@ public enum FlagType {
     private String[] getField(String name) {
         if (flagClass.equals(FlagSummon.class) && name.equals("D")) {
             return FlagSummon.getDescription();
+        }
+
+        if (flagClass.equals(FlagBannerItem.class) && name.equals("D")) {
+            return FlagBannerItem.getDescription();
         }
 
         try {
