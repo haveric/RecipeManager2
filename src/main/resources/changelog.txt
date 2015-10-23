@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.6 ===
 * @IngredientCondition: Added 'bookenchant' and 'nobookenchant'
 * Added @Hide flag
 ** @hide attributes     // Hide attributes like Damage
