@@ -17,7 +17,7 @@ This file will be automatically overwritten when a new version is installed.
 ** @banner black
 ** @banner red | circle_middle blue | skull yellow
 ** @banner green | half_horizontal yellow | circle_middle orange
-* Added @IndividualResult flag
+* Added @IndividualResults flag
 ** Allows multi-result recipes to have individual result outcomes, instead of a chance based outcome between all results.
 ** With this flag set, the first valid recipe found will be the one crafted
 ** Replaces "@displayresult first" in most cases
