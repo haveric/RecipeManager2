@@ -1,25 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
-import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
-import haveric.recipeManager.data.BlockID;
-import haveric.recipeManager.data.BrewingStandData;
-import haveric.recipeManager.data.BrewingStands;
-import haveric.recipeManager.data.FurnaceData;
-import haveric.recipeManager.data.Furnaces;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flaggable;
-import haveric.recipeManager.recipes.BrewRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -72,6 +52,26 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
+import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
+import haveric.recipeManager.data.BlockID;
+import haveric.recipeManager.data.BrewingStandData;
+import haveric.recipeManager.data.BrewingStands;
+import haveric.recipeManager.data.FurnaceData;
+import haveric.recipeManager.data.Furnaces;
+import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.flags.Flaggable;
+import haveric.recipeManager.recipes.BrewRecipe;
+import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 
 /**
  * RecipeManager handled events
@@ -397,7 +397,7 @@ public class Events implements Listener {
             new UpdateInventory(player, 2); // update inventory 2 ticks later
 
             // Reset display item when item cannot be crafted
-            if (result == null) {
+            if (result == null && times > 1) {
                 updateResultLater(event.getInventory(), originalResult, 0);
             }
         } catch (Throwable e) {
