@@ -1,5 +1,24 @@
 package haveric.recipeManager;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
@@ -21,25 +40,6 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
-
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Processes all recipe files and updates main Recipes class once done.
@@ -918,41 +918,43 @@ public class RecipeProcessor implements Runnable {
             return ErrorReporter.error("Found the '=' character but with no result!");
         }
 
-        if (totalPercentage > 100) {
-            return ErrorReporter.error("Total result items' chance exceeds 100%!", "If you want some results to be split evenly automatically you can avoid the chance number.");
-        }
-
-        // Spread remaining chance to results that have undefined chance
-        if (splitChanceBy > 0) {
-            float remainingChance = (100.0f - totalPercentage);
-            float chance = remainingChance / splitChanceBy;
-
-            for (ItemResult r : results) {
-                if (r.getChance() < 0) {
-                    totalPercentage -= r.getChance();
-                    r.setChance(chance);
-                    totalPercentage += chance;
-                }
+        if (!recipe.hasFlag(FlagType.INDIVIDUALRESULTS)) {
+            if (totalPercentage > 100) {
+                return ErrorReporter.error("Total result items' chance exceeds 100%!", "If you want some results to be split evenly automatically you can avoid the chance number.");
             }
-        }
 
-        if (!oneResult && totalPercentage < 100) {
-            boolean foundAir = false;
+            // Spread remaining chance to results that have undefined chance
+            if (splitChanceBy > 0) {
+                float remainingChance = (100.0f - totalPercentage);
+                float chance = remainingChance / splitChanceBy;
 
-            for (ItemResult r : results) {
-                if (r.getType() == Material.AIR) {
-                    r.setChance(100.0f - totalPercentage);
-                    foundAir = true;
-                    break;
+                for (ItemResult r : results) {
+                    if (r.getChance() < 0) {
+                        totalPercentage -= r.getChance();
+                        r.setChance(chance);
+                        totalPercentage += chance;
+                    }
                 }
             }
 
-            if (foundAir) {
-                ErrorReporter.warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + "!", "You can remove the chance for AIR to auto-calculate it");
-            } else {
-                ErrorReporter.warning("Results do not stack up to 100% and no fail chance defined, recipe now has " + (100.0f - totalPercentage) + "% chance to fail.", "You should extend or remove the chance for other results if you do not want fail chance instead!");
+            if (!oneResult && totalPercentage < 100) {
+                boolean foundAir = false;
 
-                results.add(new ItemResult(Material.AIR, 0, 0, (100.0f - totalPercentage)));
+                for (ItemResult r : results) {
+                    if (r.getType() == Material.AIR) {
+                        r.setChance(100.0f - totalPercentage);
+                        foundAir = true;
+                        break;
+                    }
+                }
+
+                if (foundAir) {
+                    ErrorReporter.warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + "!", "You can remove the chance for AIR to auto-calculate it");
+                } else {
+                    ErrorReporter.warning("Results do not stack up to 100% and no fail chance defined, recipe now has " + (100.0f - totalPercentage) + "% chance to fail.", "You should extend or remove the chance for other results if you do not want fail chance instead!");
+
+                    results.add(new ItemResult(Material.AIR, 0, 0, (100.0f - totalPercentage)));
+                }
             }
         }
 

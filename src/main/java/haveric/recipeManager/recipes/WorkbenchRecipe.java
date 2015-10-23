@@ -1,5 +1,13 @@
 package haveric.recipeManager.recipes;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.flags.ArgBuilder;
@@ -12,14 +20,6 @@ import haveric.recipeManager.flags.FlagKeepItem;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
 import haveric.recipeManager.tools.ToolsItem;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class WorkbenchRecipe extends MultiResultRecipe {
     protected WorkbenchRecipe() {
@@ -145,10 +145,18 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
         combinedLores.addAll(lore);
 
+        if (this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
+            double individualFail = 100 - displayResult.getChance();
+
+            if (individualFail > 0) {
+                combinedLores.add("Chance to fail: " + individualFail + "%");
+            }
+        }
+
         meta.setLore(combinedLores);
         displayResult.setItemMeta(meta);
 
-        if (flag != null) {
+        if (flag != null || this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
             return displayResult;
         }
 

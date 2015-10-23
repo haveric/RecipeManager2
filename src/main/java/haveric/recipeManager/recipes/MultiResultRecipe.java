@@ -1,18 +1,20 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flags.ArgBuilder;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.tools.ToolsItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.flags.ArgBuilder;
+import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.flags.FlagIndividualResults;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.tools.ToolsItem;
 
 public class MultiResultRecipe extends BaseRecipe {
     private List<ItemResult> results = new ArrayList<ItemResult>();
@@ -167,6 +169,8 @@ public class MultiResultRecipe extends BaseRecipe {
      * Get a random result from the list.<br>
      * Returns AIR if failure chance occurred.
      *
+     * Will grab the first valid result if using {@link FlagIndividualResults}
+     *
      * @param a
      *            dynamic arguments, use {@link ArgBuilder#create()} to build arguments for this.
      * @return the result as a clone or null.
@@ -174,28 +178,44 @@ public class MultiResultRecipe extends BaseRecipe {
     public ItemResult getResult(Args a) {
         a.clear();
 
-        List<ItemResult> list = new ArrayList<ItemResult>();
-        float maxChance = 0;
-
-        for (ItemResult r : results) {
-            a.clear();
-
-            if (r.checkFlags(a)) {
-                list.add(r);
-                maxChance += r.getChance();
-            }
-        }
-
         ItemResult result = null;
-        float rand = RecipeManager.random.nextFloat() * maxChance;
-        float chance = 0;
+        if (this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
+            for (ItemResult r : results) {
+                a.clear();
 
-        for (ItemResult r : list) {
-            chance += r.getChance();
+                if (r.checkFlags(a)) {
+                    float chance = r.getChance();
+                    float rand = RecipeManager.random.nextFloat() * 100;
 
-            if (chance >= rand) {
-                result = r.clone();
-                break;
+                    if (chance >= rand) {
+                        result = r.clone();
+                    }
+                    break;
+                }
+            }
+        } else {
+            List<ItemResult> list = new ArrayList<ItemResult>();
+            float maxChance = 0;
+
+            for (ItemResult r : results) {
+                a.clear();
+
+                if (r.checkFlags(a)) {
+                    list.add(r);
+                    maxChance += r.getChance();
+                }
+            }
+
+            float rand = RecipeManager.random.nextFloat() * maxChance;
+            float chance = 0;
+
+            for (ItemResult r : list) {
+                chance += r.getChance();
+
+                if (chance >= rand) {
+                    result = r.clone();
+                    break;
+                }
             }
         }
 

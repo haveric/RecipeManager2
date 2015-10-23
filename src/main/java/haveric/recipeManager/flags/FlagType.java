@@ -59,6 +59,7 @@ public enum FlagType {
     REMOVE(FlagRemove.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "delete"),
     RESTRICT(FlagRestrict.class, Bit.RECIPE | Bit.NO_VALUE, "disable", "denied", "deny"),
     OVERRIDE(FlagOverride.class, Bit.RECIPE | Bit.NO_FOR | Bit.NO_VALUE | Bit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace"),
+    INDIVIDUALRESULTS(FlagIndividualResults.class, Bit.RECIPE | Bit.NO_VALUE, "individual"),
 
     // Result only flags
     CLONEINGREDIENT(FlagCloneIngredient.class, Bit.RESULT | Bit.NO_SHIFT, "clone", "copy", "copyingredient"), // TODO finish
