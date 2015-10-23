@@ -148,7 +148,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
             double individualFail = 100 - displayResult.getChance();
 
-            if (individualFail > 0) {
+            if (individualFail > 0 && individualFail < 100) {
                 combinedLores.add("Chance to fail: " + individualFail + "%");
             }
         }

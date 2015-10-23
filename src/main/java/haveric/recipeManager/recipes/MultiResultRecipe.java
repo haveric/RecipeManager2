@@ -187,7 +187,7 @@ public class MultiResultRecipe extends BaseRecipe {
                     float chance = r.getChance();
                     float rand = RecipeManager.random.nextFloat() * 100;
 
-                    if (chance >= rand) {
+                    if (chance < 0 || chance >= rand) {
                         result = r.clone();
                     }
                     break;
