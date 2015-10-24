@@ -1,8 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +15,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 public enum Messages {
     // Flags
@@ -502,7 +502,7 @@ public enum Messages {
     }
 
     /**
-     * Used by plugin to log messages, shouldn't be used by other plugins unless really needed to send e message tagged by RecipeManager
+     * Used by plugin to log messages, shouldn't be used by other plugins unless really needed to send a message tagged by RecipeManager
      *
      * @param message
      */
