@@ -302,6 +302,7 @@ public class Events implements Listener {
     public void craftFinish(CraftItemEvent event) {
         try {
             CraftingInventory inv = event.getInventory();
+
             ItemResult result;
             if (inv.getResult() == null) {
                 result = null;
@@ -394,12 +395,9 @@ public class Events implements Listener {
                 }
             }
 
-            new UpdateInventory(player, 2); // update inventory 2 ticks later
+            Bukkit.getPluginManager().callEvent(new PrepareItemCraftEvent(inv, player.getOpenInventory(), false));
 
-            // Reset display item when item cannot be crafted
-            if (result == null && times > 1) {
-                updateResultLater(event.getInventory(), originalResult, 0);
-            }
+            new UpdateInventory(player, 2); // update inventory 2 ticks later
         } catch (Throwable e) {
             event.setCancelled(true);
             CommandSender sender;
