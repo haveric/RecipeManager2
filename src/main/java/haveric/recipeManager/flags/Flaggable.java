@@ -74,4 +74,8 @@ public interface Flaggable {
      * @return
      */
     boolean sendPrepare(Args a);
+
+    boolean sendFuelRandom(Args a);
+
+    boolean sendFuelEnd(Args a);
 }

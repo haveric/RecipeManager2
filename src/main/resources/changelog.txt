@@ -4,6 +4,10 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * @IndividualResults Fixed all results failing when no chances provided
 * Fixed results not updating correctly on recipes with multiple results
+* @Explode: Added fuel property to control when explosions occur in fuel recipes
+** @Explode fuel end // Will cause the explosion to happen after the fuel runs out
+** @Explode fuel random // Will cause the explosion to happen sometime randomly before the fuel runs out
+* API: Added RecipeManagerFuelBurnEndEvent and RecipeManagerFuelBurnRandomEvent
 
 === v2.6 ===
 * @IngredientCondition: Added 'bookenchant' and 'nobookenchant'

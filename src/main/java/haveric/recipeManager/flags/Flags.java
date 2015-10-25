@@ -1,14 +1,14 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.flags.FlagType.Bit;
-
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.flags.FlagType.Bit;
 
 public class Flags implements Cloneable {
     private Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
@@ -272,6 +272,26 @@ public class Flags implements Cloneable {
         for (Flag flag : flags.values()) {
             flag.failed(a);
         }
+    }
+
+    public boolean sendFuelRandom(Args a) {
+        a.clear();
+
+        for (Flag flag : flags.values()) {
+            flag.fuelRandom(a);
+        }
+
+        return !a.hasReasons();
+    }
+
+    public boolean sendFuelEnd(Args a) {
+        a.clear();
+
+        for (Flag flag : flags.values()) {
+            flag.fuelEnd(a);
+        }
+
+        return !a.hasReasons();
     }
 
     /**

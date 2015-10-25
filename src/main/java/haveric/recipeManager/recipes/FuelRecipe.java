@@ -1,5 +1,8 @@
 package haveric.recipeManager.recipes;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
@@ -9,9 +12,6 @@ import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
-
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public class FuelRecipe extends BaseRecipe {
     private ItemStack ingredient;

@@ -1,8 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,6 +10,10 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.recipes.FuelRecipe;
 
 public class FlagExplode extends Flag {
     // Flag definition and documentation
@@ -26,17 +27,20 @@ public class FlagExplode extends Flag {
         "This flag can only be declared once per recipe and once per result.",
         "",
         "Replace <arguments> with the following arguments separated by | character:",
-        "  power <0.0 to ...>     = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
-        "  fire                   = (default not set) Explosion sets fires.",
-        "  nobreak                = (default not set) Makes explosion not break blocks.",
-        "  nodamage [self]        = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
-        "  fail                   = (default not set) Explode if recipe failed as opposed to succeed.",
+        "  power <0.0 to ...>      = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
+        "  fire                    = (default not set) Explosion sets fires.",
+        "  nobreak                 = (default not set) Makes explosion not break blocks.",
+        "  nodamage [self]         = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
+        "  fail                    = (default not set) Explode if recipe failed as opposed to succeed.",
+        "  fuel <start,end,random> = (default start) Causes the explosion to happen at different times. Can only be used on fuel recipes.",
         "All arguments are optional and you can specify these arguments in any order.", };
 
     protected static final String[] E = new String[] {
-        "{flag} // will explode when recipe succeeds with power 2, 100% chance and breaks blocks",
-        "{flag} nobreak | fire | chance 25% | power 6 // will explode 25% of time without block damage but sets fires",
-        "{flag} fail | power 2 | chance 75% // will explode 75% of the time when recipe fails", };
+        "{flag} // will explode when recipe succeeds with power 2 and breaks blocks",
+        "{flag} nobreak | fire | power 6 // will explode  without block damage but sets fires",
+        "{flag} fail | power 2 // will explode when recipe fails",
+        "{flag} fuel end // On a fuel recipe, will cause the explosion to happen after the fuel runs out",
+        "{flag} fuel random // On a fuel recipe, will cause the explosion to happen sometime randomly before the fuel runs out", };
 
     // Flag code
 
@@ -45,6 +49,7 @@ public class FlagExplode extends Flag {
     private boolean noBreak = false;
     private byte noDamage = 0;
     private boolean failure = false;
+    private String fuel = "start";
 
     public FlagExplode() {
     }
@@ -55,6 +60,7 @@ public class FlagExplode extends Flag {
         noBreak = flag.noBreak;
         noDamage = flag.noDamage;
         failure = flag.failure;
+        fuel = flag.fuel;
     }
 
     @Override
@@ -90,6 +96,14 @@ public class FlagExplode extends Flag {
 
     public void setFailure(boolean newFailure) {
         failure = newFailure;
+    }
+
+    public String getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(String newFuel) {
+        fuel = newFuel;
     }
 
     public boolean getNoBreak() {
@@ -154,6 +168,20 @@ public class FlagExplode extends Flag {
                     ErrorReporter.warning("Flag " + getType() + " has 'power' argument with invalid number: " + value);
                     continue;
                 }
+            } else if (arg.startsWith("fuel")) {
+                if (getFlaggable() instanceof FuelRecipe) {
+                    value = arg.substring("fuel".length()).trim().toLowerCase();
+
+                    Flaggable flaggable = getFlaggable();
+                    if (value.equals("start") || value.equals("end") || value.equals("random")) {
+                        setFuel(value);
+                    } else {
+                        ErrorReporter.warning("Flag " + getType() + " has 'fuel' argument with invalid argument: " + value + ". Defaulting to 'start'.");
+                        setFuel("start");
+                    }
+                } else {
+                    ErrorReporter.warning("Flag " + getType() + " has 'fuel' argument on non fuel recipe.");
+                }
             } else {
                 ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
             }
@@ -164,6 +192,26 @@ public class FlagExplode extends Flag {
 
     @Override
     protected void onCrafted(final Args a) {
+        if (getFuel().equals("start")) {
+            runBoomLater(a);
+        }
+    }
+
+    @Override
+    protected void onFuelRandom(final Args a) {
+        if (getFuel().equals("random")) {
+            runBoomLater(a);
+        }
+    }
+
+    @Override
+    protected void onFuelEnd(final Args a) {
+        if (getFuel().equals("end")) {
+            runBoomLater(a);
+        }
+    }
+
+    private void runBoomLater(final Args a) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -173,7 +221,6 @@ public class FlagExplode extends Flag {
     }
 
     private void boom(Args a) {
-
         if (!a.hasLocation()) {
             a.addCustomReason("Need a location!");
             return;

@@ -1,10 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flags.FlagType.Bit;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +7,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.flags.FlagType.Bit;
 
 public class FlagForChance extends Flag {
     // Flag definition and documentation
@@ -491,6 +491,16 @@ public class FlagForChance extends Flag {
         event(a, 'r');
     }
 
+    @Override
+    protected void onFuelRandom(Args a) {
+        event(a, 'd');
+    }
+
+    @Override
+    protected void onFuelEnd(Args a) {
+        event(a, 'e');
+    }
+
     private void event(Args a, char method) {
         for (Entry<String, List<ChanceFlag>> e : flagMap.entrySet()) {
             List<ChanceFlag> flags = e.getValue();
@@ -535,6 +545,12 @@ public class FlagForChance extends Flag {
                 break;
             case 'f':
                 flag.failed(a);
+                break;
+            case 'd':
+                flag.fuelRandom(a);
+                break;
+            case 'e':
+                flag.fuelEnd(a);
                 break;
             default:
                 break;

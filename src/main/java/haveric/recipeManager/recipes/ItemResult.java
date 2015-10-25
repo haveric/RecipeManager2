@@ -1,13 +1,13 @@
 package haveric.recipeManager.recipes;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.Flag;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flaggable;
 import haveric.recipeManager.flags.Flags;
-
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public class ItemResult extends ItemStack implements Flaggable {
     private Flags flags;
@@ -167,5 +167,27 @@ public class ItemResult extends ItemStack implements Flaggable {
         }
 
         return sendPrepare;
+    }
+
+    @Override
+    public boolean sendFuelRandom(Args a) {
+        boolean sendRandom = true;
+
+        if (flags != null) {
+            sendRandom = flags.sendFuelRandom(a);
+        }
+
+        return sendRandom;
+    }
+
+    @Override
+    public boolean sendFuelEnd(Args a) {
+        boolean sendEnd = true;
+
+        if (flags != null) {
+            sendEnd = flags.sendFuelEnd(a);
+        }
+
+        return sendEnd;
     }
 }

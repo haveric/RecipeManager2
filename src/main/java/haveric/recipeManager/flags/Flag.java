@@ -1,13 +1,13 @@
 package haveric.recipeManager.flags;
 
+import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
+
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Perms;
 import haveric.recipeManager.flags.FlagType.Bit;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-
-import org.apache.commons.lang.Validate;
-import org.bukkit.entity.Player;
 
 public class Flag implements Cloneable {
     protected Flags flagsContainer;
@@ -111,6 +111,14 @@ public class Flag implements Cloneable {
      */
     public final void failed(Args a) {
         onFailed(a);
+    }
+
+    public final void fuelEnd(Args a) {
+        onFuelEnd(a);
+    }
+
+    public final void fuelRandom(Args a) {
+        onFuelRandom(a);
     }
 
     /**
@@ -296,6 +304,10 @@ public class Flag implements Cloneable {
     protected void onCrafted(Args a) { }
 
     protected void onFailed(Args a) { }
+
+    protected void onFuelEnd(Args a) { }
+
+    protected void onFuelRandom(Args a) { }
 
     public String getResultLore() {
         return null;

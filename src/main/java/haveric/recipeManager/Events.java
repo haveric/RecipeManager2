@@ -54,6 +54,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
+import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
+import haveric.recipeManager.api.events.RecipeManagerFuelBurnRandomEvent;
 import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
 import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.data.BrewingStandData;
@@ -1046,16 +1048,16 @@ public class Events implements Listener {
         short burnTime = 0;
         short cookTime = 0;
 
-        Furnace furnace = (Furnace) event.getBlock().getState();
+        final Furnace furnace = (Furnace) event.getBlock().getState();
 
         FurnaceInventory inventory = furnace.getInventory();
 
         Location furnaceLocation = furnace.getLocation();
-        FurnaceData data = Furnaces.get(furnaceLocation);
+        final FurnaceData data = Furnaces.get(furnaceLocation);
 
         ItemStack fuel = event.getFuel();
 
-        FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
+        final FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
 
         if (fuelRecipe != null) {
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
@@ -1110,6 +1112,51 @@ public class Events implements Listener {
         boolean isBurning = furnace.getType() == Material.BURNING_FURNACE;
         if (recipe != null && !isBurning) {
             furnace.setCookTime(cookTime);
+        }
+
+        long randTime = (long) Math.floor(Math.random() * burnTime);
+        Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
+            public void run() {
+                Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFueler()));
+            }
+        }, randTime);
+
+        Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
+            public void run() {
+                Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFueler()));
+            }
+        }, burnTime);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void afterBurn(RecipeManagerFuelBurnRandomEvent event) {
+        FuelRecipe recipe = event.getRecipe();
+        Furnace furnace = event.getFurnace();
+        FurnaceInventory inventory = furnace.getInventory();
+        Args a = Args.create().player(event.getFuelerName()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+
+        a.clear();
+
+        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
+
+        if (recipe.sendFuelRandom(a)) {
+            a.sendEffects(a.player(), msg);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void afterBurn(RecipeManagerFuelBurnEndEvent event) {
+        FuelRecipe recipe = event.getRecipe();
+        Furnace furnace = event.getFurnace();
+        FurnaceInventory inventory = furnace.getInventory();
+        Args a = Args.create().player(event.getFuelerName()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+
+        a.clear();
+
+        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
+
+        if (recipe.sendFuelEnd(a)) {
+            a.sendEffects(a.player(), msg);
         }
     }
 

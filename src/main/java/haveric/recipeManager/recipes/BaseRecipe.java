@@ -1,5 +1,7 @@
 package haveric.recipeManager.recipes;
 
+import org.bukkit.inventory.Recipe;
+
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
@@ -11,8 +13,6 @@ import haveric.recipeManager.flags.Flags;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-
-import org.bukkit.inventory.Recipe;
 
 public class BaseRecipe implements Flaggable {
     protected String name;
@@ -268,6 +268,28 @@ public class BaseRecipe implements Flaggable {
         }
 
         return sendPrepare;
+    }
+
+    @Override
+    public boolean sendFuelRandom(Args a) {
+        boolean sendRandom = true;
+
+        if (flags != null) {
+            sendRandom = flags.sendFuelRandom(a);
+        }
+
+        return sendRandom;
+    }
+
+    @Override
+    public boolean sendFuelEnd(Args a) {
+        boolean sendEnd = true;
+
+        if (flags != null) {
+            sendEnd = flags.sendFuelEnd(a);
+        }
+
+        return sendEnd;
     }
 
     /**
