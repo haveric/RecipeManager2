@@ -1,11 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.FlagType.Bit;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,11 +34,14 @@ import org.bukkit.potion.PotionType;
 
 import com.google.common.collect.Sets;
 
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.flags.FlagType.Bit;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.util.RMCUtil;
+
 public class Files {
     public static final String NL = System.getProperty("line.separator");
-    //public static final String PAD1 = "  ";
-    //public static final String PAD2 = "    ";
-    //public static final String PAD3 = "      ";
 
     private final CommandSender sender;
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
@@ -69,8 +66,6 @@ public class Files {
     public static final String FILE_INFO_NAMES = "name index.html";
     public static final String FILE_INFO_FLAGS = "recipe flags.html";
     public static final String FILE_INFO_BOOKS = "recipe books.html";
-
-    //public static final String FILE_RECIPES = "recipes.html";
 
     public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
 
@@ -97,8 +92,6 @@ public class Files {
         createFile(FILE_INFO_ADVANCED, overwrite);
         createFile(FILE_INFO_BOOKS, overwrite);
         createFile(FILE_CHANGELOG, overwrite);
-
-        // TODO warn of unused 'aliases.yml'
 
         if (overwrite) {
             Messages.sendAndLog(newSender, "<gray>New version installed, information files and changelog have been overwritten.");
@@ -168,9 +161,8 @@ public class Files {
         StringBuilder s = new StringBuilder(32000);
         Map<String, List<FlagType>> flags = new LinkedHashMap<String, List<FlagType>>();
 
-        String[] category = new String[] { "SHARED FLAGS", "RECIPE ONLY FLAGS", "RESULT ONLY FLAGS", };
-
-        String[] description = new String[] { "Usable on anything - file header, recipe header or result items.", "Usable only on file headers or recipe headers. Can not be used on result items.", "Usable only on recipe's result items. Can not be used on recipes or file header.", };
+        String[] category = new String[] { "SHARED FLAGS", "RECIPE ONLY FLAGS", "RESULT ONLY FLAGS" };
+        String[] description = new String[] { "Usable on anything - file header, recipe header or result items.", "Usable only on file headers or recipe headers. Can not be used on result items.", "Usable only on recipe's result items. Can not be used on recipes or file header." };
 
         int size = FlagType.values().length;
 
