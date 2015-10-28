@@ -124,22 +124,6 @@ public class BlockID {
         return Bukkit.getWorld(wid);
     }
 
-    /**
-     * Returns the world's name
-     *
-     * @return world name or null if world isn't loaded
-     */
-/*
-    public String getWorldName() {
-        String worldName = null;
-        World world = getWorld();
-
-        if (world != null) {
-            worldName = world.getName();
-        }
-        return worldName;
-    }
-*/
     @Override
     public int hashCode() {
         return hash;

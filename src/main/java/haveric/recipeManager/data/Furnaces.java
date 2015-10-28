@@ -1,8 +1,5 @@
 package haveric.recipeManager.data;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +18,9 @@ import org.bukkit.block.Furnace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.FurnaceInventory;
+
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
 
 public class Furnaces {
     private static final String SAVE_EXTENSION = ".furnacedata";
@@ -43,7 +43,7 @@ public class Furnaces {
             Entry<BlockID, FurnaceData> e = it.next();
             BlockID id = e.getKey();
 
-            if (Math.floor(id.getX() / 16.0) == x && Math.floor(id.getZ() / 16.0) == z && !added.contains(id)) {
+            if (Math.round(Math.floor(id.getX() / 16.0)) == x && Math.round(Math.floor(id.getZ() / 16.0)) == z && !added.contains(id)) {
                 it.remove();
             }
         }

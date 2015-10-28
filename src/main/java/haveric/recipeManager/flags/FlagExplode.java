@@ -172,7 +172,6 @@ public class FlagExplode extends Flag {
                 if (getFlaggable() instanceof FuelRecipe) {
                     value = arg.substring("fuel".length()).trim().toLowerCase();
 
-                    Flaggable flaggable = getFlaggable();
                     if (value.equals("start") || value.equals("end") || value.equals("random")) {
                         setFuel(value);
                     } else {

@@ -1,14 +1,5 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +10,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 
 public class CraftRecipe extends WorkbenchRecipe {
     private ItemStack[] ingredients;
@@ -424,7 +424,7 @@ public class CraftRecipe extends WorkbenchRecipe {
         int ingredientsLength = ingredients.length;
         for (int i = 0; i < ingredientsLength; i++) {
             int col = i % 3 + 1;
-            int row = (int) Math.floor(i / 3) + 1;
+            int row = i / 3 + 1;
 
             if (col <= getWidth() && row <= getHeight()) {
                 if (ingredients[i] == null) {

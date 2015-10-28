@@ -1,8 +1,5 @@
 package haveric.recipeManager.data;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,6 +19,9 @@ import org.bukkit.block.BrewingStand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.BrewerInventory;
+
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
 
 public class BrewingStands {
     private static final String SAVE_EXTENSION = ".brewingdata";
@@ -43,7 +43,7 @@ public class BrewingStands {
             Entry<BlockID, BrewingStandData> entry = iter.next();
             BlockID id = entry.getKey();
 
-            if (Math.floor(id.getX() / 16.0) == x && Math.floor(id.getZ() / 16.0) == z && !added.contains(id)) {
+            if (Math.round(Math.floor(id.getX() / 16.0)) == x && Math.round(Math.floor(id.getZ() / 16.0)) == z && !added.contains(id)) {
                 iter.remove();
             }
         }
