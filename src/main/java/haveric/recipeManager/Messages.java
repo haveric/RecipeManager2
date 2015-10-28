@@ -224,7 +224,7 @@ public enum Messages {
     private String path;
     private String message;
 
-    private Messages(String newMessage) {
+    Messages(String newMessage) {
         path = name().replace('_', '.').toLowerCase();
         message = newMessage;
     }

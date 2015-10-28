@@ -1,13 +1,13 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 
 public class ArgBuilder {
     private Args a = new Args();
@@ -31,7 +31,6 @@ public class ArgBuilder {
     /**
      * Start building an argument class for flag events
      *
-     * @return linkable methods
      */
     public ArgBuilder() {
     }

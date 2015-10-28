@@ -14,7 +14,7 @@ public class FlagIndividualResults extends Flag {
         "Allows multi-result recipes to have individual result outcomes, instead of a chance based outcome between all results.",
         "With this flag set, the first valid recipe found will be the one crafted",
         "",
-        "A percent chance on a result will cause the recipe to fail the rest of the percent out of 100.",};
+        "A percent chance on a result will cause the recipe to fail the rest of the percent out of 100.", };
 
     protected static final String[] E = new String[] {
             "{flag}", };

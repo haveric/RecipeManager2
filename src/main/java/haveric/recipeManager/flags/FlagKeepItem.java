@@ -1,14 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.util.ParseBit;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,6 +13,15 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.util.ParseBit;
 
 public class FlagKeepItem extends Flag {
     // Flag definition and documentation
@@ -273,7 +273,7 @@ public class FlagKeepItem extends Flag {
         private boolean taskRequired = false;
         private Inventory inv;
 
-        public ReturnTask(Inventory newInv) {
+        ReturnTask(Inventory newInv) {
             inv = newInv;
         }
 

@@ -86,7 +86,7 @@ public enum FlagType {
     private final String[] names;
     private final int bits;
 
-    private FlagType(Class<? extends Flag> newFlagClass, int newBits, String... aliases) {
+    FlagType(Class<? extends Flag> newFlagClass, int newBits, String... aliases) {
         flagClass = newFlagClass;
         bits = newBits;
 

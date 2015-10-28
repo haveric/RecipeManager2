@@ -1,19 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.api.events.RecipeManagerReloadBooksEvent;
-import haveric.recipeManager.data.RecipeBook;
-import haveric.recipeManager.flags.FlagAddToBook;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.io.File;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -39,6 +25,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.google.common.collect.Sets;
+
+import haveric.recipeManager.api.events.RecipeManagerReloadBooksEvent;
+import haveric.recipeManager.data.RecipeBook;
+import haveric.recipeManager.flags.FlagAddToBook;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.CombineRecipe;
+import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class RecipeBooks {
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
@@ -289,7 +289,7 @@ public class RecipeBooks {
 
         // Add unsorted recipes to volumes
         if (!unsorted.isEmpty()) {
-            int volume = Math.max((int) Math.floor((recipesNum + 0.0) / book.getRecipesPerVolume()), 1);
+            int volume = Math.max(recipesNum / book.getRecipesPerVolume(), 1);
             int added = (recipesNum % book.getRecipesPerVolume());
 
             for (String name : unsorted) {

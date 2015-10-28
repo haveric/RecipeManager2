@@ -45,7 +45,7 @@ public class FlagBannerItem extends Flag {
             }, String.class);
         } catch (NoClassDefFoundError e) {
             // No 1.8 support
-        };
+        }
         description = ObjectArrays.concat(description, new String[] {
             "  <color> is required for each pattern, color values are the same as <basecolor>",
             "  Multiple patterns can be added",
