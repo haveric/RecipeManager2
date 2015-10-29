@@ -1,10 +1,12 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.Messages;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import haveric.recipeManager.Messages;
 
 public class FlagPermission extends Flag {
     // Flag definition and documentation
@@ -127,14 +129,54 @@ public class FlagPermission extends Flag {
 
     @Override
     protected void onCheck(Args a) {
+        boolean success = false;
+        List<String> failed = new ArrayList<String>();
         for (Entry<String, Boolean> e : permissions.entrySet()) {
             if (e.getValue().booleanValue()) {
-                if (!a.hasPlayer() || !a.player().hasPermission(e.getKey())) {
-                    a.addReason(Messages.FLAG_PERMISSION_ALLOWED, getPermissionMessage(e.getKey()), "{permission}", e.getKey(), "{permissions}", getPermissionsString(true));
-                }
-            } else {
                 if (a.hasPlayer() && a.player().hasPermission(e.getKey())) {
-                    a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, getPermissionMessage(e.getKey()), "{permission}", e.getKey(), "{permissions}", getPermissionsString(false));
+                    success = true;
+                    break;
+                }
+
+                failed.add(e.getKey());
+            }
+        }
+
+        if (!success && failed.size() > 0) {
+            List<String> failedMessages = new ArrayList<String>();
+
+            for (String perm : failed) {
+                String message = getPermissionMessage(perm);
+
+                if (!failedMessages.contains(message)) {
+                    failedMessages.add(message);
+                    a.addReason(Messages.FLAG_PERMISSION_ALLOWED, message, "{permission}", perm, "{permissions}", getPermissionsString(true));
+                }
+            }
+        }
+
+        success = false;
+        List<String> succeeded = new ArrayList<String>();
+        for (Entry<String, Boolean> e : permissions.entrySet()) {
+            if (!e.getValue().booleanValue()) {
+                if (a.hasPlayer() && a.player().hasPermission(e.getKey())) {
+                    succeeded.add(e.getKey());
+                } else {
+                    success = true;
+                    break;
+                }
+            }
+        }
+
+        if (!success && succeeded.size() > 0) {
+            List<String> succeededMessages = new ArrayList<String>();
+
+            for (String perm : succeeded) {
+                String message = getPermissionMessage(perm);
+
+                if (!succeededMessages.contains(message)) {
+                    succeededMessages.add(message);
+                    a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, message, "{permission}", perm, "{permissions}", getPermissionsString(false));
                 }
             }
         }

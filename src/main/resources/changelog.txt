@@ -1,6 +1,11 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* @Permission: Fixed multiple permission requirements
+** Player must have any permission listed, not all permissions
+** Player must have no permissions marked with !
+
 === v2.6.1 ===
 * @IndividualResults Fixed all results failing when no chances provided
 * Fixed results not updating correctly on recipes with multiple results
