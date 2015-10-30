@@ -451,12 +451,6 @@ public class Events implements Listener {
             }
 
             recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
-
-            // update displayed result
-            // TODO need accurate reading if there is a recipe!
-            /*
-             * if(inv.getResult() != null && inv.getResult().getType() != Material.AIR) { event.setCurrentItem(recipe.getDisplayResult(a)); } else { event.setCurrentItem(null); }
-             */
         } else {
             if (result == null || result.getType() == Material.AIR) {
                 event.setCurrentItem(null);

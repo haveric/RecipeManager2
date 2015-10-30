@@ -257,7 +257,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             flagKI = result.getFlag(FlagKeepItem.class);
         }
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
 
             if (item != null) {

@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
@@ -181,7 +180,7 @@ public class FlagKeepItem extends Flag {
         return true;
     }
 
-    private void parse(ReturnTask task, Inventory inv, Args a, int index) {
+    private void parse(ReturnTask task, final Inventory inv, Args a, final int index) {
         ItemStack item = inv.getItem(index);
 
         if (item == null || item.getType() == Material.AIR) {
@@ -211,7 +210,11 @@ public class FlagKeepItem extends Flag {
                                     a.player().playSound(a.player().getLocation(), Sound.ITEM_BREAK, 1.0f, 0.0f);
                                 }
 
-                                Bukkit.getPluginManager().callEvent(new PlayerItemBreakEvent(a.player(), clone)); // TODO unsure if I should really call this...
+                                Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
+                                    public void run() {
+                                        inv.clear(index);
+                                    }
+                                }, 0);
                             }
 
                             clone = null;
@@ -243,7 +246,7 @@ public class FlagKeepItem extends Flag {
             CraftingInventory inv = (CraftingInventory) a.inventory();
             ReturnTask task = new ReturnTask(inv);
 
-            for (int i = 1; i < 10; i++) {
+            for (int i = 1; i < inv.getSize(); i++) {
                 parse(task, inv, a, i);
             }
 
