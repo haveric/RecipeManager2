@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Player must have any permission listed, not all permissions
 ** Player must have no permissions marked with !
 * @KeepItem: Fixed shift clicking when the item should be destroyed
+* Update checks are now asynchronous. Should no longer stall the server if update site is down or having issues
 
 === v2.6.1 ===
 * @IndividualResults Fixed all results failing when no chances provided

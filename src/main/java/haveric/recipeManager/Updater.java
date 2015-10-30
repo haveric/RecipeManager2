@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -42,7 +43,7 @@ public class Updater {
 
     private static String versionRegex = "[^de0-9 ]?[v]?([0-9\\.]+[^\\.a-z -])(?:[ -])?([dev|alpha|beta]*[-]*[0-9]*)?";
 
-    private static int taskId = -1;
+    private static BukkitTask task = null;
 
     private Updater() { } // Private constructor for utility class
 
@@ -62,24 +63,31 @@ public class Updater {
         apiKey = newApiKey;
         stop();
 
-        query(null); // Do one initial check
+        updateOnce(null); // Do one initial check
 
         int time = Settings.getInstance().getUpdateCheckFrequency();
 
         if (time > 0) {
             time *= 60 * 60 * 20;
-            taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+            task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
                 public void run() {
                     query(null);
                 }
-
             }, time, time);
         }
     }
 
+    public static void updateOnce(final CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(RecipeManager.getPlugin(), new Runnable() {
+            public void run() {
+                query(sender);
+            }
+        });
+    }
+
     public static void stop() {
-        if (taskId != -1) {
-            Bukkit.getScheduler().cancelTask(taskId);
+        if (task != null) {
+            task.cancel();
         }
     }
 
