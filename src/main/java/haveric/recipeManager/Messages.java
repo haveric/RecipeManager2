@@ -118,6 +118,7 @@ public enum Messages {
     FLAG_PREFIX_RESULT("<gray>(Result {item}<gray>) <reset>"),
     FLAG_PREFIX_FURNACE("<gray>(Furnace {location}) <reset>"),
 
+    FLAG_INVENTORY("<red> Need inventory: {inventory}"),
     // Crafting
 
     CRAFT_REPAIR_DISABLED("<red>Repair recipes disabled."),

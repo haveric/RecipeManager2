@@ -1,6 +1,11 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon v2.6.3 ===
+* Added @inventory flag
+** @inventory crafting // Player crafting menu
+** @inventory workbench // Must use a crafting table
+
 === v2.6.2 ===
 * @Permission: Fixed multiple permission requirements
 ** Player must have any permission listed, not all permissions
