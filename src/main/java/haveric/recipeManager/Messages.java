@@ -198,7 +198,8 @@ public enum Messages {
     CMD_EXTRACTRECIPE_DONE("<green>Done! Recipe saved to '<white>{file}<green>'."),
 
     CMD_RECIPES_USAGE("<yellow>Usage: <gray>/{command} <white><material>:[data]:[amount]"),
-    CMD_RECIPES_STATS_MC("Minecraft: <green>{num}"), CMD_RECIPES_STATS_RM("RecipeManager: <green>{num}"),
+    CMD_RECIPES_STATS_MC("Minecraft: <green>{num}"),
+    CMD_RECIPES_STATS_RM("RecipeManager: <green>{num}"),
     CMD_RECIPES_STATS_OTHER("Other plugins/mods: <green>{num}"),
     CMD_RECIPES_HEADER("<yellow>----- <white>Recipes for <green>{item} <white>({num} of {total})<yellow>-----"),
     CMD_RECIPES_MORE("<yellow>----- <white><blue>{cmdnext} <white>for next, <blue>{cmdprev} <white>for previous <yellow>-----"),
