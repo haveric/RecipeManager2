@@ -1,12 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +40,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.google.common.collect.ObjectArrays;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagSummon extends Flag {
     // Flag definition and documentation
@@ -694,7 +694,7 @@ public class FlagSummon extends Flag {
         }
 
         public ItemStack[] getEquip() {
-            return equip.clone();
+            return equip;
         }
 
         public void setEquip(ItemStack[] newEquip) {
@@ -702,7 +702,7 @@ public class FlagSummon extends Flag {
         }
 
         public float[] getDrop() {
-            return drop.clone();
+            return drop;
         }
 
         public void setDrop(float[] newDrop) {
