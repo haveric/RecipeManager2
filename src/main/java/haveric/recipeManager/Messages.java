@@ -217,6 +217,8 @@ public enum Messages {
     CMD_FINDITEM_FOUNDMORE("<yellow>... and <green>{matches}<yellow> more, be more specific in your search."),
     CMD_FINDITEM_NOTFOUND("<yellow>No material found by '<white>{argument}<yellow>'."),
 
+    CMD_GETBOOK_USAGE("<yellow>Usage: <gray>/{command} <white><title> [#<volume>]"),
+
     LASTCHANGED(null);
 
     private static Map<String, Set<String>> sent = new HashMap<String, Set<String>>();

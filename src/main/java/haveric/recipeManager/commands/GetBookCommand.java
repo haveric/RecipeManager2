@@ -1,9 +1,5 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.data.RecipeBook;
-
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -13,6 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.data.RecipeBook;
+
 public class GetBookCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -21,8 +21,9 @@ public class GetBookCommand implements CommandExecutor {
         }
 
         int argsLength = args.length;
-        if (argsLength == 0) {
-            return false;
+        if (argsLength <= 0) {
+            Messages.CMD_GETBOOK_USAGE.print(sender, null, "{command}", label);
+            return true;
         }
 
         Player player = (Player) sender;

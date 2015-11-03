@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added @inventory flag
 ** @inventory crafting // Player crafting menu
 ** @inventory workbench // Must use a crafting table
+* Improved /rmgetbook's command usage formatting
 
 === v2.6.2 ===
 * @Permission: Fixed multiple permission requirements
