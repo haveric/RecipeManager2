@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 ** @inventory crafting // Player crafting menu
 ** @inventory workbench // Must use a crafting table
 * Improved /rmgetbook's command usage formatting
+* Fixed /rmcheck command. Test recipe files for errors without reloading them
 
 === v2.6.2 ===
 * @Permission: Fixed multiple permission requirements

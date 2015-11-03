@@ -1,5 +1,18 @@
 package haveric.recipeManager;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Random;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
 import haveric.recipeManager.commands.BooksCommand;
 import haveric.recipeManager.commands.CheckCommand;
@@ -20,22 +33,8 @@ import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.metrics.Metrics;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Random;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * RecipeManager's main class<br>
@@ -151,15 +150,16 @@ public class RecipeManager extends JavaPlugin {
         } else {
             metrics.stop();
         }
+        if (!check) {
+            if (Settings.getInstance().getClearRecipes() || !firstTime) {
+                Vanilla.removeAllButSpecialRecipes();
+                Recipes.getInstance().clean();
+            }
 
-        if (Settings.getInstance().getClearRecipes() || !firstTime) {
-            Vanilla.removeAllButSpecialRecipes();
-            Recipes.getInstance().clean();
-        }
-
-        if (!firstTime && !Settings.getInstance().getClearRecipes()) {
-            Vanilla.restoreAllButSpecialRecipes();
-            Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+            if (!firstTime && !Settings.getInstance().getClearRecipes()) {
+                Vanilla.restoreAllButSpecialRecipes();
+                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+            }
         }
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
