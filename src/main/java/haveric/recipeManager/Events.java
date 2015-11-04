@@ -1092,25 +1092,25 @@ public class Events implements Listener {
 
         if (fuelRecipe != null) {
             event.setBurnTime(burnTime);
+
+            long randTime = (long) Math.floor(Math.random() * burnTime);
+            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFueler()));
+                }
+            }, randTime);
+
+            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFueler()));
+                }
+            }, burnTime);
         }
 
         boolean isBurning = furnace.getType() == Material.BURNING_FURNACE;
         if (recipe != null && !isBurning) {
             furnace.setCookTime(cookTime);
         }
-
-        long randTime = (long) Math.floor(Math.random() * burnTime);
-        Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
-            public void run() {
-                Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFueler()));
-            }
-        }, randTime);
-
-        Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
-            public void run() {
-                Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFueler()));
-            }
-        }, burnTime);
     }
 
     @EventHandler(priority = EventPriority.LOW)
