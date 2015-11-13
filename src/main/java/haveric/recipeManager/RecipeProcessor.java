@@ -287,8 +287,12 @@ public class RecipeProcessor implements Runnable {
     }
 
     private boolean lineIsRecipe() {
+        String trimmed = line.trim().toLowerCase();
+
         for (RMCRecipeType type : RMCRecipeType.values()) {
-            if (type.getDirective() != null && line.toLowerCase().startsWith(type.getDirective())) {
+            String directive = type.getDirective();
+
+            if (directive != null && (trimmed.equals(directive) || trimmed.startsWith(directive + " "))) {
                 return true;
             }
         }
