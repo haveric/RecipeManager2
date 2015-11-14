@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
@@ -141,7 +142,8 @@ public class FlagKeepItem extends Flag {
             if (value.startsWith("damage")) {
                 int damage = 0;
 
-                if (item.getType().getMaxDurability() > 0) {
+                Short maxDurability = Settings.getCustomData(item.getType());
+                if (maxDurability > 0) {
                     value = value.substring("damage".length()).trim();
 
                     try {
@@ -196,11 +198,12 @@ public class FlagKeepItem extends Flag {
                 clone = item.clone();
                 Integer dmg = (Integer) obj;
 
-                if (dmg != 0 && clone.getType().getMaxDurability() > 0) {
+                Short maxDurability = Settings.getCustomData(item.getType());
+                if (dmg != 0 && maxDurability > 0) {
                     if (dmg > 0) {
                         short data = (short) (dmg + clone.getDurability());
 
-                        if (data > clone.getType().getMaxDurability()) {
+                        if (data > maxDurability) {
                             if (a.hasLocation()) {
                                 a.location().getWorld().playSound(a.location(), Sound.ITEM_BREAK, 1.0f, 0.0f);
                             }

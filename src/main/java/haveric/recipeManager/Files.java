@@ -48,12 +48,14 @@ public class Files {
 
     public static final String LASTCHANGED_CONFIG = "2.5";
     public static final String LASTCHANGED_MESSAGES = "2.6.3";
+    public static final String LASTCHANGED_ITEM_DATAS = "2.7";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.4";
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.3";
 
     public static final String FILE_CONFIG = "config.yml";
     public static final String FILE_MESSAGES = "messages.yml";
 
+    public static final String FILE_ITEM_DATAS = "item datas.yml";
     public static final String FILE_ITEM_ALIASES = "item aliases.yml";
     public static final String FILE_ENCHANT_ALIASES = "enchant aliases.yml";
 

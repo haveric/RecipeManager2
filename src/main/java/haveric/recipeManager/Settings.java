@@ -1,8 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +12,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 /**
  * RecipeManager's settings loaded from its config.yml, values are read-only.
@@ -58,9 +58,12 @@ public class Settings {
     private static List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
 
     private static FileConfiguration fileConfig;
+    private static FileConfiguration itemDatasConfig;
     private static FileConfiguration itemAliasesConfig;
     private static FileConfiguration enchantAliasesConfig;
     private static Settings instance;
+
+    private static Map<Material, Short> itemDatas;
 
     private static Map<String, Material> materialNames;
     private static Map<Material, Map<String, Short>> materialDataNames;
@@ -93,6 +96,7 @@ public class Settings {
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
+        itemDatas = new HashMap<Material, Short>();
         materialNames = new HashMap<String, Material>();
         materialDataNames = new HashMap<Material, Map<String, Short>>();
         enchantNames = new HashMap<String, Enchantment>();
@@ -181,6 +185,32 @@ public class Settings {
             } else {
                 Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
                 continue;
+            }
+        }
+
+        itemDatasConfig = loadYML(Files.FILE_ITEM_DATAS);
+
+        if (!Files.LASTCHANGED_ITEM_DATAS.equals(itemDatasConfig.getString("lastchanged"))) {
+            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_DATAS + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+
+        for (String arg : itemDatasConfig.getKeys(false)) {
+            if (arg.equals("lastchanged")) {
+                continue;
+            }
+
+            Material material = getMaterial(arg);
+
+            if (material == null) {
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid material definition: " + arg);
+                continue;
+            }
+
+            String value = itemDatasConfig.getString(arg);
+            try {
+                itemDatas.put(material, Short.valueOf(value));
+            } catch (NumberFormatException e) {
+                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid data value number: " + value + " for material: " + material);
             }
         }
 
@@ -464,6 +494,20 @@ public class Settings {
 
     public Enchantment getEnchantment(String name) {
         return enchantNames.get(name);
+    }
+
+    public static Short getCustomData(Material material) {
+        Short data = null;
+
+        if (itemDatas.containsKey(material)) {
+            data = itemDatas.get(material);
+        }
+
+        if (data == null) {
+            data = material.getMaxDurability();
+        }
+
+        return data;
     }
 
     public Material getMaterial(String name) {

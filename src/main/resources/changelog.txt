@@ -1,8 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== v2.6.5 Coming soon ===
+=== v2.7 Coming soon ===
 * Fixed recipe parsing with material name/aliases starting with a directive (brew/craft/combine/smelt/fuel)
+* Added 'item datas.yml' to override max data/durability values for materials
 
 === v2.6.4 ===
 * Only call furnace fuel events for custom fuels
