@@ -1,11 +1,5 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,6 +25,12 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 
 public class ExtractCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -65,76 +65,80 @@ public class ExtractCommand implements CommandExecutor {
         int recipesNum = 0;
 
         while (recipes.hasNext()) {
-            r = recipes.next();
+            try {
+                r = recipes.next();
 
-            if (r == null || RecipeManager.getRecipes().isCustomRecipe(r)) {
-                continue;
-            }
-
-            if (skipSpecial) {
-                if (Vanilla.isSpecialRecipe(r)) {
+                if (r == null || RecipeManager.getRecipes().isCustomRecipe(r)) {
                     continue;
                 }
-            }
 
-            if (r instanceof ShapedRecipe) {
-                ShapedRecipe recipe = (ShapedRecipe) r;
-                StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
-                Map<Character, ItemStack> items = recipe.getIngredientMap();
-                String[] shape = recipe.getShape();
-                char[] cols;
-                ItemStack item;
+                if (skipSpecial) {
+                    if (Vanilla.isSpecialRecipe(r)) {
+                        continue;
+                    }
+                }
 
-                for (String element : shape) {
-                    cols = element.toCharArray();
+                if (r instanceof ShapedRecipe) {
+                    ShapedRecipe recipe = (ShapedRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
+                    Map<Character, ItemStack> items = recipe.getIngredientMap();
+                    String[] shape = recipe.getShape();
+                    char[] cols;
+                    ItemStack item;
 
-                    int colsLength = cols.length;
-                    for (int c = 0; c < colsLength; c++) {
-                        item = items.get(cols[c]);
+                    for (String element : shape) {
+                        cols = element.toCharArray();
 
-                        recipeString.append(parseIngredient(item));
+                        int colsLength = cols.length;
+                        for (int c = 0; c < colsLength; c++) {
+                            item = items.get(cols[c]);
 
-                        if ((c + 1) < colsLength) {
+                            recipeString.append(parseIngredient(item));
+
+                            if ((c + 1) < colsLength) {
+                                recipeString.append(" + ");
+                            }
+                        }
+
+                        recipeString.append(Files.NL);
+                    }
+
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedCraftRecipes.add(recipeString.toString());
+                } else if (r instanceof ShapelessRecipe) {
+                    ShapelessRecipe recipe = (ShapelessRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective()).append(Files.NL);
+                    List<ItemStack> ingredients = recipe.getIngredientList();
+
+                    int size = ingredients.size();
+                    for (int i = 0; i < size; i++) {
+                        recipeString.append(parseIngredient(ingredients.get(i)));
+
+                        if ((i + 1) < size) {
                             recipeString.append(" + ");
                         }
                     }
 
                     recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedCombineRecipes.add(recipeString.toString());
+                } else if (r instanceof FurnaceRecipe) {
+                    FurnaceRecipe recipe = (FurnaceRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective()).append(Files.NL);
+
+                    recipeString.append(parseIngredient(recipe.getInput()));
+                    recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedSmeltRecipes.add(recipeString.toString());
                 }
 
-                parseResult(recipe.getResult(), recipeString);
-
-                parsedCraftRecipes.add(recipeString.toString());
-            } else if (r instanceof ShapelessRecipe) {
-                ShapelessRecipe recipe = (ShapelessRecipe) r;
-                StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective()).append(Files.NL);
-                List<ItemStack> ingredients = recipe.getIngredientList();
-
-                int size = ingredients.size();
-                for (int i = 0; i < size; i++) {
-                    recipeString.append(parseIngredient(ingredients.get(i)));
-
-                    if ((i + 1) < size) {
-                        recipeString.append(" + ");
-                    }
-                }
-
-                recipeString.append(Files.NL);
-                parseResult(recipe.getResult(), recipeString);
-
-                parsedCombineRecipes.add(recipeString.toString());
-            } else if (r instanceof FurnaceRecipe) {
-                FurnaceRecipe recipe = (FurnaceRecipe) r;
-                StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective()).append(Files.NL);
-
-                recipeString.append(parseIngredient(recipe.getInput()));
-                recipeString.append(Files.NL);
-                parseResult(recipe.getResult(), recipeString);
-
-                parsedSmeltRecipes.add(recipeString.toString());
+                recipesNum++;
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
-
-            recipesNum++;
         }
 
         if (recipesNum == 0) {

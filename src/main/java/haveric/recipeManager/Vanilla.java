@@ -1,14 +1,5 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +15,15 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import com.google.common.collect.ImmutableMap;
+
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.CombineRecipe;
+import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 
 /**
  * Control for Bukkit recipes to avoid confusion with RecipeManager's recipes
@@ -149,27 +149,31 @@ public class Vanilla {
         Recipe r;
 
         while (iterator.hasNext()) {
-            r = iterator.next();
+            try {
+                r = iterator.next();
 
-            if (r == null || (RecipeManager.getRecipes() != null && RecipeManager.getRecipes().isCustomRecipe(r))) {
-                continue;
+                if (r == null || (RecipeManager.getRecipes() != null && RecipeManager.getRecipes().isCustomRecipe(r))) {
+                    continue;
+                }
+
+                BaseRecipe recipe = null;
+
+                if (r instanceof ShapedRecipe) {
+                    recipe = new CraftRecipe((ShapedRecipe) r);
+                } else if (r instanceof ShapelessRecipe) {
+                    recipe = new CombineRecipe((ShapelessRecipe) r);
+                } else if (r instanceof FurnaceRecipe) {
+                    recipe = new SmeltRecipe((FurnaceRecipe) r);
+                }
+
+                if (recipe == null) {
+                    continue;
+                }
+
+                initialRecipes.put(recipe, info);
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
-
-            BaseRecipe recipe = null;
-
-            if (r instanceof ShapedRecipe) {
-                recipe = new CraftRecipe((ShapedRecipe) r);
-            } else if (r instanceof ShapelessRecipe) {
-                recipe = new CombineRecipe((ShapelessRecipe) r);
-            } else if (r instanceof FurnaceRecipe) {
-                recipe = new SmeltRecipe((FurnaceRecipe) r);
-            }
-
-            if (recipe == null) {
-                continue;
-            }
-
-            initialRecipes.put(recipe, info);
         }
 
         for (Entry<BaseRecipe, RMCRecipeInfo> e : initialRecipes.entrySet()) {
@@ -262,16 +266,20 @@ public class Vanilla {
         int width = recipe.getWidth();
 
         while (iterator.hasNext()) {
-            r = iterator.next();
+            try {
+                r = iterator.next();
 
-            if (r instanceof ShapedRecipe) {
-                sr = (ShapedRecipe) r;
-                sh = sr.getShape();
+                if (r instanceof ShapedRecipe) {
+                    sr = (ShapedRecipe) r;
+                    sh = sr.getShape();
 
-                if (sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
-                    iterator.remove();
-                    return sr;
+                    if (sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
+                        iterator.remove();
+                        return sr;
+                    }
                 }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
 
@@ -305,15 +313,19 @@ public class Vanilla {
         List<ItemStack> items = recipe.getIngredients();
 
         while (iterator.hasNext()) {
-            r = iterator.next();
+            try {
+                r = iterator.next();
 
-            if (r instanceof ShapelessRecipe) {
-                sr = (ShapelessRecipe) r;
+                if (r instanceof ShapelessRecipe) {
+                    sr = (ShapelessRecipe) r;
 
-                if (Tools.compareIngredientList(items, sr.getIngredientList())) {
-                    iterator.remove();
-                    return sr;
+                    if (Tools.compareIngredientList(items, sr.getIngredientList())) {
+                        iterator.remove();
+                        return sr;
+                    }
                 }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
 
@@ -349,15 +361,19 @@ public class Vanilla {
         Recipe r;
 
         while (iterator.hasNext()) {
-            r = iterator.next();
+            try {
+                r = iterator.next();
 
-            if (r instanceof FurnaceRecipe) {
-                fr = (FurnaceRecipe) r;
+                if (r instanceof FurnaceRecipe) {
+                    fr = (FurnaceRecipe) r;
 
-                if (ingredient.getType() == fr.getInput().getType()) {
-                    iterator.remove();
-                    return fr;
+                    if (ingredient.getType() == fr.getInput().getType()) {
+                        iterator.remove();
+                        return fr;
+                    }
                 }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
 
@@ -376,10 +392,14 @@ public class Vanilla {
         Recipe recipe;
 
         while (iterator.hasNext()) {
-            recipe = iterator.next();
+            try {
+                recipe = iterator.next();
 
-            if (recipe != null && RecipeManager.getRecipes().isCustomRecipe(recipe)) {
-                iterator.remove();
+                if (recipe != null && RecipeManager.getRecipes().isCustomRecipe(recipe)) {
+                    iterator.remove();
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
     }
@@ -392,14 +412,18 @@ public class Vanilla {
         Recipe recipe;
 
         while (iterator.hasNext()) {
-            recipe = iterator.next();
+            try {
+                recipe = iterator.next();
 
-            if (recipe != null) {
-                if (isSpecialRecipe(recipe)) {
-                    continue;
+                if (recipe != null) {
+                    if (isSpecialRecipe(recipe)) {
+                        continue;
+                    }
+
+                    iterator.remove();
                 }
-
-                iterator.remove();
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
     }
