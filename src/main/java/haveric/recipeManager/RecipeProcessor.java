@@ -808,7 +808,7 @@ public class RecipeProcessor implements Runnable {
         nextLine();
 
         if (line == null || lineIsResult()) {
-            return ErrorReporter.error("No ingredient defined!");
+            return ErrorReporter.error("No potion defined!");
         }
 
         ItemStack potion = Tools.parseItem(line, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
