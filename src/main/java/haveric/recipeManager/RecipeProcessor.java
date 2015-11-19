@@ -131,7 +131,7 @@ public class RecipeProcessor implements Runnable {
 
                         // display progress each second
                         if (time > lastDisplay + 500) {
-                            Messages.sendAndLog(sender, "Recipes processed " + ((parsedFiles * 100) / numFiles) + "%...");
+                            Messages.sendAndLog(sender, "Recipes processed " + (parsedFiles / numFiles * 100) + "%...");
                             lastDisplay = time;
                         }
                     } catch (Throwable e) {
@@ -240,7 +240,7 @@ public class RecipeProcessor implements Runnable {
 
         while (searchRecipes()) { // search for recipes...
             directiveLine = lineNum;
-            String directive = line.toLowerCase();
+            String directive = line;
             recipeName = null;
             int i = directive.indexOf(' ');
 
@@ -287,12 +287,10 @@ public class RecipeProcessor implements Runnable {
     }
 
     private boolean lineIsRecipe() {
-        String trimmed = line.trim().toLowerCase();
-
         for (RMCRecipeType type : RMCRecipeType.values()) {
             String directive = type.getDirective();
 
-            if (directive != null && (trimmed.equals(directive) || trimmed.startsWith(directive + " "))) {
+            if (directive != null && (line.equals(directive) || line.startsWith(directive + " "))) {
                 return true;
             }
         }
@@ -301,7 +299,11 @@ public class RecipeProcessor implements Runnable {
     }
 
     private boolean lineIsFlag() {
-        return line.trim().charAt(0) == '@';
+        return line.charAt(0) == '@';
+    }
+
+    private boolean lineIsResult() {
+        return line.charAt(0) == '=';
     }
 
     private boolean readNextLine() {
@@ -310,6 +312,10 @@ public class RecipeProcessor implements Runnable {
 
         try {
             line = reader.readLine();
+
+            if (line != null) {
+                line = line.trim().toLowerCase();
+            }
             return line != null;
         } catch (Throwable e) {
             Messages.error(null, e, null);
@@ -331,7 +337,7 @@ public class RecipeProcessor implements Runnable {
 
     private String parseComments() {
         if (line != null) {
-            line = line.trim();
+            line = line.trim().toLowerCase();
         }
 
         if (line == null || line.isEmpty()) {
@@ -398,7 +404,7 @@ public class RecipeProcessor implements Runnable {
     private void parseFlags(Flags flags) throws Throwable {
         nextLine();
 
-        while (line != null && line.trim().length() > 0 && line.trim().charAt(0) == '@') {
+        while (line != null && line.length() > 0 && lineIsFlag()) {
             flags.parseFlag(line);
             nextLine();
         }
@@ -428,7 +434,7 @@ public class RecipeProcessor implements Runnable {
                 break;
             }
 
-            if (line.charAt(0) == '=') { // if we bump into the result prematurely (smaller recipes)
+            if (lineIsResult()) { // if we bump into the result prematurely (smaller recipes)
                 break;
             }
 
@@ -788,7 +794,7 @@ public class RecipeProcessor implements Runnable {
         BrewRecipe recipe = new BrewRecipe();
         parseFlags(recipe.getFlags());
 
-        if (line == null || line.charAt(0) == '=') {
+        if (line == null || lineIsResult()) {
             return ErrorReporter.error("No ingredient defined!");
         }
 
@@ -801,7 +807,7 @@ public class RecipeProcessor implements Runnable {
 
         nextLine();
 
-        if (line == null || line.charAt(0) == '=') {
+        if (line == null || lineIsResult()) {
             return ErrorReporter.error("No ingredient defined!");
         }
 
@@ -885,7 +891,7 @@ public class RecipeProcessor implements Runnable {
             return false;
         }
 
-        if (line.charAt(0) != '=') { // check if current line is a result, if not move on
+        if (!lineIsResult()) { // check if current line is a result, if not move on
             nextLine();
         }
 
@@ -893,7 +899,7 @@ public class RecipeProcessor implements Runnable {
         float totalPercentage = 0;
         int splitChanceBy = 0;
 
-        while (line != null && line.charAt(0) == '=') {
+        while (line != null && lineIsResult()) {
             result = Tools.parseItemResult(line, 0); // convert result to ItemResult, grabbing chance and what other stuff
 
             if (result == null) {
