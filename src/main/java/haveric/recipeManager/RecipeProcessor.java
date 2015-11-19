@@ -245,7 +245,7 @@ public class RecipeProcessor implements Runnable {
             int i = directive.indexOf(' ');
 
             if (i > 0) {
-                recipeName = line.substring(i + 1).trim();
+                recipeName = line.substring(i + 1);
                 directive = directive.substring(0, i);
             }
 
@@ -336,10 +336,6 @@ public class RecipeProcessor implements Runnable {
     }
 
     private String parseComments() {
-        if (line != null) {
-            line = line.trim().toLowerCase();
-        }
-
         if (line == null || line.isEmpty()) {
             return null;
         }
@@ -622,7 +618,7 @@ public class RecipeProcessor implements Runnable {
             float maxTime = -1;
 
             if (split.length >= 2) {
-                String[] timeSplit = split[1].trim().toLowerCase().split("-");
+                String[] timeSplit = split[1].trim().split("-");
 
                 if (timeSplit[0].equals("instant")) {
                     minTime = 0;
