@@ -1,50 +1,56 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.mutable.MutableInt;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Messages;
+import haveric.recipeManagerCommon.util.RMCUtil;
+
 public class FlagCooldown extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.COOLDOWN;
-    protected static final String[] A = new String[] {
-        "{flag} <number>[suffix] | [arguments]",
-        "{flag} false", };
 
-    protected static final String[] D = new String[] {
-        "Sets a cooldown time for crafting a recipe or result.",
-        "Once a recipe/result is used, the crafter can not craft it again for the specified amount of time.",
-        "If set on a result, the result will be unavailable to the crafter for the cooldown time but the rest of results and the recipe will work as before.",
-        "NOTE: cooldown is reset when reloading/restarting server.",
-        "",
-        "The <number> argument must be a number, by default it's seconds.",
-        "The [suffix] argument defines what the <number> value is scaled in, values for suffix can be:",
-        "  s  = for seconds (default)",
-        "  m  = for minutes",
-        "  h  = for hours",
-        "You can also use float values like '0.5m' to get 30 seconds.",
-        "",
-        "Optionally you can add some arguments separated by | character, those being:",
-        "  global            = make the cooldown global instead of per-player.",
-        "",
-        "  msg <text>        = overwrites the information message; false to hide; supports colors; use {time} variable to display the new cooldown time.",
-        "",
-        "  failmsg <text>    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <number>[suffix] | [arguments]",
+            "{flag} false", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 30",
-        "{flag} 30s // exactly the same as the previous flag",
-        "{flag} 1.75m | failmsg <red>Usable in: {time} // 1 minute and 45 seconds or 1 minute and 75% of a minute.",
-        "{flag} .5h | global | failmsg <red>Someone used this recently, wait: {time} | msg <yellow>Cooldown time: {time} // half an hour", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Sets a cooldown time for crafting a recipe or result.",
+            "Once a recipe/result is used, the crafter can not craft it again for the specified amount of time.",
+            "If set on a result, the result will be unavailable to the crafter for the cooldown time but the rest of results and the recipe will work as before.",
+            "NOTE: cooldown is reset when reloading/restarting server.",
+            "",
+            "The <number> argument must be a number, by default it's seconds.",
+            "The [suffix] argument defines what the <number> value is scaled in, values for suffix can be:",
+            "  s  = for seconds (default)",
+            "  m  = for minutes",
+            "  h  = for hours",
+            "You can also use float values like '0.5m' to get 30 seconds.",
+            "",
+            "Optionally you can add some arguments separated by | character, those being:",
+            "  global            = make the cooldown global instead of per-player.",
+            "",
+            "  msg <text>        = overwrites the information message; false to hide; supports colors; use {time} variable to display the new cooldown time.",
+            "",
+            "  failmsg <text>    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 30",
+            "{flag} 30s // exactly the same as the previous flag",
+            "{flag} 1.75m | failmsg <red>Usable in: {time} // 1 minute and 45 seconds or 1 minute and 75% of a minute.",
+            "{flag} .5h | global | failmsg <red>Someone used this recently, wait: {time} | msg <yellow>Cooldown time: {time} // half an hour", };
+    }
 
-    // Flag code
 
     private final Map<String, MutableInt> cooldownTime = new HashMap<String, MutableInt>();
 

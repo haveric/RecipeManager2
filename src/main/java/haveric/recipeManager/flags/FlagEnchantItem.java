@@ -13,30 +13,37 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagEnchantItem extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.ENCHANTITEM;
-    protected static final String[] A = new String[] {
-        "{flag} <enchantment> [level]", };
 
-    protected static final String[] D = new String[] {
-        "Enchants the result with the specified enchantment at specified level.",
-        "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
-        "Optionally you can set the level of enchantment ",
-        "  Default is the enchantment's start level ",
-        "  You can use 'max' to set it to enchantment's max level.",
-        "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
-        "",
-        "Enchantments are forced and there is no level cap!",
-        "This flag may be used more times to add more enchantments to the item.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <enchantment> [level]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} OXYGEN // enchant with oxygen at level 1",
-        "{flag} DIG_SPEED max // enchant with dig speed at max valid level",
-        "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127",
-        "{flag} SHARPNESS remove // removes a sharpness enchant"};
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Enchants the result with the specified enchantment at specified level.",
+            "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
+            "Optionally you can set the level of enchantment ",
+            "  Default is the enchantment's start level ",
+            "  You can use 'max' to set it to enchantment's max level.",
+            "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
+            "",
+            "Enchantments are forced and there is no level cap!",
+            "This flag may be used more times to add more enchantments to the item.", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} OXYGEN // enchant with oxygen at level 1",
+            "{flag} DIG_SPEED max // enchant with dig speed at max valid level",
+            "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127",
+            "{flag} SHARPNESS remove // removes a sharpness enchant", };
+    }
+
 
     private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
     private List<Enchantment> enchantsToRemove = new ArrayList<Enchantment>();

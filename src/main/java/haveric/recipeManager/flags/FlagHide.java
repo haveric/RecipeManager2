@@ -7,31 +7,38 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 
 public class FlagHide extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.HIDE;
-    protected static final String[] A = new String[] {
-        "{flag} <arguments>", };
 
-    protected static final String[] D = new String[] {
-        "Configures hide attributes for items",
-        "",
-        "Replace '<arguments>' with the following arguments separated by | character.",
-        "Arguments can be:",
-        "  attributes     = Hide attributes like Damage",
-        "  destroys       = Hide what the item can break/destroy",
-        "  enchants       = Hide enchants",
-        "  placedon       = Hide where this item can be placed on",
-        "  potioneffects  = Hide potion effects on this item",
-        "  unbreakable    = Hide the unbreakable state",
-        "  all            = Hides everything",
-        "Arguments can be listed in any order." };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <arguments>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} attributes // Removes Damage on a sword",
-        "{flag} placedon | destroys // Removes placed on line and break/destroy lines", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Configures hide attributes for items",
+            "",
+            "Replace '<arguments>' with the following arguments separated by | character.",
+            "Arguments can be:",
+            "  attributes     = Hide attributes like Damage",
+            "  destroys       = Hide what the item can break/destroy",
+            "  enchants       = Hide enchants",
+            "  placedon       = Hide where this item can be placed on",
+            "  potioneffects  = Hide potion effects on this item",
+            "  unbreakable    = Hide the unbreakable state",
+            "  all            = Hides everything",
+            "Arguments can be listed in any order.", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} attributes // Removes Damage on a sword",
+            "{flag} placedon | destroys // Removes placed on line and break/destroy lines", };
+    }
+
 
     boolean attributes = false;
     boolean destroys = false;

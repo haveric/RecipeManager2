@@ -1,30 +1,36 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Messages;
+
 public class FlagBlockPowered extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.BLOCKPOWERED;
-    protected static final String[] A = new String[] {
-        "{flag} [arguments]", };
 
-    protected static final String[] D = new String[] {
-        "Requires the workbench or furnace block to be powered by redstone.",
-        "",
-        "Optionally you can use the following arguments separated by | character and in any order:",
-        "  indirect          = check for indirect redstone power, through other blocks.",
-        "  failmsg <message> = overwrite the failure message.", };
+    @Override
+    protected  String[] getArguments() {
+        return new String[] {
+            "{flag} [arguments]", };
+    }
 
-    protected static final String[] E = new String[] { "{flag}",
-        "{flag} failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Requires the workbench or furnace block to be powered by redstone.",
+            "",
+            "Optionally you can use the following arguments separated by | character and in any order:",
+            "  indirect          = check for indirect redstone power, through other blocks.",
+            "  failmsg <message> = overwrite the failure message.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] { "{flag}",
+            "{flag} failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect", };
+    }
 
-    // Flag code
 
     private String failMessage = null;
     private boolean indirect = false;

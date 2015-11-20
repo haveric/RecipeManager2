@@ -1,42 +1,48 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.flags.FlagType.Bit;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.flags.FlagType.Bit;
+
 public class FlagForPermission extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.FORPERMISSION;
-    protected static final String[] A = new String[] {
-        "{flag} <permission node> @<flag declaration>", };
 
-    protected static final String[] D = new String[] {
-        "Adds other flags with permission requirements.",
-        "You can specify this flag more than once to add more permissions or more flags to a permission.",
-        "",
-        "Basically this is a storage for flags and will only trigger them if the crafter has the required permission.",
-        "This is useful for using different values for flags on the same recipe but for different permissions.",
-        "",
-        "The '<permission node>' argument must be a permission node.",
-        "The '<flag declaration>' must be a flag that will work on the current recipe or result.",
-        "For extra awesomeness you can even add this flag inside itself!",
-        "",
-        "NOTE: This will trigger all flags that player has permission for which means that flag effects will stack up.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <permission node> @<flag declaration>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "@exp -2                      // you can use original flag as is for players that do not have the permission",
-        "{flag} farmer.newbs @exp 4   // add 4 exp to the original -2 exp so player will have +2 exp",
-        "{flag} farmer.uber @exp 50   // add 50 exp to the original -2 exp and also add 4 exp if the player has that node too",
-        "{flag} farmer.uber @level 1  // if has required  give the crafter 1 level", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Adds other flags with permission requirements.",
+            "You can specify this flag more than once to add more permissions or more flags to a permission.",
+            "",
+            "Basically this is a storage for flags and will only trigger them if the crafter has the required permission.",
+            "This is useful for using different values for flags on the same recipe but for different permissions.",
+            "",
+            "The '<permission node>' argument must be a permission node.",
+            "The '<flag declaration>' must be a flag that will work on the current recipe or result.",
+            "For extra awesomeness you can even add this flag inside itself!",
+            "",
+            "NOTE: This will trigger all flags that player has permission for which means that flag effects will stack up.", };
+    }
 
-    // Flag code
+    protected String[] getExamples() {
+        return new String[] {
+            "@exp -2                      // you can use original flag as is for players that do not have the permission",
+            "{flag} farmer.newbs @exp 4   // add 4 exp to the original -2 exp so player will have +2 exp",
+            "{flag} farmer.uber @exp 50   // add 50 exp to the original -2 exp and also add 4 exp if the player has that node too",
+            "{flag} farmer.uber @level 1  // if has required  give the crafter 1 level", };
+    }
+
 
     private Map<String, Map<FlagType, Flag>> flagMap = new LinkedHashMap<String, Map<FlagType, Flag>>();
 

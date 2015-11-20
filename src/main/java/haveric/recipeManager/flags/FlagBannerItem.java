@@ -17,16 +17,13 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagBannerItem extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.BANNERITEM;
-    protected static final String[] A = new String[] {
-        "{flag} <basecolor> | [pattern] <color> | [...]", };
 
-    protected static final String[] E = new String[] {
-            "{flag} black",
-            "{flag} red | circle_middle blue | skull yellow",
-            "{flag} green | half_horizontal yellow | circle_middle orange"};
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <basecolor> | [pattern] <color> | [...]", };
+    }
 
     @Override
     protected String[] getDescription() {
@@ -55,8 +52,14 @@ public class FlagBannerItem extends Flag {
         return description;
     }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} black",
+            "{flag} red | circle_middle blue | skull yellow",
+            "{flag} green | half_horizontal yellow | circle_middle orange", };
+    }
 
-    // Flag code
 
     private DyeColor baseColor;
     private List<Pattern> patterns = new ArrayList<Pattern>();

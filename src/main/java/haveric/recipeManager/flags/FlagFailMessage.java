@@ -1,5 +1,7 @@
 package haveric.recipeManager.flags;
 
+import org.bukkit.Material;
+
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -7,33 +9,36 @@ import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
-import org.bukkit.Material;
-
 public class FlagFailMessage extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.FAILMESSAGE;
-    protected static final String[] A = new String[] {
-        "{flag} [message or false]", };
 
-    protected static final String[] D = new String[] {
-        "Changes the message when recipe fails due to failure chance.",
-        "Using this flag more than once will overwrite the previous message.",
-        "",
-        "The message supports colors (<red>, &3, etc).",
-        "",
-        "You can also use the following variables inside the message:",
-        "  {failchance}    = recipe's chance of failure as a number.",
-        "  {successchance} = recipe's chance of success as a number.",
-        "  {resultchance}  = result's chance of success as a number.",
-        "",
-        "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} [message or false]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} <red>YOU FAILED, MWaHahahah!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Changes the message when recipe fails due to failure chance.",
+            "Using this flag more than once will overwrite the previous message.",
+            "",
+            "The message supports colors (<red>, &3, etc).",
+            "",
+            "You can also use the following variables inside the message:",
+            "  {failchance}    = recipe's chance of failure as a number.",
+            "  {successchance} = recipe's chance of success as a number.",
+            "  {resultchance}  = result's chance of success as a number.",
+            "",
+            "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.", };
+    }
 
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} <red>YOU FAILED, MWaHahahah!", };
+    }
 
-    // Flag code
 
     private String message;
 

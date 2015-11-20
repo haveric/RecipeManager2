@@ -1,38 +1,44 @@
 package haveric.recipeManager.flags;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
 public class FlagDisplayResult extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.DISPLAYRESULT;
-    protected static final String[] A = new String[] {
-        "{flag} <item or first> | [silentfail]", };
 
-    protected static final String[] D = new String[] {
-        "Sets the display result of the recipe.",
-        "Using this flag more than once will overwrite the previous message.",
-        "",
-        "As 'item' argument you can define an item like in a result, material:data:amount.",
-        "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having " + FlagType.INGREDIENTCONDITION + " flag on them.",
-        "",
-        "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like " + FlagType.INGREDIENTCONDITION + ").",
-        "",
-        "NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.",
-        "NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <item or first> | [silentfail]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} first // displays the first available result",
-        "{flag} diamond_helmet:120 // damaged diamond helmet", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Sets the display result of the recipe.",
+            "Using this flag more than once will overwrite the previous message.",
+            "",
+            "As 'item' argument you can define an item like in a result, material:data:amount.",
+            "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having " + FlagType.INGREDIENTCONDITION + " flag on them.",
+            "",
+            "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like " + FlagType.INGREDIENTCONDITION + ").",
+            "",
+            "NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.",
+            "NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} first // displays the first available result",
+            "{flag} diamond_helmet:120 // damaged diamond helmet", };
+    }
 
-    // Flag code
 
     private ItemStack displayItem;
     private boolean silentFail;

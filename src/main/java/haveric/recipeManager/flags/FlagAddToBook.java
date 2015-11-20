@@ -3,30 +3,35 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.Files;
 
 public class FlagAddToBook extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.ADDTOBOOK;
-    protected static final String[] A = new String[] {
-        "{flag} <book id> [volume <num>]", };
 
-    protected static final String[] D = new String[] {
-        "This flag is a shortcut for quickly adding recipe(s) to books.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' for how to do that.",
-        "",
-        "The '<book id>' argument must be an existing book's ID/filename, case insensitive.",
-        "Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.",
-        "",
-        "NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <book id> [volume <num>]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} testing book // matches a 'Testing Book.yml' book for example",
-        "{flag} random stuff volume 3 // matches a 'Random Stuff.yml' with volume 3 book for example", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "This flag is a shortcut for quickly adding recipe(s) to books.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "The book must exist first, you must create it, see '" + Files.FILE_INFO_BOOKS + "' for how to do that.",
+            "",
+            "The '<book id>' argument must be an existing book's ID/filename, case insensitive.",
+            "Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.",
+            "",
+            "NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} testing book // matches a 'Testing Book.yml' book for example",
+            "{flag} random stuff volume 3 // matches a 'Random Stuff.yml' with volume 3 book for example", };
+    }
 
-
-    // Flag code
 
     private String bookName;
     private int volume;

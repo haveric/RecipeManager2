@@ -1,45 +1,49 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Perms;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.Perms;
+
 public class FlagGroup extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.GROUP;
-    protected static final String[] A = new String[] {
-        "{flag} [!]<group>, [...] | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Makes the recipe or item require the crafter to be in a permission group.",
-        "Using this flag more than once will add more groups, the player must be in at least one group.",
-        "",
-        "The '<group>' argument must be a permission group.",
-        "",
-        "Adding ! character as prefix to individual groups will do the opposite check, if crafter is in group it will not craft.",
-        "",
-        "You can also specify more groups separated by , character.",
-        "",
-        "Optionally you can specify a failure message that will be used on the specific group(s) defined.",
-        "The messages can have the following variables:",
-        "  {group}   = group that was not found or was found and it's unallowed.",
-        "  {groups}  = a comma separated list of the allowed or unallowed groups.",
-        "",
-        "NOTE: Vault with a supported permission plugin is required for this flag to work.", };
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} [!]<group>, [...] | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} ranks.vip",
-        "{flag} !jobs.builder | <red>Builders can't use this!",
-        "{flag} jobs.farmer, jobs.trader | <red>You must be a farmer or trader!",
-        "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
+    protected String[] getDescription() {
+        return new String[] {
+            "Makes the recipe or item require the crafter to be in a permission group.",
+            "Using this flag more than once will add more groups, the player must be in at least one group.",
+            "",
+            "The '<group>' argument must be a permission group.",
+            "",
+            "Adding ! character as prefix to individual groups will do the opposite check, if crafter is in group it will not craft.",
+            "",
+            "You can also specify more groups separated by , character.",
+            "",
+            "Optionally you can specify a failure message that will be used on the specific group(s) defined.",
+            "The messages can have the following variables:",
+            "  {group}   = group that was not found or was found and it's unallowed.",
+            "  {groups}  = a comma separated list of the allowed or unallowed groups.",
+            "",
+            "NOTE: Vault with a supported permission plugin is required for this flag to work.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} ranks.vip",
+            "{flag} !jobs.builder | <red>Builders can't use this!",
+            "{flag} jobs.farmer, jobs.trader | <red>You must be a farmer or trader!",
+            "{flag} ! ranks.newbs, ! ranks.newbies | <yellow>Noobs can't use this. // valid with spaces too", };
+    }
 
-    // Flag code
 
     private Map<String, Boolean> groups = new HashMap<String, Boolean>();
     private Map<String, String> messages = new HashMap<String, String>();

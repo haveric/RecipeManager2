@@ -3,24 +3,30 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.Messages;
 
 public class FlagRestrict extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.RESTRICT;
-    protected static final String[] A = new String[] {
-        "{flag} [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Restricts the recipe for everybody.",
-        "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.",
-        "",
-        "Optionally you can overwrite the default restrict message.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag}",
-        "{flag} <red>Access denied!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Restricts the recipe for everybody.",
+            "This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.",
+            "",
+            "Optionally you can overwrite the default restrict message.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag}",
+            "{flag} <red>Access denied!", };
+    }
 
-    // Flag code
 
     private String message;
 

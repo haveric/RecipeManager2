@@ -1,23 +1,29 @@
 package haveric.recipeManager.flags;
 
 public class FlagSecret extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.SECRET;
-    protected static final String[] A = new String[] {
-        "{flag} [true or false]", };
 
-    protected static final String[] D = new String[] {
-        "Hides the recipe or result from common info sources.",
-        "Recipes are hidden from commands, books, etc.",
-        "Results are also hidden from commands, books and most importantly from multiresult item display.",
-        "This also means recipes/results won't give out any fail craft reasons!", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} [true or false]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag}", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Hides the recipe or result from common info sources.",
+            "Recipes are hidden from commands, books, etc.",
+            "Results are also hidden from commands, books and most importantly from multiresult item display.",
+            "This also means recipes/results won't give out any fail craft reasons!", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag}", };
+    }
 
-    // Flag code
 
     public FlagSecret() {
     }

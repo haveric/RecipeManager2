@@ -1,8 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
-
 import java.util.Iterator;
 
 import org.bukkit.Location;
@@ -16,22 +13,32 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
+
 public class FlagSkullOwner extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.SKULLOWNER;
-    protected static final String[] A = new String[] {
-        "{flag} <name>", };
 
-    protected static final String[] D = new String[] {
-        "Sets the human skull's owner to apply the skin.",
-        "If you set it to '{player}' then it will use crafter's name.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <name>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} Notch",
-        "{flag} {player}", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Sets the human skull's owner to apply the skin.",
+            "If you set it to '{player}' then it will use crafter's name.", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} Notch",
+            "{flag} {player}", };
+    }
+
 
     private String owner;
 

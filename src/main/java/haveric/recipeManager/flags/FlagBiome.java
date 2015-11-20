@@ -1,10 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
@@ -14,28 +9,40 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManagerCommon.util.RMCUtil;
+
 public class FlagBiome extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.BIOME;
-    protected static final String[] A = new String[] {
-        "{flag} <types> | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Sets the biome required to allow crafting.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "For '<types>' you can list the biomes you want to allow or disallow.",
-        "It needs at least one biome name and you can add more separated by , character.",
-        "Also you can disallow biomes by prefixing them with ! character.",
-        "Biomes: " + RMCUtil.collectionToString(Arrays.asList(Biome.values())).toLowerCase(),
-        "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <types> | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} jungle, jungle_hills",
-        "{flag} !mushroom_island, !mushroom_shore", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Sets the biome required to allow crafting.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "For '<types>' you can list the biomes you want to allow or disallow.",
+            "It needs at least one biome name and you can add more separated by , character.",
+            "Also you can disallow biomes by prefixing them with ! character.",
+            "Biomes: " + RMCUtil.collectionToString(Arrays.asList(Biome.values())).toLowerCase(),
+            "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} jungle, jungle_hills",
+            "{flag} !mushroom_island, !mushroom_shore", };
+    }
+
 
     private Map<Biome, Boolean> biomes = new EnumMap<Biome, Boolean>(Biome.class);
     private String failMessage;

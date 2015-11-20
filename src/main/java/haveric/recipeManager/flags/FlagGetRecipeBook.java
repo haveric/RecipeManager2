@@ -1,35 +1,41 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.data.RecipeBook;
-import haveric.recipeManager.recipes.ItemResult;
-
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.data.RecipeBook;
+import haveric.recipeManager.recipes.ItemResult;
+
 public class FlagGetRecipeBook extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.GETRECIPEBOOK;
-    protected static final String[] A = new String[] {
-        "{flag} <book id> [volume <num>]", };
 
-    protected static final String[] D = new String[] {
-        "Overwrites result with the specified recipe book.",
-        "",
-        "For the '<book id>' argument you need to specify the book ID/filename, case insensitive.",
-        "",
-        "Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <book id> [volume <num>]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} recipe stuff // matches a 'Recipe Stuff.yml' book for example.",
-        "{flag} vanilla_recipes volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Overwrites result with the specified recipe book.",
+            "",
+            "For the '<book id>' argument you need to specify the book ID/filename, case insensitive.",
+            "",
+            "Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} recipe stuff // matches a 'Recipe Stuff.yml' book for example.",
+            "{flag} vanilla_recipes volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.", };
+    }
 
-    // Flag code
 
     private String bookID;
     private int volume = 1;

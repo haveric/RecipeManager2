@@ -145,44 +145,16 @@ public enum FlagType {
         return null;
     }
 
-    private String[] getField(String name) {
-        try {
-            return (String[]) flagClass.getDeclaredField(name).get(null);
-        } catch (Throwable e) {
-            Messages.debug("flag " + toString() + " does not have '" + name + "' field!");
-        }
-
-        return null;
-    }
-
     public String[] getArguments() {
-        String[] arguments = flagInstance.getArguments();
-
-        if (arguments.length == 0) {
-            arguments = getField("A");
-        }
-
-        return arguments;
+        return flagInstance.getArguments();
     }
 
     public String[] getExamples() {
-        String[] examples = flagInstance.getExamples();
-
-        if (examples.length == 0) {
-            examples = getField("E");
-        }
-
-        return examples;
+        return flagInstance.getExamples();
     }
 
     public String[] getDescription() {
-        String[] description = flagInstance.getDescription();
-
-        if (description.length == 0) {
-            description = getField("D");
-        }
-
-        return description;
+        return flagInstance.getDescription();
     }
 
     /**

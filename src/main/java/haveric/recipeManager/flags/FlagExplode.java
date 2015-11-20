@@ -16,33 +16,40 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.recipes.FuelRecipe;
 
 public class FlagExplode extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.EXPLODE;
-    protected static final String[] A = new String[] {
-        "{flag} <arguments or false>", };
 
-    protected static final String[] D = new String[] {
-        "Makes the workbench/furnace/player explode when recipe is crafted.",
-        "This flag can only be declared once per recipe and once per result.",
-        "",
-        "Replace <arguments> with the following arguments separated by | character:",
-        "  power <0.0 to ...>      = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
-        "  fire                    = (default not set) Explosion sets fires.",
-        "  nobreak                 = (default not set) Makes explosion not break blocks.",
-        "  nodamage [self]         = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
-        "  fail                    = (default not set) Explode if recipe failed as opposed to succeed.",
-        "  fuel <start,end,random> = (default start) Causes the explosion to happen at different times. Can only be used on fuel recipes.",
-        "All arguments are optional and you can specify these arguments in any order.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <arguments or false>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} // will explode when recipe succeeds with power 2 and breaks blocks",
-        "{flag} nobreak | fire | power 6 // will explode  without block damage but sets fires",
-        "{flag} fail | power 2 // will explode when recipe fails",
-        "{flag} fuel end // On a fuel recipe, will cause the explosion to happen after the fuel runs out",
-        "{flag} fuel random // On a fuel recipe, will cause the explosion to happen sometime randomly before the fuel runs out", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Makes the workbench/furnace/player explode when recipe is crafted.",
+            "This flag can only be declared once per recipe and once per result.",
+            "",
+            "Replace <arguments> with the following arguments separated by | character:",
+            "  power <0.0 to ...>      = (default 2.0) Set the explosion power, value multiplied by 2 is the range in blocks; TNT has 4.0",
+            "  fire                    = (default not set) Explosion sets fires.",
+            "  nobreak                 = (default not set) Makes explosion not break blocks.",
+            "  nodamage [self]         = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.",
+            "  fail                    = (default not set) Explode if recipe failed as opposed to succeed.",
+            "  fuel <start,end,random> = (default start) Causes the explosion to happen at different times. Can only be used on fuel recipes.",
+            "All arguments are optional and you can specify these arguments in any order.", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} // will explode when recipe succeeds with power 2 and breaks blocks",
+            "{flag} nobreak | fire | power 6 // will explode  without block damage but sets fires",
+            "{flag} fail | power 2 // will explode when recipe fails",
+            "{flag} fuel end // On a fuel recipe, will cause the explosion to happen after the fuel runs out",
+            "{flag} fuel random // On a fuel recipe, will cause the explosion to happen sometime randomly before the fuel runs out", };
+    }
+
 
     private float power = 2.0f;
     private boolean fire = false;

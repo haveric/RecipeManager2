@@ -5,28 +5,34 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagNeedMoney extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.NEEDMONEY;
-    protected static final String[] A = new String[] {
-        "{flag} <min or min-max> | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks if crafter has at least 'min' money and optionally at most 'max' money.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-        "In the message the following variables can be used:",
-        "  {money}      = money or money range; formatted with currency.",
-        "",
-        "NOTE: Vault with a supported economy plugin is required for this flag to work.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <min or min-max> | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 0.25",
-        "{flag} 0.1 - 1000 | <red>Need {money}!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks if crafter has at least 'min' money and optionally at most 'max' money.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {money}      = money or money range; formatted with currency.",
+            "",
+            "NOTE: Vault with a supported economy plugin is required for this flag to work.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 0.25",
+            "{flag} 0.1 - 1000 | <red>Need {money}!", };
+    }
 
-    // Flag code
 
     private double minMoney;
     private double maxMoney;

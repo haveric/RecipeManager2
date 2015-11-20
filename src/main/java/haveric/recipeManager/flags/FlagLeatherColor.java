@@ -1,31 +1,37 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
-
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+
 public class FlagLeatherColor extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.LEATHERCOLOR;
-    protected static final String[] A = new String[] {
-        "{flag} <red> <green> <blue>", };
 
-    protected static final String[] D = new String[] {
-        "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
-        "",
-        "Specific items: leather armor.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <red> <green> <blue>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 255 100 50", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
+            "",
+            "Specific items: leather armor.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 255 100 50", };
+    }
 
-    // Flag code
 
     private Color color;
 

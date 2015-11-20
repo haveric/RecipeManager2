@@ -1,38 +1,44 @@
 package haveric.recipeManager.flags;
 
+import org.bukkit.block.Block;
+
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
-import org.bukkit.block.Block;
-
 public class FlagTemperature extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.TEMPERATURE;
-    protected static final String[] A = new String[] {
-        "{flag} [operator]<number> | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks if the crafter or furnace has at least 'min' temperature unless [operator] is set.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "The '[operator]' argument can be nothing at all or you can use >= (which is the same as nothing, to check for greater than or equal), <= (less than or equal), > (greater), or < (less than).",
-        "The '<number>' argument must be the temperature you want to check against. Uses doubles, meaning 1 and 1.0 are valid numbers.",
-        "The '[operator]<number>' combination can be used multiple times when separated by a comma. In that case, all checks must be successful",
-        "",
-        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-        "In the message the following variables can be used:",
-        "  {temperature} = temperature conditions",
-        "  {actual}      = the actual temperature player or furnace is at", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} [operator]<number> | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} < 0 // Must be in an icy biome",
-        "{flag} 1.2 // Must be in a hot biome, such as a desert or savanna",
-        "{flag} >= 1.2 // Equivalent to the above example",
-        "{flag} >= .15, <= .95 // Must be within a temperature where it can rain", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks if the crafter or furnace has at least 'min' temperature unless [operator] is set.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "The '[operator]' argument can be nothing at all or you can use >= (which is the same as nothing, to check for greater than or equal), <= (less than or equal), > (greater), or < (less than).",
+            "The '<number>' argument must be the temperature you want to check against. Uses doubles, meaning 1 and 1.0 are valid numbers.",
+            "The '[operator]<number>' combination can be used multiple times when separated by a comma. In that case, all checks must be successful",
+            "",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {temperature} = temperature conditions",
+            "  {actual}      = the actual temperature player or furnace is at", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} < 0 // Must be in an icy biome",
+            "{flag} 1.2 // Must be in a hot biome, such as a desert or savanna",
+            "{flag} >= 1.2 // Equivalent to the above example",
+            "{flag} >= .15, <= .95 // Must be within a temperature where it can rain", };
+    }
 
-    // Flag code
 
     private Double lteTemp;
     private Double gteTemp;

@@ -1,38 +1,44 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+
 public class FlagSound extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.SOUND;
-    protected static final String[] A = new String[] {
-        "{flag} <sound> | [arguments]", };
 
-    protected static final String[] D = new String[] {
-        "Plays a sound at crafting location.",
-        "Using this flag more than once will overwrite the previous flag.",
-        "",
-        "The <sound> argument must be a sound name, you can find them in '" + Files.FILE_INFO_NAMES + "' file at 'SOUND LIST' section.",
-        "",
-        "Optionally you can specify some arguments separated by | character:",
-        "  volume <0.0 to 100.0> = (default 1.0) sound volume, if exceeds 1.0 it extends range, each 1.0 extends range by about 10 blocks.",
-        "  pitch <0.0 to 4.0>    = (default 0.0) sound pitch value.",
-        "  player                = (default not set) if set it will only play the sound to the crafter.",
-        "You can specify these arguments in any order and they're completely optional.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <sound> | [arguments]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} level_up",
-        "{flag} wolf_howl | volume 5 // can be heard loudly at 50 blocks away",
-        "{flag} portal_travel | player | volume 0.65 | pitch 3.33", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Plays a sound at crafting location.",
+            "Using this flag more than once will overwrite the previous flag.",
+            "",
+            "The <sound> argument must be a sound name, you can find them in '" + Files.FILE_INFO_NAMES + "' file at 'SOUND LIST' section.",
+            "",
+            "Optionally you can specify some arguments separated by | character:",
+            "  volume <0.0 to 100.0> = (default 1.0) sound volume, if exceeds 1.0 it extends range, each 1.0 extends range by about 10 blocks.",
+            "  pitch <0.0 to 4.0>    = (default 0.0) sound pitch value.",
+            "  player                = (default not set) if set it will only play the sound to the crafter.",
+            "You can specify these arguments in any order and they're completely optional.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} level_up",
+            "{flag} wolf_howl | volume 5 // can be heard loudly at 50 blocks away",
+            "{flag} portal_travel | player | volume 0.65 | pitch 3.33", };
+    }
 
-    // Flag code
 
     private Sound sound = null;
     private float volume = 1;

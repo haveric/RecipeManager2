@@ -6,28 +6,34 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeStatus;
 
 public class FlagRemove extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.REMOVE;
-    protected static final String[] A = new String[] {
-        "{flag} [true or false]", };
 
-    protected static final String[] D = new String[] {
-        "Removes an existing recipe that was added by vanilla Minecraft or other plugins/mods. ",
-        "The recipe definition must have the exact ingredients of the recipe you want to overwrite.",
-        "",
-        "Results and smelt time will be ignored and you don't have to delete them if you want to keep them for later.",
-        "",
-        "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.",
-        "Value is optional, if value is not specified it will just be enabled.",
-        "",
-        "This can't be used along with " + FlagType.OVERRIDE + " flag.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} [true or false]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag}", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Removes an existing recipe that was added by vanilla Minecraft or other plugins/mods. ",
+            "The recipe definition must have the exact ingredients of the recipe you want to overwrite.",
+            "",
+            "Results and smelt time will be ignored and you don't have to delete them if you want to keep them for later.",
+            "",
+            "If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.",
+            "Value is optional, if value is not specified it will just be enabled.",
+            "",
+            "This can't be used along with " + FlagType.OVERRIDE + " flag.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag}", };
+    }
 
-    // Flag code
 
     public FlagRemove() {
     }

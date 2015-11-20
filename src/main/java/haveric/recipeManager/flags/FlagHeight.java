@@ -4,26 +4,32 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagHeight extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.HEIGHT;
-    protected static final String[] A = new String[] {
-        "{flag} <min or min-max> | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-        "In the message the following variables can be used:",
-        "  {height}  = height or height range", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <min or min-max> | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 200 // must be high in the sky",
-        "{flag} 0-30 | <red>You need to be deep underground!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {height}  = height or height range", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 200 // must be high in the sky",
+            "{flag} 0-30 | <red>You need to be deep underground!", };
+    }
 
-    // Flag code
 
     private int minHeight;
     private int maxHeight;

@@ -1,42 +1,49 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.EnumSet;
 import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Messages;
+import haveric.recipeManagerCommon.util.RMCUtil;
+
 public class FlagGameMode extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.GAMEMODE;
-    protected static final String[] A = new String[] {
-        "{flag} <game mode>",
-        "{flag} <game mode> | [message]",
-        "{flag} false", };
 
-    protected static final String[] D = new String[] {
-        "Requires the crafter to be in a specific game mode.",
-        "Using this flag more than once will overwrite the previous ones.",
-        "",
-        "Values for <game mode> can be: c or creative, a or adventure, s or survival",
-        "",
-        "Optionally you can specify a failure message, should be short because it prints in the display result.",
-        "Additionally you can use the following variables in the message:",
-        "  {playergm}  = player's game mode (which is not allowed)",
-        "  {gamemodes}  = list of required game modes", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <game mode>",
+            "{flag} <game mode> | [message]",
+            "{flag} false", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} creative // only creative",
-        "{flag} s // only survival",
-        "{flag} a,s // only adventure and survival",
-        "{flag} false // disable flag, allow all gamemodes", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Requires the crafter to be in a specific game mode.",
+            "Using this flag more than once will overwrite the previous ones.",
+            "",
+            "Values for <game mode> can be: c or creative, a or adventure, s or survival",
+            "",
+            "Optionally you can specify a failure message, should be short because it prints in the display result.",
+            "Additionally you can use the following variables in the message:",
+            "  {playergm}  = player's game mode (which is not allowed)",
+            "  {gamemodes}  = list of required game modes", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} creative // only creative",
+            "{flag} s // only survival",
+            "{flag} a,s // only adventure and survival",
+            "{flag} false // disable flag, allow all gamemodes", };
+    }
+
 
     private Set<GameMode> gameModes = EnumSet.noneOf(GameMode.class);
     private String failMessage;

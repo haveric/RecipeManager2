@@ -1,9 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,39 +9,49 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.util.RMCUtil;
+
 public class FlagBookItem extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.BOOKITEM;
-    protected static final String[] A = new String[] {
-        "{flag} title [text]",
-        "{flag} author [text]",
-        "{flag} addpage [text]", };
 
-    protected static final String[] D = new String[] {
-        "Changes book's contents.",
-        "Using this flag more than once will configure the same flag.",
-        "",
-        "Supports colors and format (e.g. <red>, <blue>, &4, &F, etc).",
-        "",
-        "Use 'title <text>' and 'author <text>' only on written books, it doesn't work on book and quill therefore they're optional.",
-        "Title and author must not exceed 64 characters, colors included (2 chars each).",
-        "",
-        "Use 'addpage <text>' to add a new page, the text can contain \\n to add new lines to it, but it mainly word-wraps itself.",
-        "Page contents must not exceed 256 characters, colors (2 chars each) and new line (1 char each) included.",
-        "Optionally you can leave the text blank to add a blank page.",
-        "",
-        "Supported items: written book, book and quill.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} title [text]",
+            "{flag} author [text]",
+            "{flag} addpage [text]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} title The Art of Stealing",
-        "{flag} author Gray Fox",
-        "{flag} addpage <bold>O<reset>nce upon a time...",
-        "{flag} addpage // added blank page",
-        "{flag} addpage \\n\\n\\n\\n<italic>      The End.", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Changes book's contents.",
+            "Using this flag more than once will configure the same flag.",
+            "",
+            "Supports colors and format (e.g. <red>, <blue>, &4, &F, etc).",
+            "",
+            "Use 'title <text>' and 'author <text>' only on written books, it doesn't work on book and quill therefore they're optional.",
+            "Title and author must not exceed 64 characters, colors included (2 chars each).",
+            "",
+            "Use 'addpage <text>' to add a new page, the text can contain \\n to add new lines to it, but it mainly word-wraps itself.",
+            "Page contents must not exceed 256 characters, colors (2 chars each) and new line (1 char each) included.",
+            "Optionally you can leave the text blank to add a blank page.",
+            "",
+            "Supported items: written book, book and quill.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} title The Art of Stealing",
+            "{flag} author Gray Fox",
+            "{flag} addpage <bold>O<reset>nce upon a time...",
+            "{flag} addpage // added blank page",
+            "{flag} addpage \\n\\n\\n\\n<italic>      The End.", };
+    }
 
-    // Flag code
 
     private String title;
     private String author;

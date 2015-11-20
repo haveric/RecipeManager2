@@ -15,33 +15,40 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagEnchantedBook extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.ENCHANTEDBOOK;
-    protected static final String[] A = new String[] {
-        "{flag} <enchant> [level or max]", };
 
-    protected static final String[] D = new String[] {
-        "Adds stored enchantments in a enchanted book item.",
-        "This flag may be used more times to add more enchantments to the item.",
-        "",
-        "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
-        "Optionally you can set the level of enchantment",
-        "  Default is the enchantment's start level",
-        "  You can use 'max' to set it to enchantment's max level.",
-        "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
-        "",
-        "Enchantments are forced and there is no level cap!",
-        "",
-        "Specific item: enchanted_book", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <enchant> [level or max]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} efficiency // dig_speed alias",
-        "{flag} damage_all max",
-        "{flag} arrow_fire 127",
-        "{flag} sharpness remove"};
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Adds stored enchantments in a enchanted book item.",
+            "This flag may be used more times to add more enchantments to the item.",
+            "",
+            "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
+            "Optionally you can set the level of enchantment",
+            "  Default is the enchantment's start level",
+            "  You can use 'max' to set it to enchantment's max level.",
+            "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
+            "",
+            "Enchantments are forced and there is no level cap!",
+            "",
+            "Specific item: enchanted_book", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} efficiency // dig_speed alias",
+            "{flag} damage_all max",
+            "{flag} arrow_fire 127",
+            "{flag} sharpness remove", };
+    }
+
 
     private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
     private List<Enchantment> enchantsToRemove = new ArrayList<Enchantment>();

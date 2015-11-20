@@ -49,24 +49,15 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagSummon extends Flag {
-    // Flag definition and documentation
+    private static final FlagType TYPE = FlagType.SUMMON;
 
     private static String argFormat = "  %-26s = %s";
 
-    private static final FlagType TYPE = FlagType.SUMMON;
-    protected static final String[] A = new String[] {
-        "{flag} <type> | [arguments]", };
-
-    protected static final String[] E = new String[] {
-        "{flag} cow",
-        "{flag} skeleton | hand bow // skeletons spawn without weapons, you need to give it one",
-        "{flag} zombie | zombievillager | baby | chest chainmail_chestplate 25% | legs chainmail_leggings 25% | hand iron_sword 50% // baby villager zombie warrior",
-        "{flag} sheep | color pink | name <light_purple>Pony",
-        "{flag} ocelot | cat redcat | pet | potion speed 30 5",
-        "// chicken on a villager and villager on a cow:",
-        "{flag} chicken | mountnext",
-        "{flag} villager | mountnext",
-        "{flag} cow", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <type> | [arguments]", };
+    }
 
     @Override
     protected String[] getDescription() {
@@ -131,7 +122,20 @@ public class FlagSummon extends Flag {
         return description;
     }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} cow",
+            "{flag} skeleton | hand bow // skeletons spawn without weapons, you need to give it one",
+            "{flag} zombie | zombievillager | baby | chest chainmail_chestplate 25% | legs chainmail_leggings 25% | hand iron_sword 50% // baby villager zombie warrior",
+            "{flag} sheep | color pink | name <light_purple>Pony",
+            "{flag} ocelot | cat redcat | pet | potion speed 30 5",
+            "// chicken on a villager and villager on a cow:",
+            "{flag} chicken | mountnext",
+            "{flag} villager | mountnext",
+            "{flag} cow", };
+    }
+
 
     public class Customization implements Cloneable {
         private EntityType type = EntityType.PIG;

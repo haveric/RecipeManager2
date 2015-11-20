@@ -6,33 +6,39 @@ import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagNeedExp extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.NEEDEXP;
-    protected static final String[] A = new String[] {
-        "{flag} <min or min-max> | [message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-        "In the message the following variables can be used:",
-        "  {exp}    = exp or exp range.",
-        "  {minexp} = defined min exp range.",
-        "  {maxexp} = defined max exp range.",
-        "  {playerexp} = player's current experience.",
-        "",
-        "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <min or min-max> | [message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 100 // player needs to have at least 100 experience to craft",
-        "{flag} 250-250 // player needs to have exactly 250 experience to craft",
-        "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
-        "{flag} 1000 | <red>Need {exp} exp!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks if crafter has at least 'min' experience and optionally at most 'max' experience.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {exp}    = exp or exp range.",
+            "  {minexp} = defined min exp range.",
+            "  {maxexp} = defined max exp range.",
+            "  {playerexp} = player's current experience.",
+            "",
+            "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 100 // player needs to have at least 100 experience to craft",
+            "{flag} 250-250 // player needs to have exactly 250 experience to craft",
+            "{flag} 0-500 // player can only craft if he has between 0 and 500 experience",
+            "{flag} 1000 | <red>Need {exp} exp!", };
+    }
 
-    // Flag code
 
     private int minExp;
     private int maxExp;

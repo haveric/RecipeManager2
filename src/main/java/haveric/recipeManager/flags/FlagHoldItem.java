@@ -1,37 +1,43 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+
 public class FlagHoldItem extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.HOLDITEM;
-    protected static final String[] A = new String[] {
-        "{flag} <item or false>", };
 
-    protected static final String[] D = new String[] {
-        "Makes the recipe require crafter to hold an item.",
-        "",
-        "This flag can be used more than once to add more items, the player will need to hold one to craft.",
-        "",
-        "The <item> argument can be in this format: material:data:amount",
-        "Just like recipe results, not all values from the item are required.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <item or false>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} iron_pickaxe // any data/damage value",
-        "{flag} iron_axe:0 // only undamaged axe!",
-        "{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1",
-        "{flag} false // makes all previous statements useless", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Makes the recipe require crafter to hold an item.",
+            "",
+            "This flag can be used more than once to add more items, the player will need to hold one to craft.",
+            "",
+            "The <item> argument can be in this format: material:data:amount",
+            "Just like recipe results, not all values from the item are required.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} iron_pickaxe // any data/damage value",
+            "{flag} iron_axe:0 // only undamaged axe!",
+            "{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1",
+            "{flag} false // makes all previous statements useless", };
+    }
 
-    // Flag code
 
     private List<ItemStack> items = new ArrayList<ItemStack>();
     private String failMessage;

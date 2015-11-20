@@ -1,46 +1,52 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.util.Arrays;
 
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.util.RMCUtil;
+
 public class FlagFireworkChargeItem extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.FIREWORKCHARGEITEM;
-    protected static final String[] A = new String[] {
-        "{flag} <effect arguments>", };
 
-    protected static final String[] D = new String[] {
-        "Configures firework charge's effect.",
-        "Using this flag more than once will overwrite previous changes since the item only supports one effect.",
-        "",
-        "Replace '<effect arguments>' with the following arguments separated by | character.",
-        "Effects can be:",
-        "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.",
-        "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
-        "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + RMCUtil.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)",
-        "  trail                                     = (Optional) Adds a trail to the explosion",
-        "  flicker                                   = (Optional) Adds a flicker to explosion",
-        "Effects can be listed in any order.",
-        "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
-        "",
-        "Specific item: firework_charge.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <effect arguments>", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} trail | color 255 0 0, 0 255 0 | type ball_large",
-        "{flag} type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Configures firework charge's effect.",
+            "Using this flag more than once will overwrite previous changes since the item only supports one effect.",
+            "",
+            "Replace '<effect arguments>' with the following arguments separated by | character.",
+            "Effects can be:",
+            "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.",
+            "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
+            "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + RMCUtil.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)",
+            "  trail                                     = (Optional) Adds a trail to the explosion",
+            "  flicker                                   = (Optional) Adds a flicker to explosion",
+            "Effects can be listed in any order.",
+            "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
+            "",
+            "Specific item: firework_charge.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} trail | color 255 0 0, 0 255 0 | type ball_large",
+            "{flag} type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker", };
+    }
 
-    // Flag code
 
     private FireworkEffect effect;
 

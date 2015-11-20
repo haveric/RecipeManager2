@@ -33,119 +33,125 @@ import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagIngredientCondition extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.INGREDIENTCONDITION;
-    protected static final String[] A = new String[] {
-        "{flag} <item> | <conditions>", };
 
-    protected static final String[] D = new String[] {
-        "Adds conditions for individual ingredients like ranged data values, enchantments or using stacks.",
-        "This flag can be called more than once to add more ingredients with conditions.",
-        "",
-        "The <item> argument must be an item that is in the recipe, 'material:data' format.",
-        "If you're planning to add ranged data values the data value must be the wildcard '*' or not set at all in order to work.",
-        "",
-        "For <conditions> argument you must specify at least one condition.",
-        "Conditions must be separated by | and can be specified in any order.",
-        "Condition list:",
-        "",
-        "  data <[!][&]num or min-max or all or vanilla or damaged or new>, [...]",
-        "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
-        "    One number is required, you can add another number separated by - character to make a number range.",
-        "    Additionally instead of the number you can specify 'item:data' to use the named data value.",
-        "    Special data values:",
-        "      all: Flips the data check to allow all data values instead of none initially.",
-        "      vanilla: Only allow data values within the vanilla ranges.",
-        "      new: Equivalent to 0, or an undamaged item.",
-        "      damaged: On weapons and armor, this is everything within vanilla limits that is considered a damaged item.",
-        "    Prefixing with '&' would make a bitwise operation on the data value.",
-        "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
-        "    Optionally you can add more data conditions separated by ',' that the ingredient must match against one to proceed.",
-        "    Defaults to the equivalent of !all.",
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <item> | <conditions>", };
+    }
 
-        "",
-        "  enchant <name> [[!]num or min-max], [...]",
-        "    Condition for applied enchantments (not stored in books).",
-        "    This argument can be used more than once to add more enchantments as conditions.",
-        "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
-        "    The 2nd argument is the levels, it's optional",
-        "    A number can be used as level to set that level as requirement.",
-        "    You can also use 'max' to use the max supported level for that enchantment.",
-        "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
-        "    Prefixing with '!' would ban the level or level range.",
-        "",
-        "  noenchant or !enchant",
-        "    Ingredient must have no enchantment",
-        "    Overrides enchant condition if set",
-        "",
-        "  bookenchant <name> [[!]num or min-max], [...]",
-        "    Condition for book enchantments (not applied enchantments)",
-        "    This argument can be used more than once to add more enchantments as conditions.",
-        "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
-        "    The 2nd argument is the levels, it's optional",
-        "    A number can be used as level to set that level as requirement.",
-        "    You can also use 'max' to use the max supported level for that enchantment.",
-        "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
-        "    Prefixing with '!' would ban the level or level range.",
-        "",
-        "  nobookenchant or !bookenchant",
-        "    Ingredient must have no book enchantment",
-        "    Overrides bookenchant condition if set",
-        "",
-        "  amount <num>                     = stack amount, this will also subtract from the ingredient when crafted!",
-        "  name <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
-        "  noname or !name",
-        "    Ingredient must have no/default name",
-        "    Overrides name condition if set",
-        "",
-        "  lore <text or regex:pattern>     = checks each lore line for a specific text or if prefixed with 'regex:' it will check for a regex pattern.",
-        "  nolore or !lore",
-        "    Ingredient must have no lore",
-        "    Overrides lore condition if set",
-        "",
-        "  color <colorname or R,G,B>       = only works for leather armor, checks color, the values can be individual values or ranged separated by - char or you can use a color name constant, see '" + Files.FILE_INFO_NAMES + "' at 'DYE COLOR'.",
-        "",
-        "  nocolor or !color",
-        "    Only works for leather armor",
-        "    Ingredient must have default/vanilla color",
-        "    Overrides color condition if set",
-        "",
-        "  nometa or !meta",
-        "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color)",
-        "    Overrides enchant, name, lore, color conditions if set",
-        "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor",
-        "",
-        "  needed <num>",
-        "    Sets the number of ingredients that need to match this condition",
-        "    Defaults to all of the ingredientcondition type",
-        "",
-        // TODO mark
-        // "  recipebook <name> [volume <num>] = checks if ingredient is a recipebook generated by this plugin, partial name matching; optionally you can require a specific volume, accepts any volume by default.",
-        // "  extinctrecipebook                = checks if the ingredient is a recipe book generated by this plugin but no longer exists, useful to give players a chance to recycle their extinct recipe books.",
-        "  failmsg <text>                   = overwrite message sent to crafter when failing to provide required ingredient.",
-        "",
-        "This flag can be used on recipe results to determine a specific outcome for the recipe depending on the ingredients, however in that case you would need 'failmsg false' along with " + FlagType.DISPLAYRESULT + " flag too, see 'advanced recipes.html' file for example.",
-        "",
-        "NOTE: this flag can not be used in recipe header, needs to be defined on individual results or recipes.", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Adds conditions for individual ingredients like ranged data values, enchantments or using stacks.",
+            "This flag can be called more than once to add more ingredients with conditions.",
+            "",
+            "The <item> argument must be an item that is in the recipe, 'material:data' format.",
+            "If you're planning to add ranged data values the data value must be the wildcard '*' or not set at all in order to work.",
+            "",
+            "For <conditions> argument you must specify at least one condition.",
+            "Conditions must be separated by | and can be specified in any order.",
+            "Condition list:",
+            "",
+            "  data <[!][&]num or min-max or all or vanilla or damaged or new>, [...]",
+            "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
+            "    One number is required, you can add another number separated by - character to make a number range.",
+            "    Additionally instead of the number you can specify 'item:data' to use the named data value.",
+            "    Special data values:",
+            "      all: Flips the data check to allow all data values instead of none initially.",
+            "      vanilla: Only allow data values within the vanilla ranges.",
+            "      new: Equivalent to 0, or an undamaged item.",
+            "      damaged: On weapons and armor, this is everything within vanilla limits that is considered a damaged item.",
+            "    Prefixing with '&' would make a bitwise operation on the data value.",
+            "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
+            "    Optionally you can add more data conditions separated by ',' that the ingredient must match against one to proceed.",
+            "    Defaults to the equivalent of !all.",
 
-    protected static final String[] E = new String[] {
-        "{flag} wood | data 3 // pointless use of this flag, just use wood:3 as ingredient.",
-        "{flag} wood | data 1-3, 39, 100 // this overwrites the data condition to the previous one.",
-        "{flag} dirt | amount 64 // needs a full stack of dirt to work.",
-        "{flag} iron_sword | data 0-25 // only accepts iron swords that have 0 to 25 damage.",
-        "{flag} wool | data vanilla, !wool:red // no red wool",
-        "{flag} wool | data all, !vanilla // only modded data values",
-        "{flag} iron_sword | data new // Only allow undamaged iron swords",
-        "{flag} gold_sword | data damaged // Only allow damaged gold swords",
-        "{flag} potion | data &16384, !&64 // checks if potion is splash and NOT extended (see http://www.minecraftwiki.net/wiki/Data_value#Potions)",
-        "{flag} diamond_helmet | enchant fire_resistance 1-3 | enchant thorns | data 0, 5, 50-100 // makes ingredient require 2 enchantments and some specific data values.",
-        "{flag} stick | nometa // makes ingredient require a vanilla stick.",
-        "{flag} stick | !meta  // Same as above.",
-        "{flag} stick | name Crafted Stick | nolore | noenchant // makes ingredient require a stick with a name of 'Crafted Stick', but no lore or enchantments.",
-       };
+            "",
+            "  enchant <name> [[!]num or min-max], [...]",
+            "    Condition for applied enchantments (not stored in books).",
+            "    This argument can be used more than once to add more enchantments as conditions.",
+            "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+            "    The 2nd argument is the levels, it's optional",
+            "    A number can be used as level to set that level as requirement.",
+            "    You can also use 'max' to use the max supported level for that enchantment.",
+            "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
+            "    Prefixing with '!' would ban the level or level range.",
+            "",
+            "  noenchant or !enchant",
+            "    Ingredient must have no enchantment",
+            "    Overrides enchant condition if set",
+            "",
+            "  bookenchant <name> [[!]num or min-max], [...]",
+            "    Condition for book enchantments (not applied enchantments)",
+            "    This argument can be used more than once to add more enchantments as conditions.",
+            "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+            "    The 2nd argument is the levels, it's optional",
+            "    A number can be used as level to set that level as requirement.",
+            "    You can also use 'max' to use the max supported level for that enchantment.",
+            "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
+            "    Prefixing with '!' would ban the level or level range.",
+            "",
+            "  nobookenchant or !bookenchant",
+            "    Ingredient must have no book enchantment",
+            "    Overrides bookenchant condition if set",
+            "",
+            "  amount <num>                     = stack amount, this will also subtract from the ingredient when crafted!",
+            "  name <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "  noname or !name",
+            "    Ingredient must have no/default name",
+            "    Overrides name condition if set",
+            "",
+            "  lore <text or regex:pattern>     = checks each lore line for a specific text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "  nolore or !lore",
+            "    Ingredient must have no lore",
+            "    Overrides lore condition if set",
+            "",
+            "  color <colorname or R,G,B>       = only works for leather armor, checks color, the values can be individual values or ranged separated by - char or you can use a color name constant, see '" + Files.FILE_INFO_NAMES + "' at 'DYE COLOR'.",
+            "",
+            "  nocolor or !color",
+            "    Only works for leather armor",
+            "    Ingredient must have default/vanilla color",
+            "    Overrides color condition if set",
+            "",
+            "  nometa or !meta",
+            "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color)",
+            "    Overrides enchant, name, lore, color conditions if set",
+            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor",
+            "",
+            "  needed <num>",
+            "    Sets the number of ingredients that need to match this condition",
+            "    Defaults to all of the ingredientcondition type",
+            "",
+            // TODO mark
+            // "  recipebook <name> [volume <num>] = checks if ingredient is a recipebook generated by this plugin, partial name matching; optionally you can require a specific volume, accepts any volume by default.",
+            // "  extinctrecipebook                = checks if the ingredient is a recipe book generated by this plugin but no longer exists, useful to give players a chance to recycle their extinct recipe books.",
+            "  failmsg <text>                   = overwrite message sent to crafter when failing to provide required ingredient.",
+            "",
+            "This flag can be used on recipe results to determine a specific outcome for the recipe depending on the ingredients, however in that case you would need 'failmsg false' along with " + FlagType.DISPLAYRESULT + " flag too, see 'advanced recipes.html' file for example.",
+            "",
+            "NOTE: this flag can not be used in recipe header, needs to be defined on individual results or recipes.", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} wood | data 3 // pointless use of this flag, just use wood:3 as ingredient.",
+            "{flag} wood | data 1-3, 39, 100 // this overwrites the data condition to the previous one.",
+            "{flag} dirt | amount 64 // needs a full stack of dirt to work.",
+            "{flag} iron_sword | data 0-25 // only accepts iron swords that have 0 to 25 damage.",
+            "{flag} wool | data vanilla, !wool:red // no red wool",
+            "{flag} wool | data all, !vanilla // only modded data values",
+            "{flag} iron_sword | data new // Only allow undamaged iron swords",
+            "{flag} gold_sword | data damaged // Only allow damaged gold swords",
+            "{flag} potion | data &16384, !&64 // checks if potion is splash and NOT extended (see http://www.minecraftwiki.net/wiki/Data_value#Potions)",
+            "{flag} diamond_helmet | enchant fire_resistance 1-3 | enchant thorns | data 0, 5, 50-100 // makes ingredient require 2 enchantments and some specific data values.",
+            "{flag} stick | nometa // makes ingredient require a vanilla stick.",
+            "{flag} stick | !meta  // Same as above.",
+            "{flag} stick | name Crafted Stick | nolore | noenchant // makes ingredient require a stick with a name of 'Crafted Stick', but no lore or enchantments.", };
+    }
+
 
     // TODO written book title, author, page num, chars per page, etc
 
@@ -1291,7 +1297,7 @@ public class FlagIngredientCondition extends Flag {
                     ErrorReporter.warning("Flag " + getType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
                     continue;
                 }
-                
+
                 value = arg.substring("bookenchant".length()).trim();
 
                 String[] list = value.split(" ", 2);

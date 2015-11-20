@@ -11,29 +11,36 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagInventory extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.INVENTORY;
-    protected static final String[] A = new String[] {
-        "{flag} <inventory type> , ... | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks if crafting in the specific type of inventory",
-        "",
-        "The <inventory type> argument is required",
-        "  Values: " + RMCUtil.collectionToString(Arrays.asList(InventoryType.values())).toLowerCase(),
-        "",
-        "Can declare multiple inventory types seperated by commas",
-        "",
-        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-        "In the message the following variables can be used:",
-        "  {inventory} = name of inventory type(s)", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <inventory type> , ... | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} crafting // Player crafting menu",
-        "{flag} workbench // Must use a crafting table", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks if crafting in the specific type of inventory",
+            "",
+            "The <inventory type> argument is required",
+            "  Values: " + RMCUtil.collectionToString(Arrays.asList(InventoryType.values())).toLowerCase(),
+            "",
+            "Can declare multiple inventory types seperated by commas",
+            "",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {inventory} = name of inventory type(s)", };
+    }
 
-    // Flag code
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} crafting // Player crafting menu",
+            "{flag} workbench // Must use a crafting table", };
+    }
+
 
     private List<InventoryType> inventories = new ArrayList<InventoryType>();
     private String failMessage;

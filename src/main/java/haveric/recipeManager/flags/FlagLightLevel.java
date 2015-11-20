@@ -1,39 +1,45 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Messages;
+
 public class FlagLightLevel extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.LIGHTLEVEL;
-    protected static final String[] A = new String[] {
-        "{flag} <min or min-max> [type] | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks for the light level.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.",
-        "",
-        "Optionally you can set the  [type] argument to specify light type:",
-        "  any    = (default) any kind of light.",
-        "  sun    = sun light only.",
-        "  blocks = light from blocks (torches, furnaces, etc) only.",
-        "",
-        "Be careful using blocks light level with furnace recipes as the furnace will provide light to itself.",
-        "",
-        "You can also overwrite the fail message or use 'false' to hide it.", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <min or min-max> [type] | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 14 sun",
-        "{flag} 0-4 blocks | <red>Kill the lights!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks for the light level.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.",
+            "",
+            "Optionally you can set the  [type] argument to specify light type:",
+            "  any    = (default) any kind of light.",
+            "  sun    = sun light only.",
+            "  blocks = light from blocks (torches, furnaces, etc) only.",
+            "",
+            "Be careful using blocks light level with furnace recipes as the furnace will provide light to itself.",
+            "",
+            "You can also overwrite the fail message or use 'false' to hide it.", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 14 sun",
+            "{flag} 0-4 blocks | <red>Kill the lights!", };
+    }
 
-    // Flag code
 
     private byte minLight;
     private byte maxLight;

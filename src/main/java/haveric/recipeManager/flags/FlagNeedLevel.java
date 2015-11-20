@@ -4,29 +4,35 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagNeedLevel extends Flag {
-    // Flag definition and documentation
-
     private static final FlagType TYPE = FlagType.NEEDLEVEL;
-    protected static final String[] A = new String[] {
-        "{flag} <min or min-max> | [fail message]", };
 
-    protected static final String[] D = new String[] {
-        "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.",
-        "Using this flag more than once will overwrite the previous one.",
-        "",
-        "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-        "In the message the following variables can be used:",
-        "  {level}  = level or level range",
-        "",
-        "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
+    @Override
+    protected String[] getArguments() {
+        return new String[] {
+            "{flag} <min or min-max> | [fail message]", };
+    }
 
-    protected static final String[] E = new String[] {
-        "{flag} 1 // Requires a minimum level of 1",
-        "{flag} 5-5 // Requires exactly level 5",
-        "{flag} 25-100 | <red>Need level 25 to 100!", };
+    @Override
+    protected String[] getDescription() {
+        return new String[] {
+            "Checks if crafter has at least 'min' levels and optionally at most 'max' levels.",
+            "Using this flag more than once will overwrite the previous one.",
+            "",
+            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
+            "In the message the following variables can be used:",
+            "  {level}  = level or level range",
+            "",
+            "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
+    }
 
+    @Override
+    protected String[] getExamples() {
+        return new String[] {
+            "{flag} 1 // Requires a minimum level of 1",
+            "{flag} 5-5 // Requires exactly level 5",
+            "{flag} 25-100 | <red>Need level 25 to 100!", };
+    }
 
-    // Flag code
 
     private int minLevel;
     private int maxLevel;
