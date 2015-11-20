@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added 'item datas.yml' to override max data/durability values for materials
 * Better handling of invalid Bukkit recipes
 * Fixed potion not being defined error on brewing recipes
+* @secret: Removed conflicting alias 'hide'
 
 === v2.6.4 ===
 * Only call furnace fuel events for custom fuels

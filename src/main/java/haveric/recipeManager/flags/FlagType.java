@@ -43,7 +43,7 @@ public enum FlagType {
     SETBLOCK(FlagSetBlock.class, Bit.NO_SHIFT, "changeblock"),
     MESSAGE(FlagMessage.class, Bit.NONE, "craftmsg", "msg"),
     BROADCAST(FlagBroadcast.class, Bit.NONE, "announce", "msgall"),
-    SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR, "hide"),
+    SECRET(FlagSecret.class, Bit.NO_VALUE | Bit.NO_FOR),
     TEMPERATURE(FlagTemperature.class, Bit.NONE, "temp"),
     INVENTORY(FlagInventory.class, Bit.NONE),
     // TELEPORT(FlagTeleport.class, Bit.NO_SHIFT, "tpto", "goto"), // TODO finish flag
