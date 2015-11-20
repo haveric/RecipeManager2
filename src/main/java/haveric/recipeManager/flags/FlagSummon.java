@@ -68,8 +68,8 @@ public class FlagSummon extends Flag {
         "{flag} villager | mountnext",
         "{flag} cow", };
 
-
-    public static String[] getDescription() {
+    @Override
+    protected String[] getDescription() {
         String[] description = new String[] {
             "Summons a creature.",
             "Using this flag more than once will add more creatures.",

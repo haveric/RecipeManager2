@@ -11,6 +11,7 @@ import haveric.recipeManager.recipes.ItemResult;
 
 public class Flag implements Cloneable {
     protected Flags flagsContainer;
+    private static final String[] EMPTY_STRING = {};
 
     protected Flag() { }
 
@@ -180,6 +181,18 @@ public class Flag implements Cloneable {
     /*
      * Non-public tools/final methods
      */
+
+    protected String[] getArguments() {
+        return EMPTY_STRING;
+    }
+
+    protected String[] getDescription() {
+        return EMPTY_STRING;
+    }
+
+    protected String[] getExamples() {
+        return EMPTY_STRING;
+    }
 
     protected final Flaggable getFlaggable() {
         Flaggable flaggable = null;

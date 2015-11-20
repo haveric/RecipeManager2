@@ -86,6 +86,7 @@ public enum FlagType {
     private final Class<? extends Flag> flagClass;
     private final String[] names;
     private final int bits;
+    private Flag flagInstance = null;
 
     FlagType(Class<? extends Flag> newFlagClass, int newBits, String... aliases) {
         flagClass = newFlagClass;
@@ -145,14 +146,6 @@ public enum FlagType {
     }
 
     private String[] getField(String name) {
-        if (flagClass.equals(FlagSummon.class) && name.equals("D")) {
-            return FlagSummon.getDescription();
-        }
-
-        if (flagClass.equals(FlagBannerItem.class) && name.equals("D")) {
-            return FlagBannerItem.getDescription();
-        }
-
         try {
             return (String[]) flagClass.getDeclaredField(name).get(null);
         } catch (Throwable e) {
@@ -163,15 +156,33 @@ public enum FlagType {
     }
 
     public String[] getArguments() {
-        return getField("A");
+        String[] arguments = flagInstance.getArguments();
+
+        if (arguments.length == 0) {
+            arguments = getField("A");
+        }
+
+        return arguments;
     }
 
     public String[] getExamples() {
-        return getField("E");
+        String[] examples = flagInstance.getExamples();
+
+        if (examples.length == 0) {
+            examples = getField("E");
+        }
+
+        return examples;
     }
 
     public String[] getDescription() {
-        return getField("D");
+        String[] description = flagInstance.getDescription();
+
+        if (description.length == 0) {
+            description = getField("D");
+        }
+
+        return description;
     }
 
     /**
@@ -202,6 +213,10 @@ public enum FlagType {
         Permission p;
 
         for (FlagType type : values()) {
+            if (type.flagInstance == null) {
+                type.flagInstance = type.createFlagClass();
+            }
+
             classMap.put(type.getFlagClass(), type);
 
             for (String name : type.names) {

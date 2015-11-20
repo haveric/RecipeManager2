@@ -28,7 +28,8 @@ public class FlagBannerItem extends Flag {
             "{flag} red | circle_middle blue | skull yellow",
             "{flag} green | half_horizontal yellow | circle_middle orange"};
 
-    public static String[] getDescription() {
+    @Override
+    protected String[] getDescription() {
         String[] description = new String[] {
             "Creates a custom banner",
             "Using this flag more than once will overwrite the previous one.",
