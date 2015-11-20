@@ -17,7 +17,6 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 
 public class FlagCloneIngredient extends Flag {
-    private static final FlagType TYPE = FlagType.CLONEINGREDIENT;
 
     @Override
     protected String[] getArguments() {
@@ -91,11 +90,6 @@ public class FlagCloneIngredient extends Flag {
     public FlagCloneIngredient clone() {
         super.clone();
         return new FlagCloneIngredient(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

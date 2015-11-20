@@ -12,7 +12,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 
 public class FlagPotionEffect extends Flag {
-    private static final FlagType TYPE = FlagType.POTIONEFFECT;
 
     @Override
     protected String[] getArguments() {
@@ -63,11 +62,6 @@ public class FlagPotionEffect extends Flag {
     public FlagPotionEffect clone() {
         super.clone();
         return new FlagPotionEffect(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<PotionEffect, Float> getEffects() {

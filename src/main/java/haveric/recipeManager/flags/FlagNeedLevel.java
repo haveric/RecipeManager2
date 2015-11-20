@@ -4,7 +4,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagNeedLevel extends Flag {
-    private static final FlagType TYPE = FlagType.NEEDLEVEL;
 
     @Override
     protected String[] getArguments() {
@@ -54,11 +53,6 @@ public class FlagNeedLevel extends Flag {
     public FlagNeedLevel clone() {
         super.clone();
         return new FlagNeedLevel(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public int getMinLevel() {

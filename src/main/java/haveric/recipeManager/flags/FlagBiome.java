@@ -15,7 +15,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagBiome extends Flag {
-    private static final FlagType TYPE = FlagType.BIOME;
 
     @Override
     protected String[] getArguments() {
@@ -59,11 +58,6 @@ public class FlagBiome extends Flag {
     public FlagBiome clone() {
         super.clone();
         return new FlagBiome(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<Biome, Boolean> getBiomes() {

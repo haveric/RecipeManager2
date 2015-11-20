@@ -3,7 +3,6 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.Files;
 
 public class FlagAddToBook extends Flag {
-    private static final FlagType TYPE = FlagType.ADDTOBOOK;
 
     @Override
     protected String[] getArguments() {
@@ -48,11 +47,6 @@ public class FlagAddToBook extends Flag {
     public FlagAddToBook clone() {
         super.clone();
         return new FlagAddToBook(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

@@ -17,7 +17,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagBannerItem extends Flag {
-    private static final FlagType TYPE = FlagType.BANNERITEM;
 
     @Override
     protected String[] getArguments() {
@@ -75,11 +74,6 @@ public class FlagBannerItem extends Flag {
     public FlagBannerItem clone() {
         super.clone();
         return new FlagBannerItem(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public DyeColor getBaseColor() {

@@ -13,7 +13,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagEnchantItem extends Flag {
-    private static final FlagType TYPE = FlagType.ENCHANTITEM;
 
     @Override
     protected String[] getArguments() {
@@ -68,11 +67,6 @@ public class FlagEnchantItem extends Flag {
     public FlagEnchantItem clone() {
         super.clone();
         return new FlagEnchantItem(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

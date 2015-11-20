@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagDisplayResult extends Flag {
-    private static final FlagType TYPE = FlagType.DISPLAYRESULT;
 
     @Override
     protected String[] getArguments() {
@@ -55,11 +54,6 @@ public class FlagDisplayResult extends Flag {
     public FlagDisplayResult clone() {
         super.clone();
         return new FlagDisplayResult(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

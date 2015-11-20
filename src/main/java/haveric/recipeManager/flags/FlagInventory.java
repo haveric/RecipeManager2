@@ -11,7 +11,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagInventory extends Flag {
-    private static final FlagType TYPE = FlagType.INVENTORY;
 
     @Override
     protected String[] getArguments() {
@@ -56,11 +55,6 @@ public class FlagInventory extends Flag {
     public FlagInventory clone() {
         super.clone();
         return new FlagInventory(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public List<InventoryType> getInventories() {

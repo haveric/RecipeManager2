@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 public class FlagCommand extends Flag {
-    private static final FlagType TYPE = FlagType.COMMAND;
 
     @Override
     protected String[] getArguments() {
@@ -56,11 +55,6 @@ public class FlagCommand extends Flag {
     public FlagCommand clone() {
         super.clone();
         return new FlagCommand(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

@@ -11,7 +11,6 @@ import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.recipes.ItemResult;
 
 public class FlagGetRecipeBook extends Flag {
-    private static final FlagType TYPE = FlagType.GETRECIPEBOOK;
 
     @Override
     protected String[] getArguments() {
@@ -52,11 +51,6 @@ public class FlagGetRecipeBook extends Flag {
     public FlagGetRecipeBook clone() {
         super.clone();
         return new FlagGetRecipeBook(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public String getBookID() {

@@ -1,7 +1,6 @@
 package haveric.recipeManager.flags;
 
 public class FlagSecret extends Flag {
-    private static final FlagType TYPE = FlagType.SECRET;
 
     @Override
     protected String[] getArguments() {
@@ -35,11 +34,6 @@ public class FlagSecret extends Flag {
     public FlagSecret clone() {
         super.clone();
         return new FlagSecret(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

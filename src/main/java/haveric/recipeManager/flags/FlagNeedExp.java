@@ -6,7 +6,6 @@ import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagNeedExp extends Flag {
-    private static final FlagType TYPE = FlagType.NEEDEXP;
 
     @Override
     protected String[] getArguments() {
@@ -59,11 +58,6 @@ public class FlagNeedExp extends Flag {
     public FlagNeedExp clone() {
         super.clone();
         return new FlagNeedExp(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public int getMinExp() {

@@ -5,7 +5,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagNeedMoney extends Flag {
-    private static final FlagType TYPE = FlagType.NEEDMONEY;
 
     @Override
     protected String[] getArguments() {
@@ -51,11 +50,6 @@ public class FlagNeedMoney extends Flag {
     public FlagNeedMoney clone() {
         super.clone();
         return new FlagNeedMoney(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public double getMinMoney() {

@@ -8,7 +8,6 @@ import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagModExp extends Flag {
-    private static final FlagType TYPE = FlagType.MODEXP;
 
     @Override
     protected String[] getArguments() {
@@ -60,11 +59,6 @@ public class FlagModExp extends Flag {
     public FlagModExp clone() {
         super.clone();
         return new FlagModExp(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public char getModifier() {

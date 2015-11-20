@@ -11,7 +11,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flags.FlagType.Bit;
 
 public class FlagForPermission extends Flag {
-    private static final FlagType TYPE = FlagType.FORPERMISSION;
 
     @Override
     protected String[] getArguments() {
@@ -65,11 +64,6 @@ public class FlagForPermission extends Flag {
     public FlagForPermission clone() {
         super.clone();
         return new FlagForPermission(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<String, Map<FlagType, Flag>> getFlagMap() {

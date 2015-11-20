@@ -9,13 +9,14 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManager.Perms;
 
 public class FlagGroup extends Flag {
-    private static final FlagType TYPE = FlagType.GROUP;
 
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag} [!]<group>, [...] | [fail message]", };
     }
 
+    @Override
     protected String[] getDescription() {
         return new String[] {
             "Makes the recipe or item require the crafter to be in a permission group.",
@@ -62,11 +63,6 @@ public class FlagGroup extends Flag {
     public FlagGroup clone() {
         super.clone();
         return new FlagGroup(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<String, Boolean> getGroups() {

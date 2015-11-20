@@ -24,7 +24,6 @@ import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.util.ParseBit;
 
 public class FlagKeepItem extends Flag {
-    private static final FlagType TYPE = FlagType.KEEPITEM;
 
     @Override
     protected String[] getArguments() {
@@ -82,11 +81,6 @@ public class FlagKeepItem extends Flag {
     public FlagKeepItem clone() {
         super.clone();
         return new FlagKeepItem(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<String, Object> getKeepItems() {

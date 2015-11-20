@@ -13,7 +13,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagPotionItem extends Flag {
-    private static final FlagType TYPE = FlagType.POTIONITEM;
 
     @Override
     protected String[] getArguments() {
@@ -84,11 +83,6 @@ public class FlagPotionItem extends Flag {
     public FlagPotionItem clone() {
         super.clone();
         return new FlagPotionItem(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public short getData() {

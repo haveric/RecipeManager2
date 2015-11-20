@@ -7,7 +7,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagLightLevel extends Flag {
-    private static final FlagType TYPE = FlagType.LIGHTLEVEL;
 
     @Override
     protected String[] getArguments() {
@@ -60,11 +59,6 @@ public class FlagLightLevel extends Flag {
     public FlagLightLevel clone() {
         super.clone();
         return new FlagLightLevel(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

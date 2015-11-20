@@ -7,7 +7,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 
 public class FlagHide extends Flag {
-    private static final FlagType TYPE = FlagType.HIDE;
 
     @Override
     protected String[] getArguments() {
@@ -62,11 +61,6 @@ public class FlagHide extends Flag {
     public FlagHide clone() {
         super.clone();
         return new FlagHide(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

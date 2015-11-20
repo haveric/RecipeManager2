@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 import haveric.recipeManager.Messages;
 
 public class FlagPermission extends Flag {
-    private static final FlagType TYPE = FlagType.PERMISSION;
 
     @Override
     protected String[] getArguments() {
@@ -60,11 +59,6 @@ public class FlagPermission extends Flag {
     public FlagPermission clone() {
         super.clone();
         return new FlagPermission(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<String, Boolean> getPermissions() {

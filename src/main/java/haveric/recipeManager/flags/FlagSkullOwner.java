@@ -17,7 +17,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.ItemResult;
 
 public class FlagSkullOwner extends Flag {
-    private static final FlagType TYPE = FlagType.SKULLOWNER;
 
     @Override
     protected String[] getArguments() {
@@ -53,11 +52,6 @@ public class FlagSkullOwner extends Flag {
     public FlagSkullOwner clone() {
         super.clone();
         return new FlagSkullOwner(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public String getOwner() {

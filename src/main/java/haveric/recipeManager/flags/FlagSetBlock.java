@@ -11,7 +11,6 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.ParseBit;
 
 public class FlagSetBlock extends Flag {
-    private static final FlagType TYPE = FlagType.SETBLOCK;
 
     @Override
     protected String[] getArguments() {
@@ -64,11 +63,6 @@ public class FlagSetBlock extends Flag {
     public FlagSetBlock clone() {
         super.clone();
         return new FlagSetBlock(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

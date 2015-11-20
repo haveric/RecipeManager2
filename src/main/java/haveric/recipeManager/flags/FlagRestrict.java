@@ -3,7 +3,6 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.Messages;
 
 public class FlagRestrict extends Flag {
-    private static final FlagType TYPE = FlagType.RESTRICT;
 
     @Override
     protected String[] getArguments() {
@@ -41,11 +40,6 @@ public class FlagRestrict extends Flag {
     public FlagRestrict clone() {
         super.clone();
         return new FlagRestrict(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public String getMessage() {

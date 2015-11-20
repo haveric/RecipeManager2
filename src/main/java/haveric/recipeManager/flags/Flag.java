@@ -13,6 +13,8 @@ public class Flag implements Cloneable {
     protected Flags flagsContainer;
     private static final String[] EMPTY_STRING = {};
 
+    private FlagType type = null;
+
     protected Flag() { }
 
     /*
@@ -273,24 +275,19 @@ public class Flag implements Cloneable {
         onRegistered();
     }
 
-    /*
-     * Overwritable methods/events
-     */
-
     /**
      * @return the flag name enum
      */
     public FlagType getType() {
-        return null;
+        if (type == null) {
+            type = FlagType.getByClass(this.getClass());
+        }
+
+        return type;
     }
 
     /*
-     * /** Human friendly information about what the flag does with its current settings.
-     *
-     * @return list of strings which represent individual lines or null if not defined.
-     */
-    /*
-     * public List<String> information() { return null; }
+     * Overwritable methods/events
      */
 
     @Override

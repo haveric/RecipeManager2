@@ -10,7 +10,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagLeatherColor extends Flag {
-    private static final FlagType TYPE = FlagType.LEATHERCOLOR;
 
     @Override
     protected String[] getArguments() {
@@ -46,11 +45,6 @@ public class FlagLeatherColor extends Flag {
     public FlagLeatherColor clone() {
         super.clone();
         return new FlagLeatherColor(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

@@ -10,7 +10,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagWeather extends Flag {
-    private static final FlagType TYPE = FlagType.WEATHER;
 
     @Override
     protected String[] getArguments() {
@@ -66,11 +65,6 @@ public class FlagWeather extends Flag {
     public FlagWeather clone() {
         super.clone();
         return new FlagWeather(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

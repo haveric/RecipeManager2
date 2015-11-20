@@ -14,7 +14,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flags.FlagType.Bit;
 
 public class FlagForChance extends Flag {
-    private static final FlagType TYPE = FlagType.FORCHANCE;
 
     @Override
     protected String[] getArguments() {
@@ -131,11 +130,6 @@ public class FlagForChance extends Flag {
     public FlagForChance clone() {
         super.clone();
         return new FlagForChance(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

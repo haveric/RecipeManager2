@@ -33,7 +33,6 @@ import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagIngredientCondition extends Flag {
-    private static final FlagType TYPE = FlagType.INGREDIENTCONDITION;
 
     @Override
     protected String[] getArguments() {
@@ -1101,11 +1100,6 @@ public class FlagIngredientCondition extends Flag {
     public FlagIngredientCondition clone() {
         super.clone();
         return new FlagIngredientCondition(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

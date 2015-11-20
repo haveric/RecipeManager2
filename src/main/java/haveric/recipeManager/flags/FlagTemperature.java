@@ -6,7 +6,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagTemperature extends Flag {
-    private static final FlagType TYPE = FlagType.TEMPERATURE;
 
     @Override
     protected String[] getArguments() {
@@ -60,11 +59,6 @@ public class FlagTemperature extends Flag {
     public FlagTemperature clone() {
         super.clone();
         return new FlagTemperature(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Double getLTETemp() {

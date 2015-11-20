@@ -6,7 +6,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagModMoney extends Flag {
-    private static final FlagType TYPE = FlagType.MODMONEY;
 
     @Override
     protected String[] getArguments() {
@@ -57,11 +56,6 @@ public class FlagModMoney extends Flag {
     public FlagModMoney clone() {
         super.clone();
         return new FlagModMoney(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public char getModifier() {

@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagBroadcast extends Flag {
-    private static final FlagType TYPE = FlagType.BROADCAST;
 
     @Override
     protected String[] getArguments() {
@@ -58,11 +57,6 @@ public class FlagBroadcast extends Flag {
     public FlagBroadcast clone() {
         super.clone();
         return new FlagBroadcast(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public String getMessage() {

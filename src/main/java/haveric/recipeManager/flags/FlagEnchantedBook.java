@@ -15,7 +15,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagEnchantedBook extends Flag {
-    private static final FlagType TYPE = FlagType.ENCHANTEDBOOK;
 
     @Override
     protected String[] getArguments() {
@@ -65,11 +64,6 @@ public class FlagEnchantedBook extends Flag {
     public Flag clone() {
         super.clone();
         return new FlagEnchantedBook(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<Enchantment, Integer> getEnchants() {

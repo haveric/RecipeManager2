@@ -4,7 +4,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagHeight extends Flag {
-    private static final FlagType TYPE = FlagType.HEIGHT;
 
     @Override
     protected String[] getArguments() {
@@ -48,11 +47,6 @@ public class FlagHeight extends Flag {
     public FlagHeight clone() {
         super.clone();
         return new FlagHeight(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public int getMinHeight() {

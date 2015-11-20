@@ -10,7 +10,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagCooldown extends Flag {
-    private static final FlagType TYPE = FlagType.COOLDOWN;
 
     @Override
     protected String[] getArguments() {
@@ -75,11 +74,6 @@ public class FlagCooldown extends Flag {
     public FlagCooldown clone() {
         super.clone();
         return new FlagCooldown(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

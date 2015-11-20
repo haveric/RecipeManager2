@@ -14,7 +14,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagLaunchFirework extends Flag {
-    private static final FlagType TYPE = FlagType.LAUNCHFIREWORK;
 
     @Override
     protected String[] getArguments() {
@@ -69,11 +68,6 @@ public class FlagLaunchFirework extends Flag {
     public FlagLaunchFirework clone() {
         super.clone();
         return new FlagLaunchFirework(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public FireworkMeta getFirework() {

@@ -7,7 +7,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Messages;
 
 public class FlagBlockPowered extends Flag {
-    private static final FlagType TYPE = FlagType.BLOCKPOWERED;
 
     @Override
     protected  String[] getArguments() {
@@ -47,11 +46,6 @@ public class FlagBlockPowered extends Flag {
     public FlagBlockPowered clone() {
         super.clone();
         return new FlagBlockPowered(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public boolean isIndirect() {

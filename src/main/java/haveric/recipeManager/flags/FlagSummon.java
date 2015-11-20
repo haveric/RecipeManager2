@@ -49,7 +49,6 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagSummon extends Flag {
-    private static final FlagType TYPE = FlagType.SUMMON;
 
     private static String argFormat = "  %-26s = %s";
 
@@ -916,11 +915,6 @@ public class FlagSummon extends Flag {
     public FlagSummon clone() {
         super.clone();
         return new FlagSummon(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public List<Customization> getSpawnList() {

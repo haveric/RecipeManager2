@@ -5,7 +5,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagItemName extends Flag {
-    private static final FlagType TYPE = FlagType.ITEMNAME;
 
     @Override
     protected String[] getArguments() {
@@ -54,11 +53,6 @@ public class FlagItemName extends Flag {
     public FlagItemName clone() {
         super.clone();
         return new FlagItemName(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public String getName() {

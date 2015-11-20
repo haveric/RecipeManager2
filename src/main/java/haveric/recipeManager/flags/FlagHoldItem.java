@@ -10,7 +10,6 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 
 public class FlagHoldItem extends Flag {
-    private static final FlagType TYPE = FlagType.HOLDITEM;
 
     @Override
     protected String[] getArguments() {
@@ -57,11 +56,6 @@ public class FlagHoldItem extends Flag {
     public FlagHoldItem clone() {
         super.clone();
         return new FlagHoldItem(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public List<ItemStack> getItems() {

@@ -11,7 +11,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagGameMode extends Flag {
-    private static final FlagType TYPE = FlagType.GAMEMODE;
 
     @Override
     protected String[] getArguments() {
@@ -60,11 +59,6 @@ public class FlagGameMode extends Flag {
     public FlagGameMode clone() {
         super.clone();
         return new FlagGameMode(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Set<GameMode> getGameModes() {

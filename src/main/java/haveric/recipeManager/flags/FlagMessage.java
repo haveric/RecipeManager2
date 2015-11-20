@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 public class FlagMessage extends Flag {
-    private static final FlagType TYPE = FlagType.MESSAGE;
 
     @Override
     protected String[] getArguments() {
@@ -55,11 +54,6 @@ public class FlagMessage extends Flag {
     public FlagMessage clone() {
         super.clone();
         return new FlagMessage(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public List<String> getMessages() {

@@ -16,7 +16,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.recipes.FuelRecipe;
 
 public class FlagExplode extends Flag {
-    private static final FlagType TYPE = FlagType.EXPLODE;
 
     @Override
     protected String[] getArguments() {
@@ -74,11 +73,6 @@ public class FlagExplode extends Flag {
     public FlagExplode clone() {
         super.clone();
         return new FlagExplode(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public float getPower() {

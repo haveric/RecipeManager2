@@ -8,7 +8,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 
 public class FlagSound extends Flag {
-    private static final FlagType TYPE = FlagType.SOUND;
 
     @Override
     protected String[] getArguments() {
@@ -59,11 +58,6 @@ public class FlagSound extends Flag {
     public FlagSound clone() {
         super.clone();
         return new FlagSound(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Sound getSound() {

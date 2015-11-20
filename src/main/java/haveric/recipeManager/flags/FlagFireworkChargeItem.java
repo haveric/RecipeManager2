@@ -13,7 +13,6 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagFireworkChargeItem extends Flag {
-    private static final FlagType TYPE = FlagType.FIREWORKCHARGEITEM;
 
     @Override
     protected String[] getArguments() {
@@ -61,11 +60,6 @@ public class FlagFireworkChargeItem extends Flag {
     public FlagFireworkChargeItem clone() {
         super.clone();
         return new FlagFireworkChargeItem(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public FireworkEffect getEffect() {

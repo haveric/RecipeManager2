@@ -7,7 +7,6 @@ import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagModLevel extends Flag {
-    private static final FlagType TYPE = FlagType.MODLEVEL;
 
     @Override
     protected String[] getArguments() {
@@ -60,11 +59,6 @@ public class FlagModLevel extends Flag {
     public FlagModLevel clone() {
         super.clone();
         return new FlagModLevel(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     /**

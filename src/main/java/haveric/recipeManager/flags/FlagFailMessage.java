@@ -10,7 +10,6 @@ import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagFailMessage extends Flag {
-    private static final FlagType TYPE = FlagType.FAILMESSAGE;
 
     @Override
     protected String[] getArguments() {
@@ -53,11 +52,6 @@ public class FlagFailMessage extends Flag {
     public FlagFailMessage clone() {
         super.clone();
         return new FlagFailMessage(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public String getMessage() {

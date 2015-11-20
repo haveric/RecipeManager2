@@ -6,7 +6,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeStatus;
 
 public class FlagOverride extends Flag {
-    private static final FlagType TYPE = FlagType.OVERRIDE;
 
     @Override
     protected String[] getArguments() {
@@ -43,11 +42,6 @@ public class FlagOverride extends Flag {
     public FlagOverride clone() {
         super.clone();
         return new FlagOverride(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override

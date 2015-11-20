@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import haveric.recipeManager.Messages;
 
 public class FlagWorld extends Flag {
-    private static final FlagType TYPE = FlagType.WORLD;
 
     @Override
     protected String[] getArguments() {
@@ -54,11 +53,6 @@ public class FlagWorld extends Flag {
     public FlagWorld clone() {
         super.clone();
         return new FlagWorld(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     public Map<String, Boolean> getWorlds() {

@@ -5,7 +5,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 
 public class FlagIndividualResults extends Flag {
-    private static final FlagType TYPE = FlagType.INDIVIDUALRESULTS;
 
     @Override
     protected String[] getArguments() {
@@ -22,6 +21,7 @@ public class FlagIndividualResults extends Flag {
             "A percent chance on a result will cause the recipe to fail the rest of the percent out of 100.", };
     }
 
+    @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag}", };
@@ -38,11 +38,6 @@ public class FlagIndividualResults extends Flag {
     public FlagIndividualResults clone() {
         super.clone();
         return new FlagIndividualResults(this);
-    }
-
-    @Override
-    public FlagType getType() {
-        return TYPE;
     }
 
     @Override
