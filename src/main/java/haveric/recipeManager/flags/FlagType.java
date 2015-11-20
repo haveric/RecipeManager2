@@ -77,7 +77,7 @@ public enum FlagType {
     ENCHANTEDBOOK(FlagEnchantedBook.class, Bit.RESULT, "enchantbook", "enchantingbook"),
     GETRECIPEBOOK(FlagGetRecipeBook.class, Bit.RESULT | Bit.NO_SHIFT, "getbook", "bookresult"),
     HIDE(FlagHide.class, Bit.RESULT),
-    BANNER(FlagBannerItem.class, Bit.RESULT, "banner");
+    BANNERITEM(FlagBannerItem.class, Bit.RESULT, "banner");
 
     /*
      * FlagType related methods

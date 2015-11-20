@@ -19,7 +19,7 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 public class FlagBannerItem extends Flag {
     // Flag definition and documentation
 
-    private static final FlagType TYPE = FlagType.BANNER;
+    private static final FlagType TYPE = FlagType.BANNERITEM;
     protected static final String[] A = new String[] {
         "{flag} <basecolor> | [pattern] <color> | [...]", };
 
