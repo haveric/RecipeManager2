@@ -52,6 +52,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
@@ -303,7 +304,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void craftFinish(CraftItemEvent event) {
         try {
-            CraftingInventory inv = event.getInventory();
+            final CraftingInventory inv = event.getInventory();
 
             ItemResult result;
             if (inv.getResult() == null) {
@@ -312,7 +313,7 @@ public class Events implements Listener {
                 result = new ItemResult(inv.getResult());
             }
 
-            Player player;
+            final Player player;
             if (event.getView() == null) {
                 player = null;
             } else {
@@ -364,7 +365,6 @@ public class Events implements Listener {
             a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
 
             int times = craftResult(event, inv, player, recipe, result, a); // craft the result
-
             if (result != null) {
                 a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
 
@@ -375,20 +375,33 @@ public class Events implements Listener {
                 while (--times >= 0) {
                     a.clear();
 
-                    if (recipe.sendCrafted(a)) {
+                    boolean recipeCraftSuccess = recipe.sendCrafted(a);
+                    if (recipeCraftSuccess) {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
                     }
 
                     a.clear();
 
-                    if (result.sendPrepare(a)) {
+                    boolean resultPrepareSuccess = result.sendPrepare(a);
+                    if (resultPrepareSuccess) {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
                     }
 
                     a.clear();
 
-                    if (result.sendCrafted(a)) {
+                    boolean resultCraftSuccess = result.sendCrafted(a);
+                    if (resultCraftSuccess) {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
+                    }
+
+                    if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
+                        if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                            boolean onlyExtra = true;
+                            if (event.isShiftClick() || recipe.isMultiResult()) {
+                                onlyExtra = false;
+                            }
+                            recipe.subtractIngredients(inv, result, onlyExtra);
+                        }
                     }
 
                     // TODO call post-event ?
@@ -396,7 +409,13 @@ public class Events implements Listener {
                 }
             }
 
-            Bukkit.getPluginManager().callEvent(new PrepareItemCraftEvent(inv, player.getOpenInventory(), false));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new PrepareItemCraftEvent(inv, player.getOpenInventory(), false));
+                }
+            }.runTaskLater(RecipeManager.getPlugin(), 0);
+
 
             new UpdateInventory(player, 2); // update inventory 2 ticks later
         } catch (Throwable e) {
@@ -426,7 +445,6 @@ public class Events implements Listener {
                 if (event.isShiftClick()) {
                     if (!recipe.hasNoShiftBit()) {
                         Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
-                        event.setCancelled(true);
                         return 0;
                     }
 
@@ -449,8 +467,6 @@ public class Events implements Listener {
                     event.setCursor(merged);
                 }
             }
-
-            recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
         } else {
             if (result == null || result.getType() == Material.AIR) {
                 event.setCurrentItem(null);
@@ -465,7 +481,6 @@ public class Events implements Listener {
 
                     if (Tools.playerCanAddItem(player, result)) {
                         player.getInventory().addItem(result);
-                        recipe.subtractIngredients(inv, result, false); // subtract from ingredients manually
 
                         return 1;
                     }
@@ -497,10 +512,6 @@ public class Events implements Listener {
             }
 
             event.setCurrentItem(result);
-
-            if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
-                recipe.subtractIngredients(inv, result, true);
-            }
         }
 
         return 1;

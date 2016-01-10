@@ -7,6 +7,7 @@ This file will be automatically overwritten when a new version is installed.
 * Better handling of invalid Bukkit recipes
 * Fixed potion not being defined error on brewing recipes
 * @secret: Removed conflicting alias 'hide'
+* @ingredientcondition: Improved amount handling
 
 === v2.6.4 ===
 * Only call furnace fuel events for custom fuels
