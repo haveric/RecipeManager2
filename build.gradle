@@ -27,6 +27,8 @@ repositories {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
+    
     compile project(':RecipeManagerCommon')
     compile "org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT"
     compile "net.milkbowl.vault:VaultAPI:1.5"

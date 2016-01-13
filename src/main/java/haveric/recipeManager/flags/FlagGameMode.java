@@ -3,7 +3,6 @@ package haveric.recipeManager.flags;
 import java.util.EnumSet;
 import java.util.Set;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.GameMode;
 
 import haveric.recipeManager.ErrorReporter;
@@ -62,13 +61,13 @@ public class FlagGameMode extends Flag {
     }
 
     public Set<GameMode> getGameModes() {
-        return gameModes;
+        Set<GameMode> clone = EnumSet.noneOf(GameMode.class);
+        clone.addAll(gameModes);
+        return clone;
     }
 
-    public void setGameModes(EnumSet<GameMode> set) {
-        Validate.notNull(set, "The 'set' argument must not be null!");
-
-        gameModes = set;
+    public void clearGameModes() {
+        gameModes.clear();
     }
 
     public void addGameMode(GameMode gameMode) {
@@ -109,6 +108,10 @@ public class FlagGameMode extends Flag {
                     addGameMode(GameMode.SURVIVAL);
                     break;
 
+                case 'f':
+                    clearGameModes();
+                    break;
+
                 default:
                     try {
                         addGameMode(GameMode.valueOf(arg));
@@ -130,8 +133,8 @@ public class FlagGameMode extends Flag {
 
         GameMode gm = a.player().getGameMode();
 
-        if (!getGameModes().contains(gm)) {
-            a.addReason(Messages.FLAG_GAMEMODE, failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", RMCUtil.collectionToString(getGameModes()));
+        if (!gameModes.contains(gm)) {
+            a.addReason(Messages.FLAG_GAMEMODE, failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", RMCUtil.collectionToString(gameModes));
         }
     }
 
