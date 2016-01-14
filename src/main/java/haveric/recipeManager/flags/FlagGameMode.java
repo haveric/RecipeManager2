@@ -137,12 +137,4 @@ public class FlagGameMode extends Flag {
             a.addReason(Messages.FLAG_GAMEMODE, failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", RMCUtil.collectionToString(gameModes));
         }
     }
-
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * list.add(Messages.FLAG_GAMEMODE.get("{gamemodes}", Tools.collectionToString(getGameModes())));
-     *
-     * return list; }
-     */
 }
