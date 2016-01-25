@@ -1191,6 +1191,10 @@ public class Events implements Listener {
                     event.setResult(new ItemStack(Material.AIR));
                 } else {
                     event.setResult(result.toItemStack());
+
+                    if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                        recipe.subtractIngredient(inventory, result, true);
+                    }
                 }
             }
 

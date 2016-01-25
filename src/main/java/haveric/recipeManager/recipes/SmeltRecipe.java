@@ -1,5 +1,12 @@
 package haveric.recipeManager.recipes;
 
+import java.util.List;
+
+import org.apache.commons.lang.Validate;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
@@ -12,13 +19,6 @@ import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
-
-import java.util.List;
-
-import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
 
 public class SmeltRecipe extends SingleResultRecipe {
     private ItemStack ingredient;
@@ -296,22 +296,25 @@ public class SmeltRecipe extends SingleResultRecipe {
         return s.toString();
     }
 
-    public void subtractIngredient(FurnaceInventory inv, boolean onlyExtra) {
-        FlagIngredientCondition flag;
+    public void subtractIngredient(FurnaceInventory inv, ItemResult result, boolean onlyExtra) {
+        FlagIngredientCondition flagIC;
         if (hasFlag(FlagType.INGREDIENTCONDITION)) {
-            flag = getFlag(FlagIngredientCondition.class);
+            flagIC = getFlag(FlagIngredientCondition.class);
         } else {
-            flag = null;
+            flagIC = null;
+        }
+
+        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION)) {
+            flagIC = result.getFlag(FlagIngredientCondition.class);
         }
 
         ItemStack item = inv.getSmelting();
-
         if (item != null) {
             int amt = item.getAmount();
             int newAmt = amt;
 
-            if (flag != null) {
-                List<Conditions> condList = flag.getIngredientConditions(item);
+            if (flagIC != null) {
+                List<Conditions> condList = flagIC.getIngredientConditions(item);
 
                 for (Conditions cond : condList) {
                     if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
