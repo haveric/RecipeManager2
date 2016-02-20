@@ -12,9 +12,6 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 public class ArgBuilder {
     private Args a = new Args();
 
-    public static void init() {
-    }
-
     /**
      * Start building an argument class for flag events
      *
@@ -28,12 +25,13 @@ public class ArgBuilder {
         return new ArgBuilder(a);
     }
 
+    public static void init() { }
+
     /**
      * Start building an argument class for flag events
      *
      */
-    public ArgBuilder() {
-    }
+    public ArgBuilder() { }
 
     public ArgBuilder(Args newArgs) {
         a.setPlayerName(newArgs.playerName());

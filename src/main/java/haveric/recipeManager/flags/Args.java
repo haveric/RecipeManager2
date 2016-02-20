@@ -1,13 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,34 +9,31 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
+import haveric.recipeManagerCommon.flags.AbstractArgs;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
  */
-public class Args {
+public class Args extends AbstractArgs {
     private Player player;
-    private String playerName;
     private Location location;
     private BaseRecipe recipe;
     private RMCRecipeType recipeType;
     private Inventory inventory;
     private ItemResult result;
-    private Object extra;
 
-    private List<String> reasons;
-    private List<String> effects;
+    protected Args() { }
 
-    protected Args() {
-    }
-
-    public static void init() {
-    }
+    public static void init() { }
 
     public void setPlayer(Player newPlayer) {
         player = newPlayer;
-    }
-
-    public void setPlayerName(String newPlayerName) {
-        playerName = newPlayerName;
     }
 
     public void setLocation(Location newLocation) {
@@ -67,10 +56,6 @@ public class Args {
         result = newResult;
     }
 
-    public void setExtra(Object newExtra) {
-        extra = newExtra;
-    }
-
     /**
      * Gets the Player object from either player() or playerName()
      *
@@ -82,14 +67,6 @@ public class Args {
 
     public boolean hasPlayer() {
         return player != null;
-    }
-
-    public String playerName() {
-        return playerName;
-    }
-
-    public boolean hasPlayerName() {
-        return playerName != null;
     }
 
     /**
@@ -137,77 +114,20 @@ public class Args {
         return result != null;
     }
 
-    public Object extra() {
-        return extra;
-    }
-
-    public boolean hasExtra() {
-        return extra != null;
-    }
-
-    public List<String> reasons() {
-        return reasons;
-    }
-
-    public boolean hasReasons() {
-        return (reasons != null && !reasons.isEmpty());
-    }
-
-    public void addCustomReason(String message) {
-        if (reasons == null) {
-            reasons = new ArrayList<String>();
-        }
-
-        reasons.add(message);
-    }
-
     public void addReason(Messages globalMessage, String customMessage, Object... variables) {
         addCustomReason(globalMessage.getCustom(customMessage, variables));
     }
 
-    public void clearReasons() {
-        if (reasons != null) {
-            reasons.clear();
-        }
-    }
-
     public void sendReasons(CommandSender sender, String prefix) {
-        sendList(sender, prefix, reasons);
-    }
-
-    public List<String> effects() {
-        return effects;
-    }
-
-    public boolean hasEffects() {
-        return (effects != null && !effects.isEmpty());
-    }
-
-    public void addCustomEffect(String message) {
-        if (effects == null) {
-            effects = new ArrayList<String>();
-        }
-
-        effects.add(message);
+        sendList(sender, prefix, reasons());
     }
 
     public void addEffect(Messages globalMessage, String customMessage, Object... variables) {
         addCustomEffect(globalMessage.getCustom(customMessage, variables));
     }
 
-    public void clearEffects() {
-        if (effects != null) {
-            effects.clear();
-        }
-    }
-
     public void sendEffects(CommandSender sender, String prefix) {
-        sendList(sender, prefix, effects);
-    }
-
-    public void clear() {
-        clearReasons();
-        clearEffects();
+        sendList(sender, prefix, effects());
     }
 
     private void sendList(CommandSender sender, String prefix, List<String> list) {

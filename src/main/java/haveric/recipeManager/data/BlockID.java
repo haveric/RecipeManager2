@@ -8,13 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class BlockID {
-    private transient int hash;
+import haveric.recipeManagerCommon.data.AbstractBlockID;
 
-    private UUID wid;
-    private int x;
-    private int y;
-    private int z;
+public class BlockID extends AbstractBlockID{
 
     public BlockID(Location location) {
         parseLocation(location);
@@ -29,29 +25,8 @@ public class BlockID {
         buildHash();
     }
 
-    /**
-     * @param id
-     * @param coords
-     * @throws IllegalArgumentException
-     *             if coordinate string isn't valid or id is null
-     */
     public BlockID(UUID id, String coords) {
-        Validate.notNull(id, "id argument must not be null!");
-        Validate.notNull(coords, "coords argument must not be null!");
-
-        wid = id;
-
-        try {
-            String[] s = coords.split(",", 3);
-
-            x = Integer.parseInt(s[0]);
-            y = Integer.parseInt(s[1]);
-            z = Integer.parseInt(s[2]);
-        } catch (Throwable e) {
-            throw new IllegalArgumentException("Coords argument must have 3 numbers separated by commas!");
-        }
-
-        buildHash();
+        super(id, coords);
     }
 
     private void parseLocation(Location location) {
@@ -63,10 +38,6 @@ public class BlockID {
         z = location.getBlockZ();
 
         buildHash();
-    }
-
-    private void buildHash() {
-        hash = (wid.toString() + ":" + x + ":" + y + ":" + z + ":").hashCode();
     }
 
     public static BlockID fromString(UUID id, String coords) {
@@ -92,29 +63,6 @@ public class BlockID {
         return world.getBlockAt(x, y, z);
     }
 
-    public UUID getWorldID() {
-        return wid;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getZ() {
-        return z;
-    }
-
-    /**
-     * @return coordinates in x,y,z format string
-     */
-    public String getCoordsString() {
-        return x + "," + y + "," + z;
-    }
-
     /**
      * Get world by the world ID stored
      *
@@ -122,29 +70,5 @@ public class BlockID {
      */
     public World getWorld() {
         return Bukkit.getWorld(wid);
-    }
-
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj == null) {
-            return false;
-        }
-
-        if (!(obj instanceof BlockID)) {
-            return false;
-        }
-
-        BlockID b = (BlockID) obj;
-
-        return (b.x == x && b.y == y && b.z == z && b.wid.equals(wid));
     }
 }
