@@ -1,15 +1,10 @@
 package haveric.recipeManager;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.BrewingStand;
@@ -41,9 +36,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
@@ -58,7 +50,6 @@ import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnRandomEvent;
 import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
-import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.data.BrewingStandData;
 import haveric.recipeManager.data.BrewingStands;
 import haveric.recipeManager.data.FurnaceData;
@@ -80,13 +71,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
  * RecipeManager handled events
  */
 public class Events implements Listener {
-    protected Events() {
-        // events are registered in the reload() method
-
-        for (World world : Bukkit.getWorlds()) {
-            worldLoad(world);
-        }
-    }
+    protected Events() { }
 
     protected void clean() {
         HandlerList.unregisterAll(this);
@@ -684,6 +669,11 @@ public class Events implements Listener {
     }
 
     private void furnaceClick(InventoryClickEvent event, Furnace furnace, Player player) throws Throwable {
+        FurnaceData data = Furnaces.get(furnace.getLocation());
+        if (data.getFueler() == null) {
+            data.setFueler(player.getName());
+        }
+
         if (!RecipeManager.getPlugin().canCraft(player)) {
             event.setCancelled(true);
             return;
@@ -713,8 +703,6 @@ public class Events implements Listener {
                                     event.setCancelled(true);
                                 }
 
-                                FurnaceData data = Furnaces.get(furnace.getLocation());
-
                                 data.setFueler(player.getName());
 
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
@@ -735,8 +723,6 @@ public class Events implements Listener {
                             if (recipe.hasFlag(FlagType.REMOVE)) {
                                 event.setCancelled(true);
                             }
-
-                            FurnaceData data = Furnaces.get(furnace.getLocation());
 
                             data.setFueler(player.getName());
 
@@ -765,7 +751,6 @@ public class Events implements Listener {
                 }
                 break;
             case 1: // FUEL slot
-                FurnaceData data = Furnaces.get(furnace.getLocation());
                 ItemStack fuel = ToolsItem.nullIfAir(cursor);
 
                 if (fuel != null) {
@@ -920,6 +905,8 @@ public class Events implements Listener {
                         SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(clicked);
 
                         if (recipe != null) {
+                            data.setFueler(player.getName());
+
                             ItemStack recipeIngredient = recipe.getIngredient();
                             if (ToolsItem.isSameItem(clicked, recipeIngredient, true)) {
                                 data = Furnaces.get(furnace.getLocation());
@@ -960,6 +947,7 @@ public class Events implements Listener {
 
                     if (similarItems && itemAmount < maxStack) { // if item has room for more and they're similar
                         event.setCancelled(true); // cancel only if we're going to mess with the items
+                        data.setFueler(player.getName());
 
                         int amount = itemAmount + clicked.getAmount(); // add the stacks together
                         int diff = amount - maxStack; // check to see if there are any leftovers
@@ -1363,99 +1351,6 @@ public class Events implements Listener {
                 break;
             default:
                 break;
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void worldLoad(WorldLoadEvent event) {
-        worldLoad(event.getWorld());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void chunkLoad(ChunkLoadEvent event) {
-        if (!event.isNewChunk()) {
-            findBlocks(event.getChunk(), true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void chunkUnload(ChunkUnloadEvent event) {
-        findBlocks(event.getChunk(), false);
-    }
-
-    protected void worldLoad(World world) {
-        Chunk[] chunks = world.getLoadedChunks();
-
-        for (Chunk chunk : chunks) {
-            findBlocks(chunk, true);
-        }
-    }
-
-    private void findBlocks(final Chunk chunk, final boolean add) {
-        if (chunk == null || !chunk.isLoaded()) {
-            return;
-        }
-
-        BlockState[] tileEntities;
-
-        // Workaround for CB issues with block states.
-        try {
-            tileEntities = chunk.getTileEntities();
-        // Loading Error for chunk at chunk.getX(), chunk.getZ(). Attempting workaround...
-        } catch (Throwable e) {
-            List<BlockState> list = new ArrayList<BlockState>(32);
-            int maxY = chunk.getWorld().getMaxHeight();
-
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    for (int y = 0; y < maxY; y++) {
-                        Block block = chunk.getBlock(x, y, z);
-
-                        switch (block.getType()) {
-                            case FURNACE:
-                            case BURNING_FURNACE:
-                            case BREWING_STAND:
-                                list.add(block.getState());
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-
-            tileEntities = list.toArray(new BlockState[list.size()]);
-        }
-
-        Set<BlockID> added;
-        if (add) {
-            added = new HashSet<BlockID>(tileEntities.length);
-        } else {
-            added = null;
-        }
-
-        for (BlockState state : tileEntities) {
-            if (state instanceof Furnace) {
-                BlockID id = BlockID.fromLocation(state.getLocation());
-
-                if (add) {
-                    Furnaces.set(id, (Furnace) state);
-                    added.add(id);
-                } else {
-                    Furnaces.remove(id);
-                }
-            } else if (state instanceof BrewingStand) {
-                BlockID id = BlockID.fromLocation(state.getLocation());
-                if (add) {
-                    BrewingStands.set(id, (BrewingStand) state);
-                } else {
-                    BrewingStands.remove(id);
-                }
-            }
-        }
-
-        if (add) {
-            Furnaces.cleanChunk(chunk, added);
         }
     }
 

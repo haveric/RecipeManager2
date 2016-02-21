@@ -2,16 +2,13 @@ package haveric.recipeManager.data;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Furnace;
@@ -32,21 +29,6 @@ public class Furnaces {
 
     public static void clean() {
         furnaces.clear();
-    }
-
-    public static void cleanChunk(Chunk chunk, Set<BlockID> added) {
-        Iterator<Entry<BlockID, FurnaceData>> it = furnaces.entrySet().iterator();
-        int x = chunk.getX();
-        int z = chunk.getZ();
-
-        while (it.hasNext()) {
-            Entry<BlockID, FurnaceData> e = it.next();
-            BlockID id = e.getKey();
-
-            if (Math.round(Math.floor(id.getX() / 16.0)) == x && Math.round(Math.floor(id.getZ() / 16.0)) == z && !added.contains(id)) {
-                it.remove();
-            }
-        }
     }
 
     public static Map<BlockID, FurnaceData> getFurnaces() {
