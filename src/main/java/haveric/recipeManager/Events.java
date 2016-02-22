@@ -624,7 +624,7 @@ public class Events implements Listener {
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
-                                if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
                                 } else {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
@@ -707,7 +707,7 @@ public class Events implements Listener {
 
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
-                                if (furnaceHandleFlaggable(recipe, a, true) && isRecipeSameAsResult(a)) {
+                                if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
                                 } else {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
@@ -740,7 +740,7 @@ public class Events implements Listener {
                                 Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
-                                if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
                                 } else {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
@@ -924,7 +924,7 @@ public class Events implements Listener {
                                     Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                     ItemResult result = recipe.getResult(a);
 
-                                    if (furnaceHandleFlaggable(recipe, a, true) && (result == null || furnaceHandleFlaggable(result, a, true)) && isRecipeSameAsResult(a)) {
+                                    if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
                                         inventory.setItem(targetSlot, clicked); // send the item to the slot
                                         event.setCurrentItem(null); // clear the clicked slot
                                         ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
@@ -982,7 +982,7 @@ public class Events implements Listener {
         return isSame;
     }
 
-    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean sendReasons) {
+    private boolean furnaceHandleFlaggable(Flaggable flaggable, Args a, boolean craft, boolean sendReasons) {
         if (flaggable == null) {
             return false;
         }
@@ -1011,15 +1011,17 @@ public class Events implements Listener {
             return false;
         }
 
-        a.clear();
+        if (craft) {
+            a.clear();
 
-        if (flaggable.sendCrafted(a)) {
-            a.sendEffects(a.player(), msg);
-        } else {
-            if (sendReasons) {
-                a.sendReasons(a.player(), msg);
+            if (flaggable.sendCrafted(a)) {
+                a.sendEffects(a.player(), msg);
+            } else {
+                if (sendReasons) {
+                    a.sendReasons(a.player(), msg);
+                }
+                return false;
             }
-            return false;
         }
 
         a.clear();
@@ -1050,7 +1052,7 @@ public class Events implements Listener {
 
             Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
-            if (!furnaceHandleFlaggable(fuelRecipe, a, false)) {
+            if (!furnaceHandleFlaggable(fuelRecipe, a, true, false)) {
                 event.setCancelled(true);
             }
 
@@ -1076,10 +1078,10 @@ public class Events implements Listener {
             Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
             ItemResult result = recipe.getResult(a);
 
-            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, false);
+            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, false, false);
             boolean resultFlaggable = false;
             if (result != null) {
-                resultFlaggable = furnaceHandleFlaggable(result, a, false);
+                resultFlaggable = furnaceHandleFlaggable(result, a, false, false);
             }
 
             if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
@@ -1166,10 +1168,10 @@ public class Events implements Listener {
 
             event.setResult(event.getResult());
 
-            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, true);
+            boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, true, true);
             boolean resultFlaggable = false;
             if (result != null) {
-                resultFlaggable = furnaceHandleFlaggable(result, a, true);
+                resultFlaggable = furnaceHandleFlaggable(result, a, true, true);
             }
 
             if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
