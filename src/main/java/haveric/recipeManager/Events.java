@@ -379,14 +379,25 @@ public class Events implements Listener {
                         a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
                     }
 
+                    boolean subtract = false;
+                    boolean onlyExtra = true;
                     if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
                         if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
-                            boolean onlyExtra = true;
                             if (event.isShiftClick() || recipe.isMultiResult()) {
                                 onlyExtra = false;
                             }
-                            recipe.subtractIngredients(inv, result, onlyExtra);
+                            subtract = true;
                         }
+                    }
+
+                    if (result.hasFlag(FlagType.NORESULT)) {
+                        event.setCurrentItem(new ItemStack(Material.AIR));
+                        subtract = true;
+                        onlyExtra = false;
+                    }
+
+                    if (subtract) {
+                        recipe.subtractIngredients(inv, result, onlyExtra);
                     }
 
                     // TODO call post-event ?
@@ -1177,7 +1188,7 @@ public class Events implements Listener {
             if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
                 event.setResult(new ItemStack(Material.AIR));
             } else {
-                if (a.result() == null || a.result().getType() == Material.AIR) {
+                if (a.result() == null || a.result().getType() == Material.AIR || result.hasFlag(FlagType.NORESULT)) {
                     event.setResult(new ItemStack(Material.AIR));
                 } else {
                     event.setResult(result.toItemStack());
