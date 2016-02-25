@@ -81,8 +81,7 @@ public class FlagPotionItem extends Flag {
 
     @Override
     public FlagPotionItem clone() {
-        super.clone();
-        return new FlagPotionItem(this);
+        return new FlagPotionItem((FlagPotionItem) super.clone());
     }
 
     public short getData() {

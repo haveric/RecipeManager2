@@ -51,8 +51,7 @@ public class FlagItemName extends Flag {
 
     @Override
     public FlagItemName clone() {
-        super.clone();
-        return new FlagItemName(this);
+        return new FlagItemName((FlagItemName) super.clone());
     }
 
     public String getName() {

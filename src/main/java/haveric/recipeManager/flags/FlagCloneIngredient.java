@@ -88,8 +88,7 @@ public class FlagCloneIngredient extends Flag {
 
     @Override
     public FlagCloneIngredient clone() {
-        super.clone();
-        return new FlagCloneIngredient(this);
+        return new FlagCloneIngredient((FlagCloneIngredient) super.clone());
     }
 
     /**

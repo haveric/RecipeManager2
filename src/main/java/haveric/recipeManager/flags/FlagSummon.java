@@ -697,7 +697,7 @@ public class FlagSummon extends Flag {
         }
 
         public ItemStack[] getEquip() {
-            return equip;
+            return equip.clone();
         }
 
         public void setEquip(ItemStack[] newEquip) {
@@ -705,7 +705,7 @@ public class FlagSummon extends Flag {
         }
 
         public float[] getDrop() {
-            return drop;
+            return drop.clone();
         }
 
         public void setDrop(float[] newDrop) {
@@ -913,8 +913,7 @@ public class FlagSummon extends Flag {
 
     @Override
     public FlagSummon clone() {
-        super.clone();
-        return new FlagSummon(this);
+        return new FlagSummon((FlagSummon) super.clone());
     }
 
     public List<Customization> getSpawnList() {

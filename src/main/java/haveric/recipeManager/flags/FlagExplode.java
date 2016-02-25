@@ -71,8 +71,7 @@ public class FlagExplode extends Flag {
 
     @Override
     public FlagExplode clone() {
-        super.clone();
-        return new FlagExplode(this);
+        return new FlagExplode((FlagExplode) super.clone());
     }
 
     public float getPower() {

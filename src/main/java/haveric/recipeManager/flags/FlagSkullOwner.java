@@ -50,8 +50,7 @@ public class FlagSkullOwner extends Flag {
 
     @Override
     public FlagSkullOwner clone() {
-        super.clone();
-        return new FlagSkullOwner(this);
+        return new FlagSkullOwner((FlagSkullOwner) super.clone());
     }
 
     public String getOwner() {

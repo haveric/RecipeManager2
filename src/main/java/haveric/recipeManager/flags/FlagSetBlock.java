@@ -61,8 +61,7 @@ public class FlagSetBlock extends Flag {
 
     @Override
     public FlagSetBlock clone() {
-        super.clone();
-        return new FlagSetBlock(this);
+        return new FlagSetBlock((FlagSetBlock) super.clone());
     }
 
     @Override

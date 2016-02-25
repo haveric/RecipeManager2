@@ -56,8 +56,7 @@ public class FlagNeedExp extends Flag {
 
     @Override
     public FlagNeedExp clone() {
-        super.clone();
-        return new FlagNeedExp(this);
+        return new FlagNeedExp((FlagNeedExp) super.clone());
     }
 
     public int getMinExp() {

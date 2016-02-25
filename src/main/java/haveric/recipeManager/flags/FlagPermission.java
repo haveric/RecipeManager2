@@ -57,8 +57,7 @@ public class FlagPermission extends Flag {
 
     @Override
     public FlagPermission clone() {
-        super.clone();
-        return new FlagPermission(this);
+        return new FlagPermission((FlagPermission) super.clone());
     }
 
     public Map<String, Boolean> getPermissions() {

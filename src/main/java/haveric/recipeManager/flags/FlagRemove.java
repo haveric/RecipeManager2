@@ -42,8 +42,7 @@ public class FlagRemove extends Flag {
 
     @Override
     public FlagRemove clone() {
-        super.clone();
-        return new FlagRemove(this);
+        return new FlagRemove((FlagRemove) super.clone());
     }
 
     @Override

@@ -38,8 +38,7 @@ public class FlagRestrict extends Flag {
 
     @Override
     public FlagRestrict clone() {
-        super.clone();
-        return new FlagRestrict(this);
+        return new FlagRestrict((FlagRestrict) super.clone());
     }
 
     public String getMessage() {

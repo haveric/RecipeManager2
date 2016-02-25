@@ -52,8 +52,7 @@ public class FlagMessage extends Flag {
 
     @Override
     public FlagMessage clone() {
-        super.clone();
-        return new FlagMessage(this);
+        return new FlagMessage((FlagMessage) super.clone());
     }
 
     public List<String> getMessages() {

@@ -72,8 +72,7 @@ public class FlagBannerItem extends Flag {
 
     @Override
     public FlagBannerItem clone() {
-        super.clone();
-        return new FlagBannerItem(this);
+        return new FlagBannerItem((FlagBannerItem) super.clone());
     }
 
     public DyeColor getBaseColor() {

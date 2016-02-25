@@ -93,7 +93,7 @@ public class FlagGameModeTest {
         flag.clearGameModes();
         try {
             flag.onParse("duck");
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             assertTrue(flag.getGameModes().isEmpty());
         }
     }

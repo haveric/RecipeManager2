@@ -65,7 +65,7 @@ public class FlagForChance extends Flag {
     }
 
 
-    public class ChanceFlag implements Cloneable {
+    public class ChanceFlag {
         private Flag flag;
         private float chance;
         private boolean autoChance = false;
@@ -128,8 +128,7 @@ public class FlagForChance extends Flag {
 
     @Override
     public FlagForChance clone() {
-        super.clone();
-        return new FlagForChance(this);
+        return new FlagForChance((FlagForChance) super.clone());
     }
 
     /**

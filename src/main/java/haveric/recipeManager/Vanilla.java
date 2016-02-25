@@ -57,7 +57,7 @@ public class Vanilla {
     /**
      * Banner special recipe result
      */
-    public static ItemStack RECIPE_BANNER = null;
+    protected static ItemStack RECIPE_BANNER = null;
 
     /**
      * Book cloning's special recipe

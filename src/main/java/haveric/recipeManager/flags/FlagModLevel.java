@@ -57,8 +57,7 @@ public class FlagModLevel extends Flag {
 
     @Override
     public FlagModLevel clone() {
-        super.clone();
-        return new FlagModLevel(this);
+        return new FlagModLevel((FlagModLevel) super.clone());
     }
 
     /**

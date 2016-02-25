@@ -30,8 +30,7 @@ public class FlagNoResult extends Flag {
 
     @Override
     public FlagNoResult clone() {
-        super.clone();
-        return new FlagNoResult(this);
+        return new FlagNoResult((FlagNoResult) super.clone());
     }
 
     @Override

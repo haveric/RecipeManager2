@@ -65,8 +65,7 @@ public class FlagEnchantItem extends Flag {
 
     @Override
     public FlagEnchantItem clone() {
-        super.clone();
-        return new FlagEnchantItem(this);
+        return new FlagEnchantItem((FlagEnchantItem) super.clone());
     }
 
     @Override

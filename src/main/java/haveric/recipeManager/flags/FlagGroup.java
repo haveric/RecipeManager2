@@ -61,8 +61,7 @@ public class FlagGroup extends Flag {
 
     @Override
     public FlagGroup clone() {
-        super.clone();
-        return new FlagGroup(this);
+        return new FlagGroup((FlagGroup) super.clone());
     }
 
     public Map<String, Boolean> getGroups() {

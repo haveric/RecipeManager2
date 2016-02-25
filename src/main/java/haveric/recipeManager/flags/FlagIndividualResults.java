@@ -36,8 +36,7 @@ public class FlagIndividualResults extends Flag {
 
     @Override
     public FlagIndividualResults clone() {
-        super.clone();
-        return new FlagIndividualResults(this);
+        return new FlagIndividualResults((FlagIndividualResults) super.clone());
     }
 
     @Override

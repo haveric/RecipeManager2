@@ -54,8 +54,7 @@ public class FlagModMoney extends Flag {
 
     @Override
     public FlagModMoney clone() {
-        super.clone();
-        return new FlagModMoney(this);
+        return new FlagModMoney((FlagModMoney) super.clone());
     }
 
     public char getModifier() {

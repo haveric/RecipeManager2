@@ -45,8 +45,7 @@ public class FlagHeight extends Flag {
 
     @Override
     public FlagHeight clone() {
-        super.clone();
-        return new FlagHeight(this);
+        return new FlagHeight((FlagHeight) super.clone());
     }
 
     public int getMinHeight() {

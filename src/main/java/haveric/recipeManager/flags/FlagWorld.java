@@ -51,8 +51,7 @@ public class FlagWorld extends Flag {
 
     @Override
     public FlagWorld clone() {
-        super.clone();
-        return new FlagWorld(this);
+        return new FlagWorld((FlagWorld) super.clone());
     }
 
     public Map<String, Boolean> getWorlds() {

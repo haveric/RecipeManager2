@@ -59,8 +59,7 @@ public class FlagHide extends Flag {
 
     @Override
     public FlagHide clone() {
-        super.clone();
-        return new FlagHide(this);
+        return new FlagHide((FlagHide) super.clone());
     }
 
     @Override

@@ -56,8 +56,7 @@ public class FlagSound extends Flag {
 
     @Override
     public FlagSound clone() {
-        super.clone();
-        return new FlagSound(this);
+        return new FlagSound((FlagSound) super.clone());
     }
 
     public Sound getSound() {

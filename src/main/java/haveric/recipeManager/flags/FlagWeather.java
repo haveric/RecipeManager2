@@ -63,8 +63,7 @@ public class FlagWeather extends Flag {
 
     @Override
     public FlagWeather clone() {
-        super.clone();
-        return new FlagWeather(this);
+        return new FlagWeather((FlagWeather) super.clone());
     }
 
     /**

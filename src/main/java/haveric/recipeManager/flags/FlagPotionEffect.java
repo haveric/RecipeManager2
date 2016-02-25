@@ -60,8 +60,7 @@ public class FlagPotionEffect extends Flag {
 
     @Override
     public FlagPotionEffect clone() {
-        super.clone();
-        return new FlagPotionEffect(this);
+        return new FlagPotionEffect((FlagPotionEffect) super.clone());
     }
 
     public Map<PotionEffect, Float> getEffects() {

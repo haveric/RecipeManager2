@@ -56,8 +56,7 @@ public class FlagItemLore extends Flag {
 
     @Override
     public FlagItemLore clone() {
-        super.clone();
-        return new FlagItemLore(this);
+        return new FlagItemLore((FlagItemLore) super.clone());
     }
 
     public List<String> getLore() {

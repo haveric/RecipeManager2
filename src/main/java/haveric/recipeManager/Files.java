@@ -69,7 +69,7 @@ public class Files {
     public static final String FILE_INFO_FLAGS = "recipe flags.html";
     public static final String FILE_INFO_BOOKS = "recipe books.html";
 
-    public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
+    protected static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
 
     private static final String BUKKIT_DOCS = "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/";
 

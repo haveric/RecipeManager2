@@ -66,8 +66,7 @@ public class FlagLaunchFirework extends Flag {
 
     @Override
     public FlagLaunchFirework clone() {
-        super.clone();
-        return new FlagLaunchFirework(this);
+        return new FlagLaunchFirework((FlagLaunchFirework) super.clone());
     }
 
     public FireworkMeta getFirework() {

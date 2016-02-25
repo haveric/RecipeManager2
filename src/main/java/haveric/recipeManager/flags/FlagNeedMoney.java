@@ -48,8 +48,7 @@ public class FlagNeedMoney extends Flag {
 
     @Override
     public FlagNeedMoney clone() {
-        super.clone();
-        return new FlagNeedMoney(this);
+        return new FlagNeedMoney((FlagNeedMoney) super.clone());
     }
 
     public double getMinMoney() {

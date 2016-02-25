@@ -43,8 +43,7 @@ public class FlagLeatherColor extends Flag {
 
     @Override
     public FlagLeatherColor clone() {
-        super.clone();
-        return new FlagLeatherColor(this);
+        return new FlagLeatherColor((FlagLeatherColor) super.clone());
     }
 
     @Override

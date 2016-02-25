@@ -57,8 +57,7 @@ public class FlagTemperature extends Flag {
 
     @Override
     public FlagTemperature clone() {
-        super.clone();
-        return new FlagTemperature(this);
+        return new FlagTemperature((FlagTemperature) super.clone());
     }
 
     public Double getLTETemp() {

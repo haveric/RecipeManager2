@@ -44,8 +44,7 @@ public class FlagBlockPowered extends Flag {
 
     @Override
     public FlagBlockPowered clone() {
-        super.clone();
-        return new FlagBlockPowered(this);
+        return new FlagBlockPowered((FlagBlockPowered) super.clone());
     }
 
     public boolean isIndirect() {

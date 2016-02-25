@@ -50,8 +50,7 @@ public class FlagFailMessage extends Flag {
 
     @Override
     public FlagFailMessage clone() {
-        super.clone();
-        return new FlagFailMessage(this);
+        return new FlagFailMessage((FlagFailMessage) super.clone());
     }
 
     public String getMessage() {

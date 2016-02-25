@@ -53,8 +53,7 @@ public class FlagCommand extends Flag {
 
     @Override
     public FlagCommand clone() {
-        super.clone();
-        return new FlagCommand(this);
+        return new FlagCommand((FlagCommand) super.clone());
     }
 
     /**

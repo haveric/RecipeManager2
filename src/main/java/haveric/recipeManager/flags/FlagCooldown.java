@@ -72,8 +72,7 @@ public class FlagCooldown extends Flag {
 
     @Override
     public FlagCooldown clone() {
-        super.clone();
-        return new FlagCooldown(this);
+        return new FlagCooldown((FlagCooldown) super.clone());
     }
 
     /**

@@ -62,8 +62,7 @@ public class FlagEnchantedBook extends Flag {
 
     @Override
     public Flag clone() {
-        super.clone();
-        return new FlagEnchantedBook(this);
+        return new FlagEnchantedBook((FlagEnchantedBook) super.clone());
     }
 
     public Map<Enchantment, Integer> getEnchants() {

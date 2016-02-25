@@ -56,8 +56,7 @@ public class FlagGameMode extends Flag {
 
     @Override
     public FlagGameMode clone() {
-        super.clone();
-        return new FlagGameMode(this);
+        return new FlagGameMode((FlagGameMode) super.clone());
     }
 
     public Set<GameMode> getGameModes() {

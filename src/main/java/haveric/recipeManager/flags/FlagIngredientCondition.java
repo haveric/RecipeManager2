@@ -1098,8 +1098,7 @@ public class FlagIngredientCondition extends Flag {
 
     @Override
     public FlagIngredientCondition clone() {
-        super.clone();
-        return new FlagIngredientCondition(this);
+        return new FlagIngredientCondition((FlagIngredientCondition) super.clone());
     }
 
     @Override

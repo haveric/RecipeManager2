@@ -57,8 +57,7 @@ public class FlagLightLevel extends Flag {
 
     @Override
     public FlagLightLevel clone() {
-        super.clone();
-        return new FlagLightLevel(this);
+        return new FlagLightLevel((FlagLightLevel) super.clone());
     }
 
     /**

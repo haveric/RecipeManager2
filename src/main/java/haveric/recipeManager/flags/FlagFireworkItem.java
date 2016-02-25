@@ -67,8 +67,7 @@ public class FlagFireworkItem extends Flag {
 
     @Override
     public FlagFireworkItem clone() {
-        super.clone();
-        return new FlagFireworkItem(this);
+        return new FlagFireworkItem((FlagFireworkItem) super.clone());
     }
 
     public int getPower() {

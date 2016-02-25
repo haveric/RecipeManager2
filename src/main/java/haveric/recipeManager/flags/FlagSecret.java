@@ -32,8 +32,7 @@ public class FlagSecret extends Flag {
 
     @Override
     public FlagSecret clone() {
-        super.clone();
-        return new FlagSecret(this);
+        return new FlagSecret((FlagSecret) super.clone());
     }
 
     @Override

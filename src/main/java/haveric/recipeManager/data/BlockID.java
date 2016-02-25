@@ -10,7 +10,7 @@ import org.bukkit.block.Block;
 
 import haveric.recipeManagerCommon.data.AbstractBlockID;
 
-public class BlockID extends AbstractBlockID{
+public class BlockID extends AbstractBlockID {
 
     public BlockID(Location location) {
         parseLocation(location);

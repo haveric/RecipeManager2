@@ -54,8 +54,7 @@ public class ItemResult extends ItemStack implements Flaggable {
 
     @Override
     public ItemResult clone() {
-        super.clone();
-        return new ItemResult(this);
+        return new ItemResult(super.clone());
     }
 
     public void setItemStack(ItemStack item) {

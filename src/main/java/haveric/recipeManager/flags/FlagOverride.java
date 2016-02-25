@@ -40,8 +40,7 @@ public class FlagOverride extends Flag {
 
     @Override
     public FlagOverride clone() {
-        super.clone();
-        return new FlagOverride(this);
+        return new FlagOverride((FlagOverride) super.clone());
     }
 
     @Override

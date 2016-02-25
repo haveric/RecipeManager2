@@ -79,8 +79,7 @@ public class FlagKeepItem extends Flag {
 
     @Override
     public FlagKeepItem clone() {
-        super.clone();
-        return new FlagKeepItem(this);
+        return new FlagKeepItem((FlagKeepItem) super.clone());
     }
 
     public Map<String, Object> getKeepItems() {

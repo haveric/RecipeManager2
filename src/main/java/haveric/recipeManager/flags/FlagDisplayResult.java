@@ -52,8 +52,7 @@ public class FlagDisplayResult extends Flag {
 
     @Override
     public FlagDisplayResult clone() {
-        super.clone();
-        return new FlagDisplayResult(this);
+        return new FlagDisplayResult((FlagDisplayResult) super.clone());
     }
 
     /**

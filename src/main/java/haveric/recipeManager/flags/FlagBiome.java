@@ -56,8 +56,7 @@ public class FlagBiome extends Flag {
 
     @Override
     public FlagBiome clone() {
-        super.clone();
-        return new FlagBiome(this);
+        return new FlagBiome((FlagBiome) super.clone());
     }
 
     public Map<Biome, Boolean> getBiomes() {

@@ -67,8 +67,7 @@ public class FlagBookItem extends Flag {
 
     @Override
     public FlagBookItem clone() {
-        super.clone();
-        return new FlagBookItem(this);
+        return new FlagBookItem((FlagBookItem) super.clone());
     }
 
     public String getTitle() {

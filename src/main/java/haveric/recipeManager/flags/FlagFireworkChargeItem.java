@@ -58,8 +58,7 @@ public class FlagFireworkChargeItem extends Flag {
 
     @Override
     public FlagFireworkChargeItem clone() {
-        super.clone();
-        return new FlagFireworkChargeItem(this);
+        return new FlagFireworkChargeItem((FlagFireworkChargeItem) super.clone());
     }
 
     public FireworkEffect getEffect() {

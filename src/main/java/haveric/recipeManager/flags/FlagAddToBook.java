@@ -45,8 +45,7 @@ public class FlagAddToBook extends Flag {
 
     @Override
     public FlagAddToBook clone() {
-        super.clone();
-        return new FlagAddToBook(this);
+        return new FlagAddToBook((FlagAddToBook) super.clone());
     }
 
     /**

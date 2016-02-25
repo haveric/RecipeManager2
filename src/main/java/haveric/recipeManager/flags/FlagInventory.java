@@ -53,8 +53,7 @@ public class FlagInventory extends Flag {
 
     @Override
     public FlagInventory clone() {
-        super.clone();
-        return new FlagInventory(this);
+        return new FlagInventory((FlagInventory) super.clone());
     }
 
     public List<InventoryType> getInventories() {

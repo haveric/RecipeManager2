@@ -55,8 +55,7 @@ public class FlagBroadcast extends Flag {
 
     @Override
     public FlagBroadcast clone() {
-        super.clone();
-        return new FlagBroadcast(this);
+        return new FlagBroadcast((FlagBroadcast) super.clone());
     }
 
     public String getMessage() {

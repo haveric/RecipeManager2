@@ -54,8 +54,7 @@ public class FlagHoldItem extends Flag {
 
     @Override
     public FlagHoldItem clone() {
-        super.clone();
-        return new FlagHoldItem(this);
+        return new FlagHoldItem((FlagHoldItem) super.clone());
     }
 
     public List<ItemStack> getItems() {

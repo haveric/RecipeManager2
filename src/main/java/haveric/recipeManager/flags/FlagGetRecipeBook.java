@@ -49,8 +49,7 @@ public class FlagGetRecipeBook extends Flag {
 
     @Override
     public FlagGetRecipeBook clone() {
-        super.clone();
-        return new FlagGetRecipeBook(this);
+        return new FlagGetRecipeBook((FlagGetRecipeBook) super.clone());
     }
 
     public String getBookID() {

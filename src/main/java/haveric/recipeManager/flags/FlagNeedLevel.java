@@ -51,8 +51,7 @@ public class FlagNeedLevel extends Flag {
 
     @Override
     public FlagNeedLevel clone() {
-        super.clone();
-        return new FlagNeedLevel(this);
+        return new FlagNeedLevel((FlagNeedLevel) super.clone());
     }
 
     public int getMinLevel() {

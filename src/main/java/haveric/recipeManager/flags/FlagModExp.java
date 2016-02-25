@@ -57,8 +57,7 @@ public class FlagModExp extends Flag {
 
     @Override
     public FlagModExp clone() {
-        super.clone();
-        return new FlagModExp(this);
+        return new FlagModExp((FlagModExp) super.clone());
     }
 
     public char getModifier() {
