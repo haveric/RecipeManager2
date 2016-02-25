@@ -15,6 +15,7 @@ This file will be automatically overwritten when a new version is installed.
 * New flag @NoResult
 ** Prevents the result item from being crafted
 ** Useful when giving items through @command or providing non-item results, such as @modexp
+* @Remove: Fixed removing combine recipes
 
 
 === v2.6.4 ===

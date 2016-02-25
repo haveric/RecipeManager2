@@ -539,17 +539,21 @@ public class RecipeProcessor implements Runnable {
 
         recipe.setIngredients(ingredients);
 
-        // get the results
-        List<ItemResult> results = new ArrayList<ItemResult>();
+        if (recipe.hasFlag(FlagType.REMOVE)) {
+            nextLine(); // Skip the results line, if it exists
+        } else {
+            // get the results
+            List<ItemResult> results = new ArrayList<ItemResult>();
 
-        if (!parseResults(recipe, results, true, false)) {
-            return false;
-        }
+            if (!parseResults(recipe, results, true, false)) {
+                return false;
+            }
 
-        recipe.setResults(results);
+            recipe.setResults(results);
 
-        if (recipe.getFirstResult() == null) {
-            return ErrorReporter.error("Recipe must have at least one non-air result!");
+            if (recipe.getFirstResult() == null) {
+                return ErrorReporter.error("Recipe must have at least one non-air result!");
+            }
         }
 
         // check if recipe already exists
