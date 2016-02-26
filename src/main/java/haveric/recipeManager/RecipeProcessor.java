@@ -20,8 +20,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import haveric.recipeManager.flags.ArgBuilder;
+import haveric.recipeManager.flags.Conditions;
 import haveric.recipeManager.flags.FlagIngredientCondition;
-import haveric.recipeManager.flags.FlagIngredientCondition.Conditions;
 import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
