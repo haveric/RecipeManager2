@@ -22,7 +22,7 @@ public class FlagHoldItem extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <item or false>", };
+            "{flag} <item or false> | [conditions]", };
     }
 
     @Override
@@ -32,8 +32,77 @@ public class FlagHoldItem extends Flag {
             "",
             "This flag can be used more than once to add more items, the player will need to hold one to craft.",
             "",
-            "The <item> argument can be in this format: material:data:amount",
-            "Just like recipe results, not all values from the item are required.", };
+            "The <item> argument can be in this format: material:data",
+            "",
+            "For [conditions] argument you may further specify what item must be used.",
+            "Conditions must be separated by | and can be specified in any order.",
+            "Condition list:",
+            "",
+            "  data <[!][&]num or min-max or all or vanilla or damaged or new>, [...]",
+            "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
+            "    One number is required, you can add another number separated by - character to make a number range.",
+            "    Additionally instead of the number you can specify 'item:data' to use the named data value.",
+            "    Special data values:",
+            "      all: Flips the data check to allow all data values instead of none initially.",
+            "      vanilla: Only allow data values within the vanilla ranges.",
+            "      new: Equivalent to 0, or an undamaged item.",
+            "      damaged: On weapons and armor, this is everything within vanilla limits that is considered a damaged item.",
+            "    Prefixing with '&' would make a bitwise operation on the data value.",
+            "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
+            "    Optionally you can add more data conditions separated by ',' that the held item must match against one to proceed.",
+            "    Defaults to the equivalent of !all.",
+
+            "",
+            "  enchant <name> [[!]num or min-max], [...]",
+            "    Condition for applied enchantments (not stored in books).",
+            "    This argument can be used more than once to add more enchantments as conditions.",
+            "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+            "    The 2nd argument is the levels, it's optional",
+            "    A number can be used as level to set that level as requirement.",
+            "    You can also use 'max' to use the max supported level for that enchantment.",
+            "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
+            "    Prefixing with '!' would ban the level or level range.",
+            "",
+            "  noenchant or !enchant",
+            "    Held item must have no enchantment",
+            "    Overrides enchant condition if set",
+            "",
+            "  bookenchant <name> [[!]num or min-max], [...]",
+            "    Condition for book enchantments (not applied enchantments)",
+            "    This argument can be used more than once to add more enchantments as conditions.",
+            "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+            "    The 2nd argument is the levels, it's optional",
+            "    A number can be used as level to set that level as requirement.",
+            "    You can also use 'max' to use the max supported level for that enchantment.",
+            "    Additionally a second number separated by - can be added to specify a level range, 'max' is also supported in ranged value.",
+            "    Prefixing with '!' would ban the level or level range.",
+            "",
+            "  nobookenchant or !bookenchant",
+            "    Held item must have no book enchantment",
+            "    Overrides bookenchant condition if set",
+            "",
+            "  amount <num>                     = stack amount",
+            "  name <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "  noname or !name",
+            "    Held item must have no/default name",
+            "    Overrides name condition if set",
+            "",
+            "  lore <text or regex:pattern>     = checks each lore line for a specific text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "  nolore or !lore",
+            "    Held item must have no lore",
+            "    Overrides lore condition if set",
+            "",
+            "  color <colorname or R,G,B>       = only works for leather armor, checks color, the values can be individual values or ranged separated by - char or you can use a color name constant, see '" + Files.FILE_INFO_NAMES + "' at 'DYE COLOR'.",
+            "",
+            "  nocolor or !color",
+            "    Only works for leather armor",
+            "    Held item must have default/vanilla color",
+            "    Overrides color condition if set",
+            "",
+            "  nometa or !meta",
+            "    Held item must have no metadata (enchants, bookenchants, name, lore, color)",
+            "    Overrides enchant, name, lore, color conditions if set",
+            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor", };
     }
 
     @Override
@@ -41,7 +110,7 @@ public class FlagHoldItem extends Flag {
         return new String[] {
             "{flag} iron_pickaxe // any data/damage value",
             "{flag} iron_axe:0 // only undamaged axe!",
-            //"{flag} chainmail_helmet | protection_fire:1 // requires chain helmet with any level of damage and fire protection enchant level 1",
+            "{flag} chainmail_helmet | enchant protection_fire 1 // requires chain helmet with any level of damage and fire protection enchant level 1",
             "{flag} false // makes all previous statements useless", };
     }
 
