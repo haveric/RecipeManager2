@@ -16,6 +16,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Prevents the result item from being crafted
 ** Useful when giving items through @command or providing non-item results, such as @modexp
 * @Remove: Fixed removing combine recipes
+* @HoldItem: Added conditions similar to @IngredientCondition
 
 
 === v2.6.4 ===

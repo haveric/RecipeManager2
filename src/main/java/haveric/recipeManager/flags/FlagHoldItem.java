@@ -135,13 +135,9 @@ public class FlagHoldItem extends Flag {
                 return true;
             }
 
-            boolean success = cond.checkIngredient(item, a);
-            if (success) {
+            if (cond.checkIngredient(item, a)) {
                 anySuccess = true;
-
-                if (cond.hasNeeded() && cond.getNeededLeft() > 0) {
-                    cond.setNeededLeft(cond.getNeededLeft() - 1);
-                }
+                break;
             }
         }
 
@@ -160,6 +156,9 @@ public class FlagHoldItem extends Flag {
                 found = checkConditions(held, a);
             }
         }
+
+        // Ignore ingredient reasons
+        a.clearReasons();
 
         if (!found) {
             a.addReason(Messages.FLAG_HOLDITEM, "", "{items}", s.toString());
