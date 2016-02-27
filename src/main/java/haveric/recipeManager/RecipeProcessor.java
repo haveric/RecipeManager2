@@ -240,7 +240,7 @@ public class RecipeProcessor implements Runnable {
 
         while (searchRecipes()) { // search for recipes...
             directiveLine = lineNum;
-            String directive = line;
+            String directive = line.toLowerCase();
             recipeName = null;
             int i = directive.indexOf(' ');
 
@@ -287,10 +287,12 @@ public class RecipeProcessor implements Runnable {
     }
 
     private boolean lineIsRecipe() {
+        String lowered = line.toLowerCase();
+
         for (RMCRecipeType type : RMCRecipeType.values()) {
             String directive = type.getDirective();
 
-            if (directive != null && (line.equals(directive) || line.startsWith(directive + " "))) {
+            if (directive != null && (lowered.equals(directive) || lowered.startsWith(directive + " "))) {
                 return true;
             }
         }
@@ -314,7 +316,7 @@ public class RecipeProcessor implements Runnable {
             line = reader.readLine();
 
             if (line != null) {
-                line = line.trim().toLowerCase();
+                line = line.trim();
             }
             return line != null;
         } catch (Throwable e) {
@@ -622,7 +624,7 @@ public class RecipeProcessor implements Runnable {
             float maxTime = -1;
 
             if (split.length >= 2) {
-                String[] timeSplit = split[1].trim().split("-");
+                String[] timeSplit = split[1].trim().toLowerCase().split("-");
 
                 if (timeSplit[0].equals("instant")) {
                     minTime = 0;
