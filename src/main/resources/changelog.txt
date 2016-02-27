@@ -1,28 +1,27 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== v2.7 Coming soon ===
+=== v2.7 ===
 * Fixed recipe parsing with material name/aliases starting with a directive (brew/craft/combine/smelt/fuel)
 * Added 'item datas.yml' to override max data/durability values for materials
-* Better handling of invalid Bukkit recipes
 * Fixed potion not being defined error on brewing recipes
-* @secret: Removed conflicting alias 'hide'
+* Better handling of invalid Bukkit recipes
+* @Remove: Fixed removing combine recipes
 * @ingredientcondition: Improved amount handling
+* @HoldItem: Added conditions similar to @IngredientCondition
+* @secret: Removed conflicting alias 'hide'
+* New flag @NoResult
+** Prevents the result item from being crafted
+** Useful when giving items through @command or providing non-item results, such as @modexp
 * Furnace improvements:
 ** Fixed Furnace/Brewing save data from getting erased on a restart
 ** Fixed shift clicking an ingredient into a furnace not setting the permission owner
 ** Fixed some flags getting called before craft in furnaces
-* New flag @NoResult
-** Prevents the result item from being crafted
-** Useful when giving items through @command or providing non-item results, such as @modexp
-* @Remove: Fixed removing combine recipes
-* @HoldItem: Added conditions similar to @IngredientCondition
 * /rmcreaterecipe improvements:
 ** Collapse recipes down to smallest craft size
 ** Added combine variant
 ** Fixed amount being added to ingredients instead of @ingredientcondition
 ** Clean up unneeded data and amount outputs
-
 
 === v2.6.4 ===
 * Only call furnace fuel events for custom fuels
