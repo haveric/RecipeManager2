@@ -1,12 +1,5 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -29,6 +22,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+
 public class CreateRecipeCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -48,45 +49,97 @@ public class CreateRecipeCommand implements CommandExecutor {
                     return true;
                 }
 
-                StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
+                StringBuilder craftString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
+                StringBuilder combineString = new StringBuilder(RMCRecipeType.COMBINE.getDirective()).append(Files.NL);
                 StringBuilder conditionString = new StringBuilder();
 
-                ItemStack slot1 = inventory.getItem(9);
-                ItemStack slot2 = inventory.getItem(10);
-                ItemStack slot3 = inventory.getItem(11);
+                parseResult(holdingStack, conditionString);
 
-                ItemStack slot4 = inventory.getItem(18);
-                ItemStack slot5 = inventory.getItem(19);
-                ItemStack slot6 = inventory.getItem(20);
+                ItemStack[] ingredients = new ItemStack[9];
+                ingredients[0] = inventory.getItem(9);
+                ingredients[1] = inventory.getItem(10);
+                ingredients[2] = inventory.getItem(11);
 
-                ItemStack slot7 = inventory.getItem(27);
-                ItemStack slot8 = inventory.getItem(28);
-                ItemStack slot9 = inventory.getItem(29);
+                ingredients[3] = inventory.getItem(18);
+                ingredients[4] = inventory.getItem(19);
+                ingredients[5] = inventory.getItem(20);
 
-                parseIngredient(slot1, recipeString, conditionString);
-                recipeString.append(" + ");
-                parseIngredient(slot2, recipeString, conditionString);
-                recipeString.append(" + ");
-                parseIngredient(slot3, recipeString, conditionString);
-                recipeString.append(Files.NL);
+                ingredients[6] = inventory.getItem(27);
+                ingredients[7] = inventory.getItem(28);
+                ingredients[8] = inventory.getItem(29);
 
-                parseIngredient(slot4, recipeString, conditionString);
-                recipeString.append(" + ");
-                parseIngredient(slot5, recipeString, conditionString);
-                recipeString.append(" + ");
-                parseIngredient(slot6, recipeString, conditionString);
-                recipeString.append(Files.NL);
+                Tools.trimItemMatrix(ingredients);
 
-                parseIngredient(slot7, recipeString, conditionString);
-                recipeString.append(" + ");
-                parseIngredient(slot8, recipeString, conditionString);
-                recipeString.append(" + ");
-                parseIngredient(slot9, recipeString, conditionString);
-                recipeString.append(Files.NL);
+                int width = 0;
+                int height = 0;
 
-                parseResult(holdingStack, recipeString);
-                recipeString.append(conditionString);
-                recipeString.append(Files.NL);
+                for (int h = 0; h < 3; h++) {
+                    for (int w = 0; w < 3; w++) {
+                        ItemStack item = ingredients[(h * 3) + w];
+
+                        if (item != null) {
+                            width = Math.max(width, w);
+                            height = Math.max(height, h);
+                        }
+                    }
+                }
+
+                width++;
+                height++;
+
+                parseIngredient(ingredients[0], craftString, conditionString);
+                if (width > 1) {
+                    craftString.append(" + ");
+                    parseIngredient(ingredients[1], craftString, conditionString);
+                }
+                if (width > 2) {
+                    craftString.append(" + ");
+                    parseIngredient(ingredients[2], craftString, conditionString);
+                }
+                craftString.append(Files.NL);
+
+                if (height > 1) {
+                    parseIngredient(ingredients[3], craftString, conditionString);
+                    if (width > 1) {
+                        craftString.append(" + ");
+                        parseIngredient(ingredients[4], craftString, conditionString);
+                    }
+                    if (width > 2) {
+                        craftString.append(" + ");
+                        parseIngredient(ingredients[5], craftString, conditionString);
+                    }
+                    craftString.append(Files.NL);
+                }
+
+                if (height > 2) {
+                    parseIngredient(ingredients[6], craftString, conditionString);
+                    if (width > 1) {
+                        craftString.append(" + ");
+                        parseIngredient(ingredients[7], craftString, conditionString);
+                    }
+                    if (width > 2) {
+                        craftString.append(" + ");
+                        parseIngredient(ingredients[8], craftString, conditionString);
+                    }
+                    craftString.append(Files.NL);
+                }
+
+                boolean first = true;
+                for (ItemStack item : ingredients) {
+                    if (item != null) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            combineString.append(" + ");
+                        }
+                        parseIngredientName(item, combineString);
+                    }
+                }
+                combineString.append(Files.NL);
+
+                StringBuilder recipeString = new StringBuilder();
+                recipeString.append(craftString).append(conditionString).append(Files.NL);
+                recipeString.append(combineString).append(conditionString).append(Files.NL);
 
                 file.getParentFile().mkdirs();
 
@@ -108,23 +161,9 @@ public class CreateRecipeCommand implements CommandExecutor {
     }
 
     private void parseIngredient(ItemStack item, StringBuilder recipeString, StringBuilder conditionString) {
-        String name;
+        parseIngredientName(item, recipeString);
 
-        if (item == null || item.getType() == Material.AIR) {
-            name = "air";
-        } else {
-            name = item.getType().toString().toLowerCase() + ":";
-
-            if (item.getDurability() == -1 || item.getDurability() == Vanilla.DATA_WILDCARD) {
-                name += "*";
-            } else {
-                name += item.getDurability();
-            }
-
-            if (item.getAmount() != 1) {
-                name += ":" + item.getAmount();
-            }
-
+        if (item != null && item.getType() != Material.AIR) {
             String ingredientCondition = "";
 
             ItemMeta meta = item.getItemMeta();
@@ -160,7 +199,26 @@ public class CreateRecipeCommand implements CommandExecutor {
                 conditionString.append('@').append(FlagType.INGREDIENTCONDITION.getName()).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
                 conditionString.append(Files.NL);
             }
+        }
+    }
 
+    private void parseIngredientName(ItemStack item, StringBuilder recipeString) {
+        String name;
+
+        if (item == null || item.getType() == Material.AIR) {
+            name = "air";
+        } else {
+            name = item.getType().toString().toLowerCase() + ":";
+
+            if (item.getDurability() == -1 || item.getDurability() == Vanilla.DATA_WILDCARD) {
+                name += "*";
+            } else {
+                name += item.getDurability();
+            }
+
+            if (item.getAmount() != 1) {
+                name += ":" + item.getAmount();
+            }
         }
 
         recipeString.append(name);

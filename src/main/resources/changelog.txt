@@ -17,6 +17,9 @@ This file will be automatically overwritten when a new version is installed.
 ** Useful when giving items through @command or providing non-item results, such as @modexp
 * @Remove: Fixed removing combine recipes
 * @HoldItem: Added conditions similar to @IngredientCondition
+* /rmcreaterecipe improvements:
+** Collapse recipes down to smallest craft size
+** Added combine variant
 
 
 === v2.6.4 ===
