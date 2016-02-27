@@ -21,6 +21,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Collapse recipes down to smallest craft size
 ** Added combine variant
 ** Fixed amount being added to ingredients instead of @ingredientcondition
+** Clean up unneeded data and amount outputs
 
 
 === v2.6.4 ===

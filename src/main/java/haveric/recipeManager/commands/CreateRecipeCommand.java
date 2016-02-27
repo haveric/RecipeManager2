@@ -212,12 +212,12 @@ public class CreateRecipeCommand implements CommandExecutor {
         if (item == null || item.getType() == Material.AIR) {
             name = "air";
         } else {
-            name = item.getType().toString().toLowerCase() + ":";
+            name = item.getType().toString().toLowerCase();
 
             if (item.getDurability() == -1 || item.getDurability() == Vanilla.DATA_WILDCARD) {
-                name += "*";
-            } else {
-                name += item.getDurability();
+                name += ":*";
+            } else if (item.getDurability() != 0){
+                name += ":" + item.getDurability();
             }
         }
 
@@ -225,7 +225,13 @@ public class CreateRecipeCommand implements CommandExecutor {
     }
 
     private void parseResult(ItemStack result, StringBuilder recipeString) {
-        recipeString.append("= ").append(result.getType().toString().toLowerCase()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
+        recipeString.append("= ").append(result.getType().toString().toLowerCase());
+        if (result.getDurability() != 0 || result.getAmount() > 1) {
+            recipeString.append(':').append(result.getDurability());
+        }
+        if (result.getAmount() > 1) {
+            recipeString.append(':').append(result.getAmount());
+        }
 
         if (result.getEnchantments().size() > 0) {
             for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
@@ -258,5 +264,4 @@ public class CreateRecipeCommand implements CommandExecutor {
 
         recipeString.append(Files.NL);
     }
-
 }
