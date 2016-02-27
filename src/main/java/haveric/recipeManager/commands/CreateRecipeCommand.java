@@ -189,6 +189,10 @@ public class CreateRecipeCommand implements CommandExecutor {
                 }
             }
 
+            if (item.getAmount() != 1) {
+                ingredientCondition += " | amount " + item.getAmount();
+            }
+
             if (item.getEnchantments().size() > 0) {
                 for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                     ingredientCondition += " | enchant " + entry.getKey().getName() + " " + entry.getValue();
@@ -214,10 +218,6 @@ public class CreateRecipeCommand implements CommandExecutor {
                 name += "*";
             } else {
                 name += item.getDurability();
-            }
-
-            if (item.getAmount() != 1) {
-                name += ":" + item.getAmount();
             }
         }
 
