@@ -144,6 +144,7 @@ public enum Messages {
     CRAFT_RECIPE_MULTI_FAILED("<yellow>NOTE: <white>That sound was the recipe failing by chance! See 'fail chance' in the result description."),
     CRAFT_RECIPE_MULTI_NOSHIFTCLICK("<yellow>NOTE: <white>Recipe has more than one result, shift+clicking will only craft it once."),
     CRAFT_RECIPE_MULTI_CURSORFULL("<yellow>NOTE: <white>Cursor is full or not same type as result, put the held item in inventory or use Shift+Click to craft one by one to inventory."),
+    CRAFT_RECIPE_MULTI_CHANCE_CURSORHASITEM("<yellow>NOTE: <white>Cursor has an item on a chance recipe, put the held item in inventory or use Shift+Click to craft one by one to inventory."),
 
     CRAFT_RECIPE_FLAG_NOSHIFTCLICK("<yellow>NOTE: <white>Recipe is special, shift-clicking will only craft it once."),
 

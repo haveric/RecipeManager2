@@ -454,6 +454,12 @@ public class Events implements Listener {
                     }
                 } else {
                     ItemStack cursor = event.getCursor();
+
+                    if (!recipe.hasFlag(FlagType.INDIVIDUALRESULTS) && cursor != null && cursor.getType() != Material.AIR) {
+                        Messages.CRAFT_RECIPE_MULTI_CHANCE_CURSORHASITEM.printOnce(player);
+                        return 0;
+                    }
+
                     ItemStack merged = ToolsItem.merge(cursor, result);
 
                     if (merged == null) {
@@ -462,6 +468,7 @@ public class Events implements Listener {
                     }
 
                     event.setCursor(merged);
+
                 }
             }
         } else {
