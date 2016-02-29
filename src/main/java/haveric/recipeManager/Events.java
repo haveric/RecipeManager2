@@ -307,7 +307,7 @@ public class Events implements Listener {
 
             Location location = Workbenches.get(player);
 
-            if (result == null) {
+            if (!event.isShiftClick() && result == null) {
                 event.setCancelled(true);
                 Messages.sendDenySound(player, location);
                 return;
@@ -440,7 +440,7 @@ public class Events implements Listener {
                 Messages.sendFailSound(player, a.location());
             } else {
                 if (event.isShiftClick()) {
-                    if (!recipe.hasNoShiftBit()) {
+                    if (recipe.hasNoShiftBit()) {
                         Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
                         return 0;
                     }
