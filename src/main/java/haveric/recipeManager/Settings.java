@@ -49,7 +49,7 @@ public class Settings {
 
     private static final boolean METRICS_DEFAULT = true;
 
-    private static final Material MATERIAL_FAIL_DEFAULT = Material.FIRE;
+    private static Material MATERIAL_FAIL_DEFAULT;
     private static final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
     private static final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
 
@@ -95,6 +95,12 @@ public class Settings {
         RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<String>();
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
+
+        try {
+            MATERIAL_FAIL_DEFAULT = Material.BARRIER;
+        } catch(NoClassDefFoundError e) {
+            MATERIAL_FAIL_DEFAULT = Material.FIRE;
+        }
 
         itemDatas = new HashMap<Material, Short>();
         materialNames = new HashMap<String, Material>();

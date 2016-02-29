@@ -1,4 +1,4 @@
-lastchanged: 2.5 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.7.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -80,7 +80,7 @@ metrics: true
 # Customize materials used when crafting recipes
 # Material names reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 material:
-  fail: FIRE              # Material shown on failed recipes (default: FIRE)
+  fail: BARRIER           # Material shown on failed recipes (default: BARRIER)
   secret: CHEST           # Material shown on secret recipes (default: CHEST)
   multiple-results: CHEST # Material shown on recipes with multiple results (default: CHEST)
 
