@@ -257,6 +257,12 @@ public class Updater {
                 } else {
                     String currentVersion = getCurrentVersion();
                     String latest = getLatestVersion();
+                    if (!currentBetaStatus.isEmpty()) {
+                        currentVersion += " " + currentBetaStatus;
+                    }
+                    if (!latestBetaStatus.isEmpty()) {
+                        latestVersion += " " + latestBetaStatus;
+                    }
 
                     if (latest != null) {
                         int compare = compareVersions();
