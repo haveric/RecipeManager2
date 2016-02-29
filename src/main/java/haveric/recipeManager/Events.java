@@ -382,18 +382,19 @@ public class Events implements Listener {
                     boolean subtract = false;
                     boolean onlyExtra = true;
                     if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
+                        if (event.isShiftClick() || recipe.isMultiResult()) {
+                            subtract = true;
+                            onlyExtra = false;
+                        }
                         if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
-                            if (event.isShiftClick() || recipe.isMultiResult()) {
-                                onlyExtra = false;
-                            }
                             subtract = true;
                         }
-                    }
 
-                    if (result.hasFlag(FlagType.NORESULT)) {
-                        event.setCurrentItem(new ItemStack(Material.AIR));
-                        subtract = true;
-                        onlyExtra = false;
+                        if (result.hasFlag(FlagType.NORESULT)) {
+                            event.setCurrentItem(new ItemStack(Material.AIR));
+                            subtract = true;
+                            onlyExtra = false;
+                        }
                     }
 
                     if (subtract) {
