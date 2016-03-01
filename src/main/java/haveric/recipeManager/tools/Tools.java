@@ -913,12 +913,23 @@ public class Tools {
         Sound sound = null;
 
         try {
-            sound = Sound.valueOf(newSound);
+            // set known sounds to make sure Enum isn't changing on us
+            if (newSound.equals("BLOCK_NOTE_BASS")) {
+                sound = Sound.BLOCK_NOTE_BASS;
+            } else if (newSound.equals("BLOCK_NOTE_PING")) {
+                sound = Sound.BLOCK_NOTE_PLING;
+            } else if (newSound.equals("BLOCK_ANVIL_USE")) {
+                sound = Sound.BLOCK_ANVIL_USE;
+            } else if (newSound.equals("ENTITY_ITEM_BREAK")) {
+                sound = Sound.ENTITY_ITEM_BREAK;
+            } else {
+                sound = Sound.valueOf(newSound);
+            }
         } catch (IllegalArgumentException e) {
             try {
                 sound = Sound.valueOf(oldSound);
             } catch (IllegalArgumentException e2) {
-                Messages.send(null, "Sound missing: " + newSound + " and " + oldSound);
+                // Sound is missing
             }
         }
 
