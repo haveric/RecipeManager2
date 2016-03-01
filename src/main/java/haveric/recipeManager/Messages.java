@@ -486,15 +486,15 @@ public enum Messages {
     }
 
     public static void sendDenySound(Player player, Location location) {
-        sendSound(player, location, Sound.NOTE_BASS, 0.8f, 4, Settings.getInstance().getSoundsFailedClick());
+        sendSound(player, location, Sound.BLOCK_NOTE_BASS, 0.8f, 4, Settings.getInstance().getSoundsFailedClick());
     }
 
     public static void sendFailSound(Player player, Location location) {
-        sendSound(player, location, Sound.NOTE_PLING, 0.8f, 4, Settings.getInstance().getSoundsFailed());
+        sendSound(player, location, Sound.BLOCK_NOTE_PLING, 0.8f, 4, Settings.getInstance().getSoundsFailed());
     }
 
     public static void sendRepairSound(Player player, Location location) {
-        sendSound(player, location, Sound.ANVIL_USE, 0.8f, 4, Settings.getInstance().getSoundsRepair());
+        sendSound(player, location, Sound.BLOCK_ANVIL_USE, 0.8f, 4, Settings.getInstance().getSoundsRepair());
     }
 
     private static void sendSound(Player player, Location location, Sound sound, float volume, float pitch, boolean condition) {
