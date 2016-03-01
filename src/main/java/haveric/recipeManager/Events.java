@@ -382,10 +382,16 @@ public class Events implements Listener {
                     boolean subtract = false;
                     boolean onlyExtra = true;
                     if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
-                        if (event.isShiftClick() || recipe.isMultiResult()) {
+                        if (event.isShiftClick() && (recipe.hasNoShiftBit() || result.hasNoShiftBit())) {
                             subtract = true;
                             onlyExtra = false;
                         }
+
+                        if (recipe.isMultiResult()) {
+                            subtract = true;
+                            onlyExtra = false;
+                        }
+
                         if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
                             subtract = true;
                         }
@@ -440,7 +446,7 @@ public class Events implements Listener {
                 Messages.sendFailSound(player, a.location());
             } else {
                 if (event.isShiftClick()) {
-                    if (recipe.hasNoShiftBit()) {
+                    if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
                         Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
                         return 0;
                     }
