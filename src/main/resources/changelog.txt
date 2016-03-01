@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== v2.7.2 ===
+* Minecraft 1.9 compatibility
+
 === v2.7.1 ===
 * Fixed ingredient subtracting issues
 * Prevent chance recipes from being cheated around by holding an item of the type you want

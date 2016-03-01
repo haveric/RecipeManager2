@@ -203,13 +203,14 @@ public class FlagKeepItem extends Flag {
                         short data = (short) (dmg + clone.getDurability());
 
                         if (data > maxDurability) {
+                            Sound soundItemBreak = Tools.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK");
                             if (a.hasLocation()) {
-                                a.location().getWorld().playSound(a.location(), Sound.ENTITY_ITEM_BREAK, 1.0f, 0.0f);
+                                a.location().getWorld().playSound(a.location(), soundItemBreak, 1.0f, 0.0f);
                             }
 
                             if (a.hasPlayer()) {
                                 if (!a.hasLocation()) {
-                                    a.player().playSound(a.player().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 0.0f);
+                                    a.player().playSound(a.player().getLocation(), soundItemBreak, 1.0f, 0.0f);
                                 }
 
                                 Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {

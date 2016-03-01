@@ -1,21 +1,5 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.BrewRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManagerCommon.util.ParseBit;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -32,6 +16,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -44,6 +29,22 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Messages;
+import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Settings;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.BrewRecipe;
+import haveric.recipeManager.recipes.CombineRecipe;
+import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 /**
  * Collection of conversion and useful methods
@@ -906,5 +907,21 @@ public class Tools {
         }
 
         return false;
+    }
+
+    public static Sound getSound(String newSound, String oldSound) {
+        Sound sound = null;
+
+        try {
+            sound = Sound.valueOf(newSound);
+        } catch (IllegalArgumentException e) {
+            try {
+                sound = Sound.valueOf(oldSound);
+            } catch (IllegalArgumentException e2) {
+                Messages.send(null, "Sound missing: " + newSound + " and " + oldSound);
+            }
+        }
+
+        return sound;
     }
 }

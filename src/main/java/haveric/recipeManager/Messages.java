@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
@@ -486,15 +487,18 @@ public enum Messages {
     }
 
     public static void sendDenySound(Player player, Location location) {
-        sendSound(player, location, Sound.BLOCK_NOTE_BASS, 0.8f, 4, Settings.getInstance().getSoundsFailedClick());
+        Sound soundBlockNoteBass = Tools.getSound("BLOCK_NOTE_BASS", "NOTE_BASS");
+        sendSound(player, location, soundBlockNoteBass, 0.8f, 4, Settings.getInstance().getSoundsFailedClick());
     }
 
     public static void sendFailSound(Player player, Location location) {
-        sendSound(player, location, Sound.BLOCK_NOTE_PLING, 0.8f, 4, Settings.getInstance().getSoundsFailed());
+        Sound soundBlockNotePling = Tools.getSound("BLOCK_NOTE_PLING", "NOTE_PLING");
+        sendSound(player, location, soundBlockNotePling, 0.8f, 4, Settings.getInstance().getSoundsFailed());
     }
 
     public static void sendRepairSound(Player player, Location location) {
-        sendSound(player, location, Sound.BLOCK_ANVIL_USE, 0.8f, 4, Settings.getInstance().getSoundsRepair());
+        Sound soundBlockAnvilUse = Tools.getSound("BLOCK_ANVIL_USE", "ANVIL_USE");
+        sendSound(player, location, soundBlockAnvilUse, 0.8f, 4, Settings.getInstance().getSoundsRepair());
     }
 
     private static void sendSound(Player player, Location location, Sound sound, float volume, float pitch, boolean condition) {
