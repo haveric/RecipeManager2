@@ -97,8 +97,10 @@ public class Settings {
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
         try {
+            // 1.8
             MATERIAL_FAIL_DEFAULT = Material.BARRIER;
-        } catch(NoClassDefFoundError e) {
+        } catch(NoSuchFieldError e) {
+            // 1.7
             MATERIAL_FAIL_DEFAULT = Material.FIRE;
         }
 

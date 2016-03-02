@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== v2.7.3 ===
+* Fixed compatibility with 1.7.x versions
+
 === v2.7.2 ===
 * Minecraft 1.9 compatibility 
 ** Should still be backwards compatible to some 1.7.x builds, but may need to drop support for 1.8 and down soon
