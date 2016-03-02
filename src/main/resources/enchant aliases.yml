@@ -1,4 +1,4 @@
-lastchanged: 2.3 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.7.3 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager enchant aliases
 #
@@ -19,12 +19,15 @@ arrow_knockback: punch
 damage_all: sharpness
 damage_arthropods: bane of arthropods
 damage_undead: smite
+depth_strider: depth strider
 dig_speed: efficiency
 durability: unbreaking
 fire_aspect: fire aspect
+frost_walker: frost walker
 loot_bonus_blocks: fortune
 loot_bonus_mobs: looting
 luck: luck of the sea
+mending: repair
 oxygen: respiration
 protection_environmental: protection
 protection_explosions: blast protection
@@ -33,7 +36,6 @@ protection_fire: fire protection
 protection_projectile: projectile protection
 silk_touch: silk touch
 water_worker: aqua affinity
-depth_strider: depth strider
 
 # add your own aliases if you want.
 
