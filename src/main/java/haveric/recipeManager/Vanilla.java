@@ -22,6 +22,7 @@ import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 
@@ -118,7 +119,7 @@ public class Vanilla {
         initialRecipes.put(new FuelRecipe(Material.COAL_BLOCK, 800), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
 
-        try {
+        if (Version.has18Support()) {
             initialRecipes.put(new FuelRecipe(Material.BANNER, 15), info);
 
             initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE, 15), info);
@@ -134,8 +135,6 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
 
             RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
-        } catch (NoSuchFieldError e) {
-            // Does not support 1.8 items
         }
 
         // Index fuel recipes

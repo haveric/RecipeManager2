@@ -37,6 +37,7 @@ import com.google.common.collect.Sets;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.FlagType.Bit;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
@@ -444,14 +445,6 @@ public class Files {
         if (fileExists(FILE_INFO_NAMES, overwrite)) {
             return;
         }
-        String serverVersion;
-        try {
-            @SuppressWarnings("unused")
-            PatternType[] patterns = PatternType.values();
-            serverVersion = "1.8";
-        } catch (NoClassDefFoundError e) {
-            serverVersion = "1.7";
-        }
 
         StringBuilder s = new StringBuilder(24000);
 
@@ -475,7 +468,7 @@ public class Files {
         s.append(NL).append("- <a href='#dyecolor'><b>DYE COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
 
-        if (serverVersion.equals("1.8")) {
+        if (Version.has18Support()) {
             s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
         }
 
@@ -656,7 +649,7 @@ public class Files {
             s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
         }
 
-        if (serverVersion.equals("1.8")) {
+        if (Version.has18Support()) {
             s.append(NL);
             s.append(NL);
             s.append(NL).append("<a name='bannerpattern'></a><a href='#contents'>^ Contents</a><h3>BANNER PATTERN LIST</h3>");

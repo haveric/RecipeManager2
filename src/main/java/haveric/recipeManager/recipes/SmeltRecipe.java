@@ -16,6 +16,7 @@ import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
@@ -23,6 +24,7 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 public class SmeltRecipe extends SingleResultRecipe {
     private ItemStack ingredient;
     private ItemResult fuel;
+    private float experience = 0;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
     private int hash;
@@ -48,6 +50,8 @@ public class SmeltRecipe extends SingleResultRecipe {
                 fuel = r.fuel.clone();
             }
 
+            experience = r.experience;
+
             minTime = r.minTime;
             maxTime = r.maxTime;
             hash = r.hash;
@@ -61,6 +65,10 @@ public class SmeltRecipe extends SingleResultRecipe {
     public SmeltRecipe(FurnaceRecipe recipe) {
         setIngredient(recipe.getInput());
         setResult(recipe.getResult());
+
+        if (Version.has19Support()) {
+            setExperience(recipe.getExperience());
+        }
     }
 
     public ItemStack getIngredient() {
@@ -84,6 +92,14 @@ public class SmeltRecipe extends SingleResultRecipe {
         } else {
             fuel = new ItemResult(newFuel).setRecipe(this);
         }
+    }
+
+    public void setExperience(float newExperience) {
+        experience = newExperience;
+    }
+
+    public float getExperience() {
+        return experience;
     }
 
     public boolean hasCustomTime() {
@@ -215,7 +231,7 @@ public class SmeltRecipe extends SingleResultRecipe {
             return null;
         }
 
-        return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability());
+        return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability(), getExperience());
     }
 
     public boolean hasIngredient() {

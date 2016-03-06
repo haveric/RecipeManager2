@@ -2,7 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 === v2.7.3 ===
-* Fixed compatibility with 1.7.x versions
+* Improved compatibility for 1.8.x and 1.7.x versions.
 * Added Frost Walker and Mending enchant aliases
 
 === v2.7.2 ===

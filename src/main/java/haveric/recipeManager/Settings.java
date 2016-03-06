@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 /**
@@ -96,11 +97,9 @@ public class Settings {
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
-        try {
-            // 1.8
+        if (Version.has18Support()) {
             MATERIAL_FAIL_DEFAULT = Material.BARRIER;
-        } catch(NoSuchFieldError e) {
-            // 1.7
+        } else {
             MATERIAL_FAIL_DEFAULT = Material.FIRE;
         }
 

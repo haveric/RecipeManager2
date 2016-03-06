@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.google.common.collect.ObjectArrays;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagBannerItem extends Flag {
@@ -36,13 +37,13 @@ public class FlagBannerItem extends Flag {
             "Patterns can be added after the base color and are separated by the '|' character",
             "  [pattern] is the banner pattern type",
         };
-        try {
+
+        if (Version.has18Support()) {
             description = ObjectArrays.concat(description, new String[] {
                 "    Values: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
             }, String.class);
-        } catch (NoClassDefFoundError e) {
-            // No 1.8 support
         }
+
         description = ObjectArrays.concat(description, new String[] {
             "  <color> is required for each pattern, color values are the same as <basecolor>",
             "  Multiple patterns can be added",

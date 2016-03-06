@@ -46,6 +46,7 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagSummon extends Flag {
@@ -101,12 +102,12 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
         };
-        try {
+
+        if (Version.has18Support()) {
             description = ObjectArrays.concat(description, new String[] {
                 String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()), }, String.class);
-        } catch (NoClassDefFoundError e) {
-            // No 1.8 support
         }
+
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "saddle [mount]", "adds saddle on creature (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount creature."),
             String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),

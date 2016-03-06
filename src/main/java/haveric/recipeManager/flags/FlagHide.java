@@ -5,6 +5,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
+import haveric.recipeManager.tools.Version;
 
 public class FlagHide extends Flag {
 
@@ -105,7 +106,7 @@ public class FlagHide extends Flag {
             return;
         }
 
-        try {
+        if (Version.has18Support()) {
             ItemMeta meta = a.result().getItemMeta();
 
             if (attributes) {
@@ -133,8 +134,6 @@ public class FlagHide extends Flag {
             }
 
             a.result().setItemMeta(meta);
-        } catch (NoClassDefFoundError e) {
-            // No 1.8 support
         }
     }
 }

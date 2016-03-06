@@ -912,7 +912,7 @@ public class Tools {
     public static Sound getSound(String newSound, String oldSound) {
         Sound sound = null;
 
-        try {
+        if (Version.has19Support()) {
             // set known sounds to make sure Enum isn't changing on us
             if (newSound.equals("BLOCK_NOTE_BASS")) {
                 sound = Sound.BLOCK_NOTE_BASS;
@@ -925,7 +925,7 @@ public class Tools {
             } else {
                 sound = Sound.valueOf(newSound);
             }
-        } catch (IllegalArgumentException e) {
+        } else {
             try {
                 sound = Sound.valueOf(oldSound);
             } catch (IllegalArgumentException e2) {

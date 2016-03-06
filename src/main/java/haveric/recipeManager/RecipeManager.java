@@ -59,7 +59,6 @@ public class RecipeManager extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
-
         FurnaceData.init(); // dummy caller
         BrewingStandData.init();
         Furnaces.load(); // load saved furnaces...

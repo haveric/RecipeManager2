@@ -479,7 +479,7 @@ public class RecipeProcessor implements Runnable {
             // get results
             List<ItemResult> results = new ArrayList<ItemResult>();
 
-            if (!parseResults(recipe, results, true, false)) { // results have errors
+            if (!parseResults(recipe, results)) { // results have errors
                 return false;
             }
 
@@ -547,7 +547,7 @@ public class RecipeProcessor implements Runnable {
             // get the results
             List<ItemResult> results = new ArrayList<ItemResult>();
 
-            if (!parseResults(recipe, results, true, false)) {
+            if (!parseResults(recipe, results)) {
                 return false;
             }
 
@@ -675,7 +675,7 @@ public class RecipeProcessor implements Runnable {
             ErrorReporter.setIgnoreErrors(true);
         }
 
-        boolean hasResults = parseResults(recipe, results, false, true);
+        boolean hasResults = parseResults(recipe, results);
 
         if (!isRemove) { // ignore results if we have @remove
             if (!hasResults) {
@@ -822,7 +822,7 @@ public class RecipeProcessor implements Runnable {
 
         List<ItemResult> results = new ArrayList<ItemResult>();
 
-        if (!parseResults(recipe, results, true, false)) { // results have errors
+        if (!parseResults(recipe, results)) { // results have errors
             return false;
         }
 
@@ -888,7 +888,15 @@ public class RecipeProcessor implements Runnable {
         return added > 0;
     }
 
-    private boolean parseResults(BaseRecipe recipe, List<ItemResult> results, boolean allowAir, boolean oneResult) throws Throwable {
+    private boolean parseResults(BaseRecipe recipe, List<ItemResult> results) throws Throwable {
+        boolean allowAir = true;
+        boolean oneResult = false;
+
+        if (recipe instanceof SmeltRecipe) {
+            allowAir = false;
+            oneResult = true;
+        }
+
         if (line == null) {
             return false;
         }

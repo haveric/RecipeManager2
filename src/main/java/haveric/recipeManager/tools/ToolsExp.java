@@ -1,6 +1,5 @@
 package haveric.recipeManager.tools;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -10,8 +9,6 @@ import org.bukkit.entity.Player;
  *         https://github.com/essentials/Essentials/blob/master/Essentials/src/net/ess3/craftbukkit/SetExpFix.java
  */
 public class ToolsExp {
-    private static String xpModel = null;
-
     // This method is used to update both the recorded total experience and displayed total experience.
     // We reset both types to prevent issues.
     public static void setTotalExperience(final Player player, final int exp) {
@@ -49,9 +46,8 @@ public class ToolsExp {
 
     public static int getExpAtLevel(final int level) {
         int xp;
-        String model = getXpModel();
 
-        if (model.equals("1.8")) {
+        if (Version.has18Support()) {
             xp = getExpAtLevel18(level);
         } else {
             xp = getExpAtLevel17(level);
@@ -127,24 +123,5 @@ public class ToolsExp {
         int nextLevel = player.getLevel();
 
         return getExpAtLevel(nextLevel) - exp;
-    }
-
-    private static String getXpModel() {
-        String model;
-
-        if (xpModel == null) {
-            try {
-                @SuppressWarnings("unused")
-                Material slime = Material.SLIME_BLOCK;
-
-                xpModel = "1.8";
-            } catch (NoSuchFieldError e) {
-                xpModel = "1.7";
-            }
-        }
-
-        model = xpModel;
-
-        return model;
     }
 }
