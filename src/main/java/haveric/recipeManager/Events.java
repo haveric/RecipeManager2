@@ -1140,7 +1140,7 @@ public class Events implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void afterBurn(RecipeManagerFuelBurnRandomEvent event) {
+    public void randomBurn(RecipeManagerFuelBurnRandomEvent event) {
         FuelRecipe recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
