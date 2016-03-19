@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.google.common.collect.ObjectArrays;
 
@@ -16,6 +17,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.ConditionsHold.ConditionsSlot;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -34,6 +36,7 @@ public class FlagHoldItem extends Flag {
             "Makes the recipe require crafter to hold an item.",
             "",
             "This flag can be used more than once to add more items, the player will need to hold one to craft.",
+            "Using the flag more than once with slot conditions will require an item in each slot added.",
             "",
             "The <item> argument can be in this format: material:data",
             "",
@@ -41,15 +44,24 @@ public class FlagHoldItem extends Flag {
             "Conditions must be separated by | and can be specified in any order.",
             "Condition list:",
             "",
+            "  slot <slotname>",
+            "    Changes the slot that is checked",
+            "    Slot name values:",
+            "      mainhand: selected hotbar slot. Defaults to this.",
         };
 
         if (Version.has19Support()) {
             description = ObjectArrays.concat(description, new String[] {
-            "  offhand",
-            "    Checks the offhand item instead of the main hand",
-            "", }, String.class);
+            "      offhand or shield: offhand slot.", }, String.class);
         }
+
         description = ObjectArrays.concat(description, new String[] {
+            "      helmet: Helmet slot.",
+            "      chest or chestplate: Chestplate slot.",
+            "      legs or leggings: Leggings slot.",
+            "      boots: Boots slot.",
+            "      inventory: Any inventory slot.",
+            "",
             "  data <[!][&]num or min-max or all or vanilla or damaged or new>, [...]",
             "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
             "    One number is required, you can add another number separated by - character to make a number range.",
@@ -63,7 +75,6 @@ public class FlagHoldItem extends Flag {
             "    Prefixing with '!' would reverse the statement's meaning making it not work with the value specified.",
             "    Optionally you can add more data conditions separated by ',' that the held item must match against one to proceed.",
             "    Defaults to the equivalent of !all.",
-
             "",
             "  enchant <name> [[!]num or min-max], [...]",
             "    Condition for applied enchantments (not stored in books).",
@@ -128,20 +139,14 @@ public class FlagHoldItem extends Flag {
             "{flag} false // makes all previous statements useless", };
     }
 
-
-    private Map<String, ConditionsHold> conditionsMainhand = new HashMap<String, ConditionsHold>();
-    private Map<String, ConditionsHold> conditionsOffhand = new HashMap<String, ConditionsHold>();
+    private Map<String, ConditionsHold> conditions = new HashMap<String, ConditionsHold>();
 
     public FlagHoldItem() {
     }
 
     public FlagHoldItem(FlagHoldItem flag) {
-        for (Entry<String, ConditionsHold> e : flag.conditionsMainhand.entrySet()) {
-            conditionsMainhand.put(e.getKey(), e.getValue().clone());
-        }
-
-        for (Entry<String, ConditionsHold> e : flag.conditionsOffhand.entrySet()) {
-            conditionsOffhand.put(e.getKey(), e.getValue().clone());
+        for (Entry<String, ConditionsHold> e : flag.conditions.entrySet()) {
+            conditions.put(e.getKey(), e.getValue().clone());
         }
     }
 
@@ -164,17 +169,9 @@ public class FlagHoldItem extends Flag {
             return false;
         }
 
-        boolean mainhand = true;
-        for (int i = 1; i < args.length; i ++) {
-            String arg = args[i].trim().toLowerCase();
-            if (arg.equals("offhand")) {
-                mainhand = false;
-            }
-        }
-
         ConditionsHold cond = new ConditionsHold();
         cond.setFlagType(getType());
-        setConditions(item, cond, mainhand);
+        setConditions(item, cond);
 
         cond.setIngredient(item);
 
@@ -183,30 +180,36 @@ public class FlagHoldItem extends Flag {
         return true;
     }
 
-    public void setConditions(ItemStack item, ConditionsHold cond, boolean mainHand) {
+    public void setConditions(ItemStack item, ConditionsHold cond) {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
 
         String conditionIdentifier = Tools.convertItemToStringId(item) + "-" + cond.hashCode();
-        if (mainHand) {
-            conditionsMainhand.put(conditionIdentifier, cond);
-        } else {
-            conditionsOffhand.put(conditionIdentifier, cond);
-        }
+        conditions.put(conditionIdentifier, cond);
     }
 
-    public List<ConditionsHold> getConditions(ItemStack item, boolean mainHand) {
+    public int getNumConditionsOfSlot(ConditionsSlot slot) {
+        int num = 0;
+
+        Iterator<Entry<String, ConditionsHold>> iter = conditions.entrySet().iterator();
+
+        while (iter.hasNext()) {
+            if (slot.equals(iter.next().getValue().getSlot())) {
+                num++;
+            }
+        }
+
+        return num;
+    }
+
+    public List<ConditionsHold> getConditions(ItemStack item) {
         if (item == null) {
             return null;
         }
 
         List<ConditionsHold> conditionsList = new ArrayList<ConditionsHold>();
-        Iterator<Entry<String, ConditionsHold>> iter;
-        if (mainHand) {
-            iter = conditionsMainhand.entrySet().iterator();
-        } else {
-            iter = conditionsOffhand.entrySet().iterator();
-        }
+        Iterator<Entry<String, ConditionsHold>> iter = conditions.entrySet().iterator();
+
         while (iter.hasNext()) {
             Entry<String, ConditionsHold> entry = iter.next();
             String key = entry.getKey();
@@ -227,20 +230,20 @@ public class FlagHoldItem extends Flag {
      *            arguments to store reasons or null to just use return value.
      * @return true if passed, false otherwise
      */
-    public boolean checkConditions(ItemStack item, Args a, boolean mainHand) {
+    public boolean checkConditions(ItemStack item, Args a, ConditionsSlot slot) {
         if (item == null) {
             return false;
         }
 
         boolean anySuccess = false;
-        List<ConditionsHold> condList = getConditions(item, mainHand);
+        List<ConditionsHold> condList = getConditions(item);
 
         for (ConditionsHold cond : condList) {
             if (cond == null) {
                 return true;
             }
 
-            if (cond.checkIngredient(item, a)) {
+            if (slot.equals(cond.getSlot()) && cond.checkIngredient(item, a)) {
                 anySuccess = true;
                 break;
             }
@@ -255,37 +258,61 @@ public class FlagHoldItem extends Flag {
         boolean found = false;
 
         if (a.hasPlayer()) {
+            boolean mainFound = true;
+            boolean offFound = true;
+            boolean helmetFound = true;
+            boolean chestFound = true;
+            boolean legsFound = true;
+            boolean bootsFound = true;
+            boolean inventoryFound = true;
+
+            PlayerInventory inventory = a.player().getInventory();
+
             if (Version.has19Support()) {
-                boolean mainFound = false;
-                if (conditionsMainhand.isEmpty()) {
-                    mainFound = true;
-                } else {
-                    ItemStack heldMainhand = a.player().getInventory().getItemInMainHand();
-                    if (heldMainhand != null) {
-                        mainFound = checkConditions(heldMainhand, a, true);
-                    }
+                if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
+                    mainFound = checkConditions(inventory.getItemInMainHand(), a, ConditionsSlot.MAINHAND);
                 }
 
-                boolean offFound = false;
-                if (conditionsOffhand.isEmpty()) {
-                    offFound = true;
-                } else {
-                    ItemStack heldOffhand = a.player().getInventory().getItemInOffHand();
-                    if (heldOffhand != null) {
-                        offFound = checkConditions(heldOffhand, a, false);
-                    }
+                if (getNumConditionsOfSlot(ConditionsSlot.OFFHAND) > 0) {
+                    offFound = checkConditions(inventory.getItemInOffHand(), a, ConditionsSlot.OFFHAND);
                 }
-
-                found = mainFound && offFound;
             } else {
-                ItemStack held = a.player().getItemInHand();
-
-                if (held != null) {
-                    found = checkConditions(held, a, true);
+                if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
+                    mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
                 }
             }
 
+            if (getNumConditionsOfSlot(ConditionsSlot.HELMET) > 0) {
+                helmetFound = checkConditions(inventory.getHelmet(), a, ConditionsSlot.HELMET);
+            }
 
+            if (getNumConditionsOfSlot(ConditionsSlot.CHEST) > 0) {
+                chestFound = checkConditions(inventory.getChestplate(), a, ConditionsSlot.CHEST);
+            }
+
+            if (getNumConditionsOfSlot(ConditionsSlot.LEGS) > 0) {
+                legsFound = checkConditions(inventory.getLeggings(), a, ConditionsSlot.LEGS);
+            }
+
+            if (getNumConditionsOfSlot(ConditionsSlot.BOOTS) > 0) {
+                bootsFound = checkConditions(inventory.getBoots(), a, ConditionsSlot.BOOTS);
+            }
+
+            if (getNumConditionsOfSlot(ConditionsSlot.INVENTORY) > 0) {
+                boolean anySuccess = false;
+                ItemStack[] storage = inventory.getContents();
+
+                for (ItemStack item : storage) {
+                    if (checkConditions(item, a, ConditionsSlot.INVENTORY)) {
+                        anySuccess = true;
+                        break;
+                    }
+                }
+
+                inventoryFound = anySuccess;
+            }
+
+            found = mainFound && offFound && helmetFound && chestFound && legsFound && bootsFound && inventoryFound;
         }
 
         // Ignore ingredient reasons
