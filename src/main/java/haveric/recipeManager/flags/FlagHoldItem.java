@@ -129,18 +129,18 @@ public class FlagHoldItem extends Flag {
     }
 
 
-    private Map<String, Conditions> conditionsMainhand = new HashMap<String, Conditions>();
-    private Map<String, Conditions> conditionsOffhand = new HashMap<String, Conditions>();
+    private Map<String, ConditionsHold> conditionsMainhand = new HashMap<String, ConditionsHold>();
+    private Map<String, ConditionsHold> conditionsOffhand = new HashMap<String, ConditionsHold>();
 
     public FlagHoldItem() {
     }
 
     public FlagHoldItem(FlagHoldItem flag) {
-        for (Entry<String, Conditions> e : flag.conditionsMainhand.entrySet()) {
+        for (Entry<String, ConditionsHold> e : flag.conditionsMainhand.entrySet()) {
             conditionsMainhand.put(e.getKey(), e.getValue().clone());
         }
 
-        for (Entry<String, Conditions> e : flag.conditionsOffhand.entrySet()) {
+        for (Entry<String, ConditionsHold> e : flag.conditionsOffhand.entrySet()) {
             conditionsOffhand.put(e.getKey(), e.getValue().clone());
         }
     }
@@ -172,18 +172,18 @@ public class FlagHoldItem extends Flag {
             }
         }
 
-        Conditions cond = new Conditions();
+        ConditionsHold cond = new ConditionsHold();
         cond.setFlagType(getType());
         setConditions(item, cond, mainhand);
 
         cond.setIngredient(item);
 
-        Conditions.parse(value, args, cond);
+        ConditionsHold.parse(value, args, cond);
 
         return true;
     }
 
-    public void setConditions(ItemStack item, Conditions cond, boolean mainHand) {
+    public void setConditions(ItemStack item, ConditionsHold cond, boolean mainHand) {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
 
@@ -195,20 +195,20 @@ public class FlagHoldItem extends Flag {
         }
     }
 
-    public List<Conditions> getConditions(ItemStack item, boolean mainHand) {
+    public List<ConditionsHold> getConditions(ItemStack item, boolean mainHand) {
         if (item == null) {
             return null;
         }
 
-        List<Conditions> conditionsList = new ArrayList<Conditions>();
-        Iterator<Entry<String, Conditions>> iter;
+        List<ConditionsHold> conditionsList = new ArrayList<ConditionsHold>();
+        Iterator<Entry<String, ConditionsHold>> iter;
         if (mainHand) {
             iter = conditionsMainhand.entrySet().iterator();
         } else {
             iter = conditionsOffhand.entrySet().iterator();
         }
         while (iter.hasNext()) {
-            Entry<String, Conditions> entry = iter.next();
+            Entry<String, ConditionsHold> entry = iter.next();
             String key = entry.getKey();
             if (key.startsWith(String.valueOf(item.getTypeId() + ":" + item.getDurability() + "-"))) {
                 conditionsList.add(entry.getValue());
@@ -233,9 +233,9 @@ public class FlagHoldItem extends Flag {
         }
 
         boolean anySuccess = false;
-        List<Conditions> condList = getConditions(item, mainHand);
+        List<ConditionsHold> condList = getConditions(item, mainHand);
 
-        for (Conditions cond : condList) {
+        for (ConditionsHold cond : condList) {
             if (cond == null) {
                 return true;
             }

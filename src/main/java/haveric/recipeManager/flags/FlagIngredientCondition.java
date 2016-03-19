@@ -140,13 +140,13 @@ public class FlagIngredientCondition extends Flag {
             "{flag} stick | name Crafted Stick | nolore | noenchant // makes ingredient require a stick with a name of 'Crafted Stick', but no lore or enchantments.", };
     }
 
-    private Map<String, Conditions> conditions = new HashMap<String, Conditions>();
+    private Map<String, ConditionsIngredient> conditions = new HashMap<String, ConditionsIngredient>();
 
     public FlagIngredientCondition() {
     }
 
     public FlagIngredientCondition(FlagIngredientCondition flag) {
-        for (Entry<String, Conditions> e : flag.conditions.entrySet()) {
+        for (Entry<String, ConditionsIngredient> e : flag.conditions.entrySet()) {
             conditions.put(e.getKey(), e.getValue().clone());
         }
     }
@@ -170,24 +170,24 @@ public class FlagIngredientCondition extends Flag {
             return false;
         }
 
-        Conditions cond = new Conditions();
+        ConditionsIngredient cond = new ConditionsIngredient();
         cond.setFlagType(getType());
         setIngredientConditions(item, cond);
 
         cond.setIngredient(item);
 
-        Conditions.parse(value, args, cond);
+        ConditionsIngredient.parse(value, args, cond);
 
         return true;
     }
 
     @Override
     protected void onRegistered() {
-        Iterator<Conditions> it = conditions.values().iterator();
+        Iterator<ConditionsIngredient> it = conditions.values().iterator();
         BaseRecipe recipe = getRecipeDeep();
 
         while (it.hasNext()) {
-            Conditions c = it.next();
+            ConditionsIngredient c = it.next();
 
             if (c.getIngredient() != null && Tools.findItemInIngredients(recipe, c.getIngredient().getType(), c.getIngredient().getDurability()) == 0) {
                 ErrorReporter.error("Flag " + getType() + " couldn't find ingredient: " + ToolsItem.print(c.getIngredient()));
@@ -196,7 +196,7 @@ public class FlagIngredientCondition extends Flag {
         }
     }
     // TODO: Better handle conditions to allow multiple recipes per item:dur
-    public void setIngredientConditions(ItemStack item, Conditions cond) {
+    public void setIngredientConditions(ItemStack item, ConditionsIngredient cond) {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
 
@@ -204,15 +204,15 @@ public class FlagIngredientCondition extends Flag {
         conditions.put(conditionIdentifier, cond);
     }
 
-    public List<Conditions> getIngredientConditions(ItemStack item) {
+    public List<ConditionsIngredient> getIngredientConditions(ItemStack item) {
         if (item == null) {
             return null;
         }
 
-        List<Conditions> conditionsList = new ArrayList<Conditions>();
-        Iterator<Entry<String, Conditions>> iter = conditions.entrySet().iterator();
+        List<ConditionsIngredient> conditionsList = new ArrayList<ConditionsIngredient>();
+        Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
         while (iter.hasNext()) {
-            Entry<String, Conditions> entry = iter.next();
+            Entry<String, ConditionsIngredient> entry = iter.next();
             String key = entry.getKey();
             if (key.startsWith(String.valueOf(item.getTypeId() + ":" + item.getDurability() + "-"))) {
                 conditionsList.add(entry.getValue());
@@ -237,9 +237,9 @@ public class FlagIngredientCondition extends Flag {
         }
 
         boolean anySuccess = false;
-        List<Conditions> condList = getIngredientConditions(item);
+        List<ConditionsIngredient> condList = getIngredientConditions(item);
 
-        for (Conditions cond : condList) {
+        for (ConditionsIngredient cond : condList) {
             if (cond == null) {
                 return true;
             }
@@ -265,11 +265,11 @@ public class FlagIngredientCondition extends Flag {
         }
 
         if (a.inventory() instanceof CraftingInventory) {
-            Iterator<Entry<String, Conditions>> iter = conditions.entrySet().iterator();
+            Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
 
             while (iter.hasNext()) {
-                Entry<String, Conditions> entry = iter.next();
-                Conditions checkConditions = entry.getValue();
+                Entry<String, ConditionsIngredient> entry = iter.next();
+                ConditionsIngredient checkConditions = entry.getValue();
 
                 if (checkConditions.hasNeeded()) {
                     checkConditions.setNeededLeft(checkConditions.getNeeded());
@@ -287,8 +287,8 @@ public class FlagIngredientCondition extends Flag {
             iter = conditions.entrySet().iterator();
 
             while (iter.hasNext()) {
-                Entry<String, Conditions> entry = iter.next();
-                Conditions checkConditions = entry.getValue();
+                Entry<String, ConditionsIngredient> entry = iter.next();
+                ConditionsIngredient checkConditions = entry.getValue();
 
                 if (checkConditions.hasNeeded()) {
                     if (!a.hasReasons() && checkConditions.getNeededLeft() > 0) {

@@ -48,8 +48,6 @@ public class Conditions implements Cloneable {
     private boolean noBookEnchant = false;
     private boolean noColor = false;
     private boolean allSet = false;
-    private int needed;
-    private int neededLeft;
 
     // TODO mark
     // private boolean extinctRecipeBook;
@@ -97,9 +95,6 @@ public class Conditions implements Cloneable {
         setNoColor(original.isNoColor());
 
         setAllSet(original.isAllSet());
-
-        needed = original.needed;
-        setNeededLeft(original.getNeededLeft());
     }
 
     @Override
@@ -328,19 +323,6 @@ public class Conditions implements Cloneable {
 
     public boolean checkAmount(int amountToCheck) {
         return amountToCheck >= amount;
-    }
-
-    public int getNeeded() {
-        return needed;
-    }
-
-    public void setNeeded(int newNeeded) {
-        needed = newNeeded;
-        setNeededLeft(needed);
-    }
-
-    public boolean hasNeeded() {
-        return needed > 0;
     }
 
     /**
@@ -819,17 +801,8 @@ public class Conditions implements Cloneable {
      *            use {@link ArgBuilder} to build arguments, must not be null.
      * @return
      */
-    public boolean checkIngredient(ItemStack item, Args a) {
+    public boolean checkIngredient(ItemStack item, Args a, boolean addReasons) {
         boolean ok = true;
-        boolean addReasons = true;
-
-        if (hasNeeded()) {
-            addReasons = false;
-
-            if (getNeededLeft() == 0) {
-                return ok;
-            }
-        }
 
         if (!checkData(item.getDurability())) {
             if (a == null) {
@@ -1020,14 +993,6 @@ public class Conditions implements Cloneable {
         return ingredient;
     }
 
-    public int getNeededLeft() {
-        return neededLeft;
-    }
-
-    public void setNeededLeft(int neededLeft) {
-        this.neededLeft = neededLeft;
-    }
-
     public FlagType getFlagType() {
         return flagType;
     }
@@ -1036,310 +1001,295 @@ public class Conditions implements Cloneable {
         flagType = newFlagType;
     }
 
-    public static void parse(String value, String[] args, Conditions cond) {
+    public static void parseArg(String value, String arg, Conditions cond) {
         ItemStack item = cond.getIngredient();
-        for (int i = 1; i < args.length; i++) {
-            String arg = args[i].trim().toLowerCase();
 
-            if (arg.startsWith("offhand")) {
-                // Ignore holditem's offhand TODO: Handle this better
-                continue;
-            } else if (arg.startsWith("data")) {
-                if (item.getDurability() != Vanilla.DATA_WILDCARD) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
-                    continue;
+        if (arg.startsWith("data")) {
+            if (item.getDurability() != Vanilla.DATA_WILDCARD) {
+                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
+                return;
+            }
+
+            value = arg.substring("data".length()).trim();
+
+            String[] list = value.split(",");
+
+            for (String val : list) {
+                val = val.trim();
+                boolean not = val.charAt(0) == '!';
+
+                if (not) {
+                    val = val.substring(1).trim();
                 }
 
-                value = arg.substring("data".length()).trim();
-
-                String[] list = value.split(",");
-
-                for (String val : list) {
-                    val = val.trim();
-                    boolean not = val.charAt(0) == '!';
-
-                    if (not) {
-                        val = val.substring(1).trim();
+                short maxDurability = item.getType().getMaxDurability();
+                if (val.equals("all")) {
+                    cond.setAllSet(!not);
+                } else if (val.equals("vanilla")) {
+                    cond.addDataValueRange((short) 0, maxDurability, !not);
+                } else if (val.equals("damaged")) {
+                    if ((maxDurability - 1) > 0) {
+                        cond.addDataValueRange((short) 1, maxDurability, !not);
                     }
+                } else if (val.equals("new")) {
+                    cond.addDataValueRange((short) 0, (short) 0, !not);
+                } else if (val.matches("(.*):(.*)")) {
+                    ItemStack match = Tools.parseItem(val, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
-                    short maxDurability = item.getType().getMaxDurability();
-                    if (val.equals("all")) {
-                        cond.setAllSet(!not);
-                    } else if (val.equals("vanilla")) {
-                        cond.addDataValueRange((short) 0, maxDurability, !not);
-                    } else if (val.equals("damaged")) {
-                        if ((maxDurability - 1) > 0) {
-                            cond.addDataValueRange((short) 1, maxDurability, !not);
-                        }
-                    } else if (val.equals("new")) {
-                        cond.addDataValueRange((short) 0, (short) 0, !not);
-                    } else if (val.matches("(.*):(.*)")) {
-                        ItemStack match = Tools.parseItem(val, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
-
-                        if (match != null && match.getDurability() != Vanilla.DATA_WILDCARD) {
-                            cond.addDataValue(match.getDurability(), !not);
-                        } else {
-                            // ErrorReporter.warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
-                            continue;
-                        }
+                    if (match != null && match.getDurability() != Vanilla.DATA_WILDCARD) {
+                        cond.addDataValue(match.getDurability(), !not);
                     } else {
-                        String[] split = val.split("-");
-
-                        if (split.length > 1) {
-                            short min;
-                            short max;
-
-                            try {
-                                min = Short.valueOf(split[0].trim());
-                                max = Short.valueOf(split[1].trim());
-                            } catch (NumberFormatException e) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid numbers: " + val);
-                                continue;
-                            }
-
-                            if (min > max) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
-                                break;
-                            }
-
-                            cond.addDataValueRange(min, max, !not);
-                        } else {
-                            val = val.trim();
-                            boolean bitwise = val.charAt(0) == '&';
-
-                            if (bitwise) {
-                                val = val.substring(1).trim();
-                            }
-
-                            try {
-                                if (bitwise) {
-                                    cond.addDataBit(Short.valueOf(val), !not);
-                                } else {
-                                    cond.addDataValue(Short.valueOf(val), !not);
-                                }
-                            } catch (NumberFormatException e) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number: " + val);
-                                continue;
-                            }
-                        }
-                    }
-                }
-            } else if (arg.startsWith("amount")) {
-                value = arg.substring("amount".length()).trim();
-
-                try {
-                    cond.setAmount(Integer.parseInt(value));
-                } catch (NumberFormatException e) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'amount' argument with invalid number: " + value);
-                    continue;
-                }
-            } else if (arg.startsWith("needed")) {
-                value = arg.substring("needed".length()).trim();
-
-                try {
-                    cond.setNeeded(Integer.parseInt(value));
-                } catch (NumberFormatException e) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'needed' argument with invalid number: " + value);
-                    continue;
-                }
-            } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
-                cond.setNoEnchant(true);
-            } else if (arg.startsWith("enchant")) {
-                value = arg.substring("enchant".length()).trim();
-
-                String[] list = value.split(" ", 2);
-
-                value = list[0].trim();
-
-                Enchantment enchant = Tools.parseEnchant(value);
-
-                if (enchant == null) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid name: " + value);
-                    continue;
-                }
-
-                if (list.length > 1) {
-                    list = list[1].split(",");
-
-                    for (String s : list) {
-                        s = s.trim();
-                        boolean not = s.charAt(0) == '!';
-
-                        if (not) {
-                            s = s.substring(1).trim();
-                        }
-
-                        String[] split = s.split("-", 2);
-
-                        if (split.length > 1) {
-                            short min;
-                            short max;
-
-                            try {
-                                min = Short.valueOf(split[0].trim());
-                                max = Short.valueOf(split[1].trim());
-                            } catch (NumberFormatException e) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
-                                continue;
-                            }
-
-                            if (min > max) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
-                                continue;
-                            }
-
-                            cond.addEnchantLevelRange(enchant, min, max, !not);
-                        } else {
-                            try {
-                                cond.addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
-                            } catch (NumberFormatException e) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number: " + s);
-                                continue;
-                            }
-                        }
-                    }
-                } else {
-                    cond.addEnchant(enchant);
-                }
-            } else if (arg.startsWith("!bookenchant") || arg.startsWith("nobookenchant")) {
-                if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
-                    cond.setNoBookEnchant(true);
-                }
-            } else if (arg.startsWith("bookenchant")) {
-                if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
-                    continue;
-                }
-
-                value = arg.substring("bookenchant".length()).trim();
-
-                String[] list = value.split(" ", 2);
-
-                value = list[0].trim();
-
-                Enchantment enchant = Tools.parseEnchant(value);
-
-                if (enchant == null) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
-                    continue;
-                }
-
-                if (list.length > 1) {
-                    list = list[1].split(",");
-
-                    for (String s : list) {
-                        s = s.trim();
-                        boolean not = s.charAt(0) == '!';
-
-                        if (not) {
-                            s = s.substring(1).trim();
-                        }
-
-                        String[] split = s.split("-", 2);
-
-                        if (split.length > 1) {
-                            short min;
-                            short max;
-
-                            try {
-                                min = Short.valueOf(split[0].trim());
-                                max = Short.valueOf(split[1].trim());
-                            } catch (NumberFormatException e) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
-                                continue;
-                            }
-
-                            if (min > max) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
-                                continue;
-                            }
-
-                            cond.addBookEnchantLevelRange(enchant, min, max, !not);
-                        } else {
-                            try {
-                                cond.addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
-                            } catch (NumberFormatException e) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
-                                continue;
-                            }
-                        }
-                    }
-                } else {
-                    cond.addBookEnchant(enchant);
-                }
-            } else if (arg.startsWith("!color") || arg.startsWith("nocolor")) {
-                if (item.getItemMeta() instanceof LeatherArmorMeta) {
-                    cond.setNoColor(true);
-                }
-            } else if (arg.startsWith("color")) {
-                if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
-                    continue;
-                }
-
-                value = arg.substring("color".length()).trim();
-
-                DyeColor dye = RMCUtil.parseEnum(value, DyeColor.values());
-
-                if (dye == null) {
-                    String[] split = value.split(",", 3);
-
-                    if (split.length != 3) {
-                        ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
+                        // ErrorReporter.warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
                         continue;
                     }
+                } else {
+                    String[] split = val.split("-");
 
-                    // TODO: Figure out if these are needed
-                    //short[] minColor = new short[3];
-                    //short[] maxColor = new short[3];
-
-                    for (String element : split) {
-                        String[] range = element.split("-", 2);
+                    if (split.length > 1) {
+                        short min;
+                        short max;
 
                         try {
-                            short min = Short.valueOf(range[0].trim());
-                            short max = min;
-
-                            if (range.length > 1) {
-                                max = Short.valueOf(range[1].trim());
-                            }
-
-                            if (min < 0 || min > 255 || min > max || max > 255) {
-                                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
-                                break;
-                            }
-
-                            //minColor[c] = min;
-                            //maxColor[c] = max;
+                            min = Short.valueOf(split[0].trim());
+                            max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid number: " + value);
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid numbers: " + val);
+                            continue;
+                        }
+
+                        if (min > max) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
+                            break;
+                        }
+
+                        cond.addDataValueRange(min, max, !not);
+                    } else {
+                        val = val.trim();
+                        boolean bitwise = val.charAt(0) == '&';
+
+                        if (bitwise) {
+                            val = val.substring(1).trim();
+                        }
+
+                        try {
+                            if (bitwise) {
+                                cond.addDataBit(Short.valueOf(val), !not);
+                            } else {
+                                cond.addDataValue(Short.valueOf(val), !not);
+                            }
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number: " + val);
                             continue;
                         }
                     }
-                } else {
-                    cond.setColor(dye.getColor(), null);
                 }
-            } else if (arg.startsWith("!name") || arg.startsWith("noname")) {
-                cond.setNoName(true);
-            } else if (arg.startsWith("name")) {
-                value = args[i].trim().substring("name".length()).trim(); // preserve case for regex
-
-                cond.setName(value);
-            } else if (arg.startsWith("!lore") || arg.startsWith("nolore")) {
-                cond.setNoLore(true);
-            } else if (arg.startsWith("lore")) {
-                value = args[i].trim().substring("lore".length()).trim(); // preserve case for regex
-
-                cond.addLore(value);
-            } else if (arg.startsWith("!meta") || arg.startsWith("nometa")) {
-                cond.setNoMeta(true);
-            } else if (arg.startsWith("failmsg")) {
-                value = args[i].trim().substring("failmsg".length()).trim(); // preserve case... because it's a message
-
-                cond.setFailMessage(value);
-            } else {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has unknown argument: " + args[i]);
             }
+        } else if (arg.startsWith("amount")) {
+            value = arg.substring("amount".length()).trim();
+
+            try {
+                cond.setAmount(Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'amount' argument with invalid number: " + value);
+                return;
+            }
+        } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
+            cond.setNoEnchant(true);
+        } else if (arg.startsWith("enchant")) {
+            value = arg.substring("enchant".length()).trim();
+
+            String[] list = value.split(" ", 2);
+
+            value = list[0].trim();
+
+            Enchantment enchant = Tools.parseEnchant(value);
+
+            if (enchant == null) {
+                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid name: " + value);
+                return;
+            }
+
+            if (list.length > 1) {
+                list = list[1].split(",");
+
+                for (String s : list) {
+                    s = s.trim();
+                    boolean not = s.charAt(0) == '!';
+
+                    if (not) {
+                        s = s.substring(1).trim();
+                    }
+
+                    String[] split = s.split("-", 2);
+
+                    if (split.length > 1) {
+                        short min;
+                        short max;
+
+                        try {
+                            min = Short.valueOf(split[0].trim());
+                            max = Short.valueOf(split[1].trim());
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
+                            continue;
+                        }
+
+                        if (min > max) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
+                            continue;
+                        }
+
+                        cond.addEnchantLevelRange(enchant, min, max, !not);
+                    } else {
+                        try {
+                            cond.addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number: " + s);
+                            continue;
+                        }
+                    }
+                }
+            } else {
+                cond.addEnchant(enchant);
+            }
+        } else if (arg.startsWith("!bookenchant") || arg.startsWith("nobookenchant")) {
+            if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
+                cond.setNoBookEnchant(true);
+            }
+        } else if (arg.startsWith("bookenchant")) {
+            if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
+                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
+                return;
+            }
+
+            value = arg.substring("bookenchant".length()).trim();
+
+            String[] list = value.split(" ", 2);
+
+            value = list[0].trim();
+
+            Enchantment enchant = Tools.parseEnchant(value);
+
+            if (enchant == null) {
+                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
+                return;
+            }
+
+            if (list.length > 1) {
+                list = list[1].split(",");
+
+                for (String s : list) {
+                    s = s.trim();
+                    boolean not = s.charAt(0) == '!';
+
+                    if (not) {
+                        s = s.substring(1).trim();
+                    }
+
+                    String[] split = s.split("-", 2);
+
+                    if (split.length > 1) {
+                        short min;
+                        short max;
+
+                        try {
+                            min = Short.valueOf(split[0].trim());
+                            max = Short.valueOf(split[1].trim());
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
+                            continue;
+                        }
+
+                        if (min > max) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
+                            continue;
+                        }
+
+                        cond.addBookEnchantLevelRange(enchant, min, max, !not);
+                    } else {
+                        try {
+                            cond.addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
+                            continue;
+                        }
+                    }
+                }
+            } else {
+                cond.addBookEnchant(enchant);
+            }
+        } else if (arg.startsWith("!color") || arg.startsWith("nocolor")) {
+            if (item.getItemMeta() instanceof LeatherArmorMeta) {
+                cond.setNoColor(true);
+            }
+        } else if (arg.startsWith("color")) {
+            if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
+                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
+                return;
+            }
+
+            value = arg.substring("color".length()).trim();
+
+            DyeColor dye = RMCUtil.parseEnum(value, DyeColor.values());
+
+            if (dye == null) {
+                String[] split = value.split(",", 3);
+
+                if (split.length != 3) {
+                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
+                    return;
+                }
+
+                // TODO: Figure out if these are needed
+                //short[] minColor = new short[3];
+                //short[] maxColor = new short[3];
+
+                for (String element : split) {
+                    String[] range = element.split("-", 2);
+
+                    try {
+                        short min = Short.valueOf(range[0].trim());
+                        short max = min;
+
+                        if (range.length > 1) {
+                            max = Short.valueOf(range[1].trim());
+                        }
+
+                        if (min < 0 || min > 255 || min > max || max > 255) {
+                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
+                            break;
+                        }
+
+                        //minColor[c] = min;
+                        //maxColor[c] = max;
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid number: " + value);
+                        continue;
+                    }
+                }
+            } else {
+                cond.setColor(dye.getColor(), null);
+            }
+        } else if (arg.startsWith("!name") || arg.startsWith("noname")) {
+            cond.setNoName(true);
+        } else if (arg.startsWith("name")) {
+            value = arg.substring("name".length()).trim(); // preserve case for regex
+
+            cond.setName(value);
+        } else if (arg.startsWith("!lore") || arg.startsWith("nolore")) {
+            cond.setNoLore(true);
+        } else if (arg.startsWith("lore")) {
+            value = arg.substring("lore".length()).trim(); // preserve case for regex
+
+            cond.addLore(value);
+        } else if (arg.startsWith("!meta") || arg.startsWith("nometa")) {
+            cond.setNoMeta(true);
+        } else if (arg.startsWith("failmsg")) {
+            value = arg.substring("failmsg".length()).trim(); // preserve case... because it's a message
+
+            cond.setFailMessage(value);
+        } else {
+            ErrorReporter.warning("Flag " + cond.getFlagType() + " has unknown argument: " + arg);
         }
     }
 }

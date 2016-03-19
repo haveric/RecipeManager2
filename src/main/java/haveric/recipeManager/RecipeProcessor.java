@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import haveric.recipeManager.flags.ArgBuilder;
-import haveric.recipeManager.flags.Conditions;
+import haveric.recipeManager.flags.ConditionsIngredient;
 import haveric.recipeManager.flags.FlagIngredientCondition;
 import haveric.recipeManager.flags.FlagOverride;
 import haveric.recipeManager.flags.FlagType;
@@ -1050,9 +1050,9 @@ public class RecipeProcessor implements Runnable {
 
     private ItemStack parseConditions(BaseRecipe recipe, ItemStack item) {
         if (recipe.hasFlag(FlagType.INGREDIENTCONDITION)) {
-            List<Conditions> conditionsList = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(item);
+            List<ConditionsIngredient> conditionsList = recipe.getFlag(FlagIngredientCondition.class).getIngredientConditions(item);
 
-            for (Conditions conditions : conditionsList) {
+            for (ConditionsIngredient conditions : conditionsList) {
                 if (conditions != null && conditions.checkIngredient(item, ArgBuilder.create().build())) {
                     ItemMeta meta = item.getItemMeta();
 
