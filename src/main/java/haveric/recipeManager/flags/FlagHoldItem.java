@@ -10,11 +10,14 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 
+import com.google.common.collect.ObjectArrays;
+
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Messages;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.ParseBit;
 
 public class FlagHoldItem extends Flag {
@@ -27,7 +30,7 @@ public class FlagHoldItem extends Flag {
 
     @Override
     protected String[] getDescription() {
-        return new String[] {
+        String[] description = new String[] {
             "Makes the recipe require crafter to hold an item.",
             "",
             "This flag can be used more than once to add more items, the player will need to hold one to craft.",
@@ -38,6 +41,15 @@ public class FlagHoldItem extends Flag {
             "Conditions must be separated by | and can be specified in any order.",
             "Condition list:",
             "",
+        };
+
+        if (Version.has19Support()) {
+            description = ObjectArrays.concat(description, new String[] {
+            "  offhand",
+            "    Checks the offhand item instead of the main hand",
+            "", }, String.class);
+        }
+        description = ObjectArrays.concat(description, new String[] {
             "  data <[!][&]num or min-max or all or vanilla or damaged or new>, [...]",
             "    Condition for data/damage/durability, as argument you can specify data values separated by , character.",
             "    One number is required, you can add another number separated by - character to make a number range.",
@@ -102,7 +114,9 @@ public class FlagHoldItem extends Flag {
             "  nometa or !meta",
             "    Held item must have no metadata (enchants, bookenchants, name, lore, color)",
             "    Overrides enchant, name, lore, color conditions if set",
-            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor", };
+            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor", }, String.class);
+
+        return description;
     }
 
     @Override
@@ -115,14 +129,19 @@ public class FlagHoldItem extends Flag {
     }
 
 
-    private Map<String, Conditions> conditions = new HashMap<String, Conditions>();
+    private Map<String, Conditions> conditionsMainhand = new HashMap<String, Conditions>();
+    private Map<String, Conditions> conditionsOffhand = new HashMap<String, Conditions>();
 
     public FlagHoldItem() {
     }
 
     public FlagHoldItem(FlagHoldItem flag) {
-        for (Entry<String, Conditions> e : flag.conditions.entrySet()) {
-            conditions.put(e.getKey(), e.getValue().clone());
+        for (Entry<String, Conditions> e : flag.conditionsMainhand.entrySet()) {
+            conditionsMainhand.put(e.getKey(), e.getValue().clone());
+        }
+
+        for (Entry<String, Conditions> e : flag.conditionsOffhand.entrySet()) {
+            conditionsOffhand.put(e.getKey(), e.getValue().clone());
         }
     }
 
@@ -145,9 +164,17 @@ public class FlagHoldItem extends Flag {
             return false;
         }
 
+        boolean mainhand = true;
+        for (int i = 1; i < args.length; i ++) {
+            String arg = args[i].trim().toLowerCase();
+            if (arg.equals("offhand")) {
+                mainhand = false;
+            }
+        }
+
         Conditions cond = new Conditions();
         cond.setFlagType(getType());
-        setConditions(item, cond);
+        setConditions(item, cond, mainhand);
 
         cond.setIngredient(item);
 
@@ -156,21 +183,30 @@ public class FlagHoldItem extends Flag {
         return true;
     }
 
-    public void setConditions(ItemStack item, Conditions cond) {
+    public void setConditions(ItemStack item, Conditions cond, boolean mainHand) {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
 
         String conditionIdentifier = Tools.convertItemToStringId(item) + "-" + cond.hashCode();
-        conditions.put(conditionIdentifier, cond);
+        if (mainHand) {
+            conditionsMainhand.put(conditionIdentifier, cond);
+        } else {
+            conditionsOffhand.put(conditionIdentifier, cond);
+        }
     }
 
-    public List<Conditions> getConditions(ItemStack item) {
+    public List<Conditions> getConditions(ItemStack item, boolean mainHand) {
         if (item == null) {
             return null;
         }
 
         List<Conditions> conditionsList = new ArrayList<Conditions>();
-        Iterator<Entry<String, Conditions>> iter = conditions.entrySet().iterator();
+        Iterator<Entry<String, Conditions>> iter;
+        if (mainHand) {
+            iter = conditionsMainhand.entrySet().iterator();
+        } else {
+            iter = conditionsOffhand.entrySet().iterator();
+        }
         while (iter.hasNext()) {
             Entry<String, Conditions> entry = iter.next();
             String key = entry.getKey();
@@ -191,13 +227,13 @@ public class FlagHoldItem extends Flag {
      *            arguments to store reasons or null to just use return value.
      * @return true if passed, false otherwise
      */
-    public boolean checkConditions(ItemStack item, Args a) {
+    public boolean checkConditions(ItemStack item, Args a, boolean mainHand) {
         if (item == null) {
             return false;
         }
 
         boolean anySuccess = false;
-        List<Conditions> condList = getConditions(item);
+        List<Conditions> condList = getConditions(item, mainHand);
 
         for (Conditions cond : condList) {
             if (cond == null) {
@@ -219,11 +255,37 @@ public class FlagHoldItem extends Flag {
         boolean found = false;
 
         if (a.hasPlayer()) {
-            ItemStack held = a.player().getItemInHand();
+            if (Version.has19Support()) {
+                boolean mainFound = false;
+                if (conditionsMainhand.isEmpty()) {
+                    mainFound = true;
+                } else {
+                    ItemStack heldMainhand = a.player().getInventory().getItemInMainHand();
+                    if (heldMainhand != null) {
+                        mainFound = checkConditions(heldMainhand, a, true);
+                    }
+                }
 
-            if (held != null) {
-                found = checkConditions(held, a);
+                boolean offFound = false;
+                if (conditionsOffhand.isEmpty()) {
+                    offFound = true;
+                } else {
+                    ItemStack heldOffhand = a.player().getInventory().getItemInOffHand();
+                    if (heldOffhand != null) {
+                        offFound = checkConditions(heldOffhand, a, false);
+                    }
+                }
+
+                found = mainFound && offFound;
+            } else {
+                ItemStack held = a.player().getItemInHand();
+
+                if (held != null) {
+                    found = checkConditions(held, a, true);
+                }
             }
+
+
         }
 
         // Ignore ingredient reasons

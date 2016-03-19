@@ -216,7 +216,7 @@ public class CreateRecipeCommand implements CommandExecutor {
 
             if (item.getDurability() == -1 || item.getDurability() == Vanilla.DATA_WILDCARD) {
                 name += ":*";
-            } else if (item.getDurability() != 0){
+            } else if (item.getDurability() != 0) {
                 name += ":" + item.getDurability();
             }
         }

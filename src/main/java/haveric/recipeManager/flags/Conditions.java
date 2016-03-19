@@ -1041,7 +1041,10 @@ public class Conditions implements Cloneable {
         for (int i = 1; i < args.length; i++) {
             String arg = args[i].trim().toLowerCase();
 
-            if (arg.startsWith("data")) {
+            if (arg.startsWith("offhand")) {
+                // Ignore holditem's offhand TODO: Handle this better
+                continue;
+            } else if (arg.startsWith("data")) {
                 if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                     ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
                     continue;
