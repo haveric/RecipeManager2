@@ -25,7 +25,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -333,7 +335,7 @@ public class Tools {
         return item;
     }
 
-    public static Potion parsePotion(String value, FlagType type) {
+    public static Potion parsePotion18(String value, FlagType type) {
         String[] split = value.toLowerCase().split("\\|");
 
         if (split.length == 0) {
@@ -407,6 +409,90 @@ public class Tools {
         }
 
         potion.setSplash(splash);
+
+        return potion;
+    }
+
+    public static ItemStack parsePotion19(String value, FlagType type) {
+        ItemStack potion = new ItemStack(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+        PotionData potionData = null;
+
+        String[] split = value.toLowerCase().split("\\|");
+
+        if (split.length == 0) {
+            ErrorReporter.error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
+            return null;
+        }
+
+        boolean extended = false;
+        int level = 1;
+
+        for (String s : split) {
+            s = s.trim();
+
+            if (s.equals("splash")) {
+                potion.setType(Material.SPLASH_POTION);
+            } else if (s.equals("lingering")) {
+                potion.setType(Material.LINGERING_POTION);
+            } else if (s.equals("extended")) {
+                extended = true;
+            } else if (s.startsWith("type")) {
+                split = s.split(" ", 2);
+
+                if (split.length <= 1) {
+                    ErrorReporter.error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    return null;
+                }
+
+                value = split[1].trim();
+
+                try {
+                    PotionType newType = PotionType.valueOf(value.toUpperCase());
+
+                    boolean upgraded = false;
+                    if (newType.getMaxLevel() > 0) {
+                        int newLevel = Math.min(Math.max(level, 1), newType.getMaxLevel());
+                        if (newLevel == 2) {
+                            upgraded = true;
+                        }
+                    }
+                    potionData = new PotionData(newType, extended, upgraded);
+                } catch (IllegalArgumentException e) {
+                    ErrorReporter.error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                    return null;
+                }
+            } else if (s.startsWith("level")) {
+                split = s.split(" ", 2);
+
+                if (split.length <= 1) {
+                    ErrorReporter.error("Flag " + type + " has 'level' argument with no level!");
+                    continue;
+                }
+
+                value = split[1].trim();
+
+                if (value.equals("max")) {
+                    level = 9999;
+                } else {
+                    try {
+                        level = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.error("Flag " + type + " has invalid 'level' number: " + value);
+                    }
+                }
+            } else {
+                ErrorReporter.error("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
+            }
+        }
+
+        if (potionData == null || potionData.getType() == null) {
+            ErrorReporter.error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+            return null;
+        }
+
+        potionMeta.setBasePotionData(potionData);
+        potion.setItemMeta(potionMeta);
 
         return potion;
     }

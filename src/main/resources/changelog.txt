@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon
 * @HoldItem: Added slot attribute to support offhand, armor, and inventory
 ** See your 'recipe flags.html' file for usage information
+* Fixed potions in 1.9.x
 
 === v2.7.3 ===
 * Improved compatibility for 1.8.x and 1.7.x versions.
