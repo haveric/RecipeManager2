@@ -1,20 +1,19 @@
 package haveric.recipeManager.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.data.AbstractRecipeBook;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.data.AbstractRecipeBook;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class RecipeBook extends AbstractRecipeBook {
 
@@ -76,7 +75,7 @@ public class RecipeBook extends AbstractRecipeBook {
 
         String bookVolume = "";
         if (getVolumesNum() > 1) {
-            bookVolume = " - " + Messages.RECIPEBOOK_VOLUME.get("{volume}", volume);
+            bookVolume = " - " + Messages.getInstance().parse("recipebook.volume", "{volume}", volume);
         }
         meta.setTitle(getTitle() + bookVolume);
         meta.setAuthor(getAuthor() + RMCUtil.hideString(" " + getId() + " " + volume + " " + (System.currentTimeMillis() / 1000)));
@@ -88,7 +87,7 @@ public class RecipeBook extends AbstractRecipeBook {
             coverString.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(RMCChatColor.UNDERLINE).append(getTitle());
 
             if (getVolumesNum() > 1) {
-                coverString.append('\n').append(RMCChatColor.BLACK).append("  ").append(Messages.RECIPEBOOK_VOLUMEOFVOLUMES.get("{volume}", volume, "{volumes}", getVolumesNum()));
+                coverString.append('\n').append(RMCChatColor.BLACK).append("  ").append(Messages.getInstance().parse("recipebook.volumeofvolumes", "{volume}", volume, "{volumes}", getVolumesNum()));
             }
 
             coverString.append('\n').append(RMCChatColor.GRAY).append("        Published by\n        RecipeManager");
@@ -110,7 +109,7 @@ public class RecipeBook extends AbstractRecipeBook {
 
         if (contents) {
             index = new ArrayList<StringBuilder>();
-            index.add(new StringBuilder(256).append(Messages.RECIPEBOOK_HEADER_CONTENTS.get()).append("\n\n").append(RMCChatColor.BLACK));
+            index.add(new StringBuilder(256).append(Messages.getInstance().get("recipebook.header.contents")).append("\n\n").append(RMCChatColor.BLACK));
         }
 
         for (String name : volumes.get(volumeID)) {

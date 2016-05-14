@@ -1,19 +1,23 @@
 package haveric.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagBookItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.BOOK_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -109,7 +113,7 @@ public class FlagBookItem extends Flag {
         ItemResult result = getResult();
 
         if (result == null || !(result.getItemMeta() instanceof BookMeta)) {
-            ErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK or BOOK_AND_QUILL item!");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a WRITTEN_BOOK or BOOK_AND_QUILL item!");
             return false;
         }
 
@@ -135,12 +139,12 @@ public class FlagBookItem extends Flag {
 
         if (setTitle || setAuthor) {
             if (result.getType() == Material.BOOK_AND_QUILL) {
-                ErrorReporter.warning("Flag " + getType() + " can not have title or author set on BOOK_AND_QUILL, only WRITTEN_BOOK.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can not have title or author set on BOOK_AND_QUILL, only WRITTEN_BOOK.");
                 return true;
             }
 
             if (value.length() > 64) {
-                ErrorReporter.warning("Flag " + getType() + " has '" + (setTitle ? "title" : "author") + "' with over 64 characters, trimmed.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + (setTitle ? "title" : "author") + "' with over 64 characters, trimmed.");
                 value = value.substring(0, 64);
             }
 
@@ -151,11 +155,11 @@ public class FlagBookItem extends Flag {
             }
         } else if (key.equals("addpage")) {
             if (pages.size() == 50) {
-                ErrorReporter.warning("Flag " + getType() + " has over 50 pages added, they will be trimmed.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has over 50 pages added, they will be trimmed.");
             }
 
             if (value.length() > 256) {
-                ErrorReporter.warning("Flag " + getType() + " has 'addpage' with over 256 characters! It will be trimmed.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'addpage' with over 256 characters! It will be trimmed.");
             }
 
             addPage(value);

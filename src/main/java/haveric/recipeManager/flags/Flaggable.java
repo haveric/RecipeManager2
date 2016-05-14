@@ -2,9 +2,9 @@ package haveric.recipeManager.flags;
 
 public interface Flaggable {
     /**
-     * Shortcut for {@link Flags#hasFlag(FlagType)}
+     * Shortcut for {@link Flags#hasFlag(String)}
      */
-    boolean hasFlag(FlagType type);
+    boolean hasFlag(String type);
 
     /**
      * Checks if flag storage is null.<br>
@@ -20,14 +20,9 @@ public interface Flaggable {
     boolean hasNoShiftBit();
 
     /**
-     * Shortcut for {@link Flags#getFlag(FlagType)}
+     * Shortcut for {@link Flags#getFlag(String)}
      */
-    Flag getFlag(FlagType type);
-
-    /**
-     * Shortcut for {@link Flags#getFlag(Class)}
-     */
-    <T extends Flag> T getFlag(Class<T> flagClass);
+    Flag getFlag(String type);
 
     /**
      * Gets the Flag object that holds a list of flags.<br>

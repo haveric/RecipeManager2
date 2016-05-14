@@ -6,9 +6,11 @@ build.xml
 bin
 node_modules
 downloads/dev
-bin/
 
 # Gradle
 .gradle
 build/
-/build/
+
+# Intellij
+*.iml
+.idea/

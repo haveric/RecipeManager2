@@ -1,35 +1,20 @@
 package haveric.recipeManager;
 
+import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.BrewRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.MultiResultRecipe;
-import haveric.recipeManager.recipes.SingleResultRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import com.google.common.collect.ImmutableMap;
 
 /**
  * RecipeManager's recipe storage
@@ -54,10 +39,10 @@ public class Recipes {
     protected Map<String, BrewRecipe> indexBrew = new HashMap<String, BrewRecipe>();
     protected Map<String, BaseRecipe> indexName = new HashMap<String, BaseRecipe>();
 
-    protected Recipes() {
+    public Recipes() {
     }
 
-    protected void clean() {
+    public void clean() {
         index.clear();
         indexCraft.clear();
         indexCombine.clear();
@@ -430,5 +415,9 @@ public class Recipes {
 
     protected static void recipeResetResult(String name) {
         staticResults.remove(name);
+    }
+
+    public Map<BaseRecipe, RMCRecipeInfo> getIndex() {
+        return index;
     }
 }

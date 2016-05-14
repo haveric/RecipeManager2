@@ -1,18 +1,22 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.tools.Tools;
+import org.bukkit.enchantments.Enchantment;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.enchantments.Enchantment;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.tools.Tools;
-
 public class FlagEnchantItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.ENCHANT_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -81,7 +85,7 @@ public class FlagEnchantItem extends Flag {
         Enchantment enchant = Tools.parseEnchant(value);
 
         if (enchant == null) {
-            ErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
             return false;
         }
 
@@ -98,7 +102,7 @@ public class FlagEnchantItem extends Flag {
                 try {
                     level = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number: " + value);
+                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
                     return false;
                 }
             }

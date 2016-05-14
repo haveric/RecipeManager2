@@ -1,26 +1,16 @@
 package haveric.recipeManager;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
+import haveric.recipeManager.flags.FlagBit;
+import haveric.recipeManager.flags.FlagDescriptor;
+import haveric.recipeManager.flags.FlagFactory;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
@@ -32,23 +22,17 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import com.google.common.collect.Sets;
-
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.FlagType.Bit;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.io.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class Files {
     public static final String NL = System.getProperty("line.separator");
 
     private final CommandSender sender;
-    private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
 
     public static final String LASTCHANGED_CONFIG = "2.7.1";
-    public static final String LASTCHANGED_MESSAGES = "2.7.1";
+    public static final String LASTCHANGED_MESSAGES = "2.7.3";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.4";
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.7.3";
@@ -70,7 +54,7 @@ public class Files {
     public static final String FILE_INFO_FLAGS = "recipe flags.html";
     public static final String FILE_INFO_BOOKS = "recipe books.html";
 
-    protected static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
+    public static final Set<String> FILE_RECIPE_EXTENSIONS = Sets.newHashSet(".txt", ".rm");
 
     private static final String BUKKIT_DOCS = "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/";
 
@@ -97,7 +81,7 @@ public class Files {
         createFile(FILE_CHANGELOG, overwrite);
 
         if (overwrite) {
-            Messages.sendAndLog(newSender, "<gray>New version installed, information files and changelog have been overwritten.");
+            MessageSender.getInstance().sendAndLog(newSender, "<gray>New version installed, information files and changelog have been overwritten.");
         }
     }
 
@@ -105,7 +89,7 @@ public class Files {
         boolean newVersion = true;
 
         try {
-            File file = new File(DIR_PLUGIN + FILE_USED_VERSION);
+            File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_USED_VERSION);
             String currentVersion = RecipeManager.getPlugin().getDescription().getVersion();
 
             if (file.exists()) {
@@ -121,7 +105,7 @@ public class Files {
                 b.close();
             }
         } catch (Throwable e) {
-            Messages.error(null, e, null);
+            MessageSender.getInstance().error(null, e, null);
         }
 
         return newVersion;
@@ -129,7 +113,7 @@ public class Files {
 
     private void createDirectories() {
         // Create base directories
-        File file = new File(DIR_PLUGIN + "recipes" + File.separator + "disabled");
+        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled");
         file.mkdirs();
 
         // Create disable directory info file
@@ -145,7 +129,7 @@ public class Files {
             return false;
         }
 
-        return new File(DIR_PLUGIN + file).exists();
+        return new File(RecipeManager.getPlugin().getDataFolder() + File.separator + file).exists();
     }
 
     private void createFile(String file, boolean overwrite) {
@@ -162,21 +146,21 @@ public class Files {
         }
 
         StringBuilder s = new StringBuilder(32000);
-        Map<String, List<FlagType>> flags = new LinkedHashMap<String, List<FlagType>>();
+        Map<String, List<FlagDescriptor>> flags = new LinkedHashMap<String, List<FlagDescriptor>>();
 
         String[] category = new String[] { "SHARED FLAGS", "RECIPE ONLY FLAGS", "RESULT ONLY FLAGS" };
         String[] description = new String[] { "Usable on anything - file header, recipe header or result items.", "Usable only on file headers or recipe headers. Can not be used on result items.", "Usable only on recipe's result items. Can not be used on recipes or file header." };
 
-        int size = FlagType.values().length;
+        int size = FlagFactory.getInstance().getFlags().values().size();
 
         for (String c : category) {
-            flags.put(c, new ArrayList<FlagType>(size));
+            flags.put(c, new ArrayList<FlagDescriptor>(size));
         }
 
-        for (FlagType flag : FlagType.values()) {
-            if (flag.hasBit(Bit.RECIPE)) {
+        for (FlagDescriptor flag : FlagFactory.getInstance().getFlags().values()) {
+            if (flag.hasBit(FlagBit.RECIPE)) {
                 flags.get(category[1]).add(flag);
-            } else if (flag.hasBit(Bit.RESULT)) {
+            } else if (flag.hasBit(FlagBit.RESULT)) {
                 flags.get(category[2]).add(flag);
             } else {
                 flags.get(category[0]).add(flag);
@@ -216,8 +200,8 @@ public class Files {
 
             s.append(NL).append("<a href='#").append(key).append("'><b>").append(c).append("</b></a>");
 
-            for (FlagType flag : flags.get(c)) {
-                s.append(NL).append("- <a href='#").append(flag.getName()).append("'><b>@").append(flag.getName()).append("</b></a>");
+            for (FlagDescriptor flag : flags.get(c)) {
+                s.append(NL).append("- <a href='#").append(flag.getName()).append("'><b>").append(flag.getNameDisplay()).append("</b></a>");
             }
 
             s.append(NL);
@@ -232,7 +216,7 @@ public class Files {
             s.append(NL).append("<a name='").append(key).append("'></a><hr>  <b>").append(category[t]).append("</b>");
             s.append(NL).append("    ").append(description[t]);
 
-            for (FlagType flag : flags.get(category[t])) {
+            for (FlagDescriptor flag : flags.get(category[t])) {
                 String[] args = flag.getArguments();
                 String[] desc = flag.getDescription();
                 String[] ex = flag.getExamples();
@@ -262,7 +246,7 @@ public class Files {
                     }
                 }
 
-                if (!flag.hasBit(Bit.NO_FALSE)) {
+                if (!flag.hasBit(FlagBit.NO_FALSE)) {
                     s.append(NL).append(NL).append("    Setting to 'false' or 'remove' will disable the flag.");
                 }
 
@@ -274,7 +258,7 @@ public class Files {
                     }
                 }
 
-                int flagNamesLength = flag.getNames().length;
+                int flagNamesLength = flag.getNames().size();
                 if (flagNamesLength > 1) {
                     s.append(NL).append(NL).append("    <b>Aliases:</b> ");
 
@@ -283,7 +267,7 @@ public class Files {
                             s.append(", ");
                         }
 
-                        s.append('@').append(flag.getNames()[i]);
+                        s.append('@').append(flag.getNames().get(i));
                     }
                 }
 
@@ -294,9 +278,9 @@ public class Files {
             s.append(NL);
         }
 
-        Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_FLAGS);
+        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_FLAGS);
 
-        Messages.sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
+        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
     }
 
     private void createCommands(boolean overwrite) {
@@ -386,14 +370,14 @@ public class Files {
         s.append("</tr>");
 
         List<Permission> permissions = desc.getPermissions();
-        List<Permission> perms = new ArrayList<Permission>(permissions.size() + FlagType.values().length);
+        List<Permission> perms = new ArrayList<Permission>(permissions.size() + FlagFactory.getInstance().getFlags().size());
 
         perms.addAll(permissions);
 
         perms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + "*"));
 
-        for (FlagType type : FlagType.values()) {
-            if (type.hasBit(Bit.NO_SKIP_PERMISSION)) {
+        for (FlagDescriptor type : FlagFactory.getInstance().getFlags().values()) {
+            if (type.hasBit(FlagBit.NO_SKIP_PERMISSION)) {
                 continue;
             }
 
@@ -436,9 +420,9 @@ public class Files {
         s.append(NL);
         s.append("</pre>");
 
-        Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_COMMANDS);
+        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_COMMANDS);
 
-        Messages.sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
+        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
     }
 
     private void createNameIndex(boolean overwrite) {
@@ -665,8 +649,8 @@ public class Files {
         s.append(NL);
         s.append(NL).append("</pre>");
 
-        Tools.saveTextToFile(s.toString(), DIR_PLUGIN + FILE_INFO_NAMES);
+        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_NAMES);
 
-        Messages.sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_NAMES + "' file.");
+        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_NAMES + "' file.");
     }
 }

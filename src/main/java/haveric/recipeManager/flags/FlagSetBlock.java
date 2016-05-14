@@ -1,16 +1,19 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.util.ParseBit;
-
 public class FlagSetBlock extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.SET_BLOCK;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -73,7 +76,7 @@ public class FlagSetBlock extends Flag {
         ItemStack item = Tools.parseItem(value, 0, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
         if (item == null || !item.getType().isBlock()) {
-            ErrorReporter.error("Flag " + getType() + " has invalid block material type: " + value, "Note that block materials have IDs from 0 to 255.");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid block material type: " + value, "Note that block materials have IDs from 0 to 255.");
             return false;
         }
 
@@ -112,7 +115,7 @@ public class FlagSetBlock extends Flag {
             CraftingInventory inv = (CraftingInventory) a.inventory();
 
             if (inv.getSize() < 9) {
-                a.addReason(Messages.FLAG_SETBLOCK_NEEDSWORKBENCH, failMessage);
+                a.addReason("flag.setblock.needsworkbench", failMessage);
             }
         }
     }

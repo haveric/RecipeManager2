@@ -3,6 +3,11 @@ package haveric.recipeManager.flags;
 public class FlagSecret extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.SECRET;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag} [true or false]", };

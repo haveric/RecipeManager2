@@ -1,10 +1,20 @@
 package haveric.recipeManager;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Random;
-
+import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
+import haveric.recipeManager.commands.*;
+import haveric.recipeManager.data.BrewingStandData;
+import haveric.recipeManager.data.BrewingStands;
+import haveric.recipeManager.data.FurnaceData;
+import haveric.recipeManager.data.Furnaces;
+import haveric.recipeManager.flags.ArgBuilder;
+import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.flags.FlagLoader;
+import haveric.recipeManager.flags.FlagFactory;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.metrics.Metrics;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,28 +23,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
-import haveric.recipeManager.commands.BooksCommand;
-import haveric.recipeManager.commands.CheckCommand;
-import haveric.recipeManager.commands.CreateRecipeCommand;
-import haveric.recipeManager.commands.ExtractCommand;
-import haveric.recipeManager.commands.FindItemCommand;
-import haveric.recipeManager.commands.GetBookCommand;
-import haveric.recipeManager.commands.HelpCommand;
-import haveric.recipeManager.commands.RecipeCommand;
-import haveric.recipeManager.commands.ReloadBooksCommand;
-import haveric.recipeManager.commands.ReloadCommand;
-import haveric.recipeManager.commands.UpdateCommand;
-import haveric.recipeManager.data.BrewingStandData;
-import haveric.recipeManager.data.BrewingStands;
-import haveric.recipeManager.data.FurnaceData;
-import haveric.recipeManager.data.Furnaces;
-import haveric.recipeManager.flags.ArgBuilder;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.metrics.Metrics;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Random;
 
 /**
  * RecipeManager's main class<br>
@@ -75,7 +67,10 @@ public class RecipeManager extends JavaPlugin {
 
         Args.init(); // dummy method to avoid errors on 'reload' with updating
         ArgBuilder.init();
-        FlagType.init();
+
+        new FlagLoader();
+        FlagFactory.getInstance().init();
+        FlagFactory.getInstance().initPermissions();
         RecipeBooks.init();
 
         Files.init();
@@ -108,7 +103,7 @@ public class RecipeManager extends JavaPlugin {
 
     private void setupVault(PluginManager pm) {
         if (pm.getPlugin("Vault") == null) {
-            Messages.log("Vault was not found, economy features are not available.");
+            MessageSender.getInstance().log("Vault was not found, economy features are not available.");
         } else {
             RegisteredServiceProvider<Economy> econProvider = getServer().getServicesManager().getRegistration(Economy.class);
             if (econProvider != null) {
@@ -133,7 +128,7 @@ public class RecipeManager extends JavaPlugin {
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
         Settings.getInstance().reload(sender); // (re)load settings
         Files.reload(sender); // (re)generate info files if they do not exist
-        Messages.reload(sender); // (re)load messages from messages.yml
+        Messages.getInstance().reload(sender); // (re)load messages from messages.yml
 
         Updater.init(this, 32835, null);
 
@@ -203,12 +198,12 @@ public class RecipeManager extends JavaPlugin {
                     return pluginName;
                 }
 
-                Messages.debug("<red>Couldn't figure out plugin of package: " + packageName + " | class=" + trace.getClassName());
+                MessageSender.getInstance().debug("<red>Couldn't figure out plugin of package: " + packageName + " | class=" + trace.getClassName());
                 return null;
             }
         }
 
-        Messages.debug("<red>Couldn't find caller of " + method + "!");
+        MessageSender.getInstance().debug("<red>Couldn't find caller of " + method + "!");
         return null;
     }
 
@@ -256,7 +251,7 @@ public class RecipeManager extends JavaPlugin {
 
             plugin = null;
         } catch (Throwable e) {
-            Messages.error(null, e, null);
+            MessageSender.getInstance().error(null, e, null);
         }
     }
 
@@ -265,7 +260,6 @@ public class RecipeManager extends JavaPlugin {
      * @throws
      */
     public static RecipeManager getPlugin() {
-        validatePluginEnabled();
         return plugin;
     }
 
@@ -273,7 +267,6 @@ public class RecipeManager extends JavaPlugin {
      * @return Recipes class
      */
     public static Recipes getRecipes() {
-        validatePluginEnabled();
         return recipes;
     }
 
@@ -283,25 +276,11 @@ public class RecipeManager extends JavaPlugin {
      * @return RecipeBooks class
      */
     public static RecipeBooks getRecipeBooks() {
-        validatePluginEnabled();
         return recipeBooks;
     }
 
     public static void setRecipeBooks(RecipeBooks newRecipeBooks) {
         recipeBooks = newRecipeBooks;
-    }
-
-    private static void validatePluginEnabled() {
-        if (!isPluginFullyEnabled()) {
-            throw new IllegalAccessError("RecipeManager is not fully enabled at this point! Listen to RecipeManagerEnabledEvent.");
-        }
-    }
-
-    /**
-     * @return True if plugin is fully enabled and can be used
-     */
-    public static boolean isPluginFullyEnabled() {
-        return plugin != null;
     }
 
     /**

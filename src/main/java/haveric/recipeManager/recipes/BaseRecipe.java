@@ -1,15 +1,12 @@
 package haveric.recipeManager.recipes;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.flags.*;
 import org.bukkit.inventory.Recipe;
 
-import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.Flag;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flaggable;
-import haveric.recipeManager.flags.Flags;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 
@@ -48,19 +45,19 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     /**
      * Set the name of this recipe.
      *
-     * @param name
+     * @param newName
      *            should be a UNIQUE name
      */
     public void setName(String newName) {
         newName = newName.trim();
 
         if (newName.isEmpty()) {
-            ErrorReporter.error("Recipe names can not be empty!");
+            ErrorReporter.getInstance().error("Recipe names can not be empty!");
             return;
         }
 
         while (newName.charAt(0) == '+') {
-            ErrorReporter.error("Recipe names can not start with '+' character, removed!");
+            ErrorReporter.getInstance().error("Recipe names can not start with '+' character, removed!");
             newName = newName.substring(1);
         }
 
@@ -119,7 +116,7 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
 
     // From Flaggable interface
 
-    public boolean hasFlag(FlagType type) {
+    public boolean hasFlag(String type) {
         boolean hasFlag = false;
 
         if (flags != null) {
@@ -143,7 +140,7 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         return hasNoShiftBit;
     }
 
-    public Flag getFlag(FlagType type) {
+    public Flag getFlag(String type) {
         Flag flag = null;
 
         if (flags != null) {
@@ -151,16 +148,6 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         }
 
         return flag;
-    }
-
-    public <T extends Flag> T getFlag(Class<T> flagClass) {
-        T t = null;
-
-        if (flags != null) {
-            t = flags.getFlag(flagClass);
-        }
-
-        return t;
     }
 
     public Flags getFlags() {

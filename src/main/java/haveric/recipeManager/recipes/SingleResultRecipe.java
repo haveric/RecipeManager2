@@ -1,10 +1,9 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.flags.Flags;
-
+import haveric.recipeManager.messages.Messages;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -64,7 +63,7 @@ public class SingleResultRecipe extends BaseRecipe {
 
         if (r.getType() == Material.AIR && hasFlags()) {
             sendFailed(a);
-            a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+            a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
         }
 
         return r;

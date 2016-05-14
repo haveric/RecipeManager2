@@ -1,11 +1,9 @@
 package haveric.recipeManager;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,9 +11,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * RecipeManager's settings loaded from its config.yml, values are read-only.
@@ -121,41 +121,41 @@ public class Settings {
         String lastChanged = fileConfig.getString("lastchanged");
 
         if (!Files.LASTCHANGED_CONFIG.equals(lastChanged)) {
-            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CONFIG + "' file is outdated, please delete it to allow it to be generated again.");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CONFIG + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
-        Messages.log("config.yml settings:");
-        Messages.log("    special-recipes.repair: " + getSpecialRepair());
-        Messages.log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
-        Messages.log("    special-recipes.leather-dye: " + getSpecialLeatherDye());
-        Messages.log("    special-recipes.fireworks: " + getSpecialFireworks());
-        Messages.log("    special-recipes.map-cloning: " + getSpecialMapCloning());
-        Messages.log("    special-recipes.map-extending: " + getSpecialMapExtending());
-        Messages.log("    special-recipes.book-cloning: " + getSpecialBookCloning());
-        Messages.log("    special-recipes.banner: " + getSpecialBanner());
-        Messages.log("    sounds.failed: " + getSoundsFailed());
-        Messages.log("    sounds.failed_click: " + getSoundsFailedClick());
-        Messages.log("    sounds.repair: " + getSoundsRepair());
-        Messages.log("    update-books: " + getUpdateBooks());
-        Messages.log("    color-console: " + getColorConsole());
-        Messages.log("    furnace-shift-click: " + getFurnaceShiftClick());
-        Messages.log("    multithreading: " + getMultithreading());
-        Messages.log("    fix-mod-results: " + getFixModResults());
-        Messages.log("    clear-recipes: " + getClearRecipes());
-        Messages.log("    update-check.enabled: " + getUpdateCheckEnabled());
-        Messages.log("    update-check.frequency: " + getUpdateCheckFrequency());
-        Messages.log("    metrics: " + getMetrics());
-        Messages.log("    material.fail: " + getFailMaterial());
-        Messages.log("    material.secret: " + getSecretMaterial());
-        Messages.log("    material.multiple-results: " + getMultipleResultsMaterial());
-        Messages.log("    disable-override-warnings: " + getDisableOverrideWarnings());
-        Messages.log("    recipe-comment-characters: " + getRecipeCommentCharacters());
+        MessageSender.getInstance().log("config.yml settings:");
+        MessageSender.getInstance().log("    special-recipes.repair: " + getSpecialRepair());
+        MessageSender.getInstance().log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
+        MessageSender.getInstance().log("    special-recipes.leather-dye: " + getSpecialLeatherDye());
+        MessageSender.getInstance().log("    special-recipes.fireworks: " + getSpecialFireworks());
+        MessageSender.getInstance().log("    special-recipes.map-cloning: " + getSpecialMapCloning());
+        MessageSender.getInstance().log("    special-recipes.map-extending: " + getSpecialMapExtending());
+        MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
+        MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
+        MessageSender.getInstance().log("    sounds.failed: " + getSoundsFailed());
+        MessageSender.getInstance().log("    sounds.failed_click: " + getSoundsFailedClick());
+        MessageSender.getInstance().log("    sounds.repair: " + getSoundsRepair());
+        MessageSender.getInstance().log("    update-books: " + getUpdateBooks());
+        MessageSender.getInstance().log("    color-console: " + getColorConsole());
+        MessageSender.getInstance().log("    furnace-shift-click: " + getFurnaceShiftClick());
+        MessageSender.getInstance().log("    multithreading: " + getMultithreading());
+        MessageSender.getInstance().log("    fix-mod-results: " + getFixModResults());
+        MessageSender.getInstance().log("    clear-recipes: " + getClearRecipes());
+        MessageSender.getInstance().log("    update-check.enabled: " + getUpdateCheckEnabled());
+        MessageSender.getInstance().log("    update-check.frequency: " + getUpdateCheckFrequency());
+        MessageSender.getInstance().log("    metrics: " + getMetrics());
+        MessageSender.getInstance().log("    material.fail: " + getFailMaterial());
+        MessageSender.getInstance().log("    material.secret: " + getSecretMaterial());
+        MessageSender.getInstance().log("    material.multiple-results: " + getMultipleResultsMaterial());
+        MessageSender.getInstance().log("    disable-override-warnings: " + getDisableOverrideWarnings());
+        MessageSender.getInstance().log("    recipe-comment-characters: " + getRecipeCommentCharacters());
 
 
         itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
 
         if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.getString("lastchanged"))) {
-            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
         for (String arg : itemAliasesConfig.getKeys(false)) {
@@ -166,7 +166,7 @@ public class Settings {
             Material material = Material.matchMaterial(arg);
 
             if (material == null) {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid material definition: " + arg);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid material definition: " + arg);
                 continue;
             }
 
@@ -184,13 +184,13 @@ public class Settings {
                         try {
                             parseMaterialDataNames(sender, section.getString(key), Short.valueOf(key), material);
                         } catch (NumberFormatException e) {
-                            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data value number: " + key + " for material: " + material);
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data value number: " + key + " for material: " + material);
                             continue;
                         }
                     }
                 }
             } else {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
                 continue;
             }
         }
@@ -198,7 +198,7 @@ public class Settings {
         itemDatasConfig = loadYML(Files.FILE_ITEM_DATAS);
 
         if (!Files.LASTCHANGED_ITEM_DATAS.equals(itemDatasConfig.getString("lastchanged"))) {
-            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_DATAS + "' file is outdated, please delete it to allow it to be generated again.");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_DATAS + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
         for (String arg : itemDatasConfig.getKeys(false)) {
@@ -209,7 +209,7 @@ public class Settings {
             Material material = getMaterial(arg);
 
             if (material == null) {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid material definition: " + arg);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid material definition: " + arg);
                 continue;
             }
 
@@ -217,14 +217,14 @@ public class Settings {
             try {
                 itemDatas.put(material, Short.valueOf(value));
             } catch (NumberFormatException e) {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid data value number: " + value + " for material: " + material);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid data value number: " + value + " for material: " + material);
             }
         }
 
         enchantAliasesConfig = loadYML(Files.FILE_ENCHANT_ALIASES);
 
         if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.getString("lastchanged"))) {
-            Messages.sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
         //
@@ -240,7 +240,7 @@ public class Settings {
             Enchantment enchant = Enchantment.getByName(arg.toUpperCase());
 
             if (enchant == null) {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has invalid enchant definition: " + arg);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has invalid enchant definition: " + arg);
                 continue;
             }
 
@@ -252,7 +252,7 @@ public class Settings {
                 String parsed = RMCUtil.parseAliasName(str);
 
                 if (enchantNames.containsKey(parsed)) {
-                    Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has duplicate enchant alias '" + str + "' for enchant " + enchant);
+                    MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has duplicate enchant alias '" + str + "' for enchant " + enchant);
                     continue;
                 }
 
@@ -268,19 +268,19 @@ public class Settings {
         String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
         Material failMaterial = Material.matchMaterial(failString);
         if (failMaterial == null) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to " + MATERIAL_FAIL_DEFAULT.toString() + ".");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to " + MATERIAL_FAIL_DEFAULT.toString() + ".");
         }
 
         String secretString = fileConfig.getString("material.secret", MATERIAL_SECRET_DEFAULT.toString());
         Material secretMaterial = Material.matchMaterial(secretString);
         if (secretMaterial == null) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT.toString() + ".");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT.toString() + ".");
         }
 
         String multipleResultsString = fileConfig.getString("material.multiple-results", MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString());
         Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
         if (multipleResultsMaterial == null) {
-            Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString() + ".");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString() + ".");
         }
     }
 
@@ -296,7 +296,7 @@ public class Settings {
             String parsed = RMCUtil.parseAliasName(str);
 
             if (materialNames.containsKey(parsed)) {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate material alias '" + str + "' for material " + material);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate material alias '" + str + "' for material " + material);
                 continue;
             }
 
@@ -327,7 +327,7 @@ public class Settings {
             String parsed = RMCUtil.parseAliasName(str);
 
             if (dataMap.containsKey(parsed)) {
-                Messages.sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate data alias '" + str + "' for material " + material + " and data value " + data);
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate data alias '" + str + "' for material " + material + " and data value " + data);
                 continue;
             }
 
@@ -351,9 +351,9 @@ public class Settings {
 
         if (!file.exists()) {
             RecipeManager.getPlugin().saveResource(fileName, false);
-            Messages.log("Generated and loaded '" + fileName + "' file.");
+            MessageSender.getInstance().log("Generated and loaded '" + fileName + "' file.");
         } else {
-            Messages.log("Loaded '" + fileName + "' file.");
+            MessageSender.getInstance().log("Loaded '" + fileName + "' file.");
         }
 
         return YamlConfiguration.loadConfiguration(file);

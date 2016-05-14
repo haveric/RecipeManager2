@@ -1,21 +1,18 @@
 package haveric.recipeManager.flags;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public class FlagTypeTest {
+public class FlagTypeOldTest {
 
     @Test
     public void flagDocumentation() {
-        for (FlagType flagType : FlagType.values()) {
-            if (flagType.flagInstance == null) {
-                flagType.flagInstance = flagType.createFlagClass();
-            }
+        for (FlagDescriptor flagType : FlagFactory.getInstance().getFlags().values()) {
             assertTrue("Arguments missing for " + flagType.getName(), flagType.getArguments().length > 0);
             assertTrue("Examples missing for " + flagType.getName(), flagType.getExamples().length > 0);
             assertTrue("Description missing for " + flagType.getName(), flagType.getDescription().length > 0);
@@ -26,7 +23,7 @@ public class FlagTypeTest {
     public void duplicateAliases() {
         List<String> aliases = new ArrayList<String>();
 
-        for (FlagType flagType : FlagType.values()) {
+        for (FlagDescriptor flagType : FlagFactory.getInstance().getFlags().values()) {
             for (String name : flagType.getNames()) {
                 if (aliases.contains(name)) {
                     fail("Duplicate name: " + name);

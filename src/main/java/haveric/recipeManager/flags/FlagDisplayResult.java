@@ -1,14 +1,19 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagDisplayResult extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.DISPLAY_RESULT;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -23,9 +28,9 @@ public class FlagDisplayResult extends Flag {
             "Using this flag more than once will overwrite the previous message.",
             "",
             "As 'item' argument you can define an item like in a result, material:data:amount.",
-            "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having " + FlagType.INGREDIENTCONDITION + " flag on them.",
+            "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having @" + FlagType.INGREDIENT_CONDITION + " flag on them.",
             "",
-            "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like " + FlagType.INGREDIENTCONDITION + ").",
+            "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like @" + FlagType.INGREDIENT_CONDITION + ").",
             "",
             "NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.",
             "NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.", };
@@ -63,7 +68,7 @@ public class FlagDisplayResult extends Flag {
     }
 
     /**
-     * @param displayItem
+     * @param newDisplayItem
      *            item or null to use first available of recipe
      */
     public void setDisplayItem(ItemStack newDisplayItem) {
@@ -83,7 +88,7 @@ public class FlagDisplayResult extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (!(recipe instanceof WorkbenchRecipe)) {
-            ErrorReporter.error("Flag " + getType() + " can only be used on workbench recipes.");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on workbench recipes.");
             return false;
         }
 
@@ -100,7 +105,7 @@ public class FlagDisplayResult extends Flag {
             ItemStack item = Tools.parseItem(value, 0);
 
             if (item == null || item.getType() == Material.AIR) {
-                ErrorReporter.warning("Flag " + getType() + " has invalid item defined!");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid item defined!");
                 return false;
             }
 
@@ -113,7 +118,7 @@ public class FlagDisplayResult extends Flag {
             if (value.equals("silentfail")) {
                 setSilentFail(true);
             } else {
-                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
             }
         }
 

@@ -1,17 +1,15 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import org.apache.commons.lang.Validate;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.flags.FlagType.Bit;
-
 public class Flags implements Cloneable {
-    private Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
+    private Map<String, Flag> flags = new LinkedHashMap<String, Flag>();
     protected Flaggable flaggable;
 
     @Override
@@ -26,7 +24,7 @@ public class Flags implements Cloneable {
                 s.append(", ");
             }
 
-            s.append(f.getType());
+            s.append(f.getFlagType());
         }
 
         String toReturn;
@@ -47,8 +45,8 @@ public class Flags implements Cloneable {
     }
 
     public boolean hasNoShiftBit() {
-        for (FlagType t : flags.keySet()) {
-            if (t.hasBit(Bit.NO_SHIFT)) {
+        for (String t : flags.keySet()) {
+            if (FlagFactory.getInstance().getFlagByName(t).hasBit(FlagBit.NO_SHIFT)) {
                 return true;
             }
         }
@@ -56,28 +54,8 @@ public class Flags implements Cloneable {
         return false;
     }
 
-    /**
-     * Gets a flag by its type.<br>
-     * For automated casting you should use {@link #getFlag(Class)}
-     *
-     * @param type
-     * @return Flag object
-     */
-    public Flag getFlag(FlagType type) {
-        return flags.get(type);
-    }
-
-    /**
-     * Gets a flag by its class name.<br>
-     * This is useful for easy auto-casting, example:<br> <br>
-     * <code>FlagCommands flag = flags.getFlag(FlagCommands.class);</code>
-     *
-     * @param flagClass
-     *            the class of the flag
-     * @return Flag object
-     */
-    public <T extends Flag> T getFlag(Class<T> flagClass) {
-        return flagClass.cast(flags.get(FlagType.getByClass(flagClass)));
+    public Flag getFlag(String name) {
+        return flags.get(name);
     }
 
     /**
@@ -86,7 +64,7 @@ public class Flags implements Cloneable {
      * @param type
      * @return
      */
-    public boolean hasFlag(FlagType type) {
+    public boolean hasFlag(String type) {
         return flags.containsKey(type);
     }
 
@@ -111,7 +89,7 @@ public class Flags implements Cloneable {
         flag.flagsContainer = this;
 
         if (canAdd(flag)) {
-            flags.put(flag.getType(), flag);
+            flags.put(flag.getFlagType(), flag);
         } else {
             flag.flagsContainer = prevContainer;
         }
@@ -130,24 +108,24 @@ public class Flags implements Cloneable {
 
         // check if it's really a flag because this is a public method
         if (value.charAt(0) != '@') {
-            ErrorReporter.warning("Flags must start with @ character!");
+            ErrorReporter.getInstance().warning("Flags must start with @ character!");
             return;
         }
 
         String[] split = value.split("[:\\s]+", 2); // split by space or : char
         String flagString = split[0].trim(); // format flag name
-        FlagType type = FlagType.getByName(flagString); // Find the current flag
+        FlagDescriptor type = FlagFactory.getInstance().getFlagByName(flagString); // Find the current flag
 
         // If no valid flag was found
         if (type == null) {
-            ErrorReporter.warning("Unknown flag: " + flagString, "Name might be different, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
+            ErrorReporter.getInstance().warning("Unknown flag: " + flagString, "Name might be different, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
             return;
         }
 
-        Flag flag = flags.get(type); // get existing flag, if any
+        Flag flag = flags.get(type.getName()); // get existing flag, if any
 
         if (flag == null) {
-            flag = type.createFlagClass(); // create a new instance of the flag does not exist
+            flag = type.createFlagClass();
         }
 
         flag.flagsContainer = this; // set container before hand to allow checks
@@ -164,13 +142,13 @@ public class Flags implements Cloneable {
 
         // check if parsed flag had valid values and needs to be added to flag list
         if (flag.onParse(value)) {
-            flags.put(flag.getType(), flag);
+            flags.put(flag.getFlagType(), flag);
         }
     }
 
     /**
      * Removes the specified flag from this flag list.<br>
-     * Alias for {@link #removeFlag(FlagType)}
+     * Alias for {@link #removeFlag(String)}
      *
      * @param flag
      */
@@ -179,7 +157,7 @@ public class Flags implements Cloneable {
             return;
         }
 
-        removeFlag(flag.getType());
+        removeFlag(flag.getFlagType());
     }
 
     /**
@@ -187,7 +165,7 @@ public class Flags implements Cloneable {
      *
      * @param type
      */
-    public void removeFlag(FlagType type) {
+    public void removeFlag(String type) {
         if (type == null) {
             return;
         }
@@ -323,7 +301,7 @@ public class Flags implements Cloneable {
         for (Flag f : flags.values()) {
             f = f.clone();
             f.flagsContainer = clone;
-            clone.flags.put(f.getType(), f);
+            clone.flags.put(f.getFlagType(), f);
         }
 
         return clone;

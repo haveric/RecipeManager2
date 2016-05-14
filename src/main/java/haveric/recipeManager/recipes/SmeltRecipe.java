@@ -1,24 +1,19 @@
 package haveric.recipeManager.recipes;
 
-import java.util.List;
-
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.*;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.ArgBuilder;
-import haveric.recipeManager.flags.ConditionsIngredient;
-import haveric.recipeManager.flags.FlagIngredientCondition;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.util.List;
 
 public class SmeltRecipe extends SingleResultRecipe {
     private ItemStack ingredient;
@@ -95,7 +90,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     }
 
     /**
-     * @param minTime
+     * @param newMinTime
      *            min random time range (seconds)
      */
     public void setMinTime(float newMinTime) {
@@ -107,7 +102,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     }
 
     /**
-     * @param maxTime
+     * @param newMaxTime
      *            max random time range (seconds) or set to -1 to disable
      */
     public void setMaxTime(float newMaxTime) {
@@ -253,7 +248,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.RECIPEBOOK_HEADER_SMELT.get());
+        s.append(Messages.getInstance().get("recipebook.header.smelt"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
@@ -262,34 +257,34 @@ public class SmeltRecipe extends SingleResultRecipe {
         s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null, true));
 
         /*
-         * if(isMultiResult()) { s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
+         * if(isMultiResult()) { s.append('\n').append(MessagesOld.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
          */
 
         s.append('\n');
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
         s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK, false));
 
         s.append('\n');
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_COOKTIME.get()).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.cooktime")).append(RMCChatColor.BLACK);
         s.append('\n');
 
         if (hasCustomTime()) {
             if (maxTime > minTime) {
-                s.append(Messages.RECIPEBOOK_SMELT_TIME_RANDOM.get("{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
+                s.append(Messages.getInstance().parse("recipebook.smelt.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
             } else {
                 if (minTime <= 0) {
-                    s.append(Messages.RECIPEBOOK_SMELT_TIME_INSTANT.get());
+                    s.append(Messages.getInstance().get("recipebook.smelt.time.instant"));
                 } else {
-                    s.append(Messages.RECIPEBOOK_SMELT_TIME_FIXED.get("{time}", RMCUtil.printNumber(minTime)));
+                    s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
                 }
             }
         } else {
-            s.append(Messages.RECIPEBOOK_SMELT_TIME_NORMAL.get("{time}", RMCUtil.printNumber(minTime)));
+            s.append(Messages.getInstance().parse("recipebook.smelt.time.normal", "{time}", RMCUtil.printNumber(minTime)));
         }
 
         if (hasFuel()) {
             s.append('\n');
-            s.append('\n').append(Messages.RECIPEBOOK_HEADER_REQUIREFUEL.get()).append(RMCChatColor.BLACK);
+            s.append('\n').append(Messages.getInstance().get("recipebook.header.requirefuel")).append(RMCChatColor.BLACK);
             s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RED, RMCChatColor.BLACK, true));
         }
 
@@ -298,14 +293,14 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     public void subtractIngredient(FurnaceInventory inv, ItemResult result, boolean onlyExtra) {
         FlagIngredientCondition flagIC;
-        if (hasFlag(FlagType.INGREDIENTCONDITION)) {
-            flagIC = getFlag(FlagIngredientCondition.class);
+        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
         } else {
             flagIC = null;
         }
 
-        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION)) {
-            flagIC = result.getFlag(FlagIngredientCondition.class);
+        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
         }
 
         ItemStack item = inv.getSmelting();

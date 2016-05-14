@@ -1,16 +1,19 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import org.apache.commons.lang.Validate;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.Validate;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.flags.FlagType.Bit;
-
 public class FlagForPermission extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.FOR_PERMISSION;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -43,17 +46,17 @@ public class FlagForPermission extends Flag {
     }
 
 
-    private Map<String, Map<FlagType, Flag>> flagMap = new LinkedHashMap<String, Map<FlagType, Flag>>();
+    private Map<String, Map<String, Flag>> flagMap = new LinkedHashMap<String, Map<String, Flag>>();
 
     public FlagForPermission() {
     }
 
     public FlagForPermission(FlagForPermission flag) {
-        for (Entry<String, Map<FlagType, Flag>> e : flag.flagMap.entrySet()) {
-            Map<FlagType, Flag> flags = new LinkedHashMap<FlagType, Flag>();
+        for (Entry<String, Map<String, Flag>> e : flag.flagMap.entrySet()) {
+            Map<String, Flag> flags = new LinkedHashMap<String, Flag>();
 
             for (Flag f : e.getValue().values()) {
-                flags.put(f.getType(), f.clone(getFlagsContainer()));
+                flags.put(f.getFlagType(), f.clone(getFlagsContainer()));
             }
 
             flagMap.put(e.getKey(), flags);
@@ -65,12 +68,12 @@ public class FlagForPermission extends Flag {
         return new FlagForPermission((FlagForPermission) super.clone());
     }
 
-    public Map<String, Map<FlagType, Flag>> getFlagMap() {
+    public Map<String, Map<String, Flag>> getFlagMap() {
         return flagMap;
     }
 
-    public Flag getFlagForPermission(String permission, FlagType type) {
-        Map<FlagType, Flag> flags = flagMap.get(permission);
+    public Flag getFlagForPermission(String permission, String type) {
+        Map<String, Flag> flags = flagMap.get(permission);
 
         if (flags != null) {
             return flags.get(type);
@@ -79,11 +82,11 @@ public class FlagForPermission extends Flag {
         return null;
     }
 
-    public void setFlagMap(Map<String, Map<FlagType, Flag>> map) {
+    public void setFlagMap(Map<String, Map<String, Flag>> map) {
         flagMap = map;
     }
 
-    public void setFlagsForPermission(String permission, Map<FlagType, Flag> flags) {
+    public void setFlagsForPermission(String permission, Map<String, Flag> flags) {
         flagMap.put(permission, flags);
     }
 
@@ -94,7 +97,8 @@ public class FlagForPermission extends Flag {
      * @return false if flag can only be added on specific flaggables
      */
     public boolean canAdd(Flag flag) {
-        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_FOR);
+
+        return flag != null && flag.validate() && !FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.NO_FOR);
     }
 
     /**
@@ -108,15 +112,15 @@ public class FlagForPermission extends Flag {
         Validate.notNull(flag, "Argument flag must not be null!");
 
         if (canAdd(flag)) {
-            Map<FlagType, Flag> flags = flagMap.get(permission);
+            Map<String, Flag> flags = flagMap.get(permission);
 
             if (flags == null) {
-                flags = new LinkedHashMap<FlagType, Flag>();
+                flags = new LinkedHashMap<String, Flag>();
                 flagMap.put(permission, flags);
             }
 
             flag.flagsContainer = getFlagsContainer();
-            flags.put(flag.getType(), flag);
+            flags.put(flag.getFlagType(), flag);
         }
     }
 
@@ -125,26 +129,25 @@ public class FlagForPermission extends Flag {
         String[] split = value.split("@");
 
         if (split.length <= 1) {
-            return ErrorReporter.error("Flag " + getType() + " is missing the inner flag declaration!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " is missing the inner flag declaration!");
         }
 
         String permission = split[0].trim(); // store permission node for later use
         split = split[1].trim().split("[:\\s]+", 2); // split by space or : char
-        String flagString = '@' + split[0].trim(); // format flag name
-        FlagType type = FlagType.getByName(flagString); // Find the current flag
+        String flagString = split[0].trim(); // format flag name
+        FlagDescriptor type = FlagFactory.getInstance().getFlagByName(flagString); // Find the current flag
 
         if (type == null) { // If no valid flag was found
-            return ErrorReporter.error("Flag " + getType() + " has unknown flag: " + flagString, "Name might be different, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has unknown flag: " + flagString, "Name might be different, check '" + Files.FILE_INFO_FLAGS + "' for flag list.");
         }
 
-        if (type.hasBit(Bit.NO_FOR)) {
-            return ErrorReporter.error("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
+        if (type.hasBit(FlagBit.NO_FOR)) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + "'s flag " + flagString + " can not be used with this!");
         }
 
-        Flag flag = getFlagForPermission(permission, type); // get existing flag, if any
+        Flag flag = getFlagForPermission(permission, type.getName()); // get existing flag, if any
 
         if (flag == null) {
-            flag = type.createFlagClass(); // create a new instance of the flag does not exist
             flag.flagsContainer = getFlagsContainer(); // set container before hand to allow checks
         }
 
@@ -195,7 +198,7 @@ public class FlagForPermission extends Flag {
             return;
         }
 
-        for (Entry<String, Map<FlagType, Flag>> e : flagMap.entrySet()) {
+        for (Entry<String, Map<String, Flag>> e : flagMap.entrySet()) {
             if (a.player().hasPermission(e.getKey())) {
                 for (Flag f : e.getValue().values()) {
                     switch (method) {

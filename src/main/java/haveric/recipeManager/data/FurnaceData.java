@@ -1,14 +1,13 @@
 package haveric.recipeManager.data;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.Messages;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores data about a furnace
@@ -70,7 +69,7 @@ public class FurnaceData implements ConfigurationSerializable {
                 fuel = ItemStack.deserialize((Map<String, Object>) obj);
             }
         } catch (Throwable e) {
-            Messages.error(null, e, null);
+            MessageSender.getInstance().error(null, e, null);
         }
     }
 

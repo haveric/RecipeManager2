@@ -1,8 +1,7 @@
 package haveric.recipeManager.flags;
 
-import org.bukkit.inventory.ItemStack;
-
 import haveric.recipeManager.ErrorReporter;
+import org.bukkit.inventory.ItemStack;
 
 public class ConditionsIngredient extends Conditions {
     private int needed;
@@ -70,7 +69,7 @@ public class ConditionsIngredient extends Conditions {
                 try {
                     cond.setNeeded(Integer.parseInt(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'needed' argument with invalid number: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'needed' argument with invalid number: " + value);
                     continue;
                 }
             } else {

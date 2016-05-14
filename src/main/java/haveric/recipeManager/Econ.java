@@ -1,14 +1,13 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-
-import java.util.UUID;
-
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+
+import java.util.UUID;
 
 public class Econ {
     private Economy economy = null;
@@ -31,10 +30,10 @@ public class Econ {
         if (newEconomy != null) {
             if (newEconomy.isEnabled()) {
                 economy = newEconomy;
-                Messages.log("Vault detected and connected to " + economy.getName() + ", economy features available.");
+                MessageSender.getInstance().log("Vault detected and connected to " + economy.getName() + ", economy features available.");
             } else {
                 economy = null;
-                Messages.log("Vault detected but does not have an economy plugin connected, economy features are not available.");
+                MessageSender.getInstance().log("Vault detected but does not have an economy plugin connected, economy features are not available.");
             }
         }
     }
@@ -119,7 +118,7 @@ public class Econ {
         } catch (Exception e) { }
 
         if (error != null && !error.transactionSuccess()) {
-            Messages.info("<red>Economy error: " + error.errorMessage);
+            MessageSender.getInstance().info("<red>Economy error: " + error.errorMessage);
         }
     }
 }

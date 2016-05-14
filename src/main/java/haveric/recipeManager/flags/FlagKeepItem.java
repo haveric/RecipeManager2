@@ -1,18 +1,5 @@
 package haveric.recipeManager.flags;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Settings;
@@ -22,8 +9,25 @@ import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.util.ParseBit;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class FlagKeepItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.KEEP_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -101,7 +105,7 @@ public class FlagKeepItem extends Flag {
     }
 
     /**
-     * @param ingredient
+     * @param item
      * @param object
      *            can be Integer or ItemStack object
      */
@@ -131,7 +135,7 @@ public class FlagKeepItem extends Flag {
         }
 
         if (keepItems.containsKey(key)) {
-            ErrorReporter.warning("Flag " + getType() + " already has the '" + ToolsItem.print(item) + "' ingredient added.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has the '" + ToolsItem.print(item) + "' ingredient added.");
             return false;
         }
 
@@ -148,16 +152,16 @@ public class FlagKeepItem extends Flag {
                     try {
                         damage = Integer.parseInt(value);
                     } catch (NumberFormatException e) {
-                        ErrorReporter.warning("Flag " + getType() + " has invalid damage number: " + value + ", ignored.");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid damage number: " + value + ", ignored.");
                     }
                 } else {
-                    ErrorReporter.warning("Flag " + getType() + " can't set damage on non-damageable item: " + ToolsItem.print(item) + ", ignored.");
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't set damage on non-damageable item: " + ToolsItem.print(item) + ", ignored.");
                 }
 
                 keepItems.put(key, damage);
             } else if (value.startsWith("replace")) {
                 if (item.getType().getMaxStackSize() > 1) {
-                    ErrorReporter.warning("Flag " + getType() + " can't replace stackable ingredient: " + ToolsItem.print(item));
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't replace stackable ingredient: " + ToolsItem.print(item));
                     return false;
                 }
 
@@ -171,7 +175,7 @@ public class FlagKeepItem extends Flag {
 
                 keepItems.put(key, replace);
             } else {
-                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
                 return false;
             }
         } else {

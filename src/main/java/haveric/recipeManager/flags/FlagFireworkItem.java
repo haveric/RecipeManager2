@@ -1,21 +1,25 @@
 package haveric.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang.Validate;
-import org.bukkit.FireworkEffect;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.apache.commons.lang.Validate;
+import org.bukkit.FireworkEffect;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FlagFireworkItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.FIREWORK_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -97,7 +101,7 @@ public class FlagFireworkItem extends Flag {
         ItemResult result = getResult();
 
         if (result == null || !(result.getItemMeta() instanceof FireworkMeta)) {
-            ErrorReporter.error("Flag " + getType() + " needs a FIREWORK item!");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a FIREWORK item!");
             return false;
         }
 
@@ -111,7 +115,7 @@ public class FlagFireworkItem extends Flag {
         if (value.startsWith("effect")) {
             value = value.substring("power".length()).trim();
 
-            FireworkEffect effect = Tools.parseFireworkEffect(value, getType());
+            FireworkEffect effect = Tools.parseFireworkEffect(value, getFlagType());
 
             if (effect == null) {
                 return false;
@@ -128,11 +132,11 @@ public class FlagFireworkItem extends Flag {
             }
 
             if (getPower() < 0 || getPower() > 128) {
-                ErrorReporter.error("Flag " + getType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
+                ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
                 return false;
             }
         } else {
-            ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
         }
 
         return true;

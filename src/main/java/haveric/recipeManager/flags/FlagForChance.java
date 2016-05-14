@@ -1,19 +1,22 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
+import org.apache.commons.lang.Validate;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.Validate;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flags.FlagType.Bit;
-
 public class FlagForChance extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.FOR_CHANCE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -141,7 +144,7 @@ public class FlagForChance extends Flag {
     }
 
     /**
-     * Gets the first flag matching FlagType or the last if reverse is set to true.<br>
+     * Gets the first flag matching FlagTypeOld or the last if reverse is set to true.<br>
      * There can be more instances of the same type of flag.
      *
      * @param group
@@ -169,7 +172,8 @@ public class FlagForChance extends Flag {
      * @return false if flag can only be added on specific flaggables
      */
     public boolean canAdd(Flag flag) {
-        return flag != null && flag.validate() && !flag.getType().hasBit(Bit.NO_FOR);
+
+        return flag != null && flag.validate() && !FlagFactory.getInstance().getFlagByName(getFlagType()).hasBit(FlagBit.NO_FOR);
     }
 
     /**
@@ -232,7 +236,7 @@ public class FlagForChance extends Flag {
             String arg = value.substring(0, i);
 
             if (arg.charAt(0) == '@') {
-                ErrorReporter.warning("Flag " + getType() + " has invalid group name that resembles a flag: " + arg);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid group name that resembles a flag: " + arg);
                 return false;
             }
 
@@ -247,20 +251,20 @@ public class FlagForChance extends Flag {
                     try {
                         chance = Float.valueOf(arg);
                     } catch (NumberFormatException e) {
-                        ErrorReporter.warning("Flag " + getType() + " has invalid chance number: " + arg);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid chance number: " + arg);
                         return false;
                     }
 
                     if (chance < 0.01f || chance > 100) {
                         chance = Math.min(Math.max(chance, 0.01f), 100.0f);
 
-                        ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " is lower than 0.01 or higher than 100%, trimmed.");
                     }
 
                     arg = value.substring(i + 1).trim(); // get the string after the first space
 
                     if (arg.charAt(0) != '@' && !arg.startsWith("^@")) { // we need a flag declaration at this point
-                        ErrorReporter.warning("Flag " + getType() + " has chance as first argument but not a flag as second argument: " + arg);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has chance as first argument but not a flag as second argument: " + arg);
                         return false;
                     }
 
@@ -286,7 +290,7 @@ public class FlagForChance extends Flag {
                         i = arg.indexOf('%'); // get location of first '%' char...
 
                         if (i == -1) {
-                            ErrorReporter.warning("Flag " + getType() + " has neither a flag nor a chance argument: " + value);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has neither a flag nor a chance argument: " + value);
                             return false;
                         }
 
@@ -295,14 +299,14 @@ public class FlagForChance extends Flag {
                         try {
                             chance = Float.valueOf(chanceString);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + getType() + " has invalid chance number: " + chanceString);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid chance number: " + chanceString);
                             return false;
                         }
 
                         if (chance < 0.01f || chance > 100) {
                             chance = Math.min(Math.max(chance, 0.01f), 100.0f);
 
-                            ErrorReporter.warning("Flag " + getType() + " is lower than 0.01 or higher than 100%, trimmed.");
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " is lower than 0.01 or higher than 100%, trimmed.");
                         }
 
                         if (arg.length() > (i + 1)) {
@@ -316,7 +320,7 @@ public class FlagForChance extends Flag {
 
                                 flagDeclaration = arg;
                             } else {
-                                ErrorReporter.warning("Flag " + getType() + " has unknown last argument, expected flag: " + arg);
+                                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown last argument, expected flag: " + arg);
                             }
                         }
                     }
@@ -334,7 +338,7 @@ public class FlagForChance extends Flag {
             } else {
                 for (ChanceFlag c : flags) {
                     if (c.getFlag() == null) {
-                        ErrorReporter.warning("Flag " + getType() + " already has a blank flag for this group!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has a blank flag for this group!");
                         return false;
                     }
                 }
@@ -347,15 +351,15 @@ public class FlagForChance extends Flag {
             String[] split = flagDeclaration.split("[:\\s]+", 2); // split by space or : char
             String flagString = split[0].trim(); // format flag name
 
-            FlagType type = FlagType.getByName(flagString); // Find the current flag
+            FlagDescriptor type = FlagFactory.getInstance().getFlagByName(flagString); // Find the current flag
 
             if (type == null) {
-                ErrorReporter.warning("Flag " + getType() + " has unknown flag type: " + flagString);
+                ErrorReporter.getInstance().warning("Flag " + type.getNameDisplay() + " has unknown flag type: " + flagString);
                 return false;
             }
 
-            if (type.hasBit(Bit.NO_FOR)) {
-                ErrorReporter.warning("Flag " + getType() + "'s flag " + flagString + " can not be used with this!");
+            if (type.hasBit(FlagBit.NO_FOR)) {
+                ErrorReporter.getInstance().warning("Flag " + type.getNameDisplay() + "'s flag " + flagString + " can not be used with this!");
                 return false;
             }
 
@@ -368,11 +372,11 @@ public class FlagForChance extends Flag {
                     for (i = flags.size() - 1; i >= 0; i--) {
                         ChanceFlag c = flags.get(i);
 
-                        if (c.getFlag() != null && c.getFlag().getType() == type) {
+                        if (c.getFlag() != null && c.getFlag().getFlagType() == type.getName()) {
                             flagChance = c;
 
                             if (chance != null) {
-                                ErrorReporter.warning("Flag " + getType() + " has flag " + flagChance.getFlag().getType() + " with chance defined, chance will be ignored because flag will append the previous one!", "Or remove the '^' prefix to create a new fresh flag, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
+                                ErrorReporter.getInstance().warning("Flag " + type.getNameDisplay() + " has flag @" + flagChance.getFlag().getFlagType() + " with chance defined, chance will be ignored because flag will append the previous one!", "Or remove the '^' prefix to create a new fresh flag, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
                             }
 
                             break;
@@ -384,7 +388,7 @@ public class FlagForChance extends Flag {
             Flag flag = null;
 
             if (appendFlag && flagChance == null) {
-                ErrorReporter.warning("Flag " + getType() + " can't append to " + type + " flag because it hasn't been defined for this group!");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't append to " + type + " flag because it hasn't been defined for this group!");
             }
 
             if (!appendFlag || flagChance == null) {
@@ -399,20 +403,20 @@ public class FlagForChance extends Flag {
 
                     if (chance == null) {
                         if (totalChance >= 100) {
-                            ErrorReporter.warning("Flag " + getType() + " already has 100% chance for '" + group + "' group!", "You can't add more flags to it until you reduce the chance of one or more flags.");
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has 100% chance for '" + group + "' group!", "You can't add more flags to it until you reduce the chance of one or more flags.");
                             return false;
                         }
                     } else {
                         totalChance += chance;
 
                         if (totalChance > 100) {
-                            ErrorReporter.warning("Flag " + getType() + " exceeds 100% chance for '" + group + "' group!", "Reduce the chance or remove it to be auto-calculated.");
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " exceeds 100% chance for '" + group + "' group!", "Reduce the chance or remove it to be auto-calculated.");
                             return false;
                         }
                     }
                 }
 
-                flag = type.createFlagClass(); // create a new instance of the flag does not exist
+                flag = type.createFlagClass();
                 flag.flagsContainer = getFlagsContainer(); // set container before hand to allow checks
                 flagChance = new ChanceFlag(flag, chance);
             } else {

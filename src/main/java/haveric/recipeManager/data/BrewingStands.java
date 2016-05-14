@@ -1,15 +1,7 @@
 package haveric.recipeManager.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.messages.MessageSender;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -20,8 +12,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.BrewerInventory;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class BrewingStands {
     private static final String SAVE_EXTENSION = ".brewingdata";
@@ -154,13 +148,13 @@ public class BrewingStands {
             }
         }
 
-        Messages.log("Loaded " + brewingStands.size() + " brewing stands in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        MessageSender.getInstance().log("Loaded " + brewingStands.size() + " brewing stands in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 
     public static void save() {
         long start = System.currentTimeMillis();
 
-        Messages.log("Saving " + brewingStands.size() + " brewing stands...");
+        MessageSender.getInstance().log("Saving " + brewingStands.size() + " brewing stands...");
 
         Map<UUID, Map<String, BrewingStandData>> mapWorld = new HashMap<UUID, Map<String, BrewingStandData>>();
         Map<String, BrewingStandData> mapCoords;
@@ -181,7 +175,7 @@ public class BrewingStands {
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
 
         if (!dir.exists() && !dir.mkdirs()) {
-            Messages.info("<red>Couldn't create directories: " + dir.getPath());
+            MessageSender.getInstance().info("<red>Couldn't create directories: " + dir.getPath());
             return;
         }
 
@@ -208,11 +202,11 @@ public class BrewingStands {
             try {
                 yml.save(file);
             } catch (IOException e) {
-                Messages.error(null, e, "Failed to create '" + file.getPath() + "' file!");
+                MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
                 continue;
             }
         }
 
-        Messages.log("Saved brewing standings in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        MessageSender.getInstance().log("Saved brewing standings in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 }

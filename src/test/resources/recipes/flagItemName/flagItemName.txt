@@ -1,0 +1,9 @@
+craft
+dirt + cobblestone
+= iron_sword
+@name <light_purple>Weird Item
+
+craft
+dirt + stone
+= iron_sword
+@name <yellow>{player}'s Sword

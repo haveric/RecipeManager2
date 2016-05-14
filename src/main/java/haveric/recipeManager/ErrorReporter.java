@@ -1,29 +1,37 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCChatColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
-/**
- * This class is used by RecipeManager to display recipe errors.<br>
- * Errors can be caught to be displayed in a single chunk along with file name and lines.<br>
- * When errors are not caught they'll be directly displayed to console.
- */
 public class ErrorReporter {
-    private static HashMap<String, List<String>> fileErrors;
-    private static String currentFile;
-    private static int currentLine;
-    private static boolean ignore = false;
+
+    private static ErrorReporter instance;
+
+    public static ErrorReporter getInstance() {
+        if(instance == null){
+            instance = new ErrorReporter();
+        }
+        return instance;
+    }
+
+    private HashMap<String, List<String>> fileErrors;
+    private String currentFile;
+    private int currentLine;
+    private boolean ignore = false;
+
+
 
     /**
      * Starts catching reported errors and stores them in a list for later printing.<br>
      * This also resets file to null and line to 0
      */
-    public static void startCatching() {
+    public void startCatching() {
         stopCatching();
         fileErrors = new HashMap<String, List<String>>();
     }
@@ -32,7 +40,7 @@ public class ErrorReporter {
      * Stops catching the errors and ditches any caught errors so far!<br>
      * Calling this requires calling {@link #startCatching()} again to queue errors.
      */
-    public static void stopCatching() {
+    public void stopCatching() {
         fileErrors = null;
         currentFile = null;
         currentLine = 0;
@@ -44,7 +52,7 @@ public class ErrorReporter {
      *
      * @return true if catching, false otherwise
      */
-    public static boolean isCatching() {
+    public boolean isCatching() {
         return fileErrors != null;
     }
 
@@ -53,7 +61,7 @@ public class ErrorReporter {
      *
      * @return 0 if no errors, -1 if not catching at all
      */
-    public static int getCatchedAmount() {
+    public int getCatchedAmount() {
         int caught;
 
         if (isCatching()) {
@@ -68,9 +76,8 @@ public class ErrorReporter {
     /**
      * Print the queued errors (if any)
      *
-     * @param logFile
      */
-    public static void print(String logFile) {
+    public void print(String logFile) {
         if (!isCatching() || fileErrors.isEmpty()) {
             stopCatching();
             return;
@@ -83,9 +90,9 @@ public class ErrorReporter {
 
         StringBuilder buffer;
         StringBuilder text = new StringBuilder(errors * 128);
-        Messages.info(text.toString());
+        MessageSender.getInstance().info(text.toString());
 
-        for (Entry<String, List<String>> entry : fileErrors.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : fileErrors.entrySet()) {
             buffer = new StringBuilder();
             buffer.append(RMCChatColor.BOLD).append(RMCChatColor.AQUA).append("File: ").append(entry.getKey()).append(Files.NL);
 
@@ -118,13 +125,13 @@ public class ErrorReporter {
 
             buffer.append(Files.NL);
             text.append(buffer);
-            Messages.info(buffer.toString());
+            MessageSender.getInstance().info(buffer.toString());
         }
 
         text.append(Files.NL).append(Files.NL);
 
         if (logFile != null && Tools.saveTextToFile(RMCChatColor.stripColor(text.toString()), logFile)) {
-            Messages.info(RMCChatColor.YELLOW + "Error messages saved in '" + logFile + "'.");
+            MessageSender.getInstance().info(RMCChatColor.YELLOW + "Error messages saved in '" + logFile + "'.");
         }
 
         stopCatching();
@@ -134,9 +141,8 @@ public class ErrorReporter {
      * Set the current file path/name - printed in queued errors.<br>
      * This also resets line to 0.
      *
-     * @param line
      */
-    public static void setFile(String file) {
+    public void setFile(String file) {
         currentFile = file;
         currentLine = 0;
     }
@@ -144,24 +150,23 @@ public class ErrorReporter {
     /**
      * @return the current file the parser is at.
      */
-    public static String getFile() {
+    public String getFile() {
         return currentFile;
     }
 
     /**
      * Set the current line - printed in queued errors.<br>
-     * This will be reset to 0 after calling {@link #setFile()}
+     * This will be reset to 0 after calling
      *
-     * @param line
      */
-    public static void setLine(int line) {
+    public void setLine(int line) {
         currentLine = line;
     }
 
     /**
      * @return the current line the parser is at.
      */
-    public static int getLine() {
+    public int getLine() {
         return currentLine;
     }
 
@@ -169,33 +174,27 @@ public class ErrorReporter {
      * This can be used to temporarily ignore any errors that are stored.<br>
      * <b>NOTE: Only works when catching errors, use with care.</b>
      *
-     * @param set
      */
-    protected static void setIgnoreErrors(boolean set) {
+    public void setIgnoreErrors(boolean set) {
         if (isCatching()) {
             ignore = set;
         }
     }
 
-    protected static boolean getIgnoreErrors() {
-        return ignore;
-    }
-
-    public static void warning(String warning) {
+    public void warning(String warning) {
         warning(warning, null);
     }
 
-    public static void warning(String warning, String tip) {
+    public void warning(String warning, String tip) {
         entry(RMCChatColor.YELLOW.toString() + RMCChatColor.UNDERLINE + "Warning", warning, tip);
     }
 
     /**
      * Queue error or print it directly if queue was not started.
      *
-     * @param error
      * @return always returns false, useful for quick returns
      */
-    public static boolean error(String error) {
+    public boolean error(String error) {
         return error(error, null);
     }
 
@@ -208,19 +207,19 @@ public class ErrorReporter {
      *            optional tip, use null to avoid
      * @return always returns false, useful for quick returns
      */
-    public static boolean error(String error, String tip) {
+    public boolean error(String error, String tip) {
         entry(RMCChatColor.RED.toString() + RMCChatColor.UNDERLINE + "Fatal", error, tip);
         return false;
     }
 
-    private static void entry(String type, String message, String tip) {
+    private void entry(String type, String message, String tip) {
         if (!isCatching()) {
             String infoMessage = type + ":" + RMCChatColor.RESET + " " + message;
 
             if (tip != null) {
                 infoMessage += RMCChatColor.DARK_GREEN + " TIP: " + RMCChatColor.GRAY + tip;
             }
-            Messages.info(infoMessage);
+            MessageSender.getInstance().info(infoMessage);
         } else if (!ignore) {
             List<String> errors = fileErrors.get(currentFile);
 

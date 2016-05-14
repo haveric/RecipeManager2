@@ -1,11 +1,14 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
 import org.bukkit.block.Block;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-
 public class FlagTemperature extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.TEMPERATURE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -163,7 +166,7 @@ public class FlagTemperature extends Flag {
                 try {
                     setLTETemp(Double.parseDouble(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("The " + getType() + " flag has invalid <= temperature number: " + value);
+                    ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid <= temperature number: " + value);
                 }
             } else if (value.startsWith(">=")) {
                 value = value.substring(2).trim();
@@ -171,7 +174,7 @@ public class FlagTemperature extends Flag {
                 try {
                     setGTETemp(Double.parseDouble(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("The " + getType() + " flag has invalid >= temperature number: " + value);
+                    ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid >= temperature number: " + value);
                 }
             } else if (value.charAt(0) == '<') {
                 value = value.substring(1).trim();
@@ -179,7 +182,7 @@ public class FlagTemperature extends Flag {
                 try {
                     setLTTemp(Double.parseDouble(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("The " + getType() + " flag has invalid < temperature number: " + value);
+                    ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid < temperature number: " + value);
                 }
             } else if (value.charAt(0) == '>') {
                 value = value.substring(1).trim();
@@ -187,14 +190,14 @@ public class FlagTemperature extends Flag {
                 try {
                     setGTTemp(Double.parseDouble(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("The " + getType() + " flag has invalid > temperature number: " + value);
+                    ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid > temperature number: " + value);
                 }
             } else {
                 // Default to >= when no operator set
                 try {
                     setGTETemp(Double.parseDouble(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("The " + getType() + " flag has invalid  temperature number: " + value);
+                    ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid  temperature number: " + value);
                 }
             }
         }
@@ -205,7 +208,7 @@ public class FlagTemperature extends Flag {
     @Override
     protected void onCheck(Args a) {
         if (!a.hasLocation()) {
-            a.addReason(Messages.FLAG_TEMPERATURE, failMessage, "{temperature}", getTemperatureString(), "{actual}", "Unknown Temperature");
+            a.addReason("flag.temperature", failMessage, "{temperature}", getTemperatureString(), "{actual}", "Unknown Temperature");
         } else {
             Block block = a.location().getBlock();
             double biomeTemperature = block.getTemperature();
@@ -218,7 +221,7 @@ public class FlagTemperature extends Flag {
             }
 
             if (!checkTemperature(actualTemperature)) {
-                a.addReason(Messages.FLAG_TEMPERATURE, failMessage, "{temperature}", getTemperatureString(), "{actual}", actualTemperature);
+                a.addReason("flag.temperature", failMessage, "{temperature}", getTemperatureString(), "{actual}", actualTemperature);
             }
         }
     }

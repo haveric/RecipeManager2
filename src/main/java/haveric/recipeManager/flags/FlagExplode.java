@@ -1,9 +1,8 @@
 package haveric.recipeManager.flags;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.recipes.FuelRecipe;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -11,11 +10,16 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.recipes.FuelRecipe;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class FlagExplode extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.EXPLODE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -165,7 +169,7 @@ public class FlagExplode extends Flag {
                 try {
                     setPower(Float.valueOf(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.warning("Flag " + getType() + " has 'power' argument with invalid number: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'power' argument with invalid number: " + value);
                     continue;
                 }
             } else if (arg.startsWith("fuel")) {
@@ -175,14 +179,14 @@ public class FlagExplode extends Flag {
                     if (value.equals("start") || value.equals("end") || value.equals("random")) {
                         setFuel(value);
                     } else {
-                        ErrorReporter.warning("Flag " + getType() + " has 'fuel' argument with invalid argument: " + value + ". Defaulting to 'start'.");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'fuel' argument with invalid argument: " + value + ". Defaulting to 'start'.");
                         setFuel("start");
                     }
                 } else {
-                    ErrorReporter.warning("Flag " + getType() + " has 'fuel' argument on non fuel recipe.");
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'fuel' argument on non fuel recipe.");
                 }
             } else {
-                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
             }
         }
 

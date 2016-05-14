@@ -2,10 +2,14 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.Econ;
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagModMoney extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.MOD_MONEY;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -26,7 +30,7 @@ public class FlagModMoney extends Flag {
             "  {modifier}     = the modifier prefix.",
             "",
             "NOTE: Vault with a supported economy plugin is required for this flag to work.",
-            "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.NEEDMONEY.toString() + " if you want to check.", };
+            "NOTE: This flag does not check if player has enough money when subtracting! Use in combination with " + FlagType.NEED_MONEY + " if you want to check.", };
     }
 
     @Override
@@ -68,7 +72,7 @@ public class FlagModMoney extends Flag {
     /**
      * Set the amount, can be negative.
      *
-     * @param amount
+     * @param newAmount
      */
     public void setAmount(float newAmount) {
         if (newAmount < 0) {
@@ -79,9 +83,9 @@ public class FlagModMoney extends Flag {
     }
 
     /**
-     * @param mod
+     * @param newMod
      *            can be '+', '-', '='
-     * @param amount
+     * @param newAmount
      *            the amount, forced as positive number
      */
     public void setAmount(char newMod, float newAmount) {
@@ -118,7 +122,7 @@ public class FlagModMoney extends Flag {
     @Override
     protected boolean onParse(String value) {
         if (!Econ.getInstance().isEnabled()) {
-            ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
 
         String[] split = value.split("\\|");
@@ -141,7 +145,7 @@ public class FlagModMoney extends Flag {
         }
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-            return ErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
         }
 
         float newAmount = 0;
@@ -149,11 +153,11 @@ public class FlagModMoney extends Flag {
         try {
             newAmount = Float.valueOf(value);
         } catch (NumberFormatException e) {
-            return ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
         }
 
         if (newMod != '=' && newAmount == 0) {
-            return ErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag can only have 0 amount for = modifier, not for + or -");
         }
 
         setAmount(newMod, newAmount);
@@ -180,13 +184,13 @@ public class FlagModMoney extends Flag {
             case '+':
                 Econ.getInstance().modMoney(a.playerName(), amount);
 
-                a.addEffect(Messages.FLAG_MODMONEY_ADD, failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modmoney.add", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
                 Econ.getInstance().modMoney(a.playerName(), -amount);
 
-                a.addEffect(Messages.FLAG_MODMONEY_SUB, failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modmoney.sub", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '=':
@@ -198,7 +202,7 @@ public class FlagModMoney extends Flag {
                     Econ.getInstance().modMoney(a.playerName(), amount);
                 }
 
-                a.addEffect(Messages.FLAG_MODMONEY_SET, failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modmoney.set", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             default:
@@ -209,8 +213,8 @@ public class FlagModMoney extends Flag {
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
      *
-     * switch(mod) { case '+': list.add(Messages.FLAG_MODMONEY_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(Messages.FLAG_MODMONEY_SUB.get("{amount}", amount,
-     * "{modifier}", mod)); break; case '=': list.add(Messages.FLAG_MODMONEY_SET.get("{amount}", amount, "{modifier}", mod)); break; }
+     * switch(mod) { case '+': list.add(MessagesOld.FLAG_MODMONEY_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(MessagesOld.FLAG_MODMONEY_SUB.get("{amount}", amount,
+     * "{modifier}", mod)); break; case '=': list.add(MessagesOld.FLAG_MODMONEY_SET.get("{amount}", amount, "{modifier}", mod)); break; }
      *
      * return list; }
      */

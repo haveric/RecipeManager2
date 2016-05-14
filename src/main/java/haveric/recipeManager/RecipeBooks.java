@@ -1,20 +1,17 @@
 package haveric.recipeManager;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.common.collect.Sets;
+import haveric.recipeManager.api.events.RecipeManagerReloadBooksEvent;
+import haveric.recipeManager.data.RecipeBook;
+import haveric.recipeManager.flags.FlagAddToBook;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.*;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -24,21 +21,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import com.google.common.collect.Sets;
-
-import haveric.recipeManager.api.events.RecipeManagerReloadBooksEvent;
-import haveric.recipeManager.data.RecipeBook;
-import haveric.recipeManager.flags.FlagAddToBook;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.io.File;
+import java.text.DateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RecipeBooks {
     private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
@@ -76,10 +64,10 @@ public class RecipeBooks {
 
         File dir = new File(DIR_BOOKS);
 
-        ErrorReporter.startCatching();
+        ErrorReporter.getInstance().startCatching();
 
         if (!dir.exists() && !dir.mkdirs()) {
-            Messages.send(sender, RMCChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
+            MessageSender.getInstance().send(sender, RMCChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
         }
 
         Map<String, File> files = new HashMap<String, File>();
@@ -107,12 +95,12 @@ public class RecipeBooks {
             parseBook(sender, e.getValue());
         }
 
-        int errors = ErrorReporter.getCatchedAmount();
+        int errors = ErrorReporter.getInstance().getCatchedAmount();
 
         if (errors > 0) {
-            ErrorReporter.print(FILE_ERRORLOG);
+            ErrorReporter.getInstance().print(FILE_ERRORLOG);
         } else {
-            ErrorReporter.stopCatching();
+            ErrorReporter.getInstance().stopCatching();
 
             File log = new File(FILE_ERRORLOG);
 
@@ -125,7 +113,7 @@ public class RecipeBooks {
         if (errors > 0) {
             bookErrors = " with " + errors + " errors/warnings";
         }
-        Messages.sendAndLog(sender, "Parsed " + books.size() + " recipe books" + bookErrors + ".");
+        MessageSender.getInstance().sendAndLog(sender, "Parsed " + books.size() + " recipe books" + bookErrors + ".");
 
         // TODO post event ?
         // Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEventPost(sender));
@@ -151,7 +139,7 @@ public class RecipeBooks {
     }
 
     private RecipeBook parseBook(CommandSender sender, File file) {
-        ErrorReporter.setFile(file.getName());
+        ErrorReporter.getInstance().setFile(file.getName());
 
         // Loading YML file
         FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
@@ -196,7 +184,7 @@ public class RecipeBooks {
                 }
 
                 if (volume < 1) {
-                    ErrorReporter.error("Book '" + id + "' has invalid volume number: " + volString, "Must be a number starting from 1.");
+                    ErrorReporter.getInstance().error("Book '" + id + "' has invalid volume number: " + volString, "Must be a number starting from 1.");
                     continue;
                 }
 
@@ -213,8 +201,8 @@ public class RecipeBooks {
 
                 // Get all recipes that have @recipebook flag for this book with this volume
                 for (BaseRecipe r : RecipeManager.getRecipes().index.keySet()) {
-                    if (r.hasFlag(FlagType.ADDTOBOOK) && !allRecipes.contains(r.getName())) {
-                        FlagAddToBook flag = r.getFlag(FlagAddToBook.class);
+                    if (r.hasFlag(FlagType.ADD_TO_BOOK) && !allRecipes.contains(r.getName())) {
+                        FlagAddToBook flag = (FlagAddToBook) r.getFlag(FlagType.ADD_TO_BOOK);
 
                         if (flag.getVolume() == volume && id.equals(flag.getBookName())) {
                             recipes.add(r.getName());
@@ -237,7 +225,7 @@ public class RecipeBooks {
 
             for (int i = 1; i <= maxVolume; i++) {
                 if (!volumesMap.containsKey(i)) {
-                    ErrorReporter.warning("Book '" + id + "' is missing 'volume " + i + "', volumes have been renamed.");
+                    ErrorReporter.getInstance().warning("Book '" + id + "' is missing 'volume " + i + "', volumes have been renamed.");
 
                     List<List<String>> list = new ArrayList<List<String>>();
 
@@ -268,8 +256,8 @@ public class RecipeBooks {
 
         // Get all recipes that have @recipebook flag for this book without defined volume
         for (BaseRecipe r : RecipeManager.getRecipes().index.keySet()) {
-            if (r.hasFlag(FlagType.ADDTOBOOK) && !allRecipes.contains(r.getName())) {
-                FlagAddToBook flag = r.getFlag(FlagAddToBook.class);
+            if (r.hasFlag(FlagType.ADD_TO_BOOK) && !allRecipes.contains(r.getName())) {
+                FlagAddToBook flag = (FlagAddToBook) r.getFlag(FlagType.ADD_TO_BOOK);
 
                 if (id.equals(flag.getBookName()) && flag.getVolume() == 0) {
                     unsorted.add(r.getName());
@@ -311,8 +299,8 @@ public class RecipeBooks {
 
         // Get all recipes that have @recipebook flag for this book with defined volume
         for (BaseRecipe r : RecipeManager.getRecipes().index.keySet()) {
-            if (r.hasFlag(FlagType.ADDTOBOOK) && !allRecipes.contains(r.getName())) {
-                FlagAddToBook flag = r.getFlag(FlagAddToBook.class);
+            if (r.hasFlag(FlagType.ADD_TO_BOOK) && !allRecipes.contains(r.getName())) {
+                FlagAddToBook flag = (FlagAddToBook) r.getFlag(FlagType.ADD_TO_BOOK);
 
                 if (id.equals(flag.getBookName()) && flag.getVolume() > 0) {
                     List<String> recipes = volumesMap.get(flag.getVolume());
@@ -321,7 +309,7 @@ public class RecipeBooks {
                         recipes.add(r.getName());
                         allRecipes.add(r.getName());
                     } else {
-                        ErrorReporter.warning("Flag " + FlagType.ADDTOBOOK + " is set for '" + id + "' book but with invalid volume: " + flag.getVolume());
+                        ErrorReporter.getInstance().warning("Flag " + FlagType.ADD_TO_BOOK + " is set for '" + id + "' book but with invalid volume: " + flag.getVolume());
                     }
                 }
             }
@@ -339,11 +327,11 @@ public class RecipeBooks {
         try {
             yml.save(file);
         } catch (Throwable e) {
-            Messages.error(sender, e, "<red>Couldn't save '" + id + ".yml'!");
+            MessageSender.getInstance().error(sender, e, "<red>Couldn't save '" + id + ".yml'!");
         }
 
         if (volumesMap.isEmpty()) {
-            ErrorReporter.error("Book '" + id + "' has no defined recipes!", "See '" + Files.FILE_INFO_BOOKS + "' file to learn about recipe books.");
+            ErrorReporter.getInstance().error("Book '" + id + "' has no defined recipes!", "See '" + Files.FILE_INFO_BOOKS + "' file to learn about recipe books.");
             return null;
         }
 
@@ -362,7 +350,7 @@ public class RecipeBooks {
             int i = value.indexOf(' ');
 
             if (i < 0) {
-                ErrorReporter.warning("Book '" + id + "' has an argument without a value, removed.");
+                ErrorReporter.getInstance().warning("Book '" + id + "' has an argument without a value, removed.");
             }
 
             String arg = value.substring(0, i + 1).trim();
@@ -382,7 +370,7 @@ public class RecipeBooks {
                 } else if (value.startsWith("fuel")) {
                     getExistingByType(recipes, allRecipes, FuelRecipe.class);
                 } else {
-                    ErrorReporter.warning("Book '" + id + "' has 'existing' argument with unknown value: '" + value + "', removed");
+                    ErrorReporter.getInstance().warning("Book '" + id + "' has 'existing' argument with unknown value: '" + value + "', removed");
                 }
             } else if (arg.startsWith("custom")) {
                 if (value.equals("all")) {
@@ -398,7 +386,7 @@ public class RecipeBooks {
                 } else if (value.startsWith("fuel")) {
                     getCustomByType(recipes, allRecipes, FuelRecipe.class);
                 } else {
-                    ErrorReporter.warning("Book '" + id + "' has 'custom' argument with unknown value: '" + value + "', removed");
+                    ErrorReporter.getInstance().warning("Book '" + id + "' has 'custom' argument with unknown value: '" + value + "', removed");
                 }
             } else if (arg.startsWith("file")) {
                 if (value.charAt(0) == '/') {
@@ -419,7 +407,7 @@ public class RecipeBooks {
                 }
 
                 if (added == 0) {
-                    ErrorReporter.warning("Book '" + id + "' could not find any recipes that were added by: '" + value + "', removed.");
+                    ErrorReporter.getInstance().warning("Book '" + id + "' could not find any recipes that were added by: '" + value + "', removed.");
                 }
             } else if (arg.startsWith("folder")) {
                 if (value.charAt(0) != '/') {
@@ -452,19 +440,19 @@ public class RecipeBooks {
                 }
 
                 if (added == 0) {
-                    ErrorReporter.warning("Book '" + id + "' could not find any recipes in folder: '" + value + "', removed.");
+                    ErrorReporter.getInstance().warning("Book '" + id + "' could not find any recipes in folder: '" + value + "', removed.");
                 }
             } else {
-                ErrorReporter.warning("Book '" + id + "' has unknown argument: '" + arg + "', removed.");
+                ErrorReporter.getInstance().warning("Book '" + id + "' has unknown argument: '" + arg + "', removed.");
             }
         } else {
             BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(value);
 
             if (recipe == null) {
-                ErrorReporter.warning("Book '" + id + "' has a recipe that does not exist any more: '" + value + "', removed.");
+                ErrorReporter.getInstance().warning("Book '" + id + "' has a recipe that does not exist any more: '" + value + "', removed.");
             } else {
                 if (allRecipes.contains(value)) {
-                    ErrorReporter.warning("Book '" + id + "' already has recipe '" + value + "' added, removed.");
+                    ErrorReporter.getInstance().warning("Book '" + id + "' already has recipe '" + value + "' added, removed.");
                 } else {
                     recipes.add(value);
                     allRecipes.add(value);
@@ -529,7 +517,7 @@ public class RecipeBooks {
             RecipeBook book = getBook(id);
 
             if (book == null) {
-                Messages.RECIPEBOOK_UPDATE_EXTINCT.printOnce(player, null, "{title}", meta.getTitle());
+                Messages.getInstance().sendOnceCustom(player, "recipebook.update.extinct", "{title}", meta.getTitle());
                 return;
             }
 
@@ -540,13 +528,13 @@ public class RecipeBooks {
                 volume = Integer.parseInt(match.group(3));
                 updated = Integer.parseInt(match.group(4));
             } catch (NumberFormatException e) {
-                Messages.error(null, e, "Error while parsing " + player.getName() + "'s held book details.");
+                MessageSender.getInstance().error(null, e, "Error while parsing " + player.getName() + "'s held book details.");
                 return;
             }
 
             if (generated > updated) {
                 if (volume > book.getVolumesNum()) {
-                    Messages.RECIPEBOOK_UPDATE_NOVOLUME.printOnce(player, null, "{title}", meta.getTitle(), "{volume}", volume);
+                    Messages.getInstance().sendOnceCustom(player, "recipebook.update.novolume", "{title}", meta.getTitle(), "{volume}", volume);
                     return;
                 }
 
@@ -556,14 +544,14 @@ public class RecipeBooks {
                 boolean titleDiff = !bookMeta.getTitle().equals(meta.getTitle());
 
                 if (titleDiff || !bookMeta.getPages().equals(meta.getPages())) {
-                    Messages.RECIPEBOOK_UPDATE_DONE.print(player);
+                    Messages.getInstance().send(player, "recipebook.update.done");
 
                     if (titleDiff) {
-                        Messages.RECIPEBOOK_UPDATE_CHANGED_TITLE.print(player, null, "{oldtitle}", meta.getTitle(), "{newtitle}", bookMeta.getTitle());
+                        Messages.getInstance().send(player, "recipebook.update.changed.title", "{oldtitle}", meta.getTitle(), "{newtitle}", bookMeta.getTitle());
                     }
 
                     if (meta.getPageCount() != bookMeta.getPageCount()) {
-                        Messages.RECIPEBOOK_UPDATE_CHANGED_PAGES.print(player, null, "{oldpages}", meta.getPageCount(), "{newpages}", bookMeta.getPageCount());
+                        Messages.getInstance().send(player, "recipebook.update.changed.pages", "{oldpages}", meta.getPageCount(), "{newpages}", bookMeta.getPageCount());
                     }
                 }
 

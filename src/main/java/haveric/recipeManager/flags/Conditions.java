@@ -1,13 +1,11 @@
 package haveric.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -18,18 +16,18 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.util.ParseBit;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 //TODO written book title, author, page num, chars per page, etc
 
 public class Conditions implements Cloneable {
-    private FlagType flagType;
+    private String flagType;
     private ItemStack ingredient;
     private String failMessage;
     private Map<Short, Boolean> dataValues = new HashMap<Short, Boolean>();
@@ -336,7 +334,7 @@ public class Conditions implements Cloneable {
      * Set the enchants map.<br>
      * Setting to null will clear the map contents.
      *
-     * @param enchants
+     * @param newEnchants
      */
     public void setEnchants(Map<Enchantment, Map<Short, Boolean>> newEnchants) {
         if (newEnchants == null) {
@@ -455,7 +453,7 @@ public class Conditions implements Cloneable {
      * Set the book enchants map.<br>
      * Setting to null will clear the map contents.
      *
-     * @param enchants
+     * @param newEnchants
      */
     public void setBookEnchants(Map<Enchantment, Map<Short, Boolean>> newEnchants) {
         if (newEnchants == null) {
@@ -594,7 +592,7 @@ public class Conditions implements Cloneable {
                     Pattern pattern = Pattern.compile(name.substring("regex:".length()));
                     return pattern.matcher(nameToCheck).matches();
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
+                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
                     return false;
                 }
             }
@@ -638,7 +636,7 @@ public class Conditions implements Cloneable {
                 try {
                     pattern = Pattern.compile(lore.substring("regex:".length()));
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
+                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'http://regexpal.com' (or something similar) to test your regex code before using it.");
                     return false;
                 }
             }
@@ -672,9 +670,9 @@ public class Conditions implements Cloneable {
     /**
      * Set the color ranges.
      *
-     * @param minColor
+     * @param newMinColor
      *            color for min-range or null to disable color checking.
-     * @param maxColor
+     * @param newMaxColor
      *            color for max-range or null to disable range.
      */
     public void setColor(Color newMinColor, Color newMaxColor) {
@@ -810,7 +808,7 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NODATA, getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getDataString());
+                a.addReason("flag.ingredientconditions.nodata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getDataString());
             }
             ok = false;
 
@@ -825,7 +823,7 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOAMOUNT, getFailMessage(), "{item}", ToolsItem.print(item), "{amount}", getAmount());
+                a.addReason("flag.ingredientconditions.noamount", getFailMessage(), "{item}", ToolsItem.print(item), "{amount}", getAmount());
             }
             ok = false;
 
@@ -842,7 +840,7 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
+                    a.addReason("flag.ingredientconditions.noenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
                 }
                 ok = false;
 
@@ -858,7 +856,7 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOENCHANTS, getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
+                a.addReason("flag.ingredientconditions.noenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
             }
             ok = false;
 
@@ -879,7 +877,7 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NONAME, getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getName());
+                a.addReason("flag.ingredientconditions.noname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getName());
             }
             ok = false;
 
@@ -894,7 +892,7 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOLORE, getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLores());
+                a.addReason("flag.ingredientconditions.nolore", getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLores());
             }
             ok = false;
 
@@ -920,7 +918,7 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason(Messages.FLAG_INGREDIENTCONDITIONS_NOCOLOR, getFailMessage(), "{item}", ToolsItem.print(item), "{color}", getColorString());
+                    a.addReason("flag.ingredientconditions.nocolor", getFailMessage(), "{item}", ToolsItem.print(item), "{color}", getColorString());
                 }
                 ok = false;
 
@@ -993,11 +991,11 @@ public class Conditions implements Cloneable {
         return ingredient;
     }
 
-    public FlagType getFlagType() {
+    public String getFlagType() {
         return flagType;
     }
 
-    public void setFlagType(FlagType newFlagType) {
+    public void setFlagType(String newFlagType) {
         flagType = newFlagType;
     }
 
@@ -1006,7 +1004,7 @@ public class Conditions implements Cloneable {
 
         if (arg.startsWith("data")) {
             if (item.getDurability() != Vanilla.DATA_WILDCARD) {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
+                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
                 return;
             }
 
@@ -1039,7 +1037,7 @@ public class Conditions implements Cloneable {
                     if (match != null && match.getDurability() != Vanilla.DATA_WILDCARD) {
                         cond.addDataValue(match.getDurability(), !not);
                     } else {
-                        // ErrorReporter.warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
+                        // ErrorReporter.getInstance().warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
                         continue;
                     }
                 } else {
@@ -1053,12 +1051,12 @@ public class Conditions implements Cloneable {
                             min = Short.valueOf(split[0].trim());
                             max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid numbers: " + val);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid numbers: " + val);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
                             break;
                         }
 
@@ -1078,7 +1076,7 @@ public class Conditions implements Cloneable {
                                 cond.addDataValue(Short.valueOf(val), !not);
                             }
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number: " + val);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number: " + val);
                             continue;
                         }
                     }
@@ -1090,7 +1088,7 @@ public class Conditions implements Cloneable {
             try {
                 cond.setAmount(Integer.parseInt(value));
             } catch (NumberFormatException e) {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'amount' argument with invalid number: " + value);
+                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'amount' argument with invalid number: " + value);
                 return;
             }
         } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
@@ -1105,7 +1103,7 @@ public class Conditions implements Cloneable {
             Enchantment enchant = Tools.parseEnchant(value);
 
             if (enchant == null) {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid name: " + value);
+                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid name: " + value);
                 return;
             }
 
@@ -1130,12 +1128,12 @@ public class Conditions implements Cloneable {
                             min = Short.valueOf(split[0].trim());
                             max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
                             continue;
                         }
 
@@ -1144,7 +1142,7 @@ public class Conditions implements Cloneable {
                         try {
                             cond.addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number: " + s);
                             continue;
                         }
                     }
@@ -1158,7 +1156,7 @@ public class Conditions implements Cloneable {
             }
         } else if (arg.startsWith("bookenchant")) {
             if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
+                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
                 return;
             }
 
@@ -1171,7 +1169,7 @@ public class Conditions implements Cloneable {
             Enchantment enchant = Tools.parseEnchant(value);
 
             if (enchant == null) {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
+                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
                 return;
             }
 
@@ -1196,12 +1194,12 @@ public class Conditions implements Cloneable {
                             min = Short.valueOf(split[0].trim());
                             max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
                             continue;
                         }
 
@@ -1210,7 +1208,7 @@ public class Conditions implements Cloneable {
                         try {
                             cond.addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
                             continue;
                         }
                     }
@@ -1224,7 +1222,7 @@ public class Conditions implements Cloneable {
             }
         } else if (arg.startsWith("color")) {
             if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
-                ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
+                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
                 return;
             }
 
@@ -1236,7 +1234,7 @@ public class Conditions implements Cloneable {
                 String[] split = value.split(",", 3);
 
                 if (split.length != 3) {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
                     return;
                 }
 
@@ -1256,14 +1254,14 @@ public class Conditions implements Cloneable {
                         }
 
                         if (min < 0 || min > 255 || min > max || max > 255) {
-                            ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
+                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
                             break;
                         }
 
                         //minColor[c] = min;
                         //maxColor[c] = max;
                     } catch (NumberFormatException e) {
-                        ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid number: " + value);
                         continue;
                     }
                 }
@@ -1289,7 +1287,7 @@ public class Conditions implements Cloneable {
 
             cond.setFailMessage(value);
         } else {
-            ErrorReporter.warning("Flag " + cond.getFlagType() + " has unknown argument: " + arg);
+            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has unknown argument: " + arg);
         }
     }
 }

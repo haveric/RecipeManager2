@@ -1,11 +1,16 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeStatus;
 
 public class FlagRemove extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.REMOVE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -48,7 +53,7 @@ public class FlagRemove extends Flag {
     @Override
     protected boolean onValidate() {
         if (getFlagsContainer().hasFlag(FlagType.OVERRIDE)) {
-            return ErrorReporter.error("Flag " + getType() + " can't work with " + FlagType.OVERRIDE + " flag!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can't work with " + FlagType.OVERRIDE + " flag!");
         }
 
         return true;
@@ -64,7 +69,7 @@ public class FlagRemove extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (recipe == null) {
-            Messages.error(null, new IllegalAccessError(), "ERROR: invalid recipe pointer");
+            MessageSender.getInstance().error(null, new IllegalAccessError(), "ERROR: invalid recipe pointer");
             remove();
         } else {
             recipe.getInfo().setStatus(RecipeStatus.REMOVED);

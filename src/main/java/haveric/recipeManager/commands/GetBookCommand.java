@@ -1,7 +1,9 @@
 package haveric.recipeManager.commands;
 
-import java.util.List;
-
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.data.RecipeBook;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,9 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.data.RecipeBook;
+import java.util.List;
 
 public class GetBookCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -22,7 +22,7 @@ public class GetBookCommand implements CommandExecutor {
 
         int argsLength = args.length;
         if (argsLength <= 0) {
-            Messages.CMD_GETBOOK_USAGE.print(sender, null, "{command}", label);
+            Messages.getInstance().send(sender, "cmd.getbook.usage", "{command}", label);
             return true;
         }
 
@@ -44,7 +44,7 @@ public class GetBookCommand implements CommandExecutor {
             try {
                 volume = Integer.parseInt(bookName.substring(index + 1));
             } catch (Throwable e) {
-                Messages.CMD_GETBOOK_INVALIDNUMBER.print(sender);
+                Messages.getInstance().send(sender, "cmd.getbook.invalidnumber");
             }
 
             bookName = bookName.substring(0, index).trim();
@@ -53,13 +53,13 @@ public class GetBookCommand implements CommandExecutor {
         List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(bookName);
 
         if (books.isEmpty()) {
-            Messages.CMD_GETBOOK_NOTEXIST.print(sender, null, "{arg}", bookName);
+            Messages.getInstance().send(sender, "cmd.getbook.notexist", "{arg}", bookName);
             return true;
         } else if (books.size() > 1) {
-            Messages.CMD_GETBOOK_MANYMATCHES.print(sender, null, "{num}", books.size(), "{arg}", bookName);
+            Messages.getInstance().send(sender, "cmd.getbook.manymatches", "{num}", books.size(), "{arg}", bookName);
 
             for (RecipeBook b : books) {
-                Messages.send(sender, "<red> - <reset>" + b.getTitle());
+                MessageSender.getInstance().send(sender, "<red> - <reset>" + b.getTitle());
             }
 
             return true;
@@ -71,7 +71,7 @@ public class GetBookCommand implements CommandExecutor {
 
         BookMeta meta = (BookMeta) item.getItemMeta();
 
-        Messages.CMD_GETBOOK_GIVEN.print(sender, null, "{title}", meta.getTitle());
+        Messages.getInstance().send(sender, "cmd.getbook.given", "{title}", meta.getTitle());
 
         return true;
     }

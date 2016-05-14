@@ -5,6 +5,11 @@ import haveric.recipeManager.Files;
 public class FlagAddToBook extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.ADD_TO_BOOK;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag} <book id> [volume <num>]", };
@@ -80,7 +85,7 @@ public class FlagAddToBook extends Flag {
     /**
      * Set the book volume to add the recipe too.
      *
-     * @param volume
+     * @param newVolume
      *            book volume from 1 or 0 to allocate automatically.
      */
     public void setVolume(int newVolume) {

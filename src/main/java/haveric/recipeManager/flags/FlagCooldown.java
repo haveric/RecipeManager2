@@ -1,15 +1,18 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManagerCommon.util.RMCUtil;
+import org.apache.commons.lang.mutable.MutableInt;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.mutable.MutableInt;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 public class FlagCooldown extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.COOLDOWN;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -226,14 +229,14 @@ public class FlagCooldown extends Flag {
         }
 
         if (value.length() > String.valueOf(Float.MAX_VALUE).length()) {
-            ErrorReporter.error("The " + getType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + RMCUtil.printNumber(Float.MIN_VALUE) + " and " + RMCUtil.printNumber(Float.MAX_VALUE) + ".");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + RMCUtil.printNumber(Float.MIN_VALUE) + " and " + RMCUtil.printNumber(Float.MAX_VALUE) + ".");
             return false;
         }
 
         try {
             time = Float.valueOf(value);
         } catch (NumberFormatException e) {
-            ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
             return false;
         }
 
@@ -244,7 +247,7 @@ public class FlagCooldown extends Flag {
         }
 
         if (time <= 0.0f) {
-            ErrorReporter.error("The " + getType() + " flag must have cooldown value more than 0!");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag must have cooldown value more than 0!");
             return false;
         }
 
@@ -268,11 +271,11 @@ public class FlagCooldown extends Flag {
     @Override
     protected void onCheck(Args a) {
         if (!hasCooldown(a.playerName())) {
-            Messages message;
+            String message;
             if (global) {
-                message = Messages.FLAG_COOLDOWN_FAIL_GLOBAL;
+                message = "flag.cooldown.fail.global";
             } else {
-                message = Messages.FLAG_COOLDOWN_FAIL_PERPLAYER;
+                message = "flag.cooldown.fail.perplayer";
             }
             a.addReason(message, getFailMessage(), "{time}", getTimeLeftStringFor(a.playerName()));
         }
@@ -299,11 +302,11 @@ public class FlagCooldown extends Flag {
             get.setValue(diff);
         }
 
-        Messages message;
+        String message;
         if (global) {
-            message = Messages.FLAG_COOLDOWN_SET_GLOBAL;
+            message = "flag.cooldown.set.global";
         } else {
-            message = Messages.FLAG_COOLDOWN_SET_PERPLAYER;
+            message = "flag.cooldown.set.perplayer";
         }
         a.addEffect(message, getCraftMessage(), "{time}", timeToString(getCooldownTime()));
     }
@@ -311,7 +314,7 @@ public class FlagCooldown extends Flag {
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
      *
-     * list.add((global ? Messages.FLAG_COOLDOWN_SET_GLOBAL : Messages.FLAG_COOLDOWN_SET_PERPLAYER).get("{time}", timeToString(getCooldownTime())));
+     * list.add((global ? MessagesOld.FLAG_COOLDOWN_SET_GLOBAL : MessagesOld.FLAG_COOLDOWN_SET_PERPLAYER).get("{time}", timeToString(getCooldownTime())));
      *
      * return list; }
      */

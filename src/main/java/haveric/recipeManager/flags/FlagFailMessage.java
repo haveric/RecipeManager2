@@ -1,15 +1,19 @@
 package haveric.recipeManager.flags;
 
-import org.bukkit.Material;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.Material;
 
 public class FlagFailMessage extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.FAIL_MESSAGE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -70,7 +74,7 @@ public class FlagFailMessage extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (!(recipe instanceof MultiResultRecipe) && !(recipe instanceof SingleResultRecipe)) {
-            ErrorReporter.error("Flag " + getType() + " can only be used on recipes that support failure chance.");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on recipes that support failure chance.");
             return false;
         }
 

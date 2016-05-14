@@ -1,107 +1,50 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.BrewRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.recipes.*;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.command.CommandSender;
-
 public class RecipeRegistrator {
-    protected Map<BaseRecipe, RMCRecipeInfo> queuedRecipes = new HashMap<BaseRecipe, RMCRecipeInfo>();
+    private Map<BaseRecipe, RMCRecipeInfo> queuedRecipes = new HashMap<BaseRecipe, RMCRecipeInfo>();
     private boolean registered = false;
 
     protected RecipeRegistrator() {
     }
-
-    protected void queueRecipe(BaseRecipe recipe, String adder) {
+    
+    public void queueRecipe(BaseRecipe recipe, String adder) {
         if (recipe instanceof CraftRecipe) {
-            queueCraftRecipe((CraftRecipe) recipe, adder);
+            queueRecipe(recipe, adder, "Recipe is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
         } else if (recipe instanceof CombineRecipe) {
-            queueCombineRecipe((CombineRecipe) recipe, adder);
+            queueRecipe(recipe, adder, "Recipe is invalid! Needs at least one result and ingredient!");
         } else if (recipe instanceof SmeltRecipe) {
-            queueSmeltRecipe((SmeltRecipe) recipe, adder);
+            queueRecipe(recipe, adder, "Recipe is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof BrewRecipe) {
-            queueBrewRecipe((BrewRecipe) recipe, adder);
+            queueRecipe(recipe, adder, "Recipe is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof FuelRecipe) {
-            queueFuelRecipe((FuelRecipe) recipe, adder);
+            queueRecipe(recipe, adder, "Recipe is invalid! Needs an ingredient!");
         } else {
             throw new IllegalArgumentException("Unknown recipe!");
         }
     }
 
-    protected void queueCraftRecipe(CraftRecipe recipe, String adder) {
+    private void queueRecipe(BaseRecipe recipe, String adder, String error) {
         if (registered) {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
+            throw new IllegalArgumentException(error);
         }
 
         queuedRecipes.remove(recipe); // if exists, update key too!
-        queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
-    }
-
-    protected void queueCombineRecipe(CombineRecipe recipe, String adder) {
-        if (registered) {
-            throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
-        }
-
-        if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid! Needs at least one result and ingredient!");
-        }
-
-        queuedRecipes.remove(recipe);
-        queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
-    }
-
-    protected void queueSmeltRecipe(SmeltRecipe recipe, String adder) {
-        if (registered) {
-            throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
-        }
-
-        if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid! Needs a result and ingredient!");
-        }
-
-        queuedRecipes.remove(recipe);
-        queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
-    }
-
-    protected void queueBrewRecipe(BrewRecipe recipe, String adder) {
-        if (registered) {
-            throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
-        }
-
-        if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid! Needs a result and ingredient!");
-        }
-
-        queuedRecipes.remove(recipe);
-        queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
-    }
-
-    protected void queueFuelRecipe(FuelRecipe recipe, String adder) {
-        if (registered) {
-            throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
-        }
-
-        if (!recipe.isValid()) {
-            throw new IllegalArgumentException("Recipe is invalid! Needs an ingredient!");
-        }
-
-        queuedRecipes.remove(recipe);
         queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
     }
 
@@ -145,7 +88,7 @@ public class RecipeRegistrator {
             time = System.currentTimeMillis();
 
             if (time > lastDisplay + 1000) {
-                Messages.sendAndLog(sender, String.format("%sRegistering recipes %d%%...", RMCChatColor.YELLOW, ((processed * 100) / size)));
+                MessageSender.getInstance().sendAndLog(sender, String.format("%sRegistering recipes %d%%...", RMCChatColor.YELLOW, ((processed * 100) / size)));
                 lastDisplay = time;
             }
 
@@ -157,6 +100,14 @@ public class RecipeRegistrator {
 
         RecipeManager.getRecipeBooks().reload(sender); // (re)create recipe books for recipes
 
-        Messages.send(sender, String.format("All done in %.3f seconds, %d recipes processed.", ((System.currentTimeMillis() - start) / 1000.0), processed));
+        MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d recipes processed.", ((System.currentTimeMillis() - start) / 1000.0), processed));
+    }
+
+    public Map<BaseRecipe, RMCRecipeInfo> getQueuedRecipes() {
+        return queuedRecipes;
+    }
+
+    public int getNumQueuedRecipes() {
+        return queuedRecipes.size();
     }
 }

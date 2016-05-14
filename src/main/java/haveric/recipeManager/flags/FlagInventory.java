@@ -1,16 +1,19 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.event.inventory.InventoryType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.event.inventory.InventoryType;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 public class FlagInventory extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.INVENTORY;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -90,7 +93,7 @@ public class FlagInventory extends Flag {
             try {
                 addInventory(InventoryType.valueOf(arg.trim().toUpperCase()));
             } catch (IllegalArgumentException e) {
-                return ErrorReporter.error("Flag " + getType() + "  has unknown inventory type(s): " + value);
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + "  has unknown inventory type(s): " + value);
             }
         }
 
@@ -113,7 +116,7 @@ public class FlagInventory extends Flag {
         }
 
         if (!success) {
-            a.addReason(Messages.FLAG_INVENTORY, failMessage, "{inventory}", getInventories().toString());
+            a.addReason("flag.inventory", failMessage, "{inventory}", getInventories().toString());
         }
     }
 }

@@ -1,7 +1,24 @@
 package haveric.recipeManager;
 
-import java.util.List;
-
+import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
+import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
+import haveric.recipeManager.api.events.RecipeManagerFuelBurnRandomEvent;
+import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
+import haveric.recipeManager.data.BrewingStandData;
+import haveric.recipeManager.data.BrewingStands;
+import haveric.recipeManager.data.FurnaceData;
+import haveric.recipeManager.data.Furnaces;
+import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.flags.Flaggable;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,52 +37,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.BrewEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.FurnaceBurnEvent;
-import org.bukkit.event.inventory.FurnaceExtractEvent;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.BrewerInventory;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import haveric.recipeManager.api.events.RecipeManagerCraftEvent;
-import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
-import haveric.recipeManager.api.events.RecipeManagerFuelBurnRandomEvent;
-import haveric.recipeManager.api.events.RecipeManagerPrepareCraftEvent;
-import haveric.recipeManager.data.BrewingStandData;
-import haveric.recipeManager.data.BrewingStands;
-import haveric.recipeManager.data.FurnaceData;
-import haveric.recipeManager.data.Furnaces;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flaggable;
-import haveric.recipeManager.recipes.BrewRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import java.util.List;
 
 /**
  * RecipeManager handled events
@@ -163,9 +141,9 @@ public class Events implements Listener {
                 a.setResult(result);
 
                 if (recipe.sendPrepare(a)) {
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+                    a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                 } else {
-                    a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+                    a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                     result = null;
                 }
             }
@@ -183,44 +161,44 @@ public class Events implements Listener {
                 sender = null;
             }
 
-            Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
+            MessageSender.getInstance().error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
     private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult) {
         if (!result.equals(recipeResult)) { // result was processed by the game and it doesn't match the original recipe
             if (!Settings.getInstance().getSpecialLeatherDye() && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
-                Messages.CRAFT_SPECIAL_LEATHERDYE.printOnce(player);
+                Messages.getInstance().sendOnce(player, "craft.special.leatherdye");
                 inv.setResult(null);
                 return true;
             }
 
             if (!Settings.getInstance().getSpecialMapCloning() && recipeResult.equals(Vanilla.RECIPE_MAPCLONE)) {
-                Messages.CRAFT_SPECIAL_MAP_CLONING.printOnce(player);
+                Messages.getInstance().sendOnce(player, "craft.special.map.cloning");
                 inv.setResult(null);
                 return true;
             }
 
             if (!Settings.getInstance().getSpecialMapExtending() && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
-                Messages.CRAFT_SPECIAL_MAP_EXTENDING.printOnce(player);
+                Messages.getInstance().sendOnce(player, "craft.special.map.extending");
                 inv.setResult(null);
                 return true;
             }
 
             if (!Settings.getInstance().getSpecialFireworks() && recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
-                Messages.CRAFT_SPECIAL_FIREWORKS.printOnce(player);
+                Messages.getInstance().sendOnce(player, "craft.special.fireworks");
                 inv.setResult(null);
                 return true;
             }
 
             if (!Settings.getInstance().getSpecialBookCloning() && recipeResult.equals(Vanilla.RECIPE_BOOKCLONE)) {
-                Messages.CRAFT_SPECIAL_BOOK_CLONING.printOnce(player);
+                Messages.getInstance().sendOnce(player, "craft.special.book.cloning");
                 inv.setResult(null);
                 return true;
             }
 
             if (!Settings.getInstance().getSpecialBanner() && recipeResult.equals(Vanilla.RECIPE_BANNER)) {
-                Messages.CRAFT_SPECIAL_BANNER.printOnce(player);
+                Messages.getInstance().sendOnce(player, "craft.special.banner");
                 inv.setResult(null);
                 return true;
             }
@@ -231,8 +209,8 @@ public class Events implements Listener {
 
     private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) throws Throwable {
         if (!Settings.getInstance().getSpecialRepair()) {
-            Messages.sendDenySound(player, location);
-            Messages.CRAFT_REPAIR_DISABLED.printOnce(player);
+            SoundNotifier.sendDenySound(player, location);
+            Messages.getInstance().sendOnce(player, "craft.repair.disabled");
             inv.setResult(null);
             return;
         }
@@ -280,7 +258,7 @@ public class Events implements Listener {
         result = callEvent.getResult();
 
         if (result != null) {
-            Messages.sendRepairSound(player, location);
+        	SoundNotifier.sendRepairSound(player, location);
         }
 
         inv.setResult(result);
@@ -309,7 +287,7 @@ public class Events implements Listener {
 
             if (!event.isShiftClick() && result == null) {
                 event.setCancelled(true);
-                Messages.sendDenySound(player, location);
+                SoundNotifier.sendDenySound(player, location);
                 return;
             }
 
@@ -323,7 +301,7 @@ public class Events implements Listener {
             Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
 
             if (!recipe.checkFlags(a)) {
-                Messages.sendDenySound(player, location);
+            	SoundNotifier.sendDenySound(player, location);
                 event.setCancelled(true);
                 return;
             }
@@ -362,21 +340,21 @@ public class Events implements Listener {
 
                     boolean recipeCraftSuccess = recipe.sendCrafted(a);
                     if (recipeCraftSuccess) {
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                     }
 
                     a.clear();
 
                     boolean resultPrepareSuccess = result.sendPrepare(a);
                     if (resultPrepareSuccess) {
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
+                        a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
                     }
 
                     a.clear();
 
                     boolean resultCraftSuccess = result.sendCrafted(a);
                     if (resultCraftSuccess) {
-                        a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
+                        a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
                     }
 
                     boolean subtract = false;
@@ -392,11 +370,11 @@ public class Events implements Listener {
                             onlyExtra = false;
                         }
 
-                        if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                        if (recipe.hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
                             subtract = true;
                         }
 
-                        if (result.hasFlag(FlagType.NORESULT)) {
+                        if (result.hasFlag(FlagType.NO_RESULT)) {
                             event.setCurrentItem(new ItemStack(Material.AIR));
                             subtract = true;
                             onlyExtra = false;
@@ -430,7 +408,7 @@ public class Events implements Listener {
                 sender = null;
             }
 
-            Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
+            MessageSender.getInstance().error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
@@ -442,16 +420,16 @@ public class Events implements Listener {
 
             // check if result is air / recipe failed
             if (result == null || result.getType() == Material.AIR) {
-                Messages.CRAFT_RECIPE_MULTI_FAILED.printOnce(player);
-                Messages.sendFailSound(player, a.location());
+                Messages.getInstance().sendOnce(player, "craft.recipe.multi.failed");
+                SoundNotifier.sendFailSound(player, a.location());
             } else {
                 if (event.isShiftClick()) {
                     if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
-                        Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
+                        Messages.getInstance().sendOnce(player, "craft.recipe.flag.noshiftclick");
                         return 0;
                     }
 
-                    Messages.CRAFT_RECIPE_MULTI_NOSHIFTCLICK.printOnce(player);
+                    Messages.getInstance().sendOnce(player, "craft.recipe.multi.noshiftclick");
 
                     if (Tools.playerCanAddItem(player, result)) {
                         player.getInventory().addItem(result);
@@ -461,15 +439,15 @@ public class Events implements Listener {
                 } else {
                     ItemStack cursor = event.getCursor();
 
-                    if (!recipe.hasFlag(FlagType.INDIVIDUALRESULTS) && cursor != null && cursor.getType() != Material.AIR) {
-                        Messages.CRAFT_RECIPE_MULTI_CHANCE_CURSORHASITEM.printOnce(player);
+                    if (!recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS) && cursor != null && cursor.getType() != Material.AIR) {
+                        Messages.getInstance().sendOnce(player, "craft.recipe.multi.chance.cursorhasitem");
                         return 0;
                     }
 
                     ItemStack merged = ToolsItem.merge(cursor, result);
 
                     if (merged == null) {
-                        Messages.CRAFT_RECIPE_MULTI_CURSORFULL.printOnce(player);
+                        Messages.getInstance().sendOnce(player, "craft.recipe.multi.cursorfull");
                         return 0;
                     }
 
@@ -485,7 +463,7 @@ public class Events implements Listener {
 
             if (event.isShiftClick()) {
                 if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
-                    Messages.CRAFT_RECIPE_FLAG_NOSHIFTCLICK.printOnce(player);
+                    Messages.getInstance().sendOnce(player, "craft.recipe.flag.noshiftclick");
 
                     event.setCancelled(true); // cancel regardless just to be safe
 
@@ -602,7 +580,7 @@ public class Events implements Listener {
         Players.remove(player);
         Workbenches.remove(player);
         Recipes.recipeResetResult(name);
-        Messages.clearPlayer(name);
+        Messages.getInstance().clearPlayer(name);
 
         UUIDFetcher.removePlayerFromCache(name);
     }
@@ -689,7 +667,7 @@ public class Events implements Listener {
                 sender = null;
             }
 
-            Messages.error(sender, e, event.getEventName() + " cancelled due to error:");
+            MessageSender.getInstance().error(sender, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
@@ -1012,7 +990,7 @@ public class Events implements Listener {
             return false;
         }
 
-        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
+        String msg = Messages.getInstance().parse("flag.prefix.furnace", "{location}", Tools.printLocation(a.location()));
 
         a.clear();
 
@@ -1148,7 +1126,7 @@ public class Events implements Listener {
 
         a.clear();
 
-        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
+        String msg = Messages.getInstance().parse("flag.prefix.furnace", "{location}", Tools.printLocation(a.location()));
 
         if (recipe.sendFuelRandom(a)) {
             a.sendEffects(a.player(), msg);
@@ -1164,7 +1142,7 @@ public class Events implements Listener {
 
         a.clear();
 
-        String msg = Messages.FLAG_PREFIX_FURNACE.get("{location}", Tools.printLocation(a.location()));
+        String msg = Messages.getInstance().parse("flag.prefix.furnace", "{location}", Tools.printLocation(a.location()));
 
         if (recipe.sendFuelEnd(a)) {
             a.sendEffects(a.player(), msg);
@@ -1202,12 +1180,12 @@ public class Events implements Listener {
             if (!isRecipeSameAsResult(a) || !recipeFlaggable || (result != null && !resultFlaggable)) {
                 event.setResult(new ItemStack(Material.AIR));
             } else {
-                if (a.result() == null || a.result().getType() == Material.AIR || result.hasFlag(FlagType.NORESULT)) {
+                if (a.result() == null || a.result().getType() == Material.AIR || result.hasFlag(FlagType.NO_RESULT)) {
                     event.setResult(new ItemStack(Material.AIR));
                 } else {
                     event.setResult(result.toItemStack());
 
-                    if (recipe.hasFlag(FlagType.INGREDIENTCONDITION) || result.hasFlag(FlagType.INGREDIENTCONDITION)) {
+                    if (recipe.hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
                         recipe.subtractIngredient(inventory, result, true);
                     }
                 }
@@ -1246,7 +1224,7 @@ public class Events implements Listener {
                 event.setExpToDrop(0);
             }
         } catch (Throwable e) {
-            Messages.error(null, e, event.getEventName() + " cancelled due to error:");
+            MessageSender.getInstance().error(null, e, event.getEventName() + " cancelled due to error:");
         }
     }
 
@@ -1384,11 +1362,11 @@ public class Events implements Listener {
                 int compare = Updater.compareVersions();
 
                 if (compare == -1) {
-                    Messages.send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                    MessageSender.getInstance().send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 } else if (compare == 2) {
-                    Messages.send(player, "[RecipeManager] New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                    MessageSender.getInstance().send(player, "[RecipeManager] New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 } else if (compare == 3) {
-                    Messages.send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                    MessageSender.getInstance().send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 }
             }
         }

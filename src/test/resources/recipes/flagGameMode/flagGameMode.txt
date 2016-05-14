@@ -1,0 +1,4 @@
+craft
+dirt + cobblestone
+= iron_sword
+@gamemode creative

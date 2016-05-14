@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import haveric.recipeManager.messages.MessageSender;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,7 +17,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.FurnaceInventory;
 
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 
 public class Furnaces {
@@ -159,13 +159,13 @@ public class Furnaces {
             }
         }
 
-        Messages.log("Loaded " + furnaces.size() + " furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        MessageSender.getInstance().log("Loaded " + furnaces.size() + " furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 
     public static void save() {
         long start = System.currentTimeMillis();
 
-        Messages.log("Saving " + furnaces.size() + " furnaces...");
+        MessageSender.getInstance().log("Saving " + furnaces.size() + " furnaces...");
 
         Map<UUID, Map<String, FurnaceData>> mapWorld = new HashMap<UUID, Map<String, FurnaceData>>();
         Map<String, FurnaceData> mapCoords;
@@ -186,7 +186,7 @@ public class Furnaces {
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
 
         if (!dir.exists() && !dir.mkdirs()) {
-            Messages.info("<red>Couldn't create directories: " + dir.getPath());
+            MessageSender.getInstance().info("<red>Couldn't create directories: " + dir.getPath());
             return;
         }
 
@@ -212,11 +212,11 @@ public class Furnaces {
             try {
                 yml.save(file);
             } catch (Throwable e) {
-                Messages.error(null, e, "Failed to create '" + file.getPath() + "' file!");
+                MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
                 continue;
             }
         }
 
-        Messages.log("Saved furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        MessageSender.getInstance().log("Saved furnaces in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 }

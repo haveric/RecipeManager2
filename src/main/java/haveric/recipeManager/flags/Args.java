@@ -1,21 +1,21 @@
 package haveric.recipeManager.flags;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-
-import haveric.recipeManager.Messages;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import haveric.recipeManagerCommon.flags.AbstractArgs;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
@@ -114,16 +114,16 @@ public class Args extends AbstractArgs {
         return result != null;
     }
 
-    public void addReason(Messages globalMessage, String customMessage, Object... variables) {
-        addCustomReason(globalMessage.getCustom(customMessage, variables));
+    public void addReason(String globalMessagePath, String customMessage, Object... variables) {
+        addCustomReason(Messages.getInstance().parseCustom(globalMessagePath, customMessage, variables));
     }
 
     public void sendReasons(CommandSender sender, String prefix) {
         sendList(sender, prefix, reasons());
     }
 
-    public void addEffect(Messages globalMessage, String customMessage, Object... variables) {
-        addCustomEffect(globalMessage.getCustom(customMessage, variables));
+    public void addEffect(String globalMessagePath, String customMessage, Object... variables) {
+        addCustomEffect(Messages.getInstance().parseCustom(globalMessagePath, customMessage, variables));
     }
 
     public void sendEffects(CommandSender sender, String prefix) {
@@ -137,7 +137,7 @@ public class Args extends AbstractArgs {
 
         for (String s : list) {
             if (s != null) {
-                Messages.send(sender, prefix + s);
+                MessageSender.getInstance().send(sender, prefix + s);
             }
         }
     }

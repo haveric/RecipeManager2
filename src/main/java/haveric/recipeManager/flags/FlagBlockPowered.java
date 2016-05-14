@@ -1,12 +1,15 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-
 public class FlagBlockPowered extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.BLOCK_POWERED;
+    }
 
     @Override
     protected  String[] getArguments() {
@@ -82,7 +85,7 @@ public class FlagBlockPowered extends Flag {
 
                 setFailMessage(arg);
             } else {
-                ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
             }
         }
 
@@ -103,17 +106,17 @@ public class FlagBlockPowered extends Flag {
             case FURNACE:
             case BURNING_FURNACE:
                 if (isIndirect() ? !block.isBlockIndirectlyPowered() : !block.isBlockPowered()) {
-                    Messages reason;
+                    String reason;
                     if (block.getType() == Material.WORKBENCH) {
-                        reason = Messages.FLAG_BLOCKPOWERED_WORKBENCH;
+                        reason = "flag.blockpowered.workbench";
                     } else {
-                        reason = Messages.FLAG_BLOCKPOWERED_FURNACE;
+                        reason = "flag.blockpowered.furnace";
                     }
                     a.addReason(reason, failMessage);
                 }
                 break;
             default:
-                a.addReason(Messages.FLAG_BLOCKPOWERED_WORKBENCH, failMessage);
+                a.addReason("flag.blockpowered.workbench", failMessage);
                 return;
         }
     }

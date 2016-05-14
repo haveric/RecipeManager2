@@ -1,5 +1,9 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.tools.Tools;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
@@ -8,12 +12,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.tools.Tools;
-
 public class FlagLaunchFirework extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.LAUNCH_FIREWORK;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -96,7 +100,7 @@ public class FlagLaunchFirework extends Flag {
         if (value.startsWith("effect")) {
             value = value.substring("effect".length()).trim();
 
-            FireworkEffect effect = Tools.parseFireworkEffect(value, getType());
+            FireworkEffect effect = Tools.parseFireworkEffect(value, getFlagType());
 
             if (effect != null) {
                 firework.addEffect(effect);
@@ -112,7 +116,7 @@ public class FlagLaunchFirework extends Flag {
             }
 
             if (power < 0 || power > 128) {
-                ErrorReporter.error("Flag " + getType() + " invalid 'power' argument value: '" + value + "', it must be a number from 0 to 128");
+                ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument value: '" + value + "', it must be a number from 0 to 128");
                 return false;
             }
 
@@ -127,11 +131,11 @@ public class FlagLaunchFirework extends Flag {
             }
 
             if (getChance() < 0 || getChance() > 100) {
-                ErrorReporter.error("Flag " + getType() + " invalid 'chance' argument value: '" + value + "', it must be a number from 0 to 100");
+                ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'chance' argument value: '" + value + "', it must be a number from 0 to 100");
                 return false;
             }
         } else {
-            ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value);
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
             return false;
         }
 

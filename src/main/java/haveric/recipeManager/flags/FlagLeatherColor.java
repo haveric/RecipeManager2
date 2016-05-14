@@ -1,15 +1,19 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
-
 public class FlagLeatherColor extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.LEATHER_COLOR;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -51,7 +55,7 @@ public class FlagLeatherColor extends Flag {
         ItemResult result = getResult();
 
         if (result == null || !(result.getItemMeta() instanceof LeatherArmorMeta)) {
-            return ErrorReporter.error("Flag " + getType() + " needs a leather armor item!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a leather armor item!");
         }
 
         return true;
@@ -62,7 +66,7 @@ public class FlagLeatherColor extends Flag {
         color = Tools.parseColor(value);
 
         if (color == null) {
-            return ErrorReporter.error("Flag " + getType() + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
         }
 
         return true;

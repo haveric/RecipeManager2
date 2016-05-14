@@ -1,28 +1,26 @@
 package haveric.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-
 import com.google.common.collect.ObjectArrays;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.ConditionsHold.ConditionsSlot;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.ParseBit;
+import org.apache.commons.lang.Validate;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class FlagHoldItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.HOLD_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -160,7 +158,7 @@ public class FlagHoldItem extends Flag {
         String[] args = value.split("\\|");
 
         if (args.length < 1) {
-            return ErrorReporter.error("Flag " + getType() + " needs an item!", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs an item!", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
 
         ItemStack item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
@@ -170,7 +168,7 @@ public class FlagHoldItem extends Flag {
         }
 
         ConditionsHold cond = new ConditionsHold();
-        cond.setFlagType(getType());
+        cond.setFlagType(getFlagType());
         setConditions(item, cond);
 
         cond.setIngredient(item);
@@ -319,7 +317,7 @@ public class FlagHoldItem extends Flag {
         a.clearReasons();
 
         if (!found) {
-            a.addReason(Messages.FLAG_HOLDITEM, "", "{items}", s.toString());
+            a.addReason("flag.holditem", "", "{items}", s.toString());
         }
     }
 }

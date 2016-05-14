@@ -1,9 +1,13 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
 
 public class FlagNeedLevel extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.NEED_LEVEL;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -21,7 +25,7 @@ public class FlagNeedLevel extends Flag {
             "In the message the following variables can be used:",
             "  {level}  = level or level range",
             "",
-            "NOTE: This is for experience levels, for experience points use " + FlagType.NEEDEXP.toString() + " or for world height use " + FlagType.HEIGHT + ".", };
+            "NOTE: This is for experience levels, for experience points use " + FlagType.NEED_EXP + " or for world height use " + FlagType.HEIGHT + ".", };
     }
 
     @Override
@@ -131,7 +135,7 @@ public class FlagNeedLevel extends Flag {
             setMinLevel(Integer.parseInt(value));
             setMaxLevel(getMinLevel());
         } catch (NumberFormatException e) {
-            ErrorReporter.error("The " + getType() + " flag has invalid min required level number: " + value);
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required level number: " + value);
             return false;
         }
 
@@ -142,13 +146,13 @@ public class FlagNeedLevel extends Flag {
                 setMaxLevel(Integer.parseInt(value));
                 setBoth = true;
             } catch (NumberFormatException e) {
-                ErrorReporter.error("The " + getType() + " flag has invalid max required level number: " + value);
+                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required level number: " + value);
                 return false;
             }
         }
 
         if ((getMinLevel() <= 0 && getMaxLevel() <= 0) || getMaxLevel() < getMinLevel()) {
-            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
 
@@ -158,7 +162,7 @@ public class FlagNeedLevel extends Flag {
     @Override
     protected void onCheck(Args a) {
         if (!a.hasPlayer() || !checkLevel(a.player().getLevel())) {
-            a.addReason(Messages.FLAG_NEEDLEVEL, failMessage, "{level}", getLevelString());
+            a.addReason("flag.needlevel", failMessage, "{level}", getLevelString());
         }
     }
 }

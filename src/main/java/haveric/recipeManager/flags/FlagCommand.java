@@ -1,11 +1,16 @@
 package haveric.recipeManager.flags;
 
+import org.bukkit.Bukkit;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-
 public class FlagCommand extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.COMMAND;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -67,7 +72,7 @@ public class FlagCommand extends Flag {
      * Set the command list.<br>
      * You can use null to remove the entire flag.
      *
-     * @param commands
+     * @param newCommands
      */
     public void setCommands(List<String> newCommands) {
         if (newCommands == null) {
@@ -127,7 +132,7 @@ public class FlagCommand extends Flag {
      *
      * List<String> list = new ArrayList<String>(commands.size());
      *
-     * for(String command : commands) { if(command.charAt(0) == '/') { list.add(Messages.FLAG_COMMAND_PLAYER.get("{command}", command)); } else { list.add(Messages.FLAG_COMMAND_SERVER.get("{command}",
+     * for(String command : commands) { if(command.charAt(0) == '/') { list.add(MessagesOld.FLAG_COMMAND_PLAYER.get("{command}", command)); } else { list.add(MessagesOld.FLAG_COMMAND_SERVER.get("{command}",
      * command)); } }
      *
      * return list; }

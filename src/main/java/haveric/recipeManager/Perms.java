@@ -1,14 +1,13 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-
-import java.util.UUID;
-
 import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class Perms {
     public static final String FLAG_PREFIX = "recipemanager.flag.";
@@ -33,10 +32,10 @@ public class Perms {
         if (newPermission != null) {
             if (newPermission.isEnabled()) {
                 permission = newPermission;
-                Messages.log("Vault has made permission-group available for this plugin.");
+                MessageSender.getInstance().log("Vault has made permission-group available for this plugin.");
             } else {
                 permission = null;
-                Messages.info("<yellow>NOTE: <dark_aqua>Vault<reset> doesn't have a permission-group plugin connected!");
+                MessageSender.getInstance().info("<yellow>NOTE: <dark_aqua>Vault<reset> doesn't have a permission-group plugin connected!");
             }
         }
     }

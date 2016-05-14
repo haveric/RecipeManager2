@@ -1,11 +1,15 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagNeedExp extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.NEED_EXP;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -26,7 +30,7 @@ public class FlagNeedExp extends Flag {
             "  {maxexp} = defined max exp range.",
             "  {playerexp} = player's current experience.",
             "",
-            "NOTE: This is for total experience points, for experience levels use " + FlagType.NEEDLEVEL.toString(), };
+            "NOTE: This is for total experience points, for experience levels use " + FlagType.NEED_LEVEL, };
     }
 
     @Override
@@ -133,7 +137,7 @@ public class FlagNeedExp extends Flag {
         value = split[0].trim();
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-            ErrorReporter.error("The " + getType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
             return false;
         }
 
@@ -141,7 +145,7 @@ public class FlagNeedExp extends Flag {
             setMinExp(Integer.parseInt(value));
             setMaxExp(getMinExp());
         } catch (NumberFormatException e) {
-            ErrorReporter.error("The " + getType() + " flag has invalid min req exp number: " + value);
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min req exp number: " + value);
             return false;
         }
 
@@ -149,7 +153,7 @@ public class FlagNeedExp extends Flag {
             value = split[1].trim();
 
             if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-                ErrorReporter.error("The " + getType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
+                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
                 return false;
             }
 
@@ -157,13 +161,13 @@ public class FlagNeedExp extends Flag {
                 setMaxExp(Integer.parseInt(value));
                 setBoth = true;
             } catch (NumberFormatException e) {
-                ErrorReporter.error("The " + getType() + " flag has invalid max req exp number: " + value);
+                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max req exp number: " + value);
                 return false;
             }
         }
 
         if ((getMinExp() <= 0 && getMaxExp() <= 0) || getMaxExp() < getMinExp()) {
-            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
 
@@ -173,7 +177,7 @@ public class FlagNeedExp extends Flag {
     @Override
     protected void onCheck(Args a) {
         if (!a.hasPlayer() || !checkExp(ToolsExp.getTotalExperience(a.player()))) {
-            a.addReason(Messages.FLAG_NEEDEXP, failMessage, "{exp}", getExpString(), "{minexp}", getMinExp(), "{maxexp}", getMaxExp(), "{playerexp}", ToolsExp.getTotalExperience(a.player()));
+            a.addReason("flag.needexp", failMessage, "{exp}", getExpString(), "{minexp}", getMinExp(), "{maxexp}", getMaxExp(), "{playerexp}", ToolsExp.getTotalExperience(a.player()));
         }
     }
 }

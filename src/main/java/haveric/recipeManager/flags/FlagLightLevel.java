@@ -1,12 +1,15 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-
 public class FlagLightLevel extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.LIGHT_LEVEL;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -114,7 +117,7 @@ public class FlagLightLevel extends Flag {
     }
 
     /**
-     * @param lightType
+     * @param type
      *            'sun', 'blocks' or 'any'/null.
      * @throws IllegalArgumentException
      *             if any other string is specified
@@ -204,7 +207,7 @@ public class FlagLightLevel extends Flag {
         try {
             minLight = Byte.valueOf(value);
         } catch (NumberFormatException e) {
-            ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
             return false;
         }
 
@@ -214,13 +217,13 @@ public class FlagLightLevel extends Flag {
             try {
                 maxLight = Byte.valueOf(value);
             } catch (NumberFormatException e) {
-                ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
                 return false;
             }
         }
 
         if (minLight > 15 || maxLight > 15 || (maxLight > 0 && (minLight > maxLight || minLight < 0))) {
-            ErrorReporter.error("The " + getType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
             return false;
         }
 
@@ -275,14 +278,14 @@ public class FlagLightLevel extends Flag {
         }
 
         if (light < minLight || (maxLight > minLight && light > maxLight)) {
-            a.addReason(Messages.FLAG_LIGHTLEVEL, failMessage, "{light}", getLightString(), "{type}", getLightTypeString());
+            a.addReason("flag.lightlevel", failMessage, "{light}", getLightString(), "{type}", getLightTypeString());
         }
     }
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
      *
-     * list.add(Messages.FLAG_LIGHTLEVEL.get("{light}", getLightString(), "{type}", getLightTypeString()));
+     * list.add(MessagesOld.FLAG_LIGHTLEVEL.get("{light}", getLightString(), "{type}", getLightTypeString()));
      *
      * return list; }
      */

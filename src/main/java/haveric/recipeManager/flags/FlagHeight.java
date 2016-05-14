@@ -1,9 +1,13 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
 
 public class FlagHeight extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.HEIGHT;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -101,7 +105,7 @@ public class FlagHeight extends Flag {
             setMinHeight(Integer.parseInt(value));
             setMaxHeight(getMinHeight());
         } catch (NumberFormatException e) {
-            ErrorReporter.error("The " + getType() + " flag has invalid min required height number: " + value);
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required height number: " + value);
             return false;
         }
 
@@ -111,13 +115,13 @@ public class FlagHeight extends Flag {
             try {
                 setMaxHeight(Integer.parseInt(value));
             } catch (NumberFormatException e) {
-                ErrorReporter.error("The " + getType() + " flag has invalid max required height number: " + value);
+                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required height number: " + value);
                 return false;
             }
         }
 
         if ((getMinHeight() <= 0 && getMaxHeight() <= 0) || getMaxHeight() < getMinHeight()) {
-            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
 
@@ -127,7 +131,7 @@ public class FlagHeight extends Flag {
     @Override
     protected void onCheck(Args a) {
         if (!a.hasLocation() || !checkHeight(a.location().getBlockY())) {
-            a.addReason(Messages.FLAG_HEIGHT, failMessage, "{height}", getHeightString());
+            a.addReason("flag.height", failMessage, "{height}", getHeightString());
         }
     }
 }

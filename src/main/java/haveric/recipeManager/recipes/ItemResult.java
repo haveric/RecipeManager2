@@ -1,13 +1,10 @@
 package haveric.recipeManager.recipes;
 
+import haveric.recipeManager.flags.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.Flag;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flaggable;
-import haveric.recipeManager.flags.Flags;
 
 public class ItemResult extends ItemStack implements Flaggable {
     private Flags flags;
@@ -62,7 +59,7 @@ public class ItemResult extends ItemStack implements Flaggable {
         setType(item.getType());
         setDurability(item.getDurability());
         setAmount(item.getAmount());
-        setItemMeta(item.getItemMeta());
+        //setItemMeta(item.getItemMeta());
     }
 
     public ItemStack toItemStack() {
@@ -91,7 +88,7 @@ public class ItemResult extends ItemStack implements Flaggable {
 
     // From Flaggable interface
 
-    public boolean hasFlag(FlagType type) {
+    public boolean hasFlag(String type) {
         boolean hasFlag = false;
 
         if (flags != null) {
@@ -115,12 +112,8 @@ public class ItemResult extends ItemStack implements Flaggable {
         return hasNoShiftBit;
     }
 
-    public Flag getFlag(FlagType type) {
+    public Flag getFlag(String type) {
         return flags.getFlag(type);
-    }
-
-    public <T extends Flag> T getFlag(Class<T> flagClass) {
-        return flags.getFlag(flagClass);
     }
 
     public Flags getFlags() {

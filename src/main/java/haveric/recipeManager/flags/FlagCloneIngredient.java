@@ -1,9 +1,9 @@
 package haveric.recipeManager.flags;
 
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
@@ -11,12 +11,16 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FlagCloneIngredient extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.CLONE_INGREDIENT;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -43,7 +47,7 @@ public class FlagCloneIngredient extends Flag {
             "",
             "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
             "",
-            "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENTCONDITION + " flag too.", };
+            "To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the " + FlagType.INGREDIENT_CONDITION + " flag too.", };
     }
 
     @Override
@@ -180,7 +184,7 @@ public class FlagCloneIngredient extends Flag {
         ItemResult result = getResult();
 
         if (result == null || result.getType() == Material.AIR) {
-            ErrorReporter.error("Flag " + getType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
             return false;
         }
 
@@ -200,10 +204,10 @@ public class FlagCloneIngredient extends Flag {
         int found = Tools.findItemInIngredients(getResult().getRecipe(), getResult().getType(), null);
 
         if (found == 0) {
-            ErrorReporter.error("Flag " + getType() + " couldn't find ingredient: " + ToolsItem.print(getResult()));
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(getResult()));
             return false;
         } else if (found > 1) {
-            ErrorReporter.warning("Flag " + getType() + " has found the " + ToolsItem.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has found the " + ToolsItem.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
         }
 
         for (String arg : args) {
@@ -254,7 +258,7 @@ public class FlagCloneIngredient extends Flag {
                             setAmountModifier(match.group(0).charAt(0), Math.abs(Integer.parseInt(value)));
                         }
                     } catch (Throwable e) {
-                        ErrorReporter.warning("Flag " + getType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + (isDataArg ? "data" : "amount") + "' argument with invalid number: " + value);
                         continue;
                     }
                 }
@@ -262,7 +266,7 @@ public class FlagCloneIngredient extends Flag {
                 continue;
             }
 
-            ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + arg);
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
         }
 
         return true;

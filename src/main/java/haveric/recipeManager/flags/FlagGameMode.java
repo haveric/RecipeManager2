@@ -1,15 +1,18 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.GameMode;
+
 import java.util.EnumSet;
 import java.util.Set;
 
-import org.bukkit.GameMode;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 public class FlagGameMode extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.GAMEMODE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -115,7 +118,7 @@ public class FlagGameMode extends Flag {
                     try {
                         addGameMode(GameMode.valueOf(arg));
                     } catch (IllegalArgumentException e) {
-                        return ErrorReporter.error("Flag " + getType() + " has unknown game mode: " + value);
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has unknown game mode: " + value);
                     }
             }
         }
@@ -133,7 +136,7 @@ public class FlagGameMode extends Flag {
         GameMode gm = a.player().getGameMode();
 
         if (!gameModes.contains(gm)) {
-            a.addReason(Messages.FLAG_GAMEMODE, failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", RMCUtil.collectionToString(gameModes));
+            a.addReason("flag.gamemode", failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", RMCUtil.collectionToString(gameModes));
         }
     }
 }

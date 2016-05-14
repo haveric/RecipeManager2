@@ -1,20 +1,23 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManagerCommon.util.RMCUtil;
+import org.apache.commons.lang.Validate;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.Validate;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
-
 public class FlagBiome extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.BIOME;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -118,7 +121,7 @@ public class FlagBiome extends Flag {
             Biome biome = RMCUtil.parseEnum(arg, Biome.values());
 
             if (biome == null) {
-                ErrorReporter.warning("Flag " + getType() + " has unknown biome: " + arg);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown biome: " + arg);
                 continue;
             }
 
@@ -139,9 +142,9 @@ public class FlagBiome extends Flag {
         Boolean set = getBiomes().get(b.getBiome());
 
         if (set == null) {
-            a.addReason(Messages.FLAG_BIOME_ALLOWED, failMessage, "{biomes}", getBiomesString(true));
+            a.addReason("flag.biome.allowed", failMessage, "{biomes}", getBiomesString(true));
         } else if (!set) {
-            a.addReason(Messages.FLAG_BIOME_UNALLOWED, failMessage, "{biomes}", getBiomesString(false));
+            a.addReason("flag.biome.unallowed", failMessage, "{biomes}", getBiomesString(false));
         }
     }
 }

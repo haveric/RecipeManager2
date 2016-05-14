@@ -1,17 +1,16 @@
 package haveric.recipeManager.recipes;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class FuelRecipe extends BaseRecipe {
     private ItemStack ingredient;
@@ -78,7 +77,7 @@ public class FuelRecipe extends BaseRecipe {
     /**
      * Set minimum time it can burn (or fixed if max not defined).
      *
-     * @param minTime
+     * @param newMinTime
      *            float value in seconds
      */
     public void setMinTime(float newMinTime) {
@@ -93,7 +92,7 @@ public class FuelRecipe extends BaseRecipe {
      * Set maximum time it can burn.<br>
      * NOTE: minimum time must be smaller than this and higher than -1
      *
-     * @param maxTime
+     * @param newMaxTime
      *            float value in seconds
      */
     public void setMaxTime(float newMaxTime) {
@@ -179,24 +178,24 @@ public class FuelRecipe extends BaseRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.RECIPEBOOK_HEADER_FUEL.get());
+        s.append(Messages.getInstance().get("recipebook.header.fuel"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
         }
 
         s.append('\n');
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENT.get()).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
         s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK, false));
 
         s.append('\n');
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_BURNTIME.get()).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().get("recipebook.header.burntime")).append(RMCChatColor.BLACK);
         s.append('\n');
 
         if (maxTime > minTime) {
-            s.append(Messages.RECIPEBOOK_FUEL_TIME_RANDOM.get("{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
+            s.append(Messages.getInstance().parse("recipebook.fuel.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
         } else {
-            s.append(Messages.RECIPEBOOK_FUEL_TIME_FIXED.get("{time}", RMCUtil.printNumber(minTime)));
+            s.append(Messages.getInstance().parse("recipebook.fuel.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
         }
 
         return s.toString();

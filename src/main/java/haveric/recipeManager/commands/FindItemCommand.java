@@ -1,11 +1,7 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.Messages;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManagerCommon.util.RMCUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,10 +9,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FindItemCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length <= 0) {
-            Messages.CMD_FINDITEM_USAGE.print(sender, null, "{command}", label);
+            Messages.getInstance().send(sender, "cmd.finditem.usage", "{command}", label);
             return true;
         }
 
@@ -32,7 +31,7 @@ public class FindItemCommand implements CommandExecutor {
             ItemStack item = ((Player) sender).getItemInHand();
 
             if (item == null || item.getType() == Material.AIR) {
-                Messages.CMD_FINDITEM_INVALIDHELDITEM.print(sender);
+                Messages.getInstance().send(sender, "cmd.finditem.invalidhelditem");
                 return true;
             }
 
@@ -50,7 +49,7 @@ public class FindItemCommand implements CommandExecutor {
                 Material mat = Material.getMaterial(id);
 
                 if (mat == null) {
-                    Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", id);
+                    Messages.getInstance().send(sender, "cmd.finditem.notfound", "{argument}", id);
                 } else {
                     found.add(mat);
                 }
@@ -70,18 +69,18 @@ public class FindItemCommand implements CommandExecutor {
         }
 
         if (found.isEmpty()) {
-            Messages.CMD_FINDITEM_NOTFOUND.print(sender, null, "{argument}", find);
+            Messages.getInstance().send(sender, "cmd.finditem.notfound", "{argument}", find);
         } else {
             int foundSize = found.size();
-            Messages.CMD_FINDITEM_HEADER.print(sender, null, "{matches}", foundSize, "{argument}", find);
+            Messages.getInstance().send(sender, "cmd.finditem.header", "{matches}", foundSize, "{argument}", find);
 
             for (int i = 0; i < Math.min(foundSize, 10); i++) {
                 Material m = found.get(i);
-                Messages.CMD_FINDITEM_LIST.print(sender, null, "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
+                Messages.getInstance().send(sender, "cmd.finditem.list", "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
             }
 
             if (foundSize > 10) {
-                Messages.CMD_FINDITEM_FOUNDMORE.print(sender, null, "{matches}", (foundSize - 10));
+                Messages.getInstance().send(sender, "cmd.finditem.foundmore", "{matches}", (foundSize - 10));
             }
         }
 

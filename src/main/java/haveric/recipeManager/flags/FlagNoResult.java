@@ -3,6 +3,11 @@ package haveric.recipeManager.flags;
 public class FlagNoResult extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.NO_RESULT;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag}", };
@@ -13,7 +18,7 @@ public class FlagNoResult extends Flag {
         return new String[] {
             "Prevents the result item from being crafted.",
             "",
-            "Useful when giving items through " + FlagType.COMMAND + " or providing non-item results, such as " + FlagType.MODEXP + "."};
+            "Useful when giving items through " + FlagType.COMMAND + " or providing non-item results, such as " + FlagType.MOD_EXP + "."};
     }
 
     @Override

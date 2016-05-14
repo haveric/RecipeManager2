@@ -1,24 +1,21 @@
 package haveric.recipeManager.recipes;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class CraftRecipe extends WorkbenchRecipe {
     private ItemStack[] ingredients;
@@ -79,7 +76,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      * This also calculates the width and height of the shape matrix.<br>
      * <b>NOTE: Array must have exactly 9 elements, use null for empty slots.</b>
      *
-     * @param ingredients
+     * @param newIngredients
      *            ingredients matrix, this also defines the shape, width and height.
      */
     public void setIngredients(ItemStack[] newIngredients) {
@@ -159,7 +156,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      * Useful for matching recipes, no other real effect.<br>
      * This triggers a hashCode recalculation.
      *
-     * @param mirror
+     * @param newMirror
      */
     public void setMirrorShape(boolean newMirror) {
         mirror = newMirror;
@@ -198,21 +195,6 @@ public class CraftRecipe extends WorkbenchRecipe {
                     if (item.getEnchantments().size() > 0) {
                         for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                             str.append("enchant:").append(entry.getKey().getName()).append(':').append(entry.getValue());
-                        }
-                    }
-
-                    if (item.hasItemMeta()) {
-                        ItemMeta meta = item.getItemMeta();
-
-                        if (meta.hasDisplayName()) {
-                            str.append("name:").append(meta.getDisplayName());
-                        }
-
-                        if (meta.hasLore()) {
-                            List<String> lores = meta.getLore();
-                            for (String lore : lores) {
-                                str.append("lore:").append(lore);
-                            }
                         }
                     }
                 }
@@ -403,7 +385,7 @@ public class CraftRecipe extends WorkbenchRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.RECIPEBOOK_HEADER_SHAPED.get());
+        s.append(Messages.getInstance().get("recipebook.header.shapes"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
@@ -412,11 +394,11 @@ public class CraftRecipe extends WorkbenchRecipe {
         s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null, true));
 
         if (isMultiResult()) {
-            s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
+            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
         }
 
         s.append('\n');
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_SHAPE.get()).append(RMCChatColor.GRAY).append('\n');
+        s.append('\n').append(Messages.getInstance().get("recipebook.header.shape")).append(RMCChatColor.GRAY).append('\n');
 
         Map<String, Integer> charItems = new LinkedHashMap<String, Integer>();
         int num = 1;
@@ -448,7 +430,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             }
         }
 
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENTS.get()).append(RMCChatColor.GRAY);
+        s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredients")).append(RMCChatColor.GRAY);
 
         for (Entry<String, Integer> entry : charItems.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getValue()).append(RMCChatColor.GRAY).append(": ").append(entry.getKey());

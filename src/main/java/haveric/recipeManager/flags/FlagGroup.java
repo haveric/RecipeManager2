@@ -1,14 +1,18 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Perms;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Perms;
-
 public class FlagGroup extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.GROUP;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -100,7 +104,7 @@ public class FlagGroup extends Flag {
     @Override
     protected boolean onParse(String value) {
         if (!Perms.getInstance().isEnabled()) {
-            ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported permission plugin was detected.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " does nothing because no Vault-supported permission plugin was detected.");
         }
 
         String[] split = value.split("\\|");
@@ -136,11 +140,11 @@ public class FlagGroup extends Flag {
         for (Entry<String, Boolean> e : groups.entrySet()) {
             if (e.getValue().booleanValue()) {
                 if (!a.hasPlayerName() || !Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
-                    a.addReason(Messages.FLAG_GROUP_ALLOWED, getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(true));
+                    a.addReason("flag.group.allowed", getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(true));
                 }
             } else {
                 if (a.hasPlayerName() && Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
-                    a.addReason(Messages.FLAG_GROUP_UNALLOWED, getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(false));
+                    a.addReason("flag.group.unallowed", getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(false));
                 }
             }
         }
@@ -151,10 +155,10 @@ public class FlagGroup extends Flag {
      *
      * String allowed = getGroupsString(true); String unallowed = getGroupsString(false);
      *
-     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String group = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(Messages.FLAG_GROUP_ALLOWED.get("{group}", group,
+     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String group = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(MessagesOld.FLAG_GROUP_ALLOWED.get("{group}", group,
      * "{groups}", allowed)); }
      *
-     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String group = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(Messages.FLAG_GROUP_UNALLOWED.get("{group}", group,
+     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String group = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(MessagesOld.FLAG_GROUP_UNALLOWED.get("{group}", group,
      * "{groups}", unallowed)); }
      *
      * return list; }

@@ -1,25 +1,16 @@
 package haveric.recipeManager.recipes;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import haveric.recipeManager.Settings;
+import haveric.recipeManager.flags.*;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.Settings;
-import haveric.recipeManager.flags.ArgBuilder;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.ConditionsIngredient;
-import haveric.recipeManager.flags.Flag;
-import haveric.recipeManager.flags.FlagDisplayResult;
-import haveric.recipeManager.flags.FlagIngredientCondition;
-import haveric.recipeManager.flags.FlagKeepItem;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.tools.ToolsItem;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorkbenchRecipe extends MultiResultRecipe {
     protected WorkbenchRecipe() {
@@ -43,9 +34,9 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         a.clear();
 
         if (!checkFlags(a)) {
-            a.sendReasons(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+            a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
 
-            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 0, Messages.CRAFT_RESULT_DENIED_TITLE.get(), Messages.CRAFT_RESULT_DENIED_INFO.get());
+            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 0, Messages.getInstance().get("craft.result.denied.title"), Messages.getInstance().get("craft.result.denied.info"));
         }
 
         List<ItemResult> displayResults = new ArrayList<ItemResult>();
@@ -84,7 +75,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
                 } else {
                     displayResults.add(r);
 
-                    a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(r)));
+                    a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(r)));
                 }
             } else {
                 unavailableNum++;
@@ -104,7 +95,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
         FlagDisplayResult flag;
         if (a.hasRecipe()) {
-            flag = a.recipe().getFlag(FlagDisplayResult.class);
+            flag = (FlagDisplayResult) a.recipe().getFlag(FlagType.DISPLAY_RESULT);
         } else {
             flag = null;
         }
@@ -145,7 +136,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
         combinedLores.addAll(lore);
 
-        if (this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
+        if (this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             double individualFail = 100 - displayResult.getChance();
 
             if (individualFail > 0 && individualFail < 100) {
@@ -156,7 +147,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         meta.setLore(combinedLores);
         displayResult.setItemMeta(meta);
 
-        if (flag != null || this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
+        if (flag != null || this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             return displayResult;
         }
 
@@ -164,7 +155,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
             } else if (secretNum == 1 && displayNum == 0) {
-                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.CRAFT_RESULT_RECEIVE_TITLE_UNKNOWN.get());
+                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.getInstance().get("craft.result.receive.title.unknown"));
             }
         } else if (displayNum == 1 && failedLores > 0 && unavailableNum == failedLores) {
             return ToolsItem.create(displayResult.getType(), 0, 0, displayResult.getItemMeta().getDisplayName(), lore);
@@ -173,30 +164,30 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         String title = null;
 
         if (receive) {
-            title = Messages.CRAFT_RESULT_RECEIVE_TITLE_RANDOM.get();
+            title = Messages.getInstance().get("craft.result.receive.title.random");
         } else {
-            title = Messages.CRAFT_RESULT_NORECEIVE_TITLE.get();
-            lore.add(Messages.CRAFT_RESULT_DENIED_INFO.get());
+            title = Messages.getInstance().get("craft.result.noreceive.title");
+            lore.add(Messages.getInstance().get("craft.result.denied.info"));
         }
 
         for (ItemResult r : displayResults) {
             String cloneMessage = "";
-            if (r.hasFlag(FlagType.CLONEINGREDIENT)) {
-                cloneMessage = Messages.FLAG_CLONE_RESULTDISPLAY.get();
+            if (r.hasFlag(FlagType.CLONE_INGREDIENT)) {
+                cloneMessage = Messages.getInstance().get("flag.clone.resultdisplay");
             }
-            lore.add(Messages.CRAFT_RESULT_LIST_ITEM.get("{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r), "{clone}", cloneMessage));
+            lore.add(Messages.getInstance().parse("craft.result.list.item", "{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r), "{clone}", cloneMessage));
         }
 
         if (failChance > 0) {
-            lore.add(Messages.CRAFT_RESULT_LIST_FAILURE.get("{chance}", formatChance(failChance)));
+            lore.add(Messages.getInstance().parse("craft.result.list.failure", "{chance}", formatChance(failChance)));
         }
 
         if (secretNum > 0) {
-            lore.add(Messages.CRAFT_RESULT_LIST_SECRETS.get("{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
+            lore.add(Messages.getInstance().parse("craft.result.list.secrets", "{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
         }
 
         if (unavailableNum > 0) {
-            lore.add(Messages.CRAFT_RESULT_LIST_UNAVAILABLE.get("{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
+            lore.add(Messages.getInstance().parse("craft.result.list.unavailable", "{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
 
         Material displayMaterial;
@@ -237,24 +228,24 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
     public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra) {
         FlagIngredientCondition flagIC;
-        if (hasFlag(FlagType.INGREDIENTCONDITION)) {
-            flagIC = getFlag(FlagIngredientCondition.class);
+        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
         } else {
             flagIC = null;
         }
         FlagKeepItem flagKI;
-        if (hasFlag(FlagType.KEEPITEM)) {
-            flagKI = getFlag(FlagKeepItem.class);
+        if (hasFlag(FlagType.KEEP_ITEM)) {
+            flagKI = (FlagKeepItem) getFlag(FlagType.KEEP_ITEM);
         } else {
             flagKI = null;
         }
 
-        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENTCONDITION)) {
-            flagIC = result.getFlag(FlagIngredientCondition.class);
+        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
         }
 
-        if (flagKI == null && result != null && result.hasFlag(FlagType.KEEPITEM)) {
-            flagKI = result.getFlag(FlagKeepItem.class);
+        if (flagKI == null && result != null && result.hasFlag(FlagType.KEEP_ITEM)) {
+            flagKI = (FlagKeepItem) result.getFlag(FlagType.KEEP_ITEM);
         }
 
         for (int i = 1; i < inv.getSize(); i++) {

@@ -1,20 +1,24 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
-
 public class FlagEnchantedBook extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.ENCHANTED_BOOK;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -90,7 +94,7 @@ public class FlagEnchantedBook extends Flag {
         ItemResult result = getResult();
 
         if (result == null || !(result.getItemMeta() instanceof EnchantmentStorageMeta)) {
-            ErrorReporter.error("Flag " + getType() + " needs an enchantable book!");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs an enchantable book!");
             return false;
         }
 
@@ -104,7 +108,7 @@ public class FlagEnchantedBook extends Flag {
         Enchantment enchant = Tools.parseEnchant(value);
 
         if (enchant == null) {
-            ErrorReporter.error("Flag " + getType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
             return false;
         }
 
@@ -121,7 +125,7 @@ public class FlagEnchantedBook extends Flag {
                 try {
                     level = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
-                    ErrorReporter.error("Flag " + getType() + " has invalid enchantment level number!");
+                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number!");
                     return false;
                 }
             }

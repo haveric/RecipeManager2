@@ -1,7 +1,7 @@
 package haveric.recipeManager.flags;
 
-import java.util.Iterator;
-
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.ItemResult;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,10 +13,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.recipes.ItemResult;
+import java.util.Iterator;
 
 public class FlagSkullOwner extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.SKULL_OWNER;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -66,7 +70,7 @@ public class FlagSkullOwner extends Flag {
         ItemResult result = getResult();
 
         if (result == null || !(result.getItemMeta() instanceof SkullMeta) || result.getDurability() != 3) {
-            return ErrorReporter.error("Flag " + getType() + " needs a SKULL_ITEM with data value 3 to work!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a SKULL_ITEM with data value 3 to work!");
         }
 
         return true;

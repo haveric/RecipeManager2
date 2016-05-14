@@ -1,16 +1,11 @@
 package haveric.recipeManager.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -18,26 +13,23 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ExtractCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted recipes (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
 
         if (file.exists()) {
-            Messages.CMD_EXTRACT_WAIT.print(sender);
+            Messages.getInstance().send(sender, "cmd.extract.wait");
             return true;
         }
 
@@ -48,12 +40,12 @@ public class ExtractCommand implements CommandExecutor {
                 if (arg.equalsIgnoreCase("special")) {
                     skipSpecial = false;
                 } else {
-                    Messages.CMD_EXTRACT_UNKNOWNARG.print(sender, null, "{arg}", arg);
+                    Messages.getInstance().send(sender, "cmd.extract.unknownarg", "{arg}", arg);
                 }
             }
         }
 
-        Messages.CMD_EXTRACT_CONVERTING.print(sender);
+        Messages.getInstance().send(sender, "cmd.extract.converting");
 
         List<String> parsedCraftRecipes = new ArrayList<String>();
         List<String> parsedCombineRecipes = new ArrayList<String>();
@@ -142,7 +134,7 @@ public class ExtractCommand implements CommandExecutor {
         }
 
         if (recipesNum == 0) {
-            Messages.CMD_EXTRACT_NORECIPES.print(sender);
+            Messages.getInstance().send(sender, "cmd.extract.norecipes");
         } else {
             try {
                 file.getParentFile().mkdirs();
@@ -174,9 +166,9 @@ public class ExtractCommand implements CommandExecutor {
 
                 stream.close();
 
-                Messages.CMD_EXTRACT_DONE.print(sender, null, "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
+                Messages.getInstance().send(sender, "cmd.extract.done", "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
             } catch (Throwable e) {
-                Messages.error(sender, e, "Error writing '" + file.getName() + "'");
+                MessageSender.getInstance().error(sender, e, "Error writing '" + file.getName() + "'");
             }
         }
 

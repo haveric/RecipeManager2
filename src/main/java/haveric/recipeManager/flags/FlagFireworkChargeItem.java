@@ -1,18 +1,22 @@
 package haveric.recipeManager.flags;
 
-import java.util.Arrays;
-
-import org.bukkit.FireworkEffect;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.FireworkEffect;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
 
 public class FlagFireworkChargeItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.FIREWORK_CHARGE_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -74,7 +78,7 @@ public class FlagFireworkChargeItem extends Flag {
         ItemResult result = getResult();
 
         if (result == null || !(result.getItemMeta() instanceof FireworkEffectMeta)) {
-            ErrorReporter.error("Flag " + getType() + " needs a FIREWORK_CHARGE item!");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a FIREWORK_CHARGE item!");
             return false;
         }
 
@@ -83,7 +87,7 @@ public class FlagFireworkChargeItem extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        FireworkEffect newEffect = Tools.parseFireworkEffect(value, getType());
+        FireworkEffect newEffect = Tools.parseFireworkEffect(value, getFlagType());
 
         if (newEffect == null) {
             return false;

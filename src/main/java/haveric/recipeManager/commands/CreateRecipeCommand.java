@@ -1,14 +1,13 @@
 package haveric.recipeManager.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map.Entry;
-
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -22,13 +21,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import haveric.recipeManager.Files;
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class CreateRecipeCommand implements CommandExecutor {
 
@@ -40,12 +40,12 @@ public class CreateRecipeCommand implements CommandExecutor {
             PlayerInventory inventory = player.getInventory();
 
             if (holdingStack == null || holdingStack.getType() == Material.AIR) {
-                Messages.send(sender, "No item to extract a recipe from.");
+                MessageSender.getInstance().send(sender, "No item to extract a recipe from.");
             } else {
                 File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted recipe (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
 
                 if (file.exists()) {
-                    Messages.CMD_EXTRACT_WAIT.print(sender);
+                    Messages.getInstance().send(sender, "cmd.extract.wait");
                     return true;
                 }
 
@@ -150,9 +150,9 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                     stream.close();
 
-                    Messages.CMD_EXTRACTRECIPE_DONE.print(sender, null, "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
+                    Messages.getInstance().send(sender, "cmd.extractrecipe.done", "{file}", file.getPath().replace(RecipeManager.getPlugin().getDataFolder().toString(), ""));
                 } catch (IOException e) {
-                    Messages.error(sender, e, "Error writing '" + file.getName() + "'");
+                    MessageSender.getInstance().error(sender, e, "Error writing '" + file.getName() + "'");
                 }
             }
         }
@@ -200,7 +200,7 @@ public class CreateRecipeCommand implements CommandExecutor {
             }
 
             if (ingredientCondition.length() > 0) {
-                conditionString.append('@').append(FlagType.INGREDIENTCONDITION.getName()).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
+                conditionString.append('@').append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
                 conditionString.append(Files.NL);
             }
         }

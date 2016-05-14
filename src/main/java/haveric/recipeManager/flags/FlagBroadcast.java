@@ -8,6 +8,11 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 public class FlagBroadcast extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.BROADCAST;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag} <text> | [permission]", };

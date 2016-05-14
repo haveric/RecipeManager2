@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import haveric.recipeManager.Messages;
-
 public class FlagWorld extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.WORLD;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -123,11 +126,11 @@ public class FlagWorld extends Flag {
         for (Entry<String, Boolean> e : worlds.entrySet()) {
             if (e.getValue().booleanValue()) {
                 if (world == null || !world.equals(e.getKey())) {
-                    a.addReason(Messages.FLAG_WORLD_ALLOWED, getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(true));
+                    a.addReason("flag.world.allowed", getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(true));
                 }
             } else {
                 if (world != null && world.equals(e.getKey())) {
-                    a.addReason(Messages.FLAG_WORLD_UNALLOWED, getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(false));
+                    a.addReason("flag.world.unallowed", getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(false));
                 }
             }
         }
@@ -138,10 +141,10 @@ public class FlagWorld extends Flag {
      *
      * String allowed = getWorldsString(true); String unallowed = getWorldsString(false);
      *
-     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String world = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(Messages.FLAG_WORLD_ALLOWED.get("{world}", world,
+     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String world = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(MessagesOld.FLAG_WORLD_ALLOWED.get("{world}", world,
      * "{worlds}", allowed)); }
      *
-     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String world = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(Messages.FLAG_WORLD_UNALLOWED.get("{world}", world,
+     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String world = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(MessagesOld.FLAG_WORLD_UNALLOWED.get("{world}", world,
      * "{worlds}", unallowed)); }
      *
      * return list; }

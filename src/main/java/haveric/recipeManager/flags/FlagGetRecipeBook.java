@@ -1,16 +1,20 @@
 package haveric.recipeManager.flags;
 
-import java.util.List;
-
-import org.apache.commons.lang.Validate;
-import org.bukkit.Material;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.recipes.ItemResult;
+import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
+
+import java.util.List;
 
 public class FlagGetRecipeBook extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.GET_RECIPE_BOOK;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -74,7 +78,7 @@ public class FlagGetRecipeBook extends Flag {
         ItemResult result = getResult();
 
         if (result == null || result.getType() != Material.WRITTEN_BOOK) {
-            return ErrorReporter.error("Flag " + getType() + " needs a WRITTEN_BOOK to work!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a WRITTEN_BOOK to work!");
         }
 
         return true;
@@ -107,7 +111,7 @@ public class FlagGetRecipeBook extends Flag {
         List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookID());
 
         if (books.isEmpty()) {
-            ErrorReporter.warning("Flag " + getType() + " could not find book ID containing '" + bookID + "', flag ignored.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " could not find book ID containing '" + bookID + "', flag ignored.");
             remove();
             return;
         }
@@ -115,7 +119,7 @@ public class FlagGetRecipeBook extends Flag {
         RecipeBook book = books.get(0);
 
         if (books.size() > 1) {
-            ErrorReporter.warning("Flag " + getType() + " found " + books.size() + " books matching ID '" + bookID + "', using first: " + book.getTitle());
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " found " + books.size() + " books matching ID '" + bookID + "', using first: " + book.getTitle());
         }
     }
 

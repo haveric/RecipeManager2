@@ -1,23 +1,21 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ToolsItem {
     public static ItemResult create(Material type, int data, int amount, String name, String... lore) {
@@ -56,7 +54,7 @@ public class ToolsItem {
      * If item is enchanted it will have aqua color instead of white.<br>
      * Uses aliases to display data values as well.<br>
      * Uses item's display name in italic font if available.<br> <br>
-     * NOTE: Will have a RESET color at the end, use {@link #print(ItemStack, ChatColor)} to use a different end-color instead.
+     * NOTE: Will have a RESET color at the end
      *
      * @param item
      *            the item to print, can be null
@@ -118,7 +116,7 @@ public class ToolsItem {
                 itemData = name;
             } else {
                 if (data == Vanilla.DATA_WILDCARD) {
-                    itemData = name + RMCChatColor.GRAY + ":" + Messages.ITEM_ANYDATA.get();
+                    itemData = name + RMCChatColor.GRAY + ":" + Messages.getInstance().get("item.anydata");
                 } else {
                     itemData = name + RMCChatColor.GRAY + ":" + data;
                 }

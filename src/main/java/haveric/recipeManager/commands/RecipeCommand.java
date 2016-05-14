@@ -1,28 +1,14 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SingleResultRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.util.ParseBit;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,6 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class RecipeCommand implements CommandExecutor {
     private static Map<String, Pages> pagination = new HashMap<String, Pages>();
@@ -112,23 +101,23 @@ public class RecipeCommand implements CommandExecutor {
                 Pages pages = pagination.get(name);
 
                 if (pages == null) {
-                    Messages.CMD_RECIPES_NEEDQUERY.print(sender);
+                    Messages.getInstance().send(sender, "cmd.recipes.needquery");
                 } else {
                     if (next ? pages.hasNext() : pages.hasPrev()) {
                         String page = (next ? pages.next() : pages.prev());
-                        Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", ToolsItem.print(pages.item), "{num}", (pages.page + 1), "{total}", pages.pages.length);
-                        Messages.send(sender, page);
+                        Messages.getInstance().send(sender, "cmd.recipes.header", "{item}", ToolsItem.print(pages.item), "{num}", (pages.page + 1), "{total}", pages.pages.length);
+                        MessageSender.getInstance().send(sender, page);
 
                         if (pages.hasNext()) {
-                            Messages.CMD_RECIPES_MORE.print(sender, null, "{cmdnext}", "/" + label + " next", "{cmdprev}", "/" + label + " prev");
+                            Messages.getInstance().send(sender, "cmd.recipes.more", "{cmdnext}", "/" + label + " next", "{cmdprev}", "/" + label + " prev");
                         } else {
-                            Messages.CMD_RECIPES_END.print(sender);
+                            Messages.getInstance().send(sender, "cmd.recipes.end");
                         }
                     } else {
                         if (next) {
-                            Messages.CMD_RECIPES_NONEXT.print(sender, null, "{command}", "/" + label + " prev");
+                            Messages.getInstance().send(sender, "cmd.recipes.nonext", "{command}", "/" + label + " prev");
                         } else {
-                            Messages.CMD_RECIPES_NOPREV.print(sender, null, "{command}", "/" + label + " next");
+                            Messages.getInstance().send(sender, "cmd.recipes.noprev", "{command}", "/" + label + " next");
                         }
                     }
                 }
@@ -141,7 +130,7 @@ public class RecipeCommand implements CommandExecutor {
                         item = player.getItemInHand();
 
                         if (item == null) {
-                            Messages.CMD_RECIPES_NOHAND.print(sender);
+                            Messages.getInstance().send(player, "cmd.recipes.nohand");
                             return true;
                         }
                     } else {
@@ -152,7 +141,7 @@ public class RecipeCommand implements CommandExecutor {
                     item = Tools.parseItem(args[0], Vanilla.DATA_WILDCARD, ParseBit.NO_META | ParseBit.NO_PRINT);
 
                     if (item == null) {
-                        Messages.CMD_RECIPES_INVALIDITEM.print(sender, null, "{arg}", args[0]);
+                        Messages.getInstance().send(sender, "cmd.recipes.invaliditem", "{arg}", args[0]);
                         return true;
                     }
                 }
@@ -170,18 +159,18 @@ public class RecipeCommand implements CommandExecutor {
                 }
 
                 if (list.isEmpty()) {
-                    Messages.CMD_RECIPES_NORESULTS.print(sender, null, "{item}", ToolsItem.print(item));
+                    Messages.getInstance().send(sender, "cmd.recipes.noresults", "{item}", ToolsItem.print(item));
                 } else {
                     Pages pages = new Pages(name, item, list);
                     pagination.put(name, pages);
 
-                    Messages.CMD_RECIPES_HEADER.print(sender, null, "{item}", ToolsItem.print(pages.item), "{num}", 1, "{total}", pages.pages.length);
-                    Messages.send(sender, pages.next());
+                    Messages.getInstance().send(sender, "cmd.recipes.header", "{item}", ToolsItem.print(pages.item), "{num}", 1, "{total}", pages.pages.length);
+                    MessageSender.getInstance().send(sender, pages.next());
 
                     if (pages.hasNext()) {
-                        Messages.CMD_RECIPES_MORE.print(sender, null, "{cmdnext}", "/" + label + " next", "{cmdprev}", "/" + label + " prev");
+                        Messages.getInstance().send(sender, "cmd.recipes.more", "{cmdnext}", "/" + label + " next", "{cmdprev}", "/" + label + " prev");
                     } else {
-                        Messages.CMD_RECIPES_END.print(sender);
+                        Messages.getInstance().send(sender, "cmd.recipes.end");
                     }
                 }
             }
@@ -203,10 +192,10 @@ public class RecipeCommand implements CommandExecutor {
                 }
             }
 
-            Messages.CMD_RECIPES_USAGE.print(sender, null, "{command}", label);
-            Messages.CMD_RECIPES_STATS_MC.print(sender, null, "{num}", mc);
-            Messages.CMD_RECIPES_STATS_RM.print(sender, null, "{num}", rm);
-            Messages.CMD_RECIPES_STATS_OTHER.print(sender, null, "{num}", other);
+            Messages.getInstance().send(sender, "cmd.recipes.usage", "{command}", label);
+            Messages.getInstance().send(sender, "cmd.recipes.stats.mc", "{num}", mc);
+            Messages.getInstance().send(sender, "cmd.recipes.stats.rm", "{num}", rm);
+            Messages.getInstance().send(sender, "cmd.recipes.stats.other", "{num}", other);
         }
 
         return true;

@@ -1,11 +1,16 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeStatus;
 
 public class FlagOverride extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.OVERRIDE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -46,7 +51,7 @@ public class FlagOverride extends Flag {
     @Override
     protected boolean onValidate() {
         if (getFlagsContainer().hasFlag(FlagType.REMOVE)) {
-            return ErrorReporter.error("Flag " + getType() + " can't work with @remove flag!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can't work with @remove flag!");
         }
 
         return true;
@@ -62,7 +67,7 @@ public class FlagOverride extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (recipe == null) {
-            Messages.debug("ERROR: invalid recipe pointer");
+            MessageSender.getInstance().debug("ERROR: invalid recipe pointer");
             remove();
         } else {
             recipe.getInfo().setStatus(RecipeStatus.OVERRIDDEN);
@@ -72,7 +77,7 @@ public class FlagOverride extends Flag {
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
      *
-     * list.add(Messages.FLAG_OVERRIDE.get());
+     * list.add(MessagesOld.FLAG_OVERRIDE.get());
      *
      * return list; }
      */

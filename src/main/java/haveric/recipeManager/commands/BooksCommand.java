@@ -1,28 +1,27 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.RecipeBook;
-
-import java.util.Map;
-
+import haveric.recipeManager.messages.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.util.Map;
 
 public class BooksCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Map<String, RecipeBook> books = RecipeManager.getRecipeBooks().getBooks();
 
         if (books.isEmpty()) {
-            Messages.CMD_BOOKS_NOBOOKS.print(sender);
+            Messages.getInstance().send(sender, "cmd.books.nobooks");
             return true;
         }
 
-        Messages.CMD_BOOKS_HEADER.print(sender, null, "{number}", books.size());
+        Messages.getInstance().send(sender, "cmd.books.header", "{number}", books.size());
 
         for (RecipeBook book : books.values()) {
-            Messages.CMD_BOOKS_ITEM.print(sender, null, "{title}", book.getTitle(), "{volumes}", book.getVolumesNum());
+            Messages.getInstance().send(sender, "cmd.books.item", "{title}", book.getTitle(), "{volumes}", book.getVolumesNum());
         }
 
         return true;

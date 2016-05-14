@@ -7,6 +7,11 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 public class FlagItemName extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.ITEM_NAME;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag} <text or false>", };
@@ -54,17 +59,17 @@ public class FlagItemName extends Flag {
         return new FlagItemName((FlagItemName) super.clone());
     }
 
-    public String getName() {
+    public String getItemName() {
         return name;
     }
 
-    public void setName(String newName) {
+    public void setItemName(String newName) {
         name = newName;
     }
 
     @Override
     protected boolean onParse(String value) {
-        setName(value);
+        setItemName(value);
         return true;
     }
 
@@ -78,10 +83,10 @@ public class FlagItemName extends Flag {
         ItemMeta meta = a.result().getItemMeta();
 
         String displayName;
-        if (getName() == null) {
+        if (getItemName() == null) {
             displayName = null;
         } else {
-            displayName = RMCUtil.parseColors(a.parseVariables(getName()), false);
+            displayName = RMCUtil.parseColors(a.parseVariables(getItemName()), false);
         }
         meta.setDisplayName(displayName);
 

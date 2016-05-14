@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import haveric.recipeManager.Messages;
-
 public class FlagPermission extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.PERMISSION;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -149,7 +152,7 @@ public class FlagPermission extends Flag {
 
                 if (!failedMessages.contains(message)) {
                     failedMessages.add(message);
-                    a.addReason(Messages.FLAG_PERMISSION_ALLOWED, message, "{permission}", perm, "{permissions}", getPermissionsString(true));
+                    a.addReason("flag.permission.allowed", message, "{permission}", perm, "{permissions}", getPermissionsString(true));
                 }
             }
         }
@@ -175,7 +178,7 @@ public class FlagPermission extends Flag {
 
                 if (!succeededMessages.contains(message)) {
                     succeededMessages.add(message);
-                    a.addReason(Messages.FLAG_PERMISSION_UNALLOWED, message, "{permission}", perm, "{permissions}", getPermissionsString(false));
+                    a.addReason("flag.permission.unallowed", message, "{permission}", perm, "{permissions}", getPermissionsString(false));
                 }
             }
         }
@@ -186,11 +189,11 @@ public class FlagPermission extends Flag {
      *
      * String allowed = getPermissionsString(true); String unallowed = getPermissionsString(false);
      *
-     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String permission = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(Messages.FLAG_PERMISSION_ALLOWED.get("{permission}",
+     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String permission = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(MessagesOld.FLAG_PERMISSION_ALLOWED.get("{permission}",
      * permission, "{permissions}", allowed)); }
      *
      * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String permission = unallowed.substring(0, (i > 0 ? i : unallowed.length()));
-     * list.add(Messages.FLAG_PERMISSION_UNALLOWED.get("{permission}", permission, "{permissions}", unallowed)); }
+     * list.add(MessagesOld.FLAG_PERMISSION_UNALLOWED.get("{permission}", permission, "{permissions}", unallowed)); }
      *
      * return list; }
      */

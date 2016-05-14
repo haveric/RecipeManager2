@@ -1,19 +1,15 @@
 package haveric.recipeManager.flags;
 
-import org.apache.commons.lang.Validate;
-import org.bukkit.entity.Player;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Perms;
-import haveric.recipeManager.flags.FlagType.Bit;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 
 public class Flag implements Cloneable {
     protected Flags flagsContainer;
     private static final String[] EMPTY_STRING = {};
-
-    private FlagType type = null;
 
     protected Flag() { }
 
@@ -56,7 +52,8 @@ public class Flag implements Cloneable {
             return true; // has permission for all flags
         }
 
-        for (String name : getType().getNames()) {
+        FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
+        for (String name : desc.getNames()) {
             if (Perms.hasFlagPrefix(player, name)) {
                 return true; // has permission for this flag
             }
@@ -155,10 +152,10 @@ public class Flag implements Cloneable {
     public int hashCode() {
         int hashCode;
 
-        if (getType() == null) {
+        if (getFlagType() == null) {
             hashCode = 0;
         } else {
-            hashCode = getType().hashCode();
+            hashCode = getFlagType().hashCode();
         }
 
         return hashCode;
@@ -194,6 +191,10 @@ public class Flag implements Cloneable {
 
     protected String[] getExamples() {
         return EMPTY_STRING;
+    }
+
+    protected String getFlagType() {
+        return null;
     }
 
     protected final Flaggable getFlaggable() {
@@ -240,14 +241,15 @@ public class Flag implements Cloneable {
     }
 
     protected final boolean validateParse(String value) {
-        Validate.notNull(getType(), "This can't be used on a blank flag!");
+        Validate.notNull(getFlagType(), "This can't be used on a blank flag!");
 
-        if (!getType().hasBit(Bit.NO_VALUE) && value == null) {
-            ErrorReporter.error("Flag " + getType() + " needs a value!");
+        FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
+        if (!desc.hasBit(FlagBit.NO_VALUE) && value == null) {
+            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " needs a value!");
             return false;
         }
 
-        if (!getType().hasBit(Bit.NO_FALSE) && value != null && (value.equalsIgnoreCase("false") || value.equalsIgnoreCase("remove"))) {
+        if (!desc.hasBit(FlagBit.NO_FALSE) && value != null && (value.equalsIgnoreCase("false") || value.equalsIgnoreCase("remove"))) {
             remove();
             return false;
         }
@@ -258,13 +260,14 @@ public class Flag implements Cloneable {
     protected final boolean validate() {
         Flaggable flaggable = getFlaggable();
 
-        if (getType().hasBit(Bit.RESULT) && !(flaggable instanceof ItemResult)) {
-            ErrorReporter.error("Flag " + getType() + " only works on results!");
+        FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
+        if (desc.hasBit(FlagBit.RESULT) && !(flaggable instanceof ItemResult)) {
+            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " only works on results!");
             return false;
         }
 
-        if (getType().hasBit(Bit.RECIPE) && !(flaggable instanceof BaseRecipe) && flaggable instanceof ItemResult) {
-            ErrorReporter.error("Flag " + getType() + " only works on recipes!");
+        if (desc.hasBit(FlagBit.RECIPE) && !(flaggable instanceof BaseRecipe) && flaggable instanceof ItemResult) {
+            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " only works on recipes!");
             return false;
         }
 
@@ -273,17 +276,6 @@ public class Flag implements Cloneable {
 
     protected final void registered() {
         onRegistered();
-    }
-
-    /**
-     * @return the flag name enum
-     */
-    public FlagType getType() {
-        if (type == null) {
-            type = FlagType.getByClass(this.getClass());
-        }
-
-        return type;
     }
 
     /*
@@ -296,7 +288,7 @@ public class Flag implements Cloneable {
     }
 
     protected boolean onValidate() {
-        return (getType() != null);
+        return (getFlagType() != null);
     }
 
     protected boolean onParse(String value) {

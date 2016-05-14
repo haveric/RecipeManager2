@@ -1,17 +1,21 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
-import haveric.recipeManager.RecipeManager;
-
 public class FlagPotionEffect extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.POTION_EFFECT;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -110,7 +114,7 @@ public class FlagPotionEffect extends Flag {
         boolean morefx = false;
 
         if (type == null) {
-            ErrorReporter.error("Flag " + getType() + " has invalid effect type: " + value);
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid effect type: " + value);
             return false;
         }
 
@@ -130,14 +134,14 @@ public class FlagPotionEffect extends Flag {
                     try {
                         chance = Float.valueOf(value);
                     } catch (NumberFormatException e) {
-                        ErrorReporter.warning("Flag " + getType() + " has invalid chance value number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid chance value number: " + value);
                         continue;
                     }
 
                     if (chance < 0.01f || chance > 100.0f) {
                         chance = Math.min(Math.max(chance, 0.01f), 100.0f);
 
-                        ErrorReporter.warning("Flag " + getType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has chance value less than 0.01 or higher than 100.0, value trimmed.");
                     }
                 } else if (value.startsWith("amplifier")) {
                     value = value.substring("amplifier".length()).trim();
@@ -145,11 +149,11 @@ public class FlagPotionEffect extends Flag {
                     try {
                         amplifier = Integer.parseInt(value);
                     } catch (NumberFormatException e) {
-                        ErrorReporter.warning("Flag " + getType() + " has invalid amplifier value number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid amplifier value number: " + value);
                     }
                 } else if (value.startsWith("duration")) {
                     if (type.isInstant()) {
-                        ErrorReporter.warning("Flag " + getType() + " has effect type '" + type.toString() + "' which is instant, it can't have duration, ignored.");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has effect type '" + type.toString() + "' which is instant, it can't have duration, ignored.");
                         continue;
                     }
 
@@ -159,7 +163,7 @@ public class FlagPotionEffect extends Flag {
                         duration = Float.valueOf(value);
                         duration /= type.getDurationModifier(); // compensate for effect's duration modifier
                     } catch (NumberFormatException e) {
-                        ErrorReporter.warning("Flag " + getType() + " has invalid duration value number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid duration value number: " + value);
                     }
                 }
             }

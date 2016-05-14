@@ -1,13 +1,17 @@
 package haveric.recipeManager.flags;
 
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.tools.Version;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class FlagHide extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.HIDE;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -68,7 +72,7 @@ public class FlagHide extends Flag {
         String[] args = value.toLowerCase().split("\\|");
 
         if (args.length < 1) {
-            return ErrorReporter.error("Flag " + getType() + " needs at least one argument", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs at least one argument", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
 
         for (int i = 0; i < args.length; i++) {

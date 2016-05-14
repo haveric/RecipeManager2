@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitTask;
@@ -250,7 +251,7 @@ public class Updater {
 
                 if (latestVersion == null) {
                     if (sender != null) { // send this message only if it's a requested update check
-                        Messages.sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + urlFiles);
+                        MessageSender.getInstance().sendAndLog(sender, "<red>Unable to check for updates, please check manually by visiting:<yellow> " + urlFiles);
                     } else {
                         return; // block the disable message
                     }
@@ -269,35 +270,35 @@ public class Updater {
 
                         if (compare == 0) {
                             if (sender != null) { // send this message only if it's a requested update check
-                                Messages.sendAndLog(sender, "<gray>Using the latest version: " + latest);
+                                MessageSender.getInstance().sendAndLog(sender, "<gray>Using the latest version: " + latest);
                             } else {
                                 return; // block the disable message
                             }
                         } else if (compare == -1) {
-                            Messages.sendAndLog(sender, "New version: <green>" + latest + "<reset>! You're using <yellow>" + currentVersion);
-                            Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                            MessageSender.getInstance().sendAndLog(sender, "New version: <green>" + latest + "<reset>! You're using <yellow>" + currentVersion);
+                            MessageSender.getInstance().sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         } else if (compare == 1) {
-                            Messages.sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
+                            MessageSender.getInstance().sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latest);
                         } else if (compare == 2) {
-                            Messages.send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
-                            Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                            MessageSender.getInstance().send(sender, "New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                            MessageSender.getInstance().sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         } else if (compare == 3) {
-                            Messages.send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
-                            Messages.sendAndLog(sender, "Grab it at: <green>" + latestLink);
+                            MessageSender.getInstance().send(sender, "BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
+                            MessageSender.getInstance().sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         }
                     }
                 }
 
                 if (sender == null) {
-                    Messages.sendAndLog(null, "<gray>You can disable this check from config.yml.");
+                    MessageSender.getInstance().sendAndLog(null, "<gray>You can disable this check from config.yml.");
                 }
             } catch (MalformedURLException e) {
-                Messages.error(null, e, "Error while checking for updates");
-                Messages.info("You can disable the update checker in config.yml, but please report the error.");
+                MessageSender.getInstance().error(null, e, "Error while checking for updates");
+                MessageSender.getInstance().info("You can disable the update checker in config.yml, but please report the error.");
             } catch (IOException e) {
                 // There was an error reading the query
-                Messages.error(null, e, "Error while checking for updates");
-                Messages.info("You can disable the update checker in config.yml, but please report the error.");
+                MessageSender.getInstance().error(null, e, "Error while checking for updates");
+                MessageSender.getInstance().info("You can disable the update checker in config.yml, but please report the error.");
             }
         }
     }

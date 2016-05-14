@@ -2,9 +2,13 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.Econ;
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
 
 public class FlagNeedMoney extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.NEED_MONEY;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -111,7 +115,7 @@ public class FlagNeedMoney extends Flag {
     @Override
     protected boolean onParse(String value) {
         if (!Econ.getInstance().isEnabled()) {
-            ErrorReporter.warning("Flag " + getType() + " does nothing because no Vault-supported economy plugin was detected.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
 
         String[] split = value.split("\\|");
@@ -127,7 +131,7 @@ public class FlagNeedMoney extends Flag {
             setMinMoney(Double.valueOf(value));
             setMaxMoney(getMinMoney());
         } catch (NumberFormatException e) {
-            ErrorReporter.error("The " + getType() + " flag has invalid min required money number: " + value);
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required money number: " + value);
             return false;
         }
 
@@ -137,13 +141,13 @@ public class FlagNeedMoney extends Flag {
             try {
                 setMaxMoney(Double.valueOf(value));
             } catch (NumberFormatException e) {
-                ErrorReporter.error("The " + getType() + " flag has invalid max required money number: " + value);
+                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required money number: " + value);
                 return false;
             }
         }
 
         if ((getMinMoney() <= 0 && getMaxMoney() <= 0) || getMaxMoney() < getMinMoney()) {
-            ErrorReporter.error("The " + getType() + " flag needs min or max higher than 0 and max higher than min.");
+            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
 
@@ -157,7 +161,7 @@ public class FlagNeedMoney extends Flag {
         }
 
         if (!a.hasPlayerName() || !checkMoney(Econ.getInstance().getMoney(a.playerName()))) {
-            a.addReason(Messages.FLAG_NEEDMONEY, failMessage, "{money}", getMoneyString());
+            a.addReason("flag.needmoney", failMessage, "{money}", getMoneyString());
         }
     }
 }

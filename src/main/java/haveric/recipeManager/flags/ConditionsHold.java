@@ -1,8 +1,7 @@
 package haveric.recipeManager.flags;
 
-import org.bukkit.inventory.ItemStack;
-
 import haveric.recipeManager.ErrorReporter;
+import org.bukkit.inventory.ItemStack;
 
 public class ConditionsHold extends Conditions {
 
@@ -60,7 +59,7 @@ public class ConditionsHold extends Conditions {
                 } else if (val.equals("inventory")) {
                     cond.setSlot(ConditionsSlot.INVENTORY);
                 } else {
-                    ErrorReporter.warning("Flag " + cond.getFlagType() + " has 'slot' argument with invalid value: " + val);
+                    ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'slot' argument with invalid value: " + val);
                 }
             } else {
                 parseArg(value, arg, cond);

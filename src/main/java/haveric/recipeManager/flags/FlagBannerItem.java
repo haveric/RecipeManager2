@@ -1,9 +1,9 @@
 package haveric.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.common.collect.ObjectArrays;
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -11,13 +11,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.google.common.collect.ObjectArrays;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FlagBannerItem extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.BANNER_ITEM;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -91,7 +94,7 @@ public class FlagBannerItem extends Flag {
         baseColor = RMCUtil.parseEnum(args[0].trim(), DyeColor.values());
 
         if (baseColor == null) {
-            ErrorReporter.warning("Flag " + getType() + " has invalid base color!");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid base color!");
             return false;
         }
 
@@ -103,11 +106,11 @@ public class FlagBannerItem extends Flag {
             DyeColor color = RMCUtil.parseEnum(split[1], DyeColor.values());
 
             if (type == null) {
-                ErrorReporter.warning("Flag " + getType() + " has invalid pattern: " + split[0]);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid pattern: " + split[0]);
                 return false;
             }
             if (color == null) {
-                ErrorReporter.warning("Flag " + getType() + " has invalid color " + split[1] + " for pattern: " + split[0]);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid color " + split[1] + " for pattern: " + split[0]);
                 return false;
             }
 

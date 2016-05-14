@@ -1,13 +1,18 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 
-import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 
 public class FlagSound extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.SOUND;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -77,12 +82,12 @@ public class FlagSound extends Flag {
     }
 
     /**
-     * @param volume
+     * @param newVolume
      *            from 0.0 to 1.0
      */
     public void setVolume(float newVolume) {
         if (newVolume < 0 || newVolume > 4) {
-            ErrorReporter.warning("Flag " + getType() + " has invalid 'volume' number range, must be between 0.0 and 1.0, trimmed.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid 'volume' number range, must be between 0.0 and 1.0, trimmed.");
 
             volume = Math.min(Math.max(newVolume, 0.0f), 4.0f);
         } else {
@@ -98,12 +103,12 @@ public class FlagSound extends Flag {
     }
 
     /**
-     * @param pitch
+     * @param newPitch
      *            from 0.0 to 4.0
      */
     public void setPitch(float newPitch) {
         if (newPitch < 0 || newPitch > 4) {
-            ErrorReporter.warning("Flag " + getType() + " has invalid 'pitch' number range, must be between 0.0 and 4.0, trimmed.");
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid 'pitch' number range, must be between 0.0 and 4.0, trimmed.");
 
             pitch = Math.min(Math.max(newPitch, 0.0f), 4.0f);
         } else {
@@ -128,7 +133,7 @@ public class FlagSound extends Flag {
         try {
             setSound(Sound.valueOf(value));
         } catch (IllegalArgumentException e) {
-            ErrorReporter.error("Flag " + getType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
             return false;
         }
 
@@ -142,32 +147,32 @@ public class FlagSound extends Flag {
                     value = value.substring("volume".length()).trim();
 
                     if (value.isEmpty()) {
-                        ErrorReporter.error("Flag " + getType() + " has 'volume' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'volume' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
 
                     try {
                         setVolume(Float.valueOf(value));
                     } catch (NumberFormatException e) {
-                        ErrorReporter.error("Flag " + getType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
                 } else if (value.startsWith("pitch")) {
                     value = value.substring("pitch".length()).trim();
 
                     if (value.isEmpty()) {
-                        ErrorReporter.error("Flag " + getType() + " has 'pitch' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'pitch' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
 
                     try {
                         setPitch(Float.valueOf(value));
                     } catch (NumberFormatException e) {
-                        ErrorReporter.error("Flag " + getType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
+                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
                     }
                 } else {
-                    ErrorReporter.warning("Flag " + getType() + " has unknown argument: " + value, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
                 }
             }
         }

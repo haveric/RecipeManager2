@@ -1,13 +1,16 @@
 package haveric.recipeManager.flags;
 
-import org.bukkit.entity.Player;
-
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.entity.Player;
 
 public class FlagModExp extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.MOD_EXP;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -28,8 +31,8 @@ public class FlagModExp extends Flag {
             "  {modifier}     = the modifier prefix.",
             "  {actualamount} = (only works for - modifier) the actual amount lost.",
             "",
-            "NOTE: This is for total experience points, for experience levels use " + FlagType.MODLEVEL.toString(),
-            "NOTE: This flag does not check if player has enough experience when subtracting! Use in combination with " + FlagType.NEEDEXP.toString() + " if you want to check.", };
+            "NOTE: This is for total experience points, for experience levels use " + FlagType.MOD_LEVEL,
+            "NOTE: This flag does not check if player has enough experience when subtracting! Use in combination with " + FlagType.NEED_EXP + " if you want to check.", };
     }
 
     @Override
@@ -71,7 +74,7 @@ public class FlagModExp extends Flag {
     /**
      * Set the amount, can be negative.
      *
-     * @param amount
+     * @param newAmount
      */
     public void setAmount(int newAmount) {
         if (newAmount < 0) {
@@ -82,9 +85,9 @@ public class FlagModExp extends Flag {
     }
 
     /**
-     * @param mod
+     * @param newMod
      *            can be '+', '-', '='
-     * @param amount
+     * @param newAmount
      *            the amount, forced as positive number
      */
     public void setAmount(char newMod, int newAmount) {
@@ -135,7 +138,7 @@ public class FlagModExp extends Flag {
         }
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-            return ErrorReporter.error("The " + getType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
         }
 
         int newAmount = 0;
@@ -143,11 +146,11 @@ public class FlagModExp extends Flag {
         try {
             newAmount = Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return ErrorReporter.error("The " + getType() + " flag has invalid number: " + value);
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
         }
 
         if (newMod != '=' && newAmount == 0) {
-            return ErrorReporter.error("The " + getType() + " flag can only have 0 amount for = modifier, not for + or -");
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag can only have 0 amount for = modifier, not for + or -");
         }
 
         setAmount(newMod, newAmount);
@@ -178,19 +181,19 @@ public class FlagModExp extends Flag {
             case '+':
                 exp = ToolsExp.getTotalExperience(p) + amount;
 
-                a.addEffect(Messages.FLAG_MODEXP_ADD, failMessage, "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modexp.add", failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
                 exp = Math.max(ToolsExp.getTotalExperience(p) - amount, 0);
 
-                a.addEffect(Messages.FLAG_MODEXP_SUB, failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
+                a.addEffect("flag.modexp.sub", failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
 
                 break;
             case '=':
                 exp = Math.max(amount, 0);
 
-                a.addEffect(Messages.FLAG_MODEXP_SET, failMessage, "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modexp.set", failMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             default:
@@ -203,8 +206,8 @@ public class FlagModExp extends Flag {
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
      *
-     * switch(mod) { case '+': list.add(Messages.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(Messages.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}",
-     * mod, "{actualamount}", amount)); break; case '=': list.add(Messages.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod)); break; }
+     * switch(mod) { case '+': list.add(MessagesOld.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(MessagesOld.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}",
+     * mod, "{actualamount}", amount)); break; case '=': list.add(MessagesOld.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod)); break; }
      *
      * return list; }
      */

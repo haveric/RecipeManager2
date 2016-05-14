@@ -1,8 +1,11 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.Messages;
-
 public class FlagRestrict extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.RESTRICT;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -57,6 +60,6 @@ public class FlagRestrict extends Flag {
 
     @Override
     protected void onCheck(Args a) {
-        a.addReason(Messages.FLAG_RESTRICT, message);
+        a.addReason("flag.restrict", message);
     }
 }

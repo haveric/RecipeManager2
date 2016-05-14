@@ -7,6 +7,11 @@ import haveric.recipeManager.recipes.MultiResultRecipe;
 public class FlagIndividualResults extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.INDIVIDUAL_RESULTS;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag}", };
@@ -44,7 +49,7 @@ public class FlagIndividualResults extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (!(recipe instanceof MultiResultRecipe)) {
-            return ErrorReporter.error("Flag " + getType() + " only works with recipes that support multiple results!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " only works with recipes that support multiple results!");
         }
 
         return true;

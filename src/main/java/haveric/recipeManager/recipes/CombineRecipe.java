@@ -1,24 +1,23 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.Messages;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.FlagType;
 import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import org.apache.commons.lang.mutable.MutableInt;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.commons.lang.mutable.MutableInt;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapelessRecipe;
 
 public class CombineRecipe extends WorkbenchRecipe {
     private List<ItemStack> ingredients;
@@ -211,7 +210,7 @@ public class CombineRecipe extends WorkbenchRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.RECIPEBOOK_HEADER_SHAPELESS.get());
+        s.append(Messages.getInstance().get("recipebook.header.shapeless"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
@@ -220,11 +219,11 @@ public class CombineRecipe extends WorkbenchRecipe {
         s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null, true));
 
         if (isMultiResult()) {
-            s.append('\n').append(Messages.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1)));
+            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
         }
 
         s.append('\n');
-        s.append('\n').append(Messages.RECIPEBOOK_HEADER_INGREDIENTS.get()).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredients")).append(RMCChatColor.BLACK);
 
         Map<ItemStack, MutableInt> items = new HashMap<ItemStack, MutableInt>();
 

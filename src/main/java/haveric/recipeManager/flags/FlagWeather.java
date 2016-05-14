@@ -1,15 +1,19 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.World;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.World;
-
-import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Messages;
-import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagWeather extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.WEATHER;
+    }
 
     @Override
     protected String[] getArguments() {
@@ -78,7 +82,7 @@ public class FlagWeather extends Flag {
     /**
      * Set the weather requirement.
      *
-     * @param weather
+     * @param newWeather
      *            0 = none, 1 = rain/snow, 2 = thunder
      */
     public void setWeather(int newWeather) {
@@ -142,12 +146,12 @@ public class FlagWeather extends Flag {
                     break;
 
                 default:
-                    ErrorReporter.warning("Flag " + getType() + " has unknown weather type: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown weather type: " + value);
             }
         }
 
         if (weather == 0) {
-            ErrorReporter.error("Flag " + getType() + " needs at least one valid weather type!");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs at least one valid weather type!");
             return false;
         }
 
@@ -174,14 +178,14 @@ public class FlagWeather extends Flag {
         }
 
         if ((getWeather() & checkWeather) != checkWeather) {
-            a.addReason(Messages.FLAG_WEATHER, failMessage, "{weather}", getWeatherString());
+            a.addReason("flag.weather", failMessage, "{weather}", getWeatherString());
         }
     }
 
     /*
      * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
      *
-     * list.add(Messages.FLAG_WEATHER.get("{weather}", getWeatherString()));
+     * list.add(MessagesOld.FLAG_WEATHER.get("{weather}", getWeatherString()));
      *
      * return list; }
      */

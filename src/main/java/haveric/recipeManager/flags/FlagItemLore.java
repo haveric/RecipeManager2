@@ -1,14 +1,18 @@
 package haveric.recipeManager.flags;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import haveric.recipeManagerCommon.util.RMCUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagItemLore extends Flag {
+
+    @Override
+    protected String getFlagType() {
+        return FlagType.ITEM_LORE;
+    }
 
     @Override
     protected String[] getArguments() {

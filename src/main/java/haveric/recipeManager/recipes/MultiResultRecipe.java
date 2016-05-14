@@ -1,20 +1,15 @@
 package haveric.recipeManager.recipes;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.flags.*;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.ToolsItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.Messages;
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flags.ArgBuilder;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.FlagIndividualResults;
-import haveric.recipeManager.flags.FlagType;
-import haveric.recipeManager.flags.Flags;
-import haveric.recipeManager.tools.ToolsItem;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiResultRecipe extends BaseRecipe {
     private List<ItemResult> results = new ArrayList<ItemResult>();
@@ -52,7 +47,7 @@ public class MultiResultRecipe extends BaseRecipe {
     }
 
     /**
-     * @param results
+     * @param newResults
      *            the results list or null if you want to clear results
      */
     public void setResults(List<ItemResult> newResults) {
@@ -150,12 +145,6 @@ public class MultiResultRecipe extends BaseRecipe {
      * @return the first valid result as a clone or null.
      */
     public ItemResult getFirstResult() {
-        // TODO remove ?
-        /*
-         * for(ItemResult r : results) { if(r.getType() != Material.AIR && !r.hasFlag(FlagType.SECRET)) { return r; } }
-         *
-         * // if no non-secret result was found, then we must return something...
-         */
         for (ItemResult r : results) {
             if (r.getType() != Material.AIR) {
                 return r.clone();
@@ -163,6 +152,19 @@ public class MultiResultRecipe extends BaseRecipe {
         }
 
         return null; // no valid results defined
+    }
+
+    public boolean hasValidResult() {
+        boolean valid = false;
+
+        for (ItemResult r : results) {
+            if (r.getType() != Material.AIR) {
+                valid = true;
+                break;
+            }
+        }
+
+        return valid;
     }
 
     /**
@@ -179,7 +181,7 @@ public class MultiResultRecipe extends BaseRecipe {
         a.clear();
 
         ItemResult result = null;
-        if (this.hasFlag(FlagType.INDIVIDUALRESULTS)) {
+        if (this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             for (ItemResult r : results) {
                 a.clear();
 
@@ -224,12 +226,12 @@ public class MultiResultRecipe extends BaseRecipe {
 
         if (result != null) {
             if (result.sendPrepare(a)) {
-                a.sendEffects(a.player(), Messages.FLAG_PREFIX_RESULT.get("{item}", ToolsItem.print(result)));
+                a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
             }
 
             if (result.getType() == Material.AIR && hasFlags()) {
                 sendFailed(a);
-                a.sendEffects(a.player(), Messages.FLAG_PREFIX_RECIPE.get());
+                a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
             }
         }
 
