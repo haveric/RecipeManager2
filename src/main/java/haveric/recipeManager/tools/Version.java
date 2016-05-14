@@ -2,6 +2,7 @@ package haveric.recipeManager.tools;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Rabbit;
 
 public class Version {
 
@@ -10,6 +11,8 @@ public class Version {
     public static void init() {
         if (supports19()) {
             supportVersion = "1.9";
+        } else if (supports18Plus()) {
+            supportVersion = "1.8+";
         } else if (supports18()) {
             supportVersion = "1.8";
         } else {
@@ -18,13 +21,29 @@ public class Version {
     }
 
     private static boolean supports19() {
-        boolean supports = false;
+        boolean supports;
 
         try {
             @SuppressWarnings("unused")
             Sound sound = Sound.BLOCK_NOTE_BASS;
             supports = true;
         } catch (NoSuchFieldError e) {
+            supports = false;
+        }
+
+        return supports;
+    }
+
+    private static boolean supports18Plus() {
+        boolean supports;
+
+        try {
+            @SuppressWarnings("unused")
+            Rabbit.Type rabbit = Rabbit.Type.SALT_AND_PEPPER;
+            supports = true;
+        } catch (NoSuchFieldError e) {
+            supports = false;
+        } catch (NoClassDefFoundError e) {
             supports = false;
         }
 
@@ -64,11 +83,22 @@ public class Version {
         return hasSupport;
     }
 
+    public static boolean has18PlusSupport() {
+        boolean hasSupport = false;
+        String version = getVersion();
+
+        if (version.equals("1.9") || version.equals("1.8+")) {
+            hasSupport = true;
+        }
+
+        return hasSupport;
+    }
+
     public static boolean has18Support() {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.9") || version.equals("1.8")) {
+        if (version.equals("1.9") || version.equals("1.8+") || version.equals("1.8")) {
             hasSupport = true;
         }
 

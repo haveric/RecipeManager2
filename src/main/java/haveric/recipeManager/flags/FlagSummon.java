@@ -81,7 +81,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
         };
 
-        if (Version.has18Support()) {
+        if (Version.has18PlusSupport()) {
             description = ObjectArrays.concat(description, new String[] {
                 String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()), }, String.class);
         }
