@@ -1,7 +1,5 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.messages.MessageSender;
-
 public class FlagLoader {
     public FlagLoader() {
         loadDefaultFlags();
