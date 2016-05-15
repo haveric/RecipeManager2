@@ -6,7 +6,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-import haveric.recipeManagerCommon.flags.AbstractArgs;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,23 +13,33 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
  */
-public class Args extends AbstractArgs {
+public class Args {
+    private String playerName;
     private Player player;
     private Location location;
     private BaseRecipe recipe;
     private RMCRecipeType recipeType;
     private Inventory inventory;
     private ItemResult result;
+    private Object extra;
+
+    private List<String> reasons;
+    private List<String> effects;
 
     protected Args() { }
 
     public static void init() { }
+
+    public void setPlayerName(String newPlayerName) {
+        playerName = newPlayerName;
+    }
 
     public void setPlayer(Player newPlayer) {
         player = newPlayer;
@@ -56,6 +65,17 @@ public class Args extends AbstractArgs {
         result = newResult;
     }
 
+    public void setExtra(Object newExtra) {
+        extra = newExtra;
+    }
+
+    public String playerName() {
+        return playerName;
+    }
+
+    public boolean hasPlayerName() {
+        return playerName != null;
+    }
     /**
      * Gets the Player object from either player() or playerName()
      *
@@ -114,6 +134,35 @@ public class Args extends AbstractArgs {
         return result != null;
     }
 
+    public Object extra() {
+        return extra;
+    }
+
+    public boolean hasExtra() {
+        return extra != null;
+    }
+
+    public List<String> reasons() {
+        return reasons;
+    }
+
+    public boolean hasReasons() {
+        return (reasons != null && !reasons.isEmpty());
+    }
+
+    public void addCustomReason(String message) {
+        if (reasons == null) {
+            reasons = new ArrayList<String>();
+        }
+
+        reasons.add(message);
+    }
+
+    public void clearReasons() {
+        if (reasons != null) {
+            reasons.clear();
+        }
+    }
     public void addReason(String globalMessagePath, String customMessage, Object... variables) {
         addCustomReason(Messages.getInstance().parseCustom(globalMessagePath, customMessage, variables));
     }
@@ -122,12 +171,39 @@ public class Args extends AbstractArgs {
         sendList(sender, prefix, reasons());
     }
 
+    public List<String> effects() {
+        return effects;
+    }
+
+    public boolean hasEffects() {
+        return (effects != null && !effects.isEmpty());
+    }
+
+    public void addCustomEffect(String message) {
+        if (effects == null) {
+            effects = new ArrayList<String>();
+        }
+
+        effects.add(message);
+    }
+
+    public void clearEffects() {
+        if (effects != null) {
+            effects.clear();
+        }
+    }
+
     public void addEffect(String globalMessagePath, String customMessage, Object... variables) {
         addCustomEffect(Messages.getInstance().parseCustom(globalMessagePath, customMessage, variables));
     }
 
     public void sendEffects(CommandSender sender, String prefix) {
         sendList(sender, prefix, effects());
+    }
+
+    public void clear() {
+        clearReasons();
+        clearEffects();
     }
 
     private void sendList(CommandSender sender, String prefix, List<String> list) {
