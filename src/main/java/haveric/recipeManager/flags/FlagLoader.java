@@ -1,10 +1,10 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.messages.MessageSender;
+
 public class FlagLoader {
     public FlagLoader() {
         loadDefaultFlags();
-
-        // TODO: Add API for custom flag loading
     }
 
     public void loadDefaultFlags() {
@@ -74,5 +74,9 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.HIDE, new FlagHide(), FlagBit.RESULT);
         FlagFactory.getInstance().initializeFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), FlagBit.RESULT, "banner");
         FlagFactory.getInstance().initializeFlag(FlagType.NO_RESULT, new FlagNoResult(), FlagBit.RESULT | FlagBit.NO_FOR | FlagBit.NO_VALUE);
+    }
+
+    public void loadCustomFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {
+        FlagFactory.getInstance().initializeFlag(mainAlias, newFlag, bits, aliases);
     }
 }

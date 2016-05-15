@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
+import haveric.recipeManager.api.events.RecipeManagerFlagsLoadEvent;
 import haveric.recipeManager.commands.*;
 import haveric.recipeManager.data.BrewingStandData;
 import haveric.recipeManager.data.BrewingStands;
@@ -8,8 +9,8 @@ import haveric.recipeManager.data.FurnaceData;
 import haveric.recipeManager.data.Furnaces;
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.FlagLoader;
 import haveric.recipeManager.flags.FlagFactory;
+import haveric.recipeManager.flags.FlagLoader;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.metrics.Metrics;
@@ -38,7 +39,7 @@ public class RecipeManager extends JavaPlugin {
     private static RecipeBooks recipeBooks;
     private static Events events;
     private Metrics metrics;
-
+    private FlagLoader flagLoader;
     private HashMap<String, String> plugins = new HashMap<String, String>();
 
     // constants
@@ -68,7 +69,10 @@ public class RecipeManager extends JavaPlugin {
         Args.init(); // dummy method to avoid errors on 'reload' with updating
         ArgBuilder.init();
 
-        new FlagLoader();
+        flagLoader = new FlagLoader();
+
+        pm.callEvent(new RecipeManagerFlagsLoadEvent(flagLoader));
+
         FlagFactory.getInstance().init();
         FlagFactory.getInstance().initPermissions();
         RecipeBooks.init();
