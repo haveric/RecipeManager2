@@ -30,6 +30,7 @@ public class Settings {
     private static final boolean SPECIAL_MAP_EXTENDING_DEFAULT = true;
     private static final boolean SPECIAL_BOOK_CLONING_DEFAULT = true;
     private static final boolean SPECIAL_BANNER_DEFAULT = true;
+    private static final boolean SPECIAL_SHIELD_BANNER_DEFAULT = true;
 
     private static final boolean SOUNDS_REPAIR_DEFAULT = true;
     private static final boolean SOUNDS_FAILED_DEFAULT = true;
@@ -133,6 +134,7 @@ public class Settings {
         MessageSender.getInstance().log("    special-recipes.map-extending: " + getSpecialMapExtending());
         MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
         MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
+        MessageSender.getInstance().log("    special-recipes.shield-banner: " + getSpecialShieldBanner());
         MessageSender.getInstance().log("    sounds.failed: " + getSoundsFailed());
         MessageSender.getInstance().log("    sounds.failed_click: " + getSoundsFailedClick());
         MessageSender.getInstance().log("    sounds.repair: " + getSoundsRepair());
@@ -389,6 +391,10 @@ public class Settings {
 
     public boolean getSpecialBanner() {
         return fileConfig.getBoolean("special-recipes.banner", SPECIAL_BANNER_DEFAULT);
+    }
+
+    public boolean getSpecialShieldBanner() {
+        return fileConfig.getBoolean("special-recipes.shield-banner", SPECIAL_SHIELD_BANNER_DEFAULT);
     }
 
     public boolean getSoundsRepair() {

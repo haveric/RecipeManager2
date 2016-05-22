@@ -1,30 +1,20 @@
 package haveric.recipeManager;
 
+import com.google.common.collect.ImmutableMap;
+import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.*;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
-
-import com.google.common.collect.ImmutableMap;
-
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.FuelRecipe;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 
 /**
  * Control for Bukkit recipes to avoid confusion with RecipeManager's recipes
@@ -59,6 +49,8 @@ public class Vanilla {
      * Banner special recipe result
      */
     protected static ItemStack RECIPE_BANNER = null;
+
+    protected static ItemStack RECIPE_SHIELD_BANNER = null;
 
     /**
      * Book cloning's special recipe
@@ -135,6 +127,10 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
 
             RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
+        }
+
+        if (Version.has19Support()) {
+            RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
         }
 
         // Index fuel recipes
@@ -479,6 +475,10 @@ public class Vanilla {
             }
 
             if (RECIPE_BANNER != null && result.equals(RECIPE_BANNER)) {
+                isSpecial = true;
+            }
+
+            if (RECIPE_SHIELD_BANNER != null && result.equals(RECIPE_SHIELD_BANNER)) {
                 isSpecial = true;
             }
 

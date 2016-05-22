@@ -202,6 +202,12 @@ public class Events implements Listener {
                 inv.setResult(null);
                 return true;
             }
+
+            if (!Settings.getInstance().getSpecialShieldBanner() && recipeResult.equals(Vanilla.RECIPE_SHIELD_BANNER)) {
+                Messages.getInstance().sendOnce(player, "craft.special.shield-banner");
+                inv.setResult(null);
+                return true;
+            }
         }
 
         return false;
