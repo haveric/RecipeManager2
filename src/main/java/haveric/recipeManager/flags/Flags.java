@@ -122,8 +122,7 @@ public class Flags implements Cloneable {
             return;
         }
 
-        Flag flag = flags.get(type.getName()); // get existing flag, if any
-
+        Flag flag = flags.get(type.getNameDisplay()); // get existing flag, if any
         if (flag == null) {
             flag = type.createFlagClass();
         }
