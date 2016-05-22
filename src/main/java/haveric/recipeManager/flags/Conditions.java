@@ -611,7 +611,6 @@ public class Conditions implements Cloneable {
         if (newLore != null) {
             lores.add(RMCUtil.parseColors(newLore, false));
         }
-
     }
 
     public boolean hasLore() {

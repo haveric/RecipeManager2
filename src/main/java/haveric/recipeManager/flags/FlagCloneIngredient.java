@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
@@ -11,6 +12,8 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,14 +39,17 @@ public class FlagCloneIngredient extends Flag {
             "",
             "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.",
             "Arguments can be one or more of the following, separated by | character:",
-            "  data [<mod> <value>]   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
-            "  amount [<mod> <value>] = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
-            "  enchants               = copies the enchantments.",
-            "  name                   = copies the custom item name.",
-            "  lore                   = copies the custom item lore/description.",
-            "  special                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
-            "  allmeta                = copies enchants, name, lore and special.",
-            "  all                    = copies entire item (data, amount, enchants, name, lore, special)",
+            "  data [<mod> <value>]                   = copy data value with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+            "  amount [<mod> <value>]                 = copy stack amount with optional modifier, <mod> can be +,-,/,* or % as math operator and <value> a number.",
+            "  enchants                               = copies the enchantments.",
+            "  name                                   = copies the custom item name.",
+            "  lore [number or text or regex:pattern] = copies all the custom item lore/description unless conditions are added to copy specific lines.",
+            "    [number]                             = copies only the lore on line number. More lore conditions can be added to copy more lines",
+            "    [text]                               = copies any lore lines that contain the text",
+            "    [regex:pattern]                      = copies any lore lines that match the regex pattern.",
+            "  special                                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
+            "  allmeta                                = copies enchants, name, lore and special.",
+            "  all                                    = copies entire item (data, amount, enchants, name, lore, special)",
             "",
             "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
             "",
@@ -65,6 +71,8 @@ public class FlagCloneIngredient extends Flag {
     private byte copyBitsum;
     private int[] dataModifier = new int[2];
     private int[] amountModifier = new int[2];
+    private List<String> loreConditions = new ArrayList<String>();
+    private List<Integer> loreLines = new ArrayList<Integer>();
 
     /**
      * Contains static constants that are usable in the 'copy' methods of {@link FlagCloneIngredient}.
@@ -88,6 +96,8 @@ public class FlagCloneIngredient extends Flag {
         copyBitsum = flag.copyBitsum;
         System.arraycopy(flag.dataModifier, 0, dataModifier, 0, dataModifier.length);
         System.arraycopy(flag.amountModifier, 0, amountModifier, 0, amountModifier.length);
+        loreConditions = flag.loreConditions;
+        loreLines = flag.loreLines;
     }
 
     @Override
@@ -179,6 +189,16 @@ public class FlagCloneIngredient extends Flag {
         amountModifier[1] = data;
     }
 
+    private void addLoreCondition(String newLore) {
+        if (newLore != null) {
+            loreConditions.add(RMCUtil.parseColors(newLore, false));
+        }
+    }
+
+    private void addLoreLine(int line) {
+        loreLines.add(line);
+    }
+
     @Override
     protected boolean onValidate() {
         ItemResult result = getResult();
@@ -225,8 +245,18 @@ public class FlagCloneIngredient extends Flag {
             } else if (arg.equals("name")) {
                 addCopyBit(Bit.NAME);
                 continue;
-            } else if (arg.equals("lore")) {
+            } else if (arg.startsWith("lore")) {
                 addCopyBit(Bit.LORE);
+
+                String loreValue = arg.substring("lore".length()).trim();
+                if (!loreValue.isEmpty()) {
+                    try {
+                        int loreLine = Integer.parseInt(loreValue);
+                        addLoreLine(loreLine);
+                    } catch (NumberFormatException e) {
+                        addLoreCondition(loreValue);
+                    }
+                }
                 continue;
             } else if (arg.equals("special")) {
                 addCopyBit(Bit.SPECIAL);
@@ -351,7 +381,37 @@ public class FlagCloneIngredient extends Flag {
         }
 
         if (hasCopyBit(Bit.LORE)) {
-            resultMeta.setLore(ingredientMeta.getLore());
+            if (loreConditions.isEmpty() && loreLines.isEmpty()) {
+                resultMeta.setLore(ingredientMeta.getLore());
+            } else {
+                List<String> newLores = new ArrayList<String>();
+
+                List<String> ingredientLores = ingredientMeta.getLore();
+                for (int i = 0; i < ingredientLores.size(); i++) {
+                    String loreLine = ingredientLores.get(i);
+
+                    if (loreLines.contains(i+1)) {
+                        newLores.add(loreLine);
+                        continue;
+                    }
+                    for (String loreCondition : loreConditions) {
+                        if (loreCondition.startsWith("regex:")) {
+                            Pattern pattern = Pattern.compile(loreCondition.substring("regex:".length()));
+                            if (pattern.matcher(loreLine).matches()) {
+                                newLores.add(loreLine);
+                                break;
+                            }
+                        } else {
+                            if (loreLine.contains(loreCondition)) {
+                                newLores.add(loreLine);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                resultMeta.setLore(newLores);
+            }
         }
 
         if (hasCopyBit(Bit.SPECIAL)) {
