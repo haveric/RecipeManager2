@@ -233,15 +233,7 @@ public class ToolsItem {
     }
 
     public static boolean canMerge(ItemStack intoItem, ItemStack item) {
-        if (intoItem == null || intoItem.getType() == Material.AIR) {
-            return true;
-        }
-
-        if (ToolsItem.isSameItem(intoItem, item, true) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount())) {
-            return true;
-        }
-
-        return false;
+        return intoItem == null || intoItem.getType() == Material.AIR || ToolsItem.isSameItem(intoItem, item, true) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount());
     }
 
     public static boolean isSameItem(ItemStack one, ItemStack two, boolean negativeDurAllowed) {

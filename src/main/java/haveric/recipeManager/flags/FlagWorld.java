@@ -78,7 +78,7 @@ public class FlagWorld extends Flag {
         StringBuilder s = new StringBuilder();
 
         for (Entry<String, Boolean> e : worlds.entrySet()) {
-            if (allowed == e.getValue().booleanValue()) {
+            if (allowed == e.getValue()) {
                 if (s.length() > 0) {
                     s.append(", ");
                 }
@@ -124,7 +124,7 @@ public class FlagWorld extends Flag {
         }
 
         for (Entry<String, Boolean> e : worlds.entrySet()) {
-            if (e.getValue().booleanValue()) {
+            if (e.getValue()) {
                 if (world == null || !world.equals(e.getKey())) {
                     a.addReason("flag.world.allowed", getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(true));
                 }

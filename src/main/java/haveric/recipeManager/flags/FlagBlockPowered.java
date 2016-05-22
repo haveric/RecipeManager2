@@ -117,7 +117,6 @@ public class FlagBlockPowered extends Flag {
                 break;
             default:
                 a.addReason("flag.blockpowered.workbench", failMessage);
-                return;
         }
     }
 }

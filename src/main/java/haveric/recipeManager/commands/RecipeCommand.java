@@ -214,11 +214,11 @@ public class RecipeCommand implements CommandExecutor {
             } else if (recipe instanceof SmeltRecipe) {
                 SmeltRecipe r = (SmeltRecipe) recipe;
 
-                return containsItem(Arrays.asList(r.getIngredient()), item, true);
+                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
             } else if (recipe instanceof FuelRecipe) {
                 FuelRecipe r = (FuelRecipe) recipe;
 
-                return containsItem(Arrays.asList(r.getIngredient()), item, true);
+                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
             }
         } else {
             if (recipe instanceof WorkbenchRecipe) {
@@ -228,7 +228,7 @@ public class RecipeCommand implements CommandExecutor {
             } else if (recipe instanceof SingleResultRecipe) {
                 SingleResultRecipe r = (SingleResultRecipe) recipe;
 
-                return containsItem(Arrays.asList(r.getResult()), item, false);
+                return containsItem(Collections.singletonList(r.getResult()), item, false);
             }
         }
 

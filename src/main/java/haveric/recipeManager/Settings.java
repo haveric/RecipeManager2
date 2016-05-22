@@ -187,13 +187,11 @@ public class Settings {
                             parseMaterialDataNames(sender, section.getString(key), Short.valueOf(key), material);
                         } catch (NumberFormatException e) {
                             MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data value number: " + key + " for material: " + material);
-                            continue;
                         }
                     }
                 }
             } else {
                 MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
-                continue;
             }
         }
 

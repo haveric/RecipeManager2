@@ -166,15 +166,8 @@ public class Flag implements Cloneable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
+        return obj == this || obj instanceof Flag && obj.hashCode() == hashCode();
 
-        if (!(obj instanceof Flag)) {
-            return false;
-        }
-
-        return obj.hashCode() == hashCode();
     }
 
     /*

@@ -179,7 +179,7 @@ public class FlagKeepItem extends Flag {
                 return false;
             }
         } else {
-            keepItems.put(key, Integer.valueOf(0));
+            keepItems.put(key, 0);
         }
 
         return true;

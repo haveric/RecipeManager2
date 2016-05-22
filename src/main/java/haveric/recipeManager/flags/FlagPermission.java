@@ -84,7 +84,7 @@ public class FlagPermission extends Flag {
         StringBuilder s = new StringBuilder();
 
         for (Entry<String, Boolean> e : permissions.entrySet()) {
-            if (allowed == e.getValue().booleanValue()) {
+            if (allowed == e.getValue()) {
                 if (s.length() > 0) {
                     s.append(", ");
                 }
@@ -134,7 +134,7 @@ public class FlagPermission extends Flag {
         boolean success = false;
         List<String> failed = new ArrayList<String>();
         for (Entry<String, Boolean> e : permissions.entrySet()) {
-            if (e.getValue().booleanValue()) {
+            if (e.getValue()) {
                 if (a.hasPlayer() && a.player().hasPermission(e.getKey())) {
                     success = true;
                     break;
@@ -160,7 +160,7 @@ public class FlagPermission extends Flag {
         success = false;
         List<String> succeeded = new ArrayList<String>();
         for (Entry<String, Boolean> e : permissions.entrySet()) {
-            if (!e.getValue().booleanValue()) {
+            if (!e.getValue()) {
                 if (a.hasPlayer() && a.player().hasPermission(e.getKey())) {
                     succeeded.add(e.getKey());
                 } else {

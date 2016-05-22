@@ -70,7 +70,6 @@ public class ConditionsIngredient extends Conditions {
                     cond.setNeeded(Integer.parseInt(value));
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'needed' argument with invalid number: " + value);
-                    continue;
                 }
             } else {
                 parseArg(value, arg, cond);

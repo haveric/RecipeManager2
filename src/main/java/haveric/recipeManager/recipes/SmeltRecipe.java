@@ -189,19 +189,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof SmeltRecipe)) {
-            return false;
-        }
-
-        if (hash != ((SmeltRecipe) obj).hashCode()) {
-            return false;
-        }
-
-        return true;
+        return this == obj || obj instanceof SmeltRecipe && hash == obj.hashCode();
     }
 
     @Override

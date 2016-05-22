@@ -198,7 +198,7 @@ public class Tools {
                             }
                         }
                     } else {
-                        data = dataValue.shortValue();
+                        data = dataValue;
                     }
 
                     if (data == -1) {
@@ -719,10 +719,7 @@ public class Tools {
             return -1;
         }
 
-        int loreSize = lore.size();
-        for (int i = 0; i < loreSize; i++) {
-            String s = lore.get(i);
-
+        for (String s : lore) {
             if (s != null && s.startsWith(Recipes.RECIPE_ID_STRING)) {
                 try {
                     return Integer.parseInt(s.substring(Recipes.RECIPE_ID_STRING.length()));

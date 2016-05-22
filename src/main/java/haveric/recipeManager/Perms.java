@@ -52,7 +52,7 @@ public class Perms {
                 UUID uuid = UUIDFetcher.getUUIDOf(playerName);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
-                isPlayerInGroup = permission.playerInGroup((String) null, player, group);
+                isPlayerInGroup = permission.playerInGroup(null, player, group);
             } catch (Exception e) { }
         }
 

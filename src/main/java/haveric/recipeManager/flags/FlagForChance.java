@@ -372,7 +372,7 @@ public class FlagForChance extends Flag {
                     for (i = flags.size() - 1; i >= 0; i--) {
                         ChanceFlag c = flags.get(i);
 
-                        if (c.getFlag() != null && c.getFlag().getFlagType() == type.getName()) {
+                        if (c.getFlag() != null && c.getFlag().getFlagType().equals(type.getName())) {
                             flagChance = c;
 
                             if (chance != null) {

@@ -79,7 +79,7 @@ public class FlagCloneIngredient extends Flag {
      */
     public class Bit {
         public static final byte NONE = 0;
-        public static final byte DATA = 1 << 0;
+        public static final byte DATA = 1;
         public static final byte AMOUNT = 1 << 1;
         public static final byte ENCHANTS = 1 << 2;
         public static final byte NAME = 1 << 3;

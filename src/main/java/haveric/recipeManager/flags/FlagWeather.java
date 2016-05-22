@@ -49,7 +49,7 @@ public class FlagWeather extends Flag {
 
 
     public class Bit {
-        public static final byte CLEAR = 1 << 0;
+        public static final byte CLEAR = 1;
         public static final byte DOWNFALL = 1 << 1;
         public static final byte THUNDER = 1 << 2;
     }

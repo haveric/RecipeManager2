@@ -203,7 +203,6 @@ public class BrewingStands {
                 yml.save(file);
             } catch (IOException e) {
                 MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
-                continue;
             }
         }
 

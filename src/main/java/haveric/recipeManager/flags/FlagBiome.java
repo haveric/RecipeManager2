@@ -80,7 +80,7 @@ public class FlagBiome extends Flag {
         StringBuilder s = new StringBuilder();
 
         for (Entry<Biome, Boolean> e : biomes.entrySet()) {
-            if (allowed == e.getValue().booleanValue()) {
+            if (allowed == e.getValue()) {
                 if (s.length() > 0) {
                     s.append(", ");
                 }

@@ -3,6 +3,7 @@ package haveric.recipeManager.flags;
 import haveric.recipeManager.messages.MessageSender;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FlagDescriptor {
@@ -15,9 +16,7 @@ public class FlagDescriptor {
         bits = newBits;
 
         names.add(mainAlias.toLowerCase());
-        for (String alias : aliases) {
-            names.add(alias);
-        }
+        Collections.addAll(names, aliases);
     }
 
     /**

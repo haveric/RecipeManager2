@@ -75,8 +75,8 @@ public class FlagHide extends Flag {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs at least one argument", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");
         }
 
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i].trim().toLowerCase();
+        for (String arg : args) {
+            arg = arg.trim().toLowerCase();
 
             if (arg.startsWith("attributes")) {
                 attributes = true;

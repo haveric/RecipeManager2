@@ -106,7 +106,7 @@ public class MessageSender extends AbstractMessageSender {
         try {
             // Use reflection to use the proper version of getOnlinePlayers - credit to Maxim Roncac� (ShadyPotato)
             if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
-                Collection<?> onlinePlayers = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                Collection<?> onlinePlayers = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null));
 
                 for (Object p : onlinePlayers) {
                     if (p instanceof Player) {
@@ -117,7 +117,7 @@ public class MessageSender extends AbstractMessageSender {
                     }
                 }
             } else {
-                Player[] onlinePlayers = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null, new Object[0]));
+                Player[] onlinePlayers = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null));
                 for (Player p : onlinePlayers) {
                     if (p.hasPermission("recipemanager.debugger")) {
                         send(p, message);

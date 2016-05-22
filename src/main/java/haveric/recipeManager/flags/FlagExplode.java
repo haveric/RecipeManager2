@@ -170,7 +170,6 @@ public class FlagExplode extends Flag {
                     setPower(Float.valueOf(value));
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'power' argument with invalid number: " + value);
-                    continue;
                 }
             } else if (arg.startsWith("fuel")) {
                 if (getFlaggable() instanceof FuelRecipe) {

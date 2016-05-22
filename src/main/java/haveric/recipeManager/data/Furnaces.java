@@ -213,7 +213,6 @@ public class Furnaces {
                 yml.save(file);
             } catch (Throwable e) {
                 MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
-                continue;
             }
         }
 

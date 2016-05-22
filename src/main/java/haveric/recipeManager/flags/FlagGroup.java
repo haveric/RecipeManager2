@@ -89,7 +89,7 @@ public class FlagGroup extends Flag {
         StringBuilder s = new StringBuilder();
 
         for (Entry<String, Boolean> e : groups.entrySet()) {
-            if (allowed == e.getValue().booleanValue()) {
+            if (allowed == e.getValue()) {
                 if (s.length() > 0) {
                     s.append(", ");
                 }
@@ -138,7 +138,7 @@ public class FlagGroup extends Flag {
         }
 
         for (Entry<String, Boolean> e : groups.entrySet()) {
-            if (e.getValue().booleanValue()) {
+            if (e.getValue()) {
                 if (!a.hasPlayerName() || !Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
                     a.addReason("flag.group.allowed", getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(true));
                 }

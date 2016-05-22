@@ -1131,7 +1131,6 @@ public class FlagSummon extends Flag {
                         c.setChance(Float.valueOf(value));
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'chance' argument with invalid number: " + value);
-                        continue;
                     }
                 } else if (value.startsWith("jumpstrength")) {
                     value = value.substring("jumpstrength".length()).trim();
@@ -1260,7 +1259,6 @@ public class FlagSummon extends Flag {
                             c.setMaxHp(Integer.parseInt(value));
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'hp' argument with invalid number for maxhp: " + value);
-                            continue;
                         }
                     }
                 } else if (value.startsWith("potion")) {
@@ -1364,7 +1362,6 @@ public class FlagSummon extends Flag {
                             c.getDrop()[index] = Math.min(Math.max(Float.valueOf(value), 0), 100);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'chance' argument with invalid number: " + value);
-                            continue;
                         }
                     }
                 } else if (value.startsWith("horse")) {

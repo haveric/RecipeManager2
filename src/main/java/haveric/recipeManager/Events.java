@@ -226,15 +226,12 @@ public class Events implements Listener {
         if (Settings.getInstance().getSpecialRepairMetadata()) {
             ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];
-            // TODO: Figure out why this was here
-            //int[] repair = new int[2];
+
             int repairIndex = 0;
 
-            int matrixLength = matrix.length;
-            for (int i = 0; i < matrixLength; i++) {
-                if (matrix[i] != null && matrix[i].getType() != Material.AIR) {
-                    //repair[repairIndex] = i;
-                    repaired[repairIndex] = matrix[i];
+            for (ItemStack item : matrix) {
+                if (item != null && item.getType() != Material.AIR) {
+                    repaired[repairIndex] = item;
 
                     if (++repairIndex > 1) {
                         break;
@@ -488,7 +485,7 @@ public class Events implements Listener {
                 item.setAmount(result.getAmount() * craftAmount);
 
                 int space = Tools.playerFreeSpaceForItem(player, item);
-                int crafted = Math.min((int) Math.ceil(Float.valueOf(space) / result.getAmount()), craftAmount);
+                int crafted = Math.min((int) Math.ceil(space / result.getAmount()), craftAmount);
 
                 if (crafted > 0) {
                     event.setCurrentItem(result);

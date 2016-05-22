@@ -459,8 +459,6 @@ public class RecipeBooks {
                 }
             }
         }
-
-        return;
     }
 
     private void getExistingByType(Collection<String> recipes, Set<String> allRecipes, Class<? extends BaseRecipe> cls) {
@@ -595,7 +593,7 @@ public class RecipeBooks {
         RecipeBook book = books.get(id); // full match first
 
         if (book != null) {
-            return Arrays.asList(book);
+            return Collections.singletonList(book);
         }
 
         // partial match

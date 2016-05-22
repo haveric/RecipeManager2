@@ -6,7 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 ** See your 'recipe flags.html' file for usage information
 * Fixed potions in 1.9.x
 * Fixed Shield Banner recipe
-* @CloneIngredient: Added lore options 
+* @CloneIngredient: Added lore options
 ** lore                 = copies all the custom item lore/description unless conditions are added to copy specific lines.",
 ** lore [number]        = copies only the lore on line number. More lore conditions can be added to copy more lines",
 ** lore [text]          = copies any lore lines that contain the text",

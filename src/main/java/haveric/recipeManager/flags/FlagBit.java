@@ -9,7 +9,7 @@ public class FlagBit {
     /**
      * Flag only works in recipes.
      */
-    public static final byte RECIPE = 1 << 0;
+    public static final byte RECIPE = 1;
 
     /**
      * Flag only works on results.

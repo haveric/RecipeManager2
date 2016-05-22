@@ -39,11 +39,8 @@ public class RecipeFileReader {
     }
 
     public boolean searchRecipes() {
-        if (line != null && lineIsRecipe()) {
-            return true;
-        }
+        return line != null && lineIsRecipe() || nextLine();
 
-        return nextLine();
     }
 
     public boolean lineIsRecipe() {

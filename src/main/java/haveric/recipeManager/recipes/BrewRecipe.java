@@ -87,11 +87,7 @@ public class BrewRecipe extends MultiResultRecipe {
         this.ingredient = ingredient;
 
         // build hashCode
-        StringBuilder str = new StringBuilder("brew");
-
-        str.append(ingredient.getTypeId()).append(':').append(ingredient.getDurability()).append(';');
-
-        hash = str.toString().hashCode();
+        hash = ("brew" + ingredient.getTypeId() + ':' + ingredient.getDurability() + ';').hashCode();
     }
 
     public String getIndexString() {

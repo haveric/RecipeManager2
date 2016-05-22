@@ -277,7 +277,7 @@ public class Conditions implements Cloneable {
 
         if (hasDataBits()) {
             for (Entry<Short, Boolean> e : dataBits.entrySet()) {
-                short d = e.getKey().shortValue();
+                short d = e.getKey();
 
                 if (e.getValue()) {
                     if (!ok && (data & d) == d) {
@@ -301,7 +301,7 @@ public class Conditions implements Cloneable {
                 return isAllSet();
             }
 
-            return is.booleanValue();
+            return is;
         }
 
         return true;
@@ -395,13 +395,7 @@ public class Conditions implements Cloneable {
                 if (level == null) {
                     return false;
                 } else if (!e.getValue().isEmpty()) {
-                    Boolean is = e.getValue().get(level.shortValue());
-
-                    if (is == null) {
-                        return false;
-                    }
-
-                    return is.booleanValue();
+                    return e.getValue().get(level);
                 }
             }
         }
@@ -514,13 +508,7 @@ public class Conditions implements Cloneable {
                 if (level == null) {
                     return false;
                 } else if (!e.getValue().isEmpty()) {
-                    Boolean is = e.getValue().get(level.shortValue());
-
-                    if (is == null) {
-                        return false;
-                    }
-
-                    return is.booleanValue();
+                    return e.getValue().get(level);
                 }
             }
         }
@@ -659,11 +647,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (matchedLoreChecks == totalLoreChecks) {
-            return true;
-        }
-
-        return false;
+        return matchedLoreChecks == totalLoreChecks;
     }
 
     /**
@@ -1037,7 +1021,6 @@ public class Conditions implements Cloneable {
                         cond.addDataValue(match.getDurability(), !not);
                     } else {
                         // ErrorReporter.getInstance().warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
-                        continue;
                     }
                 } else {
                     String[] split = val.split("-");
@@ -1076,7 +1059,6 @@ public class Conditions implements Cloneable {
                             }
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number: " + val);
-                            continue;
                         }
                     }
                 }
@@ -1088,7 +1070,6 @@ public class Conditions implements Cloneable {
                 cond.setAmount(Integer.parseInt(value));
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'amount' argument with invalid number: " + value);
-                return;
             }
         } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
             cond.setNoEnchant(true);
@@ -1142,7 +1123,6 @@ public class Conditions implements Cloneable {
                             cond.addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number: " + s);
-                            continue;
                         }
                     }
                 }
@@ -1208,7 +1188,6 @@ public class Conditions implements Cloneable {
                             cond.addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
-                            continue;
                         }
                     }
                 }
@@ -1261,7 +1240,6 @@ public class Conditions implements Cloneable {
                         //maxColor[c] = max;
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid number: " + value);
-                        continue;
                     }
                 }
             } else {
