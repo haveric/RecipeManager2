@@ -224,7 +224,7 @@ public class ExtractCommand implements CommandExecutor {
                 Color color = leatherMeta.getColor();
 
                 if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
-                    recipeString.append(Files.NL).append("  @leathercolor ").append(color.getRed() + " " + color.getGreen() + " " + color.getBlue());
+                    recipeString.append(Files.NL).append("  @leathercolor ").append(color.getRed()).append(' ').append(color.getGreen()).append(' ').append(color.getBlue());
                 }
             }
         }

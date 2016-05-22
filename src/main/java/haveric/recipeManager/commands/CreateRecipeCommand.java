@@ -200,7 +200,7 @@ public class CreateRecipeCommand implements CommandExecutor {
             }
 
             if (ingredientCondition.length() > 0) {
-                conditionString.append('@').append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
+                conditionString.append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
                 conditionString.append(Files.NL);
             }
         }
@@ -257,7 +257,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                 Color color = leatherMeta.getColor();
 
                 if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
-                    recipeString.append(Files.NL).append("@leathercolor ").append(color.getRed() + " " + color.getGreen() + " " + color.getBlue());
+                    recipeString.append(Files.NL).append("@leathercolor ").append(color.getRed()).append(' ').append(color.getGreen()).append(' ').append(color.getBlue());
                 }
             }
         }
