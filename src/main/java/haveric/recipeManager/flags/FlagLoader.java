@@ -1,5 +1,8 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.messages.MessageSender;
+import org.bukkit.ChatColor;
+
 public class FlagLoader {
     public FlagLoader() {
         loadDefaultFlags();
@@ -75,6 +78,10 @@ public class FlagLoader {
     }
 
     public void loadCustomFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {
-        FlagFactory.getInstance().initializeFlag(mainAlias, newFlag, bits, aliases);
+        if (FlagFactory.getInstance().isInitialized()) {
+            MessageSender.getInstance().info(ChatColor.RED + "Custom flags must be added in your onEnable() method.");
+        } else {
+            FlagFactory.getInstance().initializeFlag(mainAlias, newFlag, bits, aliases);
+        }
     }
 }

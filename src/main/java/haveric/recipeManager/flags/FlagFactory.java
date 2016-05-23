@@ -30,7 +30,6 @@ public class FlagFactory {
     }
 
     protected void initializeFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {
-        // TODO: Mention how/where to add custom Flags
         if (!initialized) {
             if (mainAlias.startsWith("@")) {
                 mainAlias = mainAlias.split("@")[1];
@@ -97,5 +96,9 @@ public class FlagFactory {
         }
 
         return nameMap.get(name);
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 }

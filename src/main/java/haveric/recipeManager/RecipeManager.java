@@ -1,7 +1,6 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
-import haveric.recipeManager.api.events.RecipeManagerFlagsLoadEvent;
 import haveric.recipeManager.commands.*;
 import haveric.recipeManager.data.BrewingStandData;
 import haveric.recipeManager.data.BrewingStands;
@@ -17,12 +16,14 @@ import haveric.recipeManager.metrics.Metrics;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -39,18 +40,24 @@ public class RecipeManager extends JavaPlugin {
     private static RecipeBooks recipeBooks;
     private static Events events;
     private Metrics metrics;
-    private FlagLoader flagLoader;
     private HashMap<String, String> plugins = new HashMap<String, String>();
 
     // constants
     public static final Random random = new Random();
+    private boolean loaded = false;
+    public static FlagLoader flagLoader = null;
 
     @Override
     public void onEnable() {
+        if (loaded) {
+            MessageSender.getInstance().info(ChatColor.RED + "Plugin is already enabled");
+            return;
+        }
+
         plugin = this;
+        Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         PluginManager pm = getServer().getPluginManager();
-        Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         FurnaceData.init(); // dummy caller
         BrewingStandData.init();
@@ -64,14 +71,25 @@ public class RecipeManager extends JavaPlugin {
 
         Vanilla.init(); // get initial recipes...
 
-        scanPlugins(); // scan for other plugins and store them in case any use our API
-
         Args.init(); // dummy method to avoid errors on 'reload' with updating
         ArgBuilder.init();
 
         flagLoader = new FlagLoader();
 
-        pm.callEvent(new RecipeManagerFlagsLoadEvent(flagLoader));
+        // wait for all plugins to load then enable this
+        new BukkitRunnable() {
+            public void run() {
+                onEnablePost();
+            }
+        }.runTask(this);
+    }
+
+    private void onEnablePost() {
+        loaded = true;
+
+        PluginManager pm = getServer().getPluginManager();
+
+        scanPlugins(); // scan for other plugins and store them in case any use our API
 
         FlagFactory.getInstance().init();
         FlagFactory.getInstance().initPermissions();
@@ -305,5 +323,9 @@ public class RecipeManager extends JavaPlugin {
 
     public static Events getEvents() {
         return events;
+    }
+
+    public static FlagLoader getFlagLoader() {
+        return flagLoader;
     }
 }
