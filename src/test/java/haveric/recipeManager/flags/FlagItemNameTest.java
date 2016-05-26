@@ -2,10 +2,13 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeProcessor;
-import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.messages.TestMessageSender;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import org.bukkit.Material;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,40 +16,43 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
+import java.util.Map;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Settings.class, MessageSender.class, RecipeManager.class})
-public class FlagItemNameTest {
+public class FlagItemNameTest extends FlagBaseTest {
     private FlagItemName flag;
-    private Recipes recipes;
 
     @Before
     public void setup() {
         flag = new FlagItemName();
-        recipes = new Recipes();
-
-        mockStatic(Settings.class);
-        Settings mockSettings = mock(Settings.class);
-        when(Settings.getInstance()).thenReturn(mockSettings);
-        when(mockSettings.getMultithreading()).thenReturn(false);
-
-        mockStatic(MessageSender.class);
-        when(MessageSender.getInstance()).thenReturn(TestMessageSender.getInstance());
-
-        mockStatic(RecipeManager.class);
-        when(RecipeManager.getRecipes()).thenReturn(recipes);
-
-        new FlagLoader();
-        FlagFactory.getInstance().init();
     }
 
     @Test
     public void onRecipeParse() {
         File file = new File("src/test/resources/recipes/flagItemName/flagItemName.txt");
-        RecipeProcessor.reload(null, true, file.getPath());
+        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+
+        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+
+        assertEquals(4, queued.size());
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
+            ItemResult result = recipe.getResults().get(0);
+            Material resultType = result.getType();
+
+            FlagItemName flag = (FlagItemName) result.getFlag(FlagType.ITEM_NAME);
+            if (resultType == Material.STONE_SWORD) {
+                assertEquals(flag.getItemName(), "Weird Item");
+            } else if (resultType == Material.IRON_SWORD) {
+                assertEquals(flag.getItemName(), "{player}'s Sword");
+            } else if (resultType == Material.GOLD_SWORD) {
+                assertEquals(flag.getItemName(), "<gold> Gold");
+            } else if (resultType == Material.DIAMOND_SWORD) {
+                assertEquals(flag.getItemName(), "Second");
+            }
+        }
     }
 }

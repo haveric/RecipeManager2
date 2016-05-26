@@ -1,9 +1,21 @@
 craft
-dirt + cobblestone
-= iron_sword
-@name <light_purple>Weird Item
+dirt + stone
+= stone_sword
+@name Weird Item
 
 craft
-dirt + stone
+dirt + iron_ingot
 = iron_sword
-@name <yellow>{player}'s Sword
+@name {player}'s Sword
+
+craft
+dirt + gold_ingot
+= gold_sword
+@name <gold> Gold
+
+
+craft
+dirt + diamond
+= diamond_sword
+@name First
+@name Second

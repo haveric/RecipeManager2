@@ -1,29 +1,25 @@
 package haveric.recipeManager.flags;
 
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
-import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.messages.TestMessageSender;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Settings.class, MessageSender.class, RecipeManager.class})
-public class FlagGameModeTest {
+public class FlagGameModeTest extends FlagBaseTest{
 
     private FlagGameMode flag;
     private Recipes recipes;
@@ -31,21 +27,6 @@ public class FlagGameModeTest {
     @Before
     public void setup() {
         flag = new FlagGameMode();
-        recipes = new Recipes();
-
-        mockStatic(Settings.class);
-        Settings mockSettings = mock(Settings.class);
-        when(Settings.getInstance()).thenReturn(mockSettings);
-        when(mockSettings.getMultithreading()).thenReturn(false);
-
-        mockStatic(MessageSender.class);
-        when(MessageSender.getInstance()).thenReturn(TestMessageSender.getInstance());
-
-        mockStatic(RecipeManager.class);
-        when(RecipeManager.getRecipes()).thenReturn(recipes);
-
-        new FlagLoader();
-        FlagFactory.getInstance().init();
     }
 
     @Test
@@ -72,62 +53,50 @@ public class FlagGameModeTest {
     @Test
     public void onRecipeParse() {
         File file = new File("src/test/resources/recipes/flagGameMode/");
-        RecipeProcessor.reload(null, true, file.getPath());
+        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
+        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-    }
-    @Test
-    public void onParse() {
-        // Test individual game modes
-        flag.clearGameModes();
-        flag.onParse("a");
-        assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
+        assertEquals(12, queued.size());
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
+            ItemResult result = recipe.getResults().get(0);
+            Material resultType = result.getType();
 
-        flag.clearGameModes();
-        flag.onParse("adventure");
-        assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
-
-        flag.clearGameModes();
-        flag.onParse("c");
-        assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
-
-        flag.clearGameModes();
-        flag.onParse("creative");
-        assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
-
-        flag.clearGameModes();
-        flag.onParse("s");
-        assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
-
-        flag.clearGameModes();
-        flag.onParse("survival");
-        assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
-
-        // Test multiple gamemodes
-        flag.clearGameModes();
-        flag.onParse("a,s");
-        assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
-        assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
-        assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
-
-        // Test disable using false
-        flag.clearGameModes();
-        flag.onParse("false");
-        assertTrue(flag.getGameModes().isEmpty());
-
-        // Test fail message
-        flag.clearGameModes();
-        flag.onParse("a | fail");
-        assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
-        assertEquals(flag.getGameModes().size(), 1);
-        assertEquals(flag.getFailMessage(), "fail");
-
-        // Test invalid input TODO: Improve this
-        flag.clearGameModes();
-        try {
-            flag.onParse("duck");
-        } catch (NullPointerException e) {
-            assertTrue(flag.getGameModes().isEmpty());
+            FlagGameMode flag = (FlagGameMode) result.getFlag(FlagType.GAMEMODE);
+            if (resultType == Material.IRON_SWORD) {
+                assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
+                assertFalse(flag.getGameModes().contains(GameMode.SURVIVAL));
+            } else if (resultType == Material.DIRT) {
+                assertFalse(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
+                assertFalse(flag.getGameModes().contains(GameMode.SURVIVAL));
+            } else if (resultType == Material.COBBLESTONE) {
+                assertFalse(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
+                assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
+            } else if (resultType == Material.LOG) {
+                assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
+                assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
+            } else if (resultType == Material.GRASS) {
+                assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
+                assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
+            } else if (resultType == Material.WOOD) {
+                assertEquals(flag, null);
+            } else if (resultType == Material.RAW_FISH) {
+                assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertEquals(flag.getGameModes().size(), 1);
+                assertEquals(flag.getFailMessage(), "fail");
+            } else if (resultType == Material.COOKED_FISH) {
+                assertEquals(flag, null);
+            } else if (resultType == Material.BRICK) {
+                assertFalse(flag.getGameModes().contains(GameMode.ADVENTURE));
+                assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
+                assertFalse(flag.getGameModes().contains(GameMode.SURVIVAL));
+            }
         }
     }
 

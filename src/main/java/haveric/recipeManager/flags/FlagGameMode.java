@@ -94,6 +94,9 @@ public class FlagGameMode extends Flag {
 
         split = split[0].toLowerCase().split(",");
 
+        // Clear gamemodes before parsing to prevent multiple declarations
+        clearGameModes();
+
         for (String arg : split) {
             arg = arg.trim();
 
@@ -108,10 +111,6 @@ public class FlagGameMode extends Flag {
 
                 case 's':
                     addGameMode(GameMode.SURVIVAL);
-                    break;
-
-                case 'f':
-                    clearGameModes();
                     break;
 
                 default:

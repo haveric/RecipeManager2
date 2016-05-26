@@ -21,7 +21,7 @@ public class RecipeProcessor implements Runnable {
     private final boolean check;
 
     // Storage
-    private volatile RecipeRegistrator registrator = null;
+    private static volatile RecipeRegistrator registrator = null;
     private final List<String> fileList = new ArrayList<String>();
 
     // Constants
@@ -33,12 +33,14 @@ public class RecipeProcessor implements Runnable {
     public static void reload(CommandSender sender, boolean check) {
         DIR_RECIPES = RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator;
         FILE_ERRORLOG = DIR_RECIPES + "errors.log";
-        new RecipeProcessor(sender, check);
     }
 
-    public static void reload(CommandSender sender, boolean check, String newDirectory) {
+    /**
+     * Used for Testing Only
+     */
+    public static void reload(CommandSender sender, boolean check, String newDirectory, String errorDirectory) {
         DIR_RECIPES = newDirectory;
-        FILE_ERRORLOG = DIR_RECIPES + "errors.log";
+        FILE_ERRORLOG = errorDirectory + File.separator + "errors.log";
         new RecipeProcessor(sender, check);
     }
 
@@ -205,5 +207,9 @@ public class RecipeProcessor implements Runnable {
             String fileName = file.getPath().replace(DIR_RECIPES, ""); // get the relative path+filename
             fileList.add(fileName); // add to the processing file list
         }
+    }
+
+    public static RecipeRegistrator getRegistrator() {
+        return registrator;
     }
 }

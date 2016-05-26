@@ -59,7 +59,7 @@ public class ItemResult extends ItemStack implements Flaggable {
         setType(item.getType());
         setDurability(item.getDurability());
         setAmount(item.getAmount());
-        //setItemMeta(item.getItemMeta());
+        //setItemMeta(item.getItemMeta()); // TODO: Revisit
     }
 
     public ItemStack toItemStack() {

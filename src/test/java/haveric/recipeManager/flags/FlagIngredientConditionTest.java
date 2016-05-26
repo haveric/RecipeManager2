@@ -1,11 +1,11 @@
 package haveric.recipeManager.flags;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
 
-public class FlagIngredientConditionTest {
+import static org.junit.Assert.assertTrue;
+
+public class FlagIngredientConditionTest extends FlagBaseTest {
 
     private FlagIngredientCondition flag;
 
