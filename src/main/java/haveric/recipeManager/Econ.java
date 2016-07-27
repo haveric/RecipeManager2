@@ -1,7 +1,6 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -71,20 +70,17 @@ public class Econ {
      * Gets how much money a player has.<br>
      * If economy is not enabled this method will return 0.
      *
-     * @param playerName
-     *            player's name
+     * @param playerUUID
+     *            player's uuid
      * @return money player has, 0 if no economy plugin was found
      */
-    public double getMoney(String playerName) {
+    public double getMoney(UUID playerUUID) {
         double money = 0;
 
         if (isEnabled()) {
-            try {
-                UUID uuid = UUIDFetcher.getUUIDOf(playerName);
-                OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
 
-                money = economy.getBalance(player);
-            } catch (Exception e) { }
+            money = economy.getBalance(player);
         }
 
         return money;
@@ -95,29 +91,26 @@ public class Econ {
      * Use negative values to take money.<br>
      * If economy is not enabled or amount is 0, this method won't do anything
      *
-     * @param playerName
-     *            player's name
+     * @param playerUUID
+     *            player's uuid
      * @param amount
      *            amount to give
      */
-    public void modMoney(String playerName, double amount) {
+    public void modMoney(UUID playerUUID, double amount) {
         if (!isEnabled() || amount == 0) {
             return;
         }
 
-        EconomyResponse error = null;
+        EconomyResponse error;
 
-        try {
-            UUID uuid = UUIDFetcher.getUUIDOf(playerName);
-            OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            if (amount > 0) {
-                error = economy.depositPlayer(player, amount);
-            } else {
-                error = economy.withdrawPlayer(player, Math.abs(amount));
-            }
-        } catch (Exception e) { }
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+        if (amount > 0) {
+            error = economy.depositPlayer(player, amount);
+        } else {
+            error = economy.withdrawPlayer(player, Math.abs(amount));
+        }
 
-        if (error != null && !error.transactionSuccess()) {
+        if (!error.transactionSuccess()) {
             MessageSender.getInstance().info("<red>Economy error: " + error.errorMessage);
         }
     }

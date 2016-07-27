@@ -175,31 +175,31 @@ public class FlagModMoney extends Flag {
             return;
         }
 
-        if (!a.hasPlayerName()) {
-            a.addCustomReason("Need a player name!");
+        if (!a.hasPlayerUUID()) {
+            a.addCustomReason("Need a player uuid!");
             return;
         }
 
         switch (mod) {
             case '+':
-                Econ.getInstance().modMoney(a.playerName(), amount);
+                Econ.getInstance().modMoney(a.playerUUID(), amount);
 
                 a.addEffect("flag.modmoney.add", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
-                Econ.getInstance().modMoney(a.playerName(), -amount);
+                Econ.getInstance().modMoney(a.playerUUID(), -amount);
 
                 a.addEffect("flag.modmoney.sub", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '=':
-                double money = Econ.getInstance().getMoney(a.playerName());
+                double money = Econ.getInstance().getMoney(a.playerUUID());
 
-                Econ.getInstance().modMoney(a.playerName(), -money);
+                Econ.getInstance().modMoney(a.playerUUID(), -money);
 
                 if (amount > 0) {
-                    Econ.getInstance().modMoney(a.playerName(), amount);
+                    Econ.getInstance().modMoney(a.playerUUID(), amount);
                 }
 
                 a.addEffect("flag.modmoney.set", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);

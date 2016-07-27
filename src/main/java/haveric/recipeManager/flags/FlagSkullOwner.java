@@ -2,8 +2,10 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.recipes.ItemResult;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
@@ -91,12 +93,13 @@ public class FlagSkullOwner extends Flag {
 
         String owner;
         if (getOwner().equalsIgnoreCase("{player}")) {
-            if (!a.hasPlayerName()) {
-                a.addCustomReason("Needs player name!");
+            if (!a.hasPlayerUUID()) {
+                a.addCustomReason("Needs player uuid!");
                 return;
             }
 
-            owner = a.playerName();
+            OfflinePlayer player = Bukkit.getOfflinePlayer(a.playerUUID());
+            owner = player.getName();
         } else {
             owner = getOwner();
         }

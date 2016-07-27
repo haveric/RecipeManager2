@@ -6,6 +6,7 @@ import org.apache.commons.lang.mutable.MutableInt;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class FlagCooldown extends Flag {
 
@@ -54,7 +55,7 @@ public class FlagCooldown extends Flag {
     }
 
 
-    private final Map<String, MutableInt> cooldownTime = new HashMap<String, MutableInt>();
+    private final Map<UUID, MutableInt> cooldownTime = new HashMap<UUID, MutableInt>();
 
     private int cooldown;
     private boolean global = false;
@@ -104,18 +105,18 @@ public class FlagCooldown extends Flag {
     /**
      * Gets the cooldown time in seconds for specified player or for global if null is specified and global is enabled.
      *
-     * @param playerName
+     * @param playerUUID
      *            if global is enabled this value is ignored, can be null.
      * @return -1 if there is a problem otherwise 0 or more specifies seconds left
      */
-    public int getTimeLeftFor(String playerName) {
+    public int getTimeLeftFor(UUID playerUUID) {
         if (global) {
-            playerName = null;
-        } else if (playerName == null) {
+            playerUUID = null;
+        } else if (playerUUID == null) {
             return -1;
         }
 
-        MutableInt get = cooldownTime.get(playerName);
+        MutableInt get = cooldownTime.get(playerUUID);
         int time = (int) (System.currentTimeMillis() / 1000);
 
         if (get == null || time >= get.intValue()) {
@@ -128,12 +129,12 @@ public class FlagCooldown extends Flag {
     /**
      * Gets the cooldown time as formatted string for specified player or for global if null is specified and global is enabled.
      *
-     * @param playerName
+     * @param playerUUID
      *            if global is enabled this value is ignored, can be null.
      * @return '#h #m #s' format of remaining time.
      */
-    public String getTimeLeftStringFor(String playerName) {
-        return timeToString(getTimeLeftFor(playerName));
+    public String getTimeLeftStringFor(UUID playerUUID) {
+        return timeToString(getTimeLeftFor(playerUUID));
     }
 
     private String timeToString(int time) {
@@ -166,18 +167,18 @@ public class FlagCooldown extends Flag {
     /**
      * Checks countdown time for player or globally if null is supplied and global is enabled.
      *
-     * @param playerName
+     * @param playerUUID
      *            if global is enabled this value is ignored, can be null.
      * @return true if can be used, false otherwise.
      */
-    public boolean hasCooldown(String playerName) {
+    public boolean hasCooldown(UUID playerUUID) {
         if (global) {
-            playerName = null;
-        } else if (playerName == null) {
+            playerUUID = null;
+        } else if (playerUUID == null) {
             return false;
         }
 
-        MutableInt get = cooldownTime.get(playerName);
+        MutableInt get = cooldownTime.get(playerUUID);
 
         if (get == null) {
             return true;
@@ -270,34 +271,34 @@ public class FlagCooldown extends Flag {
 
     @Override
     protected void onCheck(Args a) {
-        if (!hasCooldown(a.playerName())) {
+        if (!hasCooldown(a.playerUUID())) {
             String message;
             if (global) {
                 message = "flag.cooldown.fail.global";
             } else {
                 message = "flag.cooldown.fail.perplayer";
             }
-            a.addReason(message, getFailMessage(), "{time}", getTimeLeftStringFor(a.playerName()));
+            a.addReason(message, getFailMessage(), "{time}", getTimeLeftStringFor(a.playerUUID()));
         }
     }
 
     @Override
     protected void onCrafted(Args a) {
-        if (!global && !a.hasPlayerName()) {
+        if (!global && !a.hasPlayerUUID()) {
             return;
         }
 
-        String playerName = null;
+        UUID playerUUID = null;
         if (!global) {
-            playerName = a.playerName();
+            playerUUID = a.playerUUID();
         }
 
-        MutableInt get = cooldownTime.get(playerName);
+        MutableInt get = cooldownTime.get(playerUUID);
         int diff = (int) (System.currentTimeMillis() / 1000) + getCooldownTime();
 
         if (get == null) {
             get = new MutableInt(diff);
-            cooldownTime.put(playerName, get);
+            cooldownTime.put(playerUUID, get);
         } else {
             get.setValue(diff);
         }

@@ -139,11 +139,11 @@ public class FlagGroup extends Flag {
 
         for (Entry<String, Boolean> e : groups.entrySet()) {
             if (e.getValue()) {
-                if (!a.hasPlayerName() || !Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
+                if (!a.hasPlayerUUID() || !Perms.getInstance().playerInGroup(a.playerUUID(), e.getKey())) {
                     a.addReason("flag.group.allowed", getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(true));
                 }
             } else {
-                if (a.hasPlayerName() && Perms.getInstance().playerInGroup(a.playerName(), e.getKey())) {
+                if (a.hasPlayerUUID() && Perms.getInstance().playerInGroup(a.playerUUID(), e.getKey())) {
                     a.addReason("flag.group.unallowed", getGroupMessage(e.getKey()), "{group}", e.getKey(), "{groups}", getGroupsString(false));
                 }
             }

@@ -160,7 +160,7 @@ public class FlagNeedMoney extends Flag {
             return;
         }
 
-        if (!a.hasPlayerName() || !checkMoney(Econ.getInstance().getMoney(a.playerName()))) {
+        if (!a.hasPlayerUUID() || !checkMoney(Econ.getInstance().getMoney(a.playerUUID()))) {
             a.addReason("flag.needmoney", failMessage, "{money}", getMoneyString());
         }
     }

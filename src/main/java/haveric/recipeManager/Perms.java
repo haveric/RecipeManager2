@@ -1,7 +1,6 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -44,16 +43,13 @@ public class Perms {
         return permission != null;
     }
 
-    public boolean playerInGroup(String playerName, String group) {
+    public boolean playerInGroup(UUID playerUUID, String group) {
         boolean isPlayerInGroup = false;
 
         if (permission != null) {
-            try {
-                UUID uuid = UUIDFetcher.getUUIDOf(playerName);
-                OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+            OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
 
-                isPlayerInGroup = permission.playerInGroup(null, player, group);
-            } catch (Exception e) { }
+            isPlayerInGroup = permission.playerInGroup(null, player, group);
         }
 
         return isPlayerInGroup;
