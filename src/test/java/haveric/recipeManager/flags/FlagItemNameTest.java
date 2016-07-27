@@ -23,21 +23,21 @@ import static org.junit.Assert.assertEquals;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Settings.class, MessageSender.class, RecipeManager.class})
 public class FlagItemNameTest extends FlagBaseTest {
-    private FlagItemName flag;
+    //private FlagItemName flag;
 
     @Before
     public void setup() {
-        flag = new FlagItemName();
+        //flag = new FlagItemName();
     }
 
     @Test
-    public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagItemName/flagItemName.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        public void onRecipeParse() {
+            File file = new File("src/test/resources/recipes/flagItemName/flagItemName.txt");
+            RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
-        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+            Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(4, queued.size());
+            assertEquals(4, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);

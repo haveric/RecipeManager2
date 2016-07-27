@@ -1,0 +1,10 @@
+craft
+dirt + cobblestone + log + stone
+= dirt
+
+craft
+dirt
+cobblestone
+log
+stone
+= stone

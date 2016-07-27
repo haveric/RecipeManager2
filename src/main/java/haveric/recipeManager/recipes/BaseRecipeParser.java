@@ -42,8 +42,11 @@ public abstract class BaseRecipeParser {
 
         if (!this.reader.lineIsResult()) { // check if current line is a result, if not move on
             this.reader.nextLine();
-        }
 
+            if (!this.reader.lineIsResult() && !this.reader.lineIsRecipe()) {
+                return ErrorReporter.getInstance().error("Recipe has more rows of ingredients than allowed!");
+            }
+        }
         ItemResult result;
         float totalPercentage = 0;
         int splitChanceBy = 0;

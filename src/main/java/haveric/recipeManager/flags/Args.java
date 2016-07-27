@@ -5,7 +5,6 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +20,7 @@ import java.util.UUID;
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
  */
 public class Args {
-    private String playerName;
+    private UUID playerUUID;
     private Player player;
     private Location location;
     private BaseRecipe recipe;
@@ -37,8 +36,8 @@ public class Args {
 
     public static void init() { }
 
-    public void setPlayerName(String newPlayerName) {
-        playerName = newPlayerName;
+    public void setPlayerUUID(UUID newPlayerUUID) {
+        playerUUID = newPlayerUUID;
     }
 
     public void setPlayer(Player newPlayer) {
@@ -69,12 +68,12 @@ public class Args {
         extra = newExtra;
     }
 
-    public String playerName() {
-        return playerName;
+    public UUID playerUUID() {
+        return playerUUID;
     }
 
-    public boolean hasPlayerName() {
-        return playerName != null;
+    public boolean hasPlayerUUID() {
+        return playerUUID != null;
     }
     /**
      * Gets the Player object from either player() or playerName()
@@ -220,8 +219,8 @@ public class Args {
 
     public String parseVariables(String string) {
         String name;
-        if (hasPlayerName()) {
-            name = playerName();
+        if (hasPlayerUUID()) {
+            name = Bukkit.getOfflinePlayer(playerUUID).getName();
         } else {
             name = "(nobody)";
         }
@@ -257,17 +256,14 @@ public class Args {
      */
     public Args processArgs() {
         Player player = player();
-        String playerName = playerName();
+        UUID playerUUID = playerUUID();
 
-        if (player == null && playerName != null) {
-            try {
-                UUID uuid = UUIDFetcher.getUUIDOf(playerName);
-                setPlayer(Bukkit.getPlayer(uuid));
-            } catch (Exception e) { }
+        if (player == null && playerUUID != null) {
+            setPlayer(Bukkit.getPlayer(playerUUID));
         }
 
-        if (playerName == null && player != null) {
-            setPlayerName(player().getName());
+        if (playerUUID == null && player != null) {
+            setPlayerUUID(player().getUniqueId());
         }
 
         if (location() == null && player != null) {

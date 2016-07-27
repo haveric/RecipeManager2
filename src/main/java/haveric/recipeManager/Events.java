@@ -335,7 +335,7 @@ public class Events implements Listener {
                 a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
 
                 if (times > 0) {
-                    Recipes.recipeResetResult(a.playerName());
+                    Recipes.recipeResetResult(a.playerUUID());
                 }
 
                 while (--times >= 0) {
@@ -582,7 +582,7 @@ public class Events implements Listener {
 
         Players.remove(player);
         Workbenches.remove(player);
-        Recipes.recipeResetResult(name);
+        Recipes.recipeResetResult(player.getUniqueId());
         Messages.getInstance().clearPlayer(name);
 
         UUIDFetcher.removePlayerFromCache(name);
@@ -627,7 +627,7 @@ public class Events implements Listener {
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
-                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
@@ -657,7 +657,7 @@ public class Events implements Listener {
                 } else if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
                     if (event.getRawSlot() < inv.getSize()) {
                         BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
-                        data.setFueler(ent.getName());
+                        data.setFuelerUUID(ent.getUniqueId());
                     }
                 }
             }
@@ -676,8 +676,8 @@ public class Events implements Listener {
 
     private void furnaceClick(InventoryClickEvent event, Furnace furnace, Player player) throws Throwable {
         FurnaceData data = Furnaces.get(furnace.getLocation());
-        if (data.getFueler() == null) {
-            data.setFueler(player.getName());
+        if (data.getFuelerUUID() == null) {
+            data.setFuelerUUID(player.getUniqueId());
         }
 
         if (!RecipeManager.getPlugin().canCraft(player)) {
@@ -709,9 +709,9 @@ public class Events implements Listener {
                                     event.setCancelled(true);
                                 }
 
-                                data.setFueler(player.getName());
+                                data.setFuelerUUID(player.getUniqueId());
 
-                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
@@ -730,7 +730,7 @@ public class Events implements Listener {
                                 event.setCancelled(true);
                             }
 
-                            data.setFueler(player.getName());
+                            data.setFuelerUUID(player.getUniqueId());
 
                             ItemStack fuel = data.getFuel();
 
@@ -743,7 +743,7 @@ public class Events implements Listener {
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
-                                Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
@@ -760,7 +760,7 @@ public class Events implements Listener {
                 ItemStack fuel = ToolsItem.nullIfAir(cursor);
 
                 if (fuel != null) {
-                    data.setFueler(player.getName());
+                    data.setFuelerUUID(player.getUniqueId());
                 }
 
                 if (event.getClick() == ClickType.NUMBER_KEY) {
@@ -911,7 +911,7 @@ public class Events implements Listener {
                         SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(clicked);
 
                         if (recipe != null) {
-                            data.setFueler(player.getName());
+                            data.setFuelerUUID(player.getUniqueId());
 
                             ItemStack recipeIngredient = recipe.getIngredient();
                             if (ToolsItem.isSameItem(clicked, recipeIngredient, true)) {
@@ -927,7 +927,7 @@ public class Events implements Listener {
                                 if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                     event.setCancelled(true);
                                 } else {
-                                    Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                    Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
                                     ItemResult result = recipe.getResult(a);
 
                                     if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
@@ -953,7 +953,7 @@ public class Events implements Listener {
 
                     if (similarItems && itemAmount < maxStack) { // if item has room for more and they're similar
                         event.setCancelled(true); // cancel only if we're going to mess with the items
-                        data.setFueler(player.getName());
+                        data.setFuelerUUID(player.getUniqueId());
 
                         int amount = itemAmount + clicked.getAmount(); // add the stacks together
                         int diff = amount - maxStack; // check to see if there are any leftovers
@@ -1037,6 +1037,7 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void furnaceBurn(FurnaceBurnEvent event) {
+        Messages.getInstance().send(null, "Furnace Burn Event");
         short burnTime = 0;
         short cookTime = 0;
 
@@ -1056,7 +1057,7 @@ public class Events implements Listener {
                 event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFuelerUUID()).location(furnaceLocation).recipe(fuelRecipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
             if (!furnaceHandleFlaggable(fuelRecipe, a, true, false)) {
                 event.setCancelled(true);
@@ -1081,7 +1082,7 @@ public class Events implements Listener {
                 event.setCancelled(true);
             }
 
-            Args a = Args.create().player(data.getFueler()).location(furnaceLocation).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFuelerUUID()).location(furnaceLocation).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
             ItemResult result = recipe.getResult(a);
 
             boolean recipeFlaggable = furnaceHandleFlaggable(recipe, a, false, false);
@@ -1103,13 +1104,13 @@ public class Events implements Listener {
             long randTime = (long) Math.floor(Math.random() * burnTime);
             Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
                 public void run() {
-                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFueler()));
+                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFuelerUUID()));
                 }
             }, randTime);
 
             Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
                 public void run() {
-                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFueler()));
+                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFuelerUUID()));
                 }
             }, burnTime);
         }
@@ -1125,7 +1126,7 @@ public class Events implements Listener {
         FuelRecipe recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
-        Args a = Args.create().player(event.getFuelerName()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+        Args a = Args.create().player(event.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
         a.clear();
 
@@ -1141,7 +1142,7 @@ public class Events implements Listener {
         FuelRecipe recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
-        Args a = Args.create().player(event.getFuelerName()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+        Args a = Args.create().player(event.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
         a.clear();
 
@@ -1168,7 +1169,7 @@ public class Events implements Listener {
 
             FurnaceData data = Furnaces.get(furnace.getLocation());
 
-            Args a = Args.create().player(data.getFueler()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+            Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
             ItemResult result = recipe.getResult(a);
 
@@ -1352,9 +1353,8 @@ public class Events implements Listener {
     public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (Bukkit.getServer().getOnlineMode()) {
-            UUIDFetcher.addPlayerToCache(player.getName(), player.getUniqueId());
-        }
+        UUIDFetcher.addPlayerToCache(player.getName(), player.getUniqueId());
+
         Players.addJoined(player);
 
         if (Settings.getInstance().getUpdateCheckEnabled() && player.hasPermission("recipemanager.command.rmupdate")) {
@@ -1387,7 +1387,7 @@ public class Events implements Listener {
             Location location = block.getLocation();
             BrewingStandData data = BrewingStands.get(location);
 
-            Args a = Args.create().inventory(inventory).location(location).player(data.getFueler()).recipe(recipe).build();
+            Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
             ItemResult result = recipe.getResult(a);
 
             if (result != null && recipe.sendPrepare(a) && result.sendPrepare(a)) {

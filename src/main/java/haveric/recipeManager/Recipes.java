@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * RecipeManager's recipe storage
@@ -25,7 +26,7 @@ public class Recipes {
     public static final String RECIPE_ID_STRING = RMCChatColor.GRAY + "RecipeManager #";
 
     // Remember results for re-use on failure
-    private static final Map<String, ItemResult> staticResults = new HashMap<String, ItemResult>();
+    private static final Map<UUID, ItemResult> staticResults = new HashMap<UUID, ItemResult>();
 
     // Recipe index
     protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<BaseRecipe, RMCRecipeInfo>();
@@ -399,11 +400,11 @@ public class Recipes {
     }
 
     protected static ItemResult recipeGetResult(Args a, WorkbenchRecipe recipe) {
-        ItemResult result = staticResults.get(a.playerName());
+        ItemResult result = staticResults.get(a.playerUUID());
 
         if (result == null) {
             result = recipe.getResult(a);
-            staticResults.put(a.playerName(), result);
+            staticResults.put(a.playerUUID(), result);
         }
 
         if (result == null) {
@@ -413,8 +414,8 @@ public class Recipes {
         return result.clone();
     }
 
-    protected static void recipeResetResult(String name) {
-        staticResults.remove(name);
+    protected static void recipeResetResult(UUID uuid) {
+        staticResults.remove(uuid);
     }
 
     public Map<BaseRecipe, RMCRecipeInfo> getIndex() {

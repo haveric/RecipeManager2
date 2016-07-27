@@ -23,7 +23,11 @@ public class RecipeFileParser {
 
     public void parseFile(String root, String fileName) throws Throwable {
         BufferedReader reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(root + fileName))));
+
         currentFile = RMCUtil.removeExtensions(fileName, Files.FILE_RECIPE_EXTENSIONS);
+        if (currentFile.isEmpty()) {
+            currentFile = RMCUtil.removeExtensions(root, Files.FILE_RECIPE_EXTENSIONS);
+        }
         ErrorReporter.getInstance().setFile(currentFile);
         fileFlags = new Flags();
         boolean added = false;
@@ -46,7 +50,9 @@ public class RecipeFileParser {
             }
 
             BaseRecipeParser parser = recipeParserFactory.getParser(directive, fileReader, recipeName, fileFlags, registrator);
-            added = parser.parseRecipe(directiveLine);
+            if (parser != null) {
+                added = parser.parseRecipe(directiveLine);
+            }
 
             if (!added) {
                 ErrorReporter.getInstance().error("Recipe was not added! Review previous errors and fix them.", "Warnings do not prevent recipe creation but they should be fixed as well!");

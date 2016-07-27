@@ -1,13 +1,14 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import java.util.UUID;
 
 public class ArgBuilder {
     private Args a = new Args();
@@ -34,7 +35,7 @@ public class ArgBuilder {
     public ArgBuilder() { }
 
     public ArgBuilder(Args newArgs) {
-        a.setPlayerName(newArgs.playerName());
+        a.setPlayerUUID(newArgs.playerUUID());
         a.setPlayer(newArgs.player());
         a.setLocation(newArgs.location().clone());
         a.setRecipe(newArgs.recipe());
@@ -44,8 +45,8 @@ public class ArgBuilder {
         a.setExtra(newArgs.extra());
     }
 
-    public ArgBuilder player(String player) {
-        a.setPlayerName(player);
+    public ArgBuilder player(UUID playerUUID) {
+        a.setPlayerUUID(playerUUID);
         return this;
     }
 

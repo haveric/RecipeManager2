@@ -33,6 +33,7 @@ public class RecipeProcessor implements Runnable {
     public static void reload(CommandSender sender, boolean check) {
         DIR_RECIPES = RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator;
         FILE_ERRORLOG = DIR_RECIPES + "errors.log";
+        new RecipeProcessor(sender, check);
     }
 
     /**

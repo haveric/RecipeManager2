@@ -23,25 +23,10 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class FlagBaseTest {
 
     private Recipes recipes;
-    private boolean loaded = false;
     protected File workDir;
-    protected File errorFile;
 
     @Before
     public void setupBase() {
-        if (!loaded) {
-            setupOnce();
-
-            loaded = true;
-        }
-
-        recipes = new Recipes();
-
-        mockStatic(RecipeManager.class);
-        when(RecipeManager.getRecipes()).thenReturn(recipes);
-    }
-
-    private void setupOnce() {
         mockStatic(Settings.class);
         Settings mockSettings = mock(Settings.class);
         when(Settings.getInstance()).thenReturn(mockSettings);
@@ -56,5 +41,10 @@ public class FlagBaseTest {
         workDir = new File("src/test/work/");
         workDir.delete();
         workDir.mkdirs();
+
+        recipes = new Recipes();
+
+        mockStatic(RecipeManager.class);
+        when(RecipeManager.getRecipes()).thenReturn(recipes);
     }
 }

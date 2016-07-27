@@ -55,11 +55,13 @@ public class ItemResult extends ItemStack implements Flaggable {
         return new ItemResult(this);
     }
 
-    public void setItemStack(ItemStack item) {
+    public void setItemStack(ItemStack item, boolean setMeta) {
         setType(item.getType());
         setDurability(item.getDurability());
         setAmount(item.getAmount());
-        //setItemMeta(item.getItemMeta()); // TODO: Revisit
+        if (setMeta) {
+            setItemMeta(item.getItemMeta());
+        }
     }
 
     public ItemStack toItemStack() {

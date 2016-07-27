@@ -1,4 +1,0 @@
-craft
-dirt + cobble
-= iron_sword
-@name &cTest

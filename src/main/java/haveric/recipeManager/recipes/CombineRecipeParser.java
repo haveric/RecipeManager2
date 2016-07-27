@@ -38,13 +38,24 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 continue;
             }
 
-            items += item.getAmount();
-            if (items > 9) {
-                ErrorReporter.getInstance().error("Combine recipes can't have more than 9 ingredients!", "If you're using stacks make sure they don't exceed 9 items in total.");
-                return false;
+            if (items < 9) {
+                int originalAmount = item.getAmount();
+                if (items + originalAmount > 9) {
+                    int newAmount = 9 - items;
+                    items += newAmount;
+
+                    item.setAmount(newAmount);
+                    ingredients.add(item);
+
+                    int ignoredAmount = originalAmount - newAmount;
+                    ErrorReporter.getInstance().warning("Combine recipes can't have more than 9 ingredients! Extra ingredient(s) ignored: " + item.getType() + "x" + ignoredAmount, "If you're using stacks make sure they don't exceed 9 items in total.");
+                } else {
+                    items += item.getAmount();
+                    ingredients.add(item);
+                }
             }
 
-            ingredients.add(item);
+
         }
 
         if (ingredients.size() == 2 && !conditionEvaluator.checkIngredients(ingredients.get(0), ingredients.get(1))) {
@@ -65,7 +76,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
             recipe.setResults(results);
 
-            if (recipe.getFirstResult() == null) {
+            if (!recipe.hasValidResult()) {
                 return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
             }
         }

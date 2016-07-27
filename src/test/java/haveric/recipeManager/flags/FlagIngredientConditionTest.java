@@ -1,68 +1,52 @@
 package haveric.recipeManager.flags;
 
+import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class FlagIngredientConditionTest extends FlagBaseTest {
 
-    private FlagIngredientCondition flag;
-
-    @Before
-    public void setup() {
-        flag = new FlagIngredientCondition();
-    }
-/*
     @Test
-    public void checkIngredient() {
-        Args a = ArgBuilder.create().build();
+    public void onRecipeParse() {
+        File file = new File("src/test/resources/recipes/flagIngredientCondition/flagIngredientCondition.txt");
+        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
-        flag.onParse("dirt | data 0-5");
-        ItemStack mockItem = mock(ItemStack.class);
+        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        Tools tools = new Tools();
-        when(Tools.parseItem(anyString(), Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META)).thenReturn(mockItem);
+        assertEquals(1, queued.size());
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
+            ItemResult result = recipe.getResults().get(0);
+            Material resultType = result.getType();
+
+            FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+            if (resultType == Material.DIRT) {
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
+                Map<Short, Boolean> values = conditions.get(0).getDataValues();
+                assertTrue(values.containsKey((short) 0));
+                assertTrue(values.containsKey((short) 1));
+                assertTrue(values.containsKey((short) 2));
+                assertTrue(values.containsKey((short) 3));
+                assertTrue(values.containsKey((short) 4));
+                assertTrue(values.containsKey((short) 5));
+                assertFalse(values.containsKey((short) 6));
+            }
+        }
+
+        // TODO: Add more tests
     }
-*/
-    @Test
-    public void onCheck() {
-        Args a;
-        /*
-        Inventory mockCraftingInventory = mock(CraftingInventory.class);
-        ItemStack mockItem = mock(ItemStack.class);
-
-        when(mockCraftingInventory.getItem(1)).thenReturn(mockItem);
-        Conditions mockConditions = mock(Conditions.class);
-
-        flag.setIngredientConditions(mockItem, mockConditions);
-        when(mockConditions.checkIngredient(any(ItemStack.class), any(Args.class))).thenReturn(true);
-
-        a = ArgBuilder.create().inventory(mockCraftingInventory).build();
-        flag.onCheck(a);
-        assertFalse(a.hasReasons());
-
-        Inventory mockFurnaceInventory = mock(FurnaceInventory.class);
-        // TODO: Add items to inventory
-        a = ArgBuilder.create().inventory(mockFurnaceInventory).build();
-        flag.onCheck(a);
-
-
-        Inventory mockBrewerInventory = mock(BrewerInventory.class);
-        // TODO: Add items to inventory
-        a = ArgBuilder.create().inventory(mockBrewerInventory).build();
-        flag.onCheck(a);
-
-
-        Inventory mockUnknownInventory = mock(Inventory.class);
-        a = ArgBuilder.create().inventory(mockUnknownInventory).build();
-        flag.onCheck(a);
-        assertTrue(a.hasReasons());
-        */
-        // Test Args with no inventory
-        a = ArgBuilder.create().build();
-        flag.onCheck(a);
-        assertTrue(a.hasReasons());
-    }
-
 }

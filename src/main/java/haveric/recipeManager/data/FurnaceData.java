@@ -1,6 +1,7 @@
 package haveric.recipeManager.data;
 
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Stores data about a furnace
@@ -18,14 +20,18 @@ public class FurnaceData implements ConfigurationSerializable {
         ConfigurationSerialization.registerClass(FurnaceData.class, "RM_FurnaceData");
     }
 
-    private String smelter = null;
+    @Deprecated
     private String fueler = null;
+
+    private UUID fuelerUUID = null;
     private ItemStack smelting = null;
     private ItemStack fuel = null;
 
     // Constants
-    private static final String ID_SMELTER = "smelter";
+    @Deprecated
     private static final String ID_FUELER = "fueler";
+
+    private static final String ID_FUELER_UUID = "fuelerUUID";
     private static final String ID_SMELTING = "smelting";
     private static final String ID_FUEL = "fuel";
 
@@ -45,26 +51,23 @@ public class FurnaceData implements ConfigurationSerializable {
         try {
             Object obj;
 
-            obj = map.get(ID_SMELTER);
-
+            obj = map.get(ID_FUELER);
             if (obj instanceof String) {
-                smelter = (String) obj;
+                fuelerUUID = UUIDFetcher.getUUIDOf((String) obj);
+                setFueler(null);
             }
 
-            obj = map.get(ID_FUELER);
-
-            if (obj instanceof String) {
-                fueler = (String) obj;
+            obj = map.get(ID_FUELER_UUID);
+            if (obj instanceof UUID) {
+                fuelerUUID = (UUID) obj;
             }
 
             obj = map.get(ID_SMELTING);
-
             if (obj instanceof Map) {
                 smelting = ItemStack.deserialize((Map<String, Object>) obj);
             }
 
             obj = map.get(ID_FUEL);
-
             if (obj instanceof Map) {
                 fuel = ItemStack.deserialize((Map<String, Object>) obj);
             }
@@ -76,12 +79,8 @@ public class FurnaceData implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<String, Object>(4);
 
-        if (smelter != null) {
-            map.put(ID_SMELTER, smelter);
-        }
-
-        if (fueler != null) {
-            map.put(ID_FUELER, fueler);
+        if (fuelerUUID != null) {
+            map.put(ID_FUELER, fuelerUUID);
         }
 
         if (smelting != null) {
@@ -103,20 +102,17 @@ public class FurnaceData implements ConfigurationSerializable {
         return new FurnaceData(map);
     }
 
-    public String getFueler() {
-        return fueler;
+    @Deprecated
+    public String getFueler() { return fueler; }
+    @Deprecated
+    public void setFueler(String newFueler) { fueler = newFueler; }
+
+    public UUID getFuelerUUID() {
+        return fuelerUUID;
     }
 
-    public void setFueler(String newFueler) {
-        fueler = newFueler;
-    }
-
-    public String getSmelter() {
-        return smelter;
-    }
-
-    public void setSmelter(String newSmelter) {
-        smelter = newSmelter;
+    public void setFuelerUUID(UUID newFuelerUUID) {
+        fuelerUUID = newFuelerUUID;
     }
 
     public ItemStack getSmelting() {
@@ -142,13 +138,4 @@ public class FurnaceData implements ConfigurationSerializable {
             fuel = newFuel.clone();
         }
     }
-/*
-    public boolean isFrozen() {
-        return frozen;
-    }
-
-    public void setFrozen(boolean newFrozen) {
-        frozen = newFrozen;
-    }
-*/
 }

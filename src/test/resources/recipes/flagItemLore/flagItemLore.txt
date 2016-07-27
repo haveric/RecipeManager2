@@ -1,0 +1,5 @@
+craft
+dirt + dirt
+= dirt
+@lore Test
+@lore Test 2
