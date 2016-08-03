@@ -13,6 +13,7 @@ import haveric.recipeManager.flags.FlagLoader;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.metrics.Metrics;
+import haveric.recipeManager.util.UUIDNameResolver;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -115,6 +116,9 @@ public class RecipeManager extends JavaPlugin {
         getCommand("rmbooks").setExecutor(new BooksCommand());
         getCommand("rmupdate").setExecutor(new UpdateCommand());
         getCommand("rmcreaterecipe").setExecutor(new CreateRecipeCommand());
+
+        // UUID name resolver helper. This makes the fetching of uuids from names less painful.
+        pm.registerEvents(UUIDNameResolver.getInstance(), this);
     }
 
     @Override
@@ -142,10 +146,8 @@ public class RecipeManager extends JavaPlugin {
     /**
      * Reload RecipeManager's settings, messages, etc and re-parse recipes.
      *
-     * @param sender
-     *            To whom to send the messages to, null = console.
-     * @param check
-     *            Set to true to only check recipes, settings are unaffected.
+     * @param sender To whom to send the messages to, null = console.
+     * @param check  Set to true to only check recipes, settings are unaffected.
      */
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
         Settings.getInstance().reload(sender); // (re)load settings
