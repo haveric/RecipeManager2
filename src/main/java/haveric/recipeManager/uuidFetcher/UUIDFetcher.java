@@ -1,5 +1,8 @@
 package haveric.recipeManager.uuidFetcher;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import haveric.recipeManager.util.UUIDNameResolver;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static final double PROFILES_PER_REQUEST = 100;
@@ -18,22 +22,28 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private final ArrayList<String> names;
     private final boolean rateLimiting;
 
-    private static HashMap<String, UUID> lookupCache;
+    //    private static HashMap<String, UUID> lookupCache;
+    private static Cache<String, UUID> lookupCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(30, TimeUnit.MINUTES)
+            .expireAfterWrite(30, TimeUnit.MINUTES)
+            .initialCapacity(100)
+            .maximumSize(1000)
+            .build();
 
     public static void addPlayerToCache(String name, UUID uuid) {
-        if (lookupCache == null) {
-            lookupCache = new HashMap<String, UUID>();
-        }
+//        if (lookupCache == null) {
+//            lookupCache = new HashMap<String, UUID>();
+//        }
 
         lookupCache.put(name, uuid);
     }
 
     public static void removePlayerFromCache(String name) {
-        if (lookupCache != null) {
-            if (lookupCache.containsKey(name)) {
-                lookupCache.remove(name);
-            }
-        }
+//        if (lookupCache != null) {
+//            if (lookupCache.containsKey(name)) {
+//                lookupCache.remove(name);
+//            }
+//        }
     }
 
     public UUIDFetcher(ArrayList<String> newNames, boolean newRateLimiting) {
@@ -46,9 +56,9 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public Map<String, UUID> call() throws Exception {
-        if (lookupCache == null) {
-            lookupCache = new HashMap<String, UUID>();
-        }
+//        if (lookupCache == null) {
+//            lookupCache = new HashMap<String, UUID>();
+//        }
 
         Map<String, UUID> uuidMap = new HashMap<String, UUID>();
 
@@ -56,10 +66,22 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         while (iter.hasNext()) {
             String name = iter.next();
 
-            if (lookupCache.containsKey(name)) {
-                uuidMap.put(name, lookupCache.get(name));
+            UUID uuid = lookupCache.getIfPresent(name);
+
+            if (uuid != null) {
+                uuidMap.put(name, uuid);
+                iter.remove();
+
+                // Before we go crazy and query all over the internet, see if we have a cached uuid for this name.
+            } else if (UUIDNameResolver.getInstance().hasCachedUUID(name)) {
+                uuidMap.put(name, UUIDNameResolver.getInstance().getUUID(name));
                 iter.remove();
             }
+//            if (lookupCache.getIfPresent(name) != null)
+//                if (lookupCache.containsKey(name)) {
+//                    uuidMap.put(name, lookupCache.get(name));
+//                    iter.remove();
+//                }
         }
 
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
