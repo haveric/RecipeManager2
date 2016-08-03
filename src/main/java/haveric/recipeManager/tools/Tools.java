@@ -126,9 +126,8 @@ public class Tools {
         if (item == null) {
             return null;
         }
-        String[] args = string.split(";");
 
-        result.setItemStack(item, args.length > 1);
+        result.setItemStack(item);
 
         return result;
     }

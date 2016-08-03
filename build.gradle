@@ -33,7 +33,7 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.4'
     
     compile project(':RecipeManagerCommon')
-    compile "org.bukkit:bukkit:1.10-R0.1-SNAPSHOT"
+    compile "org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT"
     compile "net.milkbowl.vault:VaultAPI:1.6"
     
     extra project(':RecipeManagerCommon')

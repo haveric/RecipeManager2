@@ -31,27 +31,38 @@ public class FlagItemNameTest extends FlagBaseTest {
     }
 
     @Test
-        public void onRecipeParse() {
-            File file = new File("src/test/resources/recipes/flagItemName/flagItemName.txt");
-            RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+    public void onRecipeParse() {
+        File file = new File("src/test/resources/recipes/flagItemName/flagItemName.txt");
+        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
-            Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-            assertEquals(4, queued.size());
+        assertEquals(4, queued.size());
+
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
-            ItemResult result = recipe.getResults().get(0);
-            Material resultType = result.getType();
+
+            Args a = ArgBuilder.create().recipe(recipe).build();
+            a.setPlayerUUID(testUUID);
+
+            ItemResult result = recipe.getResult(a);
 
             FlagItemName flag = (FlagItemName) result.getFlag(FlagType.ITEM_NAME);
+            flag.onPrepare(a);
+
+            Material resultType = result.getType();
             if (resultType == Material.STONE_SWORD) {
                 assertEquals(flag.getItemName(), "Weird Item");
+                assertEquals(result.getItemMeta().getDisplayName(), "Weird Item");
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(flag.getItemName(), "{player}'s Sword");
+                assertEquals(result.getItemMeta().getDisplayName(), "TestPlayer's Sword");
             } else if (resultType == Material.GOLD_SWORD) {
                 assertEquals(flag.getItemName(), "<gold> Gold");
+                assertEquals(result.getItemMeta().getDisplayName(), "§6 Gold");
             } else if (resultType == Material.DIAMOND_SWORD) {
                 assertEquals(flag.getItemName(), "Second");
+                assertEquals(result.getItemMeta().getDisplayName(), "Second");
             }
         }
     }

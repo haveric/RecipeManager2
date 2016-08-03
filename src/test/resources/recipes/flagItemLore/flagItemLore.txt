@@ -1,5 +1,5 @@
 craft
 dirt + dirt
 = dirt
-@lore Test
-@lore Test 2
+@lore One
+@lore Two
