@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Flags implements Cloneable {
-    private Map<String, Flag> flags = new LinkedHashMap<String, Flag>();
+    private Map<String, Flag> flags = new LinkedHashMap<>();
     protected Flaggable flaggable;
 
     @Override

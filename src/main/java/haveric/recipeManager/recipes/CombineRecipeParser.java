@@ -27,7 +27,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
         // get the ingredients
         String[] ingredientsRaw = reader.getLine().split("\\+");
 
-        List<ItemStack> ingredients = new ArrayList<ItemStack>();
+        List<ItemStack> ingredients = new ArrayList<>();
         ItemStack item;
         int items = 0;
 
@@ -68,7 +68,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
             reader.nextLine(); // Skip the results line, if it exists
         } else {
             // get the results
-            List<ItemResult> results = new ArrayList<ItemResult>();
+            List<ItemResult> results = new ArrayList<>();
 
             if (!parseResults(recipe, results)) {
                 return false;

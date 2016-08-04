@@ -64,7 +64,7 @@ public class FlagKeepItem extends Flag {
     }
 
 
-    private Map<String, Object> keepItems = new HashMap<String, Object>();
+    private Map<String, Object> keepItems = new HashMap<>();
 
     public FlagKeepItem() {
     }
@@ -279,7 +279,7 @@ public class FlagKeepItem extends Flag {
     }
 
     private class ReturnTask extends BukkitRunnable {
-        private Map<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
+        private Map<Integer, ItemStack> items = new HashMap<>();
         private boolean taskRequired = false;
         private Inventory inv;
 

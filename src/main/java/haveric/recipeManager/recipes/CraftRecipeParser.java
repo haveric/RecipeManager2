@@ -88,7 +88,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
             this.reader.nextLine(); // Skip the results line, if it exists
         } else {
             // get results
-            List<ItemResult> results = new ArrayList<ItemResult>();
+            List<ItemResult> results = new ArrayList<>();
 
             if (!parseResults(recipe, results)) { // results have errors
                 return false;

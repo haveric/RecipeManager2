@@ -46,14 +46,14 @@ public class FlagForPermission extends Flag {
     }
 
 
-    private Map<String, Map<String, Flag>> flagMap = new LinkedHashMap<String, Map<String, Flag>>();
+    private Map<String, Map<String, Flag>> flagMap = new LinkedHashMap<>();
 
     public FlagForPermission() {
     }
 
     public FlagForPermission(FlagForPermission flag) {
         for (Entry<String, Map<String, Flag>> e : flag.flagMap.entrySet()) {
-            Map<String, Flag> flags = new LinkedHashMap<String, Flag>();
+            Map<String, Flag> flags = new LinkedHashMap<>();
 
             for (Flag f : e.getValue().values()) {
                 flags.put(f.getFlagType(), f.clone(getFlagsContainer()));
@@ -115,7 +115,7 @@ public class FlagForPermission extends Flag {
             Map<String, Flag> flags = flagMap.get(permission);
 
             if (flags == null) {
-                flags = new LinkedHashMap<String, Flag>();
+                flags = new LinkedHashMap<>();
                 flagMap.put(permission, flags);
             }
 

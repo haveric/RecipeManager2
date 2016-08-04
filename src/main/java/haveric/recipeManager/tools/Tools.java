@@ -261,7 +261,7 @@ public class Tools {
                     List<String> lore = meta.getLore();
 
                     if (lore == null) {
-                        lore = new ArrayList<String>();
+                        lore = new ArrayList<>();
                     }
 
                     lore.add(RMCUtil.parseColors(value, false));
@@ -576,7 +576,7 @@ public class Tools {
                 }
 
                 split = split[1].split(",");
-                List<Color> colors = new ArrayList<Color>();
+                List<Color> colors = new ArrayList<>();
                 Color color;
 
                 for (String c : split) {
@@ -604,7 +604,7 @@ public class Tools {
                 }
 
                 split = split[1].split(",");
-                List<Color> colors = new ArrayList<Color>();
+                List<Color> colors = new ArrayList<>();
                 Color color;
 
                 for (String c : split) {
@@ -692,7 +692,7 @@ public class Tools {
         List<String> lore = meta.getLore();
 
         if (lore == null) {
-            lore = new ArrayList<String>();
+            lore = new ArrayList<>();
         }
 
         lore.add(Recipes.RECIPE_ID_STRING + id);

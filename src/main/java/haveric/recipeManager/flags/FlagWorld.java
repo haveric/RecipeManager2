@@ -41,8 +41,8 @@ public class FlagWorld extends Flag {
             "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds", };
     }
 
-    private Map<String, Boolean> worlds = new HashMap<String, Boolean>();
-    private Map<String, String> messages = new HashMap<String, String>();
+    private Map<String, Boolean> worlds = new HashMap<>();
+    private Map<String, String> messages = new HashMap<>();
 
     public FlagWorld() {
     }

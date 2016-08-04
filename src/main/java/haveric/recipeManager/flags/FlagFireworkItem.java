@@ -60,7 +60,7 @@ public class FlagFireworkItem extends Flag {
 
 
     private int power = 2;
-    private List<FireworkEffect> effects = new ArrayList<FireworkEffect>();
+    private List<FireworkEffect> effects = new ArrayList<>();
 
     public FlagFireworkItem() {
     }

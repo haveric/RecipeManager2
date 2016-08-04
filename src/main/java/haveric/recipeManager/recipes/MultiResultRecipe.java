@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiResultRecipe extends BaseRecipe {
-    private List<ItemResult> results = new ArrayList<ItemResult>();
+    private List<ItemResult> results = new ArrayList<>();
 
     protected MultiResultRecipe() {
     }
@@ -23,7 +23,7 @@ public class MultiResultRecipe extends BaseRecipe {
         if (recipe instanceof MultiResultRecipe) {
             MultiResultRecipe r = (MultiResultRecipe) recipe;
 
-            results = new ArrayList<ItemResult>(r.getResults().size());
+            results = new ArrayList<>(r.getResults().size());
 
             for (ItemResult i : r.getResults()) {
                 results.add(i.clone());
@@ -196,7 +196,7 @@ public class MultiResultRecipe extends BaseRecipe {
                 }
             }
         } else {
-            List<ItemResult> list = new ArrayList<ItemResult>();
+            List<ItemResult> list = new ArrayList<>();
             float maxChance = 0;
 
             for (ItemResult r : results) {

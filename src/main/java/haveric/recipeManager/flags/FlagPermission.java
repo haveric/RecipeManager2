@@ -47,8 +47,8 @@ public class FlagPermission extends Flag {
     }
 
 
-    private Map<String, Boolean> permissions = new HashMap<String, Boolean>();
-    private Map<String, String> messages = new HashMap<String, String>();
+    private Map<String, Boolean> permissions = new HashMap<>();
+    private Map<String, String> messages = new HashMap<>();
 
     public FlagPermission() {
     }
@@ -132,7 +132,7 @@ public class FlagPermission extends Flag {
     @Override
     protected void onCheck(Args a) {
         boolean success = false;
-        List<String> failed = new ArrayList<String>();
+        List<String> failed = new ArrayList<>();
         for (Entry<String, Boolean> e : permissions.entrySet()) {
             if (e.getValue()) {
                 if (a.hasPlayer() && a.player().hasPermission(e.getKey())) {
@@ -145,7 +145,7 @@ public class FlagPermission extends Flag {
         }
 
         if (!success && failed.size() > 0) {
-            List<String> failedMessages = new ArrayList<String>();
+            List<String> failedMessages = new ArrayList<>();
 
             for (String perm : failed) {
                 String message = getPermissionMessage(perm);
@@ -158,7 +158,7 @@ public class FlagPermission extends Flag {
         }
 
         success = false;
-        List<String> succeeded = new ArrayList<String>();
+        List<String> succeeded = new ArrayList<>();
         for (Entry<String, Boolean> e : permissions.entrySet()) {
             if (!e.getValue()) {
                 if (a.hasPlayer() && a.player().hasPermission(e.getKey())) {
@@ -171,7 +171,7 @@ public class FlagPermission extends Flag {
         }
 
         if (!success && succeeded.size() > 0) {
-            List<String> succeededMessages = new ArrayList<String>();
+            List<String> succeededMessages = new ArrayList<>();
 
             for (String perm : succeeded) {
                 String message = getPermissionMessage(perm);

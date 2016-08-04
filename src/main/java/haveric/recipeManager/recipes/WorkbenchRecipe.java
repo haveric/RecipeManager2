@@ -39,7 +39,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 0, Messages.getInstance().get("craft.result.denied.title"), Messages.getInstance().get("craft.result.denied.info"));
         }
 
-        List<ItemResult> displayResults = new ArrayList<ItemResult>();
+        List<ItemResult> displayResults = new ArrayList<>();
         float failChance = 0;
         int secretNum = 0;
         float secretChance = 0;
@@ -48,7 +48,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         int displayNum = 0;
         int failedLores = 0;
 
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
 
         for (ItemResult r : getResults()) {
             r = r.clone();
@@ -130,7 +130,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         ItemMeta meta = displayResult.getItemMeta();
         List<String> oldLores = meta.getLore();
 
-        List<String> combinedLores = new ArrayList<String>();
+        List<String> combinedLores = new ArrayList<>();
         if (oldLores != null) {
             combinedLores.addAll(oldLores);
         }

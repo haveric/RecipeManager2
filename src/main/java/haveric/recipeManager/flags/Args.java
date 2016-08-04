@@ -151,7 +151,7 @@ public class Args {
 
     public void addCustomReason(String message) {
         if (reasons == null) {
-            reasons = new ArrayList<String>();
+            reasons = new ArrayList<>();
         }
 
         reasons.add(message);
@@ -180,7 +180,7 @@ public class Args {
 
     public void addCustomEffect(String message) {
         if (effects == null) {
-            effects = new ArrayList<String>();
+            effects = new ArrayList<>();
         }
 
         effects.add(message);

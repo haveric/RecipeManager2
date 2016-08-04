@@ -58,7 +58,7 @@ public class FlagBookItem extends Flag {
 
     private String title;
     private String author;
-    private List<String> pages = new ArrayList<String>(50);
+    private List<String> pages = new ArrayList<>(50);
 
     public FlagBookItem() {
     }

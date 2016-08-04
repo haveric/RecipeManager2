@@ -35,7 +35,7 @@ public class RemoveResultRecipe extends BaseRecipe {
             throw new IllegalAccessError("Recipe has already been applied!");
         }
 
-        removed = new HashMap<BaseRecipe, RMCRecipeInfo>();
+        removed = new HashMap<>();
 
         for (Entry<BaseRecipe, RMCRecipeInfo> e : RecipeManager.getRecipes().getRecipeList().entrySet()) {
             BaseRecipe recipe = e.getKey();

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FlagDescriptor {
-    private List<String> names = new ArrayList<String>();
+    private List<String> names = new ArrayList<>();
     private int bits;
     private Flag flag;
 
@@ -34,11 +34,11 @@ public class FlagDescriptor {
      * @return array of flags names, index 0 is always the main name
      */
     public ArrayList<String> getNames() {
-        return new ArrayList<String>(names);
+        return new ArrayList<>(names);
     }
 
     public ArrayList<String> getAliases() {
-        ArrayList<String> cloned = new ArrayList<String>(names);
+        ArrayList<String> cloned = new ArrayList<>(names);
         cloned.remove(0);
 
         return cloned;

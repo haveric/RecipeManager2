@@ -1,14 +1,5 @@
 package haveric.recipeManager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -16,6 +7,14 @@ import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Updater {
  // The project's unique ID
@@ -51,8 +50,8 @@ public class Updater {
     /**
      * Check for updates using your Curse account (with key)
      *
-     * @param projectID The BukkitDev Project ID, found in the "Facts" panel on the right-side of your project page.
-     * @param apiKey Your ServerMods API key, found at https://dev.bukkit.org/home/servermods-apikey/
+     * @param newProjectID The BukkitDev Project ID, found in the "Facts" panel on the right-side of your project page.
+     * @param newApiKey Your ServerMods API key, found at https://dev.bukkit.org/home/servermods-apikey/
      */
     public static void init(RecipeManager newPlugin, int newProjectID, String newApiKey) {
         plugin = newPlugin;
@@ -292,11 +291,7 @@ public class Updater {
                 if (sender == null) {
                     MessageSender.getInstance().sendAndLog(null, "<gray>You can disable this check from config.yml.");
                 }
-            } catch (MalformedURLException e) {
-                MessageSender.getInstance().error(null, e, "Error while checking for updates");
-                MessageSender.getInstance().info("You can disable the update checker in config.yml, but please report the error.");
             } catch (IOException e) {
-                // There was an error reading the query
                 MessageSender.getInstance().error(null, e, "Error while checking for updates");
                 MessageSender.getInstance().info("You can disable the update checker in config.yml, but please report the error.");
             }

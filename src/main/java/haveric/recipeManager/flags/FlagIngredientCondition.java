@@ -140,7 +140,7 @@ public class FlagIngredientCondition extends Flag {
             "{flag} stick | name Crafted Stick | nolore | noenchant // makes ingredient require a stick with a name of 'Crafted Stick', but no lore or enchantments.", };
     }
 
-    private Map<String, ConditionsIngredient> conditions = new HashMap<String, ConditionsIngredient>();
+    private Map<String, ConditionsIngredient> conditions = new HashMap<>();
 
     public FlagIngredientCondition() {
     }
@@ -209,7 +209,7 @@ public class FlagIngredientCondition extends Flag {
             return null;
         }
 
-        List<ConditionsIngredient> conditionsList = new ArrayList<ConditionsIngredient>();
+        List<ConditionsIngredient> conditionsList = new ArrayList<>();
         Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
         while (iter.hasNext()) {
             Entry<String, ConditionsIngredient> entry = iter.next();

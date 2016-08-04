@@ -50,8 +50,8 @@ public class FlagGroup extends Flag {
     }
 
 
-    private Map<String, Boolean> groups = new HashMap<String, Boolean>();
-    private Map<String, String> messages = new HashMap<String, String>();
+    private Map<String, Boolean> groups = new HashMap<>();
+    private Map<String, String> messages = new HashMap<>();
 
     // TODO finish
 

@@ -49,7 +49,7 @@ public class FlagItemLore extends Flag {
     }
 
 
-    private List<String> lore = new ArrayList<String>();
+    private List<String> lore = new ArrayList<>();
 
     public FlagItemLore() {
     }
@@ -99,7 +99,7 @@ public class FlagItemLore extends Flag {
         List<String> newLore = meta.getLore();
 
         if (newLore == null) {
-            newLore = new ArrayList<String>();
+            newLore = new ArrayList<>();
         }
 
         for (String line : lore) {

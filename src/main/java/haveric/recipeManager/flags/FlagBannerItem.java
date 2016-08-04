@@ -65,7 +65,7 @@ public class FlagBannerItem extends Flag {
 
 
     private DyeColor baseColor;
-    private List<Pattern> patterns = new ArrayList<Pattern>();
+    private List<Pattern> patterns = new ArrayList<>();
 
     public FlagBannerItem() { }
 

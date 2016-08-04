@@ -24,7 +24,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     public static void addPlayerToCache(String name, UUID uuid) {
         if (lookupCache == null) {
-            lookupCache = new HashMap<String, UUID>();
+            lookupCache = new HashMap<>();
         }
 
         lookupCache.put(name, uuid);
@@ -50,10 +50,10 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     public Map<String, UUID> call() throws Exception {
         if (lookupCache == null) {
-            lookupCache = new HashMap<String, UUID>();
+            lookupCache = new HashMap<>();
         }
 
-        Map<String, UUID> uuidMap = new HashMap<String, UUID>();
+        Map<String, UUID> uuidMap = new HashMap<>();
 
         Iterator<String> iter = names.iterator();
         while (iter.hasNext()) {
@@ -110,6 +110,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
 
     public static UUID getUUIDOf(String name) throws Exception {
-        return new UUIDFetcher(new ArrayList<String>(Collections.singletonList(name))).call().get(name);
+        return new UUIDFetcher(new ArrayList<>(Collections.singletonList(name))).call().get(name);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class RecipeRegistrator {
-    private Map<BaseRecipe, RMCRecipeInfo> queuedRecipes = new HashMap<BaseRecipe, RMCRecipeInfo>();
+    private Map<BaseRecipe, RMCRecipeInfo> queuedRecipes = new HashMap<>();
     private boolean registered = false;
 
     protected RecipeRegistrator() {

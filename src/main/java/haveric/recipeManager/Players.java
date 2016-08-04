@@ -1,15 +1,14 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.commands.RecipeCommand;
+import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
-import org.bukkit.entity.Player;
-
 public class Players {
-    private static Map<String, Integer> joined = new HashMap<String, Integer>();
+    private static Map<String, Integer> joined = new HashMap<>();
 
     private Players() {
     }

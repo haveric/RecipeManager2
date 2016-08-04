@@ -400,7 +400,7 @@ public class CraftRecipe extends WorkbenchRecipe {
         s.append('\n');
         s.append('\n').append(Messages.getInstance().get("recipebook.header.shape")).append(RMCChatColor.GRAY).append('\n');
 
-        Map<String, Integer> charItems = new LinkedHashMap<String, Integer>();
+        Map<String, Integer> charItems = new LinkedHashMap<>();
         int num = 1;
 
         int ingredientsLength = ingredients.length;

@@ -47,7 +47,7 @@ public class FlagCommand extends Flag {
     }
 
 
-    private List<String> commands = new ArrayList<String>();
+    private List<String> commands = new ArrayList<>();
 
     public FlagCommand() {
     }

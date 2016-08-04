@@ -45,7 +45,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
 
         recipe.setPotion(potion);
 
-        List<ItemResult> results = new ArrayList<ItemResult>();
+        List<ItemResult> results = new ArrayList<>();
 
         if (!parseResults(recipe, results)) { // results have errors
             return false;

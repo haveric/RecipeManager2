@@ -151,7 +151,7 @@ public class FlagSummon extends Flag {
         private boolean noBreed = false;
         private ItemStack[] equip = new ItemStack[5];
         private float[] drop = new float[5];
-        private List<PotionEffect> potions = new ArrayList<PotionEffect>();
+        private List<PotionEffect> potions = new ArrayList<>();
         private Horse.Variant horse = null;
         private Horse.Color horseColor = null;
         private Horse.Style horseStyle = null;
@@ -215,7 +215,7 @@ public class FlagSummon extends Flag {
         }
 
         public List<LivingEntity> spawn(Location location, Player player) {
-            List<LivingEntity> entities = new ArrayList<LivingEntity>(num);
+            List<LivingEntity> entities = new ArrayList<>(num);
             World world = location.getWorld();
 
             for (int i = 0; i < num; i++) {
@@ -880,7 +880,7 @@ public class FlagSummon extends Flag {
         }
     }
 
-    private List<Customization> spawn = new ArrayList<Customization>();
+    private List<Customization> spawn = new ArrayList<>();
 
     public FlagSummon() { }
 

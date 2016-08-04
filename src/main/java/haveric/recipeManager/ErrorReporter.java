@@ -33,7 +33,7 @@ public class ErrorReporter {
      */
     public void startCatching() {
         stopCatching();
-        fileErrors = new HashMap<String, List<String>>();
+        fileErrors = new HashMap<>();
     }
 
     /**
@@ -224,7 +224,7 @@ public class ErrorReporter {
             List<String> errors = fileErrors.get(currentFile);
 
             if (errors == null) {
-                errors = new ArrayList<String>();
+                errors = new ArrayList<>();
             }
 
             String errorMessage = "line " + String.format("%-5d", currentLine) + type + ": " + RMCChatColor.RESET + message;

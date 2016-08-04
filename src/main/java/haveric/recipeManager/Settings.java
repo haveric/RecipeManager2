@@ -94,7 +94,7 @@ public class Settings {
     }
 
     private static void init() {
-        RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<String>();
+        RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<>();
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
@@ -104,13 +104,13 @@ public class Settings {
             MATERIAL_FAIL_DEFAULT = Material.FIRE;
         }
 
-        itemDatas = new HashMap<Material, Short>();
-        materialNames = new HashMap<String, Material>();
-        materialDataNames = new HashMap<Material, Map<String, Short>>();
-        enchantNames = new HashMap<String, Enchantment>();
-        materialPrint = new HashMap<Material, String>();
-        materialDataPrint = new HashMap<Material, Map<Short, String>>();
-        enchantPrint = new HashMap<Enchantment, String>();
+        itemDatas = new HashMap<>();
+        materialNames = new HashMap<>();
+        materialDataNames = new HashMap<>();
+        enchantNames = new HashMap<>();
+        materialPrint = new HashMap<>();
+        materialDataPrint = new HashMap<>();
+        enchantPrint = new HashMap<>();
 
         // Load/reload/generate config.yml
         fileConfig = loadYML(Files.FILE_CONFIG);
@@ -320,7 +320,7 @@ public class Settings {
             Map<String, Short> dataMap = materialDataNames.get(material);
 
             if (dataMap == null) {
-                dataMap = new HashMap<String, Short>();
+                dataMap = new HashMap<>();
                 materialDataNames.put(material, dataMap);
             }
 
@@ -336,7 +336,7 @@ public class Settings {
             Map<Short, String> printMap = materialDataPrint.get(material);
 
             if (printMap == null) {
-                printMap = new HashMap<Short, String>();
+                printMap = new HashMap<>();
                 materialDataPrint.put(material, printMap);
             }
 

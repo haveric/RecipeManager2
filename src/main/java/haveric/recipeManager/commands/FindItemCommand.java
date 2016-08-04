@@ -19,7 +19,7 @@ public class FindItemCommand implements CommandExecutor {
             return true;
         }
 
-        List<Material> found = new ArrayList<Material>();
+        List<Material> found = new ArrayList<>();
         String find = args[0].trim();
 
         if (find.equalsIgnoreCase("this")) {

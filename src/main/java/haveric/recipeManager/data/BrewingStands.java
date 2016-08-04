@@ -156,7 +156,7 @@ public class BrewingStands {
 
         MessageSender.getInstance().log("Saving " + brewingStands.size() + " brewing stands...");
 
-        Map<UUID, Map<String, BrewingStandData>> mapWorld = new HashMap<UUID, Map<String, BrewingStandData>>();
+        Map<UUID, Map<String, BrewingStandData>> mapWorld = new HashMap<>();
         Map<String, BrewingStandData> mapCoords;
         BlockID id;
 
@@ -165,7 +165,7 @@ public class BrewingStands {
             mapCoords = mapWorld.get(id.getWorldID());
 
             if (mapCoords == null) {
-                mapCoords = new HashMap<String, BrewingStandData>();
+                mapCoords = new HashMap<>();
                 mapWorld.put(id.getWorldID(), mapCoords);
             }
 

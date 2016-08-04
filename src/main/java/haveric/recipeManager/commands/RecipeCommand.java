@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class RecipeCommand implements CommandExecutor {
-    private static Map<String, Pages> pagination = new HashMap<String, Pages>();
+    private static Map<String, Pages> pagination = new HashMap<>();
 
     public static void clean(String name) {
         pagination.remove(name);
@@ -148,7 +148,7 @@ public class RecipeCommand implements CommandExecutor {
 
                 boolean ingredient = (args.length > 1 && args[1].charAt(0) == 'i');
 
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
 
                 for (Entry<BaseRecipe, RMCRecipeInfo> e : RecipeManager.getRecipes().getRecipeList().entrySet()) {
                     BaseRecipe recipe = e.getKey();

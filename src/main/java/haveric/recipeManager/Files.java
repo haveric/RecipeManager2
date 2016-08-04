@@ -146,7 +146,7 @@ public class Files {
         }
 
         StringBuilder s = new StringBuilder(32000);
-        Map<String, List<FlagDescriptor>> flags = new LinkedHashMap<String, List<FlagDescriptor>>();
+        Map<String, List<FlagDescriptor>> flags = new LinkedHashMap<>();
 
         String[] category = new String[] { "SHARED FLAGS", "RECIPE ONLY FLAGS", "RESULT ONLY FLAGS" };
         String[] description = new String[] { "Usable on anything - file header, recipe header or result items.", "Usable only on file headers or recipe headers. Can not be used on result items.", "Usable only on recipe's result items. Can not be used on recipes or file header." };
@@ -370,7 +370,7 @@ public class Files {
         s.append("</tr>");
 
         List<Permission> permissions = desc.getPermissions();
-        List<Permission> perms = new ArrayList<Permission>(permissions.size() + FlagFactory.getInstance().getFlags().size());
+        List<Permission> perms = new ArrayList<>(permissions.size() + FlagFactory.getInstance().getFlags().size());
 
         perms.addAll(permissions);
 

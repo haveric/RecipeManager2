@@ -53,7 +53,7 @@ public class BrewingStandData implements ConfigurationSerializable {
     }
 
     public Map<String, Object> serialize() {
-        Map<String, Object> map = new HashMap<String, Object>(1);
+        Map<String, Object> map = new HashMap<>(1);
 
         if (fuelerUUID != null) {
             map.put(ID_FUELER, fuelerUUID);

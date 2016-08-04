@@ -101,14 +101,14 @@ public class FlagForChance extends Flag {
         }
     }
 
-    private Map<String, List<ChanceFlag>> flagMap = new HashMap<String, List<ChanceFlag>>();
+    private Map<String, List<ChanceFlag>> flagMap = new HashMap<>();
 
     public FlagForChance() {
     }
 
     public FlagForChance(FlagForChance flag) {
         for (Entry<String, List<ChanceFlag>> e : flag.flagMap.entrySet()) {
-            List<ChanceFlag> flags = new ArrayList<ChanceFlag>();
+            List<ChanceFlag> flags = new ArrayList<>();
 
             for (ChanceFlag c : e.getValue()) {
                 if (c.getFlag() == null) {
@@ -207,7 +207,7 @@ public class FlagForChance extends Flag {
             List<ChanceFlag> flags = flagMap.get(group);
 
             if (flags == null) {
-                flags = new ArrayList<ChanceFlag>();
+                flags = new ArrayList<>();
                 flagMap.put(group, flags);
             }
 
@@ -333,7 +333,7 @@ public class FlagForChance extends Flag {
 
         if (flagDeclaration == null) {
             if (flags == null) {
-                flags = new ArrayList<ChanceFlag>();
+                flags = new ArrayList<>();
                 flagMap.put(group, flags);
             } else {
                 for (ChanceFlag c : flags) {
@@ -364,7 +364,7 @@ public class FlagForChance extends Flag {
             }
 
             if (flags == null) {
-                flags = new ArrayList<ChanceFlag>();
+                flags = new ArrayList<>();
                 flagMap.put(group, flags);
             } else {
                 if (appendFlag) {

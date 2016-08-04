@@ -15,7 +15,7 @@ import org.bukkit.entity.HumanEntity;
  * Stores in-use workbench locations to be used with flags.
  */
 public class Workbenches {
-    private static Map<String, BlockID> workbenches = new HashMap<String, BlockID>();
+    private static Map<String, BlockID> workbenches = new HashMap<>();
 
     private Workbenches() {
     }

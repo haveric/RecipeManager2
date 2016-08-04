@@ -71,8 +71,8 @@ public class FlagCloneIngredient extends Flag {
     private byte copyBitsum;
     private int[] dataModifier = new int[2];
     private int[] amountModifier = new int[2];
-    private List<String> loreConditions = new ArrayList<String>();
-    private List<Integer> loreLines = new ArrayList<Integer>();
+    private List<String> loreConditions = new ArrayList<>();
+    private List<Integer> loreLines = new ArrayList<>();
 
     /**
      * Contains static constants that are usable in the 'copy' methods of {@link FlagCloneIngredient}.
@@ -384,7 +384,7 @@ public class FlagCloneIngredient extends Flag {
             if (loreConditions.isEmpty() && loreLines.isEmpty()) {
                 resultMeta.setLore(ingredientMeta.getLore());
             } else {
-                List<String> newLores = new ArrayList<String>();
+                List<String> newLores = new ArrayList<>();
 
                 List<String> ingredientLores = ingredientMeta.getLore();
                 for (int i = 0; i < ingredientLores.size(); i++) {

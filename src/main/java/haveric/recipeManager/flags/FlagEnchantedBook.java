@@ -53,8 +53,8 @@ public class FlagEnchantedBook extends Flag {
     }
 
 
-    private Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
-    private List<Enchantment> enchantsToRemove = new ArrayList<Enchantment>();
+    private Map<Enchantment, Integer> enchants = new HashMap<>();
+    private List<Enchantment> enchantsToRemove = new ArrayList<>();
 
     public FlagEnchantedBook() {
     }

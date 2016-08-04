@@ -41,7 +41,7 @@ public class RecipeManager extends JavaPlugin {
     private static RecipeBooks recipeBooks;
     private static Events events;
     private Metrics metrics;
-    private HashMap<String, String> plugins = new HashMap<String, String>();
+    private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
     public static final Random random = new Random();

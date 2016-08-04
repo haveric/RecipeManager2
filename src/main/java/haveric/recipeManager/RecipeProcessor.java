@@ -22,7 +22,7 @@ public class RecipeProcessor implements Runnable {
 
     // Storage
     private static volatile RecipeRegistrator registrator = null;
-    private final List<String> fileList = new ArrayList<String>();
+    private final List<String> fileList = new ArrayList<>();
 
     // Constants
     private static String DIR_RECIPES;

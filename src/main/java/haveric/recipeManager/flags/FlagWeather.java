@@ -90,7 +90,7 @@ public class FlagWeather extends Flag {
     }
 
     public String getWeatherString() {
-        List<String> list = new ArrayList<String>(3);
+        List<String> list = new ArrayList<>(3);
 
         if ((weather & Bit.CLEAR) == Bit.CLEAR) {
             list.add("clear");

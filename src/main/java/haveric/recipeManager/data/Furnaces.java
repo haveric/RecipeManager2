@@ -167,7 +167,7 @@ public class Furnaces {
 
         MessageSender.getInstance().log("Saving " + furnaces.size() + " furnaces...");
 
-        Map<UUID, Map<String, FurnaceData>> mapWorld = new HashMap<UUID, Map<String, FurnaceData>>();
+        Map<UUID, Map<String, FurnaceData>> mapWorld = new HashMap<>();
         Map<String, FurnaceData> mapCoords;
         BlockID id;
 
@@ -176,7 +176,7 @@ public class Furnaces {
             mapCoords = mapWorld.get(id.getWorldID());
 
             if (mapCoords == null) {
-                mapCoords = new HashMap<String, FurnaceData>();
+                mapCoords = new HashMap<>();
                 mapWorld.put(id.getWorldID(), mapCoords);
             }
 

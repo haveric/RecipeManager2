@@ -41,9 +41,7 @@ public class Version {
             @SuppressWarnings("unused")
             Rabbit.Type rabbit = Rabbit.Type.SALT_AND_PEPPER;
             supports = true;
-        } catch (NoSuchFieldError e) {
-            supports = false;
-        } catch (NoClassDefFoundError e) {
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
             supports = false;
         }
 

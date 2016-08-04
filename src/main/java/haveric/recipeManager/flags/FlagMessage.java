@@ -41,7 +41,7 @@ public class FlagMessage extends Flag {
     }
 
 
-    private List<String> messages = new ArrayList<String>();
+    private List<String> messages = new ArrayList<>();
 
     public FlagMessage() {
     }
@@ -84,7 +84,7 @@ public class FlagMessage extends Flag {
             remove();
         } else {
             if (messages == null) {
-                messages = new ArrayList<String>();
+                messages = new ArrayList<>();
             }
 
             messages.add(message);

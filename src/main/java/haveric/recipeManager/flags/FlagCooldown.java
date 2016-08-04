@@ -55,7 +55,7 @@ public class FlagCooldown extends Flag {
     }
 
 
-    private final Map<UUID, MutableInt> cooldownTime = new HashMap<UUID, MutableInt>();
+    private final Map<UUID, MutableInt> cooldownTime = new HashMap<>();
 
     private int cooldown;
     private boolean global = false;

@@ -21,7 +21,7 @@ public class FlagTypeOldTest {
 
     @Test
     public void duplicateAliases() {
-        List<String> aliases = new ArrayList<String>();
+        List<String> aliases = new ArrayList<>();
 
         for (FlagDescriptor flagType : FlagFactory.getInstance().getFlags().values()) {
             for (String name : flagType.getNames()) {

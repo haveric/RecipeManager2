@@ -47,9 +47,9 @@ public class ExtractCommand implements CommandExecutor {
 
         Messages.getInstance().send(sender, "cmd.extract.converting");
 
-        List<String> parsedCraftRecipes = new ArrayList<String>();
-        List<String> parsedCombineRecipes = new ArrayList<String>();
-        List<String> parsedSmeltRecipes = new ArrayList<String>();
+        List<String> parsedCraftRecipes = new ArrayList<>();
+        List<String> parsedCombineRecipes = new ArrayList<>();
+        List<String> parsedSmeltRecipes = new ArrayList<>();
 
         Iterator<Recipe> recipes = Bukkit.getServer().recipeIterator();
 

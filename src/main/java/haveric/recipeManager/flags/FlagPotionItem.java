@@ -89,7 +89,7 @@ public class FlagPotionItem extends Flag {
 
 
     private short data;
-    private List<PotionEffect> effects = new ArrayList<PotionEffect>();
+    private List<PotionEffect> effects = new ArrayList<>();
     private ItemStack customPotion;
 
     public FlagPotionItem() {

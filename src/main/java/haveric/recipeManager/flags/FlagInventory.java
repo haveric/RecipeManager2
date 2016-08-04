@@ -44,7 +44,7 @@ public class FlagInventory extends Flag {
     }
 
 
-    private List<InventoryType> inventories = new ArrayList<InventoryType>();
+    private List<InventoryType> inventories = new ArrayList<>();
     private String failMessage;
 
     public FlagInventory() {

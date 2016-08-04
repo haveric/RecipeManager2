@@ -12,8 +12,8 @@ import java.util.Map;
 public class FlagFactory {
 
     private static FlagFactory instance = null;
-    private Map<String, FlagDescriptor> flags = new HashMap<String, FlagDescriptor>();
-    private Map<String, FlagDescriptor> nameMap = new HashMap<String, FlagDescriptor>();
+    private Map<String, FlagDescriptor> flags = new HashMap<>();
+    private Map<String, FlagDescriptor> nameMap = new HashMap<>();
 
     private boolean initialized = false;
 

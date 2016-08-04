@@ -26,19 +26,19 @@ public class Recipes {
     public static final String RECIPE_ID_STRING = RMCChatColor.GRAY + "RecipeManager #";
 
     // Remember results for re-use on failure
-    private static final Map<UUID, ItemResult> staticResults = new HashMap<UUID, ItemResult>();
+    private static final Map<UUID, ItemResult> staticResults = new HashMap<>();
 
     // Recipe index
-    protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<BaseRecipe, RMCRecipeInfo>();
+    protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<>();
 
     // Quick-find index
-    protected Map<Integer, CraftRecipe> indexCraft = new HashMap<Integer, CraftRecipe>();
-    protected Map<Integer, CombineRecipe> indexCombine = new HashMap<Integer, CombineRecipe>();
-    protected Map<String, SmeltRecipe> indexSmelt = new HashMap<String, SmeltRecipe>();
-    protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<String, SmeltRecipe>();
-    protected Map<String, FuelRecipe> indexFuels = new HashMap<String, FuelRecipe>();
-    protected Map<String, BrewRecipe> indexBrew = new HashMap<String, BrewRecipe>();
-    protected Map<String, BaseRecipe> indexName = new HashMap<String, BaseRecipe>();
+    protected Map<Integer, CraftRecipe> indexCraft = new HashMap<>();
+    protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
+    protected Map<String, SmeltRecipe> indexSmelt = new HashMap<>();
+    protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<>();
+    protected Map<String, FuelRecipe> indexFuels = new HashMap<>();
+    protected Map<String, BrewRecipe> indexBrew = new HashMap<>();
+    protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {
     }

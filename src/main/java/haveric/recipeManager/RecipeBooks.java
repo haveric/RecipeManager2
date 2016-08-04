@@ -33,7 +33,7 @@ public class RecipeBooks {
     private static final String DIR_BOOKS = DIR_PLUGIN + "books" + File.separator;
     private static final String FILE_ERRORLOG = DIR_BOOKS + "errors.log";
 
-    private final Map<String, RecipeBook> books = new HashMap<String, RecipeBook>();
+    private final Map<String, RecipeBook> books = new HashMap<>();
     private final int generated = (int) (System.currentTimeMillis() / 1000);
 
     // Constants
@@ -70,7 +70,7 @@ public class RecipeBooks {
             MessageSender.getInstance().send(sender, RMCChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
         }
 
-        Map<String, File> files = new HashMap<String, File>();
+        Map<String, File> files = new HashMap<>();
 
         File[] listOfFiles = dir.listFiles();
         if (listOfFiles != null) {
@@ -168,8 +168,8 @@ public class RecipeBooks {
         book.setCustomEndPage(RMCUtil.parseColors(yml.getString("settings.customend").replace("\\n", "\n"), false));
 
         // Loading recipes from volumes...
-        Map<Integer, List<String>> volumesMap = new HashMap<Integer, List<String>>(); // need List for saving to YAML properly
-        Set<String> allRecipes = new HashSet<String>();
+        Map<Integer, List<String>> volumesMap = new HashMap<>(); // need List for saving to YAML properly
+        Set<String> allRecipes = new HashSet<>();
         int recipesNum = 0;
 
         for (String key : yml.getKeys(false)) {
@@ -191,7 +191,7 @@ public class RecipeBooks {
                 List<String> recipes = volumesMap.get(volume);
 
                 if (recipes == null) {
-                    recipes = new ArrayList<String>(book.getRecipesPerVolume());
+                    recipes = new ArrayList<>(book.getRecipesPerVolume());
                     volumesMap.put(volume, recipes);
                 }
 
@@ -227,7 +227,7 @@ public class RecipeBooks {
                 if (!volumesMap.containsKey(i)) {
                     ErrorReporter.getInstance().warning("Book '" + id + "' is missing 'volume " + i + "', volumes have been renamed.");
 
-                    List<List<String>> list = new ArrayList<List<String>>();
+                    List<List<String>> list = new ArrayList<>();
 
                     for (int v = 1; v <= maxVolume; v++) {
                         List<String> l = volumesMap.get(v);
@@ -252,7 +252,7 @@ public class RecipeBooks {
         }
 
         // Load unsorted recipes and recipes with @recipebook flag...
-        List<String> unsorted = new ArrayList<String>();
+        List<String> unsorted = new ArrayList<>();
 
         // Get all recipes that have @recipebook flag for this book without defined volume
         for (BaseRecipe r : RecipeManager.getRecipes().index.keySet()) {
@@ -284,7 +284,7 @@ public class RecipeBooks {
                 List<String> recipes = volumesMap.get(volume);
 
                 if (recipes == null) {
-                    recipes = new ArrayList<String>(book.getRecipesPerVolume());
+                    recipes = new ArrayList<>(book.getRecipesPerVolume());
                     volumesMap.put(volume, recipes);
                 }
 
@@ -597,7 +597,7 @@ public class RecipeBooks {
         }
 
         // partial match
-        List<RecipeBook> found = new ArrayList<RecipeBook>(books.size());
+        List<RecipeBook> found = new ArrayList<>(books.size());
 
         for (Entry<String, RecipeBook> e : books.entrySet()) {
             if (e.getKey().contains(id)) {

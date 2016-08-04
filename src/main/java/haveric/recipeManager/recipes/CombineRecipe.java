@@ -48,7 +48,7 @@ public class CombineRecipe extends WorkbenchRecipe {
      * @return clone of ingredients list
      */
     public List<ItemStack> getIngredients() {
-        List<ItemStack> clone = new ArrayList<ItemStack>();
+        List<ItemStack> clone = new ArrayList<>();
 
         for (ItemStack i : ingredients) {
             clone.add(i.clone());
@@ -71,7 +71,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     public void addIngredient(int amount, Material type, short data) {
         if (ingredients == null) {
-            ingredients = new ArrayList<ItemStack>();
+            ingredients = new ArrayList<>();
         }
 
         if ((ingredients.size() + amount) > 9) { // check if they're more than they should...
@@ -87,7 +87,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     public void setIngredients(List<ItemStack> newIngredients) {
         // unstack ingredients
-        ingredients = new ArrayList<ItemStack>();
+        ingredients = new ArrayList<>();
         int amount;
 
         for (ItemStack ingredient : newIngredients) {
@@ -225,7 +225,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         s.append('\n');
         s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredients")).append(RMCChatColor.BLACK);
 
-        Map<ItemStack, MutableInt> items = new HashMap<ItemStack, MutableInt>();
+        Map<ItemStack, MutableInt> items = new HashMap<>();
 
         for (ItemStack item : ingredients) {
             MutableInt i = items.get(item);

@@ -102,13 +102,13 @@ public class RecipeBook extends AbstractRecipeBook {
         // Build contents index and page content
         List<StringBuilder> index = null;
 
-        List<String> pages = new ArrayList<String>();
+        List<String> pages = new ArrayList<>();
         int i = 0;
         int r = 2;
         int p = (int) Math.ceil(volumes.get(volumeID).size() / 13.0) + 2;
 
         if (contents) {
-            index = new ArrayList<StringBuilder>();
+            index = new ArrayList<>();
             index.add(new StringBuilder(256).append(Messages.getInstance().get("recipebook.header.contents")).append("\n\n").append(RMCChatColor.BLACK));
         }
 

@@ -95,7 +95,7 @@ public class SmeltRecipeParser extends BaseRecipeParser {
         }
 
         // get result or move current line after them if we got @remove and results
-        List<ItemResult> results = new ArrayList<ItemResult>();
+        List<ItemResult> results = new ArrayList<>();
 
         if (isRemove) { // ignore result errors if we have @remove
             ErrorReporter.getInstance().setIgnoreErrors(true);

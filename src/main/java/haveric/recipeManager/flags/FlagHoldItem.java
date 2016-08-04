@@ -137,7 +137,7 @@ public class FlagHoldItem extends Flag {
             "{flag} false // makes all previous statements useless", };
     }
 
-    private Map<String, ConditionsHold> conditions = new HashMap<String, ConditionsHold>();
+    private Map<String, ConditionsHold> conditions = new HashMap<>();
 
     public FlagHoldItem() {
     }
@@ -205,7 +205,7 @@ public class FlagHoldItem extends Flag {
             return null;
         }
 
-        List<ConditionsHold> conditionsList = new ArrayList<ConditionsHold>();
+        List<ConditionsHold> conditionsList = new ArrayList<>();
         Iterator<Entry<String, ConditionsHold>> iter = conditions.entrySet().iterator();
 
         while (iter.hasNext()) {

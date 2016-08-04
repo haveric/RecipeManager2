@@ -51,7 +51,7 @@ public class FlagPotionEffect extends Flag {
     }
 
 
-    private Map<PotionEffect, Float> effects = new HashMap<PotionEffect, Float>();
+    private Map<PotionEffect, Float> effects = new HashMap<>();
     private boolean clear = false;
 
     public FlagPotionEffect() {

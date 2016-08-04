@@ -30,13 +30,13 @@ public class Conditions implements Cloneable {
     private String flagType;
     private ItemStack ingredient;
     private String failMessage;
-    private Map<Short, Boolean> dataValues = new HashMap<Short, Boolean>();
-    private Map<Short, Boolean> dataBits = new HashMap<Short, Boolean>();
+    private Map<Short, Boolean> dataValues = new HashMap<>();
+    private Map<Short, Boolean> dataBits = new HashMap<>();
     private int amount;
-    private Map<Enchantment, Map<Short, Boolean>> enchants = new HashMap<Enchantment, Map<Short, Boolean>>();
-    private Map<Enchantment, Map<Short, Boolean>> bookEnchants = new HashMap<Enchantment, Map<Short, Boolean>>();
+    private Map<Enchantment, Map<Short, Boolean>> enchants = new HashMap<>();
+    private Map<Enchantment, Map<Short, Boolean>> bookEnchants = new HashMap<>();
     private String name;
-    private List<String> lores = new ArrayList<String>();
+    private List<String> lores = new ArrayList<>();
     private Color minColor;
     private Color maxColor;
     private boolean noMeta = false;
@@ -67,13 +67,13 @@ public class Conditions implements Cloneable {
         amount = original.amount;
 
         for (Entry<Enchantment, Map<Short, Boolean>> e : original.enchants.entrySet()) {
-            Map<Short, Boolean> map = new HashMap<Short, Boolean>(e.getValue().size());
+            Map<Short, Boolean> map = new HashMap<>(e.getValue().size());
             map.putAll(e.getValue());
             enchants.put(e.getKey(), map);
         }
 
         for (Entry<Enchantment, Map<Short, Boolean>> e : original.bookEnchants.entrySet()) {
-            Map<Short, Boolean> map = new HashMap<Short, Boolean>(e.getValue().size());
+            Map<Short, Boolean> map = new HashMap<>(e.getValue().size());
             map.putAll(e.getValue());
             bookEnchants.put(e.getKey(), map);
         }
@@ -364,7 +364,7 @@ public class Conditions implements Cloneable {
         Map<Short, Boolean> levels = enchants.get(enchant);
 
         if (levels == null) {
-            levels = new HashMap<Short, Boolean>();
+            levels = new HashMap<>();
             enchants.put(enchant, levels);
         }
 
@@ -477,7 +477,7 @@ public class Conditions implements Cloneable {
         Map<Short, Boolean> levels = bookEnchants.get(enchant);
 
         if (levels == null) {
-            levels = new HashMap<Short, Boolean>();
+            levels = new HashMap<>();
             bookEnchants.put(enchant, levels);
         }
 

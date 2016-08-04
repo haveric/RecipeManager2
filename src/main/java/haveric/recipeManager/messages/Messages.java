@@ -18,9 +18,9 @@ import static haveric.recipeManager.Files.FILE_MESSAGES;
 
 public class Messages {
     private static Messages instance;
-    private Map<String, Set<String>> sent = new HashMap<String, Set<String>>();
+    private Map<String, Set<String>> sent = new HashMap<>();
 
-    private Map<String,String> messages = new HashMap<String, String>();
+    private Map<String,String> messages = new HashMap<>();
 
     private Messages() {
 
@@ -160,7 +160,7 @@ public class Messages {
             Set<String> set = sent.get(sender.getName());
 
             if (set == null) {
-                set = new HashSet<String>();
+                set = new HashSet<>();
                 sent.put(sender.getName(), set);
             }
 

@@ -8,9 +8,9 @@ import java.util.*;
 
 public class TestItemMeta implements ItemMeta {
     private String displayName;
-    private List<String> lores = new ArrayList<String>();
-    private Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
-    private Set<ItemFlag> flags = new HashSet<ItemFlag>();
+    private List<String> lores = new ArrayList<>();
+    private Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private Set<ItemFlag> flags = new HashSet<>();
 
     public TestItemMeta() {}
 
@@ -49,7 +49,7 @@ public class TestItemMeta implements ItemMeta {
 
     @Override
     public List<String> getLore() {
-        ArrayList<String> loresCopy = new ArrayList<String>();
+        ArrayList<String> loresCopy = new ArrayList<>();
         loresCopy.addAll(lores);
         return loresCopy;
     }

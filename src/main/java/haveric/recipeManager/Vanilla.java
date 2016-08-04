@@ -20,7 +20,7 @@ import java.util.Map.Entry;
  * Control for Bukkit recipes to avoid confusion with RecipeManager's recipes
  */
 public class Vanilla {
-    protected static Map<BaseRecipe, RMCRecipeInfo> initialRecipes = new HashMap<BaseRecipe, RMCRecipeInfo>();
+    protected static Map<BaseRecipe, RMCRecipeInfo> initialRecipes = new HashMap<>();
 
     /** Leather dyeing's special recipe result, you can use it to identify vanilla recipes. */
     public static final ItemStack RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short) 0);

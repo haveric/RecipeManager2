@@ -241,7 +241,7 @@ public class FlagExplode extends Flag {
         }
 
         if (failure == failed) {
-            Map<LivingEntity, Double> entities = new HashMap<LivingEntity, Double>();
+            Map<LivingEntity, Double> entities = new HashMap<>();
             Location loc = a.location();
             World world = loc.getWorld();
             double x = loc.getX() + 0.5;
