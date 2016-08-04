@@ -584,8 +584,6 @@ public class Events implements Listener {
         Workbenches.remove(player);
         Recipes.recipeResetResult(player.getUniqueId());
         Messages.getInstance().clearPlayer(name);
-
-        UUIDFetcher.removePlayerFromCache(name);
     }
 
     /*

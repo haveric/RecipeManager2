@@ -1,5 +1,7 @@
 package haveric.recipeManager.uuidFetcher;
 
+import haveric.recipeManager.RecipeManager;
+import org.bukkit.OfflinePlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,10 +30,11 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         lookupCache.put(name, uuid);
     }
 
-    public static void removePlayerFromCache(String name) {
-        if (lookupCache != null) {
-            if (lookupCache.containsKey(name)) {
-                lookupCache.remove(name);
+    public static void addOfflinePlayers() {
+        OfflinePlayer[] players = RecipeManager.getPlugin().getServer().getOfflinePlayers();
+        for (OfflinePlayer player : players) {
+            if (player.getName() != null && player.getUniqueId() != null) {
+                addPlayerToCache(player.getName(), player.getUniqueId());
             }
         }
     }
