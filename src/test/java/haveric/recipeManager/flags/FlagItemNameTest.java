@@ -7,6 +7,7 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Before;
@@ -59,7 +60,7 @@ public class FlagItemNameTest extends FlagBaseTest {
                 assertEquals(result.getItemMeta().getDisplayName(), "TestPlayer's Sword");
             } else if (resultType == Material.GOLD_SWORD) {
                 assertEquals(flag.getItemName(), "<gold> Gold");
-                assertEquals(result.getItemMeta().getDisplayName(), "§6 Gold");
+                assertEquals(result.getItemMeta().getDisplayName(), RMCChatColor.COLOR_CHAR + "6 Gold");
             } else if (resultType == Material.DIAMOND_SWORD) {
                 assertEquals(flag.getItemName(), "Second");
                 assertEquals(result.getItemMeta().getDisplayName(), "Second");
