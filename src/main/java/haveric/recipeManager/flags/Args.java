@@ -250,7 +250,7 @@ public class Args {
 
     /**
      * Re-processes the arguments to assign them in as many places as possible.<br>
-     * For example, if you only set player name, the player() will still be null, but by triggering this it will try to assign player() to a Player object.
+     * For example, if you only set player UUID, the player() will still be null, but by triggering this it will try to assign player() to a Player object.
      *
      * @return same instance
      */

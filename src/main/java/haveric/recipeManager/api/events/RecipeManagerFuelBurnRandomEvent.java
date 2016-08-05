@@ -48,10 +48,10 @@ public class RecipeManagerFuelBurnRandomEvent extends Event implements Cancellab
     }
 
     /**
-     * Get the player's uuid that initially placed the fuel.<br>
+     * Get the player's UUID that initially placed the fuel.<br>
      * Can be null in certain situations!
      *
-     * @return fueler's name
+     * @return fueler's UUID
      */
     public UUID getFuelerUUID() {
         return fuelerUUID;
@@ -59,7 +59,7 @@ public class RecipeManagerFuelBurnRandomEvent extends Event implements Cancellab
 
     /**
      * Get the Player object of the player that placed the fuel.<br>
-     * NOTE: This returns null if player is not online or plugin couldn't get the player's uuid, use getFuelerUUID() to get his uuid only.
+     * NOTE: This returns null if player is not online or plugin couldn't get the player's UUID, use getFuelerUUID() to get his UUID only.
      *
      * @return Player object of the fueler
      */

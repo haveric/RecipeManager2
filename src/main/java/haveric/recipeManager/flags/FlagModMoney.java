@@ -176,7 +176,7 @@ public class FlagModMoney extends Flag {
         }
 
         if (!a.hasPlayerUUID()) {
-            a.addCustomReason("Need a player uuid!");
+            a.addCustomReason("Need a player UUID!");
             return;
         }
 

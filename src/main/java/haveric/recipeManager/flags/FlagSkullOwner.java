@@ -94,7 +94,7 @@ public class FlagSkullOwner extends Flag {
         String owner;
         if (getOwner().equalsIgnoreCase("{player}")) {
             if (!a.hasPlayerUUID()) {
-                a.addCustomReason("Needs player uuid!");
+                a.addCustomReason("Needs player UUID!");
                 return;
             }
 

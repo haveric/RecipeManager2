@@ -71,7 +71,7 @@ public class Econ {
      * If economy is not enabled this method will return 0.
      *
      * @param playerUUID
-     *            player's uuid
+     *            player's UUID
      * @return money player has, 0 if no economy plugin was found
      */
     public double getMoney(UUID playerUUID) {
@@ -92,7 +92,7 @@ public class Econ {
      * If economy is not enabled or amount is 0, this method won't do anything
      *
      * @param playerUUID
-     *            player's uuid
+     *            player's UUID
      * @param amount
      *            amount to give
      */
