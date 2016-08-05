@@ -17,7 +17,6 @@ import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -1350,8 +1349,6 @@ public class Events implements Listener {
     @EventHandler
     public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
-        UUIDFetcher.addPlayerToCache(player.getName(), player.getUniqueId());
 
         Players.addJoined(player);
 

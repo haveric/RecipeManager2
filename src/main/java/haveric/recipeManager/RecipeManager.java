@@ -13,7 +13,6 @@ import haveric.recipeManager.flags.FlagLoader;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.metrics.Metrics;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -76,8 +75,6 @@ public class RecipeManager extends JavaPlugin {
         ArgBuilder.init();
 
         flagLoader = new FlagLoader();
-
-        UUIDFetcher.addOfflinePlayers();
 
         // wait for all plugins to load then enable this
         new BukkitRunnable() {

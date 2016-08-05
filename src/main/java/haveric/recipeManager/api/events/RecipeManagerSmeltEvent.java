@@ -3,18 +3,13 @@ package haveric.recipeManager.api.events;
 import haveric.recipeManager.recipes.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SmeltRecipe;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
-
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
+// TODO: Reimplement
 /**
  * Event triggered when RecipeManager's custom furnace recipes are being smelted.<br>
  * Player can return null in certain situations, so be sure to prepare for that situation.<br>
@@ -27,16 +22,16 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     private FuelRecipe fuelRecipe;
     private ItemResult result;
     private Block block;
-    private String smelter;
-    private String fueler;
+    //private String smelter;
+    //private String fueler;
 
-    public RecipeManagerSmeltEvent(SmeltRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock, String newSmelter, String newFueler) {
+    public RecipeManagerSmeltEvent(SmeltRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock/*,, String newSmelter String newFueler*/) {
         recipe = newRecipe;
         fuelRecipe = newFuelRecipe;
         result = newResult;
         block = newBlock;
-        smelter = newSmelter;
-        fueler = newFueler;
+        //smelter = newSmelter;
+        //fueler = newFueler;
     }
 
     /**
@@ -90,9 +85,10 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *
      * @return smelter's name or null
      */
-    public String getSmelterName() {
-        return smelter;
-    }
+
+//    public String getSmelterName() {
+//        return smelter;
+//    }
 
     /**
      * Get the Player object of the player that placed the ingredient.<br>
@@ -101,18 +97,18 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *
      * @return Player object of the smelter or null
      */
-    public Player getSmelter() {
-        Player player = null;
-
-        if (smelter != null) {
-            try {
-                UUID uuid = UUIDFetcher.getUUIDOf(smelter);
-                player = Bukkit.getPlayer(uuid);
-            } catch (Exception e) { }
-        }
-
-        return player;
-    }
+//    public Player getSmelter() {
+//        Player player = null;
+//
+//        if (smelter != null) {
+//            try {
+//                UUID uuid = UUIDFetcher.getUUIDOf(smelter);
+//                player = Bukkit.getPlayer(uuid);
+//            } catch (Exception e) { }
+//        }
+//
+//        return player;
+//    }
 
     /**
      * Get the player's name that placed the fuel powering this recipe.<br>
@@ -120,9 +116,9 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *
      * @return fueler's name or null
      */
-    public String getFuelerName() {
-        return fueler;
-    }
+//    public String getFuelerName() {
+//        return fueler;
+//    }
 
     /**
      * Get the Player object of the player that placed the fuel powering this recipe.<br>
@@ -131,18 +127,18 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *
      * @return Player object of the fueler or null
      */
-    public Player getFueler() {
-        Player player = null;
-
-        if (fueler != null) {
-            try {
-                UUID uuid = UUIDFetcher.getUUIDOf(fueler);
-                player = Bukkit.getPlayer(uuid);
-            } catch (Exception e) { }
-        }
-
-        return player;
-    }
+//    public Player getFueler() {
+//        Player player = null;
+//
+//        if (fueler != null) {
+//            try {
+//                UUID uuid = UUIDFetcher.getUUIDOf(fueler);
+//                player = Bukkit.getPlayer(uuid);
+//            } catch (Exception e) { }
+//        }
+//
+//        return player;
+//    }
 
     @Override
     public HandlerList getHandlers() {

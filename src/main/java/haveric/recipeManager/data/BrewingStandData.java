@@ -1,7 +1,6 @@
 package haveric.recipeManager.data;
 
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.uuidFetcher.UUIDFetcher;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -16,12 +15,7 @@ public class BrewingStandData implements ConfigurationSerializable {
         ConfigurationSerialization.registerClass(BrewingStandData.class, "RM_BrewingStandData");
     }
 
-    @Deprecated
-    private String fueler;
-
     private UUID fuelerUUID;
-    @Deprecated
-    private static final String ID_FUELER = "fueler";
 
     private static final String ID_FUELER_UUID = "fuelerUUID";
 
@@ -37,15 +31,9 @@ public class BrewingStandData implements ConfigurationSerializable {
         try {
             Object obj;
 
-            obj = map.get(ID_FUELER);
-            if (obj instanceof String) {
-                fuelerUUID = UUIDFetcher.getUUIDOf((String) obj);
-                setFueler(null);
-            }
-
             obj = map.get(ID_FUELER_UUID);
-            if (obj instanceof UUID) {
-                fuelerUUID = (UUID) obj;
+            if (obj instanceof String) {
+                fuelerUUID = UUID.fromString((String) obj);
             }
         } catch (Throwable e) {
             MessageSender.getInstance().error(null, e, null);
@@ -56,7 +44,7 @@ public class BrewingStandData implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>(1);
 
         if (fuelerUUID != null) {
-            map.put(ID_FUELER, fuelerUUID);
+            map.put(ID_FUELER_UUID, fuelerUUID.toString());
         }
 
         return map;
@@ -69,11 +57,6 @@ public class BrewingStandData implements ConfigurationSerializable {
     public static BrewingStandData valueOf(Map<String, Object> map) {
         return deserialize(map);
     }
-
-    @Deprecated
-    public String getFueler() { return fueler; }
-    @Deprecated
-    public void setFueler(String newFueler) { fueler = newFueler; }
 
     public UUID getFuelerUUID() {
         return fuelerUUID;

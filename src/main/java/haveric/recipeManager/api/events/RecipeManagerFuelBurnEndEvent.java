@@ -51,7 +51,7 @@ public class RecipeManagerFuelBurnEndEvent extends Event implements Cancellable 
      * Get the player's uuid that initially placed the fuel.<br>
      * Can be null in certain situations!
      *
-     * @return fueler's name
+     * @return fueler's uuid
      */
     public UUID getFuelerUUID() {
         return fuelerUUID;
