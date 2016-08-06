@@ -8,10 +8,12 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 
 import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class RecipeFileReader {
 
+    private final String UTF8_BOM = new String("\uFEFF".getBytes(StandardCharsets.UTF_8));
 
     private String line;
     private int lineNum;
@@ -77,6 +79,9 @@ public class RecipeFileReader {
             line = reader.readLine();
 
             if (line != null) {
+                if (lineNum == 1 && line.startsWith(UTF8_BOM)) {
+                    line = line.replace(UTF8_BOM, "");
+                }
                 line = line.trim();
             }
             return line != null;

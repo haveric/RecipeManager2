@@ -1,11 +1,12 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.*;
-import haveric.recipeManager.flags.*;
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeRegistrator;
+import haveric.recipeManager.flags.Flags;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
@@ -22,7 +23,7 @@ public class RecipeFileParser {
     }
 
     public void parseFile(String root, String fileName) throws Throwable {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(root + fileName))));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(root + fileName)));
 
         currentFile = RMCUtil.removeExtensions(fileName, Files.FILE_RECIPE_EXTENSIONS);
         if (currentFile.isEmpty()) {

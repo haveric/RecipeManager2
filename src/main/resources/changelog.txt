@@ -13,6 +13,8 @@ This file will be automatically overwritten when a new version is installed.
 ** lore [text]          = copies any lore lines that contain the text
 ** lore [regex:pattern] = copies any lore lines that match the regex pattern
 * @GameMode: Fixed duplicate calls not clearing previous gamemodes
+* Removed the need for server lookups of UUIDs
+* Fix recipe files starting with UTF8 BOM
 
 === v2.7.3 ===
 * Improved compatibility for 1.8.x and 1.7.x versions.
