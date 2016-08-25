@@ -1,7 +1,7 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.RecipeBooks;
 import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.recipes.ItemResult;
 import org.apache.commons.lang.Validate;
@@ -108,7 +108,7 @@ public class FlagGetRecipeBook extends Flag {
 
     @Override
     protected void onRegistered() {
-        List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookID());
+        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(getBookID());
 
         if (books.isEmpty()) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " could not find book ID containing '" + bookID + "', flag ignored.");
@@ -135,7 +135,7 @@ public class FlagGetRecipeBook extends Flag {
             return;
         }
 
-        List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(getBookID());
+        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(getBookID());
 
         if (books.isEmpty()) {
             return;

@@ -93,7 +93,8 @@ public class RecipeManager extends JavaPlugin {
 
         FlagFactory.getInstance().init();
         FlagFactory.getInstance().initPermissions();
-        RecipeBooks.init();
+        RecipeBooks.getInstance().init();
+        RecipeBooks.getInstance().reload(null);
 
         Files.init();
         Players.init();
@@ -290,19 +291,6 @@ public class RecipeManager extends JavaPlugin {
      */
     public static Recipes getRecipes() {
         return recipes;
-    }
-
-    /**
-     * NOTE: Changes to a new instance on 'rmreload', do not store.
-     *
-     * @return RecipeBooks class
-     */
-    public static RecipeBooks getRecipeBooks() {
-        return recipeBooks;
-    }
-
-    public static void setRecipeBooks(RecipeBooks newRecipeBooks) {
-        recipeBooks = newRecipeBooks;
     }
 
     /**

@@ -10,7 +10,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -24,12 +23,6 @@ import static org.junit.Assert.assertEquals;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Settings.class, MessageSender.class, RecipeManager.class})
 public class FlagItemNameTest extends FlagBaseTest {
-    //private FlagItemName flag;
-
-    @Before
-    public void setup() {
-        //flag = new FlagItemName();
-    }
 
     @Test
     public void onRecipeParse() {

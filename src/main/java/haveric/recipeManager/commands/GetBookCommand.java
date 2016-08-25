@@ -1,6 +1,6 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.RecipeBooks;
 import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
@@ -50,7 +50,7 @@ public class GetBookCommand implements CommandExecutor {
             bookName = bookName.substring(0, index).trim();
         }
 
-        List<RecipeBook> books = RecipeManager.getRecipeBooks().getBooksPartialMatch(bookName);
+        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(bookName);
 
         if (books.isEmpty()) {
             Messages.getInstance().send(sender, "cmd.getbook.notexist", "{arg}", bookName);

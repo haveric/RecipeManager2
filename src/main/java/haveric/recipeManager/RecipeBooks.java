@@ -29,28 +29,42 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RecipeBooks {
-    private static final String DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
-    private static final String DIR_BOOKS = DIR_PLUGIN + "books" + File.separator;
-    private static final String FILE_ERRORLOG = DIR_BOOKS + "errors.log";
+    private static String DIR_PLUGIN;
+    private static String DIR_BOOKS;
+    private static String FILE_ERRORLOG;
 
     private final Map<String, RecipeBook> books = new HashMap<>();
     private final int generated = (int) (System.currentTimeMillis() / 1000);
 
+    private static RecipeBooks instance;
+
+    private boolean callEvents;
+
+    protected RecipeBooks() {}
+
+    public static RecipeBooks getInstance() {
+        if (instance == null) {
+            instance = new RecipeBooks();
+        }
+
+        return instance;
+    }
     // Constants
     //public static final String BOOK_MARKER = "RecipeManager";
 
-    /* TODO: This is strange, turn this into a singleton perhaps? */
-    protected static void init() {
-        RecipeBooks recipeBooks = RecipeManager.getRecipeBooks();
-        if (recipeBooks != null) {
-            recipeBooks.clean();
-        }
+    public void init(File booksDir) {
+        clean();
 
-        recipeBooks = new RecipeBooks();
-        RecipeManager.setRecipeBooks(recipeBooks);
+        DIR_BOOKS = booksDir.getPath() + File.separator;;
+        callEvents = false;
     }
 
-    private RecipeBooks() {
+    public void init() {
+        clean();
+
+        DIR_PLUGIN = RecipeManager.getPlugin().getDataFolder() + File.separator;
+        DIR_BOOKS = DIR_PLUGIN + "books" + File.separator;
+        callEvents = true;
     }
 
     public void clean() {
@@ -58,21 +72,24 @@ public class RecipeBooks {
     }
 
     public void reload(CommandSender sender) {
-        Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEvent(sender));
+        FILE_ERRORLOG = DIR_BOOKS + "errors.log";
+        File booksDir = new File(DIR_BOOKS);
+
+        if (callEvents) {
+            Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEvent(sender));
+        }
 
         clean();
 
-        File dir = new File(DIR_BOOKS);
-
         ErrorReporter.getInstance().startCatching();
 
-        if (!dir.exists() && !dir.mkdirs()) {
-            MessageSender.getInstance().send(sender, RMCChatColor.RED + "Error: couldn't create directories: " + dir.getPath());
+        if (!booksDir.exists() && !booksDir.mkdirs()) {
+            MessageSender.getInstance().send(sender, RMCChatColor.RED + "Error: couldn't create directories: " + booksDir.getPath());
         }
 
         Map<String, File> files = new HashMap<>();
 
-        File[] listOfFiles = dir.listFiles();
+        File[] listOfFiles = booksDir.listFiles();
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
@@ -92,7 +109,7 @@ public class RecipeBooks {
         }
 
         for (Entry<String, File> e : files.entrySet()) {
-            parseBook(sender, e.getValue());
+            initBook(sender, e.getValue());
         }
 
         int errors = ErrorReporter.getInstance().getCatchedAmount();
@@ -119,6 +136,36 @@ public class RecipeBooks {
         // Bukkit.getPluginManager().callEvent(new RecipeManagerReloadBooksEventPost(sender));
     }
 
+    public void reloadAfterRecipes(CommandSender sender) {
+        FILE_ERRORLOG = DIR_BOOKS + "errors.log";
+        File booksDir = new File(DIR_BOOKS);
+
+        Map<String, File> files = new HashMap<>();
+
+        File[] listOfFiles = booksDir.listFiles();
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    int i = file.getName().lastIndexOf('.');
+                    String ext;
+                    if (i > 0) {
+                        ext = file.getName().substring(i).toLowerCase();
+                    } else {
+                        ext = file.getName();
+                    }
+
+                    if (ext.equals(".yml")) {
+                        files.put(RMCUtil.removeExtensions(file.getName(), Sets.newHashSet(".yml")), file);
+                    }
+                }
+            }
+        }
+
+        for (Entry<String, File> e : files.entrySet()) {
+            initBookRecipes(sender, e.getValue());
+        }
+    }
+
     /**
      * Parses a YAML file into a RecipeBook object.<br>
      * It can have any extension and its name will be the ID.<br>
@@ -135,12 +182,10 @@ public class RecipeBooks {
             throw new IllegalArgumentException("The specified File object is not a file!");
         }
 
-        return parseBook(null, file);
+        return initBook(null, file);
     }
 
-    private RecipeBook parseBook(CommandSender sender, File file) {
-        ErrorReporter.getInstance().setFile(file.getName());
-
+    private RecipeBook initBook(CommandSender sender, File file) {
         // Loading YML file
         FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
         String id = RMCUtil.removeExtensions(file.getName(), Sets.newHashSet(".yml")).toLowerCase(); // get filename without extension (book ID)
@@ -155,6 +200,9 @@ public class RecipeBooks {
         yml.addDefault("settings.end", true);
         yml.addDefault("settings.customend", "");
 
+        yml.options().header("Recipe book configuration (last loaded at " + DateFormat.getDateTimeInstance().format(new Date()) + ")" + Files.NL + "Read '" + Files.FILE_INFO_BOOKS + "' file to learn how to configure books." + Files.NL);
+        yml.options().copyDefaults(true);
+
         // Create RecipeBook object and assign basic info
         RecipeBook book = new RecipeBook(id);
 
@@ -166,6 +214,26 @@ public class RecipeBooks {
         book.setContentsPage(yml.getBoolean("settings.contents"));
         book.setEndPage(yml.getBoolean("settings.end"));
         book.setCustomEndPage(RMCUtil.parseColors(yml.getString("settings.customend").replace("\\n", "\n"), false));
+
+        try {
+            yml.save(file);
+        } catch (Throwable e) {
+            MessageSender.getInstance().error(sender, e, "<red>Couldn't save '" + id + ".yml'!");
+        }
+
+        books.put(id.toLowerCase(), book);
+
+        return book;
+    }
+
+    private RecipeBook initBookRecipes(CommandSender sender, File file) {
+        ErrorReporter.getInstance().setFile(file.getName());
+
+        // Loading YML file
+        FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        String id = RMCUtil.removeExtensions(file.getName(), Sets.newHashSet(".yml")).toLowerCase(); // get filename without extension (book ID)
+
+        RecipeBook book = getBook(id);
 
         // Loading recipes from volumes...
         Map<Integer, List<String>> volumesMap = new HashMap<>(); // need List for saving to YAML properly
@@ -199,6 +267,7 @@ public class RecipeBooks {
                     parseRecipeName(id, value, recipes, allRecipes);
                 }
 
+                MessageSender.getInstance().info("RecipeBooks Recipes: " + RecipeManager.getRecipes().index.size());
                 // Get all recipes that have @recipebook flag for this book with this volume
                 for (BaseRecipe r : RecipeManager.getRecipes().index.keySet()) {
                     if (r.hasFlag(FlagType.ADD_TO_BOOK) && !allRecipes.contains(r.getName())) {
@@ -320,9 +389,6 @@ public class RecipeBooks {
             yml.set("volume" + e.getKey(), null);
             yml.set("volume " + e.getKey(), e.getValue());
         }
-
-        yml.options().header("Recipe book configuration (last loaded at " + DateFormat.getDateTimeInstance().format(new Date()) + ")" + Files.NL + "Read '" + Files.FILE_INFO_BOOKS + "' file to learn how to configure books." + Files.NL);
-        yml.options().copyDefaults(true);
 
         try {
             yml.save(file);

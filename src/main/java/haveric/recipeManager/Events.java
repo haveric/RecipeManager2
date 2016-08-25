@@ -260,7 +260,7 @@ public class Events implements Listener {
         result = callEvent.getResult();
 
         if (result != null) {
-        	SoundNotifier.sendRepairSound(player, location);
+            SoundNotifier.sendRepairSound(player, location);
         }
 
         inv.setResult(result);
@@ -303,7 +303,7 @@ public class Events implements Listener {
             Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
 
             if (!recipe.checkFlags(a)) {
-            	SoundNotifier.sendDenySound(player, location);
+                SoundNotifier.sendDenySound(player, location);
                 event.setCancelled(true);
                 return;
             }
@@ -1306,7 +1306,7 @@ public class Events implements Listener {
         ItemStack item = player.getInventory().getItem(event.getNewSlot());
 
         if (Settings.getInstance().getUpdateBooks()) {
-            RecipeManager.getRecipeBooks().updateBook(player, item);
+            RecipeBooks.getInstance().updateBook(player, item);
         }
 
         if (Settings.getInstance().getFixModResults()) {
