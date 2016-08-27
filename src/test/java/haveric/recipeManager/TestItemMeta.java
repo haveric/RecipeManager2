@@ -1,30 +1,34 @@
 package haveric.recipeManager;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 
 import java.util.*;
 
-public class TestItemMeta implements ItemMeta {
+public class TestItemMeta implements ItemMeta, Repairable {
     private String displayName;
     private List<String> lores = new ArrayList<>();
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private Set<ItemFlag> flags = new HashSet<>();
+    private int repairCost;
 
-    public TestItemMeta() {}
-
-    public TestItemMeta(ItemMeta meta) {
+    public TestItemMeta(TestItemMeta meta) {
+        if (meta == null) {
+            return;
+        }
         setDisplayName(meta.getDisplayName());
         setLore(meta.getLore());
 
-        for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-            addEnchant(entry.getKey(), entry.getValue(), true);
-        }
+        this.enchantments = new HashMap<>(meta.getEnchants());
 
         for (ItemFlag flag : meta.getItemFlags()) {
             addItemFlags(flag);
         }
+
+        this.repairCost = meta.getRepairCost();
     }
 
     @Override
@@ -49,9 +53,7 @@ public class TestItemMeta implements ItemMeta {
 
     @Override
     public List<String> getLore() {
-        ArrayList<String> loresCopy = new ArrayList<>();
-        loresCopy.addAll(lores);
-        return loresCopy;
+        return new ArrayList<>(lores);
     }
 
     @Override
@@ -83,7 +85,7 @@ public class TestItemMeta implements ItemMeta {
     @Override
     public boolean addEnchant(Enchantment ench, int level, boolean ignoreLevelRestriction) {
         boolean changed = false;
-        if (ignoreLevelRestriction || level <= ench.getMaxLevel()) {
+        if (ignoreLevelRestriction || level >= ench.getStartLevel() && level <= ench.getMaxLevel()) {
             enchantments.put(ench, level);
             changed = true;
         }
@@ -139,12 +141,47 @@ public class TestItemMeta implements ItemMeta {
     }
 
     @Override
-    public ItemMeta clone() {
-        return new TestItemMeta(this);
+    public TestItemMeta clone() {
+        try {
+            return (TestItemMeta) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
     public Map<String, Object> serialize() {
         return null;
+    }
+
+    public boolean hasRepairCost() {
+        return repairCost > 0;
+    }
+
+    public int getRepairCost() {
+        return repairCost;
+    }
+
+    public void setRepairCost(int cost) {
+        repairCost = cost;
+    }
+
+    boolean applicableTo(Material type) {
+        return type != Material.AIR;
+    }
+
+    boolean isEmpty() {
+        return !(hasDisplayName() || hasEnchants() || hasLore());
+    }
+
+    boolean equalsCommon(TestItemMeta that) {
+        return ((this.hasDisplayName() ? that.hasDisplayName() && this.displayName.equals(that.displayName) : !that.hasDisplayName()))
+                && (this.hasEnchants() ? that.hasEnchants() && this.enchantments.equals(that.enchantments) : !that.hasEnchants())
+                && (this.hasLore() ? that.hasLore() && this.lores.equals(that.lores) : !that.hasLore())
+                && (this.hasRepairCost() ? that.hasRepairCost() && this.repairCost == that.repairCost : !that.hasRepairCost());
+    }
+
+    boolean notUncommon(TestItemMeta meta) {
+        return true;
     }
 }

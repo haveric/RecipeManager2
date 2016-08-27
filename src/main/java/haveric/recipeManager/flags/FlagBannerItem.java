@@ -7,7 +7,6 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -98,6 +97,8 @@ public class FlagBannerItem extends Flag {
             return false;
         }
 
+        patterns.clear();
+
         for (int i = 1; i < args.length; i++) {
             String pattern = args[i].trim();
             String[] split = pattern.split(" ");
@@ -127,8 +128,7 @@ public class FlagBannerItem extends Flag {
             return;
         }
 
-        ItemStack item = a.result();
-        ItemMeta meta = item.getItemMeta();
+        ItemMeta meta = a.result().getItemMeta();
 
         if (!(meta instanceof BannerMeta)) {
             a.addCustomReason("Needs banner!");
@@ -143,6 +143,6 @@ public class FlagBannerItem extends Flag {
             banner.addPattern(pattern);
         }
 
-        item.setItemMeta(banner);
+        a.result().setItemMeta(banner);
     }
 }
