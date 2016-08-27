@@ -42,11 +42,11 @@ public class FlagBiome extends Flag {
     protected String[] getExamples() {
         return new String[] {
             "{flag} jungle, jungle_hills",
-            "{flag} !mushroom_island, !mushroom_shore", };
+            "{flag} !mushroom_island, !mushroom_island_shore", };
     }
 
 
-    private Map<Biome, Boolean> biomes = new EnumMap<Biome, Boolean>(Biome.class);
+    private Map<Biome, Boolean> biomes = new EnumMap<>(Biome.class);
     private String failMessage;
 
     public FlagBiome() {
@@ -109,6 +109,8 @@ public class FlagBiome extends Flag {
         }
 
         split = split[0].trim().toLowerCase().split(",");
+
+        biomes.clear();
 
         for (String arg : split) {
             arg = arg.trim();
