@@ -1,4 +1,4 @@
-lastchanged: 2.7.3
+lastchanged: 2.8
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
@@ -31,6 +31,7 @@ flag:
   blockpowered:
     furnace: <red>Need a furnace powered by redstone.
     workbench: <red>Need a workbench powered by redstone.
+    brewingstand: <red>Need a brewing stand powered by redstone.
   lightlevel: <red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>.
   setblock:
     needsworkbench: <red>Recipe needs to be used with a workbench!

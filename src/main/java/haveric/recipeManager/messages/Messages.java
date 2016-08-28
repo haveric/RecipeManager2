@@ -49,7 +49,7 @@ public class Messages {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         if (!Files.LASTCHANGED_MESSAGES.equals(config.getString("lastchanged"))) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_MESSAGES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
         loadMessages(sender, file);

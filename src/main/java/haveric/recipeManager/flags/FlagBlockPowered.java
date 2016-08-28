@@ -105,10 +105,20 @@ public class FlagBlockPowered extends Flag {
             case WORKBENCH:
             case FURNACE:
             case BURNING_FURNACE:
-                if (isIndirect() ? !block.isBlockIndirectlyPowered() : !block.isBlockPowered()) {
+            case BREWING_STAND:
+                boolean valid;
+                if (isIndirect()) {
+                    valid = block.isBlockIndirectlyPowered() || block.isBlockPowered();
+                } else {
+                    valid = block.isBlockPowered();
+                }
+
+                if (!valid) {
                     String reason;
                     if (block.getType() == Material.WORKBENCH) {
                         reason = "flag.blockpowered.workbench";
+                    } else if (block.getType() == Material.BREWING_STAND) {
+                        reason = "flag.blockpowered.brewingstand";
                     } else {
                         reason = "flag.blockpowered.furnace";
                     }
