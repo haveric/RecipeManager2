@@ -17,14 +17,14 @@ public class TestItemFactory implements ItemFactory {
         return getItemMeta(material, null);
     }
 
-    private ItemMeta getItemMeta(Material material, TestItemMeta meta) {
+    private ItemMeta getItemMeta(Material material, TestMetaItem meta) {
         switch (material) {
             case AIR:
                 return null;
             case WRITTEN_BOOK:
                 //return meta instanceof CraftMetaBookSigned ? meta : new CraftMetaBookSigned(meta);
             case BOOK_AND_QUILL:
-                //return meta != null && meta.getClass().equals(CraftMetaBook.class) ? meta : new CraftMetaBook(meta);
+                return meta != null && meta.getClass().equals(TestMetaBook.class) ? meta : new TestMetaBook(meta);
             case SKULL_ITEM:
                 //return meta instanceof CraftMetaSkull ? meta : new CraftMetaSkull(meta);
             case LEATHER_HELMET:
@@ -46,7 +46,7 @@ public class TestItemFactory implements ItemFactory {
             case ENCHANTED_BOOK:
                 //return meta instanceof CraftMetaEnchantedBook ? meta : new CraftMetaEnchantedBook(meta);
             case BANNER:
-                return meta instanceof TestBannerMeta ? meta : new TestBannerMeta(meta);
+                return meta instanceof TestMetaBanner ? meta : new TestMetaBanner(meta);
             case FURNACE:
             case CHEST:
             case TRAPPED_CHEST:
@@ -71,7 +71,7 @@ public class TestItemFactory implements ItemFactory {
             case SHIELD:
                 //return new CraftMetaBlockState(meta, material);
             default:
-                return new TestItemMeta(meta);
+                return new TestMetaItem(meta);
         }
     }
 
@@ -88,11 +88,11 @@ public class TestItemFactory implements ItemFactory {
         if (material == null || meta == null) {
             return false;
         }
-        if (!(meta instanceof TestItemMeta)) {
+        if (!(meta instanceof TestMetaItem)) {
             throw new IllegalArgumentException("Meta of " + meta.getClass().toString() + " not created by " + TestItemFactory.class.getName());
         }
 
-        return ((TestItemMeta) meta).applicableTo(material);
+        return ((TestMetaItem) meta).applicableTo(material);
     }
 
     @Override
@@ -100,23 +100,23 @@ public class TestItemFactory implements ItemFactory {
         if (meta1 == meta2) {
             return true;
         }
-        if (meta1 != null && !(meta1 instanceof TestItemMeta)) {
+        if (meta1 != null && !(meta1 instanceof TestMetaItem)) {
             throw new IllegalArgumentException("First meta of " + meta1.getClass().getName() + " does not belong to " + TestItemFactory.class.getName());
         }
-        if (meta2 != null && !(meta2 instanceof TestItemMeta)) {
+        if (meta2 != null && !(meta2 instanceof TestMetaItem)) {
             throw new IllegalArgumentException("Second meta " + meta2.getClass().getName() + " does not belong to " + TestItemFactory.class.getName());
         }
         if (meta1 == null) {
-            return ((TestItemMeta) meta2).isEmpty();
+            return ((TestMetaItem) meta2).isEmpty();
         }
         if (meta2 == null) {
-            return ((TestItemMeta) meta1).isEmpty();
+            return ((TestMetaItem) meta1).isEmpty();
         }
 
-        return equals((TestItemMeta) meta1, (TestItemMeta) meta2);
+        return equals((TestMetaItem) meta1, (TestMetaItem) meta2);
     }
 
-    private boolean equals(TestItemMeta meta1, TestItemMeta meta2) {
+    private boolean equals(TestMetaItem meta1, TestMetaItem meta2) {
         return meta1.equalsCommon(meta2) && meta1.notUncommon(meta2) && meta2.notUncommon(meta1);
     }
 
@@ -129,10 +129,10 @@ public class TestItemFactory implements ItemFactory {
     @Override
     public ItemMeta asMetaFor(ItemMeta meta, Material material) throws IllegalArgumentException {
         Validate.notNull(material, "Material cannot be null");
-        if (!(meta instanceof TestItemMeta)) {
+        if (!(meta instanceof TestMetaItem)) {
             throw new IllegalArgumentException("Meta of " + (meta != null ? meta.getClass().toString() : "null") + " not created by " + TestItemFactory.class.getName());
         }
-        return getItemMeta(material, (TestItemMeta) meta);
+        return getItemMeta(material, (TestMetaItem) meta);
     }
 
     @Override

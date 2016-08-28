@@ -1,0 +1,13 @@
+craft
+dirt + dirt
+= dirt
+@bookitem title The Art of Stealing
+
+craft
+dirt + stone_sword
+= written_book
+@bookitem title The Art of Stealing
+@bookitem author Gray Fox
+@bookitem addpage <bold>O<reset>nce upon a time...
+@bookitem addpage // added blank page
+@bookitem addpage \\n\\n\\n\\n<italic>      The End.

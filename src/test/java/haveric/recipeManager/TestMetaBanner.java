@@ -8,18 +8,18 @@ import org.bukkit.inventory.meta.BannerMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestBannerMeta extends TestItemMeta implements BannerMeta {
+public class TestMetaBanner extends TestMetaItem implements BannerMeta {
     private DyeColor baseColor;
     private List<Pattern> patterns = new ArrayList<>();
 
-    public TestBannerMeta(TestItemMeta meta) {
+    public TestMetaBanner(TestMetaItem meta) {
         super(meta);
 
-        if (!(meta instanceof TestBannerMeta)) {
+        if (!(meta instanceof TestMetaBanner)) {
             return;
         }
 
-        TestBannerMeta banner = (TestBannerMeta) meta;
+        TestMetaBanner banner = (TestMetaBanner) meta;
         baseColor = banner.getBaseColor();
         patterns = new ArrayList<>(banner.getPatterns());
     }

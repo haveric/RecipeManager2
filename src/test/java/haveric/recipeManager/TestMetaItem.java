@@ -8,14 +8,14 @@ import org.bukkit.inventory.meta.Repairable;
 
 import java.util.*;
 
-public class TestItemMeta implements ItemMeta, Repairable {
+public class TestMetaItem implements ItemMeta, Repairable {
     private String displayName;
     private List<String> lores = new ArrayList<>();
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private Set<ItemFlag> flags = new HashSet<>();
     private int repairCost;
 
-    public TestItemMeta(TestItemMeta meta) {
+    public TestMetaItem(TestMetaItem meta) {
         if (meta == null) {
             return;
         }
@@ -141,9 +141,9 @@ public class TestItemMeta implements ItemMeta, Repairable {
     }
 
     @Override
-    public TestItemMeta clone() {
+    public TestMetaItem clone() {
         try {
-            return (TestItemMeta) super.clone();
+            return (TestMetaItem) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new Error(e);
         }
@@ -174,14 +174,14 @@ public class TestItemMeta implements ItemMeta, Repairable {
         return !(hasDisplayName() || hasEnchants() || hasLore());
     }
 
-    boolean equalsCommon(TestItemMeta that) {
+    boolean equalsCommon(TestMetaItem that) {
         return ((this.hasDisplayName() ? that.hasDisplayName() && this.displayName.equals(that.displayName) : !that.hasDisplayName()))
                 && (this.hasEnchants() ? that.hasEnchants() && this.enchantments.equals(that.enchantments) : !that.hasEnchants())
                 && (this.hasLore() ? that.hasLore() && this.lores.equals(that.lores) : !that.hasLore())
                 && (this.hasRepairCost() ? that.hasRepairCost() && this.repairCost == that.repairCost : !that.hasRepairCost());
     }
 
-    boolean notUncommon(TestItemMeta meta) {
+    boolean notUncommon(TestMetaItem meta) {
         return true;
     }
 }

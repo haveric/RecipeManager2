@@ -1,7 +1,7 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.RecipeProcessor;
-import haveric.recipeManager.TestBannerMeta;
+import haveric.recipeManager.TestMetaBanner;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -44,7 +44,7 @@ public class FlagBannerItemTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertTrue(a.hasReasons());
             } else {
-                TestBannerMeta meta = (TestBannerMeta) result.getItemMeta();
+                TestMetaBanner meta = (TestMetaBanner) result.getItemMeta();
                 String name = recipe.getName();
                 assertFalse(a.hasReasons());
 
