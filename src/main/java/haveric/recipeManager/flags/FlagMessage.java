@@ -8,6 +8,11 @@ import org.apache.commons.lang.Validate;
 public class FlagMessage extends Flag {
 
     @Override
+    protected String getFlagType() {
+        return FlagType.MESSAGE;
+    }
+
+    @Override
     protected String[] getArguments() {
         return new String[] {
             "{flag} <text>", };

@@ -1,0 +1,9 @@
+craft
+dirt + dirt
+= dirt
+@broadcast {playerdisplay} <green>crafted something!
+
+craft
+dirt + stone_sword
+= stone_sword
+@broadcast '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z} | ranks.admins

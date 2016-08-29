@@ -1,0 +1,10 @@
+craft
+dirt + dirt
+= dirt
+@message <green>Good job!
+
+craft
+dirt + stone_sword
+= stone_sword
+@message <green>Good job!
+@message <gray>Now you can die&c happy<gray> that you crafted that.

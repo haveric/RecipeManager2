@@ -98,6 +98,8 @@ public class FlagBroadcast extends Flag {
         Validate.notNull(message);
 
         String parsedMessage = RMCUtil.parseColors(a.parseVariables(message), false);
+        System.out.println("Parsed: " + parsedMessage);
+        System.out.println("Permission: " + permission);
         if (permission == null) {
             Bukkit.broadcastMessage(parsedMessage);
         } else {
