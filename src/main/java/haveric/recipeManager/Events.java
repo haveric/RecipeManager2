@@ -378,6 +378,7 @@ public class Events implements Listener {
 
                         if (result.hasFlag(FlagType.NO_RESULT)) {
                             event.setCurrentItem(new ItemStack(Material.AIR));
+                            event.setCursor(new ItemStack(Material.AIR));
                             subtract = true;
                             onlyExtra = false;
                         }
