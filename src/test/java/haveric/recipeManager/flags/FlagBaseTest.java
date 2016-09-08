@@ -27,15 +27,16 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class FlagBaseTest {
 
     private Recipes recipes;
+    protected Settings settings;
     protected File workDir;
     protected UUID testUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
     @Before
     public void setupBase() {
         mockStatic(Settings.class);
-        Settings mockSettings = mock(Settings.class);
-        when(Settings.getInstance()).thenReturn(mockSettings);
-        when(mockSettings.getMultithreading()).thenReturn(false);
+        settings = mock(Settings.class);
+        when(Settings.getInstance()).thenReturn(settings);
+        when(settings.getMultithreading()).thenReturn(false);
 
         mockStatic(MessageSender.class);
         when(MessageSender.getInstance()).thenReturn(TestMessageSender.getInstance());

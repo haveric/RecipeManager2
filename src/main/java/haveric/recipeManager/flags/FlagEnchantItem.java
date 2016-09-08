@@ -29,8 +29,8 @@ public class FlagEnchantItem extends Flag {
         return new String[] {
             "Enchants the result with the specified enchantment at specified level.",
             "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
-            "Optionally you can set the level of enchantment ",
-            "  Default is the enchantment's start level ",
+            "Optionally you can set the level of enchantment",
+            "  Default is the enchantment's start level",
             "  You can use 'max' to set it to enchantment's max level.",
             "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
             "",

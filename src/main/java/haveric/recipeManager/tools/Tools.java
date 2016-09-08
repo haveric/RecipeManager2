@@ -26,7 +26,7 @@ import java.util.Map.Entry;
  */
 public class Tools {
     public static Enchantment parseEnchant(String value) {
-        Enchantment enchant = null;
+        Enchantment enchant;
 
         try {
             enchant = Enchantment.getById(Integer.parseInt(value));
