@@ -209,7 +209,7 @@ public class FlagCooldown extends Flag {
 
         value = split[0].trim();
         float multiplier = 0;
-        float time = 0.0f;
+        float time;
 
         switch (value.charAt(value.length() - 1)) {
             case 'm':
