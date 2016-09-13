@@ -228,7 +228,7 @@ public class Files {
 
                 if (args != null) {
                     for (String a : args) {
-                        s.append(NL).append("  <b>").append(StringEscapeUtils.escapeHtml(a.replace("{flag}", flag.toString()))).append("</b>");
+                        s.append(NL).append("  <b>").append(StringEscapeUtils.escapeHtml(a.replace("{flag}", flag.getNameDisplay()))).append("</b>");
                     }
                 }
 
@@ -254,7 +254,7 @@ public class Files {
                     s.append(NL).append(NL).append("    <b>Examples:</b>");
 
                     for (String e : ex) {
-                        s.append(NL).append("      ").append(StringEscapeUtils.escapeHtml(e.replace("{flag}", flag.toString())));
+                        s.append(NL).append("      ").append(StringEscapeUtils.escapeHtml(e.replace("{flag}", flag.getNameDisplay())));
                     }
                 }
 
