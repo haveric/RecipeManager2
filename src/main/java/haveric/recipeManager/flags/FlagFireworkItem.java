@@ -67,6 +67,8 @@ public class FlagFireworkItem extends Flag {
 
     public FlagFireworkItem(FlagFireworkItem flag) {
         effects.addAll(flag.effects);
+
+        power = flag.getPower();
     }
 
     @Override
@@ -113,7 +115,7 @@ public class FlagFireworkItem extends Flag {
         value = value.toLowerCase();
 
         if (value.startsWith("effect")) {
-            value = value.substring("power".length()).trim();
+            value = value.substring("effect".length()).trim();
 
             FireworkEffect effect = Tools.parseFireworkEffect(value, getFlagType());
 
