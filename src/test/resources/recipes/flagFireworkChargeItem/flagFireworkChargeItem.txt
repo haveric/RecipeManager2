@@ -1,0 +1,16 @@
+craft first
+dirt + dirt
+= firework_charge
+@fireworkchargeitem trail | color 255 0 0, 0 255 0 | type ball_large
+
+
+craft second
+dirt + stone_sword
+= firework_charge
+@fireworkchargeitem type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker
+
+craft two
+dirt + iron_sword
+= firework_charge
+@fireworkchargeitem trail | color 255 0 0, 0 255 0 | type ball_large
+@fireworkchargeitem type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker

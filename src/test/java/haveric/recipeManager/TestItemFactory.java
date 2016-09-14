@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class TestItemFactory implements ItemFactory {
+    public static final Color DEFAULT_LEATHER_COLOR = Color.fromRGB(0xA06540);
 
     public TestItemFactory() { }
 
@@ -22,7 +23,7 @@ public class TestItemFactory implements ItemFactory {
             case AIR:
                 return null;
             case WRITTEN_BOOK:
-                //return meta instanceof CraftMetaBookSigned ? meta : new CraftMetaBookSigned(meta);
+                return meta instanceof TestMetaBookSigned ? meta : new TestMetaBookSigned(meta);
             case BOOK_AND_QUILL:
                 return meta != null && meta.getClass().equals(TestMetaBook.class) ? meta : new TestMetaBook(meta);
             case SKULL_ITEM:
@@ -31,20 +32,20 @@ public class TestItemFactory implements ItemFactory {
             case LEATHER_CHESTPLATE:
             case LEATHER_LEGGINGS:
             case LEATHER_BOOTS:
-                //return meta instanceof CraftMetaLeatherArmor ? meta : new CraftMetaLeatherArmor(meta);
+                return meta instanceof TestMetaLeatherArmor ? meta : new TestMetaLeatherArmor(meta);
             case POTION:
             case SPLASH_POTION:
             case LINGERING_POTION:
             case TIPPED_ARROW:
-                //return meta instanceof CraftMetaPotion ? meta : new CraftMetaPotion(meta);
+                return meta instanceof TestMetaPotion ? meta : new TestMetaPotion(meta);
             case MAP:
-                //return meta instanceof CraftMetaMap ? meta : new CraftMetaMap(meta);
+                return meta instanceof TestMetaMap ? meta : new TestMetaMap(meta);
             case FIREWORK:
-                //return meta instanceof CraftMetaFirework ? meta : new CraftMetaFirework(meta);
+                return meta instanceof TestMetaFirework ? meta : new TestMetaFirework(meta);
             case FIREWORK_CHARGE:
-                //return meta instanceof CraftMetaCharge ? meta : new CraftMetaCharge(meta);
+                return meta instanceof TestMetaCharge ? meta : new TestMetaCharge(meta);
             case ENCHANTED_BOOK:
-                //return meta instanceof CraftMetaEnchantedBook ? meta : new CraftMetaEnchantedBook(meta);
+                return meta instanceof TestMetaEnchantedBook ? meta : new TestMetaEnchantedBook(meta);
             case BANNER:
                 return meta instanceof TestMetaBanner ? meta : new TestMetaBanner(meta);
             case FURNACE:

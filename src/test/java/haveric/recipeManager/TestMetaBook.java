@@ -30,6 +30,9 @@ public class TestMetaBook extends TestMetaItem implements BookMeta {
         }
     }
 
+    boolean isBookEmpty() {
+        return !(hasPages() || hasAuthor() || hasTitle());
+    }
 
     public boolean hasAuthor() {
         return !Strings.isNullOrEmpty(author);

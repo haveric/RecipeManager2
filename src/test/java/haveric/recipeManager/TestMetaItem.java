@@ -184,4 +184,18 @@ public class TestMetaItem implements ItemMeta, Repairable {
     boolean notUncommon(TestMetaItem meta) {
         return true;
     }
+
+    static boolean checkConflictingEnchants(Map<Enchantment, Integer> enchantments, Enchantment ench) {
+        if (enchantments == null || enchantments.isEmpty()) {
+            return false;
+        }
+
+        for (Enchantment enchant : enchantments.keySet()) {
+            if (enchant.conflictsWith(ench)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
