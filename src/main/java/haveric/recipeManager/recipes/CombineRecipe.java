@@ -232,7 +232,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
             if (i == null) {
                 i = new MutableInt();
-                items.put(item, i);
+                items.put(item.clone(), i);
             }
 
             i.add(item.getAmount());
