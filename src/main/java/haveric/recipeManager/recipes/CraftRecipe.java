@@ -385,7 +385,7 @@ public class CraftRecipe extends WorkbenchRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.getInstance().get("recipebook.header.shapes"));
+        s.append(Messages.getInstance().parse("recipebook.header.shaped"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
@@ -398,7 +398,7 @@ public class CraftRecipe extends WorkbenchRecipe {
         }
 
         s.append('\n');
-        s.append('\n').append(Messages.getInstance().get("recipebook.header.shape")).append(RMCChatColor.GRAY).append('\n');
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.shape")).append(RMCChatColor.GRAY).append('\n');
 
         Map<String, Integer> charItems = new LinkedHashMap<>();
         int num = 1;
@@ -430,7 +430,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             }
         }
 
-        s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredients")).append(RMCChatColor.GRAY);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients")).append(RMCChatColor.GRAY);
 
         for (Entry<String, Integer> entry : charItems.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getValue()).append(RMCChatColor.GRAY).append(": ").append(entry.getKey());

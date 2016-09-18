@@ -210,7 +210,7 @@ public class CombineRecipe extends WorkbenchRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.getInstance().get("recipebook.header.shapeless"));
+        s.append(Messages.getInstance().parse("recipebook.header.shapeless"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
@@ -223,7 +223,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         }
 
         s.append('\n');
-        s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredients")).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients")).append(RMCChatColor.BLACK);
 
         Map<ItemStack, MutableInt> items = new HashMap<>();
 

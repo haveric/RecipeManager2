@@ -116,7 +116,7 @@ public class ToolsItem {
                 itemData = name;
             } else {
                 if (data == Vanilla.DATA_WILDCARD) {
-                    itemData = name + RMCChatColor.GRAY + ":" + Messages.getInstance().get("item.anydata");
+                    itemData = name + RMCChatColor.GRAY + ":" + Messages.getInstance().parse("item.anydata");
                 } else {
                     itemData = name + RMCChatColor.GRAY + ":" + data;
                 }

@@ -236,7 +236,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.getInstance().get("recipebook.header.smelt"));
+        s.append(Messages.getInstance().parse("recipebook.header.smelt"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
@@ -261,7 +261,7 @@ public class SmeltRecipe extends SingleResultRecipe {
                 s.append(Messages.getInstance().parse("recipebook.smelt.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
             } else {
                 if (minTime <= 0) {
-                    s.append(Messages.getInstance().get("recipebook.smelt.time.instant"));
+                    s.append(Messages.getInstance().parse("recipebook.smelt.time.instant"));
                 } else {
                     s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
                 }
@@ -272,7 +272,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         if (hasFuel()) {
             s.append('\n');
-            s.append('\n').append(Messages.getInstance().get("recipebook.header.requirefuel")).append(RMCChatColor.BLACK);
+            s.append('\n').append(Messages.getInstance().parse("recipebook.header.requirefuel")).append(RMCChatColor.BLACK);
             s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RED, RMCChatColor.BLACK, true));
         }
 

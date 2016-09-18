@@ -164,10 +164,10 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         String title = null;
 
         if (receive) {
-            title = Messages.getInstance().get("craft.result.receive.title.random");
+            title = Messages.getInstance().parse("craft.result.receive.title.random");
         } else {
-            title = Messages.getInstance().get("craft.result.noreceive.title");
-            lore.add(Messages.getInstance().get("craft.result.denied.info"));
+            title = Messages.getInstance().parse("craft.result.noreceive.title");
+            lore.add(Messages.getInstance().parse("craft.result.denied.info"));
         }
 
         for (ItemResult r : displayResults) {

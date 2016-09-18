@@ -109,7 +109,7 @@ public class RecipeBook extends AbstractRecipeBook {
 
         if (contents) {
             index = new ArrayList<>();
-            index.add(new StringBuilder(256).append(Messages.getInstance().get("recipebook.header.contents")).append("\n\n").append(RMCChatColor.BLACK));
+            index.add(new StringBuilder(256).append(Messages.getInstance().parse("recipebook.header.contents")).append("\n\n").append(RMCChatColor.BLACK));
         }
 
         for (String name : volumes.get(volumeID)) {

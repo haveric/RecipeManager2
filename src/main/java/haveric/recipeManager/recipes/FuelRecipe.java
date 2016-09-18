@@ -178,18 +178,18 @@ public class FuelRecipe extends BaseRecipe {
     public String printBook() {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.getInstance().get("recipebook.header.fuel"));
+        s.append(Messages.getInstance().parse("recipebook.header.fuel"));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
         }
 
         s.append('\n');
-        s.append('\n').append(Messages.getInstance().get("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
         s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK, false));
 
         s.append('\n');
-        s.append('\n').append(Messages.getInstance().get("recipebook.header.burntime")).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);
         s.append('\n');
 
         if (maxTime > minTime) {
