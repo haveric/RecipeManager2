@@ -58,7 +58,6 @@ public class FlagBlockTest extends FlagBaseTest {
         directFurnaceLoc = mock(Location.class);
         indirectFurnaceLoc = mock(Location.class);
 
-        mockStatic(Block.class);
         Block unpoweredFurnace = mock(Block.class);
         when(unpoweredFurnace.getType()).thenReturn(Material.FURNACE);
         when(unpoweredFurnaceLoc.getBlock()).thenReturn(unpoweredFurnace);
@@ -80,7 +79,6 @@ public class FlagBlockTest extends FlagBaseTest {
         directBrewingStandLoc = mock(Location.class);
         indirectBrewingStandLoc = mock(Location.class);
 
-        mockStatic(Block.class);
         Block unpoweredBrewingStand = mock(Block.class);
         when(unpoweredBrewingStand.getType()).thenReturn(Material.BREWING_STAND);
         when(unpoweredBrewingStandLoc.getBlock()).thenReturn(unpoweredBrewingStand);

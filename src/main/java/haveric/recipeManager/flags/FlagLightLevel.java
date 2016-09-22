@@ -2,7 +2,6 @@ package haveric.recipeManager.flags;
 
 import haveric.recipeManager.ErrorReporter;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 
 public class FlagLightLevel extends Flag {
 
@@ -179,6 +178,8 @@ public class FlagLightLevel extends Flag {
 
         if (split.length > 1) {
             setFailMessage(split[1].trim());
+        } else {
+            setFailMessage(null);
         }
 
         value = split[0].trim().toLowerCase();
@@ -238,7 +239,7 @@ public class FlagLightLevel extends Flag {
         }
 
         Block block = a.location().getBlock();
-        int light = 0;
+        int light;
 
         switch (lightType) {
             case 's':
@@ -251,30 +252,6 @@ public class FlagLightLevel extends Flag {
 
             default:
                 light = block.getLightLevel();
-        }
-
-        if (light == 0) {
-            BlockFace[] faces = BlockFace.values();
-
-            for (int f = 0; f < 6; f++) {
-                Block b = block.getRelative(faces[f]);
-                int l = 0;
-
-                switch (lightType) {
-                    case 's':
-                        l = b.getLightFromSky();
-                        break;
-
-                    case 'b':
-                        l = b.getLightFromBlocks();
-                        break;
-
-                    default:
-                        l = b.getLightLevel();
-                }
-
-                light = Math.max(light, l);
-            }
         }
 
         if (light < minLight || (maxLight > minLight && light > maxLight)) {
