@@ -1,0 +1,32 @@
+craft
+dirt + dirt
+= dirt
+@modmoney 0.5
+
+craft
+dirt + cobblestone
+= dirt
+@modmoney +.5
+
+craft
+dirt + diamond_sword
+= dirt
+@modmoney -2.5
+@modmoney .5
+
+
+craft
+dirt + stone_sword
+= stone_sword
+@modmoney -2.5 | <red>You lost {money}!
+
+craft
+dirt + iron_sword
+= iron_sword
+@modmoney = 0 | <red>You lost all your money!
+
+craft
+dirt + gold_sword
+= gold_sword
+@modmoney = 0
+@modmoney -2.5

@@ -23,7 +23,11 @@ public class FlagModLevel extends Flag {
             "Modifies crafter's level.",
             "Using this flag more than once will overwrite the previous one.",
             "",
-            "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+            "The '[modifier]' argument can be nothing at all or you can use",
+            "  + (which is the same as nothing, to add)",
+            "  - (to subtract)",
+            "  = (to set)",
+            "",
             "The '<number>' argument must be the amount of levels to modify.",
             "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
             "For the fail message you can use the following arguments:",
@@ -212,11 +216,23 @@ public class FlagModLevel extends Flag {
     }
 
     /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * switch(mod) { case '+': list.add(MessagesOld.FLAG_MODLEVEL_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(MessagesOld.FLAG_MODLEVEL_SUB.get("{amount}", amount,
-     * "{modifier}", mod, "{actualamount}", amount)); break; case '=': list.add(MessagesOld.FLAG_MODLEVEL_SET.get("{amount}", amount, "{modifier}", mod)); break; }
-     *
-     * return list; }
-     */
+    @Override
+    public List<String> information() {
+        List<String> list = new ArrayList<String>(1);
+
+        switch(mod) {
+            case '+':
+                list.add(MessagesOld.FLAG_MODLEVEL_ADD.get("{amount}", amount, "{modifier}", mod));
+                break;
+            case '-':
+                list.add(MessagesOld.FLAG_MODLEVEL_SUB.get("{amount}", amount, "{modifier}", mod, "{actualamount}", amount));
+                break;
+            case '=':
+                list.add(MessagesOld.FLAG_MODLEVEL_SET.get("{amount}", amount, "{modifier}", mod));
+                break;
+        }
+
+        return list;
+    }
+    */
 }

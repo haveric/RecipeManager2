@@ -39,6 +39,8 @@ public class FlagNeedMoney extends Flag {
 
     private double minMoney;
     private double maxMoney;
+    private boolean setBoth = false;
+
     private String failMessage;
 
     public FlagNeedMoney() {
@@ -48,11 +50,16 @@ public class FlagNeedMoney extends Flag {
         minMoney = flag.minMoney;
         maxMoney = flag.maxMoney;
         failMessage = flag.failMessage;
+        setBoth = flag.setBoth;
     }
 
     @Override
     public FlagNeedMoney clone() {
         return new FlagNeedMoney((FlagNeedMoney) super.clone());
+    }
+
+    public boolean getSetBoth() {
+        return setBoth;
     }
 
     public double getMinMoney() {
@@ -92,16 +99,15 @@ public class FlagNeedMoney extends Flag {
     }
 
     public boolean checkMoney(double money) {
-        boolean check = false;
+        boolean isValid;
 
-        if (minMoney == maxMoney) {
-            if (money >= minMoney) {
-                check = true;
-            }
-        } else if (money >= minMoney && money <= maxMoney) {
-            check = true;
+        isValid = money >= minMoney;
+
+        if (isValid && setBoth) {
+            isValid = money <= maxMoney;
         }
-        return check;
+
+        return isValid;
     }
 
     public String getFailMessage() {
@@ -117,6 +123,8 @@ public class FlagNeedMoney extends Flag {
         if (!Econ.getInstance().isEnabled()) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " does nothing because no Vault-supported economy plugin was detected.");
         }
+
+        setBoth = false;
 
         String[] split = value.split("\\|");
 
@@ -140,6 +148,7 @@ public class FlagNeedMoney extends Flag {
 
             try {
                 setMaxMoney(Double.valueOf(value));
+                setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required money number: " + value);
                 return false;

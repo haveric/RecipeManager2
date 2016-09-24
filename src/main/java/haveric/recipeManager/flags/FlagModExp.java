@@ -24,7 +24,11 @@ public class FlagModExp extends Flag {
             "Modifies crafter's experience points.",
             "Using this flag more than once will overwrite the previous one.",
             "",
-            "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+            "The '[modifier]' argument can be nothing at all or you can use",
+            "  + (which is the same as nothing, to add)",
+            "  - (to subtract)",
+            "  = (to set)",
+            "",
             "The '<amount>' argument must be the amount of experience to modify.",
             "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.", "For the fail message you can use the following arguments:",
             "  {amount}       = amount defined in the flag, never has modifier prefix.",
@@ -204,11 +208,22 @@ public class FlagModExp extends Flag {
     }
 
     /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * switch(mod) { case '+': list.add(MessagesOld.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(MessagesOld.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}",
-     * mod, "{actualamount}", amount)); break; case '=': list.add(MessagesOld.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod)); break; }
-     *
-     * return list; }
-     */
+    @Override
+    public List<String> information() {
+        List<String> list = new ArrayList<String>(1);
+
+        switch(mod) {
+           case '+':
+               list.add(MessagesOld.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod));
+               break;
+           case '-':
+               list.add(MessagesOld.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}", mod, "{actualamount}", amount));
+               break;
+           case '=':
+               list.add(MessagesOld.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod));
+               break;
+        }
+
+        return list; }
+    */
 }

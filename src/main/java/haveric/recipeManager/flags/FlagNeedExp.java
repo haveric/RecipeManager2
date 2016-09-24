@@ -63,6 +63,10 @@ public class FlagNeedExp extends Flag {
         return new FlagNeedExp((FlagNeedExp) super.clone());
     }
 
+    public boolean getSetBoth() {
+        return setBoth;
+    }
+
     public int getMinExp() {
         return minExp;
     }
@@ -129,6 +133,7 @@ public class FlagNeedExp extends Flag {
     protected boolean onParse(String value) {
         String[] split = value.split("\\|");
 
+        setBoth = false;
         if (split.length > 1) {
             setFailMessage(split[1].trim());
         }

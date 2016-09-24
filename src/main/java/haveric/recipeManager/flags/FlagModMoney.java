@@ -22,7 +22,11 @@ public class FlagModMoney extends Flag {
         return new String[] {
             "Modifies crafter's money.", "Using this flag more than once will overwrite the previous one.",
             "",
-            "The '[modifier]' argument can be nothing at all or you can use + (which is the same as nothing, to add), - (to subtract) or = (to set).",
+            "The '[modifier]' argument can be nothing at all or you can use",
+            "  + (which is the same as nothing, to add)",
+            "  - (to subtract)",
+            "  = (to set)",
+            "",
             "The '<number>' argument must be the amount of money to modify.",
             "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
             "For the fail message you can use the following arguments:",
@@ -211,11 +215,23 @@ public class FlagModMoney extends Flag {
     }
 
     /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * switch(mod) { case '+': list.add(MessagesOld.FLAG_MODMONEY_ADD.get("{amount}", amount, "{modifier}", mod)); break; case '-': list.add(MessagesOld.FLAG_MODMONEY_SUB.get("{amount}", amount,
-     * "{modifier}", mod)); break; case '=': list.add(MessagesOld.FLAG_MODMONEY_SET.get("{amount}", amount, "{modifier}", mod)); break; }
-     *
-     * return list; }
-     */
+    @Override
+    public List<String> information() {
+        List<String> list = new ArrayList<String>(1);
+
+        switch(mod) {
+            case '+':
+                list.add(MessagesOld.FLAG_MODMONEY_ADD.get("{amount}", amount, "{modifier}", mod));
+                break;
+            case '-':
+                list.add(MessagesOld.FLAG_MODMONEY_SUB.get("{amount}", amount, "{modifier}", mod));
+                break;
+            case '=':
+                list.add(MessagesOld.FLAG_MODMONEY_SET.get("{amount}", amount, "{modifier}", mod));
+                break;
+        }
+
+        return list;
+    }
+    */
 }

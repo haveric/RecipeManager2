@@ -11,7 +11,7 @@ public class FlagType {
     public static final String WORLD = "@world";
     public static final String HEIGHT = "@height";
     public static final String MOD_EXP = "@modexp";
-    public static final String NEED_EXP = "@needxp";
+    public static final String NEED_EXP = "@needexp";
     public static final String MOD_LEVEL = "@modlevel";
     public static final String NEED_LEVEL = "@needlevel";
     public static final String MOD_MONEY = "@modmoney";

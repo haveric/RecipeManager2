@@ -58,6 +58,10 @@ public class FlagNeedLevel extends Flag {
         return new FlagNeedLevel((FlagNeedLevel) super.clone());
     }
 
+    public boolean getSetBoth() {
+        return setBoth;
+    }
+
     public int getMinLevel() {
         return minLevel;
     }
@@ -84,7 +88,7 @@ public class FlagNeedLevel extends Flag {
     }
 
     public boolean checkLevel(int level) {
-        boolean isValid = false;
+        boolean isValid;
 
         isValid = level >= minLevel;
 
@@ -123,6 +127,8 @@ public class FlagNeedLevel extends Flag {
     @Override
     protected boolean onParse(String value) {
         String[] split = value.split("\\|");
+
+        setBoth = false;
 
         if (split.length > 1) {
             setFailMessage(split[1].trim());

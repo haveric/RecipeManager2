@@ -1,0 +1,32 @@
+craft
+dirt + dirt
+= dirt
+@modlevel 1
+
+craft
+dirt + cobblestone
+= dirt
+@modlevel +1
+
+craft
+dirt + diamond_sword
+= dirt
+@modlevel -2
+@modlevel 1
+
+
+craft
+dirt + stone_sword
+= stone_sword
+@modlevel -2 | <red>You lost {amount} levels.
+
+craft
+dirt + iron_sword
+= iron_sword
+@modlevel = 0 | <red>You've been set to level 0!
+
+craft
+dirt + gold_sword
+= gold_sword
+@modlevel = 0
+@modlevel -2
