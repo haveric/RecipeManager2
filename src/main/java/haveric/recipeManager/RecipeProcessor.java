@@ -157,7 +157,7 @@ public class RecipeProcessor implements Runnable {
             MessageSender.getInstance().error(sender, e, "Code error while processing recipes");
         } finally {
             task = null;
-            MessageSender.getInstance().info("Check: " + check + ", reg: " + registrator);
+
             if (check || registrator == null) {
                 return;
             }

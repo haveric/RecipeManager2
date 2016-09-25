@@ -150,8 +150,8 @@ public class RecipeManager extends JavaPlugin {
      */
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
         Settings.getInstance().reload(sender); // (re)load settings
-        Files.reload(sender); // (re)generate info files if they do not exist
         Messages.getInstance().reload(sender); // (re)load messages from messages.yml
+        Files.reload(sender); // (re)generate info files if they do not exist
 
         Updater.init(this, 32835, null);
 

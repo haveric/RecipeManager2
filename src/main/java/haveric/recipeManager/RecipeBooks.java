@@ -267,7 +267,6 @@ public class RecipeBooks {
                     parseRecipeName(id, value, recipes, allRecipes);
                 }
 
-                MessageSender.getInstance().info("RecipeBooks Recipes: " + RecipeManager.getRecipes().index.size());
                 // Get all recipes that have @recipebook flag for this book with this volume
                 for (BaseRecipe r : RecipeManager.getRecipes().index.keySet()) {
                     if (r.hasFlag(FlagType.ADD_TO_BOOK) && !allRecipes.contains(r.getName())) {
