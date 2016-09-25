@@ -109,12 +109,12 @@ public class FlagLaunchFirework extends Flag {
             }
         } else if (value.startsWith("power")) {
             value = value.substring("power".length()).trim();
-            int power = -1;
+            int power;
 
             try {
                 power = Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                // TODO: Handle Exception
+                power = -1;
             }
 
             if (power < 0 || power > 128) {

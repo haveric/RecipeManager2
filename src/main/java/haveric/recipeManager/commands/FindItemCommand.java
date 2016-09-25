@@ -37,12 +37,12 @@ public class FindItemCommand implements CommandExecutor {
 
             found.add(item.getType());
         } else {
-            int id = 0;
+            int id;
 
             try {
                 id = Integer.parseInt(find);
             } catch (NumberFormatException e) {
-                // TODO: Handle error
+                id = 0;
             }
 
             if (id > 0) {

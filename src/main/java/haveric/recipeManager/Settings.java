@@ -227,10 +227,12 @@ public class Settings {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
-        //
-        // TODO remove for(Enchantment e : Enchantment.values()) { enchantNames.put(String.valueOf(e.getId()), e); enchantNames.put(Tools.parseAliasName(e.toString()), e); enchantPrint.put(e,
-        // Tools.parseAliasPrint(e.toString())); }
-        //
+
+        /* TODO remove
+        for (Enchantment e : Enchantment.values()) {
+            enchantNames.put(String.valueOf(e.getId()), e);
+            enchantNames.put(Tools.parseAliasName(e.toString()), e); enchantPrint.put(e, Tools.parseAliasPrint(e.toString()));
+        } */
 
         for (String arg : enchantAliasesConfig.getKeys(false)) {
             if (arg.equals("lastchanged")) {

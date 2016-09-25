@@ -243,12 +243,12 @@ public class RecipeBooks {
         for (String key : yml.getKeys(false)) {
             if (key.startsWith("volume")) {
                 String volString = key.substring("volume".length()).trim();
-                int volume = 0;
+                int volume;
 
                 try {
                     volume = Integer.parseInt(volString);
                 } catch (NumberFormatException e) {
-                    // TODO: Handle exception and/or prevent following code from running?
+                    volume = 0;
                 }
 
                 if (volume < 1) {
