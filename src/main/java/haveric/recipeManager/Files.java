@@ -595,7 +595,7 @@ public class Files {
             if (i + 3 < soundsLength) {
                 sounds3 = sounds[i + 3].name();
             }
-            s.append(NL).append(String.format(" %-24s%-24s%-24s%s", sounds[i].name(), sounds1, sounds2, sounds3));
+            s.append(NL).append(String.format(" %-36s%-36s%-36s%s", sounds[i].name(), sounds1, sounds2, sounds3));
         }
 
         s.append(NL);
