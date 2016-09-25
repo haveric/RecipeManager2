@@ -44,7 +44,7 @@ public class FlagLaunchFirework extends Flag {
             "Effects can be listed in any order.",
             "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
             "",
-            "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds, values above 4 are NOT recommended because it heavily affects client performance.", };
+            "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds of flight, values above 4 are NOT recommended because it heavily affects client performance, default 2.", };
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FlagLaunchFirework extends Flag {
             "{flag} power 2", };
     }
 
-
+    private int DEFAULT_POWER = 2;
     private FireworkMeta firework;
     private float chance = 100;
 
@@ -96,6 +96,8 @@ public class FlagLaunchFirework extends Flag {
         if (firework == null) {
             firework = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK);
         }
+
+        firework.setPower(DEFAULT_POWER);
 
         if (value.startsWith("effect")) {
             value = value.substring("effect".length()).trim();
