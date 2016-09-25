@@ -36,7 +36,7 @@ public class TestEnchantmentSharpness extends Enchantment {
 
     @Override
     public boolean canEnchantItem(ItemStack item) {
-        return false;
+        return true;
     }
 
 }
