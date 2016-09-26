@@ -33,8 +33,8 @@ public class Conditions implements Cloneable {
     private Map<Short, Boolean> dataValues = new HashMap<>();
     private Map<Short, Boolean> dataBits = new HashMap<>();
     private int amount;
-    private Map<Enchantment, Map<Short, Boolean>> enchants = new HashMap<>();
-    private Map<Enchantment, Map<Short, Boolean>> bookEnchants = new HashMap<>();
+    private Map<Enchantment, Map<Integer, Boolean>> enchants = new HashMap<>();
+    private Map<Enchantment, Map<Integer, Boolean>> bookEnchants = new HashMap<>();
     private String name;
     private List<String> lores = new ArrayList<>();
     private Color minColor;
@@ -66,14 +66,14 @@ public class Conditions implements Cloneable {
 
         amount = original.amount;
 
-        for (Entry<Enchantment, Map<Short, Boolean>> e : original.enchants.entrySet()) {
-            Map<Short, Boolean> map = new HashMap<>(e.getValue().size());
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : original.enchants.entrySet()) {
+            Map<Integer, Boolean> map = new HashMap<>(e.getValue().size());
             map.putAll(e.getValue());
             enchants.put(e.getKey(), map);
         }
 
-        for (Entry<Enchantment, Map<Short, Boolean>> e : original.bookEnchants.entrySet()) {
-            Map<Short, Boolean> map = new HashMap<>(e.getValue().size());
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : original.bookEnchants.entrySet()) {
+            Map<Integer, Boolean> map = new HashMap<>(e.getValue().size());
             map.putAll(e.getValue());
             bookEnchants.put(e.getKey(), map);
         }
@@ -326,7 +326,7 @@ public class Conditions implements Cloneable {
     /**
      * @return enchantments map, never null.
      */
-    public Map<Enchantment, Map<Short, Boolean>> getEnchants() {
+    public Map<Enchantment, Map<Integer, Boolean>> getEnchants() {
         return enchants;
     }
 
@@ -336,7 +336,7 @@ public class Conditions implements Cloneable {
      *
      * @param newEnchants
      */
-    public void setEnchants(Map<Enchantment, Map<Short, Boolean>> newEnchants) {
+    public void setEnchants(Map<Enchantment, Map<Integer, Boolean>> newEnchants) {
         if (newEnchants == null) {
             enchants.clear();
         } else {
@@ -345,7 +345,7 @@ public class Conditions implements Cloneable {
     }
 
     public void addEnchant(Enchantment enchant) {
-        enchants.put(enchant, new HashMap<Short, Boolean>(0));
+        enchants.put(enchant, new HashMap<Integer, Boolean>(0));
     }
 
     public void addEnchantLevel(Enchantment enchant, short level) {
@@ -361,14 +361,14 @@ public class Conditions implements Cloneable {
     }
 
     public void addEnchantLevelRange(Enchantment enchant, short min, short max, boolean allow) {
-        Map<Short, Boolean> levels = enchants.get(enchant);
+        Map<Integer, Boolean> levels = enchants.get(enchant);
 
         if (levels == null) {
             levels = new HashMap<>();
             enchants.put(enchant, levels);
         }
 
-        for (short i = min; i <= max; i++) {
+        for (int i = min; i <= max; i++) {
             levels.put(i, allow);
         }
     }
@@ -387,26 +387,35 @@ public class Conditions implements Cloneable {
         }
 
         if (enchantsToCheck != null && !enchantsToCheck.isEmpty()) {
-            for (Entry<Enchantment, Map<Short, Boolean>> e : enchants.entrySet()) {
-                Integer level = enchantsToCheck.get(e.getKey());
+            for (Entry<Enchantment, Map<Integer, Boolean>> e : enchants.entrySet()) {
+                boolean checkedHasEnchant = enchantsToCheck.containsKey(e.getKey());
 
-                // TODO test if proper
+                if (checkedHasEnchant) {
+                    // All levels of the enchant are allowed
+                    if (e.getValue().isEmpty()) {
+                        continue;
+                    }
 
-                if (level == null) {
+                    Integer level = enchantsToCheck.get(e.getKey());
+
+                    boolean hasEnchant = e.getValue().get(level) != null;
+
+                    if (!hasEnchant) {
+                        return false;
+                    }
+                } else {
                     return false;
-                } else if (!e.getValue().isEmpty()) {
-                    return e.getValue().get(level);
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     public String getEnchantsString() {
         StringBuilder s = new StringBuilder();
 
-        for (Entry<Enchantment, Map<Short, Boolean>> e : getEnchants().entrySet()) {
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : getEnchants().entrySet()) {
             if (s.length() > 0) {
                 s.append("; ");
             }
@@ -417,7 +426,7 @@ public class Conditions implements Cloneable {
                 s.append(' ');
                 boolean first = true;
 
-                for (Entry<Short, Boolean> l : e.getValue().entrySet()) {
+                for (Entry<Integer, Boolean> l : e.getValue().entrySet()) {
                     if (first) {
                         first = false;
                     } else {
@@ -439,7 +448,7 @@ public class Conditions implements Cloneable {
     /**
      * @return book enchantments map, never null.
      */
-    public Map<Enchantment, Map<Short, Boolean>> getBookEnchants() {
+    public Map<Enchantment, Map<Integer, Boolean>> getBookEnchants() {
         return bookEnchants;
     }
 
@@ -449,7 +458,7 @@ public class Conditions implements Cloneable {
      *
      * @param newEnchants
      */
-    public void setBookEnchants(Map<Enchantment, Map<Short, Boolean>> newEnchants) {
+    public void setBookEnchants(Map<Enchantment, Map<Integer, Boolean>> newEnchants) {
         if (newEnchants == null) {
             bookEnchants.clear();
         } else {
@@ -458,7 +467,7 @@ public class Conditions implements Cloneable {
     }
 
     public void addBookEnchant(Enchantment enchant) {
-        bookEnchants.put(enchant, new HashMap<Short, Boolean>(0));
+        bookEnchants.put(enchant, new HashMap<Integer, Boolean>(0));
     }
 
     public void addBookEnchantLevel(Enchantment enchant, short level) {
@@ -474,14 +483,14 @@ public class Conditions implements Cloneable {
     }
 
     public void addBookEnchantLevelRange(Enchantment enchant, short min, short max, boolean allow) {
-        Map<Short, Boolean> levels = bookEnchants.get(enchant);
+        Map<Integer, Boolean> levels = bookEnchants.get(enchant);
 
         if (levels == null) {
             levels = new HashMap<>();
             bookEnchants.put(enchant, levels);
         }
 
-        for (short i = min; i <= max; i++) {
+        for (int i = min; i <= max; i++) {
             levels.put(i, allow);
         }
     }
@@ -500,26 +509,35 @@ public class Conditions implements Cloneable {
         }
 
         if (enchantsToCheck != null && !enchantsToCheck.isEmpty()) {
-            for (Entry<Enchantment, Map<Short, Boolean>> e : bookEnchants.entrySet()) {
-                Integer level = enchantsToCheck.get(e.getKey());
+            for (Entry<Enchantment, Map<Integer, Boolean>> e : bookEnchants.entrySet()) {
+                boolean checkedHasEnchant = enchantsToCheck.containsKey(e.getKey());
 
-                // TODO test if proper
+                if (checkedHasEnchant) {
+                    // All levels of the enchant are allowed
+                    if (e.getValue().isEmpty()) {
+                        continue;
+                    }
 
-                if (level == null) {
+                    Integer level = enchantsToCheck.get(e.getKey());
+
+                    boolean hasEnchant = e.getValue().get(level) != null;
+
+                    if (!hasEnchant) {
+                        return false;
+                    }
+                } else {
                     return false;
-                } else if (!e.getValue().isEmpty()) {
-                    return e.getValue().get(level);
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     public String getBookEnchantsString() {
         StringBuilder s = new StringBuilder();
 
-        for (Entry<Enchantment, Map<Short, Boolean>> e : getBookEnchants().entrySet()) {
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : getBookEnchants().entrySet()) {
             if (s.length() > 0) {
                 s.append("; ");
             }
@@ -530,7 +548,7 @@ public class Conditions implements Cloneable {
                 s.append(' ');
                 boolean first = true;
 
-                for (Entry<Short, Boolean> l : e.getValue().entrySet()) {
+                for (Entry<Integer, Boolean> l : e.getValue().entrySet()) {
                     if (first) {
                         first = false;
                     } else {
