@@ -1,0 +1,10 @@
+craft
+@failmessage <red>YOU FAILED, MWaHahahah!
+dirt + dirt
+= dirt
+
+craft
+@failmessage <red>YOU FAILED, MWaHahahah!
+@failmessage Test
+dirt + stone_sword
+= stone_sword
