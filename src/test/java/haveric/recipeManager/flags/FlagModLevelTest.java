@@ -27,8 +27,7 @@ public class FlagModLevelTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).build();
-            a.setPlayerUUID(testUUID);
+            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
 
             ItemResult result = recipe.getResult(a);
 

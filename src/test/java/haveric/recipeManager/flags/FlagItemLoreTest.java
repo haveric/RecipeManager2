@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 public class FlagItemLoreTest extends FlagBaseTest {
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagItemLore/flagItemLore.txt");
+        File file = new File("src/test/resources/recipes/flagItemLore/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

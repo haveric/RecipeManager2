@@ -105,7 +105,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagLightLevel/flagLightLevel.txt");
+        File file = new File("src/test/resources/recipes/flagLightLevel/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -115,8 +115,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).build();
-            a.setPlayerUUID(testUUID);
+            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
             a.setLocation(light0Loc);
 
             ItemResult result = recipe.getResult(a);

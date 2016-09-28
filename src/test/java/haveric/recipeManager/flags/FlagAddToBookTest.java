@@ -5,8 +5,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.data.RecipeBook;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,9 +13,7 @@ import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagAddToBookTest extends FlagBaseTest {
 
@@ -46,10 +42,10 @@ public class FlagAddToBookTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagAddToBook/flagAddToBook.txt");
+        File file = new File("src/test/resources/recipes/flagAddToBook/");
         RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
 
-        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+        //Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
         Recipes recipes = RecipeManager.getRecipes();
 

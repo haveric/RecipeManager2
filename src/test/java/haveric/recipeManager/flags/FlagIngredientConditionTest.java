@@ -7,7 +7,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -22,7 +21,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagIngredientCondition/flagIngredientCondition.txt");
+        File file = new File("src/test/resources/recipes/flagIngredientCondition/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

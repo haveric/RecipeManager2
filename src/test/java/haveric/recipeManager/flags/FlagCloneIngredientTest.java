@@ -69,8 +69,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).inventory(inventory).build();
-            a.setPlayerUUID(testUUID);
+            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventory(inventory).build();
 
             ItemResult result = recipe.getResult(a);
 
