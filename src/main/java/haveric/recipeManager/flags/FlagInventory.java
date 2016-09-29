@@ -18,7 +18,7 @@ public class FlagInventory extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <inventory type> , ... | [fail message]", };
+            "{flag} <inventory type> , ... | [arguments]", };
     }
 
     @Override
@@ -29,22 +29,29 @@ public class FlagInventory extends Flag {
             "The <inventory type> argument is required",
             "  Values: " + RMCUtil.collectionToString(Arrays.asList(InventoryType.values())).toLowerCase(),
             "",
-            "Can declare multiple inventory types seperated by commas",
+            "Can declare multiple inventory types separated by commas",
             "",
-            "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
-            "In the message the following variables can be used:",
-            "  {inventory} = name of inventory type(s)", };
+            "",
+            "Optional arguments:",
+            "  title <text>      - Add an inventory title restriction",
+            "",
+            "  failmsg <message> - Overwrite the fail message or you can use 'false' to hide it.",
+            "    In the message the following variables can be used:",
+            "      {inventory} = name of inventory type(s)",
+            "      {title}     = title of inventory", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag} crafting // Player crafting menu",
-            "{flag} workbench // Must use a crafting table", };
+            "{flag} workbench // Must use a crafting table",
+            "{flag} workbench | title Custom // Must use a crafting table named 'Custom'", };
     }
 
 
     private List<InventoryType> inventories = new ArrayList<>();
+    private String title;
     private String failMessage;
 
     public FlagInventory() {
@@ -52,6 +59,8 @@ public class FlagInventory extends Flag {
 
     public FlagInventory(FlagInventory flag) {
         inventories = flag.inventories;
+        title = flag.title;
+        failMessage = flag.failMessage;
     }
 
     @Override
@@ -71,6 +80,18 @@ public class FlagInventory extends Flag {
         inventories.add(inventory);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String newTitle) {
+        title = newTitle;
+    }
+
+    public boolean hasTitle() {
+        return title != null;
+    }
+
     public String getFailMessage() {
         return failMessage;
     }
@@ -84,7 +105,15 @@ public class FlagInventory extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(split[1].trim());
+            for (int i = 1; i < split.length; i++) {
+                value = split[i].trim();
+
+                if (value.toLowerCase().startsWith("title")) {
+                    setTitle(value.substring("title".length()).trim());
+                } else if (value.toLowerCase().startsWith("failmsg")) {
+                    setFailMessage(value.substring("failmsg".length()).trim());
+                }
+            }
         }
 
         split = split[0].toLowerCase().split(",");
@@ -113,10 +142,14 @@ public class FlagInventory extends Flag {
                     break;
                 }
             }
+
+            if (hasTitle()) {
+                success = getTitle().equals(a.inventory().getTitle());
+            }
         }
 
         if (!success) {
-            a.addReason("flag.inventory", failMessage, "{inventory}", getInventories().toString());
+            a.addReason("flag.inventory", failMessage, "{inventory}", getInventories().toString(), "{title}", a.inventory().getTitle());
         }
     }
 }
