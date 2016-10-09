@@ -4,7 +4,8 @@ import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.ConditionsHold.ConditionsSlot;
+import haveric.recipeManager.flags.conditions.ConditionsHold;
+import haveric.recipeManager.flags.conditions.ConditionsHold.ConditionsSlot;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -173,7 +174,7 @@ public class FlagHoldItem extends Flag {
 
         cond.setIngredient(item);
 
-        ConditionsHold.parse(value, args, cond);
+        cond.parse(value, args);
 
         return true;
     }

@@ -1,6 +1,7 @@
-package haveric.recipeManager.flags;
+package haveric.recipeManager.flags.conditions;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.flags.Args;
 import org.bukkit.inventory.ItemStack;
 
 public class ConditionsHold extends Conditions {
@@ -37,7 +38,7 @@ public class ConditionsHold extends Conditions {
         return checkIngredient(item, a, addReasons);
     }
 
-    public static void parse(String value, String[] args, ConditionsHold cond) {
+    public void parse(String value, String[] args) {
         for (int i = 1; i < args.length; i++) {
             String arg = args[i].trim().toLowerCase();
 
@@ -45,24 +46,24 @@ public class ConditionsHold extends Conditions {
                 String val = arg.substring("slot".length()).trim();
 
                 if (val.equals("mainhand")) {
-                    cond.setSlot(ConditionsSlot.MAINHAND);
+                    setSlot(ConditionsSlot.MAINHAND);
                 } else if (val.equals("offhand") || val.equals("shield")) {
-                    cond.setSlot(ConditionsSlot.OFFHAND);
+                    setSlot(ConditionsSlot.OFFHAND);
                 } else if (val.equals("helmet")) {
-                    cond.setSlot(ConditionsSlot.HELMET);
+                    setSlot(ConditionsSlot.HELMET);
                 } else if (val.equals("chest") || val.equals("chestplate")) {
-                    cond.setSlot(ConditionsSlot.CHEST);
+                    setSlot(ConditionsSlot.CHEST);
                 } else if (val.equals("legs") || val.equals("leggings")) {
-                    cond.setSlot(ConditionsSlot.LEGS);
+                    setSlot(ConditionsSlot.LEGS);
                 } else if (val.equals("boots")) {
-                    cond.setSlot(ConditionsSlot.BOOTS);
+                    setSlot(ConditionsSlot.BOOTS);
                 } else if (val.equals("inventory")) {
-                    cond.setSlot(ConditionsSlot.INVENTORY);
+                    setSlot(ConditionsSlot.INVENTORY);
                 } else {
-                    ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'slot' argument with invalid value: " + val);
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'slot' argument with invalid value: " + val);
                 }
             } else {
-                parseArg(value, arg, cond);
+                parseArg(value, arg);
             }
         }
     }

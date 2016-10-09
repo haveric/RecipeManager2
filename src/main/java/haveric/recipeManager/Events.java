@@ -1382,31 +1382,28 @@ public class Events implements Listener {
             Block block = event.getBlock();
             Location location = block.getLocation();
             BrewingStandData data = BrewingStands.get(location);
-
             Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
             ItemResult result = recipe.getResult(a);
 
-            if (result != null && recipe.sendPrepare(a) && result.sendPrepare(a)) {
+            if (result != null && recipe.sendPrepare(a)) {
                 if (recipe.checkFlags(a) && result.checkFlags(a)) {
-                    ItemStack potion = recipe.getPotion();
+                    @SuppressWarnings("unchecked")
+                    List<Boolean> potionBools = (List<Boolean>) a.extra();
 
                     ItemStack bukkitResult = result.toItemStack();
-                    ItemStack potion1 = inventory.getItem(0);
-                    ItemStack potion2 = inventory.getItem(1);
-                    ItemStack potion3 = inventory.getItem(2);
 
                     boolean cancel = false;
-                    if (ToolsItem.isSameItem(potion, potion1, true)) {
+                    if (potionBools.get(0)) {
                         inventory.setItem(0, bukkitResult.clone());
                         cancel = true;
                     }
 
-                    if (ToolsItem.isSameItem(potion, potion2, true)) {
+                    if (potionBools.get(1)) {
                         inventory.setItem(1, bukkitResult.clone());
                         cancel = true;
                     }
 
-                    if (ToolsItem.isSameItem(potion, potion3, true)) {
+                    if (potionBools.get(2)) {
                         inventory.setItem(2, bukkitResult.clone());
                         cancel = true;
                     }

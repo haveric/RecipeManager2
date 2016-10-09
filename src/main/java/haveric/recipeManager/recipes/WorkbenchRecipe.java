@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.flags.*;
+import haveric.recipeManager.flags.conditions.ConditionsIngredient;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;

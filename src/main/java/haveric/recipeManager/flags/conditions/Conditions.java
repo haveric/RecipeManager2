@@ -1,7 +1,9 @@
-package haveric.recipeManager.flags;
+package haveric.recipeManager.flags.conditions;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.flags.ArgBuilder;
+import haveric.recipeManager.flags.Args;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -10,11 +12,17 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +47,8 @@ public class Conditions implements Cloneable {
     private List<String> lores = new ArrayList<>();
     private Color minColor;
     private Color maxColor;
+    private Map<PotionType, ConditionPotion> potionConditions = new HashMap<>();
+    private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private boolean noMeta = false;
     private boolean noName = false;
     private boolean noLore = false;
@@ -85,6 +95,9 @@ public class Conditions implements Cloneable {
         minColor = original.minColor;
         maxColor = original.maxColor;
 
+        potionConditions.putAll(original.potionConditions);
+        potionEffectConditions.putAll(original.potionEffectConditions);
+
         setNoMeta(original.isNoMeta());
         setNoName(original.isNoName());
         setNoLore(original.isNoLore());
@@ -100,7 +113,7 @@ public class Conditions implements Cloneable {
         return new Conditions(this);
     }
 
-    protected void setIngredient(ItemStack newIngredient) {
+    public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
     }
 
@@ -791,6 +804,98 @@ public class Conditions implements Cloneable {
         return false;
     }
 
+    public boolean hasPotion() {
+        return !potionConditions.isEmpty();
+    }
+
+    public boolean checkPotion(PotionMeta meta, Material potionMaterial) {
+        int conditionsMet = 0;
+
+        for (Map.Entry<PotionType, ConditionPotion> entry : potionConditions.entrySet()) {
+            boolean success = true;
+            PotionType type = entry.getKey();
+            ConditionPotion cond = entry.getValue();
+
+            PotionData data = meta.getBasePotionData();
+            if (type == null || type.equals(data.getType())) {
+                if (cond.hasExtended()) {
+                    if (!cond.getExtended().equals(data.isExtended())) {
+                        success = false;
+                    }
+                }
+
+                if (cond.hasLevel()) {
+                    if (cond.getLevel() == 1 && data.isUpgraded() || cond.getLevel() == 2 && !data.isUpgraded()) {
+                        success = false;
+                    }
+                }
+            } else {
+                success = false;
+            }
+
+            if (success) {
+                conditionsMet ++;
+            }
+        }
+
+        return conditionsMet == potionConditions.entrySet().size();
+    }
+
+    public boolean hasPotionEffect() {
+        return !potionEffectConditions.isEmpty();
+    }
+
+    public boolean checkPotionEffect(PotionMeta meta) {
+        int conditionsMet = 0;
+
+        for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : potionEffectConditions.entrySet()) {
+            boolean anySuccess = false;
+            PotionEffectType type = entry.getKey();
+            ConditionPotionEffect cond = entry.getValue();
+
+            List<PotionEffect> effects = meta.getCustomEffects();
+            for (PotionEffect effect : effects) {
+                boolean success = true;
+                if (type == null || type.equals(effect.getType())) {
+                    if (cond.hasDuration()) {
+                        int duration = effect.getDuration();
+
+                        if (duration < cond.getDurationMinLevel() || duration > cond.getDurationMaxLevel()) {
+                            success = false;
+                        }
+                    }
+
+                    if (cond.hasAmplify()) {
+                        int amplifier = effect.getAmplifier();
+
+                        if (amplifier < cond.getAmplifyMinLevel() || amplifier > cond.getAmplifyMaxLevel()) {
+                            success = false;
+                        }
+                    }
+
+                    if (cond.hasAmbient()) {
+                        if (!cond.getAmbient().equals(effect.isAmbient())) {
+                            success = false;
+                        }
+                    }
+                } else {
+                    success = false;
+                }
+
+                if (success) {
+                    anySuccess = true;
+                    break;
+                }
+            }
+
+            if (anySuccess) {
+                conditionsMet ++;
+            }
+        }
+
+        return conditionsMet == potionConditions.entrySet().size();
+    }
+
     /**
      * Check the supplied item with supplied arguments against this condition class.
      *
@@ -929,6 +1034,60 @@ public class Conditions implements Cloneable {
             }
         }
 
+        if (hasPotion()) {
+            boolean failed = true;
+
+            if (meta instanceof PotionMeta) {
+                PotionMeta potion = (PotionMeta) meta;
+
+                if (checkPotion(potion, item.getType())) {
+                    failed = false;
+                }
+            }
+
+            if (failed) {
+                if (a == null) {
+                    return false;
+                }
+
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nopotion", getFailMessage(), "{item}", ToolsItem.print(item));
+                }
+                ok = false;
+
+                if (getFailMessage() != null) {
+                    return false;
+                }
+            }
+        }
+
+        if (hasPotionEffect()) {
+            boolean failed = true;
+
+            if (meta instanceof PotionMeta) {
+                PotionMeta potion = (PotionMeta) meta;
+
+                if (checkPotionEffect(potion)) {
+                    failed = false;
+                }
+            }
+
+            if (failed) {
+                if (a == null) {
+                    return false;
+                }
+
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nopotioneffect", getFailMessage(), "{item}", ToolsItem.print(item));
+                }
+                ok = false;
+
+                if (getFailMessage() != null) {
+                    return false;
+                }
+            }
+        }
+
         return ok;
     }
 
@@ -1000,12 +1159,12 @@ public class Conditions implements Cloneable {
         flagType = newFlagType;
     }
 
-    public static void parseArg(String value, String arg, Conditions cond) {
-        ItemStack item = cond.getIngredient();
+    public void parseArg(String value, String arg) {
+        ItemStack item = getIngredient();
 
         if (arg.startsWith("data")) {
             if (item.getDurability() != Vanilla.DATA_WILDCARD) {
-                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
                 return;
             }
 
@@ -1023,20 +1182,20 @@ public class Conditions implements Cloneable {
 
                 short maxDurability = item.getType().getMaxDurability();
                 if (val.equals("all")) {
-                    cond.setAllSet(!not);
+                    setAllSet(!not);
                 } else if (val.equals("vanilla")) {
-                    cond.addDataValueRange((short) 0, maxDurability, !not);
+                    addDataValueRange((short) 0, maxDurability, !not);
                 } else if (val.equals("damaged")) {
                     if ((maxDurability - 1) > 0) {
-                        cond.addDataValueRange((short) 1, maxDurability, !not);
+                        addDataValueRange((short) 1, maxDurability, !not);
                     }
                 } else if (val.equals("new")) {
-                    cond.addDataValueRange((short) 0, (short) 0, !not);
+                    addDataValueRange((short) 0, (short) 0, !not);
                 } else if (val.matches("(.*):(.*)")) {
                     ItemStack match = Tools.parseItem(val, Vanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
                     if (match != null && match.getDurability() != Vanilla.DATA_WILDCARD) {
-                        cond.addDataValue(match.getDurability(), !not);
+                        addDataValue(match.getDurability(), !not);
                     } else {
                         // ErrorReporter.getInstance().warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
                     }
@@ -1051,16 +1210,16 @@ public class Conditions implements Cloneable {
                             min = Short.valueOf(split[0].trim());
                             max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid numbers: " + val);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid numbers: " + val);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
                             break;
                         }
 
-                        cond.addDataValueRange(min, max, !not);
+                        addDataValueRange(min, max, !not);
                     } else {
                         val = val.trim();
                         boolean bitwise = val.charAt(0) == '&';
@@ -1071,12 +1230,12 @@ public class Conditions implements Cloneable {
 
                         try {
                             if (bitwise) {
-                                cond.addDataBit(Short.valueOf(val), !not);
+                                addDataBit(Short.valueOf(val), !not);
                             } else {
-                                cond.addDataValue(Short.valueOf(val), !not);
+                                addDataValue(Short.valueOf(val), !not);
                             }
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'data' argument with invalid number: " + val);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid number: " + val);
                         }
                     }
                 }
@@ -1085,12 +1244,12 @@ public class Conditions implements Cloneable {
             value = arg.substring("amount".length()).trim();
 
             try {
-                cond.setAmount(Integer.parseInt(value));
+                setAmount(Integer.parseInt(value));
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'amount' argument with invalid number: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'amount' argument with invalid number: " + value);
             }
         } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
-            cond.setNoEnchant(true);
+            setNoEnchant(true);
         } else if (arg.startsWith("enchant")) {
             value = arg.substring("enchant".length()).trim();
 
@@ -1101,7 +1260,7 @@ public class Conditions implements Cloneable {
             Enchantment enchant = Tools.parseEnchant(value);
 
             if (enchant == null) {
-                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid name: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid name: " + value);
                 return;
             }
 
@@ -1126,34 +1285,34 @@ public class Conditions implements Cloneable {
                             min = Short.valueOf(split[0].trim());
                             max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
                             continue;
                         }
 
-                        cond.addEnchantLevelRange(enchant, min, max, !not);
+                        addEnchantLevelRange(enchant, min, max, !not);
                     } else {
                         try {
-                            cond.addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                            addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'enchant' argument with invalid number: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid number: " + s);
                         }
                     }
                 }
             } else {
-                cond.addEnchant(enchant);
+                addEnchant(enchant);
             }
         } else if (arg.startsWith("!bookenchant") || arg.startsWith("nobookenchant")) {
             if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
-                cond.setNoBookEnchant(true);
+                setNoBookEnchant(true);
             }
         } else if (arg.startsWith("bookenchant")) {
             if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
-                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
                 return;
             }
 
@@ -1166,7 +1325,7 @@ public class Conditions implements Cloneable {
             Enchantment enchant = Tools.parseEnchant(value);
 
             if (enchant == null) {
-                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
                 return;
             }
 
@@ -1191,34 +1350,34 @@ public class Conditions implements Cloneable {
                             min = Short.valueOf(split[0].trim());
                             max = Short.valueOf(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
                             continue;
                         }
 
-                        cond.addBookEnchantLevelRange(enchant, min, max, !not);
+                        addBookEnchantLevelRange(enchant, min, max, !not);
                     } else {
                         try {
-                            cond.addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                            addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
                         }
                     }
                 }
             } else {
-                cond.addBookEnchant(enchant);
+                addBookEnchant(enchant);
             }
         } else if (arg.startsWith("!color") || arg.startsWith("nocolor")) {
             if (item.getItemMeta() instanceof LeatherArmorMeta) {
-                cond.setNoColor(true);
+                setNoColor(true);
             }
         } else if (arg.startsWith("color")) {
             if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
-                ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
                 return;
             }
 
@@ -1230,7 +1389,7 @@ public class Conditions implements Cloneable {
                 String[] split = value.split(",", 3);
 
                 if (split.length != 3) {
-                    ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
                     return;
                 }
 
@@ -1250,39 +1409,131 @@ public class Conditions implements Cloneable {
                         }
 
                         if (min < 0 || min > 255 || min > max || max > 255) {
-                            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
                             break;
                         }
 
                         //minColor[c] = min;
                         //maxColor[c] = max;
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'color' argument with invalid number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid number: " + value);
                     }
                 }
             } else {
-                cond.setColor(dye.getColor(), null);
+                setColor(dye.getColor(), null);
             }
         } else if (arg.startsWith("!name") || arg.startsWith("noname")) {
-            cond.setNoName(true);
+            setNoName(true);
         } else if (arg.startsWith("name")) {
             value = arg.substring("name".length()).trim(); // preserve case for regex
 
-            cond.setName(value);
+            setName(value);
         } else if (arg.startsWith("!lore") || arg.startsWith("nolore")) {
-            cond.setNoLore(true);
+            setNoLore(true);
         } else if (arg.startsWith("lore")) {
             value = arg.substring("lore".length()).trim(); // preserve case for regex
 
-            cond.addLore(value);
+            addLore(value);
         } else if (arg.startsWith("!meta") || arg.startsWith("nometa")) {
-            cond.setNoMeta(true);
+            setNoMeta(true);
         } else if (arg.startsWith("failmsg")) {
             value = arg.substring("failmsg".length()).trim(); // preserve case... because it's a message
 
-            cond.setFailMessage(value);
+            setFailMessage(value);
+        } else if (arg.startsWith("potion")) {
+            value = arg.substring("potion".length()).trim().toLowerCase();
+
+            ConditionPotion potionCond = new ConditionPotion();
+            PotionType potionType = null;
+
+            String[] split = value.split(",");
+            for (String element : split) {
+                element = element.trim();
+
+                if (element.equals("extended")) {
+                    potionCond.setExtended(true);
+                } else if (element.equals("!extended")) {
+                    potionCond.setExtended(false);
+                } else if (element.startsWith("type")) {
+                    String[] typeSplit = element.split(" ");
+                    try {
+                        potionType = PotionType.valueOf(typeSplit[1].toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'type' argument with invalid potion type: " + typeSplit[1]);
+                    }
+                } else if (element.startsWith("level")) {
+                    String[] levelSplit = element.split(" ");
+
+                    try {
+                        if (levelSplit.length > 1) {
+                            potionCond.setLevel(Integer.parseInt(levelSplit[1]));
+                        }
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'level' argument with invalid value: " + levelSplit[1]);
+                    }
+                }
+            }
+
+            potionConditions.put(potionType, potionCond);
+        } else if (arg.startsWith("potioneffect")) {
+            value = arg.substring("potioneffect".length()).trim().toLowerCase();
+
+            ConditionPotionEffect effectCond = new ConditionPotionEffect();
+            PotionEffectType effectType = null;
+
+            String[] split = value.split(",");
+            for (String element : split) {
+                if (element.equals("ambient")) {
+                    effectCond.setAmbient(true);
+                } else if (element.equals("!ambient")) {
+                    effectCond.setAmbient(false);
+                } else if (element.startsWith("type")) {
+                    String[] typeSplit = element.split(":");
+                    try {
+                        effectType = PotionEffectType.getByName(typeSplit[1].toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'type' argument with invalid potion effect type: " + typeSplit[1]);
+                    }
+                } else if (element.startsWith("duration")) {
+                    String[] durationSplit = element.split(" ", 2);
+                    String durationValue = durationSplit[1].trim();
+                    durationSplit = durationValue.split("-");
+
+                    try {
+                        if (durationSplit.length > 1) {
+                            effectCond.setDurationMinLevel(Integer.parseInt(durationSplit[0]));
+                            effectCond.setDurationMaxLevel(Integer.parseInt(durationSplit[1]));
+                        } else {
+                            int level = Integer.parseInt(durationSplit[0]);
+                            effectCond.setDurationMinLevel(level);
+                            effectCond.setDurationMaxLevel(level);
+                        }
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'duration' argument with invalid value: " + durationValue);
+                    }
+                } else if (element.startsWith("amplify")) {
+                    String[] amplifySplit = element.split(" ", 2);
+                    String amplifyValue = amplifySplit[1].trim();
+                    amplifySplit = amplifyValue.split("-");
+
+                    try {
+                        if (amplifySplit.length > 1) {
+                            effectCond.setAmplifyMinLevel(Integer.parseInt(amplifySplit[0]));
+                            effectCond.setAmplifyMaxLevel(Integer.parseInt(amplifySplit[1]));
+                        } else {
+                            int level = Integer.parseInt(amplifySplit[0]);
+                            effectCond.setAmplifyMinLevel(level);
+                            effectCond.setAmplifyMaxLevel(level);
+                        }
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'amplify' argument with invalid value: " + amplifyValue);
+                    }
+                }
+            }
+
+            potionEffectConditions.put(effectType, effectCond);
         } else {
-            ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has unknown argument: " + arg);
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
         }
     }
 }

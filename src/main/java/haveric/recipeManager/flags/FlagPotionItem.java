@@ -68,7 +68,7 @@ public class FlagPotionItem extends Flag {
                 "",
                 "Similar syntax to basic effect, arguments separated by | character, can be in any order.",
                 "Arguments for custom effect:",
-                "  type <effect type>  = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE !)",
+                "  type <effect type>  = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
                 "  duration <float>    = (optional) Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
                 "  amplify <number>    = (optional) Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
                 "  ambient             = (optional) Adds extra visual particles",

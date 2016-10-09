@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.*;
+import haveric.recipeManager.flags.conditions.ConditionsIngredient;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;

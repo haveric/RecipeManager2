@@ -774,6 +774,12 @@ public class Tools {
             if (i.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || i.getDurability() == data)) {
                 found++;
             }
+
+            ItemStack potion = r.getPotion();
+
+            if (potion.getType() == type && (data == null || data == Vanilla.DATA_WILDCARD || potion.getDurability() == data)) {
+                found++;
+            }
         }
 
         return found;

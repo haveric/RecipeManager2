@@ -1,6 +1,7 @@
-package haveric.recipeManager.flags;
+package haveric.recipeManager.flags.conditions;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.flags.Args;
 import org.bukkit.inventory.ItemStack;
 
 public class ConditionsIngredient extends Conditions {
@@ -59,7 +60,7 @@ public class ConditionsIngredient extends Conditions {
         return checkIngredient(item, a, addReasons);
     }
 
-    public static void parse(String value, String[] args, ConditionsIngredient cond) {
+    public void parse(String value, String[] args) {
         for (int i = 1; i < args.length; i++) {
             String arg = args[i].trim().toLowerCase();
 
@@ -67,12 +68,12 @@ public class ConditionsIngredient extends Conditions {
                 value = arg.substring("needed".length()).trim();
 
                 try {
-                    cond.setNeeded(Integer.parseInt(value));
+                    setNeeded(Integer.parseInt(value));
                 } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().warning("Flag " + cond.getFlagType() + " has 'needed' argument with invalid number: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'needed' argument with invalid number: " + value);
                 }
             } else {
-                parseArg(value, arg, cond);
+                parseArg(value, arg);
             }
         }
     }
