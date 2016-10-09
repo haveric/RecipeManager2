@@ -17,7 +17,7 @@ This file will be automatically overwritten when a new version is installed.
 * Fix recipe files starting with UTF8 BOM
 * @NoResult: Fixed result not clearing as it should
 * @FireworkItem: Fixed effect parsing and power not being set
-* @IngredientCondition: Added potion and potioneffect conditions
+* @IngredientCondition: Added potion, potioneffect, and banner conditions
 * Many more misc. fixes
 
 === v2.7.3 ===

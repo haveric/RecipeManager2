@@ -51,6 +51,10 @@ flag:
     noname: '<yellow>{item}<red> needs name: <yellow>{name}'
     nolore: '<yellow>{item}<red> needs lore: <yellow>{lore}'
     nocolor: '<yellow>{item}<red> needs color: <yellow>{color}'
+    nopotion: '<yellow>{item}<red> needs potion: <yellow>{potion}'
+    nopotioneffect: '<yellow>{item}<red> needs effect(s): <yellow>{effect}'
+    nobannercolor: '<yellow>{item}<red> needs banner color: <yellow>{color}'
+    nobannerpatterns: '<yellow>{item}<red> needs banner pattern(s): <yellow>{patterns}'
   needexp: '<red>Need EXP: <yellow>{exp}<reset>. Current EXP:<yellow> {playerexp}'
   modexp:
     add: <green>+{amount}<reset> EXP

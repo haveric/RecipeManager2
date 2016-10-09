@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -13,12 +14,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -49,6 +48,8 @@ public class Conditions implements Cloneable {
     private Color maxColor;
     private Map<PotionType, ConditionPotion> potionConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
+    private DyeColor bannerColor;
+    private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
     private boolean noMeta = false;
     private boolean noName = false;
     private boolean noLore = false;
@@ -97,6 +98,8 @@ public class Conditions implements Cloneable {
 
         potionConditions.putAll(original.potionConditions);
         potionEffectConditions.putAll(original.potionEffectConditions);
+        bannerColor = original.bannerColor;
+        bannerPatterns.putAll(original.bannerPatterns);
 
         setNoMeta(original.isNoMeta());
         setNoName(original.isNoName());
@@ -896,6 +899,47 @@ public class Conditions implements Cloneable {
         return conditionsMet == potionConditions.entrySet().size();
     }
 
+    public void setBannerColor(DyeColor color) {
+        bannerColor = color;
+    }
+
+    public boolean hasBannerColor() {
+        return bannerColor != null;
+    }
+
+    public boolean checkBannerColor(BannerMeta meta) {
+        return meta.getBaseColor().equals(bannerColor);
+    }
+
+    public void addBannerPattern(PatternType pattern, DyeColor color) {
+        bannerPatterns.put(pattern, color);
+    }
+    public boolean hasBannerPatterns() {
+        return !bannerPatterns.isEmpty();
+    }
+
+    public boolean checkBannerPatterns(BannerMeta meta) {
+        List<org.bukkit.block.banner.Pattern> patterns = meta.getPatterns();
+        int conditionsMet = 0;
+
+        for (Entry<PatternType, DyeColor> entry : bannerPatterns.entrySet()) {
+
+            PatternType type = entry.getKey();
+            DyeColor dye = entry.getValue();
+
+            for (org.bukkit.block.banner.Pattern pattern : patterns) {
+                if (pattern.getPattern() == type) {
+                    if (dye == null || dye == pattern.getColor()) {
+                        conditionsMet ++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return conditionsMet == bannerPatterns.entrySet().size();
+    }
+
     /**
      * Check the supplied item with supplied arguments against this condition class.
      *
@@ -1051,7 +1095,7 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nopotion", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.nopotion", getFailMessage(), "{item}", ToolsItem.print(item), "{potion}", potionConditions); // TODO: This probably needs updating
                 }
                 ok = false;
 
@@ -1078,7 +1122,61 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nopotioneffect", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.nopotioneffect", getFailMessage(), "{item}", ToolsItem.print(item), "{effect}", potionEffectConditions); // TODO: This probably needs updating
+                }
+                ok = false;
+
+                if (getFailMessage() != null) {
+                    return false;
+                }
+            }
+        }
+
+        if (hasBannerColor()) {
+            boolean failed = true;
+
+            if (meta instanceof BannerMeta) {
+                BannerMeta banner = (BannerMeta) meta;
+
+                if (checkBannerColor(banner)) {
+                    failed = false;
+                }
+            }
+
+            if (failed) {
+                if (a == null) {
+                    return false;
+                }
+
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nobannercolor", getFailMessage(), "{item}", ToolsItem.print(item), "color", bannerColor);
+                }
+                ok = false;
+
+                if (getFailMessage() != null) {
+                    return false;
+                }
+            }
+        }
+
+        if (hasBannerPatterns()) {
+            boolean failed = true;
+
+            if (meta instanceof BannerMeta) {
+                BannerMeta banner = (BannerMeta) meta;
+
+                if (checkBannerPatterns(banner)) {
+                    failed = false;
+                }
+            }
+
+            if (failed) {
+                if (a == null) {
+                    return false;
+                }
+
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nobannerpatterns", getFailMessage(), "{item}", ToolsItem.print(item), "{patterns)", bannerPatterns); // TODO: Check if these messages are actually being used and if so probably fix bannerPatterns output
                 }
                 ok = false;
 
@@ -1488,7 +1586,7 @@ public class Conditions implements Cloneable {
                 } else if (element.equals("!ambient")) {
                     effectCond.setAmbient(false);
                 } else if (element.startsWith("type")) {
-                    String[] typeSplit = element.split(":");
+                    String[] typeSplit = element.split(" ");
                     try {
                         effectType = PotionEffectType.getByName(typeSplit[1].toUpperCase());
                     } catch (IllegalArgumentException e) {
@@ -1532,6 +1630,48 @@ public class Conditions implements Cloneable {
             }
 
             potionEffectConditions.put(effectType, effectCond);
+        } else if (arg.startsWith("banner")) {
+            value = arg.substring("banner".length()).trim().toLowerCase();
+            MessageSender.getInstance().info("Banner");
+            String[] split = value.split(",");
+            for (String element : split) {
+                MessageSender.getInstance().info("Element: " + element);
+                if (element.startsWith("color")) {
+                    String[] colorSplit = element.split(" ", 2);
+                    String colorValue = colorSplit[1].trim();
+
+                    try {
+                        DyeColor dye = DyeColor.valueOf(colorValue.toUpperCase());
+                        setBannerColor(dye);
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid dye color: " + colorValue);
+                    }
+                } else if (element.startsWith("pattern")) {
+                    String[] patternSplit = element.split(" ", 3);
+                    String patternValue = patternSplit[1].trim();
+
+                    PatternType pattern = null;
+                    try {
+                        pattern = PatternType.valueOf(patternValue.toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pattern' argument with invalid pattern type: " + patternValue);
+                    }
+
+                    DyeColor dye = null;
+                    if (patternSplit.length > 2) {
+                        try {
+                            String colorValue = patternSplit[2].trim();
+                            dye = DyeColor.valueOf(colorValue.toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pattern' argument with invalid pattern type: " + patternValue);
+                        }
+                    }
+
+                    if (pattern != null) {
+                        addBannerPattern(pattern, dye);
+                    }
+                }
+            }
         } else {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
         }
