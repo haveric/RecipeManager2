@@ -1294,9 +1294,9 @@ public class Conditions implements Cloneable {
 
                     if (match != null && match.getDurability() != Vanilla.DATA_WILDCARD) {
                         addDataValue(match.getDurability(), !not);
-                    } else {
+                    }/* else {
                         // ErrorReporter.getInstance().warning("Flag " + getType() + " has 'data' argument with unknown material:data combination: " + val);
-                    }
+                    }*/
                 } else {
                     String[] split = val.split("-");
 

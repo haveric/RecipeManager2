@@ -33,9 +33,7 @@ public class ConditionsHold extends Conditions {
 
 
     public boolean checkIngredient(ItemStack item, Args a) {
-        boolean addReasons = true;
-
-        return checkIngredient(item, a, addReasons);
+        return checkIngredient(item, a, true);
     }
 
     public void parse(String value, String[] args) {

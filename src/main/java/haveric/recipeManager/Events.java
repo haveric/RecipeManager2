@@ -905,7 +905,7 @@ public class Events implements Listener {
 
                         event.setCancelled(true); // cancel only if we're going to mess with the items
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
-                    } else if (targetSlot == 0) {
+                    } else {
                         SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(clicked);
 
                         if (recipe != null) {

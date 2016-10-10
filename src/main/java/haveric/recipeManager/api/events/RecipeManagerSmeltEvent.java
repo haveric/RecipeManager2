@@ -85,7 +85,6 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *
      * @return smelter's name or null
      */
-
 //    public String getSmelterName() {
 //        return smelter;
 //    }

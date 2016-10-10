@@ -27,7 +27,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
         this.power = that.power;
 
         if (that.hasEffects()) {
-            this.effects = new ArrayList<FireworkEffect>(that.effects);
+            this.effects = new ArrayList<>(that.effects);
         }
     }
 
@@ -76,7 +76,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
 
         List<FireworkEffect> effects = this.effects;
         if (effects == null) {
-            effects = this.effects = new ArrayList<FireworkEffect>();
+            effects = this.effects = new ArrayList<>();
         }
 
         for (Object obj : collection) {
@@ -137,7 +137,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
         TestMetaFirework meta = (TestMetaFirework) super.clone();
 
         if (this.effects != null) {
-            meta.effects = new ArrayList<FireworkEffect>(this.effects);
+            meta.effects = new ArrayList<>(this.effects);
         }
 
         return meta;
@@ -146,7 +146,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
     public void addEffect(FireworkEffect effect) {
         Validate.notNull(effect, "Effect cannot be null");
         if (this.effects == null) {
-            this.effects = new ArrayList<FireworkEffect>();
+            this.effects = new ArrayList<>();
         }
         this.effects.add(effect);
     }
@@ -159,7 +159,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
 
         List<FireworkEffect> list = this.effects;
         if (list == null) {
-            list = this.effects = new ArrayList<FireworkEffect>();
+            list = this.effects = new ArrayList<>();
         }
 
         for (FireworkEffect effect : effects) {

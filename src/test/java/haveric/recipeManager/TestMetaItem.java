@@ -118,9 +118,7 @@ public class TestMetaItem implements ItemMeta, Repairable {
 
     @Override
     public void addItemFlags(ItemFlag... itemFlags) {
-        for (ItemFlag itemFlag : itemFlags) {
-            flags.add(itemFlag);
-        }
+        Collections.addAll(flags, itemFlags);
     }
 
     @Override

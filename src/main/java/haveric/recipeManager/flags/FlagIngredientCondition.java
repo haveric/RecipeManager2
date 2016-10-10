@@ -232,9 +232,7 @@ public class FlagIngredientCondition extends Flag {
         }
 
         List<ConditionsIngredient> conditionsList = new ArrayList<>();
-        Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
-        while (iter.hasNext()) {
-            Entry<String, ConditionsIngredient> entry = iter.next();
+        for (Entry<String, ConditionsIngredient> entry : conditions.entrySet()) {
             String key = entry.getKey();
             if (key.startsWith(String.valueOf(item.getTypeId() + ":" + item.getDurability() + "-"))) {
                 conditionsList.add(entry.getValue());

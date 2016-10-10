@@ -38,7 +38,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
                 // set the burn time
                 String[] timeSplit = split[1].trim().split("-");
-                float minTime = -1;
+                float minTime;
                 float maxTime = -1;
 
                 try {

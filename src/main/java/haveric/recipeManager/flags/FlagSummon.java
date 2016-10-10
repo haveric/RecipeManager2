@@ -233,7 +233,7 @@ public class FlagSummon extends Flag {
                     while (tries-- > 0) {
                         int x = minX + RecipeManager.random.nextInt(maxX - minX);
                         int z = minZ + RecipeManager.random.nextInt(maxZ - minZ);
-                        int y = 0;
+                        int y;
 
                         for (y = maxY; y >= minY; y--) {
                             Block block = world.getBlockAt(x, y, z);

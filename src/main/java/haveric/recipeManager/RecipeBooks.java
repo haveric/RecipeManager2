@@ -55,7 +55,7 @@ public class RecipeBooks {
     public void init(File booksDir) {
         clean();
 
-        DIR_BOOKS = booksDir.getPath() + File.separator;;
+        DIR_BOOKS = booksDir.getPath() + File.separator;
         callEvents = false;
     }
 
@@ -584,8 +584,8 @@ public class RecipeBooks {
                 return;
             }
 
-            int volume = 0;
-            int updated = 0;
+            int volume;
+            int updated;
 
             try {
                 volume = Integer.parseInt(match.group(3));

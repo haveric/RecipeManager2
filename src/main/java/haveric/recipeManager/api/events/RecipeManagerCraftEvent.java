@@ -77,7 +77,7 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
      * Sets the result to the specified item.<br>
      * Set to AIR or NULL to force the recipe to fail.
      *
-     * @param result
+     * @param newResult
      *            the new result or null
      */
     public void setResult(ItemStack newResult) {

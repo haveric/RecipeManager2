@@ -46,14 +46,13 @@ public class ConditionsIngredient extends Conditions {
     }
 
     public boolean checkIngredient(ItemStack item, Args a) {
-        boolean ok = true;
         boolean addReasons = true;
 
         if (hasNeeded()) {
             addReasons = false;
 
             if (getNeededLeft() == 0) {
-                return ok;
+                return true;
             }
         }
 

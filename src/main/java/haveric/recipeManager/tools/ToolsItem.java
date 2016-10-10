@@ -84,7 +84,7 @@ public class ToolsItem {
             return RMCChatColor.GRAY + "(nothing)";
         }
 
-        String name = null;
+        String name;
         String itemData = null;
 
         ItemMeta meta = item.getItemMeta();
@@ -143,7 +143,7 @@ public class ToolsItem {
     }
 
     public static String getName(ItemStack item) {
-        String name = null;
+        String name;
         String itemData = null;
 
         ItemMeta meta = item.getItemMeta();

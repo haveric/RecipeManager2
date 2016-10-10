@@ -20,7 +20,7 @@ import java.util.Map.Entry;
 public class BrewingStands {
     private static final String SAVE_EXTENSION = ".brewingdata";
 
-    private static Map<BlockID, BrewingStandData> brewingStands = new LinkedHashMap<BlockID, BrewingStandData>(128);
+    private static Map<BlockID, BrewingStandData> brewingStands = new LinkedHashMap<>(128);
 
     protected static void init() { }
 

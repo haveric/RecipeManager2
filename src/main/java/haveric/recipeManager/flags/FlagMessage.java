@@ -1,9 +1,9 @@
 package haveric.recipeManager.flags;
 
+import org.apache.commons.lang.Validate;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.Validate;
 
 public class FlagMessage extends Flag {
 
@@ -67,7 +67,7 @@ public class FlagMessage extends Flag {
     /**
      * Set the message list.
      *
-     * @param messages
+     * @param newMessages
      */
     public void setMessages(List<String> newMessages) {
         if (newMessages == null) {

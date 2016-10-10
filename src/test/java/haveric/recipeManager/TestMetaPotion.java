@@ -25,7 +25,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         TestMetaPotion potionMeta = (TestMetaPotion) meta;
         this.type = potionMeta.type;
         if (potionMeta.hasCustomEffects()) {
-            this.customEffects = new ArrayList<PotionEffect>(potionMeta.customEffects);
+            this.customEffects = new ArrayList<>(potionMeta.customEffects);
         }
     }
 
@@ -56,7 +56,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         TestMetaPotion clone = (TestMetaPotion) super.clone();
         clone.type = type;
         if (this.customEffects != null) {
-            clone.customEffects = new ArrayList<PotionEffect>(this.customEffects);
+            clone.customEffects = new ArrayList<>(this.customEffects);
         }
         return clone;
     }
@@ -100,7 +100,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
             }
         } else {
             if (customEffects == null) {
-                customEffects = new ArrayList<PotionEffect>();
+                customEffects = new ArrayList<>();
             }
             customEffects.add(effect);
             return true;

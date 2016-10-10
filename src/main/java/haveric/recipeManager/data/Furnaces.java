@@ -1,12 +1,6 @@
 package haveric.recipeManager.data;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -17,12 +11,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.FurnaceInventory;
 
-import haveric.recipeManager.RecipeManager;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class Furnaces {
     private static final String SAVE_EXTENSION = ".furnacedata";
 
-    private static Map<BlockID, FurnaceData> furnaces = new LinkedHashMap<BlockID, FurnaceData>(128);
+    private static Map<BlockID, FurnaceData> furnaces = new LinkedHashMap<>(128);
 
     protected static void init() {
     }
@@ -93,7 +92,7 @@ public class Furnaces {
     /**
      * Add new furnace
      *
-     * @param id
+     * @param location
      */
     public static void add(Location location) {
         add(BlockID.fromLocation(location));

@@ -152,7 +152,7 @@ public class FlagModMoney extends Flag {
             return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
         }
 
-        float newAmount = 0;
+        float newAmount;
 
         try {
             newAmount = Float.valueOf(value);

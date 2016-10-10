@@ -1,6 +1,7 @@
 package haveric.recipeManager.flags;
 
 import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.flags.conditions.ConditionsIngredient;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;

@@ -145,7 +145,7 @@ public class FlagModExp extends Flag {
             return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
         }
 
-        int newAmount = 0;
+        int newAmount;
 
         try {
             newAmount = Integer.parseInt(value);

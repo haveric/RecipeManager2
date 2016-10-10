@@ -190,10 +190,8 @@ public class FlagHoldItem extends Flag {
     public int getNumConditionsOfSlot(ConditionsSlot slot) {
         int num = 0;
 
-        Iterator<Entry<String, ConditionsHold>> iter = conditions.entrySet().iterator();
-
-        while (iter.hasNext()) {
-            if (slot.equals(iter.next().getValue().getSlot())) {
+        for (Entry<String, ConditionsHold> stringConditionsHoldEntry : conditions.entrySet()) {
+            if (slot.equals(stringConditionsHoldEntry.getValue().getSlot())) {
                 num++;
             }
         }
@@ -207,10 +205,8 @@ public class FlagHoldItem extends Flag {
         }
 
         List<ConditionsHold> conditionsList = new ArrayList<>();
-        Iterator<Entry<String, ConditionsHold>> iter = conditions.entrySet().iterator();
 
-        while (iter.hasNext()) {
-            Entry<String, ConditionsHold> entry = iter.next();
+        for (Entry<String, ConditionsHold> entry : conditions.entrySet()) {
             String key = entry.getKey();
             if (key.startsWith(String.valueOf(item.getTypeId() + ":" + item.getDurability() + "-"))) {
                 conditionsList.add(entry.getValue());

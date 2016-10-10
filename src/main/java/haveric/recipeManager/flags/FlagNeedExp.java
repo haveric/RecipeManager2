@@ -93,9 +93,7 @@ public class FlagNeedExp extends Flag {
     }
 
     public boolean checkExp(int exp) {
-        boolean isValid = false;
-
-        isValid = exp >= minExp;
+        boolean isValid = exp >= minExp;
 
         if (isValid && setBoth) {
             isValid = exp <= maxExp;

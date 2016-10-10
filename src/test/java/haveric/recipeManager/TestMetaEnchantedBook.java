@@ -21,7 +21,7 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
         TestMetaEnchantedBook that = (TestMetaEnchantedBook) meta;
 
         if (that.hasEnchants()) {
-            this.enchantments = new HashMap<Enchantment, Integer>(that.enchantments);
+            this.enchantments = new HashMap<>(that.enchantments);
         }
     }
 
@@ -63,7 +63,7 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
         TestMetaEnchantedBook meta = (TestMetaEnchantedBook) super.clone();
 
         if (this.enchantments != null) {
-            meta.enchantments = new HashMap<Enchantment, Integer>(this.enchantments);
+            meta.enchantments = new HashMap<>(this.enchantments);
         }
 
         return meta;
@@ -91,7 +91,7 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
 
     public boolean addStoredEnchant(Enchantment ench, int level, boolean ignoreRestrictions) {
         if (enchantments == null) {
-            enchantments = new HashMap<Enchantment, Integer>(4);
+            enchantments = new HashMap<>(4);
         }
 
         if (ignoreRestrictions || level >= ench.getStartLevel() && level <= ench.getMaxLevel()) {

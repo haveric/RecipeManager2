@@ -65,7 +65,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
      * Sets the display result.<br>
      * Setting this to null will prevent the player from crafting the recipe.
      *
-     * @param result
+     * @param newResult
      *            ItemStack displayed result or null to 'cancel' event
      */
     public void setResult(ItemStack newResult) {
@@ -82,7 +82,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
     /**
      * The workbench location is used by the recipe flags.
      *
-     * @param workbench
+     * @param newWorkbench
      *            the new workbench location
      */
     public void setWorkbenchLocation(Location newWorkbench) {

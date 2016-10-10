@@ -46,7 +46,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         float secretChance = 0;
         int unavailableNum = 0;
         float unavailableChance = 0;
-        int displayNum = 0;
+        int displayNum;
         int failedLores = 0;
 
         List<String> lore = new ArrayList<>();
@@ -155,14 +155,14 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (unavailableNum == 0 && failChance == 0) {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
-            } else if (secretNum == 1 && displayNum == 0) {
+            } else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.getInstance().get("craft.result.receive.title.unknown"));
             }
         } else if (displayNum == 1 && failedLores > 0 && unavailableNum == failedLores) {
             return ToolsItem.create(displayResult.getType(), 0, 0, displayResult.getItemMeta().getDisplayName(), lore);
         }
 
-        String title = null;
+        String title;
 
         if (receive) {
             title = Messages.getInstance().parse("craft.result.receive.title.random");

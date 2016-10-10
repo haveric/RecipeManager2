@@ -500,6 +500,7 @@ public class Settings {
         return allComments;
     }
 
+    @SuppressWarnings("unchecked")
     public List<String> getRecipeCommentCharactersAsList() {
         return (List<String>) fileConfig.getList("recipe-comment-characters", RECIPE_COMMENT_CHARACTERS_DEFAULT);
     }
