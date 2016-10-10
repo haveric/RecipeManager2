@@ -4,7 +4,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flags.ArgBuilder;
 import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -1632,10 +1631,9 @@ public class Conditions implements Cloneable {
             potionEffectConditions.put(effectType, effectCond);
         } else if (arg.startsWith("banner")) {
             value = arg.substring("banner".length()).trim().toLowerCase();
-            MessageSender.getInstance().info("Banner");
+
             String[] split = value.split(",");
             for (String element : split) {
-                MessageSender.getInstance().info("Element: " + element);
                 if (element.startsWith("color")) {
                     String[] colorSplit = element.split(" ", 2);
                     String colorValue = colorSplit[1].trim();
