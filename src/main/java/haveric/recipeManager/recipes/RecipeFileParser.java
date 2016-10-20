@@ -3,7 +3,7 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeRegistrator;
-import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManagerCommon.util.RMCUtil;
 
 import java.io.BufferedReader;

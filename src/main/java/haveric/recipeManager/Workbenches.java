@@ -1,15 +1,14 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.data.BlockID;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores in-use workbench locations to be used with flags.

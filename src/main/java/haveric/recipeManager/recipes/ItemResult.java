@@ -1,10 +1,10 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.flags.*;
+import haveric.recipeManager.flag.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.flag.args.Args;
 
 public class ItemResult extends ItemStack implements Flaggable {
     private Flags flags;

@@ -1,8 +1,13 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Settings;
-import haveric.recipeManager.flags.*;
-import haveric.recipeManager.flags.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.*;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.flags.FlagDisplayResult;
+import haveric.recipeManager.flag.flags.FlagIngredientCondition;
+import haveric.recipeManager.flag.flags.FlagKeepItem;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;

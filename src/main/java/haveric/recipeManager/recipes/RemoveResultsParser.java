@@ -2,7 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
-import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

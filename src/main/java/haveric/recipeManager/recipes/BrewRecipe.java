@@ -1,7 +1,7 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 
 import org.bukkit.inventory.ItemStack;

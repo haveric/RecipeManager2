@@ -3,7 +3,7 @@ package haveric.recipeManager.commands;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flags.FlagType;
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;

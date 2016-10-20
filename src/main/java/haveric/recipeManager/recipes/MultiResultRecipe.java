@@ -1,7 +1,10 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flags.*;
+import haveric.recipeManager.flag.*;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.flags.FlagIndividualResults;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import org.apache.commons.lang.Validate;

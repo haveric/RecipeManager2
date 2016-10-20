@@ -1,9 +1,9 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.Sets;
-import haveric.recipeManager.flags.FlagBit;
-import haveric.recipeManager.flags.FlagDescriptor;
-import haveric.recipeManager.flags.FlagFactory;
+import haveric.recipeManager.flag.FlagBit;
+import haveric.recipeManager.flag.FlagDescriptor;
+import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;

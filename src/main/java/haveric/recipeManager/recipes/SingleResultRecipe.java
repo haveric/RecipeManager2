@@ -1,8 +1,8 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flags.Args;
-import haveric.recipeManager.flags.Flags;
+import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;

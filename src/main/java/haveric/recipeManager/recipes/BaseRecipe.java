@@ -1,12 +1,12 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.flags.*;
+import haveric.recipeManager.flag.*;
 import org.bukkit.inventory.Recipe;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.flags.Args;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 
