@@ -1035,7 +1035,6 @@ public class Events implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void furnaceBurn(FurnaceBurnEvent event) {
-        Messages.getInstance().send(null, "Furnace Burn Event");
         short burnTime = 0;
         short cookTime = 0;
 
@@ -1140,7 +1139,11 @@ public class Events implements Listener {
         FuelRecipe recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
-        Args a = Args.create().player(event.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
+        Location furnaceLocation = furnace.getLocation();
+        FurnaceData data = Furnaces.get(furnaceLocation);
+        data.setFuel(null);
+
+        Args a = Args.create().player(event.getFuelerUUID()).location(furnaceLocation).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
 
         a.clear();
 
