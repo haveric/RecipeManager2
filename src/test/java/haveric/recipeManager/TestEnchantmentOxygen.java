@@ -39,4 +39,8 @@ public class TestEnchantmentOxygen extends Enchantment {
         return false;
     }
 
+    @Override
+    public boolean isTreasure() {
+        return false;
+    }
 }

@@ -39,4 +39,8 @@ public class TestEnchantmentSharpness extends Enchantment {
         return true;
     }
 
+    @Override
+    public boolean isTreasure() {
+        return false;
+    }
 }
