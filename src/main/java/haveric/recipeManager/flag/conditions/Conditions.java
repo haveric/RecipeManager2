@@ -124,7 +124,7 @@ public class Conditions implements Cloneable {
     }
 
     public void setFailMessage(String message) {
-        failMessage = message;
+        failMessage = RMCUtil.parseColors(message, false);
     }
 
     /**
@@ -1258,14 +1258,15 @@ public class Conditions implements Cloneable {
 
     public void parseArg(String value, String arg) {
         ItemStack item = getIngredient();
+        String argLower = arg.toLowerCase();
 
-        if (arg.startsWith("data")) {
+        if (argLower.startsWith("data")) {
             if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
                 return;
             }
 
-            value = arg.substring("data".length()).trim();
+            value = argLower.substring("data".length()).trim();
 
             String[] list = value.split(",");
 
@@ -1337,7 +1338,7 @@ public class Conditions implements Cloneable {
                     }
                 }
             }
-        } else if (arg.startsWith("amount")) {
+        } else if (argLower.startsWith("amount")) {
             value = arg.substring("amount".length()).trim();
 
             try {
@@ -1345,10 +1346,10 @@ public class Conditions implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'amount' argument with invalid number: " + value);
             }
-        } else if (arg.startsWith("!enchant") || arg.startsWith("noenchant")) {
+        } else if (argLower.startsWith("!enchant") || argLower.startsWith("noenchant")) {
             setNoEnchant(true);
-        } else if (arg.startsWith("enchant")) {
-            value = arg.substring("enchant".length()).trim();
+        } else if (argLower.startsWith("enchant")) {
+            value = argLower.substring("enchant".length()).trim();
 
             String[] list = value.split(" ", 2);
 
@@ -1403,17 +1404,17 @@ public class Conditions implements Cloneable {
             } else {
                 addEnchant(enchant);
             }
-        } else if (arg.startsWith("!bookenchant") || arg.startsWith("nobookenchant")) {
+        } else if (argLower.startsWith("!bookenchant") || argLower.startsWith("nobookenchant")) {
             if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
                 setNoBookEnchant(true);
             }
-        } else if (arg.startsWith("bookenchant")) {
+        } else if (argLower.startsWith("bookenchant")) {
             if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
                 return;
             }
 
-            value = arg.substring("bookenchant".length()).trim();
+            value = argLower.substring("bookenchant".length()).trim();
 
             String[] list = value.split(" ", 2);
 
@@ -1468,17 +1469,17 @@ public class Conditions implements Cloneable {
             } else {
                 addBookEnchant(enchant);
             }
-        } else if (arg.startsWith("!color") || arg.startsWith("nocolor")) {
+        } else if (argLower.startsWith("!color") || argLower.startsWith("nocolor")) {
             if (item.getItemMeta() instanceof LeatherArmorMeta) {
                 setNoColor(true);
             }
-        } else if (arg.startsWith("color")) {
+        } else if (argLower.startsWith("color")) {
             if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
                 return;
             }
 
-            value = arg.substring("color".length()).trim();
+            value = argLower.substring("color".length()).trim();
 
             DyeColor dye = RMCUtil.parseEnum(value, DyeColor.values());
 
@@ -1519,26 +1520,26 @@ public class Conditions implements Cloneable {
             } else {
                 setColor(dye.getColor(), null);
             }
-        } else if (arg.startsWith("!name") || arg.startsWith("noname")) {
+        } else if (argLower.startsWith("!name") || argLower.startsWith("noname")) {
             setNoName(true);
-        } else if (arg.startsWith("name")) {
+        } else if (argLower.startsWith("name")) {
             value = arg.substring("name".length()).trim(); // preserve case for regex
 
             setName(value);
-        } else if (arg.startsWith("!lore") || arg.startsWith("nolore")) {
+        } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
             setNoLore(true);
-        } else if (arg.startsWith("lore")) {
+        } else if (argLower.startsWith("lore")) {
             value = arg.substring("lore".length()).trim(); // preserve case for regex
 
             addLore(value);
-        } else if (arg.startsWith("!meta") || arg.startsWith("nometa")) {
+        } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
             setNoMeta(true);
-        } else if (arg.startsWith("failmsg")) {
-            value = arg.substring("failmsg".length()).trim(); // preserve case... because it's a message
+        } else if (argLower.startsWith("failmsg")) {
+            value = arg.substring("failmsg".length()).trim(); // preserve case because it's a message
 
             setFailMessage(value);
-        } else if (arg.startsWith("potion")) {
-            value = arg.substring("potion".length()).trim().toLowerCase();
+        } else if (argLower.startsWith("potion")) {
+            value = argLower.substring("potion".length()).trim();
 
             ConditionPotion potionCond = new ConditionPotion();
             PotionType potionType = null;
@@ -1572,8 +1573,8 @@ public class Conditions implements Cloneable {
             }
 
             potionConditions.put(potionType, potionCond);
-        } else if (arg.startsWith("potioneffect")) {
-            value = arg.substring("potioneffect".length()).trim().toLowerCase();
+        } else if (argLower.startsWith("potioneffect")) {
+            value = argLower.substring("potioneffect".length()).trim();
 
             ConditionPotionEffect effectCond = new ConditionPotionEffect();
             PotionEffectType effectType = null;
@@ -1629,8 +1630,8 @@ public class Conditions implements Cloneable {
             }
 
             potionEffectConditions.put(effectType, effectCond);
-        } else if (arg.startsWith("banner")) {
-            value = arg.substring("banner".length()).trim().toLowerCase();
+        } else if (argLower.startsWith("banner")) {
+            value = argLower.substring("banner".length()).trim();
 
             String[] split = value.split(",");
             for (String element : split) {

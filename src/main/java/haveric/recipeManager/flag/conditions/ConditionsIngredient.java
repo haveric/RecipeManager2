@@ -61,9 +61,10 @@ public class ConditionsIngredient extends Conditions {
 
     public void parse(String value, String[] args) {
         for (int i = 1; i < args.length; i++) {
-            String arg = args[i].trim().toLowerCase();
+            String arg = args[i].trim();
+            String argLower = arg.toLowerCase();
 
-            if (arg.startsWith("needed")) {
+            if (argLower.startsWith("needed")) {
                 value = arg.substring("needed".length()).trim();
 
                 try {

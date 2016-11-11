@@ -1,8 +1,8 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
-import haveric.recipeManager.flag.conditions.ConditionsIngredient;
-import haveric.recipeManager.flag.flags.FlagIngredientCondition;
+import haveric.recipeManager.flag.conditions.ConditionsHold;
+import haveric.recipeManager.flag.flags.FlagHoldItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -20,11 +20,11 @@ import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class FlagIngredientConditionTest extends FlagBaseTest {
+public class FlagHoldItemTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagIngredientCondition/");
+        File file = new File("src/test/resources/recipes/flagHoldItem/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -35,9 +35,9 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+            FlagHoldItem flag = (FlagHoldItem) result.getFlag(FlagType.HOLD_ITEM);
             if (resultType == Material.DIRT) {
-                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
+                List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIRT));
                 Map<Short, Boolean> values = conditions.get(0).getDataValues();
                 assertTrue(values.containsKey((short) 0));
                 assertTrue(values.containsKey((short) 1));
@@ -47,8 +47,8 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(values.containsKey((short) 5));
                 assertFalse(values.containsKey((short) 6));
             } else if (resultType == Material.GRAVEL) {
-                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIAMOND_SPADE));
-                ConditionsIngredient cond = conditions.get(0);
+                List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIAMOND_SPADE));
+                ConditionsHold cond = conditions.get(0);
                 assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
                 assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
             }

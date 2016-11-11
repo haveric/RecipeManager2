@@ -38,9 +38,10 @@ public class ConditionsHold extends Conditions {
 
     public void parse(String value, String[] args) {
         for (int i = 1; i < args.length; i++) {
-            String arg = args[i].trim().toLowerCase();
+            String arg = args[i].trim();
+            String argLower = arg.toLowerCase();
 
-            if (arg.startsWith("slot")) {
+            if (argLower.startsWith("slot")) {
                 String val = arg.substring("slot".length()).trim();
 
                 if (val.equals("mainhand")) {
