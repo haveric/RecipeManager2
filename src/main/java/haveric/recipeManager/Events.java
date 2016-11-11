@@ -649,6 +649,7 @@ public class Events implements Listener {
 
             if (ent instanceof Player) {
                 InventoryHolder holder = inv.getHolder();
+                Recipes.recipeResetResult(ent.getUniqueId());
 
                 if (inv instanceof FurnaceInventory && holder instanceof Furnace) {
                     furnaceClick(event, (Furnace) holder, (Player) ent);
