@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * Furnace recipes: Fixed fuel recipes preventing other fuel recipes
 * Fix incorrect result after different failed recipe
 * Fix case issues with @IngredientCondition and @HoldItem
+* Fixed colors in craft result denied messages
 
 === v2.8 ===
 * Dropped support for Java 6
