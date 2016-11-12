@@ -391,7 +391,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
         }
 
-        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
 
         if (isMultiResult()) {
             s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
@@ -412,7 +412,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                 if (ingredients[i] == null) {
                     s.append('[').append(RMCChatColor.WHITE).append('_').append(RMCChatColor.GRAY).append(']');
                 } else {
-                    String print = ToolsItem.print(ingredients[i], RMCChatColor.RED, RMCChatColor.BLACK, false);
+                    String print = ToolsItem.print(ingredients[i], RMCChatColor.RED, RMCChatColor.BLACK);
                     Integer get = charItems.get(print);
 
                     if (get == null) {

@@ -245,7 +245,7 @@ public class SmeltRecipe extends SingleResultRecipe {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
         }
 
-        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
 
         /*
          * if(isMultiResult()) { s.append('\n').append(MessagesOld.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
@@ -253,7 +253,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         s.append('\n');
         s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK, false));
+        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK));
 
         s.append('\n');
         s.append('\n').append(Messages.getInstance().parse("recipebook.header.cooktime")).append(RMCChatColor.BLACK);
@@ -276,7 +276,7 @@ public class SmeltRecipe extends SingleResultRecipe {
         if (hasFuel()) {
             s.append('\n');
             s.append('\n').append(Messages.getInstance().parse("recipebook.header.requirefuel")).append(RMCChatColor.BLACK);
-            s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RED, RMCChatColor.BLACK, true));
+            s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RED, RMCChatColor.BLACK));
         }
 
         return s.toString();

@@ -61,7 +61,7 @@ public class ToolsItem {
      * @return user-friendly item print
      */
     public static String print(ItemStack item) {
-        return print(item, RMCChatColor.WHITE, RMCChatColor.RESET, false);
+        return print(item, RMCChatColor.WHITE, RMCChatColor.RESET);
     }
 
     /**
@@ -79,7 +79,7 @@ public class ToolsItem {
      *            will be appended at the end of string, should be your text color
      * @return user-friendly item print
      */
-    public static String print(ItemStack item, RMCChatColor defColor, RMCChatColor endColor, boolean alwaysShowAmount) {
+    public static String print(ItemStack item, RMCChatColor defColor, RMCChatColor endColor) {
         if (item == null || item.getType() == Material.AIR) {
             return RMCChatColor.GRAY + "(nothing)";
         }
@@ -124,7 +124,7 @@ public class ToolsItem {
         }
 
         String amount = "";
-        if (alwaysShowAmount || item.getAmount() > 1) {
+        if (item.getAmount() > 1) {
             amount = item.getAmount() + "x ";
         }
 

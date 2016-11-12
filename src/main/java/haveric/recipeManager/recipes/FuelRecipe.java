@@ -186,7 +186,7 @@ public class FuelRecipe extends BaseRecipe {
 
         s.append('\n');
         s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK, false));
+        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK));
 
         s.append('\n');
         s.append('\n').append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);

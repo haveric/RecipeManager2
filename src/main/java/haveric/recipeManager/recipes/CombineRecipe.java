@@ -216,7 +216,7 @@ public class CombineRecipe extends WorkbenchRecipe {
             s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
         }
 
-        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null, true));
+        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
 
         if (isMultiResult()) {
             s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
@@ -241,7 +241,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         for (Entry<ItemStack, MutableInt> e : items.entrySet()) {
             ItemStack item = e.getKey();
             item.setAmount(e.getValue().intValue());
-            s.append('\n').append(ToolsItem.print(item, RMCChatColor.RED, RMCChatColor.BLACK, false));
+            s.append('\n').append(ToolsItem.print(item, RMCChatColor.RED, RMCChatColor.BLACK));
         }
 
         return s.toString();
