@@ -15,6 +15,8 @@ public class TestMetaItem implements ItemMeta, Repairable {
     private Set<ItemFlag> flags = new HashSet<>();
     private int repairCost;
 
+    private boolean unbreakable;
+
     public TestMetaItem(TestMetaItem meta) {
         if (meta == null) {
             return;
@@ -29,6 +31,7 @@ public class TestMetaItem implements ItemMeta, Repairable {
         }
 
         this.repairCost = meta.getRepairCost();
+        this.unbreakable = meta.unbreakable;
     }
 
     @Override
@@ -169,14 +172,25 @@ public class TestMetaItem implements ItemMeta, Repairable {
     }
 
     boolean isEmpty() {
-        return !(hasDisplayName() || hasEnchants() || hasLore());
+        return !(hasDisplayName() || hasEnchants() || hasLore() || hasRepairCost() || isUnbreakable());
+    }
+
+    @Override
+    public boolean isUnbreakable() {
+        return unbreakable;
+    }
+
+    @Override
+    public void setUnbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
     }
 
     boolean equalsCommon(TestMetaItem that) {
         return ((this.hasDisplayName() ? that.hasDisplayName() && this.displayName.equals(that.displayName) : !that.hasDisplayName()))
                 && (this.hasEnchants() ? that.hasEnchants() && this.enchantments.equals(that.enchantments) : !that.hasEnchants())
                 && (this.hasLore() ? that.hasLore() && this.lores.equals(that.lores) : !that.hasLore())
-                && (this.hasRepairCost() ? that.hasRepairCost() && this.repairCost == that.repairCost : !that.hasRepairCost());
+                && (this.hasRepairCost() ? that.hasRepairCost() && this.repairCost == that.repairCost : !that.hasRepairCost())
+                && (this.isUnbreakable() == that.isUnbreakable());
     }
 
     boolean notUncommon(TestMetaItem meta) {

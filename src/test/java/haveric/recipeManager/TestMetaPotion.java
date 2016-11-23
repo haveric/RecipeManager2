@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     private PotionData type = new PotionData(PotionType.UNCRAFTABLE, false, false);
     private List<PotionEffect> customEffects;
+    private Color color;
 
     TestMetaPotion(TestMetaItem meta) {
         super(meta);
@@ -24,6 +26,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         }
         TestMetaPotion potionMeta = (TestMetaPotion) meta;
         this.type = potionMeta.type;
+        this.color = potionMeta.color;
         if (potionMeta.hasCustomEffects()) {
             this.customEffects = new ArrayList<>(potionMeta.customEffects);
         }
@@ -167,6 +170,21 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     @Override
+    public boolean hasColor() {
+        return color != null;
+    }
+
+    @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
     public boolean equalsCommon(TestMetaItem meta) {
         if (!super.equalsCommon(meta)) {
             return false;
@@ -174,7 +192,9 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         if (meta instanceof TestMetaPotion) {
             TestMetaPotion that = (TestMetaPotion) meta;
 
-            return type.equals(that.type) && (this.hasCustomEffects() ? that.hasCustomEffects() && this.customEffects.equals(that.customEffects) : !that.hasCustomEffects());
+            return type.equals(that.type)
+                    && (this.hasCustomEffects() ? that.hasCustomEffects() && this.customEffects.equals(that.customEffects) : !that.hasCustomEffects())
+                    && (this.hasColor() ? that.hasColor() && this.color.equals(that.color) : !that.hasColor());
         }
         return true;
     }

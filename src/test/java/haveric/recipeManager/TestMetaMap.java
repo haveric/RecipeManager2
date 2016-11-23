@@ -1,5 +1,6 @@
 package haveric.recipeManager;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.MapMeta;
 
@@ -9,6 +10,8 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
     static final byte SCALING_FALSE = (byte) 2;
 
     private byte scaling = SCALING_EMPTY;
+    private String locName;
+    private Color color;
 
     TestMetaMap(TestMetaItem meta) {
         super(meta);
@@ -19,6 +22,8 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
 
         TestMetaMap map = (TestMetaMap) meta;
         this.scaling = map.scaling;
+        this.locName = map.locName;
+        this.color = map.color;
     }
 
     @Override
@@ -37,7 +42,7 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
     }
 
     boolean isMapEmpty() {
-        return !hasScaling();
+        return !(hasScaling() | hasLocationName() || hasColor());
     }
 
     boolean hasScaling() {
@@ -53,6 +58,36 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
     }
 
     @Override
+    public boolean hasLocationName() {
+        return this.locName != null;
+    }
+
+    @Override
+    public String getLocationName() {
+        return this.locName;
+    }
+
+    @Override
+    public void setLocationName(String name) {
+        this.locName = name;
+    }
+
+    @Override
+    public boolean hasColor() {
+        return this.color != null;
+    }
+
+    @Override
+    public Color getColor() {
+        return this.color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
     boolean equalsCommon(TestMetaItem meta) {
         if (!super.equalsCommon(meta)) {
             return false;
@@ -60,7 +95,9 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
         if (meta instanceof TestMetaMap) {
             TestMetaMap that = (TestMetaMap) meta;
 
-            return (this.scaling == that.scaling);
+            return (this.scaling == that.scaling)
+                    && (hasLocationName() ? that.hasLocationName() && this.locName.equals(that.locName) : !that.hasLocationName())
+                    && (hasColor() ? that.hasColor() && this.color.equals(that.color) : !that.hasColor());
         }
         return true;
     }
