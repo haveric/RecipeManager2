@@ -46,6 +46,7 @@ public class FlagType {
     public static final String CLONE_INGREDIENT = "@cloneingredient";
     public static final String ITEM_NAME = "@itemname";
     public static final String ITEM_LORE = "@itemlore";
+    public static final String ITEM_UNBREAKABLE = "@itemunbreakable";
     public static final String LEATHER_COLOR = "@leathercolor";
     public static final String BOOK_ITEM = "@bookitem";
     public static final String FIREWORK_ITEM = "@fireworkitem";
