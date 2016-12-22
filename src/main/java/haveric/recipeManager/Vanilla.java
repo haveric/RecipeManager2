@@ -136,6 +136,27 @@ public class Vanilla {
         }
 
         if (Version.has1_11Support()) {
+            initialRecipes.put(new FuelRecipe(Material.WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.LADDER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.WOOD_BUTTON, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.BOW, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.FISHING_ROD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SIGN, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.BOWL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.WOODEN_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_DOOR_ITEM, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_DOOR_ITEM, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_DOOR_ITEM, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_DOOR_ITEM, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_DOOR_ITEM, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.BOAT, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.BOAT_ACACIA, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.BOAT_BIRCH, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.BOAT_DARK_OAK, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.BOAT_JUNGLE, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.BOAT_SPRUCE, 20), info);
+
             RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
         }
 
