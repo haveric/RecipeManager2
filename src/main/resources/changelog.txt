@@ -1,13 +1,14 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.9 Coming Soon ===
 * Furnace recipes: Fixed fuel recipes preventing other fuel recipes
 * Fix incorrect result after different failed recipe
 * Fix case issues with @IngredientCondition and @HoldItem
 * Fixed colors in craft result denied messages
 * New Flag: @ItemUnbreakable or @Unbreakable
 ** Sets the unbreakable state of items (Requires 1.11)
+* Added/updated special recipes for 1.11
 
 === v2.8 ===
 * Dropped support for Java 6

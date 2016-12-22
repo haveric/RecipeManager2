@@ -1,4 +1,4 @@
-lastchanged: 2.8 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.9 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -13,11 +13,14 @@ special-recipes:
   repair-metadata: false     # Weapon/tool repairing while preserving metadata (enchantments, name, etc), if both items have metadata, the first item's metadata will be preserved (ordering is from top left to bottom right)
   leather-armor-dye: true    # leather armor dyeing recipes
   fireworks: true            # fireworks recipes
+  firework-star: true        # firework star recipes
   map-cloning: true          # clone maps recipes
   map-extending: true        # extend maps recipes
   book-cloning: true         # clone books recipes
   banner: true               # banner recipes
-
+  shield-banner: true        # shield banner recipes
+  tipped-arrows: true        # tipped/potion arrows recipes
+  shulker-dye: true          # shulker dying recipes
 
 # When to play some additional sounds
 sounds:

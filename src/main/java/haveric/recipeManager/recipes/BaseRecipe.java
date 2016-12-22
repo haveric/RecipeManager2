@@ -13,6 +13,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     private Flags flags;
     protected Recipe recipe;
+    private boolean vanillaSpecialRecipe = false;
 
     public BaseRecipe() {
         super();
@@ -27,6 +28,7 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         }
 
         recipe = newRecipe.recipe;
+        vanillaSpecialRecipe = newRecipe.vanillaSpecialRecipe;
     }
 
     public BaseRecipe(Flags newFlags) {
@@ -65,6 +67,13 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         customName = true;
     }
 
+    public void setVanillaSpecialRecipe(boolean isVanilla) {
+        vanillaSpecialRecipe = isVanilla;
+    }
+
+    public boolean isVanillaSpecialRecipe() {
+        return vanillaSpecialRecipe;
+    }
 
 
     @Override

@@ -33,7 +33,7 @@ public class Vanilla {
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 0, (short) 0);
+    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 1, (short) 0);
 
     /**
      * Fireworks' special recipe result, you can use it to identify vanilla recipes.
@@ -51,6 +51,8 @@ public class Vanilla {
     protected static ItemStack RECIPE_BANNER = null;
 
     protected static ItemStack RECIPE_SHIELD_BANNER = null;
+
+    protected static ItemStack RECIPE_TIPPED_ARROW = null;
 
     /**
      * Book cloning's special recipe
@@ -133,6 +135,10 @@ public class Vanilla {
             RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
         }
 
+        if (Version.has1_11Support()) {
+            RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
+        }
+
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
             if (recipe instanceof FuelRecipe) {
@@ -165,6 +171,9 @@ public class Vanilla {
                     continue;
                 }
 
+                if (isSpecialRecipe(r)) {
+                    recipe.setVanillaSpecialRecipe(true);
+                }
                 initialRecipes.put(recipe, info);
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
@@ -443,6 +452,9 @@ public class Vanilla {
             if (recipe instanceof FuelRecipe) {
                 RecipeManager.getRecipes().indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
             } else {
+                if (recipe.isVanillaSpecialRecipe()) {
+                    continue;
+                }
                 Recipe bukkitRecipe = recipe.getBukkitRecipe(true);
 
                 if (bukkitRecipe != null) {
@@ -483,6 +495,14 @@ public class Vanilla {
             }
 
             if (recipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
+                isSpecial = true;
+            }
+
+            if (RECIPE_TIPPED_ARROW != null && result.equals(RECIPE_TIPPED_ARROW)) {
+                isSpecial = true;
+            }
+
+            if (result.getType().equals(Material.AIR)) {
                 isSpecial = true;
             }
         }

@@ -8,15 +8,16 @@ import haveric.recipeManager.data.BrewingStandData;
 import haveric.recipeManager.data.BrewingStands;
 import haveric.recipeManager.data.FurnaceData;
 import haveric.recipeManager.data.Furnaces;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flaggable;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,6 +41,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -110,9 +112,7 @@ public class Events implements Listener {
                 result = new ItemResult(inv.getResult());
             }
 
-            ItemStack recipeResult = bukkitRecipe.getResult();
-
-            if (prepareSpecialRecipe(player, inv, result, recipeResult)) {
+            if (prepareSpecialRecipe(player, inv, result, bukkitRecipe)) {
                 return; // stop here if it's a special recipe
             }
 
@@ -164,18 +164,44 @@ public class Events implements Listener {
         }
     }
 
-    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, ItemStack recipeResult) {
+    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, Recipe recipe) {
+        ItemStack recipeResult = recipe.getResult();
+
         if (!result.equals(recipeResult)) { // result was processed by the game and it doesn't match the original recipe
-            if (!Settings.getInstance().getSpecialLeatherDye() && recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
-                Messages.getInstance().sendOnce(player, "craft.special.leatherdye");
-                inv.setResult(null);
-                return true;
+            if (!Settings.getInstance().getSpecialLeatherDye()) {
+                boolean leatherDye = false;
+
+                if (Version.has1_11Support()) {
+                    if (result.hasItemMeta() && result.getItemMeta() instanceof LeatherArmorMeta) {
+                        leatherDye = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_LEATHERDYE)) {
+                    leatherDye = true;
+                }
+
+                if (leatherDye) {
+                    Messages.getInstance().sendOnce(player, "craft.special.leatherdye");
+                    inv.setResult(null);
+                    return true;
+                }
             }
 
-            if (!Settings.getInstance().getSpecialMapCloning() && recipeResult.equals(Vanilla.RECIPE_MAPCLONE)) {
-                Messages.getInstance().sendOnce(player, "craft.special.map.cloning");
-                inv.setResult(null);
-                return true;
+            if (!Settings.getInstance().getSpecialMapCloning()) {
+                boolean mapClone = false;
+
+                if (Version.has1_11Support()) {
+                    if (result.getType().equals(Material.MAP) && result.getAmount() > 1) {
+                        mapClone = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_MAPCLONE)) {
+                    mapClone = true;
+                }
+
+                if (mapClone) {
+                    Messages.getInstance().sendOnce(player, "craft.special.map.cloning");
+                    inv.setResult(null);
+                    return true;
+                }
             }
 
             if (!Settings.getInstance().getSpecialMapExtending() && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
@@ -184,28 +210,98 @@ public class Events implements Listener {
                 return true;
             }
 
-            if (!Settings.getInstance().getSpecialFireworks() && recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
-                Messages.getInstance().sendOnce(player, "craft.special.fireworks");
+            if (!Settings.getInstance().getSpecialFireworks()) {
+                boolean fireworks = false;
+
+                if (Version.has1_11Support()) {
+                    if (result.getType().equals(Material.FIREWORK)) {
+                        fireworks = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
+                    fireworks = true;
+                }
+
+                if (fireworks) {
+                    Messages.getInstance().sendOnce(player, "craft.special.fireworks");
+                    inv.setResult(null);
+                    return true;
+                }
+            }
+
+            if (!Settings.getInstance().getSpecialFireworkStar()) {
+                if (Version.has1_11Support() && result.getType().equals(Material.FIREWORK_CHARGE)) {
+                    Messages.getInstance().sendOnce(player, "craft.special.fireworkstar");
+                    inv.setResult(null);
+                    return true;
+                }
+            }
+
+            if (!Settings.getInstance().getSpecialBookCloning()) {
+                boolean bookClone = false;
+
+                if (Version.has1_11Support()) {
+                    if (result.getType().equals(Material.WRITTEN_BOOK)) {
+                        bookClone = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_BOOKCLONE)) {
+                    bookClone = true;
+                }
+
+                if (bookClone) {
+                    Messages.getInstance().sendOnce(player, "craft.special.book.cloning");
+                    inv.setResult(null);
+                    return true;
+                }
+            }
+
+            if (!Settings.getInstance().getSpecialBanner()) {
+                boolean isBanner = false;
+
+                if (Version.has1_11Support()) {
+                    if (result.getType().equals(Material.BANNER)) {
+                        isBanner = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_BANNER)) {
+                    isBanner = true;
+                }
+
+                if (isBanner) {
+                    Messages.getInstance().sendOnce(player, "craft.special.banner");
+                    inv.setResult(null);
+                    return true;
+                }
+            }
+
+            if (!Settings.getInstance().getSpecialShieldBanner()) {
+                boolean isShieldBanner = false;
+
+                if (Version.has1_11Support()) {
+                    if (result.getType().equals(Material.SHIELD)) {
+                        isShieldBanner = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_SHIELD_BANNER)) {
+                    isShieldBanner = true;
+                }
+
+                if (isShieldBanner) {
+                    Messages.getInstance().sendOnce(player, "craft.special.shieldbanner");
+                    inv.setResult(null);
+                    return true;
+                }
+            }
+
+            if (!Settings.getInstance().getSpecialTippedArrows() && recipeResult.equals(Vanilla.RECIPE_TIPPED_ARROW)) {
+                Messages.getInstance().sendOnce(player, "craft.special.tippedarrows");
                 inv.setResult(null);
                 return true;
             }
 
-            if (!Settings.getInstance().getSpecialBookCloning() && recipeResult.equals(Vanilla.RECIPE_BOOKCLONE)) {
-                Messages.getInstance().sendOnce(player, "craft.special.book.cloning");
-                inv.setResult(null);
-                return true;
-            }
-
-            if (!Settings.getInstance().getSpecialBanner() && recipeResult.equals(Vanilla.RECIPE_BANNER)) {
-                Messages.getInstance().sendOnce(player, "craft.special.banner");
-                inv.setResult(null);
-                return true;
-            }
-
-            if (!Settings.getInstance().getSpecialShieldBanner() && recipeResult.equals(Vanilla.RECIPE_SHIELD_BANNER)) {
-                Messages.getInstance().sendOnce(player, "craft.special.shield-banner");
-                inv.setResult(null);
-                return true;
+            if (!Settings.getInstance().getSpecialShulkerDye()) {
+                if (Version.has1_11Support() && ToolsItem.isShulkerBox(result.getType())) {
+                    Messages.getInstance().sendOnce(player, "craft.special.shulkerdye");
+                    inv.setResult(null);
+                    return true;
+                }
             }
         }
 

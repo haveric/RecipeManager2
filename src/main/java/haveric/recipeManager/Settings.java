@@ -26,11 +26,14 @@ public class Settings {
 
     private static final boolean SPECIAL_LEATHER_DYE_DEFAULT = true;
     private static final boolean SPECIAL_FIREWORKS_DEFAULT = true;
+    private static final boolean SPECIAL_FIREWORK_STAR_DEFAULT = true;
     private static final boolean SPECIAL_MAP_CLONING_DEFAULT = true;
     private static final boolean SPECIAL_MAP_EXTENDING_DEFAULT = true;
     private static final boolean SPECIAL_BOOK_CLONING_DEFAULT = true;
     private static final boolean SPECIAL_BANNER_DEFAULT = true;
     private static final boolean SPECIAL_SHIELD_BANNER_DEFAULT = true;
+    private static final boolean SPECIAL_TIPPED_ARROWS_DEFAULT = true;
+    private static final boolean SPECIAL_SHULKER_DYE_DEFAULT = true;
 
     private static final boolean SOUNDS_REPAIR_DEFAULT = true;
     private static final boolean SOUNDS_FAILED_DEFAULT = true;
@@ -130,11 +133,14 @@ public class Settings {
         MessageSender.getInstance().log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
         MessageSender.getInstance().log("    special-recipes.leather-dye: " + getSpecialLeatherDye());
         MessageSender.getInstance().log("    special-recipes.fireworks: " + getSpecialFireworks());
+        MessageSender.getInstance().log("    special-recipes.firework-star: " + getSpecialFireworkStar());
         MessageSender.getInstance().log("    special-recipes.map-cloning: " + getSpecialMapCloning());
         MessageSender.getInstance().log("    special-recipes.map-extending: " + getSpecialMapExtending());
         MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
         MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
         MessageSender.getInstance().log("    special-recipes.shield-banner: " + getSpecialShieldBanner());
+        MessageSender.getInstance().log("    special-recipes.tipped-arrows: " + getSpecialTippedArrows());
+        MessageSender.getInstance().log("    special-recipes.shulker-dye: " + getSpecialShulkerDye());
         MessageSender.getInstance().log("    sounds.failed: " + getSoundsFailed());
         MessageSender.getInstance().log("    sounds.failed_click: " + getSoundsFailedClick());
         MessageSender.getInstance().log("    sounds.repair: " + getSoundsRepair());
@@ -377,6 +383,10 @@ public class Settings {
         return fileConfig.getBoolean("special-recipes.fireworks", SPECIAL_FIREWORKS_DEFAULT);
     }
 
+    public boolean getSpecialFireworkStar() {
+        return fileConfig.getBoolean("special-recipes.firework-star", SPECIAL_FIREWORK_STAR_DEFAULT);
+    }
+
     public boolean getSpecialMapCloning() {
         return fileConfig.getBoolean("special-recipes.map-cloning", SPECIAL_MAP_CLONING_DEFAULT);
     }
@@ -395,6 +405,14 @@ public class Settings {
 
     public boolean getSpecialShieldBanner() {
         return fileConfig.getBoolean("special-recipes.shield-banner", SPECIAL_SHIELD_BANNER_DEFAULT);
+    }
+
+    public boolean getSpecialTippedArrows() {
+        return fileConfig.getBoolean("special-recipes.tipped-arrows", SPECIAL_TIPPED_ARROWS_DEFAULT);
+    }
+
+    public boolean getSpecialShulkerDye() {
+        return fileConfig.getBoolean("special-recipes.shulker-dye", SPECIAL_SHULKER_DYE_DEFAULT);
     }
 
     public boolean getSoundsRepair() {

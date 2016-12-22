@@ -1,4 +1,4 @@
-lastchanged: 2.8
+lastchanged: 2.9
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
@@ -97,12 +97,16 @@ craft:
   special:
     leatherdye: <red>Leather dyeing is disabled.
     fireworks: <red>Firework crafting is disabled.
+    fireworkstar: <red>Firework star crafting is disabled.
     map:
       cloning: <red>Map cloning is disabled.
       extending: <red>Map extending is disabled.
     book:
       cloning: <red>Book cloning is disabled.
     banner: <red>Banner crafting is disabled.
+    shieldbanner: <red>Shield Banner crafting is disabled.
+    tippedarrows: <red>Tipped arrows crafting is disabled.
+    shulkerdye: <red>Shulker dying is disabled.
   result:
     denied:
       title: <yellow><underline>You can't craft this recipe!
