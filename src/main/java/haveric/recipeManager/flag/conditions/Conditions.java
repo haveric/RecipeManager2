@@ -15,6 +15,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
@@ -49,6 +50,7 @@ public class Conditions implements Cloneable {
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private DyeColor bannerColor;
     private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
+    private EntityType spawnEggEntityType;
     private boolean noMeta = false;
     private boolean noName = false;
     private boolean noLore = false;
@@ -99,6 +101,7 @@ public class Conditions implements Cloneable {
         potionEffectConditions.putAll(original.potionEffectConditions);
         bannerColor = original.bannerColor;
         bannerPatterns.putAll(original.bannerPatterns);
+        spawnEggEntityType = original.spawnEggEntityType;
 
         setNoMeta(original.isNoMeta());
         setNoName(original.isNoName());
@@ -939,6 +942,18 @@ public class Conditions implements Cloneable {
         return conditionsMet == bannerPatterns.entrySet().size();
     }
 
+    public void setSpawnEggEntityType(EntityType entityType) {
+        spawnEggEntityType = entityType;
+    }
+
+    public boolean hasSpawnEggEntityType() {
+        return spawnEggEntityType != null;
+    }
+
+    public boolean checkSpawnEggEntityType(SpawnEggMeta meta) {
+        return meta.getSpawnedType().equals(spawnEggEntityType);
+    }
+
     /**
      * Check the supplied item with supplied arguments against this condition class.
      *
@@ -1176,6 +1191,33 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     a.addReason("flag.ingredientconditions.nobannerpatterns", getFailMessage(), "{item}", ToolsItem.print(item), "{patterns)", bannerPatterns); // TODO: Check if these messages are actually being used and if so probably fix bannerPatterns output
+                }
+                ok = false;
+
+                if (getFailMessage() != null) {
+                    return false;
+                }
+            }
+        }
+
+        if (hasSpawnEggEntityType()) {
+            boolean failed = true;
+
+            if (meta instanceof SpawnEggMeta) {
+                SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
+
+                if (checkSpawnEggEntityType(spawnEggMeta)) {
+                    failed = false;
+                }
+            }
+
+            if (failed) {
+                if (a == null) {
+                    return false;
+                }
+
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nospawneggentitytype", getFailMessage(), "{item}", ToolsItem.print(item), "{entitytype)", spawnEggEntityType);
                 }
                 ok = false;
 
@@ -1670,6 +1712,15 @@ public class Conditions implements Cloneable {
                         addBannerPattern(pattern, dye);
                     }
                 }
+            }
+        } else if (argLower.startsWith("spawnegg")) {
+            value = argLower.substring("spawnegg".length()).trim();
+
+            try {
+                EntityType entityType = EntityType.valueOf(value.toUpperCase());
+                setSpawnEggEntityType(entityType);
+            } catch (IllegalArgumentException e) {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'spawnegg' argument with invalid entity type: " + value);
             }
         } else {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);

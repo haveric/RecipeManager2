@@ -127,7 +127,9 @@ public class FlagHoldItem extends Flag {
             "  nometa or !meta",
             "    Held item must have no metadata (enchants, bookenchants, name, lore, color)",
             "    Overrides enchant, name, lore, color conditions if set",
-            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor", }, String.class);
+            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor",
+            "",
+            "  spawnegg <entitytype> = Type of entity contained in a spawn egg, read '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section", }, String.class);
 
         return description;
     }
