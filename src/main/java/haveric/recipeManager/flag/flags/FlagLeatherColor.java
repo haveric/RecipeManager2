@@ -21,21 +21,21 @@ public class FlagLeatherColor extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <red> <green> <blue>", };
+                "{flag} <red> <green> <blue>", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-            "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
-            "",
-            "Specific items: leather armor.", };
+                "Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
+                "",
+                "Specific items: leather armor.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} 255 100 50", };
+                "{flag} 255 100 50", };
     }
 
 

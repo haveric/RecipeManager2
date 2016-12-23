@@ -48,6 +48,8 @@ public class TestItemFactory implements ItemFactory {
                 return meta instanceof TestMetaEnchantedBook ? meta : new TestMetaEnchantedBook(meta);
             case BANNER:
                 return meta instanceof TestMetaBanner ? meta : new TestMetaBanner(meta);
+            case MONSTER_EGG:
+                return meta instanceof TestMetaSpawnEgg ? meta : new TestMetaSpawnEgg(meta);
             case FURNACE:
             case CHEST:
             case TRAPPED_CHEST:

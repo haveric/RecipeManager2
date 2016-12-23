@@ -11,6 +11,7 @@ This file will be automatically overwritten when a new version is installed.
 * Added/updated special recipes for 1.11
 * Added enchant aliases for Binding Curse, Vanishing Curse, and Sweeping Edge
 * Added 1.11 fuel recipes
+* Added @SpawnEgg flag (Requires 1.11)
 
 === v2.8 ===
 * Dropped support for Java 6
