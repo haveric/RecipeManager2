@@ -12,8 +12,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import static haveric.recipeManager.Files.FILE_MESSAGES;
@@ -55,16 +53,9 @@ public class FlagBaseTest {
         workDir.delete();
         workDir.mkdirs();
 
-
         File messagesFile = new File("src/main/resources/" + FILE_MESSAGES);
-        File workMessagesFile = new File("src/test/work/" + FILE_MESSAGES);
+        Messages.getInstance().loadMessages(null, messagesFile);
 
-        try {
-            java.nio.file.Files.copy(messagesFile.toPath(), workMessagesFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Messages.getInstance().loadMessages(null, workMessagesFile);
-        } catch (IOException e) {
-            // TODO: Handle error
-        }
         recipes = new Recipes();
 
         mockStatic(RecipeManager.class);
