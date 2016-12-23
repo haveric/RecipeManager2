@@ -33,7 +33,8 @@ public class Vanilla {
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 1, (short) 0);
+    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 0, (short) 0);
+    public static final ItemStack RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.EMPTY_MAP, 1, (short) 0);
 
     /**
      * Fireworks' special recipe result, you can use it to identify vanilla recipes.
@@ -503,7 +504,7 @@ public class Vanilla {
         if (recipe != null) {
             ItemStack result = recipe.getResult();
 
-            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_BOOKCLONE)) {
+            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_MAPEXTEND_1_11) || result.equals(RECIPE_BOOKCLONE)) {
                 isSpecial = true;
             }
 

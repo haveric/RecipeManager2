@@ -204,10 +204,22 @@ public class Events implements Listener {
                 }
             }
 
-            if (!Settings.getInstance().getSpecialMapExtending() && recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
-                Messages.getInstance().sendOnce(player, "craft.special.map.extending");
-                inv.setResult(null);
-                return true;
+            if (!Settings.getInstance().getSpecialMapExtending()) {
+                boolean mapExtend = false;
+
+                if (Version.has1_11Support()) {
+                    if (recipeResult.equals(Vanilla.RECIPE_MAPEXTEND_1_11)) {
+                        mapExtend = true;
+                    }
+                } else if (recipeResult.equals(Vanilla.RECIPE_MAPEXTEND)) {
+                    mapExtend = true;
+                }
+
+                if (mapExtend) {
+                    Messages.getInstance().sendOnce(player, "craft.special.map.extending");
+                    inv.setResult(null);
+                    return true;
+                }
             }
 
             if (!Settings.getInstance().getSpecialFireworks()) {
