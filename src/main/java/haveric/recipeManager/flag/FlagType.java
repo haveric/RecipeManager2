@@ -60,4 +60,5 @@ public class FlagType {
     public static final String BANNER_ITEM = "@banneritem";
     public static final String NO_RESULT = "@noresult";
     public static final String SPAWN_EGG = "@spawnegg";
+    public static final String MONSTER_SPAWNER = "@monsterspawner";
 }

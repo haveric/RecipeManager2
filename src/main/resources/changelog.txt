@@ -1,6 +1,10 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* New Flag: @MonsterSpawner (Requires Bukkit/Spigot build of 1/10/2017 or newer)
+** Works similarly to @SpawnEgg
+
 === v2.9 ===
 * Furnace recipes: Fixed fuel recipes preventing other fuel recipes
 * Fix incorrect result after different failed recipe
