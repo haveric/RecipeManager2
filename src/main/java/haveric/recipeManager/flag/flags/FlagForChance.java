@@ -390,7 +390,7 @@ public class FlagForChance extends Flag {
             Flag flag;
 
             if (appendFlag && flagChance == null) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't append to " + type + " flag because it hasn't been defined for this group!");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't append to " + type.getNameDisplay() + " flag because it hasn't been defined for this group!");
             }
 
             if (!appendFlag || flagChance == null) {
