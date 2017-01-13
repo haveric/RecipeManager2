@@ -30,9 +30,9 @@ public class FlagDisplayResult extends Flag {
             "Using this flag more than once will overwrite the previous message.",
             "",
             "As 'item' argument you can define an item like in a result, material:data:amount.",
-            "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having @" + FlagType.INGREDIENT_CONDITION + " flag on them.",
+            "Or you can set the item as 'first' to use the first display result available, very useful for multiple results having " + FlagType.INGREDIENT_CONDITION + " flag on them.",
             "",
-            "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like @" + FlagType.INGREDIENT_CONDITION + ").",
+            "Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like " + FlagType.INGREDIENT_CONDITION + ").",
             "",
             "NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.",
             "NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.", };
