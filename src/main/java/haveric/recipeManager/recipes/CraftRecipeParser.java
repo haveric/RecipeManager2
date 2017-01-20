@@ -6,6 +6,7 @@ import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -64,9 +65,11 @@ public class CraftRecipeParser extends BaseRecipeParser {
                 }
 
                 // no point in adding more ingredients if there are errors
-                if (!ingredientErrors && item.getType() != Material.AIR) {
-                    ingredients[(rows * 3) + i] = item;
-                    ingredientsNum++;
+                if (!ingredientErrors) {
+                    if (Version.has1_11Support() || item.getType() != Material.AIR) {
+                        ingredients[(rows * 3) + i] = item;
+                        ingredientsNum++;
+                    }
                 }
             }
 
