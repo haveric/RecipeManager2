@@ -41,8 +41,6 @@ public class Updater {
     private static String currentBetaStatus = "";
     private static String latestBetaStatus = "";
 
-    private static String versionRegex = "[^de0-9 ]?[v]?([0-9\\.]+[^\\.a-z -])(?:[ -])?([dev|alpha|beta]*[-]*[0-9]*)?";
-
     private static BukkitTask task = null;
 
     private Updater() { } // Private constructor for utility class
@@ -92,44 +90,54 @@ public class Updater {
     }
 
     public static String getCurrentVersion() {
-        Pattern pattern = Pattern.compile(versionRegex);
         String currentVersion = plugin.getDescription().getVersion();
 
-        Matcher matcher = pattern.matcher(currentVersion);
+        Matcher matcher = getMatcher(currentVersion);
         if (matcher.find()) {
-            currentVersion = matcher.group(1).replaceAll(" v", "");
-
-            currentBetaStatus = matcher.group(2);
-            if (currentBetaStatus == null) {
-                currentBetaStatus = "";
-            } else {
-                currentBetaStatus = currentBetaStatus.replaceAll(" -", "");
-            }
+            currentVersion = getVersion(matcher);
+            currentBetaStatus = getBetaStatus(matcher);
         }
 
         return currentVersion;
     }
 
     public static String getLatestVersion() {
-        Pattern pattern = Pattern.compile(versionRegex);
         String latest = latestVersion;
-
         if (latest != null) {
-            Matcher matcher = pattern.matcher(latest);
-            if (matcher.find()) {
-                latest = matcher.group(1).replaceAll(" v", "");
+            Matcher matcher = getMatcher(latest);
 
-                latestBetaStatus = matcher.group(2);
-                if (latestBetaStatus == null) {
-                    latestBetaStatus = "";
-                } else {
-                    latestBetaStatus = latestBetaStatus.replaceAll(" -", "");
-                }
+            if (matcher.find()) {
+                latest = getVersion(matcher);
+                latestBetaStatus = getBetaStatus(matcher);
             }
         }
 
         return latest;
     }
+
+    protected static Matcher getMatcher(String original) {
+        String versionRegex = "v?([0-9.]+)[ -]?((dev|alpha|beta)?[0-9 -]*)?";
+        Pattern pattern = Pattern.compile(versionRegex);
+
+        return pattern.matcher(original);
+    }
+
+    protected static String getVersion(Matcher matcher) {
+        return matcher.group(1).replaceAll(" v", "");
+    }
+
+    protected static String getBetaStatus(Matcher matcher) {
+        String status = matcher.group(2);
+
+        if (status == null) {
+            status = "";
+        } else {
+            status = status.replaceAll("[ -]", "");
+        }
+
+        return status;
+    }
+
 
     /**
      *
