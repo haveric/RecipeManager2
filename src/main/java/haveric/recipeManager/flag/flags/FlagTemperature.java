@@ -215,16 +215,15 @@ public class FlagTemperature extends Flag {
         } else {
             Block block = a.location().getBlock();
             double biomeTemperature = block.getTemperature();
-            double actualTemperature = biomeTemperature;
             int y = block.getY();
             int seaLevel = a.location().getWorld().getSeaLevel();
 
             if (y > seaLevel) {
-                actualTemperature -= ((y - seaLevel) * 0.00166667);
+                biomeTemperature -= ((y - seaLevel) * 0.00166667);
             }
 
-            if (!checkTemperature(actualTemperature)) {
-                a.addReason("flag.temperature", failMessage, "{temperature}", getTemperatureString(), "{actual}", actualTemperature);
+            if (!checkTemperature(biomeTemperature)) {
+                a.addReason("flag.temperature", failMessage, "{temperature}", getTemperatureString(), "{actual}", biomeTemperature);
             }
         }
     }

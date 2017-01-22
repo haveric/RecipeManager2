@@ -226,7 +226,7 @@ public class RecipeBooks {
         return book;
     }
 
-    private RecipeBook initBookRecipes(CommandSender sender, File file) {
+    private void initBookRecipes(CommandSender sender, File file) {
         ErrorReporter.getInstance().setFile(file.getName());
 
         // Loading YML file
@@ -397,7 +397,7 @@ public class RecipeBooks {
 
         if (volumesMap.isEmpty()) {
             ErrorReporter.getInstance().error("Book '" + id + "' has no defined recipes!", "See '" + Files.FILE_INFO_BOOKS + "' file to learn about recipe books.");
-            return null;
+            return;
         }
 
         for (List<String> recipes : volumesMap.values()) {
@@ -405,8 +405,6 @@ public class RecipeBooks {
         }
 
         books.put(id.toLowerCase(), book);
-
-        return book;
     }
 
     private void parseRecipeName(String id, String value, Collection<String> recipes, Set<String> allRecipes) {

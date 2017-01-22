@@ -96,7 +96,6 @@ public class FlagMonsterSpawner extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-
         if (!a.hasResult()) {
             a.addCustomReason("Needs result!");
             return;

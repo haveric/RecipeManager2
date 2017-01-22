@@ -27,8 +27,7 @@ public class TestMetaBookSigned extends TestMetaBook implements BookMeta {
 
     @Override
     public TestMetaBookSigned clone() {
-        TestMetaBookSigned meta = (TestMetaBookSigned) super.clone();
-        return meta;
+        return (TestMetaBookSigned) super.clone();
     }
 
     @Override
