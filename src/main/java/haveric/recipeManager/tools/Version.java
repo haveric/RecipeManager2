@@ -3,14 +3,19 @@ package haveric.recipeManager.tools;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.EntityType;
 
 public class Version {
 
     private static String supportVersion = null;
 
     public static void init() {
-        if (supports1_11()) {
+        if (supports1_12()) {
+            supportVersion = "1.12";
+        } else if (supports1_11()) {
             supportVersion = "1.11";
+        } else if (supports1_10()) {
+            supportVersion = "1.10";
         } else if (supports19()) {
             supportVersion = "1.9";
         } else if (supports18Plus()) {
@@ -21,6 +26,20 @@ public class Version {
             supportVersion = "1.7";
         }
     }
+    
+    private static boolean supports1_12() {
+        boolean supports;
+
+        try {
+            @SuppressWarnings("unused")
+            EntityType et = EntityType.PARROT;
+            supports = true;
+        } catch (NoSuchFieldError e) {
+            supports = false;
+        }
+
+        return supports;
+    }
 
     private static boolean supports1_11() {
         boolean supports;
@@ -28,6 +47,19 @@ public class Version {
         try {
             @SuppressWarnings("unused")
             Material shulker = Material.SHULKER_SHELL;
+            supports = true;
+        } catch (NoSuchFieldError e) {
+            supports = false;
+        }
+
+        return supports;
+    }
+    private static boolean supports1_10() {
+        boolean supports;
+
+        try {
+            @SuppressWarnings("unused")
+            EntityType et = EntityType.POLAR_BEAR;
             supports = true;
         } catch (NoSuchFieldError e) {
             supports = false;
@@ -85,11 +117,33 @@ public class Version {
         return supportVersion;
     }
 
+    public static boolean has1_12Support() {
+        boolean hasSupport = false;
+        String version = getVersion();
+
+        if (version.equals("1.12")) {
+            hasSupport = true;
+        }
+
+        return hasSupport;
+    }
+
     public static boolean has1_11Support() {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.11")) {
+        if (version.equals("1.12") || version.equals("1.11")) {
+            hasSupport = true;
+        }
+
+        return hasSupport;
+    }
+
+    public static boolean has1_10Support() {
+        boolean hasSupport = false;
+        String version = getVersion();
+
+        if (version.equals("1.12") || version.equals("1.11") || version.equals("1.10")) {
             hasSupport = true;
         }
 
@@ -100,7 +154,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.11") || version.equals("1.9")) {
+        if (version.equals("1.12") || version.equals("1.11") || version.equals("1.10") || version.equals("1.9")) {
             hasSupport = true;
         }
 

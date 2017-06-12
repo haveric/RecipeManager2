@@ -10,6 +10,7 @@ import java.util.*;
 
 public class TestMetaItem implements ItemMeta, Repairable {
     private String displayName;
+    private String localizedName;
     private List<String> lores = new ArrayList<>();
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private Set<ItemFlag> flags = new HashSet<>();
@@ -209,5 +210,20 @@ public class TestMetaItem implements ItemMeta, Repairable {
         }
 
         return false;
+    }
+
+    @Override
+    public void setLocalizedName(String name) {
+        this.localizedName = name;
+    }
+
+    @Override
+    public String getLocalizedName() {
+        return this.localizedName;
+    }
+
+    @Override
+    public boolean hasLocalizedName() {
+        return this.localizedName != null;
     }
 }

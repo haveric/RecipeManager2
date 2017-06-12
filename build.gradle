@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 configurations {
     extra
@@ -33,7 +33,7 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.4'
     
     compile project(':RecipeManagerCommon')
-    compile "org.bukkit:bukkit:1.11.2-R0.1-SNAPSHOT"
+    compile "org.bukkit:bukkit:1.12-R0.1-SNAPSHOT"
     //compile "net.milkbowl.vault:VaultAPI:1.6"
     compile "com.github.MilkBowl:VaultAPI:master-SNAPSHOT"
     
