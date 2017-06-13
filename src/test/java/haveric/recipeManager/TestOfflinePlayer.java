@@ -28,8 +28,7 @@ public class TestOfflinePlayer implements OfflinePlayer {
         return false;
     }
 
-    @Override
-    public void setBanned(boolean banned) {
+    public void setBanned(boolean value) {
 
     }
 
