@@ -10,10 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -280,6 +277,9 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCraftRecipe(CraftRecipe recipe) {
+        List<Recipe> newRecipes = new ArrayList<Recipe>();
+        Recipe removedRecipe = null;
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapedRecipe sr;
         Recipe r;
@@ -299,17 +299,28 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
-                        iterator.remove();
-                        return sr;
+                    if (removedRecipe == null && sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
+                        removedRecipe = sr;
+                    } else {
+                        newRecipes.add(r);
                     }
+                } else {
+                    newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        return null;
+        if (removedRecipe != null) {
+            Bukkit.clearRecipes();
+
+            for (Recipe newRecipe : newRecipes) {
+                Bukkit.addRecipe(newRecipe);
+            }
+        }
+
+        return removedRecipe;
     }
 
     /**
@@ -332,6 +343,9 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCombineRecipe(CombineRecipe recipe) {
+        List<Recipe> newRecipes = new ArrayList<Recipe>();
+        Recipe removedRecipe = null;
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapelessRecipe sr;
         Recipe r;
@@ -345,17 +359,28 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (Tools.compareIngredientList(items, sr.getIngredientList())) {
-                        iterator.remove();
-                        return sr;
+                    if (removedRecipe == null && Tools.compareIngredientList(items, sr.getIngredientList())) {
+                        removedRecipe = sr;
+                    } else {
+                        newRecipes.add(r);
                     }
+                } else {
+                    newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        return null;
+        if (removedRecipe != null) {
+            Bukkit.clearRecipes();
+
+            for (Recipe newRecipe : newRecipes) {
+                Bukkit.addRecipe(newRecipe);
+            }
+        }
+
+        return removedRecipe;
     }
 
     /**
@@ -382,6 +407,9 @@ public class Vanilla {
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
+        List<Recipe> newRecipes = new ArrayList<Recipe>();
+        Recipe removedRecipe = null;
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         FurnaceRecipe fr;
         Recipe r;
@@ -393,17 +421,28 @@ public class Vanilla {
                 if (r instanceof FurnaceRecipe) {
                     fr = (FurnaceRecipe) r;
 
-                    if (ingredient.getType() == fr.getInput().getType()) {
-                        iterator.remove();
-                        return fr;
+                    if (removedRecipe == null && ingredient.getType() == fr.getInput().getType()) {
+                        removedRecipe = fr;
+                    } else {
+                        newRecipes.add(r);
                     }
+                } else {
+                    newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        return null;
+        if (removedRecipe != null) {
+            Bukkit.clearRecipes();
+
+            for (Recipe newRecipe : newRecipes) {
+                Bukkit.addRecipe(newRecipe);
+            }
+        }
+
+        return removedRecipe;
     }
 
     /**
@@ -414,6 +453,8 @@ public class Vanilla {
             return;
         }
 
+        List<Recipe> originalRecipes = new ArrayList<Recipe>();
+
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 
@@ -421,12 +462,18 @@ public class Vanilla {
             try {
                 recipe = iterator.next();
 
-                if (recipe != null && RecipeManager.getRecipes().isCustomRecipe(recipe)) {
-                    iterator.remove();
+                if (recipe != null && !RecipeManager.getRecipes().isCustomRecipe(recipe)) {
+                    originalRecipes.add(recipe);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
+        }
+
+        Bukkit.clearRecipes();
+
+        for (Recipe newRecipe : originalRecipes) {
+            Bukkit.addRecipe(newRecipe);
         }
     }
 
@@ -434,6 +481,7 @@ public class Vanilla {
      * Remove all recipes from the server except special ones
      */
     public static void removeAllButSpecialRecipes() {
+        List<Recipe> specialRecipes = new ArrayList<Recipe>();
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 
@@ -443,14 +491,17 @@ public class Vanilla {
 
                 if (recipe != null) {
                     if (isSpecialRecipe(recipe)) {
-                        continue;
+                        specialRecipes.add(recipe);
                     }
-
-                    iterator.remove();
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
+        }
+
+        Bukkit.clearRecipes();
+        for (Recipe specialRecipe : specialRecipes) {
+            Bukkit.addRecipe(specialRecipe);
         }
     }
 
