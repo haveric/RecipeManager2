@@ -1,4 +1,4 @@
-lastchanged: 2.10.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.11.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager enchant aliases
 #
@@ -38,7 +38,7 @@ silk_touch: silk touch
 water_worker: aqua affinity
 binding_curse: binding curse
 vanishing_curse: vanishing curse
-sweeping: sweeping edge
+sweeping_edge: sweeping edge
 
 # add your own aliases if you want.
 
