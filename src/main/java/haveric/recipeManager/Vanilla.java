@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.tools.RecipeIteratorV1_12;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -299,10 +300,8 @@ public class Vanilla {
         int width = recipe.getWidth();
 
         // 1.12 support -- .remove() no longer works. Have to grab all recipes 'cept the one to remove. Clear all recipes. Then readd all.
-        List<Recipe> toReadd = null;
-        boolean foundRemove = false;
         if (Version.has1_12Support()) {
-            toReadd = new LinkedList<Recipe>();
+            iterator = new RecipeIteratorV1_12(iterator);
         }
 
         while (iterator.hasNext()) {
@@ -314,35 +313,16 @@ public class Vanilla {
                     sh = sr.getShape();
 
                     if (sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
-                        if (!Version.has1_12Support()) {
-                            iterator.remove();
-                            return sr;
-                        } else {
-                            foundRemove = true;
-                            break;
-                        } 
-                    } else if (Version.has1_12Support()) {
-                        toReadd.add(r);
+                        iterator.remove();
+                        if (Version.has1_12Support()) {
+                            ((RecipeIteratorV1_12) iterator).finish();
+                        }
+                        return sr;
                     }
-                } else if (Version.has1_12Support()) {
-                    toReadd.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
-        }
-
-        if (Version.has1_12Support() && foundRemove) { // grab rest of recipes and clear, then add them all back.
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
-                    toReadd.add(r);
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
-            }
-            Bukkit.clearRecipes();
-            toReadd.stream().forEach(recpe -> Bukkit.addRecipe(recpe));
         }
 
         return null;
@@ -375,10 +355,8 @@ public class Vanilla {
         List<ItemStack> items = recipe.getIngredients();
 
         // 1.12 support -- .remove() no longer works. Have to grab all recipes 'cept the one to remove. Clear all recipes. Then readd all.
-        List<Recipe> toReadd = null;
-        boolean foundRemove = false;
         if (Version.has1_12Support()) {
-            toReadd = new LinkedList<Recipe>();
+            iterator = new RecipeIteratorV1_12(iterator);
         }
 
         while (iterator.hasNext()) {
@@ -389,37 +367,17 @@ public class Vanilla {
                     sr = (ShapelessRecipe) r;
 
                     if (Tools.compareIngredientList(items, sr.getIngredientList())) {
-                        if (!Version.has1_12Support()) {
-                            iterator.remove();
-                            return sr;
-                        } else {
-                            foundRemove = true;
-                            break;
-                        } 
-                    } else if (Version.has1_12Support()) {
-                        toReadd.add(r);
+                        iterator.remove();
+                        if (Version.has1_12Support()) {
+                            ((RecipeIteratorV1_12) iterator).finish();
+                        }
+                        return sr;
                     }
-                } else if (Version.has1_12Support()) {
-                    toReadd.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
-
-        if (Version.has1_12Support() && foundRemove) { // grab rest of recipes and clear, then add them all back.
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
-                    toReadd.add(r);
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
-            }
-            Bukkit.clearRecipes();
-            toReadd.stream().forEach(recpe -> Bukkit.addRecipe(recpe));
-        }
-
         return null;
     }
 
@@ -452,10 +410,8 @@ public class Vanilla {
         Recipe r;
 
         // 1.12 support -- .remove() no longer works. Have to grab all recipes 'cept the one to remove. Clear all recipes. Then readd all.
-        List<Recipe> toReadd = null;
-        boolean foundRemove = false;
         if (Version.has1_12Support()) {
-            toReadd = new LinkedList<Recipe>();
+            iterator = new RecipeIteratorV1_12(iterator);
         }
 
         while (iterator.hasNext()) {
@@ -466,35 +422,16 @@ public class Vanilla {
                     fr = (FurnaceRecipe) r;
 
                     if (ingredient.getType() == fr.getInput().getType()) {
-                        if (!Version.has1_12Support()) {
-                            iterator.remove();
-                            return fr;
-                        } else {
-                            foundRemove = true;
-                            break;
-                        } 
-                    } else if (Version.has1_12Support()) {
-                        toReadd.add(r);
+                        iterator.remove();
+                        if (Version.has1_12Support()) {
+                            ((RecipeIteratorV1_12) iterator).finish();
+                        }
+                        return fr;
                     }
-                } else if (Version.has1_12Support()) {
-                    toReadd.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
-        }
-
-        if (Version.has1_12Support() && foundRemove) { // grab rest of recipes and clear, then add them all back.
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
-                    toReadd.add(r);
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
-            }
-            Bukkit.clearRecipes();
-            toReadd.stream().forEach(recipe -> Bukkit.addRecipe(recipe));
         }
 
         return null;
@@ -512,10 +449,8 @@ public class Vanilla {
         Recipe recipe;
 
         // 1.12 support -- .remove() no longer works. Have to grab all recipes 'cept the one to remove. Clear all recipes. Then readd all.
-        List<Recipe> toReadd = null;
-        boolean foundRemove = false;
         if (Version.has1_12Support()) {
-            toReadd = new LinkedList<Recipe>();
+            iterator = new RecipeIteratorV1_12(iterator);
         }
 
         while (iterator.hasNext()) {
@@ -523,32 +458,12 @@ public class Vanilla {
                 recipe = iterator.next();
 
                 if (recipe != null && RecipeManager.getRecipes().isCustomRecipe(recipe)) {
-                    if (!Version.has1_12Support()) {
-                        iterator.remove();
-                    } else {
-                        foundRemove = true;
-                    } 
-                } else if (Version.has1_12Support()) {
-                    toReadd.add(recipe);
+                    iterator.remove();
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
-
-        if (Version.has1_12Support() && foundRemove) { // grab rest of recipes and clear, then add them all back.
-            while (iterator.hasNext()) {
-                try {
-                    recipe = iterator.next();
-                    toReadd.add(recipe);
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
-            }
-            Bukkit.clearRecipes();
-            toReadd.stream().forEach(r -> Bukkit.addRecipe(r));
-        }
-
     }
 
     /**
@@ -559,10 +474,8 @@ public class Vanilla {
         Recipe recipe;
 
         // 1.12 support -- .remove() no longer works. Have to grab all recipes 'cept the one to remove. Clear all recipes. Then readd all.
-        List<Recipe> toReadd = null;
-        boolean foundRemove = false;
         if (Version.has1_12Support()) {
-            toReadd = new LinkedList<Recipe>();
+            iterator = new RecipeIteratorV1_12(iterator);
         }
 
         while (iterator.hasNext()) {
@@ -571,41 +484,22 @@ public class Vanilla {
 
                 if (recipe != null) {
                     if (isSpecialRecipe(recipe)) {
-                        if (Version.has1_12Support()) {
-                            toReadd.add(recipe);
-                        } else {
-                            continue;
-                        } 
+                        continue;
                     }
 
-                    if (!Version.has1_12Support()) {
-                        iterator.remove();
-                    }
+                    iterator.remove();
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
-
-        if (Version.has1_12Support() && foundRemove) { // grab rest of recipes and clear, then add them all back.
-            while (iterator.hasNext()) {
-                try {
-                    recipe = iterator.next();
-                    toReadd.add(recipe);
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
-            }
-            Bukkit.clearRecipes();
-            toReadd.stream().forEach(r -> Bukkit.addRecipe(r));
-        }
-
     }
 
     /**
      * Adds all recipes that already existed when the plugin was enabled.
      */
     public static void restoreInitialRecipes() {
+    	// TODO: 1.12 this won't work, refactor to skip the bukkit recipe...
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             // TODO maybe check if recipe is already in server ?
             Bukkit.addRecipe(entry.getKey().getBukkitRecipe(true));
@@ -616,6 +510,7 @@ public class Vanilla {
      * Adds all recipes except special that already existed when the plugin was enabled.
      */
     public static void restoreAllButSpecialRecipes() {
+    	// TODO: 1.12 this won't work, refactor to skip the bukkit recipe...?
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 
