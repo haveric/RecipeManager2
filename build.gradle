@@ -25,6 +25,7 @@ repositories {
         //url 'http://nexus.theyeticave.net/content/repositories/pub_releases/'
         url 'https://jitpack.io'
     }
+    mavenLocal()
 }
 
 dependencies {
@@ -34,6 +35,7 @@ dependencies {
     
     compile project(':RecipeManagerCommon')
     compile "org.bukkit:bukkit:1.12-R0.1-SNAPSHOT"
+    compile "org.spigotmc:spigot:1.12-R0.1-SNAPSHOT"
     //compile "net.milkbowl.vault:VaultAPI:1.6"
     compile "com.github.MilkBowl:VaultAPI:master-SNAPSHOT"
     

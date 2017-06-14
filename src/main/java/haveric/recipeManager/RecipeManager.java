@@ -252,13 +252,19 @@ public class RecipeManager extends JavaPlugin {
             Vanilla.clean();
 
 
-            recipes.clean();
+            if (recipes != null) {
+            	recipes.clean();
+            }
             recipes = null;
 
-            recipeBooks.clean();
+            if (recipeBooks != null) {
+            	recipeBooks.clean();
+            }
             recipeBooks = null;
 
-            events.clean();
+            if (events != null) {
+            	events.clean();
+            }
             events = null;
 
             Settings.clean();

@@ -2,6 +2,7 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.args.Args;
 import org.apache.commons.lang.Validate;
 
@@ -142,6 +143,10 @@ public class Flags implements Cloneable {
 
         // check if parsed flag had valid values and needs to be added to flag list
         if (flag.onParse(value)) {
+        	//TODO: 
+        	try {
+        		RecipeManager.getPlugin().getLogger().info("Loading file with flag: " + flag.getFlagType());
+        	} catch (Exception e) {}
             flags.put(flag.getFlagType(), flag);
         }
     }

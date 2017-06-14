@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 /**
  * Control for Bukkit recipes to avoid confusion with RecipeManager's recipes
@@ -146,7 +147,7 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.FISHING_ROD, 15), info);
             initialRecipes.put(new FuelRecipe(Material.SIGN, 10), info);
             initialRecipes.put(new FuelRecipe(Material.BOWL, 5), info);
-            initialRecipes.put(new FuelRecipe(Material.WOODEN_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.WOOD_DOOR, 10), info); // was WOODEN_DOOR, which is block type, not item type...
             initialRecipes.put(new FuelRecipe(Material.DARK_OAK_DOOR_ITEM, 10), info);
             initialRecipes.put(new FuelRecipe(Material.ACACIA_DOOR_ITEM, 10), info);
             initialRecipes.put(new FuelRecipe(Material.BIRCH_DOOR_ITEM, 10), info);
@@ -183,18 +184,23 @@ public class Vanilla {
                 BaseRecipe recipe = null;
 
                 if (r instanceof ShapedRecipe) {
+                	RecipeManager.getPlugin().getLogger().log(Level.INFO, "Initializing Shaped Recipe: " + ((ShapedRecipe) r).getKey().toString());
                     recipe = new CraftRecipe((ShapedRecipe) r);
                 } else if (r instanceof ShapelessRecipe) {
+                	RecipeManager.getPlugin().getLogger().log(Level.INFO, "Initializing Shapeless Recipe: " + ((ShapelessRecipe) r).getKey().toString());
                     recipe = new CombineRecipe((ShapelessRecipe) r);
                 } else if (r instanceof FurnaceRecipe) {
+                	RecipeManager.getPlugin().getLogger().log(Level.INFO, "Initializing Furnace Recipe: " + ((FurnaceRecipe) r).getInput() +  ((FurnaceRecipe) r).getResult());
                     recipe = new SmeltRecipe((FurnaceRecipe) r);
                 }
 
                 if (recipe == null) {
+                	RecipeManager.getPlugin().getLogger().log(Level.INFO, "Unrecognized Recipe: " + r.toString()); 
                     continue;
                 }
 
                 if (isSpecialRecipe(r)) {
+                	RecipeManager.getPlugin().getLogger().log(Level.INFO, "Recipe is Vanilla Special!");
                     recipe.setVanillaSpecialRecipe(true);
                 }
                 initialRecipes.put(recipe, info);
@@ -565,7 +571,7 @@ public class Vanilla {
 
                 if (recipe != null) {
                     if (isSpecialRecipe(recipe)) {
-                        if (!Version.has1_12Support()) {
+                        if (Version.has1_12Support()) {
                             toReadd.add(recipe);
                         } else {
                             continue;

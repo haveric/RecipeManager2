@@ -21,17 +21,17 @@ public class RecipeRegistrator {
     
     public void queueRecipe(BaseRecipe recipe, String adder) {
         if (recipe instanceof CraftRecipe) {
-            queueRecipe(recipe, adder, "Recipe is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
         } else if (recipe instanceof CombineRecipe) {
-            queueRecipe(recipe, adder, "Recipe is invalid! Needs at least one result and ingredient!");
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and ingredient!");
         } else if (recipe instanceof SmeltRecipe) {
-            queueRecipe(recipe, adder, "Recipe is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof BrewRecipe) {
-            queueRecipe(recipe, adder, "Recipe is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof FuelRecipe) {
-            queueRecipe(recipe, adder, "Recipe is invalid! Needs an ingredient!");
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs an ingredient!");
         } else {
-            throw new IllegalArgumentException("Unknown recipe!");
+            throw new IllegalArgumentException("Unknown recipe! " + recipe.toString());
         }
     }
 

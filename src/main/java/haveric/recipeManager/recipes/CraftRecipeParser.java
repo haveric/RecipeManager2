@@ -66,7 +66,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
                 // no point in adding more ingredients if there are errors
                 if (!ingredientErrors) {
-                    if (Version.has1_11Support() || item.getType() != Material.AIR) {
+                    if ((Version.has1_11Support() && !Version.has1_12Support()) || item.getType() != Material.AIR) {
                         ingredients[(rows * 3) + i] = item;
                         ingredientsNum++;
                     }
