@@ -83,6 +83,7 @@ public class RecipeRegistrator {
         while (iterator.hasNext()) {
             entry = iterator.next();
 
+            MessageSender.getInstance().sendAndLog(sender, String.format("  Registering Recipe %s", entry.getKey().getName()));
             RecipeManager.getRecipes().registerRecipe(entry.getKey(), entry.getValue());
 
             time = System.currentTimeMillis();

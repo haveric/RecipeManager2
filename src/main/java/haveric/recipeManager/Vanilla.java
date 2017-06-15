@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.RecipeIteratorV1_12;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsRecipeV1_12;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -229,6 +230,7 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCustomRecipe(BaseRecipe recipe) {
+    	try { RecipeManager.getPlugin().getLogger().info("  Attempting to remove " + recipe.getName());} catch (Exception e){}
         if (recipe instanceof CraftRecipe) {
             return removeCraftRecipe((CraftRecipe) recipe);
         }
@@ -240,6 +242,8 @@ public class Vanilla {
         if (recipe instanceof SmeltRecipe) {
             return removeSmeltRecipe((SmeltRecipe) recipe);
         }
+        
+        try { RecipeManager.getPlugin().getLogger().info("  Failed to remove " + recipe.getName());} catch (Exception e){}
 
         return null;
     }
@@ -312,7 +316,9 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
+                    if (sh.length == height && sh[0].length() == width && 
+                    		(Version.has1_12Support() ? ToolsRecipeV1_12.matches(recipe, r) : 
+                    		Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))) {
                         iterator.remove();
                         if (Version.has1_12Support()) {
                             ((RecipeIteratorV1_12) iterator).finish();
@@ -324,7 +330,7 @@ public class Vanilla {
                 // Catch any invalid Bukkit recipes
             }
         }
-
+        try { RecipeManager.getPlugin().getLogger().info("  Failed to remove " + recipe.getName());} catch (Exception e){}
         return null;
     }
 
@@ -366,7 +372,8 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (Tools.compareIngredientList(items, sr.getIngredientList())) {
+                    if (Version.has1_12Support() ? ToolsRecipeV1_12.matches(recipe, r) : 
+                        		Tools.compareIngredientList(items, sr.getIngredientList())) {
                         iterator.remove();
                         if (Version.has1_12Support()) {
                             ((RecipeIteratorV1_12) iterator).finish();
@@ -378,6 +385,8 @@ public class Vanilla {
                 // Catch any invalid Bukkit recipes
             }
         }
+        
+        try { RecipeManager.getPlugin().getLogger().info("  Failed to remove " + recipe.getName());} catch (Exception e){}
         return null;
     }
 
@@ -421,7 +430,7 @@ public class Vanilla {
                 if (r instanceof FurnaceRecipe) {
                     fr = (FurnaceRecipe) r;
 
-                    if (ingredient.getType() == fr.getInput().getType()) {
+                    if (ingredient.getType() == fr.getInput().getType()) { // still works on compare same way in v1.12
                         iterator.remove();
                         if (Version.has1_12Support()) {
                             ((RecipeIteratorV1_12) iterator).finish();
@@ -434,6 +443,7 @@ public class Vanilla {
             }
         }
 
+        try { RecipeManager.getPlugin().getLogger().info("  Failed to remove furnace recipe for " + ingredient.toString());} catch (Exception e){}
         return null;
     }
 
@@ -500,6 +510,9 @@ public class Vanilla {
      */
     public static void restoreInitialRecipes() {
     	// TODO: 1.12 this won't work, refactor to skip the bukkit recipe...
+    	if (Version.has1_12Support()) {
+    		try { RecipeManager.getPlugin().getLogger().info("  Recipe fidelity lost due to restore Initial Recipes");} catch (Exception e){}
+    	}
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             // TODO maybe check if recipe is already in server ?
             Bukkit.addRecipe(entry.getKey().getBukkitRecipe(true));
@@ -511,6 +524,9 @@ public class Vanilla {
      */
     public static void restoreAllButSpecialRecipes() {
     	// TODO: 1.12 this won't work, refactor to skip the bukkit recipe...?
+    	if (Version.has1_12Support()) {
+    		try { RecipeManager.getPlugin().getLogger().info("  Recipe fidelity lost due to restore Initial Recipes excluding specials");} catch (Exception e){}
+    	}
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 
