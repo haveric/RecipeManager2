@@ -2,9 +2,12 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
@@ -100,6 +103,15 @@ public class RecipeRegistrator {
         queuedRecipes.clear(); // clear the queue to let the class vanish
 
         RecipeBooks.getInstance().reloadAfterRecipes(sender); // (re)create recipe books for recipes
+        
+        // TODO: Force-remap / reload Achievements? How do we keep achievements in sync from changes here?
+        if (Version.has1_12Support()) {
+            try {
+                //Bukkit.getServer().reloadData(); remove for now...
+            } catch (NullPointerException npe) {
+                // During test running.
+            }
+        }
 
         MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d recipes processed.", ((System.currentTimeMillis() - start) / 1000.0), processed));
     }
