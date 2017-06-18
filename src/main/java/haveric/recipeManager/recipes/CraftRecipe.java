@@ -81,7 +81,7 @@ public class CraftRecipe extends WorkbenchRecipe {
      */
     public void setIngredients(ItemStack[] newIngredients) {
         if (newIngredients.length != 9) {
-            throw new IllegalArgumentException("Recipe must have exactly 9 items, use null to specify empty slots!");
+            throw new IllegalArgumentException("Recipe " + this.name + " must have exactly 9 items, use null to specify empty slots!");
         }
 
         ingredients = newIngredients.clone();

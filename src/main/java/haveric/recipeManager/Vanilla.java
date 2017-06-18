@@ -142,7 +142,7 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.FISHING_ROD, 15), info);
             initialRecipes.put(new FuelRecipe(Material.SIGN, 10), info);
             initialRecipes.put(new FuelRecipe(Material.BOWL, 5), info);
-            initialRecipes.put(new FuelRecipe(Material.WOODEN_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.WOOD_DOOR, 10), info); // was WOODEN_DOOR, which is block type, not item type...
             initialRecipes.put(new FuelRecipe(Material.DARK_OAK_DOOR_ITEM, 10), info);
             initialRecipes.put(new FuelRecipe(Material.ACACIA_DOOR_ITEM, 10), info);
             initialRecipes.put(new FuelRecipe(Material.BIRCH_DOOR_ITEM, 10), info);
@@ -229,7 +229,7 @@ public class Vanilla {
         if (recipe instanceof SmeltRecipe) {
             return removeSmeltRecipe((SmeltRecipe) recipe);
         }
-
+ 
         return null;
     }
 

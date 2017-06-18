@@ -88,7 +88,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
         recipe.setIngredients(ingredients); // done with ingredients, set 'em
 
-        if (recipe.hasFlag(FlagType.REMOVE)) {
+        if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) {
             this.reader.nextLine(); // Skip the results line, if it exists
         } else {
             // get results
