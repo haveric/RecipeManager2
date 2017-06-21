@@ -89,6 +89,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the creature's jump strength (Only works for horses). 0 = no jump"),
             String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
             String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
+            String.format(argFormat, "noai", "disable the ai on creature."),
             String.format(argFormat, "noeffect", "no spawning particle effects on creature."),
             String.format(argFormat, "noremove", "prevents creature from being removed if nobody is near it."),
             String.format(argFormat, "name <text>", "sets the creature's name, supports colors (<red>, &3, etc)."),
@@ -154,6 +155,7 @@ public class FlagSummon extends Flag {
 
     public class Customization implements Cloneable {
         private EntityType type = EntityType.PIG;
+        private boolean noAi = false;
         private boolean noEffect = false;
         private boolean noRemove = false;
         private boolean invulnerable = false;
@@ -204,6 +206,7 @@ public class FlagSummon extends Flag {
 
         public Customization(Customization c) {
             type = c.type;
+            noAi = c.noAi;
             noEffect = c.noEffect;
             noRemove = c.noRemove;
             invulnerable = c.invulnerable;
@@ -514,6 +517,7 @@ public class FlagSummon extends Flag {
 
                 ent.setRemoveWhenFarAway(!noRemove);
                 ent.setInvulnerable(invulnerable);
+                ent.setAI(!noAi);
 
                 EntityEquipment eq = ent.getEquipment();
 
@@ -570,6 +574,14 @@ public class FlagSummon extends Flag {
 
         public void setType(EntityType newType) {
             type = newType;
+        }
+
+        public boolean isNoAi() {
+            return noAi;
+        }
+
+        public void setNoAi(boolean newNoAi) {
+            noAi = newNoAi;
         }
 
         public boolean isNoEffect() {
@@ -995,6 +1007,8 @@ public class FlagSummon extends Flag {
                     c.setNoRemove(true);
                 } else if (value.equals("invulnerable")) {
                     c.setInvulnerable(true);
+                } else if (value.equals("noai")) {
+                    c.setNoAi(true);
                 } else if (value.equals("noeffect")) {
                     c.setNoEffect(true);
                 } else if (value.equals("target")) {
