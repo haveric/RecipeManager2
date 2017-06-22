@@ -1,6 +1,7 @@
 package haveric.recipeManager.commands;
 
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -27,8 +28,13 @@ public class FindItemCommand implements CommandExecutor {
                 sender.sendMessage("Only players can use the 'this' argument.");
                 return true;
             }
-
-            ItemStack item = ((Player) sender).getItemInHand();
+            Player player = (Player) sender;
+            ItemStack item;
+            if (Version.has1_12Support()) {
+                item = player.getInventory().getItemInMainHand();
+            } else {
+                item = ((Player) sender).getItemInHand();
+            }
 
             if (item == null || item.getType() == Material.AIR) {
                 Messages.getInstance().send(sender, "cmd.finditem.invalidhelditem");

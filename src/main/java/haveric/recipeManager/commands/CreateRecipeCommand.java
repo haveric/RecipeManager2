@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -36,7 +37,12 @@ public class CreateRecipeCommand implements CommandExecutor {
 
         if (sender instanceof Player) {
             Player player = ((Player) sender);
-            ItemStack holdingStack = player.getItemInHand();
+            ItemStack holdingStack;
+            if (Version.has1_12Support()) {
+                holdingStack = player.getInventory().getItemInMainHand();
+            } else {
+                holdingStack = player.getItemInHand();
+            }
             PlayerInventory inventory = player.getInventory();
 
             if (holdingStack == null || holdingStack.getType() == Material.AIR) {

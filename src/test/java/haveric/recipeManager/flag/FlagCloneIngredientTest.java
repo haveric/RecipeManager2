@@ -80,37 +80,44 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
             flag.onPrepare(a);
 
             String name = recipe.getName();
-            if (name.equals("one")) {
-                assertEquals(4, result.getAmount());
-                assertTrue(result.getItemMeta().getLore().isEmpty());
-                assertTrue(result.getEnchantments().isEmpty());
-            } else if (name.equals("two")) {
-                assertEquals(1, result.getAmount());
-                assertEquals(10, result.getDurability());
-                assertTrue(result.getItemMeta().getLore().isEmpty());
-                assertTrue(result.getEnchantments().isEmpty());
-            } else if (name.equals("three")) {
-                assertEquals(1, result.getAmount());
-                assertEquals(12, result.getDurability());
-                assertTrue(result.getItemMeta().getLore().isEmpty());
-                assertTrue(result.getEnchantments().isEmpty());
-            } else if (name.equals("four")) {
-                assertEquals(1, result.getAmount());
-                assertEquals(0, result.getDurability());
-                assertTrue(result.getItemMeta().getLore().isEmpty());
-                assertTrue(result.getEnchantments().isEmpty());
-            } else if (name.equals("five")) {
-                assertEquals(2, result.getAmount());
-                assertEquals(10, result.getDurability());
-                assertTrue(result.getItemMeta().getLore().contains("Test Lore"));
-                assertTrue(result.getEnchantments().isEmpty());
-            } else if (name.equals("six")) {
-                assertEquals(2, result.getAmount());
-                assertEquals(10, result.getDurability());
-                assertTrue(result.getItemMeta().getLore().contains("Test Lore"));
-                assertFalse(result.getEnchantments().isEmpty());
-                assertTrue(result.getEnchantments().containsKey(Enchantment.DAMAGE_ALL));
-                assertEquals(2, result.getEnchantments().get(Enchantment.DAMAGE_ALL).intValue());
+            switch (name) {
+                case "one":
+                    assertEquals(4, result.getAmount());
+                    assertTrue(result.getItemMeta().getLore().isEmpty());
+                    assertTrue(result.getEnchantments().isEmpty());
+                    break;
+                case "two":
+                    assertEquals(1, result.getAmount());
+                    assertEquals(10, result.getDurability());
+                    assertTrue(result.getItemMeta().getLore().isEmpty());
+                    assertTrue(result.getEnchantments().isEmpty());
+                    break;
+                case "three":
+                    assertEquals(1, result.getAmount());
+                    assertEquals(12, result.getDurability());
+                    assertTrue(result.getItemMeta().getLore().isEmpty());
+                    assertTrue(result.getEnchantments().isEmpty());
+                    break;
+                case "four":
+                    assertEquals(1, result.getAmount());
+                    assertEquals(0, result.getDurability());
+                    assertTrue(result.getItemMeta().getLore().isEmpty());
+                    assertTrue(result.getEnchantments().isEmpty());
+                    break;
+                case "five":
+                    assertEquals(2, result.getAmount());
+                    assertEquals(10, result.getDurability());
+                    assertTrue(result.getItemMeta().getLore().contains("Test Lore"));
+                    assertTrue(result.getEnchantments().isEmpty());
+                    break;
+                case "six":
+                    assertEquals(2, result.getAmount());
+                    assertEquals(10, result.getDurability());
+                    assertTrue(result.getItemMeta().getLore().contains("Test Lore"));
+                    assertFalse(result.getEnchantments().isEmpty());
+                    assertTrue(result.getEnchantments().containsKey(Enchantment.DAMAGE_ALL));
+                    assertEquals(2, result.getEnchantments().get(Enchantment.DAMAGE_ALL).intValue());
+                    break;
             }
         }
 

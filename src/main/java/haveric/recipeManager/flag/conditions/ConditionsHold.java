@@ -44,22 +44,33 @@ public class ConditionsHold extends Conditions {
             if (argLower.startsWith("slot")) {
                 String val = arg.substring("slot".length()).trim();
 
-                if (val.equals("mainhand")) {
-                    setSlot(ConditionsSlot.MAINHAND);
-                } else if (val.equals("offhand") || val.equals("shield")) {
-                    setSlot(ConditionsSlot.OFFHAND);
-                } else if (val.equals("helmet")) {
-                    setSlot(ConditionsSlot.HELMET);
-                } else if (val.equals("chest") || val.equals("chestplate")) {
-                    setSlot(ConditionsSlot.CHEST);
-                } else if (val.equals("legs") || val.equals("leggings")) {
-                    setSlot(ConditionsSlot.LEGS);
-                } else if (val.equals("boots")) {
-                    setSlot(ConditionsSlot.BOOTS);
-                } else if (val.equals("inventory")) {
-                    setSlot(ConditionsSlot.INVENTORY);
-                } else {
-                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'slot' argument with invalid value: " + val);
+                switch(val) {
+                    case "mainhand":
+                        setSlot(ConditionsSlot.MAINHAND);
+                        break;
+                    case "offhand":
+                    case "shield":
+                        setSlot(ConditionsSlot.OFFHAND);
+                        break;
+                    case "helmet":
+                        setSlot(ConditionsSlot.HELMET);
+                        break;
+                    case "chest":
+                    case "chestplate":
+                        setSlot(ConditionsSlot.CHEST);
+                        break;
+                    case "legs":
+                    case "leggings":
+                        setSlot(ConditionsSlot.LEGS);
+                        break;
+                    case "boots":
+                        setSlot(ConditionsSlot.BOOTS);
+                        break;
+                    case "inventory":
+                        setSlot(ConditionsSlot.INVENTORY);
+                        break;
+                    default:
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'slot' argument with invalid value: " + val);
                 }
             } else {
                 parseArg(value, arg);

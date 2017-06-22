@@ -976,16 +976,22 @@ public class Tools {
 
         if (Version.has19Support()) {
             // set known sounds to make sure Enum isn't changing on us
-            if (newSound.equals("BLOCK_NOTE_BASS")) {
-                sound = Sound.BLOCK_NOTE_BASS;
-            } else if (newSound.equals("BLOCK_NOTE_PING")) {
-                sound = Sound.BLOCK_NOTE_PLING;
-            } else if (newSound.equals("BLOCK_ANVIL_USE")) {
-                sound = Sound.BLOCK_ANVIL_USE;
-            } else if (newSound.equals("ENTITY_ITEM_BREAK")) {
-                sound = Sound.ENTITY_ITEM_BREAK;
-            } else {
-                sound = Sound.valueOf(newSound);
+            switch (newSound) {
+                case "BLOCK_NOTE_BASS":
+                    sound = Sound.BLOCK_NOTE_BASS;
+                    break;
+                case "BLOCK_NOTE_PING":
+                    sound = Sound.BLOCK_NOTE_PLING;
+                    break;
+                case "BLOCK_ANVIL_USE":
+                    sound = Sound.BLOCK_ANVIL_USE;
+                    break;
+                case "ENTITY_ITEM_BREAK":
+                    sound = Sound.ENTITY_ITEM_BREAK;
+                    break;
+                default:
+                    sound = Sound.valueOf(newSound);
+                    break;
             }
         } else {
             try {

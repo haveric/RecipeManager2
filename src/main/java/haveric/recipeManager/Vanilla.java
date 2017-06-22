@@ -277,7 +277,7 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCraftRecipe(CraftRecipe recipe) {
-        List<Recipe> newRecipes = new ArrayList<Recipe>();
+        List<Recipe> newRecipes = new ArrayList<>();
         Recipe removedRecipe = null;
 
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
@@ -343,7 +343,7 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCombineRecipe(CombineRecipe recipe) {
-        List<Recipe> newRecipes = new ArrayList<Recipe>();
+        List<Recipe> newRecipes = new ArrayList<>();
         Recipe removedRecipe = null;
 
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
@@ -407,7 +407,7 @@ public class Vanilla {
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
-        List<Recipe> newRecipes = new ArrayList<Recipe>();
+        List<Recipe> newRecipes = new ArrayList<>();
         Recipe removedRecipe = null;
 
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
@@ -453,7 +453,7 @@ public class Vanilla {
             return;
         }
 
-        List<Recipe> originalRecipes = new ArrayList<Recipe>();
+        List<Recipe> originalRecipes = new ArrayList<>();
 
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
@@ -481,7 +481,7 @@ public class Vanilla {
      * Remove all recipes from the server except special ones
      */
     public static void removeAllButSpecialRecipes() {
-        List<Recipe> specialRecipes = new ArrayList<Recipe>();
+        List<Recipe> specialRecipes = new ArrayList<>();
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 

@@ -278,7 +278,11 @@ public class FlagHoldItem extends Flag {
                 }
             } else {
                 if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
-                    mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
+                    if (Version.has1_12Support()) {
+                        mainFound = checkConditions(inventory.getItemInMainHand(), a, ConditionsSlot.MAINHAND);
+                    } else {
+                        mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
+                    }
                 }
             }
 

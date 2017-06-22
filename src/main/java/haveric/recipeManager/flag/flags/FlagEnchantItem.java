@@ -97,17 +97,21 @@ public class FlagEnchantItem extends Flag {
         if (split.length > 1) {
             value = split[1].toLowerCase().trim();
 
-            if (value.equals("max")) {
-                level = enchant.getMaxLevel();
-            } else if (value.equals("remove")) {
-                enchantsToRemove.add(enchant);
-            } else {
-                try {
-                    level = Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
-                    return false;
-                }
+            switch (value) {
+                case "max":
+                    level = enchant.getMaxLevel();
+                    break;
+                case "remove":
+                    enchantsToRemove.add(enchant);
+                    break;
+                default:
+                    try {
+                        level = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
+                        return false;
+                    }
+                    break;
             }
         }
 

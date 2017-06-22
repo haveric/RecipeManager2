@@ -7,6 +7,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.command.Command;
@@ -127,7 +128,11 @@ public class RecipeCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("this")) {
                     if (sender instanceof Player) {
                         Player player = (Player) sender;
-                        item = player.getItemInHand();
+                        if (Version.has1_12Support()) {
+                            item = player.getInventory().getItemInMainHand();
+                        } else {
+                            item = player.getItemInHand();
+                        }
 
                         if (item == null) {
                             Messages.getInstance().send(player, "cmd.recipes.nohand");
