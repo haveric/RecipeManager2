@@ -895,7 +895,7 @@ public class Tools {
     }
 
     public static void sortIngredientList(List<ItemStack> ingredients) {
-        Collections.sort(ingredients, new Comparator<ItemStack>() {
+        ingredients.sort(new Comparator<ItemStack>() {
             public int compare(ItemStack item1, ItemStack item2) {
                 int id1 = item1.getTypeId();
                 int id2 = item2.getTypeId();

@@ -154,7 +154,7 @@ public class Files {
         int size = FlagFactory.getInstance().getFlags().values().size();
 
         for (String c : category) {
-            flags.put(c, new ArrayList<FlagDescriptor>(size));
+            flags.put(c, new ArrayList<>(size));
         }
 
         for (FlagDescriptor flag : FlagFactory.getInstance().getFlags().values()) {
@@ -493,7 +493,7 @@ public class Files {
 
         List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
-        Collections.sort(enchantments, new Comparator<Enchantment>() {
+        enchantments.sort(new Comparator<Enchantment>() {
             public int compare(Enchantment e1, Enchantment e2) {
                 int compare;
                 if (e1.getId() > e2.getId()) {

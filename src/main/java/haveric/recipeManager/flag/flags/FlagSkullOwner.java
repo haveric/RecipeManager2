@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Iterator;
-import java.util.UUID;
 
 public class FlagSkullOwner extends Flag {
 

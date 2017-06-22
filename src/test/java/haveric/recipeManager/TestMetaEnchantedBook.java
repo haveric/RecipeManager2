@@ -86,7 +86,7 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
     }
 
     public Map<Enchantment, Integer> getStoredEnchants() {
-        return hasStoredEnchants() ? ImmutableMap.copyOf(enchantments) : ImmutableMap.<Enchantment, Integer>of();
+        return hasStoredEnchants() ? ImmutableMap.copyOf(enchantments) : ImmutableMap.of();
     }
 
     public boolean addStoredEnchant(Enchantment ench, int level, boolean ignoreRestrictions) {
