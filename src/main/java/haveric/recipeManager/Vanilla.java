@@ -300,11 +300,17 @@ public class Vanilla {
                     sh = sr.getShape();
 
                     if (removedRecipe == null && sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
-                        removedRecipe = sr;
-                    } else {
+                        if (Version.has1_12Support()) {
+                            removedRecipe = sr;
+                        } else {
+                            iterator.remove();
+                            return sr;
+
+                        }
+                    } else if (Version.has1_12Support()) {
                         newRecipes.add(r);
                     }
-                } else {
+                } else if (Version.has1_12Support()){
                     newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
@@ -312,15 +318,19 @@ public class Vanilla {
             }
         }
 
-        if (removedRecipe != null) {
-            Bukkit.clearRecipes();
+        if (Version.has1_12Support()) {
+            if (removedRecipe != null) {
+                Bukkit.clearRecipes();
 
-            for (Recipe newRecipe : newRecipes) {
-                Bukkit.addRecipe(newRecipe);
+                for (Recipe newRecipe : newRecipes) {
+                    Bukkit.addRecipe(newRecipe);
+                }
             }
-        }
 
-        return removedRecipe;
+            return removedRecipe;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -360,11 +370,16 @@ public class Vanilla {
                     sr = (ShapelessRecipe) r;
 
                     if (removedRecipe == null && Tools.compareIngredientList(items, sr.getIngredientList())) {
-                        removedRecipe = sr;
-                    } else {
+                        if (Version.has1_12Support()) {
+                            removedRecipe = sr;
+                        } else {
+                            iterator.remove();
+                            return sr;
+                        }
+                    } else if (Version.has1_12Support()){
                         newRecipes.add(r);
                     }
-                } else {
+                } else if (Version.has1_12Support()){
                     newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
@@ -372,15 +387,19 @@ public class Vanilla {
             }
         }
 
-        if (removedRecipe != null) {
-            Bukkit.clearRecipes();
+        if (Version.has1_12Support()) {
+            if (removedRecipe != null) {
+                Bukkit.clearRecipes();
 
-            for (Recipe newRecipe : newRecipes) {
-                Bukkit.addRecipe(newRecipe);
+                for (Recipe newRecipe : newRecipes) {
+                    Bukkit.addRecipe(newRecipe);
+                }
             }
-        }
 
-        return removedRecipe;
+            return removedRecipe;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -422,11 +441,16 @@ public class Vanilla {
                     fr = (FurnaceRecipe) r;
 
                     if (removedRecipe == null && ingredient.getType() == fr.getInput().getType()) {
-                        removedRecipe = fr;
-                    } else {
+                        if (Version.has1_12Support()) {
+                            removedRecipe = fr;
+                        } else {
+                            iterator.remove();
+                            return fr;
+                        }
+                    } else if (Version.has1_12Support()){
                         newRecipes.add(r);
                     }
-                } else {
+                } else if (Version.has1_12Support()){
                     newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
@@ -434,15 +458,19 @@ public class Vanilla {
             }
         }
 
-        if (removedRecipe != null) {
-            Bukkit.clearRecipes();
+        if (Version.has1_12Support()) {
+            if (removedRecipe != null) {
+                Bukkit.clearRecipes();
 
-            for (Recipe newRecipe : newRecipes) {
-                Bukkit.addRecipe(newRecipe);
+                for (Recipe newRecipe : newRecipes) {
+                    Bukkit.addRecipe(newRecipe);
+                }
             }
-        }
 
-        return removedRecipe;
+            return removedRecipe;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -462,18 +490,26 @@ public class Vanilla {
             try {
                 recipe = iterator.next();
 
-                if (recipe != null && !RecipeManager.getRecipes().isCustomRecipe(recipe)) {
-                    originalRecipes.add(recipe);
+                if (recipe != null) {
+                    if (RecipeManager.getRecipes().isCustomRecipe(recipe)) {
+                        if (!Version.has1_12Support()) {
+                            iterator.remove();
+                        }
+                    } else if (Version.has1_12Support()) {
+                        originalRecipes.add(recipe);
+                    }
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        Bukkit.clearRecipes();
+        if (Version.has1_12Support()) {
+            Bukkit.clearRecipes();
 
-        for (Recipe newRecipe : originalRecipes) {
-            Bukkit.addRecipe(newRecipe);
+            for (Recipe newRecipe : originalRecipes) {
+                Bukkit.addRecipe(newRecipe);
+            }
         }
     }
 
@@ -491,7 +527,15 @@ public class Vanilla {
 
                 if (recipe != null) {
                     if (isSpecialRecipe(recipe)) {
-                        specialRecipes.add(recipe);
+                        if (Version.has1_12Support()) {
+                            specialRecipes.add(recipe);
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    if (!Version.has1_12Support()) {
+                        iterator.remove();
                     }
                 }
             } catch (NullPointerException e) {
@@ -499,9 +543,12 @@ public class Vanilla {
             }
         }
 
-        Bukkit.clearRecipes();
-        for (Recipe specialRecipe : specialRecipes) {
-            Bukkit.addRecipe(specialRecipe);
+        if (Version.has1_12Support()) {
+            Bukkit.clearRecipes();
+
+            for (Recipe specialRecipe : specialRecipes) {
+                Bukkit.addRecipe(specialRecipe);
+            }
         }
     }
 
