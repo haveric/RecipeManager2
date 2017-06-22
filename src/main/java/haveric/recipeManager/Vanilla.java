@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
@@ -9,6 +10,10 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -51,6 +56,7 @@ public class Vanilla {
     protected static ItemStack RECIPE_SHIELD_BANNER = null;
 
     protected static ItemStack RECIPE_TIPPED_ARROW = null;
+    protected static ItemStack RECIPE_TIPPED_ARROW2 = null;
 
     /**
      * Book cloning's special recipe
@@ -156,6 +162,14 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.BOAT_SPRUCE, 20), info);
 
             RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
+        }
+
+        if (Version.has1_12Support()) {
+            RECIPE_TIPPED_ARROW2 = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
+            PotionMeta meta = (PotionMeta) RECIPE_TIPPED_ARROW2.getItemMeta();
+            PotionData potionData = new PotionData(PotionType.WATER);
+            meta.setBasePotionData(potionData);
+            RECIPE_TIPPED_ARROW2.setItemMeta(meta);
         }
 
         // Index fuel recipes
@@ -618,7 +632,7 @@ public class Vanilla {
                 isSpecial = true;
             }
 
-            if (RECIPE_TIPPED_ARROW != null && result.equals(RECIPE_TIPPED_ARROW)) {
+            if ((RECIPE_TIPPED_ARROW != null && result.equals(RECIPE_TIPPED_ARROW)) || (RECIPE_TIPPED_ARROW2 != null && result.equals(RECIPE_TIPPED_ARROW2))) {
                 isSpecial = true;
             }
 
