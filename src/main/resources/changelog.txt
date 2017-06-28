@@ -2,10 +2,12 @@
 This file will be automatically overwritten when a new version is installed.
 
 === v2.11.0 Coming Soon ===
-* Added basic 1.12 Support (Please check your removal recipes against a fresh /rmextract as some have changed)
+* Added 1.12 Support (Please check your removal recipes against a fresh /rmextract as some have changed)
 * Fixed Sweeping Edge enchantment alias (again)
 * Fixed errors on shutdown
 * @Summon: Added support for invulnerable and noai (disabling ai)
+* To avoid "recipe not found, removing" errors and subsequent loss of advancement connections to managed recipes, give them all names. (e.g. craft <name>)
+** This is especially true for @override's, but is also true if you intend to leverage advancements.
 
 === v2.10.0 ===
 * New Flag: @MonsterSpawner (Requires Bukkit/Spigot build of 1/10/2017 or newer)
