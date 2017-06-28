@@ -6,9 +6,13 @@ import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.FlagOverride;
+import haveric.recipeManager.tools.ToolsRecipeV1_12;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 import java.util.Map;
 
@@ -88,6 +92,25 @@ public class ConditionEvaluator {
     }
 
     private RMCRecipeInfo getRecipeFromMap(BaseRecipe recipe, Map<BaseRecipe, RMCRecipeInfo> map) {
+        if (Version.has1_12Support()) {
+            for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : map.entrySet()) {
+                // Let's only use this special logic for recipes where RMCRecipeInfo has the bukkit pointer.
+                if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
+                    Recipe bukkit = entry.getKey().getBukkitRecipe(true);
+                    if (ToolsRecipeV1_12.matches(recipe, bukkit)) {
+                        return entry.getValue();
+                    } else if (recipe instanceof CraftRecipe) {
+                        CraftRecipe cr = (CraftRecipe) recipe;
+                        cr.setMirrorShape(true);
+
+                        if (ToolsRecipeV1_12.matches(cr, bukkit)) {
+                            return entry.getValue();
+                        }
+                    }
+                }
+            }
+        }
+
         RMCRecipeInfo info = map.get(recipe);
 
         if (info == null && recipe instanceof CraftRecipe) {

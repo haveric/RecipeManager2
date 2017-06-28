@@ -3,7 +3,9 @@ package haveric.recipeManager;
 import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.tools.RecipeIteratorV1_12;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsRecipeV1_12;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -291,9 +293,6 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCraftRecipe(CraftRecipe recipe) {
-        List<Recipe> newRecipes = new ArrayList<>();
-        Recipe removedRecipe = null;
-
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapedRecipe sr;
         Recipe r;
@@ -305,6 +304,11 @@ public class Vanilla {
         int height = recipe.getHeight();
         int width = recipe.getWidth();
 
+        // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
+        if (Version.has1_12Support()) {
+            iterator = new RecipeIteratorV1_12(iterator);
+        }
+
         while (iterator.hasNext()) {
             try {
                 r = iterator.next();
@@ -313,38 +317,22 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (removedRecipe == null && sh.length == height && sh[0].length() == width && Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror)) {
+                    if (sh.length == height && sh[0].length() == width &&
+                            (Version.has1_12Support() ? ToolsRecipeV1_12.matches(recipe, r) : 
+                            Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))) {
+                        iterator.remove();
                         if (Version.has1_12Support()) {
-                            removedRecipe = sr;
-                        } else {
-                            iterator.remove();
-                            return sr;
-
+                            ( (RecipeIteratorV1_12) iterator).finish();
                         }
-                    } else if (Version.has1_12Support()) {
-                        newRecipes.add(r);
+                        return sr;
                     }
-                } else if (Version.has1_12Support()){
-                    newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        if (Version.has1_12Support()) {
-            if (removedRecipe != null) {
-                Bukkit.clearRecipes();
-
-                for (Recipe newRecipe : newRecipes) {
-                    Bukkit.addRecipe(newRecipe);
-                }
-            }
-
-            return removedRecipe;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -367,14 +355,16 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCombineRecipe(CombineRecipe recipe) {
-        List<Recipe> newRecipes = new ArrayList<>();
-        Recipe removedRecipe = null;
-
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         ShapelessRecipe sr;
         Recipe r;
 
         List<ItemStack> items = recipe.getIngredients();
+
+        // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
+        if (Version.has1_12Support()) {
+            iterator = new RecipeIteratorV1_12(iterator);
+        }
 
         while (iterator.hasNext()) {
             try {
@@ -383,37 +373,21 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (removedRecipe == null && Tools.compareIngredientList(items, sr.getIngredientList())) {
+                    if (Version.has1_12Support() ? ToolsRecipeV1_12.matches(recipe, r) :
+                            Tools.compareIngredientList(items, sr.getIngredientList())) {
+                        iterator.remove();
                         if (Version.has1_12Support()) {
-                            removedRecipe = sr;
-                        } else {
-                            iterator.remove();
-                            return sr;
+                            ( (RecipeIteratorV1_12) iterator).finish();
                         }
-                    } else if (Version.has1_12Support()){
-                        newRecipes.add(r);
+                        return sr;
                     }
-                } else if (Version.has1_12Support()){
-                    newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        if (Version.has1_12Support()) {
-            if (removedRecipe != null) {
-                Bukkit.clearRecipes();
-
-                for (Recipe newRecipe : newRecipes) {
-                    Bukkit.addRecipe(newRecipe);
-                }
-            }
-
-            return removedRecipe;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -440,12 +414,14 @@ public class Vanilla {
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
-        List<Recipe> newRecipes = new ArrayList<>();
-        Recipe removedRecipe = null;
-
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         FurnaceRecipe fr;
         Recipe r;
+
+        // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
+        if (Version.has1_12Support()) {
+            iterator = new RecipeIteratorV1_12(iterator);
+        }
 
         while (iterator.hasNext()) {
             try {
@@ -454,37 +430,20 @@ public class Vanilla {
                 if (r instanceof FurnaceRecipe) {
                     fr = (FurnaceRecipe) r;
 
-                    if (removedRecipe == null && ingredient.getType() == fr.getInput().getType()) {
+                    if (ingredient.getType() == fr.getInput().getType()) { // this works fine in 1.12
+                        iterator.remove();
                         if (Version.has1_12Support()) {
-                            removedRecipe = fr;
-                        } else {
-                            iterator.remove();
-                            return fr;
+                            ( (RecipeIteratorV1_12) iterator).finish();
                         }
-                    } else if (Version.has1_12Support()){
-                        newRecipes.add(r);
+                        return fr;
                     }
-                } else if (Version.has1_12Support()){
-                    newRecipes.add(r);
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        if (Version.has1_12Support()) {
-            if (removedRecipe != null) {
-                Bukkit.clearRecipes();
-
-                for (Recipe newRecipe : newRecipes) {
-                    Bukkit.addRecipe(newRecipe);
-                }
-            }
-
-            return removedRecipe;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -500,6 +459,11 @@ public class Vanilla {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 
+        // In 1.12, we don't use the special iterator here, because "remove" is actually suppress.
+        //  Since we really want to remove, we instead catalogue the non-custom, in case
+        //  other plugins have added recipes. Then, when done, we clear all, and readd just those
+        //  discovered recipes, in the order we found them, to limit disruption.
+
         while (iterator.hasNext()) {
             try {
                 recipe = iterator.next();
@@ -509,7 +473,7 @@ public class Vanilla {
                         if (!Version.has1_12Support()) {
                             iterator.remove();
                         }
-                    } else if (Version.has1_12Support()) {
+                    } else if (Version.has1_12Support()) { // TODO: Ideally check key, if minecraft: domain, ignore.
                         originalRecipes.add(recipe);
                     }
                 }
@@ -519,10 +483,14 @@ public class Vanilla {
         }
 
         if (Version.has1_12Support()) {
-            Bukkit.clearRecipes();
+            try {
+                Bukkit.getServer().reloadData();
+            } catch (NullPointerException npe) { /* Tests hate this */ }
 
             for (Recipe newRecipe : originalRecipes) {
-                Bukkit.addRecipe(newRecipe);
+                try {
+                    Bukkit.addRecipe(newRecipe);
+		} catch (Exception e) { /* for v1.12, we'll reload to preserve ordering, then blindly try to reapply recipes. */ }
             }
         }
     }
@@ -535,43 +503,37 @@ public class Vanilla {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 
+        // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
+        if (Version.has1_12Support()) {
+            iterator = new RecipeIteratorV1_12(iterator);
+        }
+
         while (iterator.hasNext()) {
             try {
                 recipe = iterator.next();
 
                 if (recipe != null) {
                     if (isSpecialRecipe(recipe)) {
-                        if (Version.has1_12Support()) {
-                            specialRecipes.add(recipe);
-                        } else {
-                            continue;
-                        }
+                        continue;
                     }
 
-                    if (!Version.has1_12Support()) {
-                        iterator.remove();
-                    }
+                    iterator.remove();
                 }
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
 
-        if (Version.has1_12Support()) {
-            Bukkit.clearRecipes();
-
-            for (Recipe specialRecipe : specialRecipes) {
-                Bukkit.addRecipe(specialRecipe);
-            }
-        }
+        // In 1.12, special iterator will automatically clean up when it runs out of recipes to remove.
     }
 
     /**
      * Adds all recipes that already existed when the plugin was enabled.
      */
     public static void restoreInitialRecipes() {
+        // TODO: In 1.12, this will fail.
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
-            // TODO maybe check if recipe is already in server ?
+            // TODO maybe check if recipe is already in server?
             Bukkit.addRecipe(entry.getKey().getBukkitRecipe(true));
         }
     }
@@ -580,6 +542,7 @@ public class Vanilla {
      * Adds all recipes except special that already existed when the plugin was enabled.
      */
     public static void restoreAllButSpecialRecipes() {
+        // TODO: In 1.12, this will fail.
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 

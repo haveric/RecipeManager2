@@ -5,6 +5,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -333,6 +334,12 @@ public class Recipes {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
 
+        // For 1.12, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to 
+        //  ensure the RM recipe is added.
+        if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
+            recipe.setBukkitRecipe(null);
+        }
+
         // Add to server if applicable
         if (!recipe.hasFlag(FlagType.REMOVE)) {
             Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
@@ -371,7 +378,9 @@ public class Recipes {
      * @return removed recipe or null if not found
      */
     public Recipe removeRecipe(BaseRecipe recipe) {
-        if (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE)) {
+        // In 1.12, adding the RM recipe is handled elsewhere; we just need to remove indexing here.
+        //  if we did try to add, we'd get a fatal error and this whole mess would fail.
+        if (!Version.has1_12Support() && (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))) {
             Bukkit.getServer().addRecipe(recipe.getBukkitRecipe(false));
         }
 

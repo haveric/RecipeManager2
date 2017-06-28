@@ -13,6 +13,7 @@ import haveric.recipeManager.flag.FlagLoader;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.metrics.Metrics;
+import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -175,7 +176,13 @@ public class RecipeManager extends JavaPlugin {
             }
 
             if (!firstTime && !Settings.getInstance().getClearRecipes()) {
-                Vanilla.restoreAllButSpecialRecipes();
+                if (!Version.has1_12Support()) {
+                    Vanilla.restoreAllButSpecialRecipes();
+                } else {
+                    try {
+                        Bukkit.getServer().reloadData();
+                    } catch (NullPointerException npe) { /* Test Framework hates this */ }
+                }
                 Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
             }
         }
