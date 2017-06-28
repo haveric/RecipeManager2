@@ -178,12 +178,13 @@ public class RecipeManager extends JavaPlugin {
             if (!firstTime && !Settings.getInstance().getClearRecipes()) {
                 if (!Version.has1_12Support()) {
                     Vanilla.restoreAllButSpecialRecipes();
+                    Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
                 } else {
                     try {
-                        Bukkit.getServer().reloadData();
+                        Bukkit.getServer().resetRecipes();
+                        Vanilla.init();
                     } catch (NullPointerException npe) { /* Test Framework hates this */ }
                 }
-                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
             }
         }
 

@@ -484,7 +484,7 @@ public class Vanilla {
 
         if (Version.has1_12Support()) {
             try {
-                Bukkit.getServer().reloadData();
+                Bukkit.getServer().resetRecipes();
             } catch (NullPointerException npe) { /* Tests hate this */ }
 
             for (Recipe newRecipe : originalRecipes) {

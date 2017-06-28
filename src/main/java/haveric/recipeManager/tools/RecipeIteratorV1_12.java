@@ -27,6 +27,8 @@ import net.minecraft.server.v1_12_R1.RegistryMaterials;
 import net.minecraft.server.v1_12_R1.ShapedRecipes;
 import net.minecraft.server.v1_12_R1.ShapelessRecipes;
 import net.minecraft.server.v1_12_R1.Items;
+import net.minecraft.server.v1_12_R1.ItemSnow;
+import net.minecraft.server.v1_12_R1.Blocks;
 import net.minecraft.server.v1_12_R1.NonNullList;
 import net.minecraft.server.v1_12_R1.RecipeItemStack;
 
@@ -129,14 +131,14 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
                     widthF.setInt(shaped, 1);
                     heightF.setInt(shaped, 1);
                     resultF.set(shaped, new ItemStack(Items.a, 1));
-                    itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(Items.a)));
+                    itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(new ItemStack[] {new ItemStack(new ItemSnow(Blocks.SNOW_LAYER), 1, 32767, false)})));
                 } else if (removeRecipe instanceof ShapelessRecipes) {
                     ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
                     Field ingredientsF = stripPrivateFinal(ShapelessRecipes.class, "ingredients");
                     Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                     resultF.set(shapeless, new ItemStack(Items.a, 1));
-                    ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(Items.a)));                            
+                    ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new ItemStack[] {new ItemStack(new ItemSnow(Blocks.SNOW_LAYER), 1, 32767, false)})));
                 } else {
                     throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
                 }
