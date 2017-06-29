@@ -330,8 +330,17 @@ public class Recipes {
         }
 
         // Remove original recipe
-        if (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE)) {
+        if (recipe.hasFlag(FlagType.REMOVE) || (!Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE))) {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
+        }
+        
+        // For 1.12, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
+        if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
+            if (recipe instanceof SmeltRecipe) { // 'cept for this.
+                recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
+            } else {
+                Vanilla.replaceCustomRecipe(recipe);
+            }
         }
 
         // For 1.12, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to 
@@ -344,8 +353,14 @@ public class Recipes {
         if (!recipe.hasFlag(FlagType.REMOVE)) {
             Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
 
+            // For 1.12, we don't actually add our overrides, they exist in the index. The replaceCustomRecipe
+            //  handler puts as the recipe result the ID index "special item" that RM uses to tell itself that
+            //  this is a recipe to manage. 
             if (bukkitRecipe != null) {
-                Bukkit.addRecipe(bukkitRecipe);
+                // Note that since we don't "replace" smelt recipes, we need special handling here.
+                if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && !(recipe instanceof SmeltRecipe))) {
+                    Bukkit.addRecipe(bukkitRecipe);
+                }
             }
         }
 

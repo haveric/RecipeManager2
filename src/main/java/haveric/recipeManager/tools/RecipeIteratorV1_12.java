@@ -12,6 +12,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
@@ -80,7 +81,18 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
         if (recipes.hasNext()) {
             removeFrom = RemoveFrom.RECIPES;
             removeRecipe = recipes.next();
-            return removeRecipe.toBukkitRecipe();
+            try {
+                return removeRecipe.toBukkitRecipe();
+            } catch (ArrayIndexOutOfBoundsException aioobe) {
+                try {
+                    Field keyF = removeRecipe.getClass().getField("key");
+                    MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
+                    MessageSender.getInstance().error(null, aioobe, "Failure while traversing iterator on recipe " + key.toString());
+                } catch (Exception e) {
+                    MessageSender.getInstance().error(null, e, "Failure while traversing iterator, unable to determine recipe.");
+                }
+            }
+            return null;
         } else {
             ItemStack item;
             if (smeltingCustom.hasNext()) {
@@ -151,6 +163,58 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
             break;
         case VANILLA:
             recipeSmeltingVanilla.add(removeItem);
+        }
+    }
+    
+    /**
+     * Backing list is now immutable in 1.12.
+     * 
+     * To prevent bad linking to RM unique recipes, we add a new mode "replace" which can be leveraged 
+     * instead of remove, to link the MC recipe to the RM recipe directly. We don't actually then
+     * add the RM recipe to Bukkit, only to our indexes.
+     * 
+     * For Smelting, use traditional remove / add.
+     */
+    public void replace(BaseRecipe recipe) {
+        if (removeFrom == null) {
+            throw new IllegalStateException();
+        }
+        switch (removeFrom) {
+        case RECIPES:
+            // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
+            try {
+                Field keyF = removeRecipe.getClass().getField("key");
+                MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
+                if (removeRecipe instanceof ShapedRecipes && recipe instanceof CraftRecipe) {
+                    ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
+                    Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
+                    
+                    org.bukkit.inventory.ItemStack override = Tools.createItemRecipeId( ((CraftRecipe)recipe).getFirstResult(), recipe.getIndex());
+                    ItemStack overrideF = CraftItemStack.asNMSCopy(override);
+                    if (overrideF == null || overrideF == ItemStack.a) {
+                        ErrorReporter.getInstance().error("NMS failure for v1.12 support during craft recipe replace : " + recipe.getName());
+                    }
+                    resultF.set(shaped, overrideF);
+                } else if (removeRecipe instanceof ShapelessRecipes && recipe instanceof CombineRecipe) {
+                    ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
+                    Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
+                    
+                    org.bukkit.inventory.ItemStack override = Tools.createItemRecipeId( ((CombineRecipe)recipe).getFirstResult(), recipe.getIndex());
+                    ItemStack overrideF = CraftItemStack.asNMSCopy(override);
+                    if (overrideF == null || overrideF == ItemStack.a) {
+                        ErrorReporter.getInstance().error("NMS failure for v1.12 support during combine recipe replace : " + recipe.getName());
+                    }
+                    resultF.set(shapeless, overrideF);
+                } else {
+                    throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
+                }
+            } catch (Exception e) {
+                MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during grid recipe replace");
+            }
+            break;
+        case CUSTOM:
+        case VANILLA:
+            throw new IllegalStateException("Replace not supported for Furnace recipes.");
         }
     }
 

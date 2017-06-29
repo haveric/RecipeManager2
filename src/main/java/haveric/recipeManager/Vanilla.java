@@ -446,6 +446,104 @@ public class Vanilla {
         return null;
     }
 
+    // 1.12 replacement support
+    
+    /**
+     * Replaces a recipe with a RecipeManager recipe. V1_12 support only!
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return replaced recipe or null if not found.
+     */
+    public static Recipe replaceCustomRecipe(BaseRecipe recipe) {
+        if (!Version.has1_12Support()) return null;
+
+        if (recipe instanceof CraftRecipe) {
+            return replaceCraftRecipe((CraftRecipe) recipe);
+        }
+
+        if (recipe instanceof CombineRecipe) {
+            return replaceCombineRecipe((CombineRecipe) recipe);
+        }
+
+        return null;
+
+    }
+
+    /**
+     * V1_12 or newer supported only.
+     * Replaces a RecipeManager recipe on the <b>server</b>
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return replaced recipe or null if not found
+     */
+    public static Recipe replaceCraftRecipe(CraftRecipe recipe) {
+        RecipeIteratorV1_12 iterator = new RecipeIteratorV1_12(Bukkit.recipeIterator());
+        ShapedRecipe sr;
+        Recipe r;
+        String[] sh;
+
+        int height = recipe.getHeight();
+        int width = recipe.getWidth();
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof ShapedRecipe && !(r instanceof FurnaceRecipe)) {
+                    sr = (ShapedRecipe) r;
+                    sh = sr.getShape();
+
+                    if (sh.length == height && sh[0].length() == width && ToolsRecipeV1_12.matches(recipe, r)) {
+                        iterator.replace(recipe);
+                        iterator.finish();
+                        return sr;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+        return null;
+    }
+
+    /**
+     * V1_12 or newer supported only.
+     * Replaces a RecipeManager recipe from the <b>server</b>
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return replaced recipe or null if not found
+     */
+    public static Recipe replaceCombineRecipe(CombineRecipe recipe) {
+        RecipeIteratorV1_12 iterator = new RecipeIteratorV1_12(Bukkit.recipeIterator());
+        ShapelessRecipe sr;
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof ShapelessRecipe) {
+                    sr = (ShapelessRecipe) r;
+
+                    if (ToolsRecipeV1_12.matches(recipe, r)) {
+                        iterator.replace(recipe);
+                        iterator.finish();
+                        return sr;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+
+        return null;
+    }
+
+    // 1.12 replacement support end
+    
     /**
      * Remove all RecipeManager recipes from the server.
      */
@@ -483,14 +581,15 @@ public class Vanilla {
         }
 
         if (Version.has1_12Support()) {
-            try {
-                Bukkit.getServer().resetRecipes();
-            } catch (NullPointerException npe) { /* Tests hate this */ }
+            Bukkit.getServer().resetRecipes();
+            Vanilla.init();
 
             for (Recipe newRecipe : originalRecipes) {
                 try {
-                    Bukkit.addRecipe(newRecipe);
-		} catch (Exception e) { /* for v1.12, we'll reload to preserve ordering, then blindly try to reapply recipes. */ }
+                    if (!Vanilla.isSpecialRecipe(newRecipe)) {
+                        Bukkit.addRecipe(newRecipe);
+                    }
+                } catch (Exception e) { /* for v1.12, we'll reload to preserve ordering, then blindly try to reapply recipes. */ }
             }
         }
     }

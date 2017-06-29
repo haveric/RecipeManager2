@@ -180,10 +180,9 @@ public class RecipeManager extends JavaPlugin {
                     Vanilla.restoreAllButSpecialRecipes();
                     Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
                 } else {
-                    try {
-                        Bukkit.getServer().resetRecipes();
-                        Vanilla.init();
-                    } catch (NullPointerException npe) { /* Test Framework hates this */ }
+                    Vanilla.removeCustomRecipes();
+                    // Basically does server recipe reset and vanilla re-init, but also
+                    // tries to save any other recipes.
                 }
             }
         }
