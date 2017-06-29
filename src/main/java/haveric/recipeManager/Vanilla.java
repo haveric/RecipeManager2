@@ -489,7 +489,7 @@ public class Vanilla {
             try {
                 r = iterator.next();
 
-                if (r instanceof ShapedRecipe && !(r instanceof FurnaceRecipe)) {
+                if (r instanceof ShapedRecipe) {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
