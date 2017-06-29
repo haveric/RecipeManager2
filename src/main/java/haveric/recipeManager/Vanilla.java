@@ -1,7 +1,6 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.RecipeIteratorV1_12;
 import haveric.recipeManager.tools.Tools;
@@ -12,7 +11,6 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;

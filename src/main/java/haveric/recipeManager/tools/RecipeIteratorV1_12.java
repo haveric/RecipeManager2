@@ -1,41 +1,22 @@
 package haveric.recipeManager.tools;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
-
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.SmeltRecipe;
-import net.minecraft.server.v1_12_R1.CraftingManager;
-import net.minecraft.server.v1_12_R1.IRecipe;
-import net.minecraft.server.v1_12_R1.ItemStack;
-import net.minecraft.server.v1_12_R1.MinecraftKey;
-import net.minecraft.server.v1_12_R1.RecipesFurnace;
-import net.minecraft.server.v1_12_R1.RegistryMaterials;
-import net.minecraft.server.v1_12_R1.ShapedRecipes;
-import net.minecraft.server.v1_12_R1.ShapelessRecipes;
-import net.minecraft.server.v1_12_R1.Items;
-import net.minecraft.server.v1_12_R1.ItemSnow;
-import net.minecraft.server.v1_12_R1.Blocks;
-import net.minecraft.server.v1_12_R1.NonNullList;
-import net.minecraft.server.v1_12_R1.RecipeItemStack;
-
+import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.RecipeIterator;
+import org.bukkit.inventory.Recipe;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class RecipeIteratorV1_12 implements Iterator<Recipe> {
     private Iterator<IRecipe> recipes = null;

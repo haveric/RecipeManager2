@@ -10,8 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import static org.junit.Assert.assertEquals;
-
 public class RunTestsCommand implements CommandExecutor {
 
     private int total;

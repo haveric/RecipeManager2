@@ -1,27 +1,20 @@
 package haveric.recipeManager.tools;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.logging.Level;
-
-import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftFurnaceRecipe;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapedRecipe;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapelessRecipe;
-import org.bukkit.inventory.Recipe;
-
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.SmeltRecipe;
-import net.minecraft.server.v1_12_R1.ItemStack;
-import net.minecraft.server.v1_12_R1.NonNullList;
-import net.minecraft.server.v1_12_R1.RecipeItemStack;
-import net.minecraft.server.v1_12_R1.ShapedRecipes;
-import net.minecraft.server.v1_12_R1.ShapelessRecipes;
+import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftFurnaceRecipe;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapedRecipe;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapelessRecipe;
+import org.bukkit.inventory.Recipe;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class ToolsRecipeV1_12 {
     /**
