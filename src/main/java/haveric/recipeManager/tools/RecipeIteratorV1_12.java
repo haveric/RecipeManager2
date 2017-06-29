@@ -31,9 +31,9 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
         RECIPES, CUSTOM, VANILLA
     }
 
-    RemoveFrom removeFrom = null;
-    IRecipe removeRecipe = null;
-    ItemStack removeItem = null;
+    private RemoveFrom removeFrom = null;
+    private IRecipe removeRecipe = null;
+    private ItemStack removeItem = null;
 
     public RecipeIteratorV1_12(Iterator<Recipe> backing) {
         if (backing instanceof RecipeIterator) {

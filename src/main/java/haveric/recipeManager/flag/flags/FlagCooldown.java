@@ -141,7 +141,7 @@ public class FlagCooldown extends Flag {
     }
 
     private String timeToString(int time) {
-        String timeString = null;
+        String timeString = "";
         if (time < 1) {
             timeString = "0s";
         } else {
