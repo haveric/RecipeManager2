@@ -13,6 +13,7 @@ import haveric.recipeManager.flag.FlagLoader;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.metrics.Metrics;
+import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -175,8 +176,14 @@ public class RecipeManager extends JavaPlugin {
             }
 
             if (!firstTime && !Settings.getInstance().getClearRecipes()) {
-                Vanilla.restoreAllButSpecialRecipes();
-                Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+                if (!Version.has1_12Support()) {
+                    Vanilla.restoreAllButSpecialRecipes();
+                    Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
+                } else {
+                    Vanilla.removeCustomRecipes();
+                    // Basically does server recipe reset and vanilla re-init, but also
+                    // tries to save any other recipes.
+                }
             }
         }
 

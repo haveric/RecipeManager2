@@ -102,15 +102,6 @@ public class RecipeRegistrator {
 
         RecipeBooks.getInstance().reloadAfterRecipes(sender); // (re)create recipe books for recipes
         
-        // TODO: Force-remap / reload Achievements? How do we keep achievements in sync from changes here?
-        if (Version.has1_12Support()) {
-            try {
-                //Bukkit.getServer().reloadData(); remove for now...
-            } catch (NullPointerException npe) {
-                // During test running.
-            }
-        }
-
         MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d recipes processed.", ((System.currentTimeMillis() - start) / 1000.0), processed));
     }
 
