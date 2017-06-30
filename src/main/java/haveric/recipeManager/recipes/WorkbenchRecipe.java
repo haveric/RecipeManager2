@@ -42,7 +42,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         if (!checkFlags(a)) {
             a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
 
-            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 0, Messages.getInstance().parse("craft.result.denied.title"), Messages.getInstance().parse("craft.result.denied.info"));
+            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 1, Messages.getInstance().parse("craft.result.denied.title"), Messages.getInstance().parse("craft.result.denied.info"));
         }
 
         List<ItemResult> displayResults = new ArrayList<>();
@@ -161,10 +161,10 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
             } else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
-                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 0, Messages.getInstance().get("craft.result.receive.title.unknown"));
+                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 1, Messages.getInstance().get("craft.result.receive.title.unknown"));
             }
         } else if (displayNum == 1 && failedLores > 0 && unavailableNum == failedLores) {
-            return ToolsItem.create(displayResult.getType(), 0, 0, displayResult.getItemMeta().getDisplayName(), lore);
+            return ToolsItem.create(displayResult.getType(), 0, 1, displayResult.getItemMeta().getDisplayName(), lore);
         }
 
         String title;
@@ -203,7 +203,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             displayMaterial = Settings.getInstance().getFailMaterial();
         }
 
-        return ToolsItem.create(displayMaterial, 0, 0, title, lore);
+        return ToolsItem.create(displayMaterial, 0, 1, title, lore);
     }
 
     private String formatChance(float chance) {
