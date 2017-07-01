@@ -10,6 +10,7 @@ import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagKeepItem;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -39,10 +40,17 @@ public class WorkbenchRecipe extends MultiResultRecipe {
     public ItemResult getDisplayResult(Args a) {
         a.clear();
 
+        int displayAmount = 0;
+
+        // Just to maintain previous functionality
+        if (Version.has1_12Support()) {
+            displayAmount = 1;
+        }
+
         if (!checkFlags(a)) {
             a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
 
-            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, 1, Messages.getInstance().parse("craft.result.denied.title"), Messages.getInstance().parse("craft.result.denied.info"));
+            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), Messages.getInstance().parse("craft.result.denied.info"));
         }
 
         List<ItemResult> displayResults = new ArrayList<>();
@@ -161,10 +169,10 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
             } else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
-                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, 1, Messages.getInstance().get("craft.result.receive.title.unknown"));
+                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().get("craft.result.receive.title.unknown"));
             }
         } else if (displayNum == 1 && failedLores > 0 && unavailableNum == failedLores) {
-            return ToolsItem.create(displayResult.getType(), 0, 1, displayResult.getItemMeta().getDisplayName(), lore);
+            return ToolsItem.create(displayResult.getType(), 0, displayAmount, displayResult.getItemMeta().getDisplayName(), lore);
         }
 
         String title;
@@ -203,7 +211,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             displayMaterial = Settings.getInstance().getFailMaterial();
         }
 
-        return ToolsItem.create(displayMaterial, 0, 1, title, lore);
+        return ToolsItem.create(displayMaterial, 0, displayAmount, title, lore);
     }
 
     private String formatChance(float chance) {
