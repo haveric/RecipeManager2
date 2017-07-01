@@ -21,7 +21,8 @@ public class RunTestsCommand implements CommandExecutor {
 
         MessageSender.getInstance().send(sender, "Running Tests...");
 
-        testRemoveRestoreSpecialRecipes(sender);
+        //testRemoveRestoreSpecialRecipes(sender);
+        // TODO: Figure out more tests that can be done in-game
 
         MessageSender.getInstance().send(sender, getFinalChatColor() + "" + passed + " out of " + total + " tests passed.");
 
