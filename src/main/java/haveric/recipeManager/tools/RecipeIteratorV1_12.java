@@ -124,14 +124,14 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
                     widthF.setInt(shaped, 1);
                     heightF.setInt(shaped, 1);
                     resultF.set(shaped, new ItemStack(Items.a, 1));
-                    itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(new ItemStack[] {new ItemStack(new ItemSnow(Blocks.SNOW_LAYER), 1, 32767, false)})));
+                    itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(new ItemStack[] {new ItemStack(new ItemSnow(Blocks.SNOW_LAYER), 1, Short.MAX_VALUE, false)})));
                 } else if (removeRecipe instanceof ShapelessRecipes) {
                     ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
                     Field ingredientsF = stripPrivateFinal(ShapelessRecipes.class, "ingredients");
                     Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                     resultF.set(shapeless, new ItemStack(Items.a, 1));
-                    ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new ItemStack[] {new ItemStack(new ItemSnow(Blocks.SNOW_LAYER), 1, 32767, false)})));
+                    ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new ItemStack[] {new ItemStack(new ItemSnow(Blocks.SNOW_LAYER), 1, Short.MAX_VALUE, false)})));
                 } else {
                     throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
                 }
