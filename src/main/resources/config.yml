@@ -1,4 +1,4 @@
-lastchanged: 2.9 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.11.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -74,11 +74,6 @@ clear-recipes: false
 update-check:
   enabled: true     # Enable/disable update checking. (default: true)
   frequency: 6      # Check for updates each N hours, use 0 to check only at startup. (default: 6)
-
-
-# Enable or disable metrics system for this specific plugin, it will also not create the PluginMetrics folder if this is disabled, but other plugins can use metrics if they have it implemented.
-#   default: true
-metrics: true
 
 # Customize materials used when crafting recipes
 # Material names reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html

@@ -52,8 +52,6 @@ public class Settings {
     private static final boolean UPDATE_CHECK_ENABLED_DEFAULT = true;
     private static final int UPDATE_CHECK_FREQUENCY_DEFAULT = 6;
 
-    private static final boolean METRICS_DEFAULT = true;
-
     private static Material MATERIAL_FAIL_DEFAULT;
     private static final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
     private static final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
@@ -152,7 +150,6 @@ public class Settings {
         MessageSender.getInstance().log("    clear-recipes: " + getClearRecipes());
         MessageSender.getInstance().log("    update-check.enabled: " + getUpdateCheckEnabled());
         MessageSender.getInstance().log("    update-check.frequency: " + getUpdateCheckFrequency());
-        MessageSender.getInstance().log("    metrics: " + getMetrics());
         MessageSender.getInstance().log("    material.fail: " + getFailMaterial());
         MessageSender.getInstance().log("    material.secret: " + getSecretMaterial());
         MessageSender.getInstance().log("    material.multiple-results: " + getMultipleResultsMaterial());
@@ -457,10 +454,6 @@ public class Settings {
 
     public int getUpdateCheckFrequency() {
         return Math.max(fileConfig.getInt("update-check.frequency", UPDATE_CHECK_FREQUENCY_DEFAULT), 0);
-    }
-
-    public boolean getMetrics() {
-        return fileConfig.getBoolean("metrics", METRICS_DEFAULT);
     }
 
     public Material getFailMaterial() {

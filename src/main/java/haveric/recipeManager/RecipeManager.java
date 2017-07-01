@@ -6,13 +6,12 @@ import haveric.recipeManager.data.BrewingStandData;
 import haveric.recipeManager.data.BrewingStands;
 import haveric.recipeManager.data.FurnaceData;
 import haveric.recipeManager.data.Furnaces;
-import haveric.recipeManager.flag.args.ArgBuilder;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.flag.FlagLoader;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.metrics.Metrics;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -26,7 +25,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
@@ -40,7 +38,6 @@ public class RecipeManager extends JavaPlugin {
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
     private static Events events;
-    private Metrics metrics;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -157,18 +154,6 @@ public class RecipeManager extends JavaPlugin {
 
         Updater.init(this, 32835, null);
 
-        if (metrics == null) {
-            if (Settings.getInstance().getMetrics()) { // start/stop metrics accordingly
-                try {
-                    metrics = new Metrics(this);
-                    metrics.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            metrics.stop();
-        }
         if (!check) {
             if (Settings.getInstance().getClearRecipes() || !firstTime) {
                 Vanilla.removeAllButSpecialRecipes();
@@ -279,12 +264,6 @@ public class RecipeManager extends JavaPlugin {
 
             Econ.getInstance().clean();
             Perms.getInstance().clean();
-
-
-            if (metrics != null) {
-                metrics.stop();
-                metrics = null;
-            }
 
             plugin = null;
         } catch (Throwable e) {
