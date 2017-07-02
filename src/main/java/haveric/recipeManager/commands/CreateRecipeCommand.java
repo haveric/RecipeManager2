@@ -8,6 +8,7 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -73,6 +74,18 @@ public class CreateRecipeCommand implements CommandExecutor {
                 ingredients[6] = inventory.getItem(27);
                 ingredients[7] = inventory.getItem(28);
                 ingredients[8] = inventory.getItem(29);
+
+                int numNulls = 0;
+                for (int i = 0; i <= 8; i++) {
+                    if (ingredients[i] == null) {
+                        numNulls ++;
+                    }
+                }
+
+                if (numNulls == 9) {
+                    MessageSender.getInstance().send(player, RMCChatColor.RED + "No ingredients found in the left 3x3 inventory slots.");
+                    return false;
+                }
 
                 Tools.trimItemMatrix(ingredients);
 
