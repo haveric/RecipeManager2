@@ -49,7 +49,7 @@ public class BrewRecipe extends MultiResultRecipe {
     public void resetName() {
         StringBuilder s = new StringBuilder();
 
-        s.append(ingredient.getTypeId());
+        s.append(ingredient.getType().toString().toLowerCase());
 
         if (ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
             s.append(':').append(ingredient.getDurability());
@@ -57,7 +57,7 @@ public class BrewRecipe extends MultiResultRecipe {
 
         s.append(" + ");
 
-        s.append(potion.getTypeId());
+        s.append(potion.getType().toString().toLowerCase());
 
         if (potion.getDurability() != Vanilla.DATA_WILDCARD) {
             s.append(':').append(potion.getDurability());

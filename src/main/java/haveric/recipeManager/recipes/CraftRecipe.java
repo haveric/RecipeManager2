@@ -3,17 +3,22 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.flags.FlagIngredientCondition;
+import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -222,9 +227,9 @@ public class CraftRecipe extends WorkbenchRecipe {
                 ItemStack item = ingredients[(h * 3) + w];
 
                 if (item == null) {
-                    s.append('0');
+                    s.append("air");
                 } else {
-                    s.append(item.getTypeId());
+                    s.append(item.getType().toString().toLowerCase());
 
                     if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                         s.append(':').append(item.getDurability());
@@ -376,8 +381,16 @@ public class CraftRecipe extends WorkbenchRecipe {
         if (hasCustomName()) {
             print = RMCChatColor.ITALIC + getName();
         } else {
-            print = ToolsItem.getName(getFirstResult());
+            ItemResult result = getFirstResult();
+
+            if (result.hasFlag(FlagType.ITEM_NAME)) {
+                FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+                print = RMCUtil.parseColors(flag.getItemName(), false);
+            } else {
+                print = ToolsItem.getName(getFirstResult());
+            }
         }
+
         return print;
     }
 
@@ -388,31 +401,59 @@ public class CraftRecipe extends WorkbenchRecipe {
         s.append(Messages.getInstance().parse("recipebook.header.shaped"));
 
         if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
         }
 
-        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+        s.append('\n').append(RMCChatColor.GRAY).append('=');
+
+        ItemResult result = getFirstResult();
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getItemName(), false));
+        } else {
+            s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+        }
 
         if (isMultiResult()) {
             s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
         }
 
-        s.append('\n');
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.shape")).append(RMCChatColor.GRAY).append('\n');
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
+        s.append(RMCChatColor.GRAY);
 
         Map<String, Integer> charItems = new LinkedHashMap<>();
         int num = 1;
 
-        int ingredientsLength = ingredients.length;
+        // If ingredients get mirrored at any point, display them as they were written
+        ItemStack[] displayIngredients = ingredients;
+        if (isMirrorShape()) {
+            displayIngredients = Tools.mirrorItemMatrix(ingredients);
+        }
+
+        int ingredientsLength = displayIngredients.length;
         for (int i = 0; i < ingredientsLength; i++) {
             int col = i % 3 + 1;
             int row = i / 3 + 1;
 
             if (col <= getWidth() && row <= getHeight()) {
-                if (ingredients[i] == null) {
+                if (displayIngredients[i] == null) {
                     s.append('[').append(RMCChatColor.WHITE).append('_').append(RMCChatColor.GRAY).append(']');
                 } else {
-                    String print = ToolsItem.print(ingredients[i], RMCChatColor.RED, RMCChatColor.BLACK);
+                    String print = "";
+                    if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                        FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+                        List<ConditionsIngredient> conditions = flag.getIngredientConditions(displayIngredients[i]);
+
+                        if (conditions.size() > 0) {
+                            print = RMCChatColor.BLACK + conditions.get(0).getName();
+                        }
+                    }
+
+                    if (print.equals("")) {
+                        print = ToolsItem.print(displayIngredients[i], RMCChatColor.BLACK, RMCChatColor.BLACK);
+                    }
+
                     Integer get = charItems.get(print);
 
                     if (get == null) {
@@ -430,7 +471,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             }
         }
 
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients")).append(RMCChatColor.GRAY);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
         for (Entry<String, Integer> entry : charItems.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getValue()).append(RMCChatColor.GRAY).append(": ").append(entry.getKey());

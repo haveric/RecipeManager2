@@ -2,10 +2,12 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flag.*;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
+import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
@@ -229,7 +231,14 @@ public class SmeltRecipe extends SingleResultRecipe {
         if (hasCustomName()) {
             print = RMCChatColor.ITALIC + getName();
         } else {
-            print = ToolsItem.getName(getResult());
+            ItemResult result = getResult();
+
+            if (result.hasFlag(FlagType.ITEM_NAME)) {
+                FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+                print = RMCUtil.parseColors(flag.getItemName(), false);
+            } else {
+                print = ToolsItem.getName(getResult());
+            }
         }
 
         return print;
@@ -242,21 +251,44 @@ public class SmeltRecipe extends SingleResultRecipe {
         s.append(Messages.getInstance().parse("recipebook.header.smelt"));
 
         if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
         }
 
-        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
+        s.append('\n').append(RMCChatColor.GRAY).append('=');
+
+        ItemResult result = getResult();
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getItemName(), false));
+        } else {
+            s.append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
+        }
 
         /*
          * if(isMultiResult()) { s.append('\n').append(MessagesOld.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
          */
 
-        s.append('\n');
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK));
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
 
-        s.append('\n');
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.cooktime")).append(RMCChatColor.BLACK);
+        String print = "";
+        if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
+
+            if (conditions.size() > 0) {
+                print = RMCChatColor.BLACK + conditions.get(0).getName();
+            }
+        }
+
+        if (print.equals("")) {
+            print = ToolsItem.print(getIngredient(), RMCChatColor.RESET, RMCChatColor.BLACK);
+        }
+
+        s.append('\n').append(print);
+
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.cooktime")).append(RMCChatColor.BLACK);
         s.append('\n');
 
         if (hasCustomTime()) {
@@ -274,9 +306,9 @@ public class SmeltRecipe extends SingleResultRecipe {
         }
 
         if (hasFuel()) {
-            s.append('\n');
-            s.append('\n').append(Messages.getInstance().parse("recipebook.header.requirefuel")).append(RMCChatColor.BLACK);
-            s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RED, RMCChatColor.BLACK));
+            s.append("\n\n");
+            s.append(Messages.getInstance().parse("recipebook.header.requirefuel"));
+            s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RESET, RMCChatColor.BLACK));
         }
 
         return s.toString();

@@ -396,7 +396,7 @@ public class Recipes {
         // In 1.12, adding the RM recipe is handled elsewhere; we just need to remove indexing here.
         //  if we did try to add, we'd get a fatal error and this whole mess would fail.
         if (!Version.has1_12Support() && (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))) {
-            Bukkit.getServer().addRecipe(recipe.getBukkitRecipe(false));
+            Bukkit.addRecipe(recipe.getBukkitRecipe(false));
         }
 
         index.remove(recipe); // Remove from main index

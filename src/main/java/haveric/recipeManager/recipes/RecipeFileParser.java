@@ -38,10 +38,9 @@ public class RecipeFileParser {
 
         fileReader.parseFlags(fileFlags); // parse file header flags that apply to all recipes
 
-
-        String recipeName = null;
         while (fileReader.searchRecipes()) { // search for recipes...
             int directiveLine = fileReader.getLineNum();
+            String recipeName = null;
             String directive = fileReader.getLine().toLowerCase();
             int i = directive.indexOf(' ');
 
