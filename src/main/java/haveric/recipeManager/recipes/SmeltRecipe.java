@@ -18,6 +18,7 @@ import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SmeltRecipe extends SingleResultRecipe {
@@ -223,8 +224,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     public RMCRecipeType getType() {
         return RMCRecipeType.SMELT;
     }
-
-    @Override
+    /*
     public String printBookIndex() {
         String print;
 
@@ -243,9 +243,43 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         return print;
     }
+    */
+    @Override
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasCustomName()) {
+            print.add(RMCChatColor.ITALIC + getName());
+        } else {
+            print.add(getResultPrintName(getResult()));
+        }
+
+        return print;
+    }
+
+    private String getResultPrintName(ItemResult result) {
+        String print;
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            print = RMCUtil.parseColors(flag.getItemName(), false);
+        } else {
+            print = ToolsItem.getName(getResult());
+        }
+
+        return print;
+    }
 
     @Override
-    public String printBook() {
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        recipes.add(printBookResult(getResult()));
+
+        return recipes;
+    }
+
+    public String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 
         s.append(Messages.getInstance().parse("recipebook.header.smelt"));
@@ -256,7 +290,6 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         s.append('\n').append(RMCChatColor.GRAY).append('=');
 
-        ItemResult result = getResult();
         if (result.hasFlag(FlagType.ITEM_NAME)) {
             FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
             s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getItemName(), false));

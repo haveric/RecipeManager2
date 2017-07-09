@@ -159,7 +159,7 @@ public class RecipeCommand implements CommandExecutor {
                     BaseRecipe recipe = e.getKey();
 
                     if (hasItem(recipe, item, ingredient)) {
-                        list.add(recipe.printChat());
+                        list.addAll(recipe.printChat());
                     }
                 }
 

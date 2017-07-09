@@ -17,6 +17,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -373,8 +374,7 @@ public class CraftRecipe extends WorkbenchRecipe {
     public RMCRecipeType getType() {
         return RMCRecipeType.CRAFT;
     }
-
-    @Override
+    /*
     public String printBookIndex() {
         String print;
 
@@ -393,9 +393,51 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         return print;
     }
+    */
+    @Override
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                print.add(getResultPrintName(result));
+            }
+        } else {
+            print.add(getResultPrintName(getFirstResult()));
+        }
+
+        return print;
+    }
+
+    private String getResultPrintName(ItemResult result) {
+        String print;
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            print = RMCUtil.parseColors(flag.getItemName(), false);
+        } else {
+            print = ToolsItem.getName(getFirstResult());
+        }
+
+        return print;
+    }
 
     @Override
-    public String printBook() {
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                recipes.add(printBookResult(result));
+            }
+        } else {
+            recipes.add(printBookResult(getFirstResult()));
+        }
+
+        return recipes;
+    }
+
+    private String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 
         s.append(Messages.getInstance().parse("recipebook.header.shaped"));
@@ -406,7 +448,6 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         s.append('\n').append(RMCChatColor.GRAY).append('=');
 
-        ItemResult result = getFirstResult();
         if (result.hasFlag(FlagType.ITEM_NAME)) {
             FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
             s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getItemName(), false));
@@ -414,7 +455,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
         }
 
-        if (isMultiResult()) {
+        if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
         }
 

@@ -122,32 +122,35 @@ public class RecipeBook extends AbstractRecipeBook {
                     index.add(new StringBuilder(256).append(RMCChatColor.BLACK));
                 }
 
-                String indexName = recipe.printBookIndex();
-                index.get(i).append(RMCChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
+                List<String> indices = recipe.printBookIndices();
+                for (String indexName : indices) {
+                    index.get(i).append(RMCChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
 
-                if (indexName.length() >= 18) {
-                    r += 2;
-                } else {
-                    r += 1;
+                    if (indexName.length() >= 18) {
+                        r += 2;
+                    } else {
+                        r += 1;
+                    }
+
+                    p += 1;
                 }
-
-                p += 1;
             }
 
-            String page = recipe.printBook();
+            List<String> recipes = recipe.printBookRecipes();
+            for (String page : recipes) {
+                if (page.length() >= 255) {
+                    int x = page.indexOf('\n', 220);
 
-            if (page.length() >= 255) {
-                int x = page.indexOf('\n', 220);
+                    if (x < 0 || x > 255) {
+                        x = 255;
+                    }
 
-                if (x < 0 || x > 255) {
-                    x = 255;
+                    pages.add(page.substring(0, x));
+                    pages.add(page.substring(x + 1));
+                    p++;
+                } else {
+                    pages.add(page);
                 }
-
-                pages.add(page.substring(0, x));
-                pages.add(page.substring(x + 1));
-                p++;
-            } else {
-                pages.add(page);
             }
         }
 
