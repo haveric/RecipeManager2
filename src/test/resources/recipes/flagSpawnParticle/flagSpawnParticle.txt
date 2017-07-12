@@ -1,0 +1,44 @@
+craft first
+dirt + dirt
+= dirt
+@spawnparticle heart | count 3
+
+craft second
+dirt + stone_sword
+= dirt
+@spawnparticle heart | delay 40
+
+craft third
+dirt + iron_sword
+= dirt
+@spawnparticle heart | extra 3
+
+craft offset
+dirt + gold_sword
+= dirt
+@spawnparticle heart | count 20 | delay 80 | randomoffset -1 2 1 | offset -2 3 2
+
+craft offset2
+dirt + diamond_sword
+= dirt
+@spawnparticle heart | count 20 | delay 80 | randomoffset -1 2 | offset -2 3
+
+craft offset3
+dirt + stick
+= dirt
+@spawnparticle heart | count 20 | delay 80 | randomoffset -1 | offset -2
+
+craft multiple
+dirt + grass
+= dirt
+@particle heart | count 3
+@particle heart | count 5 | delay 40
+@particle heart | count 20 | delay 80 | randomoffset -1 2 1 | offset -2 3
+
+craft multiple2
+dirt + cobblestone
+= dirt
+@particle heart | count 3
+@particle smoke_normal | count 5 | delay 40
+@particle lava | count 20 | delay 80 | randomoffset -1 2 1 | offset -2 3
+@particle smoke_large
