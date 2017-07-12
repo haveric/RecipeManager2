@@ -113,7 +113,7 @@ public class RecipeBook extends AbstractRecipeBook {
 
             List<String> indices = recipe.printBookIndices();
             for (String indexName : indices) {
-                if (indexName.length() >= 18) {
+                if (RMCChatColor.stripColor(indexName).length() >= 18) {
                     numRecipeLines += 2;
                 } else {
                     numRecipeLines += 1;
@@ -122,7 +122,6 @@ public class RecipeBook extends AbstractRecipeBook {
         }
 
         int p = 3;
-
         if (numRecipeLines > 12) {
             numRecipeLines -= 12;
 
@@ -138,17 +137,18 @@ public class RecipeBook extends AbstractRecipeBook {
             BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
 
             if (contents) {
-                if (r > 13) {
-                    r = 0;
-                    i++;
-                    index.add(new StringBuilder(256).append(RMCChatColor.BLACK));
-                }
-
                 List<String> indices = recipe.printBookIndices();
                 for (String indexName : indices) {
+                    if (r > 13) {
+                        r = 0;
+                        i++;
+                        index.add(new StringBuilder(256).append(RMCChatColor.BLACK));
+                    }
+
+
                     index.get(i).append(RMCChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
 
-                    if (indexName.length() >= 18) {
+                    if (RMCChatColor.stripColor(indexName).length() >= 18) {
                         r += 2;
                     } else {
                         r += 1;
