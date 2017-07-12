@@ -579,7 +579,7 @@ public class Vanilla {
         }
 
         if (Version.has1_12Support()) {
-            Bukkit.getServer().resetRecipes();
+            Bukkit.resetRecipes();
             Vanilla.init();
 
             for (Recipe newRecipe : originalRecipes) {

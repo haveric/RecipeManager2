@@ -3,11 +3,15 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.flags.FlagIngredientCondition;
+import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -133,9 +137,9 @@ public class CombineRecipe extends WorkbenchRecipe {
             ItemStack item = ingredients.get(i);
 
             if (item == null) {
-                s.append('0');
+                s.append("air");
             } else {
-                s.append(item.getTypeId());
+                s.append(item.getType().toString().toLowerCase());
 
                 if (item.getDurability() != Vanilla.DATA_WILDCARD) {
                     s.append(':').append(item.getDurability());
@@ -192,13 +196,47 @@ public class CombineRecipe extends WorkbenchRecipe {
     public RMCRecipeType getType() {
         return RMCRecipeType.COMBINE;
     }
-
-    @Override
+    /*
     public String printBookIndex() {
         String print;
 
         if (hasCustomName()) {
             print = RMCChatColor.ITALIC + getName();
+        } else {
+            ItemResult result = getFirstResult();
+
+            if (result.hasFlag(FlagType.ITEM_NAME)) {
+                FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+                print = RMCUtil.parseColors(flag.getItemName(), false);
+            } else {
+                print = ToolsItem.getName(getFirstResult());
+            }
+        }
+
+        return print;
+    }
+    */
+
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                print.add(getResultPrintName(result));
+            }
+        } else {
+            print.add(getResultPrintName(getFirstResult()));
+        }
+
+        return print;
+    }
+
+    private String getResultPrintName(ItemResult result) {
+        String print;
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            print = RMCUtil.parseColors(flag.getItemName(), false);
         } else {
             print = ToolsItem.getName(getFirstResult());
         }
@@ -207,23 +245,44 @@ public class CombineRecipe extends WorkbenchRecipe {
     }
 
     @Override
-    public String printBook() {
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                recipes.add(printBookResult(result));
+            }
+        } else {
+            recipes.add(printBookResult(getFirstResult()));
+        }
+
+        return recipes;
+    }
+
+    private String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 
         s.append(Messages.getInstance().parse("recipebook.header.shapeless"));
 
         if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
         }
 
-        s.append('\n').append(RMCChatColor.GRAY).append('=').append(RMCChatColor.BLACK).append(RMCChatColor.BOLD).append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+        s.append('\n').append(RMCChatColor.GRAY).append('=');
 
-        if (isMultiResult()) {
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getItemName(), false));
+        } else {
+            s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+        }
+
+        if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
         }
 
-        s.append('\n');
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients")).append(RMCChatColor.BLACK);
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
         Map<ItemStack, MutableInt> items = new HashMap<>();
 
@@ -241,7 +300,22 @@ public class CombineRecipe extends WorkbenchRecipe {
         for (Entry<ItemStack, MutableInt> e : items.entrySet()) {
             ItemStack item = e.getKey();
             item.setAmount(e.getValue().intValue());
-            s.append('\n').append(ToolsItem.print(item, RMCChatColor.RED, RMCChatColor.BLACK));
+
+            String print = "";
+            if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(item);
+
+                if (conditions.size() > 0) {
+                    print = RMCChatColor.BLACK + conditions.get(0).getName();
+                }
+            }
+
+            if (print.equals("")) {
+                print = ToolsItem.print(item, RMCChatColor.RESET, RMCChatColor.BLACK);
+            }
+
+            s.append('\n').append(print);
         }
 
         return s.toString();

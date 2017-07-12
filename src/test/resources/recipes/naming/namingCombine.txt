@@ -1,0 +1,7 @@
+combine Random Stuff
+dirt + iron_ingot
+= stone_sword
+
+combine
+dirt + gold_ingot
+= iron_sword

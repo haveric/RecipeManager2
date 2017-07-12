@@ -3,6 +3,8 @@ This file will be automatically overwritten when a new version is installed.
 
 === v2.11.1 (Coming Soon) ===
 * Removed Metrics
+* Fixed a crash when using /rmcreaterecipe with no ingredients
+* Improvements to RecipeBooks
 
 === v2.11.0 ===
 * Added 1.12 Support

@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
@@ -81,7 +82,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
             ErrorReporter.getInstance().error("Recipe has some invalid ingredients, fix them!");
             return false;
         } else if (ingredientsNum == 0) { // no ingredients were processed
-            return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult readme.txt for proper recipe syntax.");
+            return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult '" + Files.FILE_INFO_BASICS + "' for proper recipe syntax.");
         } else if (ingredientsNum == 2 && !this.conditionEvaluator.checkIngredients(ingredients)) {
             return false;
         }

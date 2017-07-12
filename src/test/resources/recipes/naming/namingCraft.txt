@@ -1,0 +1,7 @@
+craft Boomstick
+dirt + dirt
+= stone_sword
+
+craft
+dirt + stone
+= iron_sword

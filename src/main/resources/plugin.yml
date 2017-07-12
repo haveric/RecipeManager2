@@ -59,7 +59,7 @@ commands:
     permission: recipemanager.command.rmupdate
   rmcreaterecipe:
     aliases: [createrecipe]
-    description: creates a recipe from the left 9 ingredients in an inventory and the held item as a result
+    description: creates a recipe from the leftmost 3x3 ingredients in an inventory and the held item as a result
     usage: /<command>
     permission: recipemanager.command.rmcreaterecipe
   rmruntests:

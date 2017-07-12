@@ -1,0 +1,7 @@
+smelt Diamond Sword
+dirt
+= stone_sword
+
+smelt
+diamond
+= iron_sword

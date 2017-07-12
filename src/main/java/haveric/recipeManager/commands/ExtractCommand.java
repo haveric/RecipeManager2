@@ -51,7 +51,7 @@ public class ExtractCommand implements CommandExecutor {
         List<String> parsedCombineRecipes = new ArrayList<>();
         List<String> parsedSmeltRecipes = new ArrayList<>();
 
-        Iterator<Recipe> recipes = Bukkit.getServer().recipeIterator();
+        Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
         Recipe r;
         int recipesNum = 0;

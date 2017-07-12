@@ -12,6 +12,9 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FuelRecipe extends BaseRecipe {
     private ItemStack ingredient;
     private float minTime;
@@ -160,8 +163,7 @@ public class FuelRecipe extends BaseRecipe {
     public RMCRecipeType getType() {
         return RMCRecipeType.FUEL;
     }
-
-    @Override
+    /*
     public String printBookIndex() {
         String print;
 
@@ -173,23 +175,45 @@ public class FuelRecipe extends BaseRecipe {
 
         return print;
     }
+    */
 
     @Override
-    public String printBook() {
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasCustomName()) {
+            print.add(RMCChatColor.ITALIC + getName());
+        } else {
+            print.add(ToolsItem.getName(getIngredient()) + " Fuel");
+        }
+
+        return print;
+    }
+
+    @Override
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        recipes.add(printBookResult());
+
+        return recipes;
+    }
+
+    public String printBookResult() {
         StringBuilder s = new StringBuilder(256);
 
         s.append(Messages.getInstance().parse("recipebook.header.fuel"));
 
         if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName()).append(RMCChatColor.BLACK);
         }
 
-        s.append('\n');
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK));
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
+        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.BLACK, RMCChatColor.BLACK));
 
-        s.append('\n');
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);
         s.append('\n');
 
         if (maxTime > minTime) {

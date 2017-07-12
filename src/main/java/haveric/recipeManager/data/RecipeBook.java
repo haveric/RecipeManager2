@@ -105,7 +105,28 @@ public class RecipeBook extends AbstractRecipeBook {
         List<String> pages = new ArrayList<>();
         int i = 0;
         int r = 2;
-        int p = (int) Math.ceil(volumes.get(volumeID).size() / 13.0) + 2;
+
+        int numRecipeLines = 0;
+
+        for (String name : volumes.get(volumeID)) {
+            BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
+
+            List<String> indices = recipe.printBookIndices();
+            for (String indexName : indices) {
+                if (RMCChatColor.stripColor(indexName).length() >= 18) {
+                    numRecipeLines += 2;
+                } else {
+                    numRecipeLines += 1;
+                }
+            }
+        }
+
+        int p = 3;
+        if (numRecipeLines > 12) {
+            numRecipeLines -= 12;
+
+            p += (int) Math.ceil(numRecipeLines / 14.0);
+        }
 
         if (contents) {
             index = new ArrayList<>();
@@ -116,38 +137,42 @@ public class RecipeBook extends AbstractRecipeBook {
             BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
 
             if (contents) {
-                if (r > 13) {
-                    r = 0;
-                    i++;
-                    index.add(new StringBuilder(256).append(RMCChatColor.BLACK));
+                List<String> indices = recipe.printBookIndices();
+                for (String indexName : indices) {
+                    if (r > 13) {
+                        r = 0;
+                        i++;
+                        index.add(new StringBuilder(256).append(RMCChatColor.BLACK));
+                    }
+
+
+                    index.get(i).append(RMCChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
+
+                    if (RMCChatColor.stripColor(indexName).length() >= 18) {
+                        r += 2;
+                    } else {
+                        r += 1;
+                    }
+
+                    p += 1;
                 }
-
-                String indexName = recipe.printBookIndex();
-                index.get(i).append(RMCChatColor.BLACK).append(p).append(". ").append(indexName).append('\n');
-
-                if (indexName.length() >= 18) {
-                    r += 2;
-                } else {
-                    r += 1;
-                }
-
-                p += 1;
             }
 
-            String page = recipe.printBook();
+            List<String> recipes = recipe.printBookRecipes();
+            for (String page : recipes) {
+                if (page.length() >= 255) {
+                    int x = page.indexOf('\n', 220);
 
-            if (page.length() >= 255) {
-                int x = page.indexOf('\n', 220);
+                    if (x < 0 || x > 255) {
+                        x = 255;
+                    }
 
-                if (x < 0 || x > 255) {
-                    x = 255;
+                    pages.add(page.substring(0, x));
+                    pages.add(page.substring(x + 1));
+                    p++;
+                } else {
+                    pages.add(page);
                 }
-
-                pages.add(page.substring(0, x));
-                pages.add(page.substring(x + 1));
-                p++;
-            } else {
-                pages.add(page);
             }
         }
 
