@@ -105,7 +105,29 @@ public class RecipeBook extends AbstractRecipeBook {
         List<String> pages = new ArrayList<>();
         int i = 0;
         int r = 2;
-        int p = (int) Math.ceil(volumes.get(volumeID).size() / 13.0) + 2;
+
+        int numRecipeLines = 0;
+
+        for (String name : volumes.get(volumeID)) {
+            BaseRecipe recipe = RecipeManager.getRecipes().getRecipeByName(name);
+
+            List<String> indices = recipe.printBookIndices();
+            for (String indexName : indices) {
+                if (indexName.length() >= 18) {
+                    numRecipeLines += 2;
+                } else {
+                    numRecipeLines += 1;
+                }
+            }
+        }
+
+        int p = 3;
+
+        if (numRecipeLines > 12) {
+            numRecipeLines -= 12;
+
+            p += (int) Math.ceil(numRecipeLines / 14.0);
+        }
 
         if (contents) {
             index = new ArrayList<>();
