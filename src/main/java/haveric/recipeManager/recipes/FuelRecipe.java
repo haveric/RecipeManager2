@@ -205,12 +205,12 @@ public class FuelRecipe extends BaseRecipe {
         s.append(Messages.getInstance().parse("recipebook.header.fuel"));
 
         if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.DARK_BLUE).append(getName()).append(RMCChatColor.BLACK);
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName()).append(RMCChatColor.BLACK);
         }
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.RED, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);
