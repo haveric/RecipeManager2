@@ -194,6 +194,8 @@ public class MultiResultRecipe extends BaseRecipe {
 
                     if (chance < 0 || chance >= rand) {
                         result = r.clone();
+                    } else {
+                        result = new ItemResult(new ItemStack(Material.AIR, 0));
                     }
                     break;
                 }
