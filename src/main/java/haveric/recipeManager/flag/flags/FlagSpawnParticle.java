@@ -42,6 +42,7 @@ public class FlagSpawnParticle extends Flag {
             "  count <amount>              = How many particles are spawned",
             "  delay <ticks>               = How long to delay the particle spawn in ticks (20 ticks per second)",
             "  extra <value>               = Used to set extra data for certain particles. For example, speed. Allows doubles (0.0)",
+            "  repeat <times> [ticks]      = Repeat the particle spawn multiple times. Ticks defaults to 20",
             "You can specify these arguments in any order and they're completely optional.", };
     }
 
@@ -131,12 +132,10 @@ public class FlagSpawnParticle extends Flag {
                         return false;
                     }
 
-                    if (offsets.length >= 1) {
-                        try {
-                            rmParticle.setRandomOffsetX(Double.parseDouble(offsets[0]));
-                        } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid randomoffset x value: " + offsets[0]);
-                        }
+                    try {
+                        rmParticle.setRandomOffsetX(Double.parseDouble(offsets[0]));
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid randomoffset x value: " + offsets[0]);
                     }
 
                     if (offsets.length >= 2) {
@@ -178,6 +177,29 @@ public class FlagSpawnParticle extends Flag {
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid extra value: " + value);
                     }
+                } else if (value.startsWith("repeat")) {
+                    value = value.substring("repeat".length()).trim();
+
+                    String[] repeats = value.split(" ", 2);
+
+                    if (repeats.length < 1) {
+                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'repeat' argument with no values!", "Add values separated by a space (ex: 2 40)");
+                        return false;
+                    }
+
+                    try {
+                        rmParticle.setRepeatTimes(Integer.parseInt(repeats[0]));
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid repeat times value: " + repeats[0]);
+                    }
+
+                    if (repeats.length >= 2) {
+                        try {
+                            rmParticle.setRepeatDelay(Integer.parseInt(repeats[1]));
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid repeat tick delay value: " + repeats[1]);
+                        }
+                    }
                 }
             }
         }
@@ -217,21 +239,30 @@ public class FlagSpawnParticle extends Flag {
         final Particle particle = rmParticle.getParticle();
 
         int delay = rmParticle.getDelay();
-        if (delay > 0) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
-                public void run() {
-                    if (extra.isNaN()) {
-                        a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ);
-                    } else {
-                        a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ, extra);
+
+        int repeatTimes = rmParticle.getRepeatTimes();
+        int repeatDelay = rmParticle.getRepeatDelay();
+
+        for (int i = 0; i < repeatTimes + 1; i++) {
+            if (i > 0) {
+                delay += repeatDelay;
+            }
+            if (delay > 0) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
+                    public void run() {
+                        if (extra.isNaN()) {
+                            a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ);
+                        } else {
+                            a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ, extra);
+                        }
                     }
-                }
-            }, delay);
-        } else {
-            if (extra.isNaN()) {
-                a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ);
+                }, delay);
             } else {
-                a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ, extra);
+                if (extra.isNaN()) {
+                    a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ);
+                } else {
+                    a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ, extra);
+                }
             }
         }
     }

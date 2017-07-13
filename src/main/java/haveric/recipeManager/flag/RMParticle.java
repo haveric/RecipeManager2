@@ -8,10 +8,10 @@ public class RMParticle {
     private int delay = 0;
 
     public static double DEFAULT_OFFSET_X = .5;
-    public static  double DEFAULT_OFFSET_Y = 1.0;
-    public static  double DEFAULT_OFFSET_Z = .5;
+    public static double DEFAULT_OFFSET_Y = 1.0;
+    public static double DEFAULT_OFFSET_Z = .5;
 
-    public static  double DEFAULT_RANDOM_OFFSET = .25;
+    public static double DEFAULT_RANDOM_OFFSET = .25;
 
     private double offsetX = DEFAULT_OFFSET_X;
     private double offsetY = DEFAULT_OFFSET_Y;
@@ -23,6 +23,9 @@ public class RMParticle {
 
     private int count = 1;
     private Double extra = Double.NaN;
+
+    private int repeatTimes = 0;
+    private int repeatDelay = 20;
 
     public RMParticle(Particle newParticle) {
         particle = newParticle;
@@ -100,11 +103,27 @@ public class RMParticle {
         this.count = count;
     }
 
-    public double getExtra() {
+    public Double getExtra() {
         return extra;
     }
 
-    public void setExtra(double extra) {
+    public void setExtra(Double extra) {
         this.extra = extra;
+    }
+
+    public int getRepeatTimes() {
+        return repeatTimes;
+    }
+
+    public void setRepeatTimes(int repeatTimes) {
+        this.repeatTimes = repeatTimes;
+    }
+
+    public int getRepeatDelay() {
+        return repeatDelay;
+    }
+
+    public void setRepeatDelay(int repeatDelay) {
+        this.repeatDelay = repeatDelay;
     }
 }

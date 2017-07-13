@@ -28,6 +28,16 @@ dirt + stick
 = dirt
 @spawnparticle heart | count 20 | delay 80 | randomoffset -1 | offset -2
 
+craft repeat
+dirt + stone
+= dirt
+@spawnparticle heart | repeat 5 40
+
+craft repeat2
+dirt + brick
+= dirt
+@spawnparticle heart | repeat 7
+
 craft multiple
 dirt + grass
 = dirt

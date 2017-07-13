@@ -25,7 +25,7 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(8, queued.size());
+        assertEquals(10, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
@@ -115,6 +115,20 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(-2, particles.get(0).getOffsetX(), .001);
                     assertEquals(RMParticle.DEFAULT_OFFSET_Y, particles.get(0).getOffsetY(), .001);
                     assertEquals(RMParticle.DEFAULT_OFFSET_Z, particles.get(0).getOffsetZ(), .001);
+                    break;
+                case "repeat":
+                    assertEquals(1, particles.size());
+                    assertEquals(Particle.HEART, particles.get(0).getParticle());
+
+                    assertEquals(5, particles.get(0).getRepeatTimes());
+                    assertEquals(40, particles.get(0).getRepeatDelay());
+                    break;
+                case "repeat2":
+                    assertEquals(1, particles.size());
+                    assertEquals(Particle.HEART, particles.get(0).getParticle());
+
+                    assertEquals(7, particles.get(0).getRepeatTimes());
+                    assertEquals(20, particles.get(0).getRepeatDelay());
                     break;
                 case "multiple":
                     assertEquals(3, particles.size());
