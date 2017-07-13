@@ -310,7 +310,13 @@ public class SmeltRecipe extends SingleResultRecipe {
             List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
 
             if (conditions.size() > 0) {
-                print = RMCChatColor.BLACK + conditions.get(0).getName();
+                ConditionsIngredient condition = conditions.get(0);
+
+                if (condition.hasName()) {
+                    print = RMCChatColor.BLACK + condition.getName();
+                } else if (condition.hasLore()) {
+                    print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
+                }
             }
         }
 
