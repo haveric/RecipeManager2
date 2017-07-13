@@ -1,11 +1,11 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== v2.11.1 (Coming Soon) ===
+=== v2.12.0 ===
 * Removed Metrics
+* Fixed custom potion error
 * Fixed a crash when using /rmcreaterecipe with no ingredients
 * Improvements to RecipeBooks
-* Fixed custom potion error
 * New Flag: @SpawnParticle
 
 === v2.11.0 ===
