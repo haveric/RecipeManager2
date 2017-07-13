@@ -101,7 +101,10 @@ public class FlagPotionItem extends Flag {
     public FlagPotionItem(FlagPotionItem flag) {
         data = flag.data;
         effects.addAll(flag.effects);
-        customPotion = flag.customPotion.clone();
+
+        if (customPotion != null) {
+            customPotion = flag.customPotion.clone();
+        }
     }
 
     @Override

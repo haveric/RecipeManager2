@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * Removed Metrics
 * Fixed a crash when using /rmcreaterecipe with no ingredients
 * Improvements to RecipeBooks
+* Fixed custom potion error
 * New Flag: @SpawnParticle
 
 === v2.11.0 ===
