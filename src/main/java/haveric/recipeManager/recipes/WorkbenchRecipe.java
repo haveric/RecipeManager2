@@ -43,7 +43,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         int displayAmount = 0;
 
         // Just to maintain previous functionality
-        if (Version.has1_12Support()) {
+        if (Version.has1_11Support()) {
             displayAmount = 1;
         }
 
