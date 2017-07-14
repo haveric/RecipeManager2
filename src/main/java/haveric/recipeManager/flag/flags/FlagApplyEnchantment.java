@@ -38,6 +38,7 @@ public class FlagApplyEnchantment extends Flag {
             "  ingredientaction <action> = (default largest) merge action for all of the ingredients",
             "  resultaction <action>     = (default largest) merge action applied to the result",
             "  ignorelevel               = Ignore enchantment level restrictions",
+            "  onlybooks                 = Only copies enchantments from Enchanted Books. Without this, all item enchantments will be copied",
             "",
             "Actions include:",
             "  largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)",
@@ -48,7 +49,9 @@ public class FlagApplyEnchantment extends Flag {
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag}", };
+            "{flag}",
+            "{flag} resultaction combine // Combines the levels with the resulting item's enchants",
+            "{flag} ingredientaction combine | ignorelevels | onlybooks // Combines all ingredients levels from books while allowing higher than vanilla allowed enchants"};
     }
 
     public enum ApplyEnchantmentAction {
@@ -59,6 +62,7 @@ public class FlagApplyEnchantment extends Flag {
     private ApplyEnchantmentAction ingredientAction = ApplyEnchantmentAction.LARGEST;
     private ApplyEnchantmentAction resultAction = ApplyEnchantmentAction.LARGEST;
     private boolean ignoreLevelRestriction = false;
+    private boolean onlyBooks = false;
 
 
     public FlagApplyEnchantment() { }
@@ -67,6 +71,7 @@ public class FlagApplyEnchantment extends Flag {
         ingredientAction = flag.ingredientAction;
         resultAction = flag.resultAction;
         ignoreLevelRestriction = flag.ignoreLevelRestriction;
+        onlyBooks = flag.onlyBooks;
     }
 
     @Override
@@ -84,6 +89,10 @@ public class FlagApplyEnchantment extends Flag {
 
     public boolean getIgnoreLevelRestriction() {
         return ignoreLevelRestriction;
+    }
+
+    public boolean getOnlyBooks() {
+        return onlyBooks;
     }
 
     @Override
@@ -119,6 +128,8 @@ public class FlagApplyEnchantment extends Flag {
                 }
             } else if (arg.startsWith("ignorelevel")) {
                 ignoreLevelRestriction = true;
+            } else if (arg.startsWith("onlybooks")) {
+                onlyBooks = true;
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
             }
@@ -198,6 +209,26 @@ public class FlagApplyEnchantment extends Flag {
                             }
                         } else {
                             enchantments.put(enchantment, level);
+                        }
+                    }
+                }
+
+                if(!onlyBooks) {
+                    if (meta != null && meta.hasEnchants()) {
+                        for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
+                            Enchantment enchantment = entry.getKey();
+                            int level = entry.getValue();
+
+                            if (enchantments.containsKey(enchantment)) {
+                                int currentLevel = enchantments.get(enchantment);
+                                if (ingredientAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
+                                    enchantments.put(enchantment, level);
+                                } else if (ingredientAction == ApplyEnchantmentAction.COMBINE) {
+                                    enchantments.put(enchantment, level + currentLevel);
+                                }
+                            } else {
+                                enchantments.put(enchantment, level);
+                            }
                         }
                     }
                 }
