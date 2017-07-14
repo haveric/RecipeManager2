@@ -4,6 +4,8 @@ This file will be automatically overwritten when a new version is installed.
 === (Coming Soon) ===
 * Fixed fail chances not removing ingredients on @IndividualResults recipes
 * Fixed null names in recipe books. Use first ingredientcondition lore line as an assumed fallback name
+* New Flag: @ApplyEnchantment
+** Copies enchantments from ingredient books to the result
 
 === v2.12.0 ===
 * Removed Metrics

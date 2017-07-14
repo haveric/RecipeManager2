@@ -80,6 +80,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.NO_RESULT, new FlagNoResult(), FlagBit.RESULT | FlagBit.NO_FOR | FlagBit.NO_VALUE);
         FlagFactory.getInstance().initializeFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), FlagBit.RESULT, "monsteregg", "egg");
         FlagFactory.getInstance().initializeFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), FlagBit.RESULT, "spawner", "mobspawner");
+        FlagFactory.getInstance().initializeFlag(FlagType.APPLY_ENCHANTMENT, new FlagApplyEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE, "applyenchant", "applyenchantments", "applyenchants");
     }
 
     public void loadCustomFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {
