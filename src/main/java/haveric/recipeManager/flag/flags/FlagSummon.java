@@ -69,7 +69,7 @@ public class FlagSummon extends Flag {
 
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
-            String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's hand with optional drop chance; for enderman it only uses material and data from the item."),
+            String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's main hand with optional drop chance; for enderman it only uses material and data from the item."),
             String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
             String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."),
             String.format(argFormat, "haschest", "adds a chest to creature (Only works on horses, forces horse to be an adult and tamed)."),
@@ -85,6 +85,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
             String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
             String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
+            String.format(argFormat, "offhand <item> [drop%]", "equip an item on the creature's offhand with optional drop chance."),
             String.format(argFormat, "invulnerable", "makes the creature invulnerable."),
             String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the creature's jump strength (Only works for horses). 0 = no jump"),
             String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
@@ -189,8 +190,8 @@ public class FlagSummon extends Flag {
         private boolean baby = false;
         private boolean ageLock = false;
         private boolean noBreed = false;
-        private ItemStack[] equip = new ItemStack[5];
-        private float[] drop = new float[5];
+        private ItemStack[] equip = new ItemStack[6];
+        private float[] drop = new float[6];
         private List<PotionEffect> potions = new ArrayList<>();
         private Horse.Variant horse = null;
         private Horse.Color horseColor = null;
@@ -520,10 +521,8 @@ public class FlagSummon extends Flag {
                 ent.setAI(!noAi);
 
                 EntityEquipment eq = ent.getEquipment();
-
                 for (int j = 0; j < equip.length; j++) {
                     ItemStack item = equip[j];
-
                     if (item == null) {
                         continue;
                     }
@@ -554,11 +553,19 @@ public class FlagSummon extends Flag {
                                 Enderman npc = (Enderman) ent;
                                 npc.setCarriedMaterial(item.getData());
                             } else {
-                                eq.setItemInHand(item);
-                                eq.setItemInHandDropChance(drop[j]);
+                                if (Version.has1_12Support()) {
+                                    eq.setItemInMainHand(item);
+                                    eq.setItemInMainHandDropChance(drop[j]);
+                                } else {
+                                    eq.setItemInHand(item);
+                                    eq.setItemInHandDropChance(drop[j]);
+                                }
                             }
 
                             break;
+                        case 5:
+                            eq.setItemInOffHand(item);
+                            eq.setItemInOffHandDropChance(drop[j]);
                         default:
                             break;
                     }
@@ -754,6 +761,12 @@ public class FlagSummon extends Flag {
             equip = newEquip.clone();
         }
 
+        public void setEquip(ItemStack item, int index) {
+            if (index < equip.length) {
+                equip[index] = item.clone();
+            }
+        }
+
         public float[] getDrop() {
             return drop.clone();
         }
@@ -762,6 +775,11 @@ public class FlagSummon extends Flag {
             drop = newDrop.clone();
         }
 
+        public void setDrop(float newDrop, int index) {
+            if (index < drop.length) {
+                drop[index] = newDrop;
+            }
+        }
         public List<PotionEffect> getPotionEffects() {
             return potions;
         }
@@ -1376,7 +1394,7 @@ public class FlagSummon extends Flag {
                     }
 
                     c.addPotionEffect(effect, duration, amplifier);
-                } else if (value.startsWith("hand") || value.startsWith("hold") || value.startsWith("head") || value.startsWith("helmet") || value.startsWith("chest") || value.startsWith("leg") || value.startsWith("feet") || value.startsWith("boot")) {
+                } else if (value.startsWith("hand") || value.startsWith("mainhand") || value.startsWith("offhand") || value.startsWith("hold") || value.startsWith("head") || value.startsWith("helmet") || value.startsWith("chest") || value.startsWith("leg") || value.startsWith("feet") || value.startsWith("boot")) {
                     int index = -1;
 
                     switch (value.charAt(0)) {
@@ -1407,6 +1425,12 @@ public class FlagSummon extends Flag {
                         case 'f':
                             index = 3;
                             break;
+                        case 'm':
+                            index = 4;
+                            break;
+                        case 'o':
+                            index = 5;
+                            break;
                         default:
                             break;
                     }
@@ -1426,7 +1450,7 @@ public class FlagSummon extends Flag {
                         continue;
                     }
 
-                    c.getEquip()[index] = item;
+                    c.setEquip(item, index);
 
                     if (args.length > 1) {
                         value = args[1].trim();
@@ -1436,7 +1460,7 @@ public class FlagSummon extends Flag {
                         }
 
                         try {
-                            c.getDrop()[index] = Math.min(Math.max(Float.valueOf(value), 0), 100);
+                            c.setDrop( Math.min(Math.max(Float.valueOf(value), 0), 100), index);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'chance' argument with invalid number: " + value);
                         }
