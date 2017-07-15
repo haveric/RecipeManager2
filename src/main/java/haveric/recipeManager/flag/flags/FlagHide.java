@@ -113,7 +113,7 @@ public class FlagHide extends Flag {
             return;
         }
 
-        if (Version.has18Support()) {
+        if (Version.has1_8Support()) {
             ItemMeta meta = a.result().getItemMeta();
 
             if (attributes) {

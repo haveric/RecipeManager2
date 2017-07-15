@@ -50,7 +50,7 @@ public class FlagPotionItem extends Flag {
                 "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
         };
 
-        if (Version.has19Support()) {
+        if (Version.has1_9Support()) {
             description = ObjectArrays.concat(description, new String[] {
                     "  lingering              = (optional) Lingering potion instead of drinkable",
             }, String.class);
@@ -166,7 +166,7 @@ public class FlagPotionItem extends Flag {
                 addEffect(effect);
             }
         } else {
-            if (Version.has19Support()) {
+            if (Version.has1_9Support()) {
                 setCustomPotion(Tools.parsePotion19(value, getFlagType()));
             } else {
                 Potion p = Tools.parsePotion18(value, getFlagType());

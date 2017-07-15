@@ -99,7 +99,7 @@ public class Settings {
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
-        if (Version.has18Support()) {
+        if (Version.has1_8Support()) {
             MATERIAL_FAIL_DEFAULT = Material.BARRIER;
         } else {
             MATERIAL_FAIL_DEFAULT = Material.FIRE;

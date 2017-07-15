@@ -105,7 +105,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
         }, String.class);
 
-        if (Version.has18PlusSupport()) {
+        if (Version.has1_8PlusSupport()) {
             description = ObjectArrays.concat(description, new String[] {
                 String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()) }, String.class);
         }
@@ -517,8 +517,10 @@ public class FlagSummon extends Flag {
                 }
 
                 ent.setRemoveWhenFarAway(!noRemove);
-                ent.setInvulnerable(invulnerable);
-                ent.setAI(!noAi);
+                if (Version.has1_10Support()) {
+                    ent.setInvulnerable(invulnerable);
+                    ent.setAI(!noAi);
+                }
 
                 EntityEquipment eq = ent.getEquipment();
                 for (int j = 0; j < equip.length; j++) {
@@ -553,7 +555,7 @@ public class FlagSummon extends Flag {
                                 Enderman npc = (Enderman) ent;
                                 npc.setCarriedMaterial(item.getData());
                             } else {
-                                if (Version.has1_12Support()) {
+                                if (Version.has1_9Support()) {
                                     eq.setItemInMainHand(item);
                                     eq.setItemInMainHandDropChance(drop[j]);
                                 } else {

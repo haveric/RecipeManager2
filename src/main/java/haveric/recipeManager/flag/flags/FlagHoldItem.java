@@ -52,7 +52,7 @@ public class FlagHoldItem extends Flag {
             "      mainhand: selected hotbar slot. Defaults to this.",
         };
 
-        if (Version.has19Support()) {
+        if (Version.has1_9Support()) {
             description = ObjectArrays.concat(description, new String[] {
             "      offhand or shield: offhand slot.", }, String.class);
         }
@@ -268,7 +268,7 @@ public class FlagHoldItem extends Flag {
 
             PlayerInventory inventory = a.player().getInventory();
 
-            if (Version.has19Support()) {
+            if (Version.has1_9Support()) {
                 if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
                     mainFound = checkConditions(inventory.getItemInMainHand(), a, ConditionsSlot.MAINHAND);
                 }

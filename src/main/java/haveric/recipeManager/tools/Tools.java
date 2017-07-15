@@ -974,7 +974,7 @@ public class Tools {
     public static Sound getSound(String newSound, String oldSound) {
         Sound sound = null;
 
-        if (Version.has19Support()) {
+        if (Version.has1_9Support()) {
             // set known sounds to make sure Enum isn't changing on us
             switch (newSound) {
                 case "BLOCK_NOTE_BASS":

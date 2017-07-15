@@ -47,7 +47,7 @@ public class ToolsExp {
     public static int getExpAtLevel(final int level) {
         int xp;
 
-        if (Version.has18Support()) {
+        if (Version.has1_8Support()) {
             xp = getExpAtLevel18(level);
         } else {
             xp = getExpAtLevel17(level);

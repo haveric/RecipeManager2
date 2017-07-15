@@ -14,11 +14,13 @@ public class Version {
             supportVersion = "1.12";
         } else if (supports1_11()) {
             supportVersion = "1.11";
-        } else if (supports19()) {
+        } else if (supports1_10()) {
+            supportVersion = "1.10";
+        } else if (supports1_9()) {
             supportVersion = "1.9";
-        } else if (supports18Plus()) {
+        } else if (supports1_8Plus()) {
             supportVersion = "1.8+";
-        } else if (supports18()) {
+        } else if (supports1_8()) {
             supportVersion = "1.8";
         } else {
             supportVersion = "1.7";
@@ -52,7 +54,22 @@ public class Version {
 
         return supports;
     }
-    private static boolean supports19() {
+
+    private static boolean supports1_10() {
+        boolean supports;
+
+        try {
+            @SuppressWarnings("unused")
+            EntityType et = EntityType.POLAR_BEAR;
+            supports = true;
+        } catch (NoSuchFieldError e) {
+            supports = false;
+        }
+
+        return supports;
+    }
+
+    private static boolean supports1_9() {
         boolean supports;
 
         try {
@@ -66,7 +83,7 @@ public class Version {
         return supports;
     }
 
-    private static boolean supports18Plus() {
+    private static boolean supports1_8Plus() {
         boolean supports;
 
         try {
@@ -80,7 +97,7 @@ public class Version {
         return supports;
     }
 
-    private static boolean supports18() {
+    private static boolean supports1_8() {
         boolean supports;
 
         try {
@@ -124,18 +141,29 @@ public class Version {
         return hasSupport;
     }
 
-    public static boolean has19Support() {
+    public static boolean has1_10Support() {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.12") || version.equals("1.11") || version.equals("1.9")) {
+        if (version.equals("1.12") || version.equals("1.11") || version.equals("1.10")) {
             hasSupport = true;
         }
 
         return hasSupport;
     }
 
-    public static boolean has18PlusSupport() {
+    public static boolean has1_9Support() {
+        boolean hasSupport = false;
+        String version = getVersion();
+
+        if (!version.equals("1.8+") && !version.equals("1.8") && !version.equals("1.7")) {
+            hasSupport = true;
+        }
+
+        return hasSupport;
+    }
+
+    public static boolean has1_8PlusSupport() {
         boolean hasSupport = false;
         String version = getVersion();
 
@@ -146,7 +174,7 @@ public class Version {
         return hasSupport;
     }
 
-    public static boolean has18Support() {
+    public static boolean has1_8Support() {
         boolean hasSupport = false;
         String version = getVersion();
 

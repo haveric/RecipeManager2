@@ -43,7 +43,7 @@ public class FlagBannerItem extends Flag {
             "  [pattern] is the banner pattern type",
         };
 
-        if (Version.has18Support()) {
+        if (Version.has1_8Support()) {
             description = ObjectArrays.concat(description, new String[] {
                 "    Values: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
             }, String.class);

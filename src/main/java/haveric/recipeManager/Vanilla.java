@@ -117,7 +117,7 @@ public class Vanilla {
         initialRecipes.put(new FuelRecipe(Material.COAL_BLOCK, 800), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
 
-        if (Version.has18Support()) {
+        if (Version.has1_8Support()) {
             initialRecipes.put(new FuelRecipe(Material.BANNER, 15), info);
 
             initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE, 15), info);
@@ -135,7 +135,7 @@ public class Vanilla {
             RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
         }
 
-        if (Version.has19Support()) {
+        if (Version.has1_9Support()) {
             RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
         }
 
