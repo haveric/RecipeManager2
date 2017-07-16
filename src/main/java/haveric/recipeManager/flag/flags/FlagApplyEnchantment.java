@@ -171,11 +171,12 @@ public class FlagApplyEnchantment extends Flag {
         for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
             Enchantment enchantment = entry.getKey();
             int level = entry.getValue();
+
             if (resultMeta.hasEnchant(enchantment)) {
                 int currentLevel = resultMeta.getEnchantLevel(enchantment);
                 if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
                     resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
-                } else {
+                } else if (resultAction == ApplyEnchantmentAction.COMBINE){
                     resultMeta.addEnchant(enchantment, level + currentLevel, ignoreLevelRestriction);
                 }
             } else {

@@ -6,7 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 * Fixed null names in recipe books. Use first ingredientcondition lore line as an assumed fallback name
 * Fixed chance recipes not showing results in MC 1.11
 * @Summon: Updated and fixed setting items on entities
-* @Summon: Added better backwards support for equipment 
+* @Summon: Added better backwards support for equipment
 * New Flag: @ApplyEnchantment
 ** Copies enchantments from ingredients to the result
 

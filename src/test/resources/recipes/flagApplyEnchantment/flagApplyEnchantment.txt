@@ -1,0 +1,35 @@
+craft default
+enchanted_book + stone_sword + dirt
+= iron_sword
+@enchant sharpness
+@applyenchantment
+
+craft ingredientcombine
+enchanted_book + stone_sword + cobblestone
+= iron_sword
+@enchant sharpness
+@applyenchantment ingredientaction combine
+
+craft resultcombine
+enchanted_book + stone_sword + grass
+= iron_sword
+@enchant sharpness
+@applyenchantment resultaction combine
+
+craft bothcombine
+enchanted_book + stone_sword + stone
+= iron_sword
+@enchant sharpness
+@applyenchantment ingredientaction combine | resultaction combine
+
+craft onlybooksdefault
+enchanted_book + stone_sword + brick
+= iron_sword
+@enchant sharpness
+@applyenchantment onlybooks
+
+craft onlybookscombine
+enchanted_book + stone_sword + sand
+= iron_sword
+@enchant sharpness
+@applyenchantment ingredientaction combine | resultaction combine | onlybooks
