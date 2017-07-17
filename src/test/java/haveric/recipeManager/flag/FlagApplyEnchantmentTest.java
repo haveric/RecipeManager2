@@ -33,13 +33,7 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
     @Before
     public void setup() {
         Enchantment.registerEnchantment(new TestEnchantmentSharpness(16));
-        //Enchantment.registerEnchantment(new TestEnchantmentOxygen(5));
-        //Enchantment.registerEnchantment(new TestEnchantmentDigSpeed(32));
-        //Enchantment.registerEnchantment(new TestEnchantmentInfinity(51));
         when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
-        //when(settings.getEnchantment("oxygen")).thenReturn(Enchantment.OXYGEN);
-        //when(settings.getEnchantment("digspeed")).thenReturn(Enchantment.DIG_SPEED);
-        //when(settings.getEnchantment("arrowinfinite")).thenReturn(Enchantment.ARROW_INFINITE);
 
         mockStatic(Inventory.class);
         inventory = mock(CraftingInventory.class);
