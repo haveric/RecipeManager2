@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== (Coming Soon) ===
+=== v2.13.0 ===
 * Fixed fail chances not removing ingredients on @IndividualResults recipes
 * Fixed null names in recipe books. Use first ingredientcondition lore line as an assumed fallback name
 * Fixed chance recipes not showing results in MC 1.11
