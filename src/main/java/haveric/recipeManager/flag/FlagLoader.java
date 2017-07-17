@@ -32,11 +32,11 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.BIOME, new FlagBiome(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.WEATHER, new FlagWeather(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.EXPLODE, new FlagExplode(), FlagBit.NO_SHIFT | FlagBit.NO_VALUE, "explosion", "boom", "tnt");
-        FlagFactory.getInstance().initializeFlag(FlagType.SOUND, new FlagSound(), FlagBit.NO_SHIFT, "playsound");
+        FlagFactory.getInstance().initializeFlag(FlagType.SOUND, new FlagSound(), FlagBit.ONCE_PER_SHIFT, "playsound");
         FlagFactory.getInstance().initializeFlag(FlagType.SUMMON, new FlagSummon(), FlagBit.NO_SHIFT, "spawn", "creature", "mob", "animal");
         FlagFactory.getInstance().initializeFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), FlagBit.NO_VALUE, "poweredblock", "blockpower", "redstonepowered");
         FlagFactory.getInstance().initializeFlag(FlagType.POTION_EFFECT, new FlagPotionEffect(), FlagBit.NONE, "potionfx");
-        FlagFactory.getInstance().initializeFlag(FlagType.LAUNCH_FIREWORK, new FlagLaunchFirework(), FlagBit.NO_SHIFT, "setfirework");
+        FlagFactory.getInstance().initializeFlag(FlagType.LAUNCH_FIREWORK, new FlagLaunchFirework(), FlagBit.ONCE_PER_SHIFT, "setfirework");
         FlagFactory.getInstance().initializeFlag(FlagType.SET_BLOCK, new FlagSetBlock(), FlagBit.NO_SHIFT, "changeblock");
         FlagFactory.getInstance().initializeFlag(FlagType.MESSAGE, new FlagMessage(), FlagBit.NONE, "craftmsg", "msg");
         FlagFactory.getInstance().initializeFlag(FlagType.BROADCAST, new FlagBroadcast(), FlagBit.NONE, "announce", "msgall");
