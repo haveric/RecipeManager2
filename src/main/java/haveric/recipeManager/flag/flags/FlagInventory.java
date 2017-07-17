@@ -88,7 +88,7 @@ public class FlagInventory extends Flag {
     }
 
     public void setTitle(String newTitle) {
-        title = newTitle;
+        title = RMCUtil.parseColors(newTitle, false);
     }
 
     public boolean hasTitle() {
