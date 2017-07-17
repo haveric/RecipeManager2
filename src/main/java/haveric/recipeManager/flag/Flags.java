@@ -210,11 +210,17 @@ public class Flags implements Cloneable {
         return flags.values();
     }
 
+    private boolean isOncePerShift(Flag flag) {
+        return FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.ONCE_PER_SHIFT);
+    }
+
     public boolean sendPrepare(Args a) {
         a.clear();
 
         for (Flag flag : flags.values()) {
-            flag.prepare(a);
+            if (!isOncePerShift(flag) || a.isFirstRun()) {
+                flag.prepare(a);
+            }
         }
 
         return !a.hasReasons();
@@ -232,7 +238,9 @@ public class Flags implements Cloneable {
         a.clear();
 
         for (Flag flag : flags.values()) {
-            flag.crafted(a);
+            if (!isOncePerShift(flag) || a.isFirstRun()) {
+                flag.crafted(a);
+            }
         }
 
         return !a.hasReasons();
@@ -248,7 +256,9 @@ public class Flags implements Cloneable {
         a.clear();
 
         for (Flag flag : flags.values()) {
-            flag.failed(a);
+            if (!isOncePerShift(flag) || a.isFirstRun()) {
+                flag.failed(a);
+            }
         }
     }
 

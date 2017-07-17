@@ -28,6 +28,7 @@ public class Args {
     private Inventory inventory;
     private ItemResult result;
     private Object extra;
+    private boolean firstRun = true;
 
     private List<String> reasons;
     private List<String> effects;
@@ -66,6 +67,10 @@ public class Args {
 
     public void setExtra(Object newExtra) {
         extra = newExtra;
+    }
+
+    public void setFirstRun(boolean newFirstRun) {
+        firstRun = newFirstRun;
     }
 
     public UUID playerUUID() {
@@ -139,6 +144,10 @@ public class Args {
 
     public boolean hasExtra() {
         return extra != null;
+    }
+
+    public boolean isFirstRun() {
+        return firstRun;
     }
 
     public List<String> reasons() {

@@ -445,7 +445,9 @@ public class Events implements Listener {
                     Recipes.recipeResetResult(a.playerUUID());
                 }
 
+                boolean firstRun = true;
                 while (--times >= 0) {
+                    a.setFirstRun(firstRun);
                     a.clear();
 
                     boolean recipeCraftSuccess = recipe.sendCrafted(a);
@@ -498,6 +500,8 @@ public class Events implements Listener {
 
                     // TODO call post-event ?
                     // Bukkit.getPluginManager().callEvent(new RecipeManagerCraftEventPost(recipe, result, player, event.getCursor(), event.isShiftClick(), event.isRightClick() ? 1 : 0));
+
+                    firstRun = false;
                 }
             }
 
