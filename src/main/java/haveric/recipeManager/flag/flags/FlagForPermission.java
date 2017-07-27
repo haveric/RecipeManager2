@@ -149,7 +149,8 @@ public class FlagForPermission extends Flag {
 
         Flag flag = getFlagForPermission(permission, type.getName()); // get existing flag, if any
 
-        if (flag == null) { // TODO: This is likely a bug
+        if (flag == null) {
+            flag = type.createFlagClass(); // create a new instance of the flag if it does not exist
             flag.setFlagsContainer(getFlagsContainer()); // set container before hand to allow checks
         }
 
