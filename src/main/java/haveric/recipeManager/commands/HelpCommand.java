@@ -15,7 +15,7 @@ public class HelpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         PluginDescriptionFile desc = RecipeManager.getPlugin().getDescription();
 
-        MessageSender.getInstance().send(sender, RMCChatColor.YELLOW + "------ " + RMCChatColor.WHITE + desc.getFullName() + RMCChatColor.GRAY + " by haveric / Digi " + RMCChatColor.YELLOW + "------");
+        MessageSender.getInstance().send(sender, RMCChatColor.YELLOW + "---- " + RMCChatColor.WHITE + desc.getFullName() + RMCChatColor.GRAY + " by haveric/ProgrammerDan " + RMCChatColor.YELLOW + "----");
 
         Map<String, Map<String, Object>> cmds = desc.getCommands();
         Map<String, Object> data;
