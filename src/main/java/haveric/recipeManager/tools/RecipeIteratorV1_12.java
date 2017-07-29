@@ -107,6 +107,7 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
         }
         switch (removeFrom) {
         case RECIPES:
+            //MessageSender.getInstance().info("NMS for 1.12 removing recipe " + removeRecipe);
             try {
                 Field keyF = removeRecipe.getClass().getField("key");
                 MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
@@ -164,6 +165,7 @@ public class RecipeIteratorV1_12 implements Iterator<Recipe> {
         case RECIPES:
             // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
             try {
+                //MessageSender.getInstance().info("NMS for 1.12 replacing recipe " + recipe.getName());
                 Field keyF = removeRecipe.getClass().getField("key");
                 MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
                 if (removeRecipe instanceof ShapedRecipes && recipe instanceof CraftRecipe) {
