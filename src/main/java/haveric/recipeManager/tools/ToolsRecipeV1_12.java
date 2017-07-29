@@ -14,7 +14,12 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapelessRecipe;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class ToolsRecipeV1_12 {
     /**
@@ -97,6 +102,8 @@ public class ToolsRecipeV1_12 {
                         i++;
                     }
                     // if we made it through the whole list, and never failed to match, we have a match.
+                    /*MessageSender.getInstance().info("NMS for 1.12 matched recipe " + baseRecipe.getName() + " with shaped " + 
+                            recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
                     return true;
 
                 } catch (Exception e) {
@@ -127,36 +134,55 @@ public class ToolsRecipeV1_12 {
                     Field itemsF = ShapelessRecipes.class.getDeclaredField("ingredients"); // pointer to _full_ list of items, hidden by Bukkit.
                     itemsF.setAccessible(true);
                     NonNullList<RecipeItemStack> items = (NonNullList<RecipeItemStack>) itemsF.get(recipe);
+                    ArrayList<RecipeItemStack> copy = new ArrayList<>(items);
 
                     // from Bukkit / spigot...
-                    int i = 0;
                     List<org.bukkit.inventory.ItemStack> baseItems = combineBase.getIngredients();
-                    for (RecipeItemStack list : items) {
-                        org.bukkit.inventory.ItemStack baseItem = baseItems.get(i);
-                        if (list != null && list.choices.length > 0) {
-                            boolean match = false;
-                            for (ItemStack stack : list.choices) {
-                                org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(
-                                        org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers
-                                                .getMaterial(stack.getItem()),
-                                        1, (short) stack.getData());
-                                if (bukkitItem.getType() == baseItem.getType()
-                                        && (baseItem.getDurability() == Vanilla.DATA_WILDCARD
-                                                || bukkitItem.getDurability() == Vanilla.DATA_WILDCARD
-                                                || baseItem.getDurability() == bukkitItem.getDurability())) {
-                                    match = true;
-                                    break; // we need find only one match from all items. Stop when we have.
+                    
+                    for (org.bukkit.inventory.ItemStack baseItem : baseItems) {
+                        boolean match = false;
+                        if (copy.size() == 0) { // we ran out of things to match against but still have baseItems.
+                            /*MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + baseRecipe.getName() + " with shapeless " + 
+                                    recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
+                            return false;
+                        }
+                        Iterator<RecipeItemStack> iterator = copy.iterator();
+                        while (iterator.hasNext()) {
+                            RecipeItemStack list = iterator.next();
+                            if (list != null && list.choices.length > 0) {
+                                for (ItemStack stack : list.choices) {
+                                    org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(
+                                            org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers
+                                                    .getMaterial(stack.getItem()),
+                                            1, (short) stack.getData());
+                                    if (bukkitItem.getType() == baseItem.getType()
+                                            && (baseItem.getDurability() == Vanilla.DATA_WILDCARD
+                                                    || bukkitItem.getDurability() == Vanilla.DATA_WILDCARD
+                                                    || baseItem.getDurability() == bukkitItem.getDurability())) {
+                                        match = true;
+                                        copy.remove(list);
+                                        break;
+                                    }
                                 }
                             }
-                            if (!match) {
-                                return false; // fast fail.
-                            }
+                            if (match) break; // we found a match for this recipeitemstack.
                         }
-                        i++;
+                        if (!match) {
+                            /*MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + baseRecipe.getName() + " with shapeless " + 
+                                    recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
+                            return false;
+                        }
                     }
-                    // if we made it through the whole list, and never failed to match, we have a match.
-                    return true;
-
+                    if (copy.size() == 0) { // yay, we've run out of base items AND run out of recipeItemStacks.
+                        // every base item has matched against a unique RecipeItemStack.
+                        /*MessageSender.getInstance().info("NMS for 1.12 matched recipe " + baseRecipe.getName() + " with shapeless " + 
+                                recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
+                        return true;
+                    } else {
+                        /*MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + baseRecipe.getName() + " with shapeless " + 
+                                recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
+                        return false;
+                    }
                 } catch (Exception e) {
                     MessageSender.getInstance().error(null, e, "Failed during combine recipe lookup");
                 }
