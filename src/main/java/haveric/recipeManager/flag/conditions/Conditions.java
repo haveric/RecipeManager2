@@ -363,7 +363,7 @@ public class Conditions implements Cloneable {
     }
 
     public void addEnchant(Enchantment enchant) {
-        enchants.put(enchant, new HashMap<>(0));
+        enchants.put(enchant, new HashMap<Integer, Boolean>(0));
     }
 
     public void addEnchantLevel(Enchantment enchant, short level) {
@@ -485,7 +485,7 @@ public class Conditions implements Cloneable {
     }
 
     public void addBookEnchant(Enchantment enchant) {
-        bookEnchants.put(enchant, new HashMap<>(0));
+        bookEnchants.put(enchant, new HashMap<Integer, Boolean>(0));
     }
 
     public void addBookEnchantLevel(Enchantment enchant, short level) {
