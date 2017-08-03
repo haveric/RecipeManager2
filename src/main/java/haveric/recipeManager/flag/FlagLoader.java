@@ -63,7 +63,7 @@ public class FlagLoader {
         // Result only flags
         FlagFactory.getInstance().initializeFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NO_SHIFT, "clone", "copy", "copyingredient"); // TODO finish
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.RESULT, "name", "displayname");
-        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.RESULT, "lore", "itemdesc");
+        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.RESULT | FlagBit.NO_VALUE, "lore", "itemdesc");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), FlagBit.RESULT | FlagBit.NO_FALSE | FlagBit.NO_VALUE, "unbreakable");
         FlagFactory.getInstance().initializeFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), FlagBit.RESULT, "leathercolour", "color", "colour");
         FlagFactory.getInstance().initializeFlag(FlagType.BOOK_ITEM, new FlagBookItem(), FlagBit.RESULT, "book");

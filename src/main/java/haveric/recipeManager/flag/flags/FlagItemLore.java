@@ -86,6 +86,9 @@ public class FlagItemLore extends Flag {
 
     @Override
     public boolean onParse(String value) {
+        if (value == null) {
+            value = ""; // convert empty flag to blank line
+        }
         addLore(value);
 
         return true;
@@ -106,9 +109,7 @@ public class FlagItemLore extends Flag {
         }
 
         for (String line : lore) {
-            if (line != null && !line.isEmpty()) {
-                newLore.add(a.parseVariables(line));
-            }
+            newLore.add(a.parseVariables(line));
         }
 
         meta.setLore(newLore);

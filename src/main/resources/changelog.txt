@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* @ItemLore: Allow empty lines without needing colors
+
 === v2.13.1 ===
 * @SpawnParticle: Only trigger once per shift click
 * @LaunchFirework: Switch to trigger once per shift click instead of preventing shift click
