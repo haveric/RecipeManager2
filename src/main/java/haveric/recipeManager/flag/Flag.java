@@ -240,7 +240,7 @@ public class Flag implements Cloneable {
         Validate.notNull(getFlagType(), "This can't be used on a blank flag!");
 
         FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
-        if (!desc.hasBit(FlagBit.NO_VALUE) && value == null) {
+        if (!desc.hasBit(FlagBit.NO_VALUE_REQUIRED) && value == null) {
             ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " needs a value!");
             return false;
         }

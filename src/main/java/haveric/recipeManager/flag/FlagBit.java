@@ -17,9 +17,9 @@ public class FlagBit {
     public static final int RESULT = 1 << 1;
 
     /**
-     * No value is allowed for this flag.
+     * No value is required for this flag.
      */
-    public static final int NO_VALUE = 1 << 2;
+    public static final int NO_VALUE_REQUIRED = 1 << 2;
 
     /**
      * Disables flag from being stored - used on flags that directly affect result's metadata.
