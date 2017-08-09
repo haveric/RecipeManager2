@@ -3,6 +3,7 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Tools;
 import org.apache.commons.lang.Validate;
 
 import java.util.ArrayList;
@@ -38,14 +39,17 @@ public class FlagMessage extends Flag {
             "  {world}          = world name of event location or '(unknown)' if not available",
             "  {x}              = event location's X coord or '(?)' if not available",
             "  {y}              = event location's Y coord or '(?)' if not available",
-            "  {z}              = event location's Z coord or '(?)' if not available", };
+            "  {z}              = event location's Z coord or '(?)' if not available",
+            "",
+            "Allows quotes to prevent spaces being trimmed.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag} <green>Good job!",
-            "{flag} <gray>Now you can die&c happy<gray> that you crafted that.", };
+            "{flag} <gray>Now you can die&c happy<gray> that you crafted that.",
+            "{flag} \"  Extra space  \" // Quotes at the beginning and end will be removed, but spaces will be kept.", };
     }
 
 
@@ -101,6 +105,8 @@ public class FlagMessage extends Flag {
 
     @Override
     public boolean onParse(String value) {
+        value = Tools.trimOrExact(value);
+
         addMessage(value);
         return true;
     }

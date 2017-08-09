@@ -3,6 +3,7 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -40,7 +41,9 @@ public class FlagItemLore extends Flag {
             "  {world}          = world name of event location or '(unknown)' if not available",
             "  {x}              = event location's X coord or '(?)' if not available",
             "  {y}              = event location's Y coord or '(?)' if not available",
-            "  {z}              = event location's Z coord or '(?)' if not available", };
+            "  {z}              = event location's Z coord or '(?)' if not available",
+            "",
+            "Allows quotes to prevent spaces being trimmed.", };
     }
 
     @Override
@@ -48,7 +51,8 @@ public class FlagItemLore extends Flag {
         return new String[] {
             "{flag} <red>Awesome item",
             "{flag} <magic>some scrambled text on line 2",
-            "{flag} <gray>Crafted at {world}:{x},{y},{z}", };
+            "{flag} <gray>Crafted at {world}:{x},{y},{z}",
+            "{flag} \"  Extra space  \" // Quotes at the beginning and end will be removed, but spaces will be kept.", };
     }
 
 
@@ -89,6 +93,9 @@ public class FlagItemLore extends Flag {
         if (value == null) {
             value = ""; // convert empty flag to blank line
         }
+
+        value = Tools.trimOrExact(value);
+
         addLore(value);
 
         return true;

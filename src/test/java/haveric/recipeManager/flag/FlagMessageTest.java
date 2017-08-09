@@ -26,7 +26,7 @@ public class FlagMessageTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(2, queued.size());
+        assertEquals(4, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
@@ -45,6 +45,12 @@ public class FlagMessageTest extends FlagBaseTest {
                 assertEquals(2, flag.getMessages().size());
                 assertTrue(flag.getMessages().contains("<green>Good job!"));
                 assertTrue(flag.getMessages().contains("<gray>Now you can die&c happy<gray> that you crafted that."));
+            } else if (resultType == Material.COBBLESTONE) {
+                assertEquals(1, flag.getMessages().size());
+                assertTrue(flag.getMessages().contains("<green>Good job!"));
+            } else if (resultType == Material.STONE) {
+                assertEquals(1, flag.getMessages().size());
+                assertTrue(flag.getMessages().contains("   <green>Good job!   "));
             }
         }
     }

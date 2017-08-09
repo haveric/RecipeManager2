@@ -3,3 +3,9 @@ dirt + dirt
 = dirt
 @lore One
 @lore Two
+
+craft
+dirt + cobblestone
+= cobblestone
+@lore    One   /* Ends here */
+@lore "   Two   "

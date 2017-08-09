@@ -19,3 +19,13 @@ dirt + diamond
 = diamond_sword
 @name First
 @name Second
+
+craft
+dirt + cobblestone
+= cobblestone
+@name    First   /* Ends here */
+
+craft
+dirt + brick
+= brick
+@name "   Second   "

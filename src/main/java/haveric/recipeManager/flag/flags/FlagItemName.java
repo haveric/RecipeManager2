@@ -3,9 +3,9 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import org.bukkit.inventory.meta.ItemMeta;
-
+import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class FlagItemName extends Flag {
 
@@ -37,14 +37,17 @@ public class FlagItemName extends Flag {
             "  {world}          = world name of event location or '(unknown)' if not available",
             "  {x}              = event location's X coord or '(?)' if not available",
             "  {y}              = event location's Y coord or '(?)' if not available",
-            "  {z}              = event location's Z coord or '(?)' if not available", };
+            "  {z}              = event location's Z coord or '(?)' if not available",
+            "",
+            "Allows quotes to prevent spaces being trimmed.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag} <light_purple>Weird Item",
-            "{flag} <yellow>{player}'s Sword", };
+            "{flag} <yellow>{player}'s Sword",
+            "{flag} \"  Extra space  \" // Quotes at the beginning and end will be removed, but spaces will be kept.", };
     }
 
 
@@ -72,6 +75,8 @@ public class FlagItemName extends Flag {
 
     @Override
     public boolean onParse(String value) {
+        value = Tools.trimOrExact(value);
+
         setItemName(value);
         return true;
     }

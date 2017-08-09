@@ -34,7 +34,7 @@ public class FlagItemNameTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(4, queued.size());
+        assertEquals(6, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
@@ -59,6 +59,12 @@ public class FlagItemNameTest extends FlagBaseTest {
             } else if (resultType == Material.DIAMOND_SWORD) {
                 assertEquals(flag.getItemName(), "Second");
                 assertEquals(result.getItemMeta().getDisplayName(), "Second");
+            } else if (resultType == Material.COBBLESTONE) {
+                assertEquals(flag.getItemName(), "First");
+                assertEquals(result.getItemMeta().getDisplayName(), "First");
+            } else if (resultType == Material.BRICK) {
+                assertEquals(flag.getItemName(), "   Second   ");
+                assertEquals(result.getItemMeta().getDisplayName(), "   Second   ");
             }
         }
     }

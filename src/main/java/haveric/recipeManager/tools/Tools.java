@@ -1003,4 +1003,16 @@ public class Tools {
 
         return sound;
     }
+
+    public static String trimOrExact(String input) {
+        String output;
+
+        if (input.startsWith("\"") && input.endsWith("\"")) {
+            output = input.substring(1, input.length() - 1);
+        } else {
+            output = input.trim();
+        }
+
+        return output;
+    }
 }

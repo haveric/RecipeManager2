@@ -26,7 +26,7 @@ public class FlagItemLoreTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(1, queued.size());
+        assertEquals(2, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
@@ -36,12 +36,16 @@ public class FlagItemLoreTest extends FlagBaseTest {
             FlagItemLore flag = (FlagItemLore) result.getFlag(FlagType.ITEM_LORE);
             flag.onPrepare(a);
 
+            List<String> lores = result.getItemMeta().getLore();
+
             Material resultType = result.getType();
             if (resultType == Material.DIRT) {
-                List<String> lores = result.getItemMeta().getLore();
-
                 assertTrue(lores.contains("One"));
                 assertTrue(lores.contains("Two"));
+                assertEquals(lores.size(), 2);
+            } else if (resultType == Material.COBBLESTONE) {
+                assertTrue(lores.contains("One"));
+                assertTrue(lores.contains("   Two   "));
                 assertEquals(lores.size(), 2);
             }
         }

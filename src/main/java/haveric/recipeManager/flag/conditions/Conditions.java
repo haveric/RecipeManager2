@@ -1565,13 +1565,17 @@ public class Conditions implements Cloneable {
         } else if (argLower.startsWith("!name") || argLower.startsWith("noname")) {
             setNoName(true);
         } else if (argLower.startsWith("name")) {
-            value = arg.substring("name".length()).trim(); // preserve case for regex
+            value = arg.substring("name".length()); // preserve case for regex
+
+            value = Tools.trimOrExact(value);
 
             setName(value);
         } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
             setNoLore(true);
         } else if (argLower.startsWith("lore")) {
-            value = arg.substring("lore".length()).trim(); // preserve case for regex
+            value = arg.substring("lore".length()); // preserve case for regex
+
+            value = Tools.trimOrExact(value);
 
             addLore(value);
         } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
