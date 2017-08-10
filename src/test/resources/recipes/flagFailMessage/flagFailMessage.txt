@@ -8,3 +8,13 @@ craft
 @failmessage Test
 dirt + stone_sword
 = stone_sword
+
+craft
+@failmessage   One   /* Ends here */
+dirt + stone
+= stone
+
+craft
+@failmessage "   Two   "
+dirt + cobblestone
+= cobblestone

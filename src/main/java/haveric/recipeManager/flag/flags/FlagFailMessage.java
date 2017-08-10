@@ -37,12 +37,15 @@ public class FlagFailMessage extends Flag {
             "  {successchance} = recipe's chance of success as a number.",
             "  {resultchance}  = result's chance of success as a number.",
             "",
-            "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.", };
+            "The same effect can be achieved by using " + FlagType.MESSAGE + " on the fail result item.",
+            "",
+            "Allows quotes to prevent spaces being trimmed.", };
     }
 
     protected String[] getExamples() {
         return new String[] {
-            "{flag} <red>YOU FAILED, MWaHahahah!", };
+            "{flag} <red>YOU FAILED, MWaHahahah!",
+            "{flag} \"  Extra space  \" // Quotes at the beginning and end will be removed, but spaces will be kept.", };
     }
 
 
@@ -86,7 +89,7 @@ public class FlagFailMessage extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        setMessage(value);
+        setMessage(RMCUtil.trimExactQuotes(value));
         return true;
     }
 

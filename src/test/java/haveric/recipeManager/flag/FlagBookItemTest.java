@@ -28,7 +28,7 @@ public class FlagBookItemTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(2, queued.size());
+        assertEquals(4, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
@@ -47,11 +47,29 @@ public class FlagBookItemTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertNull(flag);
             } else if (resultType == Material.WRITTEN_BOOK) {
-                assertFalse(a.hasReasons());
                 TestMetaBook meta = (TestMetaBook) result.getItemMeta();
-                assertEquals("The Art of Stealing", meta.getTitle());
-                assertEquals("Gray Fox", meta.getAuthor());
-                assertEquals(3, meta.getPages().size());
+                String name = recipe.getName();
+
+                switch(name) {
+                    case "all":
+                        assertFalse(a.hasReasons());
+                        assertEquals("The Art of Stealing", meta.getTitle());
+                        assertEquals("Gray Fox", meta.getAuthor());
+                        assertEquals(3, meta.getPages().size());
+                        break;
+                    case "spaces":
+                        assertEquals("The Art of Stealing", meta.getTitle());
+                        assertEquals("Gray Fox", meta.getAuthor());
+                        assertEquals(1, meta.getPages().size());
+                        assertEquals("Once upon a time...", meta.getPages().get(0));
+                        break;
+                    case "quotes":
+                        assertEquals("   The Art of Stealing   ", meta.getTitle());
+                        assertEquals("   Gray Fox   ", meta.getAuthor());
+                        assertEquals(1, meta.getPages().size());
+                        assertEquals("   Once upon a time...   ", meta.getPages().get(0));
+                        break;
+                }
             }
         }
     }

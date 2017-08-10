@@ -45,7 +45,9 @@ public class FlagBookItem extends Flag {
             "Page contents must not exceed 256 characters, colors (2 chars each) and new line (1 char each) included.",
             "Optionally you can leave the text blank to add a blank page.",
             "",
-            "Supported items: written book, book and quill.", };
+            "Supported items: written book, book and quill.",
+            "",
+            "Allows quotes to prevent spaces being trimmed.", };
     }
 
     @Override
@@ -55,7 +57,10 @@ public class FlagBookItem extends Flag {
             "{flag} author Gray Fox",
             "{flag} addpage <bold>O<reset>nce upon a time...",
             "{flag} addpage // added blank page",
-            "{flag} addpage \\n\\n\\n\\n<italic>      The End.", };
+            "{flag} addpage \\n\\n\\n\\n<italic>      The End.",
+            "{flag} title \" The Art of Stealing \" // Quotes at the beginning and end will be removed, but spaces will be kept.",
+            "{flag} author \"   Gray Fox   \"",
+            "{flag} addpage \" <bold>O<reset>nce upon a time... \"",};
     }
 
 
@@ -140,32 +145,33 @@ public class FlagBookItem extends Flag {
         boolean setTitle = key.equals("title");
         boolean setAuthor = !setTitle && key.equals("author");
 
+        String trimmed = RMCUtil.trimExactQuotes(value);
         if (setTitle || setAuthor) {
             if (result.getType() == Material.BOOK_AND_QUILL) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can not have title or author set on BOOK_AND_QUILL, only WRITTEN_BOOK.");
                 return true;
             }
 
-            if (value.length() > 64) {
+            if (trimmed.length() > 64) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + (setTitle ? "title" : "author") + "' with over 64 characters, trimmed.");
-                value = value.substring(0, 64);
+                trimmed = trimmed.substring(0, 64);
             }
 
             if (setTitle) {
-                setTitle(value);
+                setTitle(trimmed);
             } else {
-                setAuthor(value);
+                setAuthor(trimmed);
             }
         } else if (key.equals("addpage")) {
             if (pages.size() == 50) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has over 50 pages added, they will be trimmed.");
             }
 
-            if (value.length() > 256) {
+            if (trimmed.length() > 256) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'addpage' with over 256 characters! It will be trimmed.");
             }
 
-            addPage(value);
+            addPage(trimmed);
         }
 
         return true;

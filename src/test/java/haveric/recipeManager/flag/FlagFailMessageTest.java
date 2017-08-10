@@ -26,7 +26,7 @@ public class FlagFailMessageTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(2, queued.size());
+        assertEquals(4, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
@@ -42,6 +42,10 @@ public class FlagFailMessageTest extends FlagBaseTest {
                 assertEquals(RMCChatColor.COLOR_CHAR + "cYOU FAILED, MWaHahahah!", flag.getMessage());
             } else if (resultType == Material.STONE_SWORD) {
                 assertEquals("Test", flag.getMessage());
+            } else if (resultType == Material.STONE) {
+                assertEquals("One", flag.getMessage());
+            } else if (resultType == Material.COBBLESTONE) {
+                assertEquals("   Two   ", flag.getMessage());
             }
         }
     }

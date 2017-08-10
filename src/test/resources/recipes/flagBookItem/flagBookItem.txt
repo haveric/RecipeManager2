@@ -3,7 +3,7 @@ dirt + dirt
 = dirt
 @bookitem title The Art of Stealing
 
-craft
+craft all
 dirt + stone_sword
 = written_book
 @bookitem title The Art of Stealing
@@ -11,3 +11,19 @@ dirt + stone_sword
 @bookitem addpage <bold>O<reset>nce upon a time...
 @bookitem addpage // added blank page
 @bookitem addpage \\n\\n\\n\\n<italic>      The End.
+
+craft spaces
+dirt + stone
+= written_book
+@bookitem title    The Art of Stealing
+@bookitem author    Gray Fox
+@bookitem addpage    Once upon a time...
+
+craft quotes
+dirt + cobblestone
+= written_book
+@bookitem title "   The Art of Stealing   "
+@bookitem author "   Gray Fox   "
+@bookitem addpage "   Once upon a time...   "
+
+

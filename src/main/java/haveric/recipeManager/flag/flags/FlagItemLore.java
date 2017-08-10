@@ -93,9 +93,7 @@ public class FlagItemLore extends Flag {
             value = ""; // convert empty flag to blank line
         }
 
-        value = RMCUtil.trimExactQuotes(value);
-
-        addLore(value);
+        addLore(RMCUtil.trimExactQuotes(value));
 
         return true;
     }

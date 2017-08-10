@@ -74,9 +74,7 @@ public class FlagItemName extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        value = RMCUtil.trimExactQuotes(value);
-
-        setItemName(value);
+        setItemName(RMCUtil.trimExactQuotes(value));
         return true;
     }
 
