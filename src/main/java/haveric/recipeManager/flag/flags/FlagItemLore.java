@@ -3,7 +3,6 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -94,7 +93,7 @@ public class FlagItemLore extends Flag {
             value = ""; // convert empty flag to blank line
         }
 
-        value = Tools.trimOrExact(value);
+        value = RMCUtil.trimExactQuotes(value);
 
         addLore(value);
 

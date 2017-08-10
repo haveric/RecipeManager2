@@ -3,10 +3,9 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-
-import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagBroadcast extends Flag {
 
@@ -40,13 +39,16 @@ public class FlagBroadcast extends Flag {
             "  {world}          = world name of event location or '(unknown)' if not available",
             "  {x}              = event location's X coord or '(?)' if not available",
             "  {y}              = event location's Y coord or '(?)' if not available",
-            "  {z}              = event location's Z coord or '(?)' if not available", };
+            "  {z}              = event location's Z coord or '(?)' if not available",
+            "",
+            "Allows quotes to prevent spaces being trimmed.", };
     }
 
     protected String[] getExamples() {
         return new String[] {
             "{flag} {playerdisplay} <green>crafted something!",
-            "{flag} '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z} | ranks.admins", };
+            "{flag} '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z} | ranks.admins",
+            "{flag} \"  Extra space  \" // Quotes at the beginning and end will be removed, but spaces will be kept.", };
     }
 
 
@@ -86,7 +88,8 @@ public class FlagBroadcast extends Flag {
     public boolean onParse(String value) {
         String[] split = value.split("\\|", 2);
 
-        setMessage(split[0].trim());
+        String message = RMCUtil.trimExactQuotes(split[0]);
+        setMessage(message);
         setPermission(null);
 
         if (split.length > 1) {
@@ -101,8 +104,7 @@ public class FlagBroadcast extends Flag {
         Validate.notNull(message);
 
         String parsedMessage = RMCUtil.parseColors(a.parseVariables(message), false);
-        System.out.println("Parsed: " + parsedMessage);
-        System.out.println("Permission: " + permission);
+
         if (permission == null) {
             Bukkit.broadcastMessage(parsedMessage);
         } else {

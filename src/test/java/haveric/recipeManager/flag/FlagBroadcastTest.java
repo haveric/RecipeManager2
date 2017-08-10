@@ -26,7 +26,7 @@ public class FlagBroadcastTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(2, queued.size());
+        assertEquals(5, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
@@ -43,6 +43,13 @@ public class FlagBroadcastTest extends FlagBaseTest {
                 assertNull(flag.getPermission());
             } else if (resultType == Material.STONE_SWORD) {
                 assertEquals("'{player}' crafted '{recipename}' at {world}: {x}, {y}, {z}", flag.getMessage());
+                assertEquals("ranks.admins", flag.getPermission());
+            } else if (resultType == Material.STONE) {
+                assertEquals("One", flag.getMessage());
+            } else if (resultType == Material.COBBLESTONE) {
+                assertEquals("   Two   ", flag.getMessage());
+            } else if (resultType == Material.BRICK) {
+                assertEquals("  '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z}  ", flag.getMessage());
                 assertEquals("ranks.admins", flag.getPermission());
             }
         }

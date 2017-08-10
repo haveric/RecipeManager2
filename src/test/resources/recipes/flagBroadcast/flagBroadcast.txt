@@ -7,3 +7,18 @@ craft
 dirt + stone_sword
 = stone_sword
 @broadcast '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z} | ranks.admins
+
+craft
+dirt + stone
+= stone
+@broadcast    One   /* Ends here */
+
+craft
+dirt + cobblestone
+= cobblestone
+@broadcast "   Two   "
+
+craft
+dirt + brick
+= brick
+@broadcast "  '{player}' crafted '{recipename}' at {world}: {x}, {y}, {z}  " | ranks.admins

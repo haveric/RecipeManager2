@@ -3,7 +3,7 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class FlagMessage extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        value = Tools.trimOrExact(value);
+        value = RMCUtil.trimExactQuotes(value);
 
         addMessage(value);
         return true;

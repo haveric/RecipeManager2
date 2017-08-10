@@ -1567,7 +1567,7 @@ public class Conditions implements Cloneable {
         } else if (argLower.startsWith("name")) {
             value = arg.substring("name".length()); // preserve case for regex
 
-            value = Tools.trimOrExact(value);
+            value = RMCUtil.trimExactQuotes(value);
 
             setName(value);
         } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
@@ -1575,7 +1575,7 @@ public class Conditions implements Cloneable {
         } else if (argLower.startsWith("lore")) {
             value = arg.substring("lore".length()); // preserve case for regex
 
-            value = Tools.trimOrExact(value);
+            value = RMCUtil.trimExactQuotes(value);
 
             addLore(value);
         } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
