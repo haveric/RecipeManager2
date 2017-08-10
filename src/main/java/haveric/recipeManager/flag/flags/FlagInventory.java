@@ -112,9 +112,9 @@ public class FlagInventory extends Flag {
                 value = split[i].trim();
 
                 if (value.toLowerCase().startsWith("title")) {
-                    setTitle(value.substring("title".length()).trim());
+                    setTitle(RMCUtil.trimExactQuotes(value.substring("title".length())));
                 } else if (value.toLowerCase().startsWith("failmsg")) {
-                    setFailMessage(value.substring("failmsg".length()).trim());
+                    setFailMessage(RMCUtil.trimExactQuotes(value.substring("failmsg".length())));
                 }
             }
         }

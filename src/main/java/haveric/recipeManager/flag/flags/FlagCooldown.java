@@ -262,9 +262,9 @@ public class FlagCooldown extends Flag {
                 if (value.equalsIgnoreCase("global")) {
                     global = true;
                 } else if (value.toLowerCase().startsWith("msg")) {
-                    craftMessage = value.substring("msg".length()).trim();
+                    craftMessage = RMCUtil.trimExactQuotes(value.substring("msg".length()));
                 } else if (value.toLowerCase().startsWith("failmsg")) {
-                    failMessage = value.substring("failmsg".length()).trim();
+                    failMessage = RMCUtil.trimExactQuotes(value.substring("failmsg".length()));
                 }
             }
         }

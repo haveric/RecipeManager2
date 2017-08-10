@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagHeight extends Flag {
 
@@ -98,7 +99,7 @@ public class FlagHeight extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(split[1].trim());
+            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
         }
 
         split = split[0].split("-", 2);

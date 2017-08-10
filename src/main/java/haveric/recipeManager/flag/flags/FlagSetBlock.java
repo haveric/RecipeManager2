@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -95,7 +96,7 @@ public class FlagSetBlock extends Flag {
                 } else if (value.startsWith("noinv")) {
                     noInv = true;
 
-                    value = args[i].trim().substring("noinv".length()).trim();
+                    value = RMCUtil.trimExactQuotes(args[i].trim().substring("noinv".length()));
 
                     if (!value.isEmpty()) {
                         failMessage = value;

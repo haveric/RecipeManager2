@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -84,9 +85,7 @@ public class FlagBlockPowered extends Flag {
             if (check.equals("indirect")) {
                 setIndirect(true);
             } else if (check.startsWith("failmsg")) {
-                arg = arg.substring("failmsg".length()).trim();
-
-                setFailMessage(arg);
+                setFailMessage(RMCUtil.trimExactQuotes(arg.substring("failmsg".length())));
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
             }

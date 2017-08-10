@@ -3,6 +3,7 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,7 +107,7 @@ public class FlagPermission extends Flag {
 
         String message;
         if (split.length > 1) {
-            message = split[1].trim();
+            message = RMCUtil.trimExactQuotes(split[1]);
         } else {
             message = null;
         }

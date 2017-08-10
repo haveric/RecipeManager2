@@ -1567,23 +1567,19 @@ public class Conditions implements Cloneable {
         } else if (argLower.startsWith("name")) {
             value = arg.substring("name".length()); // preserve case for regex
 
-            value = RMCUtil.trimExactQuotes(value);
-
-            setName(value);
+            setName(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
             setNoLore(true);
         } else if (argLower.startsWith("lore")) {
             value = arg.substring("lore".length()); // preserve case for regex
 
-            value = RMCUtil.trimExactQuotes(value);
-
-            addLore(value);
+            addLore(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
             setNoMeta(true);
         } else if (argLower.startsWith("failmsg")) {
-            value = arg.substring("failmsg".length()).trim(); // preserve case because it's a message
+            value = arg.substring("failmsg".length()); // preserve case because it's a message
 
-            setFailMessage(value);
+            setFailMessage(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("potion")) {
             value = argLower.substring("potion".length()).trim();
 

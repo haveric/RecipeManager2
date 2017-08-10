@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.block.Block;
 
 public class FlagLightLevel extends Flag {
@@ -180,7 +181,7 @@ public class FlagLightLevel extends Flag {
         String[] split = value.split("\\|", 2);
 
         if (split.length > 1) {
-            setFailMessage(split[1].trim());
+            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
         } else {
             setFailMessage(null);
         }

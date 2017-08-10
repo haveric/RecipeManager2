@@ -3,6 +3,7 @@ package haveric.recipeManager.flag.flags;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 
 public class FlagRestrict extends Flag {
 
@@ -58,7 +59,7 @@ public class FlagRestrict extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        setMessage(value);
+        setMessage(RMCUtil.trimExactQuotes(value));
         return true;
     }
 

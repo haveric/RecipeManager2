@@ -136,7 +136,7 @@ public class FlagNeedExp extends Flag {
 
         setBoth = false;
         if (split.length > 1) {
-            setFailMessage(split[1].trim());
+            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
         }
 
         split = split[0].split("-", 2);

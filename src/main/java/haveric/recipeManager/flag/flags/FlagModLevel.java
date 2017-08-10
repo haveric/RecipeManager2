@@ -142,7 +142,7 @@ public class FlagModLevel extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(split[1].trim());
+            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
         }
 
         value = split[0].trim();

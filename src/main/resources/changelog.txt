@@ -3,7 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
 * @ItemLore: Allow empty lines without needing colors
-* @ItemLore, @ItemName, @Message, @Broadcast, @BookItem
+* @ItemLore, @ItemName, @Message, @Broadcast, @BookItem, and more
 ** Added exact string option using quotes
 
 === v2.13.1 ===
