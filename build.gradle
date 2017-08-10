@@ -42,11 +42,12 @@ dependencies {
     testCompile 'org.powermock:powermock-module-junit4:1.6.4'
     testCompile 'org.powermock:powermock-api-mockito:1.6.4'
 
-    compile 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT'
+    compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+
     compile "org.bukkit:bukkit:1.12-R0.1-SNAPSHOT"
     compile "org.spigotmc:spigot:1.12-R0.1-SNAPSHOT"
     compile "net.milkbowl.vault:VaultAPI:1.6"
 
-    extra 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT'
+    extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 
 }
