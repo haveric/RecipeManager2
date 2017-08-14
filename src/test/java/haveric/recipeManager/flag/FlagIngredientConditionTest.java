@@ -29,7 +29,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(2, queued.size());
+        assertEquals(4, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
@@ -51,6 +51,18 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 ConditionsIngredient cond = conditions.get(0);
                 assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
                 assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
+            } else if (resultType == Material.COBBLESTONE) {
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
+                ConditionsIngredient cond = conditions.get(0);
+                assertEquals("One", cond.getName());
+                assertEquals("Two", cond.getLores().get(0));
+                assertEquals("Three", cond.getFailMessage());
+            } else if (resultType == Material.STONE) {
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
+                ConditionsIngredient cond = conditions.get(0);
+                assertEquals("   One   ", cond.getName());
+                assertEquals("   Two   ", cond.getLores().get(0));
+                assertEquals("   Three   ", cond.getFailMessage());
             }
         }
 

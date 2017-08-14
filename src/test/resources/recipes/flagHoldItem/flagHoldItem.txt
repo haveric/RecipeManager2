@@ -7,3 +7,13 @@ craft
 cobblestone + 277
 = gravel
 @holditem 277 | name &bHammer | failmsg &cFoo
+
+craft
+dirt + cobblestone
+= cobblestone
+@holditem dirt | name    One    | lore    Two    | failmsg    Three   /* Ends here */
+
+craft
+dirt + stone
+= stone
+@holditem dirt | name "   One   " | lore "   Two   " | failmsg "   Three   "

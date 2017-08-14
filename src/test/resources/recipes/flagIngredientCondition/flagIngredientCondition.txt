@@ -7,3 +7,13 @@ craft
 cobblestone + 277
 = gravel
 @ingredientcondition 277 | name &bHammer | failmsg &cFoo
+
+craft
+dirt + cobblestone
+= cobblestone
+@ingredientcondition dirt | name    One    | lore    Two    | failmsg    Three   /* Ends here */
+
+craft
+dirt + stone
+= stone
+@ingredientcondition dirt | name "   One   " | lore "   Two   " | failmsg "   Three   "
