@@ -100,12 +100,10 @@ public class FlagSpawnParticle extends Flag {
                         return false;
                     }
 
-                    if (offsets.length >= 1) {
-                        try {
-                            rmParticle.setOffsetX(Double.parseDouble(offsets[0]));
-                        } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid offset x value: " + offsets[0]);
-                        }
+                    try {
+                        rmParticle.setOffsetX(Double.parseDouble(offsets[0]));
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid offset x value: " + offsets[0]);
                     }
 
                     if (offsets.length >= 2) {

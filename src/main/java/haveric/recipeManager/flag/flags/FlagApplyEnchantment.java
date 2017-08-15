@@ -56,7 +56,7 @@ public class FlagApplyEnchantment extends Flag {
 
     public enum ApplyEnchantmentAction {
         LARGEST,
-        COMBINE;
+        COMBINE
     }
 
     private ApplyEnchantmentAction ingredientAction = ApplyEnchantmentAction.LARGEST;
