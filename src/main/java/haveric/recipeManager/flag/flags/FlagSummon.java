@@ -264,21 +264,20 @@ public class FlagSummon extends Flag {
             List<LivingEntity> entities = new ArrayList<>(num);
             World world = location.getWorld();
 
+            int minX = location.getBlockX() - spread / 2;
+            int minY = location.getBlockY() - spread / 2;
+            int minZ = location.getBlockZ() - spread / 2;
+
+            int maxY = minY + spread;
+
             for (int i = 0; i < num; i++) {
                 if (spread > 0) {
-                    int minX = location.getBlockX() - spread / 2;
-                    int minY = location.getBlockY() - spread / 2;
-                    int minZ = location.getBlockZ() - spread / 2;
-                    int maxX = location.getBlockX() + spread / 2;
-                    int maxY = location.getBlockY() + spread / 2;
-                    int maxZ = location.getBlockZ() + spread / 2;
-
                     int tries = spread * 10;
                     boolean found = false;
 
                     while (tries-- > 0) {
-                        int x = minX + RecipeManager.random.nextInt(maxX - minX);
-                        int z = minZ + RecipeManager.random.nextInt(maxZ - minZ);
+                        int x = minX + RecipeManager.random.nextInt(spread);
+                        int z = minZ + RecipeManager.random.nextInt(spread);
                         int y;
 
                         for (y = maxY; y >= minY; y--) {

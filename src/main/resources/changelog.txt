@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * @ItemLore: Allow empty lines without needing colors
 * @ItemLore, @ItemName, @Message, @Broadcast, @BookItem, and more
 ** Added exact string option using quotes
+* @Summon: Fixed spread option
 
 === v2.13.1 ===
 * @SpawnParticle: Only trigger once per shift click
