@@ -85,6 +85,10 @@ public class Messages {
             MessageSender.getInstance().info("Missing message: " + path);
         }
 
+        if (message.equals("") || message.equals("false")) {
+            message = null;
+        }
+
         return message;
     }
 
