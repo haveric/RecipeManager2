@@ -5,12 +5,16 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,6 +248,37 @@ public class Args {
         string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "(?)"));
         string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "(?)"));
         string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "(?)"));
+
+        ItemMeta meta = result.getItemMeta();
+
+        if (meta.hasLore()) {
+            string = string.replace("{lore}", "\"" + StringUtils.join(meta.getLore(), "\",\"") + "\"");
+        }
+        if (meta instanceof BookMeta) {
+            BookMeta book = (BookMeta) meta;
+            if (book.hasTitle()) {
+                string = string.replace("{booktitle}", book.getTitle());
+            }
+            if (book.hasAuthor()) {
+                string = string.replace("{bookauthor}", book.getAuthor());
+            }
+            if (book.hasPages()) {
+                String pages = "";
+                int numPages = book.getPageCount();
+                for (int i = 1; i <= numPages; i++) {
+                    String page = book.getPage(i);
+                    pages += "\"{text:\\\"" + page + "\\\"}\"";
+
+                    if (i < numPages) {
+                        pages += ",";
+                    }
+                }
+
+                pages = RMCChatColor.stripColor(pages);
+                pages = pages.replace("\n", "\\\\n");
+                string = string.replace("{bookpages}", pages);
+            }
+        }
 
         return string;
     }
