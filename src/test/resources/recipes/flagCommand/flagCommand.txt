@@ -13,3 +13,18 @@ dirt + iron_sword
 = iron_sword
 @command /say I crafted {result}!
 @command kick {player}
+
+craft
+dirt + gold_sword
+= gold_sword
+@command /say {player} crafted Gold Sword at {x},{y},{z}
+
+craft
+dirt + diamond_sword
+= diamond_sword
+@command /say {player} crafted Sword at {x-0},{y+0},{z -0} on {world}
+
+craft
+dirt + stick
+= stick
+@command /say {player} crafted Sword at {x   +   12},{y - 3},{z+2}

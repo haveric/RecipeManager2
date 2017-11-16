@@ -19,6 +19,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Easily modifiable arguments for the flag classes without needing to re-edit all of them
@@ -230,6 +232,47 @@ public class Args {
         }
     }
 
+    private String parsePosition(String string, String coord) {
+        Pattern regex = Pattern.compile("\\{[" + coord + "] *([+-])? *(\\d*)\\}");
+        Matcher regexMatcher = regex.matcher(string);
+
+        while (regexMatcher.find()) {
+            String group1 = regexMatcher.group(1);
+            String group2 = regexMatcher.group(2);
+
+            String group = "";
+            if (group1 != null) {
+                group += group1;
+            }
+            if (group2 != null) {
+                group += group2;
+            }
+            int offset = 0;
+
+            if (!group.isEmpty()) {
+                offset = Integer.parseInt(group);
+            }
+
+            String replaceString = "(?)";
+            if (hasLocation()) {
+                int blockCoord = offset;
+
+                if (coord.equals("x")) {
+                    blockCoord += location.getBlockX();
+                } else if (coord.equals("y")) {
+                    blockCoord += location.getBlockY();
+                } else if (coord.equals("z")) {
+                    blockCoord += location.getBlockZ();
+                }
+
+                replaceString = "" + blockCoord;
+            }
+            string = regexMatcher.replaceFirst(replaceString);
+        }
+
+        return string;
+    }
+
     public String parseVariables(String string) {
         String name;
         if (hasPlayerUUID()) {
@@ -245,9 +288,10 @@ public class Args {
         string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
         string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(unknown)"));
         string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
-        string = string.replace("{x}", (hasLocation() ? "" + location().getBlockX() : "(?)"));
-        string = string.replace("{y}", (hasLocation() ? "" + location().getBlockY() : "(?)"));
-        string = string.replace("{z}", (hasLocation() ? "" + location().getBlockZ() : "(?)"));
+
+        string = parsePosition(string, "x");
+        string = parsePosition(string, "y");
+        string = parsePosition(string, "z");
 
         ItemMeta meta = result.getItemMeta();
 

@@ -40,6 +40,7 @@ public class FlagBroadcast extends Flag {
             "  {x}              = event location's X coord or '(?)' if not available",
             "  {y}              = event location's Y coord or '(?)' if not available",
             "  {z}              = event location's Z coord or '(?)' if not available",
+            "    Relative positions are supported: {x-1},{y+7},{z+12}",
             "",
             "Allows quotes to prevent spaces being trimmed.", };
     }

@@ -39,7 +39,8 @@ public class FlagCommand extends Flag {
             "  {world}          = world name of event location or '(unknown)' if not available",
             "  {x}              = event location's X coord or '(?)' if not available",
             "  {y}              = event location's Y coord or '(?)' if not available",
-            "  {z}              = event location's Z coord or '(?)' if not available", };
+            "  {z}              = event location's Z coord or '(?)' if not available",
+            "    Relative positions are supported: {x-1},{y+7},{z+12}",};
     }
 
     @Override
