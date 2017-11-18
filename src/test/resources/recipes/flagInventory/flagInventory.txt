@@ -1,0 +1,25 @@
+craft
+dirt + dirt
+= dirt
+@inventory crafting
+
+craft
+dirt + cobblestone
+= cobblestone
+@inventory crafting, workbench
+
+craft
+dirt + stone
+= stone
+@inventory crafting
+@inventory workbench
+
+craft
+dirt + stone_sword
+= stone_sword
+@inventory crafting | title Custom
+
+craft
+dirt + iron_sword
+= iron_sword
+@inventory crafting | title Custom, Second, !"  Third  "

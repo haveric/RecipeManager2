@@ -37,6 +37,10 @@ public class FlagInventory extends Flag {
             "",
             "Optional arguments:",
             "  title <text>      - Add an inventory title restriction",
+            "    You can add more titles seperated by a , character to set the allowed titles.",
+            "    Also you can disallow titles by prefixing them with a ! character.",
+            "    Checks if any allowed titles are matched and all disallowed titles are not matched.",
+            "",
             "",
             "  failmsg <message> - Overwrite the fail message or you can use 'false' to hide it.",
             "    In the message the following variables can be used:",
@@ -54,7 +58,9 @@ public class FlagInventory extends Flag {
 
 
     private List<InventoryType> inventories = new ArrayList<>();
-    private String title;
+    private List<String> allowedTitles = new ArrayList<>();
+    private List<String> unallowedTitles = new ArrayList<>();
+
     private String failMessage;
 
     public FlagInventory() {
@@ -62,7 +68,8 @@ public class FlagInventory extends Flag {
 
     public FlagInventory(FlagInventory flag) {
         inventories = flag.inventories;
-        title = flag.title;
+        allowedTitles.addAll(flag.allowedTitles);
+        unallowedTitles.addAll(flag.unallowedTitles);
         failMessage = flag.failMessage;
     }
 
@@ -83,16 +90,23 @@ public class FlagInventory extends Flag {
         inventories.add(inventory);
     }
 
-    public String getTitle() {
-        return title;
+    public boolean hasTitles() {
+        return !allowedTitles.isEmpty() || !unallowedTitles.isEmpty();
+    }
+    public List<String> getAllowedTitles() {
+        return allowedTitles;
     }
 
-    public void setTitle(String newTitle) {
-        title = RMCUtil.parseColors(newTitle, false);
+    public void addAllowedTitle(String title) {
+        allowedTitles.add(RMCUtil.parseColors(title, false));
     }
 
-    public boolean hasTitle() {
-        return title != null;
+    public List<String> getUnallowedTitles() {
+        return unallowedTitles;
+    }
+
+    public void addUnallowedTitle(String title) {
+        unallowedTitles.add(RMCUtil.parseColors(title, false));
     }
 
     public String getFailMessage() {
@@ -112,7 +126,18 @@ public class FlagInventory extends Flag {
                 value = split[i].trim();
 
                 if (value.toLowerCase().startsWith("title")) {
-                    setTitle(RMCUtil.trimExactQuotes(value.substring("title".length())));
+                    String titles[] = value.substring("title".length()).split(",");
+
+                    for (String title : titles) {
+                        title = title.trim();
+
+                        boolean not = title.charAt(0) == '!';
+                        if (not) {
+                            addUnallowedTitle(RMCUtil.trimExactQuotes(title.substring(1)));
+                        } else {
+                            addAllowedTitle(RMCUtil.trimExactQuotes(title));
+                        }
+                    }
                 } else if (value.toLowerCase().startsWith("failmsg")) {
                     setFailMessage(RMCUtil.trimExactQuotes(value.substring("failmsg".length())));
                 }
@@ -146,8 +171,31 @@ public class FlagInventory extends Flag {
                 }
             }
 
-            if (hasTitle()) {
-                success = getTitle().equals(a.inventory().getTitle());
+            if (hasTitles()) {
+                String inventoryTitle = a.inventory().getTitle();
+
+                boolean allowed = false;
+
+                if (allowedTitles.isEmpty()) {
+                    allowed = true;
+                } else {
+                    for (String title : allowedTitles) {
+                        if (inventoryTitle.equals(title)) {
+                            allowed = true;
+                            break;
+                        }
+                    }
+                }
+
+                boolean notAllowed = true;
+                for (String title : unallowedTitles) {
+                    if (inventoryTitle.equals(title)) {
+                        notAllowed = false;
+                        break;
+                    }
+                }
+
+                success = allowed && notAllowed;
             }
         }
 
