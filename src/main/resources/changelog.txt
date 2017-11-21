@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+* Fixed furnace smelt times not updating
 * Added support for relative coordinates in x,y,z variables {x-1},{y+7},{z+12}
 * @Inventory: Added multiple title options
 

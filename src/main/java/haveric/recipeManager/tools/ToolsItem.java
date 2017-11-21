@@ -8,6 +8,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -289,7 +290,11 @@ public class ToolsItem {
     public static void updateFurnaceCookTimeDelayed(final Furnace furnace, final short time) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
             public void run() {
-                furnace.setCookTime(time);
+                // Re-get the furnace to make sure we are only updating the cook time state. Probably should be passing the block in instead.
+                Block block = furnace.getBlock();
+                Furnace updatedFurnace = (Furnace) block.getState();
+                updatedFurnace.setCookTime(time);
+                updatedFurnace.update();
             }
         });
     }

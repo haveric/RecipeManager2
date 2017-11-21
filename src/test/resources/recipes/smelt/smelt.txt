@@ -1,0 +1,15 @@
+smelt
+stone_sword
+= stone_sword
+
+smelt
+iron_sword % 5
+= iron_sword
+
+smelt
+gold_sword %20
+= gold_sword
+
+smelt
+diamond_sword%25
+= diamond_sword

@@ -1228,6 +1228,7 @@ public class Events implements Listener {
         boolean isBurning = furnace.getType() == Material.BURNING_FURNACE;
         if (recipe != null && !isBurning) {
             furnace.setCookTime(cookTime);
+            furnace.update();
         }
     }
 
@@ -1267,9 +1268,23 @@ public class Events implements Listener {
         }
     }
 
+    private void runFurnaceUpdateLater(Block block, short cookTime) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Furnace furnace = (Furnace) block.getState();
+
+                short newCookTime = (short) (cookTime);
+                furnace.setCookTime(newCookTime);
+                furnace.update();
+            }
+        }.runTaskLater(RecipeManager.getPlugin(), 0);
+    }
+
     @EventHandler(priority = EventPriority.LOW)
     public void furnaceSmelt(FurnaceSmeltEvent event) {
-        Furnace furnace = (Furnace) event.getBlock().getState();
+        Block block = event.getBlock();
+        Furnace furnace = (Furnace) block.getState();
         FurnaceInventory inventory = furnace.getInventory();
 
         short cookTime = 0;
@@ -1319,7 +1334,7 @@ public class Events implements Listener {
                cookTime = 0;
             }
 
-            furnace.setCookTime(cookTime);
+            runFurnaceUpdateLater(block, cookTime);
         }
     }
 
