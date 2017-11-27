@@ -1227,8 +1227,7 @@ public class Events implements Listener {
 
         boolean isBurning = furnace.getType() == Material.BURNING_FURNACE;
         if (recipe != null && !isBurning) {
-            furnace.setCookTime(cookTime);
-            furnace.update();
+            runFurnaceUpdateLater(furnace.getBlock(), cookTime);
         }
     }
 
@@ -1545,6 +1544,40 @@ public class Events implements Listener {
                         originalIngredient.setAmount(originalIngredient.getAmount() - 1);
 
                         inventory.setItem(3, originalIngredient);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void inventoryMove(InventoryMoveItemEvent event) {
+        Inventory dest = event.getDestination();
+
+        if (dest instanceof FurnaceInventory) {
+            FurnaceInventory furnaceInventory = (FurnaceInventory) dest;
+
+            ItemStack smeltingItem = furnaceInventory.getSmelting();
+
+            if (smeltingItem == null || smeltingItem.getType() == Material.AIR) {
+                ItemStack movedItem = event.getItem();
+
+                SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(movedItem);
+
+                if (recipe != null) {
+                    if (recipe.hasFlag(FlagType.REMOVE)) {
+                        event.setCancelled(true);
+                    }
+
+                    Furnace furnace = furnaceInventory.getHolder();
+                    FurnaceData data = Furnaces.get(furnace.getLocation());
+
+                    Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(furnaceInventory).extra(furnaceInventory.getSmelting()).build();
+
+                    if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
+                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                    } else {
+                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
                     }
                 }
             }
