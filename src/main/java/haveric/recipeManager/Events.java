@@ -1273,8 +1273,7 @@ public class Events implements Listener {
             public void run() {
                 Furnace furnace = (Furnace) block.getState();
 
-                short newCookTime = (short) (cookTime);
-                furnace.setCookTime(newCookTime);
+                furnace.setCookTime(cookTime);
                 furnace.update();
             }
         }.runTaskLater(RecipeManager.getPlugin(), 0);
