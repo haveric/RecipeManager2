@@ -11,7 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -113,43 +112,36 @@ public class FlagSkullOwner extends Flag {
         Block block = loc.getBlock();
         BlockState originalState = block.getState();
 
-        // If the block is an inventory, we don't want to replace it in order to prevent item loss.
-        // Instead, let the non-updated texture be set with default setOwner behavior.
-        // Ideally, this block will always be bedrock or air, so this won't be needed.
-        if (originalState instanceof InventoryHolder) {
-            SkullMeta meta = (SkullMeta) a.result().getItemMeta();
-            meta.setOwner(owner);
-            a.result().setItemMeta(meta);
+        // Sets the block to the skull and retrieves the updated ItemStack from the drops.
+        // This is needed because setOwner will not update the inventory texture.
+        block.setType(Material.SKULL);
+        BlockState newState = block.getState();
+        if (Version.has1_12Support() && offlinePlayer != null) {
+            Skull skull = (Skull) newState;
+            skull.setSkullType(SkullType.PLAYER);
+            skull.setOwningPlayer(offlinePlayer);
+            skull.update();
         } else {
-            // Sets the block to the skull and retrieves the updated ItemStack from the drops.
-            // This is needed because setOwner will not update the inventory texture.
-            block.setType(Material.SKULL);
-            if (Version.has1_12Support() && offlinePlayer != null) {
-                Skull skull = (Skull) block;
-                skull.setSkullType(SkullType.PLAYER);
-                skull.setOwningPlayer(offlinePlayer);
-            } else {
-                block.setData((byte) 3);
-                Skull s = (Skull) loc.getBlock().getState();
-                s.setOwner(owner);
-                s.update();
-            }
-
-            Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
-            ItemStack result = iter.next();
-
-            SkullMeta meta = (SkullMeta) result.getItemMeta();
-            if (!meta.hasOwner()) {
-                meta.setOwner(owner);
-                result.setItemMeta(meta);
-            }
-
-            ItemMeta cloned = result.getItemMeta().clone();
-            a.result().setItemMeta(cloned);
-
-            block.setType(originalState.getType());
-            block.setData(originalState.getRawData());
-            originalState.update();
+            block.setData((byte) 3);
+            Skull skull = (Skull) loc.getBlock().getState();
+            skull.setOwner(owner);
+            skull.update();
         }
+
+        Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
+        ItemStack result = iter.next();
+
+        SkullMeta meta = (SkullMeta) result.getItemMeta();
+        if (!meta.hasOwner()) {
+            meta.setOwner(owner);
+            result.setItemMeta(meta);
+        }
+
+        ItemMeta cloned = result.getItemMeta().clone();
+        a.result().setItemMeta(cloned);
+
+        block.setType(originalState.getType());
+        block.setData(originalState.getRawData());
+        originalState.update();
     }
 }
