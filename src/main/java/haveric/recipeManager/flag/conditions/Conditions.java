@@ -46,6 +46,7 @@ public class Conditions implements Cloneable {
     private List<String> lores = new ArrayList<>();
     private Color minColor;
     private Color maxColor;
+    private Boolean unbreakable;
     private Map<PotionType, ConditionPotion> potionConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private DyeColor bannerColor;
@@ -96,6 +97,7 @@ public class Conditions implements Cloneable {
 
         minColor = original.minColor;
         maxColor = original.maxColor;
+        unbreakable = original.unbreakable;
 
         potionConditions.putAll(original.potionConditions);
         potionEffectConditions.putAll(original.potionEffectConditions);
@@ -954,6 +956,26 @@ public class Conditions implements Cloneable {
         return meta.getSpawnedType().equals(spawnEggEntityType);
     }
 
+    public Boolean getUnbreakable() {
+        return unbreakable;
+    }
+
+    public void setUnbreakable(Boolean newUnbreakable) {
+        unbreakable = newUnbreakable;
+    }
+
+    public boolean hasUnbreakable() {
+        return unbreakable != null;
+    }
+
+    public boolean checkUnbreakable(boolean unbreakableToCheck) {
+        if (isNoMeta()) {
+            return !unbreakableToCheck;
+        } else {
+            return hasUnbreakable() && unbreakable == unbreakableToCheck;
+        }
+    }
+
     /**
      * Check the supplied item with supplied arguments against this condition class.
      *
@@ -1224,6 +1246,25 @@ public class Conditions implements Cloneable {
                 if (getFailMessage() != null) {
                     return false;
                 }
+            }
+        }
+
+        if (!checkUnbreakable(meta.isUnbreakable())) {
+            if (a == null) {
+                return false;
+            }
+
+            if (addReasons) {
+                if (hasUnbreakable() && unbreakable) {
+                    a.addReason("flag.ingredientconditions.unbreakable", getFailMessage(), "{item}", ToolsItem.print(item));
+                } else {
+                    a.addReason("flag.ingredientconditions.unbreakable", getFailMessage(), "{item}", ToolsItem.print(item));
+                }
+            }
+            ok = false;
+
+            if (getFailMessage() != null) {
+                return false;
             }
         }
 
@@ -1574,6 +1615,10 @@ public class Conditions implements Cloneable {
             value = arg.substring("lore".length()); // preserve case for regex
 
             addLore(RMCUtil.trimExactQuotes(value));
+        } else if (argLower.startsWith("!unbreakable") || argLower.startsWith("nounbreakable")) {
+            setUnbreakable(false);
+        } else if (argLower.startsWith("unbreakable")) {
+            setUnbreakable(true);
         } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
             setNoMeta(true);
         } else if (argLower.startsWith("failmsg")) {

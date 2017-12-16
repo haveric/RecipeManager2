@@ -1,4 +1,4 @@
-lastchanged: 2.9
+lastchanged: 2.14
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
@@ -56,6 +56,8 @@ flag:
     nobannercolor: '<yellow>{item}<red> needs banner color: <yellow>{color}'
     nobannerpatterns: '<yellow>{item}<red> needs banner pattern(s): <yellow>{patterns}'
     nospawneggentitytype: '<yellow>{item}<red> needs entity type: <yellow>{entitytype}'
+    unbreakable: '<yellow>{item}<red> needs to be unbreakable'
+    nounbreakable: '<yellow>{item}<red> needs to not be unbreakable'
   needexp: '<red>Need EXP: <yellow>{exp}<reset>. Current EXP:<yellow> {playerexp}'
   modexp:
     add: <green>+{amount}<reset> EXP

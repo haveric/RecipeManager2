@@ -17,3 +17,23 @@ craft
 dirt + stone
 = stone
 @ingredientcondition dirt | name "   One   " | lore "   Two   " | failmsg "   Three   "
+
+craft //test for unbreakable not set
+sand + iron_sword
+= wood_sword
+@ingredientcondition iron_sword | name "Wood Sword"
+
+craft
+dirt + iron_sword
+= iron_sword
+@ingredientcondition iron_sword | unbreakable
+
+craft
+grass + iron_sword
+= gold_sword
+@ingredientcondition iron_sword | !unbreakable
+
+craft
+gravel + iron_sword
+= diamond_sword
+@ingredientcondition iron_sword | nometa
