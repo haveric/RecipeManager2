@@ -124,10 +124,14 @@ public class FlagHoldItem extends Flag {
             "    Held item must have default/vanilla color",
             "    Overrides color condition if set",
             "",
+            "  unbreakable = Ingredient must have the unbreakable flag",
+            "",
+            "  nounbreakable or !unbreakable = Ingredient must not have the unbreakable flag",
+            "",
             "  nometa or !meta",
-            "    Held item must have no metadata (enchants, bookenchants, name, lore, color)",
-            "    Overrides enchant, name, lore, color conditions if set",
-            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor",
+            "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color, unbreakable)",
+            "    Overrides enchant, name, lore, color, unbreakable conditions if set",
+            "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor | nounbreakable",
             "",
             "  spawnegg <entitytype> = Type of entity contained in a spawn egg, read '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section", }, String.class);
 

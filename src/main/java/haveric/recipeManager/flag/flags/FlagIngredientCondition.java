@@ -115,7 +115,7 @@ public class FlagIngredientCondition extends Flag {
             "  nounbreakable or !unbreakable = Ingredient must not have the unbreakable flag",
             "",
             "  nometa or !meta",
-            "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color)",
+            "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color, unbreakable)",
             "    Overrides enchant, name, lore, color, unbreakable conditions if set",
             "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor | nounbreakable",
             "",
