@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.*;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
 
 import haveric.recipeManager.RecipeManager;
@@ -79,6 +80,19 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     @Override
     public String toString() {
         return getType() + "{" + getName() + "}";
+    }
+
+    protected NamespacedKey getNamespacedKey() {
+        String key = Recipes.RECIPE_ID_STRING.replace(" ", "") + hash;
+
+        RecipeManager plugin = RecipeManager.getPlugin();
+        // Used when running tests and plugin doesn't exist
+        if (plugin == null) {
+            return NamespacedKey.minecraft(key);
+        } else {
+            return new NamespacedKey(RecipeManager.getPlugin(), key);
+        }
+
     }
 
     /**

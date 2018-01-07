@@ -171,9 +171,9 @@ public class CombineRecipe extends WorkbenchRecipe {
 
         ShapelessRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new ShapelessRecipe(getFirstResult());
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
         }
 
         for (ItemStack item : ingredients) {

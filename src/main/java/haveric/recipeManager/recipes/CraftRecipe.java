@@ -281,9 +281,9 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         ShapedRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new ShapedRecipe(getFirstResult());
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
         }
 
         switch (height) {
