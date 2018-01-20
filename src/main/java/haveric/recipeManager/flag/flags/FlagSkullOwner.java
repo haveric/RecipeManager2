@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Iterator;
+import java.util.UUID;
 
 public class FlagSkullOwner extends Flag {
 
@@ -27,7 +28,8 @@ public class FlagSkullOwner extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <name>", };
+            "{flag} <name>",
+            "{flag} <uuid>"};
     }
 
     @Override
@@ -46,17 +48,23 @@ public class FlagSkullOwner extends Flag {
 
 
     private String owner;
+    private UUID ownerUUID;
 
     public FlagSkullOwner() {
     }
 
     public FlagSkullOwner(FlagSkullOwner flag) {
         owner = flag.owner;
+        ownerUUID = flag.ownerUUID;
     }
 
     @Override
     public FlagSkullOwner clone() {
         return new FlagSkullOwner((FlagSkullOwner) super.clone());
+    }
+
+    public boolean hasOwner() {
+        return owner != null;
     }
 
     public String getOwner() {
@@ -65,6 +73,18 @@ public class FlagSkullOwner extends Flag {
 
     public void setOwner(String newOwner) {
         owner = newOwner;
+    }
+
+    public boolean hasOwnerUUID() {
+        return ownerUUID != null;
+    }
+
+    public UUID getOwnerUUID() {
+        return ownerUUID;
+    }
+
+    public void setOwnerUUID(UUID newOwnerUUID) {
+        ownerUUID = newOwnerUUID;
     }
 
     @Override
@@ -80,7 +100,13 @@ public class FlagSkullOwner extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        setOwner(value);
+        String[] components = value.split("-");
+        if (components.length == 5) {
+            setOwnerUUID(UUID.fromString(value));
+        } else {
+            setOwner(value);
+        }
+
         return true;
     }
 
@@ -91,19 +117,22 @@ public class FlagSkullOwner extends Flag {
             return;
         }
 
-        String owner;
+        String owner = null;
         OfflinePlayer offlinePlayer = null;
-        if (getOwner().equalsIgnoreCase("{player}")) {
-            if (!a.hasPlayerUUID()) {
-                a.addCustomReason("Needs player UUID!");
-                return;
+        if (hasOwner()) {
+            if (getOwner().equalsIgnoreCase("{player}")) {
+                if (!a.hasPlayerUUID()) {
+                    a.addCustomReason("Needs player UUID!");
+                    return;
+                }
+
+                offlinePlayer = Bukkit.getOfflinePlayer(a.playerUUID());
+                owner = offlinePlayer.getName();
+            } else {
+                owner = getOwner();
             }
-
-            offlinePlayer = Bukkit.getOfflinePlayer(a.playerUUID());
-            owner = offlinePlayer.getName();
-        } else {
-            owner = getOwner();
-
+        } else if (hasOwnerUUID()) {
+            offlinePlayer = Bukkit.getOfflinePlayer(getOwnerUUID());
         }
 
         Player player = a.player();
@@ -133,7 +162,12 @@ public class FlagSkullOwner extends Flag {
 
         SkullMeta meta = (SkullMeta) result.getItemMeta();
         if (!meta.hasOwner()) {
-            meta.setOwner(owner);
+            if (owner != null) {
+                meta.setOwner(owner);
+            }
+            if (offlinePlayer != null) {
+                meta.setOwningPlayer(offlinePlayer);
+            }
             result.setItemMeta(meta);
         }
 
