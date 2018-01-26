@@ -972,7 +972,7 @@ public class Conditions implements Cloneable {
         if (isNoMeta()) {
             return !unbreakableToCheck;
         } else {
-            return hasUnbreakable() && unbreakable == unbreakableToCheck;
+            return !hasUnbreakable() || unbreakable == unbreakableToCheck;
         }
     }
 

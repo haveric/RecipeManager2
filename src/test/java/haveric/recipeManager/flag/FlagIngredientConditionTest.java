@@ -24,11 +24,18 @@ import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.*;
 
 public class FlagIngredientConditionTest extends FlagBaseTest {
+    private ItemStack hammerOfFoo;
     private ItemStack unbreakableSword;
     private ItemStack sword;
 
     @Before
     public void before() {
+        hammerOfFoo = new ItemStack(Material.DIAMOND_SPADE);
+        ItemMeta hammerOfFooMeta = hammerOfFoo.getItemMeta();
+        hammerOfFooMeta.setDisplayName(RMCChatColor.COLOR_CHAR + "bHammer");
+        hammerOfFoo.setItemMeta(hammerOfFooMeta);
+
+
         unbreakableSword = new ItemStack(Material.IRON_SWORD);
         ItemMeta meta = unbreakableSword.getItemMeta();
         meta.setUnbreakable(true);
@@ -68,6 +75,9 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 ConditionsIngredient cond = conditions.get(0);
                 assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
                 assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
+
+                a.clear();
+                assertTrue(flag.checkIngredientConditions(hammerOfFoo, a));
             } else if (resultType == Material.COBBLESTONE) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                 ConditionsIngredient cond = conditions.get(0);
