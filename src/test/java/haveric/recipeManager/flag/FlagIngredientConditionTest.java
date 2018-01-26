@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,8 @@ import static org.junit.Assert.*;
 
 public class FlagIngredientConditionTest extends FlagBaseTest {
     private ItemStack hammerOfFoo;
+    private ItemStack oneTwoThree;
+    private ItemStack oneTwoThreeQuotes;
     private ItemStack unbreakableSword;
     private ItemStack sword;
 
@@ -35,6 +38,17 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
         hammerOfFooMeta.setDisplayName(RMCChatColor.COLOR_CHAR + "bHammer");
         hammerOfFoo.setItemMeta(hammerOfFooMeta);
 
+        oneTwoThree = new ItemStack(Material.DIRT);
+        ItemMeta oneTwoThreeMeta = oneTwoThree.getItemMeta();
+        oneTwoThreeMeta.setDisplayName("One");
+        oneTwoThreeMeta.setLore(Collections.singletonList("Two"));
+        oneTwoThree.setItemMeta(oneTwoThreeMeta);
+
+        oneTwoThreeQuotes = new ItemStack(Material.DIRT);
+        ItemMeta oneTwoThreeQuotesMeta = oneTwoThreeQuotes.getItemMeta();
+        oneTwoThreeQuotesMeta.setDisplayName("   One   ");
+        oneTwoThreeQuotesMeta.setLore(Collections.singletonList("   Two   "));
+        oneTwoThreeQuotes.setItemMeta(oneTwoThreeQuotesMeta);
 
         unbreakableSword = new ItemStack(Material.IRON_SWORD);
         ItemMeta meta = unbreakableSword.getItemMeta();
@@ -84,12 +98,24 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertEquals("One", cond.getName());
                 assertEquals("Two", cond.getLores().get(0));
                 assertEquals("Three", cond.getFailMessage());
+
+                a.clear();
+                assertTrue(flag.checkIngredientConditions(oneTwoThree, a));
+
+                a.clear();
+                assertFalse(flag.checkIngredientConditions(oneTwoThreeQuotes, a));
             } else if (resultType == Material.STONE) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                 ConditionsIngredient cond = conditions.get(0);
                 assertEquals("   One   ", cond.getName());
                 assertEquals("   Two   ", cond.getLores().get(0));
                 assertEquals("   Three   ", cond.getFailMessage());
+
+                a.clear();
+                assertTrue(flag.checkIngredientConditions(oneTwoThreeQuotes, a));
+
+                a.clear();
+                assertFalse(flag.checkIngredientConditions(oneTwoThree, a));
             } else if (resultType == Material.WOOD_SWORD) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                 ConditionsIngredient cond = conditions.get(0);
