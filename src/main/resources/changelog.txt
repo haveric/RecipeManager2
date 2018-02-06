@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* @NoResult: Shift clicking will no longer give results
+
 === v2.14.1 ===
 * @IngredientCondition: Fixed issue when unbreakable was not set
 

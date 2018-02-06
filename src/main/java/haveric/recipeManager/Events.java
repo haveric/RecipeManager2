@@ -42,6 +42,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -50,13 +51,13 @@ import java.util.List;
  * RecipeManager handled events
  */
 public class Events implements Listener {
-    protected Events() { }
+    public Events() { }
 
-    protected void clean() {
+    public void clean() {
         HandlerList.unregisterAll(this);
     }
 
-    protected static void reload() {
+    public static void reload() {
         HandlerList.unregisterAll(RecipeManager.getEvents());
         Bukkit.getPluginManager().registerEvents(RecipeManager.getEvents(), RecipeManager.getPlugin());
     }
@@ -426,7 +427,11 @@ public class Events implements Listener {
             }
             // Call the PRE event TODO upgrade to MouseButton when PR is pulled
             RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), mouseButton);
-            Bukkit.getPluginManager().callEvent(callEvent);
+
+            PluginManager pm = Bukkit.getPluginManager();
+            if (pm != null) { // Null check used for Tests to skip event calling
+                pm.callEvent(callEvent);
+            }
 
             if (callEvent.isCancelled()) { // if event was cancelled by some other plugin then cancel this event
                 event.setCancelled(true);
@@ -505,15 +510,17 @@ public class Events implements Listener {
                 }
             }
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new PrepareItemCraftEvent(inv, player.getOpenInventory(), false));
-                }
-            }.runTaskLater(RecipeManager.getPlugin(), 0);
+            if (pm != null) { // Null check used for Tests to skip event calling
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getPluginManager().callEvent(new PrepareItemCraftEvent(inv, player.getOpenInventory(), false));
+                    }
+                }.runTaskLater(RecipeManager.getPlugin(), 0);
 
 
-            new UpdateInventory(player, 2); // update inventory 2 ticks later
+                new UpdateInventory(player, 2); // update inventory 2 ticks later
+            }
         } catch (Throwable e) {
             event.setCancelled(true);
             CommandSender sender;
@@ -538,7 +545,7 @@ public class Events implements Listener {
                 Messages.getInstance().sendOnce(player, "craft.recipe.multi.failed");
                 SoundNotifier.sendFailSound(player, a.location());
             } else {
-                if (event.isShiftClick()) {
+                if (event.isShiftClick() && !result.hasFlag(FlagType.NO_RESULT)) {
                     if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
                         Messages.getInstance().sendOnce(player, "craft.recipe.flag.noshiftclick");
                         return 0;
@@ -576,7 +583,7 @@ public class Events implements Listener {
                 return 0;
             }
 
-            if (event.isShiftClick()) {
+            if (event.isShiftClick() && !result.hasFlag(FlagType.NO_RESULT)) {
                 if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
                     Messages.getInstance().sendOnce(player, "craft.recipe.flag.noshiftclick");
 

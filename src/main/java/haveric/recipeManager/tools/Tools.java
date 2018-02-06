@@ -69,12 +69,11 @@ public class Tools {
 
     public static boolean playerCanAddItem(Player player, ItemStack item) {
         Inventory inv = player.getInventory();
-
         int amount = item.getAmount();
         int available = 0;
 
         for (ItemStack i : inv.getContents()) {
-            if (i == null) {
+            if (i == null || i.getType() == Material.AIR) {
                 available += item.getType().getMaxStackSize();
             } else if (item.isSimilar(i)) {
                 available += Math.max(Math.max(i.getMaxStackSize(), inv.getMaxStackSize()) - i.getAmount(), 0);

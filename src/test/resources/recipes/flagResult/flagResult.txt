@@ -1,0 +1,4 @@
+craft
+dirt + stone
+= stone_sword
+@ingredientcondition stone | name Test

@@ -1,8 +1,8 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
