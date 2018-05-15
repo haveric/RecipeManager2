@@ -450,8 +450,14 @@ public class Events implements Listener {
                     Recipes.recipeResetResult(a.playerUUID());
                 }
 
+                ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
+                    // Check for item changes and stop crafting
+                    if (isDifferentMatrix(originalMatrix, inv.getMatrix())) {
+                        break;
+                    }
+
                     a.setFirstRun(firstRun);
                     a.clear();
 
@@ -474,14 +480,11 @@ public class Events implements Listener {
                         a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
                     }
 
+                    boolean doneCrafting = false;
+
                     boolean subtract = false;
                     boolean onlyExtra = true;
                     if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
-                        if (event.isShiftClick() && (recipe.hasNoShiftBit() || result.hasNoShiftBit())) {
-                            subtract = true;
-                            onlyExtra = false;
-                        }
-
                         if (recipe.isMultiResult()) {
                             subtract = true;
                             onlyExtra = false;
@@ -497,10 +500,29 @@ public class Events implements Listener {
                             subtract = true;
                             onlyExtra = false;
                         }
+
+                        if (event.isShiftClick()) {
+                            subtract = true;
+                            onlyExtra = false;
+                            event.setCancelled(true);
+
+                            if (!result.hasFlag(FlagType.NO_RESULT)) {
+                                // Check for a full inventory and stop crafting
+                                if (Tools.playerCanAddItem(player, result)) {
+                                    player.getInventory().addItem(result);
+                                } else {
+                                    doneCrafting = true;
+                                }
+                            }
+                        }
                     }
 
                     if (subtract) {
                         recipe.subtractIngredients(inv, result, onlyExtra);
+                    }
+
+                    if (doneCrafting) {
+                        break;
                     }
 
                     // TODO call post-event ?
@@ -534,6 +556,26 @@ public class Events implements Listener {
         }
     }
 
+    private boolean isDifferentMatrix(ItemStack[] original, ItemStack[] current) {
+        boolean different = false;
+
+        if (original.length == current.length) {
+            for (int i = 0; i < original.length; i++) {
+                ItemStack originalStack = original[i];
+                ItemStack currentStack = current[i];
+
+                if (originalStack != null) {
+                    if (currentStack == null || currentStack.getType() != originalStack.getType()) {
+                        different = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return different;
+    }
+
     private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
         if (recipe.isMultiResult()) {
             // more special treatment needed for multi-result ones...
@@ -545,19 +587,10 @@ public class Events implements Listener {
                 Messages.getInstance().sendOnce(player, "craft.recipe.multi.failed");
                 SoundNotifier.sendFailSound(player, a.location());
             } else {
-                if (event.isShiftClick() && !result.hasFlag(FlagType.NO_RESULT)) {
-                    if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
-                        Messages.getInstance().sendOnce(player, "craft.recipe.flag.noshiftclick");
-                        return 0;
-                    }
-
+                if (event.isShiftClick()) {
                     Messages.getInstance().sendOnce(player, "craft.recipe.multi.noshiftclick");
 
-                    if (Tools.playerCanAddItem(player, result)) {
-                        player.getInventory().addItem(result);
-                    } else {
-                        return 0;
-                    }
+                    return 0;
                 } else {
                     ItemStack cursor = event.getCursor();
 
@@ -583,23 +616,8 @@ public class Events implements Listener {
                 return 0;
             }
 
-            if (event.isShiftClick() && !result.hasFlag(FlagType.NO_RESULT)) {
-                if (recipe.hasNoShiftBit() || result.hasNoShiftBit()) {
-                    Messages.getInstance().sendOnce(player, "craft.recipe.flag.noshiftclick");
-
-                    event.setCancelled(true); // cancel regardless just to be safe
-
-                    if (Tools.playerCanAddItem(player, result)) {
-                        player.getInventory().addItem(result);
-
-                        return 1;
-                    }
-
-                    return 0;
-                }
-
+            if (event.isShiftClick()) {
                 int craftAmount = recipe.getCraftableTimes(inv); // Calculate how many times the recipe can be crafted
-
                 ItemStack item = result.clone();
                 item.setAmount(result.getAmount() * craftAmount);
 

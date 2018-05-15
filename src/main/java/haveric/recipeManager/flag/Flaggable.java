@@ -17,11 +17,6 @@ public interface Flaggable {
     boolean hasFlags();
 
     /**
-     * @return true if flags prevent shift+click from creating more than one item
-     */
-    boolean hasNoShiftBit();
-
-    /**
      * Shortcut for {@link Flags#getFlag(String)}
      */
     Flag getFlag(String type);

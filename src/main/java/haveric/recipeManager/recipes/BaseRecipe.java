@@ -153,16 +153,6 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         return flags != null;
     }
 
-    public boolean hasNoShiftBit() {
-        boolean hasNoShiftBit = true;
-
-        if (flags != null) {
-            hasNoShiftBit = flags.hasNoShiftBit();
-        }
-
-        return hasNoShiftBit;
-    }
-
     public Flag getFlag(String type) {
         Flag flag = null;
 

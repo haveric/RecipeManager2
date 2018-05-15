@@ -11,33 +11,33 @@ public class FlagLoader {
 
     public void loadDefaultFlags() {
         FlagFactory.getInstance().initializeFlag(FlagType.COMMAND, new FlagCommand(), FlagBit.NONE, "cmd", "commands");
-        FlagFactory.getInstance().initializeFlag(FlagType.KEEP_ITEM, new FlagKeepItem(), FlagBit.NO_SHIFT, "returnitem", "replaceitem");
-        FlagFactory.getInstance().initializeFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), FlagBit.NO_SHIFT, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
+        FlagFactory.getInstance().initializeFlag(FlagType.KEEP_ITEM, new FlagKeepItem(), FlagBit.NONE, "returnitem", "replaceitem");
+        FlagFactory.getInstance().initializeFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), FlagBit.NONE, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
         FlagFactory.getInstance().initializeFlag(FlagType.PERMISSION, new FlagPermission(), FlagBit.NONE, "permissions", "perm");
-        FlagFactory.getInstance().initializeFlag(FlagType.FOR_PERMISSION, new FlagForPermission(), FlagBit.NO_SHIFT, "forperm");
-        FlagFactory.getInstance().initializeFlag(FlagType.FOR_CHANCE, new FlagForChance(), FlagBit.NO_SHIFT, "bychance", "chance");
+        FlagFactory.getInstance().initializeFlag(FlagType.FOR_PERMISSION, new FlagForPermission(), FlagBit.NONE, "forperm");
+        FlagFactory.getInstance().initializeFlag(FlagType.FOR_CHANCE, new FlagForChance(), FlagBit.NONE, "bychance", "chance");
         FlagFactory.getInstance().initializeFlag(FlagType.GROUP, new FlagGroup(), FlagBit.NONE, "groups", "permissiongroup", "permgroup");
         FlagFactory.getInstance().initializeFlag(FlagType.WORLD, new FlagWorld(), FlagBit.NONE, "needworld", "worlds");
         FlagFactory.getInstance().initializeFlag(FlagType.HEIGHT, new FlagHeight(), FlagBit.NONE, "depth");
-        FlagFactory.getInstance().initializeFlag(FlagType.MOD_EXP, new FlagModExp(), FlagBit.NO_SHIFT, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp");
+        FlagFactory.getInstance().initializeFlag(FlagType.MOD_EXP, new FlagModExp(), FlagBit.NONE, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp");
         FlagFactory.getInstance().initializeFlag(FlagType.NEED_EXP, new FlagNeedExp(), FlagBit.NONE, "needxp", "reqexp", "expreq", "reqxp", "xpreq");
-        FlagFactory.getInstance().initializeFlag(FlagType.MOD_LEVEL, new FlagModLevel(), FlagBit.NO_SHIFT, "levelmod", "setlevel", "level");
+        FlagFactory.getInstance().initializeFlag(FlagType.MOD_LEVEL, new FlagModLevel(), FlagBit.NONE, "levelmod", "setlevel", "level");
         FlagFactory.getInstance().initializeFlag(FlagType.NEED_LEVEL, new FlagNeedLevel(), FlagBit.NONE, "reqlevel", "levelreq");
-        FlagFactory.getInstance().initializeFlag(FlagType.MOD_MONEY, new FlagModMoney(), FlagBit.NO_SHIFT, "moneymod", "setmoney", "money");
+        FlagFactory.getInstance().initializeFlag(FlagType.MOD_MONEY, new FlagModMoney(), FlagBit.NONE, "moneymod", "setmoney", "money");
         FlagFactory.getInstance().initializeFlag(FlagType.NEED_MONEY, new FlagNeedMoney(), FlagBit.NONE, "reqmoney", "moneyreq");
-        FlagFactory.getInstance().initializeFlag(FlagType.COOLDOWN, new FlagCooldown(), FlagBit.NO_SHIFT, "cooltime", "delay");
+        FlagFactory.getInstance().initializeFlag(FlagType.COOLDOWN, new FlagCooldown(), FlagBit.NONE, "cooltime", "delay");
         FlagFactory.getInstance().initializeFlag(FlagType.HOLD_ITEM, new FlagHoldItem(), FlagBit.NONE, "hold");
         FlagFactory.getInstance().initializeFlag(FlagType.GAMEMODE, new FlagGameMode(), FlagBit.NONE, "needgm");
         FlagFactory.getInstance().initializeFlag(FlagType.LIGHT_LEVEL, new FlagLightLevel(), FlagBit.NONE, "blocklight", "sunlight", "light");
         FlagFactory.getInstance().initializeFlag(FlagType.BIOME, new FlagBiome(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.WEATHER, new FlagWeather(), FlagBit.NONE);
-        FlagFactory.getInstance().initializeFlag(FlagType.EXPLODE, new FlagExplode(), FlagBit.NO_SHIFT | FlagBit.NO_VALUE_REQUIRED, "explosion", "boom", "tnt");
+        FlagFactory.getInstance().initializeFlag(FlagType.EXPLODE, new FlagExplode(), FlagBit.NONE | FlagBit.NO_VALUE_REQUIRED, "explosion", "boom", "tnt");
         FlagFactory.getInstance().initializeFlag(FlagType.SOUND, new FlagSound(), FlagBit.ONCE_PER_SHIFT, "playsound");
-        FlagFactory.getInstance().initializeFlag(FlagType.SUMMON, new FlagSummon(), FlagBit.NO_SHIFT, "spawn", "creature", "mob", "animal");
+        FlagFactory.getInstance().initializeFlag(FlagType.SUMMON, new FlagSummon(), FlagBit.NONE, "spawn", "creature", "mob", "animal");
         FlagFactory.getInstance().initializeFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), FlagBit.NO_VALUE_REQUIRED, "poweredblock", "blockpower", "redstonepowered");
         FlagFactory.getInstance().initializeFlag(FlagType.POTION_EFFECT, new FlagPotionEffect(), FlagBit.NONE, "potionfx");
         FlagFactory.getInstance().initializeFlag(FlagType.LAUNCH_FIREWORK, new FlagLaunchFirework(), FlagBit.ONCE_PER_SHIFT, "setfirework");
-        FlagFactory.getInstance().initializeFlag(FlagType.SET_BLOCK, new FlagSetBlock(), FlagBit.NO_SHIFT, "changeblock");
+        FlagFactory.getInstance().initializeFlag(FlagType.SET_BLOCK, new FlagSetBlock(), FlagBit.NONE, "changeblock");
         FlagFactory.getInstance().initializeFlag(FlagType.MESSAGE, new FlagMessage(), FlagBit.NONE, "craftmsg", "msg");
         FlagFactory.getInstance().initializeFlag(FlagType.BROADCAST, new FlagBroadcast(), FlagBit.NONE, "announce", "msgall");
         FlagFactory.getInstance().initializeFlag(FlagType.SECRET, new FlagSecret(), FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_FOR);
@@ -61,7 +61,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.INDIVIDUAL_RESULTS, new FlagIndividualResults(), FlagBit.RECIPE | FlagBit.NO_VALUE_REQUIRED, "individual");
 
         // Result only flags
-        FlagFactory.getInstance().initializeFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NO_SHIFT, "clone", "copy", "copyingredient"); // TODO finish
+        FlagFactory.getInstance().initializeFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NONE, "clone", "copy", "copyingredient"); // TODO finish
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.RESULT, "name", "displayname");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED, "lore", "itemdesc");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), FlagBit.RESULT | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
@@ -74,7 +74,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.POTION_ITEM, new FlagPotionItem(), FlagBit.RESULT, "potion");
         FlagFactory.getInstance().initializeFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), FlagBit.RESULT, "enchant", "enchantment");
         FlagFactory.getInstance().initializeFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), FlagBit.RESULT, "enchantbook", "enchantingbook");
-        FlagFactory.getInstance().initializeFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT | FlagBit.NO_SHIFT, "getbook", "bookresult");
+        FlagFactory.getInstance().initializeFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT | FlagBit.NONE, "getbook", "bookresult");
         FlagFactory.getInstance().initializeFlag(FlagType.HIDE, new FlagHide(), FlagBit.RESULT);
         FlagFactory.getInstance().initializeFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), FlagBit.RESULT, "banner");
         FlagFactory.getInstance().initializeFlag(FlagType.NO_RESULT, new FlagNoResult(), FlagBit.RESULT | FlagBit.NO_FOR | FlagBit.NO_VALUE_REQUIRED);

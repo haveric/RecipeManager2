@@ -19,7 +19,6 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -188,7 +187,7 @@ public class FlagKeepItem extends Flag {
         return true;
     }
 
-    private void parse(ReturnTask task, final Inventory inv, Args a, final int index) {
+    private void parse(Inventory inv, Args a, final int index) {
         ItemStack item = inv.getItem(index);
 
         if (item == null || item.getType() == Material.AIR) {
@@ -239,8 +238,10 @@ public class FlagKeepItem extends Flag {
                 clone = ((ItemStack) obj).clone();
             }
 
-            if (clone != null) {
-                task.setItem(index, clone);
+            if (clone == null) {
+                inv.setItem(index, new ItemStack(Material.AIR));
+            } else {
+                inv.setItem(index, clone);
             }
         }
     }
@@ -254,58 +255,25 @@ public class FlagKeepItem extends Flag {
 
         if (a.inventory() instanceof CraftingInventory) {
             CraftingInventory inv = (CraftingInventory) a.inventory();
-            ReturnTask task = new ReturnTask(inv);
 
             for (int i = 1; i < inv.getSize(); i++) {
-                parse(task, inv, a, i);
+                parse(inv, a, i);
             }
 
-            task.startIfRequired();
         } else if (a.inventory() instanceof FurnaceInventory) {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
-            ReturnTask task = new ReturnTask(inv);
 
             if (a.recipe() instanceof SmeltRecipe) {
-                parse(task, inv, a, 0);
-                parse(task, inv, a, 1);
+                parse(inv, a, 0);
+                parse(inv, a, 1);
             } else if (a.recipe() instanceof FuelRecipe) {
-                parse(task, inv, a, 1);
+                parse(inv, a, 1);
             } else {
                 a.addCustomReason("Needs a recipe!");
                 return;
             }
-
-            task.startIfRequired();
         } else {
             a.addCustomReason("Needs a crafting or furnace inventory!");
-        }
-    }
-
-    private class ReturnTask extends BukkitRunnable {
-        private Map<Integer, ItemStack> items = new HashMap<>();
-        private boolean taskRequired = false;
-        private Inventory inv;
-
-        ReturnTask(Inventory newInv) {
-            inv = newInv;
-        }
-
-        public void setItem(int index, ItemStack replace) {
-            items.put(index, replace);
-            taskRequired = true;
-        }
-
-        public void startIfRequired() {
-            if (taskRequired) {
-                runTaskLater(RecipeManager.getPlugin(), 1);
-            }
-        }
-
-        @Override
-        public void run() {
-            for (Entry<Integer, ItemStack> e : items.entrySet()) {
-                inv.setItem(e.getKey(), e.getValue());
-            }
         }
     }
 }

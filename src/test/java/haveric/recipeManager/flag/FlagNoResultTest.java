@@ -1,7 +1,6 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.*;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -49,9 +48,10 @@ public class FlagNoResultTest extends FlagBaseTest {
         ItemStack stone = new ItemStack(Material.STONE);
         ItemStack stoneSword = new ItemStack(Material.STONE_SWORD);
 
-        ItemStack[] matrix = new ItemStack[2];
-        matrix[0] = dirt;
-        matrix[1] = stone;
+        ItemStack[] matrix = new ItemStack[3];
+        matrix[0] = stoneSword;
+        matrix[1] = dirt;
+        matrix[2] = stone;
 
         inventory.setMatrix(matrix);
         inventory.setResult(stoneSword);
@@ -60,9 +60,10 @@ public class FlagNoResultTest extends FlagBaseTest {
         ItemStack dirtStack = new ItemStack(Material.DIRT, 2);
         ItemStack stoneStack = new ItemStack(Material.STONE, 3);
 
-        ItemStack[] matrixStack = new ItemStack[2];
-        matrix[0] = dirtStack;
-        matrix[1] = stoneStack;
+        ItemStack[] matrixStack = new ItemStack[3];
+        matrixStack[0] = stoneSword;
+        matrixStack[1] = dirtStack;
+        matrixStack[2] = stoneStack;
 
         shiftInventory.setMatrix(matrixStack);
         shiftInventory.setResult(stoneSword);
@@ -120,10 +121,7 @@ public class FlagNoResultTest extends FlagBaseTest {
 
                 int count = 0;
                 for (ItemStack item : contents) {
-                    if (item == null || item.getType() == Material.AIR) {
-
-                    } else {
-                        MessageSender.getInstance().info("  Item: " + item);
+                    if (item != null && item.getType() != Material.AIR) {
                         count += item.getAmount();
                     }
                 }
@@ -135,10 +133,7 @@ public class FlagNoResultTest extends FlagBaseTest {
 
                 count = 0;
                 for (ItemStack item : shiftContents) {
-                    if (item == null || item.getType() == Material.AIR) {
-
-                    } else {
-                        MessageSender.getInstance().info(" Item: " + item);
+                    if (item != null && item.getType() != Material.AIR) {
                         count += item.getAmount();
                     }
                 }

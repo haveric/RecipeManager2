@@ -1,7 +1,9 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Settings;
-import haveric.recipeManager.flag.*;
+import haveric.recipeManager.flag.Flag;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
@@ -229,11 +231,13 @@ public class WorkbenchRecipe extends MultiResultRecipe {
     }
 
     public int getCraftableTimes(CraftingInventory inv) {
-        int craftAmount = inv.getMaxStackSize();
+        int craftAmount = 0;
+        int maxStack = inv.getMaxStackSize();
 
         for (ItemStack i : inv.getMatrix()) {
             if (i != null && i.getType() != Material.AIR) {
-                craftAmount = Math.min(i.getAmount(), craftAmount);
+                int stackAmount = i.getAmount();
+                craftAmount = Math.min(stackAmount, maxStack);
             }
         }
 

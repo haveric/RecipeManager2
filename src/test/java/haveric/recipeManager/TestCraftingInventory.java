@@ -31,6 +31,7 @@ public class TestCraftingInventory extends TestCraftInventory implements Craftin
     @Override
     public void setMatrix(ItemStack[] contents) {
         matrix = contents;
+        inventory = matrix;
     }
 
     @Override

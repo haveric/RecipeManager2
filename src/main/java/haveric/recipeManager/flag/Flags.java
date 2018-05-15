@@ -45,16 +45,6 @@ public class Flags implements Cloneable {
         flaggable = newFlaggable;
     }
 
-    public boolean hasNoShiftBit() {
-        for (String t : flags.keySet()) {
-            if (FlagFactory.getInstance().getFlagByName(t).hasBit(FlagBit.NO_SHIFT)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public Flag getFlag(String name) {
         return flags.get(name);
     }
