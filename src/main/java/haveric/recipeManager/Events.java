@@ -449,12 +449,13 @@ public class Events implements Listener {
                 if (times > 0) {
                     Recipes.recipeResetResult(a.playerUUID());
                 }
-
+                //MessageSender.getInstance().info("Times: " + times);
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
                     // Check for item changes and stop crafting
                     if (isDifferentMatrix(originalMatrix, inv.getMatrix())) {
+                        //MessageSender.getInstance().info("Stop Crafting - Different matrix");
                         break;
                     }
 
@@ -511,10 +512,14 @@ public class Events implements Listener {
                                 if (Tools.playerCanAddItem(player, result)) {
                                     player.getInventory().addItem(result);
                                 } else {
+                                    //MessageSender.getInstance().info("Stop Crafting - Full Inventory");
                                     doneCrafting = true;
                                 }
                             }
                         }
+                    } else {
+                        //MessageSender.getInstance().info("Stop Crafting - Recipe no longer matches");
+                        doneCrafting = true;
                     }
 
                     if (subtract) {
@@ -564,8 +569,11 @@ public class Events implements Listener {
                 ItemStack originalStack = original[i];
                 ItemStack currentStack = current[i];
 
+                //MessageSender.getInstance().info("Original: " + originalStack + ", Current: " + currentStack);
                 if (originalStack != null) {
-                    if (currentStack == null || currentStack.getType() != originalStack.getType()) {
+                    if (currentStack == null && originalStack.getType() == Material.AIR) {
+                        // Null == AIR
+                    } else if (currentStack == null || currentStack.getType() != originalStack.getType()) {
                         different = true;
                         break;
                     }

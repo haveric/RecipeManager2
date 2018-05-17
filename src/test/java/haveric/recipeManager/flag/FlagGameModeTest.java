@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag;
 
+import haveric.recipeManager.Perms;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -106,6 +107,7 @@ public class FlagGameModeTest extends FlagBaseTest{
     @Test
     public void onCrafted() {
         Player mockPlayer = mock(Player.class);
+        when(mockPlayer.hasPermission(Perms.FLAG_ALL)).thenReturn(true);
         when(mockPlayer.getGameMode()).thenReturn(GameMode.SURVIVAL);
         Args a = ArgBuilder.create().player(mockPlayer).build().processArgs();
 

@@ -1,0 +1,14 @@
+craft
+stone_sword + dirt
+= iron_sword
+@keepitem stone_sword
+
+craft
+stone_sword + stone
+= gold_sword
+@keepitem stone_sword | replace gold_sword
+
+craft
+stone_sword + grass
+= diamond_sword
+@keepitem stone_sword | damage 50

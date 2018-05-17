@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,12 +47,19 @@ public class FlagNoResultTest extends FlagBaseTest {
 
         ItemStack dirt = new ItemStack(Material.DIRT);
         ItemStack stone = new ItemStack(Material.STONE);
+        ItemMeta stoneMeta = stone.getItemMeta();
+        stoneMeta.setDisplayName("Test");
+        stone.setItemMeta(stoneMeta);
         ItemStack stoneSword = new ItemStack(Material.STONE_SWORD);
+        ItemStack air = new ItemStack(Material.AIR);
 
-        ItemStack[] matrix = new ItemStack[3];
+        ItemStack[] matrix = new ItemStack[10];
         matrix[0] = stoneSword;
         matrix[1] = dirt;
         matrix[2] = stone;
+        for (int i = 3; i < 10; i++) {
+            matrix[i] = air;
+        }
 
         inventory.setMatrix(matrix);
         inventory.setResult(stoneSword);
@@ -59,11 +67,17 @@ public class FlagNoResultTest extends FlagBaseTest {
         shiftInventory = new TestCraftingInventory();
         ItemStack dirtStack = new ItemStack(Material.DIRT, 2);
         ItemStack stoneStack = new ItemStack(Material.STONE, 3);
+        ItemMeta stoneStackMeta = stoneStack.getItemMeta();
+        stoneStackMeta.setDisplayName("Test");
+        stoneStack.setItemMeta(stoneStackMeta);
 
-        ItemStack[] matrixStack = new ItemStack[3];
+        ItemStack[] matrixStack = new ItemStack[10];
         matrixStack[0] = stoneSword;
         matrixStack[1] = dirtStack;
         matrixStack[2] = stoneStack;
+        for (int i = 3; i < 10; i++) {
+            matrixStack[i] = air;
+        }
 
         shiftInventory.setMatrix(matrixStack);
         shiftInventory.setResult(stoneSword);
@@ -74,6 +88,7 @@ public class FlagNoResultTest extends FlagBaseTest {
         PlayerInventory playerInventory = new TestPlayerInventory();
 
         Player player = mock(Player.class);
+        when(player.hasPermission(Perms.FLAG_ALL)).thenReturn(true);
         when(player.getInventory()).thenReturn(playerInventory);
 
         InventoryView view = mock(InventoryView.class);

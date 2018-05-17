@@ -1,7 +1,6 @@
 package haveric.recipeManager.flag.flags;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.Flag;
@@ -12,7 +11,6 @@ import haveric.recipeManager.recipes.SmeltRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.util.ParseBit;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.CraftingInventory;
@@ -189,13 +187,11 @@ public class FlagKeepItem extends Flag {
 
     private void parse(Inventory inv, Args a, final int index) {
         ItemStack item = inv.getItem(index);
-
         if (item == null || item.getType() == Material.AIR) {
             return;
         }
 
         Object obj = getItem(item);
-
         if (obj != null) {
             ItemStack clone = null;
 
@@ -219,11 +215,7 @@ public class FlagKeepItem extends Flag {
                                     a.player().playSound(a.player().getLocation(), soundItemBreak, 1.0f, 0.0f);
                                 }
 
-                                Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
-                                    public void run() {
-                                        inv.clear(index);
-                                    }
-                                }, 0);
+                                inv.setItem(index, new ItemStack(Material.AIR));
                             }
 
                             clone = null;
