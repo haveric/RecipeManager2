@@ -1,15 +1,16 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.flag.*;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.Recipe;
-
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.flag.Flag;
+import haveric.recipeManager.flag.Flaggable;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.Recipe;
 
 public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     private Flags flags;

@@ -1017,6 +1017,7 @@ public class Conditions implements Cloneable {
                 return false;
             }
         }
+
         if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
 

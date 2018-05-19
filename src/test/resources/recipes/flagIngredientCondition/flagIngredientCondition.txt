@@ -37,3 +37,13 @@ craft
 gravel + iron_sword
 = diamond_sword
 @ingredientcondition iron_sword | nometa
+
+craft
+brick + grass
+= brick
+@ingredientcondition brick | nometa
+
+craft
+brick + sponge
+= sponge
+@ingredientcondition brick | amount 10

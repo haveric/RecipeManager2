@@ -449,13 +449,19 @@ public class Events implements Listener {
                 if (times > 0) {
                     Recipes.recipeResetResult(a.playerUUID());
                 }
-                //MessageSender.getInstance().info("Times: " + times);
+
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
-                    // Check for item changes and stop crafting
+                    // Make sure no items have changed or stop crafting
                     if (isDifferentMatrix(originalMatrix, inv.getMatrix())) {
                         //MessageSender.getInstance().info("Stop Crafting - Different matrix");
+                        break;
+                    }
+
+                    // Make sure all flag conditions are still valid or stop crafting
+                    if (!recipe.checkFlags(a) || !result.checkFlags(a)) {
+                        //MessageSender.getInstance().info("Stop Crafting - Flags no longer match");
                         break;
                     }
 
@@ -508,18 +514,15 @@ public class Events implements Listener {
                             event.setCancelled(true);
 
                             if (!result.hasFlag(FlagType.NO_RESULT)) {
-                                // Check for a full inventory and stop crafting
+                                // Make sure inventory can fit the results or stop crafting
                                 if (Tools.playerCanAddItem(player, result)) {
-                                    player.getInventory().addItem(result);
+                                    player.getInventory().addItem(result.clone());
                                 } else {
                                     //MessageSender.getInstance().info("Stop Crafting - Full Inventory");
                                     doneCrafting = true;
                                 }
                             }
                         }
-                    } else {
-                        //MessageSender.getInstance().info("Stop Crafting - Recipe no longer matches");
-                        doneCrafting = true;
                     }
 
                     if (subtract) {
@@ -569,7 +572,6 @@ public class Events implements Listener {
                 ItemStack originalStack = original[i];
                 ItemStack currentStack = current[i];
 
-                //MessageSender.getInstance().info("Original: " + originalStack + ", Current: " + currentStack);
                 if (originalStack != null) {
                     if (currentStack == null && originalStack.getType() == Material.AIR) {
                         // Null == AIR

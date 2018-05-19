@@ -1,6 +1,6 @@
 package haveric.recipeManager.flag;
 
-import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.*;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
@@ -11,7 +11,9 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,9 @@ import java.util.Map;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class FlagIngredientConditionTest extends FlagBaseTest {
     private ItemStack hammerOfFoo;
@@ -30,6 +35,19 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
     private ItemStack oneTwoThreeQuotes;
     private ItemStack unbreakableSword;
     private ItemStack sword;
+
+    private ItemStack brick;
+    private ItemStack sponge;
+    private ItemStack spongeStack10;
+    private ItemStack brickStack45;
+    private ItemStack grassStack10;
+    private ItemStack air;
+
+    private File booksDir;
+    private TestCraftingInventory inventory;
+    private CraftItemEvent craftEvent;
+    private static Events events;
+    private Recipe bukkitRecipe;
 
     @Before
     public void before() {
@@ -56,22 +74,64 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
         unbreakableSword.setItemMeta(meta);
 
         sword = new ItemStack(Material.IRON_SWORD);
+
+
+        // Needed flag
+
+        brick = new ItemStack(Material.BRICK);
+        sponge = new ItemStack(Material.SPONGE);
+        spongeStack10 = new ItemStack(Material.SPONGE, 10);
+        brickStack45 = new ItemStack(Material.BRICK, 45);
+        grassStack10 = new ItemStack(Material.GRASS, 10);
+
+        air = new ItemStack(Material.AIR);
+
+        when(Settings.getCustomData(Material.STONE_SWORD)).thenReturn((short)132);
+
+        booksDir = new File(workDir.getPath() + "/books/");
+        booksDir.mkdirs();
+
+        RecipeBooks.getInstance().init(booksDir);
+        RecipeBooks.getInstance().reload(null);
+
+        mockStatic(Inventory.class);
+
+        inventory = new TestCraftingInventory();
+
+        events = new Events();
+
+
+        PlayerInventory playerInventory = new TestPlayerInventory();
+
+        Player player = mock(Player.class);
+        when(player.hasPermission(Perms.FLAG_ALL)).thenReturn(true);
+        when(player.getInventory()).thenReturn(playerInventory);
+
+        InventoryView view = mock(InventoryView.class);
+        when(view.getPlayer()).thenReturn(player);
+
+        craftEvent = mock(CraftItemEvent.class);
+        when(craftEvent.getInventory()).thenReturn(inventory);
+        when(craftEvent.getView()).thenReturn(view);
     }
 
     @Test
     public void onRecipeParse() {
         File file = new File("src/test/resources/recipes/flagIngredientCondition/");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
 
-        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+        Map<BaseRecipe, RMCRecipeInfo> indexedRecipes = Recipes.getInstance().getIndex();
 
-        assertEquals(8, queued.size());
-        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
+        assertEquals(10, indexedRecipes.size());
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : indexedRecipes.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
             Args a = ArgBuilder.create().build();
+
+            bukkitRecipe = recipe.getBukkitRecipe(false);
+            when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
             FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
             if (resultType == Material.DIRT) {
@@ -152,6 +212,58 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
                 a.clear();
                 assertTrue(flag.checkIngredientConditions(sword, a));
+            } else if (resultType == Material.BRICK) {
+                ItemStack[] matrix = new ItemStack[10];
+                matrix[0] = brick.clone();
+                matrix[1] = brickStack45.clone();
+                matrix[2] = grassStack10.clone();
+                for (int i = 3; i < 10; i++) {
+                    matrix[i] = air;
+                }
+
+                inventory.setMatrix(matrix);
+                inventory.setResult(brick.clone());
+
+                // Switch to shift click
+                craftEvent.getView().getPlayer().getInventory().clear();
+                when(craftEvent.isShiftClick()).thenReturn(true);
+                events.craftFinish(craftEvent);
+
+                ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();
+                int count = 0;
+                for (ItemStack item : shiftContents) {
+                    if (item != null && item.getType() != Material.AIR) {
+                        count += item.getAmount();
+                    }
+                }
+
+                assertEquals(10, count);
+            } else if (resultType == Material.SPONGE) {
+                ItemStack[] matrix = new ItemStack[10];
+                matrix[0] = sponge.clone();
+                matrix[1] = brickStack45.clone();
+                matrix[2] = spongeStack10.clone();
+                for (int i = 3; i < 10; i++) {
+                    matrix[i] = air;
+                }
+
+                inventory.setMatrix(matrix);
+                inventory.setResult(sponge.clone());
+
+                // Switch to shift click
+                craftEvent.getView().getPlayer().getInventory().clear();
+                when(craftEvent.isShiftClick()).thenReturn(true);
+                events.craftFinish(craftEvent);
+
+                ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();
+                int count = 0;
+                for (ItemStack item : shiftContents) {
+                    if (item != null && item.getType() != Material.AIR) {
+                        count += item.getAmount();
+                    }
+                }
+
+                assertEquals(4, count);
             }
         }
 

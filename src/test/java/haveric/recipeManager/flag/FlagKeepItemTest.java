@@ -25,7 +25,6 @@ public class FlagKeepItemTest extends FlagBaseTest {
     private File booksDir;
 
     private TestCraftingInventory inventory;
-    private TestCraftingInventory shiftInventory;
     private CraftItemEvent craftEvent;
     private static Events events;
 
@@ -61,8 +60,6 @@ public class FlagKeepItemTest extends FlagBaseTest {
 
         inventory = new TestCraftingInventory();
 
-        //inventory.setResult(ironSword.clone());
-
         events = new Events();
 
 
@@ -76,7 +73,6 @@ public class FlagKeepItemTest extends FlagBaseTest {
         when(view.getPlayer()).thenReturn(player);
 
         craftEvent = mock(CraftItemEvent.class);
-        //when(craftEvent.isShiftClick()).thenReturn(false);
         when(craftEvent.getInventory()).thenReturn(inventory);
         when(craftEvent.getView()).thenReturn(view);
     }
@@ -106,6 +102,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 matrix[2] = dirtStack.clone();
 
                 inventory.setMatrix(matrix);
+                inventory.setResult(ironSword.clone());
 
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
@@ -129,6 +126,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 matrix[2] = stoneStack.clone();
 
                 inventory.setMatrix(matrix);
+                inventory.setResult(goldSword.clone());
 
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
@@ -152,6 +150,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 matrix[2] = grassStack.clone();
 
                 inventory.setMatrix(matrix);
+                inventory.setResult(diamondSword.clone());
 
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
