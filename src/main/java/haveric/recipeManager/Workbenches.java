@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.data.BlockID;
+import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -61,7 +62,13 @@ public class Workbenches {
 
         Block block = blockID.toBlock();
 
-        if (block.getType() != Material.WORKBENCH) { // Workbench doesn't exist any more
+        Material craftingTableMaterial;
+        if (Version.has1_13Support()) {
+            craftingTableMaterial = Material.CRAFTING_TABLE;
+        } else {
+            craftingTableMaterial = Material.getMaterial("WORKBENCH");
+        }
+        if (block.getType() != craftingTableMaterial) { // Workbench doesn't exist any more
             workbenches.remove(human.getName());
             return playerLoc;
         }

@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -102,33 +103,37 @@ public class FlagBlockPowered extends Flag {
         }
 
         Block block = a.location().getBlock();
+        Material blockType = block.getType();
 
-        switch (block.getType()) {
-            case WORKBENCH:
-            case FURNACE:
-            case BURNING_FURNACE:
-            case BREWING_STAND:
-                boolean valid;
-                if (isIndirect()) {
-                    valid = block.isBlockIndirectlyPowered() || block.isBlockPowered();
+        Material craftingTableMaterial;
+        if (Version.has1_13Support()) {
+            craftingTableMaterial = Material.CRAFTING_TABLE;
+        } else {
+            craftingTableMaterial = Material.getMaterial("WORKBENCH");
+        }
+        if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == craftingTableMaterial ||
+                (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
+
+            boolean valid;
+            if (isIndirect()) {
+                valid = block.isBlockIndirectlyPowered() || block.isBlockPowered();
+            } else {
+                valid = block.isBlockPowered();
+            }
+
+            if (!valid) {
+                String reason;
+                if (blockType == craftingTableMaterial) {
+                    reason = "flag.blockpowered.workbench";
+                } else if (blockType == Material.BREWING_STAND) {
+                    reason = "flag.blockpowered.brewingstand";
                 } else {
-                    valid = block.isBlockPowered();
+                    reason = "flag.blockpowered.furnace";
                 }
-
-                if (!valid) {
-                    String reason;
-                    if (block.getType() == Material.WORKBENCH) {
-                        reason = "flag.blockpowered.workbench";
-                    } else if (block.getType() == Material.BREWING_STAND) {
-                        reason = "flag.blockpowered.brewingstand";
-                    } else {
-                        reason = "flag.blockpowered.furnace";
-                    }
-                    a.addReason(reason, failMessage);
-                }
-                break;
-            default:
-                a.addReason("flag.blockpowered.workbench", failMessage);
+                a.addReason(reason, failMessage);
+            }
+        } else {
+            a.addReason("flag.blockpowered.workbench", failMessage);
         }
     }
 }

@@ -30,18 +30,18 @@ public class Vanilla {
     /**
      * Map cloning's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPCLONE = new ItemStack(Material.EMPTY_MAP, 0, (short) -1);
+    public static ItemStack RECIPE_MAPCLONE;
 
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 0, (short) 0);
-    public static final ItemStack RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.EMPTY_MAP, 1, (short) 0);
+    public static ItemStack RECIPE_MAPEXTEND;
+    public static ItemStack RECIPE_MAPEXTEND_1_11;
 
     /**
      * Fireworks' special recipe result, you can use it to identify vanilla recipes.
      */
-    public static final ItemStack RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short) 0);
+    public static ItemStack RECIPE_FIREWORKS;
 
     /**
      * Item repair special recipe result (SHAPELESS Recipe)
@@ -78,48 +78,55 @@ public class Vanilla {
 
     protected static void init() {
         clean();
-
         RMCRecipeInfo info = new RMCRecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
+
+        boolean has1_13Support = Version.has1_13Support();
 
         // Add vanilla Minecraft fuels just for warning if user adds one that already exists or tries to overwrite a nonexistent one
         initialRecipes.put(new FuelRecipe(Material.COAL, 80), info);
-        initialRecipes.put(new FuelRecipe(Material.LOG, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.LOG_2, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_STEP, 7.5f), info);
-        initialRecipes.put(new FuelRecipe(Material.SAPLING, 5), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_AXE, 10), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_HOE, 10), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_PICKAXE, 10), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_SPADE, 10), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_SWORD, 10), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_PLATE, 15), info);
         initialRecipes.put(new FuelRecipe(Material.STICK, 5), info);
-        initialRecipes.put(new FuelRecipe(Material.FENCE, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.FENCE_GATE, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.WOOD_STAIRS, 15), info);
         initialRecipes.put(new FuelRecipe(Material.ACACIA_STAIRS, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.BIRCH_WOOD_STAIRS, 15), info);
         initialRecipes.put(new FuelRecipe(Material.DARK_OAK_STAIRS, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.SPRUCE_WOOD_STAIRS, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.JUNGLE_WOOD_STAIRS, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.TRAP_DOOR, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.WORKBENCH, 15), info);
         initialRecipes.put(new FuelRecipe(Material.BOOKSHELF, 15), info);
         initialRecipes.put(new FuelRecipe(Material.CHEST, 15), info);
         initialRecipes.put(new FuelRecipe(Material.TRAPPED_CHEST, 15), info);
         initialRecipes.put(new FuelRecipe(Material.DAYLIGHT_DETECTOR, 15), info);
         initialRecipes.put(new FuelRecipe(Material.JUKEBOX, 15), info);
         initialRecipes.put(new FuelRecipe(Material.NOTE_BLOCK, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.HUGE_MUSHROOM_1, 15), info);
-        initialRecipes.put(new FuelRecipe(Material.HUGE_MUSHROOM_2, 15), info);
         initialRecipes.put(new FuelRecipe(Material.BLAZE_ROD, 120), info);
         initialRecipes.put(new FuelRecipe(Material.COAL_BLOCK, 800), info);
         initialRecipes.put(new FuelRecipe(Material.LAVA_BUCKET, 1000), info);
 
-        if (Version.has1_8Support()) {
-            initialRecipes.put(new FuelRecipe(Material.BANNER, 15), info);
+        if (!has1_13Support) {
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("LOG"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("LOG_2"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_STEP"), 7.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("SAPLING"), 5), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_AXE"), 10), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_HOE"), 10), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_PICKAXE"), 10), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_SPADE"), 10), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_SWORD"), 10), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_PLATE"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("FENCE"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("FENCE_GATE"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_STAIRS"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("BIRCH_WOOD_STAIRS"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("SPRUCE_WOOD_STAIRS"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("JUNGLE_WOOD_STAIRS"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("TRAP_DOOR"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("WORKBENCH"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("HUGE_MUSHROOM_1"), 15), info);
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("HUGE_MUSHROOM_2"), 15), info);
 
+            RECIPE_MAPCLONE = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) -1);
+            RECIPE_MAPEXTEND = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) 0);
+            RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.getMaterial("EMPTY_MAP"), 1, (short) 0);
+            RECIPE_FIREWORKS = new ItemStack(Material.getMaterial("FIREWORK"), 0, (short) 0);
+        }
+
+        if (Version.has1_8Support()) {
             initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE, 15), info);
             initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE, 15), info);
             initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE, 15), info);
@@ -132,7 +139,10 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE_GATE, 15), info);
             initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
 
-            RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
+            if (!has1_13Support) {
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BANNER"), 15), info);
+                RECIPE_BANNER = new ItemStack(Material.getMaterial("BANNER"), 0, (short) 0);
+            }
         }
 
         if (Version.has1_9Support()) {
@@ -140,28 +150,30 @@ public class Vanilla {
         }
 
         if (Version.has1_11Support()) {
-            initialRecipes.put(new FuelRecipe(Material.WOOL, 5), info);
-            initialRecipes.put(new FuelRecipe(Material.CARPET, 3.35f), info);
             initialRecipes.put(new FuelRecipe(Material.LADDER, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.WOOD_BUTTON, 5), info);
             initialRecipes.put(new FuelRecipe(Material.BOW, 10), info);
             initialRecipes.put(new FuelRecipe(Material.FISHING_ROD, 15), info);
             initialRecipes.put(new FuelRecipe(Material.SIGN, 10), info);
             initialRecipes.put(new FuelRecipe(Material.BOWL, 5), info);
-            initialRecipes.put(new FuelRecipe(Material.WOOD_DOOR, 10), info); // was WOODEN_DOOR, which is block type, not item type...
-            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_DOOR_ITEM, 10), info);
-            initialRecipes.put(new FuelRecipe(Material.ACACIA_DOOR_ITEM, 10), info);
-            initialRecipes.put(new FuelRecipe(Material.BIRCH_DOOR_ITEM, 10), info);
-            initialRecipes.put(new FuelRecipe(Material.JUNGLE_DOOR_ITEM, 10), info);
-            initialRecipes.put(new FuelRecipe(Material.SPRUCE_DOOR_ITEM, 10), info);
-            initialRecipes.put(new FuelRecipe(Material.BOAT, 20), info);
-            initialRecipes.put(new FuelRecipe(Material.BOAT_ACACIA, 20), info);
-            initialRecipes.put(new FuelRecipe(Material.BOAT_BIRCH, 20), info);
-            initialRecipes.put(new FuelRecipe(Material.BOAT_DARK_OAK, 20), info);
-            initialRecipes.put(new FuelRecipe(Material.BOAT_JUNGLE, 20), info);
-            initialRecipes.put(new FuelRecipe(Material.BOAT_SPRUCE, 20), info);
-
             RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
+
+            if (!has1_13Support) {
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOL"), 5), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("CARPET"), 3.35f), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_BUTTON"), 5), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("WOOD_DOOR"), 10), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("DARK_OAK_DOOR_ITEM"), 10), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("ACACIA_DOOR_ITEM"), 10), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BIRCH_DOOR_ITEM"), 10), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("JUNGLE_DOOR_ITEM"), 10), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("SPRUCE_DOOR_ITEM"), 10), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT"), 20), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_ACACIA"), 20), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_BIRCH"), 20), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_DARK_OAK"), 20), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_JUNGLE"), 20), info);
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_SPRUCE"), 20), info);
+            }
         }
 
         if (Version.has1_12Support()) {
@@ -170,6 +182,168 @@ public class Vanilla {
             PotionData potionData = new PotionData(PotionType.WATER);
             meta.setBasePotionData(potionData);
             RECIPE_TIPPED_ARROW2.setItemMeta(meta);
+        }
+
+        if (has1_13Support) {
+            // Updated old fuels that got renamed in 1.13
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_ACACIA_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_BIRCH_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_DARK_OAK_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_JUNGLE_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_OAK_LOG, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_SPRUCE_LOG, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_ACACIA_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_BIRCH_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_DARK_OAK_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_JUNGLE_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_OAK_WOOD, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.STRIPPED_SPRUCE_WOOD, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_SLAB, 7.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_SLAB, 7.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_SLAB, 7.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_SLAB, 7.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_SLAB, 7.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_SLAB, 7.5f), info);
+            //initialRecipes.put(new FuelRecipe(Material.PETRIFIED_OAK_SLAB, 7.5f), info);  // Maybe?
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_SAPLING, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_SAPLING, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_SAPLING, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_SAPLING, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_SAPLING, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_SAPLING, 5), info);
+
+            initialRecipes.put(new FuelRecipe(Material.WOODEN_AXE, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.WOODEN_HOE, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.WOODEN_PICKAXE, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.WOODEN_SHOVEL, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.WOODEN_SWORD, 10), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_PRESSURE_PLATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_PRESSURE_PLATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_PRESSURE_PLATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_PRESSURE_PLATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_PRESSURE_PLATE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_PRESSURE_PLATE, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.OAK_FENCE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_FENCE_GATE, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_STAIRS, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_STAIRS, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_STAIRS, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_STAIRS, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_STAIRS, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_STAIRS, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_TRAPDOOR, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_TRAPDOOR, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_TRAPDOOR, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_TRAPDOOR, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_TRAPDOOR, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_TRAPDOOR, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.CRAFTING_TABLE, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.BROWN_MUSHROOM_BLOCK, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.RED_MUSHROOM_BLOCK, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.BLACK_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BLUE_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BROWN_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.CYAN_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.GRAY_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.GREEN_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.LIGHT_BLUE_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.LIGHT_GRAY_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.LIME_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.MAGENTA_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.ORANGE_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.PINK_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.PURPLE_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.RED_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.WHITE_BANNER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.YELLOW_BANNER, 15), info);
+
+            initialRecipes.put(new FuelRecipe(Material.BLACK_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.BLUE_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.BROWN_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.CYAN_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.GRAY_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.GREEN_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.LIGHT_BLUE_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.LIGHT_GRAY_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.LIME_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.MAGENTA_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.ORANGE_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.PINK_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.PURPLE_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.RED_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.WHITE_WOOL, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.YELLOW_WOOL, 5), info);
+
+            initialRecipes.put(new FuelRecipe(Material.BLACK_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.BLUE_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.BROWN_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.CYAN_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.GRAY_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.GREEN_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.LIGHT_BLUE_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.LIGHT_GRAY_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.LIME_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.MAGENTA_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.ORANGE_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.PINK_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.PURPLE_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.RED_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.WHITE_CARPET, 3.35f), info);
+            initialRecipes.put(new FuelRecipe(Material.YELLOW_CARPET, 3.35f), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_BUTTON, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_BUTTON, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_BUTTON, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_BUTTON, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_BUTTON, 5), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_BUTTON, 5), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_DOOR, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_DOOR, 10), info);
+
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_BOAT, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_BOAT, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_BOAT, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_BOAT, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_BOAT, 20), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_BOAT, 20), info);
+
+            // New fuels in 1.13
+            initialRecipes.put(new FuelRecipe(Material.DRIED_KELP_BLOCK, 200), info);
+
+            /* TODO: Do these work in 1.13?
+            RECIPE_MAPCLONE = new ItemStack(Material.EMPTY_MAP, 0, (short) -1);
+            RECIPE_MAPEXTEND = new ItemStack(Material.EMPTY_MAP, 0, (short) 0);
+            RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.EMPTY_MAP, 1, (short) 0);
+            RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short) 0);
+            RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
+            */
         }
 
         // Index fuel recipes

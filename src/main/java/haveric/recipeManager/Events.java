@@ -226,8 +226,15 @@ public class Events implements Listener {
             if (!Settings.getInstance().getSpecialFireworks()) {
                 boolean fireworks = false;
 
+
                 if (Version.has1_11Support()) {
-                    if (result.getType().equals(Material.FIREWORK)) {
+                    Material fireworkRocketMaterial;
+                    if (Version.has1_13Support()) {
+                        fireworkRocketMaterial = Material.FIREWORK_ROCKET;
+                    } else {
+                        fireworkRocketMaterial = Material.getMaterial("FIREWORK");
+                    }
+                    if (result.getType() == fireworkRocketMaterial) {
                         fireworks = true;
                     }
                 } else if (recipeResult.equals(Vanilla.RECIPE_FIREWORKS)) {
@@ -242,10 +249,18 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialFireworkStar()) {
-                if (Version.has1_11Support() && result.getType().equals(Material.FIREWORK_CHARGE)) {
-                    Messages.getInstance().sendOnce(player, "craft.special.fireworkstar");
-                    inv.setResult(null);
-                    return true;
+                if (Version.has1_11Support()) {
+                    Material fireworkStarMaterial;
+                    if (Version.has1_13Support()) {
+                        fireworkStarMaterial = Material.FIREWORK_STAR;
+                    } else {
+                        fireworkStarMaterial = Material.getMaterial("FIREWORK_CHARGE");
+                    }
+                    if (result.getType() == fireworkStarMaterial) {
+                        Messages.getInstance().sendOnce(player, "craft.special.fireworkstar");
+                        inv.setResult(null);
+                        return true;
+                    }
                 }
             }
 
@@ -270,8 +285,10 @@ public class Events implements Listener {
             if (!Settings.getInstance().getSpecialBanner()) {
                 boolean isBanner = false;
 
-                if (Version.has1_11Support()) {
-                    if (result.getType().equals(Material.BANNER)) {
+                if (Version.has1_13Support()) {
+                    // TODO: Does 1.13 support special recipes?
+                } else if (Version.has1_11Support()) {
+                    if (result.getType().equals(Material.getMaterial("BANNER"))) {
                         isBanner = true;
                     }
                 } else if (recipeResult.equals(Vanilla.RECIPE_BANNER)) {
@@ -680,29 +697,33 @@ public class Events implements Listener {
             case RIGHT_CLICK_BLOCK:
                 Block block = event.getClickedBlock();
 
-                switch (block.getType()) {
-                    case WORKBENCH:
-                    case FURNACE:
-                    case BURNING_FURNACE:
-                    case BREWING_STAND:
-                    case ENCHANTMENT_TABLE:
-                    case ANVIL:
-                        if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
-                            event.setCancelled(true);
-                            return;
-                        }
+                Material craftingTableMaterial;
+                Material enchantingTableMaterial;
+                if (Version.has1_13Support()) {
+                    craftingTableMaterial = Material.CRAFTING_TABLE;
+                    enchantingTableMaterial = Material.ENCHANTING_TABLE;
+                } else {
+                    craftingTableMaterial = Material.getMaterial("WORKBENCH");
+                    enchantingTableMaterial = Material.getMaterial("ENCHANTMENT_TABLE");
+                }
 
-                        if (block.getType() == Material.WORKBENCH) {
-                            Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
-                        }
+                Material blockType = block.getType();
 
-                        break;
-                    default:
-                        break;
+                if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == Material.ANVIL ||
+                        blockType == craftingTableMaterial || blockType == enchantingTableMaterial ||
+                        (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
+
+                    if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    if (blockType == craftingTableMaterial) {
+                        Workbenches.add(event.getPlayer(), event.getClickedBlock().getLocation());
+                    }
                 }
 
                 break;
-
 
             case PHYSICAL:
                 break;
@@ -1260,7 +1281,12 @@ public class Events implements Listener {
             }, burnTime);
         }
 
-        boolean isBurning = furnace.getType() == Material.BURNING_FURNACE;
+        boolean isBurning;
+        if (Version.has1_13Support()) {
+            isBurning = furnace.getBurnTime() == 0; // TODO: This is a guess for 1.13 update, verify functionality
+        } else {
+            isBurning = furnace.getType() == Material.getMaterial("BURNING_FURNACE");
+        }
         if (recipe != null && !isBurning) {
             runFurnaceUpdateLater(furnace.getBlock(), cookTime);
         }
@@ -1429,16 +1455,10 @@ public class Events implements Listener {
         Material type = block.getType();
         Location location = block.getLocation();
 
-        switch(type) {
-            case BURNING_FURNACE:
-            case FURNACE:
-                Furnaces.add(location);
-                break;
-            case BREWING_STAND:
-                BrewingStands.add(location);
-                break;
-            default:
-                break;
+        if (type == Material.FURNACE || (!Version.has1_13Support() && type == Material.getMaterial("BURNING_FURNACE"))) {
+            Furnaces.add(location);
+        } else if (type == Material.BREWING_STAND) {
+            BrewingStands.add(location);
         }
     }
 
@@ -1448,16 +1468,10 @@ public class Events implements Listener {
         Material type = block.getType();
         Location location = block.getLocation();
 
-        switch(type) {
-            case BURNING_FURNACE:
-            case FURNACE:
-                Furnaces.remove(location);
-                break;
-            case BREWING_STAND:
-                BrewingStands.remove(location);
-                break;
-            default:
-                break;
+        if (type == Material.FURNACE || (!Version.has1_13Support() && type == Material.getMaterial("BURNING_FURNACE"))) {
+            Furnaces.remove(location);
+        } else if (type == Material.BREWING_STAND) {
+            BrewingStands.remove(location);
         }
     }
 

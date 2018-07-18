@@ -38,17 +38,17 @@ public class FlagBlockTest extends FlagBaseTest {
 
         mockStatic(Block.class);
         Block unpoweredWorkbench = mock(Block.class);
-        when(unpoweredWorkbench.getType()).thenReturn(Material.WORKBENCH);
+        when(unpoweredWorkbench.getType()).thenReturn(Material.CRAFTING_TABLE);
         when(unpoweredWorkbenchLoc.getBlock()).thenReturn(unpoweredWorkbench);
 
         Block directWorkbench = mock(Block.class);
-        when(directWorkbench.getType()).thenReturn(Material.WORKBENCH);
+        when(directWorkbench.getType()).thenReturn(Material.CRAFTING_TABLE);
         when(directWorkbench.isBlockPowered()).thenReturn(true);
         when(directWorkbench.isBlockIndirectlyPowered()).thenReturn(false);
         when(directWorkbenchLoc.getBlock()).thenReturn(directWorkbench);
 
         Block indirectWorkbench = mock(Block.class);
-        when(indirectWorkbench.getType()).thenReturn(Material.WORKBENCH);
+        when(indirectWorkbench.getType()).thenReturn(Material.CRAFTING_TABLE);
         when(indirectWorkbench.isBlockPowered()).thenReturn(false);
         when(indirectWorkbench.isBlockIndirectlyPowered()).thenReturn(true);
         when(indirectWorkbenchLoc.getBlock()).thenReturn(indirectWorkbench);
