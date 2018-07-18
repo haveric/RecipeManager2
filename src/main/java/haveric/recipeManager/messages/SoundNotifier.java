@@ -11,17 +11,17 @@ public class SoundNotifier {
 
 
     public static void sendDenySound(Player player, Location location) {
-        Sound soundBlockNoteBass = Tools.getSound("BLOCK_NOTE_BASS", "NOTE_BASS");
+        Sound soundBlockNoteBass = Tools.getSound("BLOCK_NOTE_BASS");
         sendSound(player, location, soundBlockNoteBass, 0.8f, 4, Settings.getInstance().getSoundsFailedClick());
     }
 
     public static void sendFailSound(Player player, Location location) {
-        Sound soundBlockNotePling = Tools.getSound("BLOCK_NOTE_PLING", "NOTE_PLING");
+        Sound soundBlockNotePling = Tools.getSound("BLOCK_NOTE_PLING");
         sendSound(player, location, soundBlockNotePling, 0.8f, 4, Settings.getInstance().getSoundsFailed());
     }
 
     public static void sendRepairSound(Player player, Location location) {
-        Sound soundBlockAnvilUse = Tools.getSound("BLOCK_ANVIL_USE", "ANVIL_USE");
+        Sound soundBlockAnvilUse = Tools.getSound("BLOCK_ANVIL_USE");
         sendSound(player, location, soundBlockAnvilUse, 0.8f, 4, Settings.getInstance().getSoundsRepair());
     }
 

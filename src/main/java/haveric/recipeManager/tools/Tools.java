@@ -970,18 +970,25 @@ public class Tools {
         return false;
     }
 
-    public static Sound getSound(String newSound, String oldSound) {
+    public static Sound getSound(String newSound) {
         Sound sound = null;
 
-        if (Version.has1_9Support()) {
+        if (Version.has1_13Support()) {
             // set known sounds to make sure Enum isn't changing on us
             switch (newSound) {
-                case "BLOCK_NOTE_BASS":
-                    sound = Sound.BLOCK_NOTE_BASS;
+                case "BLOCK_NOTE_BASE":
+                    sound = Sound.BLOCK_NOTE_BLOCK_BASS;
                     break;
-                case "BLOCK_NOTE_PING":
-                    sound = Sound.BLOCK_NOTE_PLING;
+                case "BLOCK_NOTE_PLING":
+                    sound = Sound.BLOCK_NOTE_BLOCK_PLING;
                     break;
+                default:
+                    sound = Sound.valueOf(newSound);
+                    break;
+            }
+        } else if (Version.has1_9Support()) {
+            // set known sounds to make sure Enum isn't changing on us
+            switch (newSound) {
                 case "BLOCK_ANVIL_USE":
                     sound = Sound.BLOCK_ANVIL_USE;
                     break;
@@ -993,10 +1000,30 @@ public class Tools {
                     break;
             }
         } else {
-            try {
-                sound = Sound.valueOf(oldSound);
-            } catch (IllegalArgumentException e2) {
-                // Sound is missing
+            ArrayList<String> oldSounds = new ArrayList<>();
+            switch (newSound) {
+                case "BLOCK_NOTE_BASE":
+                    oldSounds.add("NOTE_BASS");
+                    break;
+                case "BLOCK_NOTE_PLING":
+                    oldSounds.add("NOTE_PLING");
+                    break;
+                case "BLOCK_ANVIL_USE":
+                    oldSounds.add("ANVIL_USE");
+                    break;
+                case "ENTITY_ITEM_BREAK":
+                    oldSounds.add("ITEM_BREAK");
+                    break;
+                default:
+                    break;
+            }
+
+            for (String oldSound : oldSounds) {
+                try {
+                    sound = Sound.valueOf(oldSound);
+                } catch (IllegalArgumentException e2) {
+                    // Sound is missing
+                }
             }
         }
 

@@ -205,7 +205,7 @@ public class FlagKeepItem extends Flag {
                         short data = (short) (dmg + clone.getDurability());
 
                         if (data > maxDurability) {
-                            Sound soundItemBreak = Tools.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK");
+                            Sound soundItemBreak = Tools.getSound("ENTITY_ITEM_BREAK");
                             if (a.hasLocation()) {
                                 a.location().getWorld().playSound(a.location(), soundItemBreak, 1.0f, 0.0f);
                             }
