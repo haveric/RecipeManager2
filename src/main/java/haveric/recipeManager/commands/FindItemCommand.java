@@ -42,24 +42,6 @@ public class FindItemCommand implements CommandExecutor {
             }
 
             found.add(item.getType());
-        } else {
-            int id;
-
-            try {
-                id = Integer.parseInt(find);
-            } catch (NumberFormatException e) {
-                id = 0;
-            }
-
-            if (id > 0) {
-                Material mat = Material.getMaterial(id);
-
-                if (mat == null) {
-                    Messages.getInstance().send(sender, "cmd.finditem.notfound", "{argument}", id);
-                } else {
-                    found.add(mat);
-                }
-            }
         }
 
         if (found.isEmpty()) {
