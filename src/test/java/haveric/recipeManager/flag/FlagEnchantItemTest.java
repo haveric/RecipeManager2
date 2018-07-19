@@ -25,10 +25,10 @@ public class FlagEnchantItemTest extends FlagBaseTest {
 
     @Before
     public void setup() {
-        Enchantment.registerEnchantment(new TestEnchantmentSharpness(16));
-        Enchantment.registerEnchantment(new TestEnchantmentOxygen(5));
-        Enchantment.registerEnchantment(new TestEnchantmentDigSpeed(32));
-        Enchantment.registerEnchantment(new TestEnchantmentInfinity(51));
+        Enchantment.registerEnchantment(new TestEnchantmentSharpness(Enchantment.DAMAGE_ALL));
+        Enchantment.registerEnchantment(new TestEnchantmentOxygen(Enchantment.OXYGEN));
+        Enchantment.registerEnchantment(new TestEnchantmentDigSpeed(Enchantment.DIG_SPEED));
+        Enchantment.registerEnchantment(new TestEnchantmentInfinity(Enchantment.ARROW_INFINITE));
         when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
         when(settings.getEnchantment("oxygen")).thenReturn(Enchantment.OXYGEN);
         when(settings.getEnchantment("digspeed")).thenReturn(Enchantment.DIG_SPEED);

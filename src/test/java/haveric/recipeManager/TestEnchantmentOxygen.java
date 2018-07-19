@@ -5,8 +5,10 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
 public class TestEnchantmentOxygen extends Enchantment {
-    public TestEnchantmentOxygen(int id) {
-        super(id);
+    private final Enchantment target;
+    public TestEnchantmentOxygen(Enchantment target) {
+        super(target.getKey());
+        this.target = target;
     }
 
     @Override

@@ -39,7 +39,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
 
     @Before
     public void setup() {
-        Enchantment.registerEnchantment(new TestEnchantmentSharpness(16));
+        Enchantment.registerEnchantment(new TestEnchantmentSharpness(Enchantment.DAMAGE_ALL));
         when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
 
         mockStatic(Inventory.class);

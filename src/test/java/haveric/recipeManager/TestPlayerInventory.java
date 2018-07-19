@@ -185,9 +185,4 @@ public class TestPlayerInventory extends TestCraftInventory implements PlayerInv
     public void setHeldItemSlot(int slot) {
 
     }
-
-    @Override
-    public int clear(int id, int data) {
-        return 0;
-    }
 }

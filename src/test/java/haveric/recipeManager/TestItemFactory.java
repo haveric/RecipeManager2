@@ -24,9 +24,21 @@ public class TestItemFactory implements ItemFactory {
                 return null;
             case WRITTEN_BOOK:
                 return meta instanceof TestMetaBookSigned ? meta : new TestMetaBookSigned(meta);
-            case BOOK_AND_QUILL:
+            case WRITABLE_BOOK:
                 return meta != null && meta.getClass().equals(TestMetaBook.class) ? meta : new TestMetaBook(meta);
-            case SKULL_ITEM:
+            case CREEPER_HEAD:
+            case CREEPER_WALL_HEAD:
+            case DRAGON_HEAD:
+            case DRAGON_WALL_HEAD:
+            case PISTON_HEAD:
+            case PLAYER_HEAD:
+            case PLAYER_WALL_HEAD:
+            case SKELETON_SKULL:
+            case SKELETON_WALL_SKULL:
+            case WITHER_SKELETON_SKULL:
+            case WITHER_SKELETON_WALL_SKULL:
+            case ZOMBIE_HEAD:
+            case ZOMBIE_WALL_HEAD:
                 //return meta instanceof CraftMetaSkull ? meta : new CraftMetaSkull(meta);
             case LEATHER_HELMET:
             case LEATHER_CHESTPLATE:
@@ -38,17 +50,90 @@ public class TestItemFactory implements ItemFactory {
             case LINGERING_POTION:
             case TIPPED_ARROW:
                 return meta instanceof TestMetaPotion ? meta : new TestMetaPotion(meta);
-            case MAP:
+            case FILLED_MAP:
                 return meta instanceof TestMetaMap ? meta : new TestMetaMap(meta);
-            case FIREWORK:
+            case FIREWORK_ROCKET:
                 return meta instanceof TestMetaFirework ? meta : new TestMetaFirework(meta);
-            case FIREWORK_CHARGE:
+            case FIREWORK_STAR:
                 return meta instanceof TestMetaCharge ? meta : new TestMetaCharge(meta);
             case ENCHANTED_BOOK:
                 return meta instanceof TestMetaEnchantedBook ? meta : new TestMetaEnchantedBook(meta);
-            case BANNER:
+            case BLACK_BANNER:
+            case BLACK_WALL_BANNER:
+            case BLUE_BANNER:
+            case BLUE_WALL_BANNER:
+            case BROWN_BANNER:
+            case BROWN_WALL_BANNER:
+            case CYAN_BANNER:
+            case CYAN_WALL_BANNER:
+            case GRAY_BANNER:
+            case GRAY_WALL_BANNER:
+            case GREEN_BANNER:
+            case GREEN_WALL_BANNER:
+            case LIGHT_BLUE_BANNER:
+            case LIGHT_BLUE_WALL_BANNER:
+            case LIGHT_GRAY_BANNER:
+            case LIGHT_GRAY_WALL_BANNER:
+            case LIME_BANNER:
+            case LIME_WALL_BANNER:
+            case MAGENTA_BANNER:
+            case MAGENTA_WALL_BANNER:
+            case ORANGE_BANNER:
+            case ORANGE_WALL_BANNER:
+            case PINK_BANNER:
+            case PINK_WALL_BANNER:
+            case PURPLE_BANNER:
+            case PURPLE_WALL_BANNER:
+            case RED_BANNER:
+            case RED_WALL_BANNER:
+            case WHITE_BANNER:
+            case WHITE_WALL_BANNER:
+            case YELLOW_BANNER:
+            case YELLOW_WALL_BANNER:
                 return meta instanceof TestMetaBanner ? meta : new TestMetaBanner(meta);
-            case MONSTER_EGG:
+            case BAT_SPAWN_EGG:
+            case BLAZE_SPAWN_EGG:
+            case CAVE_SPIDER_SPAWN_EGG:
+            case CHICKEN_SPAWN_EGG:
+            case COW_SPAWN_EGG:
+            case CREEPER_SPAWN_EGG:
+            case DONKEY_SPAWN_EGG:
+            case ELDER_GUARDIAN_SPAWN_EGG:
+            case ENDERMAN_SPAWN_EGG:
+            case ENDERMITE_SPAWN_EGG:
+            case EVOKER_SPAWN_EGG:
+            case GHAST_SPAWN_EGG:
+            case GUARDIAN_SPAWN_EGG:
+            case HORSE_SPAWN_EGG:
+            case HUSK_SPAWN_EGG:
+            case LLAMA_SPAWN_EGG:
+            case MAGMA_CUBE_SPAWN_EGG:
+            case MOOSHROOM_SPAWN_EGG:
+            case MULE_SPAWN_EGG:
+            case OCELOT_SPAWN_EGG:
+            case PARROT_SPAWN_EGG:
+            case PIG_SPAWN_EGG:
+            case POLAR_BEAR_SPAWN_EGG:
+            case RABBIT_SPAWN_EGG:
+            case SHEEP_SPAWN_EGG:
+            case SHULKER_SPAWN_EGG:
+            case SILVERFISH_SPAWN_EGG:
+            case SKELETON_HORSE_SPAWN_EGG:
+            case SKELETON_SPAWN_EGG:
+            case SLIME_SPAWN_EGG:
+            case SPIDER_SPAWN_EGG:
+            case SQUID_SPAWN_EGG:
+            case STRAY_SPAWN_EGG:
+            case VEX_SPAWN_EGG:
+            case VILLAGER_SPAWN_EGG:
+            case VINDICATOR_SPAWN_EGG:
+            case WITCH_SPAWN_EGG:
+            case WITHER_SKELETON_SPAWN_EGG:
+            case WOLF_SPAWN_EGG:
+            case ZOMBIE_HORSE_SPAWN_EGG:
+            case ZOMBIE_PIGMAN_SPAWN_EGG:
+            case ZOMBIE_SPAWN_EGG:
+            case ZOMBIE_VILLAGER_SPAWN_EGG:
                 return meta instanceof TestMetaSpawnEgg ? meta : new TestMetaSpawnEgg(meta);
             case FURNACE:
             case CHEST:
@@ -57,21 +142,37 @@ public class TestItemFactory implements ItemFactory {
             case DISPENSER:
             case DROPPER:
             case SIGN:
-            case MOB_SPAWNER:
+            case SPAWNER:
             case NOTE_BLOCK:
-            case PISTON_BASE:
-            case BREWING_STAND_ITEM:
-            case ENCHANTMENT_TABLE:
-            case COMMAND:
-            case COMMAND_REPEATING:
-            case COMMAND_CHAIN:
+            case BREWING_STAND:
+            case ENCHANTING_TABLE:
+            case COMMAND_BLOCK:
+            case REPEATING_COMMAND_BLOCK:
+            case CHAIN_COMMAND_BLOCK:
             case BEACON:
             case DAYLIGHT_DETECTOR:
-            case DAYLIGHT_DETECTOR_INVERTED:
             case HOPPER:
-            case REDSTONE_COMPARATOR:
-            case FLOWER_POT_ITEM:
+            case COMPARATOR:
             case SHIELD:
+            case STRUCTURE_BLOCK:
+            case SHULKER_BOX:
+            case WHITE_SHULKER_BOX:
+            case ORANGE_SHULKER_BOX:
+            case MAGENTA_SHULKER_BOX:
+            case LIGHT_BLUE_SHULKER_BOX:
+            case YELLOW_SHULKER_BOX:
+            case LIME_SHULKER_BOX:
+            case PINK_SHULKER_BOX:
+            case GRAY_SHULKER_BOX:
+            case LIGHT_GRAY_SHULKER_BOX:
+            case CYAN_SHULKER_BOX:
+            case PURPLE_SHULKER_BOX:
+            case BLUE_SHULKER_BOX:
+            case BROWN_SHULKER_BOX:
+            case GREEN_SHULKER_BOX:
+            case RED_SHULKER_BOX:
+            case BLACK_SHULKER_BOX:
+            case ENDER_CHEST:
                 //return new CraftMetaBlockState(meta, material);
             default:
                 return new TestMetaItem(meta);
@@ -141,5 +242,10 @@ public class TestItemFactory implements ItemFactory {
     @Override
     public Color getDefaultLeatherColor() {
         return Color.fromRGB(160, 101, 64);
+    }
+
+    @Override
+    public Material updateMaterial(ItemMeta meta, Material material) throws IllegalArgumentException {
+        return null;
     }
 }

@@ -5,8 +5,10 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
 public class TestEnchantmentInfinity extends Enchantment {
-    public TestEnchantmentInfinity(int id) {
-        super(id);
+    private final Enchantment target;
+    public TestEnchantmentInfinity(Enchantment target) {
+        super(target.getKey());
+        this.target = target;
     }
 
     @Override
