@@ -70,7 +70,7 @@ public class FuelRecipe extends BaseRecipe {
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
 
-        hash = ("fuel" + newIngredient.getTypeId() + ":" + newIngredient.getDurability()).hashCode();
+        hash = ("fuel" + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     public float getMinTime() {
@@ -120,7 +120,7 @@ public class FuelRecipe extends BaseRecipe {
     }
 
     public String getIndexString() {
-        String indexString = "" + ingredient.getTypeId();
+        String indexString = "" + ingredient.getType().toString();
 
         if (ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
             indexString += ":" + ingredient.getDurability();

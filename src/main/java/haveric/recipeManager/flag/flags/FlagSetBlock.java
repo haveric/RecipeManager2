@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -49,7 +50,7 @@ public class FlagSetBlock extends Flag {
     }
 
 
-    private int id;
+    private Material type;
     private byte data;
     private boolean drop;
     private boolean noInv;
@@ -59,7 +60,7 @@ public class FlagSetBlock extends Flag {
     }
 
     public FlagSetBlock(FlagSetBlock flag) {
-        id = flag.id;
+        type = flag.type;
         data = flag.data;
         drop = flag.drop;
         noInv = flag.noInv;
@@ -84,7 +85,7 @@ public class FlagSetBlock extends Flag {
             return false;
         }
 
-        id = item.getTypeId();
+        type = item.getType();
         data = (byte) item.getDurability();
 
         if (args.length > 1) {
@@ -137,6 +138,8 @@ public class FlagSetBlock extends Flag {
             block.breakNaturally();
         }
 
-        block.setTypeIdAndData(id, data, true);
+
+        block.setType(type, true);
+        block.setData(data, true);
     }
 }

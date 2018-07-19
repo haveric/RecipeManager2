@@ -182,10 +182,10 @@ public class Recipes {
         SmeltRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexSmelt.get(ingredient.getTypeId() + ":" + ingredient.getDurability());
+            recipe = indexSmelt.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
 
             if (recipe == null) {
-                recipe = indexSmelt.get(ingredient.getTypeId() + ":" + Vanilla.DATA_WILDCARD);
+                recipe = indexSmelt.get(ingredient.getType().toString() + ":" + Vanilla.DATA_WILDCARD);
             }
         }
 
@@ -196,10 +196,10 @@ public class Recipes {
         BrewRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexBrew.get(ingredient.getTypeId() + ":" + ingredient.getDurability());
+            recipe = indexBrew.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
 
             if (recipe == null) {
-                recipe = indexBrew.get(ingredient.getTypeId() + ":" + Vanilla.DATA_WILDCARD);
+                recipe = indexBrew.get(ingredient.getType().toString() + ":" + Vanilla.DATA_WILDCARD);
             }
         }
 
@@ -211,10 +211,10 @@ public class Recipes {
             return null;
         }
 
-        SmeltRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getTypeId()));
+        SmeltRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getType().toString()));
 
         if (recipe == null) {
-            return indexSmeltFuels.get(fuel.getTypeId() + ":" + fuel.getDurability());
+            return indexSmeltFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
         }
 
         return recipe;
@@ -232,10 +232,10 @@ public class Recipes {
             return null;
         }
 
-        FuelRecipe recipe = indexFuels.get(String.valueOf(fuel.getTypeId()));
+        FuelRecipe recipe = indexFuels.get(String.valueOf(fuel.getType().toString()));
 
         if (recipe == null) {
-            return indexFuels.get(fuel.getTypeId() + ":" + fuel.getDurability());
+            return indexFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
         }
 
         return recipe;

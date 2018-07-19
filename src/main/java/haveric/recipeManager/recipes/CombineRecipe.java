@@ -117,7 +117,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         StringBuilder str = new StringBuilder("combine");
 
         for (ItemStack item : ingredients) {
-            str.append(item.getTypeId()).append(':').append(item.getDurability()).append(';');
+            str.append(item.getType().toString()).append(':').append(item.getDurability()).append(';');
         }
 
         hash = str.toString().hashCode();

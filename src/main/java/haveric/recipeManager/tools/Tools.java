@@ -26,15 +26,9 @@ import java.util.Map.Entry;
  */
 public class Tools {
     public static Enchantment parseEnchant(String value) {
-        Enchantment enchant;
+        value = RMCUtil.parseAliasName(value);
 
-        try {
-            enchant = Enchantment.getById(Integer.parseInt(value));
-        } catch (NumberFormatException e) {
-            value = RMCUtil.parseAliasName(value);
-
-            enchant = Settings.getInstance().getEnchantment(value);
-        }
+        Enchantment enchant = Settings.getInstance().getEnchantment(value);
 
         if (enchant != null) {
             return enchant;
@@ -165,12 +159,6 @@ public class Tools {
             return null;
         }
 
-        int type = material.getId();
-
-        if (type <= 0) {
-            return new ItemStack(Material.AIR);
-        }
-
         int data = defaultData;
 
         if (split.length > 1) {
@@ -233,13 +221,13 @@ public class Tools {
             }
         }
 
-        ItemStack item = new ItemStack(type, amount, (short) data);
+        ItemStack item = new ItemStack(material, amount, (short) data);
 
         if (args.length > 1) {
             ItemMeta meta = item.getItemMeta();
 
             if (meta == null && (settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                ErrorReporter.getInstance().warning("The " + type + " material doesn't support item meta, name/lore/enchants ignored.");
+                ErrorReporter.getInstance().warning("The " + material.toString() + " material doesn't support item meta, name/lore/enchants ignored.");
                 return item;
             }
 
@@ -667,7 +655,7 @@ public class Tools {
      * For use in furnace smelting and fuel recipes HashMap
      */
     public static String convertItemToStringId(ItemStack item) {
-        String stringId = "" + item.getTypeId();
+        String stringId = "" + item.getType().toString();
 
         if (item.getDurability() != Vanilla.DATA_WILDCARD) {
             stringId += ":" + item.getDurability();
@@ -896,20 +884,18 @@ public class Tools {
     public static void sortIngredientList(List<ItemStack> ingredients) {
         ingredients.sort(new Comparator<ItemStack>() {
             public int compare(ItemStack item1, ItemStack item2) {
-                int id1 = item1.getTypeId();
-                int id2 = item2.getTypeId();
+                String id1 = item1.getType().toString();
+                String id2 = item2.getType().toString();
 
                 int compare;
-                if (id1 == id2) {
+                if (id1.equals(id2)) {
                     if (item1.getDurability() > item2.getDurability()) {
                         compare = -1;
                     } else {
                         compare = 1;
                     }
-                } else if (id1 > id2) {
-                    compare = -1;
                 } else {
-                    compare = 1;
+                    compare = id1.compareTo(id2);
                 }
 
                 return compare;
@@ -922,7 +908,7 @@ public class Tools {
 
         for (Entry<Character, ItemStack> entry : recipe.getIngredientMap().entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null) {
-                str.append(entry.getKey()).append('=').append(entry.getValue().getTypeId()).append(':').append(entry.getValue().getDurability()).append(';');
+                str.append(entry.getKey()).append('=').append(entry.getValue().getType().toString()).append(':').append(entry.getValue().getDurability()).append(';');
             }
         }
 
@@ -941,14 +927,14 @@ public class Tools {
                 continue;
             }
 
-            str.append(ingredient.getTypeId()).append(':').append(ingredient.getDurability()).append(';');
+            str.append(ingredient.getType().toString()).append(':').append(ingredient.getDurability()).append(';');
         }
 
         return str.toString();
     }
 
     public static String convertFurnaceRecipeToString(FurnaceRecipe recipe) {
-        return "f_" + recipe.getInput().getTypeId() + ":" + recipe.getInput().getDurability();
+        return "f_" + recipe.getInput().getType().toString() + ":" + recipe.getInput().getDurability();
     }
 
     public static String convertLocationToString(Location location) {

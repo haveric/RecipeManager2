@@ -95,10 +95,10 @@ public class FlagKeepItem extends Flag {
     }
 
     public Object getItem(ItemStack item) {
-        Object obj = keepItems.get(String.valueOf(item.getTypeId() + ":" + item.getDurability()));
+        Object obj = keepItems.get(String.valueOf(item.getType().toString() + ":" + item.getDurability()));
 
         if (obj == null) {
-            return keepItems.get(String.valueOf(item.getTypeId()));
+            return keepItems.get(String.valueOf(item.getType().toString()));
         }
 
         return obj;
@@ -110,7 +110,7 @@ public class FlagKeepItem extends Flag {
      *            can be Integer or ItemStack object
      */
     public void addItem(ItemStack item, Object object) {
-        String key = "" + item.getTypeId();
+        String key = "" + item.getType().toString();
 
         if (item.getDurability() != Vanilla.DATA_WILDCARD) {
             key += ":" + item.getDurability();
@@ -129,7 +129,7 @@ public class FlagKeepItem extends Flag {
             return false;
         }
 
-        String key = "" + item.getTypeId();
+        String key = "" + item.getType().toString();
         if (item.getDurability() != Vanilla.DATA_WILDCARD) {
             key += ":" + item.getDurability();
         }

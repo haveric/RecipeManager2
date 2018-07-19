@@ -243,9 +243,9 @@ public class FlagIngredientCondition extends Flag {
         List<ConditionsIngredient> conditionsList = new ArrayList<>();
         for (Entry<String, ConditionsIngredient> entry : conditions.entrySet()) {
             String key = entry.getKey();
-            if (key.startsWith(String.valueOf(item.getTypeId() + ":" + item.getDurability() + "-"))) {
+            if (key.startsWith(String.valueOf(item.getType().toString() + ":" + item.getDurability() + "-"))) {
                 conditionsList.add(entry.getValue());
-            } else if (key.startsWith(String.valueOf(item.getTypeId() + "-"))) {
+            } else if (key.startsWith(String.valueOf(item.getType().toString() + "-"))) {
                 conditionsList.add(entry.getValue());
             }
         }

@@ -87,11 +87,11 @@ public class BrewRecipe extends MultiResultRecipe {
         this.ingredient = ingredient;
 
         // build hashCode
-        hash = ("brew" + ingredient.getTypeId() + ':' + ingredient.getDurability() + ';').hashCode();
+        hash = ("brew" + ingredient.getType().toString() + ':' + ingredient.getDurability() + ';').hashCode();
     }
 
     public String getIndexString() {
-        String indexString = "" + ingredient.getTypeId();
+        String indexString = "" + ingredient.getType().toString();
 
         if (ingredient.getDurability() != Vanilla.DATA_WILDCARD) {
             indexString += ":" + ingredient.getDurability();

@@ -501,19 +501,13 @@ public class Files {
         s.append(NL).append("<a name='enchantment'></a><a href='#contents'>^ Contents</a><h3>ENCHANTMENTS LIST</h3>");
         s.append("<a href='" + BUKKIT_DOCS + "enchantments/Enchantment.html'>BukkitAPI / Enchantment</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-26s %-24s %-12s %s", "ID", "Name", "Alias", "Item type", "Level range"));
+        s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", "Key", "Name", "Alias", "Item type", "Level range"));
 
         List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
         enchantments.sort(new Comparator<Enchantment>() {
             public int compare(Enchantment e1, Enchantment e2) {
-                int compare;
-                if (e1.getId() > e2.getId()) {
-                    compare = 1;
-                } else {
-                    compare = -1;
-                }
-                return compare;
+                return e1.getKey().getKey().compareTo(e2.getKey().getKey());
             }
         });
 
@@ -523,7 +517,7 @@ public class Files {
                 // Fall back to all if the target is null.
                 target = EnchantmentTarget.ALL;
             }
-            s.append(NL).append(String.format(" %-5d %-26s %-24s %-12s %s", e.getId(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
+            s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
         }
 
         s.append(NL);

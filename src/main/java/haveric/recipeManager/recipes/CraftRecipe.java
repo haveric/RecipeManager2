@@ -196,7 +196,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                     width = Math.max(width, w);
                     height = Math.max(height, h);
 
-                    str.append(item.getTypeId()).append(':').append(item.getDurability());
+                    str.append(item.getType().toString()).append(':').append(item.getDurability());
 
                     if (item.getEnchantments().size() > 0) {
                         for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {

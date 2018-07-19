@@ -70,7 +70,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
-        hash = ("smelt" + newIngredient.getTypeId() + ":" + newIngredient.getDurability()).hashCode();
+        hash = ("smelt" + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     public ItemResult getFuel() {
@@ -169,17 +169,12 @@ public class SmeltRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    @Override
-    public int getIndex() {
-        return ingredient.getTypeId();
-    }
-
     public String getIndexString() {
-        return ingredient.getTypeId() + ":" + ingredient.getDurability();
+        return ingredient.getType().toString() + ":" + ingredient.getDurability();
     }
 
     public String getFuelIndex() {
-        String fuelIndex = "" + fuel.getTypeId();
+        String fuelIndex = "" + fuel.getType().toString();
 
         if (fuel.getDurability() != Vanilla.DATA_WILDCARD) {
             fuelIndex += ":" + fuel.getDurability();
