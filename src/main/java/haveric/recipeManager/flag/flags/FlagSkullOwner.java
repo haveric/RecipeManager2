@@ -143,7 +143,15 @@ public class FlagSkullOwner extends Flag {
 
         // Sets the block to the skull and retrieves the updated ItemStack from the drops.
         // This is needed because setOwner will not update the inventory texture.
-        block.setType(Material.SKULL);
+
+        Material skullMaterial;
+        if (Version.has1_13Support()) {
+            skullMaterial = Material.PLAYER_HEAD;
+        } else {
+            skullMaterial = Material.getMaterial("SKULL");
+        }
+
+        block.setType(skullMaterial);
         BlockState newState = block.getState();
         if (Version.has1_12Support() && offlinePlayer != null) {
             Skull skull = (Skull) newState;

@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
@@ -96,8 +97,15 @@ public class FlagLaunchFirework extends Flag {
 
     @Override
     public boolean onParse(String value) {
+        Material fireworkMaterial;
+        if (Version.has1_13Support()) {
+            fireworkMaterial = Material.FIREWORK_ROCKET;
+        } else {
+            fireworkMaterial = Material.getMaterial("FIREWORK");
+        }
+
         if (firework == null) {
-            firework = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK);
+            firework = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(fireworkMaterial);
         }
 
         firework.setPower(DEFAULT_POWER);

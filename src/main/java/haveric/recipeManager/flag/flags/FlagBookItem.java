@@ -5,6 +5,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
@@ -147,8 +148,19 @@ public class FlagBookItem extends Flag {
 
         String trimmed = RMCUtil.trimExactQuotes(value);
         if (setTitle || setAuthor) {
-            if (result.getType() == Material.BOOK_AND_QUILL) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can not have title or author set on BOOK_AND_QUILL, only WRITTEN_BOOK.");
+
+            String bookType;
+            Material writableBookMaterial;
+            if (Version.has1_13Support()) {
+                writableBookMaterial = Material.WRITABLE_BOOK;
+                bookType = "WRITABLE_BOOK";
+            } else {
+                writableBookMaterial = Material.getMaterial("BOOK_AND_QUILL");
+                bookType = "BOOK_AND_QUILL";
+            }
+
+            if (result.getType() == writableBookMaterial) {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can not have title or author set on " + bookType + ", only WRITTEN_BOOK.");
                 return true;
             }
 

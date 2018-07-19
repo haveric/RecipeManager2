@@ -303,7 +303,6 @@ public class ToolsItem {
         boolean isShulkerBox;
 
         switch(material) {
-            case SILVER_SHULKER_BOX:
             case BLACK_SHULKER_BOX:
             case BLUE_SHULKER_BOX:
             case BROWN_SHULKER_BOX:
@@ -324,6 +323,16 @@ public class ToolsItem {
             default:
                 isShulkerBox = false;
                 break;
+        }
+
+        Material grayShulkerMaterial;
+        if (Version.has1_13Support()) {
+            grayShulkerMaterial = Material.LIGHT_GRAY_SHULKER_BOX;
+        } else {
+            grayShulkerMaterial = Material.getMaterial("SILVER_SHULKER_BOX");
+        }
+        if (material == grayShulkerMaterial) {
+            isShulkerBox = true;
         }
 
         return isShulkerBox;

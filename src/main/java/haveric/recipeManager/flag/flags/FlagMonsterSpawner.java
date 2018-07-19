@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -73,7 +74,14 @@ public class FlagMonsterSpawner extends Flag {
     public boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || !result.getType().equals(Material.MOB_SPAWNER)) {
+        Material spawnerMaterial;
+        if (Version.has1_13Support()) {
+            spawnerMaterial = Material.SPAWNER;
+        } else {
+            spawnerMaterial = Material.getMaterial("MOB_SPAWNER");
+        }
+
+        if (result == null || !result.getType().equals(spawnerMaterial)) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a MOB_SPAWNER to work!");
         }
 
@@ -107,8 +115,13 @@ public class FlagMonsterSpawner extends Flag {
         Block block = loc.getBlock();
         BlockState originalState = block.getState();
 
-
-        block.setType(Material.MOB_SPAWNER);
+        Material spawnerMaterial;
+        if (Version.has1_13Support()) {
+            spawnerMaterial = Material.SPAWNER;
+        } else {
+            spawnerMaterial = Material.getMaterial("MOB_SPAWNER");
+        }
+        block.setType(spawnerMaterial);
 
         CreatureSpawner s = (CreatureSpawner) loc.getBlock().getState();
         s.setSpawnedType(entityType);
