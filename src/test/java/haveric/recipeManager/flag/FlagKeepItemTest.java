@@ -43,7 +43,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
         when(Settings.getCustomData(Material.STONE_SWORD)).thenReturn((short)132);
 
         ironSword = new ItemStack(Material.IRON_SWORD);
-        goldSword = new ItemStack(Material.GOLD_SWORD);
+        goldSword = new ItemStack(Material.GOLDEN_SWORD);
         diamondSword = new ItemStack(Material.DIAMOND_SWORD);
         stoneSword = new ItemStack(Material.STONE_SWORD);
         dirtStack = new ItemStack(Material.DIRT, 3);
@@ -119,7 +119,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 }
 
                 assertEquals(3, count);
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 ItemStack[] matrix = new ItemStack[3];
                 matrix[0] = goldSword.clone();
                 matrix[1] = stoneSword.clone();

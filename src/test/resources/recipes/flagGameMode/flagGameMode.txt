@@ -33,8 +33,8 @@ dirt + stone
 
 // Test multiple gamemodes
 craft
-dirt + log
-= log
+dirt + oak_log
+= oak_log
 @gamemode a,s
 
 craft
@@ -44,20 +44,20 @@ dirt + grass
 
 // Test disable using false
 craft
-dirt + wood
-= wood
+dirt + oak_wood
+= oak_wood
 @gamemode false
 
 // Test fail message
 craft
-dirt + raw_fish
-= raw_fish
+dirt + tropical_fish
+= tropical_fish
 @gamemode a | fail
 
 // Test invalid input
 craft
-dirt + cooked_fish
-= cooked_fish
+dirt + cooked_salmon
+= cooked_salmon
 @gamemode duck
 
 // Test multiple declarations

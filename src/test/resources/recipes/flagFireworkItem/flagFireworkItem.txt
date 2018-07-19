@@ -14,7 +14,7 @@ dirt + iron_sword
 @fireworkitem effect color 255 0 200, 0 255 0, 255 128 0 | trail | type ball_large | fadecolor 255 0 0, 0 0 255, 0 255 0
 
 craft power
-dirt + gold_sword
+dirt + golden_sword
 = firework
 @fireworkitem power 1
 

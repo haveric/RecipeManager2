@@ -26,7 +26,7 @@ dirt + iron_sword
 @modmoney = 0 | <red>You lost all your money!
 
 craft
-dirt + gold_sword
-= gold_sword
+dirt + golden_sword
+= golden_sword
 @modmoney = 0
 @modmoney -2.5

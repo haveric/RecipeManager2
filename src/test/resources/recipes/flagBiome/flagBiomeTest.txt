@@ -9,12 +9,12 @@ dirt + stone_sword
 @biome jungle, jungle_hills
 
 craft
-dirt + gold_sword
-= gold_sword
-@biome !mushroom_island, !mushroom_island_shore
+dirt + golden_sword
+= golden_sword
+@biome !mushroom_fields, !mushroom_field_shore
 
 craft
 dirt + iron_sword
 = iron_sword
 @biome jungle, jungle_hills
-@biome !mushroom_island, !mushroom_island_shore
+@biome !mushroom_fields, !mushroom_field_shore

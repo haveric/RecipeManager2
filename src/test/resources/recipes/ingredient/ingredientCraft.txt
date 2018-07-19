@@ -7,38 +7,38 @@ dirt + cobblestone
 = cobblestone
 
 craft
-dirt + cobblestone + log
-= log
+dirt + cobblestone + oak_log
+= oak_log
 
 craft
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 stone
 = stone
 
 craft
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 stone + brick
 = brick
 
 craft
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 stone + brick + stone_sword
 = stone_sword
 
 craft
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 stone + brick + stone_sword
-gold_sword
-= gold_sword
+golden_sword
+= golden_sword
 
 craft
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 stone + brick + stone_sword
-gold_sword + diamond_sword
+golden_sword + diamond_sword
 = diamond_sword
 
 craft
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 stone + brick + stone_sword
-gold_sword + diamond_sword + diamond
+golden_sword + diamond_sword + diamond
 = diamond

@@ -46,7 +46,7 @@ public class FlagModExpTest extends FlagBaseTest {
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(0, flag.getAmount(), .01);
                 assertEquals('=', flag.getModifier());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(50, flag.getAmount(), .01);
                 assertEquals('-', flag.getModifier());
             }

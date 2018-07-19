@@ -74,7 +74,7 @@ public class FlagCommandTest extends FlagBaseTest {
                 assertEquals(2, flag.getCommands().size());
                 assertEquals("/say I crafted {result}!", flag.getCommands().get(0));
                 assertEquals("kick {player}", flag.getCommands().get(1));
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1, flag.getCommands().size());
                 assertEquals("/say {player} crafted Gold Sword at {x},{y},{z}", flag.getCommands().get(0));
                 String parsed = a.parseVariables(flag.getCommands().get(0));

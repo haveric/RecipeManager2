@@ -51,7 +51,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
     @Before
     public void before() {
-        hammerOfFoo = new ItemStack(Material.DIAMOND_SPADE);
+        hammerOfFoo = new ItemStack(Material.DIAMOND_SHOVEL);
         ItemMeta hammerOfFooMeta = hammerOfFoo.getItemMeta();
         hammerOfFooMeta.setDisplayName(RMCChatColor.COLOR_CHAR + "bHammer");
         hammerOfFoo.setItemMeta(hammerOfFooMeta);
@@ -145,7 +145,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(values.containsKey((short) 5));
                 assertFalse(values.containsKey((short) 6));
             } else if (resultType == Material.GRAVEL) {
-                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIAMOND_SPADE));
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                 ConditionsIngredient cond = conditions.get(0);
                 assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
                 assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
@@ -176,7 +176,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
                 a.clear();
                 assertFalse(flag.checkIngredientConditions(oneTwoThree, a));
-            } else if (resultType == Material.WOOD_SWORD) {
+            } else if (resultType == Material.WOODEN_SWORD) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                 ConditionsIngredient cond = conditions.get(0);
                 assertNull(cond.getUnbreakable());
@@ -191,7 +191,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 a.clear();
                 assertFalse(flag.checkIngredientConditions(sword, a));
 
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                 ConditionsIngredient cond = conditions.get(0);
                 assertFalse(cond.getUnbreakable());

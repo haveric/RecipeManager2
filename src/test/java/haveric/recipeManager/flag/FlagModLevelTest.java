@@ -48,7 +48,7 @@ public class FlagModLevelTest extends FlagBaseTest {
                 assertEquals(0, flag.getAmount(), .1);
                 assertEquals('=', flag.getModifier());
                 assertEquals("<red>You've been set to level 0!", flag.getFailMessage());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(2, flag.getAmount(), .1);
                 assertEquals('-', flag.getModifier());
             }

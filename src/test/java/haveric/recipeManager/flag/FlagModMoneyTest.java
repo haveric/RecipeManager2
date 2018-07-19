@@ -48,7 +48,7 @@ public class FlagModMoneyTest extends FlagBaseTest {
                 assertEquals(0, flag.getAmount(), .001);
                 assertEquals('=', flag.getModifier());
                 assertEquals("<red>You lost all your money!", flag.getFailMessage());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(2.5, flag.getAmount(), .001);
                 assertEquals('-', flag.getModifier());
             }

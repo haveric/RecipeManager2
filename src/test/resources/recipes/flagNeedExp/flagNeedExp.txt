@@ -14,8 +14,8 @@ dirt + iron_sword
 @needexp 0-500
 
 craft
-dirt + gold_sword
-= gold_sword
+dirt + golden_sword
+= golden_sword
 @needexp 1000 | <red>Need {exp} exp!
 
 craft

@@ -5,8 +5,8 @@ stone_sword + dirt
 
 craft
 stone_sword + stone
-= gold_sword
-@keepitem stone_sword | replace gold_sword
+= golden_sword
+@keepitem stone_sword | replace golden_sword
 
 craft
 stone_sword + grass

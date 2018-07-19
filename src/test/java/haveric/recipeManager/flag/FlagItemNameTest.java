@@ -53,7 +53,7 @@ public class FlagItemNameTest extends FlagBaseTest {
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(flag.getItemName(), "{player}'s Sword");
                 assertEquals(result.getItemMeta().getDisplayName(), "TestPlayer's Sword");
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(flag.getItemName(), "<gold> Gold");
                 assertEquals(result.getItemMeta().getDisplayName(), RMCChatColor.COLOR_CHAR + "6 Gold");
             } else if (resultType == Material.DIAMOND_SWORD) {

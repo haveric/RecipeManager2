@@ -159,7 +159,7 @@ public class FlagSkullOwner extends Flag {
             skull.setOwningPlayer(offlinePlayer);
             skull.update();
         } else {
-            block.setData((byte) 3);
+            //block.setData((byte) 3); // TODO: Replace data
             Skull skull = (Skull) loc.getBlock().getState();
             skull.setOwner(owner);
             skull.update();
@@ -183,7 +183,7 @@ public class FlagSkullOwner extends Flag {
         a.result().setItemMeta(cloned);
 
         block.setType(originalState.getType());
-        block.setData(originalState.getRawData());
+        //block.setData(originalState.getRawData()); // TODO: Replace data
         originalState.update();
     }
 }

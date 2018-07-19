@@ -80,7 +80,7 @@ public class FlagGameModeTest extends FlagBaseTest{
                 assertFalse(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
                 assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
-            } else if (resultType == Material.LOG) {
+            } else if (resultType == Material.OAK_LOG) {
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
                 assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
@@ -88,13 +88,13 @@ public class FlagGameModeTest extends FlagBaseTest{
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
                 assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
-            } else if (resultType == Material.WOOD) {
+            } else if (resultType == Material.OAK_WOOD) {
                 assertEquals(flag, null);
-            } else if (resultType == Material.RAW_FISH) {
+            } else if (resultType == Material.TROPICAL_FISH) {
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertEquals(flag.getGameModes().size(), 1);
                 assertEquals(flag.getFailMessage(), "fail");
-            } else if (resultType == Material.COOKED_FISH) {
+            } else if (resultType == Material.COOKED_SALMON) {
                 assertEquals(flag, null);
             } else if (resultType == Material.BRICK) {
                 assertFalse(flag.getGameModes().contains(GameMode.ADVENTURE));

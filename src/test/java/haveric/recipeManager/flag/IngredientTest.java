@@ -42,7 +42,7 @@ public class IngredientTest extends FlagBaseTest {
                 numIngredients = 1;
             } else if (resultType == Material.COBBLESTONE) {
                 numIngredients = 2;
-            } else if (resultType == Material.LOG) {
+            } else if (resultType == Material.OAK_LOG) {
                 numIngredients = 3;
             } else if (resultType == Material.STONE) {
                 numIngredients = 4;
@@ -50,7 +50,7 @@ public class IngredientTest extends FlagBaseTest {
                 numIngredients = 5;
             } else if (resultType == Material.STONE_SWORD) {
                 numIngredients = 6;
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 numIngredients = 7;
             } else if (resultType == Material.DIAMOND_SWORD) {
                 numIngredients = 8;
@@ -62,7 +62,7 @@ public class IngredientTest extends FlagBaseTest {
                 assertEquals(Material.COBBLESTONE, ing[1].getType());
             }
             if (numIngredients > 2) {
-                assertEquals(Material.LOG, ing[2].getType());
+                assertEquals(Material.OAK_LOG, ing[2].getType());
             }
             if (numIngredients > 3) {
                 assertEquals(Material.STONE, ing[3].getType());
@@ -74,7 +74,7 @@ public class IngredientTest extends FlagBaseTest {
                 assertEquals(Material.STONE_SWORD, ing[5].getType());
             }
             if (numIngredients > 6) {
-                assertEquals(Material.GOLD_SWORD, ing[6].getType());
+                assertEquals(Material.GOLDEN_SWORD, ing[6].getType());
             }
             if (numIngredients > 7) {
                 assertEquals(Material.DIAMOND_SWORD, ing[7].getType());
@@ -106,7 +106,7 @@ public class IngredientTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertEquals(Material.DIRT, ing[0].getType());
                 assertEquals(Material.COBBLESTONE, ing[1].getType());
-                assertEquals(Material.LOG, ing[2].getType());
+                assertEquals(Material.OAK_LOG, ing[2].getType());
 
                 for (int i = 3; i <= 8; i++) {
                     assertEquals(null, ing[i]);
@@ -118,7 +118,7 @@ public class IngredientTest extends FlagBaseTest {
                 assertEquals(Material.COBBLESTONE, ing[3].getType());
                 assertEquals(null, ing[4]);
                 assertEquals(null, ing[5]);
-                assertEquals(Material.LOG, ing[6].getType());
+                assertEquals(Material.OAK_LOG, ing[6].getType());
                 assertEquals(null, ing[7]);
                 assertEquals(null, ing[8]);
             }
@@ -147,7 +147,7 @@ public class IngredientTest extends FlagBaseTest {
                 numIngredients = 1;
             } else if (resultType == Material.COBBLESTONE) {
                 numIngredients = 2;
-            } else if (resultType == Material.LOG) {
+            } else if (resultType == Material.OAK_LOG) {
                 numIngredients = 3;
             } else if (resultType == Material.STONE) {
                 numIngredients = 4;
@@ -155,7 +155,7 @@ public class IngredientTest extends FlagBaseTest {
                 numIngredients = 5;
             } else if (resultType == Material.STONE_SWORD) {
                 numIngredients = 6;
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 numIngredients = 7;
             } else if (resultType == Material.DIAMOND_SWORD) {
                 numIngredients = 8;
@@ -167,7 +167,7 @@ public class IngredientTest extends FlagBaseTest {
                 assertTrue(containsItem(ing, Material.COBBLESTONE));
             }
             if (numIngredients > 2) {
-                assertTrue(containsItem(ing, Material.LOG));
+                assertTrue(containsItem(ing, Material.OAK_LOG));
             }
             if (numIngredients > 3) {
                 assertTrue(containsItem(ing, Material.STONE));
@@ -179,7 +179,7 @@ public class IngredientTest extends FlagBaseTest {
                 assertTrue(containsItem(ing, Material.STONE_SWORD));
             }
             if (numIngredients > 6) {
-                assertTrue(containsItem(ing, Material.GOLD_SWORD));
+                assertTrue(containsItem(ing, Material.GOLDEN_SWORD));
             }
             if (numIngredients > 7) {
                 assertTrue(containsItem(ing, Material.DIAMOND_SWORD));

@@ -59,7 +59,7 @@ public class FlagCooldownTest extends FlagBaseTest {
                 assertEquals("<red>Usable in: {time}", failMessage);
                 assertNull(message);
                 assertFalse(flag.isGlobal());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1800, cooldownTime);
                 assertEquals("<red>Someone used this recently, wait: {time}", failMessage);
                 assertEquals("<yellow>Cooldown time: {time}", message);

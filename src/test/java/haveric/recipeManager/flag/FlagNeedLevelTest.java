@@ -52,7 +52,7 @@ public class FlagNeedLevelTest extends FlagBaseTest {
                 assertEquals(100, flag.getMaxLevel());
                 assertTrue(flag.getSetBoth());
                 assertEquals("<red>Need level 25 to 100!", flag.getFailMessage());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(5, flag.getMinLevel());
                 assertEquals(5, flag.getMaxLevel());
                 assertFalse(flag.getSetBoth());

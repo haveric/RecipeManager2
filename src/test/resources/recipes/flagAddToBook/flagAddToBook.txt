@@ -16,7 +16,7 @@ craft
 @addtobook testing book
 @addtobook random stuff volume 3
 dirt + gold_ingot
-= gold_sword
+= golden_sword
 
 craft Diamond Sword
 @addtobook testing book

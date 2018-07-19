@@ -14,7 +14,7 @@ dirt + iron_sword
 @needlevel 25-100 | <red>Need level 25 to 100!
 
 craft
-dirt + gold_sword
-= gold_sword
+dirt + golden_sword
+= golden_sword
 @needlevel 25-100
 @needlevel 5

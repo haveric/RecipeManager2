@@ -163,7 +163,7 @@ public class FlagIngredientCondition extends Flag {
             "{flag} wool | data vanilla, !wool:red // no red wool",
             "{flag} wool | data all, !vanilla // only modded data values",
             "{flag} iron_sword | data new // Only allow undamaged iron swords",
-            "{flag} gold_sword | data damaged // Only allow damaged gold swords",
+            "{flag} golden_sword | data damaged // Only allow damaged gold swords",
             "{flag} splash_potion | potion !extended // checks if potion is splash and NOT extended",
             "{flag} diamond_helmet | enchant fire_resistance 1-3 | enchant thorns | data 0, 5, 50-100 // makes ingredient require 2 enchantments and some specific data values.",
             "{flag} stick | nometa // makes ingredient require a vanilla stick.",

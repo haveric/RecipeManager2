@@ -51,18 +51,18 @@ public class FlagBiomeTest extends FlagBaseTest {
                 assertTrue(biomes.get(Biome.JUNGLE));
                 assertTrue(biomes.containsKey(Biome.JUNGLE_HILLS));
                 assertTrue(biomes.get(Biome.JUNGLE_HILLS));
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(2, biomes.size());
-                assertTrue(biomes.containsKey(Biome.MUSHROOM_ISLAND));
-                assertFalse(biomes.get(Biome.MUSHROOM_ISLAND));
-                assertTrue(biomes.containsKey(Biome.MUSHROOM_ISLAND_SHORE));
-                assertFalse(biomes.get(Biome.MUSHROOM_ISLAND_SHORE));
+                assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELDS));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
+                assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELD_SHORE));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(2, biomes.size());
-                assertTrue(biomes.containsKey(Biome.MUSHROOM_ISLAND));
-                assertFalse(biomes.get(Biome.MUSHROOM_ISLAND));
-                assertTrue(biomes.containsKey(Biome.MUSHROOM_ISLAND_SHORE));
-                assertFalse(biomes.get(Biome.MUSHROOM_ISLAND_SHORE));
+                assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELDS));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
+                assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELD_SHORE));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
                 assertFalse(biomes.containsKey(Biome.JUNGLE));
                 assertFalse(biomes.containsKey(Biome.JUNGLE_HILLS));
             }

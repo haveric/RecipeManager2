@@ -134,7 +134,7 @@ public class FlagMonsterSpawner extends Flag {
 
 
         block.setType(originalState.getType());
-        block.setData(originalState.getRawData());
+        //block.setData(originalState.getRawData()); // TODO: Replace Data
         originalState.update();
     }
 }

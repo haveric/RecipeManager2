@@ -140,6 +140,6 @@ public class FlagSetBlock extends Flag {
 
 
         block.setType(type, true);
-        block.setData(data, true);
+        // block.setData(data, true); // TODO: Replace data
     }
 }

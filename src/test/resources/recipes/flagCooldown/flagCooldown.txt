@@ -14,8 +14,8 @@ dirt + iron_sword
 @cooldown 1.75m | failmsg <red>Usable in: {time}
 
 craft
-dirt + gold_sword
-= gold_sword
+dirt + golden_sword
+= golden_sword
 @cooldown .5h | global | failmsg <red>Someone used this recently, wait: {time} | msg <yellow>Cooldown time: {time}
 
 craft

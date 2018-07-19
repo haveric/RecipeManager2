@@ -9,7 +9,7 @@ dirt + stone_sword
 @banner black
 
 craft one
-dirt + gold_sword
+dirt + golden_sword
 = banner
 @banner red | circle_middle blue
 

@@ -35,7 +35,7 @@ public class TestSmelt extends FlagBaseTest {
                 assertEquals(Vanilla.FURNACE_RECIPE_TIME, recipe.getCookTime(), .001);
             } else if (ingredientType == Material.IRON_SWORD) {
                 assertEquals(5, recipe.getCookTime(), .001);
-            } else if (ingredientType == Material.GOLD_SWORD) {
+            } else if (ingredientType == Material.GOLDEN_SWORD) {
                 assertEquals(20, recipe.getCookTime(), .001);
             } else if (ingredientType == Material.DIAMOND_SWORD) {
                 assertEquals(25, recipe.getCookTime(), .001);

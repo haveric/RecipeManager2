@@ -14,7 +14,7 @@ dirt + iron_sword
 @enchantedbook oxygen 127
 
 craft onlyremove
-dirt + gold_sword
+dirt + golden_sword
 = enchanted_book
 @enchantedbook sharpness remove
 

@@ -15,8 +15,8 @@ dirt + iron_sword
 @command kick {player}
 
 craft
-dirt + gold_sword
-= gold_sword
+dirt + golden_sword
+= golden_sword
 @command /say {player} crafted Gold Sword at {x},{y},{z}
 
 craft

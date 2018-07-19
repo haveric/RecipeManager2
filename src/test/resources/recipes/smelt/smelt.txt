@@ -7,8 +7,8 @@ iron_sword % 5
 = iron_sword
 
 smelt
-gold_sword %20
-= gold_sword
+golden_sword %20
+= golden_sword
 
 smelt
 diamond_sword%25

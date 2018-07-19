@@ -20,7 +20,7 @@ dirt + stone
 
 craft //test for unbreakable not set
 sand + iron_sword
-= wood_sword
+= wooden_sword
 @ingredientcondition iron_sword | name "Wood Sword"
 
 craft
@@ -30,7 +30,7 @@ dirt + iron_sword
 
 craft
 grass + iron_sword
-= gold_sword
+= golden_sword
 @ingredientcondition iron_sword | !unbreakable
 
 craft

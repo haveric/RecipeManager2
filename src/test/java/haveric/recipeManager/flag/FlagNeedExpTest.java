@@ -51,7 +51,7 @@ public class FlagNeedExpTest extends FlagBaseTest {
                 assertEquals(0, flag.getMinExp());
                 assertEquals(500, flag.getMaxExp());
                 assertTrue(flag.getSetBoth());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1000, flag.getMinExp());
                 assertEquals(1000, flag.getMaxExp());
                 assertFalse(flag.getSetBoth());

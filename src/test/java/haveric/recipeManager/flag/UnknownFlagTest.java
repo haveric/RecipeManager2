@@ -29,7 +29,7 @@ public class UnknownFlagTest extends FlagBaseTest {
 
             if (resultType == Material.IRON_SWORD) {
                 assertEquals(0, result.getFlags().get().size());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1, result.getFlags().get().size());
             } else if (resultType == Material.DIAMOND_SWORD) {
                 assertEquals(1, result.getFlags().get().size());

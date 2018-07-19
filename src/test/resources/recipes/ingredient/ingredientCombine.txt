@@ -8,28 +8,28 @@ dirt + cobblestone
 
 combine
 dirt + cobblestone + log
-= log
+= oak_log
 
 combine
-dirt + cobblestone + log + stone
+dirt + cobblestone + oak_log + stone
 = stone
 
 combine
-dirt + cobblestone + log + stone + brick
+dirt + cobblestone + oak_log + stone + brick
 = brick
 
 combine
-dirt + cobblestone + log + stone + brick + stone_sword
+dirt + cobblestone + oak_log + stone + brick + stone_sword
 = stone_sword
 
 combine
-dirt + cobblestone + log + stone + brick + stone_sword + gold_sword
-= gold_sword
+dirt + cobblestone + oak_log + stone + brick + stone_sword + golden_sword
+= golden_sword
 
 combine
-dirt + cobblestone + log + stone + brick + stone_sword + gold_sword + diamond_sword
+dirt + cobblestone + oak_log + stone + brick + stone_sword + golden_sword + diamond_sword
 = diamond_sword
 
 combine
-dirt + cobblestone + log + stone + brick + stone_sword + gold_sword + diamond_sword + diamond
+dirt + cobblestone + oak_log + stone + brick + stone_sword + golden_sword + diamond_sword + diamond
 = diamond

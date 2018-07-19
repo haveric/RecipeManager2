@@ -64,7 +64,7 @@ public class FlagEnchantItemTest extends FlagBaseTest {
                 assertEquals(1, meta.getEnchants().size());
                 assertTrue(meta.getEnchants().containsKey(Enchantment.DIG_SPEED));
                 assertEquals(3, meta.getEnchants().get(Enchantment.DIG_SPEED).intValue());
-            } else if (resultType == Material.GOLD_SWORD) {
+            } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1, meta.getEnchants().size());
                 assertTrue(meta.getEnchants().containsKey(Enchantment.ARROW_INFINITE));
                 assertEquals(127, meta.getEnchants().get(Enchantment.ARROW_INFINITE).intValue());

@@ -5,7 +5,7 @@ dirt + iron_ingot
 
 craft
 dirt + gold_ingot
-= gold_sword
+= golden_sword
 @name Test
 @unknown
 

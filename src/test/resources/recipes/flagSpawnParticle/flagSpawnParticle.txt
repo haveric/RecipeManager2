@@ -14,7 +14,7 @@ dirt + iron_sword
 @spawnparticle heart | extra 3
 
 craft offset
-dirt + gold_sword
+dirt + golden_sword
 = dirt
 @spawnparticle heart | count 20 | delay 80 | randomoffset -1 2 1 | offset -2 3 2
 

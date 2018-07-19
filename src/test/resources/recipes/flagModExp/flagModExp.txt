@@ -26,7 +26,7 @@ dirt + iron_sword
 @modexp = 0
 
 craft
-dirt + gold_sword
-= gold_sword
+dirt + golden_sword
+= golden_sword
 @modexp = 0
 @modexp -50

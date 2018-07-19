@@ -47,7 +47,7 @@ public class FlagHoldItemTest extends FlagBaseTest {
                 assertTrue(values.containsKey((short) 5));
                 assertFalse(values.containsKey((short) 6));
             } else if (resultType == Material.GRAVEL) {
-                List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIAMOND_SPADE));
+                List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                 ConditionsHold cond = conditions.get(0);
                 assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
                 assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
