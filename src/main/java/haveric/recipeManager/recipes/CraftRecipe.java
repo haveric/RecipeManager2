@@ -9,6 +9,7 @@ import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
@@ -16,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.Damageable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -196,7 +198,10 @@ public class CraftRecipe extends WorkbenchRecipe {
                     width = Math.max(width, w);
                     height = Math.max(height, h);
 
-                    str.append(item.getType().toString()).append(':').append(item.getDurability());
+                    str.append(item.getType().toString());
+                    if (!Version.has1_13Support() || item instanceof Damageable) {
+                        str.append(':').append(item.getDurability());
+                    }
 
                     if (item.getEnchantments().size() > 0) {
                         for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
@@ -232,8 +237,10 @@ public class CraftRecipe extends WorkbenchRecipe {
                 } else {
                     s.append(item.getType().toString().toLowerCase());
 
-                    if (item.getDurability() != Vanilla.DATA_WILDCARD) {
-                        s.append(':').append(item.getDurability());
+                    if (!Version.has1_13Support() || item instanceof Damageable) {
+                        if (item.getDurability() != Vanilla.DATA_WILDCARD) {
+                            s.append(':').append(item.getDurability());
+                        }
                     }
                 }
 

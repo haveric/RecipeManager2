@@ -1,10 +1,12 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.flag.*;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import haveric.recipeManager.flag.args.Args;
+import org.bukkit.inventory.meta.Damageable;
 
 public class ItemResult extends ItemStack implements Flaggable {
     private Flags flags;
@@ -57,8 +59,12 @@ public class ItemResult extends ItemStack implements Flaggable {
 
     public void setItemStack(ItemStack item) {
         setType(item.getType());
-        setDurability(item.getDurability());
         setAmount(item.getAmount());
+
+        if (!Version.has1_13Support() || item instanceof Damageable) {
+            setDurability(item.getDurability());
+        }
+
         setItemMeta(item.getItemMeta());
     }
 

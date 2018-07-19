@@ -7,9 +7,11 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.FlagIndividualResults;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,8 +111,10 @@ public class MultiResultRecipe extends BaseRecipe {
 
                 s.append(result.getType().toString().toLowerCase());
 
-                if (result.getDurability() != 0) {
-                    s.append(':').append(result.getDurability());
+                if (!Version.has1_13Support() || result instanceof Damageable) {
+                    if (result.getDurability() != 0) {
+                        s.append(':').append(result.getDurability());
+                    }
                 }
 
                 if (resultNum > 1) {

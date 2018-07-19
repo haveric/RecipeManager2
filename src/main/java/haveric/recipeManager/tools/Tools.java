@@ -221,7 +221,13 @@ public class Tools {
             }
         }
 
-        ItemStack item = new ItemStack(material, amount, (short) data);
+        ItemStack item;
+
+        if (Version.has1_13Support() && data == Vanilla.DATA_WILDCARD) {
+            item = new ItemStack(material, amount);
+        } else {
+            item = new ItemStack(material, amount, (short) data);
+        }
 
         if (args.length > 1) {
             ItemMeta meta = item.getItemMeta();
