@@ -84,7 +84,7 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     }
 
     protected NamespacedKey getNamespacedKey() {
-        String key = Recipes.RECIPE_ID_STRING.replace(" ", "") + hash;
+        String key = Recipes.RECIPE_NAMESPACE_STRING + hash;
 
         RecipeManager plugin = RecipeManager.getPlugin();
         // Used when running tests and plugin doesn't exist

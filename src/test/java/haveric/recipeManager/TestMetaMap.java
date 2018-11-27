@@ -49,6 +49,21 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
         return scaling != SCALING_EMPTY;
     }
 
+    @Override
+    public boolean hasMapId() {
+        return false;
+    }
+
+    @Override
+    public int getMapId() {
+        return 0;
+    }
+
+    @Override
+    public void setMapId(int id) {
+
+    }
+
     public boolean isScaling() {
         return scaling == SCALING_TRUE;
     }

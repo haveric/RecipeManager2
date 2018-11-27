@@ -1,8 +1,12 @@
 package haveric.recipeManager;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Multimap;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
@@ -202,6 +206,51 @@ public class TestMetaItem implements ItemMeta, Repairable {
     @Override
     public void setUnbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
+    }
+
+    @Override
+    public boolean hasAttributeModifiers() {
+        return false;
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers() {
+        return null;
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+        return null;
+    }
+
+    @Override
+    public Collection<AttributeModifier> getAttributeModifiers(Attribute attribute) {
+        return null;
+    }
+
+    @Override
+    public boolean addAttributeModifier(Attribute attribute, AttributeModifier modifier) {
+        return false;
+    }
+
+    @Override
+    public void setAttributeModifiers(Multimap<Attribute, AttributeModifier> attributeModifiers) {
+
+    }
+
+    @Override
+    public boolean removeAttributeModifier(Attribute attribute) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAttributeModifier(EquipmentSlot slot) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAttributeModifier(Attribute attribute, AttributeModifier modifier) {
+        return false;
     }
 
     boolean equalsCommon(TestMetaItem that) {
