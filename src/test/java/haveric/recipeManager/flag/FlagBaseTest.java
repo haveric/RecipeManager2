@@ -5,11 +5,9 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.TestMessageSender;
 import org.bukkit.Bukkit;
-import org.bukkit.UnsafeValues;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
-import org.mockito.AdditionalAnswers;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -17,29 +15,26 @@ import java.io.File;
 import java.util.UUID;
 
 import static haveric.recipeManager.Files.FILE_MESSAGES;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @Ignore
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Settings.class, MessageSender.class, Bukkit.class, UnsafeValues.class, RecipeManager.class})
+@PrepareForTest({Settings.class, MessageSender.class, Bukkit.class, RecipeManager.class})
 public class FlagBaseTest {
 
     private Recipes recipes;
     protected Settings settings;
-    protected UnsafeValues unsafeValues;
+    protected TestUnsafeValues unsafeValues;
     protected File workDir;
     protected UUID testUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
     @Before
     public void setupBase() {
         mockStatic(Bukkit.class);
-        mockStatic(UnsafeValues.class);
-        unsafeValues = mock(UnsafeValues.class);
+        unsafeValues = new TestUnsafeValues();
         when(Bukkit.getUnsafe()).thenReturn(unsafeValues);
-        when(unsafeValues.toLegacy(any())).then(AdditionalAnswers.returnsFirstArg());
 
         mockStatic(Settings.class);
         settings = mock(Settings.class);

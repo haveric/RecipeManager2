@@ -236,6 +236,7 @@ public class TestItemFactory implements ItemFactory {
         if (!(meta instanceof TestMetaItem)) {
             throw new IllegalArgumentException("Meta of " + (meta != null ? meta.getClass().toString() : "null") + " not created by " + TestItemFactory.class.getName());
         }
+
         return getItemMeta(material, (TestMetaItem) meta);
     }
 
@@ -246,6 +247,6 @@ public class TestItemFactory implements ItemFactory {
 
     @Override
     public Material updateMaterial(ItemMeta meta, Material material) throws IllegalArgumentException {
-        return null;
+        return material;
     }
 }
