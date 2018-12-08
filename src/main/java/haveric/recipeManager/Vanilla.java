@@ -477,7 +477,7 @@ public class Vanilla {
         int width = recipe.getWidth();
 
         // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
-        if (Version.has1_12Support()) {
+        if (Version.has1_12Support() && !Version.has1_13Support()) {
             iterator = new RecipeIteratorV1_12(iterator);
         }
 
