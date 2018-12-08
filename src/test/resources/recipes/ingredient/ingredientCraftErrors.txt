@@ -1,10 +1,10 @@
 craft
-dirt + cobblestone + log + stone
+dirt + cobblestone + oak_log + stone
 = dirt
 
 craft
 dirt
 cobblestone
-log
+oak_log
 stone
 = stone

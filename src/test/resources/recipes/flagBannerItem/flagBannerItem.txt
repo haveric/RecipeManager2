@@ -5,21 +5,21 @@ dirt + dirt
 
 craft base
 dirt + stone_sword
-= banner
+= black_banner
 @banner black
 
 craft one
 dirt + golden_sword
-= banner
+= red_banner
 @banner red | circle_middle blue
 
 craft two
 dirt + diamond_sword
-= banner
+= red_banner
 @banner red | circle_middle blue | skull yellow
 
 craft override
 dirt + cobblestone
-= banner
+= green_banner
 @banner red | circle_middle blue | skull yellow
 @banner green | half_horizontal yellow | circle_middle orange

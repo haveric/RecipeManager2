@@ -7,7 +7,7 @@ dirt + cobblestone
 = cobblestone
 
 combine
-dirt + cobblestone + log
+dirt + cobblestone + oak_log
 = oak_log
 
 combine

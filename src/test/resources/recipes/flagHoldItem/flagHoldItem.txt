@@ -4,9 +4,9 @@ dirt + dirt
 @holditem dirt | data 0-5
 
 craft
-cobblestone + 277
+cobblestone + diamond_shovel
 = gravel
-@holditem 277 | name &bHammer | failmsg &cFoo
+@holditem diamond_shovel | name &bHammer | failmsg &cFoo
 
 craft
 dirt + cobblestone

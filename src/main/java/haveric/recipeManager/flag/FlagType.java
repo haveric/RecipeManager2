@@ -50,7 +50,7 @@ public class FlagType {
     public static final String LEATHER_COLOR = "@leathercolor";
     public static final String BOOK_ITEM = "@bookitem";
     public static final String FIREWORK_ITEM = "@fireworkitem";
-    public static final String FIREWORK_CHARGE_ITEM = "@fireworkchargeitem";
+    public static final String FIREWORK_STAR_ITEM = "@fireworkstaritem";
     public static final String SKULL_OWNER = "@skullowner";
     public static final String POTION_ITEM = "@potionitem";
     public static final String ENCHANT_ITEM = "@enchantitem";

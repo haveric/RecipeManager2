@@ -69,7 +69,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.BOOK_ITEM, new FlagBookItem(), FlagBit.RESULT, "book");
         // MAPITEM(FlagMapItem(), FlagBit.RESULT, "map"), // TODO finish this flag
         FlagFactory.getInstance().initializeFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), FlagBit.RESULT, "firework", "fireworkrocket");
-        FlagFactory.getInstance().initializeFlag(FlagType.FIREWORK_CHARGE_ITEM, new FlagFireworkChargeItem(), FlagBit.RESULT, "fireworkcharge", "fireworkeffect");
+        FlagFactory.getInstance().initializeFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), FlagBit.RESULT, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
         FlagFactory.getInstance().initializeFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), FlagBit.RESULT, "skullitem");
         FlagFactory.getInstance().initializeFlag(FlagType.POTION_ITEM, new FlagPotionItem(), FlagBit.RESULT, "potion");
         FlagFactory.getInstance().initializeFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), FlagBit.RESULT, "enchant", "enchantment");

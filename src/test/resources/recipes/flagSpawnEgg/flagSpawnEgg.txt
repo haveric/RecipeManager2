@@ -1,15 +1,15 @@
 craft one
 dirt + dirt
-= monster_egg
+= creeper_spawn_egg
 @spawnegg creeper
 
 craft two
 dirt + cobblestone
-= monster_egg
+= horse_spawn_egg
 @spawnegg horse
 
 craft three
 dirt + stone_sword
-= monster_egg
+= horse_spawn_egg
 @spawnegg creeper
 @spawnegg horse
