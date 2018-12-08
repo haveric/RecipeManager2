@@ -10,6 +10,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 
 import java.util.*;
 
@@ -251,6 +252,11 @@ public class TestMetaItem implements ItemMeta, Repairable {
     @Override
     public boolean removeAttributeModifier(Attribute attribute, AttributeModifier modifier) {
         return false;
+    }
+
+    @Override
+    public CustomItemTagContainer getCustomTagContainer() {
+        return null;
     }
 
     boolean equalsCommon(TestMetaItem that) {
