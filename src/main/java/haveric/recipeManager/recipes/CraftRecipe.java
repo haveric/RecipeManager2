@@ -358,7 +358,15 @@ public class CraftRecipe extends WorkbenchRecipe {
                 item = ingredients[(h * 3) + w];
 
                 if (item != null) {
-                    bukkitRecipe.setIngredient(key, item.getType(), item.getDurability());
+                    if (Version.has1_13Support()) {
+                        if (item.getItemMeta() instanceof Damageable) {
+                            bukkitRecipe.setIngredient(key, item.getType(), ((Damageable) item.getItemMeta()).getDamage());
+                        } else {
+                            bukkitRecipe.setIngredient(key, item.getType());
+                        }
+                    } else {
+                        bukkitRecipe.setIngredient(key, item.getType(), item.getDurability());
+                    }
                 }
 
                 key++;
