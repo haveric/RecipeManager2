@@ -230,8 +230,10 @@ public class Tools {
         if (Version.has1_13Support() && data == Vanilla.DATA_WILDCARD) {
             item = new ItemStack(material, amount);
             ItemMeta meta = item.getItemMeta();
-            ((Damageable) meta).setDamage(data);
-            item.setItemMeta(meta);
+            if (meta instanceof Damageable) {
+                ((Damageable) meta).setDamage(data);
+                item.setItemMeta(meta);
+            }
         } else {
             item = new ItemStack(material, amount, (short) data);
         }
