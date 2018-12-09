@@ -490,10 +490,10 @@ public class Vanilla {
                     sh = sr.getShape();
 
                     if (sh.length == height && sh[0].length() == width &&
-                            (Version.has1_12Support() ? ToolsRecipeV1_12.matches(recipe, r) : 
+                            (Version.has1_12Support() && !Version.has1_13Support() ? ToolsRecipeV1_12.matches(recipe, r) :
                             Tools.compareShapedRecipeToMatrix(sr, matrix, matrixMirror))) {
                         iterator.remove();
-                        if (Version.has1_12Support()) {
+                        if (Version.has1_12Support() && !Version.has1_13Support()) {
                             ( (RecipeIteratorV1_12) iterator).finish();
                         }
                         return sr;
@@ -534,7 +534,7 @@ public class Vanilla {
         List<ItemStack> items = recipe.getIngredients();
 
         // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
-        if (Version.has1_12Support()) {
+        if (Version.has1_12Support() && !Version.has1_13Support()) {
             iterator = new RecipeIteratorV1_12(iterator);
         }
 
@@ -545,10 +545,10 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (Version.has1_12Support() ? ToolsRecipeV1_12.matches(recipe, r) :
+                    if (Version.has1_12Support() && !Version.has1_13Support() ? ToolsRecipeV1_12.matches(recipe, r) :
                             Tools.compareIngredientList(items, sr.getIngredientList())) {
                         iterator.remove();
-                        if (Version.has1_12Support()) {
+                        if (Version.has1_12Support() && !Version.has1_13Support()) {
                             ( (RecipeIteratorV1_12) iterator).finish();
                         }
                         return sr;
@@ -591,7 +591,7 @@ public class Vanilla {
         Recipe r;
 
         // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
-        if (Version.has1_12Support()) {
+        if (Version.has1_12Support() && !Version.has1_13Support()) {
             iterator = new RecipeIteratorV1_12(iterator);
         }
 
@@ -604,7 +604,7 @@ public class Vanilla {
 
                     if (ingredient.getType() == fr.getInput().getType()) { // this works fine in 1.12
                         iterator.remove();
-                        if (Version.has1_12Support()) {
+                        if (Version.has1_12Support() && !Version.has1_13Support()) {
                             ( (RecipeIteratorV1_12) iterator).finish();
                         }
                         return fr;
@@ -628,14 +628,14 @@ public class Vanilla {
      * @return replaced recipe or null if not found.
      */
     public static Recipe replaceCustomRecipe(BaseRecipe recipe) {
-        if (!Version.has1_12Support()) return null;
+        if (Version.has1_13Support() || !Version.has1_12Support()) return null;
 
         if (recipe instanceof CraftRecipe) {
-            return replaceCraftRecipe((CraftRecipe) recipe);
+            return replaceCraftRecipeV1_12((CraftRecipe) recipe);
         }
 
         if (recipe instanceof CombineRecipe) {
-            return replaceCombineRecipe((CombineRecipe) recipe);
+            return replaceCombineRecipeV1_12((CombineRecipe) recipe);
         }
 
         return null;
@@ -650,7 +650,7 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCraftRecipe(CraftRecipe recipe) {
+    public static Recipe replaceCraftRecipeV1_12(CraftRecipe recipe) {
         RecipeIteratorV1_12 iterator = new RecipeIteratorV1_12(Bukkit.recipeIterator());
         ShapedRecipe sr;
         Recipe r;
@@ -688,7 +688,7 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCombineRecipe(CombineRecipe recipe) {
+    public static Recipe replaceCombineRecipeV1_12(CombineRecipe recipe) {
         RecipeIteratorV1_12 iterator = new RecipeIteratorV1_12(Bukkit.recipeIterator());
         ShapelessRecipe sr;
         Recipe r;
@@ -775,7 +775,7 @@ public class Vanilla {
         Recipe recipe;
 
         // In 1.12, we cannot remove the normal way. So, we have a special NMS iterator that will handle the details.
-        if (Version.has1_12Support()) {
+        if (Version.has1_12Support() && !Version.has1_13Support()) {
             iterator = new RecipeIteratorV1_12(iterator);
         }
 

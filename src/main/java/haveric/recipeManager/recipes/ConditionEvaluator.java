@@ -92,7 +92,7 @@ public class ConditionEvaluator {
     }
 
     private RMCRecipeInfo getRecipeFromMap(BaseRecipe recipe, Map<BaseRecipe, RMCRecipeInfo> map) {
-        if (Version.has1_12Support()) {
+        if (Version.has1_12Support() && !Version.has1_13Support()) {
             for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : map.entrySet()) {
                 // Let's only use this special logic for recipes where RMCRecipeInfo has the bukkit pointer.
                 if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
