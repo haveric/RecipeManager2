@@ -331,7 +331,7 @@ public class Recipes {
         }
 
         // Remove original recipe
-        if (recipe.hasFlag(FlagType.REMOVE) || (Version.has1_13Support() || !Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE))) {
+        if (recipe.hasFlag(FlagType.REMOVE) || ((Version.has1_13Support() || !Version.has1_12Support()) && recipe.hasFlag(FlagType.OVERRIDE))) {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
         
