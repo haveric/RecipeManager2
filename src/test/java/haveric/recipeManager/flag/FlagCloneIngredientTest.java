@@ -14,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +53,9 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
         stoneSword.setAmount(2);
         List<String> lores = new ArrayList<>();
         lores.add("Test Lore");
-        stoneSword.getItemMeta().setLore(lores);
+        ItemMeta stoneMeta = stoneSword.getItemMeta();
+        stoneMeta.setLore(lores);
+        stoneSword.setItemMeta(stoneMeta);
 
         ItemStack[] matrix = new ItemStack[2];
         matrix[0] = dirt;
