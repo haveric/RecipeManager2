@@ -11,6 +11,7 @@ import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
@@ -18,7 +19,10 @@ import org.bukkit.potion.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -225,6 +229,9 @@ public class Tools {
 
         if (Version.has1_13Support() && data == Vanilla.DATA_WILDCARD) {
             item = new ItemStack(material, amount);
+            ItemMeta meta = item.getItemMeta();
+            ((Damageable) meta).setDamage(data);
+            item.setItemMeta(meta);
         } else {
             item = new ItemStack(material, amount, (short) data);
         }
