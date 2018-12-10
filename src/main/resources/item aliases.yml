@@ -1,4 +1,4 @@
-lastchanged: 2.9 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.15.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -33,351 +33,471 @@ lastchanged: 2.9 # Please do not edit this value - it is used by the plugin to n
 # "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".
 #------------------------------------------------------------------------------------------------------------------------
 
-coal:
-  0: # no name for this
-  1: char, log, burnt
+# START 1.13 ID Conversions
+air: "0, fail"
+stone: "1"
+grass_block: "2"
+dirt: "3"
+cobblestone: "4, cobble"
+oak_planks: "5"
+oak_sapling: "6"
+bedrock: "7"
 
-ink_sack:
-  names: dye
-  0: black, ink
-  1: red, rose red
-  2: green, cactus green
-  3: brown, cocoa beans
-  4: blue, lapis, lapis lazuli
-  5: purple
-  6: cyan
-  7: light gray
-  8: gray
-  9: pink, light purple
-  10: lime, light green
-  11: yellow, dandelion yellow
-  12: light blue
-  13: magenta
-  14: orange
-  15: white, bone meal
+sand: "12"
+gravel: "13"
+gold_ore: "14"
+iron_ore: "15"
+coal_ore: "16"
+oak_log: "17"
+oak_leaves: "18"
+sponge: "19"
+glass: "20"
+lapis_ore: "21"
+lapis_block: "22"
+dispenser: "23"
+sandstone: "24"
+note_block: "25"
 
-wool:
-  0: white
-  1: orange
-  2: magenta
-  3: light blue
-  4: yellow
-  5: lime
-  6: pink
-  7: gray
-  8: light gray
-  9: cyan
-  10: purple
-  11: blue
-  12: brown
-  13: green
-  14: red
-  15: black
+powered_rail: "27"
+detector_rail: "28"
+sticky_piston: "29"
+cobweb: "30"
+grass: "31, tall grass"
+dead_bush: "32"
+piston: "33"
 
-# Sandstone styles
-sandstone:
-  names: sand stone
-  0:                    # when printed, display nothing extra with this data value
-  1: chiseled, decor
-  2: smooth
+white_wool: "35"
 
-# shorter names for cobble
-cobblestone: cobble, cobble stone
-cobblestone_stairs: cobble stone stairs, cobble stairs
+dandelion: "37"
+poppy: "38, red rose, rose"
+brown_mushroom: "39"
+red_mushroom: "40"
+gold_block: "41"
+iron_block: "42"
 
-smooth_brick:
-  names: smooth brick, stone brick
-  0: stone, normal
-  1: mossy, moss
-  2: cracked, crack
-  3: chiseled, decor
+stone_slab: "44, stone step"
+bricks: "45"
+tnt: "46"
+bookshelf: "47"
+mossy_cobblestone: "48"
+obsidian: "49"
+torch: "50"
 
-smooth_stairs: smooth stairs, stone stairs, smooth stone stairs, smooth brick stairs, stone brick stairs
+oak_stairs: "53"
+chest: "54"
 
-step:
-  names: slab
-  0: stone
-  1: sand, sandstone
-  2: wood, wooden             # This is the old fire-resistant block, use wood_step material instead
-  3: cobblestone, cobble
-  4: brick. red brick
-  5: smooth brick, stone brick
-  6: nether, nether brick
-  7: quartz, quartz brick
+diamond_ore: "56"
+diamond_block: "57"
+crafting_table: "58, crafting table, craft table, workbench"
 
-double_step:
-  names: double slab
-  0: stone
-  1: sand, sandstone
-  2: wood, wooden             # This is the old fire-resistant block, use wood_step material instead
-  3: cobblestone, cobble
-  4: brick. red brick
-  5: smooth brick, stone brick
-  6: nether, nether brick
-  7: quartz, quartz brick
-  8: smooth stone, smooth
-  9: smooth sand stone, smooth sand
+furnace: "61"
 
-cobble_wall:
-  names: cobble stone wall, stone wall
-  0: 
-  1: mossy
+ladder: "65"
+rail: "66"
+cobblestone_stairs: "67, cobble stairs"
 
-wood_step:
-  names: wood slab
-  0: oak, normal
-  1: spruce, pine
-  2: birch, white
-  3: jungle, pink
-  4: acacia, orange
-  5: dark oak, dark
+lever: "69"
+stone_pressure_plate: "70"
 
-wood_double_step:
-  names: wood double step, wood double steps
-  0: oak, normal
-  1: spruce, pine
-  2: birch, white
-  3: jungle, pink
-  4: acacia, orange
-  5: dark oak, dark
+oak_pressure_plate: "72"
+redstone_ore: "73"
 
-wood:
-  names: wood planks, wood plank, plank, planks
-  0: oak, normal
-  1: spruce, pine
-  2: birch, white
-  3: jungle, pink
-  4: acacia, orange
-  5: dark oak, dark
+redstone_torch: "76"
+stone_button: "77"
+snow: "78"
+ice: "79"
+snow_block: "80"
+cactus: "81"
+clay: "82"
 
-sapling:
-  0: oak, normal
-  1: spruce, pine
-  2: birch, white
-  3: jungle, pink
-  4: acacia, orange
-  5: dark oak, dark
+jukebox: "84"
+oak_fence: "85"
+pumpkin: "86"
+netherrack: "87"
+soul_sand: "88"
+glowstone: "89"
 
-log:
-  0: oak, normal
-  1: spruce, pine
-  2: birch, white
-  3: jungle, pink
-  
-log_2:
-  0: acacia, orange
-  1: dark oak, dark
+jack_o_lantern: "91, lantern"
 
-leaves:
-  names: leaf
-  0: oak, normal
-  1: spruce, pine
-  2: birch, white
-  3: jungle, pink
+white_stained_glass: "95"
+oak_trapdoor: "96"
 
-leaves_2:
-  0: acacia, orange
-  1: dark oak, dark
+stone_bricks: "98"
+brown_mushroom_block: "99"
+red_mushroom_block: "100"
+iron_bars: "101"
+glass_pane: "102"
+melon: "103"
 
-stone:
-  0:
-  1: granite
-  2: polished granite
-  3: diorite
-  4: polished diorite
-  5: andesite
-  6: polished andesite
+vine: "106"
+oak_fence_gate: "107"
+brick_stairs: "108"
+stone_brick_stairs: "109"
+mycelium: "110"
+lily_pad: "111"
+nether_bricks: "112"
+nether_brick_fence: "113"
+nether_brick_stairs: "114"
 
-dirt:
-  0:
-  1: coarse
-  2: podzol
-  
-sand:
-  0:
-  1: red
+enchanting_table: "116"
 
-red_rose:
-  names: flower, flowers
-  0: poppy
-  1: blue orchid
-  2: allium
-  3: azure bluet
-  4: red tulip
-  5: orange tulip
-  6: white tulip
-  7: pink tulip
-  8: oxeye daisy
+end_portal_frame: "120"
+end_stone: "121"
 
-double_plant:
-  names: tall flower, tall flowers
-  0: sunflower
-  1: lilac
-  2: double tallgrass
-  3: large fern
-  4: rose bush
-  5: peony
+redstone_lamp: "123"
 
-prismarine:
-  0:
-  1: brick, bricks
-  2: dark
+oak_slab: "126, oak step, wood slab, wood step"
 
-sponge:
-  0:
-  1: wet
+sandstone_stairs: "128"
+emerald_ore: "129"
+ender_chest: "130"
+tripwire_hook: "131"
 
-raw_fish:
-  0:
-  1: raw salmon, salmon
-  2: clownfish
-  3: pufferfish
+emerald_block: "133"
+spruce_stairs: "134"
+birch_stairs: "135"
+jungle_stairs: "136"
+command_block: "137"
+beacon: "138"
+cobblestone_wall: "139, cobble wall"
 
-anvil:
-  0:
-  1: slightly damaged
-  2: very damaged
+oak_button: "143"
 
-# spade to shovel aliases
-wood_spade: wood shovel
-stone_spade: stone shovel
-iron_spade: iron shovel
-gold_spade: gold shovel
-diamond_spade: diamond shovel
+anvil: "145"
+trapped_chest: "146"
+light_weighted_pressure_plate: "147"
+heavy_weighted_pressure_plate: "148"
 
-# spawner egg items
-monster_egg: spawner egg, spawn egg, mob egg, egg spawner, egg spawn
+daylight_detector: "151, daylight sensor"
+redstone_block: "152"
+nether_quartz_ore: "153"
+hopper: "154"
+quartz_block: "155"
+quartz_stairs: "156"
+activator_rail: "157"
+dropper: "158"
+white_terracotta: "159"
+white_stained_glass_pane: "160"
+acacia_leaves: "161"
+acacia_log: "162"
+acacia_stairs: "163"
+dark_oak_stairs: "164"
+slime_block: "165"
+barrier: "166"
+iron_trapdoor: "167"
+prismarine: "168"
+sea_lantern: "169"
+hay_block: "170"
+white_carpet: "171"
+terracotta: "172"
+coal_block: "173"
+packed_ice: "174"
+sunflower: "175, double plant, tall flower, tall flowers"
 
-# silverfish blocks
-monster_eggs:
-  names: trap block
-  0: stone
-  1: cobble, cobble stone
-  2: stone brick, smooth brick
-  3: mossy stone brick, mossy brick
-  4: cracked stone brick, cracked brick
-  5: chiseled stone brick, chiseled brick
+red_sandstone: "179"
+red_sandstone_stairs: "180"
 
-# alchemy
-brewing_stand_item: brewing stand    # overwrites brewing_stand material which represents the block, not the item!
-brewing_stand: brewing stand block   # name to make the brewing stand block usable but you won't really need this.
-cauldron_item: cauldron
-cauldron: cauldron block
+acacia_slab: "182, acacia step"
+spruce_fence_gate: "183, spruce gate"
+birch_fence_gate: "184, birch gate"
+jungle_fence_gate: "185, jungle gate"
+dark_oak_fence_gate: "186 dark oak gate"
+acacia_fence_gate: "187 acacia gate"
+spruce_fence: "188"
+birch_fence: "189"
+jungle_fence: "190"
+dark_oak_fence: "191"
+acacia_fence: "192"
 
-glass_bottle: empty bottle, bottle
-potion:
-  0: water
-  16: awkward
-  32: thick
-  8192: mundane
-  64: mundane extended
+end_rod: "198"
+chorus_plant: "199"
+chorus_flower: "200"
+purpur_block: "201"
+purpur_pillar: "202"
+purpur_stairs: "203"
 
-# skulls/heads
-skull_item:
-  names: skull, head
-  0: skeleton
-  1: wither, wither skeleton
-  2: zombie
-  3: human, player
-  4: creeper
+purpur_slab: "205, purpur step"
+end_stone_bricks: "206"
 
-# golden apple
-golden_apple:
-  names: golden apple, gold apple
-  0: 
-  1: enchanted
+grass_path: "208"
 
-# Music discs
-GOLD_RECORD: music disc 1, disc 1, record 1
-GREEN_RECORD: music disc 2, disc 2, record 2
-RECORD_3: music disc 3, disc 3, record 3
-RECORD_4: music disc 4, disc 4, record 4
-RECORD_5: music disc 5, disc 5, record 5
-RECORD_6: music disc 6, disc 6, record 6
-RECORD_7: music disc 7, disc 7, record 7
-RECORD_8: music disc 8, disc 8, record 8
-RECORD_9: music disc 9, disc 9, record 9
-RECORD_10: music disc 10, disc 10, record 10
-RECORD_11: music disc 11, disc 11, record 11
-RECORD_12: music disc 12, disc 12, record 12
+repeating_command_block: "210"
+chain_command_block: "211"
 
-# Flower pots
-flower_pot: flower pot block         # name to make the flower pot block usable but you won't really need this.
-flower_pot_item:                     # overwrites flower_pot material which represents the block, not the item!
-  names: flower pot, pot
-  0: empty
-  1: rose
-  2: dandelion
-  3: oak sapling
-  4: spruce sapling, pine sapling
-  5: birch sapling
-  6: jungle tree sapling, jungle sapling
-  7: red mushroom
-  8: brown mushroom
-  9: cactus
-  10: shrub, dead bush
-  11: fern
+magma_block: "213"
+nether_wart_block: "214"
+red_nether_bricks: "215"
+bone_block: "216"
+structure_void: "217"
+observer: "218"
+white_shulker_box: "219"
+orange_shulker_box: "220"
+magenta_shulker_box: "221"
+light_blue_shulker_box: "222"
+yellow_shulker_box: "223"
+lime_shulker_box: "224"
+pink_shulker_box: "225"
+gray_shulker_box: "226"
+light_gray_shulker_box: "227"
+cyan_shulker_box: "228"
+purple_shulker_box: "229"
+blue_shulker_box: "230"
+brown_shulker_box: "231"
+green_shulker_box: "232"
+red_shulker_box: "233"
+black_shulker_box: "234"
+white_glazed_terracotta: "235"
+orange_glazed_terracotta: "236"
+magenta_glazed_terracotta: "237"
+light_blue_glazed_terracotta: "238"
+yellow_glazed_terracotta: "239"
+lime_glazed_terracotta: "240"
+pink_glazed_terracotta: "241"
+gray_glazed_terracotta: "242"
+light_gray_glazed_terracotta: "243"
+cyan_glazed_terracotta: "244"
+purple_glazed_terracotta: "245"
+blue_glazed_terracotta: "246"
+brown_glazed_terracotta: "247"
+green_glazed_terracotta: "248"
+red_glazed_terracotta: "249"
+black_glazed_terracotta: "250"
+white_concrete: "251"
+white_concrete_powder: "252"
 
-# plants
-long_grass:
-  names: plant
-  0: shrub
-  1: long grass
-  2: fern
+structure_block: "255"
+iron_shovel: "256, iron spade"
+iron_pickaxe: "257"
+iron_axe: "258"
+flint_and_steel: "259"
+apple: "260"
+bow: "261"
+arrow: "262"
+coal: "263"
+diamond: "264"
+iron_ingot: "265"
+gold_ingot: "266"
+iron_sword: "267"
+wooden_sword: "268, wood sword"
+wooden_shovel: "269, wood shovel, wooden spade, wood spade"
+wooden_pickaxe: "270, wood pickaxe"
+wooden_axe: "271, wood axe"
+stone_sword: "272"
+stone_shovel: "273, stone spade"
+stone_pickaxe: "274"
+stone_axe: "275"
+diamond_sword: "276"
+diamond_shovel: "277, diamond spade"
+diamond_pickaxe: "278"
+diamond_axe: "279"
+stick: "280"
+bowl: "281"
+mushroom_stew: "282, mushroom soup"
+golden_sword: "283, gold sword"
+golden_shovel: "284, gold shovel, golden spade, gold spade"
+golden_pickaxe: "285, gold pickaxe"
+golden_axe: "286, gold axe"
+string: "287"
+feather: "288"
+gunpowder: "289, gun powder, powder, sulphur"
+wooden_hoe: "290, wood hoe"
+stone_hoe: "291"
+iron_hoe: "292"
+diamond_hoe: "293"
+golden_hoe: "294"
+wheat_seeds: "295"
+wheat: "296"
+bread: "297"
+leather_helmet: "298"
+leather_chestplate: "299"
+leather_leggings: "300"
+leather_boots: "301"
+chainmail_helmet: "302"
+chainmail_chestplate: "303"
+chainmail_leggings: "304"
+chainmail_boots: "305"
+iron_helmet: "306"
+iron_chestplate: "307"
+iron_leggings: "308"
+iron_boots: "309"
+diamond_helmet: "310"
+diamond_chestplate: "311"
+diamond_leggings: "312"
+diamond_boots: "313"
+golden_helmet: "314"
+golden_chestplate: "315"
+golden_leggings: "316"
+golden_boots: "317"
+flint: "318"
+porkchop: "319"
+cooked_porkchop: "320"
+painting: "321"
+golden_apple: "322, gold apple"
+sign: "323"
+oak_door: "324"
+bucket: "325"
+water_bucket: "326"
+lava_bucket: "327"
+minecart: "328"
+saddle: "329"
+iron_door: "330"
+redstone: "331"
+snowball: "332"
+oak_boat: "333"
+leather: "334"
+milk_bucket: "335"
+brick: "336"
+clay_ball: "337"
+sugar_cane: "338"
+paper: "339"
+book: "340"
+slime_ball: "341"
+chest_minecart: "342, minecart with chest, storage minecart"
+furnace_minecart: "343, minecart with furnace, powered minecart"
+egg: "344"
+compass: "345"
+fishing_rod: "346"
+clock: "347"
+glowstone_dust: "348"
 
-# Fix the terribly named items
-nether_warts: nether warts block        # rename the block form of nether warts, you probably won't need to use this
-nether_stalk: nether warts              # rename the proper item to what it should have been
+ink_sac: "351, ink sack"
+bone: "352"
+sugar: "353"
+cake: "354"
+red_bed: "355"
+repeater: "356"
+cookie: "357"
+filled_map: "358"
+shears: "359"
+melon_slice: "360"
+pumpkin_seeds: "361"
+melon_seeds: "362"
+beef: "363"
+cooked_beef: "364"
+chicken: "365"
+cooked_chicken: "366"
+rotten_flesh: "367"
+ender_pearl: "368"
+blaze_rod: "369"
+ghast_tear: "370"
+gold_nugget: "371"
+nether_wart: "372"
+potion: "373"
+glass_bottle: "374, empty bottle, bottle"
+spider_eye: "375"
+fermented_spider_eye: "376"
+blaze_powder: "377"
+magma_cream: "378"
+brewing_stand: "379"
+cauldron: "380"
+ender_eye: "381"
+glistering_melon_slice: "382"
 
-# doors
-acacia_door: acacia door block
-acacia_door_item: acacia door
-birch_door: birch door block
-birch_door_item: birch door
-dark_oak_door: dark oak door block
-dark_oak_door_item: dark oak door
-jungle_door: jungle door block
-jungle_door_item: jungle door
-spruce_door: spruce door block
-spruce_door_item: spruce door
+experience_bottle: "384"
+fire_charge: "385"
+writable_book: "386"
+written_book: "387"
+emerald: "388"
+item_frame: "389"
+flower_pot: "390"
+carrot: "391"
+potato: "392"
+baked_potato: "393"
+poisonous_potato: "394"
+map: "395"
+golden_carrot: "396"
 
-# Misc. Fix Items
-carrot: carrot block
-carrot_item: carrot
-potato: potato block
-potato_item: potato
+carrot_on_a_stick: "398"
+nether_star: "399"
+pumpkin_pie: "400"
+firework_rocket: "401"
+firework_star: "402"
+enchanted_book: "403"
+comparator: "404, redstone comparator"
+nether_brick: "405"
+quartz: "406"
+tnt_minecart: "407, minecart with tnt, explosive minecart"
+hopper_minecart: "408, minecart with hopper"
+prismarine_shard: "409"
+prismarine_crystals: "410"
+rabbit: "411"
+cooked_rabbit: "412"
+rabbit_stew: "413"
+rabbit_foot: "414"
+rabbit_hide: "415"
+armor_stand: "416"
+iron_horse_armor: "417"
+golden_horse_armor: "418"
+diamond_horse_armor: "419"
+lead: "420"
+name_tag: "421"
+command_block_minecart: "422, minecart with command block"
+mutton: "423"
+cooked_mutton: "424"
+white_banner: "425"
+end_crystal: "426"
+spruce_door: "427"
+birch_door: "428"
+jungle_door: "429"
+acacia_door: "430"
+dark_oak_door: "431"
+chorus_fruit: "432"
+popped_chorus_fruit: "433"
+beetroot: "434"
+beetroot_seeds: "435"
+beetroot_soup: "436"
+dragon_breath: "437"
+splash_potion: "438"
+spectral_arrow: "439"
+tipped_arrow: "440"
+lingering_potion: "441"
+shield: "442"
+elytra: "443"
+spruce_boat: "444"
+birch_boat: "445"
+jungle_boat: "446"
+acacia_boat: "447"
+dark_oak_boat: "448"
+totem_of_undying: "449"
+shulker_shell: "450"
 
-# misc aliases
-air: fail
-sulphur: gun powder, powder
-redstone_torch_on: redstone torch
-redstone_lamp_off: redstone lamp, lamp
-jack_o_lantern: lantern
-thin_glass: glass pane
-workbench: crafting table, craft table
-storage_minecart: minecart with chest, chest minecart
-powered_minecart: minecart with furnace, furnace minecart
-explosive_minecart: minecart with TNT, tnt minecart
-hopper_minecart: minecart with hopper
-redstone_comparator: comparator
-daylight_detector: daylight sensor
+iron_nugget: "452"
+
+music_disc_13: "2256, disc 13, music record 13, record 13"
+music_disc_cat: "2257, disc cat, music record cat, record cat"
+music_disc_blocks: "2258, disc blocks, music record blocks, record blocks"
+music_disc_chirp: "2259, disc chirp, music record chirp, record chirp"
+music_disc_far: "2260, disc far, music record far, record far"
+music_disc_mall: "2261, disc mall, music record mall, record mall"
+music_disc_mellohi: "2262, disc mellohi, music record mellohi, record mellohi"
+music_disc_stal: "2263, disc stal, music record stal, record stal"
+music_disc_strad: "2264, disc strad, music record strad, record strad"
+music_disc_ward: "2265, disc ward, music record ward, record ward"
+music_disc_11: "2266, disc 11, music record 11, record 11"
+music_disc_wait: "2267, disc wait, music record wait, record wait"
+# END 1.13 ID Conversions
+
+spruce_slab: spruce step
+birch_slab: birch step
+jungle_slab: jungle step
+dark_oak_slab: dark oak step
+sandstone_slab: sandstone step
+petrified_oak_slab: petrified oak step
+cobblestone_slab: cobblestone step, cobble slab, cobble step
+brick_slab: brick step
+stone_brick_slab: stone brick step
+nether_brick_slab: nether brick step
+quartz_slab: quartz step
+red_sandstone_slab: red sandstone step
+prismarine_slab: prismarine step
+prismarine_brick_slab: prismarine brick step
+dark_prismarine_slab: dark prismarine step
+
+oak_wood: wood plank, oak plank
+spruce_wood: spruce plank
+birch_wood: birch plank
+jungle_wood: jungle plank
+acacia_wood: acacia plank
+dark_oak_wood: dark oak plank
 
 # add your own aliases if you want.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
