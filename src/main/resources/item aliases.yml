@@ -83,6 +83,7 @@ mossy_cobblestone: "48"
 obsidian: "49"
 torch: "50"
 
+spawner: "52, mob spawner, monster spawner"
 oak_stairs: "53"
 chest: "54"
 
@@ -90,6 +91,7 @@ diamond_ore: "56"
 diamond_block: "57"
 crafting_table: "58, crafting table, craft table, workbench"
 
+farmland: "60"
 furnace: "61"
 
 ladder: "65"
@@ -406,7 +408,7 @@ baked_potato: "393"
 poisonous_potato: "394"
 map: "395"
 golden_carrot: "396"
-
+player_head: "397, skull"
 carrot_on_a_stick: "398"
 nether_star: "399"
 pumpkin_pie: "400"
