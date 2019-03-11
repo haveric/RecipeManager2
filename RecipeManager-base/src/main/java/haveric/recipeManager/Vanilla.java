@@ -603,7 +603,7 @@ public class Vanilla {
      * @return replaced recipe or null if not found.
      */
     public static Recipe replaceCustomRecipe(BaseRecipe recipe) {
-        if (Version.has1_13Support() || !Version.has1_12Support()) return null;
+        if (!Version.has1_12Support()) return null;
 
         if (recipe instanceof CraftRecipe) {
             return replaceCraftRecipeV1_12((CraftRecipe) recipe);
