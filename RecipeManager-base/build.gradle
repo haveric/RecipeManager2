@@ -9,7 +9,9 @@ apply plugin: 'idea'
 sourceCompatibility = 1.8
 
 configurations {
-    extra
+    extra {
+        transitive false
+    }
 }
 
 // Include dependent libraries in archive.
