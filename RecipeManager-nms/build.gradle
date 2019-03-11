@@ -1,0 +1,39 @@
+apply plugin: 'java'
+//  Uncomment to view deprecation warnings.
+//  compileJava {
+//    options.compilerArgs << '-Xlint:deprecation'
+//    options.compilerArgs << '-Xlint:unchecked'
+//  }
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+configurations {
+    extra
+    compile2
+    compile3
+}
+
+// Include dependent libraries in archive.
+jar {
+    from {
+        configurations.extra.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+
+    compile2 "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
+    compile3 "org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT"
+
+    extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+
+
+    compile fileTree(dir: "libs", include: ['*.jar'])
+}
+task libs(type: Sync) {
+    from configurations.compile2
+    from configurations.compile3
+    into "libs"
+}

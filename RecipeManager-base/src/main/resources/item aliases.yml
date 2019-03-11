@@ -1,0 +1,505 @@
+lastchanged: 2.15.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+#-------------------------------------------------------------------------------------------------------------------------
+# RecipeManager item and data aliases
+#
+# This file defines aliases for MATERIAL and DATA usable in recipe ingredients and results.
+# You can use any names specified as values to replace MATERIAL or DATA.
+# You can also use original names with custom data names or vice-versa.
+#
+# The first names of each material or data will also be used when this plugin prints item name/data.
+#
+# Examples:
+#  dye:red    - valid: rose red dyes. (dye is material alias)
+#  wood:birch - valid: birch wood planks (wood is original material name)
+#  dye:5      - valid: purple dye (numeral data value acceptable)
+#  wood:red   - invalid: will give an error since data value alias "red" isn't defined for material "wood".
+#
+# And of course when defining ingredients you can avoid the data value or use * to allow any data value.
+#
+# This file is great for giving easy-to-use names to items that are added by other plugins or server mods.
+#
+# You can add new aliases or edit existing if you like, see below examples or follow syntax:
+#
+# <material or id>:
+#   names: <alias>, ...
+#   <number>: <alias>, ...
+#   ...
+#
+# If you don't want to give any data values, just aliases:
+#
+# <material or id>: <alias>, ...
+#
+# NOTE: You should split words by space or underscore when defining an alias, it will give you more matches, example:
+# "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".
+#------------------------------------------------------------------------------------------------------------------------
+
+# START 1.13 ID Conversions
+air: "0, fail"
+stone: "1"
+grass_block: "2"
+dirt: "3"
+cobblestone: "4, cobble"
+oak_planks: "5"
+oak_sapling: "6"
+bedrock: "7"
+
+sand: "12"
+gravel: "13"
+gold_ore: "14"
+iron_ore: "15"
+coal_ore: "16"
+oak_log: "17"
+oak_leaves: "18"
+sponge: "19"
+glass: "20"
+lapis_ore: "21"
+lapis_block: "22"
+dispenser: "23"
+sandstone: "24"
+note_block: "25"
+
+powered_rail: "27"
+detector_rail: "28"
+sticky_piston: "29"
+cobweb: "30"
+grass: "31, tall grass"
+dead_bush: "32"
+piston: "33"
+
+white_wool: "35"
+
+dandelion: "37"
+poppy: "38, red rose, rose"
+brown_mushroom: "39"
+red_mushroom: "40"
+gold_block: "41"
+iron_block: "42"
+
+stone_slab: "44, stone step"
+bricks: "45"
+tnt: "46"
+bookshelf: "47"
+mossy_cobblestone: "48"
+obsidian: "49"
+torch: "50"
+
+spawner: "52, mob spawner, monster spawner"
+oak_stairs: "53"
+chest: "54"
+
+diamond_ore: "56"
+diamond_block: "57"
+crafting_table: "58, crafting table, craft table, workbench"
+
+farmland: "60"
+furnace: "61"
+
+ladder: "65"
+rail: "66"
+cobblestone_stairs: "67, cobble stairs"
+
+lever: "69"
+stone_pressure_plate: "70"
+
+oak_pressure_plate: "72"
+redstone_ore: "73"
+
+redstone_torch: "76"
+stone_button: "77"
+snow: "78"
+ice: "79"
+snow_block: "80"
+cactus: "81"
+clay: "82"
+
+jukebox: "84"
+oak_fence: "85"
+pumpkin: "86"
+netherrack: "87"
+soul_sand: "88"
+glowstone: "89"
+
+jack_o_lantern: "91, lantern"
+
+white_stained_glass: "95"
+oak_trapdoor: "96"
+
+stone_bricks: "98"
+brown_mushroom_block: "99"
+red_mushroom_block: "100"
+iron_bars: "101"
+glass_pane: "102"
+melon: "103"
+
+vine: "106"
+oak_fence_gate: "107"
+brick_stairs: "108"
+stone_brick_stairs: "109"
+mycelium: "110"
+lily_pad: "111"
+nether_bricks: "112"
+nether_brick_fence: "113"
+nether_brick_stairs: "114"
+
+enchanting_table: "116"
+
+end_portal_frame: "120"
+end_stone: "121"
+
+redstone_lamp: "123"
+
+oak_slab: "126, oak step, wood slab, wood step"
+
+sandstone_stairs: "128"
+emerald_ore: "129"
+ender_chest: "130"
+tripwire_hook: "131"
+
+emerald_block: "133"
+spruce_stairs: "134"
+birch_stairs: "135"
+jungle_stairs: "136"
+command_block: "137"
+beacon: "138"
+cobblestone_wall: "139, cobble wall"
+
+oak_button: "143"
+
+anvil: "145"
+trapped_chest: "146"
+light_weighted_pressure_plate: "147"
+heavy_weighted_pressure_plate: "148"
+
+daylight_detector: "151, daylight sensor"
+redstone_block: "152"
+nether_quartz_ore: "153"
+hopper: "154"
+quartz_block: "155"
+quartz_stairs: "156"
+activator_rail: "157"
+dropper: "158"
+white_terracotta: "159"
+white_stained_glass_pane: "160"
+acacia_leaves: "161"
+acacia_log: "162"
+acacia_stairs: "163"
+dark_oak_stairs: "164"
+slime_block: "165"
+barrier: "166"
+iron_trapdoor: "167"
+prismarine: "168"
+sea_lantern: "169"
+hay_block: "170"
+white_carpet: "171"
+terracotta: "172"
+coal_block: "173"
+packed_ice: "174"
+sunflower: "175, double plant, tall flower, tall flowers"
+
+red_sandstone: "179"
+red_sandstone_stairs: "180"
+
+acacia_slab: "182, acacia step"
+spruce_fence_gate: "183, spruce gate"
+birch_fence_gate: "184, birch gate"
+jungle_fence_gate: "185, jungle gate"
+dark_oak_fence_gate: "186 dark oak gate"
+acacia_fence_gate: "187 acacia gate"
+spruce_fence: "188"
+birch_fence: "189"
+jungle_fence: "190"
+dark_oak_fence: "191"
+acacia_fence: "192"
+
+end_rod: "198"
+chorus_plant: "199"
+chorus_flower: "200"
+purpur_block: "201"
+purpur_pillar: "202"
+purpur_stairs: "203"
+
+purpur_slab: "205, purpur step"
+end_stone_bricks: "206"
+
+grass_path: "208"
+
+repeating_command_block: "210"
+chain_command_block: "211"
+
+magma_block: "213"
+nether_wart_block: "214"
+red_nether_bricks: "215"
+bone_block: "216"
+structure_void: "217"
+observer: "218"
+white_shulker_box: "219"
+orange_shulker_box: "220"
+magenta_shulker_box: "221"
+light_blue_shulker_box: "222"
+yellow_shulker_box: "223"
+lime_shulker_box: "224"
+pink_shulker_box: "225"
+gray_shulker_box: "226"
+light_gray_shulker_box: "227"
+cyan_shulker_box: "228"
+purple_shulker_box: "229"
+blue_shulker_box: "230"
+brown_shulker_box: "231"
+green_shulker_box: "232"
+red_shulker_box: "233"
+black_shulker_box: "234"
+white_glazed_terracotta: "235"
+orange_glazed_terracotta: "236"
+magenta_glazed_terracotta: "237"
+light_blue_glazed_terracotta: "238"
+yellow_glazed_terracotta: "239"
+lime_glazed_terracotta: "240"
+pink_glazed_terracotta: "241"
+gray_glazed_terracotta: "242"
+light_gray_glazed_terracotta: "243"
+cyan_glazed_terracotta: "244"
+purple_glazed_terracotta: "245"
+blue_glazed_terracotta: "246"
+brown_glazed_terracotta: "247"
+green_glazed_terracotta: "248"
+red_glazed_terracotta: "249"
+black_glazed_terracotta: "250"
+white_concrete: "251"
+white_concrete_powder: "252"
+
+structure_block: "255"
+iron_shovel: "256, iron spade"
+iron_pickaxe: "257"
+iron_axe: "258"
+flint_and_steel: "259"
+apple: "260"
+bow: "261"
+arrow: "262"
+coal: "263"
+diamond: "264"
+iron_ingot: "265"
+gold_ingot: "266"
+iron_sword: "267"
+wooden_sword: "268, wood sword"
+wooden_shovel: "269, wood shovel, wooden spade, wood spade"
+wooden_pickaxe: "270, wood pickaxe"
+wooden_axe: "271, wood axe"
+stone_sword: "272"
+stone_shovel: "273, stone spade"
+stone_pickaxe: "274"
+stone_axe: "275"
+diamond_sword: "276"
+diamond_shovel: "277, diamond spade"
+diamond_pickaxe: "278"
+diamond_axe: "279"
+stick: "280"
+bowl: "281"
+mushroom_stew: "282, mushroom soup"
+golden_sword: "283, gold sword"
+golden_shovel: "284, gold shovel, golden spade, gold spade"
+golden_pickaxe: "285, gold pickaxe"
+golden_axe: "286, gold axe"
+string: "287"
+feather: "288"
+gunpowder: "289, gun powder, powder, sulphur"
+wooden_hoe: "290, wood hoe"
+stone_hoe: "291"
+iron_hoe: "292"
+diamond_hoe: "293"
+golden_hoe: "294"
+wheat_seeds: "295"
+wheat: "296"
+bread: "297"
+leather_helmet: "298"
+leather_chestplate: "299"
+leather_leggings: "300"
+leather_boots: "301"
+chainmail_helmet: "302"
+chainmail_chestplate: "303"
+chainmail_leggings: "304"
+chainmail_boots: "305"
+iron_helmet: "306"
+iron_chestplate: "307"
+iron_leggings: "308"
+iron_boots: "309"
+diamond_helmet: "310"
+diamond_chestplate: "311"
+diamond_leggings: "312"
+diamond_boots: "313"
+golden_helmet: "314"
+golden_chestplate: "315"
+golden_leggings: "316"
+golden_boots: "317"
+flint: "318"
+porkchop: "319"
+cooked_porkchop: "320"
+painting: "321"
+golden_apple: "322, gold apple"
+sign: "323"
+oak_door: "324"
+bucket: "325"
+water_bucket: "326"
+lava_bucket: "327"
+minecart: "328"
+saddle: "329"
+iron_door: "330"
+redstone: "331"
+snowball: "332"
+oak_boat: "333"
+leather: "334"
+milk_bucket: "335"
+brick: "336"
+clay_ball: "337"
+sugar_cane: "338"
+paper: "339"
+book: "340"
+slime_ball: "341"
+chest_minecart: "342, minecart with chest, storage minecart"
+furnace_minecart: "343, minecart with furnace, powered minecart"
+egg: "344"
+compass: "345"
+fishing_rod: "346"
+clock: "347"
+glowstone_dust: "348"
+
+ink_sac: "351, ink sack"
+bone: "352"
+sugar: "353"
+cake: "354"
+red_bed: "355"
+repeater: "356"
+cookie: "357"
+filled_map: "358"
+shears: "359"
+melon_slice: "360"
+pumpkin_seeds: "361"
+melon_seeds: "362"
+beef: "363"
+cooked_beef: "364"
+chicken: "365"
+cooked_chicken: "366"
+rotten_flesh: "367"
+ender_pearl: "368"
+blaze_rod: "369"
+ghast_tear: "370"
+gold_nugget: "371"
+nether_wart: "372"
+potion: "373"
+glass_bottle: "374, empty bottle, bottle"
+spider_eye: "375"
+fermented_spider_eye: "376"
+blaze_powder: "377"
+magma_cream: "378"
+brewing_stand: "379"
+cauldron: "380"
+ender_eye: "381"
+glistering_melon_slice: "382"
+
+experience_bottle: "384"
+fire_charge: "385"
+writable_book: "386"
+written_book: "387"
+emerald: "388"
+item_frame: "389"
+flower_pot: "390"
+carrot: "391"
+potato: "392"
+baked_potato: "393"
+poisonous_potato: "394"
+map: "395"
+golden_carrot: "396"
+player_head: "397, skull"
+carrot_on_a_stick: "398"
+nether_star: "399"
+pumpkin_pie: "400"
+firework_rocket: "401"
+firework_star: "402"
+enchanted_book: "403"
+comparator: "404, redstone comparator"
+nether_brick: "405"
+quartz: "406"
+tnt_minecart: "407, minecart with tnt, explosive minecart"
+hopper_minecart: "408, minecart with hopper"
+prismarine_shard: "409"
+prismarine_crystals: "410"
+rabbit: "411"
+cooked_rabbit: "412"
+rabbit_stew: "413"
+rabbit_foot: "414"
+rabbit_hide: "415"
+armor_stand: "416"
+iron_horse_armor: "417"
+golden_horse_armor: "418"
+diamond_horse_armor: "419"
+lead: "420"
+name_tag: "421"
+command_block_minecart: "422, minecart with command block"
+mutton: "423"
+cooked_mutton: "424"
+white_banner: "425"
+end_crystal: "426"
+spruce_door: "427"
+birch_door: "428"
+jungle_door: "429"
+acacia_door: "430"
+dark_oak_door: "431"
+chorus_fruit: "432"
+popped_chorus_fruit: "433"
+beetroot: "434"
+beetroot_seeds: "435"
+beetroot_soup: "436"
+dragon_breath: "437"
+splash_potion: "438"
+spectral_arrow: "439"
+tipped_arrow: "440"
+lingering_potion: "441"
+shield: "442"
+elytra: "443"
+spruce_boat: "444"
+birch_boat: "445"
+jungle_boat: "446"
+acacia_boat: "447"
+dark_oak_boat: "448"
+totem_of_undying: "449"
+shulker_shell: "450"
+
+iron_nugget: "452"
+
+music_disc_13: "2256, disc 13, music record 13, record 13"
+music_disc_cat: "2257, disc cat, music record cat, record cat"
+music_disc_blocks: "2258, disc blocks, music record blocks, record blocks"
+music_disc_chirp: "2259, disc chirp, music record chirp, record chirp"
+music_disc_far: "2260, disc far, music record far, record far"
+music_disc_mall: "2261, disc mall, music record mall, record mall"
+music_disc_mellohi: "2262, disc mellohi, music record mellohi, record mellohi"
+music_disc_stal: "2263, disc stal, music record stal, record stal"
+music_disc_strad: "2264, disc strad, music record strad, record strad"
+music_disc_ward: "2265, disc ward, music record ward, record ward"
+music_disc_11: "2266, disc 11, music record 11, record 11"
+music_disc_wait: "2267, disc wait, music record wait, record wait"
+# END 1.13 ID Conversions
+
+spruce_slab: spruce step
+birch_slab: birch step
+jungle_slab: jungle step
+dark_oak_slab: dark oak step
+sandstone_slab: sandstone step
+petrified_oak_slab: petrified oak step
+cobblestone_slab: cobblestone step, cobble slab, cobble step
+brick_slab: brick step
+stone_brick_slab: stone brick step
+nether_brick_slab: nether brick step
+quartz_slab: quartz step
+red_sandstone_slab: red sandstone step
+prismarine_slab: prismarine step
+prismarine_brick_slab: prismarine brick step
+dark_prismarine_slab: dark prismarine step
+
+oak_wood: wood plank, oak plank
+spruce_wood: spruce plank
+birch_wood: birch plank
+jungle_wood: jungle plank
+acacia_wood: acacia plank
+dark_oak_wood: dark oak plank
+
+# add your own aliases if you want.

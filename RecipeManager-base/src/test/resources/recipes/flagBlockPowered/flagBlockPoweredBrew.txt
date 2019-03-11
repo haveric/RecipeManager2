@@ -1,0 +1,11 @@
+brew
+nether_wart
+potion:water
+= dirt
+@blockpowered
+
+brew
+redstone
+potion:water
+= stone_sword
+@blockpowered | indirect

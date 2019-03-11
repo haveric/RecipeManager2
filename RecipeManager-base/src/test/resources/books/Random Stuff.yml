@@ -1,0 +1,13 @@
+title: Random Stuff
+author: RecipeManager
+description: Book description written on the first page
+
+settings:
+  pervolume: 25
+  cover: false
+  contents: false
+  end: false
+  customend: Custom End
+
+recipes:
+ - Boomstick

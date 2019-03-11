@@ -1,0 +1,397 @@
+== Change log ==
+This file will be automatically overwritten when a new version is installed.
+
+=== Coming Soon ===
+* @NoResult: Shift clicking will no longer give results
+
+=== v2.14.1 ===
+* @IngredientCondition: Fixed issue when unbreakable was not set
+
+=== v2.14.0 ===
+* Fixed furnace smelt times not updating
+* Added support for relative coordinates in x,y,z variables {x-1},{y+7},{z+12}
+* @Inventory: Added multiple title
+* @IngredientCondition and @HoldItem: Added unbreakable option
+* @SkullOwner: Added uuid support (only checks the offline player storage)
+* Fixed NamespacedKey warnings for PaperSpigot
+
+=== v2.13.2
+* @ItemLore: Allow empty lines without needing colors
+* @ItemLore, @ItemName, @Message, @Broadcast, @BookItem, and more
+** Added exact string option using quotes
+* @Summon: Fixed spread option
+* Fixed messages set to false still sending a message
+
+=== v2.13.1 ===
+* @SpawnParticle: Only trigger once per shift click
+* @LaunchFirework: Switch to trigger once per shift click instead of preventing shift click
+* @ForPermission: Fixed flags not working when they haven't been used yet.
+* Fixed shapeless recipes not always matching existing recipes
+
+=== v2.13.0 ===
+* Fixed fail chances not removing ingredients on @IndividualResults recipes
+* Fixed null names in recipe books. Use first ingredientcondition lore line as an assumed fallback name
+* Fixed chance recipes not showing results in MC 1.11
+* @Summon: Updated and fixed setting items on entities
+* @Summon: Added better backwards support for equipment
+* @Inventory: Handle colored titles
+* New Flag: @ApplyEnchantment
+** Copies enchantments from ingredients to the result
+
+=== v2.12.0 ===
+* Removed Metrics
+* Fixed custom potion error
+* Fixed a crash when using /rmcreaterecipe with no ingredients
+* Improvements to RecipeBooks
+* New Flag: @SpawnParticle
+
+=== v2.11.0 ===
+* Added 1.12 Support
+** Please check your removal recipes against a fresh /rmextract as some have changed
+* To avoid "recipe not found, removing" errors and subsequent loss of advancement connections to managed recipes, give them all names. (e.g. craft <name>)
+** This is especially true for @override's, but is also true if you intend to leverage advancements
+* Fixed Sweeping Edge enchantment alias (again)
+* Fixed errors on shutdown
+* @Summon: Added support for invulnerable and noai (disabling ai)
+
+=== v2.10.0 ===
+* New Flag: @MonsterSpawner (Requires Bukkit/Spigot build of 1/10/2017 or newer)
+** Works similarly to @SpawnEgg
+* Fixed @forchance error message showing FlagDescriptor instead of the actual flag name
+* Removed double @ in @DisplayResult description
+* @Remove: Fixed craft recipes with air in them
+* Fixed Sweeping Edge enchantment alias
+
+=== v2.9 ===
+* Furnace recipes: Fixed fuel recipes preventing other fuel recipes
+* Fix incorrect result after different failed recipe
+* Fix case issues with @IngredientCondition and @HoldItem
+* Fixed colors in craft result denied messages
+* New Flag: @ItemUnbreakable or @Unbreakable
+** Sets the unbreakable state of items (Requires 1.11)
+* Added/updated special recipes for 1.11
+* Added enchant aliases for Binding Curse, Vanishing Curse, and Sweeping Edge
+* Added 1.11 fuel recipes
+* Added @SpawnEgg flag (Requires 1.11)
+* @IngredientCondition: Added spawnegg option (Requires 1.11)
+
+=== v2.8 ===
+* Dropped support for Java 6
+* Fixed potions in 1.9.x
+* Fixed Shield Banner recipe
+* Removed the need for server lookups of UUIDs
+* Fix recipe files starting with UTF8 BOM
+* @HoldItem: Added slot attribute to support offhand, armor, and inventory
+** See your 'recipe flags.html' file for usage information
+* @CloneIngredient: Added lore options
+** lore                 = copies all the custom item lore/description unless conditions are added to copy specific lines
+** lore [number]        = copies only the lore on line number. More lore conditions can be added to copy more lines
+** lore [text]          = copies any lore lines that contain the text
+** lore [regex:pattern] = copies any lore lines that match the regex pattern
+* @GameMode: Fixed duplicate calls not clearing previous gamemodes
+* @NoResult: Fixed result not clearing as it should
+* @FireworkItem: Fixed effect parsing and power not being set
+* @IngredientCondition: Added potion, potioneffect, and banner conditions
+* Many more misc. fixes
+
+=== v2.7.3 ===
+* Improved compatibility for 1.8.x and 1.7.x versions.
+* Added Frost Walker and Mending enchant aliases
+
+=== v2.7.2 ===
+* Minecraft 1.9 compatibility 
+** Should still be backwards compatible to some 1.7.x builds, but may need to drop support for 1.8 and down soon
+
+=== v2.7.1 ===
+* Fixed ingredient subtracting issues
+* Prevent chance recipes from being cheated around by holding an item of the type you want
+* Fix shift clicking for chance recipes
+* Fixed beta status not showing up in console
+* Update material.fail config to default to BARRIER as FIRE no longer displays
+
+=== v2.7 ===
+* Fixed recipe parsing with material name/aliases starting with a directive (brew/craft/combine/smelt/fuel)
+* Added 'item datas.yml' to override max data/durability values for materials
+* Fixed potion not being defined error on brewing recipes
+* Better handling of invalid Bukkit recipes
+* @Remove: Fixed removing combine recipes
+* @ingredientcondition: Improved amount handling
+* @HoldItem: Added conditions similar to @IngredientCondition
+* @secret: Removed conflicting alias 'hide'
+* New flag @NoResult
+** Prevents the result item from being crafted
+** Useful when giving items through @command or providing non-item results, such as @modexp
+* Furnace improvements:
+** Fixed Furnace/Brewing save data from getting erased on a restart
+** Fixed shift clicking an ingredient into a furnace not setting the permission owner
+** Fixed some flags getting called before craft in furnaces
+* /rmcreaterecipe improvements:
+** Collapse recipes down to smallest craft size
+** Added combine variant
+** Fixed amount being added to ingredients instead of @ingredientcondition
+** Clean up unneeded data and amount outputs
+
+=== v2.6.4 ===
+* Only call furnace fuel events for custom fuels
+
+=== v2.6.3 ===
+* Added @inventory flag
+** @inventory crafting // Player crafting menu
+** @inventory workbench // Must use a crafting table
+* Improved /rmgetbook's command usage formatting
+* Fixed /rmcheck command. Test recipe files for errors without reloading them
+* @summon: Fixed adding armor and weapons to creatures
+
+=== v2.6.2 ===
+* @Permission: Fixed multiple permission requirements
+** Player must have any permission listed, not all permissions
+** Player must have no permissions marked with !
+* @KeepItem: Fixed shift clicking when the item should be destroyed
+* Update checks are now asynchronous. Should no longer stall the server if update site is down or having issues
+
+=== v2.6.1 ===
+* @IndividualResults Fixed all results failing when no chances provided
+* Fixed results not updating correctly on recipes with multiple results
+* @Explode: Added fuel property to control when explosions occur in fuel recipes
+** @Explode fuel end // Will cause the explosion to happen after the fuel runs out
+** @Explode fuel random // Will cause the explosion to happen sometime randomly before the fuel runs out
+* API: Added RecipeManagerFuelBurnEndEvent and RecipeManagerFuelBurnRandomEvent
+
+=== v2.6 ===
+* @IngredientCondition: Added 'bookenchant' and 'nobookenchant'
+* Added @Hide flag
+** @hide attributes     // Hide attributes like Damage
+** @hide destroys       // Hide what the item can break/destroy
+** @hide enchants       // Hide enchants
+** @hide placedon       // Hide where this item can be placed on
+** @hide potioneffects  // Hide potion effects on this item
+** @hide unbreakable    // Hide the unbreakable state
+** @hide all            // Hides everything
+** @hide placedon | destroys // Removes placed on line and break/destroy lines
+* @Enchant and @EnchantBook Added 'remove' option for cloned ingredients
+* Added @BannerItem flag (See 'recipe flags.html' for patterns and colors)
+** @banner black
+** @banner red | circle_middle blue | skull yellow
+** @banner green | half_horizontal yellow | circle_middle orange
+* Added @IndividualResults flag
+** Allows multi-result recipes to have individual result outcomes, instead of a chance based outcome between all results.
+** With this flag set, the first valid recipe found will be the one crafted
+** Replaces "@displayresult first" in most cases
+* Fixed display result on a failed craft
+
+=== v2.5.1 ===
+* Fixed shift clicking vanilla ingredients into furnaces
+* Fix shift click behavior for result ingredientcondition amounts
+* Recipe Books improvements:
+** Removed strange characters at the end
+** Show the smallest shape size possible for recipes
+
+=== v2.5 ===
+* @IngredientCondition: Added 'needed' parameter which allows you to match against less than all ingredients of a type
+** For Example:
+** @ingredientcondition sugar | nometa | needed 2 // Recipe will require 2 vanilla sugar
+** @ingredientcondition sugar | name �fFlour | needed 3 // Also require 3 sugars named �fFlour
+* Added recipe-comment-characters config option for customizing inline comments
+* @ForChance: Fixed a couple issues when using groups
+* Brewing updates
+** Fixed multiple brewing recipes and multiple results
+** Added a note about this being an experimental feature. Expect bugs
+* Added /rmcreaterecipe command
+** Creates a recipe with the left 9 items in the inventory being the ingredients and the selected hotbar slot as the result
+** Early testing, does not support all ingredientconditions/flags yet
+* Removed /rmextractrecipe in favor of /rmcreaterecipe
+* Improved furnace permissions. Now updates the fueler when adding fuel or ingredients.
+* Fixed shift click stacking in furnaces (prevents items from stacking higher than their stack should)
+* @permission: Fixed an issue when the crafter didn't have any valid permission
+* Prevent the loading of recipes from getting stuck when invalid items are found
+
+=== v2.4 ===
+* Fixed some shift clicking issues with furnaces
+* Fixed rmcheck command permissions
+* Added basic brewing recipe support (See 'basic recipes.html' for usage)
+* Prevent vanilla recipes from getting the RecipeManager id lore
+* Fix 1.7.x support
+* @Restrict: Remove override warnings
+* @SkullOwner: Give the correct skull for Spigot (will be untextured before crafted)
+
+=== v2.3.4 ===
+* @LightLevel Added a note about using light from blocks with furnaces as they provide light to themselves
+* Fixed vanilla repairing after /rmreload
+* Fixed vanilla banner recipes after /rmreload
+* Fixed vanilla book cloning after /rmreload
+* Fixed vanilla map cloning after /rmreload
+* No longer exports any special recipes
+* Added special-recipes.book-cloning config
+* Added special-recipes.banner config
+* Fixed furnace-shift-click click mode when right clicking to fuel slot
+* Fixed vanilla fuels not re-registering on /rmreload
+* More furnace tweaks to prevent getting around recipe smelt times and improve fuel handling
+
+=== v2.3.3 ===
+* Fixed a UUID issue which caused issues with furnace/fuel recipes
+* Fixed doubled up lores for smelting recipes
+* Fixed custom fuels being used up when clicking on the fuel slot
+* Misc. Furnace tweaks
+* @Broadcast: Fixed colors not being set
+* @AddToBook: Names no longer required to be all lowercase
+
+=== v2.3.2 ===
+* Fixed multi-result recipes only showing the first item
+* Only perform UUID lookups when actually needed (Huge performance improvement, especially for furnaces)
+* Fixed low fuel items such as sticks resetting the furnace cook time
+* Fixed smelting recipes only ever smelting one item
+* Fixed smelting recipes with a chance to fail
+* Fixed default smelting time for custom smelting recipes
+
+=== v2.3.1 ===
+* Added @temperature flag
+** @temperature < 0 // Must be in an icy biome
+** @temperature 1.2 // Must be in a hot biome, such as a desert or savanna
+** @temp >= 1.2 // Equivalent to the above example
+** @temp >= .15, <= .95 // Must be within a temperature where it can rain
+* @FlagSummon: Add better support for horses
+** Can now use saddle, horse, horsecolor, horsestyle, jumpstrength, haschest as well as a few other animal options
+* @FlagSummon: Added adult option for animals and villagers (works similar to baby, but forces creature to be an adult)
+* @FlagSummon: Added support for Rabbits
+* @FlagSummon: Added elder option for Guardians
+* @IngredientCondition: Added more data options
+** all: Flips the data check to allow all data values instead of none initially
+** vanilla: Only allow data values within the vanilla ranges
+** new: Equivalent to 0, or an undamaged item
+** damaged: On weapons and armor, this is everything within vanilla limits that is considered a damaged item
+* @IngredientCondition: Fixed amount option
+* Reset display item when item cannot be crafted
+* Updated Bukkit doc links to spigot's versions for updated 1.8 stuff
+
+=== v2.3 ===
+* Fixed furnace recipe fuel restrictions. It will only restrict the recipe it is applied to now
+* Fixed an issue with @ingredientcondition's nometa (plus variants) causing exceptions with certain recipes
+* Removed "Extra object is not an itemstack!" for smelting recipes
+* Added 1.8 banners, fences, and gates to vanilla fuel recipes
+* Added Depth Strider to Enchantment aliases
+* Added 1.8 items to item aliases
+* Fixed colors not being set on smelting recipes
+* Fixed setting messages to false throwing an error.
+* Fix player skulls not showing the correct texture in the inventory
+* Updated @needxp flag to handle 1.8 or 1.7 models of xp
+* Added {playerexp} variable to @needxp
+* Fixed @world flag
+
+=== v2.2.3 ===
+* Fixed @remove not always working
+* Show @needmoney, @modmoney, @needlevel, @modlevel, @needexp, @modexp on recipe results
+* Fixed @needlevel
+** @needlevel 1 // Requires a minimum level of 1
+** @needlevel 5-5 // Requires exactly level 5
+* Fixed @needexp not working if exp was equal to the mininum exp
+* Upgraded @needexp to work with exact exp similar to @needlevel
+* Add support for @name, @lore, and @enchant in smelting recipes
+* Fixed nometa + variants not overriding name, lore, etc. correctly
+* Removed some reason messages as they aren't necessary anymore.
+
+=== v2.2.2 ===
+* Add support for leather color when extracting recipes.
+* Don't try to load RecipeManager last as it breaks reload. If other plugins want their recipes to work with RecipeManager, they can use depend or softdepend
+* Add new conditions to @ingredientcondition flag
+** noname: requires the ingredient not have a name set.
+** nolore: requires the ingredient not have a lore set.
+** noenchant: requires the ingredient not have any enchants.
+** nocolor: requires the ingredient not have a color set (leather armor only)
+** nometa: equivalent to noenchant | noname | nolore | nocolor
+* Fixed an @ingredientcondition bug with recipes having two or more ingredients and not having conditions on all of them
+* Fixed a potential issue with invalid enchants
+* Fixed smelting/fuel issues when reloading
+
+=== v2.2.1 ===
+* Fixed an error where the plugin would disable if Vault wasn't installed.
+* Make RecipeManager load last to catch other plugins adding recipes.
+* Fixed an error where Fuel recipes were not breaking before a @message flag.
+* Re-added furnace flag functionality to fix @forchance
+* Fixed an error when adding custom fuels with no ingredients in the furnace.
+
+=== v2.2 ===
+* Updated Metrics to handle old getOnlinePlayers (provides backward support for old versions of CraftBukkit)
+* Fixed spaces breaking recipe names
+* Fixed @needmoney not working with only the min value set
+* Fixed an Updater bug when a player joined too early
+* Added material.fail config to allow changing the Material shown when a recipe fails
+* Added material.secret config to allow changing the Material shown for secret recipes
+* Added material.multiple-results config to allow changing the Material shown for recipes with multiple results
+* Fixed parsing of flags with spaces in front of the @ symbol
+* Fixed enchantments and improved recipe extraction for /rmextract
+* Added /rmextractrecipe (Alias: /extractrecipe) to extract a recipe for the item the player is currently holding.
+* Allow multiple lore checks in @ingredientcondition
+* Added disable-override-warnings config to disable 'Recipe already created by <plugin>, recipe overwritten!' warnings
+* Reworked furnace smelt/fuel recipes
+** Significant performance improvements
+** Removes issue with furnaces smelting multiple items
+** Removed furnace-ticks config
+** Support for data values in furnace recipes
+** Some flags may not work right now with furnaces
+* Fixed files not detecting the version correctly
+* Misc. spelling fixes
+
+=== v2.1.1 ===
+* Update user agent for RecipeManager Updater
+* Better version detection
+* Fixed settings not getting initialized soon enough.
+* Default furnace ticks to 1 if invalid
+* Fixed /rmreload not reloading recipes correctly.
+* Removed the clear-recipes message on load
+* Fixed files asking to be deleted when they shouldn't be (This was probably just a version mismatch due to approval delay)
+* Removed dark alias from spruce as dark oak gets that alias now.
+
+=== v2.1 ===
+(THDigi)
+* Fixed @ingredientcondition's lore argument with 'regex:' prefix checking name's regex pattern instead, giving an error if name arg not defined
+* Also fixed a probably confusing example.
+* Fixed shutdown error when metrics is disabled in config.yml. 
+* Fixed possible issues with reload and re-enabling metrics.
+* Possible fix for errors when loading furnaces without inventories.
+* Fixed update checker printing new 'null' version to joining OPs when it is disabled;
+* Added permission for update notify receivers: 'recipemanager.command.rmupdate'
+* Added check for connection to print a user-friendly error if it can't establish a connection.
+* API: Added clearFlags() method for Flaggable interface (use by ItemResult and BaseRecipe).
+* Added check to ensure recipe is complete before generating the Bukkit recipe.
+* Removed 'item' alias for 'rmfinditem' to prevent collisions with more important commands from other plugins
+* Possible fix for an startup error that triggers if you have a plugin with no package name, just the main class.
+* Fixed @keepitem flag not working if set on results
+* Fixed @ingredientcondition not subtracting ingredients if used on results
+(Haveric)
+* Changed Integer to Double as getLastDamage() now returns a Double.
+* Fix DURABILITY enchantment returning a null EnchantmentTarget. Default any null EnchantmentTargets to ALL.
+* Remove Debug message from furnaces.
+* Updated to Metrics R7
+* Updated Metrics to work with updated getOnlinePlayers
+* Update to UUID support with Vault
+* Fixed a potential bug with colors not being supported in messages
+* Fixed regex for @cloneingredient data and @cloneingredient amount
+* Fixed @enchantedbook flag
+* Prevent unnecessary warning when using @remove in crafting recipes
+* Fixed @override causing certain recipe to throw errors.
+* Updated vanilla fuels
+* Updated how RecipeManager checks for updates to conform to the ServerMods API.
+
+=== v2.0 ===
+
+* Added hopper handling for furnaces;
+* Changed/fixed @ingredientcondition flag:
+** Fixed it and other flags glitching first result when used in results;
+** Fixed not blocking furnace ingredients from being placed;
+** Fixed it not comparing names/lores properly when colored due to unconverted colors;
+** Changed to require a 'regex:' prefix for name and lore arguments;
+** Added warning for invalid regex patterns along with a tip on testing regex patterns online;
+** Added warning for ingredients that were not found in the recipe;
+* Added name/lore/enchant options for in-line items
+** Useful for @displayitem in particular but can be used in most other item definitions that accept limitless items;
+** Syntax is as follows: <material>:[data]:[amount] ; name <name> ; lore <line> ; enchant <enchant> [level];
+** Of course, except material, all arguments are optional and lore argument can be used more than once;
+* Fixed smelt&fuel recipes being usable in already burning furnaces;
+* Added @displayresult flag to define a custom item that will be displayed as result with alternative 'first' argument to define the first one (useful with @ingredientcondition);
+* Added example recipe of both previous flags in action in the 'advanced recipes.html' file;
+* Fixed update notifier always printing there's a new version only for joining OPs;
+* Changed update notifier from printing to OPs to printing to players having 'recipemanager.command.rmupdate' permission;
+* Fixed overwritten recipes ignoring their flags because the original ones weren't fully removed;
+* Edited 'basic recipes.html' to fix some syntaxes to make more sense and some typos;
+* Removed 'recipemanager.skipflags.<flag>' permission nodes and replaced them with 'recipemanager.flag.<flag>' that are default true, due to people giving themselves all possible permissions;
+* (RMAPI) Cleaned up events code by removing some, renaming some, but it makes more sense now;

@@ -1,0 +1,68 @@
+// Test individual gamemodes
+craft
+dirt + iron_ingot
+= iron_sword
+@gamemode adventure
+
+craft
+dirt + gold_ingot
+= iron_sword
+@gamemode a
+
+
+craft
+dirt + dirt
+= dirt
+@gamemode creative
+
+craft
+dirt + stick
+= dirt
+@gamemode c
+
+
+craft
+dirt + cobblestone
+= cobblestone
+@gamemode survivial
+
+craft
+dirt + stone
+= cobblestone
+@gamemode s
+
+// Test multiple gamemodes
+craft
+dirt + oak_log
+= oak_log
+@gamemode a,s
+
+craft
+dirt + grass
+= grass
+@gamemode a, s, c
+
+// Test disable using false
+craft
+dirt + oak_wood
+= oak_wood
+@gamemode false
+
+// Test fail message
+craft
+dirt + tropical_fish
+= tropical_fish
+@gamemode a | fail
+
+// Test invalid input
+craft
+dirt + cooked_salmon
+= cooked_salmon
+@gamemode duck
+
+// Test multiple declarations
+craft
+dirt + brick
+= brick
+@gamemode survival
+@gamemode creative

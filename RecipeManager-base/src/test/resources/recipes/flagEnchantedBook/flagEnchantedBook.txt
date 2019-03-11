@@ -1,0 +1,34 @@
+craft one
+dirt + dirt
+= enchanted_book
+@enchantedbook dig_speed
+
+craft max
+dirt + stone_sword
+= enchanted_book
+@enchantedbook damage_all max
+
+craft 127
+dirt + iron_sword
+= enchanted_book
+@enchantedbook oxygen 127
+
+craft onlyremove
+dirt + golden_sword
+= enchanted_book
+@enchantedbook sharpness remove
+
+craft multiple
+dirt + diamond_sword
+= enchanted_book
+@enchantedbook dig_speed
+@enchantedbook damage_all max
+@enchantedbook oxygen 127
+
+craft remove
+dirt + cobblestone
+= enchanted_book
+@enchantedbook dig_speed
+@enchantedbook damage_all max
+@enchantedbook oxygen 127
+@enchantedbook sharpness remove

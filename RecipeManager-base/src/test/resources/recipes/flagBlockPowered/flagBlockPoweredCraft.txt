@@ -1,0 +1,9 @@
+craft
+dirt + dirt
+= dirt
+@blockpowered
+
+craft
+dirt + stone_sword
+= stone_sword
+@blockpowered failmsg <red><bold>YOU HAVE NO (indirect) POWAAH!!! | indirect

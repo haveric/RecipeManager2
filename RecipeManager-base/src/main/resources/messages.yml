@@ -1,0 +1,218 @@
+lastchanged: 2.14.0
+# Configurable messages.
+# Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
+# To disable messages you can just delete the message or use 'false'.
+flag:
+  override: <yellow>Overwrites another recipe.
+  restrict: <red>Recipe is disabled.
+  holditem: '<red>Need to hold: <yellow>{items}'
+  gamemode: '<red>Allowed gamemodes: <yellow>{gamemodes}'
+  height: '<red>Need height: <yellow>{height}'
+  onlinetime: '<red>Need online time: <yellow>{range}'
+  permission:
+    allowed: '<red>Allowed permissions: <yellow>{permissions}'
+    unallowed: '<red>Unallowed permissions: <yellow>{permissions}'
+  group:
+    allowed: '<red>Allowed groups: <yellow>{groups}'
+    unallowed: '<red>Unallowed groups: <yellow>{groups}'
+  world:
+    allowed: '<red>Allowed worlds: <yellow>{worlds}'
+    unallowed: '<red>Unallowed worlds: <yellow>{worlds}'
+  weather: '<red>Needs weather: <yellow>{weather}'
+  temperature: '<red>Needs temperature: <yellow>{temperature}<reset>. Current Temperature: <red>{actual}'
+  biome:
+    allowed: '<red>Allowed biomes: <yellow>{biomes}'
+    unallowed: '<red>Unallowed biomes: <yellow>{biomes}'
+  returnitem:
+    returned: <green>Returned item {item}<green> in crafting grid.
+    merged: <green>Returned item {item}<green> merged in crafting grid.
+    received: <yellow>Returned item {item}<green> added to inventory.
+    dropped: <yellow>Returned item {item}<green> dropped.
+  blockpowered:
+    furnace: <red>Need a furnace powered by redstone.
+    workbench: <red>Need a workbench powered by redstone.
+    brewingstand: <red>Need a brewing stand powered by redstone.
+  lightlevel: <red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>.
+  setblock:
+    needsworkbench: <red>Recipe needs to be used with a workbench!
+  items: '<red>Need in inventory: <yellow>{items}'
+  noitems: '<red>Unallowed in inventory: <yellow>{items}'
+  equip: '<red>Need equipped: <yellow>{items}'
+  noequip: '<red>Unallowed equipped: <yellow>{items}'
+  hold: '<red>Need in hand: <yellow>{items}'
+  nohold: '<red>Unallowed in hand: <yellow>{items}'
+  command:
+    player: 'Executes command on crafter: <yellow>{command}'
+    server: 'Executes console command: <yellow>{command}'
+  ingredientconditions:
+    nodata: '<yellow>{item}<red> needs data values: <yellow>{data}'
+    noamount: '<yellow>{item}<red> needs amount: <yellow>{amount}'
+    noenchants: '<yellow>{item}<red> needs enchantments: <yellow>{enchants}'
+    noname: '<yellow>{item}<red> needs name: <yellow>{name}'
+    nolore: '<yellow>{item}<red> needs lore: <yellow>{lore}'
+    nocolor: '<yellow>{item}<red> needs color: <yellow>{color}'
+    nopotion: '<yellow>{item}<red> needs potion: <yellow>{potion}'
+    nopotioneffect: '<yellow>{item}<red> needs effect(s): <yellow>{effect}'
+    nobannercolor: '<yellow>{item}<red> needs banner color: <yellow>{color}'
+    nobannerpatterns: '<yellow>{item}<red> needs banner pattern(s): <yellow>{patterns}'
+    nospawneggentitytype: '<yellow>{item}<red> needs entity type: <yellow>{entitytype}'
+    unbreakable: '<yellow>{item}<red> needs to be unbreakable'
+    nounbreakable: '<yellow>{item}<red> needs to not be unbreakable'
+  needexp: '<red>Need EXP: <yellow>{exp}<reset>. Current EXP:<yellow> {playerexp}'
+  modexp:
+    add: <green>+{amount}<reset> EXP
+    sub: <yellow>-{amount}<reset> EXP
+    set: <reset>EXP set to <yellow>{amount}
+  needlevel: '<red>Need level: <yellow>{level}'
+  modlevel:
+    add: <green>+{amount}<reset> level(s)
+    sub: <red>-{amount}<reset> level(s)
+    set: <reset>Level set to <yellow>{amount}
+  needmoney: '<red>Need money: <yellow>{money}'
+  modmoney:
+    add: <green>+{money}
+    sub: <red>-{money}
+    set: <reset>Money set to <yellow>{money}
+  playerbukkitmeta: <red>You need to be special...
+  noplayerbukkitmeta: <red>You're too special...
+  blockbukkitmeta: <red>Needs special block...
+  noblockbukkitmeta: <red>Block to special...
+  potioneffects: '<red>Need potion effect: {effects}'
+  nopotioneffects: '<red>Unallowed potion effect: {effects}'
+  realtime: <red>Allowed between {mindate} and {maxdate}
+  cooldown:
+    fail:
+      perplayer: '<red>Personal cooldown: {time}'
+      global: '<red>Global cooldown: {time}'
+    set:
+      perplayer: <yellow>Personal cooldown set to {time}
+      global: <yellow>Global cooldown set to {time}
+  clone:
+    resultdisplay: <dark_aqua><italic>(clone)
+  prefix:
+    recipe: <gray>(Recipe) <reset>
+    result: <gray>(Result {item}<gray>) <reset>
+    furnace: <gray>(Furnace {location}) <reset>
+  inventory: '<red> Need inventory: {inventory}'
+craft:
+  repair:
+    disabled: <red>Repair recipes disabled.
+  special:
+    leatherdye: <red>Leather dyeing is disabled.
+    fireworks: <red>Firework crafting is disabled.
+    fireworkstar: <red>Firework star crafting is disabled.
+    map:
+      cloning: <red>Map cloning is disabled.
+      extending: <red>Map extending is disabled.
+    book:
+      cloning: <red>Book cloning is disabled.
+    banner: <red>Banner crafting is disabled.
+    shieldbanner: <red>Shield Banner crafting is disabled.
+    tippedarrows: <red>Tipped arrows crafting is disabled.
+    shulkerdye: <red>Shulker dying is disabled.
+  result:
+    denied:
+      title: <yellow><underline>You can't craft this recipe!
+      info: <green>See chat for reasons.
+    noreceive:
+      title: <yellow><underline>You can't craft any results from this recipe!
+      info: <green>See chat for reasons.
+    receive:
+      title:
+        unknown: <light_purple><underline>You will get an unknown item!
+        random: '<light_purple><underline>You will get a random item:'
+    list:
+      item: <dark_green>{chance} <green>{item} {clone}
+      secrets: <dark_aqua>{num} secret item(s)
+      failure: <red>{chance} Failure chance
+      unavailable: <dark_red>{num} unavailable item(s)
+  recipe:
+    multi:
+      failed: '<yellow>NOTE: <white>That sound was the recipe failing by chance! See ''fail chance'' in the result description.'
+      noshiftclick: '<yellow>NOTE: <white>Recipe has more than one result, shift+clicking will only craft it once.'
+      cursorfull: '<yellow>NOTE: <white>Cursor is full or not same type as result, put the held item in inventory or use Shift+Click to craft one by one to inventory.'
+      chance:
+        cursorhasitem: '<yellow>NOTE: <white>Cursor has an item on a chance recipe, put the held item in inventory or use Shift+Click to craft one by one to inventory.'
+    flag:
+      noshiftclick: '<yellow>NOTE: <white>Recipe is special, shift-clicking will only craft it once.'
+smelt:
+  fuel:
+    needingredient: '<red>Fuel {fuel}<red> needs specific ingredient: {ingredient}'
+    needfuel: '<red>Ingredient {ingredient}<red> needs specific fuel: {fuel}'
+  frozen: <red>Furnace at <yellow>{location} <red>will be frozen until you re-place the ingredient.
+item:
+  anydata: <gray>any
+recipebook:
+  volume: Volume {volume}
+  volumeofvolumes: Volume {volume} of {volumes}
+  header:
+    contents: <black><bold><underline>CONTENTS INDEX
+    shaped: <black><bold>SHAPED RECIPE
+    shapeless: <black><bold>SHAPELESS RECIPE
+    smelt: <black><bold>FURNACE RECIPE
+    fuel: <black><bold>FURNACE FUEL
+    shape: <black><underline>Shape
+    ingredients: <black><underline>Ingredients
+    ingredient: <black><underline>Ingredient
+    cooktime: <black><underline>Cooking time
+    burntime: <black><underline>Burning time
+    requirefuel: <black><underline>As fuel
+  moreresults: <dark_green>+{amount} more results
+  smelt:
+    time:
+      normal: <black>Normal <gray>(<dark_red>{time} <gray>seconds)
+      instant: <dark_green>Instant <gray>(0 seconds)
+      fixed: <red>{time} <black>seconds
+      random: <red>{min} <black>to <red>{max} <black>seconds
+  fuel:
+    time:
+      fixed: <dark_green>{time} <black>seconds
+      random: <dark_green>{min} <black>to <dark_green>{max} <black>seconds
+  update:
+    extinct: <red>Your '<yellow>{title}<red>' recipe book does not exist any more, it won't be updated further.
+    novolume: <red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> any more, it won't be updated further.
+    done: <gray>Your held recipe book has been updated!
+    changed:
+      title: <gray>Title changed from '<reset>{oldtitle}<gray>' to '<reset>{newtitle}<gray>'.
+      pages: <gray>Pages change from <red>{oldpages}<gray> pages to <green>{newpages}<gray> pages.
+cmd:
+  getbook:
+    invalidnumber: <red>Volume argument must be a number!
+    notexist: <red>No books found by '{arg}'.
+    manymatches: '<red>Found {num} books by ''{arg}'':'
+    given: '<green>Got book: {title}'
+    usage: '<yellow>Usage: <gray>/{command} <white><title> [#<volume>]'
+  books:
+    nobooks: <red>No generated books.
+    header: '<yellow>Generated recipe books ({number}):'
+    item: '<white>{title} <gray>(volumes: {volumes})'
+  extract:
+    wait: <red>Command re-used too fast, wait a second.
+    unknownarg: '<red>Unknown argument: <yellow>{arg}'
+    converting: <gray>Searching and converting recipes...
+    norecipes: <yellow>No recipes to extract.
+    done: <green>Done! Recipes saved to '<white>{file}<green>'.
+  extractrecipe:
+    done: <green>Done! Recipe saved to '<white>{file}<green>'.
+  recipes:
+    usage: '<yellow>Usage: <gray>/{command} <white><material>:[data]:[amount]'
+    stats:
+      mc: 'Minecraft: <green>{num}'
+      rm: 'RecipeManager: <green>{num}'
+      other: 'Other plugins/mods: <green>{num}'
+    header: <yellow>----- <white>Recipes for <green>{item} <white>({num} of {total})<yellow>-----
+    more: <yellow>----- <white><blue>{cmdnext} <white>for next, <blue>{cmdprev} <white>for previous <yellow>-----
+    end: <yellow>----- <white>No more recipes <yellow>-----
+    nonext: <red>No more recipes next, type <blue>{command} <red>to see the previous recipe.
+    noprev: <red>Can't go backwards more than this, type <blue>{command} <red>to see the next recipe.
+    needquery: <red>No search progress! Use the command with an item name to search.
+    noresults: <red>No results for <yellow>{item}
+    nohand: <red>You don't have anything in your hand therefore you can't use 'this' argument.
+    invaliditem: '<red>Invalid item: <yellow>{arg}'
+  finditem:
+    usage: '<yellow>Usage: <gray>/{command} <white><item partial name>'
+    invalidhelditem: <yellow>You need to hold an item to use the '<white>this<yellow>' argument.
+    header: 'Found <green>{matches}<white> materials matching ''<green>{argument}<white>'':'
+    list: <gray>#<red>{id} <green>{material}<gray>, max durability <yellow>{maxdata}<gray>, max stack <yellow>{maxstack}
+    foundmore: <yellow>... and <green>{matches}<yellow> more, be more specific in your search.
+    notfound: <yellow>No material found by '<white>{argument}<yellow>'.

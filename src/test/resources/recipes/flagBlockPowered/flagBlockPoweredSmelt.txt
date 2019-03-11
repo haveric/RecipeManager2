@@ -1,9 +1,0 @@
-smelt
-dirt
-= dirt
-@blockpowered
-
-smelt
-stone_sword
-= stone_sword
-@blockpowered indirect

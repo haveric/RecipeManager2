@@ -1,0 +1,20 @@
+craft
+dirt + dirt
+= dirt
+@lightlevel 14 sun
+
+craft
+dirt + stone_sword
+= stone_sword
+@lightlevel 0-4 blocks | <red>Kill the lights!
+
+craft
+dirt + iron_sword
+= iron_sword
+@lightlevel 14 sun | <red>Test
+@lightlevel 0-4 blocks
+
+craft
+dirt + diamond_sword
+= diamond_sword
+@lightlevel 12-14 any

@@ -1,0 +1,49 @@
+craft
+dirt + dirt
+= dirt
+@ingredientcondition dirt | data 0-5
+
+craft
+cobblestone + diamond_shovel
+= gravel
+@ingredientcondition diamond_shovel | name &bHammer | failmsg &cFoo
+
+craft
+dirt + cobblestone
+= cobblestone
+@ingredientcondition dirt | name    One    | lore    Two    | failmsg    Three   /* Ends here */
+
+craft
+dirt + stone
+= stone
+@ingredientcondition dirt | name "   One   " | lore "   Two   " | failmsg "   Three   "
+
+craft //test for unbreakable not set
+sand + iron_sword
+= wooden_sword
+@ingredientcondition iron_sword | name "Wood Sword"
+
+craft
+dirt + iron_sword
+= iron_sword
+@ingredientcondition iron_sword | unbreakable
+
+craft
+grass + iron_sword
+= golden_sword
+@ingredientcondition iron_sword | !unbreakable
+
+craft
+gravel + iron_sword
+= diamond_sword
+@ingredientcondition iron_sword | nometa
+
+craft
+brick + grass
+= brick
+@ingredientcondition brick | nometa
+
+craft
+brick + sponge
+= sponge
+@ingredientcondition brick | amount 10

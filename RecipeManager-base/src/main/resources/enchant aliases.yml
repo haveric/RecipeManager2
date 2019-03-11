@@ -1,0 +1,47 @@
+lastchanged: 2.11.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+#-------------------------------------------------------------------------------------------------------------------------
+# RecipeManager enchant aliases
+#
+# This file defines aliases for enchantments that are usable in all configuration files.
+# You can use any names specified as values to replace enchantment name or id.
+#
+# Format is:
+# <enchant name>: <alias>, [...]
+#
+# NOTE: You should split words by space or underscore when defining an alias, it will give you more matches, example:
+# "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".
+#------------------------------------------------------------------------------------------------------------------------
+
+arrow_damage: power
+arrow_fire: flame
+arrow_infinite: infinity
+arrow_knockback: punch
+damage_all: sharpness
+damage_arthropods: bane of arthropods
+damage_undead: smite
+depth_strider: depth strider
+dig_speed: efficiency
+durability: unbreaking
+fire_aspect: fire aspect
+frost_walker: frost walker
+loot_bonus_blocks: fortune
+loot_bonus_mobs: looting
+luck: luck of the sea
+mending: repair
+oxygen: respiration
+protection_environmental: protection
+protection_explosions: blast protection
+protection_fall: feather falling
+protection_fire: fire protection
+protection_projectile: projectile protection
+silk_touch: silk touch
+water_worker: aqua affinity
+binding_curse: binding curse
+vanishing_curse: vanishing curse
+sweeping_edge: sweeping edge
+
+# add your own aliases if you want.
+
+
+
+

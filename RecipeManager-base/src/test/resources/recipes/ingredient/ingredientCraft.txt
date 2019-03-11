@@ -1,0 +1,44 @@
+craft
+dirt
+= dirt
+
+craft
+dirt + cobblestone
+= cobblestone
+
+craft
+dirt + cobblestone + oak_log
+= oak_log
+
+craft
+dirt + cobblestone + oak_log
+stone
+= stone
+
+craft
+dirt + cobblestone + oak_log
+stone + brick
+= brick
+
+craft
+dirt + cobblestone + oak_log
+stone + brick + stone_sword
+= stone_sword
+
+craft
+dirt + cobblestone + oak_log
+stone + brick + stone_sword
+golden_sword
+= golden_sword
+
+craft
+dirt + cobblestone + oak_log
+stone + brick + stone_sword
+golden_sword + diamond_sword
+= diamond_sword
+
+craft
+dirt + cobblestone + oak_log
+stone + brick + stone_sword
+golden_sword + diamond_sword + diamond
+= diamond

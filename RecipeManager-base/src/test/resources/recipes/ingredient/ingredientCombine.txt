@@ -1,0 +1,35 @@
+combine
+dirt
+= dirt
+
+combine
+dirt + cobblestone
+= cobblestone
+
+combine
+dirt + cobblestone + oak_log
+= oak_log
+
+combine
+dirt + cobblestone + oak_log + stone
+= stone
+
+combine
+dirt + cobblestone + oak_log + stone + brick
+= brick
+
+combine
+dirt + cobblestone + oak_log + stone + brick + stone_sword
+= stone_sword
+
+combine
+dirt + cobblestone + oak_log + stone + brick + stone_sword + golden_sword
+= golden_sword
+
+combine
+dirt + cobblestone + oak_log + stone + brick + stone_sword + golden_sword + diamond_sword
+= diamond_sword
+
+combine
+dirt + cobblestone + oak_log + stone + brick + stone_sword + golden_sword + diamond_sword + diamond
+= diamond

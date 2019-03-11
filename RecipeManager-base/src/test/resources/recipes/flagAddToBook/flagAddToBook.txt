@@ -1,0 +1,24 @@
+craft Boomstick
+dirt + dirt
+= stick
+
+craft
+@addtobook testing book
+dirt + stone
+= stone_sword
+
+craft
+@addtobook random stuff volume 3
+dirt + iron_ingot
+= iron_sword
+
+craft
+@addtobook testing book
+@addtobook random stuff volume 3
+dirt + gold_ingot
+= golden_sword
+
+craft Diamond Sword
+@addtobook testing book
+dirt + diamond
+= diamond_sword

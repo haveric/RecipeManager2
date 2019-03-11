@@ -1,5 +1,5 @@
 apply plugin: 'java'
-//  Uncomment to view deprecation warnings. 
+//  Uncomment to view deprecation warnings.
 //  compileJava {
 //    options.compilerArgs << '-Xlint:deprecation'
 //    options.compilerArgs << '-Xlint:unchecked'
@@ -10,6 +10,8 @@ sourceCompatibility = 1.8
 
 configurations {
     extra
+    compile2
+    compile3
 }
 
 // Include dependent libraries in archive.
@@ -19,35 +21,50 @@ jar {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name 'Spigot/Bukkit maven repo'
-        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name 'Spigot/Bukkit maven repo'
+            url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+        }
+        maven {
+            name 'Vault'
+            url 'http://nexus.hc.to/content/repositories/pub_releases'
+        }
+        maven {
+            name 'Jitpack' // For RecipeManagerCommon
+            url 'https://jitpack.io'
+        }
+        // For 1.12, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
+        mavenLocal()
     }
-    maven {
-        name 'Vault'
-        url 'http://nexus.hc.to/content/repositories/pub_releases'
+
+    dependencies {
+
     }
-    maven {
-        name 'Jitpack' // For RecipeManagerCommon
-        url 'https://jitpack.io'
-    }
-    // For 1.12, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
-    mavenLocal()
 }
 
-dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.powermock:powermock-module-junit4:1.6.4'
-    testCompile 'org.powermock:powermock-api-mockito:1.6.4'
+subprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            name 'Spigot/Bukkit maven repo'
+            url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+        }
+        maven {
+            name 'Vault'
+            url 'http://nexus.hc.to/content/repositories/pub_releases'
+        }
+        maven {
+            name 'Jitpack' // For RecipeManagerCommon
+            url 'https://jitpack.io'
+        }
+        // For 1.12, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
+        mavenLocal()
+    }
 
-    compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+    dependencies {
 
-    compile "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
-    compile "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
-    compile "net.milkbowl.vault:VaultAPI:1.6"
-
-    extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
-
+    }
 }

@@ -1,0 +1,25 @@
+craft
+dirt + dirt
+= dirt
+@cooldown 30
+
+craft
+dirt + stone_sword
+= stone_sword
+@cooldown 30s
+
+craft
+dirt + iron_sword
+= iron_sword
+@cooldown 1.75m | failmsg <red>Usable in: {time}
+
+craft
+dirt + golden_sword
+= golden_sword
+@cooldown .5h | global | failmsg <red>Someone used this recently, wait: {time} | msg <yellow>Cooldown time: {time}
+
+craft
+dirt + diamond_sword
+= diamond_sword
+@cooldown 5s
+@cooldown 10m

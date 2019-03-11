@@ -1,0 +1,25 @@
+craft
+dirt + dirt
+= dirt
+@enchantitem OXYGEN
+
+craft
+dirt + stone_sword
+= stone_sword
+@enchant dig_speed max
+
+craft
+dirt + golden_sword
+= golden_sword
+@enchant arrow_infinite 127
+
+craft
+dirt + iron_sword
+= iron_sword
+@enchant sharpness remove
+
+craft
+dirt + diamond_sword
+= diamond_sword
+@enchant dig_speed
+@enchant sharpness

@@ -1,0 +1,16 @@
+craft
+dirt + iron_ingot
+= iron_sword
+@unknown
+
+craft
+dirt + gold_ingot
+= golden_sword
+@name Test
+@unknown
+
+craft
+dirt + diamond
+= diamond_sword
+@unknown
+@name Test

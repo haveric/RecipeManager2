@@ -1,0 +1,15 @@
+craft one
+dirt + dirt
+= creeper_spawn_egg
+@spawnegg creeper
+
+craft two
+dirt + cobblestone
+= horse_spawn_egg
+@spawnegg horse
+
+craft three
+dirt + stone_sword
+= horse_spawn_egg
+@spawnegg creeper
+@spawnegg horse

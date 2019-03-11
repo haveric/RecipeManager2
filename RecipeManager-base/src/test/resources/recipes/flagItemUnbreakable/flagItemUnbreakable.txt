@@ -1,0 +1,16 @@
+craft
+dirt + stone
+= stone_sword
+@unbreakable
+
+craft
+dirt + iron_ingot
+= iron_sword
+@unbreakable
+@unbreakable false
+
+craft
+dirt + gold_ingot
+= stone_sword
+@unbreakable false
+@unbreakable

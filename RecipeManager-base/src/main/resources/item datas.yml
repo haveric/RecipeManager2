@@ -1,0 +1,15 @@
+lastchanged: 2.7 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+#-------------------------------------------------------------------------------------------------------------------------
+# RecipeManager item data overrides
+#
+# This file defines new max data values for materials. 
+# Primarily used to set modded item's data when not set correctly.
+#
+# Currently only used for @KeepItem
+#
+# Examples:
+#  diamond_sword: 100
+#  stone_axe: 5
+#
+#
+#-------------------------------------------------------------------------------------------------------------------------

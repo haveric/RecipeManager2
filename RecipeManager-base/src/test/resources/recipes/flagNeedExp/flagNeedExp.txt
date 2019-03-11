@@ -1,0 +1,25 @@
+craft
+dirt + dirt
+= dirt
+@needexp 100
+
+craft
+dirt + stone_sword
+= stone_sword
+@needexp 250-250
+
+craft
+dirt + iron_sword
+= iron_sword
+@needexp 0-500
+
+craft
+dirt + golden_sword
+= golden_sword
+@needexp 1000 | <red>Need {exp} exp!
+
+craft
+dirt + diamond_sword
+= diamond_sword
+@needexp 0-500
+@needexp 1000

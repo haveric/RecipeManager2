@@ -1,0 +1,20 @@
+craft
+dirt + dirt
+= dirt
+@biome jungle
+
+craft
+dirt + stone_sword
+= stone_sword
+@biome jungle, jungle_hills
+
+craft
+dirt + golden_sword
+= golden_sword
+@biome !mushroom_fields, !mushroom_field_shore
+
+craft
+dirt + iron_sword
+= iron_sword
+@biome jungle, jungle_hills
+@biome !mushroom_fields, !mushroom_field_shore

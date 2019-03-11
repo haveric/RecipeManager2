@@ -1,0 +1,12 @@
+combine
+dirt + dirt + dirt + dirt + dirt + dirt + dirt + dirt + dirt + stone
+= dirt
+
+combine
+cobblestone:*:10
+= dirt
+
+combine
+dirt
+dirt
+= stone
