@@ -16,6 +16,7 @@ configurations {
 
 // Include dependent libraries in archive.
 jar {
+    baseName = 'RecipeManager'
     from {
         configurations.extra.collect { it.isDirectory() ? it : zipTree(it) }
     }
