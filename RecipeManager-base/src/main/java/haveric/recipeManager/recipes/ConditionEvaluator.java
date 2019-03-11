@@ -101,20 +101,22 @@ public class ConditionEvaluator {
                 if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
                     Recipe bukkit = entry.getKey().getBukkitRecipe(true);
                     if (recipe instanceof CraftRecipe) {
-                        CraftRecipe craftRecipe = (CraftRecipe) recipe;
-                        ItemStack[] matrix = craftRecipe.getIngredients();
-                        Tools.trimItemMatrix(matrix);
-                        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-                        int height = craftRecipe.getHeight();
-                        int width = craftRecipe.getWidth();
+                        if (bukkit instanceof ShapedRecipe) {
+                            CraftRecipe craftRecipe = (CraftRecipe) recipe;
+                            ItemStack[] matrix = craftRecipe.getIngredients();
+                            Tools.trimItemMatrix(matrix);
+                            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+                            int height = craftRecipe.getHeight();
+                            int width = craftRecipe.getWidth();
 
-                        if (NMSVersionHandler.matchesShaped((ShapedRecipe) bukkit, matrix, matrixMirror, width, height)) {
-                            return entry.getValue();
+                            if (NMSVersionHandler.matchesShaped((ShapedRecipe) bukkit, matrix, matrixMirror, width, height)) {
+                                return entry.getValue();
+                            }
                         }
                     } else if (recipe instanceof CombineRecipe) {
-                        CombineRecipe combineRecipe = (CombineRecipe) recipe;
-
                         if (bukkit instanceof ShapelessRecipe) {
+                            CombineRecipe combineRecipe = (CombineRecipe) recipe;
+
                             ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkit;
                             if (NMSVersionHandler.matchesShapeless(bukkit, combineRecipe.getIngredients(), shapelessRecipe.getIngredientList())) {
                                 return entry.getValue();

@@ -31,4 +31,5 @@ dependencies {
     compile "net.milkbowl.vault:VaultAPI:1.6"
 
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+    extra project(':RecipeManager-nms')
 }
