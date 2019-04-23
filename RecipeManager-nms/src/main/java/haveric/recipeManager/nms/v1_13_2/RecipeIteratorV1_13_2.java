@@ -3,6 +3,8 @@ package haveric.recipeManager.nms.v1_13_2;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.RecipeIterator;
@@ -35,8 +37,7 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
     public RecipeIteratorV1_13_2() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();
         if (backing instanceof RecipeIterator) {
-            // TODO: Get new CraftingManager
-            recipes = CraftingManager.b().iterator();
+            recipes = ((CraftServer)Bukkit.getServer()).getServer().getCraftingManager().b().iterator();
             smeltingCustom = RecipesFurnace.getInstance().customRecipes.keySet().iterator();
             smeltingVanilla = RecipesFurnace.getInstance().recipes.keySet().iterator();
         } else {
