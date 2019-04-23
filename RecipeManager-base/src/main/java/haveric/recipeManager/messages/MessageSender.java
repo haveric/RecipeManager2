@@ -66,7 +66,7 @@ public class MessageSender extends AbstractMessageSender {
     }
 
     public void error(CommandSender sender, Throwable thrown, String message) {
-        String reportMessage = "If you're using the latest version you should report this error at: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/";
+        String reportMessage = "If you're using the latest version you should report this error at: https://dev.bukkit.org/projects/recipemanager/issues/create";
         try {
             if (message == null) {
                 message = "<red>" + thrown.getMessage();
