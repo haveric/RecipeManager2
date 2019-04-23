@@ -458,7 +458,7 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCraftRecipe(CraftRecipe recipe) {
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         ShapedRecipe sr;
         Recipe r;
         String[] sh;
@@ -477,10 +477,10 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.matchesShaped(sr, matrix, matrixMirror, width, height)) {
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShaped(sr, matrix, matrixMirror, width, height)) {
                         iterator.remove();
 
-                        NMSVersionHandler.finish();
+                        NMSVersionHandler.getRecipeIterator().finish();
 
                         return sr;
                     }
@@ -513,7 +513,7 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCombineRecipe(CombineRecipe recipe) {
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         ShapelessRecipe sr;
         Recipe r;
 
@@ -526,10 +526,10 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (NMSVersionHandler.matchesShapeless(r, items, sr.getIngredientList())) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, items, sr.getIngredientList())) {
                         iterator.remove();
 
-                        NMSVersionHandler.finish();
+                        NMSVersionHandler.getRecipeIterator().finish();
 
                         return sr;
                     }
@@ -566,7 +566,7 @@ public class Vanilla {
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         FurnaceRecipe fr;
         Recipe r;
 
@@ -580,7 +580,7 @@ public class Vanilla {
                     if (ingredient.getType() == fr.getInput().getType()) { // this works fine in 1.12
                         iterator.remove();
 
-                        NMSVersionHandler.finish();
+                        NMSVersionHandler.getRecipeIterator().finish();
 
                         return fr;
                     }
@@ -626,7 +626,7 @@ public class Vanilla {
      * @return replaced recipe or null if not found
      */
     public static Recipe replaceCraftRecipeV1_12(CraftRecipe recipe) {
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         ShapedRecipe sr;
         Recipe r;
         String[] sh;
@@ -642,10 +642,10 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.matchesShaped(sr, null, null, width, height)) {
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShaped(sr, null, null, width, height)) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
-                        NMSVersionHandler.replace(recipe, overrideItem);
-                        NMSVersionHandler.finish();
+                        NMSVersionHandler.getRecipeIterator().replace(recipe, overrideItem);
+                        NMSVersionHandler.getRecipeIterator().finish();
                         return sr;
                     }
                 }
@@ -665,7 +665,7 @@ public class Vanilla {
      * @return replaced recipe or null if not found
      */
     public static Recipe replaceCombineRecipeV1_12(CombineRecipe recipe) {
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         ShapelessRecipe sr;
         Recipe r;
 
@@ -676,10 +676,10 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (NMSVersionHandler.matchesShapeless(r, null, null)) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, null, null)) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
-                        NMSVersionHandler.replace(recipe, overrideItem);
-                        NMSVersionHandler.finish();
+                        NMSVersionHandler.getRecipeIterator().replace(recipe, overrideItem);
+                        NMSVersionHandler.getRecipeIterator().finish();
                         return sr;
                     }
                 }
@@ -748,7 +748,7 @@ public class Vanilla {
      */
     public static void removeAllButSpecialRecipes() {
         List<Recipe> specialRecipes = new ArrayList<>();
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         Recipe recipe;
 
         while (iterator.hasNext()) {

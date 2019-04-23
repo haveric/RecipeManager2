@@ -1,11 +1,11 @@
-package haveric.recipeManager.nms.v1_12;
+package haveric.recipeManager.nms.v1_13_2;
 
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
-import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftFurnaceRecipe;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.RecipeIterator;
+import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftFurnaceRecipe;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.RecipeIterator;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<Recipe> {
+public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterator<Recipe> {
     private Iterator<IRecipe> recipes = null;
 
     private Iterator<ItemStack> smeltingCustom = null;
@@ -32,10 +32,11 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
     private IRecipe removeRecipe = null;
     private ItemStack removeItem = null;
 
-    public RecipeIteratorV1_12() {
+    public RecipeIteratorV1_13_2() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();
         if (backing instanceof RecipeIterator) {
-            recipes = CraftingManager.recipes.iterator();
+            // TODO: Get new CraftingManager
+            recipes = CraftingManager.b().iterator();
             smeltingCustom = RecipesFurnace.getInstance().customRecipes.keySet().iterator();
             smeltingVanilla = RecipesFurnace.getInstance().recipes.keySet().iterator();
         } else {

@@ -109,7 +109,7 @@ public class ConditionEvaluator {
                             int height = craftRecipe.getHeight();
                             int width = craftRecipe.getWidth();
 
-                            if (NMSVersionHandler.matchesShaped((ShapedRecipe) bukkit, matrix, matrixMirror, width, height)) {
+                            if (NMSVersionHandler.getToolsRecipe().matchesShaped((ShapedRecipe) bukkit, matrix, matrixMirror, width, height)) {
                                 return entry.getValue();
                             }
                         }
@@ -118,13 +118,13 @@ public class ConditionEvaluator {
                             CombineRecipe combineRecipe = (CombineRecipe) recipe;
 
                             ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkit;
-                            if (NMSVersionHandler.matchesShapeless(bukkit, combineRecipe.getIngredients(), shapelessRecipe.getIngredientList())) {
+                            if (NMSVersionHandler.getToolsRecipe().matchesShapeless(bukkit, combineRecipe.getIngredients(), shapelessRecipe.getIngredientList())) {
                                 return entry.getValue();
                             }
                         }
                     } else if (recipe instanceof SmeltRecipe) {
                         SmeltRecipe smeltRecipe = (SmeltRecipe) recipe;
-                        if (NMSVersionHandler.matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
+                        if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
                             return entry.getValue();
                         }
                     }

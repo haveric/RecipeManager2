@@ -1,12 +1,12 @@
-package haveric.recipeManager.nms.v1_12;
+package haveric.recipeManager.nms.v1_13_2;
 
 import haveric.recipeManager.nms.tools.BaseToolsRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftFurnaceRecipe;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapedRecipe;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftShapelessRecipe;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftFurnaceRecipe;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftShapedRecipe;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftShapelessRecipe;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
@@ -19,7 +19,7 @@ import java.util.List;
  *
  * Basically duplicates the "internal" matching code.
  **/
-public class ToolsRecipeV1_12 extends BaseToolsRecipe {
+public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
     @Override
     public boolean matchesFurnace(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack furnaceIngredient) {
         if (bukkitRecipe instanceof CraftFurnaceRecipe) {
@@ -72,8 +72,8 @@ public class ToolsRecipeV1_12 extends BaseToolsRecipe {
                         boolean match = false;
                         for (ItemStack stack : list.choices) {
                             org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(
-                                    org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers
-                                            .getMaterial(stack.getItem()),1, (short) stack.getData());
+                                    org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers
+                                            .getMaterial(stack.getItem()),1);
                             if (bukkitItem.getType() == baseItem.getType()
                                     && (baseItem.getDurability() == RMCVanilla.DATA_WILDCARD
                                     || bukkitItem.getDurability() == RMCVanilla.DATA_WILDCARD
@@ -144,8 +144,8 @@ public class ToolsRecipeV1_12 extends BaseToolsRecipe {
                         if (list != null && list.choices.length > 0) {
                             for (ItemStack stack : list.choices) {
                                 org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(
-                                        org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers
-                                                .getMaterial(stack.getItem()),1, (short) stack.getData());
+                                        org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers
+                                                .getMaterial(stack.getItem()),1);
                                 if (bukkitItem.getType() == baseItem.getType()
                                         && (baseItem.getDurability() == RMCVanilla.DATA_WILDCARD
                                         || bukkitItem.getDurability() == RMCVanilla.DATA_WILDCARD
