@@ -22,13 +22,13 @@ jar {
 }
 
 dependencies {
+    compileOnly project(':RecipeManager-bukkit')
     compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 
     compile2 "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
     compile3 "org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT"
 
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
-
 
     compile fileTree(dir: "libs", include: ['*.jar'])
 }

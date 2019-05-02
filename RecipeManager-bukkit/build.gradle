@@ -9,33 +9,19 @@ apply plugin: 'idea'
 sourceCompatibility = 1.8
 
 configurations {
-    extra {
-        transitive false
-    }
+    extra
 }
 
 // Include dependent libraries in archive.
 jar {
-    baseName = 'RecipeManager'
     from {
         configurations.extra.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.powermock:powermock-module-junit4:1.6.4'
-    testCompile 'org.powermock:powermock-api-mockito:1.6.4'
-
     compile "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
-    compile project(':RecipeManager-bukkit')
     compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
-    compile project(':RecipeManager-nms')
 
-
-    compile "net.milkbowl.vault:VaultAPI:1.7"
-
-    extra project(':RecipeManager-bukkit')
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
-    extra project(':RecipeManager-nms')
 }

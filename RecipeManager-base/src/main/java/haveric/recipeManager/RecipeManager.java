@@ -152,6 +152,7 @@ public class RecipeManager extends JavaPlugin {
         Messages.getInstance().reload(sender); // (re)load messages from messages.yml
         Files.reload(sender); // (re)generate info files if they do not exist
 
+        MessageSender.init(Settings.getInstance().getColorConsole());
         Updater.init(this, 32835, null);
 
         if (!check) {

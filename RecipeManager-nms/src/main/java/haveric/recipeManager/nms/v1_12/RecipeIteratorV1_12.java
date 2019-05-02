@@ -1,5 +1,6 @@
 package haveric.recipeManager.nms.v1_12;
 
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import net.minecraft.server.v1_12_R1.*;
@@ -66,9 +67,9 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
                 try {
                     Field keyF = removeRecipe.getClass().getField("key");
                     MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
-                    // MessageSender.getInstance().error(null, aioobe, "Failure while traversing iterator on recipe " + key.toString());
+                    MessageSender.getInstance().error(null, aioobe, "Failure while traversing iterator on recipe " + key.toString());
                 } catch (Exception e) {
-                    // MessageSender.getInstance().error(null, e, "Failure while traversing iterator, unable to determine recipe.");
+                    MessageSender.getInstance().error(null, e, "Failure while traversing iterator, unable to determine recipe.");
                 }
             }
             return null;
@@ -135,7 +136,7 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
                     throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
                 }
             } catch (Exception e) {
-                // MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during grid recipe removal");
+                MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during grid recipe removal");
             }
             break;
         case CUSTOM:
@@ -169,7 +170,7 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
         case RECIPES:
             // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
             try {
-                //MessageSender.getInstance().info("NMS for 1.12 replacing recipe " + recipe.getName());
+                // MessageSender.getInstance().info("NMS for 1.12 replacing recipe " + recipe.getName());
                 Field keyF = removeRecipe.getClass().getField("key");
                 MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
                 if (removeRecipe instanceof ShapedRecipes) {
@@ -194,7 +195,7 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
                     throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
                 }
             } catch (Exception e) {
-                // MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during grid recipe replace");
+                MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during grid recipe replace");
             }
             break;
         case CUSTOM:
@@ -238,7 +239,7 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
                     experience.remove(item);
                 });
             } catch (Exception e) {
-                // MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during vanilla smelting removal");
+                MessageSender.getInstance().error(null, e, "NMS failure for v1.12 support during vanilla smelting removal");
             }
 
         }

@@ -1,6 +1,5 @@
 package haveric.recipeManager.messages;
 
-import haveric.recipeManager.Settings;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Bukkit;
@@ -10,19 +9,24 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 
-public class MessageSender extends AbstractMessageSender {
+public class MessageSender {
 
-    private static AbstractMessageSender instance;
+    private static MessageSender instance;
+    private static boolean colorConsole = false;
 
-    private MessageSender() {
+    public MessageSender() {
 
     }
 
-    public static AbstractMessageSender getInstance() {
-        if(instance == null) {
+    public static MessageSender getInstance() {
+        if (instance == null) {
             instance = new MessageSender();
         }
         return instance;
+    }
+
+    public static void init(boolean isColorConsole) {
+        colorConsole = isColorConsole;
     }
 
     /**
@@ -50,7 +54,7 @@ public class MessageSender extends AbstractMessageSender {
             message = "[RecipeManager] " + message;
         }
 
-        sender.sendMessage(RMCUtil.parseColors(message, (sender instanceof ConsoleCommandSender && !Settings.getInstance().getColorConsole())));
+        sender.sendMessage(RMCUtil.parseColors(message, (sender instanceof ConsoleCommandSender && !colorConsole)));
     }
 
     public void log(String message) {

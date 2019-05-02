@@ -1,5 +1,6 @@
 package haveric.recipeManager.nms.v1_12;
 
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.tools.BaseToolsRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
 import net.minecraft.server.v1_12_R1.*;
@@ -175,7 +176,7 @@ public class ToolsRecipeV1_12 extends BaseToolsRecipe {
                     return false;
                 }
             } catch (Exception e) {
-                //MessageSender.getInstance().error(null, e, "Failed during combine recipe lookup");
+                MessageSender.getInstance().error(null, e, "Failed during combine recipe lookup");
             }
         }
 

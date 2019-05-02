@@ -2,16 +2,16 @@ package haveric.recipeManager.messages;
 
 import org.bukkit.command.CommandSender;
 
-public class TestMessageSender extends AbstractMessageSender {
+public class TestMessageSender extends MessageSender {
 
-    private static AbstractMessageSender instance;
+    private static MessageSender instance;
 
-    private TestMessageSender() {
-
+    public TestMessageSender() {
+        super();
     }
 
-    public static AbstractMessageSender getInstance() {
-        if(instance == null) {
+    public static MessageSender getInstance() {
+        if (instance == null) {
             instance = new TestMessageSender();
         }
         return instance;
