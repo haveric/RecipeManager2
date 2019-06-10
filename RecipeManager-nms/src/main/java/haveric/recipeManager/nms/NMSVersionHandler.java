@@ -12,21 +12,20 @@ import org.bukkit.Bukkit;
 
 public class NMSVersionHandler {
 
-    private static BaseRecipeIterator recipeIterator;
     private static BaseToolsRecipe toolsRecipe;
 
     public static BaseRecipeIterator getRecipeIterator() {
-        if (recipeIterator == null) {
-            String serverVersion = getServerVersion();
-            if (serverVersion.equals("v1_13_R2")) {
-                recipeIterator = new RecipeIteratorV1_13_2();
-            //} else if (serverVersion.equals("v1_13_R1")) {
+        BaseRecipeIterator recipeIterator;
 
-            } else if (serverVersion.equals("v1_12_R1")) {
-                recipeIterator = new RecipeIteratorV1_12();
-            } else {
-                recipeIterator = new RecipeIteratorOld();
-            }
+        String serverVersion = getServerVersion();
+        if (serverVersion.equals("v1_13_R2")) {
+            recipeIterator = new RecipeIteratorV1_13_2();
+        //} else if (serverVersion.equals("v1_13_R1")) {
+
+        } else if (serverVersion.equals("v1_12_R1")) {
+            recipeIterator = new RecipeIteratorV1_12();
+        } else {
+            recipeIterator = new RecipeIteratorOld();
         }
 
         return recipeIterator;
