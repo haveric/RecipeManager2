@@ -75,8 +75,6 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
     public void remove() {
         // MessageSender.getInstance().info("NMS for 1.13 removing recipe " + removeRecipe);
         try {
-            Field keyF = removeRecipe.getClass().getField("key");
-            MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
             if (removeRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
                 Field widthF = stripPrivateFinal(ShapedRecipes.class, "width");
@@ -126,8 +124,6 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
         // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
         try {
             // MessageSender.getInstance().info("NMS for 1.13 replacing recipe " + recipe.getName());
-            Field keyF = removeRecipe.getClass().getField("key");
-            MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
             if (removeRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
                 Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
