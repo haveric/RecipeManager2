@@ -1,5 +1,6 @@
 package haveric.recipeManager.nms;
 
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManager.nms.tools.BaseToolsRecipe;
 import haveric.recipeManager.nms.v1_12.RecipeIteratorV1_12;
@@ -18,7 +19,7 @@ public class NMSVersionHandler {
     public static BaseRecipeIterator getRecipeIterator() {
         if (recipeIterator == null) {
             String serverVersion = getServerVersion();
-
+            MessageSender.getInstance().info("Server Version: " + serverVersion);
             if (serverVersion.equals("v1_13_R2")) {
                 recipeIterator = new RecipeIteratorV1_13_2();
             //} else if (serverVersion.equals("v1_13_R1")) {
