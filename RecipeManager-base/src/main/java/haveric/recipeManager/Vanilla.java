@@ -631,6 +631,9 @@ public class Vanilla {
         Recipe r;
         String[] sh;
 
+        ItemStack[] matrix = recipe.getIngredients();
+        Tools.trimItemMatrix(matrix);
+        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
         int height = recipe.getHeight();
         int width = recipe.getWidth();
 
@@ -642,7 +645,7 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShaped(sr, null, null, width, height)) {
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShaped(sr, matrix, matrixMirror, width, height)) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
                         NMSVersionHandler.getRecipeIterator().replace(recipe, overrideItem);
                         NMSVersionHandler.getRecipeIterator().finish();
