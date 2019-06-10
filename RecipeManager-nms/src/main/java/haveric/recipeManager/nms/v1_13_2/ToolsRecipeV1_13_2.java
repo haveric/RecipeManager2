@@ -65,7 +65,7 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
                 int i = 0;
 
                 for (RecipeItemStack list : items) {
-                    org.bukkit.inventory.ItemStack baseItem = ingredients[(i / height) * 3 + (i % width)];
+                    org.bukkit.inventory.ItemStack baseItem = ingredients[(i / width) * 3 + (i % width)];
                     if (baseItem == null) {
                         baseItem = new org.bukkit.inventory.ItemStack(Material.AIR);
                     }
