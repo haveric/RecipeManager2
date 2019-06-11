@@ -12,6 +12,7 @@ configurations {
     extra
     compile2
     compile3
+    compile4
 }
 
 // Include dependent libraries in archive.
@@ -27,6 +28,7 @@ dependencies {
 
     compile2 "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
     compile3 "org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT"
+    compile4 "org.spigotmc:spigot:1.14.2-R0.1-SNAPSHOT"
 
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 
@@ -35,5 +37,6 @@ dependencies {
 task libs(type: Sync) {
     from configurations.compile2
     from configurations.compile3
+    from configurations.compile4
     into "libs"
 }

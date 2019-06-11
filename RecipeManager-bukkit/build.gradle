@@ -20,7 +20,7 @@ jar {
 }
 
 dependencies {
-    compile "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
+    compile "org.bukkit:bukkit:1.14.2-R0.1-SNAPSHOT"
     compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )

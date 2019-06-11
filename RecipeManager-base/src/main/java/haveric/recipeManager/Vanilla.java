@@ -147,7 +147,6 @@ public class Vanilla {
             initialRecipes.put(new FuelRecipe(Material.LADDER, 15), info);
             initialRecipes.put(new FuelRecipe(Material.BOW, 10), info);
             initialRecipes.put(new FuelRecipe(Material.FISHING_ROD, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.SIGN, 10), info);
             initialRecipes.put(new FuelRecipe(Material.BOWL, 5), info);
             RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
 
@@ -167,6 +166,10 @@ public class Vanilla {
                 initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_DARK_OAK"), 20), info);
                 initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_JUNGLE"), 20), info);
                 initialRecipes.put(new FuelRecipe(Material.getMaterial("BOAT_SPRUCE"), 20), info);
+            }
+
+            if (!Version.has1_14Support()) {
+                initialRecipes.put(new FuelRecipe(Material.getMaterial("SIGN"), 10), info);
             }
         }
 
@@ -338,6 +341,26 @@ public class Vanilla {
             RECIPE_FIREWORKS = new ItemStack(Material.FIREWORK, 0, (short) 0);
             RECIPE_BANNER = new ItemStack(Material.BANNER, 0, (short) 0);
             */
+        }
+
+        if (Version.has1_14Support()) {
+            initialRecipes.put(new FuelRecipe(Material.ACACIA_SIGN, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.BIRCH_SIGN, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.JUNGLE_SIGN, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.OAK_SIGN, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.SPRUCE_SIGN, 10), info);
+            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_SIGN, 10), info);
+
+            // New fuels in 1.14
+            initialRecipes.put(new FuelRecipe(Material.SCAFFOLDING, 2.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.CARTOGRAPHY_TABLE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.FLETCHING_TABLE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.SMITHING_TABLE, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.LECTERN, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.COMPOSTER, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BARREL, 15), info);
+            initialRecipes.put(new FuelRecipe(Material.BAMBOO, 2.5f), info);
+            initialRecipes.put(new FuelRecipe(Material.DEAD_BUSH, 5), info);
         }
 
         // Index fuel recipes
