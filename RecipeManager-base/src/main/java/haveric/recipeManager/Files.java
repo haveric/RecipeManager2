@@ -525,7 +525,7 @@ public class Files {
         s.append(NL).append("<a name='potiontype'></a><a href='#contents'>^ Contents</a><h3>POTION TYPE LIST</h3>");
         s.append("<a href='" + BUKKIT_DOCS + "potion/PotionType.html'>BukkitAPI / PotionType</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type", "Data value"));
+        s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type"));
 
         for (PotionType t : PotionType.values()) {
             if (t != null) {
@@ -535,7 +535,7 @@ public class Files {
                 } else {
                     effectType = t.getEffectType().getName();
                 }
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), effectType, t.getDamageValue()));
+                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), effectType));
             }
         }
 
