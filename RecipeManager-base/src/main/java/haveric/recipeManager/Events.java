@@ -75,12 +75,8 @@ public class Events implements Listener {
                 return; // event was cancelled by some other plugin
             }
 
-            Player player;
-            if (event.getView() == null) {
-                player = null;
-            } else {
-                player = (Player) event.getView().getPlayer();
-            }
+            InventoryView view = event.getView();
+            Player player = (Player) view.getPlayer();
 
             if (!RecipeManager.getPlugin().canCraft(player)) {
                 inv.setResult(null);
@@ -123,7 +119,7 @@ public class Events implements Listener {
                 return; // not a custom recipe or recipe not found, no need to move on
             }
 
-            Args a = Args.create().player(player).inventory(inv).location(location).recipe(recipe).build();
+            Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
 
             result = recipe.getDisplayResult(a); // get the result from recipe
 
@@ -404,12 +400,8 @@ public class Events implements Listener {
                 result = new ItemResult(inv.getResult());
             }
 
-            final Player player;
-            if (event.getView() == null) {
-                player = null;
-            } else {
-                player = (Player) event.getView().getPlayer();
-            }
+            InventoryView view = event.getView();
+            final Player player = (Player) view.getPlayer();
 
             Location location = Workbenches.get(player);
 
@@ -426,7 +418,7 @@ public class Events implements Listener {
                 return;
             }
 
-            Args a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).build();
+            Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 
             if (!recipe.checkFlags(a)) {
                 SoundNotifier.sendDenySound(player, location);
@@ -457,11 +449,11 @@ public class Events implements Listener {
 
             result = callEvent.getResult(); // get the result from the event if it was changed
 
-            a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
+            a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
 
             int times = craftResult(event, inv, player, recipe, result, a); // craft the result
             if (result != null) {
-                a = Args.create().player(player).inventory(inv).recipe(recipe).location(location).result(result).build();
+                a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
 
                 if (times > 0) {
                     Recipes.recipeResetResult(a.playerUUID());
@@ -793,7 +785,7 @@ public class Events implements Listener {
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
-                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
@@ -878,7 +870,7 @@ public class Events implements Listener {
 
                                 data.setFuelerUUID(player.getUniqueId());
 
-                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
                                     ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
@@ -910,7 +902,7 @@ public class Events implements Listener {
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
-                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
@@ -1094,7 +1086,7 @@ public class Events implements Listener {
                                 if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                     event.setCancelled(true);
                                 } else {
-                                    Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(inventory).extra(inventory.getSmelting()).build();
+                                    Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
                                     ItemResult result = recipe.getResult(a);
 
                                     if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {

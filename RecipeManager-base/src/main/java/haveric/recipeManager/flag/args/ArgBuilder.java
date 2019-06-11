@@ -6,6 +6,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class ArgBuilder {
         a.setLocation(newArgs.location().clone());
         a.setRecipe(newArgs.recipe());
         a.setRecipeType(newArgs.recipeType());
+        a.setInventoryView(newArgs.inventoryView());
         a.setInventory(newArgs.inventory());
         a.setResult(newArgs.result().clone());
         a.setExtra(newArgs.extra());
@@ -67,6 +69,12 @@ public class ArgBuilder {
 
     public ArgBuilder recipe(RMCRecipeType type) {
         a.setRecipeType(type);
+        return this;
+    }
+
+    public ArgBuilder inventoryView(InventoryView inventoryView) {
+        a.setInventoryView(inventoryView);
+        a.setInventory(inventoryView.getTopInventory());
         return this;
     }
 

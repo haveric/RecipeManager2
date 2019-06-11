@@ -111,7 +111,7 @@ public class FlagSetBlock extends Flag {
 
     @Override
     public void onCheck(Args a) {
-        if (!a.hasLocation() || !a.hasInventory()) {
+        if (!a.hasLocation() || !a.hasInventoryView()) {
             a.addCustomReason("Needs location and inventory!");
             return;
         }

@@ -307,7 +307,7 @@ public class FlagCloneIngredient extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult() || !a.hasInventory()) { // || a.inventory() instanceof CraftingInventory == false)
+        if (!a.hasResult() || !a.hasInventoryView()) { // || a.inventory() instanceof CraftingInventory == false)
             a.addCustomReason("Needs inventory and result!");
             return;
         }

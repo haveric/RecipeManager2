@@ -288,7 +288,7 @@ public class FlagIngredientCondition extends Flag {
 
     @Override
     public void onCheck(Args a) {
-        if (!a.hasInventory()) {
+        if (!a.hasInventoryView()) {
             a.addCustomReason("Needs inventory!");
             return;
         }

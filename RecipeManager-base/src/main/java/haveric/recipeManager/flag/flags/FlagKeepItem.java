@@ -240,7 +240,7 @@ public class FlagKeepItem extends Flag {
 
     @Override
     public void onCrafted(final Args a) {
-        if (!a.hasInventory()) {
+        if (!a.hasInventoryView()) {
             a.addCustomReason("Needs an inventory!");
             return;
         }

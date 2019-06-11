@@ -139,7 +139,7 @@ public class FlagApplyEnchantment extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult() || !a.hasInventory()) {
+        if (!a.hasResult() || !a.hasInventoryView()) {
             a.addCustomReason("Needs inventory and result!");
             return;
         }

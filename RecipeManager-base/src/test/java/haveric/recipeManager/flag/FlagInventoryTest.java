@@ -10,7 +10,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,28 +24,28 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class FlagInventoryTest extends FlagBaseTest {
 
-    Inventory custom;
-    Inventory second;
-    Inventory third;
-    Inventory workbench;
+    InventoryView custom;
+    InventoryView second;
+    InventoryView third;
+    InventoryView workbench;
 
     @Before
     public void prepare() {
-        mockStatic(Inventory.class);
+        mockStatic(InventoryView.class);
 
-        custom = mock(Inventory.class);
+        custom = mock(InventoryView.class);
         when(custom.getType()).thenReturn(InventoryType.CRAFTING);
         when(custom.getTitle()).thenReturn("Custom");
 
-        second = mock(Inventory.class);
+        second = mock(InventoryView.class);
         when(second.getType()).thenReturn(InventoryType.CRAFTING);
         when(second.getTitle()).thenReturn("Second");
 
-        third = mock(Inventory.class);
+        third = mock(InventoryView.class);
         when(third.getType()).thenReturn(InventoryType.CRAFTING);
         when(third.getTitle()).thenReturn("  Third  ");
 
-        workbench = mock(Inventory.class);
+        workbench = mock(InventoryView.class);
         when(workbench.getType()).thenReturn(InventoryType.WORKBENCH);
         when(workbench.getTitle()).thenReturn("Anything");
     }
@@ -74,22 +74,22 @@ public class FlagInventoryTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
 
-                a.setInventory(custom);
+                a.setInventoryView(custom);
                 flag.onCheck(a);
                 assertFalse(a.hasReasons());
 
-                a.setInventory(workbench);
+                a.setInventoryView(workbench);
                 flag.onCheck(a);
                 assertTrue(a.hasReasons());
             } else if (resultType == Material.COBBLESTONE) {
                 assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
                 assertTrue(flag.getInventories().contains(InventoryType.WORKBENCH));
 
-                a.setInventory(custom);
+                a.setInventoryView(custom);
                 flag.onCheck(a);
                 assertFalse(a.hasReasons());
 
-                a.setInventory(workbench);
+                a.setInventoryView(workbench);
                 flag.onCheck(a);
                 assertFalse(a.hasReasons());
             } else if (resultType == Material.STONE) {
@@ -100,11 +100,11 @@ public class FlagInventoryTest extends FlagBaseTest {
                 assertTrue(flag.getAllowedTitles().contains("Custom"));
                 assertTrue(flag.getUnallowedTitles().isEmpty());
 
-                a.setInventory(custom);
+                a.setInventoryView(custom);
                 flag.onCheck(a);
                 assertFalse(a.hasReasons());
 
-                a.setInventory(second);
+                a.setInventoryView(second);
                 flag.onCheck(a);
                 assertTrue(a.hasReasons());
 
@@ -114,19 +114,19 @@ public class FlagInventoryTest extends FlagBaseTest {
                 assertTrue(flag.getAllowedTitles().contains("Second"));
                 assertTrue(flag.getUnallowedTitles().contains("  Third  "));
 
-                a.setInventory(custom);
+                a.setInventoryView(custom);
                 flag.onCheck(a);
                 assertFalse(a.hasReasons());
 
-                a.setInventory(second);
+                a.setInventoryView(second);
                 flag.onCheck(a);
                 assertFalse(a.hasReasons());
 
-                a.setInventory(third);
+                a.setInventoryView(third);
                 flag.onCheck(a);
                 assertTrue(a.hasReasons());
 
-                a.setInventory(workbench);
+                a.setInventoryView(workbench);
                 flag.onCheck(a);
                 assertTrue(a.hasReasons());
             }

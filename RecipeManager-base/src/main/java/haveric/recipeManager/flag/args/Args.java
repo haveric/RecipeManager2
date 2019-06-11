@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -31,6 +32,7 @@ public class Args {
     private Location location;
     private BaseRecipe recipe;
     private RMCRecipeType recipeType;
+    private InventoryView inventoryView;
     private Inventory inventory;
     private ItemResult result;
     private Object extra;
@@ -61,6 +63,10 @@ public class Args {
 
     public void setRecipeType(RMCRecipeType newRecipeType) {
         recipeType = newRecipeType;
+    }
+
+    public void setInventoryView(InventoryView newInventoryView) {
+        inventoryView = newInventoryView;
     }
 
     public void setInventory(Inventory newInventory) {
@@ -126,6 +132,14 @@ public class Args {
 
     public boolean hasRecipe() {
         return recipe != null;
+    }
+
+    public InventoryView inventoryView() {
+        return inventoryView;
+    }
+
+    public boolean hasInventoryView() {
+        return inventoryView != null;
     }
 
     public Inventory inventory() {
@@ -286,7 +300,7 @@ public class Args {
         string = string.replace("{result}", ToolsItem.print(result()));
         string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(unknown)"));
         string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
-        string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(unknown)"));
+        string = string.replace("{inventorytype}", (hasInventoryView() ? inventoryView().getType().toString().toLowerCase() : "(unknown)"));
         string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
 
         string = parsePosition(string, "x");
