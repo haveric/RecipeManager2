@@ -330,14 +330,18 @@ public class FlagSummon extends Flag {
                     npc.setTamed(true);
                 }
 
+                if (ent instanceof Sittable) {
+                    Sittable npc = (Sittable) ent;
+
+                    if (pet && noSit) {
+                        npc.setSitting(false);
+                    }
+                }
+
                 if (ent instanceof Wolf) {
                     Wolf npc = (Wolf) ent;
 
                     if (pet) {
-                        if (noSit) {
-                            npc.setSitting(false);
-                        }
-
                         if (color != null) {
                             npc.setCollarColor(color);
                         }
@@ -348,10 +352,6 @@ public class FlagSummon extends Flag {
 
                 if (ent instanceof Ocelot) {
                     Ocelot npc = (Ocelot) ent;
-
-                    if (pet && noSit) {
-                        npc.setSitting(false);
-                    }
 
                     if (cat != null) {
                         npc.setCatType(cat);
