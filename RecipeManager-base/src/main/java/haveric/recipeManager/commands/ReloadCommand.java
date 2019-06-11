@@ -18,7 +18,7 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 
 public class ReloadCommand implements CommandExecutor {
-    ConversationFactory reloadConversation = null;
+    ConversationFactory reloadConversation;
     
     public ReloadCommand() {
         reloadConversation = new ConversationFactory(RecipeManager.getPlugin()).withLocalEcho(true)

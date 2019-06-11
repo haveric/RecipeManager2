@@ -5,16 +5,13 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class NamingTest extends FlagBaseTest {
     @Test
@@ -37,10 +34,10 @@ public class NamingTest extends FlagBaseTest {
 
             Material resultType = result.getType();
             if (resultType == Material.STONE_SWORD) {
-                Assert.assertTrue(recipe.hasCustomName());
+                assertTrue(recipe.hasCustomName());
                 assertEquals("Boomstick", name);
             } else if (resultType == Material.IRON_SWORD) {
-                Assert.assertFalse(recipe.hasCustomName());
+                assertFalse(recipe.hasCustomName());
             }
         }
     }
@@ -65,10 +62,10 @@ public class NamingTest extends FlagBaseTest {
 
             Material resultType = result.getType();
             if (resultType == Material.STONE_SWORD) {
-                Assert.assertTrue(recipe.hasCustomName());
+                assertTrue(recipe.hasCustomName());
                 assertEquals("Random Stuff", name);
             } else if (resultType == Material.IRON_SWORD) {
-                Assert.assertFalse(recipe.hasCustomName());
+                assertFalse(recipe.hasCustomName());
             }
         }
     }
@@ -93,10 +90,10 @@ public class NamingTest extends FlagBaseTest {
 
             Material resultType = result.getType();
             if (resultType == Material.STONE_SWORD) {
-                Assert.assertTrue(recipe.hasCustomName());
+                assertTrue(recipe.hasCustomName());
                 assertEquals("Diamond Sword", name);
             } else if (resultType == Material.IRON_SWORD) {
-                Assert.assertFalse(recipe.hasCustomName());
+                assertFalse(recipe.hasCustomName());
             }
         }
     }

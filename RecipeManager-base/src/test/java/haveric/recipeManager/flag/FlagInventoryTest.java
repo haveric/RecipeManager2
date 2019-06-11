@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -18,9 +17,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -75,63 +72,63 @@ public class FlagInventoryTest extends FlagBaseTest {
 
             Material resultType = result.getType();
             if (resultType == Material.DIRT) {
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
+                assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
 
                 a.setInventory(custom);
                 flag.onCheck(a);
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
 
                 a.setInventory(workbench);
                 flag.onCheck(a);
-                Assert.assertTrue(a.hasReasons());
+                assertTrue(a.hasReasons());
             } else if (resultType == Material.COBBLESTONE) {
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.WORKBENCH));
+                assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
+                assertTrue(flag.getInventories().contains(InventoryType.WORKBENCH));
 
                 a.setInventory(custom);
                 flag.onCheck(a);
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
 
                 a.setInventory(workbench);
                 flag.onCheck(a);
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             } else if (resultType == Material.STONE) {
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.WORKBENCH));
+                assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
+                assertTrue(flag.getInventories().contains(InventoryType.WORKBENCH));
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
-                Assert.assertTrue(flag.getAllowedTitles().contains("Custom"));
-                Assert.assertTrue(flag.getUnallowedTitles().isEmpty());
+                assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
+                assertTrue(flag.getAllowedTitles().contains("Custom"));
+                assertTrue(flag.getUnallowedTitles().isEmpty());
 
                 a.setInventory(custom);
                 flag.onCheck(a);
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
 
                 a.setInventory(second);
                 flag.onCheck(a);
-                Assert.assertTrue(a.hasReasons());
+                assertTrue(a.hasReasons());
 
             } else if (resultType == Material.IRON_SWORD) {
-                Assert.assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
-                Assert.assertTrue(flag.getAllowedTitles().contains("Custom"));
-                Assert.assertTrue(flag.getAllowedTitles().contains("Second"));
-                Assert.assertTrue(flag.getUnallowedTitles().contains("  Third  "));
+                assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
+                assertTrue(flag.getAllowedTitles().contains("Custom"));
+                assertTrue(flag.getAllowedTitles().contains("Second"));
+                assertTrue(flag.getUnallowedTitles().contains("  Third  "));
 
                 a.setInventory(custom);
                 flag.onCheck(a);
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
 
                 a.setInventory(second);
                 flag.onCheck(a);
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
 
                 a.setInventory(third);
                 flag.onCheck(a);
-                Assert.assertTrue(a.hasReasons());
+                assertTrue(a.hasReasons());
 
                 a.setInventory(workbench);
                 flag.onCheck(a);
-                Assert.assertTrue(a.hasReasons());
+                assertTrue(a.hasReasons());
             }
         }
     }

@@ -649,7 +649,7 @@ public class Events implements Listener {
                 item.setAmount(result.getAmount() * craftAmount);
 
                 int space = Tools.playerFreeSpaceForItem(player, item);
-                int crafted = Math.min((int) Math.ceil(space / result.getAmount()), craftAmount);
+                int crafted = Math.min((int) Math.ceil(space / (double) result.getAmount()), craftAmount);
 
                 if (crafted > 0) {
                     event.setCurrentItem(result);

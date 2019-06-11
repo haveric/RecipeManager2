@@ -262,7 +262,7 @@ public class Flag implements Cloneable {
             return false;
         }
 
-        if (desc.hasBit(FlagBit.RECIPE) && !(flaggable instanceof BaseRecipe) && flaggable instanceof ItemResult) {
+        if (desc.hasBit(FlagBit.RECIPE) && flaggable instanceof ItemResult) {
             ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " only works on recipes!");
             return false;
         }

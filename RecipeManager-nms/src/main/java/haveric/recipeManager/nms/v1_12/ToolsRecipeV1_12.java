@@ -13,7 +13,6 @@ import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -134,12 +133,10 @@ public class ToolsRecipeV1_12 extends BaseToolsRecipe {
                         //MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + bukkitRecipe + " with shapeless " + recipe.key.toString() + ":" + bukkitRecipe.getResult());
                         return false;
                     }
-                    Iterator<RecipeItemStack> iterator = copy.iterator();
-                    while (iterator.hasNext()) {
-                        RecipeItemStack list = iterator.next();
+                    for (RecipeItemStack list : copy) {
                         if (list != null && list.choices.length > 0) {
                             for (ItemStack stack : list.choices) {
-                                org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(CraftMagicNumbers.getMaterial(stack.getItem()),1, (short) stack.getData());
+                                org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(CraftMagicNumbers.getMaterial(stack.getItem()), 1, (short) stack.getData());
                                 if (bukkitItem.getType() == baseItem.getType()
                                         && (baseItem.getDurability() == RMCVanilla.DATA_WILDCARD
                                         || bukkitItem.getDurability() == RMCVanilla.DATA_WILDCARD

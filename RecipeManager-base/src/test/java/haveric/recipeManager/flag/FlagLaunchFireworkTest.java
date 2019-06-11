@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.junit.Test;
@@ -17,9 +16,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagLaunchFireworkTest extends FlagBaseTest {
 
@@ -52,8 +49,8 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
                     assertEquals(0, meta.getEffects().get(0).getFadeColors().size());
 
                     assertEquals(FireworkEffect.Type.BALL, meta.getEffects().get(0).getType());
-                    Assert.assertFalse(meta.getEffects().get(0).hasTrail());
-                    Assert.assertFalse(meta.getEffects().get(0).hasFlicker());
+                    assertFalse(meta.getEffects().get(0).hasTrail());
+                    assertFalse(meta.getEffects().get(0).hasFlicker());
 
                     assertEquals(2, meta.getPower());
                     break;
@@ -65,7 +62,7 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
 
                     assertEquals(FireworkEffect.Type.BURST, meta.getEffects().get(0).getType());
                     assertTrue(meta.getEffects().get(0).hasTrail());
-                    Assert.assertFalse(meta.getEffects().get(0).hasFlicker());
+                    assertFalse(meta.getEffects().get(0).hasFlicker());
 
                     assertEquals(2, meta.getPower());
                     break;
@@ -83,7 +80,7 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
 
                     assertEquals(FireworkEffect.Type.BALL_LARGE, meta.getEffects().get(0).getType());
                     assertTrue(meta.getEffects().get(0).hasTrail());
-                    Assert.assertFalse(meta.getEffects().get(0).hasFlicker());
+                    assertFalse(meta.getEffects().get(0).hasFlicker());
 
                     assertEquals(2, meta.getPower());
                     break;
@@ -101,8 +98,8 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
                     assertEquals(0, meta.getEffects().get(0).getFadeColors().size());
 
                     assertEquals(FireworkEffect.Type.BALL, meta.getEffects().get(0).getType());
-                    Assert.assertFalse(meta.getEffects().get(0).hasTrail());
-                    Assert.assertFalse(meta.getEffects().get(0).hasFlicker());
+                    assertFalse(meta.getEffects().get(0).hasTrail());
+                    assertFalse(meta.getEffects().get(0).hasFlicker());
                     // END ONE
 
                     // TWO
@@ -112,7 +109,7 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
 
                     assertEquals(FireworkEffect.Type.BURST, meta.getEffects().get(1).getType());
                     assertTrue(meta.getEffects().get(1).hasTrail());
-                    Assert.assertFalse(meta.getEffects().get(1).hasFlicker());
+                    assertFalse(meta.getEffects().get(1).hasFlicker());
                     // END TWO
 
                     // THREE
@@ -128,7 +125,7 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
 
                     assertEquals(FireworkEffect.Type.BALL_LARGE, meta.getEffects().get(2).getType());
                     assertTrue(meta.getEffects().get(2).hasTrail());
-                    Assert.assertFalse(meta.getEffects().get(2).hasFlicker());
+                    assertFalse(meta.getEffects().get(2).hasFlicker());
                     // END THREE
 
                     assertEquals(1, meta.getPower());

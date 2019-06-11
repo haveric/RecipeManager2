@@ -8,17 +8,13 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagCooldownTest extends FlagBaseTest {
 
@@ -49,17 +45,17 @@ public class FlagCooldownTest extends FlagBaseTest {
                 assertEquals(30, cooldownTime);
                 assertNull(failMessage);
                 assertNull(message);
-                Assert.assertFalse(flag.isGlobal());
+                assertFalse(flag.isGlobal());
             } else if (resultType == Material.STONE_SWORD) {
                 assertEquals(30, cooldownTime);
                 assertNull(failMessage);
                 assertNull(message);
-                Assert.assertFalse(flag.isGlobal());
+                assertFalse(flag.isGlobal());
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(105, cooldownTime);
                 assertEquals("<red>Usable in: {time}", failMessage);
                 assertNull(message);
-                Assert.assertFalse(flag.isGlobal());
+                assertFalse(flag.isGlobal());
             } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1800, cooldownTime);
                 assertEquals("<red>Someone used this recently, wait: {time}", failMessage);
@@ -69,7 +65,7 @@ public class FlagCooldownTest extends FlagBaseTest {
                 assertEquals(600, cooldownTime);
                 assertNull(failMessage);
                 assertNull(message);
-                Assert.assertFalse(flag.isGlobal());
+                assertFalse(flag.isGlobal());
             }
         }
     }

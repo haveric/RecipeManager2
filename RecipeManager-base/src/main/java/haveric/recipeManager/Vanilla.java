@@ -835,11 +835,11 @@ public class Vanilla {
                 isSpecial = true;
             }
 
-            if (RECIPE_BANNER != null && result.equals(RECIPE_BANNER)) {
+            if (result.equals(RECIPE_BANNER)) {
                 isSpecial = true;
             }
 
-            if (RECIPE_SHIELD_BANNER != null && result.equals(RECIPE_SHIELD_BANNER)) {
+            if (result.equals(RECIPE_SHIELD_BANNER)) {
                 isSpecial = true;
             }
 
@@ -847,7 +847,7 @@ public class Vanilla {
                 isSpecial = true;
             }
 
-            if ((RECIPE_TIPPED_ARROW != null && result.equals(RECIPE_TIPPED_ARROW)) || (RECIPE_TIPPED_ARROW2 != null && result.equals(RECIPE_TIPPED_ARROW2))) {
+            if (result.equals(RECIPE_TIPPED_ARROW) || result.equals(RECIPE_TIPPED_ARROW2)) {
                 isSpecial = true;
             }
 

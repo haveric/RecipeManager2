@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
@@ -27,9 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -118,7 +115,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
                     assertEquals(2, result.getAmount());
                     assertEquals(10, result.getDurability());
                     assertTrue(result.getItemMeta().getLore().contains("Test Lore"));
-                    Assert.assertFalse(result.getEnchantments().isEmpty());
+                    assertFalse(result.getEnchantments().isEmpty());
                     assertTrue(result.getEnchantments().containsKey(Enchantment.DAMAGE_ALL));
                     assertEquals(2, result.getEnchantments().get(Enchantment.DAMAGE_ALL).intValue());
                     break;

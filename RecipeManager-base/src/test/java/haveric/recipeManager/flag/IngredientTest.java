@@ -6,7 +6,6 @@ import haveric.recipeManager.recipes.CombineRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
@@ -15,10 +14,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class IngredientTest extends FlagBaseTest {
     @Test
@@ -110,18 +106,18 @@ public class IngredientTest extends FlagBaseTest {
                 assertEquals(Material.OAK_LOG, ing[2].getType());
 
                 for (int i = 3; i <= 8; i++) {
-                    assertEquals(null, ing[i]);
+                    assertNull(ing[i]);
                 }
             } else if (resultType == Material.STONE) {
                 assertEquals(Material.DIRT, ing[0].getType());
-                assertEquals(null, ing[1]);
-                assertEquals(null, ing[2]);
+                assertNull(ing[1]);
+                assertNull(ing[2]);
                 assertEquals(Material.COBBLESTONE, ing[3].getType());
-                assertEquals(null, ing[4]);
-                assertEquals(null, ing[5]);
+                assertNull(ing[4]);
+                assertNull(ing[5]);
                 assertEquals(Material.OAK_LOG, ing[6].getType());
-                assertEquals(null, ing[7]);
-                assertEquals(null, ing[8]);
+                assertNull(ing[7]);
+                assertNull(ing[8]);
             }
         }
     }
@@ -207,7 +203,7 @@ public class IngredientTest extends FlagBaseTest {
 
             List<ItemStack> ing = recipe.getIngredients();
             if (resultType == Material.DIRT) {
-                Assert.assertFalse(containsItem(ing, Material.STONE));
+                assertFalse(containsItem(ing, Material.STONE));
             } else if (resultType == Material.STONE) {
                 fail();
             }

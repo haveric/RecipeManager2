@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<Recipe> {
-    private Iterator<IRecipe> recipes = null;
+    private Iterator<IRecipe> recipes;
 
-    private Iterator<ItemStack> smeltingCustom = null;
+    private Iterator<ItemStack> smeltingCustom;
     private List<ItemStack> recipeSmeltingCustom = new LinkedList<>();
 
-    private Iterator<ItemStack> smeltingVanilla = null;
+    private Iterator<ItemStack> smeltingVanilla;
     private List<ItemStack> recipeSmeltingVanilla = new LinkedList<>();
 
     enum RemoveFrom {

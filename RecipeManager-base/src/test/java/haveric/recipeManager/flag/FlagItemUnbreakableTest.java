@@ -8,16 +8,13 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagItemUnbreakableTest extends FlagBaseTest {
 
@@ -44,8 +41,8 @@ public class FlagItemUnbreakableTest extends FlagBaseTest {
                 assertTrue(flag.isUnbreakable());
                 assertTrue(result.getItemMeta().isUnbreakable());
             } else if (resultType == Material.IRON_SWORD) {
-                Assert.assertFalse(flag.isUnbreakable());
-                Assert.assertFalse(result.getItemMeta().isUnbreakable());
+                assertFalse(flag.isUnbreakable());
+                assertFalse(result.getItemMeta().isUnbreakable());
             }
         }
     }

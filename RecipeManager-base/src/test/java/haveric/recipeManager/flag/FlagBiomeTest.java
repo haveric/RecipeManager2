@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.junit.Test;
@@ -16,9 +15,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagBiomeTest extends FlagBaseTest {
 
@@ -55,17 +52,17 @@ public class FlagBiomeTest extends FlagBaseTest {
             } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(2, biomes.size());
                 assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELDS));
-                Assert.assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
                 assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELD_SHORE));
-                Assert.assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(2, biomes.size());
                 assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELDS));
-                Assert.assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
                 assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELD_SHORE));
-                Assert.assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
-                Assert.assertFalse(biomes.containsKey(Biome.JUNGLE));
-                Assert.assertFalse(biomes.containsKey(Biome.JUNGLE_HILLS));
+                assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
+                assertFalse(biomes.containsKey(Biome.JUNGLE));
+                assertFalse(biomes.containsKey(Biome.JUNGLE_HILLS));
             }
         }
     }

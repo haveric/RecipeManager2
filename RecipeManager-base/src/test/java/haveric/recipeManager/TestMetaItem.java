@@ -188,10 +188,10 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable {
         try {
             TestMetaItem clone = (TestMetaItem) super.clone();
             if (this.lores != null) {
-                clone.lores = new ArrayList<String>(this.lores);
+                clone.lores = new ArrayList<>(this.lores);
             }
             if (this.enchantments != null) {
-                clone.enchantments = new HashMap<Enchantment, Integer>(this.enchantments);
+                clone.enchantments = new HashMap<>(this.enchantments);
             }
             clone.hideFlag = this.hideFlag;
             clone.unbreakable = this.unbreakable;

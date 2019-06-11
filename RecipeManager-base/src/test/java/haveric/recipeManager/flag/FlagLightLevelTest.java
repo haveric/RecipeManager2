@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,10 +20,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -135,13 +131,13 @@ public class FlagLightLevelTest extends FlagBaseTest {
                 assertEquals("sun", flag.getLightType());
                 assertNull(flag.getFailMessage());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
                 assertEquals(0, flag.getMinLight());
                 assertEquals(4, flag.getMaxLight());
                 assertEquals("blocks", flag.getLightType());
                 assertEquals("<red>Kill the lights!", flag.getFailMessage());
             } else if (resultType == Material.IRON_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
                 assertEquals(0, flag.getMinLight());
                 assertEquals(4, flag.getMaxLight());
                 assertEquals("blocks", flag.getLightType());
@@ -168,7 +164,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
             flag.onCheck(a);
 
             if (resultType == Material.DIAMOND_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
 
             a.clear();
@@ -178,7 +174,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertTrue(a.hasReasons());
             } else if (resultType == Material.DIAMOND_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
 
             a.clear();
@@ -186,9 +182,9 @@ public class FlagLightLevelTest extends FlagBaseTest {
             flag.onCheck(a);
 
             if (resultType == Material.DIRT) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             } else if (resultType == Material.DIAMOND_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
 
             a.clear();
@@ -196,7 +192,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
             flag.onCheck(a);
 
             if (resultType == Material.DIRT) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             } else if (resultType == Material.DIAMOND_SWORD) {
                 assertTrue(a.hasReasons());
             }

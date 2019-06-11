@@ -8,15 +8,15 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftShapedRecipe;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftShapelessRecipe;
+import org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Minecraft v1.12 NMS solution for matching if a RM recipe is already represented by an MC recipe.
+ * Minecraft v1.13 NMS solution for matching if a RM recipe is already represented by an MC recipe.
  *
  * Basically duplicates the "internal" matching code.
  **/
@@ -95,7 +95,7 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
                     i++;
                 }
                 // if we made it through the whole list, and never failed to match, we have a match.
-                    /*MessageSender.getInstance().info("NMS for 1.12 matched recipe " + baseRecipe.getName() + " with shaped " +
+                    /*MessageSender.getInstance().info("NMS for 1.13 matched recipe " + baseRecipe.getName() + " with shaped " +
                             recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
                 return true;
             } catch (Exception e) {
@@ -135,18 +135,16 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
                 for (org.bukkit.inventory.ItemStack baseItem : ingredientsList) {
                     boolean match = false;
                     if (copy.size() == 0) { // we ran out of things to match against but still have baseItems.
-                            /*MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + baseRecipe.getName() + " with shapeless " +
+                            /*MessageSender.getInstance().info("NMS for 1.13 did not match recipe " + baseRecipe.getName() + " with shapeless " +
                                     recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
                         return false;
                     }
-                    Iterator<RecipeItemStack> iterator = copy.iterator();
-                    while (iterator.hasNext()) {
-                        RecipeItemStack list = iterator.next();
+                    for (RecipeItemStack list : copy) {
                         if (list != null && list.choices.length > 0) {
                             for (ItemStack stack : list.choices) {
                                 org.bukkit.inventory.ItemStack bukkitItem = new org.bukkit.inventory.ItemStack(
-                                        org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers
-                                                .getMaterial(stack.getItem()),1);
+                                        CraftMagicNumbers
+                                                .getMaterial(stack.getItem()), 1);
                                 if (bukkitItem.getType() == baseItem.getType()
                                         && (baseItem.getDurability() == RMCVanilla.DATA_WILDCARD
                                         || bukkitItem.getDurability() == RMCVanilla.DATA_WILDCARD
@@ -160,18 +158,18 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
                         if (match) break; // we found a match for this recipeitemstack.
                     }
                     if (!match) {
-                            /*MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + baseRecipe.getName() + " with shapeless " +
+                            /*MessageSender.getInstance().info("NMS for 1.13 did not match recipe " + baseRecipe.getName() + " with shapeless " +
                                     recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
                         return false;
                     }
                 }
                 if (copy.size() == 0) { // yay, we've run out of base items AND run out of recipeItemStacks.
                     // every base item has matched against a unique RecipeItemStack.
-                        /*MessageSender.getInstance().info("NMS for 1.12 matched recipe " + baseRecipe.getName() + " with shapeless " +
+                        /*MessageSender.getInstance().info("NMS for 1.13 matched recipe " + baseRecipe.getName() + " with shapeless " +
                                 recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
                     return true;
                 } else {
-                        /*MessageSender.getInstance().info("NMS for 1.12 did not match recipe " + baseRecipe.getName() + " with shapeless " +
+                        /*MessageSender.getInstance().info("NMS for 1.13 did not match recipe " + baseRecipe.getName() + " with shapeless " +
                                 recipe.key.toString() + ":" + bukkitRecipe.getResult());*/
                     return false;
                 }

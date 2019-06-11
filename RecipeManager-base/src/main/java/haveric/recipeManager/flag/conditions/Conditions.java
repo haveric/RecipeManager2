@@ -1590,7 +1590,7 @@ public class Conditions implements Cloneable {
                             max = Short.valueOf(range[1].trim());
                         }
 
-                        if (min < 0 || min > 255 || min > max || max > 255) {
+                        if (min < 0 || min > max || max > 255) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
                             break;
                         }

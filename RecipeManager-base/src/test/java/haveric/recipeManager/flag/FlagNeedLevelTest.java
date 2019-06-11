@@ -8,16 +8,13 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagNeedLevelTest extends FlagBaseTest {
 
@@ -43,7 +40,7 @@ public class FlagNeedLevelTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertEquals(1, flag.getMinLevel());
                 assertEquals(1, flag.getMaxLevel());
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
             } else if (resultType == Material.STONE_SWORD) {
                 assertEquals(5, flag.getMinLevel());
                 assertEquals(5, flag.getMaxLevel());
@@ -56,7 +53,7 @@ public class FlagNeedLevelTest extends FlagBaseTest {
             } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(5, flag.getMinLevel());
                 assertEquals(5, flag.getMaxLevel());
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
             }
         }
     }

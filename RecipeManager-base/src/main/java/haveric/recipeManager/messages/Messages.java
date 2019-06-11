@@ -14,8 +14,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static haveric.recipeManager.Files.FILE_MESSAGES;
-
 public class Messages {
     private static Messages instance;
     private Map<String, Set<String>> sent = new HashMap<>();

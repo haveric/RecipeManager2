@@ -109,7 +109,7 @@ public class ConditionEvaluator {
                             int height = craftRecipe.getHeight();
                             int width = craftRecipe.getWidth();
 
-                            if (NMSVersionHandler.getToolsRecipe().matchesShaped((ShapedRecipe) bukkit, matrix, matrixMirror, width, height)) {
+                            if (NMSVersionHandler.getToolsRecipe().matchesShaped(bukkit, matrix, matrixMirror, width, height)) {
                                 return entry.getValue();
                             }
                         }

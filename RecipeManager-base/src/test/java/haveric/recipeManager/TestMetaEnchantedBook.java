@@ -27,12 +27,7 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
 
     @Override
     boolean applicableTo(Material type) {
-        switch (type) {
-            case ENCHANTED_BOOK:
-                return true;
-            default:
-                return false;
-        }
+        return type == Material.ENCHANTED_BOOK;
     }
 
     @Override

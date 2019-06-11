@@ -8,16 +8,13 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagNeedExpTest extends FlagBaseTest {
 
@@ -43,7 +40,7 @@ public class FlagNeedExpTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertEquals(100, flag.getMinExp());
                 assertEquals(100, flag.getMaxExp());
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
             } else if (resultType == Material.STONE_SWORD) {
                 assertEquals(250, flag.getMinExp());
                 assertEquals(250, flag.getMaxExp());
@@ -55,12 +52,12 @@ public class FlagNeedExpTest extends FlagBaseTest {
             } else if (resultType == Material.GOLDEN_SWORD) {
                 assertEquals(1000, flag.getMinExp());
                 assertEquals(1000, flag.getMaxExp());
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
                 assertEquals("<red>Need {exp} exp!", flag.getFailMessage());
             } else if (resultType == Material.DIAMOND_SWORD) {
                 assertEquals(1000, flag.getMinExp());
                 assertEquals(1000, flag.getMaxExp());
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
             }
         }
     }

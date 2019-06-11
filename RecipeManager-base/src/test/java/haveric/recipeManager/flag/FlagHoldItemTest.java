@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
@@ -17,9 +16,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagHoldItemTest extends FlagBaseTest {
 
@@ -46,7 +43,7 @@ public class FlagHoldItemTest extends FlagBaseTest {
                 assertTrue(values.containsKey((short) 3));
                 assertTrue(values.containsKey((short) 4));
                 assertTrue(values.containsKey((short) 5));
-                Assert.assertFalse(values.containsKey((short) 6));
+                assertFalse(values.containsKey((short) 6));
             } else if (resultType == Material.GRAVEL) {
                 List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                 ConditionsHold cond = conditions.get(0);

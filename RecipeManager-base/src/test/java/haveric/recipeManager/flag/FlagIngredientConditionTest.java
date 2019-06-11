@@ -10,7 +10,6 @@ import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -24,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -144,7 +142,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(values.containsKey((short) 3));
                 assertTrue(values.containsKey((short) 4));
                 assertTrue(values.containsKey((short) 5));
-                Assert.assertFalse(values.containsKey((short) 6));
+                assertFalse(values.containsKey((short) 6));
             } else if (resultType == Material.GRAVEL) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                 ConditionsIngredient cond = conditions.get(0);
@@ -164,7 +162,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(flag.checkIngredientConditions(oneTwoThree, a));
 
                 a.clear();
-                Assert.assertFalse(flag.checkIngredientConditions(oneTwoThreeQuotes, a));
+                assertFalse(flag.checkIngredientConditions(oneTwoThreeQuotes, a));
             } else if (resultType == Material.STONE) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                 ConditionsIngredient cond = conditions.get(0);
@@ -176,7 +174,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(flag.checkIngredientConditions(oneTwoThreeQuotes, a));
 
                 a.clear();
-                Assert.assertFalse(flag.checkIngredientConditions(oneTwoThree, a));
+                assertFalse(flag.checkIngredientConditions(oneTwoThree, a));
             } else if (resultType == Material.WOODEN_SWORD) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                 ConditionsIngredient cond = conditions.get(0);
@@ -190,15 +188,15 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(flag.checkIngredientConditions(unbreakableSword, a));
 
                 a.clear();
-                Assert.assertFalse(flag.checkIngredientConditions(sword, a));
+                assertFalse(flag.checkIngredientConditions(sword, a));
 
             } else if (resultType == Material.GOLDEN_SWORD) {
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                 ConditionsIngredient cond = conditions.get(0);
-                Assert.assertFalse(cond.getUnbreakable());
+                assertFalse(cond.getUnbreakable());
 
                 a.clear();
-                Assert.assertFalse(flag.checkIngredientConditions(unbreakableSword, a));
+                assertFalse(flag.checkIngredientConditions(unbreakableSword, a));
 
                 a.clear();
                 assertTrue(flag.checkIngredientConditions(sword, a));
@@ -209,7 +207,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 assertTrue(cond.isNoMeta());
 
                 a.clear();
-                Assert.assertFalse(flag.checkIngredientConditions(unbreakableSword, a));
+                assertFalse(flag.checkIngredientConditions(unbreakableSword, a));
 
                 a.clear();
                 assertTrue(flag.checkIngredientConditions(sword, a));

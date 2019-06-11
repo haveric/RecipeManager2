@@ -95,7 +95,7 @@ public class FlagKeepItem extends Flag {
     }
 
     public Object getItem(ItemStack item) {
-        Object obj = keepItems.get(String.valueOf(item.getType().toString() + ":" + item.getDurability()));
+        Object obj = keepItems.get(item.getType().toString() + ":" + item.getDurability());
 
         if (obj == null) {
             return keepItems.get(String.valueOf(item.getType().toString()));
@@ -262,7 +262,6 @@ public class FlagKeepItem extends Flag {
                 parse(inv, a, 1);
             } else {
                 a.addCustomReason("Needs a recipe!");
-                return;
             }
         } else {
             a.addCustomReason("Needs a crafting or furnace inventory!");

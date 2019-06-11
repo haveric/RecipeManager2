@@ -126,7 +126,7 @@ public class FlagInventory extends Flag {
                 value = split[i].trim();
 
                 if (value.toLowerCase().startsWith("title")) {
-                    String titles[] = value.substring("title".length()).split(",");
+                    String[] titles = value.substring("title".length()).split(",");
 
                     for (String title : titles) {
                         title = title.trim();

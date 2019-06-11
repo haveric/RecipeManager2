@@ -6,16 +6,13 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.FlagBlockPowered;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class FlagBlockPoweredTest extends FlagBlockTest {
@@ -53,9 +50,9 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
             flag.onCheck(a);
 
             if (resultType == Material.DIRT) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
                 assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
             }
 
@@ -66,7 +63,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
             if (resultType == Material.DIRT) {
                 assertTrue(a.hasReasons());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
                 assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
             }
         }
@@ -104,9 +101,9 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
             flag.onCheck(a);
 
             if (resultType == Material.DIRT) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
 
             a.clear();
@@ -116,7 +113,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
             if (resultType == Material.DIRT) {
                 assertTrue(a.hasReasons());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
         }
     }
@@ -153,9 +150,9 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
             flag.onCheck(a);
 
             if (resultType == Material.DIRT) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
 
             a.clear();
@@ -165,7 +162,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
             if (resultType == Material.DIRT) {
                 assertTrue(a.hasReasons());
             } else if (resultType == Material.STONE_SWORD) {
-                Assert.assertFalse(a.hasReasons());
+                assertFalse(a.hasReasons());
             }
         }
     }

@@ -8,16 +8,13 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FlagNeedMoneyTest extends FlagBaseTest {
 
@@ -43,7 +40,7 @@ public class FlagNeedMoneyTest extends FlagBaseTest {
             if (resultType == Material.DIRT) {
                 assertEquals(.25, flag.getMinMoney(), .01);
                 assertEquals(.25, flag.getMaxMoney(), .01);
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
             } else if (resultType == Material.STONE_SWORD) {
                 assertEquals(.1, flag.getMinMoney(), .01);
                 assertEquals(1000, flag.getMaxMoney(), .01);
@@ -52,7 +49,7 @@ public class FlagNeedMoneyTest extends FlagBaseTest {
             } else if (resultType == Material.IRON_SWORD) {
                 assertEquals(.25, flag.getMinMoney(), .01);
                 assertEquals(.25, flag.getMaxMoney(), .01);
-                Assert.assertFalse(flag.getSetBoth());
+                assertFalse(flag.getSetBoth());
             }
         }
     }

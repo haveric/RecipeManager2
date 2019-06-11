@@ -9,16 +9,13 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import junit.framework.Assert;
 import org.bukkit.Material;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class FlagBookItemTest extends FlagBaseTest {
 
@@ -53,7 +50,7 @@ public class FlagBookItemTest extends FlagBaseTest {
 
                 switch(name) {
                     case "all":
-                        Assert.assertFalse(a.hasReasons());
+                        assertFalse(a.hasReasons());
                         assertEquals("The Art of Stealing", meta.getTitle());
                         assertEquals("Gray Fox", meta.getAuthor());
                         assertEquals(3, meta.getPages().size());

@@ -15,10 +15,9 @@ import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
 public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterator<Recipe> {
-    private Iterator<IRecipe> recipes = null;
+    private Iterator<IRecipe> recipes;
 
     private IRecipe removeRecipe = null;
-    private ItemStack removeItem = null;
 
     public RecipeIteratorV1_13_2() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();
