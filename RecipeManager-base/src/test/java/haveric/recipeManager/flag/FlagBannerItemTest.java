@@ -23,7 +23,7 @@ public class FlagBannerItemTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagBannerItem/");
+        File file = new File(baseRecipePath + "flagBannerItem/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

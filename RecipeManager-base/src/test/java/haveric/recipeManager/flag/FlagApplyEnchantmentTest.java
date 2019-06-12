@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.junit.Before;
@@ -29,6 +30,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class FlagApplyEnchantmentTest extends FlagBaseTest {
     private CraftingInventory inventory;
+    private InventoryView inventoryView;
 
     @Before
     public void setup() {
@@ -37,6 +39,10 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
 
         mockStatic(Inventory.class);
         inventory = mock(CraftingInventory.class);
+
+        mockStatic(InventoryView.class);
+        inventoryView = mock(InventoryView.class);
+        when(inventoryView.getTopInventory()).thenReturn(inventory);
 
         ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
 
@@ -55,7 +61,8 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagApplyEnchantment/");
+        File file = new File(baseRecipePath + "flagApplyEnchantment/");
+
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -65,7 +72,7 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventory(inventory).build();
+            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventoryView(inventoryView).build();
 
             ItemResult result = recipe.getResult(a);
 

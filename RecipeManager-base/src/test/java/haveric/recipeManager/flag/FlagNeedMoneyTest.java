@@ -20,7 +20,7 @@ public class FlagNeedMoneyTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagNeedMoney/");
+        File file = new File(baseRecipePath + "flagNeedMoney/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

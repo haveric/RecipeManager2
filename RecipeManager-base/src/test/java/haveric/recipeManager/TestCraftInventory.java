@@ -1,6 +1,6 @@
 package haveric.recipeManager;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -34,11 +34,6 @@ public class TestCraftInventory implements Inventory {
     @Override
     public void setMaxStackSize(int size) {
         maxStackSize = size;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override
@@ -376,11 +371,6 @@ public class TestCraftInventory implements Inventory {
 
     @Override
     public List<HumanEntity> getViewers() {
-        return null;
-    }
-
-    @Override
-    public String getTitle() {
         return null;
     }
 

@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class NamingTest extends FlagBaseTest {
     @Test
     public void testNamingCraft() {
-        File file = new File("src/test/resources/recipes/naming/namingCraft.txt");
+        File file = new File(baseRecipePath + "naming/namingCraft.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -44,7 +44,7 @@ public class NamingTest extends FlagBaseTest {
 
     @Test
     public void testNamingCombine() {
-        File file = new File("src/test/resources/recipes/naming/namingCombine.txt");
+        File file = new File(baseRecipePath + "naming/namingCombine.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -72,7 +72,7 @@ public class NamingTest extends FlagBaseTest {
 
     @Test
     public void testNamingSmelt() {
-        File file = new File("src/test/resources/recipes/naming/namingSmelt.txt");
+        File file = new File(baseRecipePath + "naming/namingSmelt.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

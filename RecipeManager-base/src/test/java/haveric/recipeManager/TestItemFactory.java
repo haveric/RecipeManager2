@@ -26,6 +26,7 @@ public class TestItemFactory implements ItemFactory {
                 return meta instanceof TestMetaBookSigned ? meta : new TestMetaBookSigned(meta);
             case WRITABLE_BOOK:
                 return meta != null && meta.getClass().equals(TestMetaBook.class) ? meta : new TestMetaBook(meta);
+            /*
             case CREEPER_HEAD:
             case CREEPER_WALL_HEAD:
             case DRAGON_HEAD:
@@ -39,8 +40,10 @@ public class TestItemFactory implements ItemFactory {
             case WITHER_SKELETON_WALL_SKULL:
             case ZOMBIE_HEAD:
             case ZOMBIE_WALL_HEAD:
+            */
                 //return meta instanceof CraftMetaSkull ? meta : new CraftMetaSkull(meta);
             case LEATHER_HELMET:
+            case LEATHER_HORSE_ARMOR:
             case LEATHER_CHESTPLATE:
             case LEATHER_LEGGINGS:
             case LEATHER_BOOTS:
@@ -95,8 +98,11 @@ public class TestItemFactory implements ItemFactory {
             case BLAZE_SPAWN_EGG:
             case CAVE_SPIDER_SPAWN_EGG:
             case CHICKEN_SPAWN_EGG:
+            case COD_SPAWN_EGG:
             case COW_SPAWN_EGG:
             case CREEPER_SPAWN_EGG:
+            case DOLPHIN_SPAWN_EGG:
+            case DROWNED_SPAWN_EGG:
             case DONKEY_SPAWN_EGG:
             case ELDER_GUARDIAN_SPAWN_EGG:
             case ENDERMAN_SPAWN_EGG:
@@ -112,9 +118,12 @@ public class TestItemFactory implements ItemFactory {
             case MULE_SPAWN_EGG:
             case OCELOT_SPAWN_EGG:
             case PARROT_SPAWN_EGG:
+            case PHANTOM_SPAWN_EGG:
             case PIG_SPAWN_EGG:
             case POLAR_BEAR_SPAWN_EGG:
+            case PUFFERFISH_SPAWN_EGG:
             case RABBIT_SPAWN_EGG:
+            case SALMON_SPAWN_EGG:
             case SHEEP_SPAWN_EGG:
             case SHULKER_SPAWN_EGG:
             case SILVERFISH_SPAWN_EGG:
@@ -124,6 +133,8 @@ public class TestItemFactory implements ItemFactory {
             case SPIDER_SPAWN_EGG:
             case SQUID_SPAWN_EGG:
             case STRAY_SPAWN_EGG:
+            case TROPICAL_FISH_SPAWN_EGG:
+            case TURTLE_SPAWN_EGG:
             case VEX_SPAWN_EGG:
             case VILLAGER_SPAWN_EGG:
             case VINDICATOR_SPAWN_EGG:
@@ -141,7 +152,18 @@ public class TestItemFactory implements ItemFactory {
             case JUKEBOX:
             case DISPENSER:
             case DROPPER:
-            case SIGN:
+            case ACACIA_SIGN:
+            case ACACIA_WALL_SIGN:
+            case BIRCH_SIGN:
+            case BIRCH_WALL_SIGN:
+            case DARK_OAK_SIGN:
+            case DARK_OAK_WALL_SIGN:
+            case JUNGLE_SIGN:
+            case JUNGLE_WALL_SIGN:
+            case OAK_SIGN:
+            case OAK_WALL_SIGN:
+            case SPRUCE_SIGN:
+            case SPRUCE_WALL_SIGN:
             case SPAWNER:
             case NOTE_BLOCK:
             case BREWING_STAND:
@@ -173,7 +195,20 @@ public class TestItemFactory implements ItemFactory {
             case RED_SHULKER_BOX:
             case BLACK_SHULKER_BOX:
             case ENDER_CHEST:
+            case BARREL:
+            case BELL:
+            case BLAST_FURNACE:
+            case CAMPFIRE:
+            case JIGSAW:
+            case LECTERN:
+            case SMOKER:
                 //return new CraftMetaBlockState(meta, material);
+            /*
+            case TROPICAL_FISH_BUCKET:
+                return meta instanceof CraftMetaTropicalFishBucket ? meta : new CraftMetaTropicalFishBucket(meta);
+            case CROSSBOW:
+                return meta instanceof CraftMetaCrossbow ? meta : new CraftMetaCrossbow(meta);
+            */
             default:
                 return new TestMetaItem(meta);
         }

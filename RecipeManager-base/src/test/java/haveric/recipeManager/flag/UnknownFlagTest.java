@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class UnknownFlagTest extends FlagBaseTest {
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/unknownFlag/unknownFlag.txt");
+        File file = new File(baseRecipePath + "unknownFlag/unknownFlag.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

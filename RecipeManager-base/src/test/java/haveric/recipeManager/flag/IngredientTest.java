@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class IngredientTest extends FlagBaseTest {
     @Test
     public void onCraftParse() {
-        File file = new File("src/test/resources/recipes/ingredient/ingredientCraft.txt");
+        File file = new File(baseRecipePath + "ingredient/ingredientCraft.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -88,7 +88,7 @@ public class IngredientTest extends FlagBaseTest {
 
     @Test
     public void onCraftErrorsParse() {
-        File file = new File("src/test/resources/recipes/ingredient/ingredientCraftErrors.txt");
+        File file = new File(baseRecipePath + "ingredient/ingredientCraftErrors.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -124,7 +124,7 @@ public class IngredientTest extends FlagBaseTest {
 
     @Test
     public void onCombineParse() {
-        File file = new File("src/test/resources/recipes/ingredient/ingredientCombine.txt");
+        File file = new File(baseRecipePath + "ingredient/ingredientCombine.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -190,7 +190,7 @@ public class IngredientTest extends FlagBaseTest {
 
     @Test
     public void onCombineErrorsParse() {
-        File file = new File("src/test/resources/recipes/ingredient/ingredientCombineErrors.txt");
+        File file = new File(baseRecipePath + "ingredient/ingredientCombineErrors.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

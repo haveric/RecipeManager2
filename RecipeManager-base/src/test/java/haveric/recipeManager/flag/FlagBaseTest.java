@@ -28,6 +28,8 @@ public class FlagBaseTest {
     protected Settings settings;
     protected TestUnsafeValues unsafeValues;
     protected File workDir;
+    protected String baseResourcesPath;
+    protected String baseRecipePath;
     protected UUID testUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
     @Before
@@ -54,11 +56,18 @@ public class FlagBaseTest {
         new FlagLoader();
         FlagFactory.getInstance().init();
 
-        workDir = new File("src/test/work/");
+        File baseSrcDir = new File("src");
+        String baseSrcPath = baseSrcDir.getAbsolutePath().replace(".idea\\modules\\", "") + "/";
+        String baseTestPath = baseSrcPath + "test/";
+
+        workDir = new File(baseTestPath + "work/");
         workDir.delete();
         workDir.mkdirs();
 
-        File messagesFile = new File("src/main/resources/" + FILE_MESSAGES);
+        baseResourcesPath = baseTestPath + "resources/";
+        baseRecipePath = baseResourcesPath + "recipes/";
+
+        File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
         Messages.getInstance().loadMessages(null, messagesFile);
 
         recipes = new Recipes();

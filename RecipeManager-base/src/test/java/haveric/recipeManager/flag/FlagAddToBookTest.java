@@ -25,8 +25,8 @@ public class FlagAddToBookTest extends FlagBaseTest {
         booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
 
-        File originalBook1 = new File("src/test/resources/books/Random Stuff.yml");
-        File originalBook2 = new File("src/test/resources/books/Testing Book.yml");
+        File originalBook1 = new File(baseResourcesPath + "books/Random Stuff.yml");
+        File originalBook2 = new File(baseResourcesPath + "books/Testing Book.yml");
         File book1 = new File(booksDir.getPath() + "/Random Stuff.yml");
         File book2 = new File(booksDir.getPath() + "/Testing Book.yml");
         try {
@@ -42,7 +42,7 @@ public class FlagAddToBookTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagAddToBook/");
+        File file = new File(baseRecipePath + "flagAddToBook/");
         RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
 
         //Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

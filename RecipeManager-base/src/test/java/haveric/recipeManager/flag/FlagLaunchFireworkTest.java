@@ -22,7 +22,7 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagLaunchFirework/");
+        File file = new File(baseRecipePath + "flagLaunchFirework/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

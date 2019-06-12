@@ -34,7 +34,7 @@ public class FlagEnchantedBookTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagEnchantedBook/");
+        File file = new File(baseRecipePath + "flagEnchantedBook/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

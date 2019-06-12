@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class FlagSpawnParticleTest extends FlagBaseTest {
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagSpawnParticle/");
+        File file = new File(baseRecipePath + "flagSpawnParticle/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

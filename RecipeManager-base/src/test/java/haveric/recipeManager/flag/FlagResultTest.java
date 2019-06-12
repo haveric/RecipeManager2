@@ -107,7 +107,7 @@ public class FlagResultTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagResult/");
+        File file = new File(baseRecipePath + "flagResult/");
         RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
 
 

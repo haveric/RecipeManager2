@@ -116,7 +116,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagIngredientCondition/");
+        File file = new File(baseRecipePath + "flagIngredientCondition/");
         RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> indexedRecipes = Recipes.getInstance().getIndex();

@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Before;
@@ -35,6 +36,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest({CraftingInventory.class})
 public class FlagCloneIngredientTest extends FlagBaseTest {
     private CraftingInventory inventory;
+    private InventoryView inventoryView;
 
     @Before
     public void setup() {
@@ -43,6 +45,10 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
 
         mockStatic(Inventory.class);
         inventory = mock(CraftingInventory.class);
+
+        mockStatic(InventoryView.class);
+        inventoryView = mock(InventoryView.class);
+        when(inventoryView.getTopInventory()).thenReturn(inventory);
 
         ItemStack dirt = new ItemStack(Material.DIRT);
         ItemStack stoneSword = new ItemStack(Material.STONE_SWORD);
@@ -63,7 +69,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagCloneIngredient/");
+        File file = new File(baseRecipePath + "flagCloneIngredient/");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -73,7 +79,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventory(inventory).build();
+            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventoryView(inventoryView).build();
 
             ItemResult result = recipe.getResult(a);
 

@@ -79,7 +79,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
-        File file = new File("src/test/resources/recipes/flagKeepItem/");
+        File file = new File(baseRecipePath + "flagKeepItem/");
         RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> indexedRecipes = Recipes.getInstance().getIndex();

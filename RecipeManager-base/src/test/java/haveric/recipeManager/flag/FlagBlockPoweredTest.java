@@ -19,7 +19,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
 
     @Test
     public void onRecipeParseCraft() {
-        File file = new File("src/test/resources/recipes/flagBlockPowered/flagBlockPoweredCraft.txt");
+        File file = new File(baseRecipePath + "flagBlockPowered/flagBlockPoweredCraft.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -71,7 +71,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
 
     @Test
     public void onRecipeParseSmelt() {
-        File file = new File("src/test/resources/recipes/flagBlockPowered/flagBlockPoweredSmelt.txt");
+        File file = new File(baseRecipePath + "flagBlockPowered/flagBlockPoweredSmelt.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
@@ -120,7 +120,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
 
     @Test
     public void onRecipeParseBrew() {
-        File file = new File("src/test/resources/recipes/flagBlockPowered/flagBlockPoweredBrew.txt");
+        File file = new File(baseRecipePath + "flagBlockPowered/flagBlockPoweredBrew.txt");
         RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();

@@ -48,6 +48,10 @@ public class TestUnsafeValues implements UnsafeValues {
         return null;
     }
 
+    public Material getMaterial(String material, int version) {
+        return null;
+    }
+
     @Override
     public int getDataVersion() {
         return 0;
