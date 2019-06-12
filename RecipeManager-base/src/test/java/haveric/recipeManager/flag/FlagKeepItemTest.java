@@ -71,6 +71,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
 
         InventoryView view = mock(InventoryView.class);
         when(view.getPlayer()).thenReturn(player);
+        when(view.getTopInventory()).thenReturn(inventory);
 
         craftEvent = mock(CraftItemEvent.class);
         when(craftEvent.getInventory()).thenReturn(inventory);

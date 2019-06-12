@@ -67,6 +67,7 @@ public class Args {
 
     public void setInventoryView(InventoryView newInventoryView) {
         inventoryView = newInventoryView;
+        setInventory(inventoryView.getTopInventory());
     }
 
     public void setInventory(Inventory newInventory) {

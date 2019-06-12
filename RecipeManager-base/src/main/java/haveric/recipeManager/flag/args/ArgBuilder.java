@@ -74,7 +74,6 @@ public class ArgBuilder {
 
     public ArgBuilder inventoryView(InventoryView inventoryView) {
         a.setInventoryView(inventoryView);
-        a.setInventory(inventoryView.getTopInventory());
         return this;
     }
 

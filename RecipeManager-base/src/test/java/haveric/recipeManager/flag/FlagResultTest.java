@@ -93,16 +93,21 @@ public class FlagResultTest extends FlagBaseTest {
 
         InventoryView view = mock(InventoryView.class);
         when(view.getPlayer()).thenReturn(player);
+        when(view.getTopInventory()).thenReturn(inventory);
 
         craftEvent = mock(CraftItemEvent.class);
         when(craftEvent.isShiftClick()).thenReturn(false);
         when(craftEvent.getInventory()).thenReturn(inventory);
         when(craftEvent.getView()).thenReturn(view);
 
+        InventoryView shiftView = mock(InventoryView.class);
+        when(shiftView.getPlayer()).thenReturn(player);
+        when(shiftView.getTopInventory()).thenReturn(shiftInventory);
+
         shiftCraftEvent = mock(CraftItemEvent.class);
         when(shiftCraftEvent.isShiftClick()).thenReturn(true);
         when(shiftCraftEvent.getInventory()).thenReturn(shiftInventory);
-        when(shiftCraftEvent.getView()).thenReturn(view);
+        when(shiftCraftEvent.getView()).thenReturn(shiftView);
     }
 
     @Test
