@@ -6,6 +6,8 @@ import haveric.recipeManager.nms.v1_12.RecipeIteratorV1_12;
 import haveric.recipeManager.nms.v1_12.ToolsRecipeV1_12;
 import haveric.recipeManager.nms.v1_13_2.RecipeIteratorV1_13_2;
 import haveric.recipeManager.nms.v1_13_2.ToolsRecipeV1_13_2;
+import haveric.recipeManager.nms.v1_14_R1.RecipeIteratorV1_14_R1;
+import haveric.recipeManager.nms.v1_14_R1.ToolsRecipeV1_14_R1;
 import haveric.recipeManager.nms.vOld.RecipeIteratorOld;
 import haveric.recipeManager.nms.vOld.ToolsRecipeOld;
 import org.bukkit.Bukkit;
@@ -18,10 +20,11 @@ public class NMSVersionHandler {
         BaseRecipeIterator recipeIterator;
 
         String serverVersion = getServerVersion();
-        if (serverVersion.equals("v1_13_R2")) {
-            recipeIterator = new RecipeIteratorV1_13_2();
-        //} else if (serverVersion.equals("v1_13_R1")) {
 
+        if (serverVersion.equals("v1_14_R1")) {
+            recipeIterator = new RecipeIteratorV1_14_R1();
+        } else if (serverVersion.equals("v1_13_R2")) {
+            recipeIterator = new RecipeIteratorV1_13_2();
         } else if (serverVersion.equals("v1_12_R1")) {
             recipeIterator = new RecipeIteratorV1_12();
         } else {
@@ -35,10 +38,10 @@ public class NMSVersionHandler {
         if (toolsRecipe == null) {
             String serverVersion = getServerVersion();
 
-            if (serverVersion.equals("v1_13_R2")) {
+            if (serverVersion.equals("v1_14_R1")) {
+                toolsRecipe = new ToolsRecipeV1_14_R1();
+            } else if (serverVersion.equals("v1_13_R2")) {
                 toolsRecipe = new ToolsRecipeV1_13_2();
-            //} else if (serverVersion.equals("v1_13_R1")) {
-
             } else if (serverVersion.equals("v1_12_R1")) {
                 toolsRecipe = new ToolsRecipeV1_12();
             } else {
