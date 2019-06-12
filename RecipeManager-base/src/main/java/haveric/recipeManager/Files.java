@@ -476,7 +476,7 @@ public class Files {
         s.append("<a href='" + BUKKIT_DOCS + "Material.html'>BukkitAPI / Material</a>");
         s.append(NL).append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-24s %-24s %-5s %s", "ID", "Name", "Alias", "Stack", "Max durability"));
+        s.append(NL).append(String.format(" %-24s %-24s %-5s %s", "Name", "Alias", "Stack", "Max durability"));
 
         for (Material m : Material.values()) {
             String alias = Settings.getInstance().getMaterialPrint(m);
@@ -493,7 +493,7 @@ public class Files {
                 durabilityString += m.getMaxDurability();
             }
 
-            s.append(NL).append(String.format(" %-5d %-24s %-24s %-5d %s", m.getId(), m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
+            s.append(NL).append(String.format(" %-24s %-24s %-5d %s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
         }
 
         s.append(NL);
@@ -525,7 +525,7 @@ public class Files {
         s.append(NL).append("<a name='potiontype'></a><a href='#contents'>^ Contents</a><h3>POTION TYPE LIST</h3>");
         s.append("<a href='" + BUKKIT_DOCS + "potion/PotionType.html'>BukkitAPI / PotionType</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s %s", "ID", "Name", "Instant ?", "Max level", "Effect type"));
+        s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s", "ID", "Name", "Instant ?", "Max level", "Effect type"));
 
         for (PotionType t : PotionType.values()) {
             if (t != null) {
@@ -535,7 +535,7 @@ public class Files {
                 } else {
                     effectType = t.getEffectType().getName();
                 }
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s %d", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), effectType));
+                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), effectType));
             }
         }
 
