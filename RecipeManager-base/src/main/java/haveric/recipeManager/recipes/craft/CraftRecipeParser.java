@@ -1,10 +1,13 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.craft;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.recipes.BaseRecipeParser;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;

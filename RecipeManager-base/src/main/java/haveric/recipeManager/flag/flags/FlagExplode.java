@@ -5,7 +5,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;

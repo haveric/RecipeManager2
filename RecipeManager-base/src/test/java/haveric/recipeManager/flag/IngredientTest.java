@@ -2,8 +2,8 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CombineRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;

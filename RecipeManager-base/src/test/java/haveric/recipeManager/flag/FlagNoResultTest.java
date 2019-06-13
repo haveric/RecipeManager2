@@ -2,7 +2,7 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.*;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;

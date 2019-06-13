@@ -4,6 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.smelt.SmeltRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -69,6 +73,7 @@ public class Vanilla {
      * This is a game constant.
      */
     public static final float FURNACE_RECIPE_TIME = 10f;
+    public static final float CAMPFIRE_RECIPE_TIME = 30f;
 
     protected static void init() {
         clean();

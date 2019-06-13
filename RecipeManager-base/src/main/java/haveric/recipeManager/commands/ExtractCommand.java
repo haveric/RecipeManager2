@@ -5,6 +5,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Bukkit;
@@ -51,6 +52,10 @@ public class ExtractCommand implements CommandExecutor {
         List<String> parsedCraftRecipes = new ArrayList<>();
         List<String> parsedCombineRecipes = new ArrayList<>();
         List<String> parsedSmeltRecipes = new ArrayList<>();
+        List<String> parsedBlastingRecipes = new ArrayList<>();
+        List<String> parsedSmokingRecipes = new ArrayList<>();
+        List<String> parsedCampfireRecipes = new ArrayList<>();
+        List<String> parsedStonecuttingRecipes = new ArrayList<>();
 
         Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
@@ -126,6 +131,44 @@ public class ExtractCommand implements CommandExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedSmeltRecipes.add(recipeString.toString());
+                } else if (Version.has1_14Support()){
+                    if (r instanceof BlastingRecipe) {
+                        BlastingRecipe recipe = (BlastingRecipe) r;
+                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective()).append(Files.NL);
+
+                        recipeString.append(parseIngredient(recipe.getInput()));
+                        recipeString.append(Files.NL);
+                        parseResult(recipe.getResult(), recipeString);
+
+                        parsedBlastingRecipes.add(recipeString.toString());
+                    } else if (r instanceof SmokingRecipe) {
+                        SmokingRecipe recipe = (SmokingRecipe) r;
+                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMOKING.getDirective()).append(Files.NL);
+
+                        recipeString.append(parseIngredient(recipe.getInput()));
+                        recipeString.append(Files.NL);
+                        parseResult(recipe.getResult(), recipeString);
+
+                        parsedSmokingRecipes.add(recipeString.toString());
+                    } else if (r instanceof CampfireRecipe) {
+                        CampfireRecipe recipe = (CampfireRecipe) r;
+                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.CAMPFIRE.getDirective()).append(Files.NL);
+
+                        recipeString.append(parseIngredient(recipe.getInput()));
+                        recipeString.append(Files.NL);
+                        parseResult(recipe.getResult(), recipeString);
+
+                        parsedCampfireRecipes.add(recipeString.toString());
+                    } else if (r instanceof StonecuttingRecipe) {
+                        StonecuttingRecipe recipe = (StonecuttingRecipe) r;
+                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.STONECUTTING.getDirective()).append(Files.NL);
+
+                        recipeString.append(parseIngredient(recipe.getInput()));
+                        recipeString.append(Files.NL);
+                        parseResult(recipe.getResult(), recipeString);
+
+                        parsedStonecuttingRecipes.add(recipeString.toString());
+                    }
                 }
 
                 recipesNum++;
@@ -162,6 +205,30 @@ public class ExtractCommand implements CommandExecutor {
                 stream.write("//---------------------------------------------------" + Files.NL + "// Smelt recipes" + Files.NL + Files.NL);
 
                 for (String str : parsedSmeltRecipes) {
+                    stream.write(str);
+                }
+
+                stream.write("//---------------------------------------------------" + Files.NL + "// Blasting recipes" + Files.NL + Files.NL);
+
+                for (String str : parsedBlastingRecipes) {
+                    stream.write(str);
+                }
+
+                stream.write("//---------------------------------------------------" + Files.NL + "// Smoking recipes" + Files.NL + Files.NL);
+
+                for (String str : parsedSmokingRecipes) {
+                    stream.write(str);
+                }
+
+                stream.write("//---------------------------------------------------" + Files.NL + "// Campfire recipes" + Files.NL + Files.NL);
+
+                for (String str : parsedCampfireRecipes) {
+                    stream.write(str);
+                }
+
+                stream.write("//---------------------------------------------------" + Files.NL + "// Stonecutting recipes" + Files.NL + Files.NL);
+
+                for (String str : parsedStonecuttingRecipes) {
                     stream.write(str);
                 }
 

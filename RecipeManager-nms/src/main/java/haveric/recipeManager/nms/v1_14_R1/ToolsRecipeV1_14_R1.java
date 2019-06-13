@@ -5,9 +5,7 @@ import haveric.recipeManager.nms.tools.BaseToolsRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftFurnaceRecipe;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftShapedRecipe;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftShapelessRecipe;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.*;
 import org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers;
 import org.bukkit.inventory.Recipe;
 
@@ -21,6 +19,69 @@ import java.util.List;
  * Basically duplicates the "internal" matching code.
  **/
 public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
+
+    @Override
+    public boolean matchesBlasting(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack blastingIngredient) {
+        if (bukkitRecipe instanceof CraftSmokingRecipe) {
+            CraftSmokingRecipe smokingRecipe = (CraftSmokingRecipe) bukkitRecipe;
+
+            // recipes are indexed by input, not result. So, if you overlap on input we don't care about output in terms of
+            // the server's understanding of recipes.
+            return blastingIngredient.getType() == smokingRecipe.getInput().getType()
+                    && (blastingIngredient.getDurability() == RMCVanilla.DATA_WILDCARD ||
+                    smokingRecipe.getInput().getDurability() == RMCVanilla.DATA_WILDCARD ||
+                    blastingIngredient.getDurability() == smokingRecipe.getInput().getDurability());
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean matchesSmoking(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack smokingIngredient) {
+        if (bukkitRecipe instanceof CraftSmokingRecipe) {
+            CraftSmokingRecipe smokingRecipe = (CraftSmokingRecipe) bukkitRecipe;
+
+            // recipes are indexed by input, not result. So, if you overlap on input we don't care about output in terms of
+            // the server's understanding of recipes.
+            return smokingIngredient.getType() == smokingRecipe.getInput().getType()
+                    && (smokingIngredient.getDurability() == RMCVanilla.DATA_WILDCARD ||
+                    smokingRecipe.getInput().getDurability() == RMCVanilla.DATA_WILDCARD ||
+                    smokingIngredient.getDurability() == smokingRecipe.getInput().getDurability());
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean matchesCampfire(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack campfireIngredient) {
+        if (bukkitRecipe instanceof CraftCampfireRecipe) {
+            CraftCampfireRecipe campfireRecipe = (CraftCampfireRecipe) bukkitRecipe;
+
+            // recipes are indexed by input, not result. So, if you overlap on input we don't care about output in terms of
+            // the server's understanding of recipes.
+            return campfireIngredient.getType() == campfireRecipe.getInput().getType()
+                    && (campfireIngredient.getDurability() == RMCVanilla.DATA_WILDCARD ||
+                    campfireRecipe.getInput().getDurability() == RMCVanilla.DATA_WILDCARD ||
+                    campfireIngredient.getDurability() == campfireRecipe.getInput().getDurability());
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean matchesStonecutting(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack stonecuttingIngredient, org.bukkit.inventory.ItemStack stonecuttingResult) {
+        if (bukkitRecipe instanceof CraftStonecuttingRecipe) {
+            CraftStonecuttingRecipe stonecuttingRecipe = (CraftStonecuttingRecipe) bukkitRecipe;
+
+            return stonecuttingIngredient.getType() == stonecuttingRecipe.getInput().getType()
+                    && (stonecuttingIngredient.getDurability() == RMCVanilla.DATA_WILDCARD || stonecuttingRecipe.getInput().getDurability() == RMCVanilla.DATA_WILDCARD || stonecuttingIngredient.getDurability() == stonecuttingRecipe.getInput().getDurability())
+                    && stonecuttingResult.getType() == stonecuttingRecipe.getResult().getType()
+                    && (stonecuttingResult.getDurability() == RMCVanilla.DATA_WILDCARD || stonecuttingRecipe.getResult().getDurability() == RMCVanilla.DATA_WILDCARD || stonecuttingResult.getDurability() == stonecuttingRecipe.getResult().getDurability());
+        }
+
+        return false;
+    }
+
     @Override
     public boolean matchesFurnace(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack furnaceIngredient) {
         if (bukkitRecipe instanceof CraftFurnaceRecipe) {

@@ -6,7 +6,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;

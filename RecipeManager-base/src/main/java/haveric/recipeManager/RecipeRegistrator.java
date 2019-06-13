@@ -1,7 +1,14 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.brew.BrewRecipe;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -25,6 +32,14 @@ public class RecipeRegistrator {
         } else if (recipe instanceof CombineRecipe) {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and ingredient!");
         } else if (recipe instanceof SmeltRecipe) {
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        //} else if (recipe instanceof RMBlastingRecipe) {
+        //    queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        //} else if (recipe instanceof RMSmokingRecipe) {
+        //    queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        } else if (recipe instanceof RMCampfireRecipe) {
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        } else if (recipe instanceof RMStonecuttingRecipe) {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof BrewRecipe) {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");

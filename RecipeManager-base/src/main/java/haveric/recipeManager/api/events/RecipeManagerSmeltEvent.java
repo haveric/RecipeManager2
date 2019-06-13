@@ -1,8 +1,8 @@
 package haveric.recipeManager.api.events;
 
-import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.SmeltRecipe;
+import haveric.recipeManager.recipes.smelt.SmeltRecipe;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

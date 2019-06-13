@@ -1,8 +1,11 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.recipes.BaseRecipeParser;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;

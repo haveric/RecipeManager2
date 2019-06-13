@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
@@ -6,6 +6,9 @@ import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;

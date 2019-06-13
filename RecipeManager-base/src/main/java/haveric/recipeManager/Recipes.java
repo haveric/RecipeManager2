@@ -4,6 +4,13 @@ import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.brew.BrewRecipe;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
@@ -39,6 +46,10 @@ public class Recipes {
     protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
     protected Map<String, SmeltRecipe> indexSmelt = new HashMap<>();
     protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<>();
+    //protected Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
+    //protected Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
+    protected Map<String, RMCampfireRecipe> indexCampfire = new HashMap<>();
+    protected Map<String, RMStonecuttingRecipe> indexStonecutting = new HashMap<>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<>();
     protected Map<String, BrewRecipe> indexBrew = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
@@ -52,6 +63,10 @@ public class Recipes {
         indexCombine.clear();
         indexSmelt.clear();
         indexFuels.clear();
+        //indexBlasting.clear();
+        //indexSmoking.clear();
+        indexCampfire.clear();
+        indexStonecutting.clear();
         indexBrew.clear();
         indexName.clear();
 
@@ -324,6 +339,14 @@ public class Recipes {
                 if (r.hasFuel()) {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
                 }
+            //} else if (recipe instanceof RMBlastingRecipe) {
+
+            //} else if (recipe instanceof RMSmokingRecipe) {
+
+            } else if (recipe instanceof RMCampfireRecipe) {
+                indexCampfire.put(((RMCampfireRecipe) recipe).getIndexString(), (RMCampfireRecipe) recipe);
+            } else if (recipe instanceof RMStonecuttingRecipe) {
+                indexStonecutting.put(((RMStonecuttingRecipe) recipe).getIndexString(), (RMStonecuttingRecipe) recipe);
             } else if (recipe instanceof BrewRecipe) {
                 indexBrew.put(((BrewRecipe) recipe).getIndexString(), (BrewRecipe) recipe);
             } else if (recipe instanceof FuelRecipe) {
@@ -411,6 +434,14 @@ public class Recipes {
             indexCombine.remove(recipe.getIndex());
         } else if (recipe instanceof SmeltRecipe) {
             indexSmelt.remove(((SmeltRecipe) recipe).getIndexString());
+        //} else if (recipe instanceof RMBlastingRecipe) {
+        //    indexBlasting.remove(((RMBlastingRecipe) recipe).getIndexString());
+        //} else if (recipe instanceof RMSmokingRecipe) {
+        //    indexSmoking.remove(((RMSmokingRecipe) recipe).getIndexString());
+        } else if (recipe instanceof RMCampfireRecipe) {
+            indexCampfire.remove(((RMCampfireRecipe) recipe).getIndexString());
+        } else if (recipe instanceof RMStonecuttingRecipe) {
+            indexStonecutting.remove(((RMStonecuttingRecipe) recipe).getIndexString());
         } else if (recipe instanceof BrewRecipe) {
             indexBrew.remove(((BrewRecipe) recipe).getIndexString());
         } else if (recipe instanceof FuelRecipe) {

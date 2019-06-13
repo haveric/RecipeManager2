@@ -7,6 +7,11 @@ import haveric.recipeManager.Settings;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.FlagOverride;
 import haveric.recipeManager.nms.NMSVersionHandler;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -127,7 +132,30 @@ public class ConditionEvaluator {
                         if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
                             return entry.getValue();
                         }
+                    /*
+                    } else if (recipe instanceof RMBlastingRecipe) {
+                        RMBlastingRecipe blastingRecipe = (RMBlastingRecipe) recipe;
+                        if (NMSVersionHandler.getToolsRecipe().matchesBlasting(bukkit, blastingRecipe.getIngredient())) {
+                            return entry.getValue();
+                        }
+                    } else if (recipe instanceof RMSmokingRecipe) {
+                        RMSmokingRecipe smokingRecipe = (RMSmokingRecipe) recipe;
+                        if (NMSVersionHandler.getToolsRecipe().matchesSmoking(bukkit, smokingRecipe.getIngredient())) {
+                            return entry.getValue();
+                        }
+                    */
+                    } else if (recipe instanceof RMCampfireRecipe) {
+                        RMCampfireRecipe campfireRecipe = (RMCampfireRecipe) recipe;
+                        if (NMSVersionHandler.getToolsRecipe().matchesCampfire(bukkit, campfireRecipe.getIngredient())) {
+                            return entry.getValue();
+                        }
+                    } else if (recipe instanceof RMStonecuttingRecipe) {
+                        RMStonecuttingRecipe stonecuttingRecipe = (RMStonecuttingRecipe) recipe;
+                        if (NMSVersionHandler.getToolsRecipe().matchesStonecutting(bukkit, stonecuttingRecipe.getIngredient(), stonecuttingRecipe.getResult())) {
+                            return entry.getValue();
+                        }
                     }
+
                 }
             }
         }

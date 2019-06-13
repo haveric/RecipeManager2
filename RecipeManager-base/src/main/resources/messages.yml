@@ -150,6 +150,10 @@ recipebook:
     shaped: <black><bold>SHAPED RECIPE
     shapeless: <black><bold>SHAPELESS RECIPE
     smelt: <black><bold>FURNACE RECIPE
+    blasting: <black><bold>BLASTING RECIPE
+    smoking: <black><bold>SMOKING RECIPE
+    campfire: <black><bold>CAMPFIRE RECIPE
+    stonecutting: <black><bold>STONECUTTING RECIPE
     fuel: <black><bold>FURNACE FUEL
     shape: <black><underline>Shape
     ingredients: <black><underline>Ingredients

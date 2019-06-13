@@ -1,10 +1,13 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.smelt;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.recipes.BaseRecipeParser;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -28,7 +31,7 @@ public class SmeltRecipeParser extends BaseRecipeParser {
         String[] split = reader.getLine().split("%");
 
         if (split.length == 0) {
-            return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient !");
+            return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
         }
 
         ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);

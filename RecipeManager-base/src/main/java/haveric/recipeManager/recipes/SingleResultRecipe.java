@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class SingleResultRecipe extends BaseRecipe {
-    private ItemResult result;
+    protected ItemResult result;
 
     protected SingleResultRecipe() {
     }

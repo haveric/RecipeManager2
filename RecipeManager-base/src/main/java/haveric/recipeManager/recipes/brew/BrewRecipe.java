@@ -1,6 +1,8 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.inventory.ItemStack;

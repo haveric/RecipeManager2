@@ -1,6 +1,6 @@
 package haveric.recipeManager.api.events;
 
-import haveric.recipeManager.recipes.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;

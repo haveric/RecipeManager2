@@ -1,9 +1,10 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.fuel;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.RMCVanilla;
