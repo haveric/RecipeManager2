@@ -12,6 +12,9 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
+import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
+import haveric.recipeManager.recipes.campfire.data.RMCampfires;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -38,6 +41,7 @@ public class RecipeManager extends JavaPlugin {
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
     private static Events events;
+    private static RMCampfireEvents campfireEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -58,11 +62,14 @@ public class RecipeManager extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
 
         FurnaceData.init(); // dummy caller
+        RMCampfireData.init(); // dummy caller
         BrewingStandData.init();
         Furnaces.load(); // load saved furnaces...
         BrewingStands.load();
+        RMCampfires.load();
 
         events = new Events();
+        campfireEvents = new RMCampfireEvents();
         recipes = new Recipes();
 
         setupVault(pm);
@@ -175,6 +182,7 @@ public class RecipeManager extends JavaPlugin {
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
+        RMCampfireEvents.reload();
     }
 
     private void scanPlugins() {
@@ -241,25 +249,33 @@ public class RecipeManager extends JavaPlugin {
             BrewingStands.save();
             BrewingStands.clean();
 
+            RMCampfires.save();
+            RMCampfires.clean();
+
             Workbenches.clean();
             Players.clean();
             Vanilla.clean();
 
 
             if (recipes != null) {
-            	recipes.clean();
+                recipes.clean();
             }
             recipes = null;
 
             if (recipeBooks != null) {
-            	recipeBooks.clean();
+                recipeBooks.clean();
             }
             recipeBooks = null;
 
             if (events != null) {
-            	events.clean();
+                events.clean();
             }
             events = null;
+
+            if (campfireEvents != null) {
+                campfireEvents.clean();
+            }
+            campfireEvents = null;
 
             Settings.clean();
 
@@ -305,6 +321,10 @@ public class RecipeManager extends JavaPlugin {
 
     public static Events getEvents() {
         return events;
+    }
+
+    public static RMCampfireEvents getRMCampfireEvents() {
+        return campfireEvents;
     }
 
     public static FlagLoader getFlagLoader() {

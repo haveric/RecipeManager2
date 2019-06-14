@@ -236,6 +236,62 @@ public class Recipes {
 
         return recipe;
     }
+    /*
+    public RMBlastingRecipe getRMBlastingRecipe(ItemStack ingredient) {
+        RMBlastingRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexBlasting.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+
+            if (recipe == null) {
+                recipe = indexBlasting.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+            }
+        }
+
+        return recipe;
+    }
+
+    public RMSmokingRecipe getRMSmokingRecipe(ItemStack ingredient) {
+        RMSmokingRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexSmoking.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+
+            if (recipe == null) {
+                recipe = indexSmoking.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+            }
+        }
+
+        return recipe;
+    }
+    */
+    public RMCampfireRecipe getRMCampfireRecipe(ItemStack ingredient) {
+        RMCampfireRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexCampfire.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+
+            if (recipe == null) {
+                recipe = indexCampfire.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+            }
+        }
+
+        return recipe;
+    }
+
+    public RMStonecuttingRecipe getRMStonecuttingRecipe(ItemStack ingredient) {
+        RMStonecuttingRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexStonecutting.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+
+            if (recipe == null) {
+                recipe = indexStonecutting.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+            }
+        }
+
+        return recipe;
+    }
 
     /**
      * Get RecipeManager's furnace fuel recipe for the specified item.
