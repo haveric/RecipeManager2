@@ -501,23 +501,38 @@ public class Files {
         s.append(NL).append("<a name='enchantment'></a><a href='#contents'>^ Contents</a><h3>ENCHANTMENTS LIST</h3>");
         s.append("<a href='" + BUKKIT_DOCS + "enchantments/Enchantment.html'>BukkitAPI / Enchantment</a>");
         s.append(NL);
-        s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", "Key", "Name", "Alias", "Item type", "Level range"));
+        if (Version.has1_13Support()) {
+            s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", "Key", "Name", "Alias", "Item type", "Level range"));
 
-        List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
+            List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
-        enchantments.sort(new Comparator<Enchantment>() {
-            public int compare(Enchantment e1, Enchantment e2) {
-                return e1.getKey().getKey().compareTo(e2.getKey().getKey());
+            enchantments.sort(new Comparator<Enchantment>() {
+                public int compare(Enchantment e1, Enchantment e2) {
+                    return e1.getKey().getKey().compareTo(e2.getKey().getKey());
+                }
+            });
+
+            for (Enchantment e : enchantments) {
+                EnchantmentTarget target = e.getItemTarget();
+
+                s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
             }
-        });
+        } else { // Key didn't exist yet in 1.12
+            s.append(NL).append(String.format(" %-26s %-24s %-12s %s", "Name", "Alias", "Item type", "Level range"));
 
-        for (Enchantment e : enchantments) {
-            EnchantmentTarget target = e.getItemTarget();
-            if (target == null) {
-                // Fall back to all if the target is null.
-                target = EnchantmentTarget.ALL;
+            List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
+
+            enchantments.sort(new Comparator<Enchantment>() {
+                public int compare(Enchantment e1, Enchantment e2) {
+                    return e1.getName().compareTo(e2.getName());
+                }
+            });
+
+            for (Enchantment e : enchantments) {
+                EnchantmentTarget target = e.getItemTarget();
+
+                s.append(NL).append(String.format(" %-26s %-24s %-12s %s", e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
             }
-            s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
         }
 
         s.append(NL);
