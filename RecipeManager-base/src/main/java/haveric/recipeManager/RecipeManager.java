@@ -12,8 +12,8 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
+import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
@@ -60,16 +60,26 @@ public class RecipeManager extends JavaPlugin {
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         PluginManager pm = getServer().getPluginManager();
-
-        FurnaceData.init(); // dummy caller
-        RMCampfireData.init(); // dummy caller
+        FurnaceData.init(); // dummy caller to initialize Serialization class
         BrewingStandData.init();
+
+        if (Version.has1_14Support()) {
+            RMCampfireData.init(); // dummy caller to initialize Serialization class
+        }
+
         Furnaces.load(); // load saved furnaces...
         BrewingStands.load();
-        RMCampfires.load();
+
+        if (Version.has1_14Support()) {
+            RMCampfires.load();
+        }
 
         events = new Events();
-        campfireEvents = new RMCampfireEvents();
+
+        if (Version.has1_14Support()) {
+            campfireEvents = new RMCampfireEvents();
+        }
+
         recipes = new Recipes();
 
         setupVault(pm);
@@ -182,7 +192,10 @@ public class RecipeManager extends JavaPlugin {
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
-        RMCampfireEvents.reload();
+
+        if (Version.has1_14Support()) {
+            RMCampfireEvents.reload();
+        }
     }
 
     private void scanPlugins() {
