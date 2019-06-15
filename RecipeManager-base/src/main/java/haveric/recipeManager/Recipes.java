@@ -44,7 +44,7 @@ public class Recipes {
     // Quick-find index
     protected Map<Integer, CraftRecipe> indexCraft = new HashMap<>();
     protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
-    protected Map<String, SmeltRecipe> indexSmelt = new HashMap<>();
+    public Map<String, SmeltRecipe> indexSmelt = new HashMap<>();
     protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<>();
     //protected Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
     //protected Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
@@ -527,7 +527,7 @@ public class Recipes {
         return result.clone();
     }
 
-    protected static void recipeResetResult(UUID uuid) {
+    public static void recipeResetResult(UUID uuid) {
         staticResults.remove(uuid);
     }
 

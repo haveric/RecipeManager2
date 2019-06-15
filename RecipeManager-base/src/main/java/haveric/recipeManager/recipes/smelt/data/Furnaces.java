@@ -1,6 +1,7 @@
-package haveric.recipeManager.data;
+package haveric.recipeManager.recipes.smelt.data;
 
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.messages.MessageSender;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;

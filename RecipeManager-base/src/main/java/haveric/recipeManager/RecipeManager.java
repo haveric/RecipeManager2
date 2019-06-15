@@ -2,19 +2,21 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
 import haveric.recipeManager.commands.*;
-import haveric.recipeManager.data.BrewingStandData;
-import haveric.recipeManager.data.BrewingStands;
-import haveric.recipeManager.data.FurnaceData;
-import haveric.recipeManager.data.Furnaces;
 import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.flag.FlagLoader;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.brew.BrewEvents;
+import haveric.recipeManager.recipes.brew.data.BrewingStandData;
+import haveric.recipeManager.recipes.brew.data.BrewingStands;
 import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
+import haveric.recipeManager.recipes.smelt.SmeltEvents;
+import haveric.recipeManager.recipes.smelt.data.FurnaceData;
+import haveric.recipeManager.recipes.smelt.data.Furnaces;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -41,6 +43,8 @@ public class RecipeManager extends JavaPlugin {
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
     private static Events events;
+    private static BrewEvents brewEvents;
+    private static SmeltEvents smeltEvents;
     private static RMCampfireEvents campfireEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
@@ -75,6 +79,8 @@ public class RecipeManager extends JavaPlugin {
         }
 
         events = new Events();
+        brewEvents = new BrewEvents();
+        smeltEvents = new SmeltEvents();
 
         if (Version.has1_14Support()) {
             campfireEvents = new RMCampfireEvents();
@@ -192,6 +198,8 @@ public class RecipeManager extends JavaPlugin {
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
+        BrewEvents.reload();
+        SmeltEvents.reload();
 
         if (Version.has1_14Support()) {
             RMCampfireEvents.reload();
@@ -285,6 +293,16 @@ public class RecipeManager extends JavaPlugin {
             }
             events = null;
 
+            if (brewEvents != null) {
+                brewEvents.clean();
+            }
+            brewEvents = null;
+
+            if (smeltEvents != null) {
+                smeltEvents.clean();
+            }
+            smeltEvents = null;
+
             if (campfireEvents != null) {
                 campfireEvents.clean();
             }
@@ -334,6 +352,14 @@ public class RecipeManager extends JavaPlugin {
 
     public static Events getEvents() {
         return events;
+    }
+
+    public static BrewEvents getBrewEvents() {
+        return brewEvents;
+    }
+
+    public static SmeltEvents getSmeltEvents() {
+        return smeltEvents;
     }
 
     public static RMCampfireEvents getRMCampfireEvents() {

@@ -1,4 +1,4 @@
-package haveric.recipeManager.data;
+package haveric.recipeManager.recipes.smelt.data;
 
 import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
