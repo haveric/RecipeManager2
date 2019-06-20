@@ -74,7 +74,7 @@ public class FlagAddToBookTest extends FlagBaseTest {
         assertTrue(bookTwo.hasCoverPage());
         assertTrue(bookTwo.hasContentsPage());
         assertTrue(bookTwo.hasEndPage());
-        assertEquals(null, bookTwo.getCustomEndPage());
+        assertNull(bookTwo.getCustomEndPage());
         assertEquals(1, bookTwo.getVolumesNum());
         assertEquals(3, bookTwo.getVolumeRecipes(0).size());
 

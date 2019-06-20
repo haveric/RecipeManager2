@@ -81,7 +81,7 @@ public class IngredientTest extends FlagBaseTest {
             }
 
             for (int i = numIngredients; i <= 8; i++) {
-                assertEquals(null, ing[i]);
+                assertNull(ing[i]);
             }
         }
     }

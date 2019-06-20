@@ -155,7 +155,7 @@ public class FlagSummon extends Flag {
 
 
     public class Customization implements Cloneable {
-        private EntityType type = EntityType.PIG;
+        private EntityType type;
         private boolean noAi = false;
         private boolean noEffect = false;
         private boolean noRemove = false;
@@ -229,6 +229,7 @@ public class FlagSummon extends Flag {
             villager = c.villager;
             poweredCreeper = c.poweredCreeper;
             playerIronGolem = c.playerIronGolem;
+            pigAnger = c.pigAnger;
             name = c.name;
             noHideName = c.noHideName;
             hp = c.hp;

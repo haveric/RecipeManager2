@@ -19,8 +19,8 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();
 
     private boolean cancelled = false;
-    private boolean shiftClick = false;
-    private int mouseButton = 0;
+    private boolean shiftClick;
+    private int mouseButton;
     private ItemResult result;
     private ItemStack cursor;
     private WorkbenchRecipe recipe;

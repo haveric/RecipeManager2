@@ -89,13 +89,13 @@ public class FlagGameModeTest extends FlagBaseTest{
                 assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
                 assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
             } else if (resultType == Material.OAK_WOOD) {
-                assertEquals(flag, null);
+                assertNull(flag);
             } else if (resultType == Material.TROPICAL_FISH) {
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertEquals(flag.getGameModes().size(), 1);
                 assertEquals(flag.getFailMessage(), "fail");
             } else if (resultType == Material.COOKED_SALMON) {
-                assertEquals(flag, null);
+                assertNull(flag);
             } else if (resultType == Material.BRICK) {
                 assertFalse(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));

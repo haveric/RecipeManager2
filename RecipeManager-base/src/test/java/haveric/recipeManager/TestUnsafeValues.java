@@ -34,8 +34,8 @@ public class TestUnsafeValues implements UnsafeValues {
     }
 
     @Override
-    public Material fromLegacy(MaterialData material) {
-        return fromLegacy(material);
+    public Material fromLegacy(MaterialData materialData) {
+        return fromLegacy(materialData.getItemType());
     }
 
     @Override

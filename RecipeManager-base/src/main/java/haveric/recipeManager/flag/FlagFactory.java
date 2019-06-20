@@ -15,7 +15,7 @@ public class FlagFactory {
     private Map<String, FlagDescriptor> flags = new HashMap<>();
     private Map<String, FlagDescriptor> nameMap = new HashMap<>();
 
-    private boolean initialized = false;
+    private boolean initialized;
 
     public static FlagFactory getInstance() {
         if (instance == null) {

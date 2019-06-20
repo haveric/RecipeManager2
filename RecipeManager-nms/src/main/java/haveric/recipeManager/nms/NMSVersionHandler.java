@@ -21,14 +21,19 @@ public class NMSVersionHandler {
 
         String serverVersion = getServerVersion();
 
-        if (serverVersion.equals("v1_14_R1")) {
-            recipeIterator = new RecipeIteratorV1_14_R1();
-        } else if (serverVersion.equals("v1_13_R2")) {
-            recipeIterator = new RecipeIteratorV1_13_2();
-        } else if (serverVersion.equals("v1_12_R1")) {
-            recipeIterator = new RecipeIteratorV1_12();
-        } else {
-            recipeIterator = new RecipeIteratorOld();
+        switch (serverVersion) {
+            case "v1_14_R1":
+                recipeIterator = new RecipeIteratorV1_14_R1();
+                break;
+            case "v1_13_R2":
+                recipeIterator = new RecipeIteratorV1_13_2();
+                break;
+            case "v1_12_R1":
+                recipeIterator = new RecipeIteratorV1_12();
+                break;
+            default:
+                recipeIterator = new RecipeIteratorOld();
+                break;
         }
 
         return recipeIterator;
@@ -38,14 +43,19 @@ public class NMSVersionHandler {
         if (toolsRecipe == null) {
             String serverVersion = getServerVersion();
 
-            if (serverVersion.equals("v1_14_R1")) {
-                toolsRecipe = new ToolsRecipeV1_14_R1();
-            } else if (serverVersion.equals("v1_13_R2")) {
-                toolsRecipe = new ToolsRecipeV1_13_2();
-            } else if (serverVersion.equals("v1_12_R1")) {
-                toolsRecipe = new ToolsRecipeV1_12();
-            } else {
-                toolsRecipe = new ToolsRecipeOld();
+            switch (serverVersion) {
+                case "v1_14_R1":
+                    toolsRecipe = new ToolsRecipeV1_14_R1();
+                    break;
+                case "v1_13_R2":
+                    toolsRecipe = new ToolsRecipeV1_13_2();
+                    break;
+                case "v1_12_R1":
+                    toolsRecipe = new ToolsRecipeV1_12();
+                    break;
+                default:
+                    toolsRecipe = new ToolsRecipeOld();
+                    break;
             }
         }
 
