@@ -44,7 +44,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.TEMPERATURE, new FlagTemperature(), FlagBit.NONE, "temp");
         FlagFactory.getInstance().initializeFlag(FlagType.INVENTORY, new FlagInventory(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.SPAWN_PARTICLE, new FlagSpawnParticle(), FlagBit.ONCE_PER_SHIFT, "particle");
-        // TELEPORT(FlagTeleport(), FlagBit.NO_SHIFT, "tpto", "goto"), // TODO finish flag
+        // TELEPORT(FlagTeleport(), "tpto", "goto"), // TODO finish flag
         // REALTIME(FlagRealTime(), FlagBit.NONE, "time", "date"),
         // ONLINETIME(FlagOnlineTime(), FlagBit.NONE, "playtime", "onlinefor"),
         // WORLDTIME(FlagWorldTime(), FlagBit.NONE),
