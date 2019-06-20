@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.smelt;
+package haveric.recipeManager.recipes.furnace;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
@@ -13,8 +13,8 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.smelt.data.FurnaceData;
-import haveric.recipeManager.recipes.smelt.data.Furnaces;
+import haveric.recipeManager.recipes.furnace.data.FurnaceData;
+import haveric.recipeManager.recipes.furnace.data.Furnaces;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -22,9 +22,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Furnace;
+import org.bukkit.block.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -39,16 +37,16 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class SmeltEvents implements Listener {
-    public SmeltEvents() { }
+public class RMBaseFurnaceEvents implements Listener {
+    public RMBaseFurnaceEvents() { }
 
     public void clean() {
         HandlerList.unregisterAll(this);
     }
 
     public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getSmeltEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getSmeltEvents(), RecipeManager.getPlugin());
+        HandlerList.unregisterAll(RecipeManager.getRMFurnaceEvents());
+        Bukkit.getPluginManager().registerEvents(RecipeManager.getRMFurnaceEvents(), RecipeManager.getPlugin());
     }
 
     private boolean isRecipeSameAsResult(Args a) {
@@ -105,6 +103,19 @@ public class SmeltEvents implements Listener {
         }
     }
 
+    private RMBaseFurnaceRecipe getSpecificFurnaceRecipe(Furnace furnace, ItemStack item) {
+        RMBaseFurnaceRecipe recipe;
+        if (furnace instanceof BlastFurnace) {
+            recipe = RecipeManager.getRecipes().getRMBlastingRecipe(item);
+        } else if (furnace instanceof Smoker) {
+            recipe = RecipeManager.getRecipes().getRMSmokingRecipe(item);
+        } else {
+            recipe = RecipeManager.getRecipes().getSmeltRecipe(item);
+        }
+
+        return recipe;
+    }
+
     /*
      * Furnace craft events
      */
@@ -118,13 +129,14 @@ public class SmeltEvents implements Listener {
             if (entity instanceof Player) {
                 if (event.getRawSlots().contains(0)) {
                     FurnaceInventory inventory = (FurnaceInventory) inv;
+
                     Furnace furnace = inventory.getHolder();
                     ItemStack slot = inventory.getItem(0);
 
                     if (slot == null || slot.getType() == Material.AIR) {
                         ItemStack cursor = event.getOldCursor();
 
-                        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
+                        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
 
                         if (recipe != null) {
                             if (recipe.hasFlag(FlagType.REMOVE)) {
@@ -147,9 +159,14 @@ public class SmeltEvents implements Listener {
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
-                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    if (!Version.has1_13Support()) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    }
                                 } else {
-                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    // TODO: Handle preventing the furnace with a different result in a different way
+                                    if (!Version.has1_13Support()) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    }
                                 }
                             }
                         }
@@ -202,7 +219,7 @@ public class SmeltEvents implements Listener {
                         ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
 
                         if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
-                            SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(hotbarItem);
+                            RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, hotbarItem);
 
                             if (recipe != null) {
                                 if (recipe.hasFlag(FlagType.REMOVE)) {
@@ -214,16 +231,21 @@ public class SmeltEvents implements Listener {
                                 Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
-                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    if (!Version.has1_13Support()) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    }
                                 } else {
-                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    // TODO: Handle preventing the furnace with a different result in a different way
+                                    if (!Version.has1_13Support()) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    }
                                 }
                             }
                         }
                     }
                 } else if (cursor != null && cursor.getType() != Material.AIR) {
                     if (clicked == null || clicked.getType() == Material.AIR || !ToolsItem.isSameItem(cursor, clicked, true)) {
-                        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(cursor);
+                        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
 
                         if (recipe != null) {
                             if (recipe.hasFlag(FlagType.REMOVE)) {
@@ -246,10 +268,16 @@ public class SmeltEvents implements Listener {
                                 Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
+
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
-                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    if (!Version.has1_13Support()) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                    }
                                 } else {
-                                    ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    // TODO: Handle preventing the furnace with a different result in a different way
+                                    if (!Version.has1_13Support()) {
+                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                    }
                                 }
                             }
                         }
@@ -408,7 +436,7 @@ public class SmeltEvents implements Listener {
                         event.setCancelled(true); // cancel only if we're going to mess with the items
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     } else {
-                        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(clicked);
+                        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, clicked);
 
                         if (recipe != null) {
                             data.setFuelerUUID(player.getUniqueId());
@@ -433,9 +461,15 @@ public class SmeltEvents implements Listener {
                                     if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
                                         inventory.setItem(targetSlot, clicked); // send the item to the slot
                                         event.setCurrentItem(null); // clear the clicked slot
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+
+                                        if (!Version.has1_13Support()) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                        }
                                     } else {
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                        // TODO: Handle preventing the furnace with a different result in a different way
+                                        if (!Version.has1_13Support()) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                                        }
                                     }
                                 }
                             } else {
@@ -552,7 +586,7 @@ public class SmeltEvents implements Listener {
         data.setFuel(fuel);
 
         ItemStack ingredient = inventory.getSmelting();
-        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
         if (recipe != null) {
             if (recipe.hasFlag(FlagType.REMOVE)) {
@@ -598,14 +632,13 @@ public class SmeltEvents implements Listener {
             }, burnTime);
         }
 
-        boolean isBurning;
-        if (Version.has1_13Support()) {
-            isBurning = furnace.getBurnTime() == 0; // TODO: This is a guess for 1.13 update, verify functionality
-        } else {
-            isBurning = furnace.getType() == Material.getMaterial("BURNING_FURNACE");
-        }
-        if (recipe != null && !isBurning) {
-            runFurnaceUpdateLater(furnace.getBlock(), cookTime);
+        // Old method of setting cook time forcefully
+        if (!Version.has1_13Support()) {
+            boolean isBurning = furnace.getType() == Material.getMaterial("BURNING_FURNACE");
+
+            if (recipe != null && !isBurning) {
+                runFurnaceUpdateLater(furnace.getBlock(), cookTime);
+            }
         }
     }
 
@@ -665,7 +698,7 @@ public class SmeltEvents implements Listener {
 
         short cookTime = 0;
         ItemStack ingredient = inventory.getSmelting();
-        SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
         if (recipe != null) {
             if (recipe.hasFlag(FlagType.REMOVE)) {
@@ -703,14 +736,17 @@ public class SmeltEvents implements Listener {
             cookTime = (short) (200 - recipe.getCookTicks());
         }
 
-        if (recipe != null) {
-            ItemStack recipeFuel = recipe.getFuel();
+        // Old way of updating furnace cook time
+        if (!Version.has1_13Support()) {
+            if (recipe != null) {
+                ItemStack recipeFuel = recipe.getFuel();
 
-            if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, inventory.getFuel(), true)) {
-                cookTime = 0;
+                if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, inventory.getFuel(), true)) {
+                    cookTime = 0;
+                }
+
+                runFurnaceUpdateLater(block, cookTime);
             }
-
-            runFurnaceUpdateLater(block, cookTime);
         }
     }
 
@@ -727,7 +763,8 @@ public class SmeltEvents implements Listener {
                 return; // highly unlikely but better safe than sorry
             }
 
-            SmeltRecipe recipe = furnaceResultRecipe((Furnace) state);
+
+            RMBaseFurnaceRecipe recipe = furnaceResultRecipe((Furnace) state);
 
             if (recipe != null) {
                 event.setExpToDrop(0);
@@ -737,10 +774,11 @@ public class SmeltEvents implements Listener {
         }
     }
 
-    private SmeltRecipe furnaceResultRecipe(Furnace furnace) {
+    private RMBaseFurnaceRecipe furnaceResultRecipe(Furnace furnace) {
         ItemStack ingredient = ToolsItem.nullIfAir(furnace.getInventory().getSmelting());
-        SmeltRecipe smeltRecipe = null;
+        RMBaseFurnaceRecipe smeltRecipe = null;
         ItemStack result = furnace.getInventory().getResult();
+
 
         if (ingredient == null) {
             // Guess recipe by result - inaccurate
@@ -749,14 +787,30 @@ public class SmeltEvents implements Listener {
                 return null;
             }
 
-            for (SmeltRecipe r : RecipeManager.getRecipes().indexSmelt.values()) {
-                if (result.isSimilar(r.getResult())) {
-                    smeltRecipe = r;
-                    break;
+            if (furnace instanceof BlastFurnace) {
+                for (RMBlastingRecipe r : RecipeManager.getRecipes().indexBlasting.values()) {
+                    if (result.isSimilar(r.getResult())) {
+                        smeltRecipe = r;
+                        break;
+                    }
+                }
+            } else if (furnace instanceof Smoker) {
+                for (RMSmokingRecipe r : RecipeManager.getRecipes().indexSmoking.values()) {
+                    if (result.isSimilar(r.getResult())) {
+                        smeltRecipe = r;
+                        break;
+                    }
+                }
+            } else {
+                for (RMFurnaceRecipe r : RecipeManager.getRecipes().indexSmelt.values()) {
+                    if (result.isSimilar(r.getResult())) {
+                        smeltRecipe = r;
+                        break;
+                    }
                 }
             }
         } else {
-            smeltRecipe = RecipeManager.getRecipes().getSmeltRecipe(ingredient);
+            smeltRecipe = getSpecificFurnaceRecipe(furnace, ingredient);
         }
 
         return smeltRecipe;
@@ -773,23 +827,28 @@ public class SmeltEvents implements Listener {
 
             if (smeltingItem == null || smeltingItem.getType() == Material.AIR) {
                 ItemStack movedItem = event.getItem();
+                Furnace furnace = furnaceInventory.getHolder();
 
-                SmeltRecipe recipe = RecipeManager.getRecipes().getSmeltRecipe(movedItem);
+                RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, movedItem);
 
                 if (recipe != null) {
                     if (recipe.hasFlag(FlagType.REMOVE)) {
                         event.setCancelled(true);
                     }
 
-                    Furnace furnace = furnaceInventory.getHolder();
                     FurnaceData data = Furnaces.get(furnace.getLocation());
 
                     Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(furnaceInventory).extra(furnaceInventory.getSmelting()).build();
 
                     if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
-                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                        if (!Version.has1_13Support()) {
+                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                        }
                     } else {
-                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                        // TODO: Handle preventing the furnace with a different result in a different way
+                        if (!Version.has1_13Support()) {
+                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) 0);
+                        }
                     }
                 }
             }

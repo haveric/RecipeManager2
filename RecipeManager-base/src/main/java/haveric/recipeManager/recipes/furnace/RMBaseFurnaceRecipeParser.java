@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.smelt;
+package haveric.recipeManager.recipes.furnace;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
@@ -10,6 +10,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCVanilla;
+import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -17,14 +18,26 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmeltRecipeParser extends BaseRecipeParser {
-    public SmeltRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
+public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
+    private RMCRecipeType recipeType;
+
+    public RMBaseFurnaceRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator, RMCRecipeType recipeType) {
         super(reader, recipeName, fileFlags, recipeRegistrator);
+
+        this.recipeType = recipeType;
     }
 
     @Override
     public boolean parseRecipe(int directiveLine) throws Exception {
-        SmeltRecipe recipe = new SmeltRecipe(fileFlags); // create recipe and copy flags from file
+        RMBaseFurnaceRecipe recipe;
+        if (recipeType == RMCRecipeType.BLASTING) {
+            recipe = new RMBlastingRecipe(fileFlags); // create recipe and copy flags from file
+        } else if (recipeType == RMCRecipeType.SMOKING) {
+            recipe = new RMSmokingRecipe(fileFlags); // create recipe and copy flags from file
+        } else {
+            recipe = new RMFurnaceRecipe(fileFlags); // create recipe and copy flags from file
+        }
+
         reader.parseFlags(recipe.getFlags()); // check for @flags
 
         // get the ingredient and smelting time
@@ -50,7 +63,15 @@ public class SmeltRecipeParser extends BaseRecipeParser {
 
         // get min-max or fixed smelting time
         if (!isRemove) { // if it's got @remove we don't care about burn time or fuel
-            float minTime = Vanilla.FURNACE_RECIPE_TIME;
+            float minTime;
+            if (recipeType == RMCRecipeType.BLASTING) {
+                minTime = Vanilla.BLASTING_RECIPE_TIME;
+            } else if (recipeType == RMCRecipeType.SMOKING) {
+                minTime = Vanilla.SMOKER_RECIPE_TIME;
+            } else {
+                minTime = Vanilla.FURNACE_RECIPE_TIME;
+            }
+
             float maxTime = -1;
 
             if (split.length >= 2) {
@@ -67,7 +88,15 @@ public class SmeltRecipeParser extends BaseRecipeParser {
                         }
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Invalid burn time float number! Smelt time left as default.");
-                        minTime = Vanilla.FURNACE_RECIPE_TIME;
+
+                        if (recipeType == RMCRecipeType.BLASTING) {
+                            minTime = Vanilla.BLASTING_RECIPE_TIME;
+                        } else if (recipeType == RMCRecipeType.SMOKING) {
+                            minTime = Vanilla.SMOKER_RECIPE_TIME;
+                        } else {
+                            minTime = Vanilla.FURNACE_RECIPE_TIME;
+                        }
+
                         maxTime = -1;
                     }
                 }

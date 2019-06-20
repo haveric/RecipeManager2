@@ -3,10 +3,11 @@ package haveric.recipeManager.flag;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Test;
@@ -83,7 +84,7 @@ public class NamingTest extends FlagBaseTest {
         assertEquals(2, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            SmeltRecipe recipe = (SmeltRecipe) entry.getKey();
+            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
 
             Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
 

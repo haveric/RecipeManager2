@@ -7,7 +7,9 @@ import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -31,12 +33,12 @@ public class RecipeRegistrator {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
         } else if (recipe instanceof CombineRecipe) {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and ingredient!");
-        } else if (recipe instanceof SmeltRecipe) {
+        } else if (recipe instanceof RMFurnaceRecipe) {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        //} else if (recipe instanceof RMBlastingRecipe) {
-        //    queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        //} else if (recipe instanceof RMSmokingRecipe) {
-        //    queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        } else if (recipe instanceof RMBlastingRecipe) {
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        } else if (recipe instanceof RMSmokingRecipe) {
+            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof RMCampfireRecipe) {
             queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof RMStonecuttingRecipe) {

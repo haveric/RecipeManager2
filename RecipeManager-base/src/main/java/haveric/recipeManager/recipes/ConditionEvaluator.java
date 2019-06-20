@@ -10,7 +10,9 @@ import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
@@ -127,12 +129,11 @@ public class ConditionEvaluator {
                                 return entry.getValue();
                             }
                         }
-                    } else if (recipe instanceof SmeltRecipe) {
-                        SmeltRecipe smeltRecipe = (SmeltRecipe) recipe;
+                    } else if (recipe instanceof RMFurnaceRecipe) {
+                        RMFurnaceRecipe smeltRecipe = (RMFurnaceRecipe) recipe;
                         if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
                             return entry.getValue();
                         }
-                    /*
                     } else if (recipe instanceof RMBlastingRecipe) {
                         RMBlastingRecipe blastingRecipe = (RMBlastingRecipe) recipe;
                         if (NMSVersionHandler.getToolsRecipe().matchesBlasting(bukkit, blastingRecipe.getIngredient())) {
@@ -143,7 +144,6 @@ public class ConditionEvaluator {
                         if (NMSVersionHandler.getToolsRecipe().matchesSmoking(bukkit, smokingRecipe.getIngredient())) {
                             return entry.getValue();
                         }
-                    */
                     } else if (recipe instanceof RMCampfireRecipe) {
                         RMCampfireRecipe campfireRecipe = (RMCampfireRecipe) recipe;
                         if (NMSVersionHandler.getToolsRecipe().matchesCampfire(bukkit, campfireRecipe.getIngredient())) {

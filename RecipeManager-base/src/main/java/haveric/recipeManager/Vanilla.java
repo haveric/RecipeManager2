@@ -3,11 +3,15 @@ package haveric.recipeManager;
 import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
-import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -73,6 +77,8 @@ public class Vanilla {
      * This is a game constant.
      */
     public static final float FURNACE_RECIPE_TIME = 10f;
+    public static final float BLASTING_RECIPE_TIME = 5f;
+    public static final float SMOKER_RECIPE_TIME = 5f;
     public static final float CAMPFIRE_RECIPE_TIME = 30f;
 
     protected static void init() {
@@ -393,7 +399,15 @@ public class Vanilla {
                 } else if (r instanceof ShapelessRecipe) {
                     recipe = new CombineRecipe((ShapelessRecipe) r);
                 } else if (r instanceof FurnaceRecipe) {
-                    recipe = new SmeltRecipe((FurnaceRecipe) r);
+                    recipe = new RMFurnaceRecipe((FurnaceRecipe) r);
+                } else if (r instanceof BlastingRecipe) {
+                    recipe = new RMBlastingRecipe((BlastingRecipe) r);
+                } else if (r instanceof SmokingRecipe) {
+                    recipe = new RMSmokingRecipe((SmokingRecipe) r);
+                } else if (r instanceof CampfireRecipe) {
+                    recipe = new RMCampfireRecipe((CampfireRecipe) r);
+                } else if (r instanceof StonecuttingRecipe) {
+                    recipe = new RMStonecuttingRecipe((StonecuttingRecipe) r);
                 }
 
                 if (recipe == null) {
@@ -436,8 +450,24 @@ public class Vanilla {
             return removeCombineRecipe((CombineRecipe) recipe);
         }
 
-        if (recipe instanceof SmeltRecipe) {
-            return removeSmeltRecipe((SmeltRecipe) recipe);
+        if (recipe instanceof RMFurnaceRecipe) {
+            return removeSmeltRecipe((RMFurnaceRecipe) recipe);
+        }
+
+        if (recipe instanceof RMBlastingRecipe) {
+            return removeBlastingRecipe((RMBlastingRecipe) recipe);
+        }
+
+        if (recipe instanceof RMSmokingRecipe) {
+            return removeSmokingRecipe((RMSmokingRecipe) recipe);
+        }
+
+        if (recipe instanceof RMCampfireRecipe) {
+            return removeCampfireRecipe((RMCampfireRecipe) recipe);
+        }
+
+        if (recipe instanceof RMStonecuttingRecipe) {
+            return removeStonecuttingRecipe((RMStonecuttingRecipe) recipe);
         }
  
         return null;
@@ -462,6 +492,22 @@ public class Vanilla {
 
         if (recipe instanceof FurnaceRecipe) {
             return removeFurnaceRecipe((FurnaceRecipe) recipe);
+        }
+
+        if (recipe instanceof BlastingRecipe) {
+            return removeBlastingRecipe((BlastingRecipe) recipe);
+        }
+
+        if (recipe instanceof SmokingRecipe) {
+            return removeSmokingRecipe((SmokingRecipe) recipe);
+        }
+
+        if (recipe instanceof CampfireRecipe) {
+            return removeCampfireRecipe((CampfireRecipe) recipe);
+        }
+
+        if (recipe instanceof StonecuttingRecipe) {
+            return removeStonecuttingRecipe((StonecuttingRecipe) recipe);
         }
 
         return null;
@@ -581,7 +627,7 @@ public class Vanilla {
      *            Bukkit recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeFurnaceRecipe(FurnaceRecipe recipe) {
+    private static Recipe removeFurnaceRecipe(FurnaceRecipe recipe) {
         return removeFurnaceRecipe(recipe.getInput());
     }
 
@@ -592,14 +638,14 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeSmeltRecipe(SmeltRecipe recipe) {
+    private static Recipe removeSmeltRecipe(RMFurnaceRecipe recipe) {
         return removeFurnaceRecipe(recipe.getIngredient());
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        FurnaceRecipe fr;
+        FurnaceRecipe rmRecipe;
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -607,14 +653,162 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof FurnaceRecipe) {
-                    fr = (FurnaceRecipe) r;
+                    rmRecipe = (FurnaceRecipe) r;
 
-                    if (ingredient.getType() == fr.getInput().getType()) { // this works fine in 1.12
+                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
                         iterator.remove();
 
                         baseRecipeIterator.finish();
 
-                        return fr;
+                        return rmRecipe;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+
+        return null;
+    }
+
+    private static Recipe removeBlastingRecipe(BlastingRecipe recipe) {
+        return removeBlastingRecipe(recipe.getInput());
+    }
+
+    private static Recipe removeBlastingRecipe(RMBlastingRecipe recipe) {
+        return removeBlastingRecipe(recipe.getIngredient());
+    }
+
+    private static Recipe removeBlastingRecipe(ItemStack ingredient) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        BlastingRecipe rmRecipe;
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof BlastingRecipe) {
+                    rmRecipe = (BlastingRecipe) r;
+
+                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return rmRecipe;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+
+        return null;
+    }
+
+    private static Recipe removeSmokingRecipe(SmokingRecipe recipe) {
+        return removeSmokingRecipe(recipe.getInput());
+    }
+
+    private static Recipe removeSmokingRecipe(RMSmokingRecipe recipe) {
+        return removeSmokingRecipe(recipe.getIngredient());
+    }
+
+    private static Recipe removeSmokingRecipe(ItemStack ingredient) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        SmokingRecipe rmRecipe;
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof SmokingRecipe) {
+                    rmRecipe = (SmokingRecipe) r;
+
+                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return rmRecipe;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+
+        return null;
+    }
+
+    private static Recipe removeCampfireRecipe(CampfireRecipe recipe) {
+        return removeCampfireRecipe(recipe.getInput());
+    }
+
+    private static Recipe removeCampfireRecipe(RMCampfireRecipe recipe) {
+        return removeCampfireRecipe(recipe.getIngredient());
+    }
+
+    private static Recipe removeCampfireRecipe(ItemStack ingredient) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        CampfireRecipe rmRecipe;
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof CampfireRecipe) {
+                    rmRecipe = (CampfireRecipe) r;
+
+                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return rmRecipe;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+
+        return null;
+    }
+
+    private static Recipe removeStonecuttingRecipe(StonecuttingRecipe recipe) {
+        return removeStonecuttingRecipe(recipe.getInput(), recipe.getResult());
+    }
+
+    private static Recipe removeStonecuttingRecipe(RMStonecuttingRecipe recipe) {
+        return removeStonecuttingRecipe(recipe.getIngredient(), recipe.getResult());
+    }
+
+    private static Recipe removeStonecuttingRecipe(ItemStack ingredient, ItemStack result) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        StonecuttingRecipe rmRecipe;
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof StonecuttingRecipe) {
+                    rmRecipe = (StonecuttingRecipe) r;
+
+                    if (ingredient.getType() == rmRecipe.getInput().getType() && result.getType() == rmRecipe.getResult().getType()) { // this works fine in 1.12
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return rmRecipe;
                     }
                 }
             } catch (NullPointerException e) {

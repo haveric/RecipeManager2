@@ -1,8 +1,8 @@
 package haveric.recipeManager.api.events;
 
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -18,14 +18,14 @@ import org.bukkit.inventory.ItemStack;
 public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
-    private SmeltRecipe recipe;
+    private RMBaseFurnaceRecipe recipe;
     private FuelRecipe fuelRecipe;
     private ItemResult result;
     private Block block;
     //private String smelter;
     //private String fueler;
 
-    public RecipeManagerSmeltEvent(SmeltRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock/*,, String newSmelter String newFueler*/) {
+    public RecipeManagerSmeltEvent(RMBaseFurnaceRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock/*,, String newSmelter String newFueler*/) {
         recipe = newRecipe;
         fuelRecipe = newFuelRecipe;
         result = newResult;
@@ -37,7 +37,7 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     /**
      * @return RecipeManager's Smelt class recipe, never null
      */
-    public SmeltRecipe getRecipe() {
+    public RMBaseFurnaceRecipe getRecipe() {
         return recipe;
     }
 

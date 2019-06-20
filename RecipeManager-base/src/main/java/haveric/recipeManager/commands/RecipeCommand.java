@@ -3,11 +3,15 @@ package haveric.recipeManager.commands;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.SingleResultRecipe;
+import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -220,8 +224,16 @@ public class RecipeCommand implements CommandExecutor {
                 CombineRecipe r = (CombineRecipe) recipe;
 
                 return containsItem(r.getIngredients(), item, true);
-            } else if (recipe instanceof SmeltRecipe) {
-                SmeltRecipe r = (SmeltRecipe) recipe;
+            } else if (recipe instanceof RMBaseFurnaceRecipe) {
+                RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
+
+                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
+            } else if (recipe instanceof RMCampfireRecipe) {
+                RMCampfireRecipe r = (RMCampfireRecipe) recipe;
+
+                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
+            } else if (recipe instanceof RMStonecuttingRecipe) {
+                RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
 
                 return containsItem(Collections.singletonList(r.getIngredient()), item, true);
             } else if (recipe instanceof FuelRecipe) {

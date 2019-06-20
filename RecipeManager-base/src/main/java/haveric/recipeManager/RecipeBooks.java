@@ -3,15 +3,15 @@ package haveric.recipeManager;
 import com.google.common.collect.Sets;
 import haveric.recipeManager.api.events.RecipeManagerReloadBooksEvent;
 import haveric.recipeManager.data.RecipeBook;
-import haveric.recipeManager.flag.flags.FlagAddToBook;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.flags.FlagAddToBook;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -427,13 +427,13 @@ public class RecipeBooks {
                 if (value.equals("all")) {
                     getExistingByType(recipes, allRecipes, CraftRecipe.class);
                     getExistingByType(recipes, allRecipes, CombineRecipe.class);
-                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                    getExistingByType(recipes, allRecipes, RMFurnaceRecipe.class);
                     getExistingByType(recipes, allRecipes, FuelRecipe.class);
                 } else if (value.startsWith("work") || value.startsWith("craft")) {
                     getExistingByType(recipes, allRecipes, CraftRecipe.class);
                     getExistingByType(recipes, allRecipes, CombineRecipe.class);
                 } else if (value.startsWith("smelt") || value.startsWith("furnace")) {
-                    getExistingByType(recipes, allRecipes, SmeltRecipe.class);
+                    getExistingByType(recipes, allRecipes, RMFurnaceRecipe.class);
                 } else if (value.startsWith("fuel")) {
                     getExistingByType(recipes, allRecipes, FuelRecipe.class);
                 } else {
@@ -443,13 +443,13 @@ public class RecipeBooks {
                 if (value.equals("all")) {
                     getCustomByType(recipes, allRecipes, CraftRecipe.class);
                     getCustomByType(recipes, allRecipes, CombineRecipe.class);
-                    getCustomByType(recipes, allRecipes, SmeltRecipe.class);
+                    getCustomByType(recipes, allRecipes, RMFurnaceRecipe.class);
                     getCustomByType(recipes, allRecipes, FuelRecipe.class);
                 } else if (value.startsWith("work") || value.startsWith("craft")) {
                     getCustomByType(recipes, allRecipes, CraftRecipe.class);
                     getCustomByType(recipes, allRecipes, CombineRecipe.class);
                 } else if (value.startsWith("smelt") || value.startsWith("furnace")) {
-                    getCustomByType(recipes, allRecipes, SmeltRecipe.class);
+                    getCustomByType(recipes, allRecipes, RMFurnaceRecipe.class);
                 } else if (value.startsWith("fuel")) {
                     getCustomByType(recipes, allRecipes, FuelRecipe.class);
                 } else {

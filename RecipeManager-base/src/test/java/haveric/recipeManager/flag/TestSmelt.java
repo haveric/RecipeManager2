@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +25,7 @@ public class TestSmelt extends FlagBaseTest {
 
         assertEquals(4, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            SmeltRecipe recipe = (SmeltRecipe) entry.getKey();
+            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
             ItemStack ingredient = recipe.getIngredient();
             ItemResult result = recipe.getResult();
 

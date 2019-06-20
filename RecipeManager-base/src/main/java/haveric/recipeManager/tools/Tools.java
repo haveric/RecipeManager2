@@ -1,12 +1,18 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManager.*;
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
@@ -767,8 +773,22 @@ public class Tools {
                     found++;
                 }
             }
-        } else if (recipe instanceof SmeltRecipe) {
-            SmeltRecipe r = (SmeltRecipe) recipe;
+        } else if (recipe instanceof RMBaseFurnaceRecipe) {
+            RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
+            ItemStack i = r.getIngredient();
+
+            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                found++;
+            }
+        } else if (recipe instanceof RMCampfireRecipe) {
+            RMCampfireRecipe r = (RMCampfireRecipe) recipe;
+            ItemStack i = r.getIngredient();
+
+            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                found++;
+            }
+        } else if (recipe instanceof RMStonecuttingRecipe) {
+            RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
             ItemStack i = r.getIngredient();
 
             if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {

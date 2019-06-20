@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.smelt;
+package haveric.recipeManager.recipes.furnace;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
@@ -15,9 +15,9 @@ import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.RMCVanilla;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
+import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -25,21 +25,21 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmeltRecipe extends SingleResultRecipe {
+public class RMBaseFurnaceRecipe extends SingleResultRecipe {
     private ItemStack ingredient;
     private ItemResult fuel;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
     private int hash;
 
-    public SmeltRecipe() {
+    public RMBaseFurnaceRecipe() {
     }
 
-    public SmeltRecipe(BaseRecipe recipe) {
+    public RMBaseFurnaceRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof SmeltRecipe) {
-            SmeltRecipe r = (SmeltRecipe) recipe;
+        if (recipe instanceof RMBaseFurnaceRecipe) {
+            RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
 
             if (r.ingredient == null) {
                 ingredient = null;
@@ -59,13 +59,24 @@ public class SmeltRecipe extends SingleResultRecipe {
         }
     }
 
-    public SmeltRecipe(Flags flags) {
+    public RMBaseFurnaceRecipe(Flags flags) {
         super(flags);
     }
 
-    public SmeltRecipe(FurnaceRecipe recipe) {
+    // Legacy constructor for 1.13 / 1.12
+    public RMBaseFurnaceRecipe(FurnaceRecipe recipe) {
         setIngredient(recipe.getInput());
         setResult(recipe.getResult());
+    }
+
+    // Constructor for 1.14 +
+    public RMBaseFurnaceRecipe(CookingRecipe recipe) {
+        setIngredient(recipe.getInput());
+        setResult(recipe.getResult());
+    }
+
+    public String getRecipeBaseHash() {
+        return "";
     }
 
     public ItemStack getIngredient() {
@@ -74,7 +85,7 @@ public class SmeltRecipe extends SingleResultRecipe {
 
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
-        hash = ("smelt" + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
+        hash = (getRecipeBaseHash() + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     public ItemResult getFuel() {
@@ -153,7 +164,7 @@ public class SmeltRecipe extends SingleResultRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append("smelt ");
+        s.append(getRecipeBaseHash() + " ");
 
         s.append(ingredient.getType().toString().toLowerCase());
 
@@ -192,20 +203,6 @@ public class SmeltRecipe extends SingleResultRecipe {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || obj instanceof SmeltRecipe && hash == obj.hashCode();
-    }
-
-    @Override
-    public FurnaceRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredient() || !hasResult()) {
-            return null;
-        }
-
-        return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability());
-    }
-
     public boolean hasIngredient() {
         return ingredient != null;
     }
@@ -219,10 +216,6 @@ public class SmeltRecipe extends SingleResultRecipe {
         return hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
     }
 
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.SMELT;
-    }
     /*
     public String printBookIndex() {
         String print;
@@ -281,7 +274,7 @@ public class SmeltRecipe extends SingleResultRecipe {
     public String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.getInstance().parse("recipebook.header.smelt"));
+        s.append(Messages.getInstance().parse("recipebook.header." + getRecipeBaseHash()));
 
         if (hasCustomName()) {
             s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
@@ -331,16 +324,16 @@ public class SmeltRecipe extends SingleResultRecipe {
 
         if (hasCustomTime()) {
             if (maxTime > minTime) {
-                s.append(Messages.getInstance().parse("recipebook.smelt.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
+                s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
             } else {
                 if (minTime <= 0) {
-                    s.append(Messages.getInstance().parse("recipebook.smelt.time.instant"));
+                    s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.instant"));
                 } else {
-                    s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
+                    s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.fixed", "{time}", RMCUtil.printNumber(minTime)));
                 }
             }
         } else {
-            s.append(Messages.getInstance().parse("recipebook.smelt.time.normal", "{time}", RMCUtil.printNumber(minTime)));
+            s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.normal", "{time}", RMCUtil.printNumber(minTime)));
         }
 
         if (hasFuel()) {

@@ -14,9 +14,10 @@ import haveric.recipeManager.recipes.brew.data.BrewingStands;
 import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
-import haveric.recipeManager.recipes.smelt.SmeltEvents;
-import haveric.recipeManager.recipes.smelt.data.FurnaceData;
-import haveric.recipeManager.recipes.smelt.data.Furnaces;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceEvents;
+import haveric.recipeManager.recipes.furnace.data.FurnaceData;
+import haveric.recipeManager.recipes.furnace.data.Furnaces;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingEvents;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -44,8 +45,9 @@ public class RecipeManager extends JavaPlugin {
     private static RecipeBooks recipeBooks;
     private static Events events;
     private static BrewEvents brewEvents;
-    private static SmeltEvents smeltEvents;
+    private static RMBaseFurnaceEvents furnaceEvents;
     private static RMCampfireEvents campfireEvents;
+    private static RMStonecuttingEvents stonecuttingEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -80,10 +82,11 @@ public class RecipeManager extends JavaPlugin {
 
         events = new Events();
         brewEvents = new BrewEvents();
-        smeltEvents = new SmeltEvents();
+        furnaceEvents = new RMBaseFurnaceEvents();
 
         if (Version.has1_14Support()) {
             campfireEvents = new RMCampfireEvents();
+            stonecuttingEvents = new RMStonecuttingEvents();
         }
 
         recipes = new Recipes();
@@ -199,10 +202,11 @@ public class RecipeManager extends JavaPlugin {
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload(); // (re)register events
         BrewEvents.reload();
-        SmeltEvents.reload();
+        RMBaseFurnaceEvents.reload();
 
         if (Version.has1_14Support()) {
             RMCampfireEvents.reload();
+            RMStonecuttingEvents.reload();
         }
     }
 
@@ -298,15 +302,20 @@ public class RecipeManager extends JavaPlugin {
             }
             brewEvents = null;
 
-            if (smeltEvents != null) {
-                smeltEvents.clean();
+            if (furnaceEvents != null) {
+                furnaceEvents.clean();
             }
-            smeltEvents = null;
+            furnaceEvents = null;
 
             if (campfireEvents != null) {
                 campfireEvents.clean();
             }
             campfireEvents = null;
+
+            if (stonecuttingEvents != null) {
+                stonecuttingEvents.clean();
+            }
+            stonecuttingEvents = null;
 
             Settings.clean();
 
@@ -358,12 +367,16 @@ public class RecipeManager extends JavaPlugin {
         return brewEvents;
     }
 
-    public static SmeltEvents getSmeltEvents() {
-        return smeltEvents;
+    public static RMBaseFurnaceEvents getRMFurnaceEvents() {
+        return furnaceEvents;
     }
 
     public static RMCampfireEvents getRMCampfireEvents() {
         return campfireEvents;
+    }
+
+    public static RMStonecuttingEvents getRMStonecuttingEvents() {
+        return stonecuttingEvents;
     }
 
     public static FlagLoader getFlagLoader() {

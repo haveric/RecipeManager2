@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.smelt.data;
+package haveric.recipeManager.recipes.furnace.data;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.BlockID;
@@ -58,11 +58,6 @@ public class Furnaces {
         }
 
         FurnaceInventory inv = furnace.getInventory();
-
-        if (inv == null) {
-            return; // invalid furnace, no inventory
-        }
-
         FurnaceData data = furnaces.get(id);
 
         if (data == null) {

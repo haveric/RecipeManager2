@@ -9,7 +9,10 @@ import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
@@ -44,10 +47,12 @@ public class Recipes {
     // Quick-find index
     protected Map<Integer, CraftRecipe> indexCraft = new HashMap<>();
     protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
-    public Map<String, SmeltRecipe> indexSmelt = new HashMap<>();
-    protected Map<String, SmeltRecipe> indexSmeltFuels = new HashMap<>();
-    //protected Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
-    //protected Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
+    public Map<String, RMFurnaceRecipe> indexSmelt = new HashMap<>();
+    protected Map<String, RMFurnaceRecipe> indexSmeltFuels = new HashMap<>();
+    public Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
+    protected Map<String, RMBlastingRecipe> indexBlastingFuels = new HashMap<>();
+    public Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
+    protected Map<String, RMSmokingRecipe> indexSmokingFuels = new HashMap<>();
     protected Map<String, RMCampfireRecipe> indexCampfire = new HashMap<>();
     protected Map<String, RMStonecuttingRecipe> indexStonecutting = new HashMap<>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<>();
@@ -62,9 +67,12 @@ public class Recipes {
         indexCraft.clear();
         indexCombine.clear();
         indexSmelt.clear();
+        indexSmeltFuels.clear();
         indexFuels.clear();
-        //indexBlasting.clear();
-        //indexSmoking.clear();
+        indexBlasting.clear();
+        indexBlastingFuels.clear();
+        indexSmoking.clear();
+        indexSmokingFuels.clear();
         indexCampfire.clear();
         indexStonecutting.clear();
         indexBrew.clear();
@@ -195,8 +203,8 @@ public class Recipes {
      * @param ingredient
      * @return Smelt recipe or null if doesn't exist
      */
-    public SmeltRecipe getSmeltRecipe(ItemStack ingredient) {
-        SmeltRecipe recipe = null;
+    public RMFurnaceRecipe getSmeltRecipe(ItemStack ingredient) {
+        RMFurnaceRecipe recipe = null;
 
         if (ingredient != null) {
             recipe = indexSmelt.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
@@ -204,6 +212,20 @@ public class Recipes {
             if (recipe == null) {
                 recipe = indexSmelt.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
             }
+        }
+
+        return recipe;
+    }
+
+    public RMFurnaceRecipe getSmeltRecipeWithFuel(ItemStack fuel) {
+        if (fuel == null) {
+            return null;
+        }
+
+        RMFurnaceRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getType().toString()));
+
+        if (recipe == null) {
+            return indexSmeltFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
         }
 
         return recipe;
@@ -223,20 +245,6 @@ public class Recipes {
         return recipe;
     }
 
-    public SmeltRecipe getSmeltRecipeWithFuel(ItemStack fuel) {
-        if (fuel == null) {
-            return null;
-        }
-
-        SmeltRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getType().toString()));
-
-        if (recipe == null) {
-            return indexSmeltFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
-        }
-
-        return recipe;
-    }
-    /*
     public RMBlastingRecipe getRMBlastingRecipe(ItemStack ingredient) {
         RMBlastingRecipe recipe = null;
 
@@ -246,6 +254,20 @@ public class Recipes {
             if (recipe == null) {
                 recipe = indexBlasting.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
             }
+        }
+
+        return recipe;
+    }
+
+    public RMBlastingRecipe getRMBlastingRecipeWithFuel(ItemStack fuel) {
+        if (fuel == null) {
+            return null;
+        }
+
+        RMBlastingRecipe recipe = indexBlastingFuels.get(String.valueOf(fuel.getType().toString()));
+
+        if (recipe == null) {
+            return indexBlastingFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
         }
 
         return recipe;
@@ -264,7 +286,21 @@ public class Recipes {
 
         return recipe;
     }
-    */
+
+    public RMSmokingRecipe getRMSmokingRecipeWithFuel(ItemStack fuel) {
+        if (fuel == null) {
+            return null;
+        }
+
+        RMSmokingRecipe recipe = indexSmokingFuels.get(String.valueOf(fuel.getType().toString()));
+
+        if (recipe == null) {
+            return indexSmokingFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
+        }
+
+        return recipe;
+    }
+
     public RMCampfireRecipe getRMCampfireRecipe(ItemStack ingredient) {
         RMCampfireRecipe recipe = null;
 
@@ -387,18 +423,30 @@ public class Recipes {
                 indexCraft.put(recipe.getIndex(), (CraftRecipe) recipe);
             } else if (recipe instanceof CombineRecipe) {
                 indexCombine.put(recipe.getIndex(), (CombineRecipe) recipe);
-            } else if (recipe instanceof SmeltRecipe) {
-                SmeltRecipe r = (SmeltRecipe) recipe;
+            } else if (recipe instanceof RMFurnaceRecipe) {
+                RMFurnaceRecipe r = (RMFurnaceRecipe) recipe;
 
-                indexSmelt.put(((SmeltRecipe) recipe).getIndexString(), r);
+                indexSmelt.put(((RMFurnaceRecipe) recipe).getIndexString(), r);
 
                 if (r.hasFuel()) {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
                 }
-            //} else if (recipe instanceof RMBlastingRecipe) {
+            } else if (recipe instanceof RMBlastingRecipe) {
+                RMBlastingRecipe r = (RMBlastingRecipe) recipe;
 
-            //} else if (recipe instanceof RMSmokingRecipe) {
+                indexBlasting.put(((RMBlastingRecipe) recipe).getIndexString(), r);
 
+                if (r.hasFuel()) {
+                    indexBlastingFuels.put(r.getFuelIndex(), r);
+                }
+            } else if (recipe instanceof RMSmokingRecipe) {
+                RMSmokingRecipe r = (RMSmokingRecipe) recipe;
+
+                indexSmoking.put(((RMSmokingRecipe) recipe).getIndexString(), r);
+
+                if (r.hasFuel()) {
+                    indexSmokingFuels.put(r.getFuelIndex(), r);
+                }
             } else if (recipe instanceof RMCampfireRecipe) {
                 indexCampfire.put(((RMCampfireRecipe) recipe).getIndexString(), (RMCampfireRecipe) recipe);
             } else if (recipe instanceof RMStonecuttingRecipe) {
@@ -417,7 +465,7 @@ public class Recipes {
         
         // For 1.12, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
         if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
-            if (recipe instanceof SmeltRecipe) { // 'cept for this.
+            if (recipe instanceof RMBaseFurnaceRecipe) { // 'cept for this.
                 recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
             } else {
                 Vanilla.replaceCustomRecipe(recipe);
@@ -439,7 +487,7 @@ public class Recipes {
             //  this is a recipe to manage. 
             if (bukkitRecipe != null) {
                 // Note that since we don't "replace" smelt recipes, we need special handling here.
-                if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && !(recipe instanceof SmeltRecipe))) {
+                if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && !(recipe instanceof RMBaseFurnaceRecipe))) {
                     Bukkit.addRecipe(bukkitRecipe);
                 }
             }
@@ -488,12 +536,12 @@ public class Recipes {
             indexCraft.remove(recipe.getIndex());
         } else if (recipe instanceof CombineRecipe) {
             indexCombine.remove(recipe.getIndex());
-        } else if (recipe instanceof SmeltRecipe) {
-            indexSmelt.remove(((SmeltRecipe) recipe).getIndexString());
-        //} else if (recipe instanceof RMBlastingRecipe) {
-        //    indexBlasting.remove(((RMBlastingRecipe) recipe).getIndexString());
-        //} else if (recipe instanceof RMSmokingRecipe) {
-        //    indexSmoking.remove(((RMSmokingRecipe) recipe).getIndexString());
+        } else if (recipe instanceof RMFurnaceRecipe) {
+            indexSmelt.remove(((RMFurnaceRecipe) recipe).getIndexString());
+        } else if (recipe instanceof RMBlastingRecipe) {
+            indexBlasting.remove(((RMBlastingRecipe) recipe).getIndexString());
+        } else if (recipe instanceof RMSmokingRecipe) {
+            indexSmoking.remove(((RMSmokingRecipe) recipe).getIndexString());
         } else if (recipe instanceof RMCampfireRecipe) {
             indexCampfire.remove(((RMCampfireRecipe) recipe).getIndexString());
         } else if (recipe instanceof RMStonecuttingRecipe) {

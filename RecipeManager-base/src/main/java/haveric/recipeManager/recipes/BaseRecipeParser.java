@@ -4,7 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.recipes.smelt.SmeltRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.Material;
 
@@ -32,7 +32,7 @@ public abstract class BaseRecipeParser {
         boolean allowAir = true;
         boolean oneResult = false;
 
-        if (recipe instanceof SmeltRecipe) {
+        if (recipe instanceof RMBaseFurnaceRecipe) {
             allowAir = false;
             oneResult = true;
         }
