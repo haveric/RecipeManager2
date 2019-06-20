@@ -26,11 +26,9 @@ import org.bukkit.block.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -92,18 +90,6 @@ public class RMBaseFurnaceEvents implements Listener {
             Furnaces.remove(location);
         } else if (Version.has1_14Support() && type == Material.BLAST_FURNACE || type == Material.SMOKER) {
             Furnaces.remove(location);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void furnacePlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Material clickedBlockType = event.getClickedBlock().getType();
-            if (clickedBlockType == Material.FURNACE || (!Version.has1_13Support() && clickedBlockType == Material.getMaterial("BURNING_FURNACE"))) {
-                if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
-                    event.setCancelled(true);
-                }
-            }
         }
     }
 
