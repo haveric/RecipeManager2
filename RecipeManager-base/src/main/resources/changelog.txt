@@ -2,7 +2,17 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+* 1.13 & 1.14 Update
+* New "campfire" recipes
+** Single ingredient and result
+* New "blasting" and "smoking" recipes
+** Work exactly the same as furnaces/smelt recipes
+* New "stonecutting" recipes
+** Can create many recipes with the same ingredient, as long as there are different results
+** No Flag support yet
 * @NoResult: Shift clicking will no longer give results
+* Removed need for "Recipe is special, shift-clicking will only craft it once" restriction
+
 
 === v2.14.1 ===
 * @IngredientCondition: Fixed issue when unbreakable was not set
