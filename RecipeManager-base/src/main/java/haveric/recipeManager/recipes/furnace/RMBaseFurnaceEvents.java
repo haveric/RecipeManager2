@@ -105,9 +105,10 @@ public class RMBaseFurnaceEvents implements Listener {
 
     private RMBaseFurnaceRecipe getSpecificFurnaceRecipe(Furnace furnace, ItemStack item) {
         RMBaseFurnaceRecipe recipe;
-        if (furnace instanceof BlastFurnace) {
+
+        if (Version.has1_14Support() && furnace instanceof BlastFurnace) {
             recipe = RecipeManager.getRecipes().getRMBlastingRecipe(item);
-        } else if (furnace instanceof Smoker) {
+        } else if (Version.has1_14Support() && furnace instanceof Smoker) {
             recipe = RecipeManager.getRecipes().getRMSmokingRecipe(item);
         } else {
             recipe = RecipeManager.getRecipes().getSmeltRecipe(item);
@@ -787,14 +788,14 @@ public class RMBaseFurnaceEvents implements Listener {
                 return null;
             }
 
-            if (furnace instanceof BlastFurnace) {
+            if (Version.has1_14Support() && furnace instanceof BlastFurnace) {
                 for (RMBlastingRecipe r : RecipeManager.getRecipes().indexBlasting.values()) {
                     if (result.isSimilar(r.getResult())) {
                         smeltRecipe = r;
                         break;
                     }
                 }
-            } else if (furnace instanceof Smoker) {
+            } else if (Version.has1_14Support() && furnace instanceof Smoker) {
                 for (RMSmokingRecipe r : RecipeManager.getRecipes().indexSmoking.values()) {
                     if (result.isSimilar(r.getResult())) {
                         smeltRecipe = r;
