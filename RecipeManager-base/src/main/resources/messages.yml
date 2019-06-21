@@ -3,12 +3,10 @@ lastchanged: 2.14.0
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
 flag:
-  override: <yellow>Overwrites another recipe.
   restrict: <red>Recipe is disabled.
   holditem: '<red>Need to hold: <yellow>{items}'
   gamemode: '<red>Allowed gamemodes: <yellow>{gamemodes}'
   height: '<red>Need height: <yellow>{height}'
-  onlinetime: '<red>Need online time: <yellow>{range}'
   permission:
     allowed: '<red>Allowed permissions: <yellow>{permissions}'
     unallowed: '<red>Unallowed permissions: <yellow>{permissions}'
@@ -23,27 +21,10 @@ flag:
   biome:
     allowed: '<red>Allowed biomes: <yellow>{biomes}'
     unallowed: '<red>Unallowed biomes: <yellow>{biomes}'
-  returnitem:
-    returned: <green>Returned item {item}<green> in crafting grid.
-    merged: <green>Returned item {item}<green> merged in crafting grid.
-    received: <yellow>Returned item {item}<green> added to inventory.
-    dropped: <yellow>Returned item {item}<green> dropped.
-  blockpowered:
-    furnace: <red>Need a furnace powered by redstone.
-    workbench: <red>Need a workbench powered by redstone.
-    brewingstand: <red>Need a brewing stand powered by redstone.
+  blockpowered: <red>Need a {blockname} powered by redstone.
   lightlevel: <red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>.
   setblock:
     needsworkbench: <red>Recipe needs to be used with a workbench!
-  items: '<red>Need in inventory: <yellow>{items}'
-  noitems: '<red>Unallowed in inventory: <yellow>{items}'
-  equip: '<red>Need equipped: <yellow>{items}'
-  noequip: '<red>Unallowed equipped: <yellow>{items}'
-  hold: '<red>Need in hand: <yellow>{items}'
-  nohold: '<red>Unallowed in hand: <yellow>{items}'
-  command:
-    player: 'Executes command on crafter: <yellow>{command}'
-    server: 'Executes console command: <yellow>{command}'
   ingredientconditions:
     nodata: '<yellow>{item}<red> needs data values: <yellow>{data}'
     noamount: '<yellow>{item}<red> needs amount: <yellow>{amount}'
@@ -73,13 +54,7 @@ flag:
     add: <green>+{money}
     sub: <red>-{money}
     set: <reset>Money set to <yellow>{money}
-  playerbukkitmeta: <red>You need to be special...
-  noplayerbukkitmeta: <red>You're too special...
-  blockbukkitmeta: <red>Needs special block...
-  noblockbukkitmeta: <red>Block to special...
   potioneffects: '<red>Need potion effect: {effects}'
-  nopotioneffects: '<red>Unallowed potion effect: {effects}'
-  realtime: <red>Allowed between {mindate} and {maxdate}
   cooldown:
     fail:
       perplayer: '<red>Personal cooldown: {time}'
@@ -133,11 +108,6 @@ craft:
       cursorfull: '<yellow>NOTE: <white>Cursor is full or not same type as result, put the held item in inventory or use Shift+Click to craft one by one to inventory.'
       chance:
         cursorhasitem: '<yellow>NOTE: <white>Cursor has an item on a chance recipe, put the held item in inventory or use Shift+Click to craft one by one to inventory.'
-smelt:
-  fuel:
-    needingredient: '<red>Fuel {fuel}<red> needs specific ingredient: {ingredient}'
-    needfuel: '<red>Ingredient {ingredient}<red> needs specific fuel: {fuel}'
-  frozen: <red>Furnace at <yellow>{location} <red>will be frozen until you re-place the ingredient.
 item:
   anydata: <gray>any
 recipebook:

@@ -111,8 +111,10 @@ public class FlagBlockPowered extends Flag {
         } else {
             craftingTableMaterial = Material.getMaterial("WORKBENCH");
         }
+
         if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == craftingTableMaterial ||
-                (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
+                (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE")) ||
+                (Version.has1_14Support() && (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER || blockType == Material.CAMPFIRE))) {
 
             boolean valid;
             if (isIndirect()) {
@@ -122,18 +124,33 @@ public class FlagBlockPowered extends Flag {
             }
 
             if (!valid) {
-                String reason;
+                String blockName = null;
                 if (blockType == craftingTableMaterial) {
-                    reason = "flag.blockpowered.workbench";
+                    blockName = "workbench";
                 } else if (blockType == Material.BREWING_STAND) {
-                    reason = "flag.blockpowered.brewingstand";
-                } else {
-                    reason = "flag.blockpowered.furnace";
+                    blockName = "brewing stand";
+                } else if (blockType == Material.FURNACE || (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
+                    blockName = "furnace";
+                } else if (Version.has1_14Support()) {
+                    if (blockType == Material.BLAST_FURNACE) {
+                        blockName = "blast furnace";
+                    } else if (blockType == Material.SMOKER) {
+                        blockName = "smoker";
+                    } else if (blockType == Material.STONECUTTER) {
+                        blockName = "stonecutter";
+                    } else if (blockType == Material.CAMPFIRE) {
+                        blockName = "campfire";
+                    }
                 }
-                a.addReason(reason, failMessage);
+
+                if (blockName == null) {
+                    blockName = blockType.toString().toLowerCase();
+                }
+
+                a.addReason("flag.blockpowered", failMessage, "{blockname}", blockName);
             }
         } else {
-            a.addReason("flag.blockpowered.workbench", failMessage);
+            a.addReason("flag.blockpowered", failMessage,"{blockname}", blockType.toString().toLowerCase());
         }
     }
 }
