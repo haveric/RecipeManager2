@@ -75,7 +75,7 @@ public class RMBaseFurnaceEvents implements Listener {
 
         if (type == Material.FURNACE || (!Version.has1_13Support() && type == Material.getMaterial("BURNING_FURNACE"))) {
             Furnaces.add(location);
-        } else if (Version.has1_14Support() && type == Material.BLAST_FURNACE || type == Material.SMOKER) {
+        } else if (Version.has1_14Support() && (type == Material.BLAST_FURNACE || type == Material.SMOKER)) {
             Furnaces.add(location);
         }
     }
@@ -88,7 +88,7 @@ public class RMBaseFurnaceEvents implements Listener {
 
         if (type == Material.FURNACE || (!Version.has1_13Support() && type == Material.getMaterial("BURNING_FURNACE"))) {
             Furnaces.remove(location);
-        } else if (Version.has1_14Support() && type == Material.BLAST_FURNACE || type == Material.SMOKER) {
+        } else if (Version.has1_14Support() && (type == Material.BLAST_FURNACE || type == Material.SMOKER)) {
             Furnaces.remove(location);
         }
     }
