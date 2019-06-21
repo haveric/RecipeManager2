@@ -4,7 +4,7 @@ lastchanged: 2.12.0 # Please do not edit this value - it is used by the plugin t
 # This file is for settings.
 # To make recipes, read "info - basic recipes.txt" file
 #
-# For help/issues: http://dev.bukkit.org/server-mods/recipemanager
+# For help/issues: https://dev.bukkit.org/projects/recipemanager
 #-------------------------------------------------------------------------------------------------------------------------
 
 # Enable/disable special recipes
@@ -51,7 +51,7 @@ furnace-shift-click: fuel
 
 # Multithreading allows server to do certain tasks in another thread (background) which would avoid freezing the server if it takes too long.
 # This is currently used for loading recipes, however if you encounter any weird problems you can disable this to make it run in the main thread.
-# Don't take this as a magic-fix! If you don't understand your problem then post it here: http://dev.bukkit.org/server-mods/recipemanager/create-ticket/
+# Don't take this as a magic-fix! If you don't understand your problem then post it here: https://dev.bukkit.org/projects/recipemanager/issues/create
 #   default: true
 multithreading: true
 

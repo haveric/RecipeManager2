@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
  * Proper experience methods.
  *
  * @author Essentials<br>
- *         https://github.com/essentials/Essentials/blob/master/Essentials/src/net/ess3/craftbukkit/SetExpFix.java
+ *         https://github.com/essentials/Essentials/blob/2.x/Essentials/src/com/earth2me/essentials/craftbukkit/SetExpFix.java
  */
 public class ToolsExp {
     // This method is used to update both the recorded total experience and displayed total experience.

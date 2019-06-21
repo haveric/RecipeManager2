@@ -3,8 +3,8 @@ description: Add, edit or remove recipes and fuels
 version: 2.14.4-dev
 api-version: 1.13
 authors: [haveric, ProgrammerDan, Digi]
-website: http://dev.bukkit.org/server-mods/recipemanager/
-dev-url: http://dev.bukkit.org/server-mods/recipemanager/
+website: https://dev.bukkit.org/projects/recipemanager
+dev-url: https://dev.bukkit.org/projects/recipemanager
 main: haveric.recipeManager.RecipeManager
 softdepend: [Vault]
 commands:
