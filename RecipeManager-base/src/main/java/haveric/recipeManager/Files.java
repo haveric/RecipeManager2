@@ -531,7 +531,14 @@ public class Files {
             for (Enchantment e : enchantments) {
                 EnchantmentTarget target = e.getItemTarget();
 
-                s.append(NL).append(String.format(" %-26s %-24s %-12s %s", e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
+                String targetString;
+                if (target == null) { // Check needed for 1.11
+                    targetString = "any";
+                } else {
+                    targetString = target.toString().toLowerCase();
+                }
+
+                s.append(NL).append(String.format(" %-26s %-24s %-12s %s", e.getName(), Settings.getInstance().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         }
 
