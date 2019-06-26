@@ -5,6 +5,7 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
@@ -1250,7 +1251,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (!checkUnbreakable(meta.isUnbreakable())) {
+        if (Version.has1_11Support() && !checkUnbreakable(meta.isUnbreakable())) {
             if (a == null) {
                 return false;
             }

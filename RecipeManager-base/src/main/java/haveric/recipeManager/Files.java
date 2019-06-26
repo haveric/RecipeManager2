@@ -673,14 +673,16 @@ public class Files {
             }
         }
 
-        s.append(NL);
-        s.append(NL);
-        s.append(NL).append("<a name='particle'></a><a href='#contents'>^ Contents</a><h3>PARTICLE LIST</h3>");
-        s.append("<a href='" + BUKKIT_DOCS + "Particle.html'>BukkitAPI / Particle</a>");
-        s.append(NL);
+        if (Version.has1_9Support()) {
+            s.append(NL);
+            s.append(NL);
+            s.append(NL).append("<a name='particle'></a><a href='#contents'>^ Contents</a><h3>PARTICLE LIST</h3>");
+            s.append("<a href='" + BUKKIT_DOCS + "Particle.html'>BukkitAPI / Particle</a>");
+            s.append(NL);
 
-        for (Particle p : Particle.values()) {
-            s.append(NL).append(' ').append(p.name());
+            for (Particle p : Particle.values()) {
+                s.append(NL).append(' ').append(p.name());
+            }
         }
 
         s.append(NL);
