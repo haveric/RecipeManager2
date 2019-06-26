@@ -54,12 +54,22 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "agelock", "prevent the creature from maturing or getting ready for mating, works with animals and villagers."),
                 String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
                 String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies (works opposite of adult)."),
-                String.format(argFormat, "cat <type>", "ocelot type, available values: " + RMCUtil.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
-                String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
-                String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
-                String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
-
         };
+        if (Version.has1_14Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
+            }, String.class);
+        } else {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "cat <type>", "ocelot type, available values: " + RMCUtil.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[] {
+            String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
+            String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
+            String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf/cats; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
+        }, String.class);
 
         if (!Version.has1_12Support()) {
             description = ObjectArrays.concat(description, new String[] {
@@ -171,7 +181,8 @@ public class FlagSummon extends Flag {
         private boolean angry = false;
         private boolean pet = false;
         private boolean noSit = false;
-        private Ocelot.Type cat = null;
+        private Ocelot.Type ocelot = null;
+        private Cat.Type cat = null;
         private boolean saddle = false;
         private boolean mount = false;
         private DyeColor color = null;
@@ -221,6 +232,7 @@ public class FlagSummon extends Flag {
             angry = c.angry;
             pet = c.pet;
             noSit = c.noSit;
+            ocelot= c.ocelot;
             cat = c.cat;
             saddle = c.saddle;
             mount = c.mount;
@@ -354,8 +366,22 @@ public class FlagSummon extends Flag {
                 if (ent instanceof Ocelot) {
                     Ocelot npc = (Ocelot) ent;
 
+                    if (ocelot != null) {
+                        npc.setCatType(ocelot);
+                    }
+                }
+
+                if (Version.has1_14Support() && ent instanceof Cat) {
+                    Cat npc = (Cat) ent;
+
                     if (cat != null) {
                         npc.setCatType(cat);
+                    }
+
+                    if (pet) {
+                        if (color != null) {
+                            npc.setCollarColor(color);
+                        }
                     }
                 }
 
@@ -830,11 +856,19 @@ public class FlagSummon extends Flag {
             angry = newAngry;
         }
 
-        public Ocelot.Type getCat() {
+        public Ocelot.Type getOcelot() {
+            return ocelot;
+        }
+
+        public void setOcelot(Ocelot.Type newOcelot) {
+            ocelot = newOcelot;
+        }
+
+        public Cat.Type getCat() {
             return cat;
         }
 
-        public void setCat(Ocelot.Type newCat) {
+        public void setCat(Cat.Type newCat) {
             cat = newCat;
         }
 
@@ -1095,6 +1129,33 @@ public class FlagSummon extends Flag {
                         case RABBIT:
                             break;
 
+                        case DONKEY:
+                        case MULE:
+                        case SKELETON_HORSE:
+                        case ZOMBIE_HORSE:
+                        case POLAR_BEAR:
+                            break;
+
+                        // 1.11
+                        case LLAMA:
+                            break;
+
+                        // 1.12
+                        case PARROT:
+                            break;
+
+                        // 1.13
+                        case TURTLE:
+                            break;
+
+                        // 1.14
+                        case CAT:
+                        case PANDA:
+                        case FOX:
+                        case WANDERING_TRADER:
+                        case TRADER_LLAMA:
+                            break;
+
                         default:
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'adult' set on unsupported creature!");
                             continue;
@@ -1116,6 +1177,33 @@ public class FlagSummon extends Flag {
                             break;
 
                         case RABBIT:
+                            break;
+
+                        case DONKEY:
+                        case MULE:
+                        case SKELETON_HORSE:
+                        case ZOMBIE_HORSE:
+                        case POLAR_BEAR:
+                            break;
+
+                        // 1.11
+                        case LLAMA:
+                            break;
+
+                        // 1.12
+                        case PARROT:
+                            break;
+
+                        // 1.13
+                        case TURTLE:
+                            break;
+
+                        // 1.14
+                        case CAT:
+                        case PANDA:
+                        case FOX:
+                        case WANDERING_TRADER:
+                        case TRADER_LLAMA:
                             break;
 
                         default:
@@ -1140,6 +1228,33 @@ public class FlagSummon extends Flag {
                         case RABBIT:
                             break;
 
+                        case DONKEY:
+                        case MULE:
+                        case SKELETON_HORSE:
+                        case ZOMBIE_HORSE:
+                        case POLAR_BEAR:
+                            break;
+
+                        // 1.11
+                        case LLAMA:
+                            break;
+
+                        // 1.12
+                        case PARROT:
+                            break;
+
+                        // 1.13
+                        case TURTLE:
+                            break;
+
+                        // 1.14
+                        case CAT:
+                        case PANDA:
+                        case FOX:
+                        case WANDERING_TRADER:
+                        case TRADER_LLAMA:
+                            break;
+
                         default:
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'agelock' set on unsupported creature!");
                             continue;
@@ -1162,6 +1277,33 @@ public class FlagSummon extends Flag {
                         case RABBIT:
                             break;
 
+                        case DONKEY:
+                        case MULE:
+                        case SKELETON_HORSE:
+                        case ZOMBIE_HORSE:
+                        case POLAR_BEAR:
+                            break;
+
+                        // 1.11
+                        case LLAMA:
+                            break;
+
+                        // 1.12
+                        case PARROT:
+                            break;
+
+                        // 1.13
+                        case TURTLE:
+                            break;
+
+                        // 1.14
+                        case CAT:
+                        case PANDA:
+                        case FOX:
+                        case WANDERING_TRADER:
+                        case TRADER_LLAMA:
+                            break;
+
                         default:
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'nobreed' set on unsupported creature!");
                             continue;
@@ -1180,6 +1322,19 @@ public class FlagSummon extends Flag {
                     switch (type) {
                         case WOLF:
                         case OCELOT:
+                            break;
+
+                        case HORSE:
+                        case DONKEY:
+                        case MULE:
+                        case SKELETON_HORSE:
+                        case ZOMBIE_HORSE:
+                        case LLAMA:
+                        case PARROT:
+                            break;
+
+                        case CAT:
+                        case TRADER_LLAMA:
                             break;
 
                         default:
@@ -1267,6 +1422,9 @@ public class FlagSummon extends Flag {
                         case WOLF:
                             break;
 
+                        case CAT:
+                            break;
+
                         default:
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' on unsupported creature!");
                             continue;
@@ -1305,6 +1463,19 @@ public class FlagSummon extends Flag {
                     if (c.getSkeleton() == null) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'skeleton' argument with invalid type: " + value);
                     }
+                } else if (Version.has1_14Support() && value.startsWith("cat")) {
+                    if (type != EntityType.CAT) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-cat creature!");
+                        continue;
+                    }
+
+                    value = value.substring("cat".length()).trim();
+
+                    c.setCat(RMCUtil.parseEnum(value, Cat.Type.values()));
+
+                    if (c.getCat() == null) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument with invalid type: " + value);
+                    }
                 } else if (value.startsWith("cat")) {
                     if (type != EntityType.OCELOT) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-ocelot creature!");
@@ -1313,9 +1484,9 @@ public class FlagSummon extends Flag {
 
                     value = value.substring("cat".length()).trim();
 
-                    c.setCat(RMCUtil.parseEnum(value, Ocelot.Type.values()));
+                    c.setOcelot(RMCUtil.parseEnum(value, Ocelot.Type.values()));
 
-                    if (c.getCat() == null) {
+                    if (c.getOcelot() == null) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument with invalid type: " + value);
                     }
                 } else if (value.startsWith("rabbit")) {
