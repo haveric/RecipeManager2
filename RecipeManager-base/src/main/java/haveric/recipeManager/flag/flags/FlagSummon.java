@@ -98,7 +98,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "nohidename", "don't hide name plate when not aiming at creature."),
             String.format(argFormat, "num <number>", "spawn more cloned creatures."),
             String.format(argFormat, "onfire <time>", "spawn creature on fire for <time> amount of seconds, value can be float."),
-            String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for wolf and ocelot, optionally specify 'nosit' to not spawn creature in sit stance."),
+            String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for tameable creatures, optionally specify 'nosit' to not spawn creature in sit stance."),
             String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
             String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
             String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
@@ -331,7 +331,7 @@ public class FlagSummon extends Flag {
                     npc.setTamed(true);
                 }
 
-                if (ent instanceof Sittable) {
+                if (Version.has1_12Support() && ent instanceof Sittable) {
                     Sittable npc = (Sittable) ent;
 
                     if (pet && noSit) {
