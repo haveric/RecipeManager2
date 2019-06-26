@@ -290,10 +290,18 @@ public class CraftRecipe extends WorkbenchRecipe {
         }
 
         ShapedRecipe bukkitRecipe;
-        if (vanilla) {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
+        if (Version.has1_12Support()) {
+            if (vanilla) {
+                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
+            } else {
+                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            }
         } else {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            if (vanilla) {
+                bukkitRecipe = new ShapedRecipe(getFirstResult());
+            } else {
+                bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            }
         }
 
         switch (height) {
