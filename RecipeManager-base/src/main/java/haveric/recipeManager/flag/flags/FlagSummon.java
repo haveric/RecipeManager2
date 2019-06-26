@@ -1476,7 +1476,7 @@ public class FlagSummon extends Flag {
                     if (c.getCat() == null) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument with invalid type: " + value);
                     }
-                } else if (value.startsWith("cat")) {
+                } else if (!Version.has1_14Support() && value.startsWith("cat")) {
                     if (type != EntityType.OCELOT) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-ocelot creature!");
                         continue;
