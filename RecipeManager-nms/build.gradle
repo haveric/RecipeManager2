@@ -28,7 +28,7 @@ dependencies {
 
     compile2 "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
     compile3 "org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT"
-    compile4 "org.spigotmc:spigot:1.14.2-R0.1-SNAPSHOT"
+    compile4 "org.spigotmc:spigot:1.14.3-R0.1-SNAPSHOT"
 
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 

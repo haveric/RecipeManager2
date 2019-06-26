@@ -27,7 +27,7 @@ dependencies {
     testCompile 'org.powermock:powermock-module-junit4:1.6.4'
     testCompile 'org.powermock:powermock-api-mockito:1.6.4'
 
-    compile "org.bukkit:bukkit:1.14.2-R0.1-SNAPSHOT"
+    compile "org.bukkit:bukkit:1.14.3-R0.1-SNAPSHOT"
     compile project(':RecipeManager-bukkit')
     compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
     compile project(':RecipeManager-nms')
