@@ -39,30 +39,52 @@ public class RMCampfireEvents implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void rmCampfirePlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Block block = event.getClickedBlock();
+            ItemStack item = event.getItem();
 
-            if (block != null && block.getType() == Material.CAMPFIRE) {
-                Campfire campfire = (Campfire) block.getState();
+            if (item != null && item.getType() != Material.AIR) {
+                Block block = event.getClickedBlock();
 
-                int slot = -1;
-                for (int i = 0; i <= 3; i++) {
-                    ItemStack currentIngredient = campfire.getItem(i);
+                if (block != null && block.getType() == Material.CAMPFIRE) {
+                    Campfire campfire = (Campfire) block.getState();
 
-                    if (currentIngredient == null) {
-                        slot = i;
-                        break;
+                    int slot = -1;
+                    for (int i = 0; i <= 3; i++) {
+                        ItemStack currentIngredient = campfire.getItem(i);
+
+                        if (currentIngredient == null) {
+                            slot = i;
+                            break;
+                        }
                     }
-                }
 
-                if (slot != -1) {
-                    RMCampfireData data = RMCampfires.get(campfire.getLocation());
-                    Player player = event.getPlayer();
+                    if (slot != -1) {
+                        RMCampfireData data = RMCampfires.get(campfire.getLocation());
+                        Player player = event.getPlayer();
 
-                    data.setItemId(slot, player.getUniqueId());
+                        data.setItemId(slot, player.getUniqueId());
+
+                        /* TODO: Figure out a way to properly set random cook time. Possibly wait for new campfire api event
+                        RMCampfireRecipe recipe = RecipeManager.getRecipes().getRMCampfireRecipe(item);
+                        if (recipe != null && recipe.hasRandomTime()) {
+                            runCampfireUpdateLater(campfire, slot, recipe.getCookTicks());
+                        }
+                        */
+                    }
                 }
             }
         }
     }
+
+    /*
+    private void runCampfireUpdateLater(Campfire campfire, int slot, int cookTime) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                campfire.setCookTimeTotal(slot, cookTime);
+            }
+        }.runTaskLater(RecipeManager.getPlugin(), 0);
+    }
+    */
 
     @EventHandler(priority = EventPriority.LOW)
     public void rmCampfireCookEvent(BlockCookEvent event) {

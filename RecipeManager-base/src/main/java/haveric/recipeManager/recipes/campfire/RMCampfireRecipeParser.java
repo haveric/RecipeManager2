@@ -49,23 +49,37 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
         if (!isRemove) { // if it's got @remove we don't care about cook time
-            float cookTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+            float minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+
+            float maxTime = -1;
 
             if (split.length >= 2) {
-                String time = split[1].trim().toLowerCase();
-                if (time.equals("instant")) {
-                    cookTime = 0;
+                String[] timeSplit = split[1].trim().toLowerCase().split("-");
+
+                if (timeSplit[0].equals("instant")) {
+                    minTime = 0;
                 } else {
                     try {
-                        cookTime = Float.valueOf(time);
+                        minTime = Float.valueOf(timeSplit[0]);
+
+                        if (timeSplit.length >= 2) {
+                            maxTime = Float.valueOf(timeSplit[1]);
+                        }
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Invalid cook time float number! Campfire cook time left as default.");
-                        cookTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+                        ErrorReporter.getInstance().warning("Invalid burn time float number! Campfire time left as default.");
+
+                        minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+                        maxTime = -1;
                     }
+                }
+
+                if (maxTime > -1.0 && minTime >= maxTime) {
+                    return ErrorReporter.getInstance().error("Campfire recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
                 }
             }
 
-            recipe.setCookingTime(cookTime);
+            recipe.setMinTime(minTime);
+            recipe.setMaxTime(maxTime);
 
             reader.nextLine();
         }

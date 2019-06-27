@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.campfire;
 
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
@@ -24,7 +25,8 @@ import java.util.List;
 public class RMCampfireRecipe extends SingleResultRecipe {
     private ItemStack ingredient;
 
-    private float cookingTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+    private float minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+    private float maxTime = -1;
     private float experience = 2;
     private int hash;
 
@@ -44,7 +46,8 @@ public class RMCampfireRecipe extends SingleResultRecipe {
                 ingredient = r.ingredient.clone();
             }
 
-            cookingTime = r.cookingTime;
+            minTime = r.minTime;
+            maxTime = r.maxTime;
             experience = r.experience;
             hash = r.hash;
         }
@@ -69,23 +72,66 @@ public class RMCampfireRecipe extends SingleResultRecipe {
     }
 
 
-    public float getCookingTime() {
-        return cookingTime;
+    public boolean hasCustomTime() {
+        return minTime != Vanilla.CAMPFIRE_RECIPE_TIME;
     }
 
-    public void setCookingTime(float newCookingTime) {
-        cookingTime = newCookingTime;
+    public float getMinTime() {
+        return minTime;
+    }
+
+    /**
+     * @param newMinTime
+     *            min random time range (seconds)
+     */
+    public void setMinTime(float newMinTime) {
+        minTime = newMinTime;
+    }
+
+    public float getMaxTime() {
+        return maxTime;
+    }
+
+    /**
+     * @param newMaxTime
+     *            max random time range (seconds) or set to -1 to disable
+     */
+    public void setMaxTime(float newMaxTime) {
+        maxTime = newMaxTime;
+    }
+
+    /**
+     * @return if recipe has random time range
+     */
+    public boolean hasRandomTime() {
+        return maxTime > minTime;
+    }
+
+    /**
+     * @return min time or if hasRandomTime() gets a random between min and max time.
+     */
+    public float getCookTime() {
+        float time;
+
+        if (hasRandomTime()) {
+            time = minTime + ((maxTime - minTime) * RecipeManager.random.nextFloat());
+        } else {
+            time = minTime;
+        }
+
+        return time;
+    }
+
+    /**
+     * @return getCookTime() multiplied by 20.0 and rounded
+     */
+    public int getCookTicks() {
+        return Math.round(getCookTime() * 20.0f);
     }
 
     public float getExperience() { return experience; }
 
     public void setExperience(float newExperience) { experience = newExperience; }
-    /**
-     * @return getCookTime() multiplied by 20.0 and rounded
-     */
-    public int getCookTicks() {
-        return Math.round(getCookingTime() * 20.0f);
-    }
 
     @Override
     public void resetName() {
@@ -235,10 +281,18 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         s.append(Messages.getInstance().parse("recipebook.header.cooktime")).append(RMCChatColor.BLACK);
         s.append('\n');
 
-        if (cookingTime <= 0) {
-            s.append(Messages.getInstance().parse("recipebook.smelt.time.instant"));
+        if (hasCustomTime()) {
+            if (maxTime > minTime) {
+                s.append(Messages.getInstance().parse("recipebook.smelt.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
+            } else {
+                if (minTime <= 0) {
+                    s.append(Messages.getInstance().parse("recipebook.smelt.time.instant"));
+                } else {
+                    s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
+                }
+            }
         } else {
-            s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(cookingTime)));
+            s.append(Messages.getInstance().parse("recipebook.smelt.time.normal", "{time}", RMCUtil.printNumber(minTime)));
         }
 
         return s.toString();
