@@ -324,16 +324,16 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
 
         if (hasCustomTime()) {
             if (maxTime > minTime) {
-                s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
+                s.append(Messages.getInstance().parse("recipebook.smelt.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
             } else {
                 if (minTime <= 0) {
-                    s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.instant"));
+                    s.append(Messages.getInstance().parse("recipebook.smelt.time.instant"));
                 } else {
-                    s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.fixed", "{time}", RMCUtil.printNumber(minTime)));
+                    s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
                 }
             }
         } else {
-            s.append(Messages.getInstance().parse("recipebook." + getRecipeBaseHash() + ".time.normal", "{time}", RMCUtil.printNumber(minTime)));
+            s.append(Messages.getInstance().parse("recipebook.smelt.time.normal", "{time}", RMCUtil.printNumber(minTime)));
         }
 
         if (hasFuel()) {
