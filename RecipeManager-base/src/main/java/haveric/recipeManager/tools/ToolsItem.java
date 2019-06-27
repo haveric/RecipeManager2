@@ -293,7 +293,13 @@ public class ToolsItem {
                 // Re-get the furnace to make sure we are only updating the cook time state. Probably should be passing the block in instead.
                 Block block = furnace.getBlock();
                 Furnace updatedFurnace = (Furnace) block.getState();
-                updatedFurnace.setCookTime(time);
+                if (Version.has1_14Support()) {
+                    updatedFurnace.setCookTimeTotal(time);
+                } else {
+                    updatedFurnace.setCookTime(time);
+                }
+
+
                 updatedFurnace.update();
             }
         });
