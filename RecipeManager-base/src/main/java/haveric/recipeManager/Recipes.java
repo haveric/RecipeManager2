@@ -458,12 +458,12 @@ public class Recipes {
             }
         }
 
-        // Remove original recipe
-        if (recipe.hasFlag(FlagType.REMOVE) || ((!Version.has1_12Support()) && recipe.hasFlag(FlagType.OVERRIDE))) {
+        // Remove original recipe - Special case for 1.12 below
+        if (recipe.hasFlag(FlagType.REMOVE) || (!Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE))) {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
         
-        // For 1.12, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
+        // For 1.12 AND NEWER, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
         if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
             if (recipe instanceof RMBaseFurnaceRecipe) { // 'cept for this.
                 recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
@@ -472,7 +472,7 @@ public class Recipes {
             }
         }
 
-        // For 1.12, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to 
+        // For 1.12 AND NEWER, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to
         //  ensure the RM recipe is added.
         if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
             recipe.setBukkitRecipe(null);
@@ -486,6 +486,7 @@ public class Recipes {
             //  handler puts as the recipe result the ID index "special item" that RM uses to tell itself that
             //  this is a recipe to manage. 
             if (bukkitRecipe != null) {
+                // 1.12 AND NEWER
                 // Note that since we don't "replace" smelt recipes, we need special handling here.
                 if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && !(recipe instanceof RMBaseFurnaceRecipe))) {
                     Bukkit.addRecipe(bukkitRecipe);

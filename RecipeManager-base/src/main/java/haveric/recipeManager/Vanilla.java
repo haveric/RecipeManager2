@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -593,6 +594,7 @@ public class Vanilla {
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapelessRecipe sr;
         Recipe r;
+        MessageSender.getInstance().info("Remove Combine: " + recipe);
 
         List<ItemStack> items = recipe.getIngredients();
 
@@ -603,7 +605,7 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, items, sr.getIngredientList())) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, items)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -900,6 +902,8 @@ public class Vanilla {
         ShapelessRecipe sr;
         Recipe r;
 
+        List<ItemStack> items = recipe.getIngredients();
+
         while (iterator.hasNext()) {
             try {
                 r = iterator.next();
@@ -907,7 +911,7 @@ public class Vanilla {
                 if (r instanceof ShapelessRecipe) {
                     sr = (ShapelessRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, null, null)) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, items)) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
                         baseRecipeIterator.replace(recipe, overrideItem);
                         baseRecipeIterator.finish();

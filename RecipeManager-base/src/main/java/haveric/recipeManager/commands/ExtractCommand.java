@@ -208,28 +208,30 @@ public class ExtractCommand implements CommandExecutor {
                     stream.write(str);
                 }
 
-                stream.write("//---------------------------------------------------" + Files.NL + "// Blasting recipes" + Files.NL + Files.NL);
+                if (Version.has1_14Support()) {
+                    stream.write("//---------------------------------------------------" + Files.NL + "// Blasting recipes" + Files.NL + Files.NL);
 
-                for (String str : parsedBlastingRecipes) {
-                    stream.write(str);
-                }
+                    for (String str : parsedBlastingRecipes) {
+                        stream.write(str);
+                    }
 
-                stream.write("//---------------------------------------------------" + Files.NL + "// Smoking recipes" + Files.NL + Files.NL);
+                    stream.write("//---------------------------------------------------" + Files.NL + "// Smoking recipes" + Files.NL + Files.NL);
 
-                for (String str : parsedSmokingRecipes) {
-                    stream.write(str);
-                }
+                    for (String str : parsedSmokingRecipes) {
+                        stream.write(str);
+                    }
 
-                stream.write("//---------------------------------------------------" + Files.NL + "// Campfire recipes" + Files.NL + Files.NL);
+                    stream.write("//---------------------------------------------------" + Files.NL + "// Campfire recipes" + Files.NL + Files.NL);
 
-                for (String str : parsedCampfireRecipes) {
-                    stream.write(str);
-                }
+                    for (String str : parsedCampfireRecipes) {
+                        stream.write(str);
+                    }
 
-                stream.write("//---------------------------------------------------" + Files.NL + "// Stonecutting recipes" + Files.NL + Files.NL);
+                    stream.write("//---------------------------------------------------" + Files.NL + "// Stonecutting recipes" + Files.NL + Files.NL);
 
-                for (String str : parsedStonecuttingRecipes) {
-                    stream.write(str);
+                    for (String str : parsedStonecuttingRecipes) {
+                        stream.write(str);
+                    }
                 }
 
                 stream.close();
