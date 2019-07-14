@@ -41,6 +41,10 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
 
         recipe.setIngredient(ingredient);
 
+        if (recipe.hasFlag(FlagType.OVERRIDE)) {
+            return ErrorReporter.getInstance().error("Recipe does not allow Overriding. Try removing the original and adding a new one.");
+        }
+
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
         // get result or move current line after them if we got @remove and results

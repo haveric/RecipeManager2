@@ -3,12 +3,14 @@ package haveric.recipeManager.nms.v1_14_R1;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
+import net.minecraft.server.v1_14_R1.FurnaceRecipe;
+import net.minecraft.server.v1_14_R1.ItemStack;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.RecipeIterator;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -22,7 +24,7 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
     public RecipeIteratorV1_14_R1() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();
         if (backing instanceof RecipeIterator) {
-            recipes = ((CraftServer)Bukkit.getServer()).getServer().getCraftingManager().b().iterator();
+            recipes = ((CraftServer) Bukkit.getServer()).getServer().getCraftingManager().b().iterator();
         } else {
             throw new IllegalArgumentException("This version is not supported.");
         }
@@ -72,7 +74,7 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
      * or are requested to finalize. 
      */
     public void remove() {
-        // MessageSender.getInstance().info("NMS for 1.13 removing recipe " + removeRecipe);
+        // MessageSender.getInstance().info("NMS for 1.14 removing recipe " + removeRecipe);
         try {
             if (removeRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
@@ -95,12 +97,22 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
                 Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                 resultF.set(shapeless, new ItemStack(Items.AIR, 1));
-                ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[] {new ItemNameTag(new Item.Info())})));
+                ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[]{new ItemNameTag(new Item.Info())})));
+            } else if (removeRecipe instanceof FurnaceRecipe) {
+                recipes.remove();
+            } else if (removeRecipe instanceof RecipeBlasting) {
+                recipes.remove();
+            } else if (removeRecipe instanceof RecipeSmoking) {
+                recipes.remove();
+            } else if (removeRecipe instanceof RecipeCampfire) {
+                recipes.remove();
+            } else if (removeRecipe instanceof RecipeStonecutting) {
+                recipes.remove();
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
             }
         } catch (Exception e) {
-            MessageSender.getInstance().error(null, e, "NMS failure for v1.13 support during grid recipe removal");
+            MessageSender.getInstance().error(null, e, "NMS failure for v1.14 support during grid recipe removal");
         }
     }
 
@@ -122,14 +134,14 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
     public void replace(AbstractBaseRecipe recipe, org.bukkit.inventory.ItemStack overrideItem) {
         // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
         try {
-            // MessageSender.getInstance().info("NMS for 1.13 replacing recipe " + recipe.getName());
+            // MessageSender.getInstance().info("NMS for 1.14 replacing recipe " + recipe.getName());
             if (removeRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
                 Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
                 if (overrideF == null || overrideF == ItemStack.a) {
-                    // ErrorReporter.getInstance().error("NMS failure for v1.13 support during craft recipe replace : " + recipe.getName());
+                    // ErrorReporter.getInstance().error("NMS failure for v1.14 support during craft recipe replace : " + recipe.getName());
                 }
                 resultF.set(shaped, overrideF);
             } else if (removeRecipe instanceof ShapelessRecipes) {
@@ -138,14 +150,59 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
                 if (overrideF == null || overrideF == ItemStack.a) {
-                    // ErrorReporter.getInstance().error("NMS failure for v1.13 support during combine recipe replace : " + recipe.getName());
+                    // ErrorReporter.getInstance().error("NMS failure for v1.14 support during combine recipe replace : " + recipe.getName());
                 }
                 resultF.set(shapeless, overrideF);
+
+            } else if (removeRecipe instanceof FurnaceRecipe) {
+                FurnaceRecipe furnace = (FurnaceRecipe) removeRecipe;
+                Field resultF = stripPrivateFinal(FurnaceRecipe.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
+                if (overrideF == null || overrideF == ItemStack.a) {
+                    ErrorReporter.getInstance().error("NMS failure for v1.14 support during furnace recipe replace : " + recipe.getName());
+                }
+                */
+                resultF.set(furnace, overrideF);
+            } else if (removeRecipe instanceof RecipeBlasting) {
+                RecipeBlasting blasting = (RecipeBlasting) removeRecipe;
+                Field resultF = stripPrivateFinal(RecipeBlasting.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
+                if (overrideF == null || overrideF == ItemStack.a) {
+                    ErrorReporter.getInstance().error("NMS failure for v1.14 support during blasting recipe replace : " + recipe.getName());
+                }
+                */
+                resultF.set(blasting, overrideF);
+            } else if (removeRecipe instanceof RecipeSmoking) {
+                RecipeSmoking smoking = (RecipeSmoking) removeRecipe;
+                Field resultF = stripPrivateFinal(RecipeSmoking.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
+                if (overrideF == null || overrideF == ItemStack.a) {
+                    ErrorReporter.getInstance().error("NMS failure for v1.14 support during smoking recipe replace : " + recipe.getName());
+                }
+                */
+                resultF.set(smoking, overrideF);
+            } else if (removeRecipe instanceof RecipeCampfire) {
+                RecipeCampfire campfire = (RecipeCampfire) removeRecipe;
+                Field resultF = stripPrivateFinal(RecipeCampfire.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
+                if (overrideF == null || overrideF == ItemStack.a) {
+                    ErrorReporter.getInstance().error("NMS failure for v1.14 support during campfire recipe replace : " + recipe.getName());
+                }
+                */
+                resultF.set(campfire, overrideF);
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
             }
         } catch (Exception e) {
-            MessageSender.getInstance().error(null, e, "NMS failure for v1.13 support during grid recipe replace");
+            MessageSender.getInstance().error(null, e, "NMS failure for v1.14 support during grid recipe replace");
         }
     }
 

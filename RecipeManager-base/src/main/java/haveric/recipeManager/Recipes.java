@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
@@ -462,13 +461,15 @@ public class Recipes {
         if (recipe.hasFlag(FlagType.REMOVE) || (!Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE))) {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
-        
+
+        boolean isBasicRecipe = recipe instanceof CraftRecipe || recipe instanceof CombineRecipe;
+
         // For 1.12 AND NEWER, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
         if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
-            if (recipe instanceof RMBaseFurnaceRecipe) { // 'cept for this.
-                recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
-            } else {
+            if (isBasicRecipe) {
                 Vanilla.replaceCustomRecipe(recipe);
+            } else { // 'cept for this.
+                recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
             }
         }
 
@@ -487,8 +488,9 @@ public class Recipes {
             //  this is a recipe to manage. 
             if (bukkitRecipe != null) {
                 // 1.12 AND NEWER
+
                 // Note that since we don't "replace" smelt recipes, we need special handling here.
-                if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && !(recipe instanceof RMBaseFurnaceRecipe))) {
+                if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && isBasicRecipe)) {
                     Bukkit.addRecipe(bukkitRecipe);
                 }
             }
