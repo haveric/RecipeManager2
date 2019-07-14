@@ -168,12 +168,13 @@ public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
     }
 
     @Override
-    public boolean matchesShapeless(Recipe bukkitRecipe, List<org.bukkit.inventory.ItemStack> ingredients, List<org.bukkit.inventory.ItemStack> ingredientsList) {
+    public boolean matchesShapeless(Recipe bukkitRecipe, List<org.bukkit.inventory.ItemStack> ingredients) {
         if (bukkitRecipe instanceof CraftShapelessRecipe) {
             CraftShapelessRecipe shapelessRecipe = (CraftShapelessRecipe) bukkitRecipe;
+            List<org.bukkit.inventory.ItemStack> shapelessIngredients = shapelessRecipe.getIngredientList();
 
             // Shortcut; if recipes don't have same # of itemtypes, not the same.
-            if (ingredientsList.size() != shapelessRecipe.getIngredientList().size()) {
+            if (ingredients.size() != shapelessIngredients.size()) {
                 return false;
             }
 
@@ -193,7 +194,7 @@ public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
                 ArrayList<RecipeItemStack> copy = new ArrayList<>(items);
 
                 // from Bukkit / spigot...
-                for (org.bukkit.inventory.ItemStack baseItem : ingredientsList) {
+                for (org.bukkit.inventory.ItemStack baseItem : shapelessIngredients) {
                     boolean match = false;
                     if (copy.size() == 0) { // we ran out of things to match against but still have baseItems.
                             /*MessageSender.getInstance().info("NMS for 1.13 did not match recipe " + baseRecipe.getName() + " with shapeless " +

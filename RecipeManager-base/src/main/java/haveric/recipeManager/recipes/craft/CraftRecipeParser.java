@@ -28,7 +28,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
     @Override
     public boolean parseRecipe(int directiveLine) throws Exception {
         CraftRecipe recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
-        this.reader.parseFlags(recipe.getFlags()); // parse recipe's flags
+        reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         ItemStack[] ingredients = new ItemStack[9];
         String[] split;
@@ -39,10 +39,10 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
         while (rows < 3) { // loop until we find 3 rows of ingredients (or bump into the result along the way)
             if (rows > 0) {
-                this.reader.nextLine();
+                reader.nextLine();
             }
 
-            if (this.reader.getLine() == null) {
+            if (reader.getLine() == null) {
                 if (rows == 0) {
                     return ErrorReporter.getInstance().error("No ingredients defined!");
                 }
@@ -50,11 +50,11 @@ public class CraftRecipeParser extends BaseRecipeParser {
                 break;
             }
 
-            if (this.reader.lineIsResult()) { // if we bump into the result prematurely (smaller recipes)
+            if (reader.lineIsResult()) { // if we bump into the result prematurely (smaller recipes)
                 break;
             }
 
-            split = this.reader.getLine().split("\\+"); // split ingredients by the + sign
+            split = reader.getLine().split("\\+"); // split ingredients by the + sign
             int rowLen = split.length;
 
             if (rowLen > 3) { // if we find more than 3 ingredients warn the user and limit it to 3
@@ -86,14 +86,14 @@ public class CraftRecipeParser extends BaseRecipeParser {
             return false;
         } else if (ingredientsNum == 0) { // no ingredients were processed
             return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult '" + Files.FILE_INFO_BASICS + "' for proper recipe syntax.");
-        } else if (ingredientsNum == 2 && !this.conditionEvaluator.checkIngredients(ingredients)) {
+        } else if (ingredientsNum == 2 && !conditionEvaluator.checkIngredients(ingredients)) {
             return false;
         }
 
         recipe.setIngredients(ingredients); // done with ingredients, set 'em
 
         if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) { // for mc1.12, matching requires outcome too...
-            this.reader.nextLine(); // Skip the results line, if it exists
+            reader.nextLine(); // Skip the results line, if it exists
         } else {
             // get results
             List<ItemResult> results = new ArrayList<>();
@@ -110,7 +110,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
         }
 
         // check if the recipe already exists...
-        if (!this.conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
+        if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
             return false;
         }
 

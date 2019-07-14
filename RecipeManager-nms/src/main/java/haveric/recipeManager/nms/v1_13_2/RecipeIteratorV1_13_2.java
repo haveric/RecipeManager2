@@ -95,7 +95,9 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
                 Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                 resultF.set(shapeless, new ItemStack(Items.AIR, 1));
-                ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[] {new ItemNameTag(new Item.Info())})));
+                ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[]{new ItemNameTag(new Item.Info())})));
+            } else if (removeRecipe instanceof FurnaceRecipe) {
+                recipes.remove();
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
             }
@@ -128,19 +130,34 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
                 Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
                 if (overrideF == null || overrideF == ItemStack.a) {
-                    // ErrorReporter.getInstance().error("NMS failure for v1.13 support during craft recipe replace : " + recipe.getName());
+                    ErrorReporter.getInstance().error("NMS failure for v1.13 support during craft recipe replace : " + recipe.getName());
                 }
+                */
                 resultF.set(shaped, overrideF);
             } else if (removeRecipe instanceof ShapelessRecipes) {
                 ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
                 Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
                 if (overrideF == null || overrideF == ItemStack.a) {
-                    // ErrorReporter.getInstance().error("NMS failure for v1.13 support during combine recipe replace : " + recipe.getName());
+                    ErrorReporter.getInstance().error("NMS failure for v1.13 support during combine recipe replace : " + recipe.getName());
                 }
+                */
                 resultF.set(shapeless, overrideF);
+            } else if (removeRecipe instanceof FurnaceRecipe) {
+                FurnaceRecipe furnace = (FurnaceRecipe) removeRecipe;
+                Field resultF = stripPrivateFinal(FurnaceRecipe.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                /*
+                if (overrideF == null || overrideF == ItemStack.a) {
+                    ErrorReporter.getInstance().error("NMS failure for v1.13 support during furnace recipe replace : " + recipe.getName());
+                }
+                */
+                resultF.set(furnace, overrideF);
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
             }
@@ -165,6 +182,5 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
      */
     @Override
     public void finish() {
-
     }
 }

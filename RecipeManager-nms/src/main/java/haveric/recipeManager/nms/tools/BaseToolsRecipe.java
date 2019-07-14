@@ -18,7 +18,7 @@ public abstract class BaseToolsRecipe {
         return false;
     }
 
-    public boolean matchesShapeless(Recipe bukkitRecipe, List<ItemStack> ingredients, List<ItemStack> ingredientList) {
+    public boolean matchesShapeless(Recipe bukkitRecipe, List<ItemStack> ingredients) {
         return false;
     }
 

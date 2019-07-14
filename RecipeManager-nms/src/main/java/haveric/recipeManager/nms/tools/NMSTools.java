@@ -96,12 +96,27 @@ public class NMSTools {
         sortIngredientList(ingredients);
 
         for (int i = 0; i < size; i++) {
-            if (!sortedIngr.get(i).equals(ingredients.get(i))) {
+            if (!isSameItemPlusDur(sortedIngr.get(i), ingredients.get(i))) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public static boolean isSameItemPlusDur(ItemStack one, ItemStack two) {
+        boolean same = false;
+
+        if (one != null && two != null) {
+            boolean sameType = one.getType() == two.getType();
+            boolean sameDur = one.getDurability() == two.getDurability();
+            boolean negativeDur = (one.getDurability() == Short.MAX_VALUE) || (two.getDurability() == Short.MAX_VALUE);
+
+            if (sameType && (sameDur || negativeDur)) {
+                same = true;
+            }
+        }
+        return same;
     }
 
     public static void sortIngredientList(List<ItemStack> ingredients) {

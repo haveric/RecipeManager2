@@ -25,7 +25,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) throws Exception {
 
         CombineRecipe recipe = new CombineRecipe(fileFlags); // create recipe and copy flags from file
-        this.reader.parseFlags(recipe.getFlags()); // parse recipe's flags
+        reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         // get the ingredients
         String[] ingredientsRaw = reader.getLine().split("\\+");

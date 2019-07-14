@@ -124,8 +124,7 @@ public class ConditionEvaluator {
                         if (bukkit instanceof ShapelessRecipe) {
                             CombineRecipe combineRecipe = (CombineRecipe) recipe;
 
-                            ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkit;
-                            if (NMSVersionHandler.getToolsRecipe().matchesShapeless(bukkit, combineRecipe.getIngredients(), shapelessRecipe.getIngredientList())) {
+                            if (NMSVersionHandler.getToolsRecipe().matchesShapeless(bukkit, combineRecipe.getIngredients())) {
                                 return entry.getValue();
                             }
                         }

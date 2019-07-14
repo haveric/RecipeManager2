@@ -3,11 +3,8 @@ package haveric.recipeManager.nms;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManager.nms.tools.BaseToolsRecipe;
 import haveric.recipeManager.nms.v1_12.RecipeIteratorV1_12;
-import haveric.recipeManager.nms.v1_12.ToolsRecipeV1_12;
 import haveric.recipeManager.nms.v1_13_2.RecipeIteratorV1_13_2;
-import haveric.recipeManager.nms.v1_13_2.ToolsRecipeV1_13_2;
 import haveric.recipeManager.nms.v1_14_R1.RecipeIteratorV1_14_R1;
-import haveric.recipeManager.nms.v1_14_R1.ToolsRecipeV1_14_R1;
 import haveric.recipeManager.nms.vOld.RecipeIteratorOld;
 import haveric.recipeManager.nms.vOld.ToolsRecipeOld;
 import org.bukkit.Bukkit;
@@ -41,6 +38,8 @@ public class NMSVersionHandler {
 
     public static BaseToolsRecipe getToolsRecipe() {
         if (toolsRecipe == null) {
+            toolsRecipe = new ToolsRecipeOld();
+            /*
             String serverVersion = getServerVersion();
 
             switch (serverVersion) {
@@ -57,6 +56,7 @@ public class NMSVersionHandler {
                     toolsRecipe = new ToolsRecipeOld();
                     break;
             }
+             */
         }
 
         return toolsRecipe;

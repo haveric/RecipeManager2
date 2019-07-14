@@ -93,15 +93,13 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
 
         boolean hasResults = parseResults(recipe, results);
 
-        if (!isRemove) { // ignore results if we have @remove
-            if (!hasResults) {
-                return false;
-            }
-
-            ItemResult result = results.get(0);
-
-            recipe.setResult(result);
+        if (!hasResults) {
+            return false;
         }
+
+        ItemResult result = results.get(0);
+
+        recipe.setResult(result);
 
         if (isRemove) { // un-ignore result errors
             ErrorReporter.getInstance().setIgnoreErrors(false);
