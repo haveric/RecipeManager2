@@ -86,17 +86,17 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
                 // now for the _real_ fun, modifying an unmodifiable recipe.
                 // So for shaped recipes, my thought is just to replace the ItemStack with something
                 // nonsensical, set height and width to 1, and hope it isn't cached in too many places.
-                // Oh, and set result to air.
+                // Oh, and set result to a non-air item. (Pretty sure the item doesn't matter. We'd ideally set it to air, but can't in 1.14).
                 widthF.setInt(shaped, 1);
                 heightF.setInt(shaped, 1);
-                resultF.set(shaped, new ItemStack(Items.AIR, 1));
+                resultF.set(shaped, new ItemStack(Items.STICK, 1));
                 itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(new Item[] {new ItemNameTag(new Item.Info())})));
             } else if (removeRecipe instanceof ShapelessRecipes) {
                 ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
                 Field ingredientsF = stripPrivateFinal(ShapelessRecipes.class, "ingredients");
                 Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
-                resultF.set(shapeless, new ItemStack(Items.AIR, 1));
+                resultF.set(shapeless, new ItemStack(Items.STICK, 1));
                 ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[]{new ItemNameTag(new Item.Info())})));
             } else if (removeRecipe instanceof FurnaceRecipe) {
                 recipes.remove();

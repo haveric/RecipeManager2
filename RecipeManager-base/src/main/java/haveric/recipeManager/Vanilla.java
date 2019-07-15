@@ -1,7 +1,6 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -594,7 +593,6 @@ public class Vanilla {
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapelessRecipe sr;
         Recipe r;
-        MessageSender.getInstance().info("Remove Combine: " + recipe);
 
         List<ItemStack> items = recipe.getIngredients();
 
