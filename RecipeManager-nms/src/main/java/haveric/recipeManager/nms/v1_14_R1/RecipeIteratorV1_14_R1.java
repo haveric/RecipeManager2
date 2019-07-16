@@ -3,23 +3,27 @@ package haveric.recipeManager.nms.v1_14_R1;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
-import net.minecraft.server.v1_14_R1.FurnaceRecipe;
-import net.minecraft.server.v1_14_R1.ItemStack;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.RecipeIterator;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterator<Recipe> {
     private Iterator<IRecipe<?>> recipes;
 
     private IRecipe removeRecipe = null;
+
+    List<IRecipe<?>> recipesToRemove = new LinkedList<>();
 
     public RecipeIteratorV1_14_R1() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();
@@ -99,15 +103,15 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
                 resultF.set(shapeless, new ItemStack(Items.STICK, 1));
                 ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[]{new ItemNameTag(new Item.Info())})));
             } else if (removeRecipe instanceof FurnaceRecipe) {
-                recipes.remove();
+                recipesToRemove.add(removeRecipe);
             } else if (removeRecipe instanceof RecipeBlasting) {
-                recipes.remove();
+                recipesToRemove.add(removeRecipe);
             } else if (removeRecipe instanceof RecipeSmoking) {
-                recipes.remove();
+                recipesToRemove.add(removeRecipe);
             } else if (removeRecipe instanceof RecipeCampfire) {
-                recipes.remove();
+                recipesToRemove.add(removeRecipe);
             } else if (removeRecipe instanceof RecipeStonecutting) {
-                recipes.remove();
+                recipesToRemove.add(removeRecipe);
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
             }
@@ -222,6 +226,14 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
      */
     @Override
     public void finish() {
+        Map<Recipes<?>, Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>>> recipes = ((CraftServer) Bukkit.getServer()).getServer().getCraftingManager().recipes;
 
+        for (Map.Entry<Recipes<?>, Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>>> entry : recipes.entrySet()) {
+            Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>> values = entry.getValue();
+
+            for (IRecipe<?> toRemove : recipesToRemove) {
+                values.remove(toRemove.getKey());
+            }
+        }
     }
 }
