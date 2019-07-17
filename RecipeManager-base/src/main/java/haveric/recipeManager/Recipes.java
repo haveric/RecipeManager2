@@ -262,11 +262,7 @@ public class Recipes {
         RMBlastingRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexBlasting.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-            if (recipe == null) {
-                recipe = indexBlasting.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-            }
+            recipe = indexBlasting.get(ingredient.getType().toString());
         }
 
         return recipe;
@@ -290,11 +286,7 @@ public class Recipes {
         RMSmokingRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexSmoking.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-            if (recipe == null) {
-                recipe = indexSmoking.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-            }
+            recipe = indexSmoking.get(ingredient.getType().toString());
         }
 
         return recipe;
@@ -318,11 +310,7 @@ public class Recipes {
         RMCampfireRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexCampfire.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-            if (recipe == null) {
-                recipe = indexCampfire.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-            }
+            recipe = indexCampfire.get(ingredient.getType().toString());
         }
 
         return recipe;
@@ -332,11 +320,7 @@ public class Recipes {
         RMStonecuttingRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexStonecutting.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-            if (recipe == null) {
-                recipe = indexStonecutting.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-            }
+            recipe = indexStonecutting.get(ingredient.getType().toString());
         }
 
         return recipe;
@@ -467,7 +451,9 @@ public class Recipes {
                     indexSmokingFuels.put(r.getFuelIndex(), r);
                 }
             } else if (recipe instanceof RMCampfireRecipe) {
-                indexCampfire.put(((RMCampfireRecipe) recipe).getIndexString(), (RMCampfireRecipe) recipe);
+                for (String index : ((RMCampfireRecipe) recipe).getIndexString()) {
+                    indexCampfire.put(index, (RMCampfireRecipe) recipe);
+                }
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 indexStonecutting.put(((RMStonecuttingRecipe) recipe).getIndexString(), (RMStonecuttingRecipe) recipe);
             } else if (recipe instanceof BrewRecipe) {

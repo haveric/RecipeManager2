@@ -231,7 +231,8 @@ public class RecipeCommand implements CommandExecutor {
             } else if (recipe instanceof RMCampfireRecipe) {
                 RMCampfireRecipe r = (RMCampfireRecipe) recipe;
 
-                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
+                // TODO: Fix
+                return false;//containsItem(Collections.singletonList(r.getIngredient()), item, true);
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
 

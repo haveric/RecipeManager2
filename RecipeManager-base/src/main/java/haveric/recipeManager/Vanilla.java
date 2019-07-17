@@ -681,7 +681,7 @@ public class Vanilla {
     }
 
     private static Recipe removeCampfireRecipe(RMCampfireRecipe recipe) {
-        return removeCampfireRecipe(recipe.getIngredient());
+        return removeCampfireRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
     }
 
     private static Recipe removeCampfireRecipe(ItemStack ingredient) {

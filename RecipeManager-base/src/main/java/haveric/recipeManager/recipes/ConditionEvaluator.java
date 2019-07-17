@@ -145,7 +145,8 @@ public class ConditionEvaluator {
                         }
                     } else if (recipe instanceof RMCampfireRecipe) {
                         RMCampfireRecipe campfireRecipe = (RMCampfireRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesCampfire(bukkit, campfireRecipe.getIngredient())) {
+                        // TODO: Validate functionality
+                        if (NMSVersionHandler.getToolsRecipe().matchesCampfire(bukkit, new ItemStack(campfireRecipe.getIngredientChoice().get(0)))) {
                             return entry.getValue();
                         }
                     } else if (recipe instanceof RMStonecuttingRecipe) {

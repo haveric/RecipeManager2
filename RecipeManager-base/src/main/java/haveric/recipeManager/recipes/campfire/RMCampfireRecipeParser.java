@@ -9,10 +9,8 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +32,17 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
             return ErrorReporter.getInstance().error("Campfire recipe doesn't have an ingredient!");
         }
 
-        ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT);
+        List<Material> choices = Tools.parseChoice(split[0], ParseBit.NONE);
 
-        if (ingredient == null) {
-            return false;
+        if (choices == null) {
+            return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
         }
 
-        if (ingredient.getType() == Material.AIR) {
+        if (choices.contains(Material.AIR)) {
             return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
         }
 
-        recipe.setIngredient(ingredient);
+        recipe.setIngredientChoice(choices);
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 

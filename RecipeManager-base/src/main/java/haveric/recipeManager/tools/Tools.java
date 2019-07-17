@@ -829,10 +829,13 @@ public class Tools {
             }
         } else if (recipe instanceof RMCampfireRecipe) {
             RMCampfireRecipe r = (RMCampfireRecipe) recipe;
-            ItemStack i = r.getIngredient();
+            List<Material> choice = r.getIngredientChoice();
 
-            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                found++;
+            for (Material material : choice) {
+                if (type == material) {
+                    found++;
+                    break;
+                }
             }
         } else if (recipe instanceof RMStonecuttingRecipe) {
             RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;

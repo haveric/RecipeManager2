@@ -13,17 +13,18 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.Material;
 import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RMCampfireRecipe extends SingleResultRecipe {
-    private ItemStack ingredient;
+    private List<Material> ingredientChoice = new ArrayList<>();
 
     private float minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
     private float maxTime = -1;
@@ -40,10 +41,10 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         if (recipe instanceof RMCampfireRecipe) {
             RMCampfireRecipe r = (RMCampfireRecipe) recipe;
 
-            if (r.ingredient == null) {
-                ingredient = null;
+            if (r.ingredientChoice == null) {
+                ingredientChoice = null;
             } else {
-                ingredient = r.ingredient.clone();
+                ingredientChoice.addAll(r.ingredientChoice);
             }
 
             minTime = r.minTime;
@@ -58,19 +59,45 @@ public class RMCampfireRecipe extends SingleResultRecipe {
     }
 
     public RMCampfireRecipe(CampfireRecipe recipe) {
-        setIngredient(recipe.getInput());
+        RecipeChoice choice = recipe.getInputChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            setIngredientChoice(materialChoice.getChoices());
+        }
+
         setResult(recipe.getResult());
     }
 
-    public ItemStack getIngredient() {
-        return ingredient;
+    public List<Material> getIngredientChoice() {
+        return ingredientChoice;
     }
 
-    public void setIngredient(ItemStack newIngredient) {
-        ingredient = newIngredient;
-        hash = ("campfire" + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
+    public void setIngredientChoice(List<Material> materials) {
+        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
+        setIngredientChoice(materialChoice);
     }
 
+    private void setIngredientChoice(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            ingredientChoice.clear();
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            ingredientChoice.addAll(materialChoice.getChoices());
+
+            String newHash = "campfire";
+
+            int size = ingredientChoice.size();
+            for (int i = 0; i < size; i++) {
+                newHash += ingredientChoice.get(i).toString();
+
+                if (i + 1 < size) {
+                    newHash += ", ";
+                }
+            }
+
+            hash = newHash.hashCode();
+        }
+    }
 
     public boolean hasCustomTime() {
         return minTime != Vanilla.CAMPFIRE_RECIPE_TIME;
@@ -140,10 +167,13 @@ public class RMCampfireRecipe extends SingleResultRecipe {
 
         s.append("campfire ");
 
-        s.append(ingredient.getType().toString().toLowerCase());
+        int size = ingredientChoice.size();
+        for (int i = 0; i < size; i++) {
+            s.append(ingredientChoice.get(i).toString().toLowerCase());
 
-        if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            s.append(':').append(ingredient.getDurability());
+            if (i + 1 < size) {
+                s.append(", ");
+            }
         }
 
         s.append(" to ");
@@ -158,8 +188,14 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    public String getIndexString() {
-        return ingredient.getType().toString() + ":" + ingredient.getDurability();
+    public List<String> getIndexString() {
+        List<String> indexString = new ArrayList<>();
+
+        for (Material material : ingredientChoice) {
+            indexString.add(material.toString());
+        }
+
+        return indexString;
     }
 
     @Override
@@ -174,20 +210,20 @@ public class RMCampfireRecipe extends SingleResultRecipe {
 
     @Override
     public CampfireRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredient() || !hasResult()) {
+        if (!hasIngredientChoice() || !hasResult()) {
             return null;
         }
 
-        return new CampfireRecipe(getNamespacedKey(), getResult(), ingredient.getType(), experience, getCookTicks());
+        return new CampfireRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()), experience, getCookTicks());
     }
 
-    public boolean hasIngredient() {
-        return ingredient != null;
+    public boolean hasIngredientChoice() {
+        return ingredientChoice != null;
     }
 
     @Override
     public boolean isValid() {
-        return hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
+        return hasIngredientChoice() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
     }
 
     @Override
@@ -272,7 +308,8 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         }
 
         if (print.equals("")) {
-            print = ToolsItem.print(getIngredient(), RMCChatColor.RESET, RMCChatColor.BLACK);
+            // TODO: Handle Multiple RecipeChoices
+            print = ToolsItem.print(new ItemStack(getIngredientChoice().get(0)), RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

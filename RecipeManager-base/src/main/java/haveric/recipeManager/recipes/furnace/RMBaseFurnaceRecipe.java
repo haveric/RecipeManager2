@@ -8,7 +8,6 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagItemName;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -108,7 +107,6 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
     }
 
     public void setIngredientChoice(List<Material> materials) {
-        MessageSender.getInstance().info("Set Ingredient choice: " + materials);
         RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
         setIngredientChoice(materialChoice);
     }
@@ -241,14 +239,12 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    // Old method for 1.12 pre RecipeChoice
     public List<String> getIndexString() {
         List<String> indexString = new ArrayList<>();
 
         if (Version.has1_13Support()) {
-            int size = ingredientChoice.size();
-            for (int i = 0; i < size; i++) {
-                indexString.add(ingredientChoice.get(i).toString());
+            for (Material material : ingredientChoice) {
+                indexString.add(material.toString());
             }
         } else {
             indexString.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
