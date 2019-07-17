@@ -1,4 +1,4 @@
-package haveric.recipeManager.nms.tools;
+package haveric.recipeManager.tools;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;

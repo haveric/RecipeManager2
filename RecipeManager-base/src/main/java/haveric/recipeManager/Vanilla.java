@@ -12,6 +12,7 @@ import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
+import haveric.recipeManager.tools.BaseToolsRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -474,58 +475,6 @@ public class Vanilla {
     }
 
     /**
-     * Removes a Bukkit recipe from the <b>server</b> <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the BaseRecipe object you should use
-     * {@link #removeCustomRecipe(BaseRecipe)}</b>
-     *
-     * @param recipe
-     *            Bukkit recipe
-     * @return removed recipe or null if not found
-     */
-    public static Recipe removeBukkitRecipe(Recipe recipe) {
-        if (recipe instanceof ShapedRecipe) {
-            return removeShapedRecipe((ShapedRecipe) recipe);
-        }
-
-        if (recipe instanceof ShapelessRecipe) {
-            return removeShapelessRecipe((ShapelessRecipe) recipe);
-        }
-
-        if (recipe instanceof FurnaceRecipe) {
-            return removeFurnaceRecipe((FurnaceRecipe) recipe);
-        }
-
-        if (recipe instanceof BlastingRecipe) {
-            return removeBlastingRecipe((BlastingRecipe) recipe);
-        }
-
-        if (recipe instanceof SmokingRecipe) {
-            return removeSmokingRecipe((SmokingRecipe) recipe);
-        }
-
-        if (recipe instanceof CampfireRecipe) {
-            return removeCampfireRecipe((CampfireRecipe) recipe);
-        }
-
-        if (recipe instanceof StonecuttingRecipe) {
-            return removeStonecuttingRecipe((StonecuttingRecipe) recipe);
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes a Bukkit recipe from the <b>server</b><br>
-     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CraftRecipe object you should use {@link #removeCraftRecipe(CraftRecipe)}</b>
-     *
-     * @param recipe
-     *            Bukkit recipe
-     * @return removed recipe or null if not found
-     */
-    public static Recipe removeShapedRecipe(ShapedRecipe recipe) {
-        return removeCraftRecipe(new CraftRecipe(recipe));
-    }
-
-    /**
      * Removes a RecipeManager recipe from the <b>server</b>
      *
      * @param recipe
@@ -570,18 +519,6 @@ public class Vanilla {
     }
 
     /**
-     * Removes a Bukkit recipe from the <b>server</b><br>
-     * <b>Note: This method converts the Bukkit recipe to RecipeManager recipe. If you have the CombineRecipe object you should use {@link #removeCombineRecipe(CombineRecipe)}</b>
-     *
-     * @param recipe
-     *            Bukkit recipe
-     * @return removed recipe or null if not found
-     */
-    public static Recipe removeShapelessRecipe(ShapelessRecipe recipe) {
-        return removeCombineRecipe(new CombineRecipe(recipe));
-    }
-
-    /**
      * Removes a RecipeManager recipe from the <b>server</b>
      *
      * @param recipe
@@ -620,18 +557,6 @@ public class Vanilla {
     }
 
     /**
-     * Removes a Bukkit furnace recipe from the <b>server</b><br>
-     * Unlike {@link #removeShapedRecipe(ShapedRecipe)} and {@link #removeShapelessRecipe(ShapelessRecipe)} this method does not convert recipes since it only needs the ingredient.
-     *
-     * @param recipe
-     *            Bukkit recipe
-     * @return removed recipe or null if not found
-     */
-    private static Recipe removeFurnaceRecipe(FurnaceRecipe recipe) {
-        return removeFurnaceRecipe(recipe.getInput());
-    }
-
-    /**
      * Removes a RecipeManager smelt recipe from the <b>server</b>
      *
      * @param recipe
@@ -639,12 +564,18 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     private static Recipe removeSmeltRecipe(RMFurnaceRecipe recipe) {
-        return removeFurnaceRecipe(recipe.getIngredient());
+        if (Version.has1_13Support()) {
+            return removeFurnaceRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        } else {
+            return removeFurnaceRecipe(recipe.getIngredient());
+        }
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+
         FurnaceRecipe rmRecipe;
         Recipe r;
 
@@ -655,7 +586,7 @@ public class Vanilla {
                 if (r instanceof FurnaceRecipe) {
                     rmRecipe = (FurnaceRecipe) r;
 
-                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                    if (toolsRecipe.matchesFurnace(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -671,17 +602,19 @@ public class Vanilla {
         return null;
     }
 
-    private static Recipe removeBlastingRecipe(BlastingRecipe recipe) {
-        return removeBlastingRecipe(recipe.getInput());
-    }
-
     private static Recipe removeBlastingRecipe(RMBlastingRecipe recipe) {
-        return removeBlastingRecipe(recipe.getIngredient());
+        if (Version.has1_13Support()) {
+            return removeBlastingRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        } else {
+            return removeBlastingRecipe(recipe.getIngredient());
+        }
     }
 
     private static Recipe removeBlastingRecipe(ItemStack ingredient) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+
         BlastingRecipe rmRecipe;
         Recipe r;
 
@@ -692,7 +625,7 @@ public class Vanilla {
                 if (r instanceof BlastingRecipe) {
                     rmRecipe = (BlastingRecipe) r;
 
-                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                    if (toolsRecipe.matchesBlasting(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -708,17 +641,19 @@ public class Vanilla {
         return null;
     }
 
-    private static Recipe removeSmokingRecipe(SmokingRecipe recipe) {
-        return removeSmokingRecipe(recipe.getInput());
-    }
-
     private static Recipe removeSmokingRecipe(RMSmokingRecipe recipe) {
-        return removeSmokingRecipe(recipe.getIngredient());
+        if (Version.has1_13Support()) {
+            return removeSmokingRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        } else {
+            return removeSmokingRecipe(recipe.getIngredient());
+        }
     }
 
     private static Recipe removeSmokingRecipe(ItemStack ingredient) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+
         SmokingRecipe rmRecipe;
         Recipe r;
 
@@ -729,7 +664,7 @@ public class Vanilla {
                 if (r instanceof SmokingRecipe) {
                     rmRecipe = (SmokingRecipe) r;
 
-                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                    if (toolsRecipe.matchesSmoking(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -745,17 +680,15 @@ public class Vanilla {
         return null;
     }
 
-    private static Recipe removeCampfireRecipe(CampfireRecipe recipe) {
-        return removeCampfireRecipe(recipe.getInput());
-    }
-
     private static Recipe removeCampfireRecipe(RMCampfireRecipe recipe) {
         return removeCampfireRecipe(recipe.getIngredient());
     }
 
     private static Recipe removeCampfireRecipe(ItemStack ingredient) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+
         CampfireRecipe rmRecipe;
         Recipe r;
 
@@ -766,7 +699,7 @@ public class Vanilla {
                 if (r instanceof CampfireRecipe) {
                     rmRecipe = (CampfireRecipe) r;
 
-                    if (ingredient.getType() == rmRecipe.getInput().getType()) { // this works fine in 1.12
+                    if (toolsRecipe.matchesCampfire(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -782,17 +715,15 @@ public class Vanilla {
         return null;
     }
 
-    private static Recipe removeStonecuttingRecipe(StonecuttingRecipe recipe) {
-        return removeStonecuttingRecipe(recipe.getInput(), recipe.getResult());
-    }
-
     private static Recipe removeStonecuttingRecipe(RMStonecuttingRecipe recipe) {
         return removeStonecuttingRecipe(recipe.getIngredient(), recipe.getResult());
     }
 
     private static Recipe removeStonecuttingRecipe(ItemStack ingredient, ItemStack result) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+
         StonecuttingRecipe rmRecipe;
         Recipe r;
 
@@ -803,7 +734,7 @@ public class Vanilla {
                 if (r instanceof StonecuttingRecipe) {
                     rmRecipe = (StonecuttingRecipe) r;
 
-                    if (ingredient.getType() == rmRecipe.getInput().getType() && result.getType() == rmRecipe.getResult().getType()) { // this works fine in 1.12
+                    if (toolsRecipe.matchesStonecutting(r, ingredient, result)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();

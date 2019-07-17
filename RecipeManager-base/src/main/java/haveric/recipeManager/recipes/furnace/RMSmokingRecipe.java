@@ -3,7 +3,9 @@ package haveric.recipeManager.recipes.furnace;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.SmokingRecipe;
 
 public class RMSmokingRecipe extends RMBaseFurnaceRecipe {
@@ -44,11 +46,23 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe {
 
     @Override
     public SmokingRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredient() || !hasResult()) {
-            return null;
+        if (Version.has1_13Support()) {
+            if (!hasIngredientChoice() || !hasResult()) {
+                return null;
+            }
+        } else {
+            if (!hasIngredient() || !hasResult()) {
+                return null;
+            }
         }
 
-        return new SmokingRecipe(getNamespacedKey(), getResult(), getIngredient().getType(), 0, getCookTicks());
+        SmokingRecipe recipe;
+        if (Version.has1_13Support()) {
+            recipe = new SmokingRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()), 0, getCookTicks());
+        } else {
+            recipe = new SmokingRecipe(getNamespacedKey(), getResult(), getIngredient().getType(), 0, getCookTicks());
+        }
+        return recipe;
     }
 
     @Override

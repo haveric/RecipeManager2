@@ -79,26 +79,49 @@ public class ExtractCommand implements CommandExecutor {
                 if (r instanceof ShapedRecipe) {
                     ShapedRecipe recipe = (ShapedRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
-                    Map<Character, ItemStack> items = recipe.getIngredientMap();
-                    String[] shape = recipe.getShape();
-                    char[] cols;
-                    ItemStack item;
 
-                    for (String element : shape) {
-                        cols = element.toCharArray();
+                    if (Version.has1_13Support()) {
+                        Map<Character, RecipeChoice> choices = recipe.getChoiceMap();
+                        char[] cols;
+                        RecipeChoice choice;
 
-                        int colsLength = cols.length;
-                        for (int c = 0; c < colsLength; c++) {
-                            item = items.get(cols[c]);
+                        for (String element : recipe.getShape()) {
+                            cols = element.toCharArray();
 
-                            recipeString.append(parseIngredient(item));
+                            int colsLength = cols.length;
+                            for (int c = 0; c < colsLength; c++) {
+                                choice = choices.get(cols[c]);
 
-                            if ((c + 1) < colsLength) {
-                                recipeString.append(" + ");
+                                parseChoice(choice, recipeString);
+
+                                if (c + 1 < colsLength) {
+                                    recipeString.append(" + ");
+                                }
                             }
-                        }
 
-                        recipeString.append(Files.NL);
+                            recipeString.append(Files.NL);
+                        }
+                    } else {
+                        Map<Character, ItemStack> items = recipe.getIngredientMap();
+                        char[] cols;
+                        ItemStack item;
+
+                        for (String element : recipe.getShape()) {
+                            cols = element.toCharArray();
+
+                            int colsLength = cols.length;
+                            for (int c = 0; c < colsLength; c++) {
+                                item = items.get(cols[c]);
+
+                                recipeString.append(parseIngredient(item));
+
+                                if (c + 1 < colsLength) {
+                                    recipeString.append(" + ");
+                                }
+                            }
+
+                            recipeString.append(Files.NL);
+                        }
                     }
 
                     parseResult(recipe.getResult(), recipeString);
@@ -107,14 +130,28 @@ public class ExtractCommand implements CommandExecutor {
                 } else if (r instanceof ShapelessRecipe) {
                     ShapelessRecipe recipe = (ShapelessRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective()).append(Files.NL);
-                    List<ItemStack> ingredients = recipe.getIngredientList();
 
-                    int size = ingredients.size();
-                    for (int i = 0; i < size; i++) {
-                        recipeString.append(parseIngredient(ingredients.get(i)));
+                    if (Version.has1_13Support()) {
+                        List<RecipeChoice> ingredientChoices = recipe.getChoiceList();
 
-                        if ((i + 1) < size) {
-                            recipeString.append(" + ");
+                        int size = ingredientChoices.size();
+                        for (int i = 0; i < size; i++) {
+                            parseChoice(ingredientChoices.get(i), recipeString);
+
+                            if (i + 1 < size) {
+                                recipeString.append(" + ");
+                            }
+                        }
+                    } else {
+                        List<ItemStack> ingredients = recipe.getIngredientList();
+
+                        int size = ingredients.size();
+                        for (int i = 0; i < size; i++) {
+                            recipeString.append(parseIngredient(ingredients.get(i)));
+
+                            if (i + 1 < size) {
+                                recipeString.append(" + ");
+                            }
                         }
                     }
 
@@ -126,7 +163,12 @@ public class ExtractCommand implements CommandExecutor {
                     FurnaceRecipe recipe = (FurnaceRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective()).append(Files.NL);
 
-                    recipeString.append(parseIngredient(recipe.getInput()));
+                    if (Version.has1_13Support()) {
+                        parseChoice(recipe.getInputChoice(), recipeString);
+                    } else {
+                        recipeString.append(parseIngredient(recipe.getInput()));
+                    }
+
                     recipeString.append(Files.NL);
                     parseResult(recipe.getResult(), recipeString);
 
@@ -136,7 +178,12 @@ public class ExtractCommand implements CommandExecutor {
                         BlastingRecipe recipe = (BlastingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective()).append(Files.NL);
 
-                        recipeString.append(parseIngredient(recipe.getInput()));
+                        if (Version.has1_13Support()) {
+                            parseChoice(recipe.getInputChoice(), recipeString);
+                        } else {
+                            recipeString.append(parseIngredient(recipe.getInput()));
+                        }
+
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
 
@@ -145,7 +192,12 @@ public class ExtractCommand implements CommandExecutor {
                         SmokingRecipe recipe = (SmokingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMOKING.getDirective()).append(Files.NL);
 
-                        recipeString.append(parseIngredient(recipe.getInput()));
+                        if (Version.has1_13Support()) {
+                            parseChoice(recipe.getInputChoice(), recipeString);
+                        } else {
+                            recipeString.append(parseIngredient(recipe.getInput()));
+                        }
+
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
 
@@ -154,7 +206,12 @@ public class ExtractCommand implements CommandExecutor {
                         CampfireRecipe recipe = (CampfireRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.CAMPFIRE.getDirective()).append(Files.NL);
 
-                        recipeString.append(parseIngredient(recipe.getInput()));
+                        if (Version.has1_13Support()) {
+                            parseChoice(recipe.getInputChoice(), recipeString);
+                        } else {
+                            recipeString.append(parseIngredient(recipe.getInput()));
+                        }
+
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
 
@@ -163,7 +220,12 @@ public class ExtractCommand implements CommandExecutor {
                         StonecuttingRecipe recipe = (StonecuttingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.STONECUTTING.getDirective()).append(Files.NL);
 
-                        recipeString.append(parseIngredient(recipe.getInput()));
+                        if (Version.has1_13Support()) {
+                            parseChoice(recipe.getInputChoice(), recipeString);
+                        } else {
+                            recipeString.append(parseIngredient(recipe.getInput()));
+                        }
+
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
 
@@ -251,7 +313,7 @@ public class ExtractCommand implements CommandExecutor {
         if (item == null || item.getType() == Material.AIR) {
             name = "air";
         } else {
-            name = item.getType().toString().toLowerCase() + ":";
+            name = parseMaterial(item.getType()) + ":";
 
             if (item.getDurability() == -1 || item.getDurability() == RMCVanilla.DATA_WILDCARD) {
                 name += "*";
@@ -265,6 +327,29 @@ public class ExtractCommand implements CommandExecutor {
         }
 
         return name;
+    }
+
+    private void parseChoice(RecipeChoice choice, StringBuilder recipeString) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> choices = materialChoice.getChoices();
+
+            int choicesSize = choices.size();
+
+            for (int j = 0; j < choicesSize; j++) {
+                recipeString.append(parseMaterial(choices.get(j)));
+
+                if (j + 1 < choicesSize) {
+                    recipeString.append(", ");
+                }
+            }
+        } else {
+            recipeString.append("air");
+        }
+    }
+
+    private String parseMaterial(Material material) {
+        return material.toString().toLowerCase();
     }
 
     private void parseResult(ItemStack result, StringBuilder recipeString) {

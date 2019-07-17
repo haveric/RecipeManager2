@@ -1,14 +1,16 @@
-package haveric.recipeManager.nms.tools;
+package haveric.recipeManager.tools;
 
 import haveric.recipeManagerCommon.RMCVanilla;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class NMSTools {
+public class RMBukkitTools {
     public static boolean compareShapedRecipeToMatrix(ShapedRecipe recipe, ItemStack[] matrix, ItemStack[] matrixMirror) {
         ItemStack[] ingredients = convertShapedRecipeToItemMatrix(recipe);
 
@@ -116,6 +118,27 @@ public class NMSTools {
                 same = true;
             }
         }
+        return same;
+    }
+
+    public static boolean isSameItemFromChoice(RecipeChoice choice, ItemStack item) {
+        boolean same = false;
+
+        if (item != null) {
+            Material type = item.getType();
+
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+                for (Material material : materialChoice.getChoices()) {
+                    if (type == material) {
+                        same = true;
+                        break;
+                    }
+                }
+            }
+        }
+
         return same;
     }
 

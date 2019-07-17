@@ -3,8 +3,10 @@ package haveric.recipeManager.recipes.furnace;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.inventory.BlastingRecipe;
+import org.bukkit.inventory.RecipeChoice;
 
 public class RMBlastingRecipe extends RMBaseFurnaceRecipe {
     public RMBlastingRecipe() {
@@ -44,11 +46,24 @@ public class RMBlastingRecipe extends RMBaseFurnaceRecipe {
 
     @Override
     public BlastingRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredient() || !hasResult()) {
-            return null;
+        if (Version.has1_13Support()) {
+            if (!hasIngredientChoice() || !hasResult()) {
+                return null;
+            }
+        } else {
+            if (!hasIngredient() || !hasResult()) {
+                return null;
+            }
         }
 
-        return new BlastingRecipe(getNamespacedKey(), getResult(), getIngredient().getType(), 0, getCookTicks());
+        BlastingRecipe recipe;
+        if (Version.has1_13Support()) {
+            recipe = new BlastingRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()), 0, getCookTicks());
+        } else {
+            recipe = new BlastingRecipe(getNamespacedKey(), getResult(), getIngredient().getType(), 0, getCookTicks());
+        }
+        return recipe;
+
     }
 
     @Override

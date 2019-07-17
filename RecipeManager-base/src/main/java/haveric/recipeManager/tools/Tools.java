@@ -140,6 +140,53 @@ public class Tools {
         return result;
     }
 
+    public static List<Material> parseChoice(String value, int settings) {
+        value = value.trim();
+
+        if (value.length() == 0) {
+            return null;
+        }
+
+        List<Material> choices = new ArrayList<>();
+
+        String[] args = value.split(";");
+        if (args.length > 1) {
+            ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
+        }
+
+        String[] split = args[0].split(",");
+        if (split.length <= 0 || split[0].isEmpty()) {
+            return null;
+        }
+
+        for (int i = 0; i < split.length; i++) {
+            String[] durSplit = split[i].trim().split(":");
+            value = durSplit[0];
+
+            if (durSplit.length > 1) {
+                ErrorReporter.getInstance().warning("Ingredient data is no longer supported in 1.13 or newer. Ignoring data.");
+            }
+
+            Material material = Settings.getInstance().getMaterial(value);
+
+            if (material == null) {
+                material = Material.matchMaterial(value);
+            }
+
+            if (material == null) {
+                if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
+                    ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                }
+
+                return null;
+            }
+
+            choices.add(material);
+        }
+
+        return choices;
+    }
+
     public static ItemStack parseItem(String value, int defaultData) {
         return parseItem(value, defaultData, 0);
     }

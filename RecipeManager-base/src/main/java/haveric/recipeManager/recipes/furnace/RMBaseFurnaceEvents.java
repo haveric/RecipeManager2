@@ -29,10 +29,7 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RMBaseFurnaceEvents implements Listener {
@@ -438,8 +435,20 @@ public class RMBaseFurnaceEvents implements Listener {
                         if (recipe != null) {
                             data.setFuelerUUID(player.getUniqueId());
 
-                            ItemStack recipeIngredient = recipe.getIngredient();
-                            if (ToolsItem.isSameItem(clicked, recipeIngredient, true)) {
+                            boolean same = false;
+
+                            if (Version.has1_13Support()) {
+                                for (Material material : recipe.getIngredientChoice()) {
+                                    if (clicked.getType() == material) {
+                                        same = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                same = ToolsItem.isSameItem(clicked, recipe.getIngredient(), true);
+                            }
+
+                            if (same) {
                                 data = Furnaces.get(furnace.getLocation());
                                 fuel = data.getFuel();
 

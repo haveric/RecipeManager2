@@ -8,24 +8,25 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagItemName;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.CookingRecipe;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
+import org.bukkit.inventory.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RMBaseFurnaceRecipe extends SingleResultRecipe {
+    private List<Material> ingredientChoice = new ArrayList<>();
     private ItemStack ingredient;
     private ItemResult fuel;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
@@ -47,6 +48,12 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
                 ingredient = r.ingredient.clone();
             }
 
+            if (r.ingredientChoice == null) {
+                ingredientChoice = null;
+            } else {
+                ingredientChoice.addAll(r.ingredientChoice);
+            }
+
             if (r.fuel == null) {
                 fuel = null;
             } else {
@@ -65,13 +72,21 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
 
     // Legacy constructor for 1.13 / 1.12
     public RMBaseFurnaceRecipe(FurnaceRecipe recipe) {
-        setIngredient(recipe.getInput());
+        if (Version.has1_13Support()) {
+            setIngredientChoice(recipe.getInputChoice());
+        } else {
+            setIngredient(recipe.getInput());
+        }
         setResult(recipe.getResult());
     }
 
     // Constructor for 1.14 +
     public RMBaseFurnaceRecipe(CookingRecipe recipe) {
-        setIngredient(recipe.getInput());
+        if (Version.has1_13Support()) {
+            setIngredientChoice(recipe.getInputChoice());
+        } else {
+            setIngredient(recipe.getInput());
+        }
         setResult(recipe.getResult());
     }
 
@@ -86,6 +101,37 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
         hash = (getRecipeBaseHash() + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
+    }
+
+    public List<Material> getIngredientChoice() {
+        return ingredientChoice;
+    }
+
+    public void setIngredientChoice(List<Material> materials) {
+        MessageSender.getInstance().info("Set Ingredient choice: " + materials);
+        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
+        setIngredientChoice(materialChoice);
+    }
+
+    private void setIngredientChoice(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            ingredientChoice.clear();
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            ingredientChoice.addAll(materialChoice.getChoices());
+
+            String newHash = getRecipeBaseHash();
+
+            int size = ingredientChoice.size();
+            for (int i = 0; i < size; i++) {
+                newHash += ingredientChoice.get(i).toString();
+
+                if (i + 1 < size) {
+                    newHash += ", ";
+                }
+            }
+
+            hash = newHash.hashCode();
+        }
     }
 
     public ItemResult getFuel() {
@@ -164,12 +210,23 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append(getRecipeBaseHash() + " ");
+        s.append(getRecipeBaseHash()).append(" ");
 
-        s.append(ingredient.getType().toString().toLowerCase());
+        if (Version.has1_13Support()) {
+            int size = ingredientChoice.size();
+            for (int i = 0; i < size; i++) {
+                s.append(ingredientChoice.get(i).toString().toLowerCase());
 
-        if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            s.append(':').append(ingredient.getDurability());
+                if (i + 1 < size) {
+                    s.append(", ");
+                }
+            }
+        } else {
+            s.append(ingredient.getType().toString().toLowerCase());
+
+            if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
+                s.append(':').append(ingredient.getDurability());
+            }
         }
 
         s.append(" to ");
@@ -184,8 +241,20 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    public String getIndexString() {
-        return ingredient.getType().toString() + ":" + ingredient.getDurability();
+    // Old method for 1.12 pre RecipeChoice
+    public List<String> getIndexString() {
+        List<String> indexString = new ArrayList<>();
+
+        if (Version.has1_13Support()) {
+            int size = ingredientChoice.size();
+            for (int i = 0; i < size; i++) {
+                indexString.add(ingredientChoice.get(i).toString());
+            }
+        } else {
+            indexString.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
+        }
+
+        return indexString;
     }
 
     public String getFuelIndex() {
@@ -207,13 +276,25 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
         return ingredient != null;
     }
 
+    public boolean hasIngredientChoice() {
+        return ingredientChoice != null;
+    }
+
     public boolean hasFuel() {
         return fuel != null;
     }
 
     @Override
     public boolean isValid() {
-        return hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
+        boolean valid = false;
+
+        if (Version.has1_13Support()) {
+            valid = hasIngredientChoice() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
+        } else {
+            valid = hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
+        }
+
+        return valid;
     }
 
     /*

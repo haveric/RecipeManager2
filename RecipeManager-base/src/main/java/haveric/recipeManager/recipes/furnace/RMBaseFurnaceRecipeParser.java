@@ -9,6 +9,7 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.ParseBit;
@@ -47,17 +48,31 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
             return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
         }
 
-        ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+        if (Version.has1_13Support()) {
+            List<Material> choices = Tools.parseChoice(split[0], ParseBit.NONE);
 
-        if (ingredient == null) {
-            return false;
+            if (choices == null) {
+                return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
+            }
+
+            if (choices.contains(Material.AIR)) {
+                return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+            }
+
+            recipe.setIngredientChoice(choices);
+        } else {
+            ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+
+            if (ingredient == null) {
+                return false;
+            }
+
+            if (ingredient.getType() == Material.AIR) {
+                return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+            }
+
+            recipe.setIngredient(ingredient);
         }
-
-        if (ingredient.getType() == Material.AIR) {
-            return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
-        }
-
-        recipe.setIngredient(ingredient);
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 

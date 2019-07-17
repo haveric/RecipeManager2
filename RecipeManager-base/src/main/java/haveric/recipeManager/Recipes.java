@@ -126,7 +126,17 @@ public class Recipes {
         }
 
         if (recipe instanceof FurnaceRecipe) {
-            return (getSmeltRecipe(((FurnaceRecipe) recipe).getInput()) != null);
+            if (Version.has1_13Support()) {
+                RecipeChoice choice = ((FurnaceRecipe) recipe).getInputChoice();
+
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+                    return (getSmeltRecipe(new ItemStack(materialChoice.getChoices().get(0))) != null);
+                }
+            } else {
+                return (getSmeltRecipe(((FurnaceRecipe) recipe).getInput()) != null);
+            }
         }
 
         return isCustomWorkbenchRecipe(recipe.getResult());
@@ -206,10 +216,14 @@ public class Recipes {
         RMFurnaceRecipe recipe = null;
 
         if (ingredient != null) {
-            recipe = indexSmelt.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+            if (Version.has1_13Support()) {
+                recipe = indexSmelt.get(ingredient.getType().toString());
+            } else {
+                recipe = indexSmelt.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
 
-            if (recipe == null) {
-                recipe = indexSmelt.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+                if (recipe == null) {
+                    recipe = indexSmelt.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+                }
             }
         }
 
@@ -425,7 +439,9 @@ public class Recipes {
             } else if (recipe instanceof RMFurnaceRecipe) {
                 RMFurnaceRecipe r = (RMFurnaceRecipe) recipe;
 
-                indexSmelt.put(((RMFurnaceRecipe) recipe).getIndexString(), r);
+                for (String index : ((RMFurnaceRecipe) recipe).getIndexString()) {
+                    indexSmelt.put(index, r);
+                }
 
                 if (r.hasFuel()) {
                     indexSmeltFuels.put(r.getFuelIndex(), r);
@@ -433,7 +449,9 @@ public class Recipes {
             } else if (recipe instanceof RMBlastingRecipe) {
                 RMBlastingRecipe r = (RMBlastingRecipe) recipe;
 
-                indexBlasting.put(((RMBlastingRecipe) recipe).getIndexString(), r);
+                for (String index : ((RMBlastingRecipe) recipe).getIndexString()) {
+                    indexBlasting.put(index, r);
+                }
 
                 if (r.hasFuel()) {
                     indexBlastingFuels.put(r.getFuelIndex(), r);
@@ -441,7 +459,9 @@ public class Recipes {
             } else if (recipe instanceof RMSmokingRecipe) {
                 RMSmokingRecipe r = (RMSmokingRecipe) recipe;
 
-                indexSmoking.put(((RMSmokingRecipe) recipe).getIndexString(), r);
+                for (String index : ((RMSmokingRecipe) recipe).getIndexString()) {
+                    indexSmoking.put(index, r);
+                }
 
                 if (r.hasFuel()) {
                     indexSmokingFuels.put(r.getFuelIndex(), r);
@@ -540,11 +560,17 @@ public class Recipes {
         } else if (recipe instanceof CombineRecipe) {
             indexCombine.remove(recipe.getIndex());
         } else if (recipe instanceof RMFurnaceRecipe) {
-            indexSmelt.remove(((RMFurnaceRecipe) recipe).getIndexString());
+            for (String index : ((RMFurnaceRecipe) recipe).getIndexString()) {
+                indexSmelt.remove(index);
+            }
         } else if (recipe instanceof RMBlastingRecipe) {
-            indexBlasting.remove(((RMBlastingRecipe) recipe).getIndexString());
+            for (String index : ((RMBlastingRecipe) recipe).getIndexString()) {
+                indexBlasting.remove(index);
+            }
         } else if (recipe instanceof RMSmokingRecipe) {
-            indexSmoking.remove(((RMSmokingRecipe) recipe).getIndexString());
+            for (String index : ((RMSmokingRecipe) recipe).getIndexString()) {
+                indexSmoking.remove(index);
+            }
         } else if (recipe instanceof RMCampfireRecipe) {
             indexCampfire.remove(((RMCampfireRecipe) recipe).getIndexString());
         } else if (recipe instanceof RMStonecuttingRecipe) {
