@@ -716,7 +716,7 @@ public class Vanilla {
     }
 
     private static Recipe removeStonecuttingRecipe(RMStonecuttingRecipe recipe) {
-        return removeStonecuttingRecipe(recipe.getIngredient(), recipe.getResult());
+        return removeStonecuttingRecipe(new ItemStack(recipe.getIngredientChoice().get(0)), recipe.getResult());
     }
 
     private static Recipe removeStonecuttingRecipe(ItemStack ingredient, ItemStack result) {

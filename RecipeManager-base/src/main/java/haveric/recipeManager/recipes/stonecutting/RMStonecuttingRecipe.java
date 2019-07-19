@@ -11,18 +11,19 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.StonecuttingRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RMStonecuttingRecipe extends SingleResultRecipe {
-    private ItemStack ingredient;
+    private List<Material> ingredientChoice = new ArrayList<>();
 
     private int hash;
 
@@ -36,10 +37,10 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
         if (recipe instanceof RMStonecuttingRecipe) {
             RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
 
-            if (r.ingredient == null) {
-                ingredient = null;
+            if (r.ingredientChoice == null) {
+                ingredientChoice = null;
             } else {
-                ingredient = r.ingredient.clone();
+                ingredientChoice.addAll(r.ingredientChoice);
             }
 
             hash = r.hash;
@@ -51,16 +52,44 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
     }
 
     public RMStonecuttingRecipe(StonecuttingRecipe recipe) {
-        setIngredient(recipe.getInput());
+        RecipeChoice choice = recipe.getInputChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            setIngredientChoice(materialChoice.getChoices());
+        }
+
         setResult(recipe.getResult());
     }
 
-    public ItemStack getIngredient() {
-        return ingredient;
+    public List<Material> getIngredientChoice() {
+        return ingredientChoice;
     }
 
-    public void setIngredient(ItemStack newIngredient) {
-        ingredient = newIngredient;
+    public void setIngredientChoice(List<Material> materials) {
+        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
+        setIngredientChoice(materialChoice);
+    }
+
+    private void setIngredientChoice(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            ingredientChoice.clear();
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            ingredientChoice.addAll(materialChoice.getChoices());
+
+            String newHash = "campfire";
+
+            int size = ingredientChoice.size();
+            for (int i = 0; i < size; i++) {
+                newHash += ingredientChoice.get(i).toString();
+
+                if (i + 1 < size) {
+                    newHash += ", ";
+                }
+            }
+
+            hash = newHash.hashCode();
+        }
 
         updateHash();
     }
@@ -79,8 +108,21 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
     }
 
     private void updateHash() {
-        if (ingredient != null && result != null) {
-            hash = ("stonecutting" + getIndexString()).hashCode();
+        if (ingredientChoice != null && result != null) {
+            String newHash = "stonecutting";
+
+            int size = ingredientChoice.size();
+            for (int i = 0; i < size; i++) {
+                newHash += ingredientChoice.get(i).toString();
+
+                if (i + 1 < size) {
+                    newHash += ", ";
+                }
+            }
+
+            newHash += " - " + result.getType().toString();
+
+            hash = newHash.hashCode();
         }
     }
 
@@ -91,10 +133,13 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
 
         s.append("stonecutting ");
 
-        s.append(ingredient.getType().toString().toLowerCase());
+        int size = ingredientChoice.size();
+        for (int i = 0; i < size; i++) {
+            s.append(ingredientChoice.get(i).toString().toLowerCase());
 
-        if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            s.append(':').append(ingredient.getDurability());
+            if (i + 1 < size) {
+                s.append(", ");
+            }
         }
 
         s.append(" to ");
@@ -109,8 +154,14 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    public String getIndexString() {
-        return ingredient.getType().toString() + ":" + ingredient.getDurability() + " - " + result.getType().toString() + ":" + result.getDurability();
+    public List<String> getIndexString() {
+        List<String> indexString = new ArrayList<>();
+
+        for (Material material : ingredientChoice) {
+            indexString.add(material.toString() + " - " + result.getType().toString());
+        }
+
+        return indexString;
     }
 
     @Override
@@ -125,20 +176,20 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
 
     @Override
     public StonecuttingRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredient() || !hasResult()) {
+        if (!hasIngredientChoice() || !hasResult()) {
             return null;
         }
 
-        return new StonecuttingRecipe(getNamespacedKey(), getResult(), ingredient.getType());
+        return new StonecuttingRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()));
     }
 
-    public boolean hasIngredient() {
-        return ingredient != null;
+    public boolean hasIngredientChoice() {
+        return ingredientChoice != null;
     }
 
     @Override
     public boolean isValid() {
-        return hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
+        return hasIngredientChoice() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
     }
 
     @Override
@@ -223,7 +274,8 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
         }
 
         if (print.equals("")) {
-            print = ToolsItem.print(getIngredient(), RMCChatColor.RESET, RMCChatColor.BLACK);
+            // TODO: Handle Multiple RecipeChoices
+            print = ToolsItem.print(new ItemStack(getIngredientChoice().get(0)), RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

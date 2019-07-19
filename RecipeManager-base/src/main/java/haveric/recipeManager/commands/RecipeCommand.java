@@ -18,6 +18,7 @@ import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.util.ParseBit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -227,16 +228,19 @@ public class RecipeCommand implements CommandExecutor {
             } else if (recipe instanceof RMBaseFurnaceRecipe) {
                 RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
 
-                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
+                if (Version.has1_13Support()) {
+                    return containsMaterial(r.getIngredientChoice(), item.getType());
+                } else {
+                    return containsItem(Collections.singletonList(r.getIngredient()), item, true);
+                }
             } else if (recipe instanceof RMCampfireRecipe) {
                 RMCampfireRecipe r = (RMCampfireRecipe) recipe;
 
-                // TODO: Fix
-                return false;//containsItem(Collections.singletonList(r.getIngredient()), item, true);
+                return containsMaterial(r.getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
 
-                return containsItem(Collections.singletonList(r.getIngredient()), item, true);
+                return containsMaterial(r.getIngredientChoice(), item.getType());
             } else if (recipe instanceof FuelRecipe) {
                 FuelRecipe r = (FuelRecipe) recipe;
 
@@ -251,6 +255,16 @@ public class RecipeCommand implements CommandExecutor {
                 SingleResultRecipe r = (SingleResultRecipe) recipe;
 
                 return containsItem(Collections.singletonList(r.getResult()), item, false);
+            }
+        }
+
+        return false;
+    }
+
+    private boolean containsMaterial(List<Material> materials, Material materialToMatch) {
+        for (Material material : materials) {
+            if (materialToMatch == material) {
+                return true;
             }
         }
 

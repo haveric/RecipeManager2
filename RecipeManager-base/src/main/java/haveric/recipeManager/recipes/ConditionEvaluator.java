@@ -130,28 +130,33 @@ public class ConditionEvaluator {
                         }
                     } else if (recipe instanceof RMFurnaceRecipe) {
                         RMFurnaceRecipe smeltRecipe = (RMFurnaceRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
-                            return entry.getValue();
+                        if (Version.has1_13Support()) {
+                            if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, new ItemStack(smeltRecipe.getIngredientChoice().get(0)))) {
+                                return entry.getValue();
+                            }
+                        } else {
+                            if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
+                                return entry.getValue();
+                            }
                         }
                     } else if (recipe instanceof RMBlastingRecipe) {
                         RMBlastingRecipe blastingRecipe = (RMBlastingRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesBlasting(bukkit, blastingRecipe.getIngredient())) {
+                        if (NMSVersionHandler.getToolsRecipe().matchesBlasting(bukkit, new ItemStack(blastingRecipe.getIngredientChoice().get(0)))) {
                             return entry.getValue();
                         }
                     } else if (recipe instanceof RMSmokingRecipe) {
                         RMSmokingRecipe smokingRecipe = (RMSmokingRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesSmoking(bukkit, smokingRecipe.getIngredient())) {
+                        if (NMSVersionHandler.getToolsRecipe().matchesSmoking(bukkit, new ItemStack(smokingRecipe.getIngredientChoice().get(0)))) {
                             return entry.getValue();
                         }
                     } else if (recipe instanceof RMCampfireRecipe) {
                         RMCampfireRecipe campfireRecipe = (RMCampfireRecipe) recipe;
-                        // TODO: Validate functionality
                         if (NMSVersionHandler.getToolsRecipe().matchesCampfire(bukkit, new ItemStack(campfireRecipe.getIngredientChoice().get(0)))) {
                             return entry.getValue();
                         }
                     } else if (recipe instanceof RMStonecuttingRecipe) {
                         RMStonecuttingRecipe stonecuttingRecipe = (RMStonecuttingRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesStonecutting(bukkit, stonecuttingRecipe.getIngredient(), stonecuttingRecipe.getResult())) {
+                        if (NMSVersionHandler.getToolsRecipe().matchesStonecutting(bukkit, new ItemStack(stonecuttingRecipe.getIngredientChoice().get(0)), stonecuttingRecipe.getResult())) {
                             return entry.getValue();
                         }
                     }

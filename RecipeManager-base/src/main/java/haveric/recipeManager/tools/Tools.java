@@ -822,11 +822,25 @@ public class Tools {
             }
         } else if (recipe instanceof RMBaseFurnaceRecipe) {
             RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
-            ItemStack i = r.getIngredient();
 
-            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                found++;
+            if (Version.has1_13Support()) {
+                List<Material> choice = r.getIngredientChoice();
+
+                for (Material material : choice) {
+                    if (type == material) {
+                        found++;
+                        break;
+                    }
+                }
+            } else {
+                ItemStack i = r.getIngredient();
+
+                if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                    found++;
+                }
             }
+
+
         } else if (recipe instanceof RMCampfireRecipe) {
             RMCampfireRecipe r = (RMCampfireRecipe) recipe;
             List<Material> choice = r.getIngredientChoice();
@@ -839,10 +853,13 @@ public class Tools {
             }
         } else if (recipe instanceof RMStonecuttingRecipe) {
             RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
-            ItemStack i = r.getIngredient();
+            List<Material> choice = r.getIngredientChoice();
 
-            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                found++;
+            for (Material material : choice) {
+                if (type == material) {
+                    found++;
+                    break;
+                }
             }
         } else if (recipe instanceof BrewRecipe) {
             BrewRecipe r = (BrewRecipe) recipe;

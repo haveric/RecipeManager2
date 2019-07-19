@@ -455,7 +455,9 @@ public class Recipes {
                     indexCampfire.put(index, (RMCampfireRecipe) recipe);
                 }
             } else if (recipe instanceof RMStonecuttingRecipe) {
-                indexStonecutting.put(((RMStonecuttingRecipe) recipe).getIndexString(), (RMStonecuttingRecipe) recipe);
+                for (String index : ((RMStonecuttingRecipe) recipe).getIndexString()) {
+                    indexStonecutting.put(index, (RMStonecuttingRecipe) recipe);
+                }
             } else if (recipe instanceof BrewRecipe) {
                 indexBrew.put(((BrewRecipe) recipe).getIndexString(), (BrewRecipe) recipe);
             } else if (recipe instanceof FuelRecipe) {

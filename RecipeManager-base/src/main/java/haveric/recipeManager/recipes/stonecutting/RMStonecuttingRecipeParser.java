@@ -8,10 +8,8 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +27,17 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
         // get the ingredient
         String line = reader.getLine();
 
-        ItemStack ingredient = Tools.parseItem(line, RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT);
+        List<Material> choices = Tools.parseChoice(line, ParseBit.NONE);
 
-        if (ingredient == null) {
-            return false;
+        if (choices == null) {
+            return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
         }
 
-        if (ingredient.getType() == Material.AIR) {
+        if (choices.contains(Material.AIR)) {
             return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
         }
 
-        recipe.setIngredient(ingredient);
+        recipe.setIngredientChoice(choices);
 
         if (recipe.hasFlag(FlagType.OVERRIDE)) {
             return ErrorReporter.getInstance().error("Recipe does not allow Overriding. Try removing the original and adding a new one.");
