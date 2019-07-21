@@ -224,7 +224,11 @@ public class RecipeCommand implements CommandExecutor {
             } else if (recipe instanceof CombineRecipe) {
                 CombineRecipe r = (CombineRecipe) recipe;
 
-                return containsItem(r.getIngredients(), item, true);
+                if (Version.has1_13Support()) {
+                    return containsMaterialChoice(r.getIngredientChoiceList(), item.getType());
+                } else {
+                    return containsItem(r.getIngredients(), item, true);
+                }
             } else if (recipe instanceof RMBaseFurnaceRecipe) {
                 RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
 
@@ -261,6 +265,17 @@ public class RecipeCommand implements CommandExecutor {
         return false;
     }
 
+    private boolean containsMaterialChoice(List<List<Material>> materialsList, Material materialToMatch) {
+        for (List<Material> materials : materialsList) {
+            for (Material material : materials) {
+                if (materialToMatch == material) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     private boolean containsMaterial(List<Material> materials, Material materialToMatch) {
         for (Material material : materials) {
             if (materialToMatch == material) {
