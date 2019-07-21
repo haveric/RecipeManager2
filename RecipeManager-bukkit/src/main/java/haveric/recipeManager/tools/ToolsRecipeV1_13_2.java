@@ -1,6 +1,8 @@
 package haveric.recipeManager.tools;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -24,11 +26,13 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
     }
 
     @Override
-    public boolean matchesShapeless(Recipe bukkitRecipe, List<org.bukkit.inventory.ItemStack> ingredientItems) {
+    public boolean matchesShapeless(Recipe bukkitRecipe, List<List<Material>> materialsList) {
         if (bukkitRecipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkitRecipe;
 
-            return RMBukkitTools.compareIngredientList(ingredientItems, shapelessRecipe.getIngredientList());
+            List<RecipeChoice> choices = shapelessRecipe.getChoiceList();
+
+            return RMBukkitTools.compareMaterialChoiceList(choices, materialsList);
         }
 
         return false;

@@ -30,10 +30,7 @@ import org.bukkit.potion.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -147,8 +144,6 @@ public class Tools {
             return null;
         }
 
-        List<Material> choices = new ArrayList<>();
-
         String[] args = value.split(";");
         if (args.length > 1) {
             ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
@@ -159,6 +154,7 @@ public class Tools {
             return null;
         }
 
+        List<Material> choices = new ArrayList<>();
         for (int i = 0; i < split.length; i++) {
             String[] durSplit = split[i].trim().split(":");
             value = durSplit[0];
@@ -185,6 +181,73 @@ public class Tools {
         }
 
         return choices;
+    }
+
+    public static Map<List<Material>, Integer> parseChoiceWithAmount(String value, int settings) {
+        value = value.trim();
+
+        if (value.length() == 0) {
+            return null;
+        }
+
+
+        String[] args = value.split(";");
+        if (args.length > 1) {
+            ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
+        }
+
+        String[] split = args[0].split(",");
+        if (split.length <= 0 || split[0].isEmpty()) {
+            return null;
+        }
+
+        List<Material> choices = new ArrayList<>();
+        int amount = 1;
+        int choicesSize = split.length;
+        for (int i = 0; i < choicesSize; i++) {
+            String[] durSplit = split[i].trim().split(":");
+            value = durSplit[0];
+
+            Material material = Settings.getInstance().getMaterial(value);
+
+            if (material == null) {
+                material = Material.matchMaterial(value);
+            }
+
+            if (material == null) {
+                if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
+                    ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                }
+
+                return null;
+            }
+
+            choices.add(material);
+
+            if (durSplit.length > 1) {
+                if (i + 1 < choicesSize) {
+                    ErrorReporter.getInstance().warning("Amount is only allowed on the last ingredient of a set. Ignoring amount.");
+                } else {
+                    String amountString;
+                    if (durSplit.length == 2) {
+                        amountString = durSplit[1].trim();
+                    } else {
+                        ErrorReporter.getInstance().warning("Data is no longer supported on ingredients. " + durSplit[1].trim() + " ignored. Using " + durSplit[2].trim() + " for amount.");
+                        amountString = durSplit[2].trim();
+                    }
+
+                    try {
+                        amount = Integer.parseInt(amountString);
+                    } catch (NumberFormatException e) {
+                        if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
+                            ErrorReporter.getInstance().warning("Item '" + durSplit[0] + "' has amount value that is not a number: " + amountString + ", defaulting to 1");
+                        }
+                    }
+                }
+            }
+        }
+
+        return Collections.singletonMap(choices, amount);
     }
 
     public static ItemStack parseItem(String value, int defaultData) {

@@ -531,25 +531,49 @@ public class Vanilla {
         ShapelessRecipe sr;
         Recipe r;
 
-        List<ItemStack> items = recipe.getIngredients();
+        if (Version.has1_13Support()) {
+            List<List<Material>> ingredientChoices = recipe.getIngredientChoiceList();
 
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
 
-                if (r instanceof ShapelessRecipe) {
-                    sr = (ShapelessRecipe) r;
+                    if (r instanceof ShapelessRecipe) {
+                        sr = (ShapelessRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, items)) {
-                        iterator.remove();
+                        if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoices)) {
+                            iterator.remove();
 
-                        baseRecipeIterator.finish();
+                            baseRecipeIterator.finish();
 
-                        return sr;
+                            return sr;
+                        }
                     }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
                 }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
+            }
+        } else {
+            List<ItemStack> items = recipe.getIngredients();
+
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
+
+                    if (r instanceof ShapelessRecipe) {
+                        sr = (ShapelessRecipe) r;
+
+                        if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
+                            iterator.remove();
+
+                            baseRecipeIterator.finish();
+
+                            return sr;
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
+                }
             }
         }
 
@@ -831,24 +855,47 @@ public class Vanilla {
         ShapelessRecipe sr;
         Recipe r;
 
-        List<ItemStack> items = recipe.getIngredients();
+        if (Version.has1_13Support()) {
+            List<List<Material>> choiceList = recipe.getIngredientChoiceList();
 
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
 
-                if (r instanceof ShapelessRecipe) {
-                    sr = (ShapelessRecipe) r;
+                    if (r instanceof ShapelessRecipe) {
+                        sr = (ShapelessRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, items)) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
-                        baseRecipeIterator.replace(recipe, overrideItem);
-                        baseRecipeIterator.finish();
-                        return sr;
+                        if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, choiceList)) {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                            baseRecipeIterator.replace(recipe, overrideItem);
+                            baseRecipeIterator.finish();
+                            return sr;
+                        }
                     }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
                 }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
+            }
+        } else {
+            List<ItemStack> items = recipe.getIngredients();
+
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
+
+                    if (r instanceof ShapelessRecipe) {
+                        sr = (ShapelessRecipe) r;
+
+                        if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                            baseRecipeIterator.replace(recipe, overrideItem);
+                            baseRecipeIterator.finish();
+                            return sr;
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
+                }
             }
         }
 

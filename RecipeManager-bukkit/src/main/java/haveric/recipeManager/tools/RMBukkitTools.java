@@ -88,6 +88,42 @@ public class RMBukkitTools {
         }
     }
 
+    public static boolean compareMaterialChoiceList(List<RecipeChoice> materialChoices, List<List<Material>> materialsList) {
+        int listSize = materialsList.size();
+        int choicesListSize = materialChoices.size();
+
+        if (listSize != choicesListSize) {
+            return false;
+        }
+
+        for (int i = 0; i < listSize; i++) {
+            List<Material> materials = materialsList.get(i);
+            RecipeChoice choice = materialChoices.get(i);
+
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> choiceMaterials = materialChoice.getChoices();
+
+                int size = materials.size();
+                int choiceSize = choiceMaterials.size();
+
+                if (size != choiceSize) {
+                    return false;
+                }
+
+                for (int j = 0; j < size; j++) {
+                    if (materials.get(j) != choiceMaterials.get(j)) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean compareIngredientList(List<ItemStack> sortedIngr, List<ItemStack> ingredients) {
         int size = ingredients.size();
 

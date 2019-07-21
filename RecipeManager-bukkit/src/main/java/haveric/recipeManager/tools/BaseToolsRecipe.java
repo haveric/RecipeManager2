@@ -1,5 +1,6 @@
 package haveric.recipeManager.tools;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
@@ -18,7 +19,11 @@ public abstract class BaseToolsRecipe {
         return false;
     }
 
-    public boolean matchesShapeless(Recipe bukkitRecipe, List<ItemStack> ingredients) {
+    public boolean matchesShapeless(Recipe bukkitRecipe, List<List<Material>> materialsList) {
+        return false;
+    }
+
+    public boolean matchesShapelessLegacy(Recipe bukkitRecipe, List<ItemStack> itemsList) {
         return false;
     }
 

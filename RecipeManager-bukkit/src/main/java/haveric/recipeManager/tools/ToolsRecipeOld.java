@@ -17,7 +17,7 @@ public class ToolsRecipeOld extends BaseToolsRecipe {
     }
 
     @Override
-    public boolean matchesShapeless(Recipe bukkitRecipe, List<ItemStack> ingredientItems) {
+    public boolean matchesShapelessLegacy(Recipe bukkitRecipe, List<ItemStack> ingredientItems) {
         if (bukkitRecipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkitRecipe;
 

@@ -19,6 +19,7 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
@@ -28,13 +29,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class CombineRecipe extends WorkbenchRecipe {
+    private List<List<Material>> ingredientChoiceList = new ArrayList<>();
     private List<ItemStack> ingredients;
 
     public CombineRecipe() {
     }
 
     public CombineRecipe(ShapelessRecipe recipe) {
-        setIngredients(recipe.getIngredientList());
+        if (Version.has1_13Support()) {
+            setIngredientChoiceList(recipe.getChoiceList());
+        } else {
+            setIngredients(recipe.getIngredientList());
+        }
         setResult(recipe.getResult());
     }
 
@@ -44,7 +50,17 @@ public class CombineRecipe extends WorkbenchRecipe {
         if (recipe instanceof CombineRecipe) {
             CombineRecipe r = (CombineRecipe) recipe;
 
-            ingredients = r.getIngredients();
+            if (!r.ingredients.isEmpty()) {
+                ingredients.addAll(r.getIngredients());
+            }
+
+            if (!r.ingredientChoiceList.isEmpty()) {
+                for (List<Material> ingredientChoice : r.ingredientChoiceList) {
+                    ArrayList<Material> cloneList = new ArrayList<>(ingredientChoice);
+                    ingredientChoiceList.add(cloneList);
+                }
+            }
+
         }
     }
 
@@ -113,18 +129,60 @@ public class CombineRecipe extends WorkbenchRecipe {
         sort();
     }
 
+    public List<List<Material>> getIngredientChoiceList() {
+        return ingredientChoiceList;
+    }
+
+    public void addIngredientChoice(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            List<Material> choices = materialChoice.getChoices();
+            ingredientChoiceList.add(choices);
+        }
+
+        updateHash();
+    }
+
+    public void setIngredientChoiceList(List<RecipeChoice> recipeChoices) {
+        ingredientChoiceList.clear();
+
+        for (RecipeChoice choice : recipeChoices) {
+            addIngredientChoice(choice);
+        }
+
+        updateHash();
+    }
+
+    private void updateHash() {
+        StringBuilder str = new StringBuilder("combine");
+
+        if (Version.has1_13Support()) {
+            int size = ingredientChoiceList.size();
+            for (int i = 0; i < size; i++) {
+                List<Material> ingredientChoice = ingredientChoiceList.get(i);
+                for (Material material : ingredientChoice) {
+                    str.append(material.toString()).append(';');
+                }
+
+                if (i + 1 < size) {
+                    str.append(",");
+                }
+            }
+        } else {
+            for (ItemStack item : ingredients) {
+                str.append(item.getType().toString()).append(':').append(item.getDurability()).append(';');
+            }
+        }
+
+        hash = str.toString().hashCode();
+    }
+
     private void sort() {
         // sort by type and data
         Tools.sortIngredientList(ingredients);
 
-        // build hashCode
-        StringBuilder str = new StringBuilder("combine");
-
-        for (ItemStack item : ingredients) {
-            str.append(item.getType().toString()).append(':').append(item.getDurability()).append(';');
-        }
-
-        hash = str.toString().hashCode();
+        updateHash();
     }
 
     @Override
@@ -135,23 +193,44 @@ public class CombineRecipe extends WorkbenchRecipe {
         s.append("shapeless");
         s.append(" (");
 
-        int size = ingredients.size();
+        if (Version.has1_13Support()) {
+            int ingredientChoiceListSize = ingredientChoiceList.size();
 
-        for (int i = 0; i < size; i++) {
-            ItemStack item = ingredients.get(i);
+            for (int i = 0; i < ingredientChoiceListSize; i++) {
+                List<Material> ingredientChoice = ingredientChoiceList.get(i);
 
-            if (item == null) {
-                s.append("air");
-            } else {
-                s.append(item.getType().toString().toLowerCase());
+                int ingredientChoiceSize = ingredientChoice.size();
+                for (int j = 0; j < ingredientChoiceSize; j++) {
+                    s.append(ingredientChoice.get(j).toString().toLowerCase());
 
-                if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
-                    s.append(':').append(item.getDurability());
+                    if (j + 1 < ingredientChoiceSize) {
+                        s.append(",");
+                    }
+                }
+
+                if (i + 1 < ingredientChoiceListSize) {
+                    s.append(" ");
                 }
             }
+        } else {
+            int size = ingredients.size();
 
-            if (i < (size - 1)) {
-                s.append(' ');
+            for (int i = 0; i < size; i++) {
+                ItemStack item = ingredients.get(i);
+
+                if (item == null) {
+                    s.append("air");
+                } else {
+                    s.append(item.getType().toString().toLowerCase());
+
+                    if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
+                        s.append(':').append(item.getDurability());
+                    }
+                }
+
+                if (i < (size - 1)) {
+                    s.append(' ');
+                }
             }
         }
 
@@ -169,8 +248,14 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     @Override
     public ShapelessRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredients() || !hasResults()) {
-            return null;
+        if (Version.has1_13Support()) {
+            if (!hasIngredientChoices() || !hasResults()) {
+                return null;
+            }
+        } else {
+            if (!hasIngredients() || !hasResults()) {
+                return null;
+            }
         }
 
         ShapelessRecipe bukkitRecipe;
@@ -188,8 +273,14 @@ public class CombineRecipe extends WorkbenchRecipe {
             }
         }
 
-        for (ItemStack item : ingredients) {
-            bukkitRecipe.addIngredient(item.getAmount(), item.getType(), item.getDurability());
+        if (Version.has1_13Support()) {
+            for (List<Material> materialChoice : ingredientChoiceList) {
+                bukkitRecipe.addIngredient(new RecipeChoice.MaterialChoice(materialChoice));
+            }
+        } else {
+            for (ItemStack item : ingredients) {
+                bukkitRecipe.addIngredient(item.getAmount(), item.getType(), item.getDurability());
+            }
         }
 
         return bukkitRecipe;
@@ -199,9 +290,17 @@ public class CombineRecipe extends WorkbenchRecipe {
         return ingredients != null && !ingredients.isEmpty();
     }
 
+    public boolean hasIngredientChoices() {
+        return ingredientChoiceList != null && !ingredientChoiceList.isEmpty();
+    }
+
     @Override
     public boolean isValid() {
-        return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        if (Version.has1_13Support()) {
+            return hasIngredientChoices() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        } else {
+            return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        }
     }
 
     @Override
@@ -298,6 +397,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
         Map<ItemStack, MutableInt> items = new HashMap<>();
 
+        // TODO: Handle ingredientChoiceList for 1.13
         for (ItemStack item : ingredients) {
             MutableInt i = items.get(item);
 

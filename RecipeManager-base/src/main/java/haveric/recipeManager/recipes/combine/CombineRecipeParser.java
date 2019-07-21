@@ -8,13 +8,16 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CombineRecipeParser extends BaseRecipeParser {
     public CombineRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
@@ -30,42 +33,88 @@ public class CombineRecipeParser extends BaseRecipeParser {
         // get the ingredients
         String[] ingredientsRaw = reader.getLine().split("\\+");
 
-        List<ItemStack> ingredients = new ArrayList<>();
-        ItemStack item;
-        int items = 0;
+        if (Version.has1_13Support()) {
+            List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
 
-        for (String str : ingredientsRaw) {
-            item = Tools.parseItem(str, RMCVanilla.DATA_WILDCARD, ParseBit.NO_META);
+            int items = 0;
+            for (String str : ingredientsRaw) {
+                Map<List<Material>, Integer> choiceAmountMap =  Tools.parseChoiceWithAmount(str, ParseBit.NONE);
 
-            if (item == null || item.getType() == Material.AIR) {
-                continue;
-            }
+                // We're always returning only one item, so this should always work
+                Map.Entry<List<Material>, Integer> entry = choiceAmountMap.entrySet().iterator().next();
+                List<Material> choices = entry.getKey();
 
-            if (items < 9) {
-                int originalAmount = item.getAmount();
+
+                if (choices == null) {
+                    return ErrorReporter.getInstance().error("Ingredient cannot be empty");
+                }
+
+                if (choices.contains(Material.AIR)) {
+                    return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+                }
+
+                int newAmount;
+                int originalAmount = entry.getValue();
+
+                if (originalAmount <= 0) {
+                    ErrorReporter.getInstance().warning("Recipe must have a positive amount. Defaulting to 1");
+                    originalAmount = 1;
+                }
+
                 if (items + originalAmount > 9) {
-                    int newAmount = 9 - items;
-                    items += newAmount;
-
-                    item.setAmount(newAmount);
-                    ingredients.add(item);
+                    newAmount = 9 - items;
 
                     int ignoredAmount = originalAmount - newAmount;
-                    ErrorReporter.getInstance().warning("Combine recipes can't have more than 9 ingredients! Extra ingredient(s) ignored: " + item.getType() + "x" + ignoredAmount, "If you're using stacks make sure they don't exceed 9 items in total.");
+                    ErrorReporter.getInstance().warning("Combine recipes can't have more than 9 ingredients! Extra ingredient(s) ignored: " + str + " x" + ignoredAmount, "If you're using stacks make sure they don't exceed 9 items in total.");
                 } else {
-                    items += item.getAmount();
-                    ingredients.add(item);
+                    newAmount = originalAmount;
+                }
+
+                items += newAmount;
+
+                for (int i = 0; i < newAmount; i++) {
+                    ingredientChoiceList.add(new RecipeChoice.MaterialChoice(choices));
                 }
             }
 
+            recipe.setIngredientChoiceList(ingredientChoiceList);
+        } else {
+            List<ItemStack> ingredients = new ArrayList<>();
+            ItemStack item;
+            int items = 0;
 
+            for (String str : ingredientsRaw) {
+                item = Tools.parseItem(str, RMCVanilla.DATA_WILDCARD, ParseBit.NO_META);
+
+                if (item == null || item.getType() == Material.AIR) {
+                    continue;
+                }
+
+                if (items < 9) {
+                    int originalAmount = item.getAmount();
+                    if (items + originalAmount > 9) {
+                        int newAmount = 9 - items;
+                        items += newAmount;
+
+                        item.setAmount(newAmount);
+                        ingredients.add(item);
+
+                        int ignoredAmount = originalAmount - newAmount;
+                        ErrorReporter.getInstance().warning("Combine recipes can't have more than 9 ingredients! Extra ingredient(s) ignored: " + item.getType() + " x" + ignoredAmount, "If you're using stacks make sure they don't exceed 9 items in total.");
+                    } else {
+                        items += item.getAmount();
+                        ingredients.add(item);
+                    }
+                }
+            }
+
+            if (ingredients.size() == 2 && !conditionEvaluator.checkIngredients(ingredients.get(0), ingredients.get(1))) {
+                return false;
+            }
+
+            recipe.setIngredients(ingredients);
         }
 
-        if (ingredients.size() == 2 && !conditionEvaluator.checkIngredients(ingredients.get(0), ingredients.get(1))) {
-            return false;
-        }
-
-        recipe.setIngredients(ingredients);
 
         if (recipe.hasFlag(FlagType.REMOVE)) {
             reader.nextLine(); // Skip the results line, if it exists

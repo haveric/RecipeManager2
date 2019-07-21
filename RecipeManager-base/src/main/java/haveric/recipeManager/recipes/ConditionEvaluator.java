@@ -123,9 +123,14 @@ public class ConditionEvaluator {
                     } else if (recipe instanceof CombineRecipe) {
                         if (bukkit instanceof ShapelessRecipe) {
                             CombineRecipe combineRecipe = (CombineRecipe) recipe;
-
-                            if (NMSVersionHandler.getToolsRecipe().matchesShapeless(bukkit, combineRecipe.getIngredients())) {
-                                return entry.getValue();
+                            if (Version.has1_13Support()) {
+                                if (NMSVersionHandler.getToolsRecipe().matchesShapeless(bukkit, combineRecipe.getIngredientChoiceList())) {
+                                    return entry.getValue();
+                                }
+                            } else {
+                                if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(bukkit, combineRecipe.getIngredients())) {
+                                    return entry.getValue();
+                                }
                             }
                         }
                     } else if (recipe instanceof RMFurnaceRecipe) {
