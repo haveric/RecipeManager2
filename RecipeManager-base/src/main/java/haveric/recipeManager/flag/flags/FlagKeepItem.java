@@ -122,7 +122,6 @@ public class FlagKeepItem extends Flag {
     @Override
     public boolean onParse(String value) {
         String[] split = value.split("\\|", 2);
-
         ItemStack item = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
         if (item == null) {
@@ -251,7 +250,6 @@ public class FlagKeepItem extends Flag {
             for (int i = 1; i < inv.getSize(); i++) {
                 parse(inv, a, i);
             }
-
         } else if (a.inventory() instanceof FurnaceInventory) {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 

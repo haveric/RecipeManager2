@@ -10,7 +10,6 @@ import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagDisplayResult;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagKeepItem;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -271,9 +270,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             ItemStack item = inv.getItem(i);
 
             if (item != null) {
-                MessageSender.getInstance().info("Has KeepItem: " + flagKI);
                 if (flagKI != null) {
-                    MessageSender.getInstance().info("  Item: " + item + ", " + flagKI.getItem(item));
                     if (flagKI.getItem(item) != null) {
                         continue;
                     }

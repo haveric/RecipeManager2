@@ -406,7 +406,6 @@ public class Events implements Listener {
 
             Recipe bukkitRecipe = event.getRecipe();
             WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
-            MessageSender.getInstance().info("Workbench recipe: " + recipe);
             if (recipe == null) {
                 return;
             }
@@ -452,7 +451,6 @@ public class Events implements Listener {
                     Recipes.recipeResetResult(a.playerUUID());
                 }
 
-                MessageSender.getInstance().info("Times: " + times);
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
@@ -529,7 +527,6 @@ public class Events implements Listener {
                     }
 
                     if (subtract) {
-                        MessageSender.getInstance().info("Subtract ingredients");
                         recipe.subtractIngredients(inv, result, onlyExtra);
                     }
 
