@@ -11,6 +11,7 @@ import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
@@ -46,8 +47,10 @@ public class Recipes {
     // Quick-find index
     protected Map<Integer, CraftRecipe> indexCraft = new HashMap<>();
     protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
-    public Map<String, RMFurnaceRecipe> indexSmelt = new HashMap<>();
-    protected Map<String, RMFurnaceRecipe> indexSmeltFuels = new HashMap<>();
+    public Map<String, RMFurnaceRecipe> indexSmeltLegacy = new HashMap<>();
+    protected Map<String, RMFurnaceRecipe> indexSmeltLegacyFuels = new HashMap<>();
+    public Map<String, RMFurnaceRecipe1_13> indexSmelt = new HashMap<>();
+    protected Map<String, RMFurnaceRecipe1_13> indexSmeltFuels = new HashMap<>();
     public Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
     protected Map<String, RMBlastingRecipe> indexBlastingFuels = new HashMap<>();
     public Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
@@ -65,6 +68,8 @@ public class Recipes {
         index.clear();
         indexCraft.clear();
         indexCombine.clear();
+        indexSmeltLegacy.clear();
+        indexSmeltLegacyFuels.clear();
         indexSmelt.clear();
         indexSmeltFuels.clear();
         indexFuels.clear();
@@ -212,8 +217,46 @@ public class Recipes {
      * @param ingredient
      * @return Smelt recipe or null if doesn't exist
      */
-    public RMFurnaceRecipe getSmeltRecipe(ItemStack ingredient) {
+    public RMFurnaceRecipe getSmeltLegacyRecipe(ItemStack ingredient) {
         RMFurnaceRecipe recipe = null;
+
+        if (ingredient != null) {
+            if (Version.has1_13Support()) {
+                recipe = indexSmeltLegacy.get(ingredient.getType().toString());
+            } else {
+                recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+
+                if (recipe == null) {
+                    recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+                }
+            }
+        }
+
+        return recipe;
+    }
+
+    public RMFurnaceRecipe getSmeltLegacyRecipeWithFuel(ItemStack fuel) {
+        if (fuel == null) {
+            return null;
+        }
+
+        RMFurnaceRecipe recipe = indexSmeltLegacyFuels.get(String.valueOf(fuel.getType().toString()));
+
+        if (recipe == null) {
+            return indexSmeltLegacyFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
+        }
+
+        return recipe;
+    }
+
+    /**
+     * Get RecipeManager's furnace smelt recipe for the specified ingredient
+     *
+     * @param ingredient
+     * @return Smelt recipe or null if doesn't exist
+     */
+    public RMFurnaceRecipe1_13 getSmeltRecipe(ItemStack ingredient) {
+        RMFurnaceRecipe1_13 recipe = null;
 
         if (ingredient != null) {
             if (Version.has1_13Support()) {
@@ -230,12 +273,12 @@ public class Recipes {
         return recipe;
     }
 
-    public RMFurnaceRecipe getSmeltRecipeWithFuel(ItemStack fuel) {
+    public RMFurnaceRecipe1_13 getSmeltRecipeWithFuel(ItemStack fuel) {
         if (fuel == null) {
             return null;
         }
 
-        RMFurnaceRecipe recipe = indexSmeltFuels.get(String.valueOf(fuel.getType().toString()));
+        RMFurnaceRecipe1_13 recipe = indexSmeltFuels.get(String.valueOf(fuel.getType().toString()));
 
         if (recipe == null) {
             return indexSmeltFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
@@ -424,6 +467,16 @@ public class Recipes {
                 RMFurnaceRecipe r = (RMFurnaceRecipe) recipe;
 
                 for (String index : ((RMFurnaceRecipe) recipe).getIndexString()) {
+                    indexSmeltLegacy.put(index, r);
+                }
+
+                if (r.hasFuel()) {
+                    indexSmeltLegacyFuels.put(r.getFuelIndex(), r);
+                }
+            } else if (recipe instanceof RMFurnaceRecipe1_13) {
+                RMFurnaceRecipe1_13 r = (RMFurnaceRecipe1_13) recipe;
+
+                for (String index : ((RMFurnaceRecipe1_13) recipe).getIndexString()) {
                     indexSmelt.put(index, r);
                 }
 
@@ -549,6 +602,10 @@ public class Recipes {
             indexCombine.remove(recipe.getIndex());
         } else if (recipe instanceof RMFurnaceRecipe) {
             for (String index : ((RMFurnaceRecipe) recipe).getIndexString()) {
+                indexSmeltLegacy.remove(index);
+            }
+        } else if (recipe instanceof RMFurnaceRecipe1_13) {
+            for (String index : ((RMFurnaceRecipe1_13) recipe).getIndexString()) {
                 indexSmelt.remove(index);
             }
         } else if (recipe instanceof RMBlastingRecipe) {

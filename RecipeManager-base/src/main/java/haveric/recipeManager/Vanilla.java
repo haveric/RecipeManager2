@@ -6,10 +6,13 @@ import haveric.recipeManager.nms.tools.BaseRecipeIterator;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.BaseToolsRecipe;
@@ -396,11 +399,23 @@ public class Vanilla {
                 BaseRecipe recipe = null;
 
                 if (r instanceof ShapedRecipe) {
-                    recipe = new CraftRecipe((ShapedRecipe) r);
+                    if (Version.has1_13Support()) {
+                        recipe = new CraftRecipe1_13((ShapedRecipe) r);
+                    } else {
+                        recipe = new CraftRecipe((ShapedRecipe) r);
+                    }
                 } else if (r instanceof ShapelessRecipe) {
-                    recipe = new CombineRecipe((ShapelessRecipe) r);
+                    if (Version.has1_13Support()) {
+                        recipe = new CombineRecipe1_13((ShapelessRecipe) r);
+                    } else {
+                        recipe = new CombineRecipe((ShapelessRecipe) r);
+                    }
                 } else if (r instanceof FurnaceRecipe) {
-                    recipe = new RMFurnaceRecipe((FurnaceRecipe) r);
+                    if (Version.has1_13Support()) {
+                        recipe = new RMFurnaceRecipe1_13((FurnaceRecipe) r);
+                    } else {
+                        recipe = new RMFurnaceRecipe((FurnaceRecipe) r);
+                    }
                 } else if (r instanceof BlastingRecipe) {
                     recipe = new RMBlastingRecipe((BlastingRecipe) r);
                 } else if (r instanceof SmokingRecipe) {
@@ -452,7 +467,11 @@ public class Vanilla {
         }
 
         if (recipe instanceof RMFurnaceRecipe) {
-            return removeSmeltRecipe((RMFurnaceRecipe) recipe);
+            return removeSmeltLegacyRecipe((RMFurnaceRecipe) recipe);
+        }
+
+        if (recipe instanceof RMFurnaceRecipe1_13) {
+            return removeSmeltRecipe((RMFurnaceRecipe1_13) recipe);
         }
 
         if (recipe instanceof RMBlastingRecipe) {
@@ -610,12 +629,19 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    private static Recipe removeSmeltRecipe(RMFurnaceRecipe recipe) {
-        if (Version.has1_13Support()) {
-            return removeFurnaceRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
-        } else {
-            return removeFurnaceRecipe(recipe.getIngredient());
-        }
+    private static Recipe removeSmeltLegacyRecipe(RMFurnaceRecipe recipe) {
+        return removeFurnaceRecipe(recipe.getIngredient());
+    }
+
+    /**
+     * Removes a RecipeManager smelt recipe from the <b>server</b>
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return removed recipe or null if not found
+     */
+    private static Recipe removeSmeltRecipe(RMFurnaceRecipe1_13 recipe) {
+        return removeFurnaceRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {

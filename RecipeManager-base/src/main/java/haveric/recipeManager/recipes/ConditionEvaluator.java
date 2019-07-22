@@ -12,6 +12,7 @@ import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
@@ -165,14 +166,13 @@ public class ConditionEvaluator {
                         }
                     } else if (recipe instanceof RMFurnaceRecipe) {
                         RMFurnaceRecipe smeltRecipe = (RMFurnaceRecipe) recipe;
-                        if (Version.has1_13Support()) {
-                            if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, new ItemStack(smeltRecipe.getIngredientChoice().get(0)))) {
-                                return entry.getValue();
-                            }
-                        } else {
-                            if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
-                                return entry.getValue();
-                            }
+                        if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
+                            return entry.getValue();
+                        }
+                    } else if (recipe instanceof RMFurnaceRecipe1_13) {
+                        RMFurnaceRecipe1_13 smeltRecipe = (RMFurnaceRecipe1_13) recipe;
+                        if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, new ItemStack(smeltRecipe.getIngredientChoice().get(0)))) {
+                            return entry.getValue();
                         }
                     } else if (recipe instanceof RMBlastingRecipe) {
                         RMBlastingRecipe blastingRecipe = (RMBlastingRecipe) recipe;

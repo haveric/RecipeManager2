@@ -13,7 +13,6 @@ import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +25,20 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) throws Exception {
+        CombineRecipe recipe;
+        if (Version.has1_13Support()) {
+            recipe = new CombineRecipe1_13(fileFlags);
+        } else {
+            recipe = new CombineRecipe(fileFlags); // create recipe and copy flags from file
+        }
 
-        CombineRecipe recipe = new CombineRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         // get the ingredients
         String[] ingredientsRaw = reader.getLine().split("\\+");
 
         if (Version.has1_13Support()) {
-            List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
+            List<List<Material>> ingredientChoiceList = new ArrayList<>();
 
             int items = 0;
             for (String str : ingredientsRaw) {
@@ -73,7 +77,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 items += newAmount;
 
                 for (int i = 0; i < newAmount; i++) {
-                    ingredientChoiceList.add(new RecipeChoice.MaterialChoice(choices));
+                    ingredientChoiceList.add(choices);
                 }
             }
 

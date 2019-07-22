@@ -7,7 +7,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.RecipeChoice;
 
-public class RMBlastingRecipe extends RMBaseFurnaceRecipe {
+public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMBlastingRecipe() {
         setMinTime(Vanilla.BLASTING_RECIPE_TIME);
     }

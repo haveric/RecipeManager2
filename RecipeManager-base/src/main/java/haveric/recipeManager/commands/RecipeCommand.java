@@ -220,7 +220,11 @@ public class RecipeCommand implements CommandExecutor {
             if (recipe instanceof CraftRecipe) {
                 CraftRecipe r = (CraftRecipe) recipe;
 
-                return containsItem(Arrays.asList(r.getIngredients()), item, true);
+                if (Version.has1_13Support()) {
+                    return containsMaterialChoice(r.getIngredientsChoiceMap(), item.getType());
+                } else {
+                    return containsItem(Arrays.asList(r.getIngredients()), item, true);
+                }
             } else if (recipe instanceof CombineRecipe) {
                 CombineRecipe r = (CombineRecipe) recipe;
 
@@ -265,17 +269,26 @@ public class RecipeCommand implements CommandExecutor {
         return false;
     }
 
-    private boolean containsMaterialChoice(List<List<Material>> materialsList, Material materialToMatch) {
-        for (List<Material> materials : materialsList) {
-            for (Material material : materials) {
-                if (materialToMatch == material) {
-                    return true;
-                }
+    private boolean containsMaterialChoice(Map<Character, List<Material>> characterMap, Material materialToMatch) {
+        for (Map.Entry<Character, List<Material>> entry : characterMap.entrySet()) {
+            if (containsMaterial(entry.getValue(), materialToMatch)) {
+                return true;
             }
         }
 
         return false;
     }
+
+    private boolean containsMaterialChoice(List<List<Material>> materialsList, Material materialToMatch) {
+        for (List<Material> materials : materialsList) {
+            if (containsMaterial(materials, materialToMatch)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean containsMaterial(List<Material> materials, Material materialToMatch) {
         for (Material material : materials) {
             if (materialToMatch == material) {

@@ -4,20 +4,21 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.RecipeChoice;
 
-public class RMFurnaceRecipe extends RMBaseFurnaceRecipe {
-    public RMFurnaceRecipe() {
+public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
+    public RMFurnaceRecipe1_13() {
     }
 
-    public RMFurnaceRecipe(BaseRecipe recipe) {
+    public RMFurnaceRecipe1_13(BaseRecipe recipe) {
         super(recipe);
     }
 
-    public RMFurnaceRecipe(Flags flags) {
+    public RMFurnaceRecipe1_13(Flags flags) {
         super(flags);
     }
 
-    public RMFurnaceRecipe(FurnaceRecipe recipe) {
+    public RMFurnaceRecipe1_13(FurnaceRecipe recipe) {
         super(recipe);
     }
 
@@ -33,15 +34,15 @@ public class RMFurnaceRecipe extends RMBaseFurnaceRecipe {
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof RMFurnaceRecipe && hashCode() == obj.hashCode();
+        return this == obj || obj instanceof RMFurnaceRecipe1_13 && hashCode() == obj.hashCode();
     }
 
     @Override
     public FurnaceRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredient() || !hasResult()) {
+        if (!hasIngredientChoice() || !hasResult()) {
             return null;
         }
 
-        return new FurnaceRecipe(getResult(), getIngredient().getType(), getIngredient().getDurability());
+        return new FurnaceRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()), 0, getCookTicks());
     }
 }

@@ -8,10 +8,18 @@ import haveric.recipeManager.flag.flags.FlagAddToBook;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
+import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
+import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -425,15 +433,46 @@ public class RecipeBooks {
 
             if (arg.startsWith("existing")) {
                 if (value.equals("all")) {
-                    getExistingByType(recipes, allRecipes, CraftRecipe.class);
-                    getExistingByType(recipes, allRecipes, CombineRecipe.class);
-                    getExistingByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    if (Version.has1_13Support()) {
+                        getExistingByType(recipes, allRecipes, CraftRecipe1_13.class);
+                        getExistingByType(recipes, allRecipes, CombineRecipe1_13.class);
+                        getExistingByType(recipes, allRecipes, RMFurnaceRecipe1_13.class);
+                    } else {
+                        getExistingByType(recipes, allRecipes, CraftRecipe.class);
+                        getExistingByType(recipes, allRecipes, CombineRecipe.class);
+                        getExistingByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    }
+
                     getExistingByType(recipes, allRecipes, FuelRecipe.class);
+
+                    if (Version.has1_14Support()) {
+                        getExistingByType(recipes, allRecipes, RMBlastingRecipe.class);
+                        getExistingByType(recipes, allRecipes, RMSmokingRecipe.class);
+                        getExistingByType(recipes, allRecipes, RMCampfireRecipe.class);
+                        getExistingByType(recipes, allRecipes, RMStonecuttingRecipe.class);
+                    }
                 } else if (value.startsWith("work") || value.startsWith("craft")) {
-                    getExistingByType(recipes, allRecipes, CraftRecipe.class);
-                    getExistingByType(recipes, allRecipes, CombineRecipe.class);
+                    if (Version.has1_13Support()) {
+                        getExistingByType(recipes, allRecipes, CraftRecipe1_13.class);
+                        getExistingByType(recipes, allRecipes, CombineRecipe1_13.class);
+                    } else {
+                        getExistingByType(recipes, allRecipes, CraftRecipe.class);
+                        getExistingByType(recipes, allRecipes, CombineRecipe.class);
+                    }
                 } else if (value.startsWith("smelt") || value.startsWith("furnace")) {
-                    getExistingByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    if (Version.has1_13Support()) {
+                        getExistingByType(recipes, allRecipes, RMFurnaceRecipe1_13.class);
+                    } else {
+                        getExistingByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    }
+                } else if (value.startsWith("blasting")) {
+                    getExistingByType(recipes, allRecipes, RMBlastingRecipe.class);
+                } else if (value.startsWith("smoking")) {
+                    getExistingByType(recipes, allRecipes, RMSmokingRecipe.class);
+                } else if (value.startsWith("campfire")) {
+                    getExistingByType(recipes, allRecipes, RMCampfireRecipe.class);
+                } else if (value.startsWith("stonecutting")) {
+                    getExistingByType(recipes, allRecipes, RMStonecuttingRecipe.class);
                 } else if (value.startsWith("fuel")) {
                     getExistingByType(recipes, allRecipes, FuelRecipe.class);
                 } else {
@@ -441,15 +480,46 @@ public class RecipeBooks {
                 }
             } else if (arg.startsWith("custom")) {
                 if (value.equals("all")) {
-                    getCustomByType(recipes, allRecipes, CraftRecipe.class);
-                    getCustomByType(recipes, allRecipes, CombineRecipe.class);
-                    getCustomByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    if (Version.has1_13Support()) {
+                        getCustomByType(recipes, allRecipes, CraftRecipe1_13.class);
+                        getCustomByType(recipes, allRecipes, CombineRecipe1_13.class);
+                        getCustomByType(recipes, allRecipes, RMFurnaceRecipe1_13.class);
+                    } else {
+                        getCustomByType(recipes, allRecipes, CraftRecipe.class);
+                        getCustomByType(recipes, allRecipes, CombineRecipe.class);
+                        getCustomByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    }
+
                     getCustomByType(recipes, allRecipes, FuelRecipe.class);
+
+                    if (Version.has1_14Support()) {
+                        getCustomByType(recipes, allRecipes, RMBlastingRecipe.class);
+                        getCustomByType(recipes, allRecipes, RMSmokingRecipe.class);
+                        getCustomByType(recipes, allRecipes, RMCampfireRecipe.class);
+                        getCustomByType(recipes, allRecipes, RMStonecuttingRecipe.class);
+                    }
                 } else if (value.startsWith("work") || value.startsWith("craft")) {
-                    getCustomByType(recipes, allRecipes, CraftRecipe.class);
-                    getCustomByType(recipes, allRecipes, CombineRecipe.class);
+                    if (Version.has1_13Support()) {
+                        getCustomByType(recipes, allRecipes, CraftRecipe1_13.class);
+                        getCustomByType(recipes, allRecipes, CombineRecipe1_13.class);
+                    } else {
+                        getCustomByType(recipes, allRecipes, CraftRecipe.class);
+                        getCustomByType(recipes, allRecipes, CombineRecipe.class);
+                    }
                 } else if (value.startsWith("smelt") || value.startsWith("furnace")) {
-                    getCustomByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    if (Version.has1_13Support()) {
+                        getCustomByType(recipes, allRecipes, RMFurnaceRecipe1_13.class);
+                    } else {
+                        getCustomByType(recipes, allRecipes, RMFurnaceRecipe.class);
+                    }
+                } else if (value.startsWith("blasting")) {
+                    getCustomByType(recipes, allRecipes, RMBlastingRecipe.class);
+                } else if (value.startsWith("smoking")) {
+                    getCustomByType(recipes, allRecipes, RMSmokingRecipe.class);
+                } else if (value.startsWith("campfire")) {
+                    getCustomByType(recipes, allRecipes, RMCampfireRecipe.class);
+                } else if (value.startsWith("stonecutting")) {
+                    getCustomByType(recipes, allRecipes, RMStonecuttingRecipe.class);
                 } else if (value.startsWith("fuel")) {
                     getCustomByType(recipes, allRecipes, FuelRecipe.class);
                 } else {

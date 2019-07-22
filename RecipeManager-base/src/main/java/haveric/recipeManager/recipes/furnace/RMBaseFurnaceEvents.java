@@ -825,10 +825,19 @@ public class RMBaseFurnaceEvents implements Listener {
                     }
                 }
             } else {
-                for (RMFurnaceRecipe r : RecipeManager.getRecipes().indexSmelt.values()) {
-                    if (result.isSimilar(r.getResult())) {
-                        smeltRecipe = r;
-                        break;
+                if (Version.has1_13Support()) {
+                    for (RMFurnaceRecipe1_13 r : RecipeManager.getRecipes().indexSmelt.values()) {
+                        if (result.isSimilar(r.getResult())) {
+                            smeltRecipe = r;
+                            break;
+                        }
+                    }
+                } else {
+                    for (RMFurnaceRecipe r : RecipeManager.getRecipes().indexSmeltLegacy.values()) {
+                        if (result.isSimilar(r.getResult())) {
+                            smeltRecipe = r;
+                            break;
+                        }
                     }
                 }
             }

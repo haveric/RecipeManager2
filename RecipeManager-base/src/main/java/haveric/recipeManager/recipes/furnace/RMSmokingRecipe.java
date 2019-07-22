@@ -7,7 +7,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.SmokingRecipe;
 
-public class RMSmokingRecipe extends RMBaseFurnaceRecipe {
+public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMSmokingRecipe() {
         setMinTime(Vanilla.SMOKER_RECIPE_TIME);
     }

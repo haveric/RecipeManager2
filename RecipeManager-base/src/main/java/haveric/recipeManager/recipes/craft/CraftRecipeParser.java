@@ -29,7 +29,12 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) throws Exception {
-        CraftRecipe recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
+        CraftRecipe recipe;
+        if (Version.has1_13Support()) {
+            recipe = new CraftRecipe1_13(fileFlags);
+        } else {
+            recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
+        }
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();

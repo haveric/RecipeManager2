@@ -8,17 +8,16 @@ import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
@@ -27,23 +26,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class CombineRecipe extends WorkbenchRecipe {
+public class CombineRecipe1_13 extends CombineRecipe {
     private List<List<Material>> ingredientChoiceList = new ArrayList<>();
     private List<ItemStack> ingredients;
 
-    public CombineRecipe() {
+    public CombineRecipe1_13() {
     }
 
-    public CombineRecipe(ShapelessRecipe recipe) {
-        setIngredients(recipe.getIngredientList());
+    public CombineRecipe1_13(ShapelessRecipe recipe) {
+        setIngredientChoice(recipe.getChoiceList());
+
         setResult(recipe.getResult());
     }
 
-    public CombineRecipe(BaseRecipe recipe) {
+    public CombineRecipe1_13(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof CombineRecipe) {
-            CombineRecipe r = (CombineRecipe) recipe;
+        if (recipe instanceof CombineRecipe1_13) {
+            CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
 
             if (!r.ingredients.isEmpty()) {
                 ingredients.addAll(r.getIngredients());
@@ -58,7 +58,7 @@ public class CombineRecipe extends WorkbenchRecipe {
         }
     }
 
-    public CombineRecipe(Flags flags) {
+    public CombineRecipe1_13(Flags flags) {
         super(flags);
     }
 
@@ -127,6 +127,27 @@ public class CombineRecipe extends WorkbenchRecipe {
         return ingredientChoiceList;
     }
 
+    public void addIngredientChoice(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            List<Material> choices = materialChoice.getChoices();
+            ingredientChoiceList.add(choices);
+        }
+
+        updateHash();
+    }
+
+    public void setIngredientChoice(List<RecipeChoice> recipeChoices) {
+        ingredientChoiceList.clear();
+
+        for (RecipeChoice choice : recipeChoices) {
+            addIngredientChoice(choice);
+        }
+
+        updateHash();
+    }
+
     public void setIngredientChoiceList(List<List<Material>> recipeChoices) {
         ingredientChoiceList.clear();
 
@@ -138,8 +159,16 @@ public class CombineRecipe extends WorkbenchRecipe {
     private void updateHash() {
         StringBuilder str = new StringBuilder("combine");
 
-        for (ItemStack item : ingredients) {
-            str.append(item.getType().toString()).append(':').append(item.getDurability()).append(';');
+        int size = ingredientChoiceList.size();
+        for (int i = 0; i < size; i++) {
+            List<Material> ingredientChoice = ingredientChoiceList.get(i);
+            for (Material material : ingredientChoice) {
+                str.append(material.toString()).append(';');
+            }
+
+            if (i + 1 < size) {
+                str.append(",");
+            }
         }
 
         hash = str.toString().hashCode();
@@ -160,23 +189,22 @@ public class CombineRecipe extends WorkbenchRecipe {
         s.append("shapeless");
         s.append(" (");
 
-        int size = ingredients.size();
+        int ingredientChoiceListSize = ingredientChoiceList.size();
 
-        for (int i = 0; i < size; i++) {
-            ItemStack item = ingredients.get(i);
+        for (int i = 0; i < ingredientChoiceListSize; i++) {
+            List<Material> ingredientChoice = ingredientChoiceList.get(i);
 
-            if (item == null) {
-                s.append("air");
-            } else {
-                s.append(item.getType().toString().toLowerCase());
+            int ingredientChoiceSize = ingredientChoice.size();
+            for (int j = 0; j < ingredientChoiceSize; j++) {
+                s.append(ingredientChoice.get(j).toString().toLowerCase());
 
-                if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
-                    s.append(':').append(item.getDurability());
+                if (j + 1 < ingredientChoiceSize) {
+                    s.append(",");
                 }
             }
 
-            if (i < (size - 1)) {
-                s.append(' ');
+            if (i + 1 < ingredientChoiceListSize) {
+                s.append(" ");
             }
         }
 
@@ -194,7 +222,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     @Override
     public ShapelessRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredients() || !hasResults()) {
+        if (!hasIngredientChoices() || !hasResults()) {
             return null;
         }
 
@@ -213,8 +241,8 @@ public class CombineRecipe extends WorkbenchRecipe {
             }
         }
 
-        for (ItemStack item : ingredients) {
-            bukkitRecipe.addIngredient(item.getAmount(), item.getType(), item.getDurability());
+        for (List<Material> materialChoice : ingredientChoiceList) {
+            bukkitRecipe.addIngredient(new RecipeChoice.MaterialChoice(materialChoice));
         }
 
         return bukkitRecipe;
@@ -230,7 +258,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     @Override
     public boolean isValid() {
-        return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        return hasIngredientChoices() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
     }
 
     @Override

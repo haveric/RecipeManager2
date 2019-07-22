@@ -36,7 +36,11 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         } else if (recipeType == RMCRecipeType.SMOKING) {
             recipe = new RMSmokingRecipe(fileFlags); // create recipe and copy flags from file
         } else {
-            recipe = new RMFurnaceRecipe(fileFlags); // create recipe and copy flags from file
+            if (Version.has1_13Support()) {
+                recipe = new RMFurnaceRecipe1_13(fileFlags); // create recipe and copy flags from file
+            } else {
+                recipe = new RMFurnaceRecipe(fileFlags); // create recipe and copy flags from file
+            }
         }
 
         reader.parseFlags(recipe.getFlags()); // check for @flags
