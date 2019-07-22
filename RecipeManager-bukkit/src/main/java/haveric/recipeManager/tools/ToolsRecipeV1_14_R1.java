@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Minecraft v1.13 NMS solution for matching if a RM recipe is already represented by an MC recipe.
@@ -12,11 +13,11 @@ import java.util.List;
  **/
 public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
     @Override
-    public boolean matchesShaped(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack[] matrix, org.bukkit.inventory.ItemStack[] matrixMirror, int width, int height) {
+    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, List<Material>> materialChoiceMap) {
         if (bukkitRecipe instanceof ShapedRecipe) {
             ShapedRecipe shapedRecipe = (ShapedRecipe) bukkitRecipe;
 
-            return RMBukkitTools.compareShapedRecipeToMatrix(shapedRecipe, matrix, matrixMirror);
+            return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, materialChoiceMap);
         }
 
         return false;

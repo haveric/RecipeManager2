@@ -11,6 +11,39 @@ import java.util.List;
 import java.util.Map;
 
 public class RMBukkitTools {
+    public static boolean compareShapedRecipeToChoice(ShapedRecipe recipe, String[] shape, Map<Character, List<Material>> choiceMap) {
+        String[] recipeShape = recipe.getShape();
+        if (recipeShape.length != shape.length) {
+            return false;
+        }
+
+        for (int i = 0; i < shape.length; i++) {
+            if (!recipeShape[i].equals(shape[i])) {
+                return false;
+            }
+        }
+
+        Map<Character, RecipeChoice> recipeChoiceMap = recipe.getChoiceMap();
+
+        if (recipeChoiceMap.size() != choiceMap.size()) {
+            return false;
+        }
+
+        for (Map.Entry<Character, RecipeChoice> entry : recipeChoiceMap.entrySet()) {
+            Character character = entry.getKey();
+
+            if (!choiceMap.containsKey(character)) {
+                return false;
+            }
+
+            if (!compareMaterialChoice(entry.getValue(), choiceMap.get(character), true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean compareShapedRecipeToMatrix(ShapedRecipe recipe, ItemStack[] matrix, ItemStack[] matrixMirror) {
         ItemStack[] ingredients = convertShapedRecipeToItemMatrix(recipe);
 
@@ -97,26 +130,49 @@ public class RMBukkitTools {
         }
 
         for (int i = 0; i < listSize; i++) {
-            List<Material> materials = materialsList.get(i);
-            RecipeChoice choice = materialChoices.get(i);
+            if (!compareMaterialChoice(materialChoices.get(i), materialsList.get(i), false)) {
+                return false;
+            }
+        }
 
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                List<Material> choiceMaterials = materialChoice.getChoices();
+        return true;
+    }
 
-                int size = materials.size();
-                int choiceSize = choiceMaterials.size();
+    private static boolean compareMaterialChoice(RecipeChoice choice, List<Material> materials, boolean airAllowed) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> choiceMaterials = materialChoice.getChoices();
 
-                if (size != choiceSize) {
+            int size = materials.size();
+            int choiceSize = choiceMaterials.size();
+
+            if (size != choiceSize) {
+                return false;
+            }
+
+            for (int j = 0; j < size; j++) {
+                if (materials.get(j) != choiceMaterials.get(j)) {
                     return false;
                 }
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> choiceMaterials = exactChoice.getChoices();
 
-                for (int j = 0; j < size; j++) {
-                    if (materials.get(j) != choiceMaterials.get(j)) {
-                        return false;
-                    }
+            int size = materials.size();
+            int choiceSize = choiceMaterials.size();
+
+            if (size != choiceSize) {
+                return false;
+            }
+
+            for (int j = 0; j < size; j++) {
+                if (materials.get(j) != choiceMaterials.get(j).getType()) {
+                    return false;
                 }
-            } else {
+            }
+        } else {
+            if (!airAllowed || materials.size() != 1 || materials.get(0) != Material.AIR) {
                 return false;
             }
         }

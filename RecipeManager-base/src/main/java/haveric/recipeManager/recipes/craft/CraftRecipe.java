@@ -19,16 +19,17 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.Damageable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class CraftRecipe extends WorkbenchRecipe {
+    private Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();
+    private String[] choiceShape;
+
     private ItemStack[] ingredients;
     private int width;
     private int height;
@@ -49,7 +50,16 @@ public class CraftRecipe extends WorkbenchRecipe {
         if (recipe instanceof CraftRecipe) {
             CraftRecipe r = (CraftRecipe) recipe;
 
-            ingredients = r.getIngredients();
+            if (r.getIngredients() != null) {
+                ingredients = r.getIngredients();
+            }
+
+            if (r.ingredientsChoiceMap.size() > 0) {
+                ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
+            }
+
+            choiceShape = r.choiceShape;
+
             width = r.width;
             height = r.height;
             mirror = r.mirror;
@@ -58,6 +68,28 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     public CraftRecipe(Flags flags) {
         super(flags);
+    }
+
+    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
+        ingredientsChoiceMap.clear();
+        ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
+
+        updateChoiceHash();
+    }
+
+    public Map<Character, List<Material>> getIngredientsChoiceMap() {
+        return ingredientsChoiceMap;
+    }
+
+    public void setChoiceShape(String[] shape) {
+        choiceShape = shape;
+
+        width = shape[0].length();
+        height = shape.length;
+    }
+
+    public String[] getChoiceShape() {
+        return choiceShape;
     }
 
     /**
@@ -141,7 +173,6 @@ public class CraftRecipe extends WorkbenchRecipe {
             ingredients = new ItemStack[9];
         }
 
-        // TODO remember WHY is this required
         if (slot != 0 && ingredients[0] == null) {
             throw new IllegalArgumentException("A plugin is using setIngredient() with index NOT starting at 0, shape is corrupted!!!");
         }
@@ -222,6 +253,37 @@ public class CraftRecipe extends WorkbenchRecipe {
         hash = str.toString().hashCode();
     }
 
+    private void updateChoiceHash() {
+        StringBuilder str = new StringBuilder("craft ");
+        int shapeSize = choiceShape.length;
+        for (int i = 0; i < shapeSize; i++) {
+            str.append(choiceShape[i]);
+
+            if (i + 1 < shapeSize) {
+                str.append(",");
+            }
+        }
+
+        str.append(" ");
+
+        for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+            str.append(entry.getKey()).append(":");
+
+            List<Material> materials = entry.getValue();
+
+            int materialsSize = materials.size();
+            for (int i = 0; i < materialsSize; i++) {
+                str.append(materials.get(i).toString());
+
+                if (i + 1 < materialsSize) {
+                    str.append(",");
+                }
+            }
+        }
+
+        hash = str.toString().hashCode();
+    }
+
     @Override
     public void resetName() {
         StringBuilder s = new StringBuilder();
@@ -231,29 +293,59 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         s.append(" (");
 
-        for (int h = 0; h < height; h++) {
-            for (int w = 0; w < width; w++) {
-                ItemStack item = ingredients[(h * 3) + w];
+        if (Version.has1_13Support()) {
+            if (choiceShape != null) {
+                int shapeSize = choiceShape.length;
+                for (int i = 0; i < shapeSize; i++) {
+                    s.append(choiceShape[i]);
 
-                if (item == null) {
-                    s.append("air");
-                } else {
-                    s.append(item.getType().toString().toLowerCase());
-
-                    if (!Version.has1_13Support() || item instanceof Damageable) {
-                        if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
-                            s.append(':').append(item.getDurability());
-                        }
+                    if (i + 1 < shapeSize) {
+                        s.append(",");
                     }
                 }
 
-                if (w < (width - 1)) {
-                    s.append(' ');
-                }
+                s.append(" ");
             }
 
-            if (h < (height - 1)) {
-                s.append(" / ");
+            for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+                s.append(entry.getKey()).append(":");
+
+                List<Material> materials = entry.getValue();
+
+                int materialsSize = materials.size();
+                for (int i = 0; i < materialsSize; i++) {
+                    s.append(materials.get(i).toString());
+
+                    if (i + 1 < materialsSize) {
+                        s.append(",");
+                    }
+                }
+            }
+        } else {
+            for (int h = 0; h < height; h++) {
+                for (int w = 0; w < width; w++) {
+                    ItemStack item = ingredients[(h * 3) + w];
+
+                    if (item == null) {
+                        s.append("air");
+                    } else {
+                        s.append(item.getType().toString().toLowerCase());
+
+                        if (!Version.has1_13Support() || item instanceof Damageable) {
+                            if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
+                                s.append(':').append(item.getDurability());
+                            }
+                        }
+                    }
+
+                    if (w < (width - 1)) {
+                        s.append(' ');
+                    }
+                }
+
+                if (h < (height - 1)) {
+                    s.append(" / ");
+                }
             }
         }
 
@@ -285,8 +377,14 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     @Override
     public ShapedRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredients() || !hasResults()) {
-            return null;
+        if (Version.has1_13Support()) {
+            if (!hasIngredientChoices() || !hasResults()) {
+                return null;
+            }
+        } else {
+            if (!hasIngredients() || !hasResults()) {
+                return null;
+            }
         }
 
         ShapedRecipe bukkitRecipe;
@@ -304,83 +402,91 @@ public class CraftRecipe extends WorkbenchRecipe {
             }
         }
 
-        switch (height) {
-            case 1:
-                switch (width) {
-                    case 1:
-                        bukkitRecipe.shape("a");
-                        break;
+        if (Version.has1_13Support()) {
+            bukkitRecipe.shape(choiceShape);
 
-                    case 2:
-                        bukkitRecipe.shape("ab");
-                        break;
+            for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+                bukkitRecipe.setIngredient(entry.getKey(), new RecipeChoice.MaterialChoice(entry.getValue()));
+            }
+        } else {
+            switch (height) {
+                case 1:
+                    switch (width) {
+                        case 1:
+                            bukkitRecipe.shape("a");
+                            break;
 
-                    case 3:
-                        bukkitRecipe.shape("abc");
-                        break;
-                    default:
-                        break;
-                }
+                        case 2:
+                            bukkitRecipe.shape("ab");
+                            break;
 
-                break;
-            case 2:
-                switch (width) {
-                    case 1:
-                        bukkitRecipe.shape("a", "b");
-                        break;
-
-                    case 2:
-                        bukkitRecipe.shape("ab", "cd");
-                        break;
-
-                    case 3:
-                        bukkitRecipe.shape("abc", "def");
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case 3:
-                switch (width) {
-                    case 1:
-                        bukkitRecipe.shape("a", "b", "c");
-                        break;
-
-                    case 2:
-                        bukkitRecipe.shape("ab", "cd", "ef");
-                        break;
-
-                    case 3:
-                        bukkitRecipe.shape("abc", "def", "ghi");
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-
-        ItemStack item;
-        char key = 'a';
-
-        for (int h = 0; h < height; h++) {
-            for (int w = 0; w < width; w++) {
-                item = ingredients[(h * 3) + w];
-
-                if (item != null) {
-                    if (Version.has1_13Support()) {
-                        if (item.getItemMeta() instanceof Damageable) {
-                            bukkitRecipe.setIngredient(key, item.getType(), ((Damageable) item.getItemMeta()).getDamage());
-                        } else {
-                            bukkitRecipe.setIngredient(key, item.getType());
-                        }
-                    } else {
-                        bukkitRecipe.setIngredient(key, item.getType(), item.getDurability());
+                        case 3:
+                            bukkitRecipe.shape("abc");
+                            break;
+                        default:
+                            break;
                     }
-                }
 
-                key++;
+                    break;
+                case 2:
+                    switch (width) {
+                        case 1:
+                            bukkitRecipe.shape("a", "b");
+                            break;
+
+                        case 2:
+                            bukkitRecipe.shape("ab", "cd");
+                            break;
+
+                        case 3:
+                            bukkitRecipe.shape("abc", "def");
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 3:
+                    switch (width) {
+                        case 1:
+                            bukkitRecipe.shape("a", "b", "c");
+                            break;
+
+                        case 2:
+                            bukkitRecipe.shape("ab", "cd", "ef");
+                            break;
+
+                        case 3:
+                            bukkitRecipe.shape("abc", "def", "ghi");
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            ItemStack item;
+            char key = 'a';
+
+            for (int h = 0; h < height; h++) {
+                for (int w = 0; w < width; w++) {
+                    item = ingredients[(h * 3) + w];
+
+                    if (item != null) {
+                        if (Version.has1_13Support()) {
+                            if (item.getItemMeta() instanceof Damageable) {
+                                bukkitRecipe.setIngredient(key, item.getType(), ((Damageable) item.getItemMeta()).getDamage());
+                            } else {
+                                bukkitRecipe.setIngredient(key, item.getType());
+                            }
+                        } else {
+                            bukkitRecipe.setIngredient(key, item.getType(), item.getDurability());
+                        }
+                    }
+
+                    key++;
+                }
             }
         }
 
@@ -391,9 +497,17 @@ public class CraftRecipe extends WorkbenchRecipe {
         return ingredients != null && ingredients.length == 9;
     }
 
+    public boolean hasIngredientChoices() {
+        return !ingredientsChoiceMap.isEmpty();
+    }
+
     @Override
     public boolean isValid() {
-        return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        if (Version.has1_13Support()) {
+            return hasIngredientChoices() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        } else {
+            return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        }
     }
 
     @Override

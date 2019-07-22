@@ -16,7 +16,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CraftRecipeParser extends BaseRecipeParser {
 
@@ -30,9 +32,13 @@ public class CraftRecipeParser extends BaseRecipeParser {
         CraftRecipe recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
+        Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();
+        char characterKey = 'a';
+        List<String> choiceShapeString = new ArrayList<>();
+
         ItemStack[] ingredients = new ItemStack[9];
         String[] split;
-        ItemStack item;
+
         int rows = 0;
         int ingredientsNum = 0;
         boolean ingredientErrors = false;
@@ -63,17 +69,38 @@ public class CraftRecipeParser extends BaseRecipeParser {
             }
 
             for (int i = 0; i < rowLen; i++) { // go through each ingredient on the line
-                item = Tools.parseItem(split[i], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
-                if (item == null) { // invalid item
-                    ingredientErrors = true;
-                }
+                if (Version.has1_13Support()) {
+                    List<Material> choices = Tools.parseChoice(split[i], ParseBit.NONE);
 
-                // no point in adding more ingredients if there are errors
-                if (!ingredientErrors) {
-                    // Minecraft 1.11 required air ingredients to include a data value of 0
-                    if ((Version.has1_11Support() && !Version.has1_12Support()) || item.getType() != Material.AIR) {
-                        ingredients[(rows * 3) + i] = item;
+                    if (choices == null || choices.isEmpty()) { // No items found
+                        ingredientErrors = true;
+                    }
+
+                    if (!ingredientErrors) {
+                        if (choiceShapeString.size() == rows) {
+                            choiceShapeString.add("" + characterKey);
+                        } else {
+                            choiceShapeString.set(rows, choiceShapeString.get(rows) + characterKey);
+                        }
+
+                        ingredientsChoiceMap.put(characterKey, choices);
+
+                        characterKey++;
                         ingredientsNum++;
+                    }
+                } else {
+                    ItemStack item = Tools.parseItem(split[i], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+                    if (item == null) { // invalid item
+                        ingredientErrors = true;
+                    }
+
+                    // no point in adding more ingredients if there are errors
+                    if (!ingredientErrors) {
+                        // Minecraft 1.11 required air ingredients to include a data value of 0
+                        if ((Version.has1_11Support() && !Version.has1_12Support()) || item.getType() != Material.AIR) {
+                            ingredients[(rows * 3) + i] = item;
+                            ingredientsNum++;
+                        }
                     }
                 }
             }
@@ -86,11 +113,25 @@ public class CraftRecipeParser extends BaseRecipeParser {
             return false;
         } else if (ingredientsNum == 0) { // no ingredients were processed
             return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult '" + Files.FILE_INFO_BASICS + "' for proper recipe syntax.");
-        } else if (ingredientsNum == 2 && !conditionEvaluator.checkIngredients(ingredients)) {
-            return false;
+        } else if (ingredientsNum == 2) {
+            if (Version.has1_13Support()) {
+                if (!conditionEvaluator.checkMaterialChoices(ingredientsChoiceMap)) {
+                    return false;
+                }
+            } else {
+                if (!conditionEvaluator.checkIngredients(ingredients)) {
+                    return false;
+                }
+            }
         }
 
-        recipe.setIngredients(ingredients); // done with ingredients, set 'em
+        // done with ingredients, set 'em
+        if (Version.has1_13Support()) {
+            recipe.setChoiceShape(choiceShapeString.toArray(new String[choiceShapeString.size()]));
+            recipe.setIngredientsChoiceMap(ingredientsChoiceMap);
+        } else {
+            recipe.setIngredients(ingredients);
+        }
 
         if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) { // for mc1.12, matching requires outcome too...
             reader.nextLine(); // Skip the results line, if it exists

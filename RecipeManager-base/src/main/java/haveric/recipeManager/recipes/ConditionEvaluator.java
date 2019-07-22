@@ -24,6 +24,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ConditionEvaluator {
@@ -32,6 +34,27 @@ public class ConditionEvaluator {
 
     public ConditionEvaluator(RecipeRegistrator registrator) {
         this.registrator = registrator;
+    }
+
+    public boolean checkMaterialChoices(Map<Character, List<Material>> ingredientsChoiceMap) {
+        List<Material> repairableItems = new ArrayList<>();
+
+        for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+            List<Material> materials = entry.getValue();
+
+            for (Material material : materials) {
+                if (material.getMaxDurability() > 0) {
+                    if (repairableItems.contains(material)) {
+                        ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
+                        return false;
+                    } else {
+                        repairableItems.add(material);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     public boolean checkIngredients(ItemStack... ingredients) {
@@ -110,14 +133,21 @@ public class ConditionEvaluator {
                     if (recipe instanceof CraftRecipe) {
                         if (bukkit instanceof ShapedRecipe) {
                             CraftRecipe craftRecipe = (CraftRecipe) recipe;
-                            ItemStack[] matrix = craftRecipe.getIngredients();
-                            Tools.trimItemMatrix(matrix);
-                            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-                            int height = craftRecipe.getHeight();
-                            int width = craftRecipe.getWidth();
 
-                            if (NMSVersionHandler.getToolsRecipe().matchesShaped(bukkit, matrix, matrixMirror, width, height)) {
-                                return entry.getValue();
+                            if (Version.has1_13Support()) {
+                                if (NMSVersionHandler.getToolsRecipe().matchesShaped(bukkit, craftRecipe.getChoiceShape(), craftRecipe.getIngredientsChoiceMap())) {
+                                    return entry.getValue();
+                                }
+                            } else {
+                                ItemStack[] matrix = craftRecipe.getIngredients();
+                                Tools.trimItemMatrix(matrix);
+                                ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+                                int height = craftRecipe.getHeight();
+                                int width = craftRecipe.getWidth();
+
+                                if (NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(bukkit, matrix, matrixMirror, width, height)) {
+                                    return entry.getValue();
+                                }
                             }
                         }
                     } else if (recipe instanceof CombineRecipe) {

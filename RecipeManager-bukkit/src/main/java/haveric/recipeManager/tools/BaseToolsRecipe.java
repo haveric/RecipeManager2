@@ -5,17 +5,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class BaseToolsRecipe {
     public boolean matchesFurnace(Recipe bukkitRecipe, ItemStack furnaceIngredient) {
         return false;
     }
 
-    public boolean matchesShaped(Recipe bukkitRecipe, ItemStack[] matrix, ItemStack[] matrixMirror, int width, int height) {
-        return matchesShapedMatrix(bukkitRecipe, matrix, width, height) || matchesShapedMatrix(bukkitRecipe, matrixMirror, width, height);
+    public boolean matchesShapedLegacy(Recipe bukkitRecipe, ItemStack[] matrix, ItemStack[] matrixMirror, int width, int height) {
+        return matchesShapedMatrixLegacy(bukkitRecipe, matrix, width, height) || matchesShapedMatrixLegacy(bukkitRecipe, matrixMirror, width, height);
     }
 
-    protected boolean matchesShapedMatrix(Recipe bukkitRecipe, ItemStack[] ingredients, int width, int height) {
+    protected boolean matchesShapedMatrixLegacy(Recipe bukkitRecipe, ItemStack[] ingredients, int width, int height) {
+        return false;
+    }
+
+    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, List<Material>> materialChoiceMap) {
         return false;
     }
 

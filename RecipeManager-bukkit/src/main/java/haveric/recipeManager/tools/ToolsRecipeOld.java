@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ToolsRecipeOld extends BaseToolsRecipe {
     @Override
-    public boolean matchesShaped(Recipe bukkitRecipe, ItemStack[] matrix, ItemStack[] matrixMirror, int width, int height) {
+    public boolean matchesShapedLegacy(Recipe bukkitRecipe, ItemStack[] matrix, ItemStack[] matrixMirror, int width, int height) {
         if (bukkitRecipe instanceof ShapedRecipe) {
             ShapedRecipe shapedRecipe = (ShapedRecipe) bukkitRecipe;
 

@@ -60,7 +60,6 @@ public class CombineRecipe extends WorkbenchRecipe {
                     ingredientChoiceList.add(cloneList);
                 }
             }
-
         }
     }
 

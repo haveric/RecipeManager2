@@ -486,32 +486,55 @@ public class Vanilla {
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
         Recipe r;
-        String[] sh;
 
-        ItemStack[] matrix = recipe.getIngredients();
-        Tools.trimItemMatrix(matrix);
-        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-        int height = recipe.getHeight();
-        int width = recipe.getWidth();
+        if (Version.has1_13Support()) {
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
 
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
+                    if (r instanceof ShapedRecipe) {
+                        sr = (ShapedRecipe) r;
 
-                if (r instanceof ShapedRecipe) {
-                    sr = (ShapedRecipe) r;
-                    sh = sr.getShape();
+                        if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
+                            iterator.remove();
 
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShaped(sr, matrix, matrixMirror, width, height)) {
-                        iterator.remove();
+                            baseRecipeIterator.finish();
 
-                        baseRecipeIterator.finish();
-
-                        return sr;
+                            return sr;
+                        }
                     }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
                 }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
+            }
+        } else {
+            String[] sh;
+
+            ItemStack[] matrix = recipe.getIngredients();
+            Tools.trimItemMatrix(matrix);
+            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+            int height = recipe.getHeight();
+            int width = recipe.getWidth();
+
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
+
+                    if (r instanceof ShapedRecipe) {
+                        sr = (ShapedRecipe) r;
+                        sh = sr.getShape();
+
+                        if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
+                            iterator.remove();
+
+                            baseRecipeIterator.finish();
+
+                            return sr;
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
+                }
             }
         }
 
@@ -811,31 +834,52 @@ public class Vanilla {
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
         Recipe r;
-        String[] sh;
+        if (Version.has1_13Support()) {
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
 
-        ItemStack[] matrix = recipe.getIngredients();
-        Tools.trimItemMatrix(matrix);
-        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-        int height = recipe.getHeight();
-        int width = recipe.getWidth();
+                    if (r instanceof ShapedRecipe) {
+                        sr = (ShapedRecipe) r;
 
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapedRecipe) {
-                    sr = (ShapedRecipe) r;
-                    sh = sr.getShape();
-
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShaped(sr, matrix, matrixMirror, width, height)) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
-                        baseRecipeIterator.replace(recipe, overrideItem);
-                        baseRecipeIterator.finish();
-                        return sr;
+                        if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                            baseRecipeIterator.replace(recipe, overrideItem);
+                            baseRecipeIterator.finish();
+                            return sr;
+                        }
                     }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
                 }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
+            }
+        } else {
+            String[] sh;
+
+            ItemStack[] matrix = recipe.getIngredients();
+            Tools.trimItemMatrix(matrix);
+            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+            int height = recipe.getHeight();
+            int width = recipe.getWidth();
+
+            while (iterator.hasNext()) {
+                try {
+                    r = iterator.next();
+
+                    if (r instanceof ShapedRecipe) {
+                        sr = (ShapedRecipe) r;
+                        sh = sr.getShape();
+
+                        if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                            baseRecipeIterator.replace(recipe, overrideItem);
+                            baseRecipeIterator.finish();
+                            return sr;
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    // Catch any invalid Bukkit recipes
+                }
             }
         }
         return null;
