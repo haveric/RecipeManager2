@@ -1088,7 +1088,7 @@ public class Tools {
         if (Version.has1_13Support()) {
             // set known sounds to make sure Enum isn't changing on us
             switch (newSound) {
-                case "BLOCK_NOTE_BASE":
+                case "BLOCK_NOTE_BASS":
                     sound = Sound.BLOCK_NOTE_BLOCK_BASS;
                     break;
                 case "BLOCK_NOTE_PLING":
@@ -1114,7 +1114,7 @@ public class Tools {
         } else {
             ArrayList<String> oldSounds = new ArrayList<>();
             switch (newSound) {
-                case "BLOCK_NOTE_BASE":
+                case "BLOCK_NOTE_BASS":
                     oldSounds.add("NOTE_BASS");
                     break;
                 case "BLOCK_NOTE_PLING":
