@@ -2,12 +2,11 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
 import java.io.File;
@@ -30,9 +29,9 @@ public class IngredientTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            ItemStack[] ing = recipe.getIngredients();
+            Map<Character, List<Material>> choiceMap = recipe.getIngredientsChoiceMap();
 
-            assertEquals(Material.DIRT, ing[0].getType());
+            assertTrue(choiceMap.get('a').contains(Material.DIRT));
 
             int numIngredients = 0;
             if (resultType == Material.DIRT) {
@@ -56,32 +55,28 @@ public class IngredientTest extends FlagBaseTest {
             }
 
             if (numIngredients > 1) {
-                assertEquals(Material.COBBLESTONE, ing[1].getType());
+                assertTrue(choiceMap.get('b').contains(Material.COBBLESTONE));
             }
             if (numIngredients > 2) {
-                assertEquals(Material.OAK_LOG, ing[2].getType());
+                assertTrue(choiceMap.get('c').contains(Material.OAK_LOG));
             }
             if (numIngredients > 3) {
-                assertEquals(Material.STONE, ing[3].getType());
+                assertTrue(choiceMap.get('d').contains(Material.STONE));
             }
             if (numIngredients > 4) {
-                assertEquals(Material.BRICK, ing[4].getType());
+                assertTrue(choiceMap.get('e').contains(Material.BRICK));
             }
             if (numIngredients > 5) {
-                assertEquals(Material.STONE_SWORD, ing[5].getType());
+                assertTrue(choiceMap.get('f').contains(Material.STONE_SWORD));
             }
             if (numIngredients > 6) {
-                assertEquals(Material.GOLDEN_SWORD, ing[6].getType());
+                assertTrue(choiceMap.get('g').contains(Material.GOLDEN_SWORD));
             }
             if (numIngredients > 7) {
-                assertEquals(Material.DIAMOND_SWORD, ing[7].getType());
+                assertTrue(choiceMap.get('h').contains(Material.DIAMOND_SWORD));
             }
             if (numIngredients > 8) {
-                assertEquals(Material.DIAMOND, ing[8].getType());
-            }
-
-            for (int i = numIngredients; i <= 8; i++) {
-                assertNull(ing[i]);
+                assertTrue(choiceMap.get('i').contains(Material.DIAMOND));
             }
         }
     }
@@ -99,25 +94,28 @@ public class IngredientTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            ItemStack[] ing = recipe.getIngredients();
-            if (resultType == Material.DIRT) {
-                assertEquals(Material.DIRT, ing[0].getType());
-                assertEquals(Material.COBBLESTONE, ing[1].getType());
-                assertEquals(Material.OAK_LOG, ing[2].getType());
+            Map<Character, List<Material>> choiceMap = recipe.getIngredientsChoiceMap();
 
-                for (int i = 3; i <= 8; i++) {
-                    assertNull(ing[i]);
-                }
+            if (resultType == Material.DIRT) {
+                assertTrue(choiceMap.get('a').contains(Material.DIRT));
+                assertTrue(choiceMap.get('b').contains(Material.COBBLESTONE));
+                assertTrue(choiceMap.get('c').contains(Material.OAK_LOG));
+
+                assertNull(choiceMap.get('d'));
+
+                assertEquals(1, recipe.getChoiceShape().length);
+                assertEquals("abc", recipe.getChoiceShape()[0]);
             } else if (resultType == Material.STONE) {
-                assertEquals(Material.DIRT, ing[0].getType());
-                assertNull(ing[1]);
-                assertNull(ing[2]);
-                assertEquals(Material.COBBLESTONE, ing[3].getType());
-                assertNull(ing[4]);
-                assertNull(ing[5]);
-                assertEquals(Material.OAK_LOG, ing[6].getType());
-                assertNull(ing[7]);
-                assertNull(ing[8]);
+                assertTrue(choiceMap.get('a').contains(Material.DIRT));
+                assertTrue(choiceMap.get('b').contains(Material.COBBLESTONE));
+                assertTrue(choiceMap.get('c').contains(Material.OAK_LOG));
+
+                assertNull(choiceMap.get('d'));
+
+                assertEquals(3, recipe.getChoiceShape().length);
+                assertEquals("a", recipe.getChoiceShape()[0]);
+                assertEquals("b", recipe.getChoiceShape()[1]);
+                assertEquals("c", recipe.getChoiceShape()[2]);
             }
         }
     }
@@ -135,9 +133,9 @@ public class IngredientTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            List<ItemStack> ing = recipe.getIngredients();
+            List<List<Material>> ingredientChoiceMap = recipe.getIngredientChoiceList();
 
-            assertTrue(containsItem(ing, Material.DIRT));
+            assertTrue(containsItem(ingredientChoiceMap, Material.DIRT));
 
             int numIngredients = 0;
             if (resultType == Material.DIRT) {
@@ -161,30 +159,30 @@ public class IngredientTest extends FlagBaseTest {
             }
 
             if (numIngredients > 1) {
-                assertTrue(containsItem(ing, Material.COBBLESTONE));
+                assertTrue(containsItem(ingredientChoiceMap, Material.COBBLESTONE));
             }
             if (numIngredients > 2) {
-                assertTrue(containsItem(ing, Material.OAK_LOG));
+                assertTrue(containsItem(ingredientChoiceMap, Material.OAK_LOG));
             }
             if (numIngredients > 3) {
-                assertTrue(containsItem(ing, Material.STONE));
+                assertTrue(containsItem(ingredientChoiceMap, Material.STONE));
             }
             if (numIngredients > 4) {
-                assertTrue(containsItem(ing, Material.BRICK));
+                assertTrue(containsItem(ingredientChoiceMap, Material.BRICK));
             }
             if (numIngredients > 5) {
-                assertTrue(containsItem(ing, Material.STONE_SWORD));
+                assertTrue(containsItem(ingredientChoiceMap, Material.STONE_SWORD));
             }
             if (numIngredients > 6) {
-                assertTrue(containsItem(ing, Material.GOLDEN_SWORD));
+                assertTrue(containsItem(ingredientChoiceMap, Material.GOLDEN_SWORD));
             }
             if (numIngredients > 7) {
-                assertTrue(containsItem(ing, Material.DIAMOND_SWORD));
+                assertTrue(containsItem(ingredientChoiceMap, Material.DIAMOND_SWORD));
             }
             if (numIngredients > 8) {
-                assertTrue(containsItem(ing, Material.DIAMOND));
+                assertTrue(containsItem(ingredientChoiceMap, Material.DIAMOND));
             }
-            assertEquals(numIngredients, ing.size());
+            assertEquals(numIngredients, ingredientChoiceMap.size());
         }
     }
 
@@ -201,20 +199,20 @@ public class IngredientTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            List<ItemStack> ing = recipe.getIngredients();
+            List<List<Material>> ingredientChoiceMap = recipe.getIngredientChoiceList();
             if (resultType == Material.DIRT) {
-                assertFalse(containsItem(ing, Material.STONE));
+                assertFalse(containsItem(ingredientChoiceMap, Material.STONE));
             } else if (resultType == Material.STONE) {
                 fail();
             }
         }
     }
 
-    private boolean containsItem(List<ItemStack> list, Material mat) {
+    private boolean containsItem(List<List<Material>> list, Material mat) {
         boolean contains = false;
 
-        for (ItemStack item : list) {
-            if (mat.equals(item.getType())) {
+        for (List<Material> materials : list) {
+            if (materials.contains(mat)) {
                 contains = true;
                 break;
             }

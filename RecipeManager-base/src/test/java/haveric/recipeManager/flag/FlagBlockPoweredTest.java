@@ -8,7 +8,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Test;
@@ -83,7 +83,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         assertEquals(2, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
+            RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
 
             Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
             a.setLocation(unpoweredFurnaceLoc);

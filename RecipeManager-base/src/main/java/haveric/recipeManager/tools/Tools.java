@@ -862,25 +862,48 @@ public class Tools {
         if (recipe instanceof CraftRecipe) {
             CraftRecipe r = (CraftRecipe) recipe;
 
-            for (ItemStack i : r.getIngredients()) {
-                if (i == null) {
-                    continue;
-                }
+            if (Version.has1_13Support()) {
+                Map<Character, List<Material>> ingredientChoiceMap = r.getIngredientsChoiceMap();
+                for (Map.Entry<Character, List<Material>> entry : ingredientChoiceMap.entrySet()) {
+                    List<Material> materials = entry.getValue();
 
-                if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                    found++;
+                    if (materials.contains(type)) {
+                        found++;
+                        break;
+                    }
+                }
+            } else {
+                for (ItemStack i : r.getIngredients()) {
+                    if (i == null) {
+                        continue;
+                    }
+
+                    if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                        found++;
+                    }
                 }
             }
         } else if (recipe instanceof CombineRecipe) {
             CombineRecipe r = (CombineRecipe) recipe;
 
-            for (ItemStack i : r.getIngredients()) {
-                if (i == null) {
-                    continue;
-                }
+            if (Version.has1_13Support()) {
+                List<List<Material>> materialsList = r.getIngredientChoiceList();
 
-                if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                    found++;
+                for (List<Material> materials : materialsList) {
+                    if (materials.contains(type)) {
+                        found++;
+                        break;
+                    }
+                }
+            } else {
+                for (ItemStack i : r.getIngredients()) {
+                    if (i == null) {
+                        continue;
+                    }
+
+                    if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                        found++;
+                    }
                 }
             }
         } else if (recipe instanceof RMBaseFurnaceRecipe) {

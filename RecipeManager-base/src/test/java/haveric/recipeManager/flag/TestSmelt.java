@@ -4,13 +4,13 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -25,19 +25,18 @@ public class TestSmelt extends FlagBaseTest {
 
         assertEquals(4, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
-            ItemStack ingredient = recipe.getIngredient();
+            RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
+            List<Material> ingredientMaterials = recipe.getIngredientChoice();
+
             ItemResult result = recipe.getResult();
 
-            Material ingredientType = ingredient.getType();
-
-            if (ingredientType == Material.STONE_SWORD) {
+            if (ingredientMaterials.contains(Material.STONE_SWORD)) {
                 assertEquals(Vanilla.FURNACE_RECIPE_TIME, recipe.getCookTime(), .001);
-            } else if (ingredientType == Material.IRON_SWORD) {
+            } else if (ingredientMaterials.contains(Material.IRON_SWORD)) {
                 assertEquals(5, recipe.getCookTime(), .001);
-            } else if (ingredientType == Material.GOLDEN_SWORD) {
+            } else if (ingredientMaterials.contains(Material.GOLDEN_SWORD)) {
                 assertEquals(20, recipe.getCookTime(), .001);
-            } else if (ingredientType == Material.DIAMOND_SWORD) {
+            } else if (ingredientMaterials.contains(Material.DIAMOND_SWORD)) {
                 assertEquals(25, recipe.getCookTime(), .001);
             }
         }
