@@ -132,6 +132,35 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
         // done with ingredients, set 'em
         if (Version.has1_13Support()) {
+
+            // Add extra air to fill rectangle
+            if (choiceShapeString.size() > 1) {
+                int min = choiceShapeString.get(0).length();
+                int max = min;
+
+                for (int i = 1; i < choiceShapeString.size(); i++) {
+                    String characters = choiceShapeString.get(i);
+                    max = Math.max(characters.length(), max);
+                    min = Math.min(characters.length(), min);
+                }
+
+                if (min < max) {
+                    for (int i = 0; i < choiceShapeString.size(); i++) {
+                        String shape = choiceShapeString.get(i);
+                        for (int j = shape.length(); j < max; j++) {
+                            shape += characterKey;
+                        }
+                        choiceShapeString.set(i, shape);
+                    }
+
+                    List<Material> airList = new ArrayList<>();
+                    airList.add(Material.AIR);
+
+                    ingredientsChoiceMap.put(characterKey, airList);
+                }
+            }
+
+
             recipe.setChoiceShape(choiceShapeString.toArray(new String[choiceShapeString.size()]));
             recipe.setIngredientsChoiceMap(ingredientsChoiceMap);
         } else {
