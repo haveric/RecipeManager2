@@ -232,6 +232,7 @@ public class FlagKeepItem extends Flag {
             if (clone == null) {
                 inv.setItem(index, new ItemStack(Material.AIR));
             } else {
+                clone.setAmount(clone.getAmount() + 1);
                 inv.setItem(index, clone);
             }
         }

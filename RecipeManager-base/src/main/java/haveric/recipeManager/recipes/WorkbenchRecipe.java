@@ -9,7 +9,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagDisplayResult;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.FlagKeepItem;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -251,31 +250,15 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         } else {
             flagIC = null;
         }
-        FlagKeepItem flagKI;
-        if (hasFlag(FlagType.KEEP_ITEM)) {
-            flagKI = (FlagKeepItem) getFlag(FlagType.KEEP_ITEM);
-        } else {
-            flagKI = null;
-        }
 
         if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
             flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-        }
-
-        if (flagKI == null && result != null && result.hasFlag(FlagType.KEEP_ITEM)) {
-            flagKI = (FlagKeepItem) result.getFlag(FlagType.KEEP_ITEM);
         }
 
         for (int i = 1; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
 
             if (item != null) {
-                if (flagKI != null) {
-                    if (flagKI.getItem(item) != null) {
-                        continue;
-                    }
-                }
-
                 int amt = item.getAmount();
                 int newAmt = amt;
 
