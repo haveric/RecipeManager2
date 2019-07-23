@@ -174,11 +174,12 @@ public class RecipeManager extends JavaPlugin {
      *            Set to true to only check recipes, settings are unaffected.
      */
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
+        MessageSender.init(Settings.getInstance().getColorConsole());
+
         Settings.getInstance().reload(sender); // (re)load settings
         Messages.getInstance().reload(sender); // (re)load messages from messages.yml
         Files.reload(sender); // (re)generate info files if they do not exist
 
-        MessageSender.init(Settings.getInstance().getColorConsole());
         Updater.init(this, 32835, null);
 
         if (!check) {
