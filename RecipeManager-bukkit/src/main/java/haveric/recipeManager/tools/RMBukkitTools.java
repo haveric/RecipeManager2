@@ -151,7 +151,7 @@ public class RMBukkitTools {
             }
 
             for (int j = 0; j < size; j++) {
-                if (materials.get(j) != choiceMaterials.get(j)) {
+                if (!materials.contains(choiceMaterials.get(j))) {
                     return false;
                 }
             }
@@ -167,7 +167,7 @@ public class RMBukkitTools {
             }
 
             for (int j = 0; j < size; j++) {
-                if (materials.get(j) != choiceMaterials.get(j).getType()) {
+                if (!materials.contains(choiceMaterials.get(j).getType())) {
                     return false;
                 }
             }

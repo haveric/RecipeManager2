@@ -119,7 +119,6 @@ public class CombineRecipeParser extends BaseRecipeParser {
             recipe.setIngredients(ingredients);
         }
 
-
         if (recipe.hasFlag(FlagType.REMOVE)) {
             reader.nextLine(); // Skip the results line, if it exists
         } else {
