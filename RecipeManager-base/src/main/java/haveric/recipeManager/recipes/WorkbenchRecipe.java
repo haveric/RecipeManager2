@@ -9,6 +9,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagDisplayResult;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
+import haveric.recipeManager.flag.flags.FlagKeepItem;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -229,13 +230,27 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         return formatString;
     }
 
-    public int getCraftableTimes(CraftingInventory inv) {
+    public int getCraftableTimes(CraftingInventory inv, ItemResult result) {
         int craftAmount = 0;
         int maxStack = inv.getMaxStackSize();
 
         for (ItemStack i : inv.getMatrix()) {
             if (i != null && i.getType() != Material.AIR) {
                 int stackAmount = i.getAmount();
+
+                if (hasFlag(FlagType.KEEP_ITEM)) {
+                    FlagKeepItem keepItemFlag = (FlagKeepItem) getFlag(FlagType.KEEP_ITEM);
+                    if (keepItemFlag.getItem(i) != null) {
+                        stackAmount = 64;
+                    }
+                }
+                if (result.hasFlag(FlagType.KEEP_ITEM)) {
+                    FlagKeepItem keepItemFlag = (FlagKeepItem) result.getFlag(FlagType.KEEP_ITEM);
+                    if (keepItemFlag.getItem(i) != null) {
+                        stackAmount = 64;
+                    }
+                }
+
                 craftAmount = Math.min(stackAmount, maxStack);
             }
         }

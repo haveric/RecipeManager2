@@ -628,7 +628,7 @@ public class Events implements Listener {
             }
 
             if (event.isShiftClick()) {
-                int craftAmount = recipe.getCraftableTimes(inv); // Calculate how many times the recipe can be crafted
+                int craftAmount = recipe.getCraftableTimes(inv, result); // Calculate how many times the recipe can be crafted
                 ItemStack item = result.clone();
                 item.setAmount(result.getAmount() * craftAmount);
 
