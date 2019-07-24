@@ -79,45 +79,7 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
      */
     public void remove() {
         // MessageSender.getInstance().info("NMS for 1.14 removing recipe " + removeRecipe);
-        try {
-            if (removeRecipe instanceof ShapedRecipes) {
-                ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
-                Field widthF = stripPrivateFinal(ShapedRecipes.class, "width");
-                Field heightF = stripPrivateFinal(ShapedRecipes.class, "height");
-                Field itemsF = stripPrivateFinal(ShapedRecipes.class, "items");
-                Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
-
-                // now for the _real_ fun, modifying an unmodifiable recipe.
-                // So for shaped recipes, my thought is just to replace the ItemStack with something
-                // nonsensical, set height and width to 1, and hope it isn't cached in too many places.
-                // Oh, and set result to a non-air item. (Pretty sure the item doesn't matter. We'd ideally set it to air, but can't in 1.14).
-                widthF.setInt(shaped, 1);
-                heightF.setInt(shaped, 1);
-                resultF.set(shaped, new ItemStack(Items.STICK, 1));
-                itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(new Item[] {new ItemNameTag(new Item.Info())})));
-            } else if (removeRecipe instanceof ShapelessRecipes) {
-                ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
-                Field ingredientsF = stripPrivateFinal(ShapelessRecipes.class, "ingredients");
-                Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
-
-                resultF.set(shapeless, new ItemStack(Items.STICK, 1));
-                ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[]{new ItemNameTag(new Item.Info())})));
-            } else if (removeRecipe instanceof FurnaceRecipe) {
-                recipesToRemove.add(removeRecipe);
-            } else if (removeRecipe instanceof RecipeBlasting) {
-                recipesToRemove.add(removeRecipe);
-            } else if (removeRecipe instanceof RecipeSmoking) {
-                recipesToRemove.add(removeRecipe);
-            } else if (removeRecipe instanceof RecipeCampfire) {
-                recipesToRemove.add(removeRecipe);
-            } else if (removeRecipe instanceof RecipeStonecutting) {
-                recipesToRemove.add(removeRecipe);
-            } else {
-                throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
-            }
-        } catch (Exception e) {
-            MessageSender.getInstance().error(null, e, "NMS failure for v1.14 support during grid recipe removal");
-        }
+        recipesToRemove.add(removeRecipe);
     }
 
     @Override
