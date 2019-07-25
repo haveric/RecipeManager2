@@ -327,7 +327,6 @@ public class CombineRecipe extends WorkbenchRecipe {
 
         Map<ItemStack, MutableInt> items = new HashMap<>();
 
-        // TODO: Handle ingredientChoiceList for 1.13
         for (ItemStack item : ingredients) {
             MutableInt i = items.get(item);
 
@@ -344,6 +343,7 @@ public class CombineRecipe extends WorkbenchRecipe {
             item.setAmount(e.getValue().intValue());
 
             String print = "";
+            // TODO: Recipes can have ingredientcondition as well
             if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
                 FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
                 List<ConditionsIngredient> conditions = flag.getIngredientConditions(item);

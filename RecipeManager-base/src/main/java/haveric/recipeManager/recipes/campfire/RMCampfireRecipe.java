@@ -17,7 +17,6 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.CampfireRecipe;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
@@ -308,8 +307,7 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         }
 
         if (print.equals("")) {
-            // TODO: Handle Multiple RecipeChoices
-            print = ToolsItem.print(new ItemStack(getIngredientChoice().get(0)), RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

@@ -571,6 +571,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                     s.append('[').append(RMCChatColor.WHITE).append('_').append(RMCChatColor.GRAY).append(']');
                 } else {
                     String print = "";
+                    // TODO: Recipes can have ingredientcondition as well
                     if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
                         FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
                         List<ConditionsIngredient> conditions = flag.getIngredientConditions(displayIngredients[i]);

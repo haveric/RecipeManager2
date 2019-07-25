@@ -49,6 +49,45 @@ public class ToolsItem {
         return item;
     }
 
+    public static String printChoice(List<Material> materials, RMCChatColor defColor, RMCChatColor endColor) {
+        String print = "";
+
+        int size = materials.size();
+        for (int i = 0; i < size; i++) {
+            print += printMaterial(materials.get(i), defColor, endColor);
+
+            if (i + 1 < size) {
+                print += ",";
+            }
+        }
+
+        return print;
+    }
+
+    private static String printMaterial(Material material, RMCChatColor defColor, RMCChatColor endColor) {
+        String print;
+        String name;
+
+        String endTextColor = "";
+        if (endColor != null) {
+            endTextColor += endColor;
+        }
+
+        if (material == Material.AIR) {
+            print = RMCChatColor.GRAY + "(air)" + endTextColor;
+        } else {
+            name = Settings.getInstance().getMaterialPrint(material);
+
+            if (name == null) {
+                name = Tools.parseAliasPrint(material.toString());
+            }
+
+            print = defColor + name + endTextColor;
+        }
+
+        return print;
+    }
+
     /**
      * Displays the ItemStack in a user-friendly and colorful manner.<br>
      * If item is null or air it will print "nothing" in gray.<br>
@@ -82,7 +121,7 @@ public class ToolsItem {
      */
     public static String print(ItemStack item, RMCChatColor defColor, RMCChatColor endColor) {
         if (item == null || item.getType() == Material.AIR) {
-            return RMCChatColor.GRAY + "(nothing)";
+            return RMCChatColor.GRAY + "(air)";
         }
 
         String name;

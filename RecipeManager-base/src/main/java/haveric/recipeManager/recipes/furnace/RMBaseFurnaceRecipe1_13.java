@@ -360,7 +360,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         }
 
         if (print.equals("")) {
-            print = ToolsItem.print(getIngredient(), RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

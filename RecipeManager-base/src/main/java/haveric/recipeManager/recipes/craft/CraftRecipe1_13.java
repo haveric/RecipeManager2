@@ -2,8 +2,6 @@ package haveric.recipeManager.recipes.craft;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.conditions.ConditionsIngredient;
-import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -478,65 +476,32 @@ public class CraftRecipe1_13 extends CraftRecipe {
         s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
         s.append(RMCChatColor.GRAY);
 
-        Map<String, Integer> charItems = new LinkedHashMap<>();
-        int num = 1;
+        for (String shape : choiceShape) {
+            for (char letter : shape.toCharArray()) {
+                s.append('[');
 
-        // If ingredients get mirrored at any point, display them as they were written
-        ItemStack[] displayIngredients = ingredients;
-        if (isMirrorShape()) {
-            displayIngredients = Tools.mirrorItemMatrix(ingredients);
-        }
-
-        int ingredientsLength = displayIngredients.length;
-        for (int i = 0; i < ingredientsLength; i++) {
-            int col = i % 3 + 1;
-            int row = i / 3 + 1;
-
-            if (col <= getWidth() && row <= getHeight()) {
-                if (displayIngredients[i] == null) {
-                    s.append('[').append(RMCChatColor.WHITE).append('_').append(RMCChatColor.GRAY).append(']');
+                List<Material> materials = ingredientsChoiceMap.get(letter);
+                if (materials.size() == 1 && materials.contains(Material.AIR)) {
+                    s.append(RMCChatColor.WHITE).append('_');
                 } else {
-                    String print = "";
-                    if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-                        FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-                        List<ConditionsIngredient> conditions = flag.getIngredientConditions(displayIngredients[i]);
-
-                        if (conditions.size() > 0) {
-                            ConditionsIngredient condition = conditions.get(0);
-
-                            if (condition.hasName()) {
-                                print = RMCChatColor.BLACK + condition.getName();
-                            } else if (condition.hasLore()) {
-                                print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
-                            }
-                        }
-                    }
-
-                    if (print.equals("")) {
-                        print = ToolsItem.print(displayIngredients[i], RMCChatColor.BLACK, RMCChatColor.BLACK);
-                    }
-
-                    Integer get = charItems.get(print);
-
-                    if (get == null) {
-                        charItems.put(print, num);
-                        get = num;
-                        num++;
-                    }
-
-                    s.append('[').append(RMCChatColor.DARK_PURPLE).append(get).append(RMCChatColor.GRAY).append(']');
+                    s.append(RMCChatColor.DARK_PURPLE).append(letter);
                 }
+
+                s.append(RMCChatColor.GRAY).append(']');
             }
 
-            if (col == getWidth() && row <= getHeight()) {
-                s.append('\n');
-            }
+            s.append('\n');
         }
 
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients"));
+        s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        for (Entry<String, Integer> entry : charItems.entrySet()) {
-            s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getValue()).append(RMCChatColor.GRAY).append(": ").append(entry.getKey());
+        for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+            s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
+
+            // TODO: Check IngredientConditions to get Names
+
+            List<Material> materials = entry.getValue();
+            s.append(ToolsItem.printChoice(materials, RMCChatColor.BLACK, RMCChatColor.BLACK));
         }
 
         return s.toString();

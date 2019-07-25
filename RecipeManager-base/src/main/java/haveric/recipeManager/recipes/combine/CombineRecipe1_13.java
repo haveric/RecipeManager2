@@ -2,8 +2,6 @@ package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.conditions.ConditionsIngredient;
-import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -14,17 +12,13 @@ import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import haveric.recipeManagerCommon.util.RMCUtil;
-import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class CombineRecipe1_13 extends CombineRecipe {
     private List<List<Material>> ingredientChoiceList = new ArrayList<>();
@@ -353,45 +347,10 @@ public class CombineRecipe1_13 extends CombineRecipe {
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        Map<ItemStack, MutableInt> items = new HashMap<>();
+        for (List<Material> materials : ingredientChoiceList) {
+            // TODO: Check IngredientConditions to get Names
 
-        // TODO: Handle ingredientChoiceList for 1.13
-        for (ItemStack item : ingredients) {
-            MutableInt i = items.get(item);
-
-            if (i == null) {
-                i = new MutableInt();
-                items.put(item.clone(), i);
-            }
-
-            i.add(item.getAmount());
-        }
-
-        for (Entry<ItemStack, MutableInt> e : items.entrySet()) {
-            ItemStack item = e.getKey();
-            item.setAmount(e.getValue().intValue());
-
-            String print = "";
-            if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-                FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-                List<ConditionsIngredient> conditions = flag.getIngredientConditions(item);
-
-                if (conditions.size() > 0) {
-                    ConditionsIngredient condition = conditions.get(0);
-
-                    if (condition.hasName()) {
-                        print = RMCChatColor.BLACK + condition.getName();
-                    } else if (condition.hasLore()) {
-                        print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
-                    }
-                }
-            }
-
-            if (print.equals("")) {
-                print = ToolsItem.print(item, RMCChatColor.RESET, RMCChatColor.BLACK);
-            }
-
-            s.append('\n').append(print);
+            s.append('\n').append(ToolsItem.printChoice(materials, RMCChatColor.BLACK, RMCChatColor.BLACK));
         }
 
         return s.toString();
