@@ -155,8 +155,8 @@ public class Tools {
         }
 
         List<Material> choices = new ArrayList<>();
-        for (int i = 0; i < split.length; i++) {
-            String[] durSplit = split[i].trim().split(":");
+        for (String s : split) {
+            String[] durSplit = s.trim().split(":");
             value = durSplit[0];
 
             if (durSplit.length > 1) {

@@ -161,7 +161,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
             }
 
 
-            recipe.setChoiceShape(choiceShapeString.toArray(new String[choiceShapeString.size()]));
+            recipe.setChoiceShape(choiceShapeString.toArray(new String[0]));
             recipe.setIngredientsChoiceMap(ingredientsChoiceMap);
         } else {
             recipe.setIngredients(ingredients);

@@ -51,7 +51,7 @@ public class RecipeCommand implements CommandExecutor {
         public Pages(String newName, ItemStack newItem, List<String> newPages) {
             name = newName;
             item = newItem;
-            pages = newPages.toArray(new String[newPages.size()]);
+            pages = newPages.toArray(new String[0]);
         }
 
         private void doTask() {
