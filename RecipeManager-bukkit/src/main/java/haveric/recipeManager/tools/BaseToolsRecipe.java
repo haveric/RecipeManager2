@@ -13,10 +13,6 @@ public abstract class BaseToolsRecipe {
     }
 
     public boolean matchesShapedLegacy(Recipe bukkitRecipe, ItemStack[] matrix, ItemStack[] matrixMirror, int width, int height) {
-        return matchesShapedMatrixLegacy(bukkitRecipe, matrix, width, height) || matchesShapedMatrixLegacy(bukkitRecipe, matrixMirror, width, height);
-    }
-
-    protected boolean matchesShapedMatrixLegacy(Recipe bukkitRecipe, ItemStack[] ingredients, int width, int height) {
         return false;
     }
 
