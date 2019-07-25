@@ -603,12 +603,12 @@ public class CraftRecipe extends WorkbenchRecipe {
                 }
             }
 
-            if (col == getWidth() && row <= getHeight()) {
+            if (col == getWidth()) {
                 s.append('\n');
             }
         }
 
-        s.append('\n').append(Messages.getInstance().parse("recipebook.header.ingredients"));
+        s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
         for (Entry<String, Integer> entry : charItems.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getValue()).append(RMCChatColor.GRAY).append(": ").append(entry.getKey());
