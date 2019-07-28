@@ -8,7 +8,7 @@ lastchanged: 2.15.0 # Please do not edit this value - it is used by the plugin t
 #
 # The first names of each material or data will also be used when this plugin prints item name/data.
 #
-# Examples:
+# Examples (1.12 or OLDER, but may be useful for custom data):
 #  dye:red    - valid: rose red dyes. (dye is material alias)
 #  wood:birch - valid: birch wood planks (wood is original material name)
 #  dye:5      - valid: purple dye (numeral data value acceptable)
@@ -20,14 +20,14 @@ lastchanged: 2.15.0 # Please do not edit this value - it is used by the plugin t
 #
 # You can add new aliases or edit existing if you like, see below examples or follow syntax:
 #
-# <material or id>:
+# <material>:
 #   names: <alias>, ...
 #   <number>: <alias>, ...
 #   ...
 #
 # If you don't want to give any data values, just aliases:
 #
-# <material or id>: <alias>, ...
+# <material>: <alias>, ...
 #
 # NOTE: You should split words by space or underscore when defining an alias, it will give you more matches, example:
 # "smooth brick stairs" will be triggered when entering the same name or even "smoothbrickstairs", "smoothbrick_stairs" or "smooth_brickstairs".

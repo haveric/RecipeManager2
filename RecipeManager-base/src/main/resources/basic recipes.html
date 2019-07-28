@@ -56,12 +56,12 @@
     
     <h4>ABOUT DEFINING ITEMS</h4>
     <ul>
-      <li>Item formats are usually 'material:data' and results are 'material:data:amount'<br/>
-      - 'material' = name, id or alias (see '<a href="name index.html#material">name index.html</a>' and 'aliases.yml')<br/>
-      - (optional) 'data' = data name (from 'aliases.yml'), number or * for any data value (default)<br/>
+      <li>Item formats are usually 'material[, ...]' and results are 'material:data:amount'<br/>
+      - 'material' = name, id or alias (see '<a href="name index.html#material">name index.html</a>' and 'item aliases.yml')<br/>
+      - (optional) 'data' = data name (from 'aliases.yml'), number or * for any data value (default). Only valid in results as of 1.13<br/>
       - (optional) 'amount' = number, default 1</li>
     
-      <li>Item definitions also support names, lore and enchantments.<br/>
+      <li>(1.12 or older ONLY) Item definitions also support names, lore and enchantments.<br/>
       Full format is: <b>&lt;material&gt;:&lt;data&gt;:&lt;amount&gt; ; name &lt;name&gt; ; lore &lt;line&gt; ; enchant &lt;enchant&gt; &lt;level&gt;</b><br/>
       Where lore and enchant can be repeated.<br/>
       And of course all meta definitions are optional and order does not matter (unlike material:data:amount).</li>
@@ -93,9 +93,9 @@
     <h3>CRAFT RECIPE - shaped workbench recipe</h3>
 <pre>
 CRAFT [recipe name]
-&lt;material:[data]&gt; + [material:[data]] + [material:[data]]
-[material:[data]] + [material:[data]] + [material:[data]]
-[material:[data]] + [material:[data]] + [material:[data]]
+&lt;material[, ...]&gt; + [material[, ...]] + [material[, ...]]
+[material[, ...]] + [material[, ...]] + [material[, ...]]
+[material[, ...]] + [material[, ...]] + [material[, ...]]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
@@ -104,6 +104,7 @@ CRAFT [recipe name]
           <li><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</li>
           <li>Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.</li>
           <li>Specifying a square of 4 or smaller makes it work in player's inventory crafting.</li>
+          <li>The '[, ...]' part means that you can add multiple ingredients as matches for that grid item.</li>
           <br/>
           <li>As for the result the 'chance%' part is optional and if defined then 'chance' must be a number between 0.0 and 100.0 (yes, accepts decimals)</li>
           <li>The '[...]' part means that you can repeat the previous statement, so you can define more than one result and the recipe will randomly pick one of the results.</li>
@@ -125,6 +126,12 @@ stick + wood + stick
 air + stick
 = bowl // undefined chance, will be calculated
 = 25% fail // 'fail' is alias for 'air'
+
+// Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
+// as long as the combination of ingredients is still unique to each recipe
+craft
+cobblestone,stone + dirt,grass
+= light_gray_terracotta
 </pre>
     
     
@@ -132,16 +139,18 @@ air + stick
     <h3>COMBINE RECIPE - shapeless workbench recipe</h3>
 <pre>
 COMBINE [recipe name]
-&lt;material:[data]:[amount]&gt; + [...]
+&lt;material[, ...]:[amount]&gt; + [...]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-    <p>
-      Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.
-      You can specify up to 9 items added up.
-      </p><p>
-      This recipe also supports multiple results just like shaped recipe, read above for information. 
-    </p>
+    <ul>
+        <li>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</li>
+        <li>You can specify up to 9 items added up.</li>
+        <li>The optional amount can only be added at the end of a list of materials</li>
+        <li><b>EXAMPLE:</b> cobblestone,stone:5 would be valid and expect the recipe to have 5 ingredients of either cobblestone OR stone</li>
+        <li></li>
+        <li>This recipe also supports multiple results just like shaped recipe, read above for information. </li>
+    </ul>
       <b>Examples:</b>
 <pre>
 // 3 sulphur + 2 sand = 2 TNT
@@ -163,7 +172,7 @@ diamond + diamond
     <h3>SMELT RECIPE - furnace smelting recipe</h3>
 <pre>
 SMELT [recipe name]
-&lt;material&gt;:[data] % [time]
+&lt;material[, ...]&gt; % [time]
 &amp; [material:[data]]
 = [chance]% &lt;material:[data]:[amount]&gt;
 // one result max!
@@ -192,7 +201,7 @@ glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
     <h3>BLASTING RECIPE - blast furnace smelting recipe</h3>
 <pre>
 BLASTING [recipe name]
-&lt;material&gt;:[data] % [time]
+&lt;material[, ...]&gt; % [time]
 &amp; [material:[data]]
 = [chance]% &lt;material:[data]:[amount]&gt;
 // one result max!
@@ -206,7 +215,7 @@ BLASTING [recipe name]
     <h3>SMOKING RECIPE - smoker smelting recipe</h3>
 <pre>
 SMOKING [recipe name]
-&lt;material&gt;:[data] % [time]
+&lt;material[, ...]&gt; % [time]
 &amp; [material:[data]]
 = [chance]% &lt;material:[data]:[amount]&gt;
 // one result max!
@@ -238,7 +247,7 @@ lantern % 20 // 'lantern' is alias for 'jack_o_lantern'
     <h3>CAMPFIRE RECIPE - campfire recipe</h3>
 <pre>
 CAMPFIRE [recipe name]
-&lt;material&gt;:[data] % [time]
+&lt;material[, ...]&gt; % [time]
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
     <ul>
@@ -251,7 +260,7 @@ CAMPFIRE [recipe name]
     <h3>STONECUTTING RECIPE - stonecutter recipe</h3>
 <pre>
 STONECUTTING [recipe name]
-&lt;material&gt;:[data]
+&lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
     <ul>
