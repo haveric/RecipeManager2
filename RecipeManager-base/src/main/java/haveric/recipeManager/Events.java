@@ -419,6 +419,8 @@ public class Events implements Listener {
             }
 
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously cancelled
+            result.setItemStack(inv.getResult()); // Reset item stack
+
 
             int mouseButton;
             if (event.isRightClick()) {
@@ -454,6 +456,9 @@ public class Events implements Listener {
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
+                    // Reset result for each craft
+                    result.setItemStack(inv.getResult());
+
                     // Make sure no items have changed or stop crafting
                     if (isDifferentMatrix(originalMatrix, inv.getMatrix())) {
                         //MessageSender.getInstance().info("Stop Crafting - Different matrix");
