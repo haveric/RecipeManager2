@@ -296,13 +296,27 @@ public class Args {
             name = "(nobody)";
         }
 
-        string = string.replace("{player}", name);
-        string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
-        string = string.replace("{result}", ToolsItem.print(result()));
-        string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(unknown)"));
-        string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
-        string = string.replace("{inventorytype}", (hasInventoryView() ? inventoryView().getType().toString().toLowerCase() : "(unknown)"));
-        string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
+        if (string.contains("{player}")) {
+            string = string.replace("{player}", name);
+        }
+        if (string.contains("{playerdisplay}")) {
+            string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
+        }
+        if (string.contains("{result}")) {
+            string = string.replace("{result}", ToolsItem.print(result()));
+        }
+        if (string.contains("{recipename}")) {
+            string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(unknown)"));
+        }
+        if (string.contains("{recipetype}")) {
+            string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
+        }
+        if (string.contains("{inventorytype}")) {
+            string = string.replace("{inventorytype}", (hasInventoryView() ? inventoryView().getType().toString().toLowerCase() : "(unknown)"));
+        }
+        if (string.contains("{world}")) {
+            string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
+        }
 
         string = parsePosition(string, "x");
         string = parsePosition(string, "y");
