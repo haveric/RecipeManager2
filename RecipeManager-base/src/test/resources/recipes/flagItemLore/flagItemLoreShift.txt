@@ -1,0 +1,4 @@
+craft
+dirt + stone
+= stone_sword
+@lore One
