@@ -3,7 +3,7 @@ lastchanged: 2.11.0 # Please do not edit this value - it is used by the plugin t
 # RecipeManager enchant aliases
 #
 # This file defines aliases for enchantments that are usable in all configuration files.
-# You can use any names specified as values to replace enchantment name or id.
+# You can use any names specified as values to replace enchantment name.
 #
 # Format is:
 # <enchant name>: <alias>, [...]
