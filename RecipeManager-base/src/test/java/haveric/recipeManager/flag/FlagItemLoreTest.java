@@ -11,6 +11,7 @@ import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Test;
@@ -65,6 +66,7 @@ public class FlagItemLoreTest extends FlagBaseTest {
 
         TestCraftingInventory shiftInventory;
         CraftItemEvent shiftCraftEvent;
+        PrepareItemCraftEvent prepareCraftEvent;
         Events events;
 
         Recipe bukkitRecipe;
@@ -112,6 +114,10 @@ public class FlagItemLoreTest extends FlagBaseTest {
         when(shiftCraftEvent.getInventory()).thenReturn(shiftInventory);
         when(shiftCraftEvent.getView()).thenReturn(view);
 
+        prepareCraftEvent = mock(PrepareItemCraftEvent.class);
+        when(prepareCraftEvent.getInventory()).thenReturn(shiftInventory);
+        when(prepareCraftEvent.getView()).thenReturn(view);
+
         // Actual Event
 
         File file = new File(baseRecipePath + "flagItemLore/flagItemLoreShift.txt");
@@ -130,8 +136,11 @@ public class FlagItemLoreTest extends FlagBaseTest {
 
             bukkitRecipe = recipe.getBukkitRecipe(false);
             when(shiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+            when(prepareCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
             if (resultType == Material.STONE_SWORD) {
+                events.prepareCraft(prepareCraftEvent);
+
                 events.craftFinish(shiftCraftEvent);
                 assertNull(shiftCraftEvent.getCurrentItem());
                 ItemStack[] shiftContents = shiftCraftEvent.getView().getPlayer().getInventory().getContents();

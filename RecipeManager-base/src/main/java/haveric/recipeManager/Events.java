@@ -71,9 +71,11 @@ public class Events implements Listener {
             InventoryView view = event.getView();
             Player player = (Player) view.getPlayer();
 
-            if (!RecipeManager.getPlugin().canCraft(player)) {
-                inv.setResult(null);
-                return; // player not allowed to craft, stop here
+            if (RecipeManager.getPlugin() != null) { // Needed for tests
+                if (!RecipeManager.getPlugin().canCraft(player)) {
+                    inv.setResult(null);
+                    return; // player not allowed to craft, stop here
+                }
             }
 
             Location location;
@@ -118,12 +120,15 @@ public class Events implements Listener {
 
             // Call the RecipeManagerPrepareCraftEvent
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
-            Bukkit.getPluginManager().callEvent(callEvent);
+            PluginManager pm = Bukkit.getPluginManager();
+            if (pm != null) { // Null check used for Tests to skip event calling
+                Bukkit.getPluginManager().callEvent(callEvent);
 
-            if (callEvent.getResult() == null) {
-                result = null;
-            } else {
-                result = new ItemResult(callEvent.getResult());
+                if (callEvent.getResult() == null) {
+                    result = null;
+                } else {
+                    result = new ItemResult(callEvent.getResult());
+                }
             }
 
             if (result != null) {
@@ -419,8 +424,9 @@ public class Events implements Listener {
             }
 
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously cancelled
-            result.setItemStack(inv.getResult()); // Reset item stack
-
+            if (result != null) {
+                result.clearMetadata(); // Reset result's metadata to remove prepare's effects
+            }
 
             int mouseButton;
             if (event.isRightClick()) {
@@ -456,8 +462,8 @@ public class Events implements Listener {
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
-                    // Reset result for each craft
-                    result.setItemStack(inv.getResult());
+                    // Reset result's metadata for each craft
+                    result.clearMetadata();
 
                     // Make sure no items have changed or stop crafting
                     if (isDifferentMatrix(originalMatrix, inv.getMatrix())) {
