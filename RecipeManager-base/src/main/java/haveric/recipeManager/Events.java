@@ -462,9 +462,6 @@ public class Events implements Listener {
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
                 while (--times >= 0) {
-                    // Reset result's metadata for each craft
-                    result.clearMetadata();
-
                     // Make sure no items have changed or stop crafting
                     if (isDifferentMatrix(originalMatrix, inv.getMatrix())) {
                         //MessageSender.getInstance().info("Stop Crafting - Different matrix");
@@ -476,6 +473,9 @@ public class Events implements Listener {
                         //MessageSender.getInstance().info("Stop Crafting - Flags no longer match");
                         break;
                     }
+
+                    // Reset result's metadata for each craft
+                    result.clearMetadata();
 
                     a.setFirstRun(firstRun);
                     a.clear();
@@ -551,6 +551,8 @@ public class Events implements Listener {
                     firstRun = false;
                 }
             }
+
+            inv.setResult(result);
 
             if (pm != null) { // Null check used for Tests to skip event calling
                 new BukkitRunnable() {

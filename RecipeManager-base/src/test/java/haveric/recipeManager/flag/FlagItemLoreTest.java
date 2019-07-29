@@ -62,16 +62,9 @@ public class FlagItemLoreTest extends FlagBaseTest {
 
     @Test
     public void testShiftClick() {
-        File booksDir;
-
-        TestCraftingInventory shiftInventory;
-        CraftItemEvent shiftCraftEvent;
-        PrepareItemCraftEvent prepareCraftEvent;
-        Events events;
-
         Recipe bukkitRecipe;
         // Prep
-        booksDir = new File(workDir.getPath() + "/books/");
+        File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
 
         RecipeBooks.getInstance().init(booksDir);
@@ -79,11 +72,25 @@ public class FlagItemLoreTest extends FlagBaseTest {
 
         mockStatic(Inventory.class);
 
-        shiftInventory = new TestCraftingInventory();
+
+
         ItemStack air = new ItemStack(Material.AIR);
         ItemStack stoneSword = new ItemStack(Material.STONE_SWORD);
+        ItemStack dirt = new ItemStack(Material.DIRT);
+        ItemStack stone = new ItemStack(Material.STONE);
         ItemStack dirtStack = new ItemStack(Material.DIRT, 3);
         ItemStack stoneStack = new ItemStack(Material.STONE, 4);
+
+        ItemStack[] matrix = new ItemStack[10];
+        matrix[0] = stoneSword;
+        matrix[1] = dirt;
+        matrix[2] = stone;
+        for (int i = 3; i < 10; i++) {
+            matrix[i] = air;
+        }
+        TestCraftingInventory inventory = new TestCraftingInventory();
+        inventory.setMatrix(matrix);
+        inventory.setResult(stoneSword);
 
         ItemStack[] matrixStack = new ItemStack[10];
         matrixStack[0] = stoneSword;
@@ -93,10 +100,11 @@ public class FlagItemLoreTest extends FlagBaseTest {
             matrixStack[i] = air;
         }
 
+        TestCraftingInventory shiftInventory = new TestCraftingInventory();
         shiftInventory.setMatrix(matrixStack);
         shiftInventory.setResult(stoneSword);
 
-        events = new Events();
+        Events events = new Events();
 
 
         PlayerInventory playerInventory = new TestPlayerInventory();
@@ -109,14 +117,23 @@ public class FlagItemLoreTest extends FlagBaseTest {
         InventoryView view = mock(InventoryView.class);
         when(view.getPlayer()).thenReturn(player);
 
-        shiftCraftEvent = mock(CraftItemEvent.class);
+        CraftItemEvent craftEvent = mock(CraftItemEvent.class);
+        when(craftEvent.isShiftClick()).thenReturn(false);
+        when(craftEvent.getInventory()).thenReturn(inventory);
+        when(craftEvent.getView()).thenReturn(view);
+
+        PrepareItemCraftEvent prepareCraftEvent = mock(PrepareItemCraftEvent.class);
+        when(prepareCraftEvent.getInventory()).thenReturn(inventory);
+        when(prepareCraftEvent.getView()).thenReturn(view);
+
+        CraftItemEvent shiftCraftEvent = mock(CraftItemEvent.class);
         when(shiftCraftEvent.isShiftClick()).thenReturn(true);
         when(shiftCraftEvent.getInventory()).thenReturn(shiftInventory);
         when(shiftCraftEvent.getView()).thenReturn(view);
 
-        prepareCraftEvent = mock(PrepareItemCraftEvent.class);
-        when(prepareCraftEvent.getInventory()).thenReturn(shiftInventory);
-        when(prepareCraftEvent.getView()).thenReturn(view);
+        PrepareItemCraftEvent prepareShiftCraftEvent = mock(PrepareItemCraftEvent.class);
+        when(prepareShiftCraftEvent.getInventory()).thenReturn(shiftInventory);
+        when(prepareShiftCraftEvent.getView()).thenReturn(view);
 
         // Actual Event
 
@@ -135,11 +152,27 @@ public class FlagItemLoreTest extends FlagBaseTest {
             Material resultType = result.getType();
 
             bukkitRecipe = recipe.getBukkitRecipe(false);
-            when(shiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+            when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
             when(prepareCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
+            when(shiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+            when(prepareShiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+
             if (resultType == Material.STONE_SWORD) {
-                events.prepareCraft(prepareCraftEvent);
+                events.prepareCraft((prepareCraftEvent));
+
+                events.craftFinish(craftEvent);
+
+                ItemStack eventResult = craftEvent.getInventory().getResult();
+                assertNotNull(eventResult);
+                ItemMeta meta = eventResult.getItemMeta();
+                assertNotNull(meta);
+                assertNotNull(meta.getLore());
+                assertEquals(1, meta.getLore().size());
+                assertEquals("One", meta.getLore().get(0));
+
+
+                events.prepareCraft(prepareShiftCraftEvent);
 
                 events.craftFinish(shiftCraftEvent);
                 assertNull(shiftCraftEvent.getCurrentItem());
@@ -149,10 +182,10 @@ public class FlagItemLoreTest extends FlagBaseTest {
                 for (ItemStack item : shiftContents) {
                     if (item != null && item.getType() != Material.AIR) {
                         count += item.getAmount();
-                        ItemMeta meta = item.getItemMeta();
-                        assertNotNull(meta);
-                        if (meta.hasLore()) {
-                            List<String> loreLines = meta.getLore();
+                        ItemMeta stackMeta = item.getItemMeta();
+                        assertNotNull(stackMeta);
+                        if (stackMeta.hasLore()) {
+                            List<String> loreLines = stackMeta.getLore();
                             assertEquals(1, loreLines.size());
                             assertEquals("One", loreLines.get(0));
                         }
