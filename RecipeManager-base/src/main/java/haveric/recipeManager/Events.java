@@ -518,6 +518,8 @@ public class Events implements Listener {
                             event.setCursor(new ItemStack(Material.AIR));
                             subtract = true;
                             onlyExtra = false;
+                        } else {
+                            event.setCurrentItem(result);
                         }
 
                         if (event.isShiftClick()) {
@@ -551,8 +553,6 @@ public class Events implements Listener {
                     firstRun = false;
                 }
             }
-
-            inv.setResult(result);
 
             if (pm != null) { // Null check used for Tests to skip event calling
                 new BukkitRunnable() {
