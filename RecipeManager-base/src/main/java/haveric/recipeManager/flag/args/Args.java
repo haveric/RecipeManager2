@@ -248,7 +248,12 @@ public class Args {
     }
 
     private String parsePosition(String string, String coord) {
-        Pattern regex = Pattern.compile("\\{[" + coord + "] *([+-])? *(\\d*)\\}");
+        // Check for the start of the variable only as it may contain an offset
+        if (!string.contains("{" + coord)) {
+            return string;
+        }
+
+        Pattern regex = Pattern.compile("\\{[" + coord + "] *([+-])? *(\\d*)}");
         Matcher regexMatcher = regex.matcher(string);
 
         while (regexMatcher.find()) {
@@ -324,16 +329,9 @@ public class Args {
             string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
         }
 
-        // Check for the start of the variable as it may contain an offset
-        if (string.contains("{x")) {
-            string = parsePosition(string, "x");
-        }
-        if (string.contains("{y")) {
-            string = parsePosition(string, "y");
-        }
-        if (string.contains("{z")) {
-            string = parsePosition(string, "z");
-        }
+        string = parsePosition(string, "x");
+        string = parsePosition(string, "y");
+        string = parsePosition(string, "z");
 
         ItemMeta meta = result.getItemMeta();
 
