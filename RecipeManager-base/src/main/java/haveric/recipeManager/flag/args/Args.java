@@ -289,17 +289,23 @@ public class Args {
     }
 
     public String parseVariables(String string) {
-        String name;
-        if (hasPlayerUUID()) {
-            name = Bukkit.getOfflinePlayer(playerUUID).getName();
-        } else {
-            name = "(nobody)";
+        String name = "";
+
+        boolean containsPlayer = string.contains("{player}");
+        boolean containsPlayerDisplay = string.contains("{playerdisplay}");
+
+        if (containsPlayer || containsPlayerDisplay) {
+            if (hasPlayerUUID()) {
+                name = Bukkit.getOfflinePlayer(playerUUID).getName();
+            } else {
+                name = "(nobody)";
+            }
         }
 
-        if (string.contains("{player}")) {
+        if (containsPlayer) {
             string = string.replace("{player}", name);
         }
-        if (string.contains("{playerdisplay}")) {
+        if (containsPlayerDisplay) {
             string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
         }
         if (string.contains("{result}")) {
@@ -318,24 +324,31 @@ public class Args {
             string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));
         }
 
-        string = parsePosition(string, "x");
-        string = parsePosition(string, "y");
-        string = parsePosition(string, "z");
+        // Check for the start of the variable as it may contain an offset
+        if (string.contains("{x")) {
+            string = parsePosition(string, "x");
+        }
+        if (string.contains("{y")) {
+            string = parsePosition(string, "y");
+        }
+        if (string.contains("{z")) {
+            string = parsePosition(string, "z");
+        }
 
         ItemMeta meta = result.getItemMeta();
 
-        if (meta.hasLore()) {
+        if (meta.hasLore() && string.contains("{lore}")) {
             string = string.replace("{lore}", "\"" + StringUtils.join(meta.getLore(), "\",\"") + "\"");
         }
         if (meta instanceof BookMeta) {
             BookMeta book = (BookMeta) meta;
-            if (book.hasTitle()) {
+            if (book.hasTitle() && string.contains("{booktitle}")) {
                 string = string.replace("{booktitle}", book.getTitle());
             }
-            if (book.hasAuthor()) {
+            if (book.hasAuthor() && string.contains("{bookauthor}")) {
                 string = string.replace("{bookauthor}", book.getAuthor());
             }
-            if (book.hasPages()) {
+            if (book.hasPages() && string.contains("{bookpages}")) {
                 String pages = "";
                 int numPages = book.getPageCount();
                 for (int i = 1; i <= numPages; i++) {
