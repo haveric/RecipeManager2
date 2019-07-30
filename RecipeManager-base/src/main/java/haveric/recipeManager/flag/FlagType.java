@@ -44,6 +44,7 @@ public class FlagType {
     public static final String INDIVIDUAL_RESULTS = "@individualresults";
 
     public static final String CLONE_INGREDIENT = "@cloneingredient";
+    public static final String ITEM_ATTRIBUTE = "@itemattribute";
     public static final String ITEM_NAME = "@itemname";
     public static final String ITEM_LORE = "@itemlore";
     public static final String ITEM_UNBREAKABLE = "@itemunbreakable";

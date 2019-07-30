@@ -2,6 +2,7 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.flag.flags.*;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.ChatColor;
 
 public class FlagLoader {
@@ -62,6 +63,9 @@ public class FlagLoader {
 
         // Result only flags
         FlagFactory.getInstance().initializeFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NONE, "clone", "copy", "copyingredient"); // TODO finish
+        if (Version.has1_13Support()) {
+            FlagFactory.getInstance().initializeFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), FlagBit.RESULT, "attribute");
+        }
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.RESULT, "name", "displayname");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED, "lore", "itemdesc");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), FlagBit.RESULT | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
