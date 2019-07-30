@@ -6,11 +6,13 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,17 +33,28 @@ public class FlagItemAttribute extends Flag {
     @Override
     protected String[] getDescription() {
         return new String[] {
+                "Adds an attribute, such as max health to the result",
                 "",
+                "<attribute> The attribute you want to modify.",
+                "  Values: all, " + RMCUtil.collectionToString(Arrays.asList(Attribute.values())).toLowerCase(),
+                "    Values starting with 'GENERIC_' such as " + Attribute.GENERIC_MAX_HEALTH + " can be used without 'GENERIC_' for ease of use. max_health would be valid in this case.",
                 "",
-                "", };
+                "[modifier] can be x for multiplication otherwise it will use addition",
+                "<num> is the amount you want the attribute modified by. If you're not using multiplication as a modifier, the value with be added/subtracted.",
+                "  Note that with multiplication, 1 = 100%. Values are expected in decimal/double format: '1.5'.",
+                "",
+                "The <slot> argument is the slot you want the attribute to affect. Default is " + EquipmentSlot.HAND + ".",
+                "  Values: all, " + RMCUtil.collectionToString(Arrays.asList(EquipmentSlot.values())).toLowerCase(),
+                "    'all' will let the attribute affect all of the equipment slots",
+                "    offhand can be used instead of off_hand as well.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-                "{flag} ",
-                "{flag} ",
-                "{flag} ", };
+                "{flag} max_health 5 // Adds 2.5 hearts of health, defaults to HAND slot",
+                "{flag} movement_speed -.1 | slot feet // Reduce speed by .1 when worn in the feet/boots slot",
+                "{flag} armor x.2 | slot offhand // Adds +20% Armor", };
     }
 
 
@@ -51,7 +64,7 @@ public class FlagItemAttribute extends Flag {
     }
 
     public FlagItemAttribute(FlagItemAttribute flag) {
-        attributes = flag.attributes;
+        attributes.putAll(flag.attributes);
     }
 
     @Override
@@ -64,7 +77,8 @@ public class FlagItemAttribute extends Flag {
     }
 
     public void setAttributes(Multimap<Attribute, AttributeModifier> newAttributes) {
-        attributes = newAttributes;
+        attributes.clear();
+        attributes.putAll(newAttributes);
     }
 
     @Override
