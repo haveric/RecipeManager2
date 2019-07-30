@@ -15,6 +15,8 @@ This file will be automatically overwritten when a new version is installed.
 ** No Flag support yet
 * @NoResult: Shift clicking will no longer give results
 * Removed need for "Recipe is special, shift-clicking will only craft it once" restriction
+* New Flag: @ItemAttribute
+** Add attributes such as max_health and armor to your results
 
 === v2.14.1 ===
 * @IngredientCondition: Fixed issue when unbreakable was not set
