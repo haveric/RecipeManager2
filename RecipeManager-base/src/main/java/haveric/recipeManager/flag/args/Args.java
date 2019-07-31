@@ -300,7 +300,7 @@ public class Args {
             return string;
         }
 
-        Pattern regex = Pattern.compile("\\{(?:rand)(?:om)* (\\d*\\.?\\d*) *- *(\\d*\\.?\\d) *(?:, *(\\d*))*}");
+        Pattern regex = Pattern.compile("\\{(?:rand)(?:om)* (-?\\d*\\.?\\d*) *- *(-?\\d*\\.?\\d) *(?:, *(\\d*))*}");
         Matcher regexMatcher = regex.matcher(string);
 
         while (regexMatcher.find()) {
@@ -335,6 +335,11 @@ public class Args {
                 max = Double.parseDouble(group2);
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid number(#1) value:" + group1);
+                return string;
+            }
+
+            if (max < min) {
+                ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has max(#2): " + max + " less than min(#1): " + min);
                 return string;
             }
 
