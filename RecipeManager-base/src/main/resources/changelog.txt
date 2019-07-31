@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.15.0 ===
 * 1.13 & 1.14 Update
 * Recipes now support MaterialChoice ingredients
 ** Example: dirt,grass + dirt,grass would allow for dirt or grass to be used in either slot
