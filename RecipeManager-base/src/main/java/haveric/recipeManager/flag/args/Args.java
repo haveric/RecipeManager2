@@ -1,5 +1,7 @@
 package haveric.recipeManager.flag.args;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -293,6 +295,61 @@ public class Args {
         return string;
     }
 
+    private String parseRandom(String string) {
+        if (!string.contains("{rand")) {
+            return string;
+        }
+
+        Pattern regex = Pattern.compile("\\{(?:rand)(?:om)* (\\d*\\.?\\d*) *- *(\\d*\\.?\\d) *(?:, *(\\d*))*}");
+        Matcher regexMatcher = regex.matcher(string);
+
+        while (regexMatcher.find()) {
+            String group1 = regexMatcher.group(1);
+            String group2 = regexMatcher.group(2);
+            String group3 = regexMatcher.group(3);
+
+            if (group1 == null || group2 == null) {
+                ErrorReporter.getInstance().warning("{rand} needs at least two numbers to parse: " + string + ". Example: {rand 1-2} or {rand 1.0-2.0, 2}.");
+                return string;
+            }
+
+            int decimals = 0;
+            if (group3 != null) {
+                try {
+                    decimals = Integer.parseInt(group3);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid decimal(#3) value:" + group3 + ". Defaulting to 0.");
+                }
+            }
+
+            double min;
+            double max;
+            try {
+                min = Double.parseDouble(group1);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid number(#1) value:" + group1);
+                return string;
+            }
+
+            try {
+                max = Double.parseDouble(group2);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid number(#1) value:" + group1);
+                return string;
+            }
+
+
+            double generated = RecipeManager.random.nextDouble();
+            double random = min + (generated * (max - min));
+
+            String replaceString = String.format("%." + decimals + "f", random);
+            string = regexMatcher.replaceFirst(replaceString);
+            regexMatcher = regex.matcher(string);
+        }
+
+        return string;
+    }
+
     public String parseVariables(String string) {
         String name = "";
 
@@ -332,6 +389,8 @@ public class Args {
         string = parsePosition(string, "x");
         string = parsePosition(string, "y");
         string = parsePosition(string, "z");
+
+        string = parseRandom(string);
 
         ItemMeta meta = result.getItemMeta();
 
