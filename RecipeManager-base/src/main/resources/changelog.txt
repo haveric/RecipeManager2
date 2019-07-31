@@ -3,6 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
 * @IngredientCondition, @HoldItem, @CloneIngredient: Double pipes '||' can be used in arguments and will be replaced by a single '|' to better support regex
+** Example: "@ingredientcondition iron_nugget | lore regex:one||two" will now correctly match one or two
 
 === v2.15.0 ===
 * 1.13 & 1.14 Update
