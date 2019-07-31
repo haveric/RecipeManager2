@@ -49,7 +49,7 @@ public class FlagCloneIngredient extends Flag {
             "  lore [number or text or regex:pattern] = copies all the custom item lore/description unless conditions are added to copy specific lines.",
             "    [number]                             = copies only the lore on line number. More lore conditions can be added to copy more lines",
             "    [text]                               = copies any lore lines that contain the text",
-            "    [regex:pattern]                      = copies any lore lines that match the regex pattern.",
+            "    [regex:pattern]                      = copies any lore lines that match the regex pattern. Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
             "  special                                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
             "  allmeta                                = copies enchants, name, lore and special.",
             "  all                                    = copies entire item (data, amount, enchants, name, lore, special)",
@@ -222,7 +222,9 @@ public class FlagCloneIngredient extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        String[] args = value.toLowerCase().split("\\|");
+        // Match on single pipes '|', but not double '||'
+        // Double pipes will be replaced by single pipes for each arg
+        String[] args = value.toLowerCase().split("(?<!\\|)\\|(?!\\|)");
 
         int found = Tools.findItemInIngredients(getResult().getRecipe(), getResult().getType(), null);
 
@@ -235,6 +237,9 @@ public class FlagCloneIngredient extends Flag {
 
         for (String arg : args) {
             arg = arg.trim();
+
+            // Replace double pipes with single pipe: || -> |
+            arg = arg.replaceAll("\\|\\|", "|");
 
             if (arg.equals("all")) {
                 setCopyBitsum(Bit.ALL);

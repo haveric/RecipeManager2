@@ -111,11 +111,14 @@ public class FlagHoldItem extends Flag {
             "",
             "  amount <num>                     = stack amount",
             "  name <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
+            "",
             "  noname or !name",
             "    Held item must have no/default name",
             "    Overrides name condition if set",
             "",
             "  lore <text or regex:pattern>     = checks each lore line for a specific text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
             "  nolore or !lore",
             "    Held item must have no lore",
             "    Overrides lore condition if set",
@@ -168,7 +171,9 @@ public class FlagHoldItem extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        String[] args = value.split("\\|");
+        // Match on single pipes '|', but not double '||'
+        // Double pipes will be replaced by single pipes for each arg
+        String[] args = value.split("(?<!\\|)\\|(?!\\|)");
 
         if (args.length < 1) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs an item!", "Read '" + Files.FILE_INFO_FLAGS + "' for more info.");

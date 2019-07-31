@@ -1342,6 +1342,9 @@ public class Conditions implements Cloneable {
     }
 
     public void parseArg(String value, String arg) {
+        // Replace double pipes with single pipe: || -> |
+        arg = arg.replaceAll("\\|\\|", "|");
+
         ItemStack item = getIngredient();
         String argLower = arg.toLowerCase();
 

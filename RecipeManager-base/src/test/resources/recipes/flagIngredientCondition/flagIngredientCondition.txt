@@ -47,3 +47,13 @@ craft
 brick + sponge
 = sponge
 @ingredientcondition brick | amount 10
+
+craft
+stone_shovel
+= stone_shovel
+@ingredientcondition stone_shovel | name regex:foo
+
+craft
+iron_shovel
+= iron_shovel
+@ingredientcondition iron_shovel | name regex:foo||bar

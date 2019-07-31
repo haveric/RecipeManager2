@@ -6,8 +6,8 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.FlagIngredientCondition;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
@@ -122,7 +122,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> indexedRecipes = Recipes.getInstance().getIndex();
 
-        assertEquals(10, indexedRecipes.size());
+        assertEquals(12, indexedRecipes.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : indexedRecipes.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
@@ -264,6 +264,14 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 }
 
                 assertEquals(4, count);
+            } else if (resultType == Material.STONE_SHOVEL) {
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.STONE_SHOVEL));
+                ConditionsIngredient cond = conditions.get(0);
+                assertEquals("regex:foo", cond.getName());
+            } else if (resultType == Material.IRON_SHOVEL) {
+                List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SHOVEL));
+                ConditionsIngredient cond = conditions.get(0);
+                assertEquals("regex:foo|bar", cond.getName());
             }
         }
 
