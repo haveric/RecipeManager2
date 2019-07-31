@@ -290,6 +290,7 @@ public class Args {
                 replaceString = "" + blockCoord;
             }
             string = regexMatcher.replaceFirst(replaceString);
+            regexMatcher = regex.matcher(string);
         }
 
         return string;
