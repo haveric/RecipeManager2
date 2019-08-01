@@ -33,6 +33,7 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.PluginManager;
@@ -424,7 +425,15 @@ public class Events implements Listener {
             }
 
             result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously cancelled
-            if (result != null) {
+
+            // We're handling durability on the result line outside of flags, so the original damage should be saved here
+            int originalDamage = -1;
+            if (result != null && Version.has1_13Support()) {
+                ItemMeta meta = result.getItemMeta();
+                if (meta instanceof Damageable) {
+                    originalDamage = ((Damageable) meta).getDamage();
+                }
+
                 result.clearMetadata(); // Reset result's metadata to remove prepare's effects
             }
 
@@ -476,6 +485,15 @@ public class Events implements Listener {
 
                     // Reset result's metadata for each craft
                     result.clearMetadata();
+
+                    // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
+                    if (originalDamage != -1) {
+                        ItemMeta meta = result.getItemMeta();
+                        if (meta instanceof Damageable) {
+                            ((Damageable)meta).setDamage(originalDamage);
+                            result.setItemMeta(meta);
+                        }
+                    }
 
                     a.setFirstRun(firstRun);
                     a.clear();
