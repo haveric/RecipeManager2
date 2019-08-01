@@ -87,6 +87,7 @@ public class FlagLoader {
         // MAPITEM(FlagMapItem(), FlagBit.RESULT, "map"), // TODO finish this flag
         FlagFactory.getInstance().initializeFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), FlagBit.RESULT, "spawner", "mobspawner");
         FlagFactory.getInstance().initializeFlag(FlagType.POTION_ITEM, new FlagPotionItem(), FlagBit.RESULT, "potion");
+        FlagFactory.getInstance().initializeFlag(FlagType.REPAIR_COST, new FlagRepairCost(), FlagBit.RESULT);
         FlagFactory.getInstance().initializeFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), FlagBit.RESULT, "skullitem");
         FlagFactory.getInstance().initializeFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), FlagBit.RESULT, "monsteregg", "egg");
     }

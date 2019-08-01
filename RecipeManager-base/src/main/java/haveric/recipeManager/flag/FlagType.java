@@ -64,4 +64,5 @@ public class FlagType {
     public static final String MONSTER_SPAWNER = "@monsterspawner";
     public static final String SPAWN_PARTICLE = "@spawnparticle";
     public static final String APPLY_ENCHANTMENT = "@applyenchantment";
+    public static final String REPAIR_COST = "@repaircost";
 }

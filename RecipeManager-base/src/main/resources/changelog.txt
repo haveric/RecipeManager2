@@ -37,6 +37,7 @@ This file will be automatically overwritten when a new version is installed.
 * @IngredientCondition and @HoldItem: Added unbreakable option
 * @SkullOwner: Added uuid support (only checks the offline player storage)
 * Fixed NamespacedKey warnings for PaperSpigot
+* New Flag: @RepairCost
 
 === v2.13.2
 * @ItemLore: Allow empty lines without needing colors
