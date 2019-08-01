@@ -3,7 +3,7 @@ package haveric.recipeManager.flag;
 import haveric.recipeManager.*;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.FlagItemLore;
+import haveric.recipeManager.flag.flags.result.FlagItemLore;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe;

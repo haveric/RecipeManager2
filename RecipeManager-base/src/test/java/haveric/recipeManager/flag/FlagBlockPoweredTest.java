@@ -3,7 +3,7 @@ package haveric.recipeManager.flag;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.FlagBlockPowered;
+import haveric.recipeManager.flag.flags.any.FlagBlockPowered;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.BrewRecipe;

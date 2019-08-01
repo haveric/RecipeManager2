@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.FlagIndividualResults;
+import haveric.recipeManager.flag.flags.recipe.FlagIndividualResults;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;

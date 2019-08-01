@@ -5,7 +5,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.flags.FlagOverride;
+import haveric.recipeManager.flag.flags.recipe.FlagOverride;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;

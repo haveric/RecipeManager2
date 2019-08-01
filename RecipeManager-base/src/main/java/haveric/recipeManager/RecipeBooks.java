@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import haveric.recipeManager.api.events.RecipeManagerReloadBooksEvent;
 import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.flags.FlagAddToBook;
+import haveric.recipeManager.flag.flags.recipe.FlagAddToBook;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;

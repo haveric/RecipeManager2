@@ -532,17 +532,6 @@ public class RMBaseFurnaceEvents implements Listener {
             return false;
         }
 
-        a.clear();
-
-        if (flaggable.sendPrepare(a)) {
-            a.sendEffects(a.player(), msg);
-        } else {
-            if (sendReasons) {
-                a.sendReasons(a.player(), msg);
-            }
-            return false;
-        }
-
         if (craft) {
             a.clear();
 

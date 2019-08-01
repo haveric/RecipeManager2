@@ -101,7 +101,7 @@ public class BrewEvents implements Listener {
             Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
             ItemResult result = recipe.getResult(a);
 
-            if (result != null && recipe.sendPrepare(a)) {
+            if (result != null && recipe.sendCrafted(a)) {
                 if (recipe.checkFlags(a) && result.checkFlags(a)) {
                     @SuppressWarnings("unchecked")
                     List<Boolean> potionBools = (List<Boolean>) a.extra();

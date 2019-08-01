@@ -2,7 +2,7 @@ package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.flags.FlagItemName;
+import haveric.recipeManager.flag.flags.result.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;

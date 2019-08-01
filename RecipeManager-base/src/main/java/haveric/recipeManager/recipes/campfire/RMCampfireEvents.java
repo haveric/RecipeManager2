@@ -139,19 +139,12 @@ public class RMCampfireEvents implements Listener {
 
                     a.clear();
 
-                    boolean resultPrepareSuccess = result.sendPrepare(a);
-                    if (resultPrepareSuccess) {
-                        a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
-                    }
-
-                    a.clear();
-
                     boolean resultCraftSuccess = result.sendCrafted(a);
                     if (resultCraftSuccess) {
                         a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
                     }
 
-                    if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
+                    if (recipeCraftSuccess && resultCraftSuccess) {
                         event.setResult(a.result());
                     }
                 }

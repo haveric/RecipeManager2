@@ -2,10 +2,10 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.flag.conditions.ConditionsHold;
-import haveric.recipeManager.flag.flags.FlagHoldItem;
+import haveric.recipeManager.flag.flags.any.FlagHoldItem;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;

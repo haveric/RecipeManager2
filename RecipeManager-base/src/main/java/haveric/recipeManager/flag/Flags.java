@@ -204,6 +204,13 @@ public class Flags implements Cloneable {
         return FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.ONCE_PER_SHIFT);
     }
 
+    /**
+     * Applies all flags to the display result, specifically used for Craft/Combine recipes
+     *
+     * @param a
+     *            arguments class
+     * @return false if something was absolutely required and crafting should be cancelled
+     */
     public boolean sendPrepare(Args a) {
         a.clear();
 

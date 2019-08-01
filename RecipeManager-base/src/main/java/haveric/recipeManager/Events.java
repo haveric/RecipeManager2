@@ -116,7 +116,7 @@ public class Events implements Listener {
 
             Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
 
-            result = recipe.getDisplayResult(a); // get the result from recipe
+            result = recipe.getDisplayResult(a); // Handles the result sendPrepares
 
             // Call the RecipeManagerPrepareCraftEvent
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
@@ -487,13 +487,6 @@ public class Events implements Listener {
 
                     a.clear();
 
-                    boolean resultPrepareSuccess = result.sendPrepare(a);
-                    if (resultPrepareSuccess) {
-                        a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
-                    }
-
-                    a.clear();
-
                     boolean resultCraftSuccess = result.sendCrafted(a);
                     if (resultCraftSuccess) {
                         a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
@@ -503,7 +496,7 @@ public class Events implements Listener {
 
                     boolean subtract = false;
                     boolean onlyExtra = true;
-                    if (recipeCraftSuccess && resultPrepareSuccess && resultCraftSuccess) {
+                    if (recipeCraftSuccess && resultCraftSuccess) {
                         if (recipe.isMultiResult()) {
                             subtract = true;
                             onlyExtra = false;
