@@ -103,7 +103,25 @@ public class FlagItemLore extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        onCrafted(a);
+        if (!a.hasResult()) {
+            a.addCustomReason("Need result!");
+            return;
+        }
+
+        ItemMeta meta = a.result().getItemMeta();
+        List<String> newLore = meta.getLore();
+
+        if (newLore == null) {
+            newLore = new ArrayList<>();
+        }
+
+        for (String line : lore) {
+            newLore.add(a.parseVariables(line, true));
+        }
+
+        meta.setLore(newLore);
+
+        a.result().setItemMeta(meta);
     }
 
     @Override

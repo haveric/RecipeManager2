@@ -81,7 +81,22 @@ public class FlagItemName extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        onCrafted(a);
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+
+        ItemMeta meta = a.result().getItemMeta();
+
+        String displayName;
+        if (getItemName() == null) {
+            displayName = null;
+        } else {
+            displayName = RMCUtil.parseColors(a.parseVariables(getItemName(), true), false);
+        }
+        meta.setDisplayName(displayName);
+
+        a.result().setItemMeta(meta);
     }
 
     @Override

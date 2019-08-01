@@ -296,7 +296,7 @@ public class Args {
         return string;
     }
 
-    private String parseRandom(String string) {
+    private String parseRandom(String string, boolean displayOnly) {
         if (!string.contains("{rand")) {
             return string;
         }
@@ -344,11 +344,19 @@ public class Args {
                 return string;
             }
 
+            String replaceString;
+            if (displayOnly) {
+                String minString = String.format("%." + decimals + "f", min);
+                String maxString = String.format("%." + decimals + "f", max);
 
-            double generated = RecipeManager.random.nextDouble();
-            double random = min + (generated * (max - min));
+                replaceString = "{" + minString + "-" + maxString + "}";
+            } else {
+                double generated = RecipeManager.random.nextDouble();
+                double random = min + (generated * (max - min));
 
-            String replaceString = String.format("%." + decimals + "f", random);
+                replaceString = String.format("%." + decimals + "f", random);
+            }
+
             string = regexMatcher.replaceFirst(replaceString);
             regexMatcher = regex.matcher(string);
         }
@@ -357,6 +365,10 @@ public class Args {
     }
 
     public String parseVariables(String string) {
+        return parseVariables(string, false);
+    }
+
+    public String parseVariables(String string, boolean displayOnly) {
         String name = "";
 
         boolean containsPlayer = string.contains("{player}");
@@ -396,7 +408,7 @@ public class Args {
         string = parsePosition(string, "y");
         string = parsePosition(string, "z");
 
-        string = parseRandom(string);
+        string = parseRandom(string, displayOnly);
 
         ItemMeta meta = result.getItemMeta();
 
