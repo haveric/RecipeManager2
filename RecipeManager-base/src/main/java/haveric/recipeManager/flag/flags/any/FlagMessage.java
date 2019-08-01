@@ -29,7 +29,7 @@ public class FlagMessage extends Flag {
             "This flag can be used more than once to add more messages.",
             "",
             "Colors are supported (<red>, &5, etc).",
-            "The message can also contain variables:",
+            "You can also use these variables:",
             "  {player}         = crafter's name or '(nobody)' if not available",
             "  {playerdisplay}  = crafter's display name or '(nobody)' if not available",
             "  {result}         = the result item name or '(nothing)' if recipe failed.",
@@ -41,6 +41,8 @@ public class FlagMessage extends Flag {
             "  {y}              = event location's Y coord or '(?)' if not available",
             "  {z}              = event location's Z coord or '(?)' if not available",
             "    Relative positions are supported: {x-1},{y+7},{z+12}",
+            "  {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10",
+            "  {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50",
             "",
             "Allows quotes to prevent spaces being trimmed.", };
     }
