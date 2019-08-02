@@ -66,4 +66,5 @@ public class FlagType {
     public static final String APPLY_ENCHANTMENT = "@applyenchantment";
     public static final String REPAIR_COST = "@repaircost";
     public static final String LOCALIZED_NAME = "@localizedname";
+    public static final String CUSTOM_MODEL_DATA = "@custommodeldata";
 }
