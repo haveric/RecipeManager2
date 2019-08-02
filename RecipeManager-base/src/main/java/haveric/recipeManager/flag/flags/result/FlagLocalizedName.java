@@ -82,6 +82,11 @@ public class FlagLocalizedName extends Flag {
     }
 
     @Override
+    public void onPrepare(Args a) {
+        onCrafted(a);
+    }
+
+    @Override
     public void onCrafted(Args a) {
         if (!a.hasResult()) {
             a.addCustomReason("Needs result!");
