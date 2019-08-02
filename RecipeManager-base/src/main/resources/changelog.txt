@@ -13,6 +13,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW FLAG: @RepairCost - Sets the default item repair cost
 * NEW FLAG: @LocalizedName - Works the same as @ItemName, but sets the localized name instead
 * NEW FLAG: @CustomModelData - Sets the custom model data that can be used in conjuction with data packs for custom textures
+* NEW: @IngredientCondition, @HoldItem - Add conditions for localizedname and custommodeldata
 
 
 === v2.15.0 ===

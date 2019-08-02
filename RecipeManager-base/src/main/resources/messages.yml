@@ -30,6 +30,8 @@ flag:
     noamount: '<yellow>{item}<red> needs amount: <yellow>{amount}'
     noenchants: '<yellow>{item}<red> needs enchantments: <yellow>{enchants}'
     noname: '<yellow>{item}<red> needs name: <yellow>{name}'
+    nolocalizedname: '<yellow>{item}<red> needs localized name: <yellow>{name}'
+    nocustommodeldata: '<yellow>{item}<red> needs custom model data: <yellow>{data}'
     nolore: '<yellow>{item}<red> needs lore: <yellow>{lore}'
     nocolor: '<yellow>{item}<red> needs color: <yellow>{color}'
     nopotion: '<yellow>{item}<red> needs potion: <yellow>{potion}'

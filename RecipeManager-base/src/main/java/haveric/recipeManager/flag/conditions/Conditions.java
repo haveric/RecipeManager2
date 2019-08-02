@@ -53,12 +53,18 @@ public class Conditions implements Cloneable {
     private DyeColor bannerColor;
     private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
     private EntityType spawnEggEntityType;
+    private String localizedName;
+    private int customModelData = Integer.MIN_VALUE;
+
     private boolean noMeta = false;
     private boolean noName = false;
     private boolean noLore = false;
     private boolean noEnchant = false;
     private boolean noBookEnchant = false;
     private boolean noColor = false;
+    private boolean noLocalizedName = false;
+    private boolean noCustomModelData = false;
+
     private boolean allSet = false;
 
     // TODO mark
@@ -105,6 +111,8 @@ public class Conditions implements Cloneable {
         bannerColor = original.bannerColor;
         bannerPatterns.putAll(original.bannerPatterns);
         spawnEggEntityType = original.spawnEggEntityType;
+        localizedName = original.localizedName;
+        customModelData = original.customModelData;
 
         setNoMeta(original.isNoMeta());
         setNoName(original.isNoName());
@@ -112,6 +120,8 @@ public class Conditions implements Cloneable {
         setNoEnchant(original.isNoEnchant());
         setNoBookEnchant(original.isNoBookEnchant());
         setNoColor(original.isNoColor());
+        setNoLocalizedName(original.isNoLocalizedName());
+        setNoCustomModelData(original.isNoCustomModelData());
 
         setAllSet(original.isAllSet());
     }
@@ -342,6 +352,30 @@ public class Conditions implements Cloneable {
 
     public boolean checkAmount(int amountToCheck) {
         return amountToCheck >= amount;
+    }
+
+    public int getCustomModelData() {
+        return customModelData;
+    }
+
+    public void setCustomModelData(int newData) {
+        customModelData = newData;
+    }
+
+    public boolean hasCustomModelData() {
+        return customModelData > Integer.MIN_VALUE;
+    }
+
+    public boolean checkCustomModelData(int dataToCheck) {
+        if (isNoMeta() || isNoCustomModelData()) {
+            return !hasCustomModelData();
+        }
+
+        if (!hasCustomModelData()) {
+            return true;
+        }
+
+        return dataToCheck == customModelData;
     }
 
     /**
@@ -625,6 +659,48 @@ public class Conditions implements Cloneable {
             }
 
             return name.equalsIgnoreCase(nameToCheck);
+        }
+
+        return false;
+    }
+
+    public String getLocalizedName() {
+        return localizedName;
+    }
+
+    public void setLocalizedName(String newLocalizedName) {
+        if (newLocalizedName == null) {
+            localizedName = null;
+        } else {
+            localizedName = RMCUtil.parseColors(newLocalizedName, false);
+        }
+    }
+
+    public boolean hasLocalizedName() {
+        return localizedName != null;
+    }
+
+    public boolean checkLocalizedName(String nameToCheck) {
+        if (isNoMeta() || isNoLocalizedName()) {
+            return nameToCheck == null;
+        }
+
+        if (!hasLocalizedName()) {
+            return true;
+        }
+
+        if (nameToCheck != null) {
+            if (localizedName.startsWith("regex:")) {
+                try {
+                    Pattern pattern = Pattern.compile(localizedName.substring("regex:".length()));
+                    return pattern.matcher(nameToCheck).matches();
+                } catch (PatternSyntaxException e) {
+                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
+                    return false;
+                }
+            }
+
+            return localizedName.equalsIgnoreCase(nameToCheck);
         }
 
         return false;
@@ -1074,6 +1150,36 @@ public class Conditions implements Cloneable {
             }
         }
 
+        if (!checkLocalizedName(meta.getLocalizedName())) {
+            if (a == null) {
+                return false;
+            }
+
+            if (addReasons) {
+                a.addReason("flag.ingredientconditions.nolocalizedname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getLocalizedName());
+            }
+            ok = false;
+
+            if (getFailMessage() != null) {
+                return false;
+            }
+        }
+
+        if (!checkCustomModelData(meta.getCustomModelData())) {
+            if (a == null) {
+                return false;
+            }
+
+            if (addReasons) {
+                a.addReason("flag.ingredientconditions.nocustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getCustomModelData());
+            }
+            ok = false;
+
+            if (getFailMessage() != null) {
+                return false;
+            }
+        }
+
         if (!checkLore(meta.getLore())) {
             if (a == null) {
                 return false;
@@ -1305,6 +1411,22 @@ public class Conditions implements Cloneable {
         this.noColor = noColor;
     }
 
+    public void setNoLocalizedName(boolean noLocalizedName) {
+        this.noLocalizedName = noLocalizedName;
+    }
+
+    public boolean isNoLocalizedName() {
+        return noLocalizedName;
+    }
+
+    public boolean isNoCustomModelData() {
+        return noCustomModelData;
+    }
+
+    public void setNoCustomModelData(boolean noCustomModelData) {
+        this.noCustomModelData = noCustomModelData;
+    }
+
     public boolean isNoName() {
         return noName;
     }
@@ -1434,6 +1556,16 @@ public class Conditions implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'amount' argument with invalid number: " + value);
             }
+        } else if (argLower.startsWith("custommodeldata")) {
+            value = arg.substring("custommodeldata".length()).trim();
+
+            try {
+                setCustomModelData(Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'custommodeldata' argument with invalid number: " + value);
+            }
+        } else if (argLower.startsWith("!custommodeldata") || argLower.startsWith("nocustommodeldata")) {
+            setNoCustomModelData(true);
         } else if (argLower.startsWith("!enchant") || argLower.startsWith("noenchant")) {
             setNoEnchant(true);
         } else if (argLower.startsWith("enchant")) {
@@ -1610,10 +1742,16 @@ public class Conditions implements Cloneable {
             }
         } else if (argLower.startsWith("!name") || argLower.startsWith("noname")) {
             setNoName(true);
+        } else if (argLower.startsWith("!localizedname") || argLower.startsWith("nolocalizedname")) {
+            setNoLocalizedName(true);
         } else if (argLower.startsWith("name")) {
             value = arg.substring("name".length()); // preserve case for regex
 
             setName(RMCUtil.trimExactQuotes(value));
+        } else if (argLower.startsWith("localizedname")) {
+            value = arg.substring("localizedname".length()); // preserve case for regex
+
+            setLocalizedName(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
             setNoLore(true);
         } else if (argLower.startsWith("lore")) {
