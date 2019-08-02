@@ -214,24 +214,15 @@ public class RMBukkitTools {
     }
 
     public static boolean isSameItemFromChoice(RecipeChoice choice, ItemStack item) {
-        boolean same = false;
-
         if (item != null) {
             Material type = item.getType();
 
             if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-                for (Material material : materialChoice.getChoices()) {
-                    if (type == material) {
-                        same = true;
-                        break;
-                    }
-                }
+                return ((RecipeChoice.MaterialChoice) choice).getChoices().contains(type);
             }
         }
 
-        return same;
+        return false;
     }
 
     public static void sortIngredientList(List<ItemStack> ingredients) {
