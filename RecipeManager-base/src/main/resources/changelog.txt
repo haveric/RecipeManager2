@@ -10,8 +10,8 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Added ability to output random numbers.
 ** {rand #1-#2} Outputs a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10",
 ** {rand #1-#2, #3} Outputs a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-* NEW FLAG: @RepairCost
-
+* NEW FLAG: @RepairCost - Sets the default item repair cost
+* NEW FLAG: @LocalizedName
 
 
 === v2.15.0 ===
