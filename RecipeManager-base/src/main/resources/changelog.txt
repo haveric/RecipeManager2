@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: data/durability not being set in 1.13/1.14 shaped/shapeless recipes
 * FIX: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Fixed multiple {x}, {y}, or {z} variables from crashing the server
 * FIX/NEW: @IngredientCondition, @HoldItem, @CloneIngredient: Double pipes '||' can be used in arguments and will be replaced by a single '|' to better support regex
+* FIX: Campfire and stonecutting index weren't being removed correctly
 ** Example: "@ingredientcondition iron_nugget | lore regex:one||two" will now correctly match one or two
 * NEW: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Added ability to output random numbers.
 ** {rand #1-#2} Outputs a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10",

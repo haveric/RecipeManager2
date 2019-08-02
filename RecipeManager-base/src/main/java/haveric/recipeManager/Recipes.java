@@ -617,9 +617,13 @@ public class Recipes {
                 indexSmoking.remove(index);
             }
         } else if (recipe instanceof RMCampfireRecipe) {
-            indexCampfire.remove(((RMCampfireRecipe) recipe).getIndexString());
+            for (String index : ((RMCampfireRecipe) recipe).getIndexString()) {
+                indexCampfire.remove(index);
+            }
         } else if (recipe instanceof RMStonecuttingRecipe) {
-            indexStonecutting.remove(((RMStonecuttingRecipe) recipe).getIndexString());
+            for (String index : ((RMStonecuttingRecipe) recipe).getIndexString()) {
+                indexStonecutting.remove(index);
+            }
         } else if (recipe instanceof BrewRecipe) {
             indexBrew.remove(((BrewRecipe) recipe).getIndexString());
         } else if (recipe instanceof FuelRecipe) {
