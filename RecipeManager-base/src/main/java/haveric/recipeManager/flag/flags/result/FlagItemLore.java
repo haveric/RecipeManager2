@@ -20,7 +20,9 @@ public class FlagItemLore extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <text>", };
+            "{flag} <text>",
+            "{flag} <test> | display",
+            "{flag} <test> | result",};
     }
 
     @Override
@@ -45,7 +47,12 @@ public class FlagItemLore extends Flag {
             "  {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10",
             "  {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50",
             "",
-            "Allows quotes to prevent spaces being trimmed.", };
+            "Allows quotes to prevent spaces being trimmed.",
+            "",
+            "Optional Arguments:",
+            "  display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)",
+            "  result           = only show on the result, but hide from the prepared result",
+            "    Default behavior with neither of these arguments is to display in both locations", };
     }
 
     @Override
@@ -58,13 +65,15 @@ public class FlagItemLore extends Flag {
     }
 
 
-    private List<String> lore = new ArrayList<>();
+    private List<String> displayLores = new ArrayList<>();
+    private List<String> resultLores = new ArrayList<>();
 
     public FlagItemLore() {
     }
 
     public FlagItemLore(FlagItemLore flag) {
-        lore.addAll(flag.lore);
+        displayLores.addAll(flag.displayLores);
+        resultLores.addAll(flag.resultLores);
     }
 
     @Override
@@ -72,31 +81,73 @@ public class FlagItemLore extends Flag {
         return new FlagItemLore((FlagItemLore) super.clone());
     }
 
-    public List<String> getLore() {
-        return lore;
+    public List<String> getDisplayLores() {
+        return displayLores;
     }
 
-    public void setLore(List<String> newLore) {
-        Validate.notNull(newLore, "The 'lore' argument must not be null!");
+    public void setDisplayLores(List<String> newLores) {
+        Validate.notNull(newLores, "The 'lore' argument must not be null!");
 
-        lore.clear();
+        displayLores.clear();
 
-        for (String value : newLore) {
-            addLore(value);
+        for (String value : newLores) {
+            addDisplayLore(value);
         }
     }
 
-    public void addLore(String value) {
-        lore.add(RMCUtil.parseColors(value, false));
+    public void addDisplayLore(String value) {
+        displayLores.add(RMCUtil.parseColors(value, false));
+    }
+
+    public List<String> getResultLores() {
+        return resultLores;
+    }
+
+    public void setResultLores(List<String> newLores) {
+        Validate.notNull(newLores, "The 'lore' argument must not be null!");
+
+        resultLores.clear();
+
+        for (String value : newLores) {
+            addResultLore(value);
+        }
+    }
+
+    public void addResultLore(String value) {
+        resultLores.add(RMCUtil.parseColors(value, false));
+    }
+
+    public void addBothLore(String value) {
+        String parsed = RMCUtil.parseColors(value, false);
+        displayLores.add(parsed);
+        resultLores.add(parsed);
     }
 
     @Override
     public boolean onParse(String value) {
+        String lore;
         if (value == null) {
-            value = ""; // convert empty flag to blank line
-        }
+            lore = ""; // convert empty flag to blank line
 
-        addLore(RMCUtil.trimExactQuotes(value));
+            addBothLore(lore);
+        } else {
+            // Match on single pipes '|', but not double '||'
+            String[] args = value.split("(?<!\\|)\\|(?!\\|)");
+            lore = args[0];
+            // Replace double pipes with single pipe: || -> |
+            lore = lore.replaceAll("\\|\\|", "|");
+
+            if (args.length > 1) {
+                String display = args[1].trim().toLowerCase();
+                if (display.equals("display")) {
+                    addDisplayLore(lore);
+                } else if (display.equals("result")) {
+                    addResultLore(lore);
+                }
+            } else {
+                addBothLore(lore);
+            }
+        }
 
         return true;
     }
@@ -115,7 +166,7 @@ public class FlagItemLore extends Flag {
             newLore = new ArrayList<>();
         }
 
-        for (String line : lore) {
+        for (String line : displayLores) {
             newLore.add(a.parseVariables(line, true));
         }
 
@@ -138,7 +189,7 @@ public class FlagItemLore extends Flag {
             newLore = new ArrayList<>();
         }
 
-        for (String line : lore) {
+        for (String line : resultLores) {
             newLore.add(a.parseVariables(line));
         }
 

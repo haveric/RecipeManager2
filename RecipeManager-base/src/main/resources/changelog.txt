@@ -14,6 +14,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW FLAG: @LocalizedName - Works the same as @ItemName, but sets the localized name instead
 * NEW FLAG: @CustomModelData - Sets the custom model data that can be used in conjuction with data packs for custom textures
 * NEW: @IngredientCondition, @HoldItem - Add conditions for localizedname and custommodeldata
+* NEW: @ItemLore - Added 'display' and 'result' parameters to show only one location. Defaults to showing in both with no parameter
 
 
 === v2.15.0 ===
