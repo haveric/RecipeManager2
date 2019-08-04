@@ -366,16 +366,20 @@ public class Conditions implements Cloneable {
         return customModelData > Integer.MIN_VALUE;
     }
 
-    public boolean checkCustomModelData(int dataToCheck) {
+    public boolean checkCustomModelData(ItemMeta meta) {
         if (isNoMeta() || isNoCustomModelData()) {
-            return !hasCustomModelData();
+            return !meta.hasCustomModelData();
         }
 
         if (!hasCustomModelData()) {
             return true;
         }
 
-        return dataToCheck == customModelData;
+        if (meta.hasCustomModelData()) {
+            return meta.getCustomModelData() == customModelData;
+        }
+
+        return false;
     }
 
     /**
@@ -1165,7 +1169,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (!checkCustomModelData(meta.getCustomModelData())) {
+        if (!checkCustomModelData(meta)) {
             if (a == null) {
                 return false;
             }
