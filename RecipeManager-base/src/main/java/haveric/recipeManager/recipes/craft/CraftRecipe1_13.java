@@ -427,7 +427,7 @@ public class CraftRecipe1_13 extends CraftRecipe {
 
         if (result.hasFlag(FlagType.ITEM_NAME)) {
             FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            print = RMCUtil.parseColors(flag.getItemName(), false);
+            print = RMCUtil.parseColors(flag.getPrintName(), false);
         } else {
             print = ToolsItem.getName(getFirstResult());
         }
@@ -463,7 +463,7 @@ public class CraftRecipe1_13 extends CraftRecipe {
 
         if (result.hasFlag(FlagType.ITEM_NAME)) {
             FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getItemName(), false));
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
         } else {
             s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
         }

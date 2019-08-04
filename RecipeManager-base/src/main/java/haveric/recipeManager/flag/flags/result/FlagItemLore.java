@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -21,8 +22,8 @@ public class FlagItemLore extends Flag {
     protected String[] getArguments() {
         return new String[] {
             "{flag} <text>",
-            "{flag} <test> | display",
-            "{flag} <test> | result",};
+            "{flag} <text> | display",
+            "{flag} <text> | result", };
     }
 
     @Override
@@ -143,6 +144,9 @@ public class FlagItemLore extends Flag {
                     addDisplayLore(lore);
                 } else if (display.equals("result")) {
                     addResultLore(lore);
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ". Defaulting to set lore in both locations.");
+                    addBothLore(lore);
                 }
             } else {
                 addBothLore(lore);

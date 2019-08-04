@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -16,7 +17,9 @@ public class FlagItemName extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <text or false>", };
+            "{flag} <text>",
+            "{flag} <text> | display",
+            "{flag} <text> | result", };
     }
 
     @Override
@@ -41,7 +44,12 @@ public class FlagItemName extends Flag {
             "  {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10",
             "  {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50",
             "",
-            "Allows quotes to prevent spaces being trimmed.", };
+            "Allows quotes to prevent spaces being trimmed.",
+            "",
+            "Optional Arguments:",
+            "  display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)",
+            "  result           = only show on the result, but hide from the prepared result",
+            "    Default behavior with neither of these arguments is to display in both locations", };
     }
 
     @Override
@@ -53,13 +61,15 @@ public class FlagItemName extends Flag {
     }
 
 
-    private String name;
+    private String displayName;
+    private String resultName;
 
     public FlagItemName() {
     }
 
     public FlagItemName(FlagItemName flag) {
-        name = flag.name;
+        displayName = flag.displayName;
+        resultName = flag.resultName;
     }
 
     @Override
@@ -67,17 +77,57 @@ public class FlagItemName extends Flag {
         return new FlagItemName((FlagItemName) super.clone());
     }
 
-    public String getItemName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setItemName(String newName) {
-        name = newName;
+    public void setDisplayName(String newName) {
+        displayName = newName;
+    }
+
+    public String getResultName() {
+        return resultName;
+    }
+
+    public void setResultName(String newName) {
+        resultName = newName;
+    }
+
+    public String getPrintName() {
+        if (getDisplayName() != null) {
+            return getDisplayName();
+        } else {
+            return getResultName();
+        }
     }
 
     @Override
     public boolean onParse(String value) {
-        setItemName(RMCUtil.trimExactQuotes(value));
+        // Match on single pipes '|', but not double '||'
+        String[] args = value.split("(?<!\\|)\\|(?!\\|)");
+        String name = args[0];
+
+        // Replace double pipes with single pipe: || -> |
+        name = name.replaceAll("\\|\\|", "|");
+        name = RMCUtil.trimExactQuotes(name);
+        name = RMCUtil.parseColors(name, false);
+
+        if (args.length > 1) {
+            String display = args[1].trim().toLowerCase();
+            if (display.equals("display")) {
+                setDisplayName(name);
+            } else if (display.equals("result")) {
+                setResultName(name);
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ". Defaulting to set name in both locations.");
+                setDisplayName(name);
+                setResultName(name);
+            }
+        } else {
+            setDisplayName(name);
+            setResultName(name);
+        }
+
         return true;
     }
 
@@ -91,10 +141,10 @@ public class FlagItemName extends Flag {
         ItemMeta meta = a.result().getItemMeta();
 
         String displayName;
-        if (getItemName() == null) {
+        if (getDisplayName() == null) {
             displayName = null;
         } else {
-            displayName = RMCUtil.parseColors(a.parseVariables(getItemName(), true), false);
+            displayName = a.parseVariables(getDisplayName(), true);
         }
         meta.setDisplayName(displayName);
 
@@ -111,10 +161,10 @@ public class FlagItemName extends Flag {
         ItemMeta meta = a.result().getItemMeta();
 
         String displayName;
-        if (getItemName() == null) {
+        if (getResultName() == null) {
             displayName = null;
         } else {
-            displayName = RMCUtil.parseColors(a.parseVariables(getItemName()), false);
+            displayName = a.parseVariables(getResultName());
         }
         meta.setDisplayName(displayName);
 
