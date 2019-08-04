@@ -1,12 +1,11 @@
 package haveric.recipeManager.api.events;
 
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Event triggered when RecipeManager's custom recipes' ingredients are placed in the workbench and the result is displayed.<br>
@@ -17,11 +16,11 @@ public class RecipeManagerPrepareCraftEvent extends Event {
     private static HandlerList handlers = new HandlerList();
 
     private WorkbenchRecipe recipe;
-    private ItemStack result;
+    private ItemResult result;
     private Player player;
     private Location workbench;
 
-    public RecipeManagerPrepareCraftEvent(WorkbenchRecipe newRecipe, ItemStack newResult, Player newPlayer, Location newWorkbench) {
+    public RecipeManagerPrepareCraftEvent(WorkbenchRecipe newRecipe, ItemResult newResult, Player newPlayer, Location newWorkbench) {
         recipe = newRecipe;
         result = newResult;
         player = newPlayer;
@@ -57,7 +56,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
      *
      * @return result item or null if player doesn't have access to recipe
      */
-    public ItemStack getResult() {
+    public ItemResult getResult() {
         return result;
     }
 
@@ -66,9 +65,9 @@ public class RecipeManagerPrepareCraftEvent extends Event {
      * Setting this to null will prevent the player from crafting the recipe.
      *
      * @param newResult
-     *            ItemStack displayed result or null to 'cancel' event
+     *            ItemResult displayed result or null to 'cancel' event
      */
-    public void setResult(ItemStack newResult) {
+    public void setResult(ItemResult newResult) {
         result = newResult;
     }
 

@@ -25,6 +25,8 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.GROUP, new FlagGroup(), FlagBit.NONE, "groups", "permissiongroup", "permgroup");
         FlagFactory.getInstance().initializeFlag(FlagType.HEIGHT, new FlagHeight(), FlagBit.NONE, "depth");
         FlagFactory.getInstance().initializeFlag(FlagType.HOLD_ITEM, new FlagHoldItem(), FlagBit.NONE, "hold");
+        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.NO_VALUE_REQUIRED, "lore", "itemdesc");
+        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.NONE, "name", "displayname");
         FlagFactory.getInstance().initializeFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), FlagBit.NONE, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
         FlagFactory.getInstance().initializeFlag(FlagType.INVENTORY, new FlagInventory(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.KEEP_ITEM, new FlagKeepItem(), FlagBit.NONE, "returnitem", "replaceitem");
@@ -81,8 +83,6 @@ public class FlagLoader {
         if (Version.has1_13Support()) {
             FlagFactory.getInstance().initializeFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), FlagBit.RESULT, "attribute");
         }
-        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED, "lore", "itemdesc");
-        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.RESULT, "name", "displayname");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), FlagBit.RESULT | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
         FlagFactory.getInstance().initializeFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), FlagBit.RESULT, "leathercolour", "color", "colour");
         FlagFactory.getInstance().initializeFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), FlagBit.RESULT);

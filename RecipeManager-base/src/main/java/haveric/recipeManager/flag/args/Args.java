@@ -388,9 +388,6 @@ public class Args {
         if (containsPlayerDisplay) {
             string = string.replace("{playerdisplay}", (player != null ? player.getDisplayName() : name));
         }
-        if (string.contains("{result}")) {
-            string = string.replace("{result}", ToolsItem.print(result()));
-        }
         if (string.contains("{recipename}")) {
             string = string.replace("{recipename}", (hasRecipe() ? recipe().getName() : "(unknown)"));
         }
@@ -410,34 +407,42 @@ public class Args {
 
         string = parseRandom(string, displayOnly);
 
-        ItemMeta meta = result.getItemMeta();
-
-        if (meta.hasLore() && string.contains("{lore}")) {
-            string = string.replace("{lore}", "\"" + StringUtils.join(meta.getLore(), "\",\"") + "\"");
-        }
-        if (meta instanceof BookMeta) {
-            BookMeta book = (BookMeta) meta;
-            if (book.hasTitle() && string.contains("{booktitle}")) {
-                string = string.replace("{booktitle}", book.getTitle());
+        if (hasResult()) {
+            if (string.contains("{result}")) {
+                string = string.replace("{result}", ToolsItem.print(result()));
             }
-            if (book.hasAuthor() && string.contains("{bookauthor}")) {
-                string = string.replace("{bookauthor}", book.getAuthor());
-            }
-            if (book.hasPages() && string.contains("{bookpages}")) {
-                String pages = "";
-                int numPages = book.getPageCount();
-                for (int i = 1; i <= numPages; i++) {
-                    String page = book.getPage(i);
-                    pages += "\"{text:\\\"" + page + "\\\"}\"";
 
-                    if (i < numPages) {
-                        pages += ",";
+            ItemMeta meta = result.getItemMeta();
+
+            if (meta != null) {
+                if (meta.hasLore() && string.contains("{lore}")) {
+                    string = string.replace("{lore}", "\"" + StringUtils.join(meta.getLore(), "\",\"") + "\"");
+                }
+                if (meta instanceof BookMeta) {
+                    BookMeta book = (BookMeta) meta;
+                    if (book.hasTitle() && string.contains("{booktitle}")) {
+                        string = string.replace("{booktitle}", book.getTitle());
+                    }
+                    if (book.hasAuthor() && string.contains("{bookauthor}")) {
+                        string = string.replace("{bookauthor}", book.getAuthor());
+                    }
+                    if (book.hasPages() && string.contains("{bookpages}")) {
+                        String pages = "";
+                        int numPages = book.getPageCount();
+                        for (int i = 1; i <= numPages; i++) {
+                            String page = book.getPage(i);
+                            pages += "\"{text:\\\"" + page + "\\\"}\"";
+
+                            if (i < numPages) {
+                                pages += ",";
+                            }
+                        }
+
+                        pages = RMCChatColor.stripColor(pages);
+                        pages = pages.replace("\n", "\\\\n");
+                        string = string.replace("{bookpages}", pages);
                     }
                 }
-
-                pages = RMCChatColor.stripColor(pages);
-                pages = pages.replace("\n", "\\\\n");
-                string = string.replace("{bookpages}", pages);
             }
         }
 

@@ -1,4 +1,4 @@
-package haveric.recipeManager.flag.flags.result;
+package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
@@ -164,19 +164,21 @@ public class FlagItemLore extends Flag {
         }
 
         ItemMeta meta = a.result().getItemMeta();
-        List<String> newLore = meta.getLore();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
 
-        if (newLore == null) {
-            newLore = new ArrayList<>();
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            for (String line : displayLores) {
+                newLore.add(a.parseVariables(line, true));
+            }
+
+            meta.setLore(newLore);
+
+            a.result().setItemMeta(meta);
         }
-
-        for (String line : displayLores) {
-            newLore.add(a.parseVariables(line, true));
-        }
-
-        meta.setLore(newLore);
-
-        a.result().setItemMeta(meta);
     }
 
     @Override
@@ -187,18 +189,20 @@ public class FlagItemLore extends Flag {
         }
 
         ItemMeta meta = a.result().getItemMeta();
-        List<String> newLore = meta.getLore();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
 
-        if (newLore == null) {
-            newLore = new ArrayList<>();
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            for (String line : resultLores) {
+                newLore.add(a.parseVariables(line));
+            }
+
+            meta.setLore(newLore);
+
+            a.result().setItemMeta(meta);
         }
-
-        for (String line : resultLores) {
-            newLore.add(a.parseVariables(line));
-        }
-
-        meta.setLore(newLore);
-
-        a.result().setItemMeta(meta);
     }
 }

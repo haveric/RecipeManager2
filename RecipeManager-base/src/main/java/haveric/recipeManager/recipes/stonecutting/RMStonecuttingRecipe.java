@@ -4,7 +4,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.result.FlagItemName;
+import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;

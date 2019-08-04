@@ -117,7 +117,7 @@ public class Events implements Listener {
 
             Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
 
-            result = recipe.getDisplayResult(a); // Handles the result sendPrepares
+            result = recipe.getDisplayResult(a);
 
             // Call the RecipeManagerPrepareCraftEvent
             RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(recipe, result, player, location);
@@ -140,6 +140,15 @@ public class Events implements Listener {
                 } else {
                     a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                     result = null;
+                }
+
+                if (result != null) {
+                    if (result.sendPrepare(a)) {
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                    } else {
+                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        result = null;
+                    }
                 }
             }
 
@@ -375,7 +384,7 @@ public class Events implements Listener {
             }
         }
 
-        RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(null, result, player, location);
+        RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(null, new ItemResult(result), player, location);
         Bukkit.getPluginManager().callEvent(callEvent);
 
         result = callEvent.getResult();

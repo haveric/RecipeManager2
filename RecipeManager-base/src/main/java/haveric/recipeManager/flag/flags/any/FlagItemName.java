@@ -1,4 +1,4 @@
-package haveric.recipeManager.flag.flags.result;
+package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
@@ -139,16 +139,17 @@ public class FlagItemName extends Flag {
         }
 
         ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            String displayName;
+            if (getDisplayName() == null) {
+                displayName = null;
+            } else {
+                displayName = a.parseVariables(getDisplayName(), true);
+            }
+            meta.setDisplayName(displayName);
 
-        String displayName;
-        if (getDisplayName() == null) {
-            displayName = null;
-        } else {
-            displayName = a.parseVariables(getDisplayName(), true);
+            a.result().setItemMeta(meta);
         }
-        meta.setDisplayName(displayName);
-
-        a.result().setItemMeta(meta);
     }
 
     @Override
@@ -159,15 +160,16 @@ public class FlagItemName extends Flag {
         }
 
         ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            String displayName;
+            if (getResultName() == null) {
+                displayName = null;
+            } else {
+                displayName = a.parseVariables(getResultName());
+            }
+            meta.setDisplayName(displayName);
 
-        String displayName;
-        if (getResultName() == null) {
-            displayName = null;
-        } else {
-            displayName = a.parseVariables(getResultName());
+            a.result().setItemMeta(meta);
         }
-        meta.setDisplayName(displayName);
-
-        a.result().setItemMeta(meta);
     }
 }
