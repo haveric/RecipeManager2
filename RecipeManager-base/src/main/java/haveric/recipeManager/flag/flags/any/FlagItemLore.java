@@ -126,17 +126,16 @@ public class FlagItemLore extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        String lore;
         if (value == null) {
-            lore = ""; // convert empty flag to blank line
-
-            addBothLore(lore);
+            addBothLore(""); // convert empty flag to blank line
         } else {
             // Match on single pipes '|', but not double '||'
             String[] args = value.split("(?<!\\|)\\|(?!\\|)");
-            lore = args[0];
+            String lore = args[0];
+
             // Replace double pipes with single pipe: || -> |
             lore = lore.replaceAll("\\|\\|", "|");
+            lore = RMCUtil.trimExactQuotes(lore);
 
             if (args.length > 1) {
                 String display = args[1].trim().toLowerCase();

@@ -48,23 +48,23 @@ public class FlagItemNameTest extends FlagBaseTest {
 
             Material resultType = result.getType();
             if (resultType == Material.STONE_SWORD) {
-                assertEquals(flag.getItemName(), "Weird Item");
-                assertEquals(result.getItemMeta().getDisplayName(), "Weird Item");
+                assertEquals("Weird Item", flag.getResultName());
+                assertEquals("Weird Item", result.getItemMeta().getDisplayName());
             } else if (resultType == Material.IRON_SWORD) {
-                assertEquals(flag.getItemName(), "{player}'s Sword");
-                assertEquals(result.getItemMeta().getDisplayName(), "TestPlayer's Sword");
+                assertEquals("{player}'s Sword", flag.getResultName());
+                assertEquals("TestPlayer's Sword", result.getItemMeta().getDisplayName());
             } else if (resultType == Material.GOLDEN_SWORD) {
-                assertEquals(flag.getItemName(), "<gold> Gold");
-                assertEquals(result.getItemMeta().getDisplayName(), RMCChatColor.COLOR_CHAR + "6 Gold");
+                assertEquals(RMCChatColor.COLOR_CHAR + "6 Gold", flag.getResultName());
+                assertEquals(RMCChatColor.COLOR_CHAR + "6 Gold", result.getItemMeta().getDisplayName());
             } else if (resultType == Material.DIAMOND_SWORD) {
-                assertEquals(flag.getItemName(), "Second");
-                assertEquals(result.getItemMeta().getDisplayName(), "Second");
+                assertEquals("Second", flag.getResultName());
+                assertEquals("Second", result.getItemMeta().getDisplayName());
             } else if (resultType == Material.COBBLESTONE) {
-                assertEquals(flag.getItemName(), "First");
-                assertEquals(result.getItemMeta().getDisplayName(), "First");
+                assertEquals("First", flag.getResultName());
+                assertEquals("First", result.getItemMeta().getDisplayName());
             } else if (resultType == Material.BRICK) {
-                assertEquals(flag.getItemName(), "   Second   ");
-                assertEquals(result.getItemMeta().getDisplayName(), "   Second   ");
+                assertEquals("   Second   ", flag.getResultName());
+                assertEquals("   Second   ", result.getItemMeta().getDisplayName());
             }
         }
     }
