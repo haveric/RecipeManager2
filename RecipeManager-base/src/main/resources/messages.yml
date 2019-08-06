@@ -1,4 +1,4 @@
-lastchanged: 2.15.0
+lastchanged: 2.16.0
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
