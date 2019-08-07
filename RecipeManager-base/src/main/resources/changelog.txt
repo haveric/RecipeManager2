@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: nometa condition check on pre 1.14 servers (error with customModelData)
 * FIX: nometa condition check on pre 1.12 servers (error with localizedname)
 * FIX: noname and nolocalizedname condition checks
+* FIX: update 'item aliases.yml' to include names for id conversions to prevent id being used in messages
 
 === v2.16.0 ===
 * FIX: data/durability not being set in 1.13/1.14 shaped/shapeless recipes
