@@ -642,16 +642,17 @@ public class Conditions implements Cloneable {
         return name != null;
     }
 
-    public boolean checkName(String nameToCheck) {
+    public boolean checkName(ItemMeta meta) {
         if (isNoMeta() || isNoName()) {
-            return nameToCheck == null;
+            return !meta.hasDisplayName();
         }
 
         if (!hasName()) {
             return true;
         }
 
-        if (nameToCheck != null) {
+        if (meta.hasDisplayName()) {
+            String nameToCheck = meta.getDisplayName();
             if (name.startsWith("regex:")) {
                 try {
                     Pattern pattern = Pattern.compile(name.substring("regex:".length()));
@@ -684,16 +685,17 @@ public class Conditions implements Cloneable {
         return localizedName != null;
     }
 
-    public boolean checkLocalizedName(String nameToCheck) {
+    public boolean checkLocalizedName(ItemMeta meta) {
         if (isNoMeta() || isNoLocalizedName()) {
-            return nameToCheck == null;
+            return !meta.hasLocalizedName();
         }
 
         if (!hasLocalizedName()) {
             return true;
         }
 
-        if (nameToCheck != null) {
+        if (meta.hasLocalizedName()) {
+            String nameToCheck = meta.getLocalizedName();
             if (localizedName.startsWith("regex:")) {
                 try {
                     Pattern pattern = Pattern.compile(localizedName.substring("regex:".length()));
@@ -1139,7 +1141,7 @@ public class Conditions implements Cloneable {
             return false;
         }
 
-        if (!checkName(meta.getDisplayName())) {
+        if (!checkName(meta)) {
             if (a == null) {
                 return false;
             }
@@ -1154,7 +1156,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (!checkLocalizedName(meta.getLocalizedName())) {
+        if (!checkLocalizedName(meta)) {
             if (a == null) {
                 return false;
             }
