@@ -1169,18 +1169,20 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (!checkCustomModelData(meta)) {
-            if (a == null) {
-                return false;
-            }
+        if (Version.has1_14Support()) {
+            if (!checkCustomModelData(meta)) {
+                if (a == null) {
+                    return false;
+                }
 
-            if (addReasons) {
-                a.addReason("flag.ingredientconditions.nocustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getCustomModelData());
-            }
-            ok = false;
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nocustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getCustomModelData());
+                }
+                ok = false;
 
-            if (getFailMessage() != null) {
-                return false;
+                if (getFailMessage() != null) {
+                    return false;
+                }
             }
         }
 
