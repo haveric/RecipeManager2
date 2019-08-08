@@ -301,16 +301,39 @@ public class Args {
             return string;
         }
 
-        Pattern regex = Pattern.compile("\\{(?:rand)(?:om)* (-?\\d*\\.?\\d*) *- *(-?\\d*\\.?\\d) *(?:, *(\\d*))*}");
+        Pattern regex = Pattern.compile("\\{(?:rand)(?:om)* (-?\\d*\\.?\\d*)(?: *- *(-?\\d*\\.?\\d))? *(?:, *(\\d*))*}");
         Matcher regexMatcher = regex.matcher(string);
 
+        List<String> savedRandoms = new ArrayList<>();
         while (regexMatcher.find()) {
             String group1 = regexMatcher.group(1);
             String group2 = regexMatcher.group(2);
             String group3 = regexMatcher.group(3);
 
             if (group1 == null || group2 == null) {
-                ErrorReporter.getInstance().warning("{rand} needs at least two numbers to parse: " + string + ". Example: {rand 1-2} or {rand 1.0-2.0, 2}.");
+                int indexOffset = 1;
+                if (group1 != null) {
+                    try {
+                        indexOffset = Integer.parseInt(group1);
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("A single parameter {rand} requires an integer: " + string + ". Example: {rand 1} or {rand 2}.");
+                    }
+                }
+
+                if (savedRandoms.isEmpty()) {
+                    ErrorReporter.getInstance().warning("Non-first {rand} needs at least two numbers to parse: " + string + ". Example: {rand 1-2} or {rand 1.0-2.0, 2}.");
+                } else if (savedRandoms.size() < indexOffset) {
+                    ErrorReporter.getInstance().warning("Non-first {rand} trying to reference non-existing {rand} index: " + indexOffset + " .From: " + string);
+                } else if (indexOffset < 1) {
+                    ErrorReporter.getInstance().warning("Non-first {rand} index: " + indexOffset + " must be greater than zero. From: " + string);
+                } else {
+                    String savedRandom = savedRandoms.get(indexOffset - 1);
+                    string = regexMatcher.replaceFirst(savedRandom);
+                    regexMatcher = regex.matcher(string);
+
+                    continue;
+                }
+
                 return string;
             }
 
@@ -353,8 +376,9 @@ public class Args {
             } else {
                 double generated = RecipeManager.random.nextDouble();
                 double random = min + (generated * (max - min));
-
-                replaceString = String.format("%." + decimals + "f", random);
+                String formattedRandom = String.format("%." + decimals + "f", random);
+                savedRandoms.add(formattedRandom);
+                replaceString = formattedRandom;
             }
 
             string = regexMatcher.replaceFirst(replaceString);
