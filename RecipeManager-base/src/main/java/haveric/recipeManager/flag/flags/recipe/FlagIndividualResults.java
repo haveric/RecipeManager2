@@ -3,8 +3,14 @@ package haveric.recipeManager.flag.flags.recipe;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
+import haveric.recipeManagerCommon.RMCChatColor;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagIndividualResults extends Flag {
 
@@ -60,6 +66,32 @@ public class FlagIndividualResults extends Flag {
     @Override
     public boolean onParse(String value) {
         return true;
+    }
+
+    @Override
+    public void onPrepare(Args a) {
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+
+        double failChance = 100 - a.result().getChance();
+        if (failChance > 0 && failChance < 100) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (meta != null) {
+                List<String> newLore = meta.getLore();
+
+                if (newLore == null) {
+                    newLore = new ArrayList<>();
+                }
+
+                newLore.add(RMCChatColor.RED + "Chance to fail: " + RMCChatColor.WHITE + failChance + "%");
+
+                meta.setLore(newLore);
+
+                a.result().setItemMeta(meta);
+            }
+        }
     }
 
 }
