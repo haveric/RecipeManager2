@@ -1110,7 +1110,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.noenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
+                    if (hasBookEnchants()) {
+                        a.addReason("flag.ingredientconditions.nobookenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
+                    } else {
+                        a.addReason("flag.ingredientconditions.emptybookenchants", getFailMessage(), "{item}", ToolsItem.print(item));
+                    }
                 }
                 ok = false;
 
@@ -1126,7 +1130,11 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason("flag.ingredientconditions.noenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
+                if (hasEnchants()) {
+                    a.addReason("flag.ingredientconditions.noenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
+                } else {
+                    a.addReason("flag.ingredientconditions.emptyenchants", getFailMessage(), "{item}", ToolsItem.print(item));
+                }
             }
             ok = false;
 
@@ -1147,7 +1155,11 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason("flag.ingredientconditions.noname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getName());
+                if (hasName()) {
+                    a.addReason("flag.ingredientconditions.noname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getName());
+                } else {
+                    a.addReason("flag.ingredientconditions.emptyname", getFailMessage(), "{item}", ToolsItem.print(item));
+                }
             }
             ok = false;
 
@@ -1163,7 +1175,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nolocalizedname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getLocalizedName());
+                    if (hasLocalizedName()) {
+                        a.addReason("flag.ingredientconditions.nolocalizedname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getLocalizedName());
+                    } else {
+                        a.addReason("flag.ingredientconditions.emptylocalizedname", getFailMessage(), "{item}", ToolsItem.print(item));
+                    }
                 }
                 ok = false;
 
@@ -1180,7 +1196,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nocustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getCustomModelData());
+                    if (hasCustomModelData()) {
+                        a.addReason("flag.ingredientconditions.nocustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getCustomModelData());
+                    } else {
+                        a.addReason("flag.ingredientconditions.emptycustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item));
+                    }
                 }
                 ok = false;
 
@@ -1196,7 +1216,11 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason("flag.ingredientconditions.nolore", getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLores());
+                if (hasLore()) {
+                    a.addReason("flag.ingredientconditions.nolore", getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLores());
+                } else {
+                    a.addReason("flag.ingredientconditions.emptylore", getFailMessage(), "{item}", ToolsItem.print(item));
+                }
             }
             ok = false;
 
