@@ -8,7 +8,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: update 'item aliases.yml' to include names for id conversions to prevent id being used in messages
 * FIX: @CustomModelData wasn't being loaded correctly
 * Fix: @IndividualResults wasn't setting names/lores correctly and now supports shift click crafting
-* Fix: Move recipe error messages from player sends to the item lore
+* Fix: Move recipe error messages from player messages to the item lore and add clearer messages
 * NEW: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Added ability to reuse random numbers
 ** {rand n} reuse a random output, where n is the nth {rand} used excluding this format
 
