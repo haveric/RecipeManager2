@@ -320,21 +320,27 @@ public class Args {
                     }
                 }
 
-                if (savedRandoms.isEmpty()) {
-                    ErrorReporter.getInstance().warning("Non-first {rand} needs at least two numbers to parse: " + string + ". Example: {rand 1-2} or {rand 1.0-2.0, 2}.");
-                } else if (savedRandoms.size() < indexOffset) {
-                    ErrorReporter.getInstance().warning("Non-first {rand} trying to reference non-existing {rand} index: " + indexOffset + " .From: " + string);
-                } else if (indexOffset < 1) {
-                    ErrorReporter.getInstance().warning("Non-first {rand} index: " + indexOffset + " must be greater than zero. From: " + string);
+                String replaceString;
+                if (displayOnly) {
+                    replaceString = "{" + indexOffset + "}";
                 } else {
-                    String savedRandom = savedRandoms.get(indexOffset - 1);
-                    string = regexMatcher.replaceFirst(savedRandom);
-                    regexMatcher = regex.matcher(string);
-
-                    continue;
+                    if (savedRandoms.isEmpty()) {
+                        ErrorReporter.getInstance().warning("Non-first {rand} needs at least two numbers to parse: " + string + ". Example: {rand 1-2} or {rand 1.0-2.0, 2}.");
+                        return string;
+                    } else if (savedRandoms.size() < indexOffset) {
+                        ErrorReporter.getInstance().warning("Non-first {rand} trying to reference non-existing {rand} index: " + indexOffset + " .From: " + string);
+                        return string;
+                    } else if (indexOffset < 1) {
+                        ErrorReporter.getInstance().warning("Non-first {rand} index: " + indexOffset + " must be greater than zero. From: " + string);
+                        return string;
+                    } else {
+                        replaceString = savedRandoms.get(indexOffset - 1);
+                    }
                 }
 
-                return string;
+                string = regexMatcher.replaceFirst(replaceString);
+                regexMatcher = regex.matcher(string);
+                continue;
             }
 
             int decimals = 0;
