@@ -6,6 +6,10 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagNeedMoney extends Flag {
 
@@ -97,11 +101,6 @@ public class FlagNeedMoney extends Flag {
         return moneyString;
     }
 
-    @Override
-    public String getResultLore() {
-        return "Need Money: " + getMoneyString();
-    }
-
     public boolean checkMoney(double money) {
         boolean isValid;
 
@@ -175,6 +174,28 @@ public class FlagNeedMoney extends Flag {
 
         if (!a.hasPlayerUUID() || !checkMoney(Econ.getInstance().getMoney(a.playerUUID()))) {
             a.addReason("flag.needmoney", failMessage, "{money}", getMoneyString());
+        }
+    }
+
+    @Override
+    public void onPrepare(Args a) {
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+
+        ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
+
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            newLore.add("Need Money: " + getMoneyString());
+
+            meta.setLore(newLore);
+            a.result().setItemMeta(meta);
         }
     }
 }

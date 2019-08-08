@@ -306,8 +306,4 @@ public class Flag implements Cloneable {
     public void onFuelEnd(Args a) { }
 
     public void onFuelRandom(Args a) { }
-
-    public String getResultLore() {
-        return null;
-    }
 }

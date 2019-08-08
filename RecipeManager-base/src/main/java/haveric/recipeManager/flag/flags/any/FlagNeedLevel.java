@@ -5,6 +5,10 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagNeedLevel extends Flag {
 
@@ -112,23 +116,6 @@ public class FlagNeedLevel extends Flag {
     }
 
     @Override
-    public String getResultLore() {
-        String resultString = "Need ";
-
-        if (setBoth) {
-            resultString += "exact ";
-        }
-
-        resultString += "level: " + getMinLevel();
-
-        if (getMaxLevel() > getMinLevel()) {
-            resultString += "-" + getMaxLevel();
-        }
-
-        return resultString;
-    }
-
-    @Override
     public boolean onParse(String value) {
         String[] split = value.split("\\|");
 
@@ -173,6 +160,38 @@ public class FlagNeedLevel extends Flag {
     public void onCheck(Args a) {
         if (!a.hasPlayer() || !checkLevel(a.player().getLevel())) {
             a.addReason("flag.needlevel", failMessage, "{level}", getLevelString());
+        }
+    }
+
+    @Override
+    public void onPrepare(Args a) {
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+
+        ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
+
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            String resultString = "Need ";
+            if (setBoth) {
+                resultString += "exact ";
+            }
+
+            resultString += "level: " + getMinLevel();
+
+            if (getMaxLevel() > getMinLevel()) {
+                resultString += "-" + getMaxLevel();
+            }
+            newLore.add(resultString);
+
+            meta.setLore(newLore);
+            a.result().setItemMeta(meta);
         }
     }
 }

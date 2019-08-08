@@ -6,6 +6,10 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagModMoney extends Flag {
 
@@ -122,11 +126,6 @@ public class FlagModMoney extends Flag {
     }
 
     @Override
-    public String getResultLore() {
-        return "Mod Money: " + getModifier() + " " + getAmount();
-    }
-
-    @Override
     public boolean onParse(String value) {
         if (!Econ.getInstance().isEnabled()) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " does nothing because no Vault-supported economy plugin was detected.");
@@ -170,6 +169,28 @@ public class FlagModMoney extends Flag {
         setAmount(newMod, newAmount);
 
         return true;
+    }
+
+    @Override
+    public void onPrepare(Args a) {
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+
+        ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
+
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            newLore.add("Mod Money: " + getModifier() + " " + getAmount());
+
+            meta.setLore(newLore);
+            a.result().setItemMeta(meta);
+        }
     }
 
     @Override

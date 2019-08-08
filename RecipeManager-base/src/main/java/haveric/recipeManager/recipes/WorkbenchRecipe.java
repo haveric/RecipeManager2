@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.Settings;
-import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -16,7 +15,6 @@ import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,24 +60,11 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         int unavailableNum = 0;
         float unavailableChance = 0;
         int displayNum;
-        int failedLores = 0;
-
-        List<String> lore = new ArrayList<>();
 
         for (ItemResult r : getResults()) {
             r = r.clone();
             a.clearReasons();
             a.setResult(r);
-
-            int beforeLength = lore.size();
-
-            for (Flag flag : r.getFlags().get()) {
-                String resultString = flag.getResultLore();
-
-                if (resultString != null) {
-                    lore.add(resultString);
-                }
-            }
 
             if (r.checkFlags(a)) {
                 if (r.hasFlag(FlagType.SECRET)) {
@@ -95,18 +80,11 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             } else {
                 unavailableNum++;
                 unavailableChance += r.getChance();
-
-                int afterLength = lore.size();
-
-                if (afterLength > beforeLength) {
-                    failedLores++;
-                    displayResults.add(r);
-                }
             }
         }
 
         displayNum = displayResults.size();
-        boolean receive = (secretNum + displayNum - failedLores) > 0;
+        boolean receive = (secretNum + displayNum) > 0;
 
         FlagDisplayResult flag;
         if (a.hasRecipe()) {
@@ -142,18 +120,6 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             return new ItemResult(air);
         }
 
-        ItemMeta meta = displayResult.getItemMeta();
-        List<String> oldLores = meta.getLore();
-
-        List<String> combinedLores = new ArrayList<>();
-        if (oldLores != null) {
-            combinedLores.addAll(oldLores);
-        }
-        combinedLores.addAll(lore);
-
-        meta.setLore(combinedLores);
-        displayResult.setItemMeta(meta);
-
         if (flag != null || this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             return displayResult;
         }
@@ -164,12 +130,12 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             } else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().get("craft.result.receive.title.unknown"));
             }
-        } else if (displayNum == 1 && failedLores > 0 && unavailableNum == failedLores) {
-            return ToolsItem.create(displayResult.getType(), 0, displayAmount, displayResult.getItemMeta().getDisplayName(), lore);
+        } else if (displayNum == 1) {
+            return ToolsItem.create(displayResult.getType(), 0, displayAmount, displayResult.getItemMeta().getDisplayName());
         }
 
+        List<String> lore = new ArrayList<>();
         String title;
-
         if (receive) {
             title = Messages.getInstance().parse("craft.result.receive.title.random");
         } else {

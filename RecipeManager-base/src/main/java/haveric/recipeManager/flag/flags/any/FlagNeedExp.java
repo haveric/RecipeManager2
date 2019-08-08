@@ -6,6 +6,10 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagNeedExp extends Flag {
 
@@ -114,23 +118,6 @@ public class FlagNeedExp extends Flag {
     }
 
     @Override
-    public String getResultLore() {
-        String resultString = "Need ";
-
-        if (setBoth) {
-            resultString += "exact ";
-        }
-
-        resultString += "exp: " + getMinExp();
-
-        if (getMaxExp() > getMinExp()) {
-            resultString += "-" + getMaxExp();
-        }
-
-        return resultString;
-    }
-
-    @Override
     public boolean onParse(String value) {
         String[] split = value.split("\\|");
 
@@ -184,6 +171,38 @@ public class FlagNeedExp extends Flag {
     public void onCheck(Args a) {
         if (!a.hasPlayer() || !checkExp(ToolsExp.getTotalExperience(a.player()))) {
             a.addReason("flag.needexp", failMessage, "{exp}", getExpString(), "{minexp}", getMinExp(), "{maxexp}", getMaxExp(), "{playerexp}", ToolsExp.getTotalExperience(a.player()));
+        }
+    }
+
+    @Override
+    public void onPrepare(Args a) {
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            return;
+        }
+
+        ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
+
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            String resultString = "Need ";
+            if (setBoth) {
+                resultString += "exact ";
+            }
+
+            resultString += "exp: " + getMinExp();
+
+            if (getMaxExp() > getMinExp()) {
+                resultString += "-" + getMaxExp();
+            }
+            newLore.add(resultString);
+
+            meta.setLore(newLore);
+            a.result().setItemMeta(meta);
         }
     }
 }

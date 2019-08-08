@@ -88,10 +88,8 @@ public class FlagIndividualResults extends Flag {
                 newLore.add(RMCChatColor.RED + "Chance to fail: " + RMCChatColor.WHITE + failChance + "%");
 
                 meta.setLore(newLore);
-
                 a.result().setItemMeta(meta);
             }
         }
     }
-
 }
