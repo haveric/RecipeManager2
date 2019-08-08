@@ -524,7 +524,15 @@ public class Events implements Listener {
                     boolean subtract = false;
                     boolean onlyExtra = true;
                     if (recipeCraftSuccess && resultCraftSuccess) {
-                        if (recipe.isMultiResult()) {
+                        boolean noResult = false;
+                        if (recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+                            float chance = result.getChance();
+                            float rand = RecipeManager.random.nextFloat() * 100;
+
+                            if (chance >= 0 && chance < rand) {
+                                noResult = true;
+                            }
+                        } else if (recipe.isMultiResult()) {
                             subtract = true;
                             onlyExtra = false;
                         }
@@ -534,28 +542,26 @@ public class Events implements Listener {
                         }
 
                         if (result.hasFlag(FlagType.NO_RESULT)) {
-                            event.setCurrentItem(new ItemStack(Material.AIR));
-                            event.setCursor(new ItemStack(Material.AIR));
-                            subtract = true;
-                            onlyExtra = false;
-                        } else {
-                            event.setCurrentItem(result);
+                            noResult = true;
                         }
 
                         if (event.isShiftClick()) {
+                            noResult = true;
+                            // Make sure inventory can fit the results or stop crafting
+                            if (Tools.playerCanAddItem(player, result)) {
+                                player.getInventory().addItem(result.clone());
+                            } else {
+                                //MessageSender.getInstance().info("Stop Crafting - Full Inventory");
+                                doneCrafting = true;
+                            }
+                        }
+
+                        if (noResult) {
                             subtract = true;
                             onlyExtra = false;
                             event.setCancelled(true);
-
-                            if (!result.hasFlag(FlagType.NO_RESULT)) {
-                                // Make sure inventory can fit the results or stop crafting
-                                if (Tools.playerCanAddItem(player, result)) {
-                                    player.getInventory().addItem(result.clone());
-                                } else {
-                                    //MessageSender.getInstance().info("Stop Crafting - Full Inventory");
-                                    doneCrafting = true;
-                                }
-                            }
+                        } else {
+                            event.setCurrentItem(result);
                         }
                     }
 
@@ -621,7 +627,7 @@ public class Events implements Listener {
     }
 
     private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
-        if (recipe.isMultiResult()) {
+        if (recipe.isMultiResult() && !recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             // more special treatment needed for multi-result ones...
 
             event.setCancelled(true); // need to cancel this from the start.

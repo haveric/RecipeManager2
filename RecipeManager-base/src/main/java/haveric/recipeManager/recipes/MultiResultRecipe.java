@@ -1,12 +1,11 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flag.*;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.recipe.FlagIndividualResults;
-import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
@@ -185,22 +184,14 @@ public class MultiResultRecipe extends BaseRecipe {
      * @return the result as a clone or null.
      */
     public ItemResult getResult(Args a) {
-        a.clear();
-
         ItemResult result = null;
         if (this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             for (ItemResult r : results) {
                 a.clear();
 
                 if (r.checkFlags(a)) {
-                    float chance = r.getChance();
-                    float rand = RecipeManager.random.nextFloat() * 100;
+                    result = r.clone();
 
-                    if (chance < 0 || chance >= rand) {
-                        result = r.clone();
-                    } else {
-                        result = new ItemResult(new ItemStack(Material.AIR, 0));
-                    }
                     break;
                 }
             }
@@ -232,17 +223,6 @@ public class MultiResultRecipe extends BaseRecipe {
 
         a.clear();
         a.setResult(result);
-
-        if (result != null) {
-            if (result.sendPrepare(a)) {
-                a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
-            }
-
-            if (result.getType() == Material.AIR && hasFlags()) {
-                sendFailed(a);
-                a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-            }
-        }
 
         return result;
     }
