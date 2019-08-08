@@ -10,7 +10,6 @@ import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.any.FlagKeepItem;
 import haveric.recipeManager.flag.flags.recipe.FlagDisplayResult;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -67,13 +66,10 @@ public class WorkbenchRecipe extends MultiResultRecipe {
 
         List<String> lore = new ArrayList<>();
 
-        Flags flags;
         for (ItemResult r : getResults()) {
             r = r.clone();
             a.clearReasons();
             a.setResult(r);
-
-            flags = r.getFlags();
 
             int beforeLength = lore.size();
 
@@ -167,7 +163,6 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         displayResult.setItemMeta(meta);
 
         if (flag != null || this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            MessageSender.getInstance().info("2Final return");
             return displayResult;
         }
 
