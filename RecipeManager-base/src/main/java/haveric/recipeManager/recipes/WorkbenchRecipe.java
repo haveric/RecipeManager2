@@ -12,6 +12,7 @@ import haveric.recipeManager.flag.flags.recipe.FlagDisplayResult;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -48,9 +49,12 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         if (!checkFlags(a)) {
-            a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+            List<String> reasons = new ArrayList<>();
+            for (String reason : a.reasons()) {
+                reasons.add(RMCUtil.parseColors(reason, false));
+            }
 
-            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), Messages.getInstance().parse("craft.result.denied.info"));
+            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), reasons);
         }
 
         List<ItemResult> displayResults = new ArrayList<>();
