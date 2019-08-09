@@ -22,7 +22,6 @@ import java.util.List;
 
 public class CombineRecipe1_13 extends CombineRecipe {
     private List<List<Material>> ingredientChoiceList = new ArrayList<>();
-    private List<ItemStack> ingredients;
 
     public CombineRecipe1_13() {
     }
@@ -38,10 +37,6 @@ public class CombineRecipe1_13 extends CombineRecipe {
 
         if (recipe instanceof CombineRecipe1_13) {
             CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
-
-            if (!r.ingredients.isEmpty()) {
-                ingredients.addAll(r.getIngredients());
-            }
 
             if (!r.ingredientChoiceList.isEmpty()) {
                 for (List<Material> ingredientChoice : r.ingredientChoiceList) {
@@ -60,61 +55,15 @@ public class CombineRecipe1_13 extends CombineRecipe {
      * @return clone of ingredients list
      */
     public List<ItemStack> getIngredients() {
-        List<ItemStack> clone = new ArrayList<>();
-
-        for (ItemStack i : ingredients) {
-            clone.add(i.clone());
-        }
-
-        return clone;
-    }
-
-    public void addIngredient(Material type) {
-        addIngredient(1, type, (short) -1);
-    }
-
-    public void addIngredient(Material type, short data) {
-        addIngredient(1, type, data);
-    }
-
-    public void addIngredient(ItemStack ingredient) {
-        addIngredient(ingredient.getAmount(), ingredient.getType(), ingredient.getDurability());
+        return null; // TODO: 1.13 doesn't use this, can we remove?
     }
 
     public void addIngredient(int amount, Material type, short data) {
-        if (ingredients == null) {
-            ingredients = new ArrayList<>();
-        }
-
-        if ((ingredients.size() + amount) > 9) { // check if they're more than they should...
-            throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
-        }
-
-        while (amount-- > 0) {
-            ingredients.add(new ItemStack(type, 1, data));
-        }
-
-        sort();
+        // TODO: 1.13 doesn't use this, can we remove?
     }
 
     public void setIngredients(List<ItemStack> newIngredients) {
-        // unstack ingredients
-        ingredients = new ArrayList<>();
-        int amount;
-
-        for (ItemStack ingredient : newIngredients) {
-            amount = ingredient.getAmount();
-
-            while (amount-- > 0) {
-                ingredients.add(new ItemStack(ingredient.getType(), 1, ingredient.getDurability()));
-            }
-        }
-
-        if (ingredients.size() > 9) { // check if they're more than they should...
-            throw new IllegalArgumentException("Recipe can't have more than 9 ingredients!");
-        }
-
-        sort();
+        // TODO: 1.13 doesn't use this, can we remove?
     }
 
     public List<List<Material>> getIngredientChoiceList() {
@@ -166,13 +115,6 @@ public class CombineRecipe1_13 extends CombineRecipe {
         }
 
         hash = str.toString().hashCode();
-    }
-
-    private void sort() {
-        // sort by type and data
-        Tools.sortIngredientList(ingredients);
-
-        updateHash();
     }
 
     @Override
@@ -240,10 +182,6 @@ public class CombineRecipe1_13 extends CombineRecipe {
         }
 
         return bukkitRecipe;
-    }
-
-    public boolean hasIngredients() {
-        return ingredients != null && !ingredients.isEmpty();
     }
 
     public boolean hasIngredientChoices() {

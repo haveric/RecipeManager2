@@ -24,7 +24,6 @@ import java.util.List;
 
 public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
     private List<Material> ingredientChoice = new ArrayList<>();
-    private ItemStack ingredient;
     private ItemResult fuel;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
@@ -38,12 +37,6 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
 
         if (recipe instanceof RMBaseFurnaceRecipe1_13) {
             RMBaseFurnaceRecipe1_13 r = (RMBaseFurnaceRecipe1_13) recipe;
-
-            if (r.ingredient == null) {
-                ingredient = null;
-            } else {
-                ingredient = r.ingredient.clone();
-            }
 
             if (r.ingredientChoice == null) {
                 ingredientChoice = null;
@@ -84,12 +77,11 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
     }
 
     public ItemStack getIngredient() {
-        return ingredient;
+        return null; // TODO: 1.13 doesn't use this, can we remove?
     }
 
     public void setIngredient(ItemStack newIngredient) {
-        ingredient = newIngredient;
-        hash = (getRecipeBaseHash() + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
+        // TODO: 1.13 doesn't use this, can we remove?
     }
 
     public List<Material> getIngredientChoice() {
@@ -244,10 +236,6 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
     @Override
     public int hashCode() {
         return hash;
-    }
-
-    public boolean hasIngredient() {
-        return ingredient != null;
     }
 
     public boolean hasIngredientChoice() {

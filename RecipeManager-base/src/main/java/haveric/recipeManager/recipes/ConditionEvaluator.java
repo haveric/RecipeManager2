@@ -203,8 +203,10 @@ public class ConditionEvaluator {
         RMCRecipeInfo info = map.get(recipe);
 
         if (info == null && recipe instanceof CraftRecipe) {
-            CraftRecipe cr = (CraftRecipe) recipe;
-            cr.setMirrorShape(true);
+            if (!Version.has1_13Support()) {
+                CraftRecipe cr = (CraftRecipe) recipe;
+                cr.setMirrorShape(true);
+            }
 
             info = map.get(recipe);
         }
