@@ -45,42 +45,6 @@ public class ToolsExp {
     }
 
     public static int getExpAtLevel(final int level) {
-        int xp;
-
-        if (Version.has1_8Support()) {
-            xp = getExpAtLevel18(level);
-        } else {
-            xp = getExpAtLevel17(level);
-        }
-
-        return xp;
-    }
-
-    /**
-     * Minecraft 1.7's model of calculating xp
-     *
-     * @param level
-     * @return
-     */
-    private static int getExpAtLevel17(final int level) {
-        if (level > 29) {
-            return 62 + (level - 30) * 7;
-        }
-
-        if (level > 15) {
-            return 17 + (level - 15) * 3;
-        }
-
-        return 17;
-    }
-
-    /**
-     * Minecraft 1.8's model of calculating xp
-     *
-     * @param level
-     * @return
-     */
-    private static int getExpAtLevel18(final int level) {
         if (level > 30) {
             return (9 * level) - 158;
         }

@@ -1,11 +1,9 @@
 package haveric.recipeManager.flag.flags.result;
 
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
@@ -32,7 +30,7 @@ public class FlagBannerItem extends Flag {
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[] {
+        return new String[] {
             "Creates a custom banner",
             "Using this flag more than once will overwrite the previous one.",
             "",
@@ -41,20 +39,9 @@ public class FlagBannerItem extends Flag {
             "",
             "Patterns can be added after the base color and are separated by the '|' character",
             "  [pattern] is the banner pattern type",
-        };
-
-        if (Version.has1_8Support()) {
-            description = ObjectArrays.concat(description, new String[] {
-                "    Values: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[] {
+            "    Values: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
             "  <color> is required for each pattern, color values are the same as <basecolor>",
-            "  Multiple patterns can be added",
-        }, String.class);
-
-        return description;
+            "  Multiple patterns can be added", };
     }
 
     @Override

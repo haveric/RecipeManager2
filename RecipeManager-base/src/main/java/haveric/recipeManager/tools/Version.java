@@ -2,7 +2,6 @@ package haveric.recipeManager.tools;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Rabbit;
 
 public class Version {
 
@@ -21,12 +20,8 @@ public class Version {
             supportVersion = "1.10";
         } else if (supports1_9()) {
             supportVersion = "1.9";
-        } else if (supports1_8Plus()) {
-            supportVersion = "1.8+";
-        } else if (supports1_8()) {
-            supportVersion = "1.8";
         } else {
-            supportVersion = "1.7";
+            supportVersion = "1.8";
         }
     }
 
@@ -111,34 +106,6 @@ public class Version {
         return supports;
     }
 
-    private static boolean supports1_8Plus() {
-        boolean supports;
-
-        try {
-            @SuppressWarnings("unused")
-            Rabbit.Type rabbit = Rabbit.Type.SALT_AND_PEPPER;
-            supports = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
-            supports = false;
-        }
-
-        return supports;
-    }
-
-    private static boolean supports1_8() {
-        boolean supports;
-
-        try {
-            @SuppressWarnings("unused")
-            Material slime = Material.SLIME_BLOCK;
-            supports = true;
-        } catch (NoSuchFieldError e) {
-            supports = false;
-        }
-
-        return supports;
-    }
-
     private static String getVersion() {
         if (supportVersion == null) {
             init();
@@ -184,7 +151,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.14") || version.equals("1.13") || version.equals("1.12") || version.equals("1.11")) {
+        if (!version.equals("1.10") && !version.equals("1.9") && !version.equals("1.8")) {
             hasSupport = true;
         }
 
@@ -195,7 +162,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (!version.equals("1.9") && !version.equals("1.8+") && !version.equals("1.8") && !version.equals("1.7")) {
+        if (!version.equals("1.9") && !version.equals("1.8")) {
             hasSupport = true;
         }
 
@@ -206,29 +173,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (!version.equals("1.8+") && !version.equals("1.8") && !version.equals("1.7")) {
-            hasSupport = true;
-        }
-
-        return hasSupport;
-    }
-
-    public static boolean has1_8PlusSupport() {
-        boolean hasSupport = false;
-        String version = getVersion();
-
-        if (!version.equals("1.8") && !version.equals("1.7")) {
-            hasSupport = true;
-        }
-
-        return hasSupport;
-    }
-
-    public static boolean has1_8Support() {
-        boolean hasSupport = false;
-        String version = getVersion();
-
-        if (!version.equals("1.7")) {
+        if (!version.equals("1.8")) {
             hasSupport = true;
         }
 

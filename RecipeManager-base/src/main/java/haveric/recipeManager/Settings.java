@@ -2,7 +2,6 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -99,11 +98,7 @@ public class Settings {
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
         RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
-        if (Version.has1_8Support()) {
-            MATERIAL_FAIL_DEFAULT = Material.BARRIER;
-        } else {
-            MATERIAL_FAIL_DEFAULT = Material.FIRE;
-        }
+        MATERIAL_FAIL_DEFAULT = Material.BARRIER;
 
         itemDatas = new HashMap<>();
         materialNames = new HashMap<>();

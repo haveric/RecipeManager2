@@ -60,7 +60,7 @@ public class FlagLaunchFirework extends Flag {
             "{flag} power 2", };
     }
 
-    private int DEFAULT_POWER = 2;
+    private final int DEFAULT_POWER = 2;
     private FireworkMeta firework;
     private float chance = 100;
 

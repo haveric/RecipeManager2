@@ -135,23 +135,21 @@ public class Vanilla {
             RECIPE_FIREWORKS = new ItemStack(Material.getMaterial("FIREWORK"), 0, (short) 0);
         }
 
-        if (Version.has1_8Support()) {
-            initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE, 15), info);
 
-            initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE_GATE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE_GATE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE_GATE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE_GATE, 15), info);
-            initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.SPRUCE_FENCE_GATE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.BIRCH_FENCE_GATE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.JUNGLE_FENCE_GATE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.DARK_OAK_FENCE_GATE, 15), info);
+        initialRecipes.put(new FuelRecipe(Material.ACACIA_FENCE_GATE, 15), info);
 
-            if (!has1_13Support) {
-                initialRecipes.put(new FuelRecipe(Material.getMaterial("BANNER"), 15), info);
-                RECIPE_BANNER = new ItemStack(Material.getMaterial("BANNER"), 0, (short) 0);
-            }
+        if (!has1_13Support) {
+            initialRecipes.put(new FuelRecipe(Material.getMaterial("BANNER"), 15), info);
+            RECIPE_BANNER = new ItemStack(Material.getMaterial("BANNER"), 0, (short) 0);
         }
 
         if (Version.has1_9Support()) {

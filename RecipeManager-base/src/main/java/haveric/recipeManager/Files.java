@@ -461,11 +461,7 @@ public class Files {
         s.append(NL).append("- <a href='#entitytype'><b>ENTITY TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#dyecolor'><b>DYE COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
-
-        if (Version.has1_8Support()) {
-            s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
-        }
-
+        s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
         s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
 
         s.append(NL);
@@ -661,16 +657,14 @@ public class Files {
             s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
         }
 
-        if (Version.has1_8Support()) {
-            s.append(NL);
-            s.append(NL);
-            s.append(NL).append("<a name='bannerpattern'></a><a href='#contents'>^ Contents</a><h3>BANNER PATTERN LIST</h3>");
-            s.append("<a href='" + BUKKIT_DOCS + "block/banner/PatternType.html'>BukkitAPI / PatternType</a>");
-            s.append(NL);
+        s.append(NL);
+        s.append(NL);
+        s.append(NL).append("<a name='bannerpattern'></a><a href='#contents'>^ Contents</a><h3>BANNER PATTERN LIST</h3>");
+        s.append("<a href='" + BUKKIT_DOCS + "block/banner/PatternType.html'>BukkitAPI / PatternType</a>");
+        s.append(NL);
 
-            for (PatternType p : PatternType.values()) {
-                s.append(NL).append(' ').append(p.name());
-            }
+        for (PatternType p : PatternType.values()) {
+            s.append(NL).append(' ').append(p.name());
         }
 
         if (Version.has1_9Support()) {

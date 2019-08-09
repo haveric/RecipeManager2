@@ -113,14 +113,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
             String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
-        }, String.class);
-
-        if (Version.has1_8PlusSupport()) {
-            description = ObjectArrays.concat(description, new String[] {
-                String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()) }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[] {
+            String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()),
             String.format(argFormat, "saddle [mount]", "adds saddle on creature (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount creature."),
             String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
         }, String.class);
@@ -1124,8 +1117,6 @@ public class FlagSummon extends Flag {
                         case SHEEP:
                         case VILLAGER:
                         case WOLF:
-                            break;
-
                         case RABBIT:
                             break;
 

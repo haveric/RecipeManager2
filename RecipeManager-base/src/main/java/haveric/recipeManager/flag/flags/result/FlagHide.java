@@ -5,7 +5,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -113,7 +112,7 @@ public class FlagHide extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (canAddMeta(a) && Version.has1_8Support()) {
+        if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
             if (meta != null) {
                 if (attributes) {
