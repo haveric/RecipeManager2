@@ -452,7 +452,7 @@ public class FlagSummon extends Flag {
 
                 if (playerIronGolem && ent instanceof IronGolem) {
                     IronGolem npc = (IronGolem) ent;
-                    npc.setPlayerCreated(true); // TODO what exactly does this do ?
+                    npc.setPlayerCreated(true);
                 }
 
                 if (shearedSheep && ent instanceof Sheep) {

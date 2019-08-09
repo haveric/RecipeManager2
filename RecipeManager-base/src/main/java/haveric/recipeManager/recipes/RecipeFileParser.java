@@ -32,7 +32,6 @@ public class RecipeFileParser {
         ErrorReporter.getInstance().setFile(currentFile);
         fileFlags = new Flags();
         boolean added = false;
-        int loaded = 0;
 
         RecipeFileReader fileReader = new RecipeFileReader(reader, fileName);
 
@@ -56,8 +55,6 @@ public class RecipeFileParser {
 
             if (!added) {
                 ErrorReporter.getInstance().error("Recipe was not added! Review previous errors and fix them.", "Warnings do not prevent recipe creation but they should be fixed as well!");
-            } else {
-                loaded++;
             }
         }
 

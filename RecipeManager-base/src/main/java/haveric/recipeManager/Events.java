@@ -452,7 +452,7 @@ public class Events implements Listener {
             } else {
                 mouseButton = 0;
             }
-            // Call the PRE event TODO upgrade to MouseButton when PR is pulled
+            // Call the PRE event
             RecipeManagerCraftEvent callEvent = new RecipeManagerCraftEvent(recipe, result, player, event.getCursor(), event.isShiftClick(), mouseButton);
 
             PluginManager pm = Bukkit.getPluginManager();
