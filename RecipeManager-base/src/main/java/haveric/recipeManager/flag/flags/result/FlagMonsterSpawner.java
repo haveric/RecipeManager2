@@ -8,14 +8,12 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class FlagMonsterSpawner extends Flag {
 
@@ -82,7 +80,7 @@ public class FlagMonsterSpawner extends Flag {
         }
 
         if (result == null || !result.getType().equals(spawnerMaterial)) {
-            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a MOB_SPAWNER to work!");
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a " + spawnerMaterial + " to work!");
         }
 
         return true;
@@ -109,37 +107,21 @@ public class FlagMonsterSpawner extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (!(meta instanceof BlockStateMeta)) {
+                return;
+            }
+
+            BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
+            BlockState blockState = blockStateMeta.getBlockState();
+
+            CreatureSpawner spawner = (CreatureSpawner) blockState;
+
+            spawner.setSpawnedType(entityType);
+
+            blockStateMeta.setBlockState(spawner);
+            a.result().setItemMeta(blockStateMeta);
         }
-
-        Player player = a.player();
-        Location playerLocation = player.getLocation();
-        Location loc = new Location(player.getWorld(), playerLocation.getBlockX(), 0, playerLocation.getBlockZ());
-        Block block = loc.getBlock();
-        BlockState originalState = block.getState();
-
-        Material spawnerMaterial;
-        if (Version.has1_13Support()) {
-            spawnerMaterial = Material.SPAWNER;
-        } else {
-            spawnerMaterial = Material.getMaterial("MOB_SPAWNER");
-        }
-        block.setType(spawnerMaterial);
-
-        CreatureSpawner s = (CreatureSpawner) loc.getBlock().getState();
-        s.setSpawnedType(entityType);
-        s.update();
-
-
-        BlockStateMeta meta = (BlockStateMeta) a.result().getItemMeta();
-        meta.setBlockState(s);
-        a.result().setItemMeta(meta);
-
-
-        block.setType(originalState.getType());
-        //block.setData(originalState.getRawData()); // TODO: Replace Data
-        originalState.update();
     }
 }
