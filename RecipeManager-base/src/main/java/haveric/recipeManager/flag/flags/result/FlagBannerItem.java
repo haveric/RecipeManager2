@@ -131,26 +131,23 @@ public class FlagBannerItem extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Need result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+
+            if (!(meta instanceof BannerMeta)) {
+                a.addCustomReason("Needs banner!");
+                return;
+            }
+
+            BannerMeta banner = (BannerMeta) meta;
+
+            banner.setBaseColor(baseColor);
+
+            for (Pattern pattern : patterns) {
+                banner.addPattern(pattern);
+            }
+
+            a.result().setItemMeta(banner);
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        if (!(meta instanceof BannerMeta)) {
-            a.addCustomReason("Needs banner!");
-            return;
-        }
-
-        BannerMeta banner = (BannerMeta) meta;
-
-        banner.setBaseColor(baseColor);
-
-        for (Pattern pattern : patterns) {
-            banner.addPattern(pattern);
-        }
-
-        a.result().setItemMeta(banner);
     }
 }

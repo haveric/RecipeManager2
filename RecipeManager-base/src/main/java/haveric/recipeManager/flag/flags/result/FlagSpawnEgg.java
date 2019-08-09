@@ -96,21 +96,18 @@ public class FlagSpawnEgg extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+
+            if (!(meta instanceof SpawnEggMeta)) {
+                a.addCustomReason("Needs Spawn Egg");
+                return;
+            }
+
+            SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
+            spawnEggMeta.setSpawnedType(entityType);
+
+            a.result().setItemMeta(spawnEggMeta);
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        if (!(meta instanceof SpawnEggMeta)) {
-            a.addCustomReason("Needs Spawn Egg");
-            return;
-        }
-
-        SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
-        spawnEggMeta.setSpawnedType(entityType);
-
-        a.result().setItemMeta(spawnEggMeta);
     }
 }

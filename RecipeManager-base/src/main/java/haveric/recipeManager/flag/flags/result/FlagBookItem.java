@@ -196,24 +196,21 @@ public class FlagBookItem extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Need result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+
+            if (!(meta instanceof BookMeta)) {
+                a.addCustomReason("Needs BookMeta supported item!");
+                return;
+            }
+
+            BookMeta bookMeta = (BookMeta) meta;
+
+            bookMeta.setTitle(title);
+            bookMeta.setAuthor(author);
+            bookMeta.setPages(pages);
+
+            a.result().setItemMeta(bookMeta);
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        if (!(meta instanceof BookMeta)) {
-            a.addCustomReason("Needs BookMeta supported item!");
-            return;
-        }
-
-        BookMeta bookMeta = (BookMeta) meta;
-
-        bookMeta.setTitle(title);
-        bookMeta.setAuthor(author);
-        bookMeta.setPages(pages);
-
-        a.result().setItemMeta(bookMeta);
     }
 }

@@ -7,7 +7,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
@@ -82,29 +81,18 @@ public class FlagLeatherColor extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+
+            if (!(meta instanceof LeatherArmorMeta)) {
+                a.addCustomReason("Needs leather armor!");
+                return;
+            }
+
+            LeatherArmorMeta leather = (LeatherArmorMeta) meta;
+            leather.setColor(color);
+
+            a.result().setItemMeta(leather);
         }
-
-        if (!applyOnItem(a.result(), color)) {
-            a.addCustomReason("Needs leather armor!");
-        }
-    }
-
-    private boolean applyOnItem(ItemStack item, Color newColor) {
-        ItemMeta meta = item.getItemMeta();
-
-        if (!(meta instanceof LeatherArmorMeta)) {
-            return false;
-        }
-
-        LeatherArmorMeta leather = (LeatherArmorMeta) meta;
-
-        leather.setColor(newColor);
-
-        item.setItemMeta(leather);
-
-        return true;
     }
 }

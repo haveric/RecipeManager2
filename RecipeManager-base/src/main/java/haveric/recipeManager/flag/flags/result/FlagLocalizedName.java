@@ -88,18 +88,14 @@ public class FlagLocalizedName extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (meta != null && getName() != null) {
+                String localizedName = RMCUtil.parseColors(a.parseVariables(getName()), false);
+                meta.setLocalizedName(localizedName);
 
-        ItemMeta meta = a.result().getItemMeta();
-
-        if (getName() != null) {
-            String localizedName = RMCUtil.parseColors(a.parseVariables(getName()), false);
-            meta.setLocalizedName(localizedName);
-
-            a.result().setItemMeta(meta);
+                a.result().setItemMeta(meta);
+            }
         }
     }
 }

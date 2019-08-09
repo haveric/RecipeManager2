@@ -8,9 +8,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FlagRepairCost extends Flag {
 
     @Override
@@ -86,43 +83,29 @@ public class FlagRepairCost extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (!(meta instanceof Repairable)) {
+                return;
+            }
+
+            addResultLore(a, "Repair cost: " + getCost());
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (!(meta instanceof Repairable)) {
-            return;
-        }
-
-        List<String> lores = meta.getLore();
-        if (lores == null) {
-            lores = new ArrayList<>();
-        }
-        lores.add("Repair cost: " + getCost());
-
-        meta.setLore(lores);
-
-        a.result().setItemMeta(meta);
     }
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (!(meta instanceof Repairable)) {
+                return;
+            }
+
+            Repairable repairable = (Repairable) meta;
+
+            repairable.setRepairCost(getCost());
+
+            a.result().setItemMeta(meta);
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (!(meta instanceof Repairable)) {
-            return;
-        }
-
-        Repairable repairable = (Repairable) meta;
-
-        repairable.setRepairCost(getCost());
-
-        a.result().setItemMeta(meta);
     }
 }

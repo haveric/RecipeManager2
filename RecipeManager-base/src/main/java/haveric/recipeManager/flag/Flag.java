@@ -7,6 +7,11 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Flag implements Cloneable {
     private Flags flagsContainer;
@@ -306,4 +311,38 @@ public class Flag implements Cloneable {
     public void onFuelEnd(Args a) { }
 
     public void onFuelRandom(Args a) { }
+
+
+    protected boolean canAddMeta(Args a) {
+        boolean canAdd;
+
+        if (!a.hasResult()) {
+            a.addCustomReason("Needs result!");
+            canAdd = false;
+        } else {
+            canAdd = a.result().getItemMeta() != null;
+        }
+
+        return canAdd;
+    }
+
+    protected void addResultLore(Args a, String lore) {
+        addResultLores(a, Collections.singletonList(lore));
+    }
+
+    protected void addResultLores(Args a, List<String> lores) {
+        ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            List<String> newLore = meta.getLore();
+
+            if (newLore == null) {
+                newLore = new ArrayList<>();
+            }
+
+            newLore.addAll(lores);
+
+            meta.setLore(newLore);
+            a.result().setItemMeta(meta);
+        }
+    }
 }

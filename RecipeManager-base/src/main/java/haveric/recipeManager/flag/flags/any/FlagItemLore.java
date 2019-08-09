@@ -6,7 +6,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,51 +157,25 @@ public class FlagItemLore extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Need result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            List<String> newLore = meta.getLore();
-
-            if (newLore == null) {
-                newLore = new ArrayList<>();
-            }
-
+        if (canAddMeta(a)) {
+            List<String> lores = new ArrayList<>();
             for (String line : displayLores) {
-                newLore.add(a.parseVariables(line, true));
+                lores.add(a.parseVariables(line, true));
             }
 
-            meta.setLore(newLore);
-
-            a.result().setItemMeta(meta);
+            addResultLores(a, lores);
         }
     }
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Need result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            List<String> newLore = meta.getLore();
-
-            if (newLore == null) {
-                newLore = new ArrayList<>();
-            }
-
+        if (canAddMeta(a)) {
+            List<String> lores = new ArrayList<>();
             for (String line : resultLores) {
-                newLore.add(a.parseVariables(line));
+                lores.add(a.parseVariables(line));
             }
 
-            meta.setLore(newLore);
-
-            a.result().setItemMeta(meta);
+            addResultLores(a, lores);
         }
     }
 }

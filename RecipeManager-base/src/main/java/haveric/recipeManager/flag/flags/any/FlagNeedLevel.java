@@ -5,10 +5,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FlagNeedLevel extends Flag {
 
@@ -165,19 +161,7 @@ public class FlagNeedLevel extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            List<String> newLore = meta.getLore();
-
-            if (newLore == null) {
-                newLore = new ArrayList<>();
-            }
-
+        if (canAddMeta(a)) {
             String resultString = "Need ";
             if (setBoth) {
                 resultString += "exact ";
@@ -188,10 +172,8 @@ public class FlagNeedLevel extends Flag {
             if (getMaxLevel() > getMinLevel()) {
                 resultString += "-" + getMaxLevel();
             }
-            newLore.add(resultString);
 
-            meta.setLore(newLore);
-            a.result().setItemMeta(meta);
+            addResultLore(a, resultString);
         }
     }
 }

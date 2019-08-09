@@ -7,10 +7,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FlagModExp extends Flag {
 
@@ -171,23 +167,8 @@ public class FlagModExp extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            List<String> newLore = meta.getLore();
-
-            if (newLore == null) {
-                newLore = new ArrayList<>();
-            }
-
-            newLore.add("Mod Exp: " + getModifier() + " " + getAmount());
-
-            meta.setLore(newLore);
-            a.result().setItemMeta(meta);
+        if (canAddMeta(a)) {
+            addResultLore(a, "Mod Exp: " + getModifier() + " " + getAmount());
         }
     }
 

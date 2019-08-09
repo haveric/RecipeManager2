@@ -73,15 +73,13 @@ public class FlagItemUnbreakable extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (meta != null) {
+                meta.setUnbreakable(unbreakable);
+
+                a.result().setItemMeta(meta);
+            }
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        meta.setUnbreakable(unbreakable);
-
-        a.result().setItemMeta(meta);
     }
 }

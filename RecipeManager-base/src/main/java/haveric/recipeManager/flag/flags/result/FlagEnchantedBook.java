@@ -146,21 +146,19 @@ public class FlagEnchantedBook extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) a.result().getItemMeta();
+            if (meta != null) {
+                for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
+                    meta.addStoredEnchant(e.getKey(), e.getValue(), true);
+                }
+
+                for (Enchantment e : enchantsToRemove) {
+                    meta.removeStoredEnchant(e);
+                }
+
+                a.result().setItemMeta(meta);
+            }
         }
-
-        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) a.result().getItemMeta();
-
-        for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
-            meta.addStoredEnchant(e.getKey(), e.getValue(), true);
-        }
-
-        for (Enchantment e : enchantsToRemove) {
-            meta.removeStoredEnchant(e);
-        }
-
-        a.result().setItemMeta(meta);
     }
 }

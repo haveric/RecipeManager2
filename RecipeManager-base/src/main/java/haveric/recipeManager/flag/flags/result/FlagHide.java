@@ -113,39 +113,35 @@ public class FlagHide extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Need result!");
-            return;
-        }
-
-        if (Version.has1_8Support()) {
+        if (canAddMeta(a) && Version.has1_8Support()) {
             ItemMeta meta = a.result().getItemMeta();
+            if (meta != null) {
+                if (attributes) {
+                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                }
 
-            if (attributes) {
-                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                if (destroys) {
+                    meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+                }
+
+                if (enchants) {
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                }
+
+                if (placedon) {
+                    meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                }
+
+                if (potioneffects) {
+                    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                }
+
+                if (unbreakable) {
+                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                }
+
+                a.result().setItemMeta(meta);
             }
-
-            if (destroys) {
-                meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-            }
-
-            if (enchants) {
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            }
-
-            if (placedon) {
-                meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-            }
-
-            if (potioneffects) {
-                meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-            }
-
-            if (unbreakable) {
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-            }
-
-            a.result().setItemMeta(meta);
         }
     }
 }

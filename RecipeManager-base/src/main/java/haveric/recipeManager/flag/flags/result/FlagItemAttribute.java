@@ -159,17 +159,15 @@ public class FlagItemAttribute extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (meta != null) {
+                for (Map.Entry<Attribute, AttributeModifier> entry : attributes.entries()) {
+                    meta.addAttributeModifier(entry.getKey(), entry.getValue());
+                }
+
+                a.result().setItemMeta(meta);
+            }
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        for (Map.Entry<Attribute, AttributeModifier> entry : attributes.entries()) {
-            meta.addAttributeModifier(entry.getKey(), entry.getValue());
-        }
-
-        a.result().setItemMeta(meta);
     }
 }

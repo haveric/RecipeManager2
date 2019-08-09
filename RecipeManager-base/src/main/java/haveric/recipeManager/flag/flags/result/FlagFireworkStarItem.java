@@ -108,22 +108,19 @@ public class FlagFireworkStarItem extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Need result!");
-            return;
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+
+            if (!(meta instanceof FireworkEffectMeta)) {
+                a.addCustomReason("Needs FireworkEffectMeta supported item!");
+                return;
+            }
+
+            FireworkEffectMeta effectMeta = (FireworkEffectMeta) meta;
+
+            effectMeta.setEffect(getEffect());
+
+            a.result().setItemMeta(effectMeta);
         }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        if (!(meta instanceof FireworkEffectMeta)) {
-            a.addCustomReason("Needs FireworkEffectMeta supported item!");
-            return;
-        }
-
-        FireworkEffectMeta effectMeta = (FireworkEffectMeta) meta;
-
-        effectMeta.setEffect(getEffect());
-
-        a.result().setItemMeta(effectMeta);
     }
 }

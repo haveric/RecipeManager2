@@ -6,10 +6,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FlagModLevel extends Flag {
 
@@ -180,23 +176,8 @@ public class FlagModLevel extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            List<String> newLore = meta.getLore();
-
-            if (newLore == null) {
-                newLore = new ArrayList<>();
-            }
-
-            newLore.add("Mod Level: " + getModifier() + " " + getAmount());
-
-            meta.setLore(newLore);
-            a.result().setItemMeta(meta);
+        if (canAddMeta(a)) {
+            addResultLore(a, "Mod Level: " + getModifier() + " " + getAmount());
         }
     }
 

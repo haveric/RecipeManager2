@@ -6,10 +6,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManagerCommon.util.RMCUtil;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FlagModMoney extends Flag {
 
@@ -173,23 +169,8 @@ public class FlagModMoney extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            List<String> newLore = meta.getLore();
-
-            if (newLore == null) {
-                newLore = new ArrayList<>();
-            }
-
-            newLore.add("Mod Money: " + getModifier() + " " + getAmount());
-
-            meta.setLore(newLore);
-            a.result().setItemMeta(meta);
+        if (canAddMeta(a)) {
+            addResultLore(a, "Mod Money: " + getModifier() + " " + getAmount());
         }
     }
 

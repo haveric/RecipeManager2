@@ -75,17 +75,15 @@ public class FlagCustomModelData extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-
-        int modelData = getCustomModelData();
-        if (modelData != Integer.MIN_VALUE) {
-            meta.setCustomModelData(modelData);
-            a.result().setItemMeta(meta);
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+            if (meta != null) {
+                int modelData = getCustomModelData();
+                if (modelData != Integer.MIN_VALUE) {
+                    meta.setCustomModelData(modelData);
+                    a.result().setItemMeta(meta);
+                }
+            }
         }
     }
 }

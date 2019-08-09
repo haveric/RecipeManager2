@@ -134,41 +134,36 @@ public class FlagItemName extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
-
-        ItemMeta meta = a.result().getItemMeta();
-        if (meta != null) {
-            String displayName;
+        if (canAddMeta(a)) {
+            String name;
             if (getDisplayName() == null) {
-                displayName = null;
+                name = null;
             } else {
-                displayName = a.parseVariables(getDisplayName(), true);
+                name = a.parseVariables(getDisplayName(), true);
             }
-            meta.setDisplayName(displayName);
 
-            a.result().setItemMeta(meta);
+            setMetaName(a, name);
         }
     }
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult()) {
-            a.addCustomReason("Needs result!");
-            return;
-        }
+        if (canAddMeta(a)) {
+            String name;
+            if (getResultName() == null) {
+                name = null;
+            } else {
+                name = a.parseVariables(getResultName());
+            }
 
+            setMetaName(a, name);
+        }
+    }
+
+    private void setMetaName(Args a, String name) {
         ItemMeta meta = a.result().getItemMeta();
         if (meta != null) {
-            String displayName;
-            if (getResultName() == null) {
-                displayName = null;
-            } else {
-                displayName = a.parseVariables(getResultName());
-            }
-            meta.setDisplayName(displayName);
+            meta.setDisplayName(name);
 
             a.result().setItemMeta(meta);
         }
