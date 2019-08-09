@@ -107,28 +107,15 @@ public class MessageSender {
     private void notifyDebuggers(String message) {
         message = RMCChatColor.DARK_RED + "(RecipeManager debug) " + RMCChatColor.RESET + message;
 
-        try {
-            // Use reflection to use the proper version of getOnlinePlayers - credit to Maxim Roncac� (ShadyPotato)
-            if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
-                Collection<?> onlinePlayers = ((Collection<?>) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null));
-
-                for (Object p : onlinePlayers) {
-                    if (p instanceof Player) {
-                        Player player = (Player) p;
-                        if (player.hasPermission("recipemanager.debugger")) {
-                            send(player, message);
-                        }
-                    }
-                }
-            } else {
-                Player[] onlinePlayers = ((Player[]) Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).invoke(null));
-                for (Player p : onlinePlayers) {
-                    if (p.hasPermission("recipemanager.debugger")) {
-                        send(p, message);
-                    }
+        Collection<?> onlinePlayers = Bukkit.getOnlinePlayers();
+        for (Object p : onlinePlayers) {
+            if (p instanceof Player) {
+                Player player = (Player) p;
+                if (player.hasPermission("recipemanager.debugger")) {
+                    send(player, message);
                 }
             }
-        } catch (Exception e) { }
+        }
     }
 
     public void debug(String message) {
