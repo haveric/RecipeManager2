@@ -37,8 +37,9 @@ public class FlagItemLoreTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).build();
-            ItemResult result = recipe.getResult(a);
+            ItemResult result = recipe.getFirstResult();
+
+            Args a = ArgBuilder.create().recipe(recipe).result(result).result(result).build();
 
             FlagItemLore flag = (FlagItemLore) result.getFlag(FlagType.ITEM_LORE);
             flag.onPrepare(a);

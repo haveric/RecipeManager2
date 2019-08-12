@@ -1,8 +1,6 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
-import haveric.recipeManager.flag.args.ArgBuilder;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagNeedExp;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -30,9 +28,7 @@ public class FlagNeedExpTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
-
-            ItemResult result = recipe.getResult(a);
+            ItemResult result = recipe.getFirstResult();
 
             FlagNeedExp flag = (FlagNeedExp) result.getFlag(FlagType.NEED_EXP);
 

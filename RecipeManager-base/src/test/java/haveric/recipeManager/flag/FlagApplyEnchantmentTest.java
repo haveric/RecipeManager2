@@ -72,9 +72,9 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventoryView(inventoryView).build();
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).inventoryView(inventoryView).build();
 
             FlagEnchantItem flagEnchantItem = (FlagEnchantItem) result.getFlag(FlagType.ENCHANT_ITEM);
             flagEnchantItem.onPrepare(a);

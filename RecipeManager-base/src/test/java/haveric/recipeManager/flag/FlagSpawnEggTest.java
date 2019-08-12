@@ -31,10 +31,9 @@ public class FlagSpawnEggTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
-
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
             FlagSpawnEgg flag = (FlagSpawnEgg) result.getFlag(FlagType.SPAWN_EGG);
             flag.onPrepare(a);
 

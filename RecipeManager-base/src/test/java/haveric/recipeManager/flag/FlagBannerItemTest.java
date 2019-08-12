@@ -33,9 +33,9 @@ public class FlagBannerItemTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
 
             FlagBannerItem flag = (FlagBannerItem) result.getFlag(FlagType.BANNER_ITEM);
             flag.onPrepare(a);

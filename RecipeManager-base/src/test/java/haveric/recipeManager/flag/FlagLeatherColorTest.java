@@ -32,9 +32,9 @@ public class FlagLeatherColorTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
 
             FlagLeatherColor flag = (FlagLeatherColor) result.getFlag(FlagType.LEATHER_COLOR);
             flag.onPrepare(a);

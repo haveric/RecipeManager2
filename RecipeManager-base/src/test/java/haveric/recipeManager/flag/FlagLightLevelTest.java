@@ -115,10 +115,9 @@ public class FlagLightLevelTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
-            a.setLocation(light0Loc);
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(light0Loc).build();
 
             FlagLightLevel flag = (FlagLightLevel) result.getFlag(FlagType.LIGHT_LEVEL);
             flag.onCheck(a);

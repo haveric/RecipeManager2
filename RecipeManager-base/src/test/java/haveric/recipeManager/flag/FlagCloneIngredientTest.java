@@ -79,9 +79,9 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).inventoryView(inventoryView).build();
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).inventoryView(inventoryView).build();
 
             FlagCloneIngredient flag = (FlagCloneIngredient) result.getFlag(FlagType.CLONE_INGREDIENT);
             flag.onPrepare(a);

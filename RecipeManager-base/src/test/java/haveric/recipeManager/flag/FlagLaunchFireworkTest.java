@@ -2,8 +2,6 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.TestMetaFirework;
-import haveric.recipeManager.flag.args.ArgBuilder;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagLaunchFirework;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -32,9 +30,7 @@ public class FlagLaunchFireworkTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
-
-            ItemResult result = recipe.getResult(a);
+            ItemResult result = recipe.getFirstResult();
 
             FlagLaunchFirework flag = (FlagLaunchFirework) result.getFlag(FlagType.LAUNCH_FIREWORK);
 

@@ -55,11 +55,9 @@ public class FlagCommandTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).location(location).build();
+            ItemResult result = recipe.getFirstResult();
 
-            a.setPlayerUUID(testUUID);
-
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).location(location).player(testUUID).build();
 
             FlagCommand flag = (FlagCommand) result.getFlag(FlagType.COMMAND);
 

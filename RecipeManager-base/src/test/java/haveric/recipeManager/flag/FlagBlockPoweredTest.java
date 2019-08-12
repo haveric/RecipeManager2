@@ -33,10 +33,9 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
-            a.setLocation(unpoweredWorkbenchLoc);
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(unpoweredWorkbenchLoc).build();
 
             FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
             flag.onCheck(a);
@@ -134,10 +133,9 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             BrewRecipe recipe = (BrewRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
-            a.setLocation(unpoweredBrewingStandLoc);
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(unpoweredBrewingStandLoc).build();
 
             FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
             flag.onCheck(a);

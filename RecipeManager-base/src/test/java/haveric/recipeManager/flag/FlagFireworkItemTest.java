@@ -32,9 +32,9 @@ public class FlagFireworkItemTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
+            ItemResult result = recipe.getFirstResult();
 
-            ItemResult result = recipe.getResult(a);
+            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
 
             FlagFireworkItem flag = (FlagFireworkItem) result.getFlag(FlagType.FIREWORK_ITEM);
             flag.onPrepare(a);
