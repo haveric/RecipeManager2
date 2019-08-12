@@ -99,37 +99,41 @@ public class BrewEvents implements Listener {
             Location location = block.getLocation();
             BrewingStandData data = BrewingStands.get(location);
             Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
-            ItemResult result = recipe.getResult(a);
+            List<ItemResult> results = recipe.getResults();
 
-            if (result != null && recipe.sendCrafted(a)) {
-                if (recipe.checkFlags(a) && result.checkFlags(a)) {
-                    @SuppressWarnings("unchecked")
-                    List<Boolean> potionBools = (List<Boolean>) a.extra();
+            if (!results.isEmpty()) {
+                ItemResult result = results.get(0);
 
-                    ItemStack bukkitResult = result.toItemStack();
+                if (result != null && recipe.sendCrafted(a)) {
+                    if (recipe.checkFlags(a) && result.checkFlags(a)) {
+                        @SuppressWarnings("unchecked")
+                        List<Boolean> potionBools = (List<Boolean>) a.extra();
 
-                    boolean cancel = false;
-                    if (potionBools.get(0)) {
-                        inventory.setItem(0, bukkitResult.clone());
-                        cancel = true;
-                    }
+                        ItemStack bukkitResult = result.toItemStack();
 
-                    if (potionBools.get(1)) {
-                        inventory.setItem(1, bukkitResult.clone());
-                        cancel = true;
-                    }
+                        boolean cancel = false;
+                        if (potionBools.get(0)) {
+                            inventory.setItem(0, bukkitResult.clone());
+                            cancel = true;
+                        }
 
-                    if (potionBools.get(2)) {
-                        inventory.setItem(2, bukkitResult.clone());
-                        cancel = true;
-                    }
+                        if (potionBools.get(1)) {
+                            inventory.setItem(1, bukkitResult.clone());
+                            cancel = true;
+                        }
 
-                    if (cancel) {
-                        event.setCancelled(true);
-                        ItemStack originalIngredient = inventory.getItem(3);
-                        originalIngredient.setAmount(originalIngredient.getAmount() - 1);
+                        if (potionBools.get(2)) {
+                            inventory.setItem(2, bukkitResult.clone());
+                            cancel = true;
+                        }
 
-                        inventory.setItem(3, originalIngredient);
+                        if (cancel) {
+                            event.setCancelled(true);
+                            ItemStack originalIngredient = inventory.getItem(3);
+                            originalIngredient.setAmount(originalIngredient.getAmount() - 1);
+
+                            inventory.setItem(3, originalIngredient);
+                        }
                     }
                 }
             }

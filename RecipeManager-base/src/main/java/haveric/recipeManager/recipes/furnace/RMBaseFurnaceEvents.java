@@ -173,7 +173,6 @@ public class RMBaseFurnaceEvents implements Listener {
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
             InventoryHolder holder = inv.getHolder();
-            Recipes.recipeResetResult(ent.getUniqueId());
 
             if (inv instanceof FurnaceInventory && holder instanceof Furnace) {
                 furnaceClick(event, (Furnace) holder, (Player) ent);

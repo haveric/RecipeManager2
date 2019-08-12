@@ -7,7 +7,6 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.any.FlagKeepItem;
 import haveric.recipeManager.flag.flags.recipe.FlagDisplayResult;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
@@ -128,15 +127,16 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             return displayResult;
         }
 
-        if (unavailableNum == 0 && failChance == 0) {
+        if (unavailableNum == 0) {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
-            } else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
+            }/* else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
                 return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().get("craft.result.receive.title.unknown"));
-            }
-        } else if (displayNum == 1) {
+            }*/
+
+        }/* else if (displayNum == 1) {
             return ToolsItem.create(displayResult.getType(), 0, displayAmount, displayResult.getItemMeta().getDisplayName());
-        }
+        }*/
 
         List<String> lore = new ArrayList<>();
         String title;
@@ -189,34 +189,6 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         return formatString;
-    }
-
-    public int getCraftableTimes(CraftingInventory inv, ItemResult result) {
-        int craftAmount = 0;
-        int maxStack = inv.getMaxStackSize();
-
-        for (ItemStack i : inv.getMatrix()) {
-            if (i != null && i.getType() != Material.AIR) {
-                int stackAmount = i.getAmount();
-
-                if (hasFlag(FlagType.KEEP_ITEM)) {
-                    FlagKeepItem keepItemFlag = (FlagKeepItem) getFlag(FlagType.KEEP_ITEM);
-                    if (keepItemFlag.getItem(i) != null) {
-                        stackAmount = 64;
-                    }
-                }
-                if (result.hasFlag(FlagType.KEEP_ITEM)) {
-                    FlagKeepItem keepItemFlag = (FlagKeepItem) result.getFlag(FlagType.KEEP_ITEM);
-                    if (keepItemFlag.getItem(i) != null) {
-                        stackAmount = 64;
-                    }
-                }
-
-                craftAmount = Math.min(stackAmount, maxStack);
-            }
-        }
-
-        return craftAmount;
     }
 
     public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra) {

@@ -2,7 +2,6 @@ package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
@@ -27,7 +26,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * RecipeManager's recipe storage
@@ -37,9 +35,6 @@ public class Recipes {
     //public static final String FURNACE_OWNER_STRING = RMCChatColor.GRAY + "Placed by: " + RMCChatColor.WHITE;
     public static final String RECIPE_NAMESPACE_STRING = "recipemanager";
     public static final String RECIPE_ID_STRING = RMCChatColor.GRAY + "RecipeManager #";
-
-    // Remember results for re-use on failure
-    private static final Map<UUID, ItemResult> staticResults = new HashMap<>();
 
     // Recipe index
     protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<>();
@@ -81,8 +76,6 @@ public class Recipes {
         indexStonecutting.clear();
         indexBrew.clear();
         indexName.clear();
-
-        staticResults.clear();
     }
 
     /**
@@ -636,25 +629,6 @@ public class Recipes {
         }
 
         return Vanilla.removeCustomRecipe(recipe);
-    }
-
-    protected static ItemResult recipeGetResult(Args a, WorkbenchRecipe recipe) {
-        ItemResult result = staticResults.get(a.playerUUID());
-
-        if (result == null) {
-            result = recipe.getResult(a);
-            staticResults.put(a.playerUUID(), result);
-        }
-
-        if (result == null) {
-            return null;
-        }
-
-        return result.clone();
-    }
-
-    public static void recipeResetResult(UUID uuid) {
-        staticResults.remove(uuid);
     }
 
     public Map<BaseRecipe, RMCRecipeInfo> getIndex() {

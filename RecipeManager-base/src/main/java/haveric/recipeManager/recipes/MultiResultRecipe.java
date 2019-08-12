@@ -1,11 +1,6 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.args.ArgBuilder;
-import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.recipe.FlagIndividualResults;
 import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
@@ -171,59 +166,5 @@ public class MultiResultRecipe extends BaseRecipe {
         }
 
         return valid;
-    }
-
-    /**
-     * Get a random result from the list.<br>
-     * Returns AIR if failure chance occurred.
-     *
-     * Will grab the first valid result if using {@link FlagIndividualResults}
-     *
-     * @param a
-     *            dynamic arguments, use {@link ArgBuilder#create()} to build arguments for this.
-     * @return the result as a clone or null.
-     */
-    public ItemResult getResult(Args a) {
-        ItemResult result = null;
-        if (this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            for (ItemResult r : results) {
-                a.clear();
-
-                if (r.checkFlags(a)) {
-                    result = r.clone();
-
-                    break;
-                }
-            }
-        } else {
-            List<ItemResult> list = new ArrayList<>();
-            float maxChance = 0;
-
-            for (ItemResult r : results) {
-                a.clear();
-
-                if (r.checkFlags(a)) {
-                    list.add(r);
-                    maxChance += r.getChance();
-                }
-            }
-
-            float rand = RecipeManager.random.nextFloat() * maxChance;
-            float chance = 0;
-
-            for (ItemResult r : list) {
-                chance += r.getChance();
-
-                if (chance >= rand) {
-                    result = r.clone();
-                    break;
-                }
-            }
-        }
-
-        a.clear();
-        a.setResult(result);
-
-        return result;
     }
 }

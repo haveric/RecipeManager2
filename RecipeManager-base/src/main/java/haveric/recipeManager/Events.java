@@ -39,6 +39,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -433,8 +434,6 @@ public class Events implements Listener {
                 return;
             }
 
-            result = Recipes.recipeGetResult(a, recipe); // gets the same stored result if event was previously cancelled
-
             // We're handling durability on the result line outside of flags, so the original damage should be saved here
             int originalDamage = -1;
             if (result != null && Version.has1_13Support()) {
@@ -469,13 +468,9 @@ public class Events implements Listener {
 
             a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
 
-            int times = craftResult(event, inv, player, recipe, result, a); // craft the result
+            int times = craftResult(event, inv, result); // craft the result
             if (result != null) {
                 a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
-
-                if (times > 0) {
-                    Recipes.recipeResetResult(a.playerUUID());
-                }
 
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
@@ -487,72 +482,128 @@ public class Events implements Listener {
                     }
 
                     // Make sure all flag conditions are still valid or stop crafting
-                    if (!recipe.checkFlags(a) || !result.checkFlags(a)) {
+                    if (!recipe.checkFlags(a)) {
                         //MessageSender.getInstance().info("Stop Crafting - Flags no longer match");
                         break;
                     }
 
-                    // Reset result's metadata for each craft
-                    result.clearMetadata();
+                    boolean skipCraft = false;
+                    List<ItemResult> potentialResults = recipe.getResults();
+                    if (recipe.isMultiResult()) {
+                        boolean hasMatch = false;
+                        if (recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+                            for (ItemResult r : potentialResults) {
+                                a.clear();
 
-                    // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
-                    if (originalDamage != -1) {
-                        ItemMeta meta = result.getItemMeta();
-                        if (meta instanceof Damageable) {
-                            ((Damageable)meta).setDamage(originalDamage);
-                            result.setItemMeta(meta);
+                                if (r.checkFlags(a)) {
+                                    result = r.clone();
+                                    hasMatch = true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            float maxChance = 0;
+
+                            List<ItemResult> matchingResults = new ArrayList<>();
+                            for (ItemResult r : potentialResults) {
+                                a.clear();
+
+                                if (r.checkFlags(a)) {
+                                    matchingResults.add(r);
+                                    maxChance += r.getChance();
+                                }
+                            }
+
+                            float rand = RecipeManager.random.nextFloat() * maxChance;
+                            float chance = 0;
+
+                            for (ItemResult r : matchingResults) {
+                                chance += r.getChance();
+
+                                if (chance >= rand) {
+                                    hasMatch = true;
+                                    result = r.clone();
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!hasMatch || result.getType() == Material.AIR) {
+                            skipCraft = true;
+                        }
+                    } else {
+                        result = potentialResults.get(0).clone();
+
+                        if (!result.checkFlags(a)) {
+                            break;
                         }
                     }
+                    a.setResult(result);
 
-                    a.setFirstRun(firstRun);
-                    a.clear();
+                    boolean recipeCraftSuccess = false;
+                    boolean resultCraftSuccess = false;
+                    if (!skipCraft) {
+                        // Reset result's metadata for each craft
+                        result.clearMetadata();
 
-                    boolean recipeCraftSuccess = recipe.sendCrafted(a);
-                    if (recipeCraftSuccess) {
-                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
+                        if (originalDamage != -1) {
+                            ItemMeta meta = result.getItemMeta();
+                            if (meta instanceof Damageable) {
+                                ((Damageable) meta).setDamage(originalDamage);
+                                result.setItemMeta(meta);
+                            }
+                        }
+
+                        a.setFirstRun(firstRun); // TODO: Remove and create onCraftComplete
+                        a.clear();
+
+                        recipeCraftSuccess = recipe.sendCrafted(a);
+                        if (recipeCraftSuccess) {
+                            a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        }
+
+                        a.clear();
+
+                        resultCraftSuccess = result.sendCrafted(a);
+                        if (resultCraftSuccess) {
+                            a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
+                        }
                     }
-
-                    a.clear();
-
-                    boolean resultCraftSuccess = result.sendCrafted(a);
-                    if (resultCraftSuccess) {
-                        a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(result)));
-                    }
-
-                    boolean doneCrafting = false;
 
                     boolean subtract = false;
                     boolean onlyExtra = true;
-                    if (recipeCraftSuccess && resultCraftSuccess) {
+                    if ((recipeCraftSuccess && resultCraftSuccess) || skipCraft) {
                         boolean noResult = false;
-                        if (recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-                            float chance = result.getChance();
-                            float rand = RecipeManager.random.nextFloat() * 100;
 
-                            if (chance >= 0 && chance < rand) {
+                        if (skipCraft) {
+                            noResult = true;
+                        } else {
+                            if (recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+                                float chance = result.getChance();
+                                float rand = RecipeManager.random.nextFloat() * 100;
+
+                                if (chance >= 0 && chance < rand) {
+                                    noResult = true;
+                                }
+                            }
+
+                            if (recipe.hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                                subtract = true;
+                            }
+
+                            if (result.hasFlag(FlagType.NO_RESULT)) {
                                 noResult = true;
                             }
-                        } else if (recipe.isMultiResult()) {
-                            subtract = true;
-                            onlyExtra = false;
-                        }
 
-                        if (recipe.hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-                            subtract = true;
-                        }
-
-                        if (result.hasFlag(FlagType.NO_RESULT)) {
-                            noResult = true;
-                        }
-
-                        if (event.isShiftClick()) {
-                            noResult = true;
-                            // Make sure inventory can fit the results or stop crafting
-                            if (Tools.playerCanAddItem(player, result)) {
-                                player.getInventory().addItem(result.clone());
-                            } else {
-                                //MessageSender.getInstance().info("Stop Crafting - Full Inventory");
-                                doneCrafting = true;
+                            if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                                noResult = true;
+                                // Make sure inventory can fit the results or drop on the ground
+                                if (Tools.playerCanAddItem(player, result)) {
+                                    player.getInventory().addItem(result.clone());
+                                } else {
+                                    player.getWorld().dropItem(player.getLocation(), result.clone());
+                                }
                             }
                         }
 
@@ -567,10 +618,6 @@ public class Events implements Listener {
 
                     if (subtract) {
                         recipe.subtractIngredients(inv, result, onlyExtra);
-                    }
-
-                    if (doneCrafting) {
-                        break;
                     }
 
                     // TODO call post-event ?
@@ -626,70 +673,14 @@ public class Events implements Listener {
         return different;
     }
 
-    private int craftResult(CraftItemEvent event, CraftingInventory inv, Player player, WorkbenchRecipe recipe, ItemResult result, Args a) throws Throwable {
-        if (recipe.isMultiResult() && !recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            // more special treatment needed for multi-result ones...
+    private int craftResult(CraftItemEvent event, CraftingInventory inv, ItemResult result) throws Throwable {
+        if (result == null || result.getType() == Material.AIR) {
+            event.setCurrentItem(null);
+            return 0;
+        }
 
-            event.setCancelled(true); // need to cancel this from the start.
-
-            // check if result is air / recipe failed
-            if (result == null || result.getType() == Material.AIR) {
-                Messages.getInstance().sendOnce(player, "craft.recipe.multi.failed");
-                SoundNotifier.sendFailSound(player, a.location());
-            } else {
-                if (event.isShiftClick()) {
-                    Messages.getInstance().sendOnce(player, "craft.recipe.multi.noshiftclick");
-
-                    return 0;
-                } else {
-                    ItemStack cursor = event.getCursor();
-
-                    if (!recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS) && cursor != null && cursor.getType() != Material.AIR) {
-                        Messages.getInstance().sendOnce(player, "craft.recipe.multi.chance.cursorhasitem");
-                        return 0;
-                    }
-
-                    ItemStack merged = ToolsItem.merge(cursor, result);
-
-                    if (merged == null) {
-                        Messages.getInstance().sendOnce(player, "craft.recipe.multi.cursorfull");
-                        return 0;
-                    }
-
-                    event.setCursor(merged);
-
-                }
-            }
-        } else {
-            if (result == null || result.getType() == Material.AIR) {
-                event.setCurrentItem(null);
-                return 0;
-            }
-
-            if (event.isShiftClick()) {
-                int craftAmount = recipe.getCraftableTimes(inv, result); // Calculate how many times the recipe can be crafted
-                ItemStack item = result.clone();
-                item.setAmount(result.getAmount() * craftAmount);
-
-                int space = Tools.playerFreeSpaceForItem(player, item);
-                int crafted = Math.min((int) Math.ceil(space / (double) result.getAmount()), craftAmount);
-
-                if (crafted > 0) {
-                    event.setCurrentItem(result);
-                    return crafted;
-                }
-
-                return 0;
-            }
-
-            ItemStack cursor = event.getCursor();
-            ItemStack merged = ToolsItem.merge(cursor, result);
-
-            if (merged == null) {
-                return 0;
-            }
-
-            event.setCurrentItem(result);
+        if (event.isShiftClick()) {
+            return inv.getMaxStackSize();
         }
 
         return 1;
@@ -770,7 +761,6 @@ public class Events implements Listener {
 
         Players.remove(player);
         Workbenches.remove(player);
-        Recipes.recipeResetResult(player.getUniqueId());
         Messages.getInstance().clearPlayer(name);
     }
 
