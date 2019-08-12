@@ -110,13 +110,6 @@ craft:
       secrets: <dark_aqua>{num} secret item(s)
       failure: <red>{chance} Failure chance
       unavailable: <dark_red>{num} unavailable item(s)
-  recipe:
-    multi:
-      failed: '<yellow>NOTE: <white>That sound was the recipe failing by chance! See ''fail chance'' in the result description.'
-      noshiftclick: '<yellow>NOTE: <white>Recipe has more than one result, shift+clicking will only craft it once.'
-      cursorfull: '<yellow>NOTE: <white>Cursor is full or not same type as result, put the held item in inventory or use Shift+Click to craft one by one to inventory.'
-      chance:
-        cursorhasitem: '<yellow>NOTE: <white>Cursor has an item on a chance recipe, put the held item in inventory or use Shift+Click to craft one by one to inventory.'
 item:
   anydata: <gray>any
 recipebook:
