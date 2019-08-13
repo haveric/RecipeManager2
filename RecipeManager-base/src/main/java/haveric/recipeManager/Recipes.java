@@ -7,6 +7,7 @@ import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
@@ -40,7 +41,8 @@ public class Recipes {
     protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<>();
 
     // Quick-find index
-    protected Map<Integer, CraftRecipe> indexCraft = new HashMap<>();
+    protected Map<Integer, CraftRecipe> indexCraftLegacy = new HashMap<>();
+    protected Map<Integer, CraftRecipe1_13> indexCraft = new HashMap<>();
     protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
     public Map<String, RMFurnaceRecipe> indexSmeltLegacy = new HashMap<>();
     protected Map<String, RMFurnaceRecipe> indexSmeltLegacyFuels = new HashMap<>();
@@ -61,6 +63,7 @@ public class Recipes {
 
     public void clean() {
         index.clear();
+        indexCraftLegacy.clear();
         indexCraft.clear();
         indexCombine.clear();
         indexSmeltLegacy.clear();
@@ -160,7 +163,11 @@ public class Recipes {
      */
     public WorkbenchRecipe getWorkbenchRecipe(Recipe recipe) {
         if (recipe instanceof ShapedRecipe) {
-            return getCraftRecipe(recipe.getResult());
+            if (Version.has1_13Support()) {
+                return getCraftRecipe(recipe.getResult());
+            } else {
+                return getCraftLegacyRecipe(recipe.getResult());
+            }
         }
 
         if (recipe instanceof ShapelessRecipe) {
@@ -177,8 +184,25 @@ public class Recipes {
      * @param result
      * @return Craft recipe or null if doesn't exist
      */
-    public CraftRecipe getCraftRecipe(ItemStack result) {
+    public CraftRecipe getCraftLegacyRecipe(ItemStack result) {
         CraftRecipe recipe = null;
+
+        if (result != null) {
+            recipe = indexCraftLegacy.get(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipe;
+    }
+
+    /**
+     * Get the RecipeManager craft recipe for the result inputted.<br>
+     * The result must be the one from the Bukkit recipe retrieved as it needs to check for result lore for the ID.
+     *
+     * @param result
+     * @return Craft recipe or null if doesn't exist
+     */
+    public CraftRecipe1_13 getCraftRecipe(ItemStack result) {
+        CraftRecipe1_13 recipe = null;
 
         if (result != null) {
             recipe = indexCraft.get(Tools.getRecipeIdFromItem(result));
@@ -452,8 +476,11 @@ public class Recipes {
         if (!recipe.hasFlag(FlagType.REMOVE)) {
             indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
 
+
             if (recipe instanceof CraftRecipe) {
-                indexCraft.put(recipe.getIndex(), (CraftRecipe) recipe);
+                indexCraftLegacy.put(recipe.getIndex(), (CraftRecipe) recipe);
+            } else if (recipe instanceof CraftRecipe1_13) {
+                indexCraft.put(recipe.getIndex(), (CraftRecipe1_13) recipe);
             } else if (recipe instanceof CombineRecipe) {
                 indexCombine.put(recipe.getIndex(), (CombineRecipe) recipe);
             } else if (recipe instanceof RMFurnaceRecipe) {
@@ -590,6 +617,8 @@ public class Recipes {
 
         // Remove from quickfind index
         if (recipe instanceof CraftRecipe) {
+            indexCraftLegacy.remove(recipe.getIndex());
+        } else if (recipe instanceof CraftRecipe1_13) {
             indexCraft.remove(recipe.getIndex());
         } else if (recipe instanceof CombineRecipe) {
             indexCombine.remove(recipe.getIndex());

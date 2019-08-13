@@ -3,6 +3,7 @@ package haveric.recipeManager.tools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public abstract class BaseToolsRecipe {
         return false;
     }
 
-    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, List<Material>> materialChoiceMap) {
+    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> materialChoiceMap) {
         return false;
     }
 

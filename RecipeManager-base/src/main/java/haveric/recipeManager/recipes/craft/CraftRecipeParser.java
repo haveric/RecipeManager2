@@ -5,6 +5,7 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
@@ -29,12 +30,13 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) throws Exception {
-        CraftRecipe recipe;
+        BaseRecipe recipe;
         if (Version.has1_13Support()) {
             recipe = new CraftRecipe1_13(fileFlags);
         } else {
             recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
         }
+
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();
@@ -159,12 +161,16 @@ public class CraftRecipeParser extends BaseRecipeParser {
                     ingredientsChoiceMap.put(characterKey, airList);
                 }
             }
-
-
-            recipe.setChoiceShape(choiceShapeString.toArray(new String[0]));
-            recipe.setIngredientsChoiceMap(ingredientsChoiceMap);
+            if (recipe instanceof CraftRecipe1_13) {
+                CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
+                craftRecipe.setChoiceShape(choiceShapeString.toArray(new String[0]));
+                craftRecipe.setIngredientsChoiceMap(ingredientsChoiceMap);
+            }
         } else {
-            recipe.setIngredients(ingredients);
+            if (recipe instanceof CraftRecipe) {
+                CraftRecipe craftRecipe = (CraftRecipe) recipe;
+                craftRecipe.setIngredients(ingredients);
+            }
         }
 
         if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) { // for mc1.12, matching requires outcome too...
@@ -177,10 +183,20 @@ public class CraftRecipeParser extends BaseRecipeParser {
                 return false;
             }
 
-            recipe.setResults(results); // done with results, set 'em
+            if (recipe instanceof CraftRecipe1_13) {
+                CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
+                craftRecipe.setResults(results); // done with results, set 'em
 
-            if (!recipe.hasValidResult()) {
-                return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
+                if (!craftRecipe.hasValidResult()) {
+                    return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
+                }
+            } else if (recipe instanceof CraftRecipe) {
+                CraftRecipe craftRecipe = (CraftRecipe) recipe;
+                craftRecipe.setResults(results); // done with results, set 'em
+
+                if (!craftRecipe.hasValidResult()) {
+                    return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
+                }
             }
         }
 

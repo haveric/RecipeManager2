@@ -10,6 +10,7 @@ import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
@@ -131,24 +132,25 @@ public class ConditionEvaluator {
                 // Let's only use this special logic for recipes where RMCRecipeInfo has the bukkit pointer.
                 if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
                     Recipe bukkit = entry.getKey().getBukkitRecipe(true);
-                    if (recipe instanceof CraftRecipe) {
+                    if (recipe instanceof CraftRecipe1_13) {
+                        if (bukkit instanceof ShapedRecipe) {
+                            CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
+                            if (NMSVersionHandler.getToolsRecipe().matchesShaped(bukkit, craftRecipe.getChoiceShape(), craftRecipe.getIngredientsChoiceMap())) {
+                                return entry.getValue();
+                            }
+                        }
+                    } else if (recipe instanceof CraftRecipe) {
                         if (bukkit instanceof ShapedRecipe) {
                             CraftRecipe craftRecipe = (CraftRecipe) recipe;
 
-                            if (Version.has1_13Support()) {
-                                if (NMSVersionHandler.getToolsRecipe().matchesShaped(bukkit, craftRecipe.getChoiceShape(), craftRecipe.getIngredientsChoiceMap())) {
-                                    return entry.getValue();
-                                }
-                            } else {
-                                ItemStack[] matrix = craftRecipe.getIngredients();
-                                Tools.trimItemMatrix(matrix);
-                                ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-                                int height = craftRecipe.getHeight();
-                                int width = craftRecipe.getWidth();
+                            ItemStack[] matrix = craftRecipe.getIngredients();
+                            Tools.trimItemMatrix(matrix);
+                            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+                            int height = craftRecipe.getHeight();
+                            int width = craftRecipe.getWidth();
 
-                                if (NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(bukkit, matrix, matrixMirror, width, height)) {
-                                    return entry.getValue();
-                                }
+                            if (NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(bukkit, matrix, matrixMirror, width, height)) {
+                                return entry.getValue();
                             }
                         }
                     } else if (recipe instanceof CombineRecipe) {
@@ -203,10 +205,8 @@ public class ConditionEvaluator {
         RMCRecipeInfo info = map.get(recipe);
 
         if (info == null && recipe instanceof CraftRecipe) {
-            if (!Version.has1_13Support()) {
-                CraftRecipe cr = (CraftRecipe) recipe;
-                cr.setMirrorShape(true);
-            }
+            CraftRecipe cr = (CraftRecipe) recipe;
+            cr.setMirrorShape(true);
 
             info = map.get(recipe);
         }

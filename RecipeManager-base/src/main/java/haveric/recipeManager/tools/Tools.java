@@ -12,6 +12,7 @@ import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
@@ -864,28 +865,44 @@ public class Tools {
     public static int findItemInIngredients(BaseRecipe recipe, Material type, Short data) {
         int found = 0;
 
-        if (recipe instanceof CraftRecipe) {
-            CraftRecipe r = (CraftRecipe) recipe;
+        if (recipe instanceof CraftRecipe1_13) {
+            CraftRecipe1_13 r = (CraftRecipe1_13) recipe;
+            Map<Character, RecipeChoice> ingredientChoiceMap = r.getIngredientsChoiceMap();
 
-            if (Version.has1_13Support()) {
-                Map<Character, List<Material>> ingredientChoiceMap = r.getIngredientsChoiceMap();
-                for (Map.Entry<Character, List<Material>> entry : ingredientChoiceMap.entrySet()) {
-                    List<Material> materials = entry.getValue();
+            for (Map.Entry<Character, RecipeChoice> entry : ingredientChoiceMap.entrySet()) {
+                RecipeChoice choice = entry.getValue();
+
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+                    List<Material> materials = materialChoice.getChoices();
 
                     if (materials.contains(type)) {
                         found++;
                         break;
                     }
-                }
-            } else {
-                for (ItemStack i : r.getIngredients()) {
-                    if (i == null) {
-                        continue;
-                    }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> items = exactChoice.getChoices();
 
-                    if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                        found++;
+                    for (ItemStack item : items) {
+                        if (item.getType() == type) {
+                            found++;
+                            break;
+                        }
                     }
+                }
+            }
+        } else if (recipe instanceof CraftRecipe) {
+            CraftRecipe r = (CraftRecipe) recipe;
+
+            for (ItemStack i : r.getIngredients()) {
+                if (i == null) {
+                    continue;
+                }
+
+                if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                    found++;
                 }
             }
         } else if (recipe instanceof CombineRecipe) {

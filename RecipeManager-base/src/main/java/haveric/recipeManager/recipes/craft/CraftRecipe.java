@@ -26,9 +26,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class CraftRecipe extends WorkbenchRecipe {
-    private Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();
-    private String[] choiceShape;
-
     private ItemStack[] ingredients;
     private int width;
     private int height;
@@ -53,12 +50,6 @@ public class CraftRecipe extends WorkbenchRecipe {
                 ingredients = r.getIngredients();
             }
 
-            if (r.ingredientsChoiceMap.size() > 0) {
-                ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
-            }
-
-            choiceShape = r.choiceShape;
-
             width = r.width;
             height = r.height;
             mirror = r.mirror;
@@ -67,28 +58,6 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     public CraftRecipe(Flags flags) {
         super(flags);
-    }
-
-    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
-        ingredientsChoiceMap.clear();
-        ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
-
-        updateChoiceHash();
-    }
-
-    public Map<Character, List<Material>> getIngredientsChoiceMap() {
-        return ingredientsChoiceMap;
-    }
-
-    public void setChoiceShape(String[] shape) {
-        choiceShape = shape;
-
-        width = shape[0].length();
-        height = shape.length;
-    }
-
-    public String[] getChoiceShape() {
-        return choiceShape;
     }
 
     /**
@@ -249,35 +218,6 @@ public class CraftRecipe extends WorkbenchRecipe {
 
         width++;
         height++;
-        hash = str.toString().hashCode();
-    }
-
-    private void updateChoiceHash() {
-        StringBuilder str = new StringBuilder("craft ");
-        int shapeSize = choiceShape.length;
-        for (int i = 0; i < shapeSize; i++) {
-            str.append(choiceShape[i]);
-
-            if (i + 1 < shapeSize) {
-                str.append(",");
-            }
-        }
-
-        for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
-            str.append(" ").append(entry.getKey()).append(":");
-
-            List<Material> materials = entry.getValue();
-
-            int materialsSize = materials.size();
-            for (int i = 0; i < materialsSize; i++) {
-                str.append(materials.get(i).toString());
-
-                if (i + 1 < materialsSize) {
-                    str.append(",");
-                }
-            }
-        }
-
         hash = str.toString().hashCode();
     }
 
@@ -448,10 +388,6 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     public boolean hasIngredients() {
         return ingredients != null && ingredients.length == 9;
-    }
-
-    public boolean hasIngredientChoices() {
-        return !ingredientsChoiceMap.isEmpty();
     }
 
     @Override

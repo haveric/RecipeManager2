@@ -49,6 +49,21 @@ public class ToolsItem {
         return item;
     }
 
+    public static String printExactChoice(List<ItemStack> items, RMCChatColor defColor, RMCChatColor endColor) {
+        String print = "";
+
+        int size = items.size();
+        for (int i = 0; i < size; i++) {
+            print += print(items.get(i), defColor, endColor);
+
+            if (i + 1 < size) {
+                print += ",";
+            }
+        }
+
+        return print;
+    }
+
     public static String printChoice(List<Material> materials, RMCChatColor defColor, RMCChatColor endColor) {
         String print = "";
 

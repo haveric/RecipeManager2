@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.flag.flags.any.FlagMessage;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class FlagMessageTest extends FlagBaseTest {
         assertEquals(4, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe recipe = (CraftRecipe) entry.getKey();
+            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
             ItemResult result = recipe.getFirstResult();
 

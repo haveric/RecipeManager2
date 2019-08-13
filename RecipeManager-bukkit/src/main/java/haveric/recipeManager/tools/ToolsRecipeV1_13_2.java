@@ -16,11 +16,11 @@ import java.util.Map;
  **/
 public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
     @Override
-    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, List<Material>> materialChoiceMap) {
+    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> choiceMap) {
         if (bukkitRecipe instanceof ShapedRecipe) {
             ShapedRecipe shapedRecipe = (ShapedRecipe) bukkitRecipe;
 
-            return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, materialChoiceMap);
+            return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, choiceMap);
         }
 
         return false;
@@ -33,7 +33,7 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
 
             List<RecipeChoice> choices = shapelessRecipe.getChoiceList();
 
-            return RMBukkitTools.compareMaterialChoiceList(choices, materialsList);
+            return RMBukkitTools.compareShapelessChoiceList(choices, materialsList);
         }
 
         return false;

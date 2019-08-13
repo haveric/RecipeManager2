@@ -456,8 +456,12 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCustomRecipe(BaseRecipe recipe) {
+        if (recipe instanceof CraftRecipe1_13) {
+            return removeCraftRecipe((CraftRecipe1_13) recipe);
+        }
+
         if (recipe instanceof CraftRecipe) {
-            return removeCraftRecipe((CraftRecipe) recipe);
+            return removeCraftLegacyRecipe((CraftRecipe) recipe);
         }
 
         if (recipe instanceof CombineRecipe) {
@@ -498,60 +502,74 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeCraftRecipe(CraftRecipe recipe) {
+    public static Recipe removeCraftLegacyRecipe(CraftRecipe recipe) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
         Recipe r;
 
-        if (Version.has1_13Support()) {
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
+        String[] sh;
 
-                    if (r instanceof ShapedRecipe) {
-                        sr = (ShapedRecipe) r;
+        ItemStack[] matrix = recipe.getIngredients();
+        Tools.trimItemMatrix(matrix);
+        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+        int height = recipe.getHeight();
+        int width = recipe.getWidth();
 
-                        if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
-                            iterator.remove();
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
 
-                            baseRecipeIterator.finish();
+                if (r instanceof ShapedRecipe) {
+                    sr = (ShapedRecipe) r;
+                    sh = sr.getShape();
 
-                            return sr;
-                        }
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return sr;
                     }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
                 }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
-        } else {
-            String[] sh;
+        }
 
-            ItemStack[] matrix = recipe.getIngredients();
-            Tools.trimItemMatrix(matrix);
-            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-            int height = recipe.getHeight();
-            int width = recipe.getWidth();
+        return null;
+    }
 
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
+    /**
+     * Removes a RecipeManager recipe from the <b>server</b>
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return removed recipe or null if not found
+     */
+    public static Recipe removeCraftRecipe(CraftRecipe1_13 recipe) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        ShapedRecipe sr;
+        Recipe r;
 
-                    if (r instanceof ShapedRecipe) {
-                        sr = (ShapedRecipe) r;
-                        sh = sr.getShape();
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
 
-                        if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
-                            iterator.remove();
+                if (r instanceof ShapedRecipe) {
+                    sr = (ShapedRecipe) r;
 
-                            baseRecipeIterator.finish();
+                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
+                        iterator.remove();
 
-                            return sr;
-                        }
+                        baseRecipeIterator.finish();
+
+                        return sr;
                     }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
                 }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
 
@@ -833,6 +851,9 @@ public class Vanilla {
     public static Recipe replaceCustomRecipe(BaseRecipe recipe) {
         if (!Version.has1_12Support()) return null;
 
+        if (recipe instanceof CraftRecipe1_13) {
+            return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe);
+        }
         if (recipe instanceof CraftRecipe) {
             return replaceCraftRecipeV1_12((CraftRecipe) recipe);
         }
@@ -846,7 +867,43 @@ public class Vanilla {
     }
 
     /**
-     * V1_12 or newer supported only.
+     * V1_13 or newer only.
+     * Replaces a RecipeManager recipe on the <b>server</b>
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return replaced recipe or null if not found
+     */
+    public static Recipe replaceCraftRecipeV1_13(CraftRecipe1_13 recipe) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        ShapedRecipe sr;
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof ShapedRecipe) {
+                    sr = (ShapedRecipe) r;
+
+                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
+                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                        baseRecipeIterator.replace(recipe, overrideItem);
+                        baseRecipeIterator.finish();
+                        return sr;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * V1_12 only.
      * Replaces a RecipeManager recipe on the <b>server</b>
      *
      * @param recipe
@@ -858,54 +915,35 @@ public class Vanilla {
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
         Recipe r;
-        if (Version.has1_13Support()) {
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
 
-                    if (r instanceof ShapedRecipe) {
-                        sr = (ShapedRecipe) r;
+        String[] sh;
 
-                        if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
-                            baseRecipeIterator.replace(recipe, overrideItem);
-                            baseRecipeIterator.finish();
-                            return sr;
-                        }
+        ItemStack[] matrix = recipe.getIngredients();
+        Tools.trimItemMatrix(matrix);
+        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
+        int height = recipe.getHeight();
+        int width = recipe.getWidth();
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof ShapedRecipe) {
+                    sr = (ShapedRecipe) r;
+                    sh = sr.getShape();
+
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
+                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                        baseRecipeIterator.replace(recipe, overrideItem);
+                        baseRecipeIterator.finish();
+                        return sr;
                     }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
                 }
-            }
-        } else {
-            String[] sh;
-
-            ItemStack[] matrix = recipe.getIngredients();
-            Tools.trimItemMatrix(matrix);
-            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-            int height = recipe.getHeight();
-            int width = recipe.getWidth();
-
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
-
-                    if (r instanceof ShapedRecipe) {
-                        sr = (ShapedRecipe) r;
-                        sh = sr.getShape();
-
-                        if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
-                            baseRecipeIterator.replace(recipe, overrideItem);
-                            baseRecipeIterator.finish();
-                            return sr;
-                        }
-                    }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
+
         return null;
     }
 

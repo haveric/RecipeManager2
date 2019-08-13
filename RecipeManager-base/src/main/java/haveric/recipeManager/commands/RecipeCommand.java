@@ -9,6 +9,7 @@ import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
@@ -24,6 +25,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -217,14 +219,14 @@ public class RecipeCommand implements CommandExecutor {
 
     private boolean hasItem(BaseRecipe recipe, ItemStack item, boolean ingredient) {
         if (ingredient) {
-            if (recipe instanceof CraftRecipe) {
+            if (recipe instanceof CraftRecipe1_13) {
+                CraftRecipe1_13 r = (CraftRecipe1_13) recipe;
+
+                return containsRecipeChoice(r.getIngredientsChoiceMap(), item, true);
+            } else if (recipe instanceof CraftRecipe) {
                 CraftRecipe r = (CraftRecipe) recipe;
 
-                if (Version.has1_13Support()) {
-                    return containsMaterialChoice(r.getIngredientsChoiceMap(), item.getType());
-                } else {
-                    return containsItem(Arrays.asList(r.getIngredients()), item, true);
-                }
+                return containsItem(Arrays.asList(r.getIngredients()), item, true);
             } else if (recipe instanceof CombineRecipe) {
                 CombineRecipe r = (CombineRecipe) recipe;
 
@@ -264,6 +266,19 @@ public class RecipeCommand implements CommandExecutor {
 
                 return containsItem(Collections.singletonList(r.getResult()), item, false);
             }
+        }
+
+        return false;
+    }
+
+    private boolean containsRecipeChoice(Map<Character, RecipeChoice> choice, ItemStack item, boolean ingredient) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return containsMaterial(materialChoice.getChoices(), item.getType());
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+
+            return containsItem(exactChoice.getChoices(), item, ingredient);
         }
 
         return false;

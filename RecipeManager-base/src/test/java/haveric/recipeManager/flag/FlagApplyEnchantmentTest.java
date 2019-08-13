@@ -8,7 +8,7 @@ import haveric.recipeManager.flag.flags.result.FlagApplyEnchantment;
 import haveric.recipeManager.flag.flags.result.FlagEnchantItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -70,7 +70,7 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
         assertEquals(6, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe recipe = (CraftRecipe) entry.getKey();
+            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
             ItemResult result = recipe.getFirstResult();
 

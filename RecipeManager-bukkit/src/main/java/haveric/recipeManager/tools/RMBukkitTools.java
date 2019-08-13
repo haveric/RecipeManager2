@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RMBukkitTools {
-    public static boolean compareShapedRecipeToChoice(ShapedRecipe recipe, String[] shape, Map<Character, List<Material>> choiceMap) {
+    public static boolean compareShapedRecipeToChoice(ShapedRecipe recipe, String[] shape, Map<Character, RecipeChoice> choiceMap) {
         String[] recipeShape = recipe.getShape();
         if (recipeShape.length != shape.length) {
             return false;
@@ -121,7 +121,7 @@ public class RMBukkitTools {
         }
     }
 
-    public static boolean compareMaterialChoiceList(List<RecipeChoice> materialChoices, List<List<Material>> materialsList) {
+    public static boolean compareShapelessChoiceList(List<RecipeChoice> materialChoices, List<List<Material>> materialsList) {
         int listSize = materialsList.size();
         int choicesListSize = materialChoices.size();
 
@@ -130,7 +130,7 @@ public class RMBukkitTools {
         }
 
         for (int i = 0; i < listSize; i++) {
-            if (!compareMaterialChoice(materialChoices.get(i), materialsList.get(i), false)) {
+            if (!compareShapelessChoice(materialChoices.get(i), materialsList.get(i), false)) {
                 return false;
             }
         }
@@ -138,7 +138,7 @@ public class RMBukkitTools {
         return true;
     }
 
-    private static boolean compareMaterialChoice(RecipeChoice choice, List<Material> materials, boolean airAllowed) {
+    private static boolean compareShapelessChoice(RecipeChoice choice, List<Material> materials, boolean airAllowed) {
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             List<Material> choiceMaterials = materialChoice.getChoices();
@@ -175,6 +175,100 @@ public class RMBukkitTools {
             if (!airAllowed || materials.size() != 1 || materials.get(0) != Material.AIR) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    public static boolean compareMaterialChoiceList(List<RecipeChoice> choices, List<RecipeChoice> choices2) {
+        int listSize = choices2.size();
+        int choicesListSize = choices.size();
+
+        if (listSize != choicesListSize) {
+            return false;
+        }
+
+        for (int i = 0; i < listSize; i++) {
+            if (!compareMaterialChoice(choices.get(i), choices2.get(i), false)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean compareMaterialChoice(RecipeChoice choice, RecipeChoice choice2, boolean airAllowed) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> choiceMaterials = materialChoice.getChoices();
+
+            if (!(choice2 instanceof RecipeChoice.MaterialChoice)) {
+                return false;
+            }
+
+            RecipeChoice.MaterialChoice materialChoice2 = (RecipeChoice.MaterialChoice) choice2;
+            List<Material> choice2Materials = materialChoice2.getChoices();
+            int size = choice2Materials.size();
+            int choiceSize = choiceMaterials.size();
+
+            if (size != choiceSize) {
+                return false;
+            }
+
+            for (int j = 0; j < size; j++) {
+                if (!choice2Materials.contains(choiceMaterials.get(j))) {
+                    return false;
+                }
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> choiceMaterials = exactChoice.getChoices();
+
+            if (!(choice2 instanceof RecipeChoice.ExactChoice)) {
+                return false;
+            }
+
+            RecipeChoice.ExactChoice exactChoice2 = (RecipeChoice.ExactChoice) choice2;
+            List<ItemStack> choice2Materials = exactChoice2.getChoices();
+
+            int size = choice2Materials.size();
+            int choiceSize = choiceMaterials.size();
+
+            if (size != choiceSize) {
+                return false;
+            }
+
+            for (ItemStack item1 : choiceMaterials) {
+                boolean foundMatch = false;
+                for (ItemStack item2 : choice2Materials) {
+                    if (item1.hashCode() == item2.hashCode()) {
+                        foundMatch = true;
+                        break;
+                    }
+                }
+
+                if (!foundMatch) {
+                    return false;
+                }
+            }
+        } else {
+            if (!airAllowed) {
+                return false;
+            }
+
+            if (choice == null) {
+                if (choice2 == null) {
+                    return true;
+                } else if (choice2 instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice2;
+
+                    List<Material> materials = materialChoice.getChoices();
+
+                    return materials.size() == 1 && materials.contains(Material.AIR);
+                }
+            }
+
+            return false;
         }
 
         return true;

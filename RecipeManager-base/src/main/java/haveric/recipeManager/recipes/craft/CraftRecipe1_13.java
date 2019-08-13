@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.WorkbenchRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -23,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class CraftRecipe1_13 extends CraftRecipe {
-    private Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();
+public class CraftRecipe1_13 extends WorkbenchRecipe {
+    private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choiceShape;
 
     private int width;
@@ -35,7 +36,8 @@ public class CraftRecipe1_13 extends CraftRecipe {
 
     public CraftRecipe1_13(ShapedRecipe recipe) {
         setBukkitRecipe(recipe);
-        setIngredients(Tools.convertShapedRecipeToItemMatrix(recipe));
+        setChoiceShape(recipe.getShape());
+        setIngredientsChoiceMap(recipe);
         setResult(recipe.getResult());
     }
 
@@ -60,14 +62,25 @@ public class CraftRecipe1_13 extends CraftRecipe {
         super(flags);
     }
 
-    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
+    private void setIngredientsChoiceMap(ShapedRecipe recipe) {
         ingredientsChoiceMap.clear();
-        ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
+        ingredientsChoiceMap.putAll(recipe.getChoiceMap());
 
         updateChoiceHash();
     }
 
-    public Map<Character, List<Material>> getIngredientsChoiceMap() {
+    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
+        ingredientsChoiceMap.clear();
+
+        for (Map.Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
+            RecipeChoice.MaterialChoice newMaterialList = new RecipeChoice.MaterialChoice(entry.getValue());
+            ingredientsChoiceMap.put(entry.getKey(), newMaterialList);
+        }
+
+        updateChoiceHash();
+    }
+
+    public Map<Character, RecipeChoice> getIngredientsChoiceMap() {
         return ingredientsChoiceMap;
     }
 
@@ -82,14 +95,6 @@ public class CraftRecipe1_13 extends CraftRecipe {
         return choiceShape;
     }
 
-    public ItemStack[] getIngredients() {
-        return null; // TODO: 1.13 doesn't use this, can we remove?
-    }
-
-    public void setIngredients(ItemStack[] newIngredients) {
-        // TODO: 1.13 doesn't use this, can we remove?
-    }
-
     private void updateChoiceHash() {
         StringBuilder str = new StringBuilder("craft ");
         int shapeSize = choiceShape.length;
@@ -101,18 +106,37 @@ public class CraftRecipe1_13 extends CraftRecipe {
             }
         }
 
-        for (Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             str.append(" ").append(entry.getKey()).append(":");
 
-            List<Material> materials = entry.getValue();
+            RecipeChoice choice = entry.getValue();
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                str.append("material:");
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> materials = materialChoice.getChoices();
+                int materialsSize = materials.size();
+                for (int i = 0; i < materialsSize; i++) {
+                    str.append(materials.get(i).toString());
 
-            int materialsSize = materials.size();
-            for (int i = 0; i < materialsSize; i++) {
-                str.append(materials.get(i).toString());
-
-                if (i + 1 < materialsSize) {
-                    str.append(",");
+                    if (i + 1 < materialsSize) {
+                        str.append(",");
+                    }
                 }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                str.append("exact:");
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                int itemsSize = items.size();
+                for (int i = 0; i < itemsSize; i++) {
+                    str.append(items.get(i).hashCode());
+
+                    if (i + 1 < itemsSize) {
+                        str.append(",");
+                    }
+                }
+            } else {
+                str.append("air");
             }
         }
 
@@ -139,18 +163,37 @@ public class CraftRecipe1_13 extends CraftRecipe {
             }
         }
 
-        for (Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             s.append(" ").append(entry.getKey()).append(":");
 
-            List<Material> materials = entry.getValue();
+            RecipeChoice choice = entry.getValue();
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                s.append("material:");
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> materials = materialChoice.getChoices();
+                int materialsSize = materials.size();
+                for (int i = 0; i < materialsSize; i++) {
+                    s.append(materials.get(i).toString());
 
-            int materialsSize = materials.size();
-            for (int i = 0; i < materialsSize; i++) {
-                s.append(materials.get(i).toString());
-
-                if (i + 1 < materialsSize) {
-                    s.append(",");
+                    if (i + 1 < materialsSize) {
+                        s.append(",");
+                    }
                 }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                s.append("exact:");
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                int itemsSize = items.size();
+                for (int i = 0; i < itemsSize; i++) {
+                    s.append(items.get(i).getType().toString()).append("-").append(items.get(i).hashCode());
+
+                    if (i + 1 < itemsSize) {
+                        s.append(",");
+                    }
+                }
+            } else {
+                s.append("air");
             }
         }
 
@@ -203,8 +246,8 @@ public class CraftRecipe1_13 extends CraftRecipe {
 
         bukkitRecipe.shape(choiceShape);
 
-        for (Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
-            bukkitRecipe.setIngredient(entry.getKey(), new RecipeChoice.MaterialChoice(entry.getValue()));
+        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+            bukkitRecipe.setIngredient(entry.getKey(), entry.getValue());
         }
 
         return bukkitRecipe;
@@ -316,11 +359,25 @@ public class CraftRecipe1_13 extends CraftRecipe {
             for (char letter : shape.toCharArray()) {
                 s.append('[');
 
-                List<Material> materials = ingredientsChoiceMap.get(letter);
-                if (materials.size() == 1 && materials.contains(Material.AIR)) {
-                    s.append(RMCChatColor.WHITE).append('_');
-                } else {
-                    s.append(RMCChatColor.DARK_PURPLE).append(letter);
+                RecipeChoice choice = ingredientsChoiceMap.get(letter);
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> materials = materialChoice.getChoices();
+
+                    if (materials.size() == 1 && materials.contains(Material.AIR)) {
+                        s.append(RMCChatColor.WHITE).append('_');
+                    } else {
+                        s.append(RMCChatColor.DARK_PURPLE).append(letter);
+                    }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> items = exactChoice.getChoices();
+
+                    if (items.size() == 1 && items.get(0).getType() == Material.AIR) {
+                        s.append(RMCChatColor.WHITE).append('_');
+                    } else {
+                        s.append(RMCChatColor.DARK_PURPLE).append(letter);
+                    }
                 }
 
                 s.append(RMCChatColor.GRAY).append(']');
@@ -331,13 +388,23 @@ public class CraftRecipe1_13 extends CraftRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        for (Map.Entry<Character, List<Material>> entry : ingredientsChoiceMap.entrySet()) {
+        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
 
             // TODO: Check IngredientConditions to get Names
 
-            List<Material> materials = entry.getValue();
-            s.append(ToolsItem.printChoice(materials, RMCChatColor.BLACK, RMCChatColor.BLACK));
+            RecipeChoice choice = entry.getValue();
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> materials = materialChoice.getChoices();
+
+                s.append(ToolsItem.printChoice(materials, RMCChatColor.BLACK, RMCChatColor.BLACK));
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                s.append(ToolsItem.printExactChoice(items, RMCChatColor.BLACK, RMCChatColor.BLACK));
+            }
         }
 
         return s.toString();
