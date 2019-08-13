@@ -11,6 +11,7 @@ This file will be automatically overwritten when a new version is installed.
 * Fix: Multi-result recipes flag support and now supports shift click crafting
 * Fix: Improved shift click crafting overall. If the inventory doesn't have room, results will be dropped on the ground
 * Fix: Move recipe error messages from player messages to the item lore and add clearer messages
+* Fix: @Override, @Remove, @Restrict Fixed shaped recipe matching for 1.12 and below
 * NEW: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Added ability to reuse random numbers
 ** {rand n} reuse a random output, where n is the nth {rand} used excluding this format
 

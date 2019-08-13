@@ -79,11 +79,14 @@ public class RMBukkitTools {
 
     public static boolean compareItemMatrix(ItemStack[] ingredients, ItemStack[] matrix) {
         for (int i = 0; i < 9; i++) {
-            if (matrix[i] == null && ingredients[i] == null) {
+            ItemStack matrixItem = matrix[i];
+            ItemStack ingredientItem = ingredients[i];
+
+            if (matrixItem == null && ingredientItem == null) {
                 continue;
             }
 
-            if (matrix[i] == null || ingredients[i] == null || ingredients[i].getType() != matrix[i].getType() || (ingredients[i].getDurability() != RMCVanilla.DATA_WILDCARD && ingredients[i].getDurability() != matrix[i].getDurability())) {
+            if (matrixItem == null || ingredientItem == null || ingredientItem.getType() != matrixItem.getType() || (ingredientItem.getDurability() != RMCVanilla.DATA_WILDCARD && matrixItem.getDurability() != RMCVanilla.DATA_WILDCARD && ingredientItem.getDurability() != matrixItem.getDurability())) {
                 return false;
             }
         }
