@@ -107,9 +107,11 @@ craft:
         random: '<light_purple><underline>You will get a random item:'
     list:
       item: <dark_green>{chance} <green>{item} {clone}
-      secrets: <dark_aqua>{num} secret item(s)
+      secret: <dark_aqua>{num} secret item
+      secrets: <dark_aqua>{num} secret items
       failure: <red>{chance} Failure chance
-      unavailable: <dark_red>{num} unavailable item(s)
+      unavailable: <dark_red>{num} unavailable item
+      unavailables: <dark_red>{num} unavailable items
 item:
   anydata: <gray>any
 recipebook:

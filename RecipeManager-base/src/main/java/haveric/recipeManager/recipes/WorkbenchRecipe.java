@@ -56,6 +56,11 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), reasons);
         }
 
+        boolean recipeHasSecret = false;
+        if (hasFlag(FlagType.SECRET)) {
+            recipeHasSecret = true;
+        }
+
         List<ItemResult> displayResults = new ArrayList<>();
         float failChance = 0;
         int secretNum = 0;
@@ -64,13 +69,14 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         float unavailableChance = 0;
         int displayNum;
 
-        for (ItemResult r : getResults()) {
+        List<ItemResult> itemResults = getResults();
+        for (ItemResult r : itemResults) {
             r = r.clone();
             a.clearReasons();
             a.setResult(r);
 
             if (r.checkFlags(a)) {
-                if (r.hasFlag(FlagType.SECRET)) {
+                if (recipeHasSecret || r.hasFlag(FlagType.SECRET)) {
                     secretNum++;
                     secretChance += r.getChance();
                 } else if (r.getType() == Material.AIR) {
@@ -89,27 +95,29 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         displayNum = displayResults.size();
         boolean receive = (secretNum + displayNum) > 0;
 
-        FlagDisplayResult flag;
+        FlagDisplayResult displayResultFlag;
         if (a.hasRecipe()) {
-            flag = (FlagDisplayResult) a.recipe().getFlag(FlagType.DISPLAY_RESULT);
+            displayResultFlag = (FlagDisplayResult) a.recipe().getFlag(FlagType.DISPLAY_RESULT);
         } else {
-            flag = null;
+            displayResultFlag = null;
         }
 
         ItemResult displayResult = null;
-        if (flag == null) {
+        if (displayResultFlag == null) {
             if (displayNum > 0) {
                 displayResult = displayResults.get(0);
+            } else if (secretNum > 0 && secretNum == itemResults.size()) {
+                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
             } else {
                 ItemStack air = new ItemStack(Material.AIR);
                 return new ItemResult(air);
             }
         } else {
-            if (!receive && flag.isSilentFail()) {
+            if (!receive && displayResultFlag.isSilentFail()) {
                 return null;
             }
 
-            ItemStack display = flag.getDisplayItem();
+            ItemStack display = displayResultFlag.getDisplayItem();
 
             if (display != null) {
                 displayResult = new ItemResult(display);
@@ -123,16 +131,17 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             return new ItemResult(air);
         }
 
-        if (flag != null || this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+        if (displayResultFlag != null || this.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
             return displayResult;
         }
+
 
         if (unavailableNum == 0) {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
-            }/* else if (secretNum == 1 && displayNum == 0) { // TODO: Potential bug here
-                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().get("craft.result.receive.title.unknown"));
-            }*/
+            } else if (secretNum > 0 && secretNum == itemResults.size()) {
+                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
+            }
 
         }/* else if (displayNum == 1) {
             return ToolsItem.create(displayResult.getType(), 0, displayAmount, displayResult.getItemMeta().getDisplayName());
@@ -160,11 +169,23 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         }
 
         if (secretNum > 0) {
-            lore.add(Messages.getInstance().parse("craft.result.list.secrets", "{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
+            String message;
+            if (secretNum == 1) {
+                message = "craft.result.list.secret";
+            } else {
+                message = "craft.result.list.secrets";
+            }
+            lore.add(Messages.getInstance().parse(message, "{chance}", formatChance(secretChance), "{num}", String.valueOf(secretNum)));
         }
 
         if (unavailableNum > 0) {
-            lore.add(Messages.getInstance().parse("craft.result.list.unavailable", "{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
+            String message;
+            if (unavailableNum == 1) {
+                message = "craft.result.list.unavailable";
+            } else {
+                message = "craft.result.list.unavailables";
+            }
+            lore.add(Messages.getInstance().parse(message, "{chance}", formatChance(unavailableChance), "{num}", String.valueOf(unavailableNum)));
         }
 
         Material displayMaterial;

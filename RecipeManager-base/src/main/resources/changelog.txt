@@ -12,7 +12,8 @@ This file will be automatically overwritten when a new version is installed.
 ** This should be the last of recipes being disabled from shift clicking
 * FIX: Improved shift click crafting overall. If the inventory doesn't have room, results will be dropped on the ground
 * FIX: Move recipe error messages from player messages to the item lore and add clearer messages
-* FIX: @Override, @Remove, @Restrict Fixed shaped recipe matching for 1.12 and below
+* FIX: @Override, @Remove, @Restrict: Fixed shaped recipe matching for 1.12 and below
+* FIX: @Secret: Fixed secret result not showing when set on recipe or all results. Added singular message variant
 * NEW: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Added ability to reuse random numbers
 ** {rand n} reuse a random output, where n is the nth {rand} used excluding this format
 * Misc. cleanup and bugfixes
