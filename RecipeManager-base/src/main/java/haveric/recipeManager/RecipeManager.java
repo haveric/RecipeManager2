@@ -320,8 +320,17 @@ public class RecipeManager extends JavaPlugin {
 
             Settings.clean();
 
-            Econ.getInstance().clean();
-            Perms.getInstance().clean();
+            try {
+                Econ.getInstance().clean();
+            } catch (NoClassDefFoundError e) {
+                // Ignore missing class on stop
+            }
+
+            try {
+                Perms.getInstance().clean();
+            } catch (NoClassDefFoundError e) {
+                // Ignore missing class on stop
+            }
 
             plugin = null;
         } catch (Throwable e) {
