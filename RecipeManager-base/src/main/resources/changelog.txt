@@ -7,13 +7,15 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: noname and nolocalizedname condition checks
 * FIX: update 'item aliases.yml' to include names for id conversions to prevent id being used in messages
 * FIX: @CustomModelData wasn't being loaded correctly
-* Fix: @IndividualResults wasn't setting names/lores correctly and now supports shift click crafting
-* Fix: Multi-result recipes flag support and now supports shift click crafting
-* Fix: Improved shift click crafting overall. If the inventory doesn't have room, results will be dropped on the ground
-* Fix: Move recipe error messages from player messages to the item lore and add clearer messages
-* Fix: @Override, @Remove, @Restrict Fixed shaped recipe matching for 1.12 and below
+* FIX: @IndividualResults wasn't setting names/lores correctly and now supports shift click crafting
+* FIX: Multi-result recipes flag support and now supports shift click crafting
+** This should be the last of recipes being disabled from shift clicking
+* FIX: Improved shift click crafting overall. If the inventory doesn't have room, results will be dropped on the ground
+* FIX: Move recipe error messages from player messages to the item lore and add clearer messages
+* FIX: @Override, @Remove, @Restrict Fixed shaped recipe matching for 1.12 and below
 * NEW: @ItemName, @ItemLore, @Command, @Message, @Broadcast: Added ability to reuse random numbers
 ** {rand n} reuse a random output, where n is the nth {rand} used excluding this format
+* Misc. cleanup and bugfixes
 
 === v2.16.0 ===
 * FIX: data/durability not being set in 1.13/1.14 shaped/shapeless recipes
