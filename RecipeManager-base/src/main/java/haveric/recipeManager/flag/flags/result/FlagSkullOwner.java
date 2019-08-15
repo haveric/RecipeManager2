@@ -36,7 +36,9 @@ public class FlagSkullOwner extends Flag {
             "If you set it to '{player}' then it will use crafter's name.",
             "",
             "For base64 textures, you can reference https://freshcoal.com/, https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository",
-            "  You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those", };
+            "  You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those",
+            "",
+            "  WARNING: The texture parameter will conflict with " + FlagType.ITEM_NBT + " and whichever is used last will be the one that gets used.", };
     }
 
     @Override

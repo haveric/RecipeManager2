@@ -27,6 +27,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.HOLD_ITEM, new FlagHoldItem(), FlagBit.NONE, "hold");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.NO_VALUE_REQUIRED, "lore", "itemdesc");
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.NONE, "name", "displayname");
+        FlagFactory.getInstance().initializeFlag(FlagType.ITEM_NBT, new FlagItemNBT(), FlagBit.NONE, "nbt");
         FlagFactory.getInstance().initializeFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), FlagBit.NONE, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
         FlagFactory.getInstance().initializeFlag(FlagType.INVENTORY, new FlagInventory(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.KEEP_ITEM, new FlagKeepItem(), FlagBit.NONE, "returnitem", "replaceitem");

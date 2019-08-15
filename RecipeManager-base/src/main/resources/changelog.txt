@@ -5,6 +5,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: @SkullOwner: No longer needs data 3 in 1.13 and 1.14
 * NEW: @SkullOwner: Added aliases 'skull' and 'head'
 * NEW: @SkullOwner: Added texture <base64> option
+* NEW: @ItemNBT <nbtRaw>: Sets raw nbt data on the result.
+** See 'recipe flags.html' before using
 
 === v2.16.1 ===
 * FIX: nometa condition check on pre 1.14 servers (error with customModelData)
