@@ -35,6 +35,9 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static org.bukkit.Tag.REGISTRY_BLOCKS;
+import static org.bukkit.Tag.REGISTRY_ITEMS;
+
 /**
  * Collection of conversion and useful methods
  */
@@ -163,27 +166,52 @@ public class Tools {
         List<Material> choices = new ArrayList<>();
         for (String s : split) {
             String[] durSplit = s.trim().split(":");
-            value = durSplit[0];
+            value = durSplit[0].trim();
 
-            if (durSplit.length > 1) {
-                ErrorReporter.getInstance().warning("Ingredient data is no longer supported in 1.13 or newer. Ignoring data.", "Try using " + FlagType.INGREDIENT_CONDITION + " with the data attribute. Use the needed attribute if multiple of the same ingredient exist and need to be unique.");
-            }
-
-            Material material = Settings.getInstance().getMaterial(value);
-
-            if (material == null) {
-                material = Material.matchMaterial(value);
-            }
-
-            if (material == null) {
-                if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                    ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+            if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
+                String namespace;
+                String material;
+                if (durSplit.length > 2) {
+                    namespace = durSplit[1].trim();
+                    material = durSplit[2].trim();
+                } else {
+                    namespace = "minecraft";
+                    material = durSplit[1].trim();
                 }
 
-                return null;
-            }
+                NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
 
-            choices.add(material);
+                if (tag == null) {
+                    tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                }
+
+                if (tag == null) {
+                    ErrorReporter.getInstance().warning("Invalid tag: " + s);
+                } else {
+                    choices.addAll(tag.getValues());
+                }
+            } else {
+                if (durSplit.length > 1) {
+                    ErrorReporter.getInstance().warning("Ingredient data is no longer supported in 1.13 or newer. Ignoring data.", "Try using " + FlagType.INGREDIENT_CONDITION + " with the data attribute. Use the needed attribute if multiple of the same ingredient exist and need to be unique.");
+                }
+
+                Material material = Settings.getInstance().getMaterial(value);
+
+                if (material == null) {
+                    material = Material.matchMaterial(value);
+                }
+
+                if (material == null) {
+                    if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
+                        ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                    }
+
+                    return null;
+                }
+
+                choices.add(material);
+            }
         }
 
         return choices;
