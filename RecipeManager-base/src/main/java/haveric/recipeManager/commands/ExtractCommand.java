@@ -8,9 +8,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,6 +23,9 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+
+import static org.bukkit.Tag.REGISTRY_BLOCKS;
+import static org.bukkit.Tag.REGISTRY_ITEMS;
 
 public class ExtractCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -334,18 +335,61 @@ public class ExtractCommand implements CommandExecutor {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             List<Material> choices = materialChoice.getChoices();
 
-            int choicesSize = choices.size();
+            Tag<Material> tag = getChoiceTagMatch(choices, REGISTRY_BLOCKS);
+            if (tag == null) {
+                tag = getChoiceTagMatch(choices, REGISTRY_ITEMS);
+            }
 
-            for (int j = 0; j < choicesSize; j++) {
-                recipeString.append(parseMaterial(choices.get(j)));
+            if (tag == null) {
+                int choicesSize = choices.size();
 
-                if (j + 1 < choicesSize) {
-                    recipeString.append(", ");
+                for (int j = 0; j < choicesSize; j++) {
+                    recipeString.append(parseMaterial(choices.get(j)));
+
+                    if (j + 1 < choicesSize) {
+                        recipeString.append(", ");
+                    }
                 }
+            } else {
+                NamespacedKey key = tag.getKey();
+                String namespace = key.getNamespace();
+
+                recipeString.append("tag:");
+                if (!namespace.equals("minecraft")) {
+                    recipeString.append(namespace).append(":");
+                }
+
+                recipeString.append(key.getKey());
             }
         } else {
             recipeString.append("air");
         }
+    }
+
+    private Tag<Material> getChoiceTagMatch(List<Material> choices, String tagType) {
+        int choicesSize = choices.size();
+
+        Iterable<Tag<Material>> blockTags = Bukkit.getTags(tagType, Material.class);
+        for (Tag<Material> tag : blockTags) {
+            Set<Material> materials = tag.getValues();
+
+            if (choicesSize == materials.size()) {
+                int numMatches = 0;
+                for (Material material : choices) {
+                    if (materials.contains(material)) {
+                        numMatches++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (numMatches == choicesSize) {
+                    return tag;
+                }
+            }
+        }
+
+        return null;
     }
 
     private String parseMaterial(Material material) {
