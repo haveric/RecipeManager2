@@ -465,7 +465,9 @@ public class Files {
         s.append(NL).append("- <a href='#dyecolor'><b>DYE COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
-        s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
+        if (Version.has1_9Support()) {
+            s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
+        }
         if (Version.has1_13Support()) {
             s.append(NL).append("- <a href='#tags'><b>TAG LIST</b></a>");
         }
