@@ -26,6 +26,9 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static org.bukkit.Tag.REGISTRY_BLOCKS;
+import static org.bukkit.Tag.REGISTRY_ITEMS;
+
 public class Files {
     public static final String NL = System.getProperty("line.separator");
 
@@ -463,6 +466,9 @@ public class Files {
         s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
         s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
+        if (Version.has1_13Support()) {
+            s.append(NL).append("- <a href='#tags'><b>TAG LIST</b></a>");
+        }
 
         s.append(NL);
         s.append(NL);
@@ -632,6 +638,22 @@ public class Files {
 
             for (Particle p : Particle.values()) {
                 s.append(NL).append(' ').append(p.name());
+            }
+        }
+
+        if (Version.has1_13Support()) {
+            addNameIndexHeading(s, "tags", "TAG LIST", "Tag", "Tag");
+
+            s.append(NL).append("Blocks");
+            Iterable<Tag<Material>> blockTags = Bukkit.getTags(REGISTRY_BLOCKS, Material.class);
+            for (Tag<Material> tag : blockTags) {
+                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), tag.getValues()));
+            }
+
+            s.append(NL).append("Items");
+            Iterable<Tag<Material>> itemTags = Bukkit.getTags(REGISTRY_ITEMS, Material.class);
+            for (Tag<Material> tag : itemTags) {
+                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), tag.getValues()));
             }
         }
 
