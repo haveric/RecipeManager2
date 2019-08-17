@@ -447,27 +447,27 @@ public class Files {
 
         s.append("<title>Name index</title><pre style='font-family:Lucida Console;font-size:16px;width:100%;'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
-        s.append(NL).append("<h1>Name index</h1>");
+        s.append(NL).append("<h1>Name Index</h1>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods!");
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
         s.append(NL);
         s.append(NL).append("<hr>");
         s.append(NL);
         s.append(NL).append("<a name='contents'></a><h3>CONTENTS</h3>");
-        s.append(NL).append("- <a href='#material'><b>MATERIAL LIST</b></a>");
-        s.append(NL).append("- <a href='#enchantment'><b>ENCHANTMENTS LIST</b></a>");
-        s.append(NL).append("- <a href='#potiontype'><b>POTION TYPE LIST</b></a>");
-        s.append(NL).append("- <a href='#potioneffect'><b>POTION EFFECT TYPE LIST</b></a>");
-        s.append(NL).append("- <a href='#fireworkeffect'><b>FIREWORK EFFECT TYPE LIST</b></a>");
-        s.append(NL).append("- <a href='#biomes'><b>BIOMES LIST</b></a>");
-        s.append(NL).append("- <a href='#sound'><b>SOUND LIST</b></a>");
-        s.append(NL).append("- <a href='#entitytype'><b>ENTITY TYPE LIST</b></a>");
-        s.append(NL).append("- <a href='#dyecolor'><b>DYE COLOR LIST</b></a>");
-        s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
         s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
+        s.append(NL).append("- <a href='#biomes'><b>BIOMES LIST</b></a>");
+        s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
+        s.append(NL).append("- <a href='#dyecolor'><b>DYE COLOR LIST</b></a>");
+        s.append(NL).append("- <a href='#enchantment'><b>ENCHANTMENTS LIST</b></a>");
+        s.append(NL).append("- <a href='#entitytype'><b>ENTITY TYPE LIST</b></a>");
+        s.append(NL).append("- <a href='#fireworkeffect'><b>FIREWORK EFFECT TYPE LIST</b></a>");
+        s.append(NL).append("- <a href='#material'><b>MATERIAL LIST</b></a>");
         if (Version.has1_9Support()) {
             s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
         }
+        s.append(NL).append("- <a href='#potioneffect'><b>POTION EFFECT TYPE LIST</b></a>");
+        s.append(NL).append("- <a href='#potiontype'><b>POTION TYPE LIST</b></a>");
+        s.append(NL).append("- <a href='#sound'><b>SOUND LIST</b></a>");
         if (Version.has1_13Support()) {
             s.append(NL).append("- <a href='#tags'><b>TAG LIST</b></a>");
         }
@@ -476,32 +476,36 @@ public class Files {
         s.append(NL);
         s.append(NL).append("<hr>");
 
-        addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
-        s.append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
-        s.append(NL);
-        s.append(NL).append(String.format(" %-24s %-24s %-5s %s", "Name", "Alias", "Stack", "Max durability"));
+        addNameIndexHeading(s, "bannerpattern", "BANNER PATTERN LIST", "block/banner/PatternType", "PatternType");
+        for (PatternType p : PatternType.values()) {
+            s.append(NL).append(' ').append(p.name());
+        }
 
-        for (Material m : Material.values()) {
-            String alias = Settings.getInstance().getMaterialPrint(m);
+        addNameIndexHeading(s, "biomes", "BIOMES LIST", "block/Biome", "Biome");
+        s.append(NL).append(String.format("<b> %-5s %-24s</b>", "ID", "Name"));
 
-            String aliasString;
-            if (alias == null) {
-                aliasString = "";
-            } else {
-                aliasString = alias;
-            }
+        for (Biome b : Biome.values()) {
+            s.append(NL).append(String.format(" %-5d %-24s", b.ordinal(), b.name()));
+        }
 
-            String durabilityString = "";
-            if (m.getMaxDurability() != 0) {
-                durabilityString += m.getMaxDurability();
-            }
+        addNameIndexHeading(s, "chatcolor", "CHAT COLOR LIST", "ChatColor", "ChatColor");
+        s.append(NL).append(String.format("<b> %-16s %s</b>", "Name", "Color character"));
 
-            s.append(NL).append(String.format(" %-24s %-24s %-5d %s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
+        for (RMCChatColor c : RMCChatColor.values()) {
+            s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
+        }
+
+        addNameIndexHeading(s, "dyecolor", "DYE COLOR LIST", "DyeColor", "DyeColor");
+        s.append(NL).append(String.format("<b> %-17s %-6s</b>", "", "Color"));
+        s.append(NL).append(String.format("<b> %-14s %-4s %-4s %-4s %-12s %s</b>", "Name", "R", "G", " B", "Wool data", "Dye data"));
+
+        for (DyeColor c : DyeColor.values()) {
+            s.append(NL).append(String.format(" %-14s %-4d %-4d %-4d %-12d %d", c.name(), c.getColor().getRed(), c.getColor().getGreen(), c.getColor().getBlue(), c.getWoolData(), c.getDyeData()));
         }
 
         addNameIndexHeading(s, "enchantment", "ENCHANTMENTS LIST", "enchantments/Enchantment", "Enchantment");
         if (Version.has1_13Support()) {
-            s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", "Key", "Name", "Alias", "Item type", "Level range"));
+            s.append(NL).append(String.format("<b> %-26s %-26s %-24s %-12s %s</b>", "Key", "Name", "Alias", "Item type", "Level range"));
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
@@ -514,10 +518,10 @@ public class Files {
             for (Enchantment e : enchantments) {
                 EnchantmentTarget target = e.getItemTarget();
 
-                s.append(NL).append(String.format(" %-26s %-26s %-24s %-12s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
+                s.append(NL).append(String.format(" %-26s %-26s %-24s %-14s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         } else { // Key didn't exist yet in 1.12
-            s.append(NL).append(String.format(" %-26s %-24s %-12s %s", "Name", "Alias", "Item type", "Level range"));
+            s.append(NL).append(String.format(" %-26s %-24s %-14s %s", "Name", "Alias", "Item type", "Level range"));
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
@@ -541,8 +545,68 @@ public class Files {
             }
         }
 
+        addNameIndexHeading(s, "entitytype", "ENTITY TYPE LIST", "entity/EntityType", "EntityType");
+        s.append(NL).append(String.format("<b> %-5s %-24s %-24s %s</b>", "ID", "Constant", "Name", "Alive ?"));
+
+        for (EntityType e : EntityType.values()) {
+            if (e.getTypeId() > 0) {
+                s.append(NL).append(String.format(" %-5s %-24s %-24s %s", e.getTypeId(), e.name(), e.getName(), e.isAlive()));
+            }
+        }
+
+        addNameIndexHeading(s, "fireworkeffect", "FIREWORK EFFECT TYPE LIST", "FireworkEffect.Type", "Firework Effect Type");
+
+        for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
+            s.append(NL).append(' ').append(t.toString());
+        }
+
+        addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
+        s.append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
+        s.append(NL);
+        s.append(NL).append(String.format("<b> %-34s %-34s %-5s %s</b>", "Name", "Alias", "Stack", "Max durability"));
+
+        for (Material m : Material.values()) {
+            String alias = Settings.getInstance().getMaterialPrint(m);
+
+            String aliasString;
+            if (alias == null) {
+                aliasString = "";
+            } else {
+                aliasString = alias;
+            }
+
+            String durabilityString = "";
+            if (m.getMaxDurability() != 0) {
+                durabilityString += m.getMaxDurability();
+            }
+
+            s.append(NL).append(String.format(" %-34s %-34s %-5d %s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
+        }
+
+        if (Version.has1_9Support()) {
+            addNameIndexHeading(s, "particle", "PARTICLE LIST", "Particle", "Particle");
+
+            for (Particle p : Particle.values()) {
+                s.append(NL).append(' ').append(p.name());
+            }
+        }
+
+        addNameIndexHeading(s, "potioneffect", "POTION EFFECT TYPE LIST", "potion/PotionEffect", "PotionEffect");
+        s.append(NL).append(String.format("<b> %-5s %-24s %-10s %s</b>", "ID", "Name", "Instant ?", "Duration modifier"));
+
+        for (PotionEffectType t : PotionEffectType.values()) {
+            if (t != null) {
+                s.append(NL).append(String.format(" %-5d %-24s %-10s %.2f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
+            }
+        }
+
+        s.append(NL);
+        s.append(NL).append("NOTE: The duration is compensated when setting potions in flags, so when using 2 seconds it will last 2 seconds regardless of effect type.");
+        s.append(NL);
+        s.append(NL).append("More about potions, effects and custom effects: <a href=\"https://minecraft.gamepedia.com/Status_effect\">https://minecraft.gamepedia.com/Status_effect</a>");
+
         addNameIndexHeading(s, "potiontype", "POTION TYPE LIST", "potion/PotionType", "PotionType");
-        s.append(NL).append(String.format(" %-5s %-24s %-10s %-10s %-16s", "ID", "Name", "Instant ?", "Max level", "Effect type"));
+        s.append(NL).append(String.format("<b> %-5s %-24s %-10s %-10s %-16s</b>", "ID", "Name", "Instant ?", "Max level", "Effect type"));
 
         for (PotionType t : PotionType.values()) {
             if (t != null) {
@@ -556,35 +620,7 @@ public class Files {
             }
         }
 
-        addNameIndexHeading(s, "potioneffect", "POTION EFFECT TYPE LIST", "potion/PotionEffect", "PotionEffect");
-        s.append(NL).append(String.format(" %-5s %-24s %-10s %s", "ID", "Name", "Instant ?", "Duration modifier"));
-
-        for (PotionEffectType t : PotionEffectType.values()) {
-            if (t != null) {
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %.2f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
-            }
-        }
-
-        s.append(NL);
-        s.append(NL).append("NOTE: The duration is compensated when setting potions in flags, so when using 2 seconds it will last 2 seconds regardless of effect type.");
-        s.append(NL);
-        s.append(NL).append("More about potions, effects and custom effects: http://www.minecraftwiki.net/wiki/Potion_effects");
-
-        addNameIndexHeading(s, "fireworkeffect", "FIREWORK EFFECT TYPE LIST", "FireworkEffect.Type", "Firework Effect Type");
-
-        for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
-            s.append(NL).append(' ').append(t.toString());
-        }
-
-        addNameIndexHeading(s, "biomes", "BIOMES LIST", "block/Biome", "Biome");
-        s.append(NL).append(String.format(" %-5s %-24s", "ID", "Name"));
-
-        for (Biome b : Biome.values()) {
-            s.append(NL).append(String.format(" %-5d %-24s", b.ordinal(), b.name()));
-        }
-
         addNameIndexHeading(s, "sound", "SOUND LIST", "Sound", "Sound");
-
         Sound[] sounds = Sound.values();
 
         int soundsLength = sounds.length;
@@ -603,56 +639,19 @@ public class Files {
             if (i + 3 < soundsLength) {
                 sounds3 = sounds[i + 3].name();
             }
-            s.append(NL).append(String.format(" %-36s%-36s%-36s%s", sounds[i].name(), sounds1, sounds2, sounds3));
-        }
-
-        addNameIndexHeading(s, "entitytype", "ENTITY TYPE LIST", "entity/EntityType", "EntityType");
-        s.append(NL).append(String.format(" %-5s %-24s %-24s %s", "ID", "Constant", "Name", "Alive ?"));
-
-        for (EntityType e : EntityType.values()) {
-            if (e.getTypeId() > 0) {
-                s.append(NL).append(String.format(" %-5s %-24s %-24s %s", e.getTypeId(), e.name(), e.getName(), e.isAlive()));
-            }
-        }
-
-        addNameIndexHeading(s, "dyecolor", "DYE COLOR LIST", "DyeColor", "DyeColor");
-        s.append(NL).append(String.format(" %-16s %-12s %-12s %s", "Name", "Color R G B", "Wool data", "Dye data"));
-
-        for (DyeColor c : DyeColor.values()) {
-            s.append(NL).append(String.format(" %-14s %-4d %-4d %-4d %-12d %d", c.name(), c.getColor().getRed(), c.getColor().getGreen(), c.getColor().getBlue(), c.getWoolData(), c.getDyeData()));
-        }
-
-        addNameIndexHeading(s, "chatcolor", "CHAT COLOR LIST", "ChatColor", "ChatColor");
-        s.append(NL).append(String.format(" %-16s %s", "Name", "Color character"));
-
-        for (RMCChatColor c : RMCChatColor.values()) {
-            s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
-        }
-
-        addNameIndexHeading(s, "bannerpattern", "BANNER PATTERN LIST", "block/banner/PatternType", "PatternType");
-
-        for (PatternType p : PatternType.values()) {
-            s.append(NL).append(' ').append(p.name());
-        }
-
-        if (Version.has1_9Support()) {
-            addNameIndexHeading(s, "particle", "PARTICLE LIST", "Particle", "Particle");
-
-            for (Particle p : Particle.values()) {
-                s.append(NL).append(' ').append(p.name());
-            }
+            s.append(NL).append(String.format(" %-46s%-46s%-46s%s", sounds[i].name(), sounds1, sounds2, sounds3));
         }
 
         if (Version.has1_13Support()) {
             addNameIndexHeading(s, "tags", "TAG LIST", "Tag", "Tag");
 
-            s.append(NL).append("Blocks");
+            s.append(NL).append("<b>Blocks</b>");
             Iterable<Tag<Material>> blockTags = Bukkit.getTags(REGISTRY_BLOCKS, Material.class);
             for (Tag<Material> tag : blockTags) {
                 s.append(NL).append(String.format(" %-36s %s", tag.getKey(), tag.getValues()));
             }
 
-            s.append(NL).append("Items");
+            s.append(NL).append(NL).append("<b>Items</b>");
             Iterable<Tag<Material>> itemTags = Bukkit.getTags(REGISTRY_ITEMS, Material.class);
             for (Tag<Material> tag : itemTags) {
                 s.append(NL).append(String.format(" %-36s %s", tag.getKey(), tag.getValues()));
