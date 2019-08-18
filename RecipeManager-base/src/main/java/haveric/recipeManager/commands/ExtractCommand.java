@@ -355,7 +355,7 @@ public class ExtractCommand implements CommandExecutor {
                 String namespace = key.getNamespace();
 
                 recipeString.append("tag:");
-                if (!namespace.equals("minecraft")) {
+                if (!namespace.equals(NamespacedKey.MINECRAFT)) {
                     recipeString.append(namespace).append(":");
                 }
 

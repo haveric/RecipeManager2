@@ -175,7 +175,7 @@ public class Tools {
                     namespace = durSplit[1].trim();
                     material = durSplit[2].trim();
                 } else {
-                    namespace = "minecraft";
+                    namespace = NamespacedKey.MINECRAFT;
                     material = durSplit[1].trim();
                 }
 
