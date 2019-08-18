@@ -471,7 +471,7 @@ public class Files {
         s.append(NL).append("- <a href='#potiontype'><b>POTION TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#sound'><b>SOUND LIST</b></a>");
         if (Version.has1_13Support()) {
-            s.append(NL).append("- <a href='#tags'><b>TAG LIST</b></a>");
+            s.append(NL).append("- <a href='#tag'><b>TAG LIST</b></a>");
         }
 
         s.append(NL);
@@ -645,7 +645,7 @@ public class Files {
         }
 
         if (Version.has1_13Support()) {
-            addNameIndexHeading(s, "tags", "TAG LIST", "Tag", "Tag");
+            addNameIndexHeading(s, "tag", "TAG LIST", "Tag", "Tag");
 
             s.append(NL).append("<b>Blocks</b>");
             Iterable<Tag<Material>> blockTags = Bukkit.getTags(REGISTRY_BLOCKS, Material.class);
