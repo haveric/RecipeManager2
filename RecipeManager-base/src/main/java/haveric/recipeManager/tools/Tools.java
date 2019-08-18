@@ -247,43 +247,100 @@ public class Tools {
         List<Material> choices = new ArrayList<>();
         int amount = 1;
         int choicesSize = split.length;
+        String amountString = null;
         for (int i = 0; i < choicesSize; i++) {
             String[] durSplit = split[i].trim().split(":");
             value = durSplit[0];
 
-            Material material = Settings.getInstance().getMaterial(value);
-
-            if (material == null) {
-                material = Material.matchMaterial(value);
-            }
-
-            if (material == null) {
-                if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                    ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+            // Formats
+            // tag:namespace:tagname:amount
+            // tag:tagname:amount
+            // tag:namespace:tagname
+            // tag:tagname
+            if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
+                String namespace;
+                String material;
+                if (durSplit.length > 4) {
+                    ErrorReporter.getInstance().warning("Invalid tag format: " + split[i]);
+                    continue;
+                } else if (durSplit.length == 4) {
+                    namespace = durSplit[1].trim();
+                    material = durSplit[2].trim();
+                    amountString = durSplit[3].trim();
+                } else if (durSplit.length == 3) {
+                    try {
+                        Integer.parseInt(durSplit[2].trim());
+                        amountString = durSplit[2].trim();
+                        namespace = NamespacedKey.MINECRAFT;
+                        material = durSplit[1].trim();
+                    } catch (NumberFormatException e) {
+                        namespace = durSplit[1].trim();
+                        material = durSplit[2].trim();
+                    }
+                } else {
+                    namespace = NamespacedKey.MINECRAFT;
+                    material = durSplit[1].trim();
                 }
 
-                return null;
+                NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
+
+                if (tag == null) {
+                    tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                }
+
+                if (tag == null) {
+                    ErrorReporter.getInstance().warning("Invalid tag: " + split[i]);
+                } else {
+                    choices.addAll(tag.getValues());
+                }
+            } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
+                String alias = durSplit[1].trim();
+                List<Material> materials = Settings.getInstance().getChoicesAlias(alias);
+
+                if (materials == null) {
+                    ErrorReporter.getInstance().warning("Invalid alias: " + split[i]);
+                } else {
+                    choices.addAll(materials);
+                }
+
+                if (durSplit.length == 3) {
+                    amountString = durSplit[2].trim();
+                }
+            } else {
+                Material material = Settings.getInstance().getMaterial(value);
+
+                if (material == null) {
+                    material = Material.matchMaterial(value);
+                }
+
+                if (material == null) {
+                    if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
+                        ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                    }
+
+                    return null;
+                }
+
+                choices.add(material);
+
+                if (durSplit.length == 2) {
+                    amountString = durSplit[1].trim();
+                } else if (durSplit.length == 3) {
+                    ErrorReporter.getInstance().warning("Data is no longer supported on ingredients. " + durSplit[1].trim() + " ignored. Using " + durSplit[2].trim() + " for amount.");
+                    amountString = durSplit[2].trim();
+                }
             }
 
-            choices.add(material);
-
-            if (durSplit.length > 1) {
+            if (amountString != null) {
                 if (i + 1 < choicesSize) {
                     ErrorReporter.getInstance().warning("Amount is only allowed on the last ingredient of a set. Ignoring amount.");
                 } else {
-                    String amountString;
-                    if (durSplit.length == 2) {
-                        amountString = durSplit[1].trim();
-                    } else {
-                        ErrorReporter.getInstance().warning("Data is no longer supported on ingredients. " + durSplit[1].trim() + " ignored. Using " + durSplit[2].trim() + " for amount.");
-                        amountString = durSplit[2].trim();
-                    }
-
                     try {
                         amount = Integer.parseInt(amountString);
                     } catch (NumberFormatException e) {
                         if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                            ErrorReporter.getInstance().warning("Item '" + durSplit[0] + "' has amount value that is not a number: " + amountString + ", defaulting to 1");
+                            ErrorReporter.getInstance().warning("Item '" + split[i] + "' has amount value that is not a number: " + amountString + ", defaulting to 1");
                         }
                     }
                 }
