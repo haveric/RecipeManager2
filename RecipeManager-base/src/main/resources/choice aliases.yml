@@ -1,0 +1,12 @@
+lastchanged: 2.17.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+#-------------------------------------------------------------------------------------------------------------------------
+# RecipeManager choice aliases
+#
+# This file defines groups of materials that can be used for recipe ingredients similar to tags
+#
+# Examples:
+# woodtools: wooden_axe, wooden_hoe, wooden_pickaxe, wooden_shovel, wooden_sword
+# axes: wooden_axe, stone_axe, iron_axe, golden_axe, diamond_axe
+#
+# Usage in ingredients: alias:woodtools or a:woodtools, alias:axes or a:axes
+#-------------------------------------------------------------------------------------------------------------------------

@@ -5,6 +5,8 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: Add tag support to ingredients in recipes (Use 'tag:' or 't:' before the tag name
 ** Tags are vanilla or datapack collections of materials (Tag names can be found in 'name index.html')
 ** Example: t:oak_logs (or t:minecraft:oak_logs) would be equivalent to "OAK_WOOD, STRIPPED_OAK_WOOD, STRIPPED_OAK_LOG, OAK_LOG"
+* NEW: Added 'choice aliases.yml' to create custom ingredient choice lists similar to tags
+** Instead of t: or tag:, use a: or alias: for these
 * FIX/NEW: 'name index.html': Added Tags, alphabetize lists, and improved formatting
 
 === v2.16.1 ===

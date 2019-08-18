@@ -191,6 +191,15 @@ public class Tools {
                 } else {
                     choices.addAll(tag.getValues());
                 }
+            } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
+                String alias = durSplit[1].trim();
+                List<Material> materials = Settings.getInstance().getChoicesAlias(alias);
+
+                if (materials == null) {
+                    ErrorReporter.getInstance().warning("Invalid alias: " + s);
+                } else {
+                    choices.addAll(materials);
+                }
             } else {
                 if (durSplit.length > 1) {
                     ErrorReporter.getInstance().warning("Ingredient data is no longer supported in 1.13 or newer. Ignoring data.", "Try using " + FlagType.INGREDIENT_CONDITION + " with the data attribute. Use the needed attribute if multiple of the same ingredient exist and need to be unique.");

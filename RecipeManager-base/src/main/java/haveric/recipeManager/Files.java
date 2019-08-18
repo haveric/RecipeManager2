@@ -36,6 +36,7 @@ public class Files {
 
     public static final String LASTCHANGED_CONFIG = "2.16.1";
     public static final String LASTCHANGED_MESSAGES = "2.16.1";
+    public static final String LASTCHANGED_CHOICE_ALIASES = "2.17.0";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.16.1";
     public static final String LASTCHANGED_ENCHANT_ALIASES = "2.15.0";
@@ -43,6 +44,7 @@ public class Files {
     public static final String FILE_CONFIG = "config.yml";
     public static final String FILE_MESSAGES = "messages.yml";
 
+    public static final String FILE_CHOICE_ALIASES = "choice aliases.yml";
     public static final String FILE_ITEM_DATAS = "item datas.yml";
     public static final String FILE_ITEM_ALIASES = "item aliases.yml";
     public static final String FILE_ENCHANT_ALIASES = "enchant aliases.yml";

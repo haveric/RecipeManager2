@@ -60,6 +60,7 @@ public class Settings {
     private static List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
 
     private static FileConfiguration fileConfig;
+    private static FileConfiguration choiceAliasesConfig;
     private static FileConfiguration itemDatasConfig;
     private static FileConfiguration itemAliasesConfig;
     private static FileConfiguration enchantAliasesConfig;
@@ -67,6 +68,7 @@ public class Settings {
 
     private static Map<Material, Short> itemDatas;
 
+    private static Map<String, List<Material>> choicesAliases;
     private static Map<String, Material> materialNames;
     private static Map<Material, Map<String, Short>> materialDataNames;
     private static Map<String, Enchantment> enchantNames;
@@ -101,6 +103,7 @@ public class Settings {
         MATERIAL_FAIL_DEFAULT = Material.BARRIER;
 
         itemDatas = new HashMap<>();
+        choicesAliases = new HashMap<>();
         materialNames = new HashMap<>();
         materialDataNames = new HashMap<>();
         enchantNames = new HashMap<>();
@@ -190,6 +193,42 @@ public class Settings {
                 }
             } else {
                 MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
+            }
+        }
+
+        choiceAliasesConfig = loadYML(Files.FILE_CHOICE_ALIASES);
+
+        if (!Files.LASTCHANGED_CHOICE_ALIASES.equals(choiceAliasesConfig.getString("lastchanged"))) {
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CHOICE_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+
+        for (String arg : choiceAliasesConfig.getKeys(false)) {
+            if (arg.equals("lastchanged")) {
+                continue;
+            }
+
+            String aliases = choiceAliasesConfig.getString(arg);
+            if (aliases != null) {
+                List<Material> materials = new ArrayList<>();
+                String[] materialSplit = aliases.split(",");
+                for (String materialString : materialSplit) {
+                    materialString = materialString.trim();
+                    Material material = getMaterial(materialString);
+
+                    if (material == null) {
+                        material = Material.matchMaterial(materialString);
+                    }
+
+                    if (material == null) {
+                        MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid material (or item alias) definition: " + arg);
+                    } else {
+                        materials.add(material);
+                    }
+                }
+
+                if (!materials.isEmpty()) {
+                    choicesAliases.put(arg.toLowerCase(), materials);
+                }
             }
         }
 
@@ -521,6 +560,10 @@ public class Settings {
         }
 
         return data;
+    }
+
+    public List<Material> getChoicesAlias(String alias) {
+        return choicesAliases.get(alias.toLowerCase());
     }
 
     public Material getMaterial(String name) {
