@@ -8,5 +8,16 @@ lastchanged: 2.17.0 # Please do not edit this value - it is used by the plugin t
 # woodtools: wooden_axe, wooden_hoe, wooden_pickaxe, wooden_shovel, wooden_sword
 # axes: wooden_axe, stone_axe, iron_axe, golden_axe, diamond_axe
 #
+# Format:
+# name: <item>, ...
+#
+# Allowed <item> formats include (in any combination):
+# material
+# alias:aliasname       // Chain aliases already defined
+# a:aliasname           // Same as above
+# tag:namespace:tagname // Include all materials from a tag
+# tag:tagname           // Defaults to namespace of minecraft
+# t:tagname             // Same as above
+#
 # Usage in ingredients: alias:woodtools or a:woodtools, alias:axes or a:axes
 #-------------------------------------------------------------------------------------------------------------------------

@@ -3,7 +3,10 @@ package haveric.recipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.bukkit.Tag.REGISTRY_BLOCKS;
+import static org.bukkit.Tag.REGISTRY_ITEMS;
 
 /**
  * RecipeManager's settings loaded from its config.yml, values are read-only.
@@ -213,16 +219,54 @@ public class Settings {
                 String[] materialSplit = aliases.split(",");
                 for (String materialString : materialSplit) {
                     materialString = materialString.trim();
-                    Material material = getMaterial(materialString);
 
-                    if (material == null) {
-                        material = Material.matchMaterial(materialString);
-                    }
+                    if (materialString.startsWith("tag:") || materialString.startsWith("t:")) {
+                        String tagString = materialString.substring(materialString.indexOf(":") + 1);
 
-                    if (material == null) {
-                        MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid material (or item alias) definition: " + arg);
+                        String[] tagSplit = tagString.split(":");
+                        String namespace;
+                        String material;
+                        if (tagSplit.length > 1) {
+                            namespace = tagSplit[0].trim();
+                            material = tagSplit[1].trim();
+                        } else {
+                            namespace = NamespacedKey.MINECRAFT;
+                            material = tagSplit[0].trim();
+                        }
+
+                        NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                        Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
+
+                        if (tag == null) {
+                            tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                        }
+
+                        if (tag == null) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid tag definition: " + arg);
+                        } else {
+                            materials.addAll(tag.getValues());
+                        }
+                    } else if (materialString.startsWith("alias:") || materialString.startsWith("a:")) {
+                        String aliasString = materialString.substring(materialString.indexOf(":") + 1);
+
+                        List<Material> choiceMaterials = getChoicesAlias(aliasString);
+                        if (choiceMaterials == null) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid choice alias definition: " + arg);
+                        } else {
+                            materials.addAll(choiceMaterials);
+                        }
                     } else {
-                        materials.add(material);
+                        Material material = getMaterial(materialString);
+
+                        if (material == null) {
+                            material = Material.matchMaterial(materialString);
+                        }
+
+                        if (material == null) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid material (or item alias) definition: " + arg);
+                        } else {
+                            materials.add(material);
+                        }
                     }
                 }
 
@@ -563,7 +607,7 @@ public class Settings {
     }
 
     public List<Material> getChoicesAlias(String alias) {
-        return choicesAliases.get(alias.toLowerCase());
+        return choicesAliases.get(alias.trim().toLowerCase());
     }
 
     public Material getMaterial(String name) {
