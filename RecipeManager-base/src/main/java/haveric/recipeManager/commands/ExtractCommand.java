@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -253,48 +254,15 @@ public class ExtractCommand implements CommandExecutor {
                 stream.write("//@restrict // prevents recipes from being used with a notification, you can also set a custom message." + Files.NL);
                 stream.write("//@override // overwrites recipe to allow result change and adding flags to it." + Files.NL);
 
-                stream.write("//---------------------------------------------------" + Files.NL + "// Craft recipes" + Files.NL + Files.NL);
-
-                for (String str : parsedCraftRecipes) {
-                    stream.write(str);
-                }
-
-                stream.write("//---------------------------------------------------" + Files.NL + "// Combine recipes" + Files.NL + Files.NL);
-
-                for (String str : parsedCombineRecipes) {
-                    stream.write(str);
-                }
-
-                stream.write("//---------------------------------------------------" + Files.NL + "// Smelt recipes" + Files.NL + Files.NL);
-
-                for (String str : parsedSmeltRecipes) {
-                    stream.write(str);
-                }
+                writeRecipes(stream, parsedCraftRecipes, "Craft");
+                writeRecipes(stream, parsedCombineRecipes, "Combine");
+                writeRecipes(stream, parsedSmeltRecipes, "Smelt");
 
                 if (Version.has1_14Support()) {
-                    stream.write("//---------------------------------------------------" + Files.NL + "// Blasting recipes" + Files.NL + Files.NL);
-
-                    for (String str : parsedBlastingRecipes) {
-                        stream.write(str);
-                    }
-
-                    stream.write("//---------------------------------------------------" + Files.NL + "// Smoking recipes" + Files.NL + Files.NL);
-
-                    for (String str : parsedSmokingRecipes) {
-                        stream.write(str);
-                    }
-
-                    stream.write("//---------------------------------------------------" + Files.NL + "// Campfire recipes" + Files.NL + Files.NL);
-
-                    for (String str : parsedCampfireRecipes) {
-                        stream.write(str);
-                    }
-
-                    stream.write("//---------------------------------------------------" + Files.NL + "// Stonecutting recipes" + Files.NL + Files.NL);
-
-                    for (String str : parsedStonecuttingRecipes) {
-                        stream.write(str);
-                    }
+                    writeRecipes(stream, parsedBlastingRecipes, "Blasting");
+                    writeRecipes(stream, parsedSmokingRecipes, "Smoking");
+                    writeRecipes(stream, parsedCampfireRecipes, "Campfire");
+                    writeRecipes(stream, parsedStonecuttingRecipes, "Stonecutting");
                 }
 
                 stream.close();
@@ -306,6 +274,14 @@ public class ExtractCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    private void writeRecipes(BufferedWriter stream, List<String> recipes, String recipeType) throws IOException {
+        stream.write("//---------------------------------------------------" + Files.NL + "// " + recipeType + " recipes" + Files.NL + Files.NL);
+
+        for (String str : recipes) {
+            stream.write(str);
+        }
     }
 
     private String parseIngredient(ItemStack item) {
