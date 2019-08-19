@@ -9,6 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Instead of t: or tag:, use a: or alias: for these
 ** Choice aliases can chain tags or previously defined aliases
 * FIX/NEW: 'name index.html': Added Tags, alphabetize lists, and improved formatting
+* FIX/NEW: Improved special recipe support for 1.12. Added banner-duplicate, firework-star-fade, and suspicious-stew to config.yml
 
 === v2.16.1 ===
 * FIX: nometa condition check on pre 1.14 servers (error with customModelData)

@@ -9,18 +9,22 @@ lastchanged: 2.16.1 # Please do not edit this value - it is used by the plugin t
 
 # Enable/disable special recipes
 special-recipes:
-  repair: true               # Weapon/tool repair (these aren't actual recipes)
-  repair-metadata: false     # Weapon/tool repairing while preserving metadata (enchantments, name, etc), if both items have metadata, the first item's metadata will be preserved (ordering is from top left to bottom right)
-  leather-armor-dye: true    # leather armor dyeing recipes
+  banner: true               # banner pattern recipes (Only affects 1.13 or earlier. Replaced with loom recipes in 1.14)
+  banner-duplicate: true     # banner duplicate/cloning recipes
+  book-cloning: true         # clone books recipes
   fireworks: true            # fireworks recipes
   firework-star: true        # firework star recipes
+  firework-star-fade: true   # firework star fade recipes
+  leather-armor-dye: true    # leather armor dyeing recipes
   map-cloning: true          # clone maps recipes
   map-extending: true        # extend maps recipes
-  book-cloning: true         # clone books recipes
-  banner: true               # banner recipes
-  shield-banner: true        # shield banner recipes
-  tipped-arrows: true        # tipped/potion arrows recipes
+  repair: true               # Weapon/tool repair (these aren't actual recipes)
+  repair-metadata: false     # Weapon/tool repairing while preserving metadata (enchantments, name, etc), if both items have metadata, the first item's metadata will be preserved (ordering is from top left to bottom right)
+  shield-banner: true        # shield decoration (banner) recipes
   shulker-dye: true          # shulker dying recipes
+  suspicious-stew: true      # suspicious stew recipes
+  tipped-arrows: true        # tipped/potion arrows recipes
+
 
 # When to play some additional sounds
 sounds:

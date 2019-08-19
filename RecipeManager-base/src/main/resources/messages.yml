@@ -85,15 +85,18 @@ craft:
     leatherdye: <red>Leather dyeing is disabled.
     fireworks: <red>Firework crafting is disabled.
     fireworkstar: <red>Firework star crafting is disabled.
+    fireworkstarfade: <red>Firework star fade crafting is disabled.
     map:
       cloning: <red>Map cloning is disabled.
       extending: <red>Map extending is disabled.
     book:
       cloning: <red>Book cloning is disabled.
     banner: <red>Banner crafting is disabled.
+    bannerduplicate: <red>Banner duplicate crafting is disabled.
     shieldbanner: <red>Shield Banner crafting is disabled.
     tippedarrows: <red>Tipped arrows crafting is disabled.
     shulkerdye: <red>Shulker dying is disabled.
+    suspiciousstew: <red>Suspicious Stew crafting is disabled.
   result:
     denied:
       title: <yellow><underline>You can't craft this recipe!
