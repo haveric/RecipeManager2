@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -344,5 +345,9 @@ public class Flag implements Cloneable {
             meta.setLore(newLore);
             a.result().setItemMeta(meta);
         }
+    }
+
+    protected void addNBTRaw(Args a, String nbtRaw) {
+        Bukkit.getUnsafe().modifyItemStack(a.result(), nbtRaw);
     }
 }

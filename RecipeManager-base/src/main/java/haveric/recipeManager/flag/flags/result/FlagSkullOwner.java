@@ -6,16 +6,10 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Version;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Iterator;
 import java.util.UUID;
 
 public class FlagSkullOwner extends Flag {
@@ -29,26 +23,36 @@ public class FlagSkullOwner extends Flag {
     protected String[] getArguments() {
         return new String[] {
             "{flag} <name>",
-            "{flag} <uuid>"};
+            "{flag} <uuid>",
+            "{flag} texture <base64>",
+            "{flag} <name> | texture <base64>",
+            "{flag} <uuid> | texture <base64>"};
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
             "Sets the human skull's owner to apply the skin.",
-            "If you set it to '{player}' then it will use crafter's name.", };
+            "If you set it to '{player}' then it will use crafter's name.",
+            "",
+            "For base64 textures, you can reference https://freshcoal.com/, https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository",
+            "  You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those",
+            "",
+            "  WARNING: The texture parameter will conflict with " + FlagType.ITEM_NBT + " and whichever is used last will be the one that gets used.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag} Notch",
-            "{flag} {player}", };
+            "{flag} {player}",
+            "{flag} texture eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzBiOGI1ODg5ZWUxYzYzODhkYzZjMmM1ZGJkNzBiNjk4NGFlZmU1NDMxOWEwOTVlNjRkYjc2MzgwOTdiODIxIn19fQ== // Jam texture", };
     }
 
 
     private String owner;
     private UUID ownerUUID;
+    private String textureBase64;
 
     public FlagSkullOwner() {
     }
@@ -56,6 +60,7 @@ public class FlagSkullOwner extends Flag {
     public FlagSkullOwner(FlagSkullOwner flag) {
         owner = flag.owner;
         ownerUUID = flag.ownerUUID;
+        textureBase64 = flag.textureBase64;
     }
 
     @Override
@@ -87,12 +92,31 @@ public class FlagSkullOwner extends Flag {
         ownerUUID = newOwnerUUID;
     }
 
+    public String getTextureBase64() {
+        return textureBase64;
+    }
+
+    public void setTextureBase64(String base64) {
+        textureBase64 = base64;
+    }
+
+    public boolean hasTextureBase64() {
+        return textureBase64 != null;
+    }
+
     @Override
     public boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || !(result.getItemMeta() instanceof SkullMeta) || result.getDurability() != 3) {
-            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a SKULL_ITEM with data value 3 to work!");
+        if (Version.has1_13Support()) {
+            if (result == null || !(result.getItemMeta() instanceof SkullMeta)) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a PLAYER_HEAD");
+            }
+
+        } else {
+            if (result == null || !(result.getItemMeta() instanceof SkullMeta) || result.getDurability() != 3) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a SKULL_ITEM with data value 3 to work!");
+            }
         }
 
         return true;
@@ -100,11 +124,22 @@ public class FlagSkullOwner extends Flag {
 
     @Override
     public boolean onParse(String value) {
-        String[] components = value.split("-");
-        if (components.length == 5) {
-            setOwnerUUID(UUID.fromString(value));
-        } else {
-            setOwner(value);
+        String[] args = value.split("\\|");
+
+        for (String arg : args) {
+            arg = arg.trim();
+
+            if (arg.toLowerCase().startsWith("texture")) {
+                String texture = arg.substring("texture".length()).trim();
+                setTextureBase64(texture);
+            } else {
+                String[] components = arg.split("-");
+                if (components.length == 5) {
+                    setOwnerUUID(UUID.fromString(arg));
+                } else {
+                    setOwner(arg);
+                }
+            }
         }
 
         return true;
@@ -132,7 +167,6 @@ public class FlagSkullOwner extends Flag {
                 }
 
                 offlinePlayer = Bukkit.getOfflinePlayer(a.playerUUID());
-                owner = offlinePlayer.getName();
             } else {
                 owner = getOwner();
             }
@@ -140,55 +174,28 @@ public class FlagSkullOwner extends Flag {
             offlinePlayer = Bukkit.getOfflinePlayer(getOwnerUUID());
         }
 
-        Player player = a.player();
-        Location playerLocation = player.getLocation();
-        Location loc = new Location(player.getWorld(), playerLocation.getBlockX(), 0, playerLocation.getBlockZ());
-        Block block = loc.getBlock();
-        BlockState originalState = block.getState();
+        String name = "";
+        UUID uuid = null;
+        String id = "";
+        String texture = "";
 
-        // Sets the block to the skull and retrieves the updated ItemStack from the drops.
-        // This is needed because setOwner will not update the inventory texture.
-
-        Material skullMaterial;
-        if (Version.has1_13BasicSupport()) {
-            skullMaterial = Material.PLAYER_HEAD;
-        } else {
-            skullMaterial = Material.getMaterial("SKULL");
+        if (hasTextureBase64()) {
+            texture = "Properties:{textures:[{Value:\"" + textureBase64 + "\"}]}";
+            uuid = new UUID(textureBase64.hashCode(), textureBase64.hashCode());
         }
 
-        block.setType(skullMaterial);
-        BlockState newState = block.getState();
-        if (Version.has1_12Support() && offlinePlayer != null) {
-            Skull skull = (Skull) newState;
-            skull.setSkullType(SkullType.PLAYER);
-            skull.setOwningPlayer(offlinePlayer);
-            skull.update();
-        } else {
-            //block.setData((byte) 3); // TODO: Replace data
-            Skull skull = (Skull) loc.getBlock().getState();
-            skull.setOwner(owner);
-            skull.update();
+        if (offlinePlayer != null) {
+            uuid = offlinePlayer.getUniqueId();
         }
 
-        Iterator<ItemStack> iter = loc.getBlock().getDrops().iterator();
-        ItemStack result = iter.next();
-
-        SkullMeta meta = (SkullMeta) result.getItemMeta();
-        if (!meta.hasOwner()) {
-            if (owner != null) {
-                meta.setOwner(owner);
-            }
-            if (offlinePlayer != null) {
-                meta.setOwningPlayer(offlinePlayer);
-            }
-            result.setItemMeta(meta);
+        if (uuid != null) {
+            id = "Id:\"" + uuid + "\",";
         }
 
-        ItemMeta cloned = result.getItemMeta().clone();
-        a.result().setItemMeta(cloned);
+        if (owner != null) {
+            name = "Name:\"" + owner + "\",";
+        }
 
-        block.setType(originalState.getType());
-        //block.setData(originalState.getRawData()); // TODO: Replace data
-        originalState.update();
+        addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");
     }
 }

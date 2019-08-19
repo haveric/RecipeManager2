@@ -2,6 +2,11 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+* FIX: @SkullOwner: No longer needs data 3 in 1.13 and 1.14
+* NEW: @SkullOwner: Added aliases 'skull' and 'head'
+* NEW: @SkullOwner: Added texture <base64> option
+* NEW: @ItemNBT <nbtRaw>: Sets raw nbt data on the result.
+** See 'recipe flags.html' before using
 * NEW: Add tag support to ingredients in recipes (Use 'tag:' or 't:' before the tag name
 ** Tags are vanilla or datapack collections of materials (Tag names can be found in 'name index.html')
 ** Example: t:oak_logs (or t:minecraft:oak_logs) would be equivalent to "OAK_WOOD, STRIPPED_OAK_WOOD, STRIPPED_OAK_LOG, OAK_LOG"
