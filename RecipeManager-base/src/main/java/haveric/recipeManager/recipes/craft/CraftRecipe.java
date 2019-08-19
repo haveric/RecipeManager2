@@ -201,7 +201,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                     height = Math.max(height, h);
 
                     str.append(item.getType().toString());
-                    if (!Version.has1_13Support() || item instanceof Damageable) {
+                    if (!Version.has1_13BasicSupport() || item instanceof Damageable) {
                         str.append(':').append(item.getDurability());
                     }
 
@@ -239,7 +239,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                 } else {
                     s.append(item.getType().toString().toLowerCase());
 
-                    if (!Version.has1_13Support() || item instanceof Damageable) {
+                    if (!Version.has1_13BasicSupport() || item instanceof Damageable) {
                         if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
                             s.append(':').append(item.getDurability());
                         }
@@ -368,7 +368,7 @@ public class CraftRecipe extends WorkbenchRecipe {
                 item = ingredients[(h * 3) + w];
 
                 if (item != null) {
-                    if (Version.has1_13Support()) {
+                    if (Version.has1_13BasicSupport()) {
                         if (item.getItemMeta() instanceof Damageable) {
                             bukkitRecipe.setIngredient(key, item.getType(), ((Damageable) item.getItemMeta()).getDamage());
                         } else {

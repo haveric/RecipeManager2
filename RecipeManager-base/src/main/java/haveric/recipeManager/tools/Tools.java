@@ -448,7 +448,7 @@ public class Tools {
 
         ItemStack item;
 
-        if (Version.has1_13Support() && data == RMCVanilla.DATA_WILDCARD) {
+        if (Version.has1_13BasicSupport() && data == RMCVanilla.DATA_WILDCARD) {
             item = new ItemStack(material, amount);
             ItemMeta meta = item.getItemMeta();
             if (meta instanceof Damageable) {
@@ -1222,7 +1222,7 @@ public class Tools {
     public static Sound getSound(String newSound) {
         Sound sound = null;
 
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             // set known sounds to make sure Enum isn't changing on us
             switch (newSound) {
                 case "BLOCK_NOTE_BASS":

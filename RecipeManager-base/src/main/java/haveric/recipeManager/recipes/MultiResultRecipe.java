@@ -105,7 +105,7 @@ public class MultiResultRecipe extends BaseRecipe {
 
                 s.append(result.getType().toString().toLowerCase());
 
-                if (!Version.has1_13Support() || result instanceof Damageable) {
+                if (!Version.has1_13BasicSupport() || result instanceof Damageable) {
                     if (result.getDurability() != 0) {
                         s.append(':').append(result.getDurability());
                     }

@@ -151,7 +151,7 @@ public class FlagBookItem extends Flag {
 
             String bookType;
             Material writableBookMaterial;
-            if (Version.has1_13Support()) {
+            if (Version.has1_13BasicSupport()) {
                 writableBookMaterial = Material.WRITABLE_BOOK;
                 bookType = "WRITABLE_BOOK";
             } else {

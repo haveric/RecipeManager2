@@ -80,7 +80,7 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), FlagBit.RESULT, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
         FlagFactory.getInstance().initializeFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT | FlagBit.NONE, "getbook", "bookresult");
         FlagFactory.getInstance().initializeFlag(FlagType.HIDE, new FlagHide(), FlagBit.RESULT);
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             FlagFactory.getInstance().initializeFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), FlagBit.RESULT, "attribute");
         }
         FlagFactory.getInstance().initializeFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), FlagBit.RESULT | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");

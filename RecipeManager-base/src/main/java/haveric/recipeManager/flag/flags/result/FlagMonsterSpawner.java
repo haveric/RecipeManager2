@@ -73,7 +73,7 @@ public class FlagMonsterSpawner extends Flag {
         ItemResult result = getResult();
 
         Material spawnerMaterial;
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             spawnerMaterial = Material.SPAWNER;
         } else {
             spawnerMaterial = Material.getMaterial("MOB_SPAWNER");

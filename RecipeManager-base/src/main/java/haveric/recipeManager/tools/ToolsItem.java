@@ -382,7 +382,7 @@ public class ToolsItem {
         }
 
         Material grayShulkerMaterial;
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             grayShulkerMaterial = Material.LIGHT_GRAY_SHULKER_BOX;
         } else {
             grayShulkerMaterial = Material.getMaterial("SILVER_SHULKER_BOX");

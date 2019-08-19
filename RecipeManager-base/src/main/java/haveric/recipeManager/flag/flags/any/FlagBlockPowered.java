@@ -106,14 +106,14 @@ public class FlagBlockPowered extends Flag {
         Material blockType = block.getType();
 
         Material craftingTableMaterial;
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             craftingTableMaterial = Material.CRAFTING_TABLE;
         } else {
             craftingTableMaterial = Material.getMaterial("WORKBENCH");
         }
 
         if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == craftingTableMaterial ||
-                (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE")) ||
+                (!Version.has1_13BasicSupport() && blockType == Material.getMaterial("BURNING_FURNACE")) ||
                 (Version.has1_14Support() && (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER || blockType == Material.CAMPFIRE))) {
 
             boolean valid;
@@ -129,7 +129,7 @@ public class FlagBlockPowered extends Flag {
                     blockName = "workbench";
                 } else if (blockType == Material.BREWING_STAND) {
                     blockName = "brewing stand";
-                } else if (blockType == Material.FURNACE || (!Version.has1_13Support() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
+                } else if (blockType == Material.FURNACE || (!Version.has1_13BasicSupport() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
                     blockName = "furnace";
                 } else if (Version.has1_14Support()) {
                     if (blockType == Material.BLAST_FURNACE) {

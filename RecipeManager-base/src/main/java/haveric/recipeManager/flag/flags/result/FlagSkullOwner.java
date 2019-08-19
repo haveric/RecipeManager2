@@ -150,7 +150,7 @@ public class FlagSkullOwner extends Flag {
         // This is needed because setOwner will not update the inventory texture.
 
         Material skullMaterial;
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             skullMaterial = Material.PLAYER_HEAD;
         } else {
             skullMaterial = Material.getMaterial("SKULL");

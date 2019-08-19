@@ -98,7 +98,7 @@ public class FlagLaunchFirework extends Flag {
     @Override
     public boolean onParse(String value) {
         Material fireworkMaterial;
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             fireworkMaterial = Material.FIREWORK_ROCKET;
         } else {
             fireworkMaterial = Material.getMaterial("FIREWORK");

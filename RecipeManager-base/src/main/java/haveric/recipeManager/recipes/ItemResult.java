@@ -61,7 +61,7 @@ public class ItemResult extends ItemStack implements Flaggable {
         setType(item.getType());
         setAmount(item.getAmount());
 
-        if (!Version.has1_13Support() || item instanceof Damageable) {
+        if (!Version.has1_13BasicSupport() || item instanceof Damageable) {
             setDurability(item.getDurability());
         }
 

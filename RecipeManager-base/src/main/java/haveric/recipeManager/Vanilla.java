@@ -125,7 +125,7 @@ public class Vanilla {
         addFuelRecipe(Material.DARK_OAK_FENCE_GATE, 15);
         addFuelRecipe(Material.ACACIA_FENCE_GATE, 15);
 
-        if (!Version.has1_13Support()) {
+        if (!Version.has1_13BasicSupport()) {
             addFuelRecipe("LOG", 15);
             addFuelRecipe("LOG_2", 15);
             addFuelRecipe("WOOD", 15);
@@ -156,7 +156,7 @@ public class Vanilla {
             addFuelRecipe(Material.FISHING_ROD, 15);
             addFuelRecipe(Material.BOWL, 5);
 
-            if (!Version.has1_13Support()) {
+            if (!Version.has1_13BasicSupport()) {
                 addFuelRecipe("WOOL", 5);
                 addFuelRecipe("CARPET", 3.35f);
                 addFuelRecipe("WOOD_BUTTON", 5);
@@ -179,7 +179,7 @@ public class Vanilla {
             }
         }
 
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             // Updated old fuels that got renamed in 1.13
             addFuelRecipe(Material.ACACIA_LOG, 15);
             addFuelRecipe(Material.BIRCH_LOG, 15);
@@ -370,7 +370,7 @@ public class Vanilla {
     }
 
     private static void initSpecialRecipes() {
-        if (!Version.has1_13Support()) {
+        if (!Version.has1_13BasicSupport()) {
             RECIPE_MAPCLONE = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) -1);
             RECIPE_MAPEXTEND = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) 0);
             RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.getMaterial("EMPTY_MAP"), 1, (short) 0);
@@ -1359,7 +1359,7 @@ public class Vanilla {
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_13Support()) {
+            if (Version.has1_13BasicSupport()) {
                 NamespacedKey key = shapeless.getKey();
 
                 if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
@@ -1382,7 +1382,7 @@ public class Vanilla {
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_13Support()) {
+            if (Version.has1_13BasicSupport()) {
                 NamespacedKey key = shapeless.getKey();
 
                 if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {

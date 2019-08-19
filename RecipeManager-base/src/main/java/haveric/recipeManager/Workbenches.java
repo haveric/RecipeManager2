@@ -63,7 +63,7 @@ public class Workbenches {
         Block block = blockID.toBlock();
 
         Material craftingTableMaterial;
-        if (Version.has1_13Support()) {
+        if (Version.has1_13BasicSupport()) {
             craftingTableMaterial = Material.CRAFTING_TABLE;
         } else {
             craftingTableMaterial = Material.getMaterial("WORKBENCH");
