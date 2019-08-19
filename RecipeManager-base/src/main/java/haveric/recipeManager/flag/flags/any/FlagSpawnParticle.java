@@ -246,13 +246,11 @@ public class FlagSpawnParticle extends Flag {
                 delay += repeatDelay;
             }
             if (delay > 0) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
-                    public void run() {
-                        if (extra.isNaN()) {
-                            a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ);
-                        } else {
-                            a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ, extra);
-                        }
+                Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), () -> {
+                    if (extra.isNaN()) {
+                        a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ);
+                    } else {
+                        a.location().getWorld().spawnParticle(particle, x, y, z, count, randomOffsetX, randomOffsetY, randomOffsetZ, extra);
                     }
                 }, delay);
             } else {

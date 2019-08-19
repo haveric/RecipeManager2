@@ -168,12 +168,7 @@ public class Furnaces {
 
         for (Entry<BlockID, FurnaceData> e : furnaces.entrySet()) {
             id = e.getKey();
-            mapCoords = mapWorld.get(id.getWorldID());
-
-            if (mapCoords == null) {
-                mapCoords = new HashMap<>();
-                mapWorld.put(id.getWorldID(), mapCoords);
-            }
+            mapCoords = mapWorld.computeIfAbsent(id.getWorldID(), k -> new HashMap<>());
 
             mapCoords.put(id.getCoordsString(), e.getValue());
         }

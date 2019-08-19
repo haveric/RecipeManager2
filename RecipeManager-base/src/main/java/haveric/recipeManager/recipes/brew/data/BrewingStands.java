@@ -163,12 +163,7 @@ public class BrewingStands {
 
         for (Entry<BlockID, BrewingStandData> entry : brewingStands.entrySet()) {
             id = entry.getKey();
-            mapCoords = mapWorld.get(id.getWorldID());
-
-            if (mapCoords == null) {
-                mapCoords = new HashMap<>();
-                mapWorld.put(id.getWorldID(), mapCoords);
-            }
+            mapCoords = mapWorld.computeIfAbsent(id.getWorldID(), k -> new HashMap<>());
 
             mapCoords.put(id.getCoordsString(), entry.getValue());
         }

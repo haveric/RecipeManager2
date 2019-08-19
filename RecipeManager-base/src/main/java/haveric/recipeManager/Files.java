@@ -511,11 +511,7 @@ public class Files {
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
-            enchantments.sort(new Comparator<Enchantment>() {
-                public int compare(Enchantment e1, Enchantment e2) {
-                    return e1.getKey().getKey().compareTo(e2.getKey().getKey());
-                }
-            });
+            enchantments.sort(Comparator.comparing(e -> e.getKey().getKey()));
 
             for (Enchantment e : enchantments) {
                 EnchantmentTarget target = e.getItemTarget();
@@ -527,11 +523,7 @@ public class Files {
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
-            enchantments.sort(new Comparator<Enchantment>() {
-                public int compare(Enchantment e1, Enchantment e2) {
-                    return e1.getName().compareTo(e2.getName());
-                }
-            });
+            enchantments.sort(Comparator.comparing(Enchantment::getName));
 
             for (Enchantment e : enchantments) {
                 EnchantmentTarget target = e.getItemTarget();

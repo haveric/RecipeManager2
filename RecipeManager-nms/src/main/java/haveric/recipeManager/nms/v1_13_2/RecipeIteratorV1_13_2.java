@@ -11,7 +11,6 @@ import org.bukkit.craftbukkit.v1_13_R2.inventory.RecipeIterator;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
 public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterator<Recipe> {
@@ -130,33 +129,18 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
                 Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
-                /*
-                if (overrideF == null || overrideF == ItemStack.a) {
-                    ErrorReporter.getInstance().error("NMS failure for v1.13 support during craft recipe replace : " + recipe.getName());
-                }
-                */
                 resultF.set(shaped, overrideF);
             } else if (removeRecipe instanceof ShapelessRecipes) {
                 ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
                 Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
-                /*
-                if (overrideF == null || overrideF == ItemStack.a) {
-                    ErrorReporter.getInstance().error("NMS failure for v1.13 support during combine recipe replace : " + recipe.getName());
-                }
-                */
                 resultF.set(shapeless, overrideF);
             } else if (removeRecipe instanceof FurnaceRecipe) {
                 FurnaceRecipe furnace = (FurnaceRecipe) removeRecipe;
                 Field resultF = stripPrivateFinal(FurnaceRecipe.class, "result");
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
-                /*
-                if (overrideF == null || overrideF == ItemStack.a) {
-                    ErrorReporter.getInstance().error("NMS failure for v1.13 support during furnace recipe replace : " + recipe.getName());
-                }
-                */
                 resultF.set(furnace, overrideF);
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
@@ -166,20 +150,6 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
         }
     }
 
-    private Field stripPrivateFinal(Class clazz, String field) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        Field fieldF = clazz.getDeclaredField(field);
-        fieldF.setAccessible(true);
-        // Remove final modifier
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(fieldF, fieldF.getModifiers() & ~Modifier.FINAL);
-        return fieldF;
-    }
-    
-    /**
-     * This is the companion to remove(), and effectuates removals of furnace recipes. It is called automatically when 
-     * the end of the iterator is reached; in other settings, call it manually.
-     */
     @Override
     public void finish() {
     }

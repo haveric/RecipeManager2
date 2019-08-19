@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -323,24 +322,22 @@ public class RMBukkitTools {
     }
 
     public static void sortIngredientList(List<ItemStack> ingredients) {
-        ingredients.sort(new Comparator<ItemStack>() {
-            public int compare(ItemStack item1, ItemStack item2) {
-                String id1 = item1.getType().toString();
-                String id2 = item2.getType().toString();
+        ingredients.sort((item1, item2) -> {
+            String id1 = item1.getType().toString();
+            String id2 = item2.getType().toString();
 
-                int compare;
-                if (id1.equals(id2)) {
-                    if (item1.getDurability() > item2.getDurability()) {
-                        compare = -1;
-                    } else {
-                        compare = 1;
-                    }
+            int compare;
+            if (id1.equals(id2)) {
+                if (item1.getDurability() > item2.getDurability()) {
+                    compare = -1;
                 } else {
-                    compare = id1.compareTo(id2);
+                    compare = 1;
                 }
-
-                return compare;
+            } else {
+                compare = id1.compareTo(id2);
             }
+
+            return compare;
         });
     }
 }

@@ -393,12 +393,7 @@ public class Settings {
 
         for (String str : split) {
             str = str.trim();
-            Map<String, Short> dataMap = materialDataNames.get(material);
-
-            if (dataMap == null) {
-                dataMap = new HashMap<>();
-                materialDataNames.put(material, dataMap);
-            }
+            Map<String, Short> dataMap = materialDataNames.computeIfAbsent(material, k -> new HashMap<>());
 
             String parsed = RMCUtil.parseAliasName(str);
 
@@ -409,12 +404,7 @@ public class Settings {
 
             dataMap.put(parsed, data);
 
-            Map<Short, String> printMap = materialDataPrint.get(material);
-
-            if (printMap == null) {
-                printMap = new HashMap<>();
-                materialDataPrint.put(material, printMap);
-            }
+            Map<Short, String> printMap = materialDataPrint.computeIfAbsent(material, k -> new HashMap<>());
 
             if (!printMap.containsKey(data)) {
                 printMap.put(data, Tools.parseAliasPrint(str));

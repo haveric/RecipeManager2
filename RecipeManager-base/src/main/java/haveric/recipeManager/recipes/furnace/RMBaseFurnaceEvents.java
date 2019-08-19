@@ -619,17 +619,8 @@ public class RMBaseFurnaceEvents implements Listener {
             event.setBurnTime(burnTime);
 
             long randTime = (long) Math.floor(Math.random() * burnTime);
-            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFuelerUUID()));
-                }
-            }, randTime);
-
-            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), new Runnable() {
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFuelerUUID()));
-                }
-            }, burnTime);
+            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnRandomEvent(fuelRecipe, furnace, data.getFuelerUUID())), randTime);
+            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> Bukkit.getPluginManager().callEvent(new RecipeManagerFuelBurnEndEvent(fuelRecipe, furnace, data.getFuelerUUID())), burnTime);
         }
 
         if (Version.has1_13Support()) {

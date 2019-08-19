@@ -114,12 +114,7 @@ public class FlagForPermission extends Flag {
         Validate.notNull(flag, "Argument flag must not be null!");
 
         if (canAdd(flag)) {
-            Map<String, Flag> flags = flagMap.get(permission);
-
-            if (flags == null) {
-                flags = new LinkedHashMap<>();
-                flagMap.put(permission, flags);
-            }
+            Map<String, Flag> flags = flagMap.computeIfAbsent(permission, k -> new LinkedHashMap<>());
 
             flag.setFlagsContainer(getFlagsContainer());
             flags.put(flag.getFlagType(), flag);

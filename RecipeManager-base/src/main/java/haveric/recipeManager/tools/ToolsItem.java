@@ -329,33 +329,29 @@ public class ToolsItem {
     }
 
     public static void replaceItem(final Inventory inventory, final int slot, final ItemStack stack) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
-            public void run() {
-                ItemStack slotItem = inventory.getItem(slot);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), () -> {
+            ItemStack slotItem = inventory.getItem(slot);
 
-                // Sanity check to make sure the new item is different;
-                if ((stack != null && slotItem != null && stack.getAmount() != slotItem.getAmount()) || !isSameItem(stack, slotItem, false)) {
-                    inventory.setItem(slot, stack);
-                }
+            // Sanity check to make sure the new item is different;
+            if ((stack != null && slotItem != null && stack.getAmount() != slotItem.getAmount()) || !isSameItem(stack, slotItem, false)) {
+                inventory.setItem(slot, stack);
             }
         });
     }
 
     public static void updateFurnaceCookTimeDelayed(final Furnace furnace, final short time) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), new Runnable() {
-            public void run() {
-                // Re-get the furnace to make sure we are only updating the cook time state. Probably should be passing the block in instead.
-                Block block = furnace.getBlock();
-                Furnace updatedFurnace = (Furnace) block.getState();
-                if (Version.has1_14Support()) {
-                    updatedFurnace.setCookTimeTotal(time);
-                } else {
-                    updatedFurnace.setCookTime(time);
-                }
-
-
-                updatedFurnace.update();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), () -> {
+            // Re-get the furnace to make sure we are only updating the cook time state. Probably should be passing the block in instead.
+            Block block = furnace.getBlock();
+            Furnace updatedFurnace = (Furnace) block.getState();
+            if (Version.has1_14Support()) {
+                updatedFurnace.setCookTimeTotal(time);
+            } else {
+                updatedFurnace.setCookTime(time);
             }
+
+
+            updatedFurnace.update();
         });
     }
 

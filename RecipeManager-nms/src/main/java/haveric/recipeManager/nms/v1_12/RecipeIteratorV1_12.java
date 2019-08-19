@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.RecipeIterator;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,25 +170,17 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
             // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
             try {
                 // MessageSender.getInstance().info("NMS for 1.12 replacing recipe " + recipe.getName());
-                Field keyF = removeRecipe.getClass().getField("key");
-                MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
                 if (removeRecipe instanceof ShapedRecipes) {
                     ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
                     Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
 
                     ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
-                    if (overrideF == null || overrideF == ItemStack.a) {
-                        // ErrorReporter.getInstance().error("NMS failure for v1.12 support during craft recipe replace : " + recipe.getName());
-                    }
                     resultF.set(shaped, overrideF);
                 } else if (removeRecipe instanceof ShapelessRecipes) {
                     ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
                     Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
 
                     ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
-                    if (overrideF == null || overrideF == ItemStack.a) {
-                        // ErrorReporter.getInstance().error("NMS failure for v1.12 support during combine recipe replace : " + recipe.getName());
-                    }
                     resultF.set(shapeless, overrideF);
                 } else {
                     throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
@@ -202,16 +193,6 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
         case VANILLA:
             throw new IllegalStateException("Replace not supported for Furnace recipes.");
         }
-    }
-
-    private Field stripPrivateFinal(Class clazz, String field) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        Field fieldF = clazz.getDeclaredField(field);
-        fieldF.setAccessible(true);
-        // Remove final modifier
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(fieldF, fieldF.getModifiers() & ~Modifier.FINAL);
-        return fieldF;
     }
     
     /**

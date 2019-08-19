@@ -159,12 +159,7 @@ public class Messages {
 
     public void sendOnceCustom(CommandSender sender, String path, Object... variables) {
         if (sender != null) {
-            Set<String> set = sent.get(sender.getName());
-
-            if (set == null) {
-                set = new HashSet<>();
-                sent.put(sender.getName(), set);
-            }
+            Set<String> set = sent.computeIfAbsent(sender.getName(), k -> new HashSet<>());
 
             if (!set.contains(path)) {
                 set.add(path);

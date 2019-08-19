@@ -420,12 +420,7 @@ public class Conditions implements Cloneable {
     }
 
     public void addEnchantLevelRange(Enchantment enchant, short min, short max, boolean allow) {
-        Map<Integer, Boolean> levels = enchants.get(enchant);
-
-        if (levels == null) {
-            levels = new HashMap<>();
-            enchants.put(enchant, levels);
-        }
+        Map<Integer, Boolean> levels = enchants.computeIfAbsent(enchant, k -> new HashMap<>());
 
         for (int i = min; i <= max; i++) {
             levels.put(i, allow);
@@ -542,12 +537,7 @@ public class Conditions implements Cloneable {
     }
 
     public void addBookEnchantLevelRange(Enchantment enchant, short min, short max, boolean allow) {
-        Map<Integer, Boolean> levels = bookEnchants.get(enchant);
-
-        if (levels == null) {
-            levels = new HashMap<>();
-            bookEnchants.put(enchant, levels);
-        }
+        Map<Integer, Boolean> levels = bookEnchants.computeIfAbsent(enchant, k -> new HashMap<>());
 
         for (int i = min; i <= max; i++) {
             levels.put(i, allow);

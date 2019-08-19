@@ -67,20 +67,12 @@ public class Updater {
 
         if (time > 0) {
             time *= 60 * 60 * 20;
-            task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
-                public void run() {
-                    query(null);
-                }
-            }, time, time);
+            task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> query(null), time, time);
         }
     }
 
     public static void updateOnce(final CommandSender sender) {
-        Bukkit.getScheduler().runTaskAsynchronously(RecipeManager.getPlugin(), new Runnable() {
-            public void run() {
-                query(sender);
-            }
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(RecipeManager.getPlugin(), () -> query(sender));
     }
 
     public static void stop() {

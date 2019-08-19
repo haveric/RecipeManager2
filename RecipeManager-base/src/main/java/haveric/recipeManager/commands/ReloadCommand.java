@@ -3,34 +3,22 @@ package haveric.recipeManager.commands;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Version;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversable;
-import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.conversations.ConversationAbandonedListener;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.MessagePrompt;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.StringPrompt;
+import org.bukkit.conversations.*;
 
 public class ReloadCommand implements CommandExecutor {
     ConversationFactory reloadConversation;
     
     public ReloadCommand() {
         reloadConversation = new ConversationFactory(RecipeManager.getPlugin()).withLocalEcho(true)
-                .withModality(false).withTimeout(60).addConversationAbandonedListener(new ConversationAbandonedListener() {
-                    @Override
-                    public void conversationAbandoned(ConversationAbandonedEvent abandonedEvent) {
-                        if (!abandonedEvent.gracefulExit()) {
-                            abandonedEvent.getContext().getForWhom().sendRawMessage("Reload cancelled due to timeout.");
-                        }
+                .withModality(false).withTimeout(60).addConversationAbandonedListener(abandonedEvent -> {
+                    if (!abandonedEvent.gracefulExit()) {
+                        abandonedEvent.getContext().getForWhom().sendRawMessage("Reload cancelled due to timeout.");
                     }
-                    
-                } ).withFirstPrompt(new StringPrompt() {
+                }).withFirstPrompt(new StringPrompt() {
                     @Override
                     public String getPromptText(ConversationContext context) {
                         return "Reloading in MC 1.12 or newer is not guaranteed to function " +

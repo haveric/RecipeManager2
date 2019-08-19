@@ -466,8 +466,6 @@ public class Events implements Listener {
 
             result = callEvent.getResult(); // get the result from the event if it was changed
 
-            a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
-
             int times = craftResult(event, inv, result); // craft the result
             if (result != null) {
                 a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();

@@ -206,12 +206,7 @@ public class FlagForChance extends Flag {
         Validate.notNull(flag, "Argument flag must not be null!");
 
         if (canAdd(flag)) {
-            List<ChanceFlag> flags = flagMap.get(group);
-
-            if (flags == null) {
-                flags = new ArrayList<>();
-                flagMap.put(group, flags);
-            }
+            List<ChanceFlag> flags = flagMap.computeIfAbsent(group, k -> new ArrayList<>());
 
             flag.setFlagsContainer(getFlagsContainer());
 

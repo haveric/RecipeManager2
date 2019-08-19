@@ -268,12 +268,7 @@ public class RecipeBooks {
                     continue;
                 }
 
-                List<String> recipes = volumesMap.get(volume);
-
-                if (recipes == null) {
-                    recipes = new ArrayList<>(book.getRecipesPerVolume());
-                    volumesMap.put(volume, recipes);
-                }
+                List<String> recipes = volumesMap.computeIfAbsent(volume, k -> new ArrayList<>(book.getRecipesPerVolume()));
 
                 for (String value : yml.getStringList(key)) {
                     parseRecipeName(id, value, recipes, allRecipes);
@@ -361,12 +356,7 @@ public class RecipeBooks {
             int added = (recipesNum % book.getRecipesPerVolume());
 
             for (String name : unsorted) {
-                List<String> recipes = volumesMap.get(volume);
-
-                if (recipes == null) {
-                    recipes = new ArrayList<>(book.getRecipesPerVolume());
-                    volumesMap.put(volume, recipes);
-                }
+                List<String> recipes = volumesMap.computeIfAbsent(volume, k -> new ArrayList<>(book.getRecipesPerVolume()));
 
                 recipes.add(name);
 
