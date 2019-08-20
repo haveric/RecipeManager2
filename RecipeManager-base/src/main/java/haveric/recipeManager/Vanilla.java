@@ -1234,7 +1234,7 @@ public class Vanilla {
         return isSpecial;
     }
 
-    public static boolean recipeMatchesArmorDye(Recipe recipe) {
+    public static boolean recipeMatchesArmorDye(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1253,7 +1253,9 @@ public class Vanilla {
                             break;
                     }
                 }
-            } else if (recipe.getResult().equals(RECIPE_LEATHERDYE)) {
+            } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.LEATHER_HELMET) {
+                matches = true;
+            } else if (result.equals(RECIPE_LEATHERDYE)) {
                 matches = true;
             }
         }
@@ -1261,7 +1263,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesMapCloning(Recipe recipe) {
+    public static boolean recipeMatchesMapCloning(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1281,10 +1283,10 @@ public class Vanilla {
                     }
                 }
             } else if (Version.has1_11Support()) {
-                if (recipe.getResult().getType().equals(Material.MAP) && recipe.getResult().getAmount() > 1) {
+                if (recipe.getResult().getType() == Material.AIR && result.getType().equals(Material.MAP) && result.getAmount() > 1) {
                     matches = true;
                 }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPCLONE)) {
+            } else if (result.equals(Vanilla.RECIPE_MAPCLONE)) {
                 matches = true;
             }
         }
@@ -1292,7 +1294,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesMapExtending(Recipe recipe) {
+    public static boolean recipeMatchesMapExtending(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapedRecipe) {
             ShapedRecipe shaped = (ShapedRecipe) recipe;
@@ -1315,7 +1317,7 @@ public class Vanilla {
                 if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND_1_11)) {
                     matches = true;
                 }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND)) {
+            } else if (result.equals(Vanilla.RECIPE_MAPEXTEND)) {
                 matches = true;
             }
         }
@@ -1323,7 +1325,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesFireworkRocket(Recipe recipe) {
+    public static boolean recipeMatchesFireworkRocket(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1343,10 +1345,10 @@ public class Vanilla {
                     }
                 }
             } else if (Version.has1_11Support()) {
-                if (recipe.getResult().getType() == Material.getMaterial("FIREWORK")) {
+                if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK")) {
                     matches = true;
                 }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
+            } else if (result.equals(Vanilla.RECIPE_FIREWORKS)) {
                 matches = true;
             }
         }
@@ -1354,7 +1356,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesFireworkStar(Recipe recipe) {
+    public static boolean recipeMatchesFireworkStar(Recipe recipe, ItemStack result, ItemStack[] matrix) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1367,9 +1369,21 @@ public class Vanilla {
                         matches = true;
                     }
                 }
-            } else if (Version.has1_11Support()) {
-                if (recipe.getResult().getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+            } else {
+                if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
                     matches = true;
+                }
+
+                // Unmatch on firework star fade recipe
+                boolean hasFireworkStar = false;
+                for (ItemStack item : matrix) {
+                    if (item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                        hasFireworkStar = true;
+                        break;
+                    }
+                }
+                if (hasFireworkStar) {
+                    matches = false;
                 }
             }
         }
@@ -1377,7 +1391,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesFireworkStarFade(Recipe recipe) {
+    public static boolean recipeMatchesFireworkStarFade(Recipe recipe, ItemStack result, ItemStack[] matrix) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1395,13 +1409,29 @@ public class Vanilla {
                             break;
                     }
                 }
+            } else {
+                if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                    matches = true;
+                }
+
+                // Unmatch on firework star recipe
+                boolean hasFireworkStar = false;
+                for (ItemStack item : matrix) {
+                    if (item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                        hasFireworkStar = true;
+                        break;
+                    }
+                }
+                if (!hasFireworkStar) {
+                    matches = false;
+                }
             }
         }
 
         return matches;
     }
 
-    public static boolean recipeMatchesBookCloning(Recipe recipe) {
+    public static boolean recipeMatchesBookCloning(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1421,10 +1451,10 @@ public class Vanilla {
                     }
                 }
             } else if (Version.has1_11Support()) {
-                if (recipe.getResult().getType().equals(Material.WRITTEN_BOOK)) {
+                if (result.getType().equals(Material.WRITTEN_BOOK)) {
                     matches = true;
                 }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_BOOKCLONE)) {
+            } else if (result.equals(Vanilla.RECIPE_BOOKCLONE)) {
                 matches = true;
             }
         }
@@ -1433,7 +1463,7 @@ public class Vanilla {
     }
 
     // Replaced by loom recipes in 1.14
-    public static boolean recipeMatchesBannerAddPattern(Recipe recipe) {
+    public static boolean recipeMatchesBannerAddPattern(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1452,19 +1482,18 @@ public class Vanilla {
                             break;
                     }
                 }
-            } else if (Version.has1_11Support()) {
-                if (recipe.getResult().getType().equals(Material.getMaterial("BANNER"))) {
+            } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER") || result.equals(Vanilla.RECIPE_BANNER)) {
+                List<ItemStack> ingredients = shapeless.getIngredientList();
+                if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.getMaterial("BANNER")) {
                     matches = true;
                 }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
-                matches = true;
             }
         }
 
         return matches;
     }
 
-    public static boolean recipeMatchesBannerDuplicate(Recipe recipe) {
+    public static boolean recipeMatchesBannerDuplicate(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1483,13 +1512,18 @@ public class Vanilla {
                             break;
                     }
                 }
+            } else if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || result.equals(Vanilla.RECIPE_BANNER)) {
+                List<ItemStack> ingredients = shapeless.getIngredientList();
+                if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.AIR) {
+                    matches = true;
+                }
             }
         }
 
         return matches;
     }
 
-    public static boolean recipeMatchesShieldDecoration(Recipe recipe) {
+    public static boolean recipeMatchesShieldDecoration(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1509,10 +1543,10 @@ public class Vanilla {
                     }
                 }
             } else if (Version.has1_11Support()) {
-                if (recipe.getResult().getType().equals(Material.SHIELD)) {
+                if (result.getType().equals(Material.SHIELD)) {
                     matches = true;
                 }
-            } else if (Version.has1_9Support() && recipe.getResult().equals(Vanilla.RECIPE_SHIELD_BANNER)) {
+            } else if (Version.has1_9Support() && result.equals(Vanilla.RECIPE_SHIELD_BANNER)) {
                 matches = true;
             }
         }
@@ -1547,7 +1581,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesShulkerDye(Recipe recipe) {
+    public static boolean recipeMatchesShulkerDye(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
@@ -1566,7 +1600,7 @@ public class Vanilla {
                             break;
                     }
                 }
-            } else if (Version.has1_11Support() && ToolsItem.isShulkerBox(recipe.getResult().getType())) {
+            } else if (Version.has1_11Support() && ToolsItem.isShulkerBox(result.getType())) {
                 matches = true;
             }
         }

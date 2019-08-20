@@ -174,7 +174,7 @@ public class Events implements Listener {
 
         if (!result.equals(recipeResult)) { // result was processed by the game and it doesn't match the original recipe
             if (!Settings.getInstance().getSpecialLeatherDye()) {
-                if (Vanilla.recipeMatchesArmorDye(recipe)) {
+                if (Vanilla.recipeMatchesArmorDye(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.leatherdye");
                     inv.setResult(null);
                     return true;
@@ -182,7 +182,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialMapCloning()) {
-                if (Vanilla.recipeMatchesMapCloning(recipe)) {
+                if (Vanilla.recipeMatchesMapCloning(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.map.cloning");
                     inv.setResult(null);
                     return true;
@@ -190,7 +190,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialMapExtending()) {
-                if (Vanilla.recipeMatchesMapExtending(recipe)) {
+                if (Vanilla.recipeMatchesMapExtending(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.map.extending");
                     inv.setResult(null);
                     return true;
@@ -198,7 +198,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialFireworks()) {
-                if (Vanilla.recipeMatchesFireworkRocket(recipe)) {
+                if (Vanilla.recipeMatchesFireworkRocket(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworks");
                     inv.setResult(null);
                     return true;
@@ -206,7 +206,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialFireworkStar()) {
-                if (Vanilla.recipeMatchesFireworkStar(recipe)) {
+                if (Vanilla.recipeMatchesFireworkStar(recipe, result, inv.getMatrix())) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworkstar");
                     inv.setResult(null);
                     return true;
@@ -214,7 +214,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialFireworkStarFade()) {
-                if (Vanilla.recipeMatchesFireworkStarFade(recipe)) {
+                if (Vanilla.recipeMatchesFireworkStarFade(recipe, result, inv.getMatrix())) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworkstarfade");
                     inv.setResult(null);
                     return true;
@@ -222,7 +222,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialBookCloning()) {
-                if (Vanilla.recipeMatchesBookCloning(recipe)) {
+                if (Vanilla.recipeMatchesBookCloning(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.book.cloning");
                     inv.setResult(null);
                     return true;
@@ -230,7 +230,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialBanner()) {
-                if (Vanilla.recipeMatchesBannerAddPattern(recipe)) {
+                if (Vanilla.recipeMatchesBannerAddPattern(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.banner");
                     inv.setResult(null);
                     return true;
@@ -238,7 +238,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialBannerDuplicate()) {
-                if (Vanilla.recipeMatchesBannerDuplicate(recipe)) {
+                if (Vanilla.recipeMatchesBannerDuplicate(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.bannerduplicate");
                     inv.setResult(null);
                     return true;
@@ -246,7 +246,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialShieldBanner()) {
-                if (Vanilla.recipeMatchesShieldDecoration(recipe)) {
+                if (Vanilla.recipeMatchesShieldDecoration(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.shieldbanner");
                     inv.setResult(null);
                     return true;
@@ -262,7 +262,7 @@ public class Events implements Listener {
             }
 
             if (!Settings.getInstance().getSpecialShulkerDye()) {
-                if (Vanilla.recipeMatchesShulkerDye(recipe)) {
+                if (Vanilla.recipeMatchesShulkerDye(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.shulkerdye");
                     inv.setResult(null);
                     return true;
