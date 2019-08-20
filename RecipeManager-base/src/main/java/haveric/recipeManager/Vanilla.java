@@ -1255,7 +1255,7 @@ public class Vanilla {
                 }
             } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.LEATHER_HELMET) {
                 matches = true;
-            } else if (result.equals(RECIPE_LEATHERDYE)) {
+            } else if (recipe.getResult().equals(RECIPE_LEATHERDYE)) {
                 matches = true;
             }
         }
@@ -1286,7 +1286,7 @@ public class Vanilla {
                 if (recipe.getResult().getType() == Material.AIR && result.getType().equals(Material.MAP) && result.getAmount() > 1) {
                     matches = true;
                 }
-            } else if (result.equals(Vanilla.RECIPE_MAPCLONE)) {
+            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPCLONE)) {
                 matches = true;
             }
         }
@@ -1317,7 +1317,7 @@ public class Vanilla {
                 if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND_1_11)) {
                     matches = true;
                 }
-            } else if (result.equals(Vanilla.RECIPE_MAPEXTEND)) {
+            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND)) {
                 matches = true;
             }
         }
@@ -1348,7 +1348,7 @@ public class Vanilla {
                 if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK")) {
                     matches = true;
                 }
-            } else if (result.equals(Vanilla.RECIPE_FIREWORKS)) {
+            } else if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS) && result.getType() != Material.getMaterial("FIREWORK_CHARGE")) {
                 matches = true;
             }
         }
@@ -1370,20 +1370,28 @@ public class Vanilla {
                     }
                 }
             } else {
-                if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                    matches = true;
-                }
+                if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                    if (recipe.getResult().getType() == Material.AIR) {
+                        matches = true;
+                    }
 
-                // Unmatch on firework star fade recipe
-                boolean hasFireworkStar = false;
-                for (ItemStack item : matrix) {
-                    if (item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                        hasFireworkStar = true;
-                        break;
+                    if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
+                        matches = true;
                     }
                 }
-                if (hasFireworkStar) {
-                    matches = false;
+
+                if (matches) {
+                    // Unmatch on firework star fade recipe
+                    boolean hasFireworkStar = false;
+                    for (ItemStack item : matrix) {
+                        if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                            hasFireworkStar = true;
+                            break;
+                        }
+                    }
+                    if (hasFireworkStar) {
+                        matches = false;
+                    }
                 }
             }
         }
@@ -1410,20 +1418,28 @@ public class Vanilla {
                     }
                 }
             } else {
-                if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                    matches = true;
-                }
+                if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                    if (recipe.getResult().getType() == Material.AIR) {
+                        matches = true;
+                    }
 
-                // Unmatch on firework star recipe
-                boolean hasFireworkStar = false;
-                for (ItemStack item : matrix) {
-                    if (item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                        hasFireworkStar = true;
-                        break;
+                    if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
+                        matches = true;
                     }
                 }
-                if (!hasFireworkStar) {
-                    matches = false;
+
+                if (matches) {
+                    // Unmatch on firework star recipe
+                    boolean hasFireworkStar = false;
+                    for (ItemStack item : matrix) {
+                        if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                            hasFireworkStar = true;
+                            break;
+                        }
+                    }
+                    if (!hasFireworkStar) {
+                        matches = false;
+                    }
                 }
             }
         }
@@ -1454,7 +1470,10 @@ public class Vanilla {
                 if (result.getType().equals(Material.WRITTEN_BOOK)) {
                     matches = true;
                 }
-            } else if (result.equals(Vanilla.RECIPE_BOOKCLONE)) {
+            } else if (recipe.getResult().equals(Vanilla.RECIPE_BOOKCLONE)) {
+                matches = true;
+            // 1.10
+            } else if (recipe.getResult().getType() == Material.WRITTEN_BOOK && recipe.getResult().getAmount() == 0) {
                 matches = true;
             }
         }
@@ -1482,7 +1501,7 @@ public class Vanilla {
                             break;
                     }
                 }
-            } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER") || result.equals(Vanilla.RECIPE_BANNER)) {
+            } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER") || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
                 List<ItemStack> ingredients = shapeless.getIngredientList();
                 if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.getMaterial("BANNER")) {
                     matches = true;
@@ -1512,10 +1531,16 @@ public class Vanilla {
                             break;
                     }
                 }
-            } else if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || result.equals(Vanilla.RECIPE_BANNER)) {
+            } else if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
                 List<ItemStack> ingredients = shapeless.getIngredientList();
-                if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.AIR) {
-                    matches = true;
+
+                if (ingredients.size() == 1) {
+                    if (Version.has1_11Support() && ingredients.get(0).getType() == Material.AIR) {
+                        matches = true;
+                    // 1.10
+                    } else if (ingredients.get(0).getType() == Material.getMaterial("INK_SACK")) {
+                        matches = true;
+                    }
                 }
             }
         }
@@ -1523,6 +1548,7 @@ public class Vanilla {
         return matches;
     }
 
+    // 1.9+
     public static boolean recipeMatchesShieldDecoration(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
@@ -1546,7 +1572,7 @@ public class Vanilla {
                 if (result.getType().equals(Material.SHIELD)) {
                     matches = true;
                 }
-            } else if (Version.has1_9Support() && result.equals(Vanilla.RECIPE_SHIELD_BANNER)) {
+            } else if (Version.has1_9Support() && recipe.getResult().equals(Vanilla.RECIPE_SHIELD_BANNER)) {
                 matches = true;
             }
         }
@@ -1554,6 +1580,7 @@ public class Vanilla {
         return matches;
     }
 
+    // 1.9+
     public static boolean recipeMatchesTippedArrow(Recipe recipe) {
         boolean matches = false;
         if (recipe instanceof ShapedRecipe) {
@@ -1575,12 +1602,16 @@ public class Vanilla {
                 }
             } else if (recipe.getResult().equals(Vanilla.RECIPE_TIPPED_ARROW)) {
                 matches = true;
+            // 1.10
+            } else if (Version.has1_9Support() && recipe.getResult().getType() == Material.TIPPED_ARROW && recipe.getResult().getAmount() == 8) {
+                matches = true;
             }
         }
 
         return matches;
     }
 
+    // 1.11+
     public static boolean recipeMatchesShulkerDye(Recipe recipe, ItemStack result) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
@@ -1608,6 +1639,7 @@ public class Vanilla {
         return matches;
     }
 
+    // 1.14+
     public static boolean recipeMatchesSuspiciousStew(Recipe recipe) {
         boolean matches = false;
         if (recipe instanceof ShapelessRecipe) {
