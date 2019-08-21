@@ -162,7 +162,17 @@ public class Files {
             flags.put(c, new ArrayList<>(size));
         }
 
-        for (FlagDescriptor flag : FlagFactory.getInstance().getFlags().values()) {
+
+        Map<String, FlagDescriptor> unsortedFlags = FlagFactory.getInstance().getFlags();
+        List<Map.Entry<String, FlagDescriptor>> entries = new ArrayList<>(unsortedFlags.entrySet());
+        entries.sort(Comparator.comparing(Entry::getKey));
+
+        Map<String, FlagDescriptor> sortedFlags = new LinkedHashMap<>();
+        for (Map.Entry<String, FlagDescriptor> entry : entries) {
+            sortedFlags.put(entry.getKey(), entry.getValue());
+        }
+
+        for (FlagDescriptor flag : sortedFlags.values()) {
             if (flag.hasBit(FlagBit.RECIPE)) {
                 flags.get(category[1]).add(flag);
             } else if (flag.hasBit(FlagBit.RESULT)) {

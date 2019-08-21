@@ -46,8 +46,8 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.SET_BLOCK, new FlagSetBlock(), FlagBit.NONE, "changeblock");
         FlagFactory.getInstance().initializeFlag(FlagType.SOUND, new FlagSound(), FlagBit.ONCE_PER_SHIFT, "playsound");
         FlagFactory.getInstance().initializeFlag(FlagType.SPAWN_PARTICLE, new FlagSpawnParticle(), FlagBit.ONCE_PER_SHIFT, "particle");
-        FlagFactory.getInstance().initializeFlag(FlagType.TEMPERATURE, new FlagTemperature(), FlagBit.NONE, "temp");
         FlagFactory.getInstance().initializeFlag(FlagType.SUMMON, new FlagSummon(), FlagBit.NONE, "spawn", "creature", "mob", "animal");
+        FlagFactory.getInstance().initializeFlag(FlagType.TEMPERATURE, new FlagTemperature(), FlagBit.NONE, "temp");
         FlagFactory.getInstance().initializeFlag(FlagType.WEATHER, new FlagWeather(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.WORLD, new FlagWorld(), FlagBit.NONE, "needworld", "worlds");
 

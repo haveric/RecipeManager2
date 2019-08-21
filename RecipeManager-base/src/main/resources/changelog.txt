@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+* FIX: Sorted 'recipe flags.html'
 * FIX: @SkullOwner: No longer needs data 3 in 1.13 and 1.14
 * NEW: @SkullOwner: Added aliases 'skull' and 'head'
 * NEW: @SkullOwner: Added texture <base64> option
