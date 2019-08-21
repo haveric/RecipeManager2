@@ -1,7 +1,7 @@
-package haveric.recipeManager.nms.v1_12;
+package haveric.recipeManager.nms;
 
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.nms.tools.BaseRecipeIterator;
+import haveric.recipeManager.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftFurnaceRecipe;

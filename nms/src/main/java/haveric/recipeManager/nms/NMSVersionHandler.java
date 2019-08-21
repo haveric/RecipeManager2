@@ -1,14 +1,8 @@
 package haveric.recipeManager.nms;
 
-import haveric.recipeManager.nms.tools.BaseRecipeIterator;
-import haveric.recipeManager.tools.BaseToolsRecipe;
-import haveric.recipeManager.nms.v1_12.RecipeIteratorV1_12;
-import haveric.recipeManager.nms.v1_13_2.RecipeIteratorV1_13_2;
-import haveric.recipeManager.tools.ToolsRecipeV1_13_2;
-import haveric.recipeManager.nms.v1_14_R1.RecipeIteratorV1_14_R1;
-import haveric.recipeManager.tools.ToolsRecipeV1_14_R1;
-import haveric.recipeManager.nms.vOld.RecipeIteratorOld;
-import haveric.recipeManager.tools.ToolsRecipeOld;
+
+
+import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
 
 public class NMSVersionHandler {
@@ -28,7 +22,7 @@ public class NMSVersionHandler {
                 recipeIterator = new RecipeIteratorV1_13_2();
                 break;
             case "v1_12_R1":
-                recipeIterator = new RecipeIteratorV1_12();
+                recipeIterator = new haveric.recipeManager.nms.RecipeIteratorV1_12();
                 break;
             default:
                 recipeIterator = new RecipeIteratorOld();

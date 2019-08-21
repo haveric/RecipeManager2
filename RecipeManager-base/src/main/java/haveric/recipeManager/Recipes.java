@@ -24,9 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * RecipeManager's recipe storage
@@ -151,6 +149,116 @@ public class Recipes {
      */
     public boolean isFuel(ItemStack item) {
         return getFuelRecipe(item) != null;
+    }
+
+    public List<CraftRecipe1_13> getCraftRecipes() {
+        List<CraftRecipe1_13> recipes = new ArrayList<>();
+        for (Map.Entry<Integer, CraftRecipe1_13> entry : indexCraft.entrySet()) {
+            CraftRecipe1_13 recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<CraftRecipe> getCraftLegacyRecipes() {
+        List<CraftRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<Integer, CraftRecipe> entry : indexCraftLegacy.entrySet()) {
+            CraftRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<CombineRecipe> getCombineRecipes() {
+        List<CombineRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<Integer, CombineRecipe> entry : indexCombine.entrySet()) {
+            CombineRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<RMFurnaceRecipe> getLegacyFurnaceRecipes() {
+        List<RMFurnaceRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, RMFurnaceRecipe> entry : indexSmeltLegacy.entrySet()) {
+            RMFurnaceRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<RMFurnaceRecipe1_13> getFurnaceRecipes() {
+        List<RMFurnaceRecipe1_13> recipes = new ArrayList<>();
+        for (Map.Entry<String, RMFurnaceRecipe1_13> entry : indexSmelt.entrySet()) {
+            RMFurnaceRecipe1_13 recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<RMBlastingRecipe> getBlastingRecipes() {
+        List<RMBlastingRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, RMBlastingRecipe> entry : indexBlasting.entrySet()) {
+            RMBlastingRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<RMSmokingRecipe> getSmokingRecipes() {
+        List<RMSmokingRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, RMSmokingRecipe> entry : indexSmoking.entrySet()) {
+            RMSmokingRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<RMCampfireRecipe> getCampfireRecipes() {
+        List<RMCampfireRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, RMCampfireRecipe> entry : indexCampfire.entrySet()) {
+            RMCampfireRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<RMStonecuttingRecipe> getStonecuttingRecipes() {
+        List<RMStonecuttingRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, RMStonecuttingRecipe> entry : indexStonecutting.entrySet()) {
+            RMStonecuttingRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<BrewRecipe> getBrewingRecipes() {
+        List<BrewRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, BrewRecipe> entry : indexBrew.entrySet()) {
+            BrewRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public List<FuelRecipe> getFuelRecipes() {
+        List<FuelRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, FuelRecipe> entry : indexFuels.entrySet()) {
+            FuelRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
     }
 
     /**
@@ -475,7 +583,6 @@ public class Recipes {
         // Add to quickfind index if it's not removed
         if (!recipe.hasFlag(FlagType.REMOVE)) {
             indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
-
 
             if (recipe instanceof CraftRecipe) {
                 indexCraftLegacy.put(recipe.getIndex(), (CraftRecipe) recipe);

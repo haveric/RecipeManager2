@@ -29,7 +29,10 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RMBaseFurnaceEvents implements Listener {
@@ -107,7 +110,7 @@ public class RMBaseFurnaceEvents implements Listener {
     /*
      * Furnace craft events
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void inventoryDrag(InventoryDragEvent event) {
         Inventory inv = event.getInventory();
 
@@ -166,7 +169,7 @@ public class RMBaseFurnaceEvents implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void inventoryClick(InventoryClickEvent event) {
         HumanEntity ent = event.getWhoClicked();
 

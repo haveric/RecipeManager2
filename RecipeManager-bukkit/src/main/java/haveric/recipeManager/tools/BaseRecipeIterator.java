@@ -1,4 +1,4 @@
-package haveric.recipeManager.nms.tools;
+package haveric.recipeManager.tools;
 
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import org.bukkit.Bukkit;

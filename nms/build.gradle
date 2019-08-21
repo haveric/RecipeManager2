@@ -1,0 +1,11 @@
+dependencies {
+    compileOnly project(':RecipeManager-bukkit')
+    compile project(':nms-v1_12')
+    compile project(':nms-v1_13_2')
+    compile project(':nms-v1_14_4')
+    compile "org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT"
+
+    extra project(':nms-v1_12')
+    extra project(':nms-v1_13_2')
+    extra project(':nms-v1_14_4')
+}

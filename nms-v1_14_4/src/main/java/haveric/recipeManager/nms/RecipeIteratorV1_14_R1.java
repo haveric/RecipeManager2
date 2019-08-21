@@ -1,27 +1,33 @@
-package haveric.recipeManager.nms.v1_13_2;
+package haveric.recipeManager.nms;
 
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.nms.tools.BaseRecipeIterator;
+import haveric.recipeManager.tools.BaseRecipeIterator;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.RecipeIterator;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.RecipeIterator;
 import org.bukkit.inventory.Recipe;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterator<Recipe> {
-    private Iterator<IRecipe> recipes;
+public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterator<Recipe> {
+    private Iterator<IRecipe<?>> recipes;
 
     private IRecipe removeRecipe = null;
 
-    public RecipeIteratorV1_13_2() {
+    List<IRecipe<?>> recipesToRemove = new LinkedList<>();
+
+    public RecipeIteratorV1_14_R1() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();
         if (backing instanceof RecipeIterator) {
-            recipes = ((CraftServer)Bukkit.getServer()).getServer().getCraftingManager().b().iterator();
+            recipes = ((CraftServer) Bukkit.getServer()).getServer().getCraftingManager().b().iterator();
         } else {
             throw new IllegalArgumentException("This version is not supported.");
         }
@@ -71,38 +77,8 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
      * or are requested to finalize. 
      */
     public void remove() {
-        // MessageSender.getInstance().info("NMS for 1.13 removing recipe " + removeRecipe);
-        try {
-            if (removeRecipe instanceof ShapedRecipes) {
-                ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
-                Field widthF = stripPrivateFinal(ShapedRecipes.class, "width");
-                Field heightF = stripPrivateFinal(ShapedRecipes.class, "height");
-                Field itemsF = stripPrivateFinal(ShapedRecipes.class, "items");
-                Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
-
-                // now for the _real_ fun, modifying an unmodifiable recipe.
-                // So for shaped recipes, my thought is just to replace the ItemStack with something
-                // nonsensical, set height and width to 1, and hope it isn't cached in too many places.
-                // Oh, and set result to air.
-                widthF.setInt(shaped, 1);
-                heightF.setInt(shaped, 1);
-                resultF.set(shaped, new ItemStack(Items.AIR, 1));
-                itemsF.set(shaped, NonNullList.a(1, RecipeItemStack.a(new Item[] {new ItemNameTag(new Item.Info())})));
-            } else if (removeRecipe instanceof ShapelessRecipes) {
-                ShapelessRecipes shapeless = (ShapelessRecipes) removeRecipe;
-                Field ingredientsF = stripPrivateFinal(ShapelessRecipes.class, "ingredients");
-                Field resultF = stripPrivateFinal(ShapelessRecipes.class, "result");
-
-                resultF.set(shapeless, new ItemStack(Items.AIR, 1));
-                ingredientsF.set(shapeless, NonNullList.a(1, RecipeItemStack.a(new Item[]{new ItemNameTag(new Item.Info())})));
-            } else if (removeRecipe instanceof FurnaceRecipe) {
-                recipes.remove();
-            } else {
-                throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
-            }
-        } catch (Exception e) {
-            MessageSender.getInstance().error(null, e, "NMS failure for v1.13 support during grid recipe removal");
-        }
+        // MessageSender.getInstance().info("NMS for 1.14 removing recipe " + removeRecipe);
+        recipesToRemove.add(removeRecipe);
     }
 
     @Override
@@ -123,7 +99,7 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
     public void replace(AbstractBaseRecipe recipe, org.bukkit.inventory.ItemStack overrideItem) {
         // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
         try {
-            // MessageSender.getInstance().info("NMS for 1.13 replacing recipe " + recipe.getName());
+            // MessageSender.getInstance().info("NMS for 1.14 replacing recipe " + recipe.getName());
             if (removeRecipe instanceof ShapedRecipes) {
                 ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
                 Field resultF = stripPrivateFinal(ShapedRecipes.class, "result");
@@ -142,15 +118,46 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
 
                 ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
                 resultF.set(furnace, overrideF);
+            } else if (removeRecipe instanceof RecipeBlasting) {
+                RecipeBlasting blasting = (RecipeBlasting) removeRecipe;
+                Field resultF = stripPrivateFinal(RecipeBlasting.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                resultF.set(blasting, overrideF);
+            } else if (removeRecipe instanceof RecipeSmoking) {
+                RecipeSmoking smoking = (RecipeSmoking) removeRecipe;
+                Field resultF = stripPrivateFinal(RecipeSmoking.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                resultF.set(smoking, overrideF);
+            } else if (removeRecipe instanceof RecipeCampfire) {
+                RecipeCampfire campfire = (RecipeCampfire) removeRecipe;
+                Field resultF = stripPrivateFinal(RecipeCampfire.class, "result");
+
+                ItemStack overrideF = CraftItemStack.asNMSCopy(overrideItem);
+                resultF.set(campfire, overrideF);
             } else {
                 throw new IllegalStateException("You cannot replace a grid recipe with a " + removeRecipe.getClass().getName() + " recipe!");
             }
         } catch (Exception e) {
-            MessageSender.getInstance().error(null, e, "NMS failure for v1.13 support during grid recipe replace");
+            MessageSender.getInstance().error(null, e, "NMS failure for v1.14 support during grid recipe replace");
         }
     }
-
+    
+    /**
+     * This is the companion to remove(), and effectuates removals of recipes. It is called automatically when
+     * the end of the iterator is reached; in other settings, call it manually.
+     */
     @Override
     public void finish() {
+        Map<Recipes<?>, Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>>> recipes = ((CraftServer) Bukkit.getServer()).getServer().getCraftingManager().recipes;
+
+        for (Map.Entry<Recipes<?>, Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>>> entry : recipes.entrySet()) {
+            Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>> values = entry.getValue();
+
+            for (IRecipe<?> toRemove : recipesToRemove) {
+                values.remove(toRemove.getKey());
+            }
+        }
     }
 }

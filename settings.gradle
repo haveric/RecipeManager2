@@ -1,6 +1,9 @@
 rootProject.name = name
 includeFlat 'RecipeManagerCommon'
-include 'RecipeManager-nms'
 include 'RecipeManager-base'
 include 'RecipeManager-bukkit'
+include 'nms-v1_12'
+include 'nms-v1_13_2'
+include 'nms-v1_14_4'
+include 'nms'
 
