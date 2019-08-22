@@ -134,7 +134,7 @@ public class Recipes {
                     return (getSmeltRecipe(new ItemStack(materialChoice.getChoices().get(0))) != null);
                 }
             } else {
-                return (getSmeltRecipe(((FurnaceRecipe) recipe).getInput()) != null);
+                return (getSmeltLegacyRecipe(((FurnaceRecipe) recipe).getInput()) != null);
             }
         }
 
@@ -346,14 +346,10 @@ public class Recipes {
         RMFurnaceRecipe recipe = null;
 
         if (ingredient != null) {
-            if (Version.has1_13Support()) {
-                recipe = indexSmeltLegacy.get(ingredient.getType().toString());
-            } else {
-                recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
+            recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
 
-                if (recipe == null) {
-                    recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-                }
+            if (recipe == null) {
+                recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
             }
         }
 
@@ -384,15 +380,7 @@ public class Recipes {
         RMFurnaceRecipe1_13 recipe = null;
 
         if (ingredient != null) {
-            if (Version.has1_13Support()) {
-                recipe = indexSmelt.get(ingredient.getType().toString());
-            } else {
-                recipe = indexSmelt.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-                if (recipe == null) {
-                    recipe = indexSmelt.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-                }
-            }
+            recipe = indexSmelt.get(ingredient.getType().toString());
         }
 
         return recipe;
