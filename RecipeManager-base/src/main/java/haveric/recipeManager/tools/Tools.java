@@ -624,6 +624,7 @@ public class Tools {
         boolean extended = false;
         int level = 1;
         PotionType potionType = null;
+        boolean needsPotionType = false;
 
         for (String s : split) {
             s = s.trim();
@@ -633,8 +634,10 @@ public class Tools {
             } else if (s.equals("lingering")) {
                 potion.setType(Material.LINGERING_POTION);
             } else if (s.equals("extended")) {
+                needsPotionType = true;
                 extended = true;
             } else if (s.startsWith("type")) {
+                needsPotionType = true;
                 split = s.split(" ", 2);
 
                 if (split.length <= 1) {
@@ -651,6 +654,7 @@ public class Tools {
                     return null;
                 }
             } else if (s.startsWith("level")) {
+                needsPotionType = true;
                 split = s.split(" ", 2);
 
                 if (split.length <= 1) {
@@ -674,21 +678,24 @@ public class Tools {
             }
         }
 
-        if (potionType == null) {
-            ErrorReporter.getInstance().error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
-            return null;
-        }
-
-        boolean upgraded = false;
-        if (potionType.getMaxLevel() > 0) {
-            int newLevel = Math.min(Math.max(level, 1), potionType.getMaxLevel());
-            if (newLevel == 2) {
-                upgraded = true;
+        if (needsPotionType) {
+            if (potionType == null) {
+                ErrorReporter.getInstance().error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+                return null;
             }
-        }
-        potionData = new PotionData(potionType, extended, upgraded);
 
-        potionMeta.setBasePotionData(potionData);
+            boolean upgraded = false;
+            if (potionType.getMaxLevel() > 0) {
+                int newLevel = Math.min(Math.max(level, 1), potionType.getMaxLevel());
+                if (newLevel == 2) {
+                    upgraded = true;
+                }
+            }
+            potionData = new PotionData(potionType, extended, upgraded);
+
+            potionMeta.setBasePotionData(potionData);
+        }
+
         potion.setItemMeta(potionMeta);
 
         return potion;

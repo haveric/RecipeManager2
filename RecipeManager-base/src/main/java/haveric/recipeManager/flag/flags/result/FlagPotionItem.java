@@ -43,7 +43,7 @@ public class FlagPotionItem extends Flag {
                 "",
                 "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
                 "Arguments for basic effect:",
-                "  type <potion type>     = (REQUIRED) Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
+                "  type <potion type>     = (REQUIRED if you want to use level or extended) Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
                 "  level <number or max>  = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
                 "  extended               = (optional) Potion has extended duration",
                 "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
