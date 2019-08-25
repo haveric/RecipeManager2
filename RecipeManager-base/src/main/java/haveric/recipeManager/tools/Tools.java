@@ -612,7 +612,6 @@ public class Tools {
     public static ItemStack parsePotion19(String value, String type) {
         ItemStack potion = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-        PotionData potionData = null;
 
         String[] split = value.toLowerCase().split("\\|");
 
@@ -673,6 +672,20 @@ public class Tools {
                         ErrorReporter.getInstance().error("Flag " + type + " has invalid 'level' number: " + value);
                     }
                 }
+            } else if (s.startsWith("color")) {
+                split = s.split(" ", 2);
+
+                if (split.length <= 1) {
+                    ErrorReporter.getInstance().error("Flag " + type + " has 'color' argument with no colors!");
+                    continue;
+                }
+
+                Color color = Tools.parseColor(split[1]);
+                if (color == null) {
+                    ErrorReporter.getInstance().error("Flag " + type + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
+                } else {
+                    potionMeta.setColor(color);
+                }
             } else {
                 ErrorReporter.getInstance().error("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
@@ -691,7 +704,7 @@ public class Tools {
                     upgraded = true;
                 }
             }
-            potionData = new PotionData(potionType, extended, upgraded);
+            PotionData potionData = new PotionData(potionType, extended, upgraded);
 
             potionMeta.setBasePotionData(potionData);
         }

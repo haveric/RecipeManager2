@@ -7,6 +7,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: @SkullOwner and @NBT will be called first to avoid overwriting meta. These flags no longer need to be the first flag
 * FIX: @NoResult shift clicking was still giving results
 * FIX: @PotionItem: base potion effect wasn't being set correctly. Conditions no longer care about order
+* FIX/NEW: @PotionItem: added base potion color support. Format: "color <r> <g> <b>"
 * FIX: @IngredientCondition, @HoldItem, @CloneIngredient: Fixed setting rgb and rgb range in color condition
 
 === v2.17.0 ===

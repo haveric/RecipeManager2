@@ -46,6 +46,7 @@ public class FlagPotionItem extends Flag {
                 "  type <potion type>     = (REQUIRED if you want to use level or extended) Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
                 "  level <number or max>  = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
                 "  extended               = (optional) Potion has extended duration",
+                "  color <r> <g> <b>      = (optional) Sets the base color",
                 "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
         };
 
@@ -84,7 +85,7 @@ public class FlagPotionItem extends Flag {
         return new String[] {
             "{flag} level max | type FIRE_RESISTANCE | extended // basic extended fire resistance potion",
             "// advanced potion example:",
-            "{flag} type POISON | splash // set the bottle design and set it as splash",
+            "{flag} type POISON | splash | color 255 128 0 // set the bottle design and set it as splash with a custom color",
             "{flag} custom type WITHER | duration 10 // add wither effect",
             "{flag} custom duration 2.5 | type BLINDNESS | amplify 5 // add blindness effect", };
     }
@@ -204,6 +205,10 @@ public class FlagPotionItem extends Flag {
             PotionMeta resultMeta = (PotionMeta) a.result().getItemMeta();
             if (baseMeta != null && resultMeta != null) {
                 resultMeta.setBasePotionData(baseMeta.getBasePotionData());
+
+                if (baseMeta.hasColor()) {
+                    resultMeta.setColor(baseMeta.getColor());
+                }
             }
 
             a.result().setItemMeta(resultMeta);
