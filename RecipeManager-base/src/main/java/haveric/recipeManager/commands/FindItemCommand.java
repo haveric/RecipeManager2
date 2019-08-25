@@ -7,13 +7,14 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindItemCommand implements CommandExecutor {
+public class FindItemCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length <= 0) {
             Messages.getInstance().send(sender, "cmd.finditem.usage", "{command}", label);
@@ -73,5 +74,24 @@ public class FindItemCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> list = new ArrayList<>();
+        if (args.length == 1) {
+            String currentInput = args[0].toLowerCase();
+            if ("this".contains(currentInput)) {
+                list.add("this");
+            }
+
+            for (Material mat : Material.values()) {
+                String originalName = mat.name().toLowerCase();
+                if (originalName.contains(currentInput) ) {
+                    list.add(originalName);
+                }
+            }
+        }
+        return list;
     }
 }
