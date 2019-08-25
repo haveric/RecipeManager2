@@ -9,7 +9,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
@@ -17,7 +17,6 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class FlagPotionItem extends Flag {
 
@@ -93,7 +92,7 @@ public class FlagPotionItem extends Flag {
 
     private short data;
     private List<PotionEffect> effects = new ArrayList<>();
-    private ItemStack customPotion;
+    private ItemStack basePotion;
 
     public FlagPotionItem() {
     }
@@ -102,8 +101,10 @@ public class FlagPotionItem extends Flag {
         data = flag.data;
         effects.addAll(flag.effects);
 
-        if (customPotion != null) {
-            customPotion = flag.customPotion.clone();
+        if (flag.basePotion == null) {
+            basePotion = null;
+        } else {
+            basePotion = flag.basePotion.clone();
         }
     }
 
@@ -120,12 +121,12 @@ public class FlagPotionItem extends Flag {
         data = newData;
     }
 
-    public ItemStack getCustomPotion() {
-        return customPotion;
+    public ItemStack getBasePotion() {
+        return basePotion;
     }
 
-    public void setCustomPotion(ItemStack potion) {
-        customPotion = potion;
+    public void setBasePotion(ItemStack potion) {
+        basePotion = potion;
     }
 
     public List<PotionEffect> getEffects() {
@@ -167,7 +168,7 @@ public class FlagPotionItem extends Flag {
             }
         } else {
             if (Version.has1_9Support()) {
-                setCustomPotion(Tools.parsePotion19(value, getFlagType()));
+                setBasePotion(Tools.parsePotion19(value, getFlagType()));
             } else {
                 Potion p = Tools.parsePotion18(value, getFlagType());
 
@@ -192,19 +193,20 @@ public class FlagPotionItem extends Flag {
             return;
         }
 
-        if (getCustomPotion() != null) {
-            PotionMeta meta = (PotionMeta) a.result().getItemMeta();
-            PotionMeta customMeta = (PotionMeta) getCustomPotion().getItemMeta();
-
-            customMeta.setDisplayName(meta.getDisplayName());
-            customMeta.setLore(meta.getLore());
-            if (meta.hasEnchants()) {
-                for (Map.Entry<Enchantment, Integer> e : meta.getEnchants().entrySet()) {
-                    customMeta.addEnchant(e.getKey(), e.getValue(), true);
-                }
+        if (getBasePotion() != null) {
+            ItemStack base = getBasePotion();
+            Material baseType = base.getType();
+            if (baseType != Material.POTION && baseType != a.result().getType()) {
+                a.result().setType(baseType);
             }
 
-            a.result().setItemMeta(customMeta);
+            PotionMeta baseMeta = (PotionMeta) base.getItemMeta();
+            PotionMeta resultMeta = (PotionMeta) a.result().getItemMeta();
+            if (baseMeta != null && resultMeta != null) {
+                resultMeta.setBasePotionData(baseMeta.getBasePotionData());
+            }
+
+            a.result().setItemMeta(resultMeta);
         } else if (data != 0) {
             a.result().setDurability(data);
         }

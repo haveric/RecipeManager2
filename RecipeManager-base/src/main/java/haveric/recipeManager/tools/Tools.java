@@ -623,6 +623,7 @@ public class Tools {
 
         boolean extended = false;
         int level = 1;
+        PotionType potionType = null;
 
         for (String s : split) {
             s = s.trim();
@@ -644,16 +645,7 @@ public class Tools {
                 value = split[1].trim();
 
                 try {
-                    PotionType newType = PotionType.valueOf(value.toUpperCase());
-
-                    boolean upgraded = false;
-                    if (newType.getMaxLevel() > 0) {
-                        int newLevel = Math.min(Math.max(level, 1), newType.getMaxLevel());
-                        if (newLevel == 2) {
-                            upgraded = true;
-                        }
-                    }
-                    potionData = new PotionData(newType, extended, upgraded);
+                    potionType = PotionType.valueOf(value.toUpperCase());
                 } catch (IllegalArgumentException e) {
                     ErrorReporter.getInstance().error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
@@ -682,10 +674,19 @@ public class Tools {
             }
         }
 
-        if (potionData == null || potionData.getType() == null) {
+        if (potionType == null) {
             ErrorReporter.getInstance().error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
             return null;
         }
+
+        boolean upgraded = false;
+        if (potionType.getMaxLevel() > 0) {
+            int newLevel = Math.min(Math.max(level, 1), potionType.getMaxLevel());
+            if (newLevel == 2) {
+                upgraded = true;
+            }
+        }
+        potionData = new PotionData(potionType, extended, upgraded);
 
         potionMeta.setBasePotionData(potionData);
         potion.setItemMeta(potionMeta);
