@@ -27,7 +27,6 @@ public class FlagItemNBT extends Flag {
             "  WARNING: This exists only to support features that may not exist in the Bukkit/Spigot API yet. Support is NOT GUARANTEED, especially across future versions.",
             "    If you find you need to use this flag a lot, please consider creating a ticket about adding support for the features you are using. I wll do my best to support what I can in better ways.",
             "  WARNING: There is NO VALIDATION on <nbtRaw> values. Test all outputs carefully before adding to a live server.",
-            "  WARNING: This flag should be used before most other flags to ensure it does not overwrite other flags",
             "",
             "Format should include outer brackets: '{}'",
             "",

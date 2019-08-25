@@ -214,9 +214,21 @@ public class Flags implements Cloneable {
     public boolean sendPrepare(Args a) {
         a.clear();
 
+        // Prepare skull owner and nbt first so they don't get overwritten
         for (Flag flag : flags.values()) {
-            if (!isOncePerShift(flag) || a.isFirstRun()) {
-                flag.prepare(a);
+            if (flag.getFlagType().equals(FlagType.SKULL_OWNER) || flag.getFlagType().equals(FlagType.ITEM_NBT)) {
+                if (!isOncePerShift(flag) || a.isFirstRun()) {
+                    flag.prepare(a);
+                }
+            }
+        }
+
+        // Ignore skull owner and nbt on the normal pass
+        for (Flag flag : flags.values()) {
+            if (!flag.getFlagType().equals(FlagType.SKULL_OWNER) && !flag.getFlagType().equals(FlagType.ITEM_NBT)) {
+                if (!isOncePerShift(flag) || a.isFirstRun()) {
+                    flag.prepare(a);
+                }
             }
         }
 
@@ -234,9 +246,21 @@ public class Flags implements Cloneable {
     public boolean sendCrafted(Args a) {
         a.clear();
 
+        // Prepare skull owner and nbt first so they don't get overwritten
         for (Flag flag : flags.values()) {
-            if (!isOncePerShift(flag) || a.isFirstRun()) {
-                flag.crafted(a);
+            if (flag.getFlagType().equals(FlagType.SKULL_OWNER) || flag.getFlagType().equals(FlagType.ITEM_NBT)) {
+                if (!isOncePerShift(flag) || a.isFirstRun()) {
+                    flag.crafted(a);
+                }
+            }
+        }
+
+        // Ignore skull owner and nbt on the normal pass
+        for (Flag flag : flags.values()) {
+            if (!flag.getFlagType().equals(FlagType.SKULL_OWNER) && !flag.getFlagType().equals(FlagType.ITEM_NBT)) {
+                if (!isOncePerShift(flag) || a.isFirstRun()) {
+                    flag.crafted(a);
+                }
             }
         }
 
