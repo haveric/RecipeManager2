@@ -324,11 +324,6 @@ public class Files {
                 continue;
             }
 
-            // Don't advertise command used for running tests
-            if (e.getKey().equals("rmruntests")) {
-                continue;
-            }
-
             Object obj = data.get("permission");
             String permission;
             if (obj == null) {
@@ -406,11 +401,6 @@ public class Files {
 
         for (Permission p : perms) {
             if (!p.getName().startsWith("recipemanager.")) {
-                continue;
-            }
-
-            // Don't advertise command used for running tests
-            if (p.getName().endsWith("rmruntests")) {
                 continue;
             }
 

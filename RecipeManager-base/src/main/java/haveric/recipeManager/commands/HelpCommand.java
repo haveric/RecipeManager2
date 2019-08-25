@@ -28,11 +28,6 @@ public class HelpCommand implements CommandExecutor {
                 continue;
             }
 
-            // Don't advertise command used for running tests
-            if (e.getKey().equals("rmruntests")) {
-                continue;
-            }
-
             MessageSender.getInstance().send(sender, "<gold>" + data.get("usage").toString().replace("<command>", e.getKey()) + ": " + RMCChatColor.RESET + data.get("description"));
         }
 
