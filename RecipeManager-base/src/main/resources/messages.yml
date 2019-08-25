@@ -192,6 +192,6 @@ cmd:
     usage: '<yellow>Usage: <gray>/{command} <white><item partial name>'
     invalidhelditem: <yellow>You need to hold an item to use the '<white>this<yellow>' argument.
     header: 'Found <green>{matches}<white> materials matching ''<green>{argument}<white>'':'
-    list: <gray>#<red>{id} <green>{material}<gray>, max durability <yellow>{maxdata}<gray>, max stack <yellow>{maxstack}
+    list: <green>{material}<gray>, max durability <yellow>{maxdata}<gray>, max stack <yellow>{maxstack}
     foundmore: <yellow>... and <green>{matches}<yellow> more, be more specific in your search.
     notfound: <yellow>No material found by '<white>{argument}<yellow>'.

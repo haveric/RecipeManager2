@@ -65,7 +65,7 @@ public class FindItemCommand implements CommandExecutor, TabCompleter {
 
             for (int i = 0; i < Math.min(foundSize, 10); i++) {
                 Material m = found.get(i);
-                Messages.getInstance().send(sender, "cmd.finditem.list", "{id}", m.getId(), "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
+                Messages.getInstance().send(sender, "cmd.finditem.list", "{material}", m.name().toLowerCase(), "{maxdata}", m.getMaxDurability(), "{maxstack}", m.getMaxStackSize());
             }
 
             if (foundSize > 10) {

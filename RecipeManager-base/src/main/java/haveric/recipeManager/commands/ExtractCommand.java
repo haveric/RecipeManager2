@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,7 +29,7 @@ import java.util.Map.Entry;
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 import static org.bukkit.Tag.REGISTRY_ITEMS;
 
-public class ExtractCommand implements CommandExecutor {
+public class ExtractCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted recipes (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
 
@@ -405,5 +406,18 @@ public class ExtractCommand implements CommandExecutor {
         }
 
         recipeString.append(Files.NL).append(Files.NL);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> list = new ArrayList<>();
+        if (args.length == 1) {
+            String currentInput = args[0].toLowerCase();
+            if ("special".contains(currentInput)) {
+                list.add("special");
+            }
+        }
+
+        return list;
     }
 }
