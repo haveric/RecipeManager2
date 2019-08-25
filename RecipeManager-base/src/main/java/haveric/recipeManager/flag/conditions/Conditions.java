@@ -874,7 +874,7 @@ public class Conditions implements Cloneable {
             int g = color.getGreen();
             int b = color.getBlue();
 
-            if (maxColor == null) {
+            if (maxColor == null || minColor.equals(maxColor)) {
                 return (minColor.getRed() == r && minColor.getGreen() == g && minColor.getBlue() == b);
             }
 
@@ -1539,8 +1539,8 @@ public class Conditions implements Cloneable {
                         short max;
 
                         try {
-                            min = Short.valueOf(split[0].trim());
-                            max = Short.valueOf(split[1].trim());
+                            min = Short.parseShort(split[0].trim());
+                            max = Short.parseShort(split[1].trim());
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid numbers: " + val);
                             continue;
@@ -1562,9 +1562,9 @@ public class Conditions implements Cloneable {
 
                         try {
                             if (bitwise) {
-                                addDataBit(Short.valueOf(val), !not);
+                                addDataBit(Short.parseShort(val), !not);
                             } else {
-                                addDataValue(Short.valueOf(val), !not);
+                                addDataValue(Short.parseShort(val), !not);
                             }
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid number: " + val);
@@ -1624,8 +1624,8 @@ public class Conditions implements Cloneable {
                         short max;
 
                         try {
-                            min = Short.valueOf(split[0].trim());
-                            max = Short.valueOf(split[1].trim());
+                            min = Short.parseShort(split[0].trim());
+                            max = Short.parseShort(split[1].trim());
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
                             continue;
@@ -1639,7 +1639,7 @@ public class Conditions implements Cloneable {
                         addEnchantLevelRange(enchant, min, max, !not);
                     } else {
                         try {
-                            addEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                            addEnchantLevel(enchant, Short.parseShort(s.trim()), !not);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid number: " + s);
                         }
@@ -1689,8 +1689,8 @@ public class Conditions implements Cloneable {
                         short max;
 
                         try {
-                            min = Short.valueOf(split[0].trim());
-                            max = Short.valueOf(split[1].trim());
+                            min = Short.parseShort(split[0].trim());
+                            max = Short.parseShort(split[1].trim());
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
                             continue;
@@ -1704,7 +1704,7 @@ public class Conditions implements Cloneable {
                         addBookEnchantLevelRange(enchant, min, max, !not);
                     } else {
                         try {
-                            addBookEnchantLevel(enchant, Short.valueOf(s.trim()), !not);
+                            addBookEnchantLevel(enchant, Short.parseShort(s.trim()), !not);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
                         }
@@ -1719,7 +1719,7 @@ public class Conditions implements Cloneable {
             }
         } else if (argLower.startsWith("color")) {
             if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather, for wool and dye use the 'data' argument.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather.");
                 return;
             }
 
@@ -1735,19 +1735,19 @@ public class Conditions implements Cloneable {
                     return;
                 }
 
-                // TODO: Figure out if these are needed
-                //short[] minColor = new short[3];
-                //short[] maxColor = new short[3];
+                short[] minColor = new short[3];
+                short[] maxColor = new short[3];
 
-                for (String element : split) {
+                for (int c = 0; c < 3; c++) {
+                    String element = split[c];
                     String[] range = element.split("-", 2);
 
                     try {
-                        short min = Short.valueOf(range[0].trim());
+                        short min = Short.parseShort(range[0].trim());
                         short max = min;
 
                         if (range.length > 1) {
-                            max = Short.valueOf(range[1].trim());
+                            max = Short.parseShort(range[1].trim());
                         }
 
                         if (min < 0 || min > max || max > 255) {
@@ -1755,12 +1755,14 @@ public class Conditions implements Cloneable {
                             break;
                         }
 
-                        //minColor[c] = min;
-                        //maxColor[c] = max;
+                        minColor[c] = min;
+                        maxColor[c] = max;
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid number: " + value);
                     }
                 }
+
+                setColor(Color.fromRGB(minColor[0], minColor[1], minColor[2]), Color.fromRGB(maxColor[0], maxColor[1], maxColor[2]));
             } else {
                 setColor(dye.getColor(), null);
             }

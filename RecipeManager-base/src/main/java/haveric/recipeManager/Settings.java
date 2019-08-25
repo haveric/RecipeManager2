@@ -197,7 +197,7 @@ public class Settings {
                         parseMaterialNames(sender, section.getString(key), material);
                     } else {
                         try {
-                            parseMaterialDataNames(sender, section.getString(key), Short.valueOf(key), material);
+                            parseMaterialDataNames(sender, section.getString(key), Short.parseShort(key), material);
                         } catch (NumberFormatException e) {
                             MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data value number: " + key + " for material: " + material);
                         }
@@ -302,7 +302,7 @@ public class Settings {
 
             String value = itemDatasConfig.getString(arg);
             try {
-                itemDatas.put(material, Short.valueOf(value));
+                itemDatas.put(material, Short.parseShort(value));
             } catch (NumberFormatException e) {
                 MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid data value number: " + value + " for material: " + material);
             }
