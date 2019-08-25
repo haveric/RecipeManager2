@@ -530,9 +530,7 @@ public class Events implements Listener {
 
                             if (result.hasFlag(FlagType.NO_RESULT)) {
                                 noResult = true;
-                            }
-
-                            if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                            } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
                                 noResult = true;
                                 // Make sure inventory can fit the results or drop on the ground
                                 if (Tools.playerCanAddItem(player, result)) {
