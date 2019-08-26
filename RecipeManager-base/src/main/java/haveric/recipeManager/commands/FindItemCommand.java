@@ -4,17 +4,14 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindItemCommand implements CommandExecutor, TabCompleter {
+public class FindItemCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length <= 0) {
             Messages.getInstance().send(sender, "cmd.finditem.usage", "{command}", label);

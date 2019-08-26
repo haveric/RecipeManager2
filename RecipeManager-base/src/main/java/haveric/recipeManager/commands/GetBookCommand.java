@@ -4,10 +4,7 @@ import haveric.recipeManager.RecipeBooks;
 import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -16,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GetBookCommand implements CommandExecutor, TabCompleter {
+public class GetBookCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("Command can only be used by players.");
