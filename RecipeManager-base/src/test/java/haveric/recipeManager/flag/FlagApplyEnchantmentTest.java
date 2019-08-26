@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class FlagApplyEnchantmentTest extends FlagBaseTest {
-    private CraftingInventory inventory;
     private InventoryView inventoryView;
 
     @Before
@@ -38,7 +37,7 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
         when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
 
         mockStatic(Inventory.class);
-        inventory = mock(CraftingInventory.class);
+        CraftingInventory inventory = mock(CraftingInventory.class);
 
         mockStatic(InventoryView.class);
         inventoryView = mock(InventoryView.class);

@@ -221,7 +221,7 @@ public class FlagIngredientCondition extends Flag {
 
         cond.setIngredient(item);
 
-        cond.parse(value, args);
+        cond.parse(args);
 
         return true;
     }

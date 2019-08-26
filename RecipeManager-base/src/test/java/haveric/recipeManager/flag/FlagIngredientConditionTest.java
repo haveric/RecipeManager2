@@ -42,11 +42,9 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
     private ItemStack grassStack10;
     private ItemStack air;
 
-    private File booksDir;
     private TestCraftingInventory inventory;
     private CraftItemEvent craftEvent;
     private static Events events;
-    private Recipe bukkitRecipe;
 
     @Before
     public void before() {
@@ -87,7 +85,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
         when(Settings.getCustomData(Material.STONE_SWORD)).thenReturn((short)132);
 
-        booksDir = new File(workDir.getPath() + "/books/");
+        File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
 
         RecipeBooks.getInstance().init(booksDir);
@@ -130,7 +128,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
             Args a = ArgBuilder.create().build();
 
-            bukkitRecipe = recipe.getBukkitRecipe(false);
+            Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
             when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
             FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);

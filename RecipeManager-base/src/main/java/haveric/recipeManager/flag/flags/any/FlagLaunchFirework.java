@@ -138,7 +138,7 @@ public class FlagLaunchFirework extends Flag {
             value = value.substring("chance".length()).replace('%', ' ').trim();
 
             try {
-                setChance(Float.valueOf(value));
+                setChance(Float.parseFloat(value));
             } catch (NumberFormatException e) {
                 // TODO: Handle Exception
             }

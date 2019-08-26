@@ -20,7 +20,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
     }
 
     @Override
-    public boolean parseRecipe(int directiveLine) throws Exception {
+    public boolean parseRecipe(int directiveLine) {
         BrewRecipe recipe = new BrewRecipe();
         this.reader.parseFlags(recipe.getFlags());
 

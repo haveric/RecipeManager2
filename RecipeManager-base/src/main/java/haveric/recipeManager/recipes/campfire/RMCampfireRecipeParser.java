@@ -58,10 +58,10 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
                     minTime = 0;
                 } else {
                     try {
-                        minTime = Float.valueOf(timeSplit[0]);
+                        minTime = Float.parseFloat(timeSplit[0]);
 
                         if (timeSplit.length >= 2) {
-                            maxTime = Float.valueOf(timeSplit[1]);
+                            maxTime = Float.parseFloat(timeSplit[1]);
                         }
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Invalid burn time float number! Campfire time left as default.");

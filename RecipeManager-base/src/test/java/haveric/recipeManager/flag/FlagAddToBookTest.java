@@ -17,12 +17,9 @@ import static org.junit.Assert.*;
 
 public class FlagAddToBookTest extends FlagBaseTest {
 
-    private File booksDir;
-
     @Before
     public void createBookFiles() {
-
-        booksDir = new File(workDir.getPath() + "/books/");
+        File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
 
         File originalBook1 = new File(baseResourcesPath + "books/Random Stuff.yml");

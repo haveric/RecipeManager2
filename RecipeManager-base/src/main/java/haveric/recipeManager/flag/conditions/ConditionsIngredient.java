@@ -59,13 +59,13 @@ public class ConditionsIngredient extends Conditions {
         return checkIngredient(item, a, addReasons);
     }
 
-    public void parse(String value, String[] args) {
+    public void parse(String[] args) {
         for (int i = 1; i < args.length; i++) {
             String arg = args[i].trim();
             String argLower = arg.toLowerCase();
 
             if (argLower.startsWith("needed")) {
-                value = arg.substring("needed".length()).trim();
+                String value = arg.substring("needed".length()).trim();
 
                 try {
                     setNeeded(Integer.parseInt(value));
@@ -73,7 +73,7 @@ public class ConditionsIngredient extends Conditions {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'needed' argument with invalid number: " + value);
                 }
             } else {
-                parseArg(value, arg);
+                parseArg(arg);
             }
         }
     }

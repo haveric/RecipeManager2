@@ -35,7 +35,6 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CraftingInventory.class})
 public class FlagCloneIngredientTest extends FlagBaseTest {
-    private CraftingInventory inventory;
     private InventoryView inventoryView;
 
     @Before
@@ -44,7 +43,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
         when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
 
         mockStatic(Inventory.class);
-        inventory = mock(CraftingInventory.class);
+        CraftingInventory inventory = mock(CraftingInventory.class);
 
         mockStatic(InventoryView.class);
         inventoryView = mock(InventoryView.class);

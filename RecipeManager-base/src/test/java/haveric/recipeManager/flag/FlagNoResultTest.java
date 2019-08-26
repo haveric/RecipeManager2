@@ -23,19 +23,13 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class FlagNoResultTest extends FlagBaseTest {
-    private File booksDir;
-
-    private TestCraftingInventory inventory;
-    private TestCraftingInventory shiftInventory;
     private CraftItemEvent craftEvent;
     private CraftItemEvent shiftCraftEvent;
     private static Events events;
 
-    private Recipe bukkitRecipe;
-
     @Before
     public void prepare() {
-        booksDir = new File(workDir.getPath() + "/books/");
+        File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
 
         RecipeBooks.getInstance().init(booksDir);
@@ -43,7 +37,7 @@ public class FlagNoResultTest extends FlagBaseTest {
 
         mockStatic(Inventory.class);
 
-        inventory = new TestCraftingInventory();
+        TestCraftingInventory inventory = new TestCraftingInventory();
 
         ItemStack dirt = new ItemStack(Material.DIRT);
         ItemStack stone = new ItemStack(Material.STONE);
@@ -64,7 +58,7 @@ public class FlagNoResultTest extends FlagBaseTest {
         inventory.setMatrix(matrix);
         inventory.setResult(stoneSword);
 
-        shiftInventory = new TestCraftingInventory();
+        TestCraftingInventory shiftInventory = new TestCraftingInventory();
         ItemStack dirtStack = new ItemStack(Material.DIRT, 2);
         ItemStack stoneStack = new ItemStack(Material.STONE, 3);
         ItemMeta stoneStackMeta = stoneStack.getItemMeta();
@@ -121,7 +115,7 @@ public class FlagNoResultTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            bukkitRecipe = recipe.getBukkitRecipe(false);
+            Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
             when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
             when(shiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
 

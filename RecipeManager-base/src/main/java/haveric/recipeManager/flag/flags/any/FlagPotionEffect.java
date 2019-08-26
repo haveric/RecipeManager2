@@ -135,7 +135,7 @@ public class FlagPotionEffect extends Flag {
                     }
 
                     try {
-                        chance = Float.valueOf(value);
+                        chance = Float.parseFloat(value);
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid chance value number: " + value);
                         continue;
@@ -163,7 +163,7 @@ public class FlagPotionEffect extends Flag {
                     value = value.substring("duration".length()).trim();
 
                     try {
-                        duration = Float.valueOf(value);
+                        duration = Float.parseFloat(value);
                         duration /= type.getDurationModifier(); // compensate for effect's duration modifier
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid duration value number: " + value);

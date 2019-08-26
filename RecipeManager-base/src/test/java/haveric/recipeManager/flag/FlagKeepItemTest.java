@@ -22,13 +22,9 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class FlagKeepItemTest extends FlagBaseTest {
-    private File booksDir;
-
     private TestCraftingInventory inventory;
     private CraftItemEvent craftEvent;
     private static Events events;
-
-    private Recipe bukkitRecipe;
 
     private ItemStack ironSword;
     private ItemStack goldSword;
@@ -50,7 +46,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
         stoneStack = new ItemStack(Material.STONE, 3);
         grassStack = new ItemStack(Material.GRASS, 20);
 
-        booksDir = new File(workDir.getPath() + "/books/");
+        File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
 
         RecipeBooks.getInstance().init(booksDir);
@@ -93,7 +89,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            bukkitRecipe = recipe.getBukkitRecipe(false);
+            Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
             when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
             if (resultType == Material.IRON_SWORD) {

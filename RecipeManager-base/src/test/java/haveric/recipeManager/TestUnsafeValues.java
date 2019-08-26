@@ -7,7 +7,6 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import static org.bukkit.Material.LEGACY_PREFIX;
@@ -63,7 +62,7 @@ public class TestUnsafeValues implements UnsafeValues {
     }
 
     @Override
-    public void checkSupported(PluginDescriptionFile pdf) throws InvalidPluginException {
+    public void checkSupported(PluginDescriptionFile pdf) {
 
     }
 

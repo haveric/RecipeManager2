@@ -170,7 +170,7 @@ public class FlagExplode extends Flag {
                 value = arg.substring("power".length()).trim();
 
                 try {
-                    setPower(Float.valueOf(value));
+                    setPower(Float.parseFloat(value));
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'power' argument with invalid number: " + value);
                 }

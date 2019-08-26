@@ -13,7 +13,7 @@ public class RemoveResultsParser extends BaseRecipeParser {
     }
 
     @Override
-    public boolean parseRecipe(int directiveLine) throws Exception {
+    public boolean parseRecipe(int directiveLine) {
         RemoveResultRecipe recipe;
         int added = 0;
 

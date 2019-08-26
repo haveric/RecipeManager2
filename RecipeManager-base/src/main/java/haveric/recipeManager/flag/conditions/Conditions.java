@@ -1487,13 +1487,14 @@ public class Conditions implements Cloneable {
         flagType = newFlagType;
     }
 
-    public void parseArg(String value, String arg) {
+    public void parseArg(String arg) {
         // Replace double pipes with single pipe: || -> |
         arg = arg.replaceAll("\\|\\|", "|");
 
         ItemStack item = getIngredient();
         String argLower = arg.toLowerCase();
 
+        String value;
         if (argLower.startsWith("data")) {
             if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");

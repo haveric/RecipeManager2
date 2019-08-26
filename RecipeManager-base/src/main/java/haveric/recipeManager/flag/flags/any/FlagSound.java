@@ -155,7 +155,7 @@ public class FlagSound extends Flag {
                     }
 
                     try {
-                        setVolume(Float.valueOf(value));
+                        setVolume(Float.parseFloat(value));
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;
@@ -169,7 +169,7 @@ public class FlagSound extends Flag {
                     }
 
                     try {
-                        setPitch(Float.valueOf(value));
+                        setPitch(Float.parseFloat(value));
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                         return false;

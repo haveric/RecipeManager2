@@ -29,7 +29,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
     }
 
     @Override
-    public boolean parseRecipe(int directiveLine) throws Exception {
+    public boolean parseRecipe(int directiveLine) {
         BaseRecipe recipe;
         if (Version.has1_13Support()) {
             recipe = new CraftRecipe1_13(fileFlags);

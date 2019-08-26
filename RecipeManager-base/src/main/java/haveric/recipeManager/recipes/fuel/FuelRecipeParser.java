@@ -18,7 +18,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
     }
 
     @Override
-    public boolean parseRecipe(int directiveLine) throws Exception {
+    public boolean parseRecipe(int directiveLine) {
         FuelRecipe recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // check for @flags
         int added = 0;
@@ -44,10 +44,10 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 float maxTime = -1;
 
                 try {
-                    minTime = Math.max(Float.valueOf(timeSplit[0]), 1);
+                    minTime = Math.max(Float.parseFloat(timeSplit[0]), 1);
 
                     if (timeSplit.length >= 2) {
-                        maxTime = (float) Math.max(Float.valueOf(timeSplit[1]), 0.0);
+                        maxTime = (float) Math.max(Float.parseFloat(timeSplit[1]), 0.0);
                     }
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("Invalid burn time float number!");

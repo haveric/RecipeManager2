@@ -36,7 +36,7 @@ public class ConditionsHold extends Conditions {
         return checkIngredient(item, a, true);
     }
 
-    public void parse(String value, String[] args) {
+    public void parse(String[] args) {
         for (int i = 1; i < args.length; i++) {
             String arg = args[i].trim();
             String argLower = arg.toLowerCase();
@@ -73,7 +73,7 @@ public class ConditionsHold extends Conditions {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'slot' argument with invalid value: " + val);
                 }
             } else {
-                parseArg(value, arg);
+                parseArg(arg);
             }
         }
     }

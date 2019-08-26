@@ -1404,13 +1404,8 @@ public class Vanilla {
                 NamespacedKey key = shapeless.getKey();
 
                 if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "firework_star_fade": // 1.13+
-                            matches = true;
-                            break;
-
-                        default:
-                            break;
+                    if ("firework_star_fade".equals(key.getKey())) { // 1.13+
+                        matches = true;
                     }
                 }
             } else {

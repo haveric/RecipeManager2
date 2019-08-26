@@ -24,7 +24,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
     }
 
     @Override
-    public boolean parseRecipe(int directiveLine) throws Exception {
+    public boolean parseRecipe(int directiveLine) {
         CombineRecipe recipe;
         if (Version.has1_13Support()) {
             recipe = new CombineRecipe1_13(fileFlags);

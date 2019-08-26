@@ -23,8 +23,6 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Settings.class, MessageSender.class, Bukkit.class, RecipeManager.class})
 public class FlagBaseTest {
-
-    private Recipes recipes;
     protected Settings settings;
     protected TestUnsafeValues unsafeValues;
     protected File workDir;
@@ -70,7 +68,7 @@ public class FlagBaseTest {
         File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
         Messages.getInstance().loadMessages(null, messagesFile);
 
-        recipes = new Recipes();
+        Recipes recipes = new Recipes();
 
         mockStatic(RecipeManager.class);
         when(RecipeManager.getRecipes()).thenReturn(recipes);

@@ -22,16 +22,12 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     private FuelRecipe fuelRecipe;
     private ItemResult result;
     private Block block;
-    //private String smelter;
-    //private String fueler;
 
     public RecipeManagerSmeltEvent(RMBaseFurnaceRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock/*,, String newSmelter String newFueler*/) {
         recipe = newRecipe;
         fuelRecipe = newFuelRecipe;
         result = newResult;
         block = newBlock;
-        //smelter = newSmelter;
-        //fueler = newFueler;
     }
 
     /**
@@ -78,66 +74,6 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     public Block getBlock() {
         return block;
     }
-
-    /**
-     * Get the player's name that initially placed the ingredient for this recipe.<br>
-     * Can be null in certain situations!
-     *
-     * @return smelter's name or null
-     */
-//    public String getSmelterName() {
-//        return smelter;
-//    }
-
-    /**
-     * Get the Player object of the player that placed the ingredient.<br>
-     * NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getSmelterName() to get his name only.<br>
-     * Shortcut for: Bukkit.getPlayerExact(event.getSmelterName());
-     *
-     * @return Player object of the smelter or null
-     */
-//    public Player getSmelter() {
-//        Player player = null;
-//
-//        if (smelter != null) {
-//            try {
-//                UUID uuid = UUIDFetcher.getUUIDOf(smelter);
-//                player = Bukkit.getPlayer(uuid);
-//            } catch (Exception e) { }
-//        }
-//
-//        return player;
-//    }
-
-    /**
-     * Get the player's name that placed the fuel powering this recipe.<br>
-     * Can be null in certain situations!
-     *
-     * @return fueler's name or null
-     */
-//    public String getFuelerName() {
-//        return fueler;
-//    }
-
-    /**
-     * Get the Player object of the player that placed the fuel powering this recipe.<br>
-     * NOTE: This returns null if player is not online or plugin couldn't get the player's name, use getFuelerName() to get his name only.<br>
-     * Shortcut for: Bukkit.getPlayerExact(event.getSmelterName());
-     *
-     * @return Player object of the fueler or null
-     */
-//    public Player getFueler() {
-//        Player player = null;
-//
-//        if (fueler != null) {
-//            try {
-//                UUID uuid = UUIDFetcher.getUUIDOf(fueler);
-//                player = Bukkit.getPlayer(uuid);
-//            } catch (Exception e) { }
-//        }
-//
-//        return player;
-//    }
 
     @Override
     public HandlerList getHandlers() {

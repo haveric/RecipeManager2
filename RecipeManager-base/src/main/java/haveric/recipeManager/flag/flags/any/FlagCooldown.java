@@ -238,7 +238,7 @@ public class FlagCooldown extends Flag {
         }
 
         try {
-            time = Float.valueOf(value);
+            time = Float.parseFloat(value);
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
             return false;

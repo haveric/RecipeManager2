@@ -153,7 +153,7 @@ public class FlagModMoney extends Flag {
         float newAmount;
 
         try {
-            newAmount = Float.valueOf(value);
+            newAmount = Float.parseFloat(value);
         } catch (NumberFormatException e) {
             return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
         }

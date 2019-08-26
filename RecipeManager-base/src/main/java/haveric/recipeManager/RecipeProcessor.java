@@ -158,19 +158,17 @@ public class RecipeProcessor implements Runnable {
         } finally {
             task = null;
 
-            if (check || registrator == null) {
-                return;
-            }
-
-            // Calling registerRecipesToServer() in main thread...
-            if (Settings.getInstance().getMultithreading()) {
-                new BukkitRunnable() {
-                    public void run() {
-                        registrator.registerRecipesToServer(sender, start);
-                    }
-                }.runTask(RecipeManager.getPlugin());
-            } else {
-                registrator.registerRecipesToServer(sender, start);
+            if (!check && registrator != null) {
+                // Calling registerRecipesToServer() in main thread...
+                if (Settings.getInstance().getMultithreading()) {
+                    new BukkitRunnable() {
+                        public void run() {
+                            registrator.registerRecipesToServer(sender, start);
+                        }
+                    }.runTask(RecipeManager.getPlugin());
+                } else {
+                    registrator.registerRecipesToServer(sender, start);
+                }
             }
         }
     }

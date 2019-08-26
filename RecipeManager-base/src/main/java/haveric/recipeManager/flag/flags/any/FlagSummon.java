@@ -1371,7 +1371,7 @@ public class FlagSummon extends Flag {
                     }
 
                     try {
-                        c.setChance(Float.valueOf(value));
+                        c.setChance(Float.parseFloat(value));
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'chance' argument with invalid number: " + value);
                     }
@@ -1379,7 +1379,7 @@ public class FlagSummon extends Flag {
                     value = value.substring("jumpstrength".length()).trim();
 
                     try {
-                        c.setJumpStrength(Float.valueOf(value));
+                        c.setJumpStrength(Float.parseFloat(value));
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'jumpstrength' argument with invalid number: " + value);
                     }
@@ -1403,7 +1403,7 @@ public class FlagSummon extends Flag {
                     value = value.substring("onfire".length()).trim();
 
                     try {
-                        c.setOnFire(Float.valueOf(value) * 20.0f);
+                        c.setOnFire(Float.parseFloat(value) * 20.0f);
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'onfire' argument with invalid value number: " + value);
                     }
@@ -1539,7 +1539,7 @@ public class FlagSummon extends Flag {
                         value = args[1].trim();
 
                         try {
-                            duration = Float.valueOf(value);
+                            duration = Float.parseFloat(value);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'potion' argument with invalid number for duration: " + value);
                             continue;
@@ -1624,7 +1624,7 @@ public class FlagSummon extends Flag {
                         }
 
                         try {
-                            c.setDrop( Math.min(Math.max(Float.valueOf(value), 0), 100), index);
+                            c.setDrop( Math.min(Math.max(Float.parseFloat(value), 0), 100), index);
                         } catch (NumberFormatException e) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'chance' argument with invalid number: " + value);
                         }

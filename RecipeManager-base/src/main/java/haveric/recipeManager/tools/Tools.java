@@ -124,7 +124,7 @@ public class Tools {
 
             if (!string.equals("*") && !string.equalsIgnoreCase("calc")) {
                 try {
-                    result.setChance(Math.min(Math.max(Float.valueOf(string), 0), 100));
+                    result.setChance(Math.min(Math.max(Float.parseFloat(string), 0), 100));
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Invalid percentage number: " + string);
                 }
@@ -758,7 +758,7 @@ public class Tools {
                 value = split[1].trim();
 
                 try {
-                    duration = Float.valueOf(value);
+                    duration = Float.parseFloat(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("Flag " + type + " has invalid 'duration' number: " + value);
                 }

@@ -210,7 +210,7 @@ public class FlagLightLevel extends Flag {
         value = split[0].trim();
 
         try {
-            minLight = Byte.valueOf(value);
+            minLight = Byte.parseByte(value);
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
             return false;
@@ -220,7 +220,7 @@ public class FlagLightLevel extends Flag {
             value = split[1].trim();
 
             try {
-                maxLight = Byte.valueOf(value);
+                maxLight = Byte.parseByte(value);
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
                 return false;

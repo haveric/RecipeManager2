@@ -281,7 +281,7 @@ public class Events implements Listener {
         return false;
     }
 
-    private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) throws Throwable {
+    private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) {
         if (!Settings.getInstance().getSpecialRepair()) {
             SoundNotifier.sendDenySound(player, location);
             Messages.getInstance().sendOnce(player, "craft.repair.disabled");
@@ -607,7 +607,7 @@ public class Events implements Listener {
         return different;
     }
 
-    private int craftResult(CraftItemEvent event, CraftingInventory inv, ItemResult result) throws Throwable {
+    private int craftResult(CraftItemEvent event, CraftingInventory inv, ItemResult result) {
         if (result == null || result.getType() == Material.AIR) {
             event.setCurrentItem(null);
             return 0;

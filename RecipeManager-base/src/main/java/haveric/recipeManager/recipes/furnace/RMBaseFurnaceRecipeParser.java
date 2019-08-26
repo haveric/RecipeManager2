@@ -29,7 +29,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
     }
 
     @Override
-    public boolean parseRecipe(int directiveLine) throws Exception {
+    public boolean parseRecipe(int directiveLine) {
         RMBaseFurnaceRecipe recipe;
         if (recipeType == RMCRecipeType.BLASTING) {
             recipe = new RMBlastingRecipe(fileFlags); // create recipe and copy flags from file
@@ -100,10 +100,10 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                     minTime = 0;
                 } else {
                     try {
-                        minTime = Float.valueOf(timeSplit[0]);
+                        minTime = Float.parseFloat(timeSplit[0]);
 
                         if (timeSplit.length >= 2) {
-                            maxTime = Float.valueOf(timeSplit[1]);
+                            maxTime = Float.parseFloat(timeSplit[1]);
                         }
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Invalid burn time float number! Smelt time left as default.");

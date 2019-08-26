@@ -26,7 +26,7 @@ public abstract class BaseRecipeParser {
         this.recipeRegistrator = recipeRegistrator;
     }
 
-    public abstract boolean parseRecipe(int directiveLine) throws Exception;
+    public abstract boolean parseRecipe(int directiveLine);
 
     protected boolean parseResults(BaseRecipe recipe, List<ItemResult> results) {
         boolean allowAir = true;

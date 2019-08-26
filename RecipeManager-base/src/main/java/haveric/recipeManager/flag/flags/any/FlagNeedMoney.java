@@ -135,7 +135,7 @@ public class FlagNeedMoney extends Flag {
         value = split[0].trim();
 
         try {
-            setMinMoney(Double.valueOf(value));
+            setMinMoney(Double.parseDouble(value));
             setMaxMoney(getMinMoney());
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required money number: " + value);
@@ -146,7 +146,7 @@ public class FlagNeedMoney extends Flag {
             value = split[1].trim();
 
             try {
-                setMaxMoney(Double.valueOf(value));
+                setMaxMoney(Double.parseDouble(value));
                 setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required money number: " + value);

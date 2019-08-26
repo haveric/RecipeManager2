@@ -23,7 +23,7 @@ public class Players {
 
     protected static void remove(Player player) {
         removeJoined(player);
-        RecipeCommand.clean(player.getName());
+        RecipeCommand.clean(player.getUniqueId());
     }
 
     public static void addJoined(Player player) {

@@ -36,8 +36,8 @@ import java.util.Map.Entry;
 public class RecipeCommand implements TabExecutor {
     private static Map<UUID, Pages> pagination = new HashMap<>();
 
-    public static void clean(String name) {
-        pagination.remove(name);
+    public static void clean(UUID uuid) {
+        pagination.remove(uuid);
     }
 
     public static void clean() {
