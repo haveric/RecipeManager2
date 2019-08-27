@@ -1,6 +1,6 @@
 name: RecipeManager
 description: Add, edit or remove recipes and fuels
-version: 2.17.0
+version: 2.17.1
 api-version: 1.13
 authors: [haveric, ProgrammerDan, Digi]
 website: https://dev.bukkit.org/projects/recipemanager
@@ -20,7 +20,7 @@ commands:
     permission: recipemanager.command.rmrecipes
   rmfinditem:
     aliases: [finditem]
-    description: search for items by name or id
+    description: search for items by name
     usage: /<command> <name>
     permission: recipemanager.command.rmfinditem
   rmcheck:
