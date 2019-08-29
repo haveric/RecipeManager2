@@ -1062,7 +1062,6 @@ public class Vanilla {
      * Remove all recipes from the server except special ones
      */
     public static void removeAllButSpecialRecipes() {
-        List<Recipe> specialRecipes = new ArrayList<>();
         Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
         Recipe recipe;
 
