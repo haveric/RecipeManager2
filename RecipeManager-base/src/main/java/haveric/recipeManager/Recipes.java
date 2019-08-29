@@ -31,7 +31,6 @@ import java.util.*;
  */
 public class Recipes {
     // constants
-    //public static final String FURNACE_OWNER_STRING = RMCChatColor.GRAY + "Placed by: " + RMCChatColor.WHITE;
     public static final String RECIPE_NAMESPACE_STRING = "recipemanager";
     public static final String RECIPE_ID_STRING = RMCChatColor.GRAY + "RecipeManager #";
 
@@ -39,21 +38,21 @@ public class Recipes {
     protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<>();
 
     // Quick-find index
-    protected Map<Integer, CraftRecipe> indexCraftLegacy = new HashMap<>();
-    protected Map<Integer, CraftRecipe1_13> indexCraft = new HashMap<>();
-    protected Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
-    public Map<String, RMFurnaceRecipe> indexSmeltLegacy = new HashMap<>();
-    protected Map<String, RMFurnaceRecipe> indexSmeltLegacyFuels = new HashMap<>();
-    public Map<String, RMFurnaceRecipe1_13> indexSmelt = new HashMap<>();
-    protected Map<String, RMFurnaceRecipe1_13> indexSmeltFuels = new HashMap<>();
-    public Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
-    protected Map<String, RMBlastingRecipe> indexBlastingFuels = new HashMap<>();
-    public Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
-    protected Map<String, RMSmokingRecipe> indexSmokingFuels = new HashMap<>();
-    protected Map<String, RMCampfireRecipe> indexCampfire = new HashMap<>();
-    protected Map<String, RMStonecuttingRecipe> indexStonecutting = new HashMap<>();
+    private Map<Integer, CraftRecipe> indexCraftLegacy = new HashMap<>();
+    private Map<Integer, CraftRecipe1_13> indexCraft = new HashMap<>();
+    private Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
+    private Map<String, RMFurnaceRecipe> indexSmeltLegacy = new HashMap<>();
+    private Map<String, RMFurnaceRecipe> indexSmeltLegacyFuels = new HashMap<>();
+    private Map<String, RMFurnaceRecipe1_13> indexSmelt = new HashMap<>();
+    private Map<String, RMFurnaceRecipe1_13> indexSmeltFuels = new HashMap<>();
+    private Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
+    private Map<String, RMBlastingRecipe> indexBlastingFuels = new HashMap<>();
+    private Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
+    private Map<String, RMSmokingRecipe> indexSmokingFuels = new HashMap<>();
+    private Map<String, RMCampfireRecipe> indexCampfire = new HashMap<>();
+    private Map<String, RMStonecuttingRecipe> indexStonecutting = new HashMap<>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<>();
-    protected Map<String, BrewRecipe> indexBrew = new HashMap<>();
+    private Map<String, BrewRecipe> indexBrew = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {

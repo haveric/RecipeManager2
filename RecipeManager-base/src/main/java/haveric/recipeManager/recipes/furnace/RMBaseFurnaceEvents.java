@@ -784,14 +784,14 @@ public class RMBaseFurnaceEvents implements Listener {
             }
 
             if (Version.has1_14Support() && furnace instanceof BlastFurnace) {
-                for (RMBlastingRecipe r : RecipeManager.getRecipes().indexBlasting.values()) {
+                for (RMBlastingRecipe r : RecipeManager.getRecipes().getBlastingRecipes()) {
                     if (result.isSimilar(r.getResult())) {
                         smeltRecipe = r;
                         break;
                     }
                 }
             } else if (Version.has1_14Support() && furnace instanceof Smoker) {
-                for (RMSmokingRecipe r : RecipeManager.getRecipes().indexSmoking.values()) {
+                for (RMSmokingRecipe r : RecipeManager.getRecipes().getSmokingRecipes()) {
                     if (result.isSimilar(r.getResult())) {
                         smeltRecipe = r;
                         break;
@@ -799,14 +799,14 @@ public class RMBaseFurnaceEvents implements Listener {
                 }
             } else {
                 if (Version.has1_13Support()) {
-                    for (RMFurnaceRecipe1_13 r : RecipeManager.getRecipes().indexSmelt.values()) {
+                    for (RMFurnaceRecipe1_13 r : RecipeManager.getRecipes().getFurnaceRecipes()) {
                         if (result.isSimilar(r.getResult())) {
                             smeltRecipe = r;
                             break;
                         }
                     }
                 } else {
-                    for (RMFurnaceRecipe r : RecipeManager.getRecipes().indexSmeltLegacy.values()) {
+                    for (RMFurnaceRecipe r : RecipeManager.getRecipes().getLegacyFurnaceRecipes()) {
                         if (result.isSimilar(r.getResult())) {
                             smeltRecipe = r;
                             break;
