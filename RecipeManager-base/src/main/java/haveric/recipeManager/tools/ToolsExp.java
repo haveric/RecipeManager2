@@ -44,7 +44,7 @@ public class ToolsExp {
         return getExpAtLevel(player.getLevel());
     }
 
-    public static int getExpAtLevel(final int level) {
+    private static int getExpAtLevel(final int level) {
         if (level > 30) {
             return (9 * level) - 158;
         }

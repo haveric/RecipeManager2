@@ -509,7 +509,7 @@ public class Vanilla {
         String[] sh;
 
         ItemStack[] matrix = recipe.getIngredients();
-        Tools.trimItemMatrix(matrix);
+        RMBukkitTools.trimItemMatrix(matrix);
         ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
         int height = recipe.getHeight();
         int width = recipe.getWidth();
@@ -917,7 +917,7 @@ public class Vanilla {
         String[] sh;
 
         ItemStack[] matrix = recipe.getIngredients();
-        Tools.trimItemMatrix(matrix);
+        RMBukkitTools.trimItemMatrix(matrix);
         ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
         int height = recipe.getHeight();
         int width = recipe.getWidth();

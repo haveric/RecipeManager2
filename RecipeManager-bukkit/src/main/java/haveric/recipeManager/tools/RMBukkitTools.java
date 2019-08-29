@@ -182,23 +182,6 @@ public class RMBukkitTools {
         return true;
     }
 
-    public static boolean compareMaterialChoiceList(List<RecipeChoice> choices, List<RecipeChoice> choices2) {
-        int listSize = choices2.size();
-        int choicesListSize = choices.size();
-
-        if (listSize != choicesListSize) {
-            return false;
-        }
-
-        for (int i = 0; i < listSize; i++) {
-            if (!compareMaterialChoice(choices.get(i), choices2.get(i), false)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private static boolean compareMaterialChoice(RecipeChoice choice, RecipeChoice choice2, boolean airAllowed) {
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;

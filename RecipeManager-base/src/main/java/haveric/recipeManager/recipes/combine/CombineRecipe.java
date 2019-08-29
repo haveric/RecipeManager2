@@ -9,6 +9,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -147,7 +148,7 @@ public class CombineRecipe extends WorkbenchRecipe {
 
     private void sort() {
         // sort by type and data
-        Tools.sortIngredientList(ingredients);
+        RMBukkitTools.sortIngredientList(ingredients);
 
         updateHash();
     }

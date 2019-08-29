@@ -22,7 +22,7 @@ public abstract class BaseRecipeIterator {
         return getBukkitRecipeIterator();
     }
 
-    public Iterator<Recipe> getBukkitRecipeIterator() {
+    protected Iterator<Recipe> getBukkitRecipeIterator() {
         return Bukkit.recipeIterator();
     }
 

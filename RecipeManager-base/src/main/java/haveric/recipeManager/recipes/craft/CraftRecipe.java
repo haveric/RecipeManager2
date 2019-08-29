@@ -9,6 +9,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -22,7 +23,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.Damageable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class CraftRecipe extends WorkbenchRecipe {
@@ -36,7 +40,7 @@ public class CraftRecipe extends WorkbenchRecipe {
 
     public CraftRecipe(ShapedRecipe recipe) {
         setBukkitRecipe(recipe);
-        setIngredients(Tools.convertShapedRecipeToItemMatrix(recipe));
+        setIngredients(RMBukkitTools.convertShapedRecipeToItemMatrix(recipe));
         setResult(recipe.getResult());
     }
 
@@ -185,7 +189,7 @@ public class CraftRecipe extends WorkbenchRecipe {
             ingredients = Tools.mirrorItemMatrix(ingredients);
         } else {
             // Trim the item matrix, shift ingredients to top-left corner
-            Tools.trimItemMatrix(ingredients);
+            RMBukkitTools.trimItemMatrix(ingredients);
         }
 
         width = 0;

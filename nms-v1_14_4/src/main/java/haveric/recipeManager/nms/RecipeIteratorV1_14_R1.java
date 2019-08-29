@@ -22,7 +22,7 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
 
     private IRecipe removeRecipe = null;
 
-    List<IRecipe<?>> recipesToRemove = new LinkedList<>();
+    private List<IRecipe<?>> recipesToRemove = new LinkedList<>();
 
     public RecipeIteratorV1_14_R1() {
         Iterator<Recipe> backing = getBukkitRecipeIterator();

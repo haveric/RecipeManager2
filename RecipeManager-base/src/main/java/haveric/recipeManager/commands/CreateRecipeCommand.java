@@ -5,7 +5,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.RMCVanilla;
@@ -87,7 +87,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                     return false;
                 }
 
-                Tools.trimItemMatrix(ingredients);
+                RMBukkitTools.trimItemMatrix(ingredients);
 
                 int width = 0;
                 int height = 0;

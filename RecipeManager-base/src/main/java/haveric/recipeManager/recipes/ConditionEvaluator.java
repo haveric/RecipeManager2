@@ -16,6 +16,7 @@ import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
+import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -144,7 +145,7 @@ public class ConditionEvaluator {
                             CraftRecipe craftRecipe = (CraftRecipe) recipe;
 
                             ItemStack[] matrix = craftRecipe.getIngredients();
-                            Tools.trimItemMatrix(matrix);
+                            RMBukkitTools.trimItemMatrix(matrix);
                             ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
                             int height = craftRecipe.getHeight();
                             int width = craftRecipe.getWidth();

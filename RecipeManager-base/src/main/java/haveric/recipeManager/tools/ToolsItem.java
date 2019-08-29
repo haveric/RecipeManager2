@@ -239,30 +239,6 @@ public class ToolsItem {
         return enchantsName;
     }
 
-    public static boolean isSimilarDataWildcard(ItemStack source, ItemStack item) {
-        boolean isSimilar = false;
-
-        if (item != null) {
-            if (item.equals(source)) {
-                isSimilar = true;
-            } else {
-                if (source.getType() == item.getType()) {
-                    if (source.getDurability() == RMCVanilla.DATA_WILDCARD || source.getDurability() == item.getDurability()) {
-                        if (source.hasItemMeta() == item.hasItemMeta()) {
-                            if (source.hasItemMeta()) {
-                                isSimilar = Bukkit.getItemFactory().equals(source.getItemMeta(), item.getItemMeta());
-                            } else {
-                                isSimilar = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return isSimilar;
-    }
-
     public static ItemStack nullIfAir(ItemStack item) {
         ItemStack nullIfAir;
 
@@ -289,10 +265,6 @@ public class ToolsItem {
         }
 
         return null;
-    }
-
-    public static boolean canMerge(ItemStack intoItem, ItemStack item) {
-        return intoItem == null || intoItem.getType() == Material.AIR || ToolsItem.isSameItem(intoItem, item, true) && item.getAmount() <= (intoItem.getMaxStackSize() - intoItem.getAmount());
     }
 
     public static boolean isSameItem(ItemStack one, ItemStack two, boolean negativeDurAllowed) {

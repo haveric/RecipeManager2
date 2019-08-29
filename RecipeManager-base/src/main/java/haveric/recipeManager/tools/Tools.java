@@ -23,7 +23,9 @@ import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -32,8 +34,10 @@ import org.bukkit.potion.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 import static org.bukkit.Tag.REGISTRY_ITEMS;
@@ -1111,118 +1115,9 @@ public class Tools {
             m[(r * 3) + 2] = matrix[(r * 3)];
         }
 
-        trimItemMatrix(m);
+        RMBukkitTools.trimItemMatrix(m);
 
         return m;
-    }
-
-    public static ItemStack[] convertShapedRecipeToItemMatrix(ShapedRecipe bukkitRecipe) {
-        Map<Character, ItemStack> items = bukkitRecipe.getIngredientMap();
-        ItemStack[] matrix = new ItemStack[9];
-        String[] shape = bukkitRecipe.getShape();
-        int slot = 0;
-
-        int shapeLength = shape.length;
-        for (int r = 0; r < shapeLength; r++) {
-            for (char col : shape[r].toCharArray()) {
-                matrix[slot] = items.get(col);
-                slot++;
-            }
-
-            slot = ((r + 1) * 3);
-        }
-
-        trimItemMatrix(matrix);
-
-        return matrix;
-    }
-
-    public static void trimItemMatrix(ItemStack[] matrix) {
-        while (matrix[0] == null && matrix[1] == null && matrix[2] == null) {
-            matrix[0] = matrix[3];
-            matrix[1] = matrix[4];
-            matrix[2] = matrix[5];
-
-            matrix[3] = matrix[6];
-            matrix[4] = matrix[7];
-            matrix[5] = matrix[8];
-
-            matrix[6] = null;
-            matrix[7] = null;
-            matrix[8] = null;
-        }
-
-        while (matrix[0] == null && matrix[3] == null && matrix[6] == null) {
-            matrix[0] = matrix[1];
-            matrix[3] = matrix[4];
-            matrix[6] = matrix[7];
-
-            matrix[1] = matrix[2];
-            matrix[4] = matrix[5];
-            matrix[7] = matrix[8];
-
-            matrix[2] = null;
-            matrix[5] = null;
-            matrix[8] = null;
-        }
-    }
-
-    public static void sortIngredientList(List<ItemStack> ingredients) {
-        ingredients.sort((item1, item2) -> {
-            String id1 = item1.getType().toString();
-            String id2 = item2.getType().toString();
-
-            int compare;
-            if (id1.equals(id2)) {
-                if (item1.getDurability() > item2.getDurability()) {
-                    compare = -1;
-                } else {
-                    compare = 1;
-                }
-            } else {
-                compare = id1.compareTo(id2);
-            }
-
-            return compare;
-        });
-    }
-
-    public static String convertShapedRecipeToString(ShapedRecipe recipe) {
-        StringBuilder str = new StringBuilder("s_");
-
-        for (Entry<Character, ItemStack> entry : recipe.getIngredientMap().entrySet()) {
-            if (entry.getKey() != null && entry.getValue() != null) {
-                str.append(entry.getKey()).append('=').append(entry.getValue().getType().toString()).append(':').append(entry.getValue().getDurability()).append(';');
-            }
-        }
-
-        for (String row : recipe.getShape()) {
-            str.append(row).append(';');
-        }
-
-        return str.toString();
-    }
-
-    public static String convertShapelessRecipeToString(ShapelessRecipe recipe) {
-        StringBuilder str = new StringBuilder("l_");
-
-        for (ItemStack ingredient : recipe.getIngredientList()) {
-            if (ingredient == null) {
-                continue;
-            }
-
-            str.append(ingredient.getType().toString()).append(':').append(ingredient.getDurability()).append(';');
-        }
-
-        return str.toString();
-    }
-
-    public static String convertFurnaceRecipeToString(FurnaceRecipe recipe) {
-        return "f_" + recipe.getInput().getType().toString() + ":" + recipe.getInput().getDurability();
-    }
-
-    public static String convertLocationToString(Location location) {
-        return location.getWorld().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
     }
 
     public static boolean saveTextToFile(String text, String filePath) {
