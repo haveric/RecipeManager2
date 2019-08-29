@@ -26,22 +26,8 @@ import static org.bukkit.Tag.REGISTRY_ITEMS;
  * RecipeManager's settings loaded from its config.yml, values are read-only.
  */
 public class Settings {
-    private static final boolean SPECIAL_REPAIR_DEFAULT = true;
+    private static final boolean SPECIAL_RECIPE_DEFAULT = true;
     private static final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
-
-    private static final boolean SPECIAL_LEATHER_DYE_DEFAULT = true;
-    private static final boolean SPECIAL_FIREWORKS_DEFAULT = true;
-    private static final boolean SPECIAL_FIREWORK_STAR_DEFAULT = true;
-    private static final boolean SPECIAL_FIREWORK_STAR_FADE_DEFAULT = true;
-    private static final boolean SPECIAL_MAP_CLONING_DEFAULT = true;
-    private static final boolean SPECIAL_MAP_EXTENDING_DEFAULT = true;
-    private static final boolean SPECIAL_BOOK_CLONING_DEFAULT = true;
-    private static final boolean SPECIAL_BANNER_DEFAULT = true;
-    private static final boolean SPECIAL_BANNER_DUPLICATE_DEFAULT = true;
-    private static final boolean SPECIAL_SHIELD_BANNER_DEFAULT = true;
-    private static final boolean SPECIAL_TIPPED_ARROWS_DEFAULT = true;
-    private static final boolean SPECIAL_SHULKER_DYE_DEFAULT = true;
-    private static final boolean SPECIAL_SUSPICIOUS_STEW_DEFAULT = true;
 
     private static final boolean SOUNDS_REPAIR_DEFAULT = true;
     private static final boolean SOUNDS_FAILED_DEFAULT = true;
@@ -69,10 +55,6 @@ public class Settings {
     private static List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
 
     private static FileConfiguration fileConfig;
-    private static FileConfiguration choiceAliasesConfig;
-    private static FileConfiguration itemDatasConfig;
-    private static FileConfiguration itemAliasesConfig;
-    private static FileConfiguration enchantAliasesConfig;
     private static Settings instance;
 
     private static Map<Material, Short> itemDatas;
@@ -167,7 +149,7 @@ public class Settings {
         MessageSender.getInstance().log("    recipe-comment-characters: " + getRecipeCommentCharacters());
 
 
-        itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
+        FileConfiguration itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
 
         if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.getString("lastchanged"))) {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
@@ -208,7 +190,7 @@ public class Settings {
             }
         }
 
-        choiceAliasesConfig = loadYML(Files.FILE_CHOICE_ALIASES);
+        FileConfiguration choiceAliasesConfig = loadYML(Files.FILE_CHOICE_ALIASES);
 
         if (!Files.LASTCHANGED_CHOICE_ALIASES.equals(choiceAliasesConfig.getString("lastchanged"))) {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CHOICE_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
@@ -282,7 +264,7 @@ public class Settings {
             }
         }
 
-        itemDatasConfig = loadYML(Files.FILE_ITEM_DATAS);
+        FileConfiguration itemDatasConfig = loadYML(Files.FILE_ITEM_DATAS);
 
         if (!Files.LASTCHANGED_ITEM_DATAS.equals(itemDatasConfig.getString("lastchanged"))) {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_DATAS + "' file is outdated, please delete it to allow it to be generated again.");
@@ -308,7 +290,7 @@ public class Settings {
             }
         }
 
-        enchantAliasesConfig = loadYML(Files.FILE_ENCHANT_ALIASES);
+        FileConfiguration enchantAliasesConfig = loadYML(Files.FILE_ENCHANT_ALIASES);
 
         if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.getString("lastchanged"))) {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
@@ -432,7 +414,7 @@ public class Settings {
     }
 
     public boolean getSpecialRepair() {
-        return fileConfig.getBoolean("special-recipes.repair", SPECIAL_REPAIR_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.repair", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialRepairMetadata() {
@@ -440,55 +422,55 @@ public class Settings {
     }
 
     public boolean getSpecialLeatherDye() {
-        return fileConfig.getBoolean("special-recipes.leather-armor-dye", SPECIAL_LEATHER_DYE_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.leather-armor-dye", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialFireworks() {
-        return fileConfig.getBoolean("special-recipes.fireworks", SPECIAL_FIREWORKS_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.fireworks", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialFireworkStar() {
-        return fileConfig.getBoolean("special-recipes.firework-star", SPECIAL_FIREWORK_STAR_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.firework-star", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialFireworkStarFade() {
-        return fileConfig.getBoolean("special-recipes.firework-star-fade", SPECIAL_FIREWORK_STAR_FADE_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.firework-star-fade", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialMapCloning() {
-        return fileConfig.getBoolean("special-recipes.map-cloning", SPECIAL_MAP_CLONING_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.map-cloning", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialMapExtending() {
-        return fileConfig.getBoolean("special-recipes.map-extending", SPECIAL_MAP_EXTENDING_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.map-extending", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialBookCloning() {
-        return fileConfig.getBoolean("special-recipes.book-cloning", SPECIAL_BOOK_CLONING_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.book-cloning", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialBanner() {
-        return fileConfig.getBoolean("special-recipes.banner", SPECIAL_BANNER_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.banner", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialBannerDuplicate() {
-        return fileConfig.getBoolean("special-recipes.banner-duplicate", SPECIAL_BANNER_DUPLICATE_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.banner-duplicate", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialShieldBanner() {
-        return fileConfig.getBoolean("special-recipes.shield-banner", SPECIAL_SHIELD_BANNER_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.shield-banner", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialTippedArrows() {
-        return fileConfig.getBoolean("special-recipes.tipped-arrows", SPECIAL_TIPPED_ARROWS_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.tipped-arrows", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialShulkerDye() {
-        return fileConfig.getBoolean("special-recipes.shulker-dye", SPECIAL_SHULKER_DYE_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.shulker-dye", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialSuspiciousStew() {
-        return fileConfig.getBoolean("special-recipes.suspicious-stew", SPECIAL_SUSPICIOUS_STEW_DEFAULT);
+        return fileConfig.getBoolean("special-recipes.suspicious-stew", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSoundsRepair() {
