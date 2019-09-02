@@ -6,6 +6,7 @@ import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
@@ -24,7 +25,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * RecipeManager's recipe storage
@@ -53,6 +57,8 @@ public class Recipes {
     private Map<String, RMStonecuttingRecipe> indexStonecutting = new HashMap<>();
     protected Map<String, FuelRecipe> indexFuels = new HashMap<>();
     private Map<String, BrewRecipe> indexBrew = new HashMap<>();
+    protected Map<String, CompostRecipe> indexCompost = new HashMap<>();
+    protected Map<String, CompostRecipe> indexRemovedCompost = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {
@@ -75,6 +81,8 @@ public class Recipes {
         indexCampfire.clear();
         indexStonecutting.clear();
         indexBrew.clear();
+        indexCompost.clear();
+        indexRemovedCompost.clear();
         indexName.clear();
     }
 
@@ -260,6 +268,16 @@ public class Recipes {
         return recipes;
     }
 
+    public List<CompostRecipe> getCompostRecipes() {
+        List<CompostRecipe> recipes = new ArrayList<>();
+        for (Map.Entry<String, CompostRecipe> entry : indexCompost.entrySet()) {
+            CompostRecipe recipe = entry.getValue();
+            recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
     /**
      * Get the RecipeManager workbench recipe for the Bukkit recipe inputted.<br>
      * Can be either craft or combine recipe.<br>
@@ -408,6 +426,26 @@ public class Recipes {
             if (recipe == null) {
                 recipe = indexBrew.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
             }
+        }
+
+        return recipe;
+    }
+
+    public CompostRecipe getCompostRecipe(ItemStack ingredient) {
+        CompostRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexCompost.get(ingredient.getType().toString());
+        }
+
+        return recipe;
+    }
+
+    public CompostRecipe getRemovedCompostRecipe(ItemStack ingredient) {
+        CompostRecipe recipe = null;
+
+        if (ingredient != null) {
+            recipe = indexRemovedCompost.get(ingredient.getType().toString());
         }
 
         return recipe;
@@ -567,8 +605,13 @@ public class Recipes {
 
         index.put(recipe, info); // Add to main index
 
-        // Add to quickfind index if it's not removed
-        if (!recipe.hasFlag(FlagType.REMOVE)) {
+        if (recipe.hasFlag(FlagType.REMOVE)) {
+            if (recipe instanceof CompostRecipe){
+                for (String index : ((CompostRecipe) recipe).getIndexString()) {
+                    indexRemovedCompost.put(index, (CompostRecipe) recipe);
+                }
+            }
+        } else { // Add to quickfind index if it's not removed
             indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
 
             if (recipe instanceof CraftRecipe) {
@@ -629,6 +672,10 @@ public class Recipes {
                 indexBrew.put(((BrewRecipe) recipe).getIndexString(), (BrewRecipe) recipe);
             } else if (recipe instanceof FuelRecipe) {
                 indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
+            } else if (recipe instanceof CompostRecipe) {
+                for (String index : ((CompostRecipe) recipe).getIndexString()) {
+                    indexCompost.put(index, (CompostRecipe) recipe);
+                }
             }
         }
 
@@ -744,6 +791,10 @@ public class Recipes {
             indexBrew.remove(((BrewRecipe) recipe).getIndexString());
         } else if (recipe instanceof FuelRecipe) {
             indexFuels.remove(((FuelRecipe) recipe).getIndexString());
+        } else if (recipe instanceof CompostRecipe) {
+            for (String index : ((CompostRecipe) recipe).getIndexString()) {
+                indexCompost.remove(index);
+            }
         }
 
         // Remove from server if applicable

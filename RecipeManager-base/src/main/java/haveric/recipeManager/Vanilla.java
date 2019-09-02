@@ -6,6 +6,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
+import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
@@ -84,6 +85,7 @@ public class Vanilla {
         clean();
 
         initFuels();
+        initCompostRecipes();
         initSpecialRecipes();
         initVanillaRecipes();
         indexInitialRecipes();
@@ -363,6 +365,90 @@ public class Vanilla {
 
     private static void addFuelRecipe(Material material, float burnTime) {
         initialRecipes.put(new FuelRecipe(material, burnTime), info);
+    }
+
+    private static void initCompostRecipes() {
+        if (Version.has1_14Support()) {
+            addCompostRecipe(Material.BEETROOT_SEEDS, 0.3f);
+            addCompostRecipe(Material.DRIED_KELP, 0.3f);
+            addCompostRecipe(Material.GRASS, 0.3f);
+            addCompostRecipe(Material.KELP, 0.3f);
+            addCompostRecipe(Material.ACACIA_LEAVES, 0.3f);
+            addCompostRecipe(Material.BIRCH_LEAVES, 0.3f);
+            addCompostRecipe(Material.DARK_OAK_LEAVES, 0.3f);
+            addCompostRecipe(Material.JUNGLE_LEAVES, 0.3f);
+            addCompostRecipe(Material.OAK_LEAVES, 0.3f);
+            addCompostRecipe(Material.SPRUCE_LEAVES, 0.3f);
+            addCompostRecipe(Material.MELON_SEEDS, 0.3f);
+            addCompostRecipe(Material.PUMPKIN_SEEDS, 0.3f);
+            addCompostRecipe(Material.ACACIA_SAPLING, 0.3f);
+            addCompostRecipe(Material.BIRCH_SAPLING, 0.3f);
+            addCompostRecipe(Material.DARK_OAK_SAPLING, 0.3f);
+            addCompostRecipe(Material.JUNGLE_SAPLING, 0.3f);
+            addCompostRecipe(Material.OAK_SAPLING, 0.3f);
+            addCompostRecipe(Material.SPRUCE_SAPLING, 0.3f);
+            addCompostRecipe(Material.SEAGRASS, 0.3f);
+            addCompostRecipe(Material.SWEET_BERRIES, 0.3f);
+            addCompostRecipe(Material.WHEAT_SEEDS, 0.3f);
+
+            addCompostRecipe(Material.CACTUS, 0.5f);
+            addCompostRecipe(Material.DRIED_KELP_BLOCK, 0.5f);
+            addCompostRecipe(Material.MELON_SLICE, 0.5f);
+            addCompostRecipe(Material.SUGAR_CANE, 0.5f);
+            addCompostRecipe(Material.TALL_GRASS, 0.5f);
+            addCompostRecipe(Material.VINE, 0.5f);
+
+            addCompostRecipe(Material.APPLE, 0.65f);
+            addCompostRecipe(Material.BEETROOT, 0.65f);
+            addCompostRecipe(Material.CARROT, 0.65f);
+            addCompostRecipe(Material.COCOA_BEANS, 0.65f);
+            addCompostRecipe(Material.FERN, 0.65f);
+            addCompostRecipe(Material.LARGE_FERN, 0.65f);
+            addCompostRecipe(Material.DANDELION, 0.65f);
+            addCompostRecipe(Material.POPPY, 0.65f);
+            addCompostRecipe(Material.BLUE_ORCHID, 0.65f);
+            addCompostRecipe(Material.ALLIUM, 0.65f);
+            addCompostRecipe(Material.AZURE_BLUET, 0.65f);
+            addCompostRecipe(Material.RED_TULIP, 0.65f);
+            addCompostRecipe(Material.ORANGE_TULIP, 0.65f);
+            addCompostRecipe(Material.WHITE_TULIP, 0.65f);
+            addCompostRecipe(Material.PINK_TULIP, 0.65f);
+            addCompostRecipe(Material.OXEYE_DAISY, 0.65f);
+            addCompostRecipe(Material.CORNFLOWER, 0.65f);
+            addCompostRecipe(Material.LILY_OF_THE_VALLEY, 0.65f);
+            addCompostRecipe(Material.WITHER_ROSE, 0.65f);
+            addCompostRecipe(Material.SUNFLOWER, 0.65f);
+            addCompostRecipe(Material.LILAC, 0.65f);
+            addCompostRecipe(Material.ROSE_BUSH, 0.65f);
+            addCompostRecipe(Material.PEONY, 0.65f);
+            addCompostRecipe(Material.LILY_PAD, 0.65f);
+            addCompostRecipe(Material.MELON, 0.65f);
+            addCompostRecipe(Material.BROWN_MUSHROOM, 0.65f);
+            addCompostRecipe(Material.RED_MUSHROOM, 0.65f);
+            addCompostRecipe(Material.MUSHROOM_STEM, 0.65f);
+            addCompostRecipe(Material.POTATO, 0.65f);
+            addCompostRecipe(Material.PUMPKIN, 0.65f);
+            addCompostRecipe(Material.CARVED_PUMPKIN, 0.65f);
+            addCompostRecipe(Material.SEA_PICKLE, 0.65f);
+            addCompostRecipe(Material.WHEAT, 0.65f);
+
+            addCompostRecipe(Material.BAKED_POTATO, 0.85f);
+            addCompostRecipe(Material.BREAD, 0.85f);
+            addCompostRecipe(Material.COOKIE, 0.85f);
+            addCompostRecipe(Material.HAY_BLOCK, 0.85f);
+            addCompostRecipe(Material.BROWN_MUSHROOM_BLOCK, 0.85f);
+            addCompostRecipe(Material.RED_MUSHROOM_BLOCK, 0.85f);
+
+            addCompostRecipe(Material.CAKE, 1);
+            addCompostRecipe(Material.PUMPKIN_PIE, 1);
+        }
+    }
+
+    private static void addCompostRecipe(Material ingredient, float chance) {
+        CompostRecipe recipe = new CompostRecipe(ingredient, 1, chance);
+        recipe.setResult(new ItemStack(Material.BONE_MEAL));
+        initialRecipes.put(recipe, info);
+        RecipeManager.getRecipes().indexCompost.put(recipe.getIndexString().get(0), recipe);
     }
 
     private static void initSpecialRecipes() {

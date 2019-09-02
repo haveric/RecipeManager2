@@ -6,26 +6,12 @@ import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.recipe.FlagOverride;
-import haveric.recipeManager.nms.NMSVersionHandler;
-import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
-import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
-import haveric.recipeManager.tools.RMBukkitTools;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,73 +118,9 @@ public class ConditionEvaluator {
             for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : map.entrySet()) {
                 // Let's only use this special logic for recipes where RMCRecipeInfo has the bukkit pointer.
                 if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
-                    Recipe bukkit = entry.getKey().getBukkitRecipe(true);
-                    if (recipe instanceof CraftRecipe1_13) {
-                        if (bukkit instanceof ShapedRecipe) {
-                            CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
-                            if (NMSVersionHandler.getToolsRecipe().matchesShaped(bukkit, craftRecipe.getChoiceShape(), craftRecipe.getIngredientsChoiceMap())) {
-                                return entry.getValue();
-                            }
-                        }
-                    } else if (recipe instanceof CraftRecipe) {
-                        if (bukkit instanceof ShapedRecipe) {
-                            CraftRecipe craftRecipe = (CraftRecipe) recipe;
-
-                            ItemStack[] matrix = craftRecipe.getIngredients();
-                            RMBukkitTools.trimItemMatrix(matrix);
-                            ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-                            int height = craftRecipe.getHeight();
-                            int width = craftRecipe.getWidth();
-
-                            if (NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(bukkit, matrix, matrixMirror, width, height)) {
-                                return entry.getValue();
-                            }
-                        }
-                    } else if (recipe instanceof CombineRecipe) {
-                        if (bukkit instanceof ShapelessRecipe) {
-                            CombineRecipe combineRecipe = (CombineRecipe) recipe;
-                            if (Version.has1_13Support()) {
-                                if (NMSVersionHandler.getToolsRecipe().matchesShapeless(bukkit, combineRecipe.getIngredientChoiceList())) {
-                                    return entry.getValue();
-                                }
-                            } else {
-                                if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(bukkit, combineRecipe.getIngredients())) {
-                                    return entry.getValue();
-                                }
-                            }
-                        }
-                    } else if (recipe instanceof RMFurnaceRecipe) {
-                        RMFurnaceRecipe smeltRecipe = (RMFurnaceRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, smeltRecipe.getIngredient())) {
-                            return entry.getValue();
-                        }
-                    } else if (recipe instanceof RMFurnaceRecipe1_13) {
-                        RMFurnaceRecipe1_13 smeltRecipe = (RMFurnaceRecipe1_13) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesFurnace(bukkit, new ItemStack(smeltRecipe.getIngredientChoice().get(0)))) {
-                            return entry.getValue();
-                        }
-                    } else if (recipe instanceof RMBlastingRecipe) {
-                        RMBlastingRecipe blastingRecipe = (RMBlastingRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesBlasting(bukkit, new ItemStack(blastingRecipe.getIngredientChoice().get(0)))) {
-                            return entry.getValue();
-                        }
-                    } else if (recipe instanceof RMSmokingRecipe) {
-                        RMSmokingRecipe smokingRecipe = (RMSmokingRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesSmoking(bukkit, new ItemStack(smokingRecipe.getIngredientChoice().get(0)))) {
-                            return entry.getValue();
-                        }
-                    } else if (recipe instanceof RMCampfireRecipe) {
-                        RMCampfireRecipe campfireRecipe = (RMCampfireRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesCampfire(bukkit, new ItemStack(campfireRecipe.getIngredientChoice().get(0)))) {
-                            return entry.getValue();
-                        }
-                    } else if (recipe instanceof RMStonecuttingRecipe) {
-                        RMStonecuttingRecipe stonecuttingRecipe = (RMStonecuttingRecipe) recipe;
-                        if (NMSVersionHandler.getToolsRecipe().matchesStonecutting(bukkit, new ItemStack(stonecuttingRecipe.getIngredientChoice().get(0)), stonecuttingRecipe.getResult())) {
-                            return entry.getValue();
-                        }
+                    if (recipe.getIndex() == entry.getKey().getIndex()) {
+                        return entry.getValue();
                     }
-
                 }
             }
         }

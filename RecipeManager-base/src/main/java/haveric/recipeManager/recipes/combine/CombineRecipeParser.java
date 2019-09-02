@@ -119,7 +119,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
             recipe.setIngredients(ingredients);
         }
 
-        if (recipe.hasFlag(FlagType.REMOVE)) {
+        if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) { // for mc1.12, matching requires outcome too...
             reader.nextLine(); // Skip the results line, if it exists
         } else {
             // get the results

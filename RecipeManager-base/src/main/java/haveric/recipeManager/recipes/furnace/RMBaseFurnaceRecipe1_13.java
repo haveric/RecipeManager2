@@ -27,7 +27,6 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
     private ItemResult fuel;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
-    private int hash;
 
     public RMBaseFurnaceRecipe1_13() {
     }

@@ -18,6 +18,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CombineRecipe1_13 extends CombineRecipe {
@@ -105,7 +106,11 @@ public class CombineRecipe1_13 extends CombineRecipe {
         int size = ingredientChoiceList.size();
         for (int i = 0; i < size; i++) {
             List<Material> ingredientChoice = ingredientChoiceList.get(i);
-            for (Material material : ingredientChoice) {
+
+            List<Material> sorted = new ArrayList<>(ingredientChoice);
+            Collections.sort(sorted);
+
+            for (Material material : sorted) {
                 str.append(material.toString()).append(';');
             }
 

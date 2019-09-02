@@ -302,12 +302,56 @@ public class FlagIngredientCondition extends Flag {
 
     @Override
     public void onCheck(Args a) {
-        if (!a.hasInventory()) {
-            a.addCustomReason("Needs inventory!");
+        if (!a.hasInventory() && !a.hasExtra()) {
+            a.addCustomReason("Needs inventory or extra ingredient!");
             return;
         }
 
-        if (a.inventory() instanceof CraftingInventory) {
+        if (!a.hasInventory()) {
+            Object extra = a.extra();
+            if (extra instanceof List) {
+                List<?> ingredients = (List<?>) extra;
+
+                Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
+
+                while (iter.hasNext()) {
+                    Entry<String, ConditionsIngredient> entry = iter.next();
+                    ConditionsIngredient checkConditions = entry.getValue();
+
+                    if (checkConditions.hasNeeded()) {
+                        checkConditions.setNeededLeft(checkConditions.getNeeded());
+                    }
+                }
+
+                for (int i = 1; i < ingredients.size(); i++) {
+                    Object potentialIngredient = ingredients.get(i);
+                    if (potentialIngredient instanceof ItemStack) {
+                        ItemStack item = ToolsItem.nullIfAir((ItemStack) potentialIngredient);
+
+                        if (item != null) {
+                            checkIngredientConditions(item, a);
+                        }
+                    }
+                }
+
+                iter = conditions.entrySet().iterator();
+
+                while (iter.hasNext()) {
+                    Entry<String, ConditionsIngredient> entry = iter.next();
+                    ConditionsIngredient checkConditions = entry.getValue();
+
+                    if (checkConditions.hasNeeded()) {
+                        if (!a.hasReasons() && checkConditions.getNeededLeft() > 0) {
+                            a.addCustomReason("Needed items mismatch!");
+                        }
+
+                        checkConditions.setNeededLeft(-1);
+                    }
+                }
+
+                return;
+            }
+        } else if (a.inventory() instanceof CraftingInventory) {
             Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
 
             while (iter.hasNext()) {
