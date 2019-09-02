@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* FIX: @IngredientCondition, @HoldItem, @CloneIngredient enchant and bookenchant conditions
+
 === v2.17.1 ===
 * FIX: Custom smelting times in 1.12 and older
 * FIX: Smelting recipes with custom fuel wasn't checking the last fuel correctly

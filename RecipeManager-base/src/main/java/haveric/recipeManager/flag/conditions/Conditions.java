@@ -461,6 +461,8 @@ public class Conditions implements Cloneable {
                     return false;
                 }
             }
+        } else {
+            return false;
         }
 
         return true;
@@ -578,6 +580,8 @@ public class Conditions implements Cloneable {
                     return false;
                 }
             }
+        } else {
+            return false;
         }
 
         return true;
