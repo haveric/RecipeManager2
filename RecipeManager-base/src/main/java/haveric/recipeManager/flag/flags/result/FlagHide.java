@@ -143,4 +143,18 @@ public class FlagHide extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "attributes: " + attributes;
+        toHash += "destroys: " + destroys;
+        toHash += "enchants: " + enchants;
+        toHash += "placedon: " + placedon;
+        toHash += "potioneffects: " + potioneffects;
+        toHash += "unbreakable: " + unbreakable;
+
+        return toHash.hashCode();
+    }
 }

@@ -138,4 +138,15 @@ public class FlagHeight extends Flag {
             a.addReason("flag.height", failMessage, "{height}", getHeightString());
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "minHeight: " + minHeight;
+        toHash += "maxHeight: " + maxHeight;
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }

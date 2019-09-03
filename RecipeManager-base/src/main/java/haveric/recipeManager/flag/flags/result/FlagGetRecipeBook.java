@@ -153,4 +153,14 @@ public class FlagGetRecipeBook extends Flag {
 
         a.result().setItemMeta(book.getBookItem(volume).getItemMeta());
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "bookID: " + bookID;
+        toHash += "volume: " + volume;
+
+        return toHash.hashCode();
+    }
 }

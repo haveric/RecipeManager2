@@ -141,4 +141,17 @@ public class FlagGameMode extends Flag {
             a.addReason("flag.gamemode", failMessage, "{playergm}", gm.toString().toLowerCase(), "{gamemodes}", RMCUtil.collectionToString(gameModes));
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (GameMode gameMode : gameModes) {
+            toHash += gameMode.toString();
+        }
+
+        toHash += failMessage;
+
+        return toHash.hashCode();
+    }
 }

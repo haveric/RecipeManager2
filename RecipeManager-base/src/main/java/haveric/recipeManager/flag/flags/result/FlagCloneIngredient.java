@@ -473,4 +473,23 @@ public class FlagCloneIngredient extends Flag {
         }
         return value;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "copyBitsum: " + copyBitsum;
+        toHash += "dataModifier: " + dataModifier[0] + dataModifier[1];
+        toHash += "amountModifier: " + amountModifier[0] + amountModifier[1];
+
+        for (String loreCondition : loreConditions) {
+            toHash += loreCondition + ", ";
+        }
+
+        for (Integer loreline : loreLines) {
+            toHash += loreline + ", ";
+        }
+
+        return toHash.hashCode();
+    }
 }

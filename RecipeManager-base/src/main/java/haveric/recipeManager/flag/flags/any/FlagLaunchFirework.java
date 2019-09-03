@@ -169,4 +169,19 @@ public class FlagLaunchFirework extends Flag {
             ent.setFireworkMeta(firework);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "power: " + firework.getPower();
+        toHash += "effects: ";
+        for (FireworkEffect effect : firework.getEffects()) {
+            toHash += effect.hashCode();
+        }
+
+        toHash += "chance: " + chance;
+
+        return toHash.hashCode();
+    }
 }

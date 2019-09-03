@@ -1945,4 +1945,98 @@ public class Conditions implements Cloneable {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "";
+
+        toHash += "flagType: " + flagType;
+        if (ingredient != null) {
+            toHash += "ingredient: " + ingredient.hashCode();
+        }
+        toHash += "failMessage: " + failMessage;
+        toHash += "dataValues: ";
+        for (Map.Entry<Short, Boolean> entry : dataValues.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().toString();
+        }
+
+        toHash += "dataBits: ";
+        for (Map.Entry<Short, Boolean> entry : dataBits.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().toString();
+        }
+
+        toHash += "amount: " + amount;
+
+        toHash += "enchants: ";
+        for (Map.Entry<Enchantment, Map<Integer, Boolean>> entry : enchants.entrySet()) {
+            toHash += entry.getKey().toString();
+
+            for (Map.Entry<Integer, Boolean> entry2 : entry.getValue().entrySet()) {
+                toHash += entry2.getKey() + entry2.getValue().toString();
+            }
+        }
+
+        toHash += "bookenchants: ";
+        for (Map.Entry<Enchantment, Map<Integer, Boolean>> entry : bookEnchants.entrySet()) {
+            toHash += entry.getKey().toString();
+
+            for (Map.Entry<Integer, Boolean> entry2 : entry.getValue().entrySet()) {
+                toHash += entry2.getKey() + entry2.getValue().toString();
+            }
+        }
+
+        toHash += "name: " + name;
+
+        toHash += "lores: ";
+        for (String lore : lores) {
+            toHash += lore;
+        }
+
+        if (minColor != null) {
+            toHash += "minColor: " + minColor.hashCode();
+        }
+        if (maxColor != null) {
+            toHash += "maxColor: " + maxColor.hashCode();
+        }
+        if (hasUnbreakable()) {
+            toHash += "unbreakable: " + unbreakable.toString();
+        }
+
+        toHash += "potionConditions: ";
+        for (Map.Entry<PotionType, ConditionPotion> entry : potionConditions.entrySet()) {
+            toHash += entry.getKey().toString() + entry.getValue().hashCode();
+        }
+
+        toHash += "potionEffectConditions: ";
+        for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : potionEffectConditions.entrySet()) {
+            toHash += entry.getKey().toString() + entry.getValue().hashCode();
+        }
+
+        if (hasBannerColor()) {
+            toHash += "bannerColor: " + bannerColor.toString();
+        }
+
+        toHash += "bannerPatterns: ";
+        for (Map.Entry<PatternType, DyeColor> entry : bannerPatterns.entrySet()) {
+            toHash += entry.getKey().toString() + entry.getValue().toString();
+        }
+
+        if (hasSpawnEggEntityType()) {
+            toHash += "spawnEggEntityType: " + spawnEggEntityType.toString();
+        }
+        toHash += "localizedName: " + localizedName;
+        toHash += "customModelData: " + customModelData;
+
+        toHash += "noMeta: " + noMeta;
+        toHash += "noName: " + noName;
+        toHash += "noLore: " + noLore;
+        toHash += "noEnchant: " + noEnchant;
+        toHash += "noBookEnchant: " + noBookEnchant;
+        toHash += "noColor: " + noColor;
+        toHash += "noLocalizedName: " + noLocalizedName;
+        toHash += "noCustomModelData: " + noCustomModelData;
+        toHash += "allSet: " + allSet;
+
+        return toHash.hashCode();
+    }
 }

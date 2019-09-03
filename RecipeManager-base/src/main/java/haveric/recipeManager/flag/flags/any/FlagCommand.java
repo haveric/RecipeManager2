@@ -144,4 +144,21 @@ public class FlagCommand extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        boolean first = true;
+        for (String command : commands) {
+            if (first) {
+                first = false;
+            } else {
+                toHash += ",";
+            }
+            toHash += command;
+        }
+
+        return toHash.hashCode();
+    }
 }

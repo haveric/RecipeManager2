@@ -131,7 +131,6 @@ public class CombineRecipe1_13 extends CombineRecipe {
         s.append(" (");
 
         int ingredientChoiceListSize = ingredientChoiceList.size();
-
         for (int i = 0; i < ingredientChoiceListSize; i++) {
             List<Material> ingredientChoice = ingredientChoiceList.get(i);
 
@@ -151,10 +150,10 @@ public class CombineRecipe1_13 extends CombineRecipe {
 
         s.append(") ");
 
+        s.append(getResultsString());
+
         if (removed) {
             s.append("removed recipe");
-        } else {
-            s.append(getResultsString());
         }
 
         name = s.toString();

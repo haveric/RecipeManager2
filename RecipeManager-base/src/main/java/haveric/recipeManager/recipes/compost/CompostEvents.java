@@ -186,13 +186,26 @@ public class CompostEvents implements Listener {
 
                 if (dataRecipe == null) {
                     if (player != null) {
-                        player.sendMessage("Composter does not have a recipe set. Try a vanilla composting material");
+                        player.sendMessage("Composter does not have a custom recipe set.");
                     }
                     event.setCancelled(true);
                     return;
                 }
 
-                if (recipe.getIndex() == dataRecipe.getIndex()) {
+                boolean sameRecipe = recipe.getIndex() == dataRecipe.getIndex();
+                boolean sameResult = false;
+
+                if (!sameRecipe) {
+                    if (!recipe.isMultiResult() && !dataRecipe.isMultiResult()) {
+                        ItemResult recipeResult = recipe.getFirstResult();
+                        ItemResult dataRecipeResult = dataRecipe.getFirstResult();
+                        if (recipeResult.hashCode() == dataRecipeResult.hashCode()) {
+                            sameResult = true;
+                        }
+                    }
+                }
+
+                if (sameRecipe || sameResult) {
                     List<ItemStack> dataIngredients = data.getIngredients();
                     List<ItemStack> ingredientsWithNew = new ArrayList<>(dataIngredients);
                     ingredientsWithNew.add(item);
@@ -259,19 +272,23 @@ public class CompostEvents implements Listener {
                         }
                     }
                 } else {
-                    String ingredientsString = "";
-                    boolean first = true;
-                    for (Material material : dataRecipe.getIngredients()) {
-                        if (first) {
-                            first = false;
-                        } else {
-                            ingredientsString += ", ";
-                        }
-                        ingredientsString += material.toString();
-                    }
-                    // TODO: Convert ingredient conditions to the ingredients
                     if (player != null) {
-                        player.sendMessage("Composter only accepts: " + ingredientsString);
+                        player.sendMessage("This composter requires different ingredients.");
+                        StringBuilder toString = new StringBuilder();
+                        boolean first = true;
+                        for (ItemStack ingredient : data.getIngredients()) {
+                            if (first) {
+                                first = false;
+                            } else {
+                                toString.append(",");
+                            }
+
+                            toString.append(ingredient.getType().name()).append(" x ").append(ingredient.getAmount());
+                            if (ingredient.hasItemMeta()) {
+                                toString.append(":").append(ingredient.getItemMeta());
+                            }
+                        }
+                        player.sendMessage("Composter contains: " + data.getIngredients());
                     }
                 }
             }

@@ -213,4 +213,18 @@ public class FlagBookItem extends Flag {
             a.result().setItemMeta(bookMeta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "title: " + title;
+        toHash += "author: " + author;
+
+        for (String page : pages) {
+            toHash += page;
+        }
+
+        return toHash.hashCode();
+    }
 }

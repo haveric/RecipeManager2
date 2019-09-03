@@ -152,4 +152,17 @@ public class FlagBiome extends Flag {
             a.addReason("flag.biome.unallowed", failMessage, "{biomes}", getBiomesString(false));
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<Biome, Boolean> entry : biomes.entrySet()) {
+            toHash += entry.getKey().toString() + "-" + entry.getValue().toString();
+        }
+
+        toHash += failMessage;
+
+        return toHash.hashCode();
+    }
 }

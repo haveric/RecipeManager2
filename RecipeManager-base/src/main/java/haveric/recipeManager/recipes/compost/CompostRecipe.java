@@ -6,6 +6,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +16,17 @@ public class CompostRecipe extends MultiResultRecipe {
     private double levelSuccessChance = 100;
     private double levels = 1;
 
-    public CompostRecipe(Material material) {
-        this.ingredients.add(material);
+    public CompostRecipe(Material ingredient, Material result, double levelSuccessChance) {
+        ingredients.add(ingredient);
+        setResult(new ItemStack(result));
+        this.levelSuccessChance = levelSuccessChance;
 
         updateHash();
     }
 
-    public CompostRecipe(Material material, int levels) {
-        this.ingredients.add(material);
-        this.levels = levels;
-
-        updateHash();
-    }
-
-    public CompostRecipe(Material material, int levels, double levelSuccessChance) {
-        this.ingredients.add(material);
+    public CompostRecipe(Material ingredient, Material result, double levelSuccessChance, int levels) {
+        ingredients.add(ingredient);
+        setResult(new ItemStack(result));
         this.levelSuccessChance = levelSuccessChance;
         this.levels = levels;
 

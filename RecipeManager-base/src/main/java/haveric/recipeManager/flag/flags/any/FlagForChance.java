@@ -101,6 +101,16 @@ public class FlagForChance extends Flag {
         public boolean isAutoChance() {
             return autoChance;
         }
+
+        @Override
+        public int hashCode() {
+            String toHash = "" + flag.hashCode();
+
+            toHash += "chance: " + chance;
+            toHash += "autochance: " + autoChance;
+
+            return toHash.hashCode();
+        }
     }
 
     private Map<String, List<ChanceFlag>> flagMap = new HashMap<>();
@@ -555,5 +565,21 @@ public class FlagForChance extends Flag {
             default:
                 break;
         }
+    }
+
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<String, List<ChanceFlag>> entry : flagMap.entrySet()) {
+            toHash += entry.getKey();
+
+            for (ChanceFlag flag : entry.getValue()) {
+                toHash += flag.hashCode();
+            }
+        }
+
+        return toHash.hashCode();
     }
 }

@@ -95,4 +95,13 @@ public class FlagLeatherColor extends Flag {
             a.result().setItemMeta(leather);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "color: " + color.hashCode();
+
+        return toHash.hashCode();
+    }
 }

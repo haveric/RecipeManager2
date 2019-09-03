@@ -198,4 +198,15 @@ public class FlagSkullOwner extends Flag {
 
         addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "owner: " + owner;
+        toHash += "ownerUUID: " + ownerUUID.toString();
+        toHash += "textureBase64: " + textureBase64;
+
+        return toHash.hashCode();
+    }
 }

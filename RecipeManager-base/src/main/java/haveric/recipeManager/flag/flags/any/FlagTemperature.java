@@ -228,4 +228,17 @@ public class FlagTemperature extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "lteTemp: " + lteTemp.toString();
+        toHash += "gteTemp: " + gteTemp.toString();
+        toHash += "ltTemp: " + ltTemp.toString();
+        toHash += "gtTemp: " + gtTemp.toString();
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }

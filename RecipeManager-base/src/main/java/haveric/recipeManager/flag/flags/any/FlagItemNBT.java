@@ -116,4 +116,14 @@ public class FlagItemNBT extends Flag {
             addNBTRaw(a, getResultNBT());
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "displayNBT: " + displayNBT;
+        toHash += "resultNBT: " + resultNBT;
+
+        return toHash.hashCode();
+    }
 }

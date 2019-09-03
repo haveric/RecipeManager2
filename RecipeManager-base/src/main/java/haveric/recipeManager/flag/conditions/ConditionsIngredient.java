@@ -77,4 +77,13 @@ public class ConditionsIngredient extends Conditions {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "needed: " + needed;
+
+        return toHash.hashCode();
+    }
 }

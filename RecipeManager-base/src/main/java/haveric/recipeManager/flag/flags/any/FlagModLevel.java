@@ -240,4 +240,16 @@ public class FlagModLevel extends Flag {
         return list;
     }
     */
+
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "mod: " + mod;
+        toHash += "amount: " + amount;
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }

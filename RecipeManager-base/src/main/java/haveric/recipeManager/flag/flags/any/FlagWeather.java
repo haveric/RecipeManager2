@@ -192,4 +192,14 @@ public class FlagWeather extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "weather: " + weather;
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }

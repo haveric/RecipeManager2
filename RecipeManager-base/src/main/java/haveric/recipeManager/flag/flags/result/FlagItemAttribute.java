@@ -170,4 +170,15 @@ public class FlagItemAttribute extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<Attribute, AttributeModifier> entry : attributes.entries()) {
+            toHash += entry.getKey().toString() + "-" + entry.getValue().hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

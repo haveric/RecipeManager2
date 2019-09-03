@@ -428,4 +428,15 @@ public class FlagIngredientCondition extends Flag {
 
         a.addCustomReason("Unknown inventory type: " + a.inventory());
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<String, ConditionsIngredient> entry : conditions.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

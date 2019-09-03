@@ -83,7 +83,11 @@ public class ToolsItem {
         String print;
         String name;
 
+        String startTextColor = "";
         String endTextColor = "";
+        if (defColor != null) {
+            startTextColor += defColor;
+        }
         if (endColor != null) {
             endTextColor += endColor;
         }
@@ -97,7 +101,7 @@ public class ToolsItem {
                 name = Tools.parseAliasPrint(material.toString());
             }
 
-            print = defColor + name + endTextColor;
+            print = startTextColor + name + endTextColor;
         }
 
         return print;

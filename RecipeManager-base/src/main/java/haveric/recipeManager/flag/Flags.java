@@ -337,4 +337,15 @@ public class Flags implements Cloneable {
 
         return clone;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + flags.size();
+
+        for (Flag f : flags.values()) {
+            toHash += f.hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

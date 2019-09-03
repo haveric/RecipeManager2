@@ -287,4 +287,18 @@ public class FlagExplode extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "power: " + power;
+        toHash += "fire: " + fire;
+        toHash += "noBreak: " + noBreak;
+        toHash += "noDamage: " + noDamage;
+        toHash += "failure: " + failure;
+        toHash += "fuel: " + fuel;
+
+        return toHash.hashCode();
+    }
 }

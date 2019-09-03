@@ -792,9 +792,7 @@ public class Recipes {
         } else if (recipe instanceof FuelRecipe) {
             indexFuels.remove(((FuelRecipe) recipe).getIndexString());
         } else if (recipe instanceof CompostRecipe) {
-            for (String index : ((CompostRecipe) recipe).getIndexString()) {
-                indexCompost.remove(index);
-            }
+            indexCompost.remove(recipe.getIndex());
         }
 
         // Remove from server if applicable

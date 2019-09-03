@@ -179,4 +179,16 @@ public class FlagNeedMoney extends Flag {
             addResultLore(a, "Need Money: " + getMoneyString());
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "minMoney: " + minMoney;
+        toHash += "maxMoney: " + maxMoney;
+        toHash += "failMessage: " + failMessage;
+        toHash += "setBoth: " + setBoth;
+
+        return toHash.hashCode();
+    }
 }

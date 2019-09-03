@@ -183,4 +183,16 @@ public class ItemResult extends ItemStack implements Flaggable {
 
         return sendEnd;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "";
+        toHash += super.hashCode(); // Get ItemStack's hash
+
+        if (hasFlags()) {
+            toHash += flags.hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

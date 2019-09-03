@@ -176,4 +176,16 @@ public class FlagNeedLevel extends Flag {
             addResultLore(a, resultString);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "minLevel: " + minLevel;
+        toHash += "maxLevel: " + maxLevel;
+        toHash += "failMessage: " + failMessage;
+        toHash += "setBoth: " + setBoth;
+
+        return toHash.hashCode();
+    }
 }

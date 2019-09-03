@@ -123,4 +123,15 @@ public class FlagMessage extends Flag {
             a.addCustomEffect(a.parseVariables(s));
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (String message : messages) {
+            toHash += message;
+        }
+
+        return toHash.hashCode();
+    }
 }

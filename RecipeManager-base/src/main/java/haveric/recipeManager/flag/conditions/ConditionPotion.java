@@ -31,4 +31,14 @@ public class ConditionPotion {
     public boolean hasLevel() {
         return level > -1;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "ConditionPotion:";
+
+        toHash += "extended: " + extended.toString();
+        toHash += "level: " + level;
+
+        return toHash.hashCode();
+    }
 }

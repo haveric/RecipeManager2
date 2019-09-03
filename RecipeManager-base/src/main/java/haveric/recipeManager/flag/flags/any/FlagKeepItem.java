@@ -266,4 +266,16 @@ public class FlagKeepItem extends Flag {
             a.addCustomReason("Needs a crafting or furnace inventory!");
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "keepItems: ";
+        for (Map.Entry<String, Object> entry : keepItems.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

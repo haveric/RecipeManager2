@@ -124,4 +124,13 @@ public class FlagMonsterSpawner extends Flag {
             a.result().setItemMeta(blockStateMeta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "entityType: " + entityType.toString();
+
+        return toHash.hashCode();
+    }
 }

@@ -178,4 +178,21 @@ public class FlagItemLore extends Flag {
             addResultLores(a, lores);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "displayLores: ";
+        for (String lore : displayLores) {
+            toHash += lore;
+        }
+
+        toHash += "resultLores: ";
+        for (String lore : resultLores) {
+            toHash += lore;
+        }
+
+        return toHash.hashCode();
+    }
 }

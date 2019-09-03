@@ -148,4 +148,21 @@ public class FlagEnchantItem extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "Enchants: ";
+        for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+            toHash += entry.getKey().hashCode() + "-" + entry.getValue().toString();
+        }
+
+        toHash += "EnchantsToRemove: ";
+        for (Enchantment enchantment : enchantsToRemove) {
+            toHash += enchantment.hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

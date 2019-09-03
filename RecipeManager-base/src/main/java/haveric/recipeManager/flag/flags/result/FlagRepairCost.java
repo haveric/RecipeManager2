@@ -108,4 +108,13 @@ public class FlagRepairCost extends Flag {
             a.result().setItemMeta(meta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "cost: " + cost;
+
+        return toHash.hashCode();
+    }
 }

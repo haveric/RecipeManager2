@@ -348,4 +348,15 @@ public class FlagHoldItem extends Flag {
             a.addReason("flag.holditem", "", "{items}", s.toString());
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<String, ConditionsHold> entry : conditions.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

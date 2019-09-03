@@ -996,6 +996,70 @@ public class FlagSummon extends Flag {
         public boolean isElder() {
             return elder;
         }
+
+        @Override
+        public int hashCode() {
+            String toHash = "" + super.hashCode();
+
+            toHash += "type: " + type.toString();
+            toHash += "noAi: " + noAi;
+            toHash += "noEffect: " + noEffect;
+            toHash += "noRemove: " + noRemove;
+            toHash += "invulnerable: " + invulnerable;
+            toHash += "mountNext: " + mountNext;
+            toHash += "chance: " + chance;
+            toHash += "num: " + num;
+            toHash += "spread: " + spread;
+            toHash += "onFire: " + onFire;
+            toHash += "pickup: " + pickup.toString();
+            toHash += "target: " + target;
+            toHash += "hit: " + hit;
+            toHash += "angry: " + angry;
+            toHash += "pet: " + pet;
+            toHash += "noSit: " + noSit;
+            toHash += "ocelot: " + ocelot.toString();
+            toHash += "cat: " + cat.toString();
+            toHash += "saddle: " + saddle;
+            toHash += "mount: " + mount;
+            toHash += "color: " + color.toString();
+            toHash += "shearedSheep: " + shearedSheep;
+            toHash += "skeleton: " + skeleton.toString();
+            toHash += "zombieVillager: " + zombieVillager;
+            toHash += "villager: " + villager.toString();
+            toHash += "poweredCreeper: " + poweredCreeper;
+            toHash += "playerIronGolem: " + playerIronGolem;
+            toHash += "pigAnger: " + pigAnger;
+            toHash += "name: " + name;
+            toHash += "noHideName: " + noHideName;
+            toHash += "hp: " + hp;
+            toHash += "maxHp: " + maxHp;
+            toHash += "adult: " + adult;
+            toHash += "baby: " + baby;
+            toHash += "ageLock: " + ageLock;
+            toHash += "noBreed: " + noBreed;
+
+            for (ItemStack item : equip) {
+                toHash += "equip: " + item.hashCode();
+            }
+
+            for (Float itemDrop : drop) {
+                toHash += "drop: " + itemDrop;
+            }
+
+            for (PotionEffect effect : potions) {
+                toHash += "potion: " + effect.hashCode();
+            }
+
+            toHash += "horse: " + horse.toString();
+            toHash += "horseColor: " + horseColor.toString();
+            toHash += "horseStyle: " + horseStyle.toString();
+            toHash += "hasChest: " + hasChest;
+            toHash += "jumpStrength: " + jumpStrength.toString();
+            toHash += "rabbit: " + rabbit.toString();
+            toHash += "elder: " + elder;
+
+            return toHash.hashCode();
+        }
     }
 
     private List<Customization> spawn = new ArrayList<>();
@@ -1747,5 +1811,16 @@ public class FlagSummon extends Flag {
                 toMount = null;
             }
         }
+    }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Customization customization : spawn) {
+            toHash += customization.hashCode();
+        }
+
+        return toHash.hashCode();
     }
 }

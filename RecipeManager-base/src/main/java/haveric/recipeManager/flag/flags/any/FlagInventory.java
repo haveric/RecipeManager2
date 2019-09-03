@@ -203,4 +203,28 @@ public class FlagInventory extends Flag {
             a.addReason("flag.inventory", failMessage, "{inventory}", getInventories().toString(), "{title}", a.inventoryView().getTitle());
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "inventories: ";
+        for (InventoryType type : inventories) {
+            toHash += type.toString();
+        }
+
+        toHash += "allowedTitles: ";
+        for (String title : allowedTitles) {
+            toHash += title;
+        }
+
+        toHash += "unallowedTitles: ";
+        for (String title : unallowedTitles) {
+            toHash += title;
+        }
+
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }
