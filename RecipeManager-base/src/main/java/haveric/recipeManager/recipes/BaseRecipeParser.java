@@ -93,7 +93,6 @@ public abstract class BaseRecipeParser {
 
                 for (ItemResult r : results) {
                     if (r.getChance() < 0) {
-                        totalPercentage -= r.getChance();
                         r.setChance(chance);
                         totalPercentage += chance;
                     }
