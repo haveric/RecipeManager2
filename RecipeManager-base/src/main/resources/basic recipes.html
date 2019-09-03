@@ -181,7 +181,7 @@ SMELT [recipe name]
 </pre>
     
     <ul>
-        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data.</li>
+        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
         <li>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 10</li>
         <li>(optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)</li>
         <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!</li>
@@ -253,7 +253,7 @@ CAMPFIRE [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
     <ul>
-        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data.</li>
+        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
         <li>(optional) '% [time]' can be the time to cook, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 30</li>
         <li>  NOTE: Due to API limitations, random cook times will only be set random on server start for campfire recipes.</li>
         <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</li>
@@ -266,12 +266,26 @@ STONECUTTING [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
     <ul>
+        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
         <li>Multiple recipes can be added with the same ingredient as long as the result is different for each.</li>
         <li>No Flag support yet</li>
     </ul>
 
-    <h3>BREW RECIPE - brewing stand recipes</h3>
-    <h4 style="margin: 0; color: red;">This is an experimental feature. Expect bugs and frequent changes.</h4>
+    <h3>COMPOST RECIPE - composter recipes</h3>
+<pre>
+COMPOST [recipe name]
+&lt;material[, ...]&gt; % [chance per level] % [levels]
+= [chance]% &lt;material:[data]:[amount]&gt;
+</pre>
+        <ul>
+            <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
+            <li>(optional) '% [chance per level]' is the percentage chance that the level will be increased by [levels]. Value can be a float number >0 and <=100. Default is 100.</li>
+            <li>(optional) '% [levels]' is the levels to Value can be a float number >0 and <=7. Default is 1.</li>
+            <li>While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made.</li>
+        </ul>
+
+        <h3>BREW RECIPE - brewing stand recipes</h3>
+        <h4 style="margin: 0; color: red;">This is an experimental feature. Expect bugs and frequent changes.</h4>
 <pre>
 BREW [recipe name]
 &lt;material:[data]:[amount]&gt; // ingredient
