@@ -4,12 +4,11 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * FIX: @IngredientCondition, @HoldItem, @CloneIngredient enchant and bookenchant conditions
 * FIX: Bug with multi-result recipes (without set percentages) not actually adding up to their specified amounts
-* FIX: Improved recipe load time for 1.13+
+* NEW: Add vanilla fuel recipes to /rmextract
 * NEW: Compost recipes with full flag and hopper support
 ** Format: <ingredient> % [chance per level] % [levels], where [chance per level] is >0 and <=100 and [levels] >0 and <=7
 ** Both [chance per level] and [levels] can support decimal inputs (meaning you can do fractional levels)
 ** While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made
-
 
 === v2.17.1 ===
 * FIX: Custom smelting times in 1.12 and older
