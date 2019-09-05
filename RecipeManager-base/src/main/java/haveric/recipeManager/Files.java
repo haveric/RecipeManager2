@@ -516,7 +516,13 @@ public class Files {
             for (Enchantment e : enchantments) {
                 EnchantmentTarget target = e.getItemTarget();
 
-                s.append(NL).append(String.format(" %-26s %-26s %-24s %-14s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), target.toString().toLowerCase(), e.getStartLevel() + " to " + e.getMaxLevel()));
+                String targetString;
+                if (target == null) { // Just in case a custom enchantment is missing the enchantment target
+                    targetString = "any";
+                } else {
+                    targetString = target.toString().toLowerCase();
+                }
+                s.append(NL).append(String.format(" %-26s %-26s %-24s %-14s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         } else { // Key didn't exist yet in 1.12
             s.append(NL).append(String.format(" %-26s %-24s %-14s %s", "Name", "Alias", "Item type", "Level range"));
