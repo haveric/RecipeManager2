@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.compost;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Material;
@@ -15,20 +16,19 @@ public class CompostRecipe extends MultiResultRecipe {
     private List<Material> ingredients = new ArrayList<>();
     private double levelSuccessChance = 100;
     private double levels = 1;
+    public static final ItemResult VANILLA_ITEM_RESULT = new ItemResult(new ItemStack(Material.BONE_MEAL));
 
-    public CompostRecipe(Material ingredient, Material result, double levelSuccessChance) {
+    /**
+     * Constructor for vanilla recipes
+     *
+     * @param ingredient material to set as the ingredient
+     * @param levelSuccessChance the per ingredient success chance to add levels
+     *
+     */
+    public CompostRecipe(Material ingredient, double levelSuccessChance) {
         ingredients.add(ingredient);
-        setResult(new ItemStack(result));
+        setResult(VANILLA_ITEM_RESULT.clone());
         this.levelSuccessChance = levelSuccessChance;
-
-        updateHash();
-    }
-
-    public CompostRecipe(Material ingredient, Material result, double levelSuccessChance, int levels) {
-        ingredients.add(ingredient);
-        setResult(new ItemStack(result));
-        this.levelSuccessChance = levelSuccessChance;
-        this.levels = levels;
 
         updateHash();
     }

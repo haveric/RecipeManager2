@@ -1,11 +1,12 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.flag.*;
+import haveric.recipeManager.flag.Flag;
+import haveric.recipeManager.flag.Flaggable;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import haveric.recipeManager.flag.args.Args;
 import org.bukkit.inventory.meta.Damageable;
 
 public class ItemResult extends ItemStack implements Flaggable {
@@ -189,7 +190,7 @@ public class ItemResult extends ItemStack implements Flaggable {
         String toHash = "";
         toHash += super.hashCode(); // Get ItemStack's hash
 
-        if (hasFlags()) {
+        if (hasFlags() && flags.hasFlags()) {
             toHash += flags.hashCode();
         }
 

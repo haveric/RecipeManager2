@@ -2,8 +2,6 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
-* FIX: @IngredientCondition, @HoldItem, @CloneIngredient enchant and bookenchant conditions
-* FIX: Bug with multi-result recipes (without set percentages) not actually adding up to their specified amounts
 * NEW: Add vanilla fuel recipes to /rmextract
 * NEW: Compost recipes with full flag and hopper support
 ** Format: <ingredient> % [chance per level] % [levels], where [chance per level] is >0 and <=100 and [levels] >0 and <=7

@@ -59,6 +59,7 @@ public class Recipes {
     private Map<String, BrewRecipe> indexBrew = new HashMap<>();
     protected Map<String, CompostRecipe> indexCompost = new HashMap<>();
     protected Map<String, CompostRecipe> indexRemovedCompost = new HashMap<>();
+    public static boolean hasAnyOverridenCompostRecipe = false;
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {
@@ -673,6 +674,10 @@ public class Recipes {
             } else if (recipe instanceof FuelRecipe) {
                 indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
             } else if (recipe instanceof CompostRecipe) {
+                if (!hasAnyOverridenCompostRecipe && recipe.hasFlag(FlagType.OVERRIDE)) {
+                    hasAnyOverridenCompostRecipe = true;
+                }
+
                 for (String index : ((CompostRecipe) recipe).getIndexString()) {
                     indexCompost.put(index, (CompostRecipe) recipe);
                 }
@@ -792,7 +797,9 @@ public class Recipes {
         } else if (recipe instanceof FuelRecipe) {
             indexFuels.remove(((FuelRecipe) recipe).getIndexString());
         } else if (recipe instanceof CompostRecipe) {
-            indexCompost.remove(recipe.getIndex());
+            for (String index : ((CompostRecipe) recipe).getIndexString()) {
+                indexCompost.remove(index);
+            }
         }
 
         // Remove from server if applicable

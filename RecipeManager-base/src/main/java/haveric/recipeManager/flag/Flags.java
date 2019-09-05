@@ -49,6 +49,9 @@ public class Flags implements Cloneable {
         return flags.get(name);
     }
 
+    public boolean hasFlags() {
+        return !flags.isEmpty();
+    }
     /**
      * Checks if flag exists in this flag list.
      *

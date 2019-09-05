@@ -125,7 +125,12 @@ public class CompostEvents implements Listener {
         }
 
         CompostRecipe recipe = Recipes.getInstance().getCompostRecipe(item);
-        if (recipe != null && recipe.getInfo().getOwner() != RMCRecipeInfo.RecipeOwner.MINECRAFT) {
+        if (recipe != null) {
+            // No overridden compost recipes, so let's ignore vanilla recipes
+            if (recipe.getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT && !Recipes.hasAnyOverridenCompostRecipe) {
+                return;
+            }
+
             boolean spawnParticles = false;
 
             if (event instanceof PlayerInteractEvent) {
@@ -184,28 +189,40 @@ public class CompostEvents implements Listener {
             } else { // Normal fill
                 CompostRecipe dataRecipe = data.getRecipe();
 
-                if (dataRecipe == null) {
-                    if (player != null) {
-                        player.sendMessage("Composter does not have a custom recipe set.");
-                    }
-                    event.setCancelled(true);
-                    return;
-                }
-
-                boolean sameRecipe = recipe.getIndex() == dataRecipe.getIndex();
+                boolean sameRecipe = false;
                 boolean sameResult = false;
-
-                if (!sameRecipe) {
-                    if (!recipe.isMultiResult() && !dataRecipe.isMultiResult()) {
+                boolean matchesVanillaResult = false;
+                if (dataRecipe == null) {
+                    if (!recipe.isMultiResult()) {
                         ItemResult recipeResult = recipe.getFirstResult();
-                        ItemResult dataRecipeResult = dataRecipe.getFirstResult();
-                        if (recipeResult.hashCode() == dataRecipeResult.hashCode()) {
-                            sameResult = true;
+
+                        if (recipeResult.hashCode() == CompostRecipe.VANILLA_ITEM_RESULT.hashCode()) {
+                            matchesVanillaResult = true;
+                        }
+                    }
+
+                    if (!matchesVanillaResult) {
+                        if (player != null) {
+                            player.sendMessage("Composter does not have a custom recipe set.");
+                        }
+                        event.setCancelled(true);
+                        return;
+                    }
+                } else {
+                    sameRecipe = recipe.getIndex() == dataRecipe.getIndex();
+                    if (!sameRecipe) {
+                        if (!recipe.isMultiResult() && !dataRecipe.isMultiResult()) {
+                            ItemResult recipeResult = recipe.getFirstResult();
+                            ItemResult dataRecipeResult = dataRecipe.getFirstResult();
+
+                            if (recipeResult.hashCode() == dataRecipeResult.hashCode()) {
+                                sameResult = true;
+                            }
                         }
                     }
                 }
 
-                if (sameRecipe || sameResult) {
+                if (sameRecipe || sameResult || matchesVanillaResult) {
                     List<ItemStack> dataIngredients = data.getIngredients();
                     List<ItemStack> ingredientsWithNew = new ArrayList<>(dataIngredients);
                     ingredientsWithNew.add(item);
@@ -288,7 +305,7 @@ public class CompostEvents implements Listener {
                                 toString.append(":").append(ingredient.getItemMeta());
                             }
                         }
-                        player.sendMessage("Composter contains: " + data.getIngredients());
+                        player.sendMessage("Composter contains: " + toString.toString());
                     }
                 }
             }
