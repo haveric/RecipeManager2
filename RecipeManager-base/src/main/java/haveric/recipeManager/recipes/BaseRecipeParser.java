@@ -52,9 +52,10 @@ public abstract class BaseRecipeParser {
         float totalPercentage = 0;
         int splitChanceBy = 0;
 
+        int lastResultLine = -1;
         while (this.reader.getLine() != null && this.reader.lineIsResult()) {
+            lastResultLine = ErrorReporter.getInstance().getLine();
             result = Tools.parseItemResult(this.reader.getLine(), 0); // convert result to ItemResult, grabbing chance and what other stuff
-
             if (result == null) {
                 this.reader.nextLine();
                 continue;
@@ -110,6 +111,11 @@ public abstract class BaseRecipeParser {
                     }
                 }
 
+                // Back up to last result
+                int savedLine = ErrorReporter.getInstance().getLine();
+                if (lastResultLine != -1) { // Shouldn't be possible, but just in case
+                    ErrorReporter.getInstance().setLine(lastResultLine);
+                }
                 if (foundAir) {
                     ErrorReporter.getInstance().warning("All results are set but they do not stack up to 100% chance, extended fail chance to " + (100.0f - totalPercentage) + "!", "You can remove the chance for AIR to auto-calculate it");
                 } else {
@@ -117,6 +123,8 @@ public abstract class BaseRecipeParser {
 
                     results.add(new ItemResult(Material.AIR, 0, 0, (100.0f - totalPercentage)));
                 }
+                // Reset line
+                ErrorReporter.getInstance().setLine(savedLine);
             }
         }
 

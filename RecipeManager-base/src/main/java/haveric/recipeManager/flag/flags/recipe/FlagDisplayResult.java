@@ -126,4 +126,14 @@ public class FlagDisplayResult extends Flag {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "displayItem: " + displayItem.hashCode();
+        toHash += "silentFail: " + silentFail;
+
+        return toHash.hashCode();
+    }
 }

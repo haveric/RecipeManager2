@@ -322,4 +322,16 @@ public class FlagCooldown extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "cooldown: " + cooldown;
+        toHash += "global: " + global;
+        toHash += "failMessage: " + failMessage;
+        toHash += "craftMessage: " + craftMessage;
+
+        return toHash.hashCode();
+    }
 }

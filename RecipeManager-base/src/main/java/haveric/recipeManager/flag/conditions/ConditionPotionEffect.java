@@ -62,4 +62,17 @@ public class ConditionPotionEffect {
     public boolean hasAmbient() {
         return ambient != null;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "ConditionPotionEffect:";
+
+        toHash += "durationMinLevel: " + durationMinLevel;
+        toHash += "durationMaxLevel: " + durationMaxLevel;
+        toHash += "amplifyMinLevel: " + amplifyMinLevel;
+        toHash += "amplifyMaxLevel: " + amplifyMaxLevel;
+        toHash += "ambient: " + ambient.toString();
+
+        return toHash.hashCode();
+    }
 }

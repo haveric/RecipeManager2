@@ -98,4 +98,13 @@ public class FlagLocalizedName extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "name: " + name;
+
+        return toHash.hashCode();
+    }
 }

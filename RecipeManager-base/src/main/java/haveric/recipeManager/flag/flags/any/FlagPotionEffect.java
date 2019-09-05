@@ -198,4 +198,18 @@ public class FlagPotionEffect extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "effects: ";
+        for (Map.Entry<PotionEffect, Float> entry : effects.entrySet()) {
+            toHash += entry.getKey().hashCode() + entry.getValue().toString();
+        }
+
+        toHash += "clear: " + clear;
+
+        return toHash.hashCode();
+    }
 }

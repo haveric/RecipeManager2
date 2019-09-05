@@ -153,4 +153,15 @@ public class FlagBlockPowered extends Flag {
             a.addReason("flag.blockpowered", failMessage,"{blockname}", blockType.toString().toLowerCase());
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "indirect: " + indirect;
+
+        toHash += failMessage;
+
+        return toHash.hashCode();
+    }
 }

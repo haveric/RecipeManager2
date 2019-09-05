@@ -110,4 +110,13 @@ public class FlagSpawnEgg extends Flag {
             a.result().setItemMeta(spawnEggMeta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "entityType: " + entityType.toString();
+
+        return toHash.hashCode();
+    }
 }

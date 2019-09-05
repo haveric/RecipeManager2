@@ -123,4 +123,13 @@ public class FlagFailMessage extends Flag {
 
         a.addCustomEffect(RMCUtil.replaceVariables(message, "{failchance}", failChance, "{successchance}", successChance, "{resultchance}", resultChance));
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "message: " + message;
+
+        return toHash.hashCode();
+    }
 }

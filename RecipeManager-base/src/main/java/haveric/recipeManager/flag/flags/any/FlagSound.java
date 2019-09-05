@@ -206,4 +206,16 @@ public class FlagSound extends Flag {
             a.location().getWorld().playSound(a.location(), sound, volume, pitch);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "sound: " + sound.toString();
+        toHash += "volume: " + volume;
+        toHash += "pitch: " + pitch;
+        toHash += "onlyPlayer: " + onlyPlayer;
+
+        return toHash.hashCode();
+    }
 }

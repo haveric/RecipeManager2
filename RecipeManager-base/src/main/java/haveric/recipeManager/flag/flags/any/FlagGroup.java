@@ -167,4 +167,19 @@ public class FlagGroup extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<String, Boolean> entry : groups.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().toString();
+        }
+
+        for (Map.Entry<String, String> entry : messages.entrySet()) {
+            toHash += entry.getKey() + entry.getValue();
+        }
+
+        return toHash.hashCode();
+    }
 }

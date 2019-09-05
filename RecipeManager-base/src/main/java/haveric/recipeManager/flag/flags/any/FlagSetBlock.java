@@ -142,4 +142,17 @@ public class FlagSetBlock extends Flag {
         block.setType(type, true);
         // block.setData(data, true); // TODO: Replace data
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "type: " + type.toString();
+        toHash += "data: " + data;
+        toHash += "drop: " + drop;
+        toHash += "noInv: " + noInv;
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }

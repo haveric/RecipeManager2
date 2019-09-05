@@ -87,4 +87,13 @@ public class ConditionsHold extends Conditions {
         BOOTS,
         INVENTORY
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "slot: " + slot.toString();
+
+        return toHash.hashCode();
+    }
 }

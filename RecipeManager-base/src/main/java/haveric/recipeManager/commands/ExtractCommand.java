@@ -5,11 +5,17 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.compost.CompostRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
+import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.*;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static haveric.recipeManager.Vanilla.isSpecialRecipe;
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 import static org.bukkit.Tag.REGISTRY_ITEMS;
 
@@ -57,6 +64,9 @@ public class ExtractCommand implements TabExecutor {
         List<String> parsedCampfireRecipes = new ArrayList<>();
         List<String> parsedStonecuttingRecipes = new ArrayList<>();
 
+        List<String> parsedFuelRecipes = new ArrayList<>();
+        List<String> parsedCompostRecipes = new ArrayList<>();
+
         Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
         Recipe r;
@@ -71,7 +81,7 @@ public class ExtractCommand implements TabExecutor {
                 }
 
                 if (skipSpecial) {
-                    if (Vanilla.isSpecialRecipe(r)) {
+                    if (isSpecialRecipe(r)) {
                         continue;
                     }
                 }
@@ -239,6 +249,35 @@ public class ExtractCommand implements TabExecutor {
             }
         }
 
+        Map<BaseRecipe, RMCRecipeInfo> initialRecipes = Vanilla.getInitialRecipes();
+
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
+            BaseRecipe recipe = entry.getKey();
+
+            if (recipe instanceof FuelRecipe) {
+                FuelRecipe fuelRecipe = (FuelRecipe) recipe;
+                StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
+
+                recipeString.append(parseIngredient(fuelRecipe.getIngredient()));
+                recipeString.append(" % ").append(fuelRecipe.getMinTime());
+
+                recipeString.append(Files.NL).append(Files.NL);
+
+                parsedFuelRecipes.add(recipeString.toString());
+            } else if (recipe instanceof CompostRecipe) {
+                CompostRecipe compostRecipe = (CompostRecipe) recipe;
+                StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMPOST.getDirective()).append(Files.NL);
+
+                parseMaterialList(compostRecipe.getIngredients(), recipeString);
+                recipeString.append(" % ").append(compostRecipe.getLevelSuccessChance()).append(" % ").append(compostRecipe.getLevels());
+
+                recipeString.append(Files.NL);
+                parseResult(compostRecipe.getFirstResult(), recipeString);
+
+                parsedCompostRecipes.add(recipeString.toString());
+            }
+        }
+
         if (recipesNum == 0) {
             Messages.getInstance().send(sender, "cmd.extract.norecipes");
         } else {
@@ -261,7 +300,10 @@ public class ExtractCommand implements TabExecutor {
                     writeRecipes(stream, parsedSmokingRecipes, "Smoking");
                     writeRecipes(stream, parsedCampfireRecipes, "Campfire");
                     writeRecipes(stream, parsedStonecuttingRecipes, "Stonecutting");
+                    writeRecipes(stream, parsedCompostRecipes, "Compost");
                 }
+
+                writeRecipes(stream, parsedFuelRecipes, "Fuel");
 
                 stream.close();
 
@@ -307,36 +349,38 @@ public class ExtractCommand implements TabExecutor {
     private void parseChoice(RecipeChoice choice, StringBuilder recipeString) {
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-            List<Material> choices = materialChoice.getChoices();
-
-            Tag<Material> tag = getChoiceTagMatch(choices, REGISTRY_BLOCKS);
-            if (tag == null) {
-                tag = getChoiceTagMatch(choices, REGISTRY_ITEMS);
-            }
-
-            if (tag == null) {
-                int choicesSize = choices.size();
-
-                for (int j = 0; j < choicesSize; j++) {
-                    recipeString.append(parseMaterial(choices.get(j)));
-
-                    if (j + 1 < choicesSize) {
-                        recipeString.append(", ");
-                    }
-                }
-            } else {
-                NamespacedKey key = tag.getKey();
-                String namespace = key.getNamespace();
-
-                recipeString.append("tag:");
-                if (!namespace.equals(NamespacedKey.MINECRAFT)) {
-                    recipeString.append(namespace).append(":");
-                }
-
-                recipeString.append(key.getKey());
-            }
+            parseMaterialList(materialChoice.getChoices(), recipeString);
         } else {
             recipeString.append("air");
+        }
+    }
+
+    private void parseMaterialList(List<Material> materials, StringBuilder recipeString) {
+        Tag<Material> tag = getChoiceTagMatch(materials, REGISTRY_BLOCKS);
+        if (tag == null) {
+            tag = getChoiceTagMatch(materials, REGISTRY_ITEMS);
+        }
+
+        if (tag == null) {
+            int choicesSize = materials.size();
+
+            for (int j = 0; j < choicesSize; j++) {
+                recipeString.append(parseMaterial(materials.get(j)));
+
+                if (j + 1 < choicesSize) {
+                    recipeString.append(", ");
+                }
+            }
+        } else {
+            NamespacedKey key = tag.getKey();
+            String namespace = key.getNamespace();
+
+            recipeString.append("tag:");
+            if (!namespace.equals(NamespacedKey.MINECRAFT)) {
+                recipeString.append(namespace).append(":");
+            }
+
+            recipeString.append(key.getKey());
         }
     }
 

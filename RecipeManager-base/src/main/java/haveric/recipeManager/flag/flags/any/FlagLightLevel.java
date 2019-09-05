@@ -270,4 +270,16 @@ public class FlagLightLevel extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "minLight: " + minLight;
+        toHash += "maxLight: " + maxLight;
+        toHash += "lightType: " + lightType;
+        toHash += "failMessage: " + failMessage;
+
+        return toHash.hashCode();
+    }
 }

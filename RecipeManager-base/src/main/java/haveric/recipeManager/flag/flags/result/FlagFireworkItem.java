@@ -170,4 +170,18 @@ public class FlagFireworkItem extends Flag {
             a.result().setItemMeta(fireworkMeta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "power: " + power;
+
+        toHash += "effects: ";
+        for (FireworkEffect effects : effects) {
+            toHash += effects.hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

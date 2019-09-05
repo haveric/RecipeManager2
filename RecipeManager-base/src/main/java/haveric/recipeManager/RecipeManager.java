@@ -14,6 +14,9 @@ import haveric.recipeManager.recipes.brew.data.BrewingStands;
 import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
+import haveric.recipeManager.recipes.compost.CompostEvents;
+import haveric.recipeManager.recipes.compost.data.ComposterData;
+import haveric.recipeManager.recipes.compost.data.Composters;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceEvents;
 import haveric.recipeManager.recipes.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.furnace.data.Furnaces;
@@ -48,6 +51,7 @@ public class RecipeManager extends JavaPlugin {
     private static RMBaseFurnaceEvents furnaceEvents;
     private static RMCampfireEvents campfireEvents;
     private static RMStonecuttingEvents stonecuttingEvents;
+    private static CompostEvents compostEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -71,6 +75,7 @@ public class RecipeManager extends JavaPlugin {
 
         if (Version.has1_14Support()) {
             RMCampfireData.init(); // dummy caller to initialize Serialization class
+            ComposterData.init();
         }
 
         Furnaces.load(); // load saved furnaces...
@@ -78,6 +83,7 @@ public class RecipeManager extends JavaPlugin {
 
         if (Version.has1_14Support()) {
             RMCampfires.load();
+            Composters.load();
         }
 
         events = new Events();
@@ -87,6 +93,7 @@ public class RecipeManager extends JavaPlugin {
         if (Version.has1_14Support()) {
             campfireEvents = new RMCampfireEvents();
             stonecuttingEvents = new RMStonecuttingEvents();
+            compostEvents = new CompostEvents();
         }
 
         recipes = new Recipes();
@@ -207,6 +214,7 @@ public class RecipeManager extends JavaPlugin {
         if (Version.has1_14Support()) {
             RMCampfireEvents.reload();
             RMStonecuttingEvents.reload();
+            CompostEvents.reload();
         }
     }
 
@@ -277,6 +285,9 @@ public class RecipeManager extends JavaPlugin {
             RMCampfires.save();
             RMCampfires.clean();
 
+            Composters.save();
+            Composters.clean();
+
             Workbenches.clean();
             Players.clean();
             Vanilla.clean();
@@ -316,6 +327,11 @@ public class RecipeManager extends JavaPlugin {
                 stonecuttingEvents.clean();
             }
             stonecuttingEvents = null;
+
+            if (compostEvents != null) {
+                compostEvents.clean();
+            }
+            compostEvents = null;
 
             Settings.clean();
 
@@ -386,6 +402,10 @@ public class RecipeManager extends JavaPlugin {
 
     public static RMStonecuttingEvents getRMStonecuttingEvents() {
         return stonecuttingEvents;
+    }
+
+    public static CompostEvents getCompostEvents() {
+        return compostEvents;
     }
 
     public static FlagLoader getFlagLoader() {

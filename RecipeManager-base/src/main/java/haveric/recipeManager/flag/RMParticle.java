@@ -4,14 +4,13 @@ import org.bukkit.Particle;
 
 public class RMParticle {
 
-    private Particle particle;
-    private int delay = 0;
-
     public static double DEFAULT_OFFSET_X = .5;
     public static double DEFAULT_OFFSET_Y = 1.0;
     public static double DEFAULT_OFFSET_Z = .5;
-
     public static double DEFAULT_RANDOM_OFFSET = .25;
+
+    private Particle particle;
+    private int delay = 0;
 
     private double offsetX = DEFAULT_OFFSET_X;
     private double offsetY = DEFAULT_OFFSET_Y;
@@ -125,5 +124,25 @@ public class RMParticle {
 
     public void setRepeatDelay(int repeatDelay) {
         this.repeatDelay = repeatDelay;
+    }
+
+    @Override
+    public int hashCode() {
+        String toHash = "rmparticle:";
+
+        toHash += "particle: " + particle.toString();
+        toHash += "delay: " + delay;
+        toHash += "offsetX: " + offsetX;
+        toHash += "offsetY: " + offsetY;
+        toHash += "offsetZ: " + offsetZ;
+        toHash += "randomOffsetX: " + randomOffsetX;
+        toHash += "randomOffsetY: " + randomOffsetY;
+        toHash += "randomOffsetZ: " + randomOffsetZ;
+        toHash += "count: " + count;
+        toHash += "extra: " + extra.toString();
+        toHash += "repeatTimes: " + repeatTimes;
+        toHash += "repeatDelay: " + repeatDelay;
+
+        return toHash.hashCode();
     }
 }

@@ -123,4 +123,13 @@ public class FlagFireworkStarItem extends Flag {
             a.result().setItemMeta(effectMeta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "effect: " + effect.hashCode();
+
+        return toHash.hashCode();
+    }
 }

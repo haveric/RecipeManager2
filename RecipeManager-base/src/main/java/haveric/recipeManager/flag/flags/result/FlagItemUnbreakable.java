@@ -82,4 +82,13 @@ public class FlagItemUnbreakable extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "unbreakable: " + unbreakable;
+
+        return toHash.hashCode();
+    }
 }

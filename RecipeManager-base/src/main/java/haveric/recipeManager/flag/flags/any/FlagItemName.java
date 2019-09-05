@@ -168,4 +168,14 @@ public class FlagItemName extends Flag {
             a.result().setItemMeta(meta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "displayName: " + displayName;
+        toHash += "resultName: " + resultName;
+
+        return toHash.hashCode();
+    }
 }

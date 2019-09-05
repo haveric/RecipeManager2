@@ -226,4 +226,19 @@ public class FlagPotionItem extends Flag {
             a.result().setItemMeta(meta);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "data: " + data;
+
+        for (PotionEffect effect : effects) {
+            toHash += "potioneffect: " + effect.hashCode();
+        }
+
+        toHash += "basePotion: " + basePotion.hashCode();
+
+        return toHash.hashCode();
+    }
 }

@@ -115,4 +115,14 @@ public class FlagBroadcast extends Flag {
             Bukkit.broadcast(parsedMessage, permission);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "message: " + message;
+        toHash += "permission: " + permission;
+
+        return toHash.hashCode();
+    }
 }

@@ -186,4 +186,16 @@ public class FlagNeedExp extends Flag {
             addResultLore(a, resultString);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "minExp: " + minExp;
+        toHash += "maxExp: " + maxExp;
+        toHash += "failMessage: " + failMessage;
+        toHash += "setBoth: " + setBoth;
+
+        return toHash.hashCode();
+    }
 }

@@ -219,4 +219,20 @@ public class FlagForPermission extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (Map.Entry<String, Map<String, Flag>> entry : flagMap.entrySet()) {
+            toHash += entry.getKey();
+
+            for (Map.Entry<String, Flag> entry2 : entry.getValue().entrySet()) {
+                toHash += entry2.getKey();
+                toHash += entry2.getValue().hashCode();
+            }
+        }
+
+        return toHash.hashCode();
+    }
 }

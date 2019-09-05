@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.brew.BrewRecipeParser;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipeParser;
 import haveric.recipeManager.recipes.combine.CombineRecipeParser;
+import haveric.recipeManager.recipes.compost.CompostRecipeParser;
 import haveric.recipeManager.recipes.craft.CraftRecipeParser;
 import haveric.recipeManager.recipes.fuel.FuelRecipeParser;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipeParser;
@@ -35,6 +36,8 @@ public class RecipeParserFactory {
             parser = new FuelRecipeParser(reader, recipeName, fileFlags, recipeRegistrator);
         } else if (directive.equals(RMCRecipeType.BREW.getDirective())) {
             parser = new BrewRecipeParser(reader, recipeName, fileFlags, recipeRegistrator);
+        } else if (directive.equals(RMCRecipeType.COMPOST.getDirective())) {
+            parser = new CompostRecipeParser(reader, recipeName, fileFlags, recipeRegistrator);
         } else if (directive.equals(RMCRecipeType.SPECIAL.getDirective())) {
             parser = new RemoveResultsParser(reader, recipeName, fileFlags, recipeRegistrator);
         } else {

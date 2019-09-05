@@ -28,7 +28,6 @@ public class RMCampfireRecipe extends SingleResultRecipe {
     private float minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
     private float maxTime = -1;
     private float experience = 2;
-    private int hash;
 
     public RMCampfireRecipe() {
 

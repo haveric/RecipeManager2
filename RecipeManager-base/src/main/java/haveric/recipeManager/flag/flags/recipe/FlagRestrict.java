@@ -67,4 +67,13 @@ public class FlagRestrict extends Flag {
     public void onCheck(Args a) {
         a.addReason("flag.restrict", message);
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "message: " + message;
+
+        return toHash.hashCode();
+    }
 }

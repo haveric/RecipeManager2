@@ -25,8 +25,6 @@ import java.util.List;
 public class RMStonecuttingRecipe extends SingleResultRecipe {
     private List<Material> ingredientChoice = new ArrayList<>();
 
-    private int hash;
-
     public RMStonecuttingRecipe() {
 
     }

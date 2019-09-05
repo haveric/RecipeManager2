@@ -154,4 +154,21 @@ public class FlagWorld extends Flag {
      *
      * return list; }
      */
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "worlds: ";
+        for (Map.Entry<String, Boolean> entry : worlds.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().toString();
+        }
+
+        toHash += "messages: ";
+        for (Map.Entry<String, String> entry : messages.entrySet()) {
+            toHash += entry.getKey() + entry.getValue();
+        }
+
+        return toHash.hashCode();
+    }
 }

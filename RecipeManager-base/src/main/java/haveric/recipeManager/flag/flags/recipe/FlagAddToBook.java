@@ -115,4 +115,14 @@ public class FlagAddToBook extends Flag {
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "bookName: " + bookName;
+        toHash += "volume: " + volume;
+
+        return toHash.hashCode();
+    }
 }

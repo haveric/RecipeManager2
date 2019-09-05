@@ -5,6 +5,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
@@ -32,23 +33,25 @@ public class RecipeRegistrator {
     
     public void queueRecipe(BaseRecipe recipe, String adder) {
         if (recipe instanceof CraftRecipe || recipe instanceof CraftRecipe1_13) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
+            queueRecipe(recipe, adder, "Craft Recipe " + recipe.getName() + " is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
         } else if (recipe instanceof CombineRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs at least one result and ingredient!");
+            queueRecipe(recipe, adder, "Combine Recipe " + recipe.getName() + " is invalid! Needs at least one result and ingredient!");
         } else if (recipe instanceof RMFurnaceRecipe || recipe instanceof RMFurnaceRecipe1_13) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Furnace Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof RMBlastingRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Blasting Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof RMSmokingRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Smoking Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof RMCampfireRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Campfire Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof RMStonecuttingRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Stonecutting Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof BrewRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+            queueRecipe(recipe, adder, "Brewing Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof FuelRecipe) {
-            queueRecipe(recipe, adder, "Recipe " + recipe.getName() + " is invalid! Needs an ingredient!");
+            queueRecipe(recipe, adder, "Fuel Recipe " + recipe.getName() + " is invalid! Needs an ingredient!");
+        } else if (recipe instanceof CompostRecipe) {
+            queueRecipe(recipe, adder, "Compost Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else {
             throw new IllegalArgumentException("Unknown recipe! " + recipe.toString());
         }

@@ -243,4 +243,16 @@ public class FlagApplyEnchantment extends Flag {
 
         return enchantments;
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "ingredientAction: " + ingredientAction.toString();
+        toHash += "resultAction: " + resultAction.toString();
+        toHash += "ignoreLevelRestriction: " + ignoreLevelRestriction;
+        toHash += "onlyBooks: " + onlyBooks;
+
+        return toHash.hashCode();
+    }
 }

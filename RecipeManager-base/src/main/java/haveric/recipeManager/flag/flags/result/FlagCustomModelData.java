@@ -86,4 +86,13 @@ public class FlagCustomModelData extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "customModelData: " + customModelData;
+
+        return toHash.hashCode();
+    }
 }

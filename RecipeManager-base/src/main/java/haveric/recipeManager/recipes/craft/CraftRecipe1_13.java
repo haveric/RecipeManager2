@@ -18,10 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class CraftRecipe1_13 extends WorkbenchRecipe {
@@ -73,8 +70,14 @@ public class CraftRecipe1_13 extends WorkbenchRecipe {
         ingredientsChoiceMap.clear();
 
         for (Map.Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
-            RecipeChoice.MaterialChoice newMaterialList = new RecipeChoice.MaterialChoice(entry.getValue());
-            ingredientsChoiceMap.put(entry.getKey(), newMaterialList);
+            List<Material> materials = entry.getValue();
+
+            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
+                ingredientsChoiceMap.put(entry.getKey(), null);
+            } else {
+                RecipeChoice.MaterialChoice newMaterialList = new RecipeChoice.MaterialChoice(entry.getValue());
+                ingredientsChoiceMap.put(entry.getKey(), newMaterialList);
+            }
         }
 
         updateChoiceHash();
@@ -113,10 +116,13 @@ public class CraftRecipe1_13 extends WorkbenchRecipe {
             if (choice instanceof RecipeChoice.MaterialChoice) {
                 str.append("material:");
                 RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                List<Material> materials = materialChoice.getChoices();
-                int materialsSize = materials.size();
+
+                List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
+                Collections.sort(sorted);
+
+                int materialsSize = sorted.size();
                 for (int i = 0; i < materialsSize; i++) {
-                    str.append(materials.get(i).toString());
+                    str.append(sorted.get(i).toString());
 
                     if (i + 1 < materialsSize) {
                         str.append(",");
@@ -125,11 +131,13 @@ public class CraftRecipe1_13 extends WorkbenchRecipe {
             } else if (choice instanceof RecipeChoice.ExactChoice) {
                 str.append("exact:");
                 RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                List<ItemStack> items = exactChoice.getChoices();
 
-                int itemsSize = items.size();
+                List<ItemStack> sorted = new ArrayList<>(exactChoice.getChoices());
+                sorted.sort(Comparator.comparing(ItemStack::getType));
+
+                int itemsSize = sorted.size();
                 for (int i = 0; i < itemsSize; i++) {
-                    str.append(items.get(i).hashCode());
+                    str.append(sorted.get(i).hashCode());
 
                     if (i + 1 < itemsSize) {
                         str.append(",");
@@ -199,10 +207,10 @@ public class CraftRecipe1_13 extends WorkbenchRecipe {
 
         s.append(") ");
 
+        s.append(getResultsString()).append(" ");
+
         if (removed) {
             s.append("removed recipe");
-        } else {
-            s.append(getResultsString());
         }
 
         name = s.toString();

@@ -137,4 +137,17 @@ public class FlagBannerItem extends Flag {
             a.result().setItemMeta(banner);
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        toHash += "baseColor: " + baseColor.toString();
+
+        for (Pattern pattern : patterns) {
+            toHash += pattern.hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }

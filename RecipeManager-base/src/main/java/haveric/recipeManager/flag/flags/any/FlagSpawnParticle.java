@@ -262,4 +262,15 @@ public class FlagSpawnParticle extends Flag {
             }
         }
     }
+
+    @Override
+    public int hashCode() {
+        String toHash = "" + super.hashCode();
+
+        for (RMParticle particle : particles) {
+            toHash += particle.hashCode();
+        }
+
+        return toHash.hashCode();
+    }
 }
