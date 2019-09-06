@@ -196,7 +196,7 @@ public class CompostEvents implements Listener {
                     if (!recipe.isMultiResult()) {
                         ItemResult recipeResult = recipe.getFirstResult();
 
-                        if (recipeResult.hashCode() == CompostRecipe.VANILLA_ITEM_RESULT.hashCode()) {
+                        if (recipeResult.getHashCode() == CompostRecipe.VANILLA_ITEM_RESULT.getHashCode()) {
                             matchesVanillaResult = true;
                         }
                     }
@@ -215,7 +215,7 @@ public class CompostEvents implements Listener {
                             ItemResult recipeResult = recipe.getFirstResult();
                             ItemResult dataRecipeResult = dataRecipe.getFirstResult();
 
-                            if (recipeResult.hashCode() == dataRecipeResult.hashCode()) {
+                            if (recipeResult.getHashCode() == dataRecipeResult.getHashCode()) {
                                 sameResult = true;
                             }
                         }

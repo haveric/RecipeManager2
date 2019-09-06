@@ -185,8 +185,8 @@ public class ItemResult extends ItemStack implements Flaggable {
         return sendEnd;
     }
 
-    @Override
-    public int hashCode() {
+    // Can't override hashCode due to 1.10 and older having a final hashCode
+    public int getHashCode() {
         String toHash = "";
         toHash += super.hashCode(); // Get ItemStack's hash
 
