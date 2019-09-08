@@ -1,12 +1,16 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManagerCommon.RMCChatColor;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingleResultRecipe extends BaseRecipe {
     protected ItemResult result;
@@ -99,5 +103,27 @@ public class SingleResultRecipe extends BaseRecipe {
         }
 
         return s.toString();
+    }
+
+    @Override
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasCustomName()) {
+            print.add(RMCChatColor.ITALIC + getName());
+        } else {
+            print.add(getResultPrintName(getResult()));
+        }
+
+        return print;
+    }
+
+    @Override
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        recipes.add(printBookResult(getResult()));
+
+        return recipes;
     }
 }

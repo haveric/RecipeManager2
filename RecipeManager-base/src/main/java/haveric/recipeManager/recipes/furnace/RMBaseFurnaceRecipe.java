@@ -232,61 +232,7 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
         return hasIngredient() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
     }
 
-    /*
-    public String printBookIndex() {
-        String print;
-
-        if (hasCustomName()) {
-            print = RMCChatColor.ITALIC + getName();
-        } else {
-            ItemResult result = getResult();
-
-            if (result.hasFlag(FlagType.ITEM_NAME)) {
-                FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-                print = RMCUtil.parseColors(flag.getItemName(), false);
-            } else {
-                print = ToolsItem.getName(getResult());
-            }
-        }
-
-        return print;
-    }
-    */
     @Override
-    public List<String> printBookIndices() {
-        List<String> print = new ArrayList<>();
-
-        if (hasCustomName()) {
-            print.add(RMCChatColor.ITALIC + getName());
-        } else {
-            print.add(getResultPrintName(getResult()));
-        }
-
-        return print;
-    }
-
-    private String getResultPrintName(ItemResult result) {
-        String print;
-
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            print = RMCUtil.parseColors(flag.getPrintName(), false);
-        } else {
-            print = ToolsItem.getName(getResult());
-        }
-
-        return print;
-    }
-
-    @Override
-    public List<String> printBookRecipes() {
-        List<String> recipes = new ArrayList<>();
-
-        recipes.add(printBookResult(getResult()));
-
-        return recipes;
-    }
-
     public String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 

@@ -164,19 +164,6 @@ public class FuelRecipe extends BaseRecipe {
     public RMCRecipeType getType() {
         return RMCRecipeType.FUEL;
     }
-    /*
-    public String printBookIndex() {
-        String print;
-
-        if (hasCustomName()) {
-            print = RMCChatColor.ITALIC + getName();
-        } else {
-            print = ToolsItem.getName(getIngredient()) + " Fuel";
-        }
-
-        return print;
-    }
-    */
 
     @Override
     public List<String> printBookIndices() {

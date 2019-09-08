@@ -230,40 +230,6 @@ public class RMCampfireRecipe extends SingleResultRecipe {
     }
 
     @Override
-    public List<String> printBookIndices() {
-        List<String> print = new ArrayList<>();
-
-        if (hasCustomName()) {
-            print.add(RMCChatColor.ITALIC + getName());
-        } else {
-            print.add(getResultPrintName(getResult()));
-        }
-
-        return print;
-    }
-
-    private String getResultPrintName(ItemResult result) {
-        String print;
-
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            print = RMCUtil.parseColors(flag.getPrintName(), false);
-        } else {
-            print = ToolsItem.getName(getResult());
-        }
-
-        return print;
-    }
-
-    @Override
-    public List<String> printBookRecipes() {
-        List<String> recipes = new ArrayList<>();
-
-        recipes.add(printBookResult(getResult()));
-
-        return recipes;
-    }
-
     public String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 

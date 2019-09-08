@@ -151,9 +151,9 @@ recipebook:
       fixed: <dark_green>{time} <black>seconds
       random: <dark_green>{min} <black>to <dark_green>{max} <black>seconds
   compost:
-    level: <dark_green>{levelsuccess}<black>% - <dark_green>{levels} <black>levels
+    level: <dark_green>{levelsuccess}<black>%,  <dark_green>{levels} <black>levels
   anvil:
-    repaircost: "<black><underline>Repair Cost: <dark_green>{repaircost}"
+    repaircost: "<black><underline>Repair Cost:<dark_green> {repaircost}"
   update:
     extinct: <red>Your '<yellow>{title}<red>' recipe book does not exist any more, it won't be updated further.
     novolume: <red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> any more, it won't be updated further.

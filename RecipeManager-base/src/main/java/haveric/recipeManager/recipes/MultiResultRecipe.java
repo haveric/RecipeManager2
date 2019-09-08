@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes;
 
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
@@ -166,5 +167,35 @@ public class MultiResultRecipe extends BaseRecipe {
         }
 
         return valid;
+    }
+
+    @Override
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                print.add(getResultPrintName(result));
+            }
+        } else {
+            print.add(getResultPrintName(getFirstResult()));
+        }
+
+        return print;
+    }
+
+    @Override
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                recipes.add(printBookResult(result));
+            }
+        } else {
+            recipes.add(printBookResult(getFirstResult()));
+        }
+
+        return recipes;
     }
 }

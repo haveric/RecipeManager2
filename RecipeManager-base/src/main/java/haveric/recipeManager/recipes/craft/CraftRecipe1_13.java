@@ -274,70 +274,9 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
     public RMCRecipeType getType() {
         return RMCRecipeType.CRAFT;
     }
-    /*
-    public String printBookIndex() {
-        String print;
-
-        if (hasCustomName()) {
-            print = RMCChatColor.ITALIC + getName();
-        } else {
-            ItemResult result = getFirstResult();
-
-            if (result.hasFlag(FlagType.ITEM_NAME)) {
-                FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-                print = RMCUtil.parseColors(flag.getItemName(), false);
-            } else {
-                print = ToolsItem.getName(getFirstResult());
-            }
-        }
-
-        return print;
-    }
-    */
-    @Override
-    public List<String> printBookIndices() {
-        List<String> print = new ArrayList<>();
-
-        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            for (ItemResult result : getResults()) {
-                print.add(getResultPrintName(result));
-            }
-        } else {
-            print.add(getResultPrintName(getFirstResult()));
-        }
-
-        return print;
-    }
-
-    private String getResultPrintName(ItemResult result) {
-        String print;
-
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            print = RMCUtil.parseColors(flag.getPrintName(), false);
-        } else {
-            print = ToolsItem.getName(getFirstResult());
-        }
-
-        return print;
-    }
 
     @Override
-    public List<String> printBookRecipes() {
-        List<String> recipes = new ArrayList<>();
-
-        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            for (ItemResult result : getResults()) {
-                recipes.add(printBookResult(result));
-            }
-        } else {
-            recipes.add(printBookResult(getFirstResult()));
-        }
-
-        return recipes;
-    }
-
-    private String printBookResult(ItemResult result) {
+    public String printBookResult(ItemResult result) {
         StringBuilder s = new StringBuilder(256);
 
         s.append(Messages.getInstance().parse("recipebook.header.shaped"));

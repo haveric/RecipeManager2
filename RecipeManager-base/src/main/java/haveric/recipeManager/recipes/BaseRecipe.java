@@ -4,11 +4,15 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.flag.Flag;
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flaggable;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
 
@@ -241,5 +245,22 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         if (flags != null) {
             flags.sendFailed(a);
         }
+    }
+
+    protected String getResultPrintName(ItemResult result) {
+        String print;
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            print = RMCUtil.parseColors(flag.getPrintName(), false);
+        } else {
+            print = ToolsItem.getName(result);
+        }
+
+        return print;
+    }
+
+    public String printBookResult(ItemResult result) {
+        return "";
     }
 }
