@@ -94,9 +94,9 @@ public class FlagModLevel extends Flag {
      */
     public void setAmount(int newAmount) {
         if (newAmount < 0) {
-            setAmount('-', amount);
+            setAmount('-', Math.abs(newAmount));
         } else {
-            setAmount('+', amount);
+            setAmount('+', newAmount);
         }
     }
 
@@ -198,7 +198,9 @@ public class FlagModLevel extends Flag {
             case '+':
                 p.giveExpLevels(amount);
 
-                a.addEffect("flag.modlevel.add", failMessage, "{amount}", amount, "{modifier}", mod);
+                if (!failMessage.isEmpty()) {
+                    a.addEffect("flag.modlevel.add", failMessage, "{amount}", amount, "{modifier}", mod);
+                }
 
                 break;
             case '-':

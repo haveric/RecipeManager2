@@ -85,7 +85,7 @@ public class FlagModExp extends Flag {
      */
     public void setAmount(int newAmount) {
         if (newAmount < 0) {
-            setAmount('-', newAmount);
+            setAmount('-', Math.abs(newAmount));
         } else {
             setAmount('+', newAmount);
         }

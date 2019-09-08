@@ -244,7 +244,7 @@ public class AnvilEvents implements Listener {
 
             FlagModLevel modLevel = new FlagModLevel();
             modLevel.setAmount(-repairCost);
-            modLevel.setFailMessage("");
+            modLevel.setFailMessage("false");
             recipe.addFlag(modLevel);
         }
 
