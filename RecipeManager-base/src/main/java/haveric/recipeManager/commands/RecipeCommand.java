@@ -5,7 +5,7 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
@@ -292,8 +292,8 @@ public class RecipeCommand implements TabExecutor {
                 return containsItem(Collections.singletonList(r.getIngredient()), item, true);
             }
         } else {
-            if (recipe instanceof WorkbenchRecipe) {
-                WorkbenchRecipe r = (WorkbenchRecipe) recipe;
+            if (recipe instanceof PreparableResultRecipe) {
+                PreparableResultRecipe r = (PreparableResultRecipe) recipe;
 
                 return containsItem(r.getResults(), item, false);
             } else if (recipe instanceof SingleResultRecipe) {

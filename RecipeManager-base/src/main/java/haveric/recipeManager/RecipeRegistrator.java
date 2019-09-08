@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
@@ -52,6 +53,8 @@ public class RecipeRegistrator {
             queueRecipe(recipe, adder, "Fuel Recipe " + recipe.getName() + " is invalid! Needs an ingredient!");
         } else if (recipe instanceof CompostRecipe) {
             queueRecipe(recipe, adder, "Compost Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
+        } else if (recipe instanceof AnvilRecipe) {
+            queueRecipe(recipe, adder, "Anvil Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
         } else {
             throw new IllegalArgumentException("Unknown recipe! " + recipe.toString());
         }

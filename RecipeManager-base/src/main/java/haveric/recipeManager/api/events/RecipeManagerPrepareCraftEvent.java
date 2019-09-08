@@ -1,7 +1,7 @@
 package haveric.recipeManager.api.events;
 
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -15,12 +15,12 @@ import org.bukkit.event.HandlerList;
 public class RecipeManagerPrepareCraftEvent extends Event {
     private static HandlerList handlers = new HandlerList();
 
-    private WorkbenchRecipe recipe;
+    private PreparableResultRecipe recipe;
     private ItemResult result;
     private Player player;
     private Location workbench;
 
-    public RecipeManagerPrepareCraftEvent(WorkbenchRecipe newRecipe, ItemResult newResult, Player newPlayer, Location newWorkbench) {
+    public RecipeManagerPrepareCraftEvent(PreparableResultRecipe newRecipe, ItemResult newResult, Player newPlayer, Location newWorkbench) {
         recipe = newRecipe;
         result = newResult;
         player = newPlayer;
@@ -46,7 +46,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
     /**
      * @return the recipe
      */
-    public WorkbenchRecipe getRecipe() {
+    public PreparableResultRecipe getRecipe() {
         return recipe;
     }
 

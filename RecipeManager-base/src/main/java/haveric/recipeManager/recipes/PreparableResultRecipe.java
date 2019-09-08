@@ -14,20 +14,21 @@ import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkbenchRecipe extends MultiResultRecipe {
-    protected WorkbenchRecipe() {
+public class PreparableResultRecipe extends MultiResultRecipe {
+    protected PreparableResultRecipe() {
     }
 
-    public WorkbenchRecipe(BaseRecipe recipe) {
+    public PreparableResultRecipe(BaseRecipe recipe) {
         super(recipe);
     }
 
-    public WorkbenchRecipe(Flags flags) {
+    public PreparableResultRecipe(Flags flags) {
         super(flags);
     }
 
@@ -212,7 +213,7 @@ public class WorkbenchRecipe extends MultiResultRecipe {
         return formatString;
     }
 
-    public void subtractIngredients(CraftingInventory inv, ItemResult result, boolean onlyExtra) {
+    public void subtractIngredients(Inventory inv, ItemResult result, boolean onlyExtra) {
         FlagIngredientCondition flagIC;
         if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
             flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
@@ -224,7 +225,15 @@ public class WorkbenchRecipe extends MultiResultRecipe {
             flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
         }
 
-        for (int i = 1; i < inv.getSize(); i++) {
+        // Set defaults to non-crafting inventories where the index has results being last (Ex: anvils)
+        int startIndex = 0;
+        int endIndex = inv.getSize() - 1;
+        if (inv instanceof CraftingInventory) {
+            startIndex = 1;
+            endIndex = inv.getSize();
+        }
+
+        for (int i = startIndex; i < endIndex; i++) {
             ItemStack item = inv.getItem(i);
 
             if (item != null) {

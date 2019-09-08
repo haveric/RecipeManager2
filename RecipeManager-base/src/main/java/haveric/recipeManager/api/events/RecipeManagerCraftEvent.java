@@ -1,7 +1,7 @@
 package haveric.recipeManager.api.events;
 
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -23,10 +23,10 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
     private int mouseButton;
     private ItemResult result;
     private ItemStack cursor;
-    private WorkbenchRecipe recipe;
+    private PreparableResultRecipe recipe;
     private Player player;
 
-    public RecipeManagerCraftEvent(WorkbenchRecipe newRecipe, ItemResult newResult, Player newPlayer, ItemStack newCursor, boolean newShiftClick, int newMouseButton) {
+    public RecipeManagerCraftEvent(PreparableResultRecipe newRecipe, ItemResult newResult, Player newPlayer, ItemStack newCursor, boolean newShiftClick, int newMouseButton) {
         recipe = newRecipe;
         result = newResult;
         player = newPlayer;
@@ -62,7 +62,7 @@ public class RecipeManagerCraftEvent extends Event implements Cancellable {
     /**
      * @return the recipe
      */
-    public WorkbenchRecipe getRecipe() {
+    public PreparableResultRecipe getRecipe() {
         return recipe;
     }
 

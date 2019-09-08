@@ -284,6 +284,19 @@ COMPOST [recipe name]
             <li>While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made.</li>
         </ul>
 
+        <h3>ANVIL RECIPE - anvil recipes</h3>
+<pre>
+ANVIL [recipe name]
+&lt;material[, ...]&gt; + &lt;material[, ...]&gt; % [experience levels] % [allowrename or true]
+= [chance]% &lt;material:[data]:[amount]&gt;
+</pre>
+        <ul>
+            <li>The first '&lt;material[, ...]&gt;' is the left ingredient.</li>
+            <li>The second '&lt;material[, ...]&gt;' is the right ingredient.</li>
+            <li>(optional) '% [experience levels]' is the experience levels per craft and shown in the anvil.</li>
+            <li>(optional) '% [allowrename or true]' will enable renaming. Will add an extra experience level to the cost and set the name after all flags. Defaults to false.</li>
+        </ul>
+
         <h3>BREW RECIPE - brewing stand recipes</h3>
         <h4 style="margin: 0; color: red;">This is an experimental feature. Expect bugs and frequent changes.</h4>
 <pre>

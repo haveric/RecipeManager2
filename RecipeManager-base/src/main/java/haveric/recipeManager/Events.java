@@ -8,7 +8,7 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -109,7 +109,7 @@ public class Events implements Listener {
                 return; // stop here if it's a special recipe
             }
 
-            WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
+            PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
 
             if (recipe == null) {
                 return; // not a custom recipe or recipe not found, no need to move on
@@ -359,7 +359,7 @@ public class Events implements Listener {
             }
 
             Recipe bukkitRecipe = event.getRecipe();
-            WorkbenchRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
+            PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe);
             if (recipe == null) {
                 return;
             }
@@ -639,7 +639,7 @@ public class Events implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
@@ -657,7 +657,7 @@ public class Events implements Listener {
 
                 Material blockType = block.getType();
 
-                if (blockType == Material.ANVIL || blockType == craftingTableMaterial || blockType == enchantingTableMaterial) {
+                if (blockType == craftingTableMaterial || blockType == enchantingTableMaterial) {
                     if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
                         event.setCancelled(true);
                         return;

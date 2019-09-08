@@ -8,6 +8,8 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.anvil.AnvilEvents;
+import haveric.recipeManager.recipes.anvil.data.Anvils;
 import haveric.recipeManager.recipes.brew.BrewEvents;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
 import haveric.recipeManager.recipes.brew.data.BrewingStands;
@@ -52,6 +54,7 @@ public class RecipeManager extends JavaPlugin {
     private static RMCampfireEvents campfireEvents;
     private static RMStonecuttingEvents stonecuttingEvents;
     private static CompostEvents compostEvents;
+    private static AnvilEvents anvilEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -89,6 +92,7 @@ public class RecipeManager extends JavaPlugin {
         events = new Events();
         brewEvents = new BrewEvents();
         furnaceEvents = new RMBaseFurnaceEvents();
+        anvilEvents = new AnvilEvents();
 
         if (Version.has1_14Support()) {
             campfireEvents = new RMCampfireEvents();
@@ -130,6 +134,7 @@ public class RecipeManager extends JavaPlugin {
         Files.init();
         Players.init();
         Workbenches.init();
+        Anvils.init();
 
         reload(null, false, true); // load data
 
@@ -210,6 +215,7 @@ public class RecipeManager extends JavaPlugin {
         Events.reload(); // (re)register events
         BrewEvents.reload();
         RMBaseFurnaceEvents.reload();
+        AnvilEvents.reload();
 
         if (Version.has1_14Support()) {
             RMCampfireEvents.reload();
@@ -289,6 +295,7 @@ public class RecipeManager extends JavaPlugin {
             Composters.clean();
 
             Workbenches.clean();
+            Anvils.clean();
             Players.clean();
             Vanilla.clean();
 
@@ -332,6 +339,11 @@ public class RecipeManager extends JavaPlugin {
                 compostEvents.clean();
             }
             compostEvents = null;
+
+            if (anvilEvents != null) {
+                anvilEvents.clean();
+            }
+            anvilEvents = null;
 
             Settings.clean();
 
@@ -408,6 +420,9 @@ public class RecipeManager extends JavaPlugin {
         return compostEvents;
     }
 
+    public static AnvilEvents getAnvilEvents() {
+        return anvilEvents;
+    }
     public static FlagLoader getFlagLoader() {
         return flagLoader;
     }

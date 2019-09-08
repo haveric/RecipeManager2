@@ -6,7 +6,7 @@ import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class CraftRecipe1_13 extends WorkbenchRecipe {
+public class CraftRecipe1_13 extends PreparableResultRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choiceShape;
 

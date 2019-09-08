@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.WorkbenchRecipe;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
 
 public class FlagDisplayResult extends Flag {
@@ -89,7 +89,7 @@ public class FlagDisplayResult extends Flag {
     public boolean onValidate() {
         BaseRecipe recipe = getRecipe();
 
-        if (!(recipe instanceof WorkbenchRecipe)) {
+        if (!(recipe instanceof PreparableResultRecipe)) {
             ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on workbench recipes.");
             return false;
         }

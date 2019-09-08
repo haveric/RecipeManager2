@@ -3,6 +3,7 @@ package haveric.recipeManager;
 import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
@@ -22,6 +23,7 @@ import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -60,6 +62,7 @@ public class Recipes {
     protected Map<String, CompostRecipe> indexCompost = new HashMap<>();
     protected Map<String, CompostRecipe> indexRemovedCompost = new HashMap<>();
     public static boolean hasAnyOverridenCompostRecipe = false;
+    private Map<String, AnvilRecipe> indexAnvil = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {
@@ -84,6 +87,7 @@ public class Recipes {
         indexBrew.clear();
         indexCompost.clear();
         indexRemovedCompost.clear();
+        indexAnvil.clear();
         indexName.clear();
     }
 
@@ -287,7 +291,7 @@ public class Recipes {
      * @param recipe
      * @return Workbench recipe, otherwise it can be null if doesn't exist or you inputted a furnace recipe
      */
-    public WorkbenchRecipe getWorkbenchRecipe(Recipe recipe) {
+    public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe) {
         if (recipe instanceof ShapedRecipe) {
             if (Version.has1_13Support()) {
                 return getCraftRecipe(recipe.getResult());
@@ -450,6 +454,17 @@ public class Recipes {
         }
 
         return recipe;
+    }
+
+    public AnvilRecipe getAnvilRecipe(ItemStack primary, ItemStack secondary) {
+        if (primary == null) {
+            primary = new ItemStack(Material.AIR);
+        }
+        if (secondary == null) {
+            secondary = new ItemStack(Material.AIR);
+        }
+
+        return indexAnvil.get(primary.getType().toString() + "-" + secondary.getType().toString());
     }
 
     public RMBlastingRecipe getRMBlastingRecipe(ItemStack ingredient) {
@@ -681,6 +696,10 @@ public class Recipes {
                 for (String index : ((CompostRecipe) recipe).getIndexString()) {
                     indexCompost.put(index, (CompostRecipe) recipe);
                 }
+            } else if (recipe instanceof AnvilRecipe) {
+                for (String index : ((AnvilRecipe) recipe).getIndexString()) {
+                    indexAnvil.put(index, (AnvilRecipe) recipe);
+                }
             }
         }
 
@@ -799,6 +818,10 @@ public class Recipes {
         } else if (recipe instanceof CompostRecipe) {
             for (String index : ((CompostRecipe) recipe).getIndexString()) {
                 indexCompost.remove(index);
+            }
+        } else if (recipe instanceof AnvilRecipe) {
+            for (String index : ((AnvilRecipe) recipe).getIndexString()) {
+                indexAnvil.remove(index);
             }
         }
 

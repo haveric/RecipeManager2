@@ -26,8 +26,6 @@ public class CompostRecipeParser extends BaseRecipeParser {
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         // get the ingredient
-        String line = reader.getLine();
-
         String[] split = reader.getLine().split("%");
         if (split.length == 0) {
             return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
