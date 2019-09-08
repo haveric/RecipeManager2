@@ -2,10 +2,15 @@ package haveric.recipeManager.recipes.compost;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
+import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -158,5 +163,80 @@ public class CompostRecipe extends MultiResultRecipe {
         return RMCRecipeType.COMPOST;
     }
 
-    // TODO: Book printing
+    @Override
+    public List<String> printBookIndices() {
+        List<String> print = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                print.add(getResultPrintName(result));
+            }
+        } else {
+            print.add(getResultPrintName(getFirstResult()));
+        }
+
+        return print;
+    }
+
+    private String getResultPrintName(ItemResult result) {
+        String print;
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            print = RMCUtil.parseColors(flag.getPrintName(), false);
+        } else {
+            print = ToolsItem.getName(getFirstResult());
+        }
+
+        return print;
+    }
+
+    @Override
+    public List<String> printBookRecipes() {
+        List<String> recipes = new ArrayList<>();
+
+        if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            for (ItemResult result : getResults()) {
+                recipes.add(printBookResult(result));
+            }
+        } else {
+            recipes.add(printBookResult(getFirstResult()));
+        }
+
+        return recipes;
+    }
+
+    private String printBookResult(ItemResult result) {
+        StringBuilder s = new StringBuilder(256);
+
+        s.append(Messages.getInstance().parse("recipebook.header.compost"));
+
+        if (hasCustomName()) {
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
+        }
+
+        s.append('\n').append(RMCChatColor.GRAY).append('=');
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
+        } else {
+            s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+        }
+
+        if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
+        }
+
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
+
+        s.append('\n').append(ToolsItem.printChoice(ingredients, RMCChatColor.BLACK, RMCChatColor.BLACK));
+
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.compostlevel")).append(RMCChatColor.BLACK);
+        s.append('\n').append(Messages.getInstance().parse("recipebook.compost.level", "{levelsuccess}", levelSuccessChance, "{levels}", levels));
+
+        return s.toString();
+    }
 }
