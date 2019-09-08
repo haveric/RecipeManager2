@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,6 +29,7 @@ import static org.bukkit.Tag.REGISTRY_ITEMS;
 public class Settings {
     private static final boolean SPECIAL_RECIPE_DEFAULT = true;
     private static final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
+    private static final String SPECIAL_ANVIL_CUSTOM_DEFAULT = "false";
 
     private static final boolean SOUNDS_REPAIR_DEFAULT = true;
     private static final boolean SOUNDS_FAILED_DEFAULT = true;
@@ -67,6 +69,12 @@ public class Settings {
     private static Map<Material, String> materialPrint;
     private static Map<Material, Map<Short, String>> materialDataPrint;
     private static Map<Enchantment, String> enchantPrint;
+
+    private static List<Material> anvilCombineItem = new ArrayList<>();
+    private static List<Material> anvilMaterialEnchant = new ArrayList<>();
+    private static List<Material> anvilRepairMaterial = new ArrayList<>();
+    private static List<Material> anvilRenaming = new ArrayList<>();
+    private static Map<Enchantment, List<Integer>> anvilEnchantments = new HashMap<>();
 
     protected Settings() {
        // Exists only to defeat instantiation.
@@ -116,6 +124,10 @@ public class Settings {
         }
 
         MessageSender.getInstance().log("config.yml settings:");
+        MessageSender.getInstance().log("    special-recipes.anvil.enchant.enabled: " + getSpecialAnvilEnchant());
+        MessageSender.getInstance().log("    special-recipes.anvil.combine-item.enabled: " + getSpecialAnvilCombineItem());
+        MessageSender.getInstance().log("    special-recipes.anvil.repair-material.enabled: " + getSpecialAnvilRepairMaterial());
+        MessageSender.getInstance().log("    special-recipes.anvil.renaming.enabled: " + getSpecialAnvilRenaming());
         MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
         MessageSender.getInstance().log("    special-recipes.banner-duplicate: " + getSpecialBannerDuplicate());
         MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
@@ -329,22 +341,116 @@ public class Settings {
         }
 
 
+        String combineItemMaterials = fileConfig.getString("special-recipes.anvil.combine-item.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
+        if (combineItemMaterials != null && !combineItemMaterials.equals("false")) {
+            anvilCombineItem.clear();
+
+            List<Material> materials = Tools.parseChoice(combineItemMaterials, ParseBit.NO_ERRORS);
+            if (materials != null) {
+                anvilCombineItem.addAll(materials);
+            }
+        }
+
+        String enchantMaterials = fileConfig.getString("special-recipes.anvil.enchant.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
+        if (enchantMaterials != null && !enchantMaterials.equals("false")) {
+            anvilMaterialEnchant.clear();
+
+            List<Material> materials = Tools.parseChoice(enchantMaterials, ParseBit.NO_ERRORS);
+            if (materials != null) {
+                anvilMaterialEnchant.addAll(materials);
+            }
+        }
+
+        String enchantEnchantments = fileConfig.getString("special-recipes.anvil.enchant.enchantments", SPECIAL_ANVIL_CUSTOM_DEFAULT);
+        if (enchantEnchantments != null && !enchantEnchantments.equals("false")) {
+            anvilEnchantments.clear();
+
+            String[] enchantments = enchantEnchantments.split(",");
+            for (String enchantString : enchantments) {
+                String[] levelsSplit = enchantString.split(":");
+                Enchantment enchant = getEnchantment(RMCUtil.parseAliasName(levelsSplit[0]));
+
+                if (enchant != null) {
+                    if (levelsSplit.length > 1) {
+                        String levelsString = levelsSplit[1];
+                        String[] split = levelsString.split("-");
+                        int minLevel = 1;
+                        try {
+                            minLevel = Integer.parseInt(split[0].trim());
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.getInstance().warning("Invalid special recipe anvil enchantment level set: " + split[0] + " for " + levelsSplit[0]);
+                        }
+
+                        int maxLevel = minLevel;
+                        if (split.length > 1) {
+                            try {
+                                maxLevel = Integer.parseInt(split[1].trim());
+                            } catch (NumberFormatException e) {
+                                ErrorReporter.getInstance().warning("Invalid special recipe anvil enchantment max level set: " + split[1] + " for " + levelsSplit[0]);
+                            }
+                        }
+
+                        List<Integer> levels = new ArrayList<>();
+                        for (int i = minLevel; i <= maxLevel; i++) {
+                            levels.add(i);
+                        }
+
+                        anvilEnchantments.put(enchant, levels);
+                    } else {
+                        List<Integer> levels = new ArrayList<>();
+                        for (int i = enchant.getStartLevel(); i <= enchant.getMaxLevel(); i++) {
+                            levels.add(i);
+                        }
+
+                        anvilEnchantments.put(enchant, levels);
+                    }
+                }
+            }
+        }
+
+        String repairMaterials = fileConfig.getString("special-recipes.anvil.repair-material.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
+        if (repairMaterials != null && !repairMaterials.equals("false")) {
+            anvilRepairMaterial.clear();
+
+            List<Material> materials = Tools.parseChoice(repairMaterials, ParseBit.NO_ERRORS);
+            MessageSender.getInstance().info("Materials: " + materials);
+            if (materials != null) {
+                anvilRepairMaterial.addAll(materials);
+            }
+        }
+
+        String renameMaterials = fileConfig.getString("special-recipes.anvil.renaming.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
+        if (renameMaterials != null && !renameMaterials.equals("false")) {
+            anvilRenaming.clear();
+
+            List<Material> materials = Tools.parseChoice(renameMaterials, ParseBit.NO_ERRORS);
+            if (materials != null) {
+                anvilRenaming.addAll(materials);
+            }
+        }
+
         String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
-        Material failMaterial = Material.matchMaterial(failString);
-        if (failMaterial == null) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to " + MATERIAL_FAIL_DEFAULT.toString() + ".");
+        if (failString != null) {
+            Material failMaterial = Material.matchMaterial(failString);
+            if (failMaterial == null) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.fail has invalid material definition: " + failString + ". Defaulting to " + MATERIAL_FAIL_DEFAULT.toString() + ".");
+            }
         }
 
         String secretString = fileConfig.getString("material.secret", MATERIAL_SECRET_DEFAULT.toString());
-        Material secretMaterial = Material.matchMaterial(secretString);
-        if (secretMaterial == null) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT.toString() + ".");
+        if (secretString != null) {
+            Material secretMaterial = Material.matchMaterial(secretString);
+            if (secretMaterial == null) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT.toString() + ".");
+            }
         }
 
         String multipleResultsString = fileConfig.getString("material.multiple-results", MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString());
-        Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
-        if (multipleResultsMaterial == null) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString() + ".");
+        if (multipleResultsString != null) {
+            Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
+            if (multipleResultsMaterial == null) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString() + ".");
+            }
         }
     }
 
@@ -447,6 +553,22 @@ public class Settings {
 
     public boolean getSpecialBookCloning() {
         return fileConfig.getBoolean("special-recipes.book-cloning", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialAnvilCombineItem() {
+        return fileConfig.getBoolean("special-recipes.anvil.combine-item.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialAnvilEnchant() {
+        return fileConfig.getBoolean("special-recipes.anvil.enchant.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialAnvilRepairMaterial() {
+        return fileConfig.getBoolean("special-recipes.anvil.repair-material.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialAnvilRenaming() {
+        return fileConfig.getBoolean("special-recipes.anvil.renaming.enabled", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialBanner() {
@@ -618,5 +740,25 @@ public class Settings {
 
     public String getEnchantPrint(Enchantment enchant) {
         return enchantPrint.get(enchant);
+    }
+
+    public List<Material> getAnvilCombineItem() {
+        return anvilCombineItem;
+    }
+
+    public List<Material> getAnvilMaterialEnchant() {
+        return anvilMaterialEnchant;
+    }
+
+    public List<Material> getAnvilRepairMaterial() {
+        return anvilRepairMaterial;
+    }
+
+    public List<Material> getAnvilRenaming() {
+        return anvilRenaming;
+    }
+
+    public Map<Enchantment, List<Integer>> getAnvilEnchantments() {
+        return anvilEnchantments;
     }
 }

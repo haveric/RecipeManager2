@@ -159,7 +159,9 @@ public class Tools {
 
         String[] args = value.split(";");
         if (args.length > 1) {
-            ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
+            if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
+                ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
+            }
         }
 
         String[] split = args[0].split(",");
@@ -216,14 +218,10 @@ public class Tools {
                 }
 
                 if (material == null) {
-                    if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                        ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
-                    }
-
-                    return null;
+                    ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                } else {
+                    choices.add(material);
                 }
-
-                choices.add(material);
             }
         }
 

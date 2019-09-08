@@ -9,6 +9,20 @@ lastchanged: 2.17.0 # Please do not edit this value - it is used by the plugin t
 
 # Enable/disable special recipes
 special-recipes:
+  anvil:
+    combine-item:
+      enabled: true          # ability to combine items of the same type to repair or improve enchantments
+      materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
+    enchant:
+      enabled: true          # ability to enchant items with books
+      materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
+      enchantments: false    #   false or comma separated list of enchantments to allow/disallow. Ex: sweeping_edge, durability:1, damage_all:1-3
+    repair-material:
+      enabled: true          # ability to repair using a material ingredient
+      materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_ingot, diamond. Supports a:<aliasname> and tag:<tagname>
+    renaming:
+      enabled: true          # ability to rename items in an anvil
+      materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
   banner: true               # banner pattern recipes (Only affects 1.13 or earlier. Replaced with loom recipes in 1.14)
   banner-duplicate: true     # banner duplicate/cloning recipes
   book-cloning: true         # clone books recipes

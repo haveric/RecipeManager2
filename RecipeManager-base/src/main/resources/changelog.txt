@@ -10,6 +10,14 @@ This file will be automatically overwritten when a new version is installed.
 ** Vanilla compost recipes can be overridden/removed
 * NEW: Anvil recipes with full flag and multi-result support
 ** Format: <material[, ...]> + <material[, ...]> % [experience levels] % [allowrename or true]
+* NEW: Added special recipes for disabling vanilla anvil behavior
+** anvil.combine-item: ability to combine items of the same type to repair or improve enchantments
+** anvil.enchant: ability to enchant items with books
+** anvil.repair-material: ability to repair using a material ingredient
+** anvil.renaming: ability to rename items in an anvil
+** enabled option: enable/disable the functionality
+** material option: materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
+** enchant option (anvil.enchant only): enchantments to allow/disallow. Ex: sweeping_edge, durability:1, damage_all:1-3
 
 === v2.17.2 ===
 * FIX: @IngredientCondition, @HoldItem, @CloneIngredient enchant and bookenchant conditions

@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
@@ -20,6 +21,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,11 +35,13 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AnvilEvents implements Listener {
     public AnvilEvents() { }
@@ -59,7 +63,105 @@ public class AnvilEvents implements Listener {
         ItemStack right = inventory.getItem(1);
 
         AnvilRecipe recipe = Recipes.getInstance().getAnvilRecipe(left, right);
-        if (recipe != null) {
+        if (recipe == null) {
+            InventoryView view = event.getView();
+            Player player = (Player) view.getPlayer();
+
+            String renameText = inventory.getRenameText();
+            if (left != null && renameText != null && !renameText.isEmpty()) {
+                List<Material> renamingMaterials = Settings.getInstance().getAnvilRenaming();
+
+                if (Settings.getInstance().getSpecialAnvilRenaming()) {
+                    if (!renamingMaterials.isEmpty() && !renamingMaterials.contains(left.getType())) {
+                        event.setResult(new ItemStack(Material.AIR));
+                        player.updateInventory();
+                    }
+                } else if (renamingMaterials.isEmpty() || renamingMaterials.contains(left.getType())) {
+                    event.setResult(new ItemStack(Material.AIR));
+                    player.updateInventory();
+                }
+            }
+
+            if (left != null && right != null) {
+                if (left.getType().getMaxDurability() > 0) {
+                    if (right.getItemMeta() instanceof BookMeta) {
+                        List<Material> enchantMaterials = Settings.getInstance().getAnvilMaterialEnchant();
+                        Map<Enchantment, List<Integer>> enchantEnchantments = Settings.getInstance().getAnvilEnchantments();
+
+                        if (Settings.getInstance().getSpecialAnvilEnchant()) {
+                            if (!enchantMaterials.isEmpty() && !enchantMaterials.contains(left.getType())) {
+                                event.setResult(new ItemStack(Material.AIR));
+                                player.updateInventory();
+                            } else if (!enchantEnchantments.isEmpty()) {
+                                Map<Enchantment, Integer> bookEnchantments = right.getEnchantments();
+
+                                boolean enchantAllowed = false;
+                                for (Map.Entry<Enchantment, Integer> entry : bookEnchantments.entrySet()) {
+                                    List<Integer> levels = enchantEnchantments.get(entry.getKey());
+
+                                    if (levels != null && levels.contains(entry.getValue())) {
+                                        enchantAllowed = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!enchantAllowed) {
+                                    event.setResult(new ItemStack(Material.AIR));
+                                    player.updateInventory();
+                                }
+                            }
+                        } else {
+                            if (enchantMaterials.isEmpty() || enchantMaterials.contains(left.getType())) {
+                                event.setResult(new ItemStack(Material.AIR));
+                                player.updateInventory();
+                            } else {
+                                boolean enchantNotAllowed = true;
+
+                                if (!enchantEnchantments.isEmpty()) {
+                                    Map<Enchantment, Integer> bookEnchantments = right.getEnchantments();
+
+                                    for (Map.Entry<Enchantment, Integer> entry : bookEnchantments.entrySet()) {
+                                        List<Integer> levels = enchantEnchantments.get(entry.getKey());
+
+                                        if (levels != null && levels.contains(entry.getValue())) {
+                                            enchantNotAllowed = false;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (enchantNotAllowed) {
+                                    event.setResult(new ItemStack(Material.AIR));
+                                    player.updateInventory();
+                                }
+                            }
+                        }
+                    } else if (right.getType().getMaxDurability() > 0) {
+                        List<Material> combineMaterials = Settings.getInstance().getAnvilCombineItem();
+                        if (Settings.getInstance().getSpecialAnvilCombineItem()) {
+                            if (!combineMaterials.isEmpty() && !combineMaterials.contains(left.getType())) {
+                                event.setResult(new ItemStack(Material.AIR));
+                                player.updateInventory();
+                            }
+                        } else if (combineMaterials.isEmpty() || combineMaterials.contains(left.getType())) {
+                            event.setResult(new ItemStack(Material.AIR));
+                            player.updateInventory();
+                        }
+                    } else {
+                        List<Material> repairMaterial = Settings.getInstance().getAnvilRepairMaterial();
+                        if (Settings.getInstance().getSpecialAnvilRepairMaterial()) {
+                            if (!repairMaterial.isEmpty() && !repairMaterial.contains(right.getType())) {
+                                event.setResult(new ItemStack(Material.AIR));
+                                player.updateInventory();
+                            }
+                        } else if (repairMaterial.isEmpty() || repairMaterial.contains(left.getType())) {
+                            event.setResult(new ItemStack(Material.AIR));
+                            player.updateInventory();
+                        }
+                    }
+                }
+            }
+        } else {
             Location location = inventory.getLocation();
 
             if (location != null) {
