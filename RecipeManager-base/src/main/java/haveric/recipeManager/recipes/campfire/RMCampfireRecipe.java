@@ -4,9 +4,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.conditions.ConditionsIngredient;
-import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -231,45 +228,9 @@ public class RMCampfireRecipe extends SingleResultRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = new StringBuilder(256);
+        StringBuilder s = getHeaderResult("campfire");
 
-        s.append(Messages.getInstance().parse("recipebook.header.campfire"));
-
-        if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
-        }
-
-        s.append('\n').append(RMCChatColor.GRAY).append('=');
-
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
-        } else {
-            s.append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
-        }
-
-        /*
-         * if(isMultiResult()) { s.append('\n').append(MessagesOld.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
-         */
-
-        s.append("\n\n");
-        s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-
-        String print = "";
-        if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
-
-            if (conditions.size() > 0) {
-                ConditionsIngredient condition = conditions.get(0);
-
-                if (condition.hasName()) {
-                    print = RMCChatColor.BLACK + condition.getName();
-                } else if (condition.hasLore()) {
-                    print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
-                }
-            }
-        }
+        String print = getConditionResultName(result);
 
         if (print.equals("")) {
             print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);

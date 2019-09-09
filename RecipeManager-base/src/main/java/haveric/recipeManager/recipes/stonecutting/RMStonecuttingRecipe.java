@@ -2,17 +2,12 @@ package haveric.recipeManager.recipes.stonecutting;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.conditions.ConditionsIngredient;
-import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
-import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -197,45 +192,9 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = new StringBuilder(256);
+        StringBuilder s = getHeaderResult("stonecutting");
 
-        s.append(Messages.getInstance().parse("recipebook.header.stonecutting"));
-
-        if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
-        }
-
-        s.append('\n').append(RMCChatColor.GRAY).append('=');
-
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
-        } else {
-            s.append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
-        }
-
-        /*
-         * if(isMultiResult()) { s.append('\n').append(MessagesOld.RECIPEBOOK_MORERESULTS.get("{amount}", (getResults().size() - 1))); }
-         */
-
-        s.append("\n\n");
-        s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-
-        String print = "";
-        if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
-
-            if (conditions.size() > 0) {
-                ConditionsIngredient condition = conditions.get(0);
-
-                if (condition.hasName()) {
-                    print = RMCChatColor.BLACK + condition.getName();
-                } else if (condition.hasLore()) {
-                    print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
-                }
-            }
-        }
+        String print = getConditionResultName(result);
 
         if (print.equals("")) {
             print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);
@@ -245,48 +204,4 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
 
         return s.toString();
     }
-    /*
-    public void subtractIngredient(FurnaceInventory inv, ItemResult result, boolean onlyExtra) {
-        FlagIngredientCondition flagIC;
-        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
-        } else {
-            flagIC = null;
-        }
-
-        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-        }
-
-        ItemStack item = inv.getSmelting();
-        if (item != null) {
-            int amt = item.getAmount();
-            int newAmt = amt;
-
-            if (flagIC != null) {
-                List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
-
-                for (ConditionsIngredient cond : condList) {
-                    if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
-                        if (cond.getAmount() > 1) {
-                            newAmt -= (cond.getAmount() - 1);
-                        }
-                    }
-                }
-            }
-
-            if (!onlyExtra) {
-                newAmt -= 1;
-            }
-
-            if (amt != newAmt) {
-                if (newAmt > 0) {
-                    item.setAmount(newAmt);
-                } else {
-                    inv.setSmelting(null);
-                }
-            }
-        }
-    }
-    */
 }

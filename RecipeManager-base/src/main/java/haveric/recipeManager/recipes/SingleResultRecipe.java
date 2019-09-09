@@ -1,10 +1,16 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
+import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -125,5 +131,49 @@ public class SingleResultRecipe extends BaseRecipe {
         recipes.add(printBookResult(getResult()));
 
         return recipes;
+    }
+
+    protected StringBuilder getHeaderResult(String type) {
+        StringBuilder s = new StringBuilder(256);
+
+        s.append(Messages.getInstance().parse("recipebook.header." + type));
+
+        if (hasCustomName()) {
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
+        }
+
+        s.append('\n').append(RMCChatColor.GRAY).append('=');
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
+        } else {
+            s.append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
+        }
+
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
+
+        return s;
+    }
+
+    protected String getConditionResultName(ItemResult result) {
+        String print = "";
+        if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
+
+            if (conditions.size() > 0) {
+                ConditionsIngredient condition = conditions.get(0);
+
+                if (condition.hasName()) {
+                    print = RMCChatColor.BLACK + condition.getName();
+                } else if (condition.hasLore()) {
+                    print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
+                }
+            }
+        }
+
+        return print;
     }
 }

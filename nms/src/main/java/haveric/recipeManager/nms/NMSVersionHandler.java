@@ -1,7 +1,5 @@
 package haveric.recipeManager.nms;
 
-
-
 import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
 

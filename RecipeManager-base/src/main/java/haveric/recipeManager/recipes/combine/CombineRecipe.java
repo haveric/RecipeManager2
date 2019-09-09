@@ -4,7 +4,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -16,7 +15,6 @@ import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -241,28 +239,8 @@ public class CombineRecipe extends PreparableResultRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = new StringBuilder(256);
+        StringBuilder s = getHeaderResult("shapeless", result);
 
-        s.append(Messages.getInstance().parse("recipebook.header.shapeless"));
-
-        if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
-        }
-
-        s.append('\n').append(RMCChatColor.GRAY).append('=');
-
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
-            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
-        } else {
-            s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
-        }
-
-        if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
-        }
-
-        s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
         Map<ItemStack, MutableInt> items = new HashMap<>();

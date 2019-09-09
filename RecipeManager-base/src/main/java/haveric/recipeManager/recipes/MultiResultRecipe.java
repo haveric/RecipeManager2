@@ -2,7 +2,12 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
+import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -197,5 +202,32 @@ public class MultiResultRecipe extends BaseRecipe {
         }
 
         return recipes;
+    }
+
+    protected StringBuilder getHeaderResult(String type, ItemResult result) {
+        StringBuilder s = new StringBuilder(256);
+
+        s.append(Messages.getInstance().parse("recipebook.header." + type));
+
+        if (hasCustomName()) {
+            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName());
+        }
+
+        s.append('\n').append(RMCChatColor.GRAY).append('=');
+
+        if (result.hasFlag(FlagType.ITEM_NAME)) {
+            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+            s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
+        } else {
+            s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+        }
+
+        if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
+            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
+        }
+
+        s.append("\n\n");
+
+        return s;
     }
 }
