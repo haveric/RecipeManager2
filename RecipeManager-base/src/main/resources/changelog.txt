@@ -9,7 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 ** While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made
 ** Vanilla compost recipes can be overridden/removed
 * NEW: Anvil recipes with full flag and multi-result support
-** Format: <material[, ...]> + <material[, ...]> % [experience levels] % [allowrename or true]
+** Format: <material[, ...]> + <material[, ...]> % [experience levels] % [allowrename or true] % [anvil damage chance]
 * NEW: Added special recipes for disabling vanilla anvil behavior
 ** anvil.combine-item: ability to combine items of the same type to repair or improve enchantments
 ** anvil.enchant: ability to enchant items with books

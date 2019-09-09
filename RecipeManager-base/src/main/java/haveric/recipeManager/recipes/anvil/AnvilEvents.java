@@ -21,6 +21,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -383,6 +384,13 @@ public class AnvilEvents implements Listener {
 
             boolean firstRun = true;
             for (int i = 0; i < times; i++) {
+                // Make sure block is still an anvil
+                if (location != null) {
+                    Material blockType = location.getBlock().getType();
+                    if (blockType != Material.ANVIL && (!Version.has1_13BasicSupport() || (blockType != Material.CHIPPED_ANVIL && blockType != Material.DAMAGED_ANVIL))) {
+                        break;
+                    }
+                }
                 ItemStack left = inventory.getItem(0);
                 ItemStack right = inventory.getItem(1);
 
@@ -516,9 +524,40 @@ public class AnvilEvents implements Listener {
 
                 recipe.subtractIngredients(inventory, result, false);
 
+                damageAnvil(location, recipe.getAnvilDamageChance());
+
                 // TODO call post-event ?
 
                 firstRun = false;
+            }
+        }
+    }
+
+    private void damageAnvil(Location location, double damageChance) {
+        if (location != null && damageChance > 0) {
+            double random = RecipeManager.random.nextFloat() * 100;
+            if (random < damageChance) {
+                Block block = location.getBlock();
+
+                if (Version.has1_13BasicSupport()) {
+                    Material blockType = block.getType();
+                    if (blockType == Material.ANVIL) {
+                        block.setType(Material.CHIPPED_ANVIL);
+                    } else if (blockType == Material.CHIPPED_ANVIL) {
+                        block.setType(Material.DAMAGED_ANVIL);
+                    } else if (blockType == Material.DAMAGED_ANVIL) {
+                        block.setType(Material.AIR);
+                    }
+                } else {
+                    byte blockData = block.getData();
+                    if (blockData < 8) {
+                        BlockState state = block.getState();
+                        state.setRawData((byte) (blockData + 4));
+                        state.update();
+                    } else {
+                        block.setType(Material.AIR);
+                    }
+                }
             }
         }
     }

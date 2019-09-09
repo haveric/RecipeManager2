@@ -19,6 +19,7 @@ public class AnvilRecipe extends PreparableResultRecipe {
     private List<Material> secondaryIngredient = new ArrayList<>();
     private int repairCost = 0;
     private boolean renamingAllowed = false;
+    private double anvilDamageChance = 12;
 
     public AnvilRecipe() {
 
@@ -36,6 +37,7 @@ public class AnvilRecipe extends PreparableResultRecipe {
             repairCost = r.repairCost;
 
             renamingAllowed = r.renamingAllowed;
+            anvilDamageChance = r.anvilDamageChance;
 
             updateHash();
         }
@@ -85,6 +87,14 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
     public void setRenamingAllowed(boolean allowRenaming) {
         this.renamingAllowed = allowRenaming;
+    }
+
+    public double getAnvilDamageChance() {
+        return anvilDamageChance;
+    }
+
+    public void setAnvilDamageChance(double anvilDamageChance) {
+        this.anvilDamageChance = anvilDamageChance;
     }
 
     private void updateHash() {
