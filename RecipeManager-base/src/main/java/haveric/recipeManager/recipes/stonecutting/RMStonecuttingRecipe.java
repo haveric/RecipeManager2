@@ -70,18 +70,18 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             ingredientChoice.addAll(materialChoice.getChoices());
 
-            String newHash = "campfire";
+            StringBuilder newHash = new StringBuilder("campfire");
 
             int size = ingredientChoice.size();
             for (int i = 0; i < size; i++) {
-                newHash += ingredientChoice.get(i).toString();
+                newHash.append(ingredientChoice.get(i).toString());
 
                 if (i + 1 < size) {
-                    newHash += ", ";
+                    newHash.append(", ");
                 }
             }
 
-            hash = newHash.hashCode();
+            hash = newHash.toString().hashCode();
         }
 
         updateHash();
@@ -136,11 +136,10 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
         }
 
         s.append(" to ");
+        s.append(getResultString());
 
         if (removed) {
-            s.append("removed recipe");
-        } else {
-            s.append(getResultString());
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();

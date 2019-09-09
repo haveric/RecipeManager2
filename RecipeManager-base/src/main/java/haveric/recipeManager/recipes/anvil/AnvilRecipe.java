@@ -118,8 +118,14 @@ public class AnvilRecipe extends PreparableResultRecipe {
         List<Material> sortedPrimary = new ArrayList<>(primaryIngredient);
         Collections.sort(sortedPrimary);
 
+        boolean first = true;
         for (Material material : sortedPrimary) {
-            str.append(material.toString()).append(";");
+            if (first) {
+                first = false;
+            } else {
+                str.append(";");
+            }
+            str.append(material.toString());
         }
 
         str.append(" + ");
@@ -127,16 +133,22 @@ public class AnvilRecipe extends PreparableResultRecipe {
         List<Material> sortedSecondary = new ArrayList<>(secondaryIngredient);
         Collections.sort(sortedSecondary);
 
+        first = true;
         for (Material material : sortedSecondary) {
-            str.append(material.toString()).append(";");
+            if (first) {
+                first = false;
+            } else {
+                str.append(";");
+            }
+            str.append(material.toString());
         }
 
         str.append(")");
 
         if (repairCost > 0) {
-            str.append("{repairCost: ").append(repairCost).append(" }");
+            str.append("{repairCost: ").append(repairCost).append("}");
         }
-        str.append(" ").append(getResultsString());
+        str.append(" to ").append(getResultsString());
 
         name = str.toString();
         customName = false;

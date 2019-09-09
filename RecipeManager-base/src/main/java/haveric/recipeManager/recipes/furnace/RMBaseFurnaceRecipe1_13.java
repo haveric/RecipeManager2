@@ -200,11 +200,10 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         }
 
         s.append(" to ");
+        s.append(getResultString());
 
         if (removed) {
-            s.append("removed recipe");
-        } else {
-            s.append(getResultString());
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();

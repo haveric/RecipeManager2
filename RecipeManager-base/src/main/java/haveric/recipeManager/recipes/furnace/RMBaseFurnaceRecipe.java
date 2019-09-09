@@ -179,12 +179,10 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
             s.append(':').append(ingredient.getDurability());
         }
 
-        s.append(" to ");
-
         if (removed) {
-            s.append("removed recipe");
+            s.append(" [removed recipe]");
         } else {
-            s.append(getResultString());
+            s.append(" to ").append(getResultString());
         }
 
         name = s.toString();

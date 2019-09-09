@@ -172,11 +172,9 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         }
 
         s.append(" to ");
-
+        s.append(getResultString());
         if (removed) {
-            s.append("removed recipe");
-        } else {
-            s.append(getResultString());
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();
@@ -258,49 +256,4 @@ public class RMCampfireRecipe extends SingleResultRecipe {
 
         return s.toString();
     }
-
-    /*
-    public void subtractIngredient(FurnaceInventory inv, ItemResult result, boolean onlyExtra) {
-        FlagIngredientCondition flagIC;
-        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
-        } else {
-            flagIC = null;
-        }
-
-        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-        }
-
-        ItemStack item = inv.getSmelting();
-        if (item != null) {
-            int amt = item.getAmount();
-            int newAmt = amt;
-
-            if (flagIC != null) {
-                List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
-
-                for (ConditionsIngredient cond : condList) {
-                    if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
-                        if (cond.getAmount() > 1) {
-                            newAmt -= (cond.getAmount() - 1);
-                        }
-                    }
-                }
-            }
-
-            if (!onlyExtra) {
-                newAmt -= 1;
-            }
-
-            if (amt != newAmt) {
-                if (newAmt > 0) {
-                    item.setAmount(newAmt);
-                } else {
-                    inv.setSmelting(null);
-                }
-            }
-        }
-    }
-    */
 }

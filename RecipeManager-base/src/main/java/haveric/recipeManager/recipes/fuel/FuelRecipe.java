@@ -144,7 +144,7 @@ public class FuelRecipe extends BaseRecipe {
         }
 
         if (removed) {
-            s.append(" / removed recipe");
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();

@@ -134,7 +134,7 @@ public class CompostRecipe extends MultiResultRecipe {
         s.append(getResultsString());
 
         if (removed) {
-            s.append(" / removed recipe");
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();

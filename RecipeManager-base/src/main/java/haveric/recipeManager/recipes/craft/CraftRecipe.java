@@ -260,9 +260,9 @@ public class CraftRecipe extends PreparableResultRecipe {
         s.append(") ");
 
         if (removed) {
-            s.append("removed recipe");
+            s.append("[removed recipe]");
         } else {
-            s.append(getResultsString());
+            s.append("to ").append(getResultsString());
         }
 
         name = s.toString();

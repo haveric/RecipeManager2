@@ -146,12 +146,11 @@ public class CombineRecipe1_13 extends CombineRecipe {
             }
         }
 
-        s.append(") ");
-
+        s.append(") to ");
         s.append(getResultsString());
 
         if (removed) {
-            s.append("removed recipe");
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();

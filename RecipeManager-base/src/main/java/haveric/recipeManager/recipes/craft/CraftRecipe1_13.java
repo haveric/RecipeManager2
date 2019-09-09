@@ -203,12 +203,11 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
             }
         }
 
-        s.append(") ");
-
-        s.append(getResultsString()).append(" ");
+        s.append(") to ");
+        s.append(getResultsString());
 
         if (removed) {
-            s.append("removed recipe");
+            s.append(" [removed recipe]");
         }
 
         name = s.toString();

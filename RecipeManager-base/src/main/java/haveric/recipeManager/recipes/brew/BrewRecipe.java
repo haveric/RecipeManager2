@@ -64,7 +64,7 @@ public class BrewRecipe extends MultiResultRecipe {
             s.append(':').append(potion.getDurability());
         }
 
-        s.append(" = ").append(getResultsString());
+        s.append(" to ").append(getResultsString());
 
         name = s.toString();
         customName = false;
