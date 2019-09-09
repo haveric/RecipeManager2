@@ -534,30 +534,37 @@ public class AnvilEvents implements Listener {
     }
 
     private void damageAnvil(Location location, double damageChance) {
-        if (location != null && damageChance > 0) {
-            double random = RecipeManager.random.nextFloat() * 100;
-            if (random < damageChance) {
-                Block block = location.getBlock();
+        if (location != null) {
+            boolean broken = false;
+            while (damageChance > 0 && !broken) {
+                double random = RecipeManager.random.nextFloat() * 100;
+                if (random < damageChance) {
+                    Block block = location.getBlock();
 
-                if (Version.has1_13BasicSupport()) {
-                    Material blockType = block.getType();
-                    if (blockType == Material.ANVIL) {
-                        block.setType(Material.CHIPPED_ANVIL);
-                    } else if (blockType == Material.CHIPPED_ANVIL) {
-                        block.setType(Material.DAMAGED_ANVIL);
-                    } else if (blockType == Material.DAMAGED_ANVIL) {
-                        block.setType(Material.AIR);
-                    }
-                } else {
-                    byte blockData = block.getData();
-                    if (blockData < 8) {
-                        BlockState state = block.getState();
-                        state.setRawData((byte) (blockData + 4));
-                        state.update();
+                    if (Version.has1_13BasicSupport()) {
+                        Material blockType = block.getType();
+                        if (blockType == Material.ANVIL) {
+                            block.setType(Material.CHIPPED_ANVIL);
+                        } else if (blockType == Material.CHIPPED_ANVIL) {
+                            block.setType(Material.DAMAGED_ANVIL);
+                        } else if (blockType == Material.DAMAGED_ANVIL) {
+                            block.setType(Material.AIR);
+                            broken = true;
+                        }
                     } else {
-                        block.setType(Material.AIR);
+                        byte blockData = block.getData();
+                        if (blockData < 8) {
+                            BlockState state = block.getState();
+                            state.setRawData((byte) (blockData + 4));
+                            state.update();
+                        } else {
+                            block.setType(Material.AIR);
+                            broken = true;
+                        }
                     }
                 }
+
+                damageChance -= 100;
             }
         }
     }

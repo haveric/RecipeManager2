@@ -102,16 +102,16 @@ public class AnvilRecipeParser extends BaseRecipeParser {
                 double anvilDamageChance = Double.parseDouble(split[3].trim());
 
                 if (anvilDamageChance < 0) {
-                    ErrorReporter.getInstance().warning("Anvil damage chance cannot be below 0: " + split[3] + ". Allowed values from 0-100 (decimal values allowed). Defaulting to 0.");
+                    ErrorReporter.getInstance().warning("Anvil damage chance cannot be below 0: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 0.");
                     anvilDamageChance = 0;
-                } else if (anvilDamageChance > 100) {
-                    ErrorReporter.getInstance().warning("Anvil damage chance cannot be above 100: " + split[3] + ". Allowed values from 0-100 (decimal values allowed). Defaulting to 100.");
-                    anvilDamageChance = 100;
+                } else if (anvilDamageChance > 300) {
+                    ErrorReporter.getInstance().warning("Anvil damage chance cannot be above 300: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 300.");
+                    anvilDamageChance = 300;
                 }
 
                 recipe.setAnvilDamageChance(anvilDamageChance);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().error("Invalid anvil damage chance: " + split[3] + ". Allowed values from 0-100 (decimal values allowed). Defaulting to 12.");
+                ErrorReporter.getInstance().error("Invalid anvil damage chance: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 12.");
             }
         }
 
