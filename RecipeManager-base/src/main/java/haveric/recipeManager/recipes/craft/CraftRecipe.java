@@ -472,4 +472,21 @@ public class CraftRecipe extends PreparableResultRecipe {
 
         return s.toString();
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        for (ItemStack i : getIngredients()) {
+            if (i == null) {
+                continue;
+            }
+
+            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+                found++;
+            }
+        }
+
+        return found;
+    }
 }

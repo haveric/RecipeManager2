@@ -5,6 +5,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
@@ -109,5 +110,24 @@ public class BrewRecipe extends MultiResultRecipe {
 
     public void setPotion(ItemStack potion) {
         this.potion = potion;
+    }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        ItemStack i = getIngredient();
+
+        if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+            found++;
+        }
+
+        ItemStack potion = getPotion();
+
+        if (potion.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || potion.getDurability() == data)) {
+            found++;
+        }
+
+        return found;
     }
 }

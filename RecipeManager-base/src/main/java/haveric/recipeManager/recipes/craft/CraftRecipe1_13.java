@@ -333,4 +333,37 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
 
         return s.toString();
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+        Map<Character, RecipeChoice> ingredientChoiceMap = getIngredientsChoiceMap();
+
+        for (Map.Entry<Character, RecipeChoice> entry : ingredientChoiceMap.entrySet()) {
+            RecipeChoice choice = entry.getValue();
+
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+                List<Material> materials = materialChoice.getChoices();
+
+                if (materials.contains(type)) {
+                    found++;
+                    break;
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                for (ItemStack item : items) {
+                    if (item.getType() == type) {
+                        found++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return found;
+    }
 }

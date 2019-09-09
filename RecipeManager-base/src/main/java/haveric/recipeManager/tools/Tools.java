@@ -6,15 +6,7 @@ import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.brew.BrewRecipe;
-import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
-import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import haveric.recipeManagerCommon.util.RMCUtil;
@@ -25,7 +17,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -977,131 +968,6 @@ public class Tools {
         }
 
         return -1;
-    }
-
-    public static int findItemInIngredients(BaseRecipe recipe, Material type, Short data) {
-        int found = 0;
-
-        if (recipe instanceof CraftRecipe1_13) {
-            CraftRecipe1_13 r = (CraftRecipe1_13) recipe;
-            Map<Character, RecipeChoice> ingredientChoiceMap = r.getIngredientsChoiceMap();
-
-            for (Map.Entry<Character, RecipeChoice> entry : ingredientChoiceMap.entrySet()) {
-                RecipeChoice choice = entry.getValue();
-
-                if (choice instanceof RecipeChoice.MaterialChoice) {
-                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-                    List<Material> materials = materialChoice.getChoices();
-
-                    if (materials.contains(type)) {
-                        found++;
-                        break;
-                    }
-                } else if (choice instanceof RecipeChoice.ExactChoice) {
-                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                    List<ItemStack> items = exactChoice.getChoices();
-
-                    for (ItemStack item : items) {
-                        if (item.getType() == type) {
-                            found++;
-                            break;
-                        }
-                    }
-                }
-            }
-        } else if (recipe instanceof CraftRecipe) {
-            CraftRecipe r = (CraftRecipe) recipe;
-
-            for (ItemStack i : r.getIngredients()) {
-                if (i == null) {
-                    continue;
-                }
-
-                if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                    found++;
-                }
-            }
-        } else if (recipe instanceof CombineRecipe) {
-            CombineRecipe r = (CombineRecipe) recipe;
-
-            if (Version.has1_13Support()) {
-                List<List<Material>> materialsList = r.getIngredientChoiceList();
-
-                for (List<Material> materials : materialsList) {
-                    if (materials.contains(type)) {
-                        found++;
-                        break;
-                    }
-                }
-            } else {
-                for (ItemStack i : r.getIngredients()) {
-                    if (i == null) {
-                        continue;
-                    }
-
-                    if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                        found++;
-                    }
-                }
-            }
-        } else if (recipe instanceof RMBaseFurnaceRecipe) {
-            RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
-
-            if (Version.has1_13Support()) {
-                List<Material> choice = r.getIngredientChoice();
-
-                for (Material material : choice) {
-                    if (type == material) {
-                        found++;
-                        break;
-                    }
-                }
-            } else {
-                ItemStack i = r.getIngredient();
-
-                if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                    found++;
-                }
-            }
-
-
-        } else if (recipe instanceof RMCampfireRecipe) {
-            RMCampfireRecipe r = (RMCampfireRecipe) recipe;
-            List<Material> choice = r.getIngredientChoice();
-
-            for (Material material : choice) {
-                if (type == material) {
-                    found++;
-                    break;
-                }
-            }
-        } else if (recipe instanceof RMStonecuttingRecipe) {
-            RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
-            List<Material> choice = r.getIngredientChoice();
-
-            for (Material material : choice) {
-                if (type == material) {
-                    found++;
-                    break;
-                }
-            }
-        } else if (recipe instanceof BrewRecipe) {
-            BrewRecipe r = (BrewRecipe) recipe;
-            ItemStack i = r.getIngredient();
-
-            if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
-                found++;
-            }
-
-            ItemStack potion = r.getPotion();
-
-            if (potion.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || potion.getDurability() == data)) {
-                found++;
-            }
-        }
-
-        return found;
     }
 
     public static ItemStack[] mirrorItemMatrix(ItemStack[] matrix) {

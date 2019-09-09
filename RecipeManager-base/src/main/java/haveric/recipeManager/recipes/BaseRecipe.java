@@ -13,6 +13,7 @@ import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.util.RMCUtil;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
 
@@ -262,5 +263,9 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
 
     public String printBookResult(ItemResult result) {
         return "";
+    }
+
+    public int findItemInIngredients(Material type, Short data) {
+        return 0;
     }
 }

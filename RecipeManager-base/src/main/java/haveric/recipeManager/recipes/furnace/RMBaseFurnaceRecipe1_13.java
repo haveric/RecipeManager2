@@ -329,4 +329,19 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
             }
         }
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        List<Material> choice = getIngredientChoice();
+        for (Material material : choice) {
+            if (type == material) {
+                found++;
+                break;
+            }
+        }
+
+        return found;
+    }
 }

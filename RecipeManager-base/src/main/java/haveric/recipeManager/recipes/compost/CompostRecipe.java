@@ -175,4 +175,19 @@ public class CompostRecipe extends MultiResultRecipe {
 
         return s.toString();
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        List<Material> choice = getIngredients();
+        for (Material material : choice) {
+            if (type == material) {
+                found++;
+                break;
+            }
+        }
+
+        return found;
+    }
 }

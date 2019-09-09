@@ -213,4 +213,20 @@ public class CombineRecipe1_13 extends CombineRecipe {
 
         return s.toString();
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        List<List<Material>> materialsList = getIngredientChoiceList();
+
+        for (List<Material> materials : materialsList) {
+            if (materials.contains(type)) {
+                found++;
+                break;
+            }
+        }
+
+        return found;
+    }
 }

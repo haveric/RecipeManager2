@@ -226,7 +226,7 @@ public class FlagCloneIngredient extends Flag {
         // Double pipes will be replaced by single pipes for each arg
         String[] args = value.toLowerCase().split("(?<!\\|)\\|(?!\\|)");
 
-        int found = Tools.findItemInIngredients(getResult().getRecipe(), getResult().getType(), null);
+        int found = getResult().getRecipe().findItemInIngredients(getResult().getType(), null);
 
         if (found == 0) {
             ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(getResult()));

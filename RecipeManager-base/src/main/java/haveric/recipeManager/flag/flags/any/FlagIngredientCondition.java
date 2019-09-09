@@ -234,7 +234,7 @@ public class FlagIngredientCondition extends Flag {
         while (it.hasNext()) {
             ConditionsIngredient c = it.next();
 
-            if (c.getIngredient() != null && Tools.findItemInIngredients(recipe, c.getIngredient().getType(), c.getIngredient().getDurability()) == 0) {
+            if (c.getIngredient() != null && recipe.findItemInIngredients(c.getIngredient().getType(), c.getIngredient().getDurability()) == 0) {
                 ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(c.getIngredient()));
                 it.remove();
             }

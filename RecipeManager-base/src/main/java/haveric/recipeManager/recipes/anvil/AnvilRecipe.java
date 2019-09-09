@@ -190,4 +190,29 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
         return s.toString();
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        List<Material> primary = getPrimaryIngredient();
+
+        for (Material material : primary) {
+            if (type == material) {
+                found++;
+                break;
+            }
+        }
+
+        List<Material> secondary = getSecondaryIngredient();
+
+        for (Material material : secondary) {
+            if (type == material) {
+                found++;
+                break;
+            }
+        }
+
+        return found;
+    }
 }

@@ -310,4 +310,17 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
             }
         }
     }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        ItemStack i = getIngredient();
+
+        if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+            found++;
+        }
+
+        return found;
+    }
 }
