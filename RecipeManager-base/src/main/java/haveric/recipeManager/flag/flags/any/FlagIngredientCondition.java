@@ -15,10 +15,7 @@ import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.inventory.BrewerInventory;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -364,6 +361,42 @@ public class FlagIngredientCondition extends Flag {
             }
 
             for (int i = 1; i < 10; i++) {
+                ItemStack item = a.inventory().getItem(i);
+
+                if (item != null) {
+                    checkIngredientConditions(item, a);
+                }
+            }
+
+            iter = conditions.entrySet().iterator();
+
+            while (iter.hasNext()) {
+                Entry<String, ConditionsIngredient> entry = iter.next();
+                ConditionsIngredient checkConditions = entry.getValue();
+
+                if (checkConditions.hasNeeded()) {
+                    if (!a.hasReasons() && checkConditions.getNeededLeft() > 0) {
+                        a.addCustomReason("Needed items mismatch!");
+                    }
+
+                    checkConditions.setNeededLeft(-1);
+                }
+            }
+
+            return;
+        } else if (a.inventory() instanceof AnvilInventory) {
+            Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
+
+            while (iter.hasNext()) {
+                Entry<String, ConditionsIngredient> entry = iter.next();
+                ConditionsIngredient checkConditions = entry.getValue();
+
+                if (checkConditions.hasNeeded()) {
+                    checkConditions.setNeededLeft(checkConditions.getNeeded());
+                }
+            }
+
+            for (int i = 0; i < 2; i++) {
                 ItemStack item = a.inventory().getItem(i);
 
                 if (item != null) {
