@@ -230,18 +230,25 @@ public class AnvilEvents implements Listener {
                 if (Version.has1_11Support()) {
                     int finalRepairCost = repairCost;
 
+                    updateRepairCost(player, inventory, finalRepairCost);
                     Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> {
-                        if (finalRepairCost > 40) {
-                            inventory.setMaximumRepairCost(finalRepairCost);
-                        }
-                        inventory.setRepairCost(finalRepairCost);
-                        player.updateInventory();
+                        updateRepairCost(player, inventory, finalRepairCost);
                     }, 2);
                 }
 
                 Anvils.remove(player);
                 Anvils.add(player, recipe, left, right, result, renameText);
             }
+        }
+    }
+
+    private void updateRepairCost(Player player, AnvilInventory inventory, int repairCost) {
+        if (repairCost > 40) {
+            inventory.setMaximumRepairCost(repairCost);
+        }
+        inventory.setRepairCost(repairCost);
+        if (player != null) {
+            player.updateInventory();
         }
     }
 
@@ -274,7 +281,15 @@ public class AnvilEvents implements Listener {
                     Player player = (Player) ent;
                     Anvil anvil = Anvils.get(player);
                     if (anvil != null) {
-                        updateAnvilInventory(player, anvilInventory);
+                        // Force refresh by updating the cost
+                        int originalRepair = anvilInventory.getRepairCost();
+                        if (originalRepair > 0) {
+                            updateRepairCost(null, anvilInventory, originalRepair + 1);
+
+                            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> {
+                                updateRepairCost(player, anvilInventory, originalRepair);
+                            }, 0);
+                        }
                     }
                 }
             }
@@ -307,8 +322,6 @@ public class AnvilEvents implements Listener {
                                 event.setCancelled(true);
                                 craftFinishAnvil(event, player, anvilInventory, false);
                             }
-                        } else {
-                            updateAnvilInventory(player, anvilInventory);
                         }
                     }
                 }
