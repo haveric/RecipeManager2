@@ -1124,7 +1124,7 @@ public class Vanilla {
                         originalRecipes.add(recipe);
                     }
                 }
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | NoSuchElementException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
