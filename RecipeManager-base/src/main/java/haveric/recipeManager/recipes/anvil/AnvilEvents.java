@@ -68,7 +68,13 @@ public class AnvilEvents implements Listener {
             InventoryView view = event.getView();
             Player player = (Player) view.getPlayer();
 
-            String renameText = inventory.getRenameText();
+            String renameText = "";
+
+            // 1.10 didn't support repair cost or rename text
+            if (Version.has1_11Support()) {
+                renameText = inventory.getRenameText();
+            }
+
             if (left != null && renameText != null && !renameText.isEmpty()) {
                 List<Material> renamingMaterials = Settings.getInstance().getAnvilRenaming();
 
@@ -220,14 +226,17 @@ public class AnvilEvents implements Listener {
 
                 event.setResult(result);
 
-                int repairCost = recipe.getRepairCost();
-                String renameText = inventory.getRenameText();
-                if (recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty()) {
-                    repairCost += 1;
-                }
 
-                // 1.10 didn't support repair cost
+                String renameText = "";
+
+                // 1.10 didn't support repair cost or rename text
                 if (Version.has1_11Support()) {
+                    renameText = inventory.getRenameText();
+                    int repairCost = recipe.getRepairCost();
+                    if (recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty()) {
+                        repairCost += 1;
+                    }
+
                     int finalRepairCost = repairCost;
 
                     updateRepairCost(player, inventory, finalRepairCost);

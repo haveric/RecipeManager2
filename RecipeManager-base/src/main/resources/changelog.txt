@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * FIX: Missing messages fail more gracefully
 * FIX: Error on /rmreload for missing/removed recipes
+* FIX: Basic anvil support for 1.9 and 1.10
 
 === 2.18.0 ===
 * NEW: Add vanilla fuel and compost recipes to /rmextract
