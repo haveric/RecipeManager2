@@ -29,24 +29,19 @@ public class Perms {
 
     public void init(Permission newPermission) {
         if (newPermission != null) {
-            if (newPermission.isEnabled()) {
-                permission = newPermission;
-                MessageSender.getInstance().log("Vault has made permission-group available for this plugin.");
-            } else {
-                permission = null;
-                MessageSender.getInstance().info("<yellow>NOTE: <dark_aqua>Vault<reset> doesn't have a permission-group plugin connected!");
-            }
+            permission = newPermission;
+            MessageSender.getInstance().log("Vault has made permission-group available for this plugin.");
         }
     }
 
     public boolean isEnabled() {
-        return permission != null;
+        return permission != null && permission.isEnabled();
     }
 
     public boolean playerInGroup(UUID playerUUID, String group) {
         boolean isPlayerInGroup = false;
 
-        if (permission != null) {
+        if (isEnabled()) {
             OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
 
             isPlayerInGroup = permission.playerInGroup(null, player, group);

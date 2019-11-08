@@ -27,13 +27,8 @@ public class Econ {
 
     public void init(Economy newEconomy) {
         if (newEconomy != null) {
-            if (newEconomy.isEnabled()) {
-                economy = newEconomy;
-                MessageSender.getInstance().log("Vault detected and connected to " + economy.getName() + ", economy features available.");
-            } else {
-                economy = null;
-                MessageSender.getInstance().log("Vault detected but does not have an economy plugin connected, economy features are not available.");
-            }
+            economy = newEconomy;
+            MessageSender.getInstance().log("Vault detected and connected to " + economy.getName() + ", economy features available.");
         }
     }
 
@@ -47,7 +42,7 @@ public class Econ {
      * @return true if economy plugin detected, false otherwise
      */
     public boolean isEnabled() {
-        return economy != null;
+        return economy != null && economy.isEnabled();
     }
 
     /**
