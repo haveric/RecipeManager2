@@ -563,7 +563,11 @@ public class Files {
         addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
         s.append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
         s.append(NL);
-        s.append(NL).append(String.format("<b> %-34s %-34s %-5s %s</b>", "Name", "Alias", "Stack", "Max durability"));
+        if (Version.has1_12Support()) {
+            s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s  %-5s %-4s</b>", "Name", "Alias", "Stack", "Max durability", "Block", "Item"));
+        } else {
+            s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s</b>", "Name", "Alias", "Stack", "Max durability"));
+        }
 
         for (Material m : Material.values()) {
             String alias = Settings.getInstance().getMaterialPrint(m);
@@ -580,7 +584,21 @@ public class Files {
                 durabilityString += m.getMaxDurability();
             }
 
-            s.append(NL).append(String.format(" %-34s %-34s %-5d %s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
+            if (Version.has1_12Support()) {
+                String block = "";
+                if (m.isBlock()) {
+                    block = "Block";
+                }
+
+                String item = "";
+                if (m.isItem()) {
+                    item = "Item";
+                }
+
+                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s   %-5s %-4s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString, block, item));
+            } else {
+                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
+            }
         }
 
         if (Version.has1_9Support()) {
