@@ -1,6 +1,10 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* FIX: color-console config changes didn't take effect early enough for setting reloads
+* FIX: settings no longer call init twice on first load
+
 === v2.18.1 ===
 * FIX: Missing messages fail more gracefully
 * FIX: Error on /rmreload for missing/removed recipes

@@ -27,6 +27,8 @@ import static org.bukkit.Tag.REGISTRY_ITEMS;
  * RecipeManager's settings loaded from its config.yml, values are read-only.
  */
 public class Settings {
+    private static boolean hasBeenInited = false;
+
     private static final boolean SPECIAL_RECIPE_DEFAULT = true;
     private static final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
     private static final String SPECIAL_ANVIL_CUSTOM_DEFAULT = "false";
@@ -94,28 +96,38 @@ public class Settings {
         instance = null;
     }
 
+    public static void clearInit() {
+        hasBeenInited = false;
+    }
+
     private static void init() {
-        RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<>();
-        RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
-        RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
+        if (!hasBeenInited) {
+            RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<>();
+            RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
+            RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
 
-        MATERIAL_FAIL_DEFAULT = Material.BARRIER;
+            MATERIAL_FAIL_DEFAULT = Material.BARRIER;
 
-        itemDatas = new HashMap<>();
-        choicesAliases = new HashMap<>();
-        materialNames = new HashMap<>();
-        materialDataNames = new HashMap<>();
-        enchantNames = new HashMap<>();
-        materialPrint = new HashMap<>();
-        materialDataPrint = new HashMap<>();
-        enchantPrint = new HashMap<>();
+            itemDatas = new HashMap<>();
+            choicesAliases = new HashMap<>();
+            materialNames = new HashMap<>();
+            materialDataNames = new HashMap<>();
+            enchantNames = new HashMap<>();
+            materialPrint = new HashMap<>();
+            materialDataPrint = new HashMap<>();
+            enchantPrint = new HashMap<>();
 
-        // Load/reload/generate config.yml
-        fileConfig = loadYML(Files.FILE_CONFIG);
+            // Load/reload/generate config.yml
+            fileConfig = loadYML(Files.FILE_CONFIG);
+
+            hasBeenInited = true;
+        }
     }
 
     public void reload(CommandSender sender) {
         init();
+
+        MessageSender.init(getColorConsole());
 
         String lastChanged = fileConfig.getString("lastchanged");
 
