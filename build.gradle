@@ -31,7 +31,7 @@ allprojects {
         }
         maven {
             name 'Alt source for Spigot'
-            url 'https://maven.notfab.net/SpigotMC/org/spigotmc/spigot/'
+            url 'https://maven.notfab.net/SpigotMC/'
         }
         maven {
             name 'Alt source for Spigot 2'
