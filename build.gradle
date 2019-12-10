@@ -12,10 +12,11 @@ allprojects {
 
     // Include dependent libraries in archive.
     jar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
         from {
             configurations.extra.collect { it.isDirectory() ? it : zipTree(it) }
         }
-        baseName 'RecipeManager'
+        archivesBaseName = 'RecipeManager'
     }
 
     repositories {
@@ -25,11 +26,7 @@ allprojects {
             url 'https://hub.spigotmc.org/nexus/content/groups/public/'
         }
         maven {
-            name 'Vault'
-            url 'http://nexus.hc.to/content/repositories/pub_releases'
-        }
-        maven {
-            name 'Jitpack' // For RecipeManagerCommon
+            name 'Jitpack' // For RecipeManagerCommon and Vault
             url 'https://jitpack.io'
         }
         // For 1.12, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.

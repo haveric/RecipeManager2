@@ -1,6 +1,6 @@
 dependencies {
-    compile "org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT"
-    compile (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+    implementation "org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT"
+    implementation (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 
     extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 }
