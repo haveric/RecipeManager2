@@ -22,6 +22,7 @@ public class NMSVersionHandler {
             case "v1_12_R1":
                 recipeIterator = new haveric.recipeManager.nms.RecipeIteratorV1_12();
                 break;
+            case "v1_15_R1":
             default:
                 recipeIterator = new RecipeIteratorOld();
                 break;
@@ -35,6 +36,7 @@ public class NMSVersionHandler {
             String serverVersion = getServerVersion();
 
             switch (serverVersion) {
+                case "v1_15_R1":
                 case "v1_14_R1":
                     toolsRecipe = new ToolsRecipeV1_14_R1();
                     break;
