@@ -12,7 +12,9 @@ public class Version {
     private static String supportVersion = null;
 
     public static void init() {
-        if (supports1_14()) {
+        if (supports1_15()) {
+            supportVersion = "1.15";
+        } else if (supports1_14()) {
             supportVersion = "1.14";
         } else if (supports1_13_plus()) {
             supportVersion = "1.13+";
@@ -29,6 +31,20 @@ public class Version {
         } else {
             supportVersion = "1.8";
         }
+    }
+
+    private static boolean supports1_15() {
+        boolean supports;
+
+        try {
+            @SuppressWarnings("unused")
+            Material beeNest = Material.BEE_NEST;
+            supports = true;
+        } catch (NoSuchFieldError e) {
+            supports = false;
+        }
+
+        return supports;
     }
 
     private static boolean supports1_14() {
@@ -137,11 +153,22 @@ public class Version {
         return supportVersion;
     }
 
+    public static boolean has1_15Support() {
+        boolean hasSupport = false;
+        String version = getVersion();
+
+        if (version.equals("1.15")) {
+            hasSupport = true;
+        }
+
+        return hasSupport;
+    }
+
     public static boolean has1_14Support() {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.14")) {
+        if (version.equals("1.15") || version.equals("1.14")) {
             hasSupport = true;
         }
 
@@ -153,7 +180,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.14") || version.equals("1.13+")) {
+        if (version.equals("1.15") || version.equals("1.14") || version.equals("1.13+")) {
             hasSupport = true;
         }
 
@@ -164,7 +191,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.14") || version.equals("1.13+") || version.equals("1.13")) {
+        if (version.equals("1.15") || version.equals("1.14") || version.equals("1.13+") || version.equals("1.13")) {
             hasSupport = true;
         }
 
@@ -175,7 +202,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.14") || version.equals("1.13+") || version.equals("1.13") || version.equals("1.12")) {
+        if (!version.equals("1.11") && !version.equals("1.10") && !version.equals("1.9") && !version.equals("1.8")) {
             hasSupport = true;
         }
 

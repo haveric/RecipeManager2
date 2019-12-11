@@ -320,12 +320,14 @@ public class Vanilla {
             addFuelRecipe(Material.OAK_DOOR, 10);
             addFuelRecipe(Material.SPRUCE_DOOR, 10);
 
-            addFuelRecipe(Material.ACACIA_BOAT, 20);
-            addFuelRecipe(Material.BIRCH_BOAT, 20);
-            addFuelRecipe(Material.DARK_OAK_BOAT, 20);
-            addFuelRecipe(Material.JUNGLE_BOAT, 20);
-            addFuelRecipe(Material.OAK_BOAT, 20);
-            addFuelRecipe(Material.SPRUCE_BOAT, 20);
+            if (!Version.has1_15Support()) {
+                addFuelRecipe(Material.ACACIA_BOAT, 20);
+                addFuelRecipe(Material.BIRCH_BOAT, 20);
+                addFuelRecipe(Material.DARK_OAK_BOAT, 20);
+                addFuelRecipe(Material.JUNGLE_BOAT, 20);
+                addFuelRecipe(Material.OAK_BOAT, 20);
+                addFuelRecipe(Material.SPRUCE_BOAT, 20);
+            }
 
             // New fuels in 1.13
             addFuelRecipe(Material.DRIED_KELP_BLOCK, 200);
@@ -340,7 +342,9 @@ public class Vanilla {
             addFuelRecipe(Material.DARK_OAK_SIGN, 10);
 
             // New fuels in 1.14
-            addFuelRecipe(Material.SCAFFOLDING, 2.5f);
+            if (!Version.has1_15Support()) {
+                addFuelRecipe(Material.SCAFFOLDING, 2.5f);
+            }
             addFuelRecipe(Material.CARTOGRAPHY_TABLE, 15);
             addFuelRecipe(Material.FLETCHING_TABLE, 15);
             addFuelRecipe(Material.SMITHING_TABLE, 15);
@@ -349,6 +353,17 @@ public class Vanilla {
             addFuelRecipe(Material.BARREL, 15);
             addFuelRecipe(Material.BAMBOO, 2.5f);
             addFuelRecipe(Material.DEAD_BUSH, 5);
+        }
+
+        if (Version.has1_15Support()) {
+            addFuelRecipe(Material.SCAFFOLDING, 20);
+
+            addFuelRecipe(Material.ACACIA_BOAT, 60);
+            addFuelRecipe(Material.BIRCH_BOAT, 60);
+            addFuelRecipe(Material.DARK_OAK_BOAT, 60);
+            addFuelRecipe(Material.JUNGLE_BOAT, 60);
+            addFuelRecipe(Material.OAK_BOAT, 60);
+            addFuelRecipe(Material.SPRUCE_BOAT, 60);
         }
 
         // Index fuel recipes
