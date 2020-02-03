@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: color-console config changes didn't take effect early enough for setting reloads
 * FIX: settings no longer call init twice on first load
 * FIX: update boat and scaffolding smelt times for 1.15
+* NEW: 1.15 support
 
 === v2.18.1 ===
 * FIX: Missing messages fail more gracefully

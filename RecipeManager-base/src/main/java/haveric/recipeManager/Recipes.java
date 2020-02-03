@@ -704,25 +704,26 @@ public class Recipes {
         }
 
         // Remove original recipe - Special case for 1.12 below
-        if (recipe.hasFlag(FlagType.REMOVE) || (!Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE))) {
+        if (recipe.hasFlag(FlagType.REMOVE) || ((Version.has1_15Support() || !Version.has1_12Support()) && recipe.hasFlag(FlagType.OVERRIDE))) {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
 
         boolean isBasicRecipe = recipe instanceof CraftRecipe || recipe instanceof CombineRecipe;
-
-        // For 1.12 AND NEWER, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
-        if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
-            if (isBasicRecipe) {
-                Vanilla.replaceCustomRecipe(recipe);
-            } else { // 'cept for this.
-                recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
+        if (!Version.has1_15Support()) {
+            // For 1.12 AND NEWER, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
+            if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
+                if (isBasicRecipe) {
+                    Vanilla.replaceCustomRecipe(recipe);
+                } else { // 'cept for this.
+                    recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
+                }
             }
-        }
 
-        // For 1.12 AND NEWER, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to
-        //  ensure the RM recipe is added.
-        if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
-            recipe.setBukkitRecipe(null);
+            // For 1.12 AND NEWER, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to
+            //  ensure the RM recipe is added.
+            if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
+                recipe.setBukkitRecipe(null);
+            }
         }
 
         // Add to server if applicable
@@ -731,12 +732,12 @@ public class Recipes {
 
             // For 1.12, we don't actually add our overrides, they exist in the index. The replaceCustomRecipe
             //  handler puts as the recipe result the ID index "special item" that RM uses to tell itself that
-            //  this is a recipe to manage. 
+            //  this is a recipe to manage.
             if (bukkitRecipe != null) {
                 // 1.12 AND NEWER
 
                 // Note that since we don't "replace" smelt recipes, we need special handling here.
-                if (!(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && isBasicRecipe)) {
+                if (Version.has1_15Support() || !(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && isBasicRecipe)) {
                     Bukkit.addRecipe(bukkitRecipe);
                 }
             }
@@ -773,7 +774,7 @@ public class Recipes {
     public Recipe removeRecipe(BaseRecipe recipe) {
         // In 1.12, adding the RM recipe is handled elsewhere; we just need to remove indexing here.
         //  if we did try to add, we'd get a fatal error and this whole mess would fail.
-        if (!Version.has1_12Support() && (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))) {
+        if ((Version.has1_15Support() || !Version.has1_12Support()) && (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE))) {
             Bukkit.addRecipe(recipe.getBukkitRecipe(false));
         }
 
