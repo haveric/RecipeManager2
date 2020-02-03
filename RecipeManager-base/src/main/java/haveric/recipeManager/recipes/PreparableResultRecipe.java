@@ -214,17 +214,6 @@ public class PreparableResultRecipe extends MultiResultRecipe {
     }
 
     public void subtractIngredients(Inventory inv, ItemResult result, boolean onlyExtra) {
-        FlagIngredientCondition flagIC;
-        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
-        } else {
-            flagIC = null;
-        }
-
-        if (flagIC == null && result != null && result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-            flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-        }
-
         // Set defaults to non-crafting inventories where the index has results being last (Ex: anvils)
         int startIndex = 0;
         int endIndex = inv.getSize() - 1;
@@ -240,7 +229,21 @@ public class PreparableResultRecipe extends MultiResultRecipe {
                 int amt = item.getAmount();
                 int newAmt = amt;
 
-                if (flagIC != null) {
+                if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                    FlagIngredientCondition flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
+                    List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
+
+                    for (ConditionsIngredient cond : condList) {
+                        if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
+                            if (cond.getAmount() > 1) {
+                                newAmt -= (cond.getAmount() - 1);
+                            }
+                        }
+                    }
+                }
+
+                if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                    FlagIngredientCondition flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
                     List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
 
                     for (ConditionsIngredient cond : condList) {

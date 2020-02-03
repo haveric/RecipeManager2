@@ -196,9 +196,9 @@ public class FlagKeepItem extends Flag {
 
             if (obj instanceof Integer) {
                 clone = item.clone();
-                Integer dmg = (Integer) obj;
+                int dmg = (Integer) obj;
 
-                Short maxDurability = Settings.getCustomData(item.getType());
+                short maxDurability = Settings.getCustomData(item.getType());
                 if (dmg != 0 && maxDurability > 0) {
                     if (dmg > 0) {
                         short data = (short) (dmg + clone.getDurability());
@@ -232,7 +232,10 @@ public class FlagKeepItem extends Flag {
             if (clone == null) {
                 inv.setItem(index, new ItemStack(Material.AIR));
             } else {
-                clone.setAmount(clone.getAmount() + 1);
+                if (inv instanceof CraftingInventory) {
+                    clone.setAmount(clone.getAmount() + 1);
+                }
+
                 inv.setItem(index, clone);
             }
         }
@@ -240,7 +243,7 @@ public class FlagKeepItem extends Flag {
 
     @Override
     public void onCrafted(final Args a) {
-        if (!a.hasInventoryView()) {
+        if (!a.hasInventory()) {
             a.addCustomReason("Needs an inventory!");
             return;
         }
