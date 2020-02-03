@@ -425,7 +425,6 @@ public class Settings {
             anvilRepairMaterial.clear();
 
             List<Material> materials = Tools.parseChoice(repairMaterials, ParseBit.NO_ERRORS);
-            MessageSender.getInstance().info("Materials: " + materials);
             if (materials != null) {
                 anvilRepairMaterial.addAll(materials);
             }
