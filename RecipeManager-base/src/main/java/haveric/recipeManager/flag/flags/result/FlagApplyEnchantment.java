@@ -5,9 +5,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -158,7 +156,19 @@ public class FlagApplyEnchantment extends Flag {
         } else if (a.inventory() instanceof FurnaceInventory) {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 
-            enchantments = copyEnchantments(new ItemStack[] { inv.getSmelting() });
+            enchantments = copyEnchantments(inv.getSmelting());
+        } else if (a.inventory() instanceof AnvilInventory) {
+            AnvilInventory inv = (AnvilInventory) a.inventory();
+
+            ItemStack[] anvilIngredients = new ItemStack[2];
+            anvilIngredients[0] = inv.getItem(0);
+            anvilIngredients[1] = inv.getItem(1);
+
+            enchantments = copyEnchantments(anvilIngredients);
+        } else if (a.inventory() instanceof BrewerInventory) {
+            BrewerInventory inv = (BrewerInventory) a.inventory();
+
+            enchantments = copyEnchantments(inv.getIngredient());
         } else {
             a.addCustomReason("Unknown inventory type: " + a.inventory());
         }
@@ -190,6 +200,10 @@ public class FlagApplyEnchantment extends Flag {
         }
 
         a.result().setItemMeta(resultMeta);
+    }
+
+    private Map<Enchantment, Integer> copyEnchantments(ItemStack item) {
+        return copyEnchantments(new ItemStack[]{item});
     }
 
     private Map<Enchantment, Integer> copyEnchantments(ItemStack[] items) {
