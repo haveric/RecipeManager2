@@ -1,4 +1,4 @@
-lastchanged: 2.18.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.19.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -11,6 +11,8 @@ lastchanged: 2.18.0 # Please do not edit this value - it is used by the plugin t
 special-recipes:
   anvil:
     combine-item:
+      # If "enabled: true", any materials set will act as a whitelist for what is enabled
+      # If "enabled: false", any materials set will act as a whitelist for what is disabled
       enabled: true          # ability to combine items of the same type to repair or improve enchantments
       materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
     enchant:
