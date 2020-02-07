@@ -7,6 +7,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: update boat and scaffolding smelt times for 1.15
 * FIX: @KeepItem functionality
 * FIX: @ApplyEnchantment: Add support for anvil and brew recipes
+* FIX: Anvil Special recipe materials and enchantment lists were not clearing on /rmreload
+* FIX: Anvil Special recipe "repair-material.enabled: false" material list was broken
 * NEW: 1.15 support
 
 === v2.18.1 ===

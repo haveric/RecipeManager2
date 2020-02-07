@@ -161,7 +161,7 @@ public class AnvilEvents implements Listener {
                                 event.setResult(new ItemStack(Material.AIR));
                                 player.updateInventory();
                             }
-                        } else if (repairMaterial.isEmpty() || repairMaterial.contains(left.getType())) {
+                        } else if (repairMaterial.isEmpty() || repairMaterial.contains(right.getType())) {
                             event.setResult(new ItemStack(Material.AIR));
                             player.updateInventory();
                         }

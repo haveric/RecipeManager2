@@ -353,30 +353,27 @@ public class Settings {
         }
 
 
+        anvilCombineItem.clear();
         String combineItemMaterials = fileConfig.getString("special-recipes.anvil.combine-item.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (combineItemMaterials != null && !combineItemMaterials.equals("false")) {
-            anvilCombineItem.clear();
-
             List<Material> materials = Tools.parseChoice(combineItemMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilCombineItem.addAll(materials);
             }
         }
 
+        anvilMaterialEnchant.clear();
         String enchantMaterials = fileConfig.getString("special-recipes.anvil.enchant.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (enchantMaterials != null && !enchantMaterials.equals("false")) {
-            anvilMaterialEnchant.clear();
-
             List<Material> materials = Tools.parseChoice(enchantMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilMaterialEnchant.addAll(materials);
             }
         }
 
+        anvilEnchantments.clear();
         String enchantEnchantments = fileConfig.getString("special-recipes.anvil.enchant.enchantments", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (enchantEnchantments != null && !enchantEnchantments.equals("false")) {
-            anvilEnchantments.clear();
-
             String[] enchantments = enchantEnchantments.split(",");
             for (String enchantString : enchantments) {
                 String[] levelsSplit = enchantString.split(":");
@@ -420,20 +417,18 @@ public class Settings {
             }
         }
 
+        anvilRepairMaterial.clear();
         String repairMaterials = fileConfig.getString("special-recipes.anvil.repair-material.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (repairMaterials != null && !repairMaterials.equals("false")) {
-            anvilRepairMaterial.clear();
-
             List<Material> materials = Tools.parseChoice(repairMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilRepairMaterial.addAll(materials);
             }
         }
 
+        anvilRenaming.clear();
         String renameMaterials = fileConfig.getString("special-recipes.anvil.renaming.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (renameMaterials != null && !renameMaterials.equals("false")) {
-            anvilRenaming.clear();
-
             List<Material> materials = Tools.parseChoice(renameMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilRenaming.addAll(materials);
