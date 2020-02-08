@@ -240,9 +240,7 @@ public class AnvilEvents implements Listener {
                     int finalRepairCost = repairCost;
 
                     updateRepairCost(player, inventory, finalRepairCost);
-                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> {
-                        updateRepairCost(player, inventory, finalRepairCost);
-                    }, 2);
+                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> updateRepairCost(player, inventory, finalRepairCost), 2);
                 }
 
                 Anvils.remove(player);
@@ -295,9 +293,7 @@ public class AnvilEvents implements Listener {
                         if (originalRepair > 0) {
                             updateRepairCost(null, anvilInventory, originalRepair + 1);
 
-                            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> {
-                                updateRepairCost(player, anvilInventory, originalRepair);
-                            }, 0);
+                            Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> updateRepairCost(player, anvilInventory, originalRepair), 0);
                         }
                     }
                 }
