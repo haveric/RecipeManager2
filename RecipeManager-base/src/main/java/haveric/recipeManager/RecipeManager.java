@@ -22,6 +22,7 @@ import haveric.recipeManager.recipes.compost.data.Composters;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceEvents;
 import haveric.recipeManager.recipes.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.furnace.data.Furnaces;
+import haveric.recipeManager.recipes.grindstone.GrindstoneEvents;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingEvents;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
@@ -55,6 +56,7 @@ public class RecipeManager extends JavaPlugin {
     private static RMStonecuttingEvents stonecuttingEvents;
     private static CompostEvents compostEvents;
     private static AnvilEvents anvilEvents;
+    private static GrindstoneEvents grindstoneEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -98,6 +100,7 @@ public class RecipeManager extends JavaPlugin {
             campfireEvents = new RMCampfireEvents();
             stonecuttingEvents = new RMStonecuttingEvents();
             compostEvents = new CompostEvents();
+            grindstoneEvents = new GrindstoneEvents();
         }
 
         recipes = new Recipes();
@@ -221,6 +224,7 @@ public class RecipeManager extends JavaPlugin {
             RMCampfireEvents.reload();
             RMStonecuttingEvents.reload();
             CompostEvents.reload();
+            GrindstoneEvents.reload();
         }
     }
 
@@ -345,6 +349,11 @@ public class RecipeManager extends JavaPlugin {
             }
             anvilEvents = null;
 
+            if (grindstoneEvents != null) {
+                grindstoneEvents.clean();
+            }
+            grindstoneEvents = null;
+
             Settings.clean();
 
             try {
@@ -423,6 +432,11 @@ public class RecipeManager extends JavaPlugin {
     public static AnvilEvents getAnvilEvents() {
         return anvilEvents;
     }
+
+    public static GrindstoneEvents getGrindstoneEvents() {
+        return grindstoneEvents;
+    }
+
     public static FlagLoader getFlagLoader() {
         return flagLoader;
     }

@@ -14,6 +14,7 @@ import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
+import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
@@ -55,6 +56,8 @@ public class RecipeRegistrator {
             queueRecipe(recipe, adder, "Compost Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
         } else if (recipe instanceof AnvilRecipe) {
             queueRecipe(recipe, adder, "Anvil Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
+        } else if (recipe instanceof GrindstoneRecipe) {
+            queueRecipe(recipe, adder, "Grindstone Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
         } else {
             throw new IllegalArgumentException("Unknown recipe! " + recipe.toString());
         }

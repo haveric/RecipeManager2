@@ -12,6 +12,7 @@ import haveric.recipeManager.recipes.compost.CompostRecipeParser;
 import haveric.recipeManager.recipes.craft.CraftRecipeParser;
 import haveric.recipeManager.recipes.fuel.FuelRecipeParser;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipeParser;
+import haveric.recipeManager.recipes.grindstone.GrindstoneRecipeParser;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipeParser;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 
@@ -41,6 +42,8 @@ public class RecipeParserFactory {
             parser = new CompostRecipeParser(reader, recipeName, fileFlags, recipeRegistrator);
         } else if (directive.equals(RMCRecipeType.ANVIL.getDirective())) {
             parser = new AnvilRecipeParser(reader, recipeName, fileFlags, recipeRegistrator);
+        } else if (directive.equals(RMCRecipeType.GRINDSTONE.getDirective())) {
+            parser = new GrindstoneRecipeParser(reader, recipeName, fileFlags, recipeRegistrator);
         } else if (directive.equals(RMCRecipeType.SPECIAL.getDirective())) {
             parser = new RemoveResultsParser(reader, recipeName, fileFlags, recipeRegistrator);
         } else {

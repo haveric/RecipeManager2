@@ -15,6 +15,7 @@ import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
+import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
@@ -63,6 +64,7 @@ public class Recipes {
     protected Map<String, CompostRecipe> indexRemovedCompost = new HashMap<>();
     public static boolean hasAnyOverridenCompostRecipe = false;
     private Map<String, AnvilRecipe> indexAnvil = new HashMap<>();
+    private Map<String, GrindstoneRecipe> indexGrindstone = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {
@@ -88,6 +90,7 @@ public class Recipes {
         indexCompost.clear();
         indexRemovedCompost.clear();
         indexAnvil.clear();
+        indexGrindstone.clear();
         indexName.clear();
     }
 
@@ -535,6 +538,17 @@ public class Recipes {
         return recipe;
     }
 
+    public GrindstoneRecipe getGrindstoneRecipe(ItemStack primary, ItemStack secondary) {
+        if (primary == null) {
+            primary = new ItemStack(Material.AIR);
+        }
+        if (secondary == null) {
+            secondary = new ItemStack(Material.AIR);
+        }
+
+        return indexGrindstone.get(primary.getType().toString() + "-" + secondary.getType().toString());
+    }
+
     /**
      * Get RecipeManager's furnace fuel recipe for the specified item.
      *
@@ -700,6 +714,10 @@ public class Recipes {
                 for (String index : ((AnvilRecipe) recipe).getIndexString()) {
                     indexAnvil.put(index, (AnvilRecipe) recipe);
                 }
+            } else if (recipe instanceof GrindstoneRecipe) {
+                for (String index : ((GrindstoneRecipe) recipe).getIndexString()) {
+                    indexGrindstone.put(index, (GrindstoneRecipe) recipe);
+                }
             }
         }
 
@@ -823,6 +841,10 @@ public class Recipes {
         } else if (recipe instanceof AnvilRecipe) {
             for (String index : ((AnvilRecipe) recipe).getIndexString()) {
                 indexAnvil.remove(index);
+            }
+        } else if (recipe instanceof GrindstoneRecipe) {
+            for (String index : ((GrindstoneRecipe) recipe).getIndexString()) {
+                indexGrindstone.remove(index);
             }
         }
 
