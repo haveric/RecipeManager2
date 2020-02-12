@@ -8,13 +8,10 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.anvil.data.Anvil;
-import haveric.recipeManager.recipes.anvil.data.Anvils;
 import haveric.recipeManager.recipes.grindstone.data.Grindstone;
 import haveric.recipeManager.recipes.grindstone.data.Grindstones;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,6 +24,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -50,6 +48,29 @@ public class GrindstoneEvents implements Listener {
     public static void reload() {
         HandlerList.unregisterAll(RecipeManager.getGrindstoneEvents());
         Bukkit.getPluginManager().registerEvents(RecipeManager.getGrindstoneEvents(), RecipeManager.getPlugin());
+    }
+
+    @EventHandler
+    public void grindstoneDrag(InventoryDragEvent event) {
+        HumanEntity ent = event.getWhoClicked();
+        if (ent instanceof Player) {
+            Inventory inv = event.getInventory();
+
+            if (inv instanceof GrindstoneInventory) {
+                GrindstoneInventory grindstoneInventory = (GrindstoneInventory) inv;
+                Location location = inv.getLocation();
+                if (location != null) {
+                    Player player = (Player) ent;
+
+                    new BukkitRunnable() {
+                            @Override
+                        public void run() {
+                            prepareGrindstone(grindstoneInventory, player, event.getView());
+                        }
+                    }.runTaskLater(RecipeManager.getPlugin(), 0);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -360,27 +381,27 @@ public class GrindstoneEvents implements Listener {
                 Block block = location.getBlock();
                 ItemResult result;
 
-                boolean sameLeft = false;
-                boolean sameRight = false;
-                Anvil anvil = Anvils.get(player);
-                if (anvil != null) {
-                    ItemStack lastTop = anvil.getLeftIngredient();
-                    sameLeft = top == null && lastTop == null;
-                    if (!sameLeft && top != null && lastTop != null) {
-                        sameLeft = top.hashCode() == lastTop.hashCode();
+                boolean sameTop = false;
+                boolean sameBottom = false;
+                Grindstone grindstone = Grindstones.get(player);
+                if (grindstone != null) {
+                    ItemStack lastTop = grindstone.getTopIngredient();
+                    sameTop = top == null && lastTop == null;
+                    if (!sameTop && top != null && lastTop != null) {
+                        sameTop = top.hashCode() == lastTop.hashCode();
                     }
 
-                    if (sameLeft) {
-                        ItemStack lastBottom = anvil.getRightIngredient();
-                        sameRight = bottom == null && lastBottom == null;
-                        if (!sameRight && bottom != null && lastBottom != null) {
-                            sameRight = bottom.hashCode() == lastBottom.hashCode();
+                    if (sameTop) {
+                        ItemStack lastBottom = grindstone.getBottomIngredient();
+                        sameBottom = bottom == null && lastBottom == null;
+                        if (!sameBottom && bottom != null && lastBottom != null) {
+                            sameBottom = bottom.hashCode() == lastBottom.hashCode();
                         }
                     }
                 }
 
-                if (sameLeft && sameRight) {
-                    result = anvil.getResult();
+                if (sameTop && sameBottom) {
+                    result = grindstone.getResult();
                 } else {
                     Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
                     result = recipe.getDisplayResult(a);
@@ -438,9 +459,9 @@ public class GrindstoneEvents implements Listener {
 
         // We're handling durability on the result line outside of flags, so the original damage should be saved here
         int originalDamage = -1;
-        if (result != null && Version.has1_13Support()) {
+        if (result != null) {
             ItemMeta meta = result.getItemMeta();
-            if (meta instanceof org.bukkit.inventory.meta.Damageable) {
+            if (meta instanceof Damageable) {
                 originalDamage = ((Damageable) meta).getDamage();
             }
 
@@ -452,10 +473,10 @@ public class GrindstoneEvents implements Listener {
 
             boolean firstRun = true;
             for (int i = 0; i < times; i++) {
-                // Make sure block is still an anvil
+                // Make sure block is still a grindstone
                 if (location != null) {
                     Material blockType = location.getBlock().getType();
-                    if (blockType != Material.ANVIL && (!Version.has1_13BasicSupport() || (blockType != Material.CHIPPED_ANVIL && blockType != Material.DAMAGED_ANVIL))) {
+                    if (blockType != Material.GRINDSTONE) {
                         break;
                     }
                 }
