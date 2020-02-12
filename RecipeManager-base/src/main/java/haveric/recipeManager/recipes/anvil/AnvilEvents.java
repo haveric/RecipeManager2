@@ -36,8 +36,8 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class AnvilEvents implements Listener {
 
             if (left != null && right != null) {
                 if (left.getType().getMaxDurability() > 0) {
-                    if (right.getItemMeta() instanceof BookMeta) {
+                    if (right.getItemMeta() instanceof EnchantmentStorageMeta) {
                         List<Material> enchantMaterials = Settings.getInstance().getAnvilMaterialEnchant();
                         Map<Enchantment, List<Integer>> enchantEnchantments = Settings.getInstance().getAnvilEnchantments();
 
@@ -100,7 +100,7 @@ public class AnvilEvents implements Listener {
                                 event.setResult(new ItemStack(Material.AIR));
                                 player.updateInventory();
                             } else if (!enchantEnchantments.isEmpty()) {
-                                Map<Enchantment, Integer> bookEnchantments = right.getEnchantments();
+                                Map<Enchantment, Integer> bookEnchantments = ((EnchantmentStorageMeta) right.getItemMeta()).getStoredEnchants();
 
                                 boolean enchantAllowed = false;
                                 for (Map.Entry<Enchantment, Integer> entry : bookEnchantments.entrySet()) {
@@ -125,7 +125,7 @@ public class AnvilEvents implements Listener {
                                 boolean enchantNotAllowed = true;
 
                                 if (!enchantEnchantments.isEmpty()) {
-                                    Map<Enchantment, Integer> bookEnchantments = right.getEnchantments();
+                                    Map<Enchantment, Integer> bookEnchantments = ((EnchantmentStorageMeta) right.getItemMeta()).getStoredEnchants();
 
                                     for (Map.Entry<Enchantment, Integer> entry : bookEnchantments.entrySet()) {
                                         List<Integer> levels = enchantEnchantments.get(entry.getKey());
