@@ -304,6 +304,38 @@ public class ToolsItem {
         return same;
     }
 
+    public static boolean isSameItemHash(ItemStack one, ItemStack two) {
+        boolean match = one == null && two == null;
+
+        if (!match && one != null && two != null) {
+            match = one.getType() == two.getType();
+
+            if (match) {
+                int oneHash;
+                int twoHash;
+                if (one.getAmount() == 1) {
+                    oneHash = one.hashCode();
+                } else {
+                    ItemStack oneClone = one.clone();
+                    oneClone.setAmount(1);
+                    oneHash = oneClone.hashCode();
+                }
+
+                if (two.getAmount() == 1) {
+                    twoHash = two.hashCode();
+                } else {
+                    ItemStack twoClone = two.clone();
+                    twoClone.setAmount(1);
+                    twoHash = twoClone.hashCode();
+                }
+
+                match = oneHash == twoHash;
+            }
+        }
+
+        return match;
+    }
+
     public static void replaceItem(final Inventory inventory, final int slot, final ItemStack stack) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(RecipeManager.getPlugin(), () -> {
             ItemStack slotItem = inventory.getItem(slot);

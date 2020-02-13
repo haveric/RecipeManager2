@@ -413,7 +413,7 @@ public class AnvilEvents implements Listener {
                 ItemStack right = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!isSameItem(left, anvil.getLeftIngredient()) || !isSameItem(right, anvil.getRightIngredient())) {
+                if (!ToolsItem.isSameItemHash(left, anvil.getLeftIngredient()) || !ToolsItem.isSameItemHash(right, anvil.getRightIngredient())) {
                     break;
                 }
 
@@ -587,46 +587,14 @@ public class AnvilEvents implements Listener {
         }
     }
 
-    private boolean isSameItem(ItemStack one, ItemStack two) {
-        boolean match = one == null && two == null;
-
-        if (!match && one != null && two != null) {
-            match = one.getType() == two.getType();
-
-            if (match) {
-                int oneHash;
-                int twoHash;
-                if (one.getAmount() == 1) {
-                    oneHash = one.hashCode();
-                } else {
-                    ItemStack oneClone = one.clone();
-                    oneClone.setAmount(1);
-                    oneHash = oneClone.hashCode();
-                }
-
-                if (two.getAmount() == 1) {
-                    twoHash = two.hashCode();
-                } else {
-                    ItemStack twoClone = two.clone();
-                    twoClone.setAmount(1);
-                    twoHash = twoClone.hashCode();
-                }
-
-                match = oneHash == twoHash;
-            }
-        }
-
-        return match;
-    }
-
     private void updateAnvilInventory(Player player, AnvilInventory anvilInventory) {
         Anvil anvil = Anvils.get(player);
 
-        boolean leftMatch = isSameItem(anvilInventory.getItem(0), anvil.getLeftSingleStack());
+        boolean leftMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(0), anvil.getLeftSingleStack());
 
         boolean rightMatch = false;
         if (leftMatch) {
-            rightMatch = isSameItem(anvilInventory.getItem(1), anvil.getRightSingleStack());
+            rightMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(1), anvil.getRightSingleStack());
 
             if (rightMatch) {
                 // Force a new prepare event by setting an item

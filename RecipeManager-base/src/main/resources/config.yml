@@ -31,6 +31,20 @@ special-recipes:
   fireworks: true            # fireworks recipes
   firework-star: true        # firework star recipes
   firework-star-fade: true   # firework star fade recipes
+  grindstone:
+    combine-item:
+      # If "enabled: true", any materials set will act as a whitelist for what is enabled
+      # If "enabled: false", any materials set will act as a whitelist for what is disabled
+      enabled: true         # ability to combine/repair items in a grindstone
+      materials: false      #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
+    disenchant:
+      book:
+        enabled: true       # ability to disenchant books
+        enchantments: false #   false or comma separated list of enchantments to allow/disallow.  Ex: sweeping_edge, durability:1, damage_all:1-3
+      item:
+        enabled: true       # ability to disenchant tools/weapons/armor
+        materials: false    #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
+        enchantments: false #   false or comma separated list of enchantments to allow/disallow.  Ex: sweeping_edge, durability:1, damage_all:1-3
   leather-armor-dye: true    # leather armor dyeing recipes
   map-cloning: true          # clone maps recipes
   map-extending: true        # extend maps recipes

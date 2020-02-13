@@ -32,6 +32,7 @@ public class Settings {
     private static final boolean SPECIAL_RECIPE_DEFAULT = true;
     private static final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
     private static final String SPECIAL_ANVIL_CUSTOM_DEFAULT = "false";
+    private static final String SPECIAL_GRINDSTONE_CUSTOM_DEFAULT = "false";
 
     private static final boolean SOUNDS_REPAIR_DEFAULT = true;
     private static final boolean SOUNDS_FAILED_DEFAULT = true;
@@ -77,6 +78,11 @@ public class Settings {
     private static List<Material> anvilRepairMaterial = new ArrayList<>();
     private static List<Material> anvilRenaming = new ArrayList<>();
     private static Map<Enchantment, List<Integer>> anvilEnchantments = new HashMap<>();
+
+    private static List<Material> grindstoneCombineItem = new ArrayList<>();
+    private static List<Material> grindstoneItemMaterials = new ArrayList<>();
+    private static Map<Enchantment, List<Integer>> grindstoneBookEnchantments = new HashMap<>();
+    private static Map<Enchantment, List<Integer>> grindstoneItemEnchantments = new HashMap<>();
 
     protected Settings() {
        // Exists only to defeat instantiation.
@@ -146,6 +152,9 @@ public class Settings {
         MessageSender.getInstance().log("    special-recipes.fireworks: " + getSpecialFireworks());
         MessageSender.getInstance().log("    special-recipes.firework-star: " + getSpecialFireworkStar());
         MessageSender.getInstance().log("    special-recipes.firework-star-fade: " + getSpecialFireworkStarFade());
+        MessageSender.getInstance().log("    special-recipes.grindstone.combine-item.enabled: " + getSpecialGrindstoneCombineItem());
+        MessageSender.getInstance().log("    special-recipes.grindstone.disenchant.book.enabled: " + getSpecialGrindstoneDisenchantBook());
+        MessageSender.getInstance().log("    special-recipes.grindstone.disenchant.item.enabled: " + getSpecialGrindstoneDisenchantItem());
         MessageSender.getInstance().log("    special-recipes.leather-armor-dye: " + getSpecialLeatherDye());
         MessageSender.getInstance().log("    special-recipes.map-cloning: " + getSpecialMapCloning());
         MessageSender.getInstance().log("    special-recipes.map-extending: " + getSpecialMapExtending());
@@ -362,6 +371,24 @@ public class Settings {
             }
         }
 
+        grindstoneCombineItem.clear();
+        String grindstoneCombineItemMaterials = fileConfig.getString("special-recipes.grindstone.combine-item.materials", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
+        if (grindstoneCombineItemMaterials != null && !grindstoneCombineItemMaterials.equals("false")) {
+            List<Material> materials = Tools.parseChoice(grindstoneCombineItemMaterials, ParseBit.NO_ERRORS);
+            if (materials != null) {
+                grindstoneCombineItem.addAll(materials);
+            }
+        }
+
+        grindstoneItemMaterials.clear();
+        String grindstoneDisenchantItemMaterials = fileConfig.getString("special-recipes.grindstone.disenchant.item.materials", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
+        if (grindstoneDisenchantItemMaterials != null && !grindstoneDisenchantItemMaterials.equals("false")) {
+            List<Material> materials = Tools.parseChoice(grindstoneDisenchantItemMaterials, ParseBit.NO_ERRORS);
+            if (materials != null) {
+                grindstoneItemMaterials.addAll(materials);
+            }
+        }
+
         anvilMaterialEnchant.clear();
         String enchantMaterials = fileConfig.getString("special-recipes.anvil.enchant.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (enchantMaterials != null && !enchantMaterials.equals("false")) {
@@ -412,6 +439,98 @@ public class Settings {
                         }
 
                         anvilEnchantments.put(enchant, levels);
+                    }
+                }
+            }
+        }
+
+        grindstoneBookEnchantments.clear();
+        String grindstoneDisenchantBookEnchantments = fileConfig.getString("special-recipes.grindstone.disenchant.book.enchantments", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
+        if (grindstoneDisenchantBookEnchantments != null && !grindstoneDisenchantBookEnchantments.equals("false")) {
+            String[] enchantments = grindstoneDisenchantBookEnchantments.split(",");
+            for (String enchantString : enchantments) {
+                String[] levelsSplit = enchantString.split(":");
+                Enchantment enchant = getEnchantment(RMCUtil.parseAliasName(levelsSplit[0]));
+
+                if (enchant != null) {
+                    if (levelsSplit.length > 1) {
+                        String levelsString = levelsSplit[1];
+                        String[] split = levelsString.split("-");
+                        int minLevel = 1;
+                        try {
+                            minLevel = Integer.parseInt(split[0].trim());
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.getInstance().warning("Invalid special recipe grindstone disenchant book enchantment level set: " + split[0] + " for " + levelsSplit[0]);
+                        }
+
+                        int maxLevel = minLevel;
+                        if (split.length > 1) {
+                            try {
+                                maxLevel = Integer.parseInt(split[1].trim());
+                            } catch (NumberFormatException e) {
+                                ErrorReporter.getInstance().warning("Invalid special recipe grindstone disenchant book enchantment max level set: " + split[1] + " for " + levelsSplit[0]);
+                            }
+                        }
+
+                        List<Integer> levels = new ArrayList<>();
+                        for (int i = minLevel; i <= maxLevel; i++) {
+                            levels.add(i);
+                        }
+
+                        grindstoneBookEnchantments.put(enchant, levels);
+                    } else {
+                        List<Integer> levels = new ArrayList<>();
+                        for (int i = enchant.getStartLevel(); i <= enchant.getMaxLevel(); i++) {
+                            levels.add(i);
+                        }
+
+                        grindstoneBookEnchantments.put(enchant, levels);
+                    }
+                }
+            }
+        }
+
+        grindstoneItemEnchantments.clear();
+        String grindstoneDisenchantItemEnchantments = fileConfig.getString("special-recipes.grindstone.disenchant.item.enchantments", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
+        if (grindstoneDisenchantItemEnchantments != null && !grindstoneDisenchantItemEnchantments.equals("false")) {
+            String[] enchantments = grindstoneDisenchantItemEnchantments.split(",");
+            for (String enchantString : enchantments) {
+                String[] levelsSplit = enchantString.split(":");
+                Enchantment enchant = getEnchantment(RMCUtil.parseAliasName(levelsSplit[0]));
+
+                if (enchant != null) {
+                    if (levelsSplit.length > 1) {
+                        String levelsString = levelsSplit[1];
+                        String[] split = levelsString.split("-");
+                        int minLevel = 1;
+                        try {
+                            minLevel = Integer.parseInt(split[0].trim());
+                        } catch (NumberFormatException e) {
+                            ErrorReporter.getInstance().warning("Invalid special recipe grindstone disenchant item enchantment level set: " + split[0] + " for " + levelsSplit[0]);
+                        }
+
+                        int maxLevel = minLevel;
+                        if (split.length > 1) {
+                            try {
+                                maxLevel = Integer.parseInt(split[1].trim());
+                            } catch (NumberFormatException e) {
+                                ErrorReporter.getInstance().warning("Invalid special recipe grindstone disenchant item enchantment max level set: " + split[1] + " for " + levelsSplit[0]);
+                            }
+                        }
+
+                        List<Integer> levels = new ArrayList<>();
+                        for (int i = minLevel; i <= maxLevel; i++) {
+                            levels.add(i);
+                        }
+
+                        grindstoneItemEnchantments.put(enchant, levels);
+                    } else {
+                        List<Integer> levels = new ArrayList<>();
+                        for (int i = enchant.getStartLevel(); i <= enchant.getMaxLevel(); i++) {
+                            levels.add(i);
+                        }
+
+                        grindstoneItemEnchantments.put(enchant, levels);
                     }
                 }
             }
@@ -575,6 +694,18 @@ public class Settings {
 
     public boolean getSpecialAnvilRenaming() {
         return fileConfig.getBoolean("special-recipes.anvil.renaming.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialGrindstoneCombineItem() {
+        return fileConfig.getBoolean("special-recipes.grindstone.combine-item.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialGrindstoneDisenchantBook() {
+        return fileConfig.getBoolean("special-recipes.grindstone.disenchant.book.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialGrindstoneDisenchantItem() {
+        return fileConfig.getBoolean("special-recipes.grindstone.disenchant.item.enabled", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialBanner() {
@@ -766,5 +897,21 @@ public class Settings {
 
     public Map<Enchantment, List<Integer>> getAnvilEnchantments() {
         return anvilEnchantments;
+    }
+
+    public List<Material> getGrindstoneCombineItem() {
+        return grindstoneCombineItem;
+    }
+
+    public Map<Enchantment, List<Integer>> getGrindstoneBookEnchantments() {
+        return grindstoneBookEnchantments;
+    }
+
+    public List<Material> getGrindstoneItemMaterials() {
+        return grindstoneItemMaterials;
+    }
+
+    public Map<Enchantment, List<Integer>> getGrindstoneItemEnchantments() {
+        return grindstoneItemEnchantments;
     }
 }
