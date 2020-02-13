@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.19.0 ===
 * FIX: color-console config changes didn't take effect early enough for setting reloads
 * FIX: settings no longer call init twice on first load
 * FIX: update boat and scaffolding smelt times for 1.15
