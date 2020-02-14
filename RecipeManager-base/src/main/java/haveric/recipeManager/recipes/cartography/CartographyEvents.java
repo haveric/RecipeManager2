@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.cartography;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
+import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
@@ -105,8 +106,12 @@ public class CartographyEvents implements Listener {
                         if (cartographyTable.getRecipe() != null) {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
                                 craftFinishCartography(event, player, cartographyInventory, true);
+                                prepareCartographyLater(cartographyInventory, player, event.getView());
+                                new UpdateInventory(player, 2);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
                                 craftFinishCartography(event, player, cartographyInventory, false);
+                                prepareCartographyLater(cartographyInventory, player, event.getView());
+                                new UpdateInventory(player, 2);
                             }
                         }
                     } else if (rawSlot == 0 || rawSlot == 1) {

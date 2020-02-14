@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.grindstone;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
+import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
@@ -91,8 +92,12 @@ public class GrindstoneEvents implements Listener {
                         if (grindstone != null) {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
                                 craftFinishGrindstone(event, player, grindstoneInventory, true);
+                                prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                                new UpdateInventory(player, 2);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
                                 craftFinishGrindstone(event, player, grindstoneInventory, false);
+                                prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                                new UpdateInventory(player, 2);
                             }
                         }
                     } else if (rawSlot == 0 || rawSlot == 1) {
