@@ -13,10 +13,7 @@ import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -232,7 +229,7 @@ public class FlagKeepItem extends Flag {
             if (clone == null) {
                 inv.setItem(index, new ItemStack(Material.AIR));
             } else {
-                if (inv instanceof CraftingInventory) {
+                if (inv instanceof CraftingInventory || inv instanceof GrindstoneInventory || inv instanceof CartographyInventory) {
                     clone.setAmount(clone.getAmount() + 1);
                 }
 
@@ -265,6 +262,9 @@ public class FlagKeepItem extends Flag {
             } else {
                 a.addCustomReason("Needs a recipe!");
             }
+        } else if (a.inventory() instanceof GrindstoneInventory || a.inventory() instanceof CartographyInventory) {
+            parse(a.inventory(), a, 0);
+            parse(a.inventory(), a, 1);
         } else {
             a.addCustomReason("Needs a crafting or furnace inventory!");
         }
