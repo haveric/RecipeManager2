@@ -28,6 +28,10 @@ special-recipes:
   banner: true               # banner pattern recipes (Only affects 1.13 or earlier. Replaced with loom recipes in 1.14)
   banner-duplicate: true     # banner duplicate/cloning recipes
   book-cloning: true         # clone books recipes
+  cartography:
+    clone: true              # clone maps recipe
+    extend: true             # extend/zoom maps recipe
+    lock: true               # lock maps recipe
   fireworks: true            # fireworks recipes
   firework-star: true        # firework star recipes
   firework-star-fade: true   # firework star fade recipes
@@ -46,8 +50,8 @@ special-recipes:
         materials: false    #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
         enchantments: false #   false or comma separated list of enchantments to allow/disallow.  Ex: sweeping_edge, durability:1, damage_all:1-3
   leather-armor-dye: true    # leather armor dyeing recipes
-  map-cloning: true          # clone maps recipes
-  map-extending: true        # extend maps recipes
+  map-cloning: true          # clone maps recipe
+  map-extending: true        # extend/zoom maps recipe
   repair: true               # Weapon/tool repair (these aren't actual recipes)
   repair-metadata: false     # Weapon/tool repairing while preserving metadata (enchantments, name, etc), if both items have metadata, the first item's metadata will be preserved (ordering is from top left to bottom right)
   shield-banner: true        # shield decoration (banner) recipes

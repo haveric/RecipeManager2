@@ -149,6 +149,9 @@ public class Settings {
         MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
         MessageSender.getInstance().log("    special-recipes.banner-duplicate: " + getSpecialBannerDuplicate());
         MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
+        MessageSender.getInstance().log("    special-recipes.cartography.clone: " + getSpecialCartographyClone());
+        MessageSender.getInstance().log("    special-recipes.cartography.extend: " + getSpecialCartographyExtend());
+        MessageSender.getInstance().log("    special-recipes.cartography.lock: " + getSpecialCartographyLock());
         MessageSender.getInstance().log("    special-recipes.fireworks: " + getSpecialFireworks());
         MessageSender.getInstance().log("    special-recipes.firework-star: " + getSpecialFireworkStar());
         MessageSender.getInstance().log("    special-recipes.firework-star-fade: " + getSpecialFireworkStarFade());
@@ -706,6 +709,18 @@ public class Settings {
 
     public boolean getSpecialGrindstoneDisenchantItem() {
         return fileConfig.getBoolean("special-recipes.grindstone.disenchant.item.enabled", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialCartographyClone() {
+        return fileConfig.getBoolean("special-recipes.cartography.clone", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialCartographyExtend() {
+        return fileConfig.getBoolean("special-recipes.cartography.extend", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialCartographyLock() {
+        return fileConfig.getBoolean("special-recipes.cartography.lock", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialBanner() {

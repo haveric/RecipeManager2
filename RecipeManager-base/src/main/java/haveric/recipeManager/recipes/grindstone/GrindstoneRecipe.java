@@ -39,6 +39,10 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
         super(flags);
     }
 
+    public boolean isValidBlockMaterial(Material material) {
+        return material == Material.GRINDSTONE;
+    }
+
     public List<Material> getPrimaryIngredient() {
         return primaryIngredient;
     }

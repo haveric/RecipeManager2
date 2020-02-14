@@ -6,6 +6,7 @@ import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.cartography.CartographyRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
@@ -65,6 +66,7 @@ public class Recipes {
     public static boolean hasAnyOverridenCompostRecipe = false;
     private Map<String, AnvilRecipe> indexAnvil = new HashMap<>();
     private Map<String, GrindstoneRecipe> indexGrindstone = new HashMap<>();
+    private Map<String, CartographyRecipe> indexCartography = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
 
     public Recipes() {
@@ -91,6 +93,7 @@ public class Recipes {
         indexRemovedCompost.clear();
         indexAnvil.clear();
         indexGrindstone.clear();
+        indexCartography.clear();
         indexName.clear();
     }
 
@@ -549,6 +552,17 @@ public class Recipes {
         return indexGrindstone.get(primary.getType().toString() + "-" + secondary.getType().toString());
     }
 
+    public CartographyRecipe getCartographyRecipe(ItemStack primary, ItemStack secondary) {
+        if (primary == null) {
+            primary = new ItemStack(Material.AIR);
+        }
+        if (secondary == null) {
+            secondary = new ItemStack(Material.AIR);
+        }
+
+        return indexCartography.get(primary.getType().toString() + "-" + secondary.getType().toString());
+    }
+
     /**
      * Get RecipeManager's furnace fuel recipe for the specified item.
      *
@@ -718,6 +732,10 @@ public class Recipes {
                 for (String index : ((GrindstoneRecipe) recipe).getIndexString()) {
                     indexGrindstone.put(index, (GrindstoneRecipe) recipe);
                 }
+            } else if (recipe instanceof CartographyRecipe) {
+                for (String index : ((CartographyRecipe) recipe).getIndexString()) {
+                    indexCartography.put(index, (CartographyRecipe) recipe);
+                }
             }
         }
 
@@ -845,6 +863,10 @@ public class Recipes {
         } else if (recipe instanceof GrindstoneRecipe) {
             for (String index : ((GrindstoneRecipe) recipe).getIndexString()) {
                 indexGrindstone.remove(index);
+            }
+        } else if (recipe instanceof CartographyRecipe) {
+            for (String index : ((CartographyRecipe) recipe).getIndexString()) {
+                indexCartography.remove(index);
             }
         }
 

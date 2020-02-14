@@ -16,6 +16,7 @@ import haveric.recipeManager.recipes.brew.data.BrewingStands;
 import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
+import haveric.recipeManager.recipes.cartography.CartographyEvents;
 import haveric.recipeManager.recipes.compost.CompostEvents;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
@@ -57,6 +58,7 @@ public class RecipeManager extends JavaPlugin {
     private static CompostEvents compostEvents;
     private static AnvilEvents anvilEvents;
     private static GrindstoneEvents grindstoneEvents;
+    private static CartographyEvents cartographyEvents;
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -101,6 +103,7 @@ public class RecipeManager extends JavaPlugin {
             stonecuttingEvents = new RMStonecuttingEvents();
             compostEvents = new CompostEvents();
             grindstoneEvents = new GrindstoneEvents();
+            cartographyEvents = new CartographyEvents();
         }
 
         recipes = new Recipes();
@@ -225,6 +228,7 @@ public class RecipeManager extends JavaPlugin {
             RMStonecuttingEvents.reload();
             CompostEvents.reload();
             GrindstoneEvents.reload();
+            CartographyEvents.reload();
         }
     }
 
@@ -354,6 +358,11 @@ public class RecipeManager extends JavaPlugin {
             }
             grindstoneEvents = null;
 
+            if (cartographyEvents != null) {
+                cartographyEvents.clean();
+            }
+            cartographyEvents = null;
+
             Settings.clean();
 
             try {
@@ -435,6 +444,10 @@ public class RecipeManager extends JavaPlugin {
 
     public static GrindstoneEvents getGrindstoneEvents() {
         return grindstoneEvents;
+    }
+
+    public static CartographyEvents getCartographyEvents() {
+        return cartographyEvents;
     }
 
     public static FlagLoader getFlagLoader() {

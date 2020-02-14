@@ -402,13 +402,14 @@ public class AnvilEvents implements Listener {
 
             boolean firstRun = true;
             for (int i = 0; i < times; i++) {
-                // Make sure block is still an anvil
+                // Make sure block is still valid
                 if (location != null) {
                     Material blockType = location.getBlock().getType();
-                    if (blockType != Material.ANVIL && (!Version.has1_13BasicSupport() || (blockType != Material.CHIPPED_ANVIL && blockType != Material.DAMAGED_ANVIL))) {
+                    if (!recipe.isValidBlockMaterial(blockType)) {
                         break;
                     }
                 }
+
                 ItemStack left = inventory.getItem(0);
                 ItemStack right = inventory.getItem(1);
 

@@ -5,6 +5,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.cartography.CartographyRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
@@ -58,6 +59,8 @@ public class RecipeRegistrator {
             queueRecipe(recipe, adder, "Anvil Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
         } else if (recipe instanceof GrindstoneRecipe) {
             queueRecipe(recipe, adder, "Grindstone Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
+        } else if (recipe instanceof CartographyRecipe) {
+            queueRecipe(recipe, adder, "Cartography Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
         } else {
             throw new IllegalArgumentException("Unknown recipe! " + recipe.toString());
         }

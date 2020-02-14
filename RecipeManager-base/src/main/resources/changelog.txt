@@ -3,6 +3,7 @@ This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
 * NEW: Grindstone recipe support
+* NEW: Cartography Table recipe support
 
 
 === v2.19.0 ===

@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.anvil;
+package haveric.recipeManager.recipes.cartography;
 
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
@@ -6,7 +6,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Material;
@@ -15,53 +14,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AnvilRecipe extends PreparableResultRecipe {
+public class CartographyRecipe extends PreparableResultRecipe {
     private List<Material> primaryIngredient = new ArrayList<>();
     private List<Material> secondaryIngredient = new ArrayList<>();
-    private int repairCost = 0;
-    private boolean renamingAllowed = false;
-    private double anvilDamageChance = 12;
 
-    public AnvilRecipe() {
+    public CartographyRecipe() {
 
     }
 
-    public AnvilRecipe(BaseRecipe recipe) {
+    public CartographyRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof AnvilRecipe) {
-            AnvilRecipe r = (AnvilRecipe) recipe;
+        if (recipe instanceof CartographyRecipe) {
+            CartographyRecipe r = (CartographyRecipe) recipe;
 
             setPrimaryIngredient(r.primaryIngredient);
             setSecondaryIngredient(r.secondaryIngredient);
-
-            repairCost = r.repairCost;
-
-            renamingAllowed = r.renamingAllowed;
-            anvilDamageChance = r.anvilDamageChance;
 
             updateHash();
         }
     }
 
-    public AnvilRecipe(Flags flags) {
+    public CartographyRecipe(Flags flags) {
         super(flags);
     }
 
     public boolean isValidBlockMaterial(Material material) {
-        boolean valid = material == Material.ANVIL;
-
-        if (!valid && Version.has1_13BasicSupport()) {
-            valid = material == Material.CHIPPED_ANVIL;
-
-            if (!valid) {
-                valid = material == Material.DAMAGED_ANVIL;
-            }
-        }
-
-        return valid;
+        return material == Material.CARTOGRAPHY_TABLE;
     }
-
 
     public List<Material> getPrimaryIngredient() {
         return primaryIngredient;
@@ -89,32 +69,8 @@ public class AnvilRecipe extends PreparableResultRecipe {
         return primaryIngredient != null && !primaryIngredient.isEmpty() && secondaryIngredient != null && !secondaryIngredient.isEmpty();
     }
 
-    public int getRepairCost() {
-        return repairCost;
-    }
-
-    public void setRepairCost(int newCost) {
-        repairCost = newCost;
-    }
-
-    public boolean isRenamingAllowed() {
-        return renamingAllowed;
-    }
-
-    public void setRenamingAllowed(boolean allowRenaming) {
-        this.renamingAllowed = allowRenaming;
-    }
-
-    public double getAnvilDamageChance() {
-        return anvilDamageChance;
-    }
-
-    public void setAnvilDamageChance(double anvilDamageChance) {
-        this.anvilDamageChance = anvilDamageChance;
-    }
-
     private void updateHash() {
-        StringBuilder str = new StringBuilder("anvil");
+        StringBuilder str = new StringBuilder("cartography");
 
         List<Material> sortedPrimary = new ArrayList<>(primaryIngredient);
         Collections.sort(sortedPrimary);
@@ -139,7 +95,7 @@ public class AnvilRecipe extends PreparableResultRecipe {
     public void resetName() {
         StringBuilder str = new StringBuilder();
 
-        str.append("anvil (");
+        str.append("cartography (");
 
         List<Material> sortedPrimary = new ArrayList<>(primaryIngredient);
         Collections.sort(sortedPrimary);
@@ -171,9 +127,6 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
         str.append(")");
 
-        if (repairCost > 0) {
-            str.append("{repairCost: ").append(repairCost).append("}");
-        }
         str.append(" to ").append(getResultsString());
 
         name = str.toString();
@@ -199,23 +152,22 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
     @Override
     public RMCRecipeType getType() {
-        return RMCRecipeType.ANVIL;
+        return RMCRecipeType.CARTOGRAPHY;
     }
+
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("anvil", result);
+        StringBuilder s = getHeaderResult("cartography", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
         s.append('\n').append(ToolsItem.printChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
         s.append('\n').append(ToolsItem.printChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
-        s.append("\n\n");
-        s.append(Messages.getInstance().parse("recipebook.anvil.repaircost", "{repaircost}", repairCost));
-
         return s.toString();
     }
+
 
     @Override
     public int findItemInIngredients(Material type, Short data) {
