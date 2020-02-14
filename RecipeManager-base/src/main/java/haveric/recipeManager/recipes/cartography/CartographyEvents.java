@@ -119,6 +119,26 @@ public class CartographyEvents implements Listener {
                         }
 
                         prepareCartographyLater(cartographyInventory, player, event.getView());
+                    } else if (rawSlot > 2) {
+                        if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                            ItemStack currentItem = event.getCurrentItem();
+
+                            if (currentItem != null) {
+                                Material clickedType = currentItem.getType();
+
+                                switch (clickedType) {
+                                    case FILLED_MAP:
+                                    case MAP:
+                                    case PAPER:
+                                    case GLASS_PANE:
+                                        prepareCartographyLater(cartographyInventory, player, event.getView());
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
                     }
                 }
             }

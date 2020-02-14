@@ -105,6 +105,16 @@ public class GrindstoneEvents implements Listener {
                         }
 
                         prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                    } else if (rawSlot > 2) {
+                        if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                            ItemStack currentItem = event.getCurrentItem();
+
+                            if (currentItem != null) {
+                                if (currentItem.getItemMeta() instanceof EnchantmentStorageMeta || currentItem.getType().getMaxDurability() > 0) {
+                                    prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                                }
+                            }
+                        }
                     }
                 }
             }
