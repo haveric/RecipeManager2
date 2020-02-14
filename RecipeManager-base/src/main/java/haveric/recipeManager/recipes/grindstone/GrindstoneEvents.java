@@ -62,12 +62,7 @@ public class GrindstoneEvents implements Listener {
                 if (location != null) {
                     Player player = (Player) ent;
 
-                    new BukkitRunnable() {
-                            @Override
-                        public void run() {
-                            prepareGrindstone(grindstoneInventory, player, event.getView());
-                        }
-                    }.runTaskLater(RecipeManager.getPlugin(), 0);
+                    prepareGrindstoneLater(grindstoneInventory, player, event.getView());
                 }
             }
         }
@@ -95,10 +90,8 @@ public class GrindstoneEvents implements Listener {
                         Grindstone grindstone = Grindstones.get(player);
                         if (grindstone != null) {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
-                                //event.setCancelled(true);
                                 craftFinishGrindstone(event, player, grindstoneInventory, true);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
-                                //event.setCancelled(true);
                                 craftFinishGrindstone(event, player, grindstoneInventory, false);
                             }
                         }
@@ -111,12 +104,7 @@ public class GrindstoneEvents implements Listener {
                             simulateDefaultClick(player, grindstoneInventory, rawSlot, clickType);
                         }
 
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                prepareGrindstone(grindstoneInventory, player, event.getView());
-                            }
-                        }.runTaskLater(RecipeManager.getPlugin(), 0);
+                        prepareGrindstoneLater(grindstoneInventory, player, event.getView());
                     }
                 }
             }
@@ -246,6 +234,15 @@ public class GrindstoneEvents implements Listener {
                 player.setItemOnCursor(newCursor);
             }
         }
+    }
+
+    private void prepareGrindstoneLater(GrindstoneInventory inventory, Player player, InventoryView view) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                prepareGrindstone(inventory, player, view);
+            }
+        }.runTaskLater(RecipeManager.getPlugin(), 0);
     }
 
     private void prepareGrindstone(GrindstoneInventory inventory, Player player, InventoryView view) {
