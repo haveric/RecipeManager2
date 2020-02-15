@@ -21,6 +21,9 @@ public class CompostRecipe extends MultiResultRecipe {
     private double levels = 1;
     public static final ItemResult VANILLA_ITEM_RESULT = new ItemResult(new ItemStack(Material.BONE_MEAL));
 
+    public CompostRecipe() {
+    }
+
     /**
      * Constructor for vanilla recipes
      *
@@ -154,6 +157,11 @@ public class CompostRecipe extends MultiResultRecipe {
     @Override
     public boolean isValid() {
         return hasIngredients();
+    } // TODO: Does this need hasResults()?
+
+    @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and ingredients!";
     }
 
     @Override

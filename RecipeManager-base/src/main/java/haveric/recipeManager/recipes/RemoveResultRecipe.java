@@ -15,6 +15,10 @@ public class RemoveResultRecipe extends BaseRecipe {
     private Map<BaseRecipe, RMCRecipeInfo> removed;
     private ItemStack result;
 
+    public RemoveResultRecipe() {
+
+    }
+
     public RemoveResultRecipe(ItemStack newResult) {
         Validate.notNull(newResult, "Result must not be null!");
 

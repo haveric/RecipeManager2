@@ -21,6 +21,10 @@ public class FuelRecipe extends BaseRecipe {
     private float minTime;
     private float maxTime;
 
+    public FuelRecipe() {
+
+    }
+
     public FuelRecipe(Material type, float burnTime) {
         setIngredient(new ItemStack(type, 1, RMCVanilla.DATA_WILDCARD));
         setMinTime(burnTime);
@@ -158,6 +162,11 @@ public class FuelRecipe extends BaseRecipe {
     @Override
     public boolean isValid() {
         return hasIngredient();
+    }
+
+    @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs an ingredient!";
     }
 
     @Override

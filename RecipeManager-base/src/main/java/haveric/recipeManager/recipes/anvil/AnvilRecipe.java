@@ -194,7 +194,12 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
     @Override
     public boolean isValid() {
-        return hasIngredients();
+        return hasIngredients() && hasResults();
+    }
+
+    @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and two ingredients!";
     }
 
     @Override

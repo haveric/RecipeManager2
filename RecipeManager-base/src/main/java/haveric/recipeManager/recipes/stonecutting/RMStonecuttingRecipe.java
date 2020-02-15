@@ -185,6 +185,11 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
     }
 
     @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and ingredient!";
+    }
+
+    @Override
     public RMCRecipeType getType() {
         return RMCRecipeType.STONECUTTING;
     }

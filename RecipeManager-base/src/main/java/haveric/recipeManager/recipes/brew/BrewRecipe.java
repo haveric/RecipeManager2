@@ -77,6 +77,11 @@ public class BrewRecipe extends MultiResultRecipe {
     }
 
     @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and ingredient!";
+    }
+
+    @Override
     public RMCRecipeType getType() {
         return RMCRecipeType.BREW;
     }

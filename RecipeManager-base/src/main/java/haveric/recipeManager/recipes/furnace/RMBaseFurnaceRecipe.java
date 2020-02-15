@@ -230,6 +230,11 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
     }
 
     @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and ingredient!";
+    }
+
+    @Override
     public String printBookResult(ItemResult result) {
         StringBuilder s = getHeaderResult(getRecipeBaseHash());
 

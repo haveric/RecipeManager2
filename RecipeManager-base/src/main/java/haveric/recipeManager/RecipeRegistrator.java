@@ -2,21 +2,6 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.anvil.AnvilRecipe;
-import haveric.recipeManager.recipes.brew.BrewRecipe;
-import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
-import haveric.recipeManager.recipes.cartography.CartographyRecipe;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
-import haveric.recipeManager.recipes.compost.CompostRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
-import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
-import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
 import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
@@ -33,46 +18,14 @@ public class RecipeRegistrator {
 
     protected RecipeRegistrator() {
     }
-    
-    public void queueRecipe(BaseRecipe recipe, String adder) {
-        if (recipe instanceof CraftRecipe || recipe instanceof CraftRecipe1_13) {
-            queueRecipe(recipe, adder, "Craft Recipe " + recipe.getName() + " is invalid! Needs at least one result and exactly 9 ingredient slots, empty ones can be null.");
-        } else if (recipe instanceof CombineRecipe) {
-            queueRecipe(recipe, adder, "Combine Recipe " + recipe.getName() + " is invalid! Needs at least one result and ingredient!");
-        } else if (recipe instanceof RMFurnaceRecipe || recipe instanceof RMFurnaceRecipe1_13) {
-            queueRecipe(recipe, adder, "Furnace Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof RMBlastingRecipe) {
-            queueRecipe(recipe, adder, "Blasting Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof RMSmokingRecipe) {
-            queueRecipe(recipe, adder, "Smoking Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof RMCampfireRecipe) {
-            queueRecipe(recipe, adder, "Campfire Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof RMStonecuttingRecipe) {
-            queueRecipe(recipe, adder, "Stonecutting Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof BrewRecipe) {
-            queueRecipe(recipe, adder, "Brewing Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof FuelRecipe) {
-            queueRecipe(recipe, adder, "Fuel Recipe " + recipe.getName() + " is invalid! Needs an ingredient!");
-        } else if (recipe instanceof CompostRecipe) {
-            queueRecipe(recipe, adder, "Compost Recipe " + recipe.getName() + " is invalid! Needs a result and ingredient!");
-        } else if (recipe instanceof AnvilRecipe) {
-            queueRecipe(recipe, adder, "Anvil Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
-        } else if (recipe instanceof GrindstoneRecipe) {
-            queueRecipe(recipe, adder, "Grindstone Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
-        } else if (recipe instanceof CartographyRecipe) {
-            queueRecipe(recipe, adder, "Cartography Recipe " + recipe.getName() + " is invalid! Needs a result and ingredients!");
-        } else {
-            throw new IllegalArgumentException("Unknown recipe! " + recipe.toString());
-        }
-    }
 
-    private void queueRecipe(BaseRecipe recipe, String adder, String error) {
+    public void queueRecipe(BaseRecipe recipe, String adder) {
         if (registered) {
             throw new IllegalAccessError("You can't add recipes after registering this class! You must create a new one.");
         }
 
         if (!recipe.isValid()) {
-            throw new IllegalArgumentException(error);
+            throw new IllegalArgumentException(recipe.getInvalidErrorMessage());
         }
 
         queuedRecipes.remove(recipe); // if exists, update key too!

@@ -397,6 +397,11 @@ public class CraftRecipe extends PreparableResultRecipe {
     }
 
     @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs at least one result and exactly 9 ingredient slots, empty ones can be null.";
+    }
+
+    @Override
     public RMCRecipeType getType() {
         return RMCRecipeType.CRAFT;
     }

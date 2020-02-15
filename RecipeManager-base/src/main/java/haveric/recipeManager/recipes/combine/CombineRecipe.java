@@ -233,6 +233,11 @@ public class CombineRecipe extends PreparableResultRecipe {
     }
 
     @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs at least one result and ingredient!";
+    }
+
+    @Override
     public RMCRecipeType getType() {
         return RMCRecipeType.COMBINE;
     }
