@@ -73,7 +73,8 @@ public class FlagSetBlock extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         String[] args = value.split("\\|");
 
         value = args[0].trim();

@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -197,7 +198,10 @@ public class FlagIngredientCondition extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        boolean test = super.onParse(value, fileName, lineNum);
+        MessageSender.getInstance().info("Test: " + test);
+
         // Match on single pipes '|', but not double '||'
         // Double pipes will be replaced by single pipes for each arg
         String[] args = value.split("(?<!\\|)\\|(?!\\|)");
@@ -232,7 +236,7 @@ public class FlagIngredientCondition extends Flag {
             ConditionsIngredient c = it.next();
 
             if (c.getIngredient() != null && recipe.findItemInIngredients(c.getIngredient().getType(), c.getIngredient().getDurability()) == 0) {
-                ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(c.getIngredient()));
+                ErrorReporter.getInstance().flagError(this, "Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(c.getIngredient()));
                 it.remove();
             }
         }

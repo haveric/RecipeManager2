@@ -114,7 +114,8 @@ public class FlagFireworkItem extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         value = value.toLowerCase();
 
         if (value.startsWith("effect")) {

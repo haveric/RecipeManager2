@@ -88,7 +88,8 @@ public class FlagGetRecipeBook extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         value = value.toLowerCase();
         String id = value;
         int index = value.lastIndexOf("volume");
@@ -114,7 +115,7 @@ public class FlagGetRecipeBook extends Flag {
         List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(getBookID());
 
         if (books.isEmpty()) {
-            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " could not find book ID containing '" + bookID + "', flag ignored.");
+            ErrorReporter.getInstance().flagWarning(this, "Flag " + getFlagType() + " could not find book ID containing '" + bookID + "', flag ignored.");
             remove();
             return;
         }
@@ -122,7 +123,7 @@ public class FlagGetRecipeBook extends Flag {
         RecipeBook book = books.get(0);
 
         if (books.size() > 1) {
-            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " found " + books.size() + " books matching ID '" + bookID + "', using first: " + book.getTitle());
+            ErrorReporter.getInstance().flagWarning(this, "Flag " + getFlagType() + " found " + books.size() + " books matching ID '" + bookID + "', using first: " + book.getTitle());
         }
     }
 

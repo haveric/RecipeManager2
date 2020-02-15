@@ -117,7 +117,8 @@ public class FlagKeepItem extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         String[] split = value.split("\\|", 2);
         ItemStack item = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 

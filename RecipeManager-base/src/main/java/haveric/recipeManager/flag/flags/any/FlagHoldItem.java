@@ -180,7 +180,8 @@ public class FlagHoldItem extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         // Match on single pipes '|', but not double '||'
         // Double pipes will be replaced by single pipes for each arg
         String[] args = value.split("(?<!\\|)\\|(?!\\|)");

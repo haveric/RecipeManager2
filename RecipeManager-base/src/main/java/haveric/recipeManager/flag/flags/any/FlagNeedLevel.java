@@ -112,7 +112,8 @@ public class FlagNeedLevel extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         String[] split = value.split("\\|");
 
         setBoth = false;

@@ -17,6 +17,8 @@ import java.util.List;
 public class Flag implements Cloneable {
     private Flags flagsContainer;
     private static final String[] EMPTY_STRING = {};
+    protected String sourceFileName = "";
+    protected int sourceLineNum = -1;
 
     protected Flag() { }
 
@@ -34,6 +36,15 @@ public class Flag implements Cloneable {
     public void setFlagsContainer(Flags flags) {
         flagsContainer = flags;
     }
+
+    public String getSourceFileName() {
+        return sourceFileName;
+    }
+
+    public int getSourceLineNum() {
+        return sourceLineNum;
+    }
+
     /**
      * Parses a string to get the values for this flag.<br>
      * Has different effects for each extension of Flag object.
@@ -43,8 +54,8 @@ public class Flag implements Cloneable {
      *
      * @return false if an error occurred and the flag should not be added
      */
-    public final boolean parse(String value) {
-        return onParse(value);
+    public final boolean parse(String value, String fileName, int lineNum) {
+        return onParse(value, fileName, lineNum);
     }
 
     /**
@@ -293,7 +304,9 @@ public class Flag implements Cloneable {
         return (getFlagType() != null);
     }
 
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        this.sourceFileName = fileName;
+        this.sourceLineNum = lineNum;
         return false; // it didn't parse anything
     }
 

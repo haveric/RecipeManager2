@@ -57,7 +57,8 @@ public class FlagCustomModelData extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         try {
             setCustomModelData(Integer.parseInt(value));
         } catch(NumberFormatException e) {

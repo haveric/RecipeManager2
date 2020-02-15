@@ -1,5 +1,6 @@
 package haveric.recipeManager;
 
+import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManagerCommon.RMCChatColor;
@@ -236,5 +237,36 @@ public class ErrorReporter {
 
             fileErrors.put(currentFile, errors);
         }
+    }
+
+    public void flagWarning(Flag flag, String warning) {
+        flagWarning(flag, warning, null);
+    }
+
+    public void flagWarning(Flag flag, String warning, String tip) {
+        flagEntry(flag, RMCChatColor.YELLOW.toString() + RMCChatColor.UNDERLINE + "Warning", warning, tip);
+    }
+
+    public boolean flagError(Flag flag, String error) {
+        return flagError(flag, error, null);
+    }
+
+    public boolean flagError(Flag flag, String error, String tip) {
+        flagEntry(flag, RMCChatColor.RED.toString() + RMCChatColor.UNDERLINE + "Fatal", error, tip);
+        return false;
+    }
+
+    private void flagEntry(Flag flag, String type, String message, String tip) {
+        String sourceFile = flag.getSourceFileName();
+        int lineNum = flag.getSourceLineNum();
+        String errorMessage = RMCChatColor.AQUA + "File: " + sourceFile + Files.NL;
+        errorMessage += RMCChatColor.WHITE + "line " + String.format("%-5d", lineNum) + type + ": " + RMCChatColor.RESET + message;
+
+        if (tip != null) {
+            errorMessage += Files.NL + RMCChatColor.DARK_GREEN + "          TIP: " + RMCChatColor.GRAY + tip;
+        }
+
+        errorMessage += Files.NL;
+        MessageSender.getInstance().info(errorMessage);
     }
 }

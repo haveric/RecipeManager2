@@ -104,7 +104,8 @@ public class FlagBiome extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         String[] split = value.split("\\|", 2);
 
         if (split.length > 1) {

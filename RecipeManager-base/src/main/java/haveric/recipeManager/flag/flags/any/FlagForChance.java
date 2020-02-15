@@ -230,7 +230,8 @@ public class FlagForChance extends Flag {
     }
 
     @Override
-    public boolean onParse(String value) {
+    public boolean onParse(String value, String fileName, int lineNum) {
+        super.onParse(value, fileName, lineNum);
         int i = value.indexOf(' '); // get position of first space
         String flagDeclaration = null;
         String group = null;
@@ -442,7 +443,7 @@ public class FlagForChance extends Flag {
             }
 
             // check if parsed flag had valid values and needs to be added to flag list
-            if (!flag.onParse(value)) {
+            if (!flag.onParse(value, fileName, lineNum)) {
                 return false;
             }
 

@@ -96,7 +96,7 @@ public class Flags implements Cloneable {
      * @param value
      *            flag expression string like the ones in recipe files
      */
-    public void parseFlag(String value) {
+    public void parseFlag(String value, String fileName, int lineNum) {
         Validate.notNull(value, "Input value must not be null!");
         value = value.trim();
 
@@ -134,7 +134,7 @@ public class Flags implements Cloneable {
         }
 
         // check if parsed flag had valid values and needs to be added to flag list
-        if (flag.onParse(value)) {
+        if (flag.onParse(value, fileName, lineNum)) {
             flags.put(flag.getFlagType(), flag);
         }
     }

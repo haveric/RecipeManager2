@@ -157,7 +157,7 @@ public class RecipeFileReader {
         nextLine();
 
         while (line != null && line.length() > 0 && lineIsFlag()) {
-            flags.parseFlag(line);
+            flags.parseFlag(line, fileName, lineNum);
             nextLine();
         }
     }
