@@ -316,7 +316,6 @@ public class RMBaseFurnaceEvents implements Listener {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(cursor.clone());
                                 event.setCursor(new ItemStack(Material.AIR));
-                                event.setResult(Event.Result.DENY);
                             } else {
                                 if (ToolsItem.isSameItem(cursor, clicked, false)) {
                                     int clickedAmount = clicked.getAmount();
@@ -329,7 +328,6 @@ public class RMBaseFurnaceEvents implements Listener {
                                         combinedClone.setAmount(total);
                                         event.setCurrentItem(combinedClone);
                                         event.setCursor(new ItemStack(Material.AIR));
-                                        event.setResult(Event.Result.DENY);
                                     } else {
                                         int left = total - maxStack;
 
@@ -342,16 +340,16 @@ public class RMBaseFurnaceEvents implements Listener {
                                             leftClone.setAmount(left);
                                             event.setCursor(leftClone);
                                         }
-                                        event.setResult(Event.Result.DENY);
                                     }
                                 } else {
                                     ItemStack clickedClone = clicked.clone();
                                     ItemStack cursorClone = cursor.clone();
                                     event.setCurrentItem(cursorClone);
                                     event.setCursor(clickedClone);
-                                    event.setResult(Event.Result.DENY);
                                 }
                             }
+
+                            event.setResult(Event.Result.DENY);
                         }
                     }
                 } else if (event.isRightClick()) {

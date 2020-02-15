@@ -542,53 +542,57 @@ public class FlagSummon extends Flag {
                 }
 
                 EntityEquipment eq = ent.getEquipment();
-                for (int j = 0; j < equip.length; j++) {
-                    ItemStack item = equip[j];
-                    if (item == null) {
-                        continue;
-                    }
+                if (eq != null) {
+                    for (int j = 0; j < equip.length; j++) {
+                        ItemStack item = equip[j];
+                        if (item == null) {
+                            continue;
+                        }
 
-                    switch (j) {
-                        case 0:
-                            eq.setHelmet(item);
-                            eq.setHelmetDropChance(drop[j]);
-                            break;
+                        switch (j) {
+                            case 0:
+                                eq.setHelmet(item);
+                                eq.setHelmetDropChance(drop[j]);
+                                break;
 
-                        case 1:
-                            eq.setChestplate(item);
-                            eq.setChestplateDropChance(drop[j]);
-                            break;
+                            case 1:
+                                eq.setChestplate(item);
+                                eq.setChestplateDropChance(drop[j]);
+                                break;
 
-                        case 2:
-                            eq.setLeggings(item);
-                            eq.setLeggingsDropChance(drop[j]);
-                            break;
+                            case 2:
+                                eq.setLeggings(item);
+                                eq.setLeggingsDropChance(drop[j]);
+                                break;
 
-                        case 3:
-                            eq.setBoots(item);
-                            eq.setBootsDropChance(drop[j]);
-                            break;
+                            case 3:
+                                eq.setBoots(item);
+                                eq.setBootsDropChance(drop[j]);
+                                break;
 
-                        case 4:
-                            if (ent instanceof Enderman) {
-                                Enderman npc = (Enderman) ent;
-                                npc.setCarriedMaterial(item.getData());
-                            } else {
-                                if (Version.has1_9Support()) {
-                                    eq.setItemInMainHand(item);
-                                    eq.setItemInMainHandDropChance(drop[j]);
+                            case 4:
+                                if (ent instanceof Enderman) {
+                                    Enderman npc = (Enderman) ent;
+                                    if (item.getData() != null) {
+                                        npc.setCarriedMaterial(item.getData());
+                                    }
                                 } else {
-                                    eq.setItemInHand(item);
-                                    eq.setItemInHandDropChance(drop[j]);
+                                    if (Version.has1_9Support()) {
+                                        eq.setItemInMainHand(item);
+                                        eq.setItemInMainHandDropChance(drop[j]);
+                                    } else {
+                                        eq.setItemInHand(item);
+                                        eq.setItemInHandDropChance(drop[j]);
+                                    }
                                 }
-                            }
 
-                            break;
-                        case 5:
-                            eq.setItemInOffHand(item);
-                            eq.setItemInOffHandDropChance(drop[j]);
-                        default:
-                            break;
+                                break;
+                            case 5:
+                                eq.setItemInOffHand(item);
+                                eq.setItemInOffHandDropChance(drop[j]);
+                            default:
+                                break;
+                        }
                     }
                 }
             }

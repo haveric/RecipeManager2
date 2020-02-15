@@ -7,7 +7,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Material;
@@ -164,18 +163,10 @@ public class CombineRecipe1_13 extends CombineRecipe {
         }
 
         ShapelessRecipe bukkitRecipe;
-        if (Version.has1_12Support()) {
-            if (vanilla) {
-                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
-            } else {
-                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
+        if (vanilla) {
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            if (vanilla) {
-                bukkitRecipe = new ShapelessRecipe(getFirstResult());
-            } else {
-                bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
         }
 
         for (List<Material> materialChoice : ingredientChoiceList) {

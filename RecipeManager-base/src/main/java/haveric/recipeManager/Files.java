@@ -165,7 +165,7 @@ public class Files {
 
         Map<String, FlagDescriptor> unsortedFlags = FlagFactory.getInstance().getFlags();
         List<Map.Entry<String, FlagDescriptor>> entries = new ArrayList<>(unsortedFlags.entrySet());
-        entries.sort(Comparator.comparing(Entry::getKey));
+        entries.sort(Entry.comparingByKey());
 
         Map<String, FlagDescriptor> sortedFlags = new LinkedHashMap<>();
         for (Map.Entry<String, FlagDescriptor> entry : entries) {

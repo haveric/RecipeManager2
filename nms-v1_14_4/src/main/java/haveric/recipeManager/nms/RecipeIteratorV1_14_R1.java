@@ -60,10 +60,9 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
                     MessageSender.getInstance().error(null, e, "Failure while traversing iterator, unable to determine recipe.");
                 }
             }
-            return null;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**

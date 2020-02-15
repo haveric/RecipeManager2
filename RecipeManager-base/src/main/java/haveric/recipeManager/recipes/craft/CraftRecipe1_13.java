@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCChatColor;
 import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.Material;
@@ -235,19 +234,12 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
         }
 
         ShapedRecipe bukkitRecipe;
-        if (Version.has1_12Support()) {
-            if (vanilla) {
-                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
-            } else {
-                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
-        } else {
         if (vanilla) {
-            bukkitRecipe = new ShapedRecipe(getFirstResult());
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
         }
-    }
+
 
         bukkitRecipe.shape(choiceShape);
 

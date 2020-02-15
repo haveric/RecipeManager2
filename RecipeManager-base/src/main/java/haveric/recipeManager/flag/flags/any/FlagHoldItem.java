@@ -277,7 +277,7 @@ public class FlagHoldItem extends Flag {
 
     @Override
     public void onCheck(Args a) {
-        StringBuilder s = new StringBuilder();
+        StringBuilder s = new StringBuilder(); // TODO: Add items that need to be held
         boolean found = false;
 
         if (a.hasPlayer()) {
@@ -301,11 +301,7 @@ public class FlagHoldItem extends Flag {
                 }
             } else {
                 if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
-                    if (Version.has1_12Support()) {
-                        mainFound = checkConditions(inventory.getItemInMainHand(), a, ConditionsSlot.MAINHAND);
-                    } else {
-                        mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
-                    }
+                    mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
                 }
             }
 
