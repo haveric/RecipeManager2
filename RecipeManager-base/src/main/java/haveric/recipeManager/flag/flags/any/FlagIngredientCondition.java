@@ -6,7 +6,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -199,8 +198,7 @@ public class FlagIngredientCondition extends Flag {
 
     @Override
     public boolean onParse(String value, String fileName, int lineNum) {
-        boolean test = super.onParse(value, fileName, lineNum);
-        MessageSender.getInstance().info("Test: " + test);
+        super.onParse(value, fileName, lineNum);
 
         // Match on single pipes '|', but not double '||'
         // Double pipes will be replaced by single pipes for each arg
