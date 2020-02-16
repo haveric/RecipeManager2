@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FlagFactory {
-
     private static FlagFactory instance = null;
     private Map<String, FlagDescriptor> flags = new HashMap<>();
     private Map<String, FlagDescriptor> nameMap = new HashMap<>();
@@ -51,6 +50,10 @@ public class FlagFactory {
                 }
             }
         }
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 
     public void initPermissions() {
@@ -96,9 +99,5 @@ public class FlagFactory {
         }
 
         return nameMap.get(name);
-    }
-
-    public boolean isInitialized() {
-        return initialized;
     }
 }

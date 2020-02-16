@@ -12,7 +12,7 @@ public class FlagLoader {
         loadDefaultFlags();
     }
 
-    public void loadDefaultFlags() {
+    private void loadDefaultFlags() {
         FlagFactory.getInstance().initializeFlag(FlagType.BIOME, new FlagBiome(), FlagBit.NONE);
         FlagFactory.getInstance().initializeFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), FlagBit.NO_VALUE_REQUIRED, "poweredblock", "blockpower", "redstonepowered");
         FlagFactory.getInstance().initializeFlag(FlagType.BROADCAST, new FlagBroadcast(), FlagBit.NONE, "announce", "msgall");

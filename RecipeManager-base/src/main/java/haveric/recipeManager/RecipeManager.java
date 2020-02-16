@@ -8,6 +8,8 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.RecipeTypeFactory;
+import haveric.recipeManager.recipes.RecipeTypeLoader;
 import haveric.recipeManager.recipes.anvil.AnvilEvents;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
 import haveric.recipeManager.recipes.brew.BrewEvents;
@@ -65,6 +67,7 @@ public class RecipeManager extends JavaPlugin {
     public static final Random random = new Random();
     private boolean loaded = false;
     public static FlagLoader flagLoader = null;
+    public static RecipeTypeLoader recipeTypeLoader = null;
 
     @Override
     public void onEnable() {
@@ -93,6 +96,7 @@ public class RecipeManager extends JavaPlugin {
             Composters.load();
         }
 
+        recipeTypeLoader = new RecipeTypeLoader();
         events = new Events();
         brewEvents = new BrewEvents();
         furnaceEvents = new RMBaseFurnaceEvents();
@@ -134,6 +138,7 @@ public class RecipeManager extends JavaPlugin {
 
         FlagFactory.getInstance().init();
         FlagFactory.getInstance().initPermissions();
+        RecipeTypeFactory.getInstance().init();
         RecipeBooks.getInstance().init();
         RecipeBooks.getInstance().reload(null);
 
@@ -452,5 +457,9 @@ public class RecipeManager extends JavaPlugin {
 
     public static FlagLoader getFlagLoader() {
         return flagLoader;
+    }
+
+    public static RecipeTypeLoader getRecipeTypeLoader() {
+        return recipeTypeLoader;
     }
 }
