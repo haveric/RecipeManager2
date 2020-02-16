@@ -261,11 +261,11 @@ public class Settings {
                         NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
                         Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
 
-                        if (tag == null) {
+                        if (tag == null || tag.getValues().isEmpty()) {
                             tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
                         }
 
-                        if (tag == null) {
+                        if (tag == null || tag.getValues().isEmpty()) {
                             MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid tag definition: " + arg);
                         } else {
                             materials.addAll(tag.getValues());

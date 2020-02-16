@@ -20,7 +20,7 @@ public class NMSVersionHandler {
                 recipeIterator = new RecipeIteratorV1_13_2();
                 break;
             case "v1_12_R1":
-                recipeIterator = new haveric.recipeManager.nms.RecipeIteratorV1_12();
+                recipeIterator = new RecipeIteratorV1_12();
                 break;
             case "v1_15_R1":
             default:

@@ -179,11 +179,11 @@ public class Tools {
                 NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
                 Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
 
-                if (tag == null) {
+                if (tag == null || tag.getValues().isEmpty()) {
                     tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
                 }
 
-                if (tag == null) {
+                if (tag == null || tag.getValues().isEmpty()) {
                     ErrorReporter.getInstance().warning("Invalid tag: " + s);
                 } else {
                     choices.addAll(tag.getValues());
@@ -278,11 +278,11 @@ public class Tools {
                 NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
                 Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
 
-                if (tag == null) {
+                if (tag == null || tag.getValues().isEmpty()) {
                     tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
                 }
 
-                if (tag == null) {
+                if (tag == null || tag.getValues().isEmpty()) {
                     ErrorReporter.getInstance().warning("Invalid tag: " + split[i]);
                 } else {
                     choices.addAll(tag.getValues());

@@ -357,11 +357,11 @@ public class ExtractCommand implements TabExecutor {
 
     private void parseMaterialList(List<Material> materials, StringBuilder recipeString) {
         Tag<Material> tag = getChoiceTagMatch(materials, REGISTRY_BLOCKS);
-        if (tag == null) {
+        if (tag == null || tag.getValues().isEmpty()) {
             tag = getChoiceTagMatch(materials, REGISTRY_ITEMS);
         }
 
-        if (tag == null) {
+        if (tag == null || tag.getValues().isEmpty()) {
             int choicesSize = materials.size();
 
             for (int j = 0; j < choicesSize; j++) {
