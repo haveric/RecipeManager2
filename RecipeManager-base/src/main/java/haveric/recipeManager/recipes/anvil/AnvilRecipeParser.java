@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
@@ -126,7 +127,7 @@ public class AnvilRecipeParser extends BaseRecipeParser {
 
         // check if the recipe already exists
         if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return false;
+            return recipe.hasFlag(FlagType.REMOVE);
         }
 
         if (recipeName != null && !recipeName.equals("")) {

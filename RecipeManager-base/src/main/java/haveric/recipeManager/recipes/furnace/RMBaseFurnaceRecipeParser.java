@@ -169,7 +169,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
         // check if the recipe already exists
         if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return false;
+            return recipe.hasFlag(FlagType.REMOVE);
         }
 
         if (recipeName != null && !recipeName.equals("")) {

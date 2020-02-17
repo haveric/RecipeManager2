@@ -69,12 +69,14 @@ public class ConditionEvaluator {
 
         if (recipe.hasFlag(FlagType.OVERRIDE) || recipe.hasFlag(FlagType.REMOVE)) {
             if (registered == null) {
-                recipe.getFlags().removeFlag(FlagType.REMOVE);
-                recipe.getFlags().removeFlag(FlagType.OVERRIDE);
-
-                ErrorReporter.getInstance().warning("Recipe was not found, can't override/remove it! Added as new recipe.", "Use 'rmextract' command to see the exact ingredients needed");
-
-                return true; // allow recipe to be added
+                if (recipe.hasFlag(FlagType.REMOVE)) {
+                    ErrorReporter.getInstance().warning("Recipe was not found, can't remove it!", "Use 'rmextract' command to see the exact ingredients needed");
+                    return false; // Don't add a remove recipe
+                } else {
+                    recipe.getFlags().removeFlag(FlagType.OVERRIDE);
+                    ErrorReporter.getInstance().warning("Recipe was not found, can't override it! Added as new recipe.", "Use 'rmextract' command to see the exact ingredients needed");
+                    return true; // allow recipe to be added
+                }
             } else if (registered.getOwner() == RMCRecipeInfo.RecipeOwner.RECIPEMANAGER && registered.getStatus() == null) {
                 ErrorReporter.getInstance().error("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
 

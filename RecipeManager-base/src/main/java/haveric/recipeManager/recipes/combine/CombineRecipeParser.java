@@ -138,7 +138,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
         // check if recipe already exists
         if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return false;
+            return recipe.hasFlag(FlagType.REMOVE);
         }
 
         if (recipeName != null && !recipeName.equals("")) {
