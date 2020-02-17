@@ -1176,7 +1176,7 @@ public class Vanilla {
 
                     iterator.remove();
                 }
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | NoSuchElementException e) {
                 // Catch any invalid Bukkit recipes
             }
         }
