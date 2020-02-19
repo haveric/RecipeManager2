@@ -90,7 +90,7 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
     }
 
     /**
-     * Backing list is now immutable in 1.12.
+     * Backing list is now immutable in 1.12 - 1.14.
      * 
      * We have two modes of operation. For recipes, we don't remove, we simply replace them with dummy data
      * that can never be matched. In this way, ID ordering is preserved and we avoid any unpleasantness with 
@@ -107,8 +107,6 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
         case RECIPES:
             //MessageSender.getInstance().info("NMS for 1.12 removing recipe " + removeRecipe);
             try {
-                Field keyF = removeRecipe.getClass().getField("key");
-                MinecraftKey key = (MinecraftKey) keyF.get(removeRecipe);
                 if (removeRecipe instanceof ShapedRecipes) {
                     ShapedRecipes shaped = (ShapedRecipes) removeRecipe;
                     Field widthF = stripPrivateFinal(ShapedRecipes.class, "width");
@@ -152,7 +150,7 @@ public class RecipeIteratorV1_12 extends BaseRecipeIterator implements Iterator<
     }
 
     /**
-     * Backing list is now immutable in 1.12.
+     * Backing list is now immutable in 1.12 - 1.14.
      * 
      * To prevent bad linking to RM unique recipes, we add a new mode "replace" which can be leveraged 
      * instead of remove, to link the MC recipe to the RM recipe directly. We don't actually then
