@@ -1,9 +1,10 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
-* NEW: Grindstone recipe support
-* NEW: Cartography Table recipe support
+=== v2.20.0 ===
+* NEW: Grindstone and Cartography Table recipe support
+** See 'basic recipes.html' for format
+** Backup and update your 'config.yml' for special recipe configurations similar to anvils
 * FIX: @ingredientcondition and @getrecipebook now shows recipe file and line number for registration errors/warnings
 * FIX: NoSuchElementException after using /rmreload when clear-recipes set to true
 * FIX: When an @remove recipe cannot be found, the recipe is no longer added
