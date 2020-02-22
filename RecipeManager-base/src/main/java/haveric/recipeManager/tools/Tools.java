@@ -737,7 +737,7 @@ public class Tools {
 
                 if (s.equals("false")) {
                     ambient = false;
-                } else if (s.equals("true")) {
+                } else if (s.equals("true") || s.isEmpty()) {
                     ambient = true;
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has invalid value for ambient: " + s + ". Defaulting to true.");
@@ -748,7 +748,7 @@ public class Tools {
 
                 if (s.equals("false")) {
                     particles = false;
-                } else if (s.equals("true")) {
+                } else if (s.equals("true") || s.isEmpty()) {
                     particles = true;
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has invalid value for particles: " + s + ". Defaulting to true.");
@@ -759,7 +759,7 @@ public class Tools {
 
                 if (value.equals("false")) {
                     icon = false;
-                } else if (s.equals("true")) {
+                } else if (s.equals("true") || s.isEmpty()) {
                     icon = true;
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has invalid value for icon: " + s + ". Defaulting to true.");

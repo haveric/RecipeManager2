@@ -122,8 +122,10 @@ public class FlagSuspiciousStew extends Flag {
 
             SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
             for (PotionEffect e : effects) {
-                stewMeta.addCustomEffect(e, false);
+                stewMeta.addCustomEffect(e, true);
             }
+
+            a.result().setItemMeta(stewMeta);
         }
     }
 

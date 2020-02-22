@@ -97,9 +97,18 @@ public class ConditionPotionEffect {
         toHash += "durationMaxLevel: " + durationMaxLevel;
         toHash += "amplifyMinLevel: " + amplifyMinLevel;
         toHash += "amplifyMaxLevel: " + amplifyMaxLevel;
-        toHash += "ambient: " + ambient.toString();
-        toHash += "particles: " + particles.toString();
-        toHash += "icon: " + icon.toString();
+
+        if (hasAmbient()) {
+            toHash += "ambient: " + ambient.toString();
+        }
+
+        if (hasParticles()) {
+            toHash += "particles: " + particles.toString();
+        }
+
+        if (hasIcon()) {
+            toHash += "icon: " + icon.toString();
+        }
 
         return toHash.hashCode();
     }

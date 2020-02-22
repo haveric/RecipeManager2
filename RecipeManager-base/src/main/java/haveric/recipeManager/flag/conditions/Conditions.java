@@ -991,7 +991,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        return conditionsMet == potionConditions.entrySet().size();
+        return conditionsMet == potionEffectConditions.entrySet().size();
     }
     public boolean hasSuspiciousStewEffect() {
         return !suspiciousStewConditions.isEmpty();
@@ -1000,7 +1000,7 @@ public class Conditions implements Cloneable {
     public boolean checkSuspiciousStewEffect(SuspiciousStewMeta meta) {
         int conditionsMet = 0;
 
-        for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : potionEffectConditions.entrySet()) {
+        for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : suspiciousStewConditions.entrySet()) {
             boolean anySuccess = false;
             PotionEffectType type = entry.getKey();
             ConditionPotionEffect cond = entry.getValue();
@@ -1604,7 +1604,6 @@ public class Conditions implements Cloneable {
 
         ItemStack item = getIngredient();
         String argLower = arg.toLowerCase();
-
         String value;
         if (argLower.startsWith("data")) {
             if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
@@ -1906,41 +1905,6 @@ public class Conditions implements Cloneable {
             value = arg.substring("failmsg".length()); // preserve case because it's a message
 
             setFailMessage(RMCUtil.trimExactQuotes(value));
-        } else if (argLower.startsWith("potion")) {
-            value = argLower.substring("potion".length()).trim();
-
-            ConditionPotion potionCond = new ConditionPotion();
-            PotionType potionType = null;
-
-            String[] split = value.split(",");
-            for (String element : split) {
-                element = element.trim();
-
-                if (element.equals("extended")) {
-                    potionCond.setExtended(true);
-                } else if (element.equals("!extended")) {
-                    potionCond.setExtended(false);
-                } else if (element.startsWith("type")) {
-                    String[] typeSplit = element.split(" ");
-                    try {
-                        potionType = PotionType.valueOf(typeSplit[1].toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'type' argument with invalid potion type: " + typeSplit[1]);
-                    }
-                } else if (element.startsWith("level")) {
-                    String[] levelSplit = element.split(" ");
-
-                    try {
-                        if (levelSplit.length > 1) {
-                            potionCond.setLevel(Integer.parseInt(levelSplit[1]));
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'level' argument with invalid value: " + levelSplit[1]);
-                    }
-                }
-            }
-
-            potionConditions.put(potionType, potionCond);
         } else if (argLower.startsWith("potioneffect") || argLower.startsWith("suspiciousstew")) {
             boolean stew = false;
             if (argLower.startsWith("potioneffect")) {
@@ -2016,6 +1980,41 @@ public class Conditions implements Cloneable {
             } else {
                 potionEffectConditions.put(effectType, effectCond);
             }
+        } else if (argLower.startsWith("potion")) {
+            value = argLower.substring("potion".length()).trim();
+
+            ConditionPotion potionCond = new ConditionPotion();
+            PotionType potionType = null;
+
+            String[] split = value.split(",");
+            for (String element : split) {
+                element = element.trim();
+
+                if (element.equals("extended")) {
+                    potionCond.setExtended(true);
+                } else if (element.equals("!extended")) {
+                    potionCond.setExtended(false);
+                } else if (element.startsWith("type")) {
+                    String[] typeSplit = element.split(" ");
+                    try {
+                        potionType = PotionType.valueOf(typeSplit[1].toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'type' argument with invalid potion type: " + typeSplit[1]);
+                    }
+                } else if (element.startsWith("level")) {
+                    String[] levelSplit = element.split(" ");
+
+                    try {
+                        if (levelSplit.length > 1) {
+                            potionCond.setLevel(Integer.parseInt(levelSplit[1]));
+                        }
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'level' argument with invalid value: " + levelSplit[1]);
+                    }
+                }
+            }
+
+            potionConditions.put(potionType, potionCond);
         } else if (argLower.startsWith("banner")) {
             value = argLower.substring("banner".length()).trim();
 
@@ -2134,6 +2133,11 @@ public class Conditions implements Cloneable {
 
         toHash += "potionEffectConditions: ";
         for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : potionEffectConditions.entrySet()) {
+            toHash += entry.getKey().toString() + entry.getValue().hashCode();
+        }
+
+        toHash += "suspiciousStewConditions: ";
+        for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : suspiciousStewConditions.entrySet()) {
             toHash += entry.getKey().toString() + entry.getValue().hashCode();
         }
 

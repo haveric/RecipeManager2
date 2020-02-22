@@ -1,4 +1,4 @@
-lastchanged: 2.18.0
+lastchanged: 2.21.0
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
@@ -43,6 +43,7 @@ flag:
     nocolor: '<yellow>{item}<red> needs color: <yellow>{color}'
     nopotion: '<yellow>{item}<red> needs potion: <yellow>{potion}'
     nopotioneffect: '<yellow>{item}<red> needs effect(s): <yellow>{effect}'
+    nosuspicioussteweffect: '<yellow>{item}<red> needs effect(s): <yellow>{effect}'
     nobannercolor: '<yellow>{item}<red> needs banner color: <yellow>{color}'
     nobannerpatterns: '<yellow>{item}<red> needs banner pattern(s): <yellow>{patterns}'
     nospawneggentitytype: '<yellow>{item}<red> needs entity type: <yellow>{entitytype}'
