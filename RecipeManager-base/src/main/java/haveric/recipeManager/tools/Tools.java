@@ -707,44 +707,81 @@ public class Tools {
         return potion;
     }
 
-    public static PotionEffect parsePotionEffect(String value, String type) {
+    public static PotionEffect parsePotionEffect(String value, String flagType) {
         String[] split = value.toLowerCase().split("\\|");
 
         if (split.length == 0) {
-            ErrorReporter.getInstance().error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
+            ErrorReporter.getInstance().error("Flag " + flagType + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion effect types list.");
             return null;
         }
 
-        PotionEffectType effectType = null;
-        boolean ambient = false;
+        String firstArg = split[0].trim();
+        PotionEffectType effectType = PotionEffectType.getByName(firstArg);
+        if (effectType == null) {
+            ErrorReporter.getInstance().error("Flag " + flagType + " has invalid effect type: " + firstArg, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
+            return null;
+        }
+
+        int amplifier = 0;
         float duration = 1;
-        int amplify = 0;
+        boolean ambient = true;
+        boolean particles = true;
+        boolean icon = true;
+
 
         for (String s : split) {
             s = s.trim();
 
-            if (s.equals("ambient")) {
-                ambient = true;
-            } else if (s.startsWith("type")) {
-                split = s.split(" ", 2);
+            if (s.startsWith("ambient")) {
+                s = s.substring("ambient".length()).trim();
 
-                if (split.length <= 1) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
-                    return null;
+                if (s.equals("false")) {
+                    ambient = false;
+                } else if (s.equals("true")) {
+                    ambient = true;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has invalid value for ambient: " + s + ". Defaulting to true.");
+                    ambient = true;
                 }
+            } else if (s.startsWith("particles")) {
+                s = s.substring("particles".length()).trim();
 
-                value = split[1].trim();
-                effectType = PotionEffectType.getByName(value.toUpperCase());
-
-                if (effectType == null) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
-                    return null;
+                if (s.equals("false")) {
+                    particles = false;
+                } else if (s.equals("true")) {
+                    particles = true;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has invalid value for particles: " + s + ". Defaulting to true.");
+                    particles = true;
                 }
+            } else if (s.startsWith("icon")) {
+                s = s.substring("icon".length()).trim();
+
+                if (value.equals("false")) {
+                    icon = false;
+                } else if (s.equals("true")) {
+                    icon = true;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has invalid value for icon: " + s + ". Defaulting to true.");
+                    icon = true;
+                }
+            } else if (s.equals("!ambient")) {
+                ambient = false;
+            } else if (s.equals("!particles")) {
+                particles = false;
+            } else if (s.equals("!icon")) {
+                icon = false;
             } else if (s.startsWith("duration")) {
+                if (effectType.isInstant()) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has effect type '" + effectType.toString() + "' which is instant, it can't have duration, ignored.");
+                    continue;
+                }
+
                 split = s.split(" ", 2);
 
+
                 if (split.length <= 1) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has 'duration' argument with no number!");
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has 'duration' argument with no number!");
                     continue;
                 }
 
@@ -753,38 +790,40 @@ public class Tools {
                 try {
                     duration = Float.parseFloat(value);
                 } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has invalid 'duration' number: " + value);
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid 'duration' number: " + value);
                 }
-            } else if (s.startsWith("amplify")) {
+            } else if (s.startsWith("amplifier")) {
                 split = s.split(" ", 2);
 
                 if (split.length <= 1) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has 'amplify' argument with no number!");
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has 'amplify' argument with no number!");
                     continue;
                 }
 
                 value = split[1].trim();
 
                 try {
-                    amplify = Integer.parseInt(value);
+                    amplifier = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has invalid 'amplify' number: " + value);
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid 'amplifier' number: " + value);
                 }
             } else {
-                ErrorReporter.getInstance().warning("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
             }
         }
 
-        if (effectType == null) {
-            ErrorReporter.getInstance().error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion effect types.");
-            return null;
+        if (duration != 1 && effectType.isInstant()) {
+            ErrorReporter.getInstance().warning("Flag " + flagType + " can't have duration on instant effect: " + effectType.toString());
         }
 
-        if (duration != 1 && (effectType.equals(PotionEffectType.HEAL) || effectType.equals(PotionEffectType.HARM))) {
-            ErrorReporter.getInstance().warning("Flag " + type + " can't have duration on HEAL or HARM because they're instant!");
+        PotionEffect effect;
+        if (Version.has1_13BasicSupport()) {
+            effect = new PotionEffect(effectType, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles, icon);
+        } else {
+            effect = new PotionEffect(effectType, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles);
         }
 
-        return new PotionEffect(effectType, Math.round(duration * 20), amplify, ambient);
+        return effect;
     }
 
     public static FireworkEffect parseFireworkEffect(String value, String type) {

@@ -2,7 +2,15 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
-* FIX/NEW: @PotionEffect: Replaced morefx with ambient. Added options for particles and icon. Changed defaults to true
+* FIX/NEW: @PotionEffect flag updates:
+** Replaced 'morefx' with 'ambient'
+** Added options for particles and icon. Changed defaults to true
+** Removed chance. Use @ForChance flag to do the same thing
+** Changed default duration to 1.0
+* FIX/NEW: @PotionItem flag updates:
+** Effect Type must now come first for custom effects
+** Replaced 'amplify' with 'amplifier'
+** Added options for particles and icon. Changed defaults to true
 * NEW: @IngredientCondition: Add potioneffect's particles and icon checks
 
 === v2.20.0 ===

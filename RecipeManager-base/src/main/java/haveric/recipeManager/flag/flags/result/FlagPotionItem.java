@@ -69,13 +69,23 @@ public class FlagPotionItem extends Flag {
                 "",
                 "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
                 "",
-                "Similar syntax to basic effect, arguments separated by | character, can be in any order.",
+                "Similar syntax to basic effect, arguments separated by | character, can be in any order after the effect type.",
                 "Arguments for custom effect:",
-                "  type <effect type>  = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
-                "  duration <float>    = (optional) Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
-                "  amplify <number>    = (optional) Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
-                "  ambient             = (optional) Adds extra visual particles",
+                "  <effect type>       = (REQUIRED) Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
+                "  duration <float>    = (default 1.0) Duration of the potion effect in seconds (does not work on instant potions effects such as HEAL and HARM)",
+                "  amplifier <number>  = (default 0) Amplify the effects of the potion (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+                "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
+                "  !ambient            = equivalent to 'ambient false'",
+                "  particles [false]   = (defaults true) display particles.",
+                "  !particles          = equivalent to 'particles false'",
         }, String.class);
+
+        if (Version.has1_13BasicSupport()) {
+        description = ObjectArrays.concat(description, new String[]{
+                "  icon [false]        = (defaults true) show the effect icon.",
+                "  !icon               = equivalent to 'icon false'",
+        }, String.class);
+    }
 
         return description;
     }
@@ -86,8 +96,8 @@ public class FlagPotionItem extends Flag {
             "{flag} level max | type FIRE_RESISTANCE | extended // basic extended fire resistance potion",
             "// advanced potion example:",
             "{flag} type POISON | splash | color 255 128 0 // set the bottle design and set it as splash with a custom color",
-            "{flag} custom type WITHER | duration 10 // add wither effect",
-            "{flag} custom duration 2.5 | type BLINDNESS | amplify 5 // add blindness effect", };
+            "{flag} custom WITHER | duration 10 // add wither effect",
+            "{flag} custom BLINDNESS | duration 2.5 | amplify 5 // add blindness effect", };
     }
 
 
