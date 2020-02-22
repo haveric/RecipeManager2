@@ -1,38 +1,37 @@
-package haveric.recipeManager.flag.flags.any;
+package haveric.recipeManager.flag.flags.result;
 
-import com.google.common.collect.ObjectArrays;
+import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlagPotionEffect extends Flag {
+public class FlagSuspiciousStew extends Flag {
 
     @Override
     public String getFlagType() {
-        return FlagType.POTION_EFFECT;
+        return FlagType.SUSPICIOUS_STEW;
     }
 
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <effect type> | [arguments]",
-            "{flag} clear", };
+            "{flag} <effect type> | [arguments]", };
     }
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[]{
-            "Adds potion effects to crafter.",
+        return new String[]{
+            "Adds potion effects to a suspicious stew.",
             "This flag can be used more than once to add more effects.",
-            "",
-            "Using 'clear' will remove all potion effects from player before adding any defined ones.",
             "",
             "The <effect type> argument must be an effect type, names for them can be found in '" + Files.FILE_INFO_NAMES + "' file at 'POTION EFFECT TYPE'.",
             "",
@@ -42,22 +41,14 @@ public class FlagPotionEffect extends Flag {
             "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
             "  !ambient            = equivalent to 'ambient false'",
             "  particles [false]   = (defaults true) display particles.",
-            "  !particles          = equivalent to 'particles false'",};
-
-        if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
+            "  !particles          = equivalent to 'particles false'",
             "  icon [false]        = (defaults true) show the effect icon.",
-            "  !icon               = equivalent to 'icon false'",
-            }, String.class);
-        }
-
-        return description;
+            "  !icon               = equivalent to 'icon false'",};
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} clear // remove all player's potion effects beforehand",
             "{flag} heal",
             "{flag} blindness | duration 60 | amplifier 5",
             "{flag} poison | chance 6.66% | ambient | amplifier 666 | duration 6.66", };
@@ -65,19 +56,17 @@ public class FlagPotionEffect extends Flag {
 
 
     private List<PotionEffect> effects = new ArrayList<>();
-    private boolean clear = false;
 
-    public FlagPotionEffect() {
+    public FlagSuspiciousStew() {
     }
 
-    public FlagPotionEffect(FlagPotionEffect flag) {
+    public FlagSuspiciousStew(FlagSuspiciousStew flag) {
         effects.addAll(flag.effects);
-        clear = flag.clear;
     }
 
     @Override
-    public FlagPotionEffect clone() {
-        return new FlagPotionEffect((FlagPotionEffect) super.clone());
+    public FlagSuspiciousStew clone() {
+        return new FlagSuspiciousStew((FlagSuspiciousStew) super.clone());
     }
 
     public List<PotionEffect> getEffects() {
@@ -97,23 +86,21 @@ public class FlagPotionEffect extends Flag {
         effects.add(effect);
     }
 
-    public boolean isClear() {
-        return clear;
-    }
+    @Override
+    public boolean onValidate() {
+        ItemResult result = getResult();
 
-    public void setClear(boolean newClear) {
-        clear = newClear;
+        if (result == null || !(result.getItemMeta() instanceof SuspiciousStewMeta)) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a suspicious stew!");
+        }
+
+        return true;
     }
 
     @Override
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
         value = value.toLowerCase();
-
-        if (value.equals("clear")) {
-            setClear(true);
-            return true;
-        }
 
         PotionEffect effect = Tools.parsePotionEffect(value, getFlagType());
         if (effect != null) {
@@ -125,19 +112,18 @@ public class FlagPotionEffect extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasPlayer()) {
-            a.addCustomReason("Need player!");
-            return;
-        }
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
 
-        if (isClear()) {
-            for (PotionEffect e : a.player().getActivePotionEffects()) {
-                a.player().removePotionEffect(e.getType());
+            if (!(meta instanceof SuspiciousStewMeta)) {
+                a.addCustomReason("Needs suspicious stew");
+                return;
             }
-        }
 
-        for (PotionEffect e : effects) {
-            e.apply(a.player());
+            SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
+            for (PotionEffect e : effects) {
+                stewMeta.addCustomEffect(e, false);
+            }
         }
     }
 
@@ -149,8 +135,6 @@ public class FlagPotionEffect extends Flag {
         for (PotionEffect effect : effects) {
             toHash.append(effect.hashCode());
         }
-
-        toHash.append("clear: ").append(clear);
 
         return toHash.toString().hashCode();
     }

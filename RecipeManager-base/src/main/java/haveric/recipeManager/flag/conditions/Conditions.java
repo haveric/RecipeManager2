@@ -50,6 +50,7 @@ public class Conditions implements Cloneable {
     private Boolean unbreakable;
     private Map<PotionType, ConditionPotion> potionConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
+    private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
     private DyeColor bannerColor;
     private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
     private EntityType spawnEggEntityType;
@@ -108,6 +109,7 @@ public class Conditions implements Cloneable {
 
         potionConditions.putAll(original.potionConditions);
         potionEffectConditions.putAll(original.potionEffectConditions);
+        suspiciousStewConditions.putAll(original.suspiciousStewConditions);
         bannerColor = original.bannerColor;
         bannerPatterns.putAll(original.bannerPatterns);
         spawnEggEntityType = original.spawnEggEntityType;
@@ -991,6 +993,72 @@ public class Conditions implements Cloneable {
 
         return conditionsMet == potionConditions.entrySet().size();
     }
+    public boolean hasSuspiciousStewEffect() {
+        return !suspiciousStewConditions.isEmpty();
+    }
+
+    public boolean checkSuspiciousStewEffect(SuspiciousStewMeta meta) {
+        int conditionsMet = 0;
+
+        for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : potionEffectConditions.entrySet()) {
+            boolean anySuccess = false;
+            PotionEffectType type = entry.getKey();
+            ConditionPotionEffect cond = entry.getValue();
+
+            List<PotionEffect> effects = meta.getCustomEffects();
+            for (PotionEffect effect : effects) {
+                boolean success = true;
+                if (type == null || type.equals(effect.getType())) {
+                    if (cond.hasDuration()) {
+                        int duration = effect.getDuration();
+
+                        if (duration < cond.getDurationMinLevel() || duration > cond.getDurationMaxLevel()) {
+                            success = false;
+                        }
+                    }
+
+                    if (cond.hasAmplify()) {
+                        int amplifier = effect.getAmplifier();
+
+                        if (amplifier < cond.getAmplifyMinLevel() || amplifier > cond.getAmplifyMaxLevel()) {
+                            success = false;
+                        }
+                    }
+
+                    if (cond.hasAmbient()) {
+                        if (!cond.getAmbient().equals(effect.isAmbient())) {
+                            success = false;
+                        }
+                    }
+
+                    if (cond.hasParticles()) {
+                        if (!cond.getParticles().equals(effect.hasParticles())) {
+                            success = false;
+                        }
+                    }
+
+                    if (Version.has1_13BasicSupport() && cond.hasIcon()) {
+                        if (!cond.getIcon().equals(effect.hasIcon())) {
+                            success = false;
+                        }
+                    }
+                } else {
+                    success = false;
+                }
+
+                if (success) {
+                    anySuccess = true;
+                    break;
+                }
+            }
+
+            if (anySuccess) {
+                conditionsMet ++;
+            }
+        }
+
+        return conditionsMet == suspiciousStewConditions.entrySet().size();
+    }
 
     public void setBannerColor(DyeColor color) {
         bannerColor = color;
@@ -1307,6 +1375,33 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     a.addReason("flag.ingredientconditions.nopotioneffect", getFailMessage(), "{item}", ToolsItem.print(item), "{effect}", potionEffectConditions); // TODO: This probably needs updating
+                }
+                ok = false;
+
+                if (getFailMessage() != null) {
+                    return false;
+                }
+            }
+        }
+
+        if (hasSuspiciousStewEffect()) {
+            boolean failed = true;
+
+            if (meta instanceof SuspiciousStewMeta) {
+                SuspiciousStewMeta stew = (SuspiciousStewMeta) meta;
+
+                if (checkSuspiciousStewEffect(stew)) {
+                    failed = false;
+                }
+            }
+
+            if (failed) {
+                if (a == null) {
+                    return false;
+                }
+
+                if (addReasons) {
+                    a.addReason("flag.ingredientconditions.nosuspicioussteweffect", getFailMessage(), "{item}", ToolsItem.print(item), "{effect}", suspiciousStewConditions); // TODO: This probably needs updating
                 }
                 ok = false;
 
@@ -1846,8 +1941,14 @@ public class Conditions implements Cloneable {
             }
 
             potionConditions.put(potionType, potionCond);
-        } else if (argLower.startsWith("potioneffect")) {
-            value = argLower.substring("potioneffect".length()).trim();
+        } else if (argLower.startsWith("potioneffect") || argLower.startsWith("suspiciousstew")) {
+            boolean stew = false;
+            if (argLower.startsWith("potioneffect")) {
+                value = argLower.substring("potioneffect".length()).trim();
+            } else {
+                value = argLower.substring("suspiciousstew".length()).trim();
+                stew = true;
+            }
 
             ConditionPotionEffect effectCond = new ConditionPotionEffect();
             PotionEffectType effectType = null;
@@ -1910,7 +2011,11 @@ public class Conditions implements Cloneable {
                 }
             }
 
-            potionEffectConditions.put(effectType, effectCond);
+            if (stew) {
+                suspiciousStewConditions.put(effectType, effectCond);
+            } else {
+                potionEffectConditions.put(effectType, effectCond);
+            }
         } else if (argLower.startsWith("banner")) {
             value = argLower.substring("banner".length()).trim();
 

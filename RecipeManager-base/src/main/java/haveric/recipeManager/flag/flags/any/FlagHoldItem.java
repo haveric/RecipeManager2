@@ -12,14 +12,14 @@ import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.RMCVanilla;
 import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
+import org.bukkit.DyeColor;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class FlagHoldItem extends Flag {
@@ -148,6 +148,46 @@ public class FlagHoldItem extends Flag {
             "    Ingredient must have no metadata (enchants, bookenchants, name, lore, color, unbreakable, localizedname, custommodeldata)",
             "    Overrides enchant, name, lore, color, unbreakable, localizedname, custommodeldata conditions if set",
             "    Equivalent to noenchant | nobookenchant | noname | nolore | nocolor | nounbreakable | nolocalizedname | nocustommodeldata",
+            "",
+            "  potion <condition>, [...]",
+            "    type <potiontype>      = Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
+            "    level                  = Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
+            "    extended or !extended  = Potion's extended duration",
+            "",
+            "  potioneffect <condition>, [...]",
+            "    type <effecttype>         = Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
+            "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
+            "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+            "    ambient or !ambient       = Check effect's extra visual particles setting",
+            "    particles or !particles   = Check effect's particles setting",
+        }, String.class);
+
+        if (Version.has1_13BasicSupport()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "    icon or !icon             = Check effect's icon setting",
+            }, String.class);
+        }
+
+        if (Version.has1_14PlusSupport()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "  suspiciousstew <condition>, [...]",
+                "    type <effecttype>         = Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
+                "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
+                "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+                "    ambient or !ambient       = Check effect's extra visual particles setting",
+                "    particles or !particles   = Check effect's particles setting",
+                "    icon or !icon             = Check effect's icon setting",
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
+            "",
+            "  banner <condition>, [...]",
+            "    color <dyecolor>",
+            "    pattern <pattern> [dyecolor]",
+            "",
+            "    Dye Colors: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
+            "    Patterns: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
             "",
             "  spawnegg <entitytype> = Type of entity contained in a spawn egg, read '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section", }, String.class);
 

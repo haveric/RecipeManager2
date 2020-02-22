@@ -93,6 +93,9 @@ public class FlagLoader {
         FlagFactory.getInstance().initializeFlag(FlagType.REPAIR_COST, new FlagRepairCost(), FlagBit.RESULT);
         FlagFactory.getInstance().initializeFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), FlagBit.RESULT, "skullitem, skull, head");
         FlagFactory.getInstance().initializeFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), FlagBit.RESULT, "monsteregg", "egg");
+        if (Version.has1_14PlusSupport()) {
+            FlagFactory.getInstance().initializeFlag(FlagType.SUSPICIOUS_STEW, new FlagSuspiciousStew(), FlagBit.RESULT, "suspicioussoup");
+        }
     }
 
     public void loadCustomFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {

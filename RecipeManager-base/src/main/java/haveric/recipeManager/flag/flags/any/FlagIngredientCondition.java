@@ -152,6 +152,18 @@ public class FlagIngredientCondition extends Flag {
                 }, String.class);
             }
 
+            if (Version.has1_14PlusSupport()) {
+                description = ObjectArrays.concat(description, new String[]{
+                    "  suspiciousstew <condition>, [...]",
+                    "    type <effecttype>         = Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
+                    "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
+                    "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+                    "    ambient or !ambient       = Check effect's extra visual particles setting",
+                    "    particles or !particles   = Check effect's particles setting",
+                    "    icon or !icon             = Check effect's icon setting",
+                }, String.class);
+            }
+
             description = ObjectArrays.concat(description, new String[]{
                 "",
                 "  banner <condition>, [...]",
