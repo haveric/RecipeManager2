@@ -729,8 +729,8 @@ public class Tools {
         boolean icon = true;
 
 
-        for (String s : split) {
-            s = s.trim();
+        for (int i = 1; i < split.length; i++) {
+            String s = split[i].trim();
 
             if (s.startsWith("ambient")) {
                 s = s.substring("ambient".length()).trim();
