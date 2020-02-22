@@ -1,11 +1,13 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -29,7 +31,7 @@ public class FlagPotionEffect extends Flag {
 
     @Override
     protected String[] getDescription() {
-        return new String[] {
+        String[] description = new String[]{
             "Adds potion effects to crafter.",
             "This flag can be used more than once to add more effects.",
             "",
@@ -41,7 +43,19 @@ public class FlagPotionEffect extends Flag {
             "  duration <float>    = (default 3.0) potion effect duration in seconds, only works on non-instant effect types.",
             "  amplifier <num>     = (default 0) potion effect amplifier.",
             "  chance <0.01-100>%  = (default 100%) chance that the effect will be applied, this chance is individual for this effect.",
-            "  morefx              = (default not set) more ambient particle effects, more screen intrusive.", };
+            "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
+            "  !ambient            = equivalent to 'ambient false'",
+            "  particles [false]   = (defaults true) display particles.",
+            "  !particles          = equivalent to 'particles false'",};
+
+        if (Version.has1_13BasicSupport()) {
+            description = ObjectArrays.concat(description, new String[]{
+            "  icon [false]        = (defaults true) show the effect icon.",
+            "  !icon               = equivalent to 'icon false'",
+            }, String.class);
+        }
+
+        return description;
     }
 
     @Override
@@ -50,7 +64,7 @@ public class FlagPotionEffect extends Flag {
             "{flag} clear // remove all player's potion effects beforehand",
             "{flag} heal",
             "{flag} blindness | duration 60 | amplifier 5",
-            "{flag} poison | chance 6.66% | morefx | amplifier 666 | duration 6.66", };
+            "{flag} poison | chance 6.66% | ambient | amplifier 666 | duration 6.66", };
     }
 
 
@@ -115,7 +129,9 @@ public class FlagPotionEffect extends Flag {
         int amplifier = 0;
         float chance = 100.0f;
         float duration = 3.0f;
-        boolean morefx = false;
+        boolean ambient = true;
+        boolean particles = true;
+        boolean icon = true;
 
         if (type == null) {
             ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid effect type: " + value);
@@ -126,8 +142,45 @@ public class FlagPotionEffect extends Flag {
             for (int i = 1; i < split.length; i++) {
                 value = split[i].trim();
 
-                if (value.equals("morefx")) {
-                    morefx = true;
+                if (value.startsWith("ambient")) {
+                    value = value.substring("ambient".length()).trim();
+
+                    if (value.equals("false")) {
+                        ambient = false;
+                    } else if (value.equals("true")) {
+                        ambient = true;
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid value for ambient: " + value + ". Defaulting to true.");
+                        ambient = true;
+                    }
+                } else if (value.startsWith("particles")) {
+                    value = value.substring("particles".length()).trim();
+
+                    if (value.equals("false")) {
+                        particles = false;
+                    } else if (value.equals("true")) {
+                        particles = true;
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid value for particles: " + value + ". Defaulting to true.");
+                        particles = true;
+                    }
+                } else if (value.startsWith("icon")) {
+                    value = value.substring("icon".length()).trim();
+
+                    if (value.equals("false")) {
+                        icon = false;
+                    } else if (value.equals("true")) {
+                        icon = true;
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid value for icon: " + value + ". Defaulting to true.");
+                        icon = true;
+                    }
+                } else if (value.equals("!ambient")) {
+                    ambient = false;
+                } else if (value.equals("!particles")) {
+                    particles = false;
+                } else if (value.equals("!icon")) {
+                    icon = false;
                 } else if (value.startsWith("chance")) {
                     value = value.substring("chance".length()).trim();
 
@@ -172,7 +225,12 @@ public class FlagPotionEffect extends Flag {
             }
         }
 
-        PotionEffect effect = new PotionEffect(type, (int) Math.ceil(duration * 20.0), amplifier, morefx);
+        PotionEffect effect;
+        if (Version.has1_13BasicSupport()) {
+            effect = new PotionEffect(type, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles, icon);
+        } else {
+            effect = new PotionEffect(type, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles);
+        }
 
         addEffect(effect, chance);
 
@@ -201,15 +259,15 @@ public class FlagPotionEffect extends Flag {
 
     @Override
     public int hashCode() {
-        String toHash = "" + super.hashCode();
+        StringBuilder toHash = new StringBuilder("" + super.hashCode());
 
-        toHash += "effects: ";
+        toHash.append("effects: ");
         for (Map.Entry<PotionEffect, Float> entry : effects.entrySet()) {
-            toHash += entry.getKey().hashCode() + entry.getValue().toString();
+            toHash.append(entry.getKey().hashCode()).append(entry.getValue().toString());
         }
 
-        toHash += "clear: " + clear;
+        toHash.append("clear: ").append(clear);
 
-        return toHash.hashCode();
+        return toHash.toString().hashCode();
     }
 }
