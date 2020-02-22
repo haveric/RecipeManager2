@@ -6,6 +6,8 @@ public class ConditionPotionEffect {
     private int amplifyMinLevel = -1;
     private int amplifyMaxLevel = -1;
     private Boolean ambient;
+    private Boolean particles;
+    private Boolean icon;
 
     public ConditionPotionEffect() {
 
@@ -63,6 +65,30 @@ public class ConditionPotionEffect {
         return ambient != null;
     }
 
+    public Boolean getParticles() {
+        return particles;
+    }
+
+    public void setParticles(Boolean particles) {
+        this.particles = particles;
+    }
+
+    public boolean hasParticles() {
+        return particles != null;
+    }
+
+    public Boolean getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Boolean icon) {
+        this.icon = icon;
+    }
+
+    public boolean hasIcon() {
+        return icon != null;
+    }
+
     @Override
     public int hashCode() {
         String toHash = "ConditionPotionEffect:";
@@ -72,6 +98,8 @@ public class ConditionPotionEffect {
         toHash += "amplifyMinLevel: " + amplifyMinLevel;
         toHash += "amplifyMaxLevel: " + amplifyMaxLevel;
         toHash += "ambient: " + ambient.toString();
+        toHash += "particles: " + particles.toString();
+        toHash += "icon: " + icon.toString();
 
         return toHash.hashCode();
     }

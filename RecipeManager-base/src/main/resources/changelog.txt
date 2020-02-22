@@ -2,7 +2,8 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
-* FIX/NEW: @FlagPotionEffect: Replaced morefx with ambient. Added options for particles and icon. Changed defaults to true
+* FIX/NEW: @PotionEffect: Replaced morefx with ambient. Added options for particles and icon. Changed defaults to true
+* NEW: @IngredientCondition: Add potioneffect's particles and icon checks
 
 === v2.20.0 ===
 * NEW: Grindstone and Cartography Table recipe support

@@ -962,6 +962,18 @@ public class Conditions implements Cloneable {
                             success = false;
                         }
                     }
+
+                    if (cond.hasParticles()) {
+                        if (!cond.getParticles().equals(effect.hasParticles())) {
+                            success = false;
+                        }
+                    }
+
+                    if (Version.has1_13BasicSupport() && cond.hasIcon()) {
+                        if (!cond.getIcon().equals(effect.hasIcon())) {
+                            success = false;
+                        }
+                    }
                 } else {
                     success = false;
                 }
@@ -1846,6 +1858,14 @@ public class Conditions implements Cloneable {
                     effectCond.setAmbient(true);
                 } else if (element.equals("!ambient")) {
                     effectCond.setAmbient(false);
+                } else if (element.equals("particles")) {
+                    effectCond.setParticles(true);
+                } else if (element.equals("!particles")) {
+                    effectCond.setParticles(false);
+                } else if (element.equals("icon")) {
+                    effectCond.setIcon(true);
+                } else if (element.equals("!icon")) {
+                    effectCond.setIcon(false);
                 } else if (element.startsWith("type")) {
                     String[] typeSplit = element.split(" ");
                     try {
