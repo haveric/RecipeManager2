@@ -292,6 +292,8 @@ public class Files {
 
             s.append(NL);
         }
+        s.append(NL);
+        s.append("</pre>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_FLAGS);
 
