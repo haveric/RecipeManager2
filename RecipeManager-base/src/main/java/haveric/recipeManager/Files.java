@@ -612,11 +612,11 @@ public class Files {
         }
 
         addNameIndexHeading(s, "potioneffect", "POTION EFFECT TYPE LIST", "potion/PotionEffect", "PotionEffect");
-        s.append(NL).append(String.format("<b> %-5s %-24s %-10s %s</b>", "ID", "Name", "Instant ?", "Duration modifier"));
+        s.append(NL).append(String.format("<b> %-5s %-24s %-10s</b>", "ID", "Name", "Instant ?"));
 
         for (PotionEffectType t : PotionEffectType.values()) {
             if (t != null) {
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %.2f", t.getId(), t.getName(), t.isInstant(), t.getDurationModifier()));
+                s.append(NL).append(String.format(" %-5d %-24s %-10s", t.getId(), t.getName(), t.isInstant()));
             }
         }
 

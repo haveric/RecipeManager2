@@ -165,7 +165,6 @@ public class FlagPotionEffect extends Flag {
 
                     try {
                         duration = Float.parseFloat(value);
-                        duration /= type.getDurationModifier(); // compensate for effect's duration modifier
                     } catch (NumberFormatException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid duration value number: " + value);
                     }

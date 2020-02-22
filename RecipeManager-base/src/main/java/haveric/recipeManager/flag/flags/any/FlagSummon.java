@@ -818,7 +818,7 @@ public class FlagSummon extends Flag {
         }
 
         public void addPotionEffect(PotionEffectType newType, float duration, int amplifier) {
-            potions.add(new PotionEffect(newType, (int) Math.ceil((duration * 20) / newType.getDurationModifier()), amplifier));
+            potions.add(new PotionEffect(newType, (int) Math.ceil(duration * 20), amplifier));
         }
 
         public float getOnFire() {
