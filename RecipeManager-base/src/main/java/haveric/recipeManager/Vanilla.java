@@ -566,10 +566,6 @@ public class Vanilla {
             return removeCombineRecipe((CombineRecipe) recipe);
         }
 
-        if (recipe instanceof RMFurnaceRecipe) {
-            return removeSmeltLegacyRecipe((RMFurnaceRecipe) recipe);
-        }
-
         if (recipe instanceof RMFurnaceRecipe1_13) {
             return removeSmeltRecipe((RMFurnaceRecipe1_13) recipe);
         }
@@ -582,6 +578,10 @@ public class Vanilla {
             return removeSmokingRecipe((RMSmokingRecipe) recipe);
         }
 
+        if (recipe instanceof RMFurnaceRecipe) {
+            return removeSmeltLegacyRecipe((RMFurnaceRecipe) recipe);
+        }
+
         if (recipe instanceof RMCampfireRecipe) {
             return removeCampfireRecipe((RMCampfireRecipe) recipe);
         }
@@ -589,7 +589,7 @@ public class Vanilla {
         if (recipe instanceof RMStonecuttingRecipe) {
             return removeStonecuttingRecipe((RMStonecuttingRecipe) recipe);
         }
- 
+
         return null;
     }
 
