@@ -10,7 +10,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;

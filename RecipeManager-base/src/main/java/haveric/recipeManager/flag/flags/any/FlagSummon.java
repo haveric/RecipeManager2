@@ -11,7 +11,7 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsEntity;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;

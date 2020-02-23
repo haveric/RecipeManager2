@@ -1,6 +1,6 @@
 package haveric.recipeManager.data;
 
-import haveric.recipeManagerCommon.data.AbstractBlockID;
+import haveric.recipeManager.common.data.AbstractBlockID;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -3,7 +3,7 @@ package haveric.recipeManager.flag.flags.recipe;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 
 public class FlagRestrict extends Flag {
 

@@ -3,7 +3,7 @@ package haveric.recipeManager.recipes.furnace;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.RecipeChoice;
 

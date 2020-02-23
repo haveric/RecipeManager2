@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.RMParticle;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;

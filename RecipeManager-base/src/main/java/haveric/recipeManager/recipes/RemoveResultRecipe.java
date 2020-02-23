@@ -1,8 +1,8 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;

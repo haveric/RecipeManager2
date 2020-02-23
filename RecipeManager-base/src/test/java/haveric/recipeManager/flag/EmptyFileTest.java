@@ -2,7 +2,7 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.junit.Test;
 
 import java.io.File;

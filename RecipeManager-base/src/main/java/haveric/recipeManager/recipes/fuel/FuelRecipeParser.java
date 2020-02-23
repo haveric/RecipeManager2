@@ -7,8 +7,8 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.RMCVanilla;
-import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

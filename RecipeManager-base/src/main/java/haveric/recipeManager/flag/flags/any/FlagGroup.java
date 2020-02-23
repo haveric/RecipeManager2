@@ -5,7 +5,7 @@ import haveric.recipeManager.Perms;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 
 import java.util.HashMap;
 import java.util.Map;

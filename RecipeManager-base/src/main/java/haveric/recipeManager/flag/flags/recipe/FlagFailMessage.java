@@ -8,7 +8,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 
 public class FlagFailMessage extends Flag {

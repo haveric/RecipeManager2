@@ -8,7 +8,7 @@ import haveric.recipeManager.flag.flags.result.FlagBookItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Test;
 

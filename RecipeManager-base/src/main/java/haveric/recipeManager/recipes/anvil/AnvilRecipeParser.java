@@ -9,7 +9,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.util.ParseBit;
+import haveric.recipeManager.common.util.ParseBit;
 import org.bukkit.Material;
 
 import java.util.ArrayList;

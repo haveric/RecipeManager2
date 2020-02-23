@@ -6,7 +6,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
-import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManager.common.RMCChatColor;
 
 public class FlagIndividualResults extends Flag {
 

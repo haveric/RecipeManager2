@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkMeta;

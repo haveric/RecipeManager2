@@ -11,7 +11,7 @@ import haveric.recipeManager.flag.flags.recipe.FlagDisplayResult;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;

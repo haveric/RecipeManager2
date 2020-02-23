@@ -1,6 +1,6 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManagerCommon.RMCVanilla;
+import haveric.recipeManager.common.RMCVanilla;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;

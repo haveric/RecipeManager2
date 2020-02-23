@@ -2,8 +2,8 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.util.ParseBit;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

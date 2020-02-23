@@ -3,7 +3,7 @@ package haveric.recipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.RecipeFileParser;
 import haveric.recipeManager.recipes.RecipeParserFactory;
-import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManager.common.RMCChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;

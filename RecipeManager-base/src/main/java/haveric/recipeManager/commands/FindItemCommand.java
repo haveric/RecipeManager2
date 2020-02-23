@@ -2,7 +2,7 @@ package haveric.recipeManager.commands;
 
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;

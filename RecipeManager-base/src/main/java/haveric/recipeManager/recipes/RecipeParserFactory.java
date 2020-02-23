@@ -15,7 +15,7 @@ import haveric.recipeManager.recipes.fuel.FuelRecipeParser;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipeParser;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipeParser;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipeParser;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 
 public class RecipeParserFactory {
 

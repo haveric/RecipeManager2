@@ -5,7 +5,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeStatus;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeStatus;
 
 public class FlagRemove extends Flag {
 

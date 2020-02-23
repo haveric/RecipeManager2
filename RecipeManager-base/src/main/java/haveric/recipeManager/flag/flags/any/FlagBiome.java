@@ -5,7 +5,7 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;

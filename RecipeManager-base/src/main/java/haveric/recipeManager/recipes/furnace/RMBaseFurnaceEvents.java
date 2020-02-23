@@ -18,7 +18,7 @@ import haveric.recipeManager.recipes.furnace.data.Furnaces;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

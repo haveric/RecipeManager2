@@ -1,8 +1,6 @@
 dependencies {
     compileOnly project(':RecipeManager-bukkit')
-    implementation (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
+    compileOnly project(':RecipeManager-common')
 
     compileOnly "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
-
-    extra (project(':RecipeManagerCommon').projectDir.exists() ? project(':RecipeManagerCommon') : 'com.github.haveric:RecipeManagerCommon:master-SNAPSHOT' )
 }

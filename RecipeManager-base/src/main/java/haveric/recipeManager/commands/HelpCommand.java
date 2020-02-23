@@ -2,7 +2,7 @@ package haveric.recipeManager.commands;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManager.common.RMCChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

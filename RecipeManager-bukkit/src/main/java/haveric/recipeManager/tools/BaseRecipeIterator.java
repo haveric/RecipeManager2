@@ -1,6 +1,6 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
+import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;

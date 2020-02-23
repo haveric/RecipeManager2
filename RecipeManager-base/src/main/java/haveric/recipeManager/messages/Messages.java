@@ -2,8 +2,8 @@ package haveric.recipeManager.messages;
 
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

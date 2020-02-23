@@ -6,10 +6,10 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.RMCVanilla;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
-import haveric.recipeManagerCommon.util.RMCUtil;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

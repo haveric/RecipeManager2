@@ -2,7 +2,7 @@ package haveric.recipeManager.nms;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.BaseRecipeIterator;
-import haveric.recipeManagerCommon.recipes.AbstractBaseRecipe;
+import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
 import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;

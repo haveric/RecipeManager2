@@ -3,7 +3,7 @@ package haveric.recipeManager;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManagerCommon.RMCChatColor;
+import haveric.recipeManager.common.RMCChatColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

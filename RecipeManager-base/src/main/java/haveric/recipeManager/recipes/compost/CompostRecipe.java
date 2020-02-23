@@ -7,8 +7,8 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManagerCommon.RMCChatColor;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

@@ -8,8 +8,8 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.recipe.FlagOverride;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo;
-import haveric.recipeManagerCommon.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
