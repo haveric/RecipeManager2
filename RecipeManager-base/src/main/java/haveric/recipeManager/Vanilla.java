@@ -684,7 +684,6 @@ public class Vanilla {
     public static Recipe removeCombineRecipe(CombineRecipe recipe) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        ShapelessRecipe sr;
         Recipe r;
 
         if (Version.has1_13Support()) {
@@ -695,14 +694,12 @@ public class Vanilla {
                     r = iterator.next();
 
                     if (r instanceof ShapelessRecipe) {
-                        sr = (ShapelessRecipe) r;
-
                         if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoices)) {
                             iterator.remove();
 
                             baseRecipeIterator.finish();
 
-                            return sr;
+                            return r;
                         }
                     }
                 } catch (NullPointerException e) {
@@ -717,14 +714,12 @@ public class Vanilla {
                     r = iterator.next();
 
                     if (r instanceof ShapelessRecipe) {
-                        sr = (ShapelessRecipe) r;
-
                         if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
                             iterator.remove();
 
                             baseRecipeIterator.finish();
 
-                            return sr;
+                            return r;
                         }
                     }
                 } catch (NullPointerException e) {
@@ -762,8 +757,6 @@ public class Vanilla {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-
-        FurnaceRecipe rmRecipe;
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -771,14 +764,12 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof FurnaceRecipe) {
-                    rmRecipe = (FurnaceRecipe) r;
-
                     if (toolsRecipe.matchesFurnace(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
 
-                        return rmRecipe;
+                        return r;
                     }
                 }
             } catch (NullPointerException e) {
@@ -801,8 +792,6 @@ public class Vanilla {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-
-        BlastingRecipe rmRecipe;
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -810,14 +799,12 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof BlastingRecipe) {
-                    rmRecipe = (BlastingRecipe) r;
-
                     if (toolsRecipe.matchesBlasting(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
 
-                        return rmRecipe;
+                        return r;
                     }
                 }
             } catch (NullPointerException e) {
@@ -840,8 +827,6 @@ public class Vanilla {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-
-        SmokingRecipe rmRecipe;
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -849,14 +834,12 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof SmokingRecipe) {
-                    rmRecipe = (SmokingRecipe) r;
-
                     if (toolsRecipe.matchesSmoking(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
 
-                        return rmRecipe;
+                        return r;
                     }
                 }
             } catch (NullPointerException e) {
@@ -875,8 +858,6 @@ public class Vanilla {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-
-        CampfireRecipe rmRecipe;
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -884,14 +865,12 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof CampfireRecipe) {
-                    rmRecipe = (CampfireRecipe) r;
-
                     if (toolsRecipe.matchesCampfire(r, ingredient)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
 
-                        return rmRecipe;
+                        return r;
                     }
                 }
             } catch (NullPointerException e) {
@@ -910,8 +889,6 @@ public class Vanilla {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-
-        StonecuttingRecipe rmRecipe;
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -919,14 +896,12 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof StonecuttingRecipe) {
-                    rmRecipe = (StonecuttingRecipe) r;
-
                     if (toolsRecipe.matchesStonecutting(r, ingredient, result)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
 
-                        return rmRecipe;
+                        return r;
                     }
                 }
             } catch (NullPointerException e) {
@@ -1056,7 +1031,6 @@ public class Vanilla {
     public static Recipe replaceCombineRecipeV1_12(CombineRecipe recipe) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        ShapelessRecipe sr;
         Recipe r;
 
         if (Version.has1_13Support()) {
@@ -1067,13 +1041,11 @@ public class Vanilla {
                     r = iterator.next();
 
                     if (r instanceof ShapelessRecipe) {
-                        sr = (ShapelessRecipe) r;
-
                         if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, choiceList)) {
                             ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
                             baseRecipeIterator.replace(recipe, overrideItem);
                             baseRecipeIterator.finish();
-                            return sr;
+                            return r;
                         }
                     }
                 } catch (NullPointerException e) {
@@ -1088,13 +1060,11 @@ public class Vanilla {
                     r = iterator.next();
 
                     if (r instanceof ShapelessRecipe) {
-                        sr = (ShapelessRecipe) r;
-
                         if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
                             ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
                             baseRecipeIterator.replace(recipe, overrideItem);
                             baseRecipeIterator.finish();
-                            return sr;
+                            return r;
                         }
                     }
                 } catch (NullPointerException e) {
@@ -1125,7 +1095,6 @@ public class Vanilla {
         //  Since we really want to remove, we instead catalogue the non-custom, in case
         //  other plugins have added recipes. Then, when done, we clear all, and readd just those
         //  discovered recipes, in the order we found them, to limit disruption.
-
         while (iterator.hasNext()) {
             try {
                 recipe = iterator.next();
