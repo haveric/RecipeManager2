@@ -1,7 +1,9 @@
 package haveric.recipeManager.flag.flags.any;
 
 import com.google.common.collect.ObjectArrays;
-import haveric.recipeManager.*;
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -26,6 +28,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class FlagSummon extends Flag {
 
@@ -78,8 +81,21 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "elder", "sets a guardian as an elder") }, String.class);
         }
 
-        description = ObjectArrays.concat(description, new String[] {
+        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
+        }, String.class);
+
+        if (Version.has1_14Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "fox <type>", "set the fox type, values: " + RMCUtil.collectionToString(Arrays.asList(Fox.Type.values())).toLowerCase()),
+                    String.format(argFormat, "foxcrouching", "set the fox to be crouching"),
+                    String.format(argFormat, "foxfirsttrustedplayer <uuid or player>", "set the fox's first trusted player. If set to 'player', the crafter will be used."),
+                    String.format(argFormat, "foxsecondtrustedplayer <uuid or player>", "set the fox's second trusted player. If set to 'player', the crafter will be used."),
+                    String.format(argFormat, "foxsleeping", "set the fox to be sleeping"),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's main hand with optional drop chance; for enderman it only uses material and data from the item."),
             String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
             String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."),
@@ -224,6 +240,13 @@ public class FlagSummon extends Flag {
         private boolean elder = false;
         private Panda.Gene pandaHiddenGene = null;
         private Panda.Gene pandaMainGene = null;
+        private Fox.Type fox = null;
+        private boolean foxCrouching = false;
+        private UUID foxFirstTrustedPlayerUUID = null;
+        private UUID foxSecondTrustedPlayerUUID = null;
+        private boolean foxFirstTrustedPlayer = false;
+        private boolean foxSecondTrustedPlayer = false;
+        private boolean foxSleeping = false;
 
         public Customization(EntityType newType) {
             type = newType;
@@ -287,6 +310,13 @@ public class FlagSummon extends Flag {
             if (Version.has1_14Support()) {
                 pandaHiddenGene = c.pandaHiddenGene;
                 pandaMainGene = c.pandaMainGene;
+                fox = c.fox;
+                foxCrouching = c.foxCrouching;
+                foxFirstTrustedPlayerUUID = c.foxFirstTrustedPlayerUUID;
+                foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
+                foxFirstTrustedPlayer = c.foxFirstTrustedPlayer;
+                foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
+                foxSleeping = c.foxSleeping;
             }
         }
 
@@ -547,6 +577,36 @@ public class FlagSummon extends Flag {
                     }
                     if (pandaHiddenGene != null) {
                         npc.setHiddenGene(pandaHiddenGene);
+                    }
+                }
+
+                if (Version.has1_14Support() && ent instanceof Fox) {
+                    Fox npc = (Fox) ent;
+
+                    if (fox != null) {
+                        npc.setFoxType(fox);
+                    }
+
+                    if (foxCrouching) {
+                        npc.setCrouching(true);
+                    }
+
+                    if (foxFirstTrustedPlayerUUID != null) {
+                        OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
+                        npc.setFirstTrustedPlayer(firstPlayer);
+                    } else if (foxFirstTrustedPlayer) {
+                        npc.setFirstTrustedPlayer(player);
+                    }
+
+                    if (foxSecondTrustedPlayerUUID != null) {
+                        OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
+                        npc.setFirstTrustedPlayer(secondPlayer);
+                    } else if (foxSecondTrustedPlayer) {
+                        npc.setSecondTrustedPlayer(player);
+                    }
+
+                    if (foxSleeping) {
+                        npc.setSleeping(true);
                     }
                 }
 
@@ -1051,6 +1111,62 @@ public class FlagSummon extends Flag {
             return pandaHiddenGene;
         }
 
+        public void setFoxType(Fox.Type newType) {
+            fox = newType;
+        }
+
+        public Fox.Type getFoxType() {
+            return fox;
+        }
+
+        public void setFoxSleeping(boolean sleeping) {
+            foxSleeping = sleeping;
+        }
+
+        public boolean isFoxSleeping() {
+            return foxSleeping;
+        }
+
+        public void setFoxFirstTrustedPlayerUUID(UUID uuid) {
+            foxFirstTrustedPlayerUUID = uuid;
+        }
+
+        public UUID getFoxFirstTrustedPlayerUUID() {
+            return foxFirstTrustedPlayerUUID;
+        }
+
+        public void setFoxSecondTrustedPlayerUUID(UUID uuid) {
+            foxSecondTrustedPlayerUUID = uuid;
+        }
+
+        public UUID getFoxSecondTrustedPlayerUUID() {
+            return foxSecondTrustedPlayerUUID;
+        }
+
+        public void setFoxFirstTrustedPlayer(boolean usePlayer) {
+            foxFirstTrustedPlayer = usePlayer;
+        }
+
+        public boolean getFoxFirstTrustedPlayer() {
+            return foxFirstTrustedPlayer;
+        }
+
+        public void setFoxSecondTrustedPlayer(boolean usePlayer) {
+            foxSecondTrustedPlayer = usePlayer;
+        }
+
+        public boolean getFoxSecondTrustedPlayer() {
+            return foxSecondTrustedPlayer;
+        }
+
+        public void setFoxCrouching(boolean crouching) {
+            foxCrouching = crouching;
+        }
+
+        public boolean getFoxCrouching() {
+            return foxCrouching;
+        }
+
         public void setHasChest(boolean newHasChest) {
             hasChest = newHasChest;
         }
@@ -1135,6 +1251,13 @@ public class FlagSummon extends Flag {
             toHash += "parrot: " + parrot;
             toHash += "pandaHiddenGene: " + pandaHiddenGene;
             toHash += "pandaMainGene: " + pandaMainGene;
+            toHash += "fox: " + fox;
+            toHash += "foxCrouching: " + foxCrouching;
+            toHash += "foxFirstTrustedPlayerUUID: " + foxFirstTrustedPlayerUUID;
+            toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
+            toHash += "foxFirstTrustedPlayer: " + foxFirstTrustedPlayer;
+            toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
+            toHash += "foxSleeping: " + foxSleeping;
 
             return toHash.hashCode();
         }
@@ -1303,7 +1426,6 @@ public class FlagSummon extends Flag {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'saddle' on non-pig and non-horse creature!");
                         continue;
                     }
-
 
                     c.setSaddle(true);
 
@@ -1668,6 +1790,51 @@ public class FlagSummon extends Flag {
 
                     if (c.getPandaHiddenGene() == null) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandahiddengene' argument with invalid type: " + value);
+                    }
+                } else if (Version.has1_14Support() && value.startsWith("fox")) {
+                    String[] foxSplit = value.split(" ");
+                    if (type != EntityType.FOX) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + foxSplit[0] + "' argument on non-fox creature!");
+                    }
+
+                    if (value.startsWith("foxcrouching")) {
+                        c.setFoxCrouching(true);
+                    } else if (value.startsWith("foxfirsttrustedplayer")) {
+                        value = value.substring("foxfirsttrustedplayer".length()).trim();
+
+                        if (value.equals("player")) {
+                            c.setFoxFirstTrustedPlayer(true);
+                        } else {
+                            try {
+                                UUID uuid = UUID.fromString(value);
+                                c.setFoxFirstTrustedPlayerUUID(uuid);
+                            } catch (IllegalArgumentException e) {
+                                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'foxfirsttrustedplayer' with invalid uuid: " + value);
+                            }
+                        }
+                    } else if (value.startsWith("foxsecondtrustedplayer")) {
+                        value = value.substring("foxsecondtrustedplayer".length()).trim();
+
+                        if (value.equals("player")) {
+                            c.setFoxSecondTrustedPlayer(true);
+                        } else {
+                            try {
+                                UUID uuid = UUID.fromString(value);
+                                c.setFoxSecondTrustedPlayerUUID(uuid);
+                            } catch (IllegalArgumentException e) {
+                                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'foxsecondtrustedplayer' with invalid uuid: " + value);
+                            }
+                        }
+                    } else if (value.startsWith("foxsleeping")) {
+                        c.setFoxSleeping(true);
+                    } else if (value.startsWith("fox")) {
+                        value = value.substring("fox".length()).trim();
+
+                        c.setFoxType(RMCUtil.parseEnum(value, Fox.Type.values()));
+
+                        if (c.getFoxType() == null) {
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'fox' argument with invalid type: " + value);
+                        }
                     }
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
