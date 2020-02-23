@@ -14,6 +14,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX/NEW: @Summon updates:
 ** Add Bee to 'adult', 'baby', 'agelock', and 'nobreed' options
 ** Add 'parrot' option for setting a parrot's variant
+** Add 'pandamaingene' and 'pandahiddengene' option for setting a panda's genes
 * NEW: @IngredientCondition, @HoldItem: Add potioneffect's particles and icon checks
 * NEW: @IngredientCondition, @HoldItem: Add suspiciousstew potioneffect options
 * FIX: @IngredientCondition, @HoldItem: Fix potioneffect functionality

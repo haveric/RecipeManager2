@@ -95,15 +95,6 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
             String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
-        }, String.class);
-
-        if (Version.has1_12Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
             String.format(argFormat, "offhand <item> [drop%]", "equip an item on the creature's offhand with optional drop chance."),
             String.format(argFormat, "invulnerable", "makes the creature invulnerable."),
@@ -118,6 +109,22 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "nohidename", "don't hide name plate when not aiming at creature."),
             String.format(argFormat, "num <number>", "spawn more cloned creatures."),
             String.format(argFormat, "onfire <time>", "spawn creature on fire for <time> amount of seconds, value can be float."),
+        }, String.class);
+
+        if (Version.has1_14Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "pandahiddengene <type>", "set the panda's hidden gene, values: " + RMCUtil.collectionToString(Arrays.asList(Panda.Gene.values())).toLowerCase()),
+                    String.format(argFormat, "pandamaingene <type>", "set the panda's main gene, values: " + RMCUtil.collectionToString(Arrays.asList(Panda.Gene.values())).toLowerCase()),
+            }, String.class);
+        }
+
+        if (Version.has1_12Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for tameable creatures, optionally specify 'nosit' to not spawn creature in sit stance."),
             String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
             String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
@@ -215,6 +222,8 @@ public class FlagSummon extends Flag {
         private Float jumpStrength = null;
         private Rabbit.Type rabbit = null;
         private boolean elder = false;
+        private Panda.Gene pandaHiddenGene = null;
+        private Panda.Gene pandaMainGene = null;
 
         public Customization(EntityType newType) {
             type = newType;
@@ -273,6 +282,11 @@ public class FlagSummon extends Flag {
 
             if (Version.has1_12Support()) {
                 parrot = c.parrot;
+            }
+
+            if (Version.has1_14Support()) {
+                pandaHiddenGene = c.pandaHiddenGene;
+                pandaMainGene = c.pandaMainGene;
             }
         }
 
@@ -386,10 +400,8 @@ public class FlagSummon extends Flag {
                         npc.setCatType(cat);
                     }
 
-                    if (pet) {
-                        if (color != null) {
-                            npc.setCollarColor(color);
-                        }
+                    if (pet && color != null) {
+                        npc.setCollarColor(color);
                     }
                 }
 
@@ -524,6 +536,17 @@ public class FlagSummon extends Flag {
 
                     if (parrot != null) {
                         npc.setVariant(parrot);
+                    }
+                }
+
+                if (Version.has1_14Support() && ent instanceof Panda) {
+                    Panda npc = (Panda) ent;
+
+                    if (pandaMainGene != null) {
+                        npc.setMainGene(pandaMainGene);
+                    }
+                    if (pandaHiddenGene != null) {
+                        npc.setHiddenGene(pandaHiddenGene);
                     }
                 }
 
@@ -1004,6 +1027,30 @@ public class FlagSummon extends Flag {
             return horseStyle;
         }
 
+        public void setParrotVariant(Parrot.Variant newVariant) {
+            parrot = newVariant;
+        }
+
+        public Parrot.Variant getParrotVariant() {
+            return parrot;
+        }
+
+        public void setPandaMainGene(Panda.Gene gene) {
+            pandaMainGene = gene;
+        }
+
+        public Panda.Gene getPandaMainGene() {
+            return pandaMainGene;
+        }
+
+        public void setPandaHiddenGene(Panda.Gene gene) {
+            pandaHiddenGene = gene;
+        }
+
+        public Panda.Gene getPandaHiddenGene() {
+            return pandaHiddenGene;
+        }
+
         public void setHasChest(boolean newHasChest) {
             hasChest = newHasChest;
         }
@@ -1084,6 +1131,10 @@ public class FlagSummon extends Flag {
             toHash += "jumpStrength: " + jumpStrength.toString();
             toHash += "rabbit: " + rabbit.toString();
             toHash += "elder: " + elder;
+
+            toHash += "parrot: " + parrot;
+            toHash += "pandaHiddenGene: " + pandaHiddenGene;
+            toHash += "pandaMainGene: " + pandaMainGene;
 
             return toHash.hashCode();
         }
@@ -1579,6 +1630,45 @@ public class FlagSummon extends Flag {
                     }
 
                     c.setPoweredCreeper(true);
+                } else if (Version.has1_12Support() && value.startsWith("parrot")) {
+                    if (type != EntityType.PARROT) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'parrot' argument on non-parrot creature!");
+                        continue;
+                    }
+
+                    value = value.substring("parrot".length()).trim();
+
+                    c.setParrotVariant(RMCUtil.parseEnum(value, Parrot.Variant.values()));
+
+                    if (c.getParrotVariant() == null) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'parrot' argument with invalid type: " + value);
+                    }
+                } else if (Version.has1_14Support() && value.startsWith("pandamaingene")) {
+                    if (type != EntityType.PANDA) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandamaingene' argument on non-panda creature!");
+                        continue;
+                    }
+
+                    value = value.substring("pandamaingene".length()).trim();
+
+                    c.setPandaMainGene(RMCUtil.parseEnum(value, Panda.Gene.values()));
+
+                    if (c.getPandaMainGene() == null) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandamaingene' argument with invalid type: " + value);
+                    }
+                } else if (Version.has1_14Support() && value.startsWith("pandahiddengene")) {
+                    if (type != EntityType.PANDA) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandahiddengene' argument on non-panda creature!");
+                        continue;
+                    }
+
+                    value = value.substring("pandahiddengene".length()).trim();
+
+                    c.setPandaHiddenGene(RMCUtil.parseEnum(value, Panda.Gene.values()));
+
+                    if (c.getPandaHiddenGene() == null) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandahiddengene' argument with invalid type: " + value);
+                    }
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
                 }
