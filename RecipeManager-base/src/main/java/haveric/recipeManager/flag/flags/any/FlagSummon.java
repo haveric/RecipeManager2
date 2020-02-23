@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsEntity;
 import haveric.recipeManager.tools.Version;
 import haveric.recipeManagerCommon.util.RMCUtil;
 import org.apache.commons.lang.Validate;
@@ -1176,200 +1177,29 @@ public class FlagSummon extends Flag {
                 } else if (value.equals("hit")) {
                     c.setHit(true);
                 } else if (value.equals("adult")) {
-                    switch (type) {
-                        case CHICKEN:
-                        case COW:
-                        case HORSE:
-                        case MUSHROOM_COW:
-                        case OCELOT:
-                        case PIG:
-                        case SHEEP:
-                        case VILLAGER:
-                        case WOLF:
-                        case RABBIT:
-                            break;
-
-                        case DONKEY:
-                        case MULE:
-                        case SKELETON_HORSE:
-                        case ZOMBIE_HORSE:
-                        case POLAR_BEAR:
-                            break;
-
-                        // 1.11
-                        case LLAMA:
-                            break;
-
-                        // 1.12
-                        case PARROT:
-                            break;
-
-                        // 1.13
-                        case TURTLE:
-                            break;
-
-                        // 1.14
-                        case CAT:
-                        case PANDA:
-                        case FOX:
-                        case WANDERING_TRADER:
-                        case TRADER_LLAMA:
-                            break;
-
-                        default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'adult' set on unsupported creature!");
-                            continue;
+                    if (ToolsEntity.isAgeable(type)) {
+                        c.setAdult(true);
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'adult' set on unsupported creature!");
                     }
-
-                    c.setAdult(true);
                 } else if (value.equals("baby")) {
-                    switch (type) {
-                        case CHICKEN:
-                        case COW:
-                        case HORSE:
-                        case MUSHROOM_COW:
-                        case OCELOT:
-                        case PIG:
-                        case SHEEP:
-                        case VILLAGER:
-                        case WOLF:
-                        case ZOMBIE: // has set/getBaby() but does not implement Ageable
-                            break;
-
-                        case RABBIT:
-                            break;
-
-                        case DONKEY:
-                        case MULE:
-                        case SKELETON_HORSE:
-                        case ZOMBIE_HORSE:
-                        case POLAR_BEAR:
-                            break;
-
-                        // 1.11
-                        case LLAMA:
-                            break;
-
-                        // 1.12
-                        case PARROT:
-                            break;
-
-                        // 1.13
-                        case TURTLE:
-                            break;
-
-                        // 1.14
-                        case CAT:
-                        case PANDA:
-                        case FOX:
-                        case WANDERING_TRADER:
-                        case TRADER_LLAMA:
-                            break;
-
-                        default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'baby' set on unsupported creature!");
-                            continue;
+                    if (ToolsEntity.isAgeable(type) || type == EntityType.ZOMBIE) {
+                        c.setBaby(true);
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'baby' set on unsupported creature!");
                     }
-
-                    c.setBaby(true);
                 } else if (value.equals("agelock")) {
-                    switch (type) {
-                        case CHICKEN:
-                        case COW:
-                        case HORSE:
-                        case MUSHROOM_COW:
-                        case OCELOT:
-                        case PIG:
-                        case SHEEP:
-                        case VILLAGER:
-                        case WOLF:
-                            break;
-
-                        case RABBIT:
-                            break;
-
-                        case DONKEY:
-                        case MULE:
-                        case SKELETON_HORSE:
-                        case ZOMBIE_HORSE:
-                        case POLAR_BEAR:
-                            break;
-
-                        // 1.11
-                        case LLAMA:
-                            break;
-
-                        // 1.12
-                        case PARROT:
-                            break;
-
-                        // 1.13
-                        case TURTLE:
-                            break;
-
-                        // 1.14
-                        case CAT:
-                        case PANDA:
-                        case FOX:
-                        case WANDERING_TRADER:
-                        case TRADER_LLAMA:
-                            break;
-
-                        default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'agelock' set on unsupported creature!");
-                            continue;
+                    if (ToolsEntity.isAgeable(type)) {
+                        c.setAgeLock(true);
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'agelock' set on unsupported creature!");
                     }
-
-                    c.setAgeLock(true);
                 } else if (value.equals("nobreed")) {
-                    switch (type) {
-                        case CHICKEN:
-                        case COW:
-                        case HORSE:
-                        case MUSHROOM_COW:
-                        case OCELOT:
-                        case PIG:
-                        case SHEEP:
-                        case VILLAGER:
-                        case WOLF:
-                            break;
-
-                        case RABBIT:
-                            break;
-
-                        case DONKEY:
-                        case MULE:
-                        case SKELETON_HORSE:
-                        case ZOMBIE_HORSE:
-                        case POLAR_BEAR:
-                            break;
-
-                        // 1.11
-                        case LLAMA:
-                            break;
-
-                        // 1.12
-                        case PARROT:
-                            break;
-
-                        // 1.13
-                        case TURTLE:
-                            break;
-
-                        // 1.14
-                        case CAT:
-                        case PANDA:
-                        case FOX:
-                        case WANDERING_TRADER:
-                        case TRADER_LLAMA:
-                            break;
-
-                        default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'nobreed' set on unsupported creature!");
-                            continue;
+                    if (ToolsEntity.isAgeable(type)) {
+                        c.setNoBreed(true);
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'nobreed' set on unsupported creature!");
                     }
-
-                    c.setNoBreed(true);
                 } else if (value.startsWith("pickup")) {
                     value = value.substring("pickup".length()).trim();
 
@@ -1379,39 +1209,20 @@ public class FlagSummon extends Flag {
                         c.setPickup(value.equals("true"));
                     }
                 } else if (value.startsWith("pet")) {
-                    switch (type) {
-                        case WOLF:
-                        case OCELOT:
-                            break;
+                    if (ToolsEntity.isTameable(type)) {
+                        c.setPet(true);
 
-                        case HORSE:
-                        case DONKEY:
-                        case MULE:
-                        case SKELETON_HORSE:
-                        case ZOMBIE_HORSE:
-                        case LLAMA:
-                        case PARROT:
-                            break;
+                        if (value.length() > "pet".length()) {
+                            value = value.substring("pet".length()).trim();
 
-                        case CAT:
-                        case TRADER_LLAMA:
-                            break;
-
-                        default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pet' on untameable creature!");
-                            continue;
-                    }
-
-                    c.setPet(true);
-
-                    if (value.length() > "pet".length()) {
-                        value = value.substring("pet".length()).trim();
-
-                        if (value.equals("nosit")) {
-                            c.setNoSit(true);
-                        } else {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pet' argument with unknown value: " + value);
+                            if (value.equals("nosit")) {
+                                c.setNoSit(true);
+                            } else {
+                                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pet' argument with unknown value: " + value);
+                            }
                         }
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pet' on untameable creature!");
                     }
                 } else if (value.startsWith("saddle")) {
                     if (type != EntityType.PIG && type != EntityType.HORSE ||

@@ -11,11 +11,12 @@ This file will be automatically overwritten when a new version is installed.
 ** Effect Type must now come first for custom effects
 ** Replaced 'amplify' with 'amplifier'
 ** Added options for particles and icon. Changed defaults to true
-* NEW FLAG: @SuspiciousStew: Adds potion effects to a suspicious stew
-* FIX: @IngredientCondition, @HoldItem: Fix potioneffect functionality
 * NEW: @IngredientCondition, @HoldItem: Add potioneffect's particles and icon checks
 * NEW: @IngredientCondition, @HoldItem: Add suspiciousstew potioneffect options
+* FIX: @IngredientCondition, @HoldItem: Fix potioneffect functionality
 * FIX: @HoldItem: Add missing potion, potioneffect, and banner documentation
+* FIX: @Summon Add Bee to 'adult', 'baby', 'agelock', and 'nobreed' options
+* NEW FLAG: @SuspiciousStew: Adds potion effects to a suspicious stew
 
 === v2.20.0 ===
 * NEW: Grindstone and Cartography Table recipe support
