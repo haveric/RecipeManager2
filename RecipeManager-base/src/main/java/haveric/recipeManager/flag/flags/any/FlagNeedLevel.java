@@ -83,10 +83,10 @@ public class FlagNeedLevel extends Flag {
     }
 
     public String getLevelString() {
-        String levelString = "" + getMinLevel();
+        String levelString = "" + minLevel;
 
-        if (getMaxLevel() > getMinLevel()) {
-            levelString += " - " + getMaxLevel();
+        if (maxLevel > minLevel) {
+            levelString += " - " + maxLevel;
         }
         return levelString;
     }
@@ -119,15 +119,15 @@ public class FlagNeedLevel extends Flag {
         setBoth = false;
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].split("-", 2);
         value = split[0].trim();
 
         try {
-            setMinLevel(Integer.parseInt(value));
-            setMaxLevel(getMinLevel());
+            minLevel = Integer.parseInt(value);
+            maxLevel = minLevel;
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required level number: " + value);
             return false;
@@ -137,7 +137,7 @@ public class FlagNeedLevel extends Flag {
             value = split[1].trim();
 
             try {
-                setMaxLevel(Integer.parseInt(value));
+                maxLevel = Integer.parseInt(value);
                 setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required level number: " + value);
@@ -145,7 +145,7 @@ public class FlagNeedLevel extends Flag {
             }
         }
 
-        if ((getMinLevel() <= 0 && getMaxLevel() <= 0) || getMaxLevel() < getMinLevel()) {
+        if ((minLevel <= 0 && maxLevel <= 0) || maxLevel < minLevel) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
@@ -168,10 +168,10 @@ public class FlagNeedLevel extends Flag {
                 resultString += "exact ";
             }
 
-            resultString += "level: " + getMinLevel();
+            resultString += "level: " + minLevel;
 
-            if (getMaxLevel() > getMinLevel()) {
-                resultString += "-" + getMaxLevel();
+            if (maxLevel > minLevel) {
+                resultString += "-" + maxLevel;
             }
 
             addResultLore(a, resultString);

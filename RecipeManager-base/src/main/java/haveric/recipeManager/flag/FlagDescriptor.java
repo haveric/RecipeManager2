@@ -61,7 +61,7 @@ public class FlagDescriptor {
 
     public Flag createFlagClass() {
         try {
-            return getFlag().getClass().newInstance();
+            return flag.getClass().newInstance();
         } catch (Throwable e) {
             MessageSender.getInstance().error(null, e, null);
         }

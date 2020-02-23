@@ -37,13 +37,13 @@ public class ItemResult extends ItemStack implements Flaggable {
     public ItemResult(ItemStack item, float newChance) {
         super(item);
 
-        setChance(newChance);
+        chance = newChance;
     }
 
     public ItemResult(Material type, int amount, int data, float newChance) {
         super(type, amount, (short) data);
 
-        setChance(newChance);
+        chance = newChance;
     }
 
     public ItemResult(ItemStack item, Flags newFlags) {

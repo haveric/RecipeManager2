@@ -93,7 +93,7 @@ public class FlagGameMode extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].toLowerCase().split(",");

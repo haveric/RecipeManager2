@@ -28,9 +28,9 @@ public class MultiResultRecipe extends BaseRecipe {
         if (recipe instanceof MultiResultRecipe) {
             MultiResultRecipe r = (MultiResultRecipe) recipe;
 
-            results = new ArrayList<>(r.getResults().size());
+            results = new ArrayList<>(r.results.size());
 
-            for (ItemResult i : r.getResults()) {
+            for (ItemResult i : r.results) {
                 results.add(i.clone());
             }
         }
@@ -97,7 +97,7 @@ public class MultiResultRecipe extends BaseRecipe {
     public String getResultsString() {
         StringBuilder s = new StringBuilder();
 
-        int resultNum = getResults().size();
+        int resultNum = results.size();
 
         if (resultNum > 0) {
             ItemStack result = getFirstResult();
@@ -179,7 +179,7 @@ public class MultiResultRecipe extends BaseRecipe {
         List<String> print = new ArrayList<>();
 
         if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            for (ItemResult result : getResults()) {
+            for (ItemResult result : results) {
                 print.add(getResultPrintName(result));
             }
         } else {
@@ -194,7 +194,7 @@ public class MultiResultRecipe extends BaseRecipe {
         List<String> recipes = new ArrayList<>();
 
         if (hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            for (ItemResult result : getResults()) {
+            for (ItemResult result : results) {
                 recipes.add(printBookResult(result));
             }
         } else {
@@ -223,7 +223,7 @@ public class MultiResultRecipe extends BaseRecipe {
         }
 
         if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {
-            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (getResults().size() - 1)));
+            s.append('\n').append(Messages.getInstance().parse("recipebook.moreresults", "{amount}", (results.size() - 1)));
         }
 
         s.append("\n\n");

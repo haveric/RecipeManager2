@@ -85,10 +85,10 @@ public class FlagNeedMoney extends Flag {
     public String getMoneyString() {
         String moneyString;
         if (Econ.getInstance().isEnabled()) {
-            moneyString = Econ.getInstance().getFormat(getMinMoney());
+            moneyString = Econ.getInstance().getFormat(minMoney);
 
-            if (getMaxMoney() > getMinMoney()) {
-                moneyString += " - " + Econ.getInstance().getFormat(getMaxMoney());
+            if (maxMoney > minMoney) {
+                moneyString += " - " + Econ.getInstance().getFormat(maxMoney);
             }
         } else {
             moneyString = null;
@@ -129,15 +129,15 @@ public class FlagNeedMoney extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].split("-", 2);
         value = split[0].trim();
 
         try {
-            setMinMoney(Double.parseDouble(value));
-            setMaxMoney(getMinMoney());
+            minMoney = Double.parseDouble(value);
+            maxMoney = minMoney;
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required money number: " + value);
             return false;
@@ -147,7 +147,7 @@ public class FlagNeedMoney extends Flag {
             value = split[1].trim();
 
             try {
-                setMaxMoney(Double.parseDouble(value));
+                maxMoney = Double.parseDouble(value);
                 setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required money number: " + value);
@@ -155,7 +155,7 @@ public class FlagNeedMoney extends Flag {
             }
         }
 
-        if ((getMinMoney() <= 0 && getMaxMoney() <= 0) || getMaxMoney() < getMinMoney()) {
+        if ((minMoney <= 0 && maxMoney <= 0) || maxMoney < minMoney) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }

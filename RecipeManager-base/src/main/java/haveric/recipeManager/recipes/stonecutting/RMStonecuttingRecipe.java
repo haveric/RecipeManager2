@@ -172,7 +172,7 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
             return null;
         }
 
-        return new StonecuttingRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()));
+        return new StonecuttingRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(ingredientChoice));
     }
 
     public boolean hasIngredientChoice() {
@@ -201,7 +201,7 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
         String print = getConditionResultName(result);
 
         if (print.equals("")) {
-            print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsItem.printChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);
@@ -213,8 +213,7 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        List<Material> choice = getIngredientChoice();
-        for (Material material : choice) {
+        for (Material material : ingredientChoice) {
             if (type == material) {
                 found++;
                 break;

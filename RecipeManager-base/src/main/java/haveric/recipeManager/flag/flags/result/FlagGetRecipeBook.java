@@ -112,7 +112,7 @@ public class FlagGetRecipeBook extends Flag {
 
     @Override
     public void onRegistered() {
-        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(getBookID());
+        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(bookID);
 
         if (books.isEmpty()) {
             ErrorReporter.getInstance().flagWarning(this, "Flag " + getFlagType() + " could not find book ID containing '" + bookID + "', flag ignored.");
@@ -134,7 +134,7 @@ public class FlagGetRecipeBook extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (getBookID() == null) {
+        if (bookID == null) {
             a.addCustomReason("Book ID not set!");
             return;
         }
@@ -144,7 +144,7 @@ public class FlagGetRecipeBook extends Flag {
             return;
         }
 
-        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(getBookID());
+        List<RecipeBook> books = RecipeBooks.getInstance().getBooksPartialMatch(bookID);
 
         if (books.isEmpty()) {
             return;

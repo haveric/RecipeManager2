@@ -87,10 +87,10 @@ public class FlagNeedExp extends Flag {
     }
 
     public String getExpString() {
-        String expString = "" + getMinExp();
+        String expString = "" + minExp;
 
         if (maxExp > minExp) {
-            expString += " - " + getMaxExp();
+            expString += " - " + maxExp;
         }
         return expString;
     }
@@ -120,7 +120,7 @@ public class FlagNeedExp extends Flag {
 
         setBoth = false;
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].split("-", 2);
@@ -132,8 +132,8 @@ public class FlagNeedExp extends Flag {
         }
 
         try {
-            setMinExp(Integer.parseInt(value));
-            setMaxExp(getMinExp());
+            minExp = Integer.parseInt(value);
+            maxExp = minExp;
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min req exp number: " + value);
             return false;
@@ -148,7 +148,7 @@ public class FlagNeedExp extends Flag {
             }
 
             try {
-                setMaxExp(Integer.parseInt(value));
+                maxExp = Integer.parseInt(value);
                 setBoth = true;
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max req exp number: " + value);
@@ -156,7 +156,7 @@ public class FlagNeedExp extends Flag {
             }
         }
 
-        if ((getMinExp() <= 0 && getMaxExp() <= 0) || getMaxExp() < getMinExp()) {
+        if ((minExp <= 0 && maxExp <= 0) || maxExp < minExp) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }
@@ -167,7 +167,7 @@ public class FlagNeedExp extends Flag {
     @Override
     public void onCheck(Args a) {
         if (!a.hasPlayer() || !checkExp(ToolsExp.getTotalExperience(a.player()))) {
-            a.addReason("flag.needexp", failMessage, "{exp}", getExpString(), "{minexp}", getMinExp(), "{maxexp}", getMaxExp(), "{playerexp}", ToolsExp.getTotalExperience(a.player()));
+            a.addReason("flag.needexp", failMessage, "{exp}", getExpString(), "{minexp}", minExp, "{maxexp}", maxExp, "{playerexp}", ToolsExp.getTotalExperience(a.player()));
         }
     }
 
@@ -179,10 +179,10 @@ public class FlagNeedExp extends Flag {
                 resultString += "exact ";
             }
 
-            resultString += "exp: " + getMinExp();
+            resultString += "exp: " + minExp;
 
-            if (getMaxExp() > getMinExp()) {
-                resultString += "-" + getMaxExp();
+            if (maxExp > minExp) {
+                resultString += "-" + maxExp;
             }
             addResultLore(a, resultString);
         }

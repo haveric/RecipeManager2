@@ -124,7 +124,7 @@ public class FlagWeather extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].toLowerCase().split(",");
@@ -181,7 +181,7 @@ public class FlagWeather extends Flag {
             checkWeather = Bit.CLEAR;
         }
 
-        if ((getWeather() & checkWeather) != checkWeather) {
+        if ((weather & checkWeather) != checkWeather) {
             a.addReason("flag.weather", failMessage, "{weather}", getWeatherString());
         }
     }

@@ -140,7 +140,7 @@ public class FlagInventory extends Flag {
                         }
                     }
                 } else if (value.toLowerCase().startsWith("failmsg")) {
-                    setFailMessage(RMCUtil.trimExactQuotes(value.substring("failmsg".length())));
+                    failMessage = RMCUtil.trimExactQuotes(value.substring("failmsg".length()));
                 }
             }
         }
@@ -165,7 +165,7 @@ public class FlagInventory extends Flag {
         if (a.hasInventoryView()) {
             InventoryType craftedType = a.inventoryView().getType();
 
-            for (InventoryType type : getInventories()) {
+            for (InventoryType type : inventories) {
                 if (craftedType.equals(type)) {
                     success = true;
                     break;
@@ -201,7 +201,7 @@ public class FlagInventory extends Flag {
         }
 
         if (!success) {
-            a.addReason("flag.inventory", failMessage, "{inventory}", getInventories().toString(), "{title}", a.inventoryView().getTitle());
+            a.addReason("flag.inventory", failMessage, "{inventory}", inventories.toString(), "{title}", a.inventoryView().getTitle());
         }
     }
 

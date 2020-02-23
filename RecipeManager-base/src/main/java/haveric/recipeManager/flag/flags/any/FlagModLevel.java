@@ -138,7 +138,7 @@ public class FlagModLevel extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         value = split[0].trim();
@@ -178,7 +178,7 @@ public class FlagModLevel extends Flag {
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addResultLore(a, "Mod Level: " + getModifier() + " " + getAmount());
+            addResultLore(a, "Mod Level: " + mod + " " + amount);
         }
     }
 

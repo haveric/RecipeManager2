@@ -73,7 +73,7 @@ public class FlagRepairCost extends Flag {
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
         try {
-            setCost(Integer.parseInt(value.trim()));
+            cost = Integer.parseInt(value.trim());
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid number: " + value);
             return false;
@@ -90,7 +90,7 @@ public class FlagRepairCost extends Flag {
                 return;
             }
 
-            addResultLore(a, "Repair cost: " + getCost());
+            addResultLore(a, "Repair cost: " + cost);
         }
     }
 
@@ -104,7 +104,7 @@ public class FlagRepairCost extends Flag {
 
             Repairable repairable = (Repairable) meta;
 
-            repairable.setRepairCost(getCost());
+            repairable.setRepairCost(cost);
 
             a.result().setItemMeta(meta);
         }

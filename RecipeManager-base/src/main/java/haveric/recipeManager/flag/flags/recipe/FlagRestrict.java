@@ -60,7 +60,7 @@ public class FlagRestrict extends Flag {
     @Override
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
-        setMessage(RMCUtil.trimExactQuotes(value));
+        message = RMCUtil.trimExactQuotes(value);
         return true;
     }
 

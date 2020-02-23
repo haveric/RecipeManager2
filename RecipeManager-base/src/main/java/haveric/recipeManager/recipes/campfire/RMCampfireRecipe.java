@@ -207,7 +207,7 @@ public class RMCampfireRecipe extends SingleResultRecipe {
             return null;
         }
 
-        return new CampfireRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()), experience, getCookTicks());
+        return new CampfireRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(ingredientChoice), experience, getCookTicks());
     }
 
     public boolean hasIngredientChoice() {
@@ -236,7 +236,7 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         String print = getConditionResultName(result);
 
         if (print.equals("")) {
-            print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsItem.printChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);
@@ -266,8 +266,7 @@ public class RMCampfireRecipe extends SingleResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        List<Material> choice = getIngredientChoice();
-        for (Material material : choice) {
+        for (Material material : ingredientChoice) {
             if (type == material) {
                 found++;
                 break;

@@ -69,7 +69,7 @@ public class Args {
 
     public void setInventoryView(InventoryView newInventoryView) {
         inventoryView = newInventoryView;
-        setInventory(inventoryView.getTopInventory());
+        inventory = inventoryView.getTopInventory();
     }
 
     public void setInventory(Inventory newInventory) {
@@ -495,23 +495,20 @@ public class Args {
      * @return same instance
      */
     public Args processArgs() {
-        Player player = player();
-        UUID playerUUID = playerUUID();
-
         if (player == null && playerUUID != null) {
-            setPlayer(Bukkit.getPlayer(playerUUID));
+            player = Bukkit.getPlayer(playerUUID);
         }
 
         if (playerUUID == null && player != null) {
-            setPlayerUUID(player().getUniqueId());
+            playerUUID = player.getUniqueId();
         }
 
-        if (location() == null && player != null) {
-            setLocation(player().getLocation());
+        if (location == null && player != null) {
+            location = player.getLocation();
         }
 
-        if (recipeType() == null && recipe() != null) {
-            setRecipeType(recipe().getType());
+        if (recipeType == null && recipe != null) {
+            recipeType = recipe.getType();
         }
 
         return this;

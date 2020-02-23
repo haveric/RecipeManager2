@@ -182,9 +182,9 @@ public class FlagLightLevel extends Flag {
         String[] split = value.split("\\|", 2);
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         } else {
-            setFailMessage(null);
+            failMessage = null;
         }
 
         value = split[0].trim().toLowerCase();

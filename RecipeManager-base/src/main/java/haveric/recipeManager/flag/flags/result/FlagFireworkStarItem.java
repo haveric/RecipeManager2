@@ -97,7 +97,7 @@ public class FlagFireworkStarItem extends Flag {
             return false;
         }
 
-        setEffect(newEffect);
+        effect = newEffect;
 
         return true;
     }
@@ -119,7 +119,7 @@ public class FlagFireworkStarItem extends Flag {
 
             FireworkEffectMeta effectMeta = (FireworkEffectMeta) meta;
 
-            effectMeta.setEffect(getEffect());
+            effectMeta.setEffect(effect);
 
             a.result().setItemMeta(effectMeta);
         }

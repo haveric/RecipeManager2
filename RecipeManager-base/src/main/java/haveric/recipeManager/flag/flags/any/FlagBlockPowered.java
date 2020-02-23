@@ -85,9 +85,9 @@ public class FlagBlockPowered extends Flag {
             String check = arg.toLowerCase();
 
             if (check.equals("indirect")) {
-                setIndirect(true);
+                indirect = true;
             } else if (check.startsWith("failmsg")) {
-                setFailMessage(RMCUtil.trimExactQuotes(arg.substring("failmsg".length())));
+                failMessage = RMCUtil.trimExactQuotes(arg.substring("failmsg".length()));
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
             }
@@ -118,7 +118,7 @@ public class FlagBlockPowered extends Flag {
                 (Version.has1_14Support() && (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER || blockType == Material.CAMPFIRE))) {
 
             boolean valid;
-            if (isIndirect()) {
+            if (indirect) {
                 valid = block.isBlockIndirectlyPowered() || block.isBlockPowered();
             } else {
                 valid = block.isBlockPowered();

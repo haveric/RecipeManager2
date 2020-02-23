@@ -180,12 +180,12 @@ public class FlagPotionItem extends Flag {
             }
         } else {
             if (Version.has1_9Support()) {
-                setBasePotion(Tools.parsePotion19(value, getFlagType()));
+                basePotion = Tools.parsePotion19(value, getFlagType());
             } else {
                 Potion p = Tools.parsePotion18(value, getFlagType());
 
                 if (p != null) {
-                    setData(p.toDamageValue());
+                    data = p.toDamageValue();
                 }
             }
         }
@@ -205,14 +205,13 @@ public class FlagPotionItem extends Flag {
             return;
         }
 
-        if (getBasePotion() != null) {
-            ItemStack base = getBasePotion();
-            Material baseType = base.getType();
+        if (basePotion != null) {
+            Material baseType = basePotion.getType();
             if (baseType != Material.POTION && baseType != a.result().getType()) {
                 a.result().setType(baseType);
             }
 
-            PotionMeta baseMeta = (PotionMeta) base.getItemMeta();
+            PotionMeta baseMeta = (PotionMeta) basePotion.getItemMeta();
             PotionMeta resultMeta = (PotionMeta) a.result().getItemMeta();
             if (baseMeta != null && resultMeta != null) {
                 resultMeta.setBasePotionData(baseMeta.getBasePotionData());
@@ -227,10 +226,10 @@ public class FlagPotionItem extends Flag {
             a.result().setDurability(data);
         }
 
-        if (!getEffects().isEmpty()) {
+        if (!effects.isEmpty()) {
             PotionMeta meta = (PotionMeta) a.result().getItemMeta();
 
-            for (PotionEffect effect : getEffects()) {
+            for (PotionEffect effect : effects) {
                 meta.addCustomEffect(effect, true);
             }
 

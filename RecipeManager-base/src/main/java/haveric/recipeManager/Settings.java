@@ -1,9 +1,9 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Tools;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -15,10 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 import static org.bukkit.Tag.REGISTRY_ITEMS;
@@ -114,13 +111,13 @@ public class Settings {
 
             MATERIAL_FAIL_DEFAULT = Material.BARRIER;
 
-            itemDatas = new HashMap<>();
+            itemDatas = new EnumMap<>(Material.class);
             choicesAliases = new HashMap<>();
             materialNames = new HashMap<>();
-            materialDataNames = new HashMap<>();
+            materialDataNames = new EnumMap<>(Material.class);
             enchantNames = new HashMap<>();
-            materialPrint = new HashMap<>();
-            materialDataPrint = new HashMap<>();
+            materialPrint = new EnumMap<>(Material.class);
+            materialDataPrint = new EnumMap<>(Material.class);
             enchantPrint = new HashMap<>();
 
             // Load/reload/generate config.yml
@@ -245,7 +242,7 @@ public class Settings {
                     materialString = materialString.trim();
 
                     if (materialString.startsWith("tag:") || materialString.startsWith("t:")) {
-                        String tagString = materialString.substring(materialString.indexOf(":") + 1);
+                        String tagString = materialString.substring(materialString.indexOf(':') + 1);
 
                         String[] tagSplit = tagString.split(":");
                         String namespace;
@@ -271,7 +268,7 @@ public class Settings {
                             materials.addAll(tag.getValues());
                         }
                     } else if (materialString.startsWith("alias:") || materialString.startsWith("a:")) {
-                        String aliasString = materialString.substring(materialString.indexOf(":") + 1);
+                        String aliasString = materialString.substring(materialString.indexOf(':') + 1);
 
                         List<Material> choiceMaterials = getChoicesAlias(aliasString);
                         if (choiceMaterials == null) {

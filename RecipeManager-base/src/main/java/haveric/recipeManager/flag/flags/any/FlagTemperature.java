@@ -157,7 +157,7 @@ public class FlagTemperature extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].split(",", 2);
@@ -169,7 +169,7 @@ public class FlagTemperature extends Flag {
                 value = value.substring(2).trim();
 
                 try {
-                    setLTETemp(Double.parseDouble(value));
+                    lteTemp = Double.parseDouble(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid <= temperature number: " + value);
                 }
@@ -177,7 +177,7 @@ public class FlagTemperature extends Flag {
                 value = value.substring(2).trim();
 
                 try {
-                    setGTETemp(Double.parseDouble(value));
+                    gteTemp = Double.parseDouble(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid >= temperature number: " + value);
                 }
@@ -185,7 +185,7 @@ public class FlagTemperature extends Flag {
                 value = value.substring(1).trim();
 
                 try {
-                    setLTTemp(Double.parseDouble(value));
+                    ltTemp = Double.parseDouble(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid < temperature number: " + value);
                 }
@@ -193,14 +193,14 @@ public class FlagTemperature extends Flag {
                 value = value.substring(1).trim();
 
                 try {
-                    setGTTemp(Double.parseDouble(value));
+                    gtTemp = Double.parseDouble(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid > temperature number: " + value);
                 }
             } else {
                 // Default to >= when no operator set
                 try {
-                    setGTETemp(Double.parseDouble(value));
+                    gteTemp = Double.parseDouble(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid  temperature number: " + value);
                 }

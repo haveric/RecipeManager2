@@ -27,24 +27,24 @@ public class FuelRecipe extends BaseRecipe {
 
     public FuelRecipe(Material type, float burnTime) {
         setIngredient(new ItemStack(type, 1, RMCVanilla.DATA_WILDCARD));
-        setMinTime(burnTime);
+        minTime = burnTime;
     }
 
     public FuelRecipe(Material type, float newMinTime, float newMaxTime) {
         setIngredient(new ItemStack(type, 1, RMCVanilla.DATA_WILDCARD));
-        setMinTime(newMinTime);
-        setMaxTime(newMaxTime);
+        minTime = newMinTime;
+        maxTime = newMaxTime;
     }
 
     public FuelRecipe(Material type, short data, float burnTime) {
         setIngredient(new ItemStack(type, 1, data));
-        setMinTime(burnTime);
+        minTime = burnTime;
     }
 
     public FuelRecipe(Material type, short data, float newMinTime, float newMaxTime) {
         setIngredient(new ItemStack(type, 1, data));
-        setMinTime(newMinTime);
-        setMaxTime(newMaxTime);
+        minTime = newMinTime;
+        maxTime = newMaxTime;
     }
 
     public FuelRecipe(BaseRecipe recipe) {
@@ -181,7 +181,7 @@ public class FuelRecipe extends BaseRecipe {
         if (hasCustomName()) {
             print.add(RMCChatColor.ITALIC + getName());
         } else {
-            print.add(ToolsItem.getName(getIngredient()) + " Fuel");
+            print.add(ToolsItem.getName(ingredient) + " Fuel");
         }
 
         return print;
@@ -207,7 +207,7 @@ public class FuelRecipe extends BaseRecipe {
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(getIngredient(), RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsItem.print(ingredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);

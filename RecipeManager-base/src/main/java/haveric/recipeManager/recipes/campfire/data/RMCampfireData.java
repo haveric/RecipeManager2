@@ -92,13 +92,13 @@ public class RMCampfireData implements ConfigurationSerializable {
     public UUID getItemUUID(int slot) {
         UUID uuid = null;
         if (slot == 0) {
-            uuid = getItem0UUID();
+            uuid = item0UUID;
         } else if (slot == 1) {
-            uuid = getItem1UUID();
+            uuid = item1UUID;
         } else if (slot == 2) {
-            uuid = getItem2UUID();
+            uuid = item2UUID;
         } else if (slot == 3) {
-            uuid = getItem3UUID();
+            uuid = item3UUID;
         }
 
         return uuid;
@@ -106,13 +106,13 @@ public class RMCampfireData implements ConfigurationSerializable {
 
     public void setItemId(int slot, UUID itemUUID) {
         if (slot == 0) {
-            setItem0UUID(itemUUID);
+            item0UUID = itemUUID;
         } else if (slot == 1) {
-            setItem1UUID(itemUUID);
+            item1UUID = itemUUID;
         } else if (slot == 2) {
-            setItem2UUID(itemUUID);
+            item2UUID = itemUUID;
         } else if (slot == 3) {
-            setItem3UUID(itemUUID);
+            item3UUID = itemUUID;
         }
     }
 

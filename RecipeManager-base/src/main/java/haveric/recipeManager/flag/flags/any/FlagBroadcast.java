@@ -93,12 +93,11 @@ public class FlagBroadcast extends Flag {
         super.onParse(value, fileName, lineNum);
         String[] split = value.split("\\|", 2);
 
-        String message = RMCUtil.trimExactQuotes(split[0]);
-        setMessage(message);
-        setPermission(null);
+        message = RMCUtil.trimExactQuotes(split[0]);
+        permission = null;
 
         if (split.length > 1) {
-            setPermission(split[1].trim().toLowerCase());
+            permission = split[1].trim().toLowerCase();
         }
 
         return true;

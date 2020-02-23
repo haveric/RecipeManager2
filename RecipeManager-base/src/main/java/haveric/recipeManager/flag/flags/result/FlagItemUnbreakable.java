@@ -39,7 +39,7 @@ public class FlagItemUnbreakable extends Flag {
     }
 
     public FlagItemUnbreakable(FlagItemUnbreakable flag) {
-        unbreakable = flag.isUnbreakable();
+        unbreakable = flag.unbreakable;
     }
 
     public void setUnbreakable(boolean isUnbreakable) {
@@ -59,9 +59,9 @@ public class FlagItemUnbreakable extends Flag {
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
         if (value != null && value.equalsIgnoreCase("false")) {
-            setUnbreakable(false);
+            unbreakable = false;
         } else {
-            setUnbreakable(true);
+            unbreakable = true;
         }
 
         return true;

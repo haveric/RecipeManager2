@@ -172,7 +172,7 @@ public class TestCraftInventory implements Inventory {
 
     @Override
     public void setStorageContents(ItemStack[] items) throws IllegalArgumentException {
-        setContents(items);
+        inventory = items;
     }
 
     public boolean contains(Material material) {

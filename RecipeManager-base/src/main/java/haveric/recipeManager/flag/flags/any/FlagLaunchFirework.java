@@ -139,12 +139,12 @@ public class FlagLaunchFirework extends Flag {
             value = value.substring("chance".length()).replace('%', ' ').trim();
 
             try {
-                setChance(Float.parseFloat(value));
+                chance = Float.parseFloat(value);
             } catch (NumberFormatException e) {
                 // TODO: Handle Exception
             }
 
-            if (getChance() < 0 || getChance() > 100) {
+            if (chance < 0 || chance > 100) {
                 ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'chance' argument value: '" + value + "', it must be a number from 0 to 100");
                 return false;
             }

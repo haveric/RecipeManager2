@@ -26,7 +26,7 @@ allprojects {
             url 'https://hub.spigotmc.org/nexus/content/groups/public/'
         }
         maven {
-            name 'Jitpack' // For recipeManager.common and Vault
+            name 'Jitpack' // For Vault
             url 'https://jitpack.io'
         }
         maven {
@@ -37,7 +37,7 @@ allprojects {
             name 'Alt source for Spigot 2'
             url 'https://repo.aikar.co/nexus/content/repositories/aikar/'
         }
-        // For 1.12, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
+        // For 1.12-1.14, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
         mavenLocal()
     }
 }

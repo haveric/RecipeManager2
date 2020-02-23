@@ -282,7 +282,7 @@ public class FlagCooldown extends Flag {
             } else {
                 message = "flag.cooldown.fail.perplayer";
             }
-            a.addReason(message, getFailMessage(), "{time}", getTimeLeftStringFor(a.playerUUID()));
+            a.addReason(message, failMessage, "{time}", getTimeLeftStringFor(a.playerUUID()));
         }
     }
 
@@ -298,7 +298,7 @@ public class FlagCooldown extends Flag {
         }
 
         MutableInt get = cooldownTime.get(playerUUID);
-        int diff = (int) (System.currentTimeMillis() / 1000) + getCooldownTime();
+        int diff = (int) (System.currentTimeMillis() / 1000) + cooldown;
 
         if (get == null) {
             get = new MutableInt(diff);
@@ -313,7 +313,7 @@ public class FlagCooldown extends Flag {
         } else {
             message = "flag.cooldown.set.perplayer";
         }
-        a.addEffect(message, getCraftMessage(), "{time}", timeToString(getCooldownTime()));
+        a.addEffect(message, craftMessage, "{time}", timeToString(cooldown));
     }
 
     /*

@@ -112,14 +112,14 @@ public class FlagDisplayResult extends Flag {
                 return false;
             }
 
-            setDisplayItem(item);
+            displayItem = item;
         }
 
         if (args.length > 1) {
             value = args[1].trim();
 
             if (value.equals("silentfail")) {
-                setSilentFail(true);
+                silentFail = true;
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
             }

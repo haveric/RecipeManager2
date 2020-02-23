@@ -71,7 +71,7 @@ public class FlagFireworkItem extends Flag {
     public FlagFireworkItem(FlagFireworkItem flag) {
         effects.addAll(flag.effects);
 
-        power = flag.getPower();
+        power = flag.power;
     }
 
     @Override
@@ -132,12 +132,12 @@ public class FlagFireworkItem extends Flag {
             value = value.substring("power".length()).trim();
 
             try {
-                setPower(Integer.parseInt(value));
+                power = Integer.parseInt(value);
             } catch (NumberFormatException e) {
                 // TODO: Handle exception
             }
 
-            if (getPower() < 0 || getPower() > 128) {
+            if (power < 0 || power > 128) {
                 ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
                 return false;
             }
@@ -165,8 +165,8 @@ public class FlagFireworkItem extends Flag {
 
             FireworkMeta fireworkMeta = (FireworkMeta) meta;
 
-            fireworkMeta.addEffects(getEffects());
-            fireworkMeta.setPower(getPower());
+            fireworkMeta.addEffects(effects);
+            fireworkMeta.setPower(power);
 
             a.result().setItemMeta(fireworkMeta);
         }

@@ -24,7 +24,7 @@ public class RecipeManagerPrepareCraftEvent extends Event {
         recipe = newRecipe;
         result = newResult;
         player = newPlayer;
-        setWorkbenchLocation(newWorkbench);
+        workbench = newWorkbench;
     }
 
     @Override

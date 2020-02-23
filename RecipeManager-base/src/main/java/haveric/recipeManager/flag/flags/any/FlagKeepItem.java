@@ -107,7 +107,7 @@ public class FlagKeepItem extends Flag {
      *            can be Integer or ItemStack object
      */
     public void addItem(ItemStack item, Object object) {
-        String key = "" + item.getType().toString();
+        String key = item.getType().toString();
 
         if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
             key += ":" + item.getDurability();
@@ -126,7 +126,7 @@ public class FlagKeepItem extends Flag {
             return false;
         }
 
-        String key = "" + item.getType().toString();
+        String key = item.getType().toString();
         if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
             key += ":" + item.getDurability();
         }

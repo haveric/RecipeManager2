@@ -98,7 +98,7 @@ public class BrewRecipe extends MultiResultRecipe {
     }
 
     public String getIndexString() {
-        String indexString = "" + ingredient.getType().toString();
+        String indexString = ingredient.getType().toString();
 
         if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
             indexString += ":" + ingredient.getDurability();
@@ -121,13 +121,9 @@ public class BrewRecipe extends MultiResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        ItemStack i = getIngredient();
-
-        if (i.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || i.getDurability() == data)) {
+        if (ingredient.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || ingredient.getDurability() == data)) {
             found++;
         }
-
-        ItemStack potion = getPotion();
 
         if (potion.getType() == type && (data == null || data == RMCVanilla.DATA_WILDCARD || potion.getDurability() == data)) {
             found++;

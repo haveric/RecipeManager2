@@ -111,7 +111,7 @@ public class FlagPotionEffect extends Flag {
         value = value.toLowerCase();
 
         if (value.equals("clear")) {
-            setClear(true);
+            clear = true;
             return true;
         }
 
@@ -130,7 +130,7 @@ public class FlagPotionEffect extends Flag {
             return;
         }
 
-        if (isClear()) {
+        if (clear) {
             for (PotionEffect e : a.player().getActivePotionEffects()) {
                 a.player().removePotionEffect(e.getType());
             }

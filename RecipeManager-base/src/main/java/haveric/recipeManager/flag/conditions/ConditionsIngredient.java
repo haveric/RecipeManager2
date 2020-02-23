@@ -16,7 +16,7 @@ public class ConditionsIngredient extends Conditions {
         super(original);
 
         needed = original.needed;
-        setNeededLeft(original.getNeededLeft());
+        neededLeft = original.neededLeft;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ConditionsIngredient extends Conditions {
 
     public void setNeeded(int newNeeded) {
         needed = newNeeded;
-        setNeededLeft(needed);
+        neededLeft = needed;
     }
 
     public boolean hasNeeded() {
@@ -51,7 +51,7 @@ public class ConditionsIngredient extends Conditions {
         if (hasNeeded()) {
             addReasons = false;
 
-            if (getNeededLeft() == 0) {
+            if (neededLeft == 0) {
                 return true;
             }
         }

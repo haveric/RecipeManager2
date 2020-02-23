@@ -153,7 +153,7 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append("shaped ").append(getWidth()).append('x').append(getHeight());
+        s.append("shaped ").append(width).append('x').append(height);
 
         s.append(" (");
 
@@ -329,9 +329,8 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
     @Override
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
-        Map<Character, RecipeChoice> ingredientChoiceMap = getIngredientsChoiceMap();
 
-        for (Map.Entry<Character, RecipeChoice> entry : ingredientChoiceMap.entrySet()) {
+        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
             if (choice instanceof RecipeChoice.MaterialChoice) {

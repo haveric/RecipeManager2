@@ -109,7 +109,7 @@ public class FlagBiome extends Flag {
         String[] split = value.split("\\|", 2);
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].trim().toLowerCase().split(",");
@@ -145,7 +145,7 @@ public class FlagBiome extends Flag {
         }
 
         Block b = a.location().getBlock();
-        Boolean set = getBiomes().get(b.getBiome());
+        Boolean set = biomes.get(b.getBiome());
 
         if (set == null) {
             a.addReason("flag.biome.allowed", failMessage, "{biomes}", getBiomesString(true));

@@ -105,7 +105,7 @@ public class FlagAddToBook extends Flag {
             value = value.substring(index + "volume".length()).trim();
 
             try {
-                setVolume(Integer.parseInt(value));
+                volume = Integer.parseInt(value);
                 newBookName = newBookName.substring(0, index).trim();
             } catch (NumberFormatException e) {
                 // TODO: Handle error

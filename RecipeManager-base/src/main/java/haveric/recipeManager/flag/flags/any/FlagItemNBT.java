@@ -88,17 +88,17 @@ public class FlagItemNBT extends Flag {
         if (args.length > 1) {
             String display = args[1].trim().toLowerCase();
             if (display.equals("display")) {
-                setDisplayNBT(nbt);
+                displayNBT = nbt;
             } else if (display.equals("result")) {
-                setResultNBT(nbt);
+                resultNBT = nbt;
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ". Defaulting to set nbt in both locations.");
-                setDisplayNBT(nbt);
-                setResultNBT(nbt);
+                displayNBT = nbt;
+                resultNBT = nbt;
             }
         } else {
-            setDisplayNBT(nbt);
-            setResultNBT(nbt);
+            displayNBT = nbt;
+            resultNBT = nbt;
         }
 
         return true;
@@ -107,14 +107,14 @@ public class FlagItemNBT extends Flag {
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addNBTRaw(a, getDisplayNBT());
+            addNBTRaw(a, displayNBT);
         }
     }
 
     @Override
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
-            addNBTRaw(a, getResultNBT());
+            addNBTRaw(a, resultNBT);
         }
     }
 

@@ -60,7 +60,7 @@ public class FlagCustomModelData extends Flag {
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
         try {
-            setCustomModelData(Integer.parseInt(value));
+            customModelData = Integer.parseInt(value);
         } catch(NumberFormatException e) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid number: " + value);
             return false;
@@ -79,7 +79,7 @@ public class FlagCustomModelData extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
             if (meta != null) {
-                int modelData = getCustomModelData();
+                int modelData = customModelData;
                 if (modelData != Integer.MIN_VALUE) {
                     meta.setCustomModelData(modelData);
                     a.result().setItemMeta(meta);

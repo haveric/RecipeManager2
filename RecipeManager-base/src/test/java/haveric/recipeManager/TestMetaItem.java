@@ -38,7 +38,7 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
         if (meta == null) {
             return;
         }
-        setDisplayName(meta.getDisplayName());
+        displayName = meta.displayName;
         this.locName = meta.locName;
 
         setLore(meta.getLore());
@@ -46,13 +46,13 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
         this.customModelData = meta.customModelData;
         this.blockData = meta.blockData;
 
-        this.enchantments = new HashMap<>(meta.getEnchants());
+        this.enchantments = new HashMap<>(meta.enchantments);
 
-        for (ItemFlag flag : meta.getItemFlags()) {
+        for (ItemFlag flag : meta.flags) {
             addItemFlags(flag);
         }
 
-        this.repairCost = meta.getRepairCost();
+        this.repairCost = meta.repairCost;
         this.hideFlag = meta.hideFlag;
         this.unbreakable = meta.unbreakable;
         this.damage = meta.damage;
@@ -268,7 +268,7 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     boolean isEmpty() {
-        return !(hasDisplayName() || hasLocalizedName() || hasEnchants() || hasLore() || hasCustomModelData() || hasBlockData() || hasRepairCost() || hideFlag != 0 || isUnbreakable() || hasDamage());
+        return !(hasDisplayName() || hasLocalizedName() || hasEnchants() || hasLore() || hasCustomModelData() || hasBlockData() || hasRepairCost() || hideFlag != 0 || unbreakable || hasDamage());
     }
 
     @Override
@@ -340,7 +340,7 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
                 && (this.hasBlockData() ? that.hasBlockData() && this.blockData.equals(that.blockData) : !that.hasBlockData())
                 && (this.hasRepairCost() ? that.hasRepairCost() && this.repairCost == that.repairCost : !that.hasRepairCost())
                 && (this.hideFlag == that.hideFlag)
-                && (this.isUnbreakable() == that.isUnbreakable())
+                && (this.unbreakable == that.unbreakable)
                 && (this.hasDamage() ? that.hasDamage() && this.damage == that.damage : !that.hasDamage())
                 && (this.version == that.version);
     }

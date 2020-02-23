@@ -227,7 +227,7 @@ public class CraftRecipe extends PreparableResultRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append("shaped ").append(getWidth()).append('x').append(getHeight());
+        s.append("shaped ").append(width).append('x').append(height);
 
         s.append(" (");
 
@@ -418,7 +418,7 @@ public class CraftRecipe extends PreparableResultRecipe {
 
         // If ingredients get mirrored at any point, display them as they were written
         ItemStack[] displayIngredients = ingredients;
-        if (isMirrorShape()) {
+        if (mirror) {
             displayIngredients = Tools.mirrorItemMatrix(ingredients);
         }
 
@@ -427,7 +427,7 @@ public class CraftRecipe extends PreparableResultRecipe {
             int col = i % 3 + 1;
             int row = i / 3 + 1;
 
-            if (col <= getWidth() && row <= getHeight()) {
+            if (col <= width && row <= height) {
                 if (displayIngredients[i] == null) {
                     s.append('[').append(RMCChatColor.WHITE).append('_').append(RMCChatColor.GRAY).append(']');
                 } else {
@@ -464,7 +464,7 @@ public class CraftRecipe extends PreparableResultRecipe {
                 }
             }
 
-            if (col == getWidth()) {
+            if (col == width) {
                 s.append('\n');
             }
         }

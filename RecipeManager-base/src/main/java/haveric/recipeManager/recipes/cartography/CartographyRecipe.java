@@ -178,18 +178,14 @@ public class CartographyRecipe extends PreparableResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        List<Material> primary = getPrimaryIngredient();
-
-        for (Material material : primary) {
+        for (Material material : primaryIngredient) {
             if (type == material) {
                 found++;
                 break;
             }
         }
 
-        List<Material> secondary = getSecondaryIngredient();
-
-        for (Material material : secondary) {
+        for (Material material : secondaryIngredient) {
             if (type == material) {
                 found++;
                 break;

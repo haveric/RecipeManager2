@@ -78,7 +78,7 @@ public class FlagLocalizedName extends Flag {
     @Override
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
-        setName(RMCUtil.trimExactQuotes(value));
+        name = RMCUtil.trimExactQuotes(value);
         return true;
     }
 
@@ -91,8 +91,8 @@ public class FlagLocalizedName extends Flag {
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (meta != null && getName() != null) {
-                String localizedName = RMCUtil.parseColors(a.parseVariables(getName()), false);
+            if (meta != null && name != null) {
+                String localizedName = RMCUtil.parseColors(a.parseVariables(name), false);
                 meta.setLocalizedName(localizedName);
 
                 a.result().setItemMeta(meta);

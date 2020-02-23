@@ -95,10 +95,10 @@ public class FlagItemName extends Flag {
     }
 
     public String getPrintName() {
-        if (getDisplayName() != null) {
-            return getDisplayName();
+        if (displayName != null) {
+            return displayName;
         } else {
-            return getResultName();
+            return resultName;
         }
     }
 
@@ -117,17 +117,17 @@ public class FlagItemName extends Flag {
         if (args.length > 1) {
             String display = args[1].trim().toLowerCase();
             if (display.equals("display")) {
-                setDisplayName(name);
+                displayName = name;
             } else if (display.equals("result")) {
-                setResultName(name);
+                resultName = name;
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ". Defaulting to set name in both locations.");
-                setDisplayName(name);
-                setResultName(name);
+                displayName = name;
+                resultName = name;
             }
         } else {
-            setDisplayName(name);
-            setResultName(name);
+            displayName = name;
+            resultName = name;
         }
 
         return true;
@@ -137,10 +137,10 @@ public class FlagItemName extends Flag {
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
             String name;
-            if (getDisplayName() == null) {
+            if (displayName == null) {
                 name = null;
             } else {
-                name = a.parseVariables(getDisplayName(), true);
+                name = a.parseVariables(displayName, true);
             }
 
             setMetaName(a, name);
@@ -151,10 +151,10 @@ public class FlagItemName extends Flag {
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
             String name;
-            if (getResultName() == null) {
+            if (resultName == null) {
                 name = null;
             } else {
-                name = a.parseVariables(getResultName());
+                name = a.parseVariables(resultName);
             }
 
             setMetaName(a, name);

@@ -158,11 +158,11 @@ public class FlagExplode extends Flag {
             arg = arg.trim().toLowerCase();
 
             if (arg.equals("fire")) {
-                setFire(true);
+                fire = true;
             } else if (arg.equals("fail")) {
-                setFailure(true);
+                failure = true;
             } else if (arg.equals("nobreak")) {
-                setNoBreak(true);
+                noBreak = true;
             } else if (arg.startsWith("nodamage")) {
                 value = arg.substring("nodamage".length()).trim();
 
@@ -171,7 +171,7 @@ public class FlagExplode extends Flag {
                 value = arg.substring("power".length()).trim();
 
                 try {
-                    setPower(Float.parseFloat(value));
+                    power = Float.parseFloat(value);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'power' argument with invalid number: " + value);
                 }
@@ -180,10 +180,10 @@ public class FlagExplode extends Flag {
                     value = arg.substring("fuel".length()).trim().toLowerCase();
 
                     if (value.equals("start") || value.equals("end") || value.equals("random")) {
-                        setFuel(value);
+                        fuel = value;
                     } else {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'fuel' argument with invalid argument: " + value + ". Defaulting to 'start'.");
-                        setFuel("start");
+                        fuel = "start";
                     }
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'fuel' argument on non fuel recipe.");
@@ -198,21 +198,21 @@ public class FlagExplode extends Flag {
 
     @Override
     public void onCrafted(final Args a) {
-        if (getFuel().equals("start")) {
+        if (fuel.equals("start")) {
             runBoomLater(a);
         }
     }
 
     @Override
     public void onFuelRandom(final Args a) {
-        if (getFuel().equals("random")) {
+        if (fuel.equals("random")) {
             runBoomLater(a);
         }
     }
 
     @Override
     public void onFuelEnd(final Args a) {
-        if (getFuel().equals("end")) {
+        if (fuel.equals("end")) {
             runBoomLater(a);
         }
     }
@@ -280,7 +280,7 @@ public class FlagExplode extends Flag {
                 }
             }
 
-            world.createExplosion(x, y, z, getPower(), getFire(), !getNoBreak());
+            world.createExplosion(x, y, z, power, fire, !noBreak);
 
             for (Entry<LivingEntity, Double> e : entities.entrySet()) {
                 e.getKey().setNoDamageTicks(0);

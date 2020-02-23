@@ -255,7 +255,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         String print = getConditionResultName(result);
 
         if (print.equals("")) {
-            print = ToolsItem.printChoice(getIngredientChoice(), RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsItem.printChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);
@@ -281,7 +281,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         if (hasFuel()) {
             s.append("\n\n");
             s.append(Messages.getInstance().parse("recipebook.header.requirefuel"));
-            s.append('\n').append(ToolsItem.print(getFuel(), RMCChatColor.RESET, RMCChatColor.BLACK));
+            s.append('\n').append(ToolsItem.print(fuel, RMCChatColor.RESET, RMCChatColor.BLACK));
         }
 
         return s.toString();
@@ -334,8 +334,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        List<Material> choice = getIngredientChoice();
-        for (Material material : choice) {
+        for (Material material : ingredientChoice) {
             if (type == material) {
                 found++;
                 break;

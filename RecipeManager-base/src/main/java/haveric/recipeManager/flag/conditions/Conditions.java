@@ -24,10 +24,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -48,11 +45,11 @@ public class Conditions implements Cloneable {
     private Color minColor;
     private Color maxColor;
     private Boolean unbreakable;
-    private Map<PotionType, ConditionPotion> potionConditions = new HashMap<>();
+    private Map<PotionType, ConditionPotion> potionConditions = new EnumMap<>(PotionType.class);
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
     private DyeColor bannerColor;
-    private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
+    private Map<PatternType, DyeColor> bannerPatterns = new EnumMap<>(PatternType.class);
     private EntityType spawnEggEntityType;
     private String localizedName;
     private int customModelData = Integer.MIN_VALUE;
@@ -77,8 +74,8 @@ public class Conditions implements Cloneable {
     }
 
     public Conditions(Conditions original) {
-        setFlagType(original.getFlagType());
-        setIngredient(original.getIngredient().clone());
+        flagType = original.flagType;
+        ingredient = original.ingredient.clone();
 
         failMessage = original.failMessage;
 
@@ -116,16 +113,16 @@ public class Conditions implements Cloneable {
         localizedName = original.localizedName;
         customModelData = original.customModelData;
 
-        setNoMeta(original.isNoMeta());
-        setNoName(original.isNoName());
-        setNoLore(original.isNoLore());
-        setNoEnchant(original.isNoEnchant());
-        setNoBookEnchant(original.isNoBookEnchant());
-        setNoColor(original.isNoColor());
-        setNoLocalizedName(original.isNoLocalizedName());
-        setNoCustomModelData(original.isNoCustomModelData());
+        noMeta = original.noMeta;
+        noName = original.noName;
+        noLore = original.noLore;
+        noEnchant = original.noEnchant;
+        noBookEnchant = original.noBookEnchant;
+        noColor = original.noColor;
+        noLocalizedName = original.noLocalizedName;
+        noCustomModelData = original.noCustomModelData;
 
-        setAllSet(original.isAllSet());
+        allSet = original.allSet;
     }
 
     @Override
@@ -331,7 +328,7 @@ public class Conditions implements Cloneable {
 
             // If value not found return false otherwise return if value should be there
             if (is == null) {
-                return isAllSet();
+                return allSet;
             }
 
             return is;
@@ -369,7 +366,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkCustomModelData(ItemMeta meta) {
-        if (isNoMeta() || isNoCustomModelData()) {
+        if (noMeta || noCustomModelData) {
             return !meta.hasCustomModelData();
         }
 
@@ -434,7 +431,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkEnchants(Map<Enchantment, Integer> enchantsToCheck) {
-        if (isNoMeta() || isNoEnchant()) {
+        if (noMeta || noEnchant) {
             return enchantsToCheck == null || enchantsToCheck.isEmpty();
         }
 
@@ -473,7 +470,7 @@ public class Conditions implements Cloneable {
     public String getEnchantsString() {
         StringBuilder s = new StringBuilder();
 
-        for (Entry<Enchantment, Map<Integer, Boolean>> e : getEnchants().entrySet()) {
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : enchants.entrySet()) {
             if (s.length() > 0) {
                 s.append("; ");
             }
@@ -553,7 +550,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkBookEnchants(Map<Enchantment, Integer> enchantsToCheck) {
-        if (isNoMeta() || isNoBookEnchant()) {
+        if (noMeta || noBookEnchant) {
             return enchantsToCheck == null || enchantsToCheck.isEmpty();
         }
 
@@ -592,7 +589,7 @@ public class Conditions implements Cloneable {
     public String getBookEnchantsString() {
         StringBuilder s = new StringBuilder();
 
-        for (Entry<Enchantment, Map<Integer, Boolean>> e : getBookEnchants().entrySet()) {
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : bookEnchants.entrySet()) {
             if (s.length() > 0) {
                 s.append("; ");
             }
@@ -639,7 +636,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkName(ItemMeta meta) {
-        if (isNoMeta() || isNoName()) {
+        if (noMeta || noName) {
             return !meta.hasDisplayName();
         }
 
@@ -654,7 +651,7 @@ public class Conditions implements Cloneable {
                     Pattern pattern = Pattern.compile(name.substring("regex:".length()));
                     return pattern.matcher(nameToCheck).matches();
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                     return false;
                 }
             }
@@ -682,7 +679,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkLocalizedName(ItemMeta meta) {
-        if (isNoMeta() || isNoLocalizedName()) {
+        if (noMeta || noLocalizedName) {
             return !meta.hasLocalizedName();
         }
 
@@ -697,7 +694,7 @@ public class Conditions implements Cloneable {
                     Pattern pattern = Pattern.compile(localizedName.substring("regex:".length()));
                     return pattern.matcher(nameToCheck).matches();
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                     return false;
                 }
             }
@@ -723,7 +720,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkLore(List<String> loreToCheck) {
-        if (isNoMeta() || isNoLore()) {
+        if (noMeta || noLore) {
             return loreToCheck == null || loreToCheck.isEmpty();
         }
 
@@ -740,7 +737,7 @@ public class Conditions implements Cloneable {
                 try {
                     pattern = Pattern.compile(lore.substring("regex:".length()));
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
+                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                     return false;
                 }
             }
@@ -866,7 +863,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkColor(Color color) {
-        if (color != null && (isNoColor() || isNoMeta())) {
+        if (color != null && (noColor || noMeta)) {
             Color defaultColor = Bukkit.getItemFactory().getDefaultLeatherColor();
             return color.equals(defaultColor);
         }
@@ -1126,7 +1123,7 @@ public class Conditions implements Cloneable {
     }
 
     public boolean checkUnbreakable(boolean unbreakableToCheck) {
-        if (isNoMeta()) {
+        if (noMeta) {
             return !unbreakableToCheck;
         } else {
             return !hasUnbreakable() || unbreakable == unbreakableToCheck;
@@ -1151,11 +1148,11 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason("flag.ingredientconditions.nodata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getDataString());
+                a.addReason("flag.ingredientconditions.nodata", failMessage, "{item}", ToolsItem.print(item), "{data}", getDataString());
             }
             ok = false;
 
-            if (getFailMessage() != null) {
+            if (failMessage != null) {
                 return false;
             }
         }
@@ -1166,11 +1163,11 @@ public class Conditions implements Cloneable {
             }
 
             if (addReasons) {
-                a.addReason("flag.ingredientconditions.noamount", getFailMessage(), "{item}", ToolsItem.print(item), "{amount}", getAmount());
+                a.addReason("flag.ingredientconditions.noamount", failMessage, "{item}", ToolsItem.print(item), "{amount}", amount);
             }
             ok = false;
 
-            if (getFailMessage() != null) {
+            if (failMessage != null) {
                 return false;
             }
         }
@@ -1185,14 +1182,14 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     if (hasBookEnchants()) {
-                        a.addReason("flag.ingredientconditions.nobookenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
+                        a.addReason("flag.ingredientconditions.nobookenchants", failMessage, "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
                     } else {
-                        a.addReason("flag.ingredientconditions.emptybookenchants", getFailMessage(), "{item}", ToolsItem.print(item));
+                        a.addReason("flag.ingredientconditions.emptybookenchants", failMessage, "{item}", ToolsItem.print(item));
                     }
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1205,14 +1202,14 @@ public class Conditions implements Cloneable {
 
             if (addReasons) {
                 if (hasEnchants()) {
-                    a.addReason("flag.ingredientconditions.noenchants", getFailMessage(), "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
+                    a.addReason("flag.ingredientconditions.noenchants", failMessage, "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
                 } else {
-                    a.addReason("flag.ingredientconditions.emptyenchants", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.emptyenchants", failMessage, "{item}", ToolsItem.print(item));
                 }
             }
             ok = false;
 
-            if (getFailMessage() != null) {
+            if (failMessage != null) {
                 return false;
             }
         }
@@ -1230,14 +1227,14 @@ public class Conditions implements Cloneable {
 
             if (addReasons) {
                 if (hasName()) {
-                    a.addReason("flag.ingredientconditions.noname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getName());
+                    a.addReason("flag.ingredientconditions.noname", failMessage, "{item}", ToolsItem.print(item), "{name}", name);
                 } else {
-                    a.addReason("flag.ingredientconditions.emptyname", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.emptyname", failMessage, "{item}", ToolsItem.print(item));
                 }
             }
             ok = false;
 
-            if (getFailMessage() != null) {
+            if (failMessage != null) {
                 return false;
             }
         }
@@ -1250,14 +1247,14 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     if (hasLocalizedName()) {
-                        a.addReason("flag.ingredientconditions.nolocalizedname", getFailMessage(), "{item}", ToolsItem.print(item), "{name}", getLocalizedName());
+                        a.addReason("flag.ingredientconditions.nolocalizedname", failMessage, "{item}", ToolsItem.print(item), "{name}", localizedName);
                     } else {
-                        a.addReason("flag.ingredientconditions.emptylocalizedname", getFailMessage(), "{item}", ToolsItem.print(item));
+                        a.addReason("flag.ingredientconditions.emptylocalizedname", failMessage, "{item}", ToolsItem.print(item));
                     }
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1271,14 +1268,14 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     if (hasCustomModelData()) {
-                        a.addReason("flag.ingredientconditions.nocustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item), "{data}", getCustomModelData());
+                        a.addReason("flag.ingredientconditions.nocustommodeldata", failMessage, "{item}", ToolsItem.print(item), "{data}", customModelData);
                     } else {
-                        a.addReason("flag.ingredientconditions.emptycustommodeldata", getFailMessage(), "{item}", ToolsItem.print(item));
+                        a.addReason("flag.ingredientconditions.emptycustommodeldata", failMessage, "{item}", ToolsItem.print(item));
                     }
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1291,14 +1288,14 @@ public class Conditions implements Cloneable {
 
             if (addReasons) {
                 if (hasLore()) {
-                    a.addReason("flag.ingredientconditions.nolore", getFailMessage(), "{item}", ToolsItem.print(item), "{lore}", getLores());
+                    a.addReason("flag.ingredientconditions.nolore", failMessage, "{item}", ToolsItem.print(item), "{lore}", lores);
                 } else {
-                    a.addReason("flag.ingredientconditions.emptylore", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.emptylore", failMessage, "{item}", ToolsItem.print(item));
                 }
             }
             ok = false;
 
-            if (getFailMessage() != null) {
+            if (failMessage != null) {
                 return false;
             }
         }
@@ -1320,11 +1317,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nocolor", getFailMessage(), "{item}", ToolsItem.print(item), "{color}", getColorString());
+                    a.addReason("flag.ingredientconditions.nocolor", failMessage, "{item}", ToolsItem.print(item), "{color}", getColorString());
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1347,11 +1344,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nopotion", getFailMessage(), "{item}", ToolsItem.print(item), "{potion}", potionConditions); // TODO: This probably needs updating
+                    a.addReason("flag.ingredientconditions.nopotion", failMessage, "{item}", ToolsItem.print(item), "{potion}", potionConditions); // TODO: This probably needs updating
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1374,11 +1371,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nopotioneffect", getFailMessage(), "{item}", ToolsItem.print(item), "{effect}", potionEffectConditions); // TODO: This probably needs updating
+                    a.addReason("flag.ingredientconditions.nopotioneffect", failMessage, "{item}", ToolsItem.print(item), "{effect}", potionEffectConditions); // TODO: This probably needs updating
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1401,11 +1398,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nosuspicioussteweffect", getFailMessage(), "{item}", ToolsItem.print(item), "{effect}", suspiciousStewConditions); // TODO: This probably needs updating
+                    a.addReason("flag.ingredientconditions.nosuspicioussteweffect", failMessage, "{item}", ToolsItem.print(item), "{effect}", suspiciousStewConditions); // TODO: This probably needs updating
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1428,11 +1425,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nobannercolor", getFailMessage(), "{item}", ToolsItem.print(item), "color", bannerColor);
+                    a.addReason("flag.ingredientconditions.nobannercolor", failMessage, "{item}", ToolsItem.print(item), "color", bannerColor);
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1455,11 +1452,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nobannerpatterns", getFailMessage(), "{item}", ToolsItem.print(item), "{patterns)", bannerPatterns); // TODO: Check if these messages are actually being used and if so probably fix bannerPatterns output
+                    a.addReason("flag.ingredientconditions.nobannerpatterns", failMessage, "{item}", ToolsItem.print(item), "{patterns)", bannerPatterns); // TODO: Check if these messages are actually being used and if so probably fix bannerPatterns output
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1482,11 +1479,11 @@ public class Conditions implements Cloneable {
                 }
 
                 if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nospawneggentitytype", getFailMessage(), "{item}", ToolsItem.print(item), "{entitytype)", spawnEggEntityType);
+                    a.addReason("flag.ingredientconditions.nospawneggentitytype", failMessage, "{item}", ToolsItem.print(item), "{entitytype)", spawnEggEntityType);
                 }
                 ok = false;
 
-                if (getFailMessage() != null) {
+                if (failMessage != null) {
                     return false;
                 }
             }
@@ -1499,14 +1496,14 @@ public class Conditions implements Cloneable {
 
             if (addReasons) {
                 if (hasUnbreakable() && unbreakable) {
-                    a.addReason("flag.ingredientconditions.unbreakable", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.unbreakable", failMessage, "{item}", ToolsItem.print(item));
                 } else {
-                    a.addReason("flag.ingredientconditions.unbreakable", getFailMessage(), "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.unbreakable", failMessage, "{item}", ToolsItem.print(item));
                 }
             }
             ok = false;
 
-            if (getFailMessage() != null) {
+            if (failMessage != null) {
                 return false;
             }
         }
@@ -1602,12 +1599,11 @@ public class Conditions implements Cloneable {
         // Replace double pipes with single pipe: || -> |
         arg = arg.replaceAll("\\|\\|", "|");
 
-        ItemStack item = getIngredient();
         String argLower = arg.toLowerCase();
         String value;
         if (argLower.startsWith("data")) {
-            if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
+            if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'data' argument but ingredient has specific data!", "The ingredient must have the 'any' data value set.");
                 return;
             }
 
@@ -1623,9 +1619,9 @@ public class Conditions implements Cloneable {
                     val = val.substring(1).trim();
                 }
 
-                short maxDurability = item.getType().getMaxDurability();
+                short maxDurability = ingredient.getType().getMaxDurability();
                 if (val.equals("all")) {
-                    setAllSet(!not);
+                    allSet = !not;
                 } else if (val.equals("vanilla")) {
                     addDataValueRange((short) 0, maxDurability, !not);
                 } else if (val.equals("damaged")) {
@@ -1653,12 +1649,12 @@ public class Conditions implements Cloneable {
                             min = Short.parseShort(split[0].trim());
                             max = Short.parseShort(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid numbers: " + val);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'data' argument with invalid numbers: " + val);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'data' argument with invalid number range: " + min + " to " + max);
                             break;
                         }
 
@@ -1678,7 +1674,7 @@ public class Conditions implements Cloneable {
                                 addDataValue(Short.parseShort(val), !not);
                             }
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'data' argument with invalid number: " + val);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'data' argument with invalid number: " + val);
                         }
                     }
                 }
@@ -1687,22 +1683,22 @@ public class Conditions implements Cloneable {
             value = arg.substring("amount".length()).trim();
 
             try {
-                setAmount(Integer.parseInt(value));
+                amount = Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'amount' argument with invalid number: " + value);
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'amount' argument with invalid number: " + value);
             }
         } else if (argLower.startsWith("custommodeldata")) {
             value = arg.substring("custommodeldata".length()).trim();
 
             try {
-                setCustomModelData(Integer.parseInt(value));
+                customModelData = Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'custommodeldata' argument with invalid number: " + value);
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'custommodeldata' argument with invalid number: " + value);
             }
         } else if (argLower.startsWith("!custommodeldata") || argLower.startsWith("nocustommodeldata")) {
-            setNoCustomModelData(true);
+            noCustomModelData = true;
         } else if (argLower.startsWith("!enchant") || argLower.startsWith("noenchant")) {
-            setNoEnchant(true);
+            noEnchant = true;
         } else if (argLower.startsWith("enchant")) {
             value = argLower.substring("enchant".length()).trim();
 
@@ -1713,7 +1709,7 @@ public class Conditions implements Cloneable {
             Enchantment enchant = Tools.parseEnchant(value);
 
             if (enchant == null) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid name: " + value);
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'enchant' argument with invalid name: " + value);
                 return;
             }
 
@@ -1738,12 +1734,12 @@ public class Conditions implements Cloneable {
                             min = Short.parseShort(split[0].trim());
                             max = Short.parseShort(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid numbers: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'enchant' argument with invalid numbers: " + s);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'enchant' argument with invalid number range: " + min + " to " + max);
                             continue;
                         }
 
@@ -1752,7 +1748,7 @@ public class Conditions implements Cloneable {
                         try {
                             addEnchantLevel(enchant, Short.parseShort(s.trim()), !not);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'enchant' argument with invalid number: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'enchant' argument with invalid number: " + s);
                         }
                     }
                 }
@@ -1760,12 +1756,12 @@ public class Conditions implements Cloneable {
                 addEnchant(enchant);
             }
         } else if (argLower.startsWith("!bookenchant") || argLower.startsWith("nobookenchant")) {
-            if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
-                setNoBookEnchant(true);
+            if (ingredient.getItemMeta() instanceof EnchantmentStorageMeta) {
+                noBookEnchant = true;
             }
         } else if (argLower.startsWith("bookenchant")) {
-            if (!(item.getItemMeta() instanceof EnchantmentStorageMeta)) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument for an item that is not an enchanted book.");
+            if (!(ingredient.getItemMeta() instanceof EnchantmentStorageMeta)) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'bookenchant' argument for an item that is not an enchanted book.");
                 return;
             }
 
@@ -1778,7 +1774,7 @@ public class Conditions implements Cloneable {
             Enchantment enchant = Tools.parseEnchant(value);
 
             if (enchant == null) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid name: " + value);
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'bookenchant' argument with invalid name: " + value);
                 return;
             }
 
@@ -1803,12 +1799,12 @@ public class Conditions implements Cloneable {
                             min = Short.parseShort(split[0].trim());
                             max = Short.parseShort(split[1].trim());
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid numbers: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'bookenchant' argument with invalid numbers: " + s);
                             continue;
                         }
 
                         if (min > max) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'bookenchant' argument with invalid number range: " + min + " to " + max);
                             continue;
                         }
 
@@ -1817,7 +1813,7 @@ public class Conditions implements Cloneable {
                         try {
                             addBookEnchantLevel(enchant, Short.parseShort(s.trim()), !not);
                         } catch (NumberFormatException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'bookenchant' argument with invalid number: " + s);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'bookenchant' argument with invalid number: " + s);
                         }
                     }
                 }
@@ -1825,12 +1821,12 @@ public class Conditions implements Cloneable {
                 addBookEnchant(enchant);
             }
         } else if (argLower.startsWith("!color") || argLower.startsWith("nocolor")) {
-            if (item.getItemMeta() instanceof LeatherArmorMeta) {
-                setNoColor(true);
+            if (ingredient.getItemMeta() instanceof LeatherArmorMeta) {
+                noColor = true;
             }
         } else if (argLower.startsWith("color")) {
-            if (!(item.getItemMeta() instanceof LeatherArmorMeta)) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather.");
+            if (!(ingredient.getItemMeta() instanceof LeatherArmorMeta)) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument for an item that is not leather armor.", "RGB can only be applied to leather.");
                 return;
             }
 
@@ -1842,7 +1838,7 @@ public class Conditions implements Cloneable {
                 String[] split = value.split(",", 3);
 
                 if (split.length != 3) {
-                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with less than 3 colors separated by comma: " + value);
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument with less than 3 colors separated by comma: " + value);
                     return;
                 }
 
@@ -1862,14 +1858,14 @@ public class Conditions implements Cloneable {
                         }
 
                         if (min < 0 || min > max || max > 255) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument with invalid range: " + min + " to " + max, "Numbers must be from 0 to 255 and min must be less or equal to max!");
                             break;
                         }
 
                         minColor[c] = min;
                         maxColor[c] = max;
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid number: " + value);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument with invalid number: " + value);
                     }
                 }
 
@@ -1878,9 +1874,9 @@ public class Conditions implements Cloneable {
                 setColor(dye.getColor(), null);
             }
         } else if (argLower.startsWith("!name") || argLower.startsWith("noname")) {
-            setNoName(true);
+            noName = true;
         } else if (argLower.startsWith("!localizedname") || argLower.startsWith("nolocalizedname")) {
-            setNoLocalizedName(true);
+            noLocalizedName = true;
         } else if (argLower.startsWith("name")) {
             value = arg.substring("name".length()); // preserve case for regex
 
@@ -1890,17 +1886,17 @@ public class Conditions implements Cloneable {
 
             setLocalizedName(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
-            setNoLore(true);
+            noLore = true;
         } else if (argLower.startsWith("lore")) {
             value = arg.substring("lore".length()); // preserve case for regex
 
             addLore(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("!unbreakable") || argLower.startsWith("nounbreakable")) {
-            setUnbreakable(false);
+            unbreakable = false;
         } else if (argLower.startsWith("unbreakable")) {
-            setUnbreakable(true);
+            unbreakable = true;
         } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
-            setNoMeta(true);
+            noMeta = true;
         } else if (argLower.startsWith("failmsg")) {
             value = arg.substring("failmsg".length()); // preserve case because it's a message
 
@@ -1936,7 +1932,7 @@ public class Conditions implements Cloneable {
                     try {
                         effectType = PotionEffectType.getByName(typeSplit[1].toUpperCase());
                     } catch (IllegalArgumentException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'type' argument with invalid potion effect type: " + typeSplit[1]);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'type' argument with invalid potion effect type: " + typeSplit[1]);
                     }
                 } else if (element.startsWith("duration")) {
                     String[] durationSplit = element.split(" ", 2);
@@ -1953,7 +1949,7 @@ public class Conditions implements Cloneable {
                             effectCond.setDurationMaxLevel(level);
                         }
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'duration' argument with invalid value: " + durationValue);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'duration' argument with invalid value: " + durationValue);
                     }
                 } else if (element.startsWith("amplify")) {
                     String[] amplifySplit = element.split(" ", 2);
@@ -1970,7 +1966,7 @@ public class Conditions implements Cloneable {
                             effectCond.setAmplifyMaxLevel(level);
                         }
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'amplify' argument with invalid value: " + amplifyValue);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'amplify' argument with invalid value: " + amplifyValue);
                     }
                 }
             }
@@ -1999,7 +1995,7 @@ public class Conditions implements Cloneable {
                     try {
                         potionType = PotionType.valueOf(typeSplit[1].toUpperCase());
                     } catch (IllegalArgumentException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'type' argument with invalid potion type: " + typeSplit[1]);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'type' argument with invalid potion type: " + typeSplit[1]);
                     }
                 } else if (element.startsWith("level")) {
                     String[] levelSplit = element.split(" ");
@@ -2009,7 +2005,7 @@ public class Conditions implements Cloneable {
                             potionCond.setLevel(Integer.parseInt(levelSplit[1]));
                         }
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'level' argument with invalid value: " + levelSplit[1]);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'level' argument with invalid value: " + levelSplit[1]);
                     }
                 }
             }
@@ -2025,10 +2021,9 @@ public class Conditions implements Cloneable {
                     String colorValue = colorSplit[1].trim();
 
                     try {
-                        DyeColor dye = DyeColor.valueOf(colorValue.toUpperCase());
-                        setBannerColor(dye);
+                        bannerColor = DyeColor.valueOf(colorValue.toUpperCase());
                     } catch (IllegalArgumentException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' argument with invalid dye color: " + colorValue);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument with invalid dye color: " + colorValue);
                     }
                 } else if (element.startsWith("pattern")) {
                     String[] patternSplit = element.split(" ", 3);
@@ -2038,7 +2033,7 @@ public class Conditions implements Cloneable {
                     try {
                         pattern = PatternType.valueOf(patternValue.toUpperCase());
                     } catch (IllegalArgumentException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pattern' argument with invalid pattern type: " + patternValue);
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pattern' argument with invalid pattern type: " + patternValue);
                     }
 
                     DyeColor dye = null;
@@ -2047,7 +2042,7 @@ public class Conditions implements Cloneable {
                             String colorValue = patternSplit[2].trim();
                             dye = DyeColor.valueOf(colorValue.toUpperCase());
                         } catch (IllegalArgumentException e) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pattern' argument with invalid pattern type: " + patternValue);
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pattern' argument with invalid pattern type: " + patternValue);
                         }
                     }
 
@@ -2060,13 +2055,12 @@ public class Conditions implements Cloneable {
             value = argLower.substring("spawnegg".length()).trim();
 
             try {
-                EntityType entityType = EntityType.valueOf(value.toUpperCase());
-                setSpawnEggEntityType(entityType);
+                spawnEggEntityType = EntityType.valueOf(value.toUpperCase());
             } catch (IllegalArgumentException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'spawnegg' argument with invalid entity type: " + value);
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'spawnegg' argument with invalid entity type: " + value);
             }
         } else {
-            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
+            ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + arg);
         }
     }
 

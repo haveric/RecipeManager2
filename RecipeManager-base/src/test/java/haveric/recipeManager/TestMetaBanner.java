@@ -20,7 +20,7 @@ public class TestMetaBanner extends TestMetaItem implements BannerMeta {
         }
 
         TestMetaBanner banner = (TestMetaBanner) meta;
-        baseColor = banner.getBaseColor();
+        baseColor = banner.baseColor;
         patterns = new ArrayList<>(banner.getPatterns());
     }
 

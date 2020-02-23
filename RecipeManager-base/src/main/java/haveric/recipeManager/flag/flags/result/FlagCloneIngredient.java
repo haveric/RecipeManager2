@@ -242,7 +242,7 @@ public class FlagCloneIngredient extends Flag {
             arg = arg.replaceAll("\\|\\|", "|");
 
             if (arg.equals("all")) {
-                setCopyBitsum(Bit.ALL);
+                copyBitsum = Bit.ALL;
                 break;
             } else if (arg.equals("allmeta")) {
                 addCopyBit(Bit.ALLMETA);

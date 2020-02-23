@@ -131,14 +131,13 @@ public class FlagSkullOwner extends Flag {
             arg = arg.trim();
 
             if (arg.toLowerCase().startsWith("texture")) {
-                String texture = arg.substring("texture".length()).trim();
-                setTextureBase64(texture);
+                textureBase64 = arg.substring("texture".length()).trim();
             } else {
                 String[] components = arg.split("-");
                 if (components.length == 5) {
-                    setOwnerUUID(UUID.fromString(arg));
+                    ownerUUID = UUID.fromString(arg);
                 } else {
-                    setOwner(arg);
+                    owner = arg;
                 }
             }
         }
@@ -158,10 +157,10 @@ public class FlagSkullOwner extends Flag {
             return;
         }
 
-        String owner = null;
+        String ownerString = null;
         OfflinePlayer offlinePlayer = null;
         if (hasOwner()) {
-            if (getOwner().equalsIgnoreCase("{player}")) {
+            if (owner.equalsIgnoreCase("{player}")) {
                 if (!a.hasPlayerUUID()) {
                     a.addCustomReason("Needs player UUID!");
                     return;
@@ -169,10 +168,10 @@ public class FlagSkullOwner extends Flag {
 
                 offlinePlayer = Bukkit.getOfflinePlayer(a.playerUUID());
             } else {
-                owner = getOwner();
+                ownerString = owner;
             }
         } else if (hasOwnerUUID()) {
-            offlinePlayer = Bukkit.getOfflinePlayer(getOwnerUUID());
+            offlinePlayer = Bukkit.getOfflinePlayer(ownerUUID);
         }
 
         String name = "";
@@ -193,8 +192,8 @@ public class FlagSkullOwner extends Flag {
             id = "Id:\"" + uuid + "\",";
         }
 
-        if (owner != null) {
-            name = "Name:\"" + owner + "\",";
+        if (ownerString != null) {
+            name = "Name:\"" + ownerString + "\",";
         }
 
         addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");

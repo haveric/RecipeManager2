@@ -226,8 +226,7 @@ public class AnvilRecipe extends PreparableResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        List<Material> primary = getPrimaryIngredient();
-
+        List<Material> primary = primaryIngredient;
         for (Material material : primary) {
             if (type == material) {
                 found++;
@@ -235,8 +234,7 @@ public class AnvilRecipe extends PreparableResultRecipe {
             }
         }
 
-        List<Material> secondary = getSecondaryIngredient();
-
+        List<Material> secondary = secondaryIngredient;
         for (Material material : secondary) {
             if (type == material) {
                 found++;

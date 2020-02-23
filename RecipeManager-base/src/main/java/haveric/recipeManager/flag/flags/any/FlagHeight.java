@@ -73,10 +73,10 @@ public class FlagHeight extends Flag {
     }
 
     public String getHeightString() {
-        String heightString = "" + getMinHeight();
+        String heightString = "" + minHeight;
 
-        if (getMaxHeight() > getMinHeight()) {
-            heightString += " - " + getMaxHeight();
+        if (maxHeight > minHeight) {
+            heightString += " - " + maxHeight;
         }
 
         return heightString;
@@ -100,15 +100,15 @@ public class FlagHeight extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            setFailMessage(RMCUtil.trimExactQuotes(split[1]));
+            failMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         split = split[0].split("-", 2);
         value = split[0].trim();
 
         try {
-            setMinHeight(Integer.parseInt(value));
-            setMaxHeight(getMinHeight());
+            minHeight = Integer.parseInt(value);
+            maxHeight = minHeight;
         } catch (NumberFormatException e) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required height number: " + value);
             return false;
@@ -118,14 +118,14 @@ public class FlagHeight extends Flag {
             value = split[1].trim();
 
             try {
-                setMaxHeight(Integer.parseInt(value));
+                maxHeight = Integer.parseInt(value);
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required height number: " + value);
                 return false;
             }
         }
 
-        if ((getMinHeight() <= 0 && getMaxHeight() <= 0) || getMaxHeight() < getMinHeight()) {
+        if ((minHeight <= 0 && maxHeight <= 0) || maxHeight < minHeight) {
             ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
             return false;
         }

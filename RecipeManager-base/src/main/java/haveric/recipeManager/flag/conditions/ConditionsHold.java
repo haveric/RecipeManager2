@@ -15,7 +15,7 @@ public class ConditionsHold extends Conditions {
     public ConditionsHold(ConditionsHold original) {
         super(original);
 
-        slot = original.getSlot();
+        slot = original.slot;
     }
 
     @Override
@@ -46,28 +46,28 @@ public class ConditionsHold extends Conditions {
 
                 switch(val) {
                     case "mainhand":
-                        setSlot(ConditionsSlot.MAINHAND);
+                        slot = ConditionsSlot.MAINHAND;
                         break;
                     case "offhand":
                     case "shield":
-                        setSlot(ConditionsSlot.OFFHAND);
+                        slot = ConditionsSlot.OFFHAND;
                         break;
                     case "helmet":
-                        setSlot(ConditionsSlot.HELMET);
+                        slot = ConditionsSlot.HELMET;
                         break;
                     case "chest":
                     case "chestplate":
-                        setSlot(ConditionsSlot.CHEST);
+                        slot = ConditionsSlot.CHEST;
                         break;
                     case "legs":
                     case "leggings":
-                        setSlot(ConditionsSlot.LEGS);
+                        slot = ConditionsSlot.LEGS;
                         break;
                     case "boots":
-                        setSlot(ConditionsSlot.BOOTS);
+                        slot = ConditionsSlot.BOOTS;
                         break;
                     case "inventory":
-                        setSlot(ConditionsSlot.INVENTORY);
+                        slot = ConditionsSlot.INVENTORY;
                         break;
                     default:
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'slot' argument with invalid value: " + val);
