@@ -1,4 +1,4 @@
-lastchanged: 2.16.1 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.21.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -494,12 +494,5 @@ red_sandstone_slab: red sandstone step
 prismarine_slab: prismarine step
 prismarine_brick_slab: prismarine brick step
 dark_prismarine_slab: dark prismarine step
-
-oak_wood: wood plank, oak plank
-spruce_wood: spruce plank
-birch_wood: birch plank
-jungle_wood: jungle plank
-acacia_wood: acacia plank
-dark_oak_wood: dark oak plank
 
 # add your own aliases if you want.
