@@ -4,3 +4,7 @@ dependencies {
 
     compileOnly "org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT"
 }
+
+jar {
+    archivesBaseName = 'RecipeManager-nms-v1_12'
+}

@@ -9,3 +9,7 @@ dependencies {
     extra project(':nms-v1_13_2')
     extra project(':nms-v1_14_4')
 }
+
+jar {
+    archivesBaseName = 'RecipeManager-nms'
+}
