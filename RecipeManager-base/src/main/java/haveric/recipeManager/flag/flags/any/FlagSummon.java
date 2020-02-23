@@ -92,9 +92,18 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "horse <type>", "set the horse type, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Variant.values())).toLowerCase()) }, String.class);
         }
 
-        description = ObjectArrays.concat(description, new String[] {
+        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
             String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
+        }, String.class);
+
+        if (Version.has1_12Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
             String.format(argFormat, "offhand <item> [drop%]", "equip an item on the creature's offhand with optional drop chance."),
             String.format(argFormat, "invulnerable", "makes the creature invulnerable."),
@@ -201,6 +210,7 @@ public class FlagSummon extends Flag {
         private Horse.Variant horse = null;
         private Horse.Color horseColor = null;
         private Horse.Style horseStyle = null;
+        private Parrot.Variant parrot = null;
         private boolean hasChest = false;
         private Float jumpStrength = null;
         private Rabbit.Type rabbit = null;
@@ -259,6 +269,10 @@ public class FlagSummon extends Flag {
                 elder = c.elder;
                 skeleton = c.skeleton;
                 zombieVillager = c.zombieVillager;
+            }
+
+            if (Version.has1_12Support()) {
+                parrot = c.parrot;
             }
         }
 
@@ -502,6 +516,14 @@ public class FlagSummon extends Flag {
 
                     if (jumpStrength != null) {
                         npc.setJumpStrength(jumpStrength);
+                    }
+                }
+
+                if (Version.has1_12Support() && ent instanceof Parrot) {
+                    Parrot npc = (Parrot) ent;
+
+                    if (parrot != null) {
+                        npc.setVariant(parrot);
                     }
                 }
 
