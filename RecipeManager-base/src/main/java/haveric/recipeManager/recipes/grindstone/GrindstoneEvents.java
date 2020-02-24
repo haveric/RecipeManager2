@@ -391,49 +391,25 @@ public class GrindstoneEvents implements Listener {
 
             if (location != null) {
                 Block block = location.getBlock();
-                ItemResult result;
 
-                boolean sameTop = false;
-                boolean sameBottom = false;
-                BaseRecipeData grindstone = Grindstones.get(player);
-                if (grindstone != null) {
-                    ItemStack lastTop = grindstone.getIngredient(0);
-                    sameTop = top == null && lastTop == null;
-                    if (!sameTop && top != null && lastTop != null) {
-                        sameTop = top.hashCode() == lastTop.hashCode();
+                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
+                ItemResult result = recipe.getDisplayResult(a);
+                if (result != null) {
+                    a.setResult(result);
+
+                    if (recipe.sendPrepare(a)) {
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                    } else {
+                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        result = null;
                     }
 
-                    if (sameTop) {
-                        ItemStack lastBottom = grindstone.getIngredient(1);
-                        sameBottom = bottom == null && lastBottom == null;
-                        if (!sameBottom && bottom != null && lastBottom != null) {
-                            sameBottom = bottom.hashCode() == lastBottom.hashCode();
-                        }
-                    }
-                }
-
-                if (sameTop && sameBottom) {
-                    result = grindstone.getResult();
-                } else {
-                    Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
-                    result = recipe.getDisplayResult(a);
                     if (result != null) {
-                        a.setResult(result);
-
-                        if (recipe.sendPrepare(a)) {
+                        if (result.sendPrepare(a)) {
                             a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                         } else {
                             a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                             result = null;
-                        }
-
-                        if (result != null) {
-                            if (result.sendPrepare(a)) {
-                                a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                            } else {
-                                a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                                result = null;
-                            }
                         }
                     }
                 }

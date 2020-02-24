@@ -316,48 +316,24 @@ public class CartographyEvents implements Listener {
             Location location = cartographyTable.getLocation();
 
             if (location != null) {
-                ItemResult result;
+                Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
+                ItemResult result = recipe.getDisplayResult(a);
+                if (result != null) {
+                    a.setResult(result);
 
-                boolean sameTop = false;
-                boolean sameBottom = false;
-                if (cartographyTable.getRecipe() != null) {
-                    ItemStack lastTop = cartographyTable.getIngredient(0);
-                    sameTop = top == null && lastTop == null;
-                    if (!sameTop && top != null && lastTop != null) {
-                        sameTop = top.hashCode() == lastTop.hashCode();
+                    if (recipe.sendPrepare(a)) {
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                    } else {
+                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        result = null;
                     }
 
-                    if (sameTop) {
-                        ItemStack lastBottom = cartographyTable.getIngredient(1);
-                        sameBottom = bottom == null && lastBottom == null;
-                        if (!sameBottom && bottom != null && lastBottom != null) {
-                            sameBottom = bottom.hashCode() == lastBottom.hashCode();
-                        }
-                    }
-                }
-
-                if (sameTop && sameBottom) {
-                    result = cartographyTable.getResult();
-                } else {
-                    Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
-                    result = recipe.getDisplayResult(a);
                     if (result != null) {
-                        a.setResult(result);
-
-                        if (recipe.sendPrepare(a)) {
+                        if (result.sendPrepare(a)) {
                             a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                         } else {
                             a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                             result = null;
-                        }
-
-                        if (result != null) {
-                            if (result.sendPrepare(a)) {
-                                a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                            } else {
-                                a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                                result = null;
-                            }
                         }
                     }
                 }

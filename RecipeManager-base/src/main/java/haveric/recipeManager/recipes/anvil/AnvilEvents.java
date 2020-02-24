@@ -177,49 +177,24 @@ public class AnvilEvents implements Listener {
 
                 Player player = (Player) view.getPlayer();
 
-                ItemResult result;
+                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
+                ItemResult result = recipe.getDisplayResult(a);
+                if (result != null) {
+                    a.setResult(result);
 
-                boolean sameLeft = false;
-                boolean sameRight = false;
-                Anvil anvil = Anvils.get(player);
-                if (anvil != null) {
-                    ItemStack lastLeft = anvil.getIngredient(0);
-                    sameLeft = left == null && lastLeft == null;
-                    if (!sameLeft && left != null && lastLeft != null) {
-                        sameLeft = left.hashCode() == lastLeft.hashCode();
+                    if (recipe.sendPrepare(a)) {
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                    } else {
+                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        result = null;
                     }
 
-                    if (sameLeft) {
-                        ItemStack lastRight = anvil.getIngredient(1);
-                        sameRight = right == null && lastRight == null;
-                        if (!sameRight && right != null && lastRight != null) {
-                            sameRight = right.hashCode() == lastRight.hashCode();
-                        }
-                    }
-                }
-
-                if (sameLeft && sameRight) {
-                    result = anvil.getResult();
-                } else {
-                    Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
-                    result = recipe.getDisplayResult(a);
                     if (result != null) {
-                        a.setResult(result);
-
-                        if (recipe.sendPrepare(a)) {
+                        if (result.sendPrepare(a)) {
                             a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                         } else {
                             a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
                             result = null;
-                        }
-
-                        if (result != null) {
-                            if (result.sendPrepare(a)) {
-                                a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                            } else {
-                                a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                                result = null;
-                            }
                         }
                     }
                 }
