@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.CartographyInventory;
@@ -60,6 +61,22 @@ public class CartographyEvents implements Listener {
                 Player player = event.getPlayer();
                 CartographyTables.remove(player);
                 CartographyTables.add(player, null, null, null, block.getLocation());
+            }
+        }
+    }
+
+    @EventHandler(priority=EventPriority.MONITOR)
+    public void cartographyInventoryClose(InventoryCloseEvent event) {
+        HumanEntity ent = event.getPlayer();
+        if (ent instanceof Player) {
+            Inventory inv = event.getInventory();
+
+            if (inv instanceof CartographyInventory) {
+                Location location = inv.getLocation();
+
+                if (location != null) {
+                    CartographyTables.remove((Player) ent);
+                }
             }
         }
     }

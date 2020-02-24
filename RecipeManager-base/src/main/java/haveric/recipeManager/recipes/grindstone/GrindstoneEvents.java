@@ -21,10 +21,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
@@ -49,6 +51,22 @@ public class GrindstoneEvents implements Listener {
     public static void reload() {
         HandlerList.unregisterAll(RecipeManager.getGrindstoneEvents());
         Bukkit.getPluginManager().registerEvents(RecipeManager.getGrindstoneEvents(), RecipeManager.getPlugin());
+    }
+
+    @EventHandler(priority= EventPriority.MONITOR)
+    public void grindstoneInventoryClose(InventoryCloseEvent event) {
+        HumanEntity ent = event.getPlayer();
+        if (ent instanceof Player) {
+            Inventory inv = event.getInventory();
+
+            if (inv instanceof GrindstoneInventory) {
+                Location location = inv.getLocation();
+
+                if (location != null) {
+                    Grindstones.remove((Player) ent);
+                }
+            }
+        }
     }
 
     @EventHandler
