@@ -48,23 +48,18 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         // get the ingredient and smelting time
         String[] split = reader.getLine().split("%");
 
-        if (split.length == 0) {
-            return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
-        }
-
         if (Version.has1_13Support()) {
-            List<Material> choices = Tools.parseChoice(split[0], ParseBit.NONE);
-
+            List<Material> choices = parseIngredient(split, recipe.getType());
             if (choices == null) {
-                return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
-            }
-
-            if (choices.contains(Material.AIR)) {
-                return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+                return false;
             }
 
             recipe.setIngredientChoice(choices);
         } else {
+            if (split.length == 0) {
+                return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
+            }
+
             ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
             if (ingredient == null) {

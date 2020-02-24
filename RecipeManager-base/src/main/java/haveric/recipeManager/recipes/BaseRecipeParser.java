@@ -2,12 +2,16 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
+import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecipeParser {
@@ -133,5 +137,70 @@ public abstract class BaseRecipeParser {
         }
 
         return true; // valid results
+    }
+
+    public List<List<Material>> parseIngredients(String[] split, RMCRecipeType recipeType, int maxIngredients, boolean airAllowed) {
+        if (split.length == 0) {
+            setParseError(recipeType, "doesn't have an ingredient!");
+            return null;
+        }
+
+        if (split.length > maxIngredients) {
+            setParseError(recipeType, "has too many ingredients. Needs up to " + maxIngredients);
+            return null;
+        }
+
+        int numAir = 0;
+        List<List<Material>> choicesList = new ArrayList<>();
+        for (String s : split) {
+            List<Material> choices = Tools.parseChoice(s, ParseBit.NONE);
+
+            if (choices == null) {
+                setParseError(recipeType, "needs an ingredient!");
+                return null;
+            }
+
+            if (choices.contains(Material.AIR)) {
+                if (airAllowed) {
+                    numAir++;
+                } else {
+                    setParseError(recipeType, "does not accept AIR as ingredients!");
+                    return null;
+                }
+            }
+
+            choicesList.add(choices);
+        }
+
+        if (numAir == maxIngredients) {
+            setParseError(recipeType, "cannot have all ingredients be AIR!");
+            return null;
+        }
+
+        return choicesList;
+    }
+
+    public List<Material> parseIngredient(String[] split, RMCRecipeType recipeType) {
+        if (split.length == 0) {
+            setParseError(recipeType, "doesn't have an ingredient!");
+            return null;
+        }
+
+        List<Material> choices = Tools.parseChoice(split[0], ParseBit.NONE);
+        if (choices == null) {
+            setParseError(recipeType, "needs an ingredient!");
+            return null;
+        }
+
+        if (choices.contains(Material.AIR)) {
+            setParseError(recipeType, "does not accept AIR as ingredients!");
+            return null;
+        }
+
+        return choices;
+    }
+
+    private void setParseError(RMCRecipeType recipeType, String error) {
+        ErrorReporter.getInstance().error(WordUtils.capitalize(recipeType.name()) + " recipe " + error);
     }
 }

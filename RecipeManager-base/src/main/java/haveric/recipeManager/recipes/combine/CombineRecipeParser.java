@@ -42,7 +42,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
             int items = 0;
             for (String str : ingredientsRaw) {
-                Map<List<Material>, Integer> choiceAmountMap =  Tools.parseChoiceWithAmount(str, ParseBit.NONE);
+                Map<List<Material>, Integer> choiceAmountMap = Tools.parseChoiceWithAmount(str, ParseBit.NONE);
 
                 // We're always returning only one item, so this should always work
                 Map.Entry<List<Material>, Integer> entry = choiceAmountMap.entrySet().iterator().next();

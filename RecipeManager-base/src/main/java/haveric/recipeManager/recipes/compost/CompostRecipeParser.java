@@ -7,8 +7,6 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.common.util.ParseBit;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -27,18 +25,10 @@ public class CompostRecipeParser extends BaseRecipeParser {
 
         // get the ingredient
         String[] split = reader.getLine().split("%");
-        if (split.length == 0) {
-            return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
-        }
 
-        List<Material> choices = Tools.parseChoice(split[0], ParseBit.NONE);
-
+        List<Material> choices = parseIngredient(split, recipe.getType());
         if (choices == null) {
-            return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
-        }
-
-        if (choices.contains(Material.AIR)) {
-            return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+            return false;
         }
 
         recipe.setIngredients(choices);

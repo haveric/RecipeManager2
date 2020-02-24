@@ -7,9 +7,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.RecipeFileReader;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.util.ParseBit;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -35,35 +33,14 @@ public class AnvilRecipeParser extends BaseRecipeParser {
         // get the ingredients
         String[] ingredientsRaw = split[0].split("\\+");
 
-        int numIngredients = ingredientsRaw.length;
-        if (numIngredients < 1) {
-            return ErrorReporter.getInstance().error("Recipe does not have any ingredients.");
-        } else if (numIngredients > 2) {
-            return ErrorReporter.getInstance().error("Recipe has too many ingredients. Needs 1 or 2.");
-        } else {
-            List<Material> primary = Tools.parseChoice(ingredientsRaw[0], ParseBit.NONE);
+        List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
+        if (choicesList == null) {
+            return false;
+        }
 
-            if (primary == null) {
-                return ErrorReporter.getInstance().error("Recipe needs a primary ingredient!");
-            }
-
-            if (primary.contains(Material.AIR)) {
-                return ErrorReporter.getInstance().error("Recipe does not accept AIR as primary ingredient!");
-            }
-            recipe.setPrimaryIngredient(primary);
-
-            List<Material> secondary;
-            if (numIngredients == 1) {
-                secondary = new ArrayList<>();
-                secondary.add(Material.AIR);
-            } else {
-                secondary = Tools.parseChoice(ingredientsRaw[1], ParseBit.NONE);
-                if (secondary == null) {
-                    return ErrorReporter.getInstance().error("Recipe needs a secondary ingredient!");
-                }
-            }
-
-            recipe.setSecondaryIngredient(secondary);
+        recipe.setPrimaryIngredient(choicesList.get(0));
+        if (choicesList.size() > 1) {
+            recipe.setSecondaryIngredient(choicesList.get(1));
         }
 
         if (split.length > 1) {
