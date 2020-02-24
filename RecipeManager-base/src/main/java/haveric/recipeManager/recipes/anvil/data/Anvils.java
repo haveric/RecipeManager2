@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,17 +26,8 @@ public class Anvils {
         anvils.clear();
     }
 
-    public static void add(Player player, AnvilRecipe recipe, ItemStack left, ItemStack right, ItemResult result, String renameText) {
-        ItemStack leftAdd = null;
-        ItemStack rightAdd = null;
-        if (left != null) {
-            leftAdd = left.clone();
-        }
-
-        if (right != null) {
-            rightAdd = right.clone();
-        }
-        anvils.put(player.getUniqueId(), new Anvil(recipe, leftAdd, rightAdd, result, renameText));
+    public static void add(Player player, AnvilRecipe recipe, List<ItemStack> ingredients, ItemResult result, String renameText) {
+        anvils.put(player.getUniqueId(), new Anvil(recipe, ingredients, result, renameText));
     }
 
     public static Anvil get(Player player) {

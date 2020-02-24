@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,18 +24,8 @@ public class CartographyTables {
         cartographyTables.clear();
     }
 
-    public static void add(Player player, CartographyRecipe recipe, ItemStack top, ItemStack bottom, ItemResult result, Location location) {
-        ItemStack topAdd = null;
-        ItemStack bottomAdd = null;
-        if (top != null) {
-            topAdd = top.clone();
-        }
-
-        if (bottom != null) {
-            bottomAdd = bottom.clone();
-        }
-
-        cartographyTables.put(player.getUniqueId(), new CartographyTable(recipe, topAdd, bottomAdd, result, location));
+    public static void add(Player player, CartographyRecipe recipe, List<ItemStack> ingredients, ItemResult result, Location location) {
+        cartographyTables.put(player.getUniqueId(), new CartographyTable(recipe, ingredients, result, location));
     }
 
     public static CartographyTable get(Player player) {

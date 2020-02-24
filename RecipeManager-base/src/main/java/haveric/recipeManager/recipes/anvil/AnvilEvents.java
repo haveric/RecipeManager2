@@ -183,14 +183,14 @@ public class AnvilEvents implements Listener {
                 boolean sameRight = false;
                 Anvil anvil = Anvils.get(player);
                 if (anvil != null) {
-                    ItemStack lastLeft = anvil.getLeftIngredient();
+                    ItemStack lastLeft = anvil.getIngredient(0);
                     sameLeft = left == null && lastLeft == null;
                     if (!sameLeft && left != null && lastLeft != null) {
                         sameLeft = left.hashCode() == lastLeft.hashCode();
                     }
 
                     if (sameLeft) {
-                        ItemStack lastRight = anvil.getRightIngredient();
+                        ItemStack lastRight = anvil.getIngredient(1);
                         sameRight = right == null && lastRight == null;
                         if (!sameRight && right != null && lastRight != null) {
                             sameRight = right.hashCode() == lastRight.hashCode();
@@ -244,7 +244,10 @@ public class AnvilEvents implements Listener {
                 }
 
                 Anvils.remove(player);
-                Anvils.add(player, recipe, left, right, result, renameText);
+                List<ItemStack> ingredients = new ArrayList<>();
+                ingredients.add(left);
+                ingredients.add(right);
+                Anvils.add(player, recipe, ingredients, result, renameText);
             }
         }
     }
@@ -414,7 +417,7 @@ public class AnvilEvents implements Listener {
                 ItemStack right = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!ToolsItem.isSameItemHash(left, anvil.getLeftIngredient()) || !ToolsItem.isSameItemHash(right, anvil.getRightIngredient())) {
+                if (!ToolsItem.isSameItemHash(left, anvil.getIngredient(0)) || !ToolsItem.isSameItemHash(right, anvil.getIngredient(1))) {
                     break;
                 }
 
@@ -591,15 +594,15 @@ public class AnvilEvents implements Listener {
     private void updateAnvilInventory(Player player, AnvilInventory anvilInventory) {
         Anvil anvil = Anvils.get(player);
 
-        boolean leftMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(0), anvil.getLeftSingleStack());
+        boolean leftMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(0), anvil.getIngredientSingleStack(0));
 
         boolean rightMatch = false;
         if (leftMatch) {
-            rightMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(1), anvil.getRightSingleStack());
+            rightMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(1), anvil.getIngredientSingleStack(1));
 
             if (rightMatch) {
                 // Force a new prepare event by setting an item
-                anvilInventory.setItem(0, anvil.getLeftIngredient());
+                anvilInventory.setItem(0, anvil.getIngredient(0));
             }
         }
 

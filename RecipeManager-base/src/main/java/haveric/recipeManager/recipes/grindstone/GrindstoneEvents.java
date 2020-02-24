@@ -4,12 +4,12 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
+import haveric.recipeManager.data.BaseRecipeData;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.grindstone.data.Grindstone;
 import haveric.recipeManager.recipes.grindstone.data.Grindstones;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -88,7 +88,7 @@ public class GrindstoneEvents implements Listener {
                             return;
                         }
 
-                        Grindstone grindstone = Grindstones.get(player);
+                        BaseRecipeData grindstone = Grindstones.get(player);
                         if (grindstone != null) {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
                                 craftFinishGrindstone(event, player, grindstoneInventory, true);
@@ -395,16 +395,16 @@ public class GrindstoneEvents implements Listener {
 
                 boolean sameTop = false;
                 boolean sameBottom = false;
-                Grindstone grindstone = Grindstones.get(player);
+                BaseRecipeData grindstone = Grindstones.get(player);
                 if (grindstone != null) {
-                    ItemStack lastTop = grindstone.getTopIngredient();
+                    ItemStack lastTop = grindstone.getIngredient(0);
                     sameTop = top == null && lastTop == null;
                     if (!sameTop && top != null && lastTop != null) {
                         sameTop = top.hashCode() == lastTop.hashCode();
                     }
 
                     if (sameTop) {
-                        ItemStack lastBottom = grindstone.getBottomIngredient();
+                        ItemStack lastBottom = grindstone.getIngredient(1);
                         sameBottom = bottom == null && lastBottom == null;
                         if (!sameBottom && bottom != null && lastBottom != null) {
                             sameBottom = bottom.hashCode() == lastBottom.hashCode();
@@ -442,7 +442,10 @@ public class GrindstoneEvents implements Listener {
                 player.updateInventory();
 
                 Grindstones.remove(player);
-                Grindstones.add(player, recipe, top, bottom, result);
+                List<ItemStack> ingredients = new ArrayList<>();
+                ingredients.add(top);
+                ingredients.add(bottom);
+                Grindstones.add(player, recipe, ingredients, result);
             }
         }
     }
@@ -451,7 +454,7 @@ public class GrindstoneEvents implements Listener {
         InventoryView view = event.getView();
         Location location = inventory.getLocation();
 
-        Grindstone grindstone = Grindstones.get(player);
+        BaseRecipeData grindstone = Grindstones.get(player);
 
         int times = 1;
         if (isShiftClick) {
@@ -496,7 +499,7 @@ public class GrindstoneEvents implements Listener {
                 ItemStack bottom = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!ToolsItem.isSameItemHash(top, grindstone.getTopIngredient()) || !ToolsItem.isSameItemHash(bottom, grindstone.getBottomIngredient())) {
+                if (!ToolsItem.isSameItemHash(top, grindstone.getIngredient(0)) || !ToolsItem.isSameItemHash(bottom, grindstone.getIngredient(1))) {
                     break;
                 }
 

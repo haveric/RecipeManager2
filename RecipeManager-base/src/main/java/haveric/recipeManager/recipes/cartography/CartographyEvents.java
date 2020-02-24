@@ -59,7 +59,7 @@ public class CartographyEvents implements Listener {
             if (block != null && block.getType() == Material.CARTOGRAPHY_TABLE) {
                 Player player = event.getPlayer();
                 CartographyTables.remove(player);
-                CartographyTables.add(player, null, null, null, null, block.getLocation());
+                CartographyTables.add(player, null, null, null, block.getLocation());
             }
         }
     }
@@ -321,14 +321,14 @@ public class CartographyEvents implements Listener {
                 boolean sameTop = false;
                 boolean sameBottom = false;
                 if (cartographyTable.getRecipe() != null) {
-                    ItemStack lastTop = cartographyTable.getTopIngredient();
+                    ItemStack lastTop = cartographyTable.getIngredient(0);
                     sameTop = top == null && lastTop == null;
                     if (!sameTop && top != null && lastTop != null) {
                         sameTop = top.hashCode() == lastTop.hashCode();
                     }
 
                     if (sameTop) {
-                        ItemStack lastBottom = cartographyTable.getBottomIngredient();
+                        ItemStack lastBottom = cartographyTable.getIngredient(1);
                         sameBottom = bottom == null && lastBottom == null;
                         if (!sameBottom && bottom != null && lastBottom != null) {
                             sameBottom = bottom.hashCode() == lastBottom.hashCode();
@@ -366,7 +366,10 @@ public class CartographyEvents implements Listener {
                 player.updateInventory();
 
                 CartographyTables.remove(player);
-                CartographyTables.add(player, recipe, top, bottom, result, location);
+                List<ItemStack> ingredients = new ArrayList<>();
+                ingredients.add(top);
+                ingredients.add(bottom);
+                CartographyTables.add(player, recipe, ingredients, result, location);
             }
         }
     }
@@ -419,7 +422,7 @@ public class CartographyEvents implements Listener {
                 ItemStack bottom = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!ToolsItem.isSameItemHash(top, cartographyTable.getTopIngredient()) || !ToolsItem.isSameItemHash(bottom, cartographyTable.getBottomIngredient())) {
+                if (!ToolsItem.isSameItemHash(top, cartographyTable.getIngredient(0)) || !ToolsItem.isSameItemHash(bottom, cartographyTable.getIngredient(1))) {
                     break;
                 }
 
