@@ -22,7 +22,11 @@ public abstract class BaseRecipeParser {
     protected ConditionEvaluator conditionEvaluator;
     protected RecipeRegistrator recipeRegistrator;
 
-    public BaseRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
+    public BaseRecipeParser() {
+        
+    }
+
+    public void init(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
         this.reader = reader;
         this.recipeName = recipeName;
         this.fileFlags = fileFlags;

@@ -1,23 +1,20 @@
 package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeRegistrator;
-import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.recipes.BaseRecipeParser;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.RecipeFileReader;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.recipes.BaseRecipeParser;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrewRecipeParser extends BaseRecipeParser {
-    public BrewRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
-        super(reader, recipeName, fileFlags, recipeRegistrator);
+    public BrewRecipeParser() {
+        super();
     }
 
     @Override

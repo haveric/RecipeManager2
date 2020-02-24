@@ -10,23 +10,15 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.RecipeTypeFactory;
 import haveric.recipeManager.recipes.RecipeTypeLoader;
-import haveric.recipeManager.recipes.anvil.AnvilEvents;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
-import haveric.recipeManager.recipes.brew.BrewEvents;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
 import haveric.recipeManager.recipes.brew.data.BrewingStands;
-import haveric.recipeManager.recipes.campfire.RMCampfireEvents;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
-import haveric.recipeManager.recipes.cartography.CartographyEvents;
-import haveric.recipeManager.recipes.compost.CompostEvents;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
-import haveric.recipeManager.recipes.furnace.RMBaseFurnaceEvents;
 import haveric.recipeManager.recipes.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.furnace.data.Furnaces;
-import haveric.recipeManager.recipes.grindstone.GrindstoneEvents;
-import haveric.recipeManager.recipes.stonecutting.RMStonecuttingEvents;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -52,15 +44,7 @@ public class RecipeManager extends JavaPlugin {
     private static RecipeManager plugin;
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
-    private static Events events;
-    private static BrewEvents brewEvents;
-    private static RMBaseFurnaceEvents furnaceEvents;
-    private static RMCampfireEvents campfireEvents;
-    private static RMStonecuttingEvents stonecuttingEvents;
-    private static CompostEvents compostEvents;
-    private static AnvilEvents anvilEvents;
-    private static GrindstoneEvents grindstoneEvents;
-    private static CartographyEvents cartographyEvents;
+
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -97,18 +81,6 @@ public class RecipeManager extends JavaPlugin {
         }
 
         recipeTypeLoader = new RecipeTypeLoader();
-        events = new Events();
-        brewEvents = new BrewEvents();
-        furnaceEvents = new RMBaseFurnaceEvents();
-        anvilEvents = new AnvilEvents();
-
-        if (Version.has1_14Support()) {
-            campfireEvents = new RMCampfireEvents();
-            stonecuttingEvents = new RMStonecuttingEvents();
-            compostEvents = new CompostEvents();
-            grindstoneEvents = new GrindstoneEvents();
-            cartographyEvents = new CartographyEvents();
-        }
 
         recipes = new Recipes();
 
@@ -223,18 +195,7 @@ public class RecipeManager extends JavaPlugin {
         }
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
-        Events.reload(); // (re)register events
-        BrewEvents.reload();
-        RMBaseFurnaceEvents.reload();
-        AnvilEvents.reload();
-
-        if (Version.has1_14Support()) {
-            RMCampfireEvents.reload();
-            RMStonecuttingEvents.reload();
-            CompostEvents.reload();
-            GrindstoneEvents.reload();
-            CartographyEvents.reload();
-        }
+        RecipeTypeFactory.getInstance().reloadEvents();
     }
 
     private void scanPlugins() {
@@ -323,51 +284,7 @@ public class RecipeManager extends JavaPlugin {
             }
             recipeBooks = null;
 
-            if (events != null) {
-                events.clean();
-            }
-            events = null;
-
-            if (brewEvents != null) {
-                brewEvents.clean();
-            }
-            brewEvents = null;
-
-            if (furnaceEvents != null) {
-                furnaceEvents.clean();
-            }
-            furnaceEvents = null;
-
-            if (campfireEvents != null) {
-                campfireEvents.clean();
-            }
-            campfireEvents = null;
-
-            if (stonecuttingEvents != null) {
-                stonecuttingEvents.clean();
-            }
-            stonecuttingEvents = null;
-
-            if (compostEvents != null) {
-                compostEvents.clean();
-            }
-            compostEvents = null;
-
-            if (anvilEvents != null) {
-                anvilEvents.clean();
-            }
-            anvilEvents = null;
-
-            if (grindstoneEvents != null) {
-                grindstoneEvents.clean();
-            }
-            grindstoneEvents = null;
-
-            if (cartographyEvents != null) {
-                cartographyEvents.clean();
-            }
-            cartographyEvents = null;
-
+            RecipeTypeFactory.getInstance().cleanEvents();
             Settings.clean();
 
             try {
@@ -417,42 +334,6 @@ public class RecipeManager extends JavaPlugin {
         }
 
         return canCraft;
-    }
-
-    public static Events getEvents() {
-        return events;
-    }
-
-    public static BrewEvents getBrewEvents() {
-        return brewEvents;
-    }
-
-    public static RMBaseFurnaceEvents getRMFurnaceEvents() {
-        return furnaceEvents;
-    }
-
-    public static RMCampfireEvents getRMCampfireEvents() {
-        return campfireEvents;
-    }
-
-    public static RMStonecuttingEvents getRMStonecuttingEvents() {
-        return stonecuttingEvents;
-    }
-
-    public static CompostEvents getCompostEvents() {
-        return compostEvents;
-    }
-
-    public static AnvilEvents getAnvilEvents() {
-        return anvilEvents;
-    }
-
-    public static GrindstoneEvents getGrindstoneEvents() {
-        return grindstoneEvents;
-    }
-
-    public static CartographyEvents getCartographyEvents() {
-        return cartographyEvents;
     }
 
     public static FlagLoader getFlagLoader() {

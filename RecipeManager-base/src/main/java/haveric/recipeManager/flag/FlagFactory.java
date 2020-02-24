@@ -29,6 +29,8 @@ public class FlagFactory {
     }
 
     protected void initializeFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {
+        mainAlias = mainAlias.toLowerCase().trim();
+
         if (!initialized) {
             if (mainAlias.startsWith("@")) {
                 mainAlias = mainAlias.split("@")[1];

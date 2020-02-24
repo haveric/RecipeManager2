@@ -1,16 +1,13 @@
 package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeRegistrator;
-import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.recipes.BaseRecipeParser;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.RecipeFileReader;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.recipes.BaseRecipeParser;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CombineRecipeParser extends BaseRecipeParser {
-    public CombineRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
-        super(reader, recipeName, fileFlags, recipeRegistrator);
+    public CombineRecipeParser() {
+        super();
     }
 
     @Override

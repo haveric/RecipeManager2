@@ -1,12 +1,9 @@
 package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.RecipeFileReader;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 
@@ -14,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnvilRecipeParser extends BaseRecipeParser {
-    public AnvilRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
-        super(reader, recipeName, fileFlags, recipeRegistrator);
+    public AnvilRecipeParser() {
+        super();
     }
 
     @Override

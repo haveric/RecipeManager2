@@ -1,21 +1,18 @@
 package haveric.recipeManager.recipes.campfire;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.RecipeFileReader;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RMCampfireRecipeParser extends BaseRecipeParser {
-    public RMCampfireRecipeParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
-        super(reader, recipeName, fileFlags, recipeRegistrator);
+    public RMCampfireRecipeParser() {
+        super();
     }
 
     @Override

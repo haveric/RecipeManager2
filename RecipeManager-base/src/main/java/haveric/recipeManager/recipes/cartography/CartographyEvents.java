@@ -1,17 +1,20 @@
 package haveric.recipeManager.recipes.cartography;
 
-import haveric.recipeManager.*;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Settings;
+import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cartography.data.CartographyTable;
 import haveric.recipeManager.recipes.cartography.data.CartographyTables;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsInventory;
 import haveric.recipeManager.tools.ToolsItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,8 +22,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
@@ -41,17 +42,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartographyEvents implements Listener {
+public class CartographyEvents extends BaseRecipeEvents {
     public CartographyEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getCartographyEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getCartographyEvents(), RecipeManager.getPlugin());
-    }
 
     @EventHandler(priority = EventPriority.LOW)
     public void cartographyInteract(PlayerInteractEvent event) {

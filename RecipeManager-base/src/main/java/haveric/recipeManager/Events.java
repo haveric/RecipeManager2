@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
@@ -21,8 +22,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -44,17 +43,8 @@ import java.util.List;
 /**
  * RecipeManager handled events
  */
-public class Events implements Listener {
+public class Events extends BaseRecipeEvents {
     public Events() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getEvents(), RecipeManager.getPlugin());
-    }
 
     /*
      * Workbench craft events

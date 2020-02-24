@@ -1,15 +1,13 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeRegistrator;
-import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class RemoveResultsParser extends BaseRecipeParser {
-    public RemoveResultsParser(RecipeFileReader reader, String recipeName, Flags fileFlags, RecipeRegistrator recipeRegistrator) {
-        super(reader, recipeName, fileFlags, recipeRegistrator);
+    public RemoveResultsParser() {
+        super();
     }
 
     @Override

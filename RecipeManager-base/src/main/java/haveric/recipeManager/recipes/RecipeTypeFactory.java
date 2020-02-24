@@ -1,14 +1,20 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.RecipeManager;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RecipeTypeFactory {
     private static RecipeTypeFactory instance = null;
-    private Map<String, BaseRecipe> recipeTypes = new HashMap<>();
+    private Map<String, BaseRecipe> recipes = new HashMap<>();
+    private Map<String, BaseRecipeEvents> recipeEvents = new HashMap<>();
+    private Map<String, BaseRecipeParser> recipeParsers = new HashMap<>();
 
     private boolean initialized;
 
@@ -24,13 +30,29 @@ public class RecipeTypeFactory {
         initialized = false;
     }
 
-    protected void initializeRecipeType(String name, BaseRecipe recipe) {
+    protected void initializeRecipeType(String name, BaseRecipe recipe, BaseRecipeParser parser, BaseRecipeEvents events) {
         name = name.toLowerCase().trim();
+
         if (!initialized) {
-            if (recipeTypes.containsKey(name)) {
+            if (recipes.containsKey(name)) {
                 ErrorReporter.getInstance().error("Recipe Type already exists: " + name);
             } else {
-                recipeTypes.put(name, recipe);
+                if (!recipes.containsKey(name)) {
+                    recipes.put(name, recipe);
+
+                    if (!recipeParsers.containsKey(name)) {
+                        recipeParsers.put(name, parser);
+                    }
+
+                    if (events != null) {
+                        String eventsClassName = events.getClass().getName();
+
+                        // Make sure the events class is unique before we add it, allowing multiple recipe types to share events
+                        if (!recipeEvents.containsKey(eventsClassName)) {
+                            recipeEvents.put(eventsClassName, events);
+                        }
+                    }
+                }
             }
         }
     }
@@ -43,13 +65,34 @@ public class RecipeTypeFactory {
         return initialized;
     }
 
+    public void cleanEvents() {
+        for (BaseRecipeEvents event : recipeEvents.values()) {
+            event.clean();
+        }
+    }
+
+    public void reloadEvents() {
+        for (BaseRecipeEvents event : recipeEvents.values()) {
+            HandlerList.unregisterAll(event);
+            Bukkit.getPluginManager().registerEvents(event, RecipeManager.getPlugin());
+        }
+    }
+
     public Map<String, BaseRecipe> getRecipeTypes() {
-        return recipeTypes;
+        return recipes;
     }
 
     public BaseRecipe getRecipeType(String name) {
         Validate.notNull(name);
 
-        return recipeTypes.get(name.toLowerCase().trim());
+        return recipes.get(name.toLowerCase().trim());
+    }
+
+    public Collection<BaseRecipeEvents> getRecipeEvents() {
+        return recipeEvents.values();
+    }
+
+    public BaseRecipeParser getRecipeParser(String name) {
+        return recipeParsers.get(name);
     }
 }

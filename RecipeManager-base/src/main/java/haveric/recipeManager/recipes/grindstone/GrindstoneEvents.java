@@ -9,12 +9,12 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.grindstone.data.Grindstones;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsInventory;
 import haveric.recipeManager.tools.ToolsItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,8 +23,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -45,17 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GrindstoneEvents implements Listener {
+public class GrindstoneEvents extends BaseRecipeEvents {
     public GrindstoneEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getGrindstoneEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getGrindstoneEvents(), RecipeManager.getPlugin());
-    }
 
     @EventHandler(priority= EventPriority.MONITOR)
     public void grindstoneInventoryClose(InventoryCloseEvent event) {

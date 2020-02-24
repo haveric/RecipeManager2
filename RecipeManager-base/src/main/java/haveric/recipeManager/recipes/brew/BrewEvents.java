@@ -2,10 +2,10 @@ package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
 import haveric.recipeManager.recipes.brew.data.BrewingStands;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,8 +14,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -29,17 +27,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class BrewEvents implements Listener {
+public class BrewEvents extends BaseRecipeEvents {
     public BrewEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getBrewEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getBrewEvents(), RecipeManager.getPlugin());
-    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void brewingStandPlace(BlockPlaceEvent event) {

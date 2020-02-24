@@ -13,11 +13,9 @@ public class RecipeFileParser {
     private String currentFile;
     private Flags fileFlags;
     private RecipeRegistrator registrator;
-    private RecipeParserFactory recipeParserFactory;
 
-    public RecipeFileParser(RecipeRegistrator recipeRegistrator, RecipeParserFactory recipeParserFactory) {
+    public RecipeFileParser(RecipeRegistrator recipeRegistrator) {
         registrator = recipeRegistrator;
-        this.recipeParserFactory = recipeParserFactory;
     }
 
     public void parseFile(String root, String fileName) throws Throwable {
@@ -46,8 +44,12 @@ public class RecipeFileParser {
                 directive = directive.substring(0, i);
             }
 
-            BaseRecipeParser parser = recipeParserFactory.getParser(directive, fileReader, recipeName, fileFlags, registrator);
-            if (parser != null) {
+            BaseRecipeParser parser = RecipeTypeFactory.getInstance().getRecipeParser(directive);
+            if (parser == null) {
+                ErrorReporter.getInstance().warning("Unexpected directive: '" + fileReader.getLine() + "'", "This might be caused by previous errors.");
+                fileReader.nextLine();
+            } else {
+                parser.init(fileReader, recipeName, fileFlags, registrator);
                 added = parser.parseRecipe(directiveLine);
             }
 

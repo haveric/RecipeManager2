@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
@@ -32,17 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CompostEvents implements Listener {
+public class CompostEvents extends BaseRecipeEvents {
     public CompostEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getCompostEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getCompostEvents(), RecipeManager.getPlugin());
-    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void placeCompost(PlayerInteractEvent event) {

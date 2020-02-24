@@ -10,6 +10,7 @@ import haveric.recipeManager.flag.flags.any.FlagModLevel;
 import haveric.recipeManager.flag.flags.any.FlagNeedLevel;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.anvil.data.Anvil;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
@@ -27,8 +28,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
@@ -47,17 +46,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AnvilEvents implements Listener {
+public class AnvilEvents extends BaseRecipeEvents {
     public AnvilEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getAnvilEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getAnvilEvents(), RecipeManager.getPlugin());
-    }
 
     @EventHandler
     public void prepareAnvil(PrepareAnvilEvent event) {

@@ -2,7 +2,6 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.RecipeFileParser;
-import haveric.recipeManager.recipes.RecipeParserFactory;
 import haveric.recipeManager.common.RMCChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -93,8 +92,7 @@ public class RecipeProcessor implements Runnable {
                 int numFiles = fileList.size();
                 int parsedFiles = 0;
 
-                RecipeParserFactory parserFactory = new RecipeParserFactory();
-                RecipeFileParser recipeParser = new RecipeFileParser(registrator, parserFactory);
+                RecipeFileParser recipeParser = new RecipeFileParser(registrator);
 
                 // Start reading files...
                 for (String name : fileList) {

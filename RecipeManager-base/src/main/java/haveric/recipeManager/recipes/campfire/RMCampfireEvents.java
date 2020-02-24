@@ -3,19 +3,17 @@ package haveric.recipeManager.recipes.campfire;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.campfire.data.RMCampfires;
 import haveric.recipeManager.tools.ToolsItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Campfire;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockCookEvent;
@@ -24,17 +22,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class RMCampfireEvents implements Listener {
+public class RMCampfireEvents extends BaseRecipeEvents {
     public RMCampfireEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getRMCampfireEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getRMCampfireEvents(), RecipeManager.getPlugin());
-    }
 
     @EventHandler(priority = EventPriority.LOW)
     public void rmCampfirePlayerInteract(PlayerInteractEvent event) {

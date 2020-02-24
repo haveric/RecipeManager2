@@ -11,6 +11,7 @@ import haveric.recipeManager.flag.Flaggable;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.data.FurnaceData;
@@ -34,17 +35,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-public class RMBaseFurnaceEvents implements Listener {
+public class RMBaseFurnaceEvents extends BaseRecipeEvents {
     public RMBaseFurnaceEvents() { }
-
-    public void clean() {
-        HandlerList.unregisterAll(this);
-    }
-
-    public static void reload() {
-        HandlerList.unregisterAll(RecipeManager.getRMFurnaceEvents());
-        Bukkit.getPluginManager().registerEvents(RecipeManager.getRMFurnaceEvents(), RecipeManager.getPlugin());
-    }
 
     private boolean isRecipeSameAsResult(Args a) {
         boolean isSame = false;
