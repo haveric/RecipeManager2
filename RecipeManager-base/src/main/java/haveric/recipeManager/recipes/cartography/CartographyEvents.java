@@ -1,9 +1,6 @@
 package haveric.recipeManager.recipes.cartography;
 
-import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
-import haveric.recipeManager.UpdateInventory;
+import haveric.recipeManager.*;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
@@ -25,11 +22,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.CartographyInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -70,16 +70,23 @@ public class CartographyEvents implements Listener {
     public void cartographyInventoryClose(InventoryCloseEvent event) {
         HumanEntity ent = event.getPlayer();
         if (ent instanceof Player) {
-            Inventory inv = event.getInventory();
-
-            if (inv instanceof CartographyInventory) {
-                Location location = inv.getLocation();
-
-                if (location != null) {
-                    CartographyTables.remove((Player) ent);
-                }
-            }
+            CartographyTables.remove((Player) ent);
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerTeleport(PlayerTeleportEvent event) {
+        CartographyTables.remove(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerDeath(PlayerDeathEvent event) {
+        CartographyTables.remove(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerQuit(PlayerQuitEvent event) {
+        CartographyTables.remove(event.getPlayer());
     }
 
     @EventHandler

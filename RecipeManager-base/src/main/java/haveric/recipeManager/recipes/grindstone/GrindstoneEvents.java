@@ -25,10 +25,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -58,16 +61,23 @@ public class GrindstoneEvents implements Listener {
     public void grindstoneInventoryClose(InventoryCloseEvent event) {
         HumanEntity ent = event.getPlayer();
         if (ent instanceof Player) {
-            Inventory inv = event.getInventory();
-
-            if (inv instanceof GrindstoneInventory) {
-                Location location = inv.getLocation();
-
-                if (location != null) {
-                    Grindstones.remove((Player) ent);
-                }
-            }
+            Grindstones.remove((Player) ent);
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerTeleport(PlayerTeleportEvent event) {
+        Grindstones.remove(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerDeath(PlayerDeathEvent event) {
+        Grindstones.remove(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerQuit(PlayerQuitEvent event) {
+        Grindstones.remove(event.getPlayer());
     }
 
     @EventHandler

@@ -30,8 +30,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -241,16 +244,23 @@ public class AnvilEvents implements Listener {
     public void anvilInventoryClose(InventoryCloseEvent event) {
         HumanEntity ent = event.getPlayer();
         if (ent instanceof Player) {
-            Inventory inv = event.getInventory();
-
-            if (inv instanceof AnvilInventory) {
-                Location location = inv.getLocation();
-
-                if (location != null) {
-                    Anvils.remove((Player) ent);
-                }
-            }
+            Anvils.remove((Player) ent);
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerTeleport(PlayerTeleportEvent event) {
+        Anvils.remove(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerDeath(PlayerDeathEvent event) {
+        Anvils.remove(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void playerQuit(PlayerQuitEvent event) {
+        Anvils.remove(event.getPlayer());
     }
 
     @EventHandler
