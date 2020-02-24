@@ -422,7 +422,7 @@ public class CartographyEvents implements Listener {
                 ItemStack bottom = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!ToolsItem.isSameItemHash(top, cartographyTable.getIngredient(0)) || !ToolsItem.isSameItemHash(bottom, cartographyTable.getIngredient(1))) {
+                if (!ToolsItem.isSameItemHash(top, cartographyTable.getIngredientSingleStack(0)) || !ToolsItem.isSameItemHash(bottom, cartographyTable.getIngredientSingleStack(1))) {
                     break;
                 }
 

@@ -499,7 +499,7 @@ public class GrindstoneEvents implements Listener {
                 ItemStack bottom = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!ToolsItem.isSameItemHash(top, grindstone.getIngredient(0)) || !ToolsItem.isSameItemHash(bottom, grindstone.getIngredient(1))) {
+                if (!ToolsItem.isSameItemHash(top, grindstone.getIngredientSingleStack(0)) || !ToolsItem.isSameItemHash(bottom, grindstone.getIngredientSingleStack(1))) {
                     break;
                 }
 

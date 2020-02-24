@@ -417,7 +417,7 @@ public class AnvilEvents implements Listener {
                 ItemStack right = inventory.getItem(1);
 
                 // Make sure no items have changed or stop crafting
-                if (!ToolsItem.isSameItemHash(left, anvil.getIngredient(0)) || !ToolsItem.isSameItemHash(right, anvil.getIngredient(1))) {
+                if (!ToolsItem.isSameItemHash(left, anvil.getIngredientSingleStack(0)) || !ToolsItem.isSameItemHash(right, anvil.getIngredientSingleStack(1))) {
                     break;
                 }
 
