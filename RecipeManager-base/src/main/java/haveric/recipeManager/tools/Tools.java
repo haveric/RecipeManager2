@@ -57,24 +57,6 @@ public class Tools {
         return null;
     }
 
-    public static int playerFreeSpaceForItem(Player player, ItemStack item) {
-        Inventory inv = player.getInventory();
-
-        int available = 0;
-
-        int itemMaxStackSize = item.getType().getMaxStackSize();
-        int inventoryMaxStackSize = inv.getMaxStackSize();
-        for (ItemStack i : inv.getStorageContents()) {
-            if (i == null || i.getType() == Material.AIR) {
-                available += itemMaxStackSize;
-            } else if (item.isSimilar(i)) {
-                available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
-            }
-        }
-
-        return available;
-    }
-
     public static boolean playerCanAddItem(Player player, ItemStack item) {
         Inventory inv = player.getInventory();
         int amount = item.getAmount();

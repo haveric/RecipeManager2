@@ -82,10 +82,12 @@ public class ToolsExp {
         return exp;
     }
 
+/* Currently unused, but may be needed in the future
     public static int getExpUntilNextLevel(final Player player) {
         int exp = Math.round(getExpAtLevel(player) * player.getExp());
         int nextLevel = player.getLevel();
 
         return getExpAtLevel(nextLevel) - exp;
     }
+*/
 }
