@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes;
 
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
@@ -18,7 +19,6 @@ import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManagerCommon.recipes.RMCRecipeType;
 import org.bukkit.ChatColor;
 
 public class RecipeTypeLoader {
@@ -27,34 +27,34 @@ public class RecipeTypeLoader {
     }
 
     private void loadDefaultRecipeTypes() {
-        RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.ANVIL.getDirective(), new AnvilRecipe());
-        RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.BREW.getDirective(), new BrewRecipe());
-        RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.FUEL.getDirective(), new FuelRecipe());
+        loadRecipeType(RMCRecipeType.ANVIL.getDirective(), new AnvilRecipe());
+        loadRecipeType(RMCRecipeType.BREW.getDirective(), new BrewRecipe());
+        loadRecipeType(RMCRecipeType.FUEL.getDirective(), new FuelRecipe());
 
-        RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.SPECIAL.getDirective(), new RemoveResultRecipe());
+        loadRecipeType(RMCRecipeType.SPECIAL.getDirective(), new RemoveResultRecipe());
 
         if (Version.has1_13Support()) {
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe1_13());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe1_13());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe1_13());
+            loadRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe1_13());
+            loadRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe1_13());
+            loadRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe1_13());
         } else {
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe());
+            loadRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe());
+            loadRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe());
+            loadRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe());
         }
 
         if (Version.has1_14Support()) {
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.BLASTING.getDirective(), new RMBlastingRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.CAMPFIRE.getDirective(), new RMCampfireRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.CARTOGRAPHY.getDirective(), new CartographyRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.GRINDSTONE.getDirective(), new GrindstoneRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.COMPOST.getDirective(), new CompostRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.SMOKING.getDirective(), new RMSmokingRecipe());
-            RecipeTypeFactory.getInstance().initializeRecipeType(RMCRecipeType.STONECUTTING.getDirective(), new RMStonecuttingRecipe());
+            loadRecipeType(RMCRecipeType.BLASTING.getDirective(), new RMBlastingRecipe());
+            loadRecipeType(RMCRecipeType.CAMPFIRE.getDirective(), new RMCampfireRecipe());
+            loadRecipeType(RMCRecipeType.CARTOGRAPHY.getDirective(), new CartographyRecipe());
+            loadRecipeType(RMCRecipeType.GRINDSTONE.getDirective(), new GrindstoneRecipe());
+            loadRecipeType(RMCRecipeType.COMPOST.getDirective(), new CompostRecipe());
+            loadRecipeType(RMCRecipeType.SMOKING.getDirective(), new RMSmokingRecipe());
+            loadRecipeType(RMCRecipeType.STONECUTTING.getDirective(), new RMStonecuttingRecipe());
         }
     }
 
-    public void loadCustomRecipeType(String recipeTypeName, BaseRecipe recipe) {
+    public void loadRecipeType(String recipeTypeName, BaseRecipe recipe) {
         if (RecipeTypeFactory.getInstance().isInitialized()) {
             MessageSender.getInstance().info(ChatColor.RED + "Custom recipe types must be added in your onEnable() method.");
         } else {
