@@ -15,7 +15,7 @@ Eclipse setup:
 6. Click Next
 7. On the Branch Selection screen, the master branch should already be selected. Click Next
 8. On the Local Destination screen, choose the directory to store the local git project (should default to C:\Users\name\git\recipeManager2) and click Next
-9. Leave the imort as "Import existing Eclipse projects" and click Next
+9. Leave the import as "Import existing Eclipse projects" and click Next
 10. recipeManager2 should be selected and you can hit finish
 11. In the branch selection of RecipeManager2, there is a master branch and a gh-pages branch. You only need the master branch for development. gh-pages is for website testing which I may be moving in the future
 12. Continue to import the existing project.
