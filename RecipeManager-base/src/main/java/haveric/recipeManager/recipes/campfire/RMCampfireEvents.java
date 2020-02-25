@@ -1,8 +1,10 @@
 package haveric.recipeManager.recipes.campfire;
 
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
@@ -81,9 +83,10 @@ public class RMCampfireEvents extends BaseRecipeEvents {
 
         if (block.getType() == Material.CAMPFIRE) {
             ItemStack ingredient = event.getSource();
-            RMCampfireRecipe recipe = RecipeManager.getRecipes().getRMCampfireRecipe(ingredient);
 
-            if (recipe != null) {
+            BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.CAMPFIRE, ingredient);
+            if (baseRecipe instanceof RMCampfireRecipe) {
+                RMCampfireRecipe recipe = (RMCampfireRecipe) baseRecipe;
                 Campfire campfire = (Campfire) block.getState();
 
                 int slot = -1;

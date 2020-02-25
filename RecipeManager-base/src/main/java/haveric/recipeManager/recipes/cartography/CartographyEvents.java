@@ -4,10 +4,12 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cartography.data.CartographyTable;
@@ -180,30 +182,14 @@ public class CartographyEvents extends BaseRecipeEvents {
         ItemStack top = inventory.getItem(0);
         ItemStack bottom = inventory.getItem(1);
 
-        CartographyRecipe recipe = Recipes.getInstance().getCartographyRecipe(top, bottom);
-        if (recipe == null) {
-            if (top != null && bottom != null) {
-                if (top.getType() == Material.FILLED_MAP) {
-                    Material bottomType = bottom.getType();
-                    if (bottomType == Material.PAPER) {
-                        if (!Settings.getInstance().getSpecialCartographyExtend()) {
-                            inventory.setItem(2, null);
-                            player.updateInventory();
-                        }
-                    } else if (bottomType == Material.MAP) {
-                        if (!Settings.getInstance().getSpecialCartographyClone()) {
-                            inventory.setItem(2, null);
-                            player.updateInventory();
-                        }
-                    } else if (bottomType == Material.GLASS_PANE) {
-                        if (!Settings.getInstance().getSpecialCartographyLock()) {
-                            inventory.setItem(2, null);
-                            player.updateInventory();
-                        }
-                    }
-                }
-            }
-        } else {
+        List<ItemStack> ingredients = new ArrayList<>();
+        ingredients.add(top);
+        ingredients.add(bottom);
+
+        BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.CARTOGRAPHY, ingredients, null);
+        if (baseRecipe instanceof CartographyRecipe) {
+            CartographyRecipe recipe = (CartographyRecipe) baseRecipe;
+
             CartographyTable cartographyTable = CartographyTables.get(player);
             Location location = cartographyTable.getLocation();
 
@@ -234,10 +220,29 @@ public class CartographyEvents extends BaseRecipeEvents {
                 player.updateInventory();
 
                 CartographyTables.remove(player);
-                List<ItemStack> ingredients = new ArrayList<>();
-                ingredients.add(top);
-                ingredients.add(bottom);
                 CartographyTables.add(player, recipe, ingredients, result, location);
+            }
+        } else {
+            if (top != null && bottom != null) {
+                if (top.getType() == Material.FILLED_MAP) {
+                    Material bottomType = bottom.getType();
+                    if (bottomType == Material.PAPER) {
+                        if (!Settings.getInstance().getSpecialCartographyExtend()) {
+                            inventory.setItem(2, null);
+                            player.updateInventory();
+                        }
+                    } else if (bottomType == Material.MAP) {
+                        if (!Settings.getInstance().getSpecialCartographyClone()) {
+                            inventory.setItem(2, null);
+                            player.updateInventory();
+                        }
+                    } else if (bottomType == Material.GLASS_PANE) {
+                        if (!Settings.getInstance().getSpecialCartographyLock()) {
+                            inventory.setItem(2, null);
+                            player.updateInventory();
+                        }
+                    }
+                }
             }
         }
     }

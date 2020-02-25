@@ -1,6 +1,9 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
@@ -16,8 +19,6 @@ import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.*;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -369,7 +370,7 @@ public class Vanilla {
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
             if (recipe instanceof FuelRecipe) {
-                RecipeManager.getRecipes().indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
+                RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
             }
         }
     }
@@ -462,7 +463,7 @@ public class Vanilla {
     private static void addCompostRecipe(Material ingredient, double chance) {
         CompostRecipe recipe = new CompostRecipe(ingredient, chance);
         initialRecipes.put(recipe, info);
-        RecipeManager.getRecipes().indexCompost.put(recipe.getIndexString().get(0), recipe);
+        RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.COMPOST.getDirective(), recipe);
     }
 
     private static void initSpecialRecipes() {
@@ -961,7 +962,7 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
 
                     if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
                         baseRecipeIterator.replace(recipe, overrideItem);
                         baseRecipeIterator.finish();
                         return sr;
@@ -1006,7 +1007,7 @@ public class Vanilla {
                     sh = sr.getShape();
 
                     if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
                         baseRecipeIterator.replace(recipe, overrideItem);
                         baseRecipeIterator.finish();
                         return sr;
@@ -1042,7 +1043,7 @@ public class Vanilla {
 
                     if (r instanceof ShapelessRecipe) {
                         if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, choiceList)) {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
                             baseRecipeIterator.replace(recipe, overrideItem);
                             baseRecipeIterator.finish();
                             return r;
@@ -1061,7 +1062,7 @@ public class Vanilla {
 
                     if (r instanceof ShapelessRecipe) {
                         if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.getIndex());
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
                             baseRecipeIterator.replace(recipe, overrideItem);
                             baseRecipeIterator.finish();
                             return r;
@@ -1173,7 +1174,7 @@ public class Vanilla {
             BaseRecipe recipe = entry.getKey();
 
             if (recipe instanceof FuelRecipe) {
-                RecipeManager.getRecipes().indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
+                RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
             } else {
                 if (recipe.isVanillaSpecialRecipe()) {
                     continue;

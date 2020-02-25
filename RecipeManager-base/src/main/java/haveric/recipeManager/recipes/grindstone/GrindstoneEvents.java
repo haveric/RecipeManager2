@@ -4,11 +4,13 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.data.BaseRecipeData;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.grindstone.data.Grindstones;
@@ -157,8 +159,48 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         ItemStack top = inventory.getItem(0);
         ItemStack bottom = inventory.getItem(1);
 
-        GrindstoneRecipe recipe = Recipes.getInstance().getGrindstoneRecipe(top, bottom);
-        if (recipe == null) {
+        List<ItemStack> ingredients = new ArrayList<>();
+        ingredients.add(top);
+        ingredients.add(bottom);
+
+        BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.GRINDSTONE, ingredients, null);
+        if (baseRecipe instanceof GrindstoneRecipe) {
+            GrindstoneRecipe recipe = (GrindstoneRecipe) baseRecipe;
+
+            Location location = inventory.getLocation();
+
+            if (location != null) {
+                Block block = location.getBlock();
+
+                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
+                ItemResult result = recipe.getDisplayResult(a);
+                if (result != null) {
+                    a.setResult(result);
+
+                    if (recipe.sendPrepare(a)) {
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                    } else {
+                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        result = null;
+                    }
+
+                    if (result != null) {
+                        if (result.sendPrepare(a)) {
+                            a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        } else {
+                            a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                            result = null;
+                        }
+                    }
+                }
+
+                inventory.setItem(2, result);
+                player.updateInventory();
+
+                Grindstones.remove(player);
+                Grindstones.add(player, recipe, ingredients, result);
+            }
+        } else {
             if (top != null && bottom != null) {
                 if (top.getType() == bottom.getType() && top.getType().getMaxDurability() > 0) {
                     List<Material> combineMaterials = Settings.getInstance().getGrindstoneCombineItem();
@@ -278,43 +320,6 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                         }
                     }
                 }
-            }
-        } else {
-            Location location = inventory.getLocation();
-
-            if (location != null) {
-                Block block = location.getBlock();
-
-                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
-                ItemResult result = recipe.getDisplayResult(a);
-                if (result != null) {
-                    a.setResult(result);
-
-                    if (recipe.sendPrepare(a)) {
-                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                    } else {
-                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                        result = null;
-                    }
-
-                    if (result != null) {
-                        if (result.sendPrepare(a)) {
-                            a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                        } else {
-                            a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                            result = null;
-                        }
-                    }
-                }
-
-                inventory.setItem(2, result);
-                player.updateInventory();
-
-                Grindstones.remove(player);
-                List<ItemStack> ingredients = new ArrayList<>();
-                ingredients.add(top);
-                ingredients.add(bottom);
-                Grindstones.add(player, recipe, ingredients, result);
             }
         }
     }

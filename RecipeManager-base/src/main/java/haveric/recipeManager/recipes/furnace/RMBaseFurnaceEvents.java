@@ -6,11 +6,14 @@ import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnRandomEvent;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flaggable;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
@@ -19,14 +22,15 @@ import haveric.recipeManager.recipes.furnace.data.Furnaces;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
@@ -85,19 +89,23 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
     }
 
     private RMBaseFurnaceRecipe getSpecificFurnaceRecipe(Furnace furnace, ItemStack item) {
-        RMBaseFurnaceRecipe recipe;
+        RMCRecipeType type;
 
         if (Version.has1_14Support() && furnace instanceof BlastFurnace) {
-            recipe = RecipeManager.getRecipes().getRMBlastingRecipe(item);
+            type = RMCRecipeType.BLASTING;
         } else if (Version.has1_14Support() && furnace instanceof Smoker) {
-            recipe = RecipeManager.getRecipes().getRMSmokingRecipe(item);
-        } else if (Version.has1_13Support()) {
-            recipe = RecipeManager.getRecipes().getSmeltRecipe(item);
+            type = RMCRecipeType.SMOKING;
         } else {
-            recipe = RecipeManager.getRecipes().getSmeltLegacyRecipe(item);
+            type = RMCRecipeType.SMELT;
         }
 
-        return recipe;
+        BaseRecipe recipe = RecipeManager.getRecipes().getRecipe(type, item);
+        RMBaseFurnaceRecipe furnaceRecipe = null;
+        if (recipe instanceof RMBaseFurnaceRecipe) {
+            furnaceRecipe = (RMBaseFurnaceRecipe) recipe;
+        }
+
+        return furnaceRecipe;
     }
 
     /*
@@ -289,9 +297,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     int hotbarButton = event.getHotbarButton();
                     ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
 
-                    FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(hotbarItem);
+                    BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, hotbarItem);
 
-                    if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof FuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(hotbarItem.clone());
@@ -301,9 +309,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                         }
                     }
                 } else if (event.isLeftClick()) {
-                    FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
+                    BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, cursor);
 
-                    if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof FuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(cursor.clone());
@@ -345,9 +353,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                         }
                     }
                 } else if (event.isRightClick()) {
-                    FuelRecipe fuelRecipe = Recipes.getInstance().getFuelRecipe(cursor);
+                    BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, cursor);
 
-                    if (fuelRecipe != null && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof FuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 int cursorAmount = cursor.getAmount();
@@ -405,7 +413,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 int targetSlot = 0;
 
                 if (Settings.getInstance().getFurnaceShiftClick() == 'f' || event.isRightClick()) {
-                    if (RecipeManager.getRecipes().getFuelRecipe(clicked) != null) {
+                    if (Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, clicked) != null) {
                         targetSlot = 1;
                     }
                 }
@@ -564,9 +572,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
         ItemStack fuel = event.getFuel();
 
-        final FuelRecipe fuelRecipe = RecipeManager.getRecipes().getFuelRecipe(fuel);
-
-        if (fuelRecipe != null) {
+        BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, fuel);
+        if (baseRecipe instanceof FuelRecipe) {
+            FuelRecipe fuelRecipe = (FuelRecipe) baseRecipe;
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
             }
@@ -616,7 +624,8 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
             }
         }
 
-        if (fuelRecipe != null) {
+        if (baseRecipe instanceof FuelRecipe) {
+            FuelRecipe fuelRecipe = (FuelRecipe) baseRecipe;
             event.setBurnTime(burnTime);
 
             long randTime = (long) Math.floor(Math.random() * burnTime);
@@ -774,32 +783,44 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
             }
 
             if (Version.has1_14Support() && furnace instanceof BlastFurnace) {
-                for (RMBlastingRecipe r : RecipeManager.getRecipes().getBlastingRecipes()) {
-                    if (result.isSimilar(r.getResult())) {
-                        smeltRecipe = r;
-                        break;
+                for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.BLASTING)) {
+                    if (r instanceof RMBlastingRecipe) {
+                        RMBlastingRecipe br = (RMBlastingRecipe) r;
+                        if (result.isSimilar(br.getResult())) {
+                            smeltRecipe = br;
+                            break;
+                        }
                     }
                 }
             } else if (Version.has1_14Support() && furnace instanceof Smoker) {
-                for (RMSmokingRecipe r : RecipeManager.getRecipes().getSmokingRecipes()) {
-                    if (result.isSimilar(r.getResult())) {
-                        smeltRecipe = r;
-                        break;
+                for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMOKING)) {
+                    if (r instanceof RMSmokingRecipe) {
+                        RMSmokingRecipe sr = (RMSmokingRecipe) r;
+                        if (result.isSimilar(sr.getResult())) {
+                            smeltRecipe = sr;
+                            break;
+                        }
                     }
                 }
             } else {
                 if (Version.has1_13Support()) {
-                    for (RMFurnaceRecipe1_13 r : RecipeManager.getRecipes().getFurnaceRecipes()) {
-                        if (result.isSimilar(r.getResult())) {
-                            smeltRecipe = r;
-                            break;
+                    for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMELT)) {
+                        if (r instanceof RMFurnaceRecipe1_13) {
+                            RMFurnaceRecipe1_13 fr = (RMFurnaceRecipe1_13) r;
+                            if (result.isSimilar(fr.getResult())) {
+                                smeltRecipe = fr;
+                                break;
+                            }
                         }
                     }
                 } else {
-                    for (RMFurnaceRecipe r : RecipeManager.getRecipes().getLegacyFurnaceRecipes()) {
-                        if (result.isSimilar(r.getResult())) {
-                            smeltRecipe = r;
-                            break;
+                    for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMELT)) {
+                        if (r instanceof RMFurnaceRecipe) {
+                            RMFurnaceRecipe fr = (RMFurnaceRecipe) r;
+                            if (result.isSimilar(fr.getResult())) {
+                                smeltRecipe = fr;
+                                break;
+                            }
                         }
                     }
                 }

@@ -1,5 +1,7 @@
 package haveric.recipeManager.recipes.craft;
 
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
@@ -8,8 +10,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -233,13 +233,7 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
             return null;
         }
 
-        ShapedRecipe bukkitRecipe;
-        if (vanilla) {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
-        } else {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
-        }
-
+        ShapedRecipe bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
 
         bukkitRecipe.shape(choiceShape);
 
@@ -356,5 +350,15 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (result != null) {
+            recipeIndexes.add(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipeIndexes;
     }
 }

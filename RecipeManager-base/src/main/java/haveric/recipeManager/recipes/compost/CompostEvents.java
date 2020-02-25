@@ -2,23 +2,27 @@ package haveric.recipeManager.recipes.compost;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -111,15 +115,16 @@ public class CompostEvents extends BaseRecipeEvents {
 
     private void addCompost(Cancellable event, ComposterData data, Block block, ItemStack item, Player player) {
         UUID playerUUID = data.getPlayerUUID();
-        CompostRecipe removed = Recipes.getInstance().getRemovedCompostRecipe(item);
-        if (removed != null) {
+        BaseRecipe baseRemovedRecipe = Recipes.getInstance().getRemovedRecipe(RMCRecipeType.COMPOST, item);
+        if (baseRemovedRecipe instanceof CompostRecipe) {
             event.setCancelled(true);
         }
 
-        CompostRecipe recipe = Recipes.getInstance().getCompostRecipe(item);
-        if (recipe != null) {
+        BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.COMPOST, item);
+        if (baseRecipe instanceof CompostRecipe) {
+            CompostRecipe recipe = (CompostRecipe) baseRecipe;
             // No overridden compost recipes, so let's ignore vanilla recipes
-            if (recipe.getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT && !Recipes.hasAnyOverridenCompostRecipe) {
+            if (recipe.getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT && !Recipes.getInstance().getRecipeTypeHasOverride(RMCRecipeType.COMPOST)) {
                 return;
             }
 
@@ -201,7 +206,7 @@ public class CompostEvents extends BaseRecipeEvents {
                         return;
                     }
                 } else {
-                    sameRecipe = recipe.getIndex() == dataRecipe.getIndex();
+                    sameRecipe = recipe.hashCode() == dataRecipe.hashCode();
                     if (!sameRecipe) {
                         if (!recipe.isMultiResult() && !dataRecipe.isMultiResult()) {
                             ItemResult recipeResult = recipe.getFirstResult();

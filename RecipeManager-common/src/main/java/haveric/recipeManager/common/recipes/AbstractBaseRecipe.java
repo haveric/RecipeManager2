@@ -4,6 +4,7 @@ import haveric.recipeManager.common.RMCChatColor;
 import org.apache.commons.lang.WordUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractBaseRecipe {
@@ -63,8 +64,8 @@ public abstract class AbstractBaseRecipe {
         return WordUtils.capitalizeFully(getType().getDirective()) + " Recipe" + getName() + " is invalid!";
     }
 
-    public int getIndex() {
-        return hash;
+    public List<String> getIndexes() {
+        return Collections.singletonList(String.valueOf(hash));
     }
 
     @Override

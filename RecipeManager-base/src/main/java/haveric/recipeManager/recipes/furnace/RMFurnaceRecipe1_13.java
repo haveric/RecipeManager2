@@ -1,8 +1,8 @@
 package haveric.recipeManager.recipes.furnace;
 
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.RecipeChoice;
 

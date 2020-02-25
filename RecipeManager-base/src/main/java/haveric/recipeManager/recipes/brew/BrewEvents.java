@@ -1,7 +1,9 @@
 package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
@@ -81,9 +83,10 @@ public class BrewEvents extends BaseRecipeEvents {
         BrewerInventory inventory = event.getContents();
 
         ItemStack ingredient = inventory.getIngredient();
-        BrewRecipe recipe = RecipeManager.getRecipes().getBrewRecipe(ingredient);
+        BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.BREW, ingredient);
+        if (baseRecipe instanceof BrewRecipe) {
+            BrewRecipe recipe = (BrewRecipe) baseRecipe;
 
-        if (recipe != null) {
             Block block = event.getBlock();
             Location location = block.getLocation();
             BrewingStandData data = BrewingStands.get(location);

@@ -2,7 +2,9 @@ package haveric.recipeManager.recipes.compost.data;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -162,7 +164,10 @@ public class ComposterData implements ConfigurationSerializable {
         CompostRecipe recipe = null;
 
         if (ingredients != null && ingredients.size() > 0) {
-            recipe = Recipes.getInstance().getCompostRecipe(ingredients.get(0));
+            BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.COMPOST, ingredients.get(0));
+            if (baseRecipe instanceof CompostRecipe) {
+                recipe = (CompostRecipe) baseRecipe;
+            }
         }
 
         return recipe;

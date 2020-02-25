@@ -14,6 +14,7 @@ import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.CampfireRecipe;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
@@ -181,7 +182,8 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    public List<String> getIndexString() {
+    @Override
+    public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
         for (Material material : ingredientChoice) {
@@ -274,5 +276,15 @@ public class RMCampfireRecipe extends SingleResultRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() == 1) {
+            recipeIndexes.add(ingredients.get(0).getType().toString());
+        }
+
+        return recipeIndexes;
     }
 }

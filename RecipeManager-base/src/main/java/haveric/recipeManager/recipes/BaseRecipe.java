@@ -3,6 +3,9 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flaggable;
@@ -10,12 +13,12 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+
+import java.util.List;
 
 public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     private Flags flags;
@@ -267,6 +270,10 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
 
     public int findItemInIngredients(Material type, Short data) {
         return 0;
+    }
+
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        return null;
     }
 
     public boolean isValidBlockMaterial(Material material) {

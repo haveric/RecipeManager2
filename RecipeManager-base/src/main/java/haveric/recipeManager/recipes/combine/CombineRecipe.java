@@ -1,5 +1,8 @@
 package haveric.recipeManager.recipes.combine;
 
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
@@ -12,9 +15,6 @@ import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -199,17 +199,9 @@ public class CombineRecipe extends PreparableResultRecipe {
 
         ShapelessRecipe bukkitRecipe;
         if (Version.has1_12Support()) {
-            if (vanilla) {
-                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
-            } else {
-                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            if (vanilla) {
-                bukkitRecipe = new ShapelessRecipe(getFirstResult());
-            } else {
-                bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
+            bukkitRecipe = new ShapelessRecipe(getFirstResult());
         }
 
         for (ItemStack item : ingredients) {
@@ -307,5 +299,15 @@ public class CombineRecipe extends PreparableResultRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (result != null) {
+            recipeIndexes.add(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipeIndexes;
     }
 }

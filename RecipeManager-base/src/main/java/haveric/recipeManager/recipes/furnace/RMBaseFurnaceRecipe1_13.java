@@ -210,7 +210,8 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         customName = false;
     }
 
-    public List<String> getIndexString() {
+    @Override
+    public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
         for (Material material : ingredientChoice) {
@@ -342,5 +343,15 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() == 1) {
+            recipeIndexes.add(ingredients.get(0).getType().toString());
+        }
+
+        return recipeIndexes;
     }
 }

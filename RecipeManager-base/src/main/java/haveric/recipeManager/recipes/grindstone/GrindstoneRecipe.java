@@ -9,6 +9,7 @@ import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -133,7 +134,8 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
         customName = false;
     }
 
-    public List<String> getIndexString() {
+    @Override
+    public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
         for (Material primary : primaryIngredient) {
@@ -193,5 +195,15 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() == 2) {
+            recipeIndexes.add(ingredients.get(0).getType().toString() + "-" + ingredients.get(1).getType().toString());
+        }
+
+        return recipeIndexes;
     }
 }

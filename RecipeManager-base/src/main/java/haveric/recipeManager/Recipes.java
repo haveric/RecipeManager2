@@ -1,38 +1,21 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableMap;
-import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.recipes.*;
-import haveric.recipeManager.recipes.anvil.AnvilRecipe;
-import haveric.recipeManager.recipes.brew.BrewRecipe;
-import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
-import haveric.recipeManager.recipes.cartography.CartographyRecipe;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
-import haveric.recipeManager.recipes.compost.CompostRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.furnace.RMSmokingRecipe;
-import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
-import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.recipes.*;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * RecipeManager's recipe storage
@@ -46,55 +29,21 @@ public class Recipes {
     protected Map<BaseRecipe, RMCRecipeInfo> index = new HashMap<>();
 
     // Quick-find index
-    private Map<Integer, CraftRecipe> indexCraftLegacy = new HashMap<>();
-    private Map<Integer, CraftRecipe1_13> indexCraft = new HashMap<>();
-    private Map<Integer, CombineRecipe> indexCombine = new HashMap<>();
-    private Map<String, RMFurnaceRecipe> indexSmeltLegacy = new HashMap<>();
-    private Map<String, RMFurnaceRecipe> indexSmeltLegacyFuels = new HashMap<>();
-    private Map<String, RMFurnaceRecipe1_13> indexSmelt = new HashMap<>();
-    private Map<String, RMFurnaceRecipe1_13> indexSmeltFuels = new HashMap<>();
-    private Map<String, RMBlastingRecipe> indexBlasting = new HashMap<>();
-    private Map<String, RMBlastingRecipe> indexBlastingFuels = new HashMap<>();
-    private Map<String, RMSmokingRecipe> indexSmoking = new HashMap<>();
-    private Map<String, RMSmokingRecipe> indexSmokingFuels = new HashMap<>();
-    private Map<String, RMCampfireRecipe> indexCampfire = new HashMap<>();
-    private Map<String, RMStonecuttingRecipe> indexStonecutting = new HashMap<>();
-    protected Map<String, FuelRecipe> indexFuels = new HashMap<>();
-    private Map<String, BrewRecipe> indexBrew = new HashMap<>();
-    protected Map<String, CompostRecipe> indexCompost = new HashMap<>();
-    protected Map<String, CompostRecipe> indexRemovedCompost = new HashMap<>();
-    public static boolean hasAnyOverridenCompostRecipe = false;
-    private Map<String, AnvilRecipe> indexAnvil = new HashMap<>();
-    private Map<String, GrindstoneRecipe> indexGrindstone = new HashMap<>();
-    private Map<String, CartographyRecipe> indexCartography = new HashMap<>();
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
+    private Map<String, Map<String, BaseRecipe>> indexRecipes = new HashMap<>();
+    private Map<String, Map<String, BaseRecipe>> indexRemovedRecipes = new HashMap<>();
+    private Map<String, Boolean> recipeTypeContainsOverride = new HashMap<>();
 
     public Recipes() {
     }
 
     public void clean() {
         index.clear();
-        indexCraftLegacy.clear();
-        indexCraft.clear();
-        indexCombine.clear();
-        indexSmeltLegacy.clear();
-        indexSmeltLegacyFuels.clear();
-        indexSmelt.clear();
-        indexSmeltFuels.clear();
-        indexFuels.clear();
-        indexBlasting.clear();
-        indexBlastingFuels.clear();
-        indexSmoking.clear();
-        indexSmokingFuels.clear();
-        indexCampfire.clear();
-        indexStonecutting.clear();
-        indexBrew.clear();
-        indexCompost.clear();
-        indexRemovedCompost.clear();
-        indexAnvil.clear();
-        indexGrindstone.clear();
-        indexCartography.clear();
+
         indexName.clear();
+        indexRecipes.clear();
+        indexRemovedRecipes.clear();
+        recipeTypeContainsOverride.clear();
     }
 
     /**
@@ -149,439 +98,141 @@ public class Recipes {
                 if (choice instanceof RecipeChoice.MaterialChoice) {
                     RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
 
-                    return (getSmeltRecipe(new ItemStack(materialChoice.getChoices().get(0))) != null);
+                    return (getRecipe(RMCRecipeType.SMELT, new ItemStack(materialChoice.getChoices().get(0))) != null);
                 }
             } else {
-                return (getSmeltLegacyRecipe(((FurnaceRecipe) recipe).getInput()) != null);
+                return (getRecipe(RMCRecipeType.SMELT, ((FurnaceRecipe) recipe).getInput()) != null);
             }
         }
 
         return isCustomWorkbenchRecipe(recipe.getResult());
     }
 
-    /**
-     * Checks if item can be used as a fuel. Alias for getFuelRecipe(item) != null
-     *
-     * @param item
-     * @return
-     */
-    public boolean isFuel(ItemStack item) {
-        return getFuelRecipe(item) != null;
+    public List<BaseRecipe> getRecipesOfType(RMCRecipeType type) {
+        return getRecipesOfType(type.getDirective());
     }
 
-    public List<CraftRecipe1_13> getCraftRecipes() {
-        List<CraftRecipe1_13> recipes = new ArrayList<>();
-        for (Map.Entry<Integer, CraftRecipe1_13> entry : indexCraft.entrySet()) {
-            CraftRecipe1_13 recipe = entry.getValue();
-            recipes.add(recipe);
+    public List<BaseRecipe> getRecipesOfType(String type) {
+        List<BaseRecipe> recipes = new ArrayList<>();
+        if (indexRecipes.containsKey(type)) {
+            recipes.addAll(indexRecipes.get(type).values());
         }
 
         return recipes;
     }
 
-    public List<CraftRecipe> getCraftLegacyRecipes() {
-        List<CraftRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<Integer, CraftRecipe> entry : indexCraftLegacy.entrySet()) {
-            CraftRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public boolean getRecipeTypeHasOverride(RMCRecipeType type) {
+        return getRecipeTypeHasOverride(type.getDirective());
     }
 
-    public List<CombineRecipe> getCombineRecipes() {
-        List<CombineRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<Integer, CombineRecipe> entry : indexCombine.entrySet()) {
-            CombineRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public boolean getRecipeTypeHasOverride(String type) {
+        return recipeTypeContainsOverride.containsKey(type) && recipeTypeContainsOverride.get(type);
     }
 
-    public List<RMFurnaceRecipe> getLegacyFurnaceRecipes() {
-        List<RMFurnaceRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, RMFurnaceRecipe> entry : indexSmeltLegacy.entrySet()) {
-            RMFurnaceRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public BaseRecipe getRecipe(RMCRecipeType type, ItemStack ingredient) {
+        return getRecipe(type, ingredient, null);
     }
 
-    public List<RMFurnaceRecipe1_13> getFurnaceRecipes() {
-        List<RMFurnaceRecipe1_13> recipes = new ArrayList<>();
-        for (Map.Entry<String, RMFurnaceRecipe1_13> entry : indexSmelt.entrySet()) {
-            RMFurnaceRecipe1_13 recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public BaseRecipe getRecipe(RMCRecipeType type, ItemStack ingredient, ItemStack result) {
+        return getRecipe(type, Collections.singletonList(ingredient), result);
     }
 
-    public List<RMBlastingRecipe> getBlastingRecipes() {
-        List<RMBlastingRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, RMBlastingRecipe> entry : indexBlasting.entrySet()) {
-            RMBlastingRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public BaseRecipe getRecipe(RMCRecipeType type, List<ItemStack> ingredients, ItemStack result) {
+        return getRecipe(type.getDirective(), ingredients, result);
     }
 
-    public List<RMSmokingRecipe> getSmokingRecipes() {
-        List<RMSmokingRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, RMSmokingRecipe> entry : indexSmoking.entrySet()) {
-            RMSmokingRecipe recipe = entry.getValue();
-            recipes.add(recipe);
+    public BaseRecipe getRecipe(String type, List<ItemStack> ingredients, ItemStack result) {
+        BaseRecipe potentialRecipe = null;
+
+        replaceNullItemsWithAir(ingredients);
+
+        BaseRecipe blankBaseRecipe = RecipeTypeFactory.getInstance().getRecipeType(type);
+        List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
+        if (recipeIndexes != null) {
+            if (indexRecipes.containsKey(type)) {
+                Map<String, BaseRecipe> recipes = indexRecipes.get(type);
+
+                for (String recipeIndex : recipeIndexes) {
+                    potentialRecipe = recipes.get(recipeIndex);
+
+                    if (potentialRecipe != null) {
+                        break;
+                    }
+                }
+            }
         }
 
-        return recipes;
+        return potentialRecipe;
     }
 
-    public List<RMCampfireRecipe> getCampfireRecipes() {
-        List<RMCampfireRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, RMCampfireRecipe> entry : indexCampfire.entrySet()) {
-            RMCampfireRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient) {
+        return getRemovedRecipe(type, ingredient, null);
     }
 
-    public List<RMStonecuttingRecipe> getStonecuttingRecipes() {
-        List<RMStonecuttingRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, RMStonecuttingRecipe> entry : indexStonecutting.entrySet()) {
-            RMStonecuttingRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient, ItemStack result) {
+        return getRemovedRecipe(type, Collections.singletonList(ingredient), result);
     }
 
-    public List<BrewRecipe> getBrewingRecipes() {
-        List<BrewRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, BrewRecipe> entry : indexBrew.entrySet()) {
-            BrewRecipe recipe = entry.getValue();
-            recipes.add(recipe);
-        }
-
-        return recipes;
+    public BaseRecipe getRemovedRecipe(RMCRecipeType type, List<ItemStack> ingredients, ItemStack result) {
+        return getRemovedRecipe(type.getDirective(), ingredients, result);
     }
 
-    public List<FuelRecipe> getFuelRecipes() {
-        List<FuelRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, FuelRecipe> entry : indexFuels.entrySet()) {
-            FuelRecipe recipe = entry.getValue();
-            recipes.add(recipe);
+    public BaseRecipe getRemovedRecipe(String type, List<ItemStack> ingredients, ItemStack result) {
+        BaseRecipe potentialRecipe = null;
+
+        replaceNullItemsWithAir(ingredients);
+
+        BaseRecipe blankBaseRecipe = RecipeTypeFactory.getInstance().getRecipeType(type);
+        List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
+        if (recipeIndexes != null) {
+            if (indexRemovedRecipes.containsKey(type)) {
+                Map<String, BaseRecipe> recipes = indexRemovedRecipes.get(type);
+
+                for (String recipeIndex : recipeIndexes) {
+                    potentialRecipe = recipes.get(recipeIndex);
+
+                    if (potentialRecipe != null) {
+                        break;
+                    }
+                }
+            }
         }
 
-        return recipes;
+        return potentialRecipe;
     }
 
-    public List<CompostRecipe> getCompostRecipes() {
-        List<CompostRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, CompostRecipe> entry : indexCompost.entrySet()) {
-            CompostRecipe recipe = entry.getValue();
-            recipes.add(recipe);
+    private void replaceNullItemsWithAir(List<ItemStack> items) {
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack ingredient = items.get(i);
+            if (ingredient == null) {
+                items.set(i, new ItemStack(Material.AIR));
+            }
         }
-
-        return recipes;
     }
 
     /**
      * Get the RecipeManager workbench recipe for the Bukkit recipe inputted.<br>
      * Can be either craft or combine recipe.<br>
-     * If you know the specific type you can use {@link #getCraftRecipe(ItemStack)} or {@link #getCombineRecipe(ItemStack)}
      *
      * @param recipe
      * @return Workbench recipe, otherwise it can be null if doesn't exist or you inputted a furnace recipe
      */
     public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe) {
+        BaseRecipe baseRecipe = null;
+
         if (recipe instanceof ShapedRecipe) {
-            if (Version.has1_13Support()) {
-                return getCraftRecipe(recipe.getResult());
-            } else {
-                return getCraftLegacyRecipe(recipe.getResult());
-            }
+
+            baseRecipe = getRecipe(RMCRecipeType.CRAFT, new ItemStack(Material.AIR), recipe.getResult());
+        } else if (recipe instanceof ShapelessRecipe) {
+            baseRecipe =  getRecipe(RMCRecipeType.COMBINE, new ItemStack(Material.AIR), recipe.getResult());
         }
 
-        if (recipe instanceof ShapelessRecipe) {
-            return getCombineRecipe(recipe.getResult());
+        PreparableResultRecipe resultRecipe = null;
+        if (baseRecipe instanceof PreparableResultRecipe) {
+            resultRecipe = (PreparableResultRecipe) baseRecipe;
         }
 
-        return null;
-    }
-
-    /**
-     * Get the RecipeManager craft recipe for the result inputted.<br>
-     * The result must be the one from the Bukkit recipe retrieved as it needs to check for result lore for the ID.
-     *
-     * @param result
-     * @return Craft recipe or null if doesn't exist
-     */
-    public CraftRecipe getCraftLegacyRecipe(ItemStack result) {
-        CraftRecipe recipe = null;
-
-        if (result != null) {
-            recipe = indexCraftLegacy.get(Tools.getRecipeIdFromItem(result));
-        }
-
-        return recipe;
-    }
-
-    /**
-     * Get the RecipeManager craft recipe for the result inputted.<br>
-     * The result must be the one from the Bukkit recipe retrieved as it needs to check for result lore for the ID.
-     *
-     * @param result
-     * @return Craft recipe or null if doesn't exist
-     */
-    public CraftRecipe1_13 getCraftRecipe(ItemStack result) {
-        CraftRecipe1_13 recipe = null;
-
-        if (result != null) {
-            recipe = indexCraft.get(Tools.getRecipeIdFromItem(result));
-        }
-
-        return recipe;
-    }
-
-    /**
-     * Get the RecipeManager combine recipe for the result inputted.<br>
-     * The result must be the one from the Bukkit recipe retrieved as it needs to check for result lore for the ID.
-     *
-     * @param result
-     * @return Combine recipe or null if doesn't exist
-     */
-    public CombineRecipe getCombineRecipe(ItemStack result) {
-        CombineRecipe recipe = null;
-
-        if (result != null) {
-            recipe = indexCombine.get(Tools.getRecipeIdFromItem(result));
-        }
-
-        return recipe;
-    }
-
-    /**
-     * Get RecipeManager's furnace smelt recipe for the specified ingredient
-     *
-     * @param ingredient
-     * @return Smelt recipe or null if doesn't exist
-     */
-    public RMFurnaceRecipe getSmeltLegacyRecipe(ItemStack ingredient) {
-        RMFurnaceRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-            if (recipe == null) {
-                recipe = indexSmeltLegacy.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-            }
-        }
-
-        return recipe;
-    }
-
-    public RMFurnaceRecipe getSmeltLegacyRecipeWithFuel(ItemStack fuel) {
-        if (fuel == null) {
-            return null;
-        }
-
-        RMFurnaceRecipe recipe = indexSmeltLegacyFuels.get(String.valueOf(fuel.getType().toString()));
-
-        if (recipe == null) {
-            return indexSmeltLegacyFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
-        }
-
-        return recipe;
-    }
-
-    /**
-     * Get RecipeManager's furnace smelt recipe for the specified ingredient
-     *
-     * @param ingredient
-     * @return Smelt recipe or null if doesn't exist
-     */
-    public RMFurnaceRecipe1_13 getSmeltRecipe(ItemStack ingredient) {
-        RMFurnaceRecipe1_13 recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexSmelt.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public RMFurnaceRecipe1_13 getSmeltRecipeWithFuel(ItemStack fuel) {
-        if (fuel == null) {
-            return null;
-        }
-
-        RMFurnaceRecipe1_13 recipe = indexSmeltFuels.get(String.valueOf(fuel.getType().toString()));
-
-        if (recipe == null) {
-            return indexSmeltFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
-        }
-
-        return recipe;
-    }
-
-    public BrewRecipe getBrewRecipe(ItemStack ingredient) {
-        BrewRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexBrew.get(ingredient.getType().toString() + ":" + ingredient.getDurability());
-
-            if (recipe == null) {
-                recipe = indexBrew.get(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
-            }
-        }
-
-        return recipe;
-    }
-
-    public CompostRecipe getCompostRecipe(ItemStack ingredient) {
-        CompostRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexCompost.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public CompostRecipe getRemovedCompostRecipe(ItemStack ingredient) {
-        CompostRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexRemovedCompost.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public AnvilRecipe getAnvilRecipe(ItemStack primary, ItemStack secondary) {
-        if (primary == null) {
-            primary = new ItemStack(Material.AIR);
-        }
-        if (secondary == null) {
-            secondary = new ItemStack(Material.AIR);
-        }
-
-        return indexAnvil.get(primary.getType().toString() + "-" + secondary.getType().toString());
-    }
-
-    public RMBlastingRecipe getRMBlastingRecipe(ItemStack ingredient) {
-        RMBlastingRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexBlasting.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public RMBlastingRecipe getRMBlastingRecipeWithFuel(ItemStack fuel) {
-        if (fuel == null) {
-            return null;
-        }
-
-        RMBlastingRecipe recipe = indexBlastingFuels.get(String.valueOf(fuel.getType().toString()));
-
-        if (recipe == null) {
-            return indexBlastingFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
-        }
-
-        return recipe;
-    }
-
-    public RMSmokingRecipe getRMSmokingRecipe(ItemStack ingredient) {
-        RMSmokingRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexSmoking.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public RMSmokingRecipe getRMSmokingRecipeWithFuel(ItemStack fuel) {
-        if (fuel == null) {
-            return null;
-        }
-
-        RMSmokingRecipe recipe = indexSmokingFuels.get(String.valueOf(fuel.getType().toString()));
-
-        if (recipe == null) {
-            return indexSmokingFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
-        }
-
-        return recipe;
-    }
-
-    public RMCampfireRecipe getRMCampfireRecipe(ItemStack ingredient) {
-        RMCampfireRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexCampfire.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public RMStonecuttingRecipe getRMStonecuttingRecipe(ItemStack ingredient) {
-        RMStonecuttingRecipe recipe = null;
-
-        if (ingredient != null) {
-            recipe = indexStonecutting.get(ingredient.getType().toString());
-        }
-
-        return recipe;
-    }
-
-    public GrindstoneRecipe getGrindstoneRecipe(ItemStack primary, ItemStack secondary) {
-        if (primary == null) {
-            primary = new ItemStack(Material.AIR);
-        }
-        if (secondary == null) {
-            secondary = new ItemStack(Material.AIR);
-        }
-
-        return indexGrindstone.get(primary.getType().toString() + "-" + secondary.getType().toString());
-    }
-
-    public CartographyRecipe getCartographyRecipe(ItemStack primary, ItemStack secondary) {
-        if (primary == null) {
-            primary = new ItemStack(Material.AIR);
-        }
-        if (secondary == null) {
-            secondary = new ItemStack(Material.AIR);
-        }
-
-        return indexCartography.get(primary.getType().toString() + "-" + secondary.getType().toString());
-    }
-
-    /**
-     * Get RecipeManager's furnace fuel recipe for the specified item.
-     *
-     * @param fuel
-     *            fuel
-     * @return Fuel recipe or null if doesn't exist
-     */
-    public FuelRecipe getFuelRecipe(ItemStack fuel) {
-        if (fuel == null) {
-            return null;
-        }
-
-        FuelRecipe recipe = indexFuels.get(String.valueOf(fuel.getType().toString()));
-
-        if (recipe == null) {
-            return indexFuels.get(fuel.getType().toString() + ":" + fuel.getDurability());
-        }
-
-        return recipe;
+        return resultRecipe;
     }
 
     /**
@@ -649,94 +300,16 @@ public class Recipes {
 
         index.put(recipe, info); // Add to main index
 
+        String recipeDirective = recipe.getType().getDirective();
         if (recipe.hasFlag(FlagType.REMOVE)) {
-            if (recipe instanceof CompostRecipe){
-                for (String index : ((CompostRecipe) recipe).getIndexString()) {
-                    indexRemovedCompost.put(index, (CompostRecipe) recipe);
-                }
+            if (!indexRemovedRecipes.containsKey(recipeDirective)) {
+                indexRemovedRecipes.put(recipeDirective, new HashMap<>());
+            }
+            for (String index : recipe.getIndexes()) {
+                indexRemovedRecipes.get(recipeDirective).put(index, recipe);
             }
         } else { // Add to quickfind index if it's not removed
-            indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
-
-            if (recipe instanceof CraftRecipe) {
-                indexCraftLegacy.put(recipe.getIndex(), (CraftRecipe) recipe);
-            } else if (recipe instanceof CraftRecipe1_13) {
-                indexCraft.put(recipe.getIndex(), (CraftRecipe1_13) recipe);
-            } else if (recipe instanceof CombineRecipe) {
-                indexCombine.put(recipe.getIndex(), (CombineRecipe) recipe);
-            } else if (recipe instanceof RMFurnaceRecipe) {
-                RMFurnaceRecipe r = (RMFurnaceRecipe) recipe;
-
-                for (String index : ((RMFurnaceRecipe) recipe).getIndexString()) {
-                    indexSmeltLegacy.put(index, r);
-                }
-
-                if (r.hasFuel()) {
-                    indexSmeltLegacyFuels.put(r.getFuelIndex(), r);
-                }
-            } else if (recipe instanceof RMFurnaceRecipe1_13) {
-                RMFurnaceRecipe1_13 r = (RMFurnaceRecipe1_13) recipe;
-
-                for (String index : ((RMFurnaceRecipe1_13) recipe).getIndexString()) {
-                    indexSmelt.put(index, r);
-                }
-
-                if (r.hasFuel()) {
-                    indexSmeltFuels.put(r.getFuelIndex(), r);
-                }
-            } else if (recipe instanceof RMBlastingRecipe) {
-                RMBlastingRecipe r = (RMBlastingRecipe) recipe;
-
-                for (String index : ((RMBlastingRecipe) recipe).getIndexString()) {
-                    indexBlasting.put(index, r);
-                }
-
-                if (r.hasFuel()) {
-                    indexBlastingFuels.put(r.getFuelIndex(), r);
-                }
-            } else if (recipe instanceof RMSmokingRecipe) {
-                RMSmokingRecipe r = (RMSmokingRecipe) recipe;
-
-                for (String index : ((RMSmokingRecipe) recipe).getIndexString()) {
-                    indexSmoking.put(index, r);
-                }
-
-                if (r.hasFuel()) {
-                    indexSmokingFuels.put(r.getFuelIndex(), r);
-                }
-            } else if (recipe instanceof RMCampfireRecipe) {
-                for (String index : ((RMCampfireRecipe) recipe).getIndexString()) {
-                    indexCampfire.put(index, (RMCampfireRecipe) recipe);
-                }
-            } else if (recipe instanceof RMStonecuttingRecipe) {
-                for (String index : ((RMStonecuttingRecipe) recipe).getIndexString()) {
-                    indexStonecutting.put(index, (RMStonecuttingRecipe) recipe);
-                }
-            } else if (recipe instanceof BrewRecipe) {
-                indexBrew.put(((BrewRecipe) recipe).getIndexString(), (BrewRecipe) recipe);
-            } else if (recipe instanceof FuelRecipe) {
-                indexFuels.put(((FuelRecipe) recipe).getIndexString(), (FuelRecipe) recipe);
-            } else if (recipe instanceof CompostRecipe) {
-                if (!hasAnyOverridenCompostRecipe && recipe.hasFlag(FlagType.OVERRIDE)) {
-                    hasAnyOverridenCompostRecipe = true;
-                }
-
-                for (String index : ((CompostRecipe) recipe).getIndexString()) {
-                    indexCompost.put(index, (CompostRecipe) recipe);
-                }
-            } else if (recipe instanceof AnvilRecipe) {
-                for (String index : ((AnvilRecipe) recipe).getIndexString()) {
-                    indexAnvil.put(index, (AnvilRecipe) recipe);
-                }
-            } else if (recipe instanceof GrindstoneRecipe) {
-                for (String index : ((GrindstoneRecipe) recipe).getIndexString()) {
-                    indexGrindstone.put(index, (GrindstoneRecipe) recipe);
-                }
-            } else if (recipe instanceof CartographyRecipe) {
-                for (String index : ((CartographyRecipe) recipe).getIndexString()) {
-                    indexCartography.put(index, (CartographyRecipe) recipe);
-                }
-            }
+            addRecipeToQuickfindIndex(recipeDirective, recipe);
         }
 
         // Remove original recipe - Special case for 1.12 below
@@ -801,6 +374,25 @@ public class Recipes {
         }
     }
 
+    public void addRecipeToQuickfindIndex(String recipeDirective, BaseRecipe recipe) {
+        indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
+
+        if (!indexRecipes.containsKey(recipeDirective)) {
+            indexRecipes.put(recipeDirective, new HashMap<>());
+        }
+        for (String index : recipe.getIndexes()) {
+            indexRecipes.get(recipeDirective).put(index, recipe);
+        }
+
+        if (!recipeTypeContainsOverride.containsKey(recipeDirective)) {
+            recipeTypeContainsOverride.put(recipeDirective, false);
+        }
+
+        if (!recipeTypeContainsOverride.get(recipeDirective) && recipe.hasFlag(FlagType.OVERRIDE)) {
+            recipeTypeContainsOverride.put(recipeDirective, true);
+        }
+    }
+
     /**
      * Removes a recipe from the server.
      *
@@ -821,57 +413,14 @@ public class Recipes {
         index.remove(recipe); // Remove from main index
         indexName.remove(recipe.getName().toLowerCase()); // Remove from name index
 
+        String recipeDirective = recipe.getType().getDirective();
+        if (!indexRecipes.containsKey(recipeDirective)) {
+            indexRecipes.put(recipeDirective, new HashMap<>());
+        }
+
         // Remove from quickfind index
-        if (recipe instanceof CraftRecipe) {
-            indexCraftLegacy.remove(recipe.getIndex());
-        } else if (recipe instanceof CraftRecipe1_13) {
-            indexCraft.remove(recipe.getIndex());
-        } else if (recipe instanceof CombineRecipe) {
-            indexCombine.remove(recipe.getIndex());
-        } else if (recipe instanceof RMFurnaceRecipe) {
-            for (String index : ((RMFurnaceRecipe) recipe).getIndexString()) {
-                indexSmeltLegacy.remove(index);
-            }
-        } else if (recipe instanceof RMFurnaceRecipe1_13) {
-            for (String index : ((RMFurnaceRecipe1_13) recipe).getIndexString()) {
-                indexSmelt.remove(index);
-            }
-        } else if (recipe instanceof RMBlastingRecipe) {
-            for (String index : ((RMBlastingRecipe) recipe).getIndexString()) {
-                indexBlasting.remove(index);
-            }
-        } else if (recipe instanceof RMSmokingRecipe) {
-            for (String index : ((RMSmokingRecipe) recipe).getIndexString()) {
-                indexSmoking.remove(index);
-            }
-        } else if (recipe instanceof RMCampfireRecipe) {
-            for (String index : ((RMCampfireRecipe) recipe).getIndexString()) {
-                indexCampfire.remove(index);
-            }
-        } else if (recipe instanceof RMStonecuttingRecipe) {
-            for (String index : ((RMStonecuttingRecipe) recipe).getIndexString()) {
-                indexStonecutting.remove(index);
-            }
-        } else if (recipe instanceof BrewRecipe) {
-            indexBrew.remove(((BrewRecipe) recipe).getIndexString());
-        } else if (recipe instanceof FuelRecipe) {
-            indexFuels.remove(((FuelRecipe) recipe).getIndexString());
-        } else if (recipe instanceof CompostRecipe) {
-            for (String index : ((CompostRecipe) recipe).getIndexString()) {
-                indexCompost.remove(index);
-            }
-        } else if (recipe instanceof AnvilRecipe) {
-            for (String index : ((AnvilRecipe) recipe).getIndexString()) {
-                indexAnvil.remove(index);
-            }
-        } else if (recipe instanceof GrindstoneRecipe) {
-            for (String index : ((GrindstoneRecipe) recipe).getIndexString()) {
-                indexGrindstone.remove(index);
-            }
-        } else if (recipe instanceof CartographyRecipe) {
-            for (String index : ((CartographyRecipe) recipe).getIndexString()) {
-                indexCartography.remove(index);
-            }
+        for (String index : recipe.getIndexes()) {
+            indexRecipes.get(recipeDirective).remove(index);
         }
 
         // Remove from server if applicable

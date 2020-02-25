@@ -189,7 +189,7 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    public List<String> getIndexString() {
+    public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
         indexString.add(ingredient.getType().toString() + ":" + ingredient.getDurability());

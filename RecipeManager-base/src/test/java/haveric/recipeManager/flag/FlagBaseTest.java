@@ -4,6 +4,8 @@ import haveric.recipeManager.*;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.TestMessageSender;
+import haveric.recipeManager.recipes.RecipeTypeFactory;
+import haveric.recipeManager.recipes.RecipeTypeLoader;
 import org.bukkit.Bukkit;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -51,6 +53,8 @@ public class FlagBaseTest {
         TestOfflinePlayer player = new TestOfflinePlayer();
         when(Bukkit.getOfflinePlayer(testUUID)).thenReturn(player);
 
+        new RecipeTypeLoader();
+        RecipeTypeFactory.getInstance().init();
         new FlagLoader();
         FlagFactory.getInstance().init();
 

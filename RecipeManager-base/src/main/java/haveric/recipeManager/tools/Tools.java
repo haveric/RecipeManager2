@@ -4,12 +4,12 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
-import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.recipes.ItemResult;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
@@ -960,27 +960,25 @@ public class Tools {
         return result;
     }
 
-    public static int getRecipeIdFromItem(ItemStack result) {
+    public static String getRecipeIdFromItem(ItemStack result) {
         if (!result.hasItemMeta()) {
-            return -1;
+            return "-1";
         }
 
         ItemMeta meta = result.getItemMeta();
-
         if (meta == null) {
-            return -1;
+            return "-1";
         }
 
         List<String> lore = meta.getLore();
-
         if (lore == null || lore.isEmpty()) {
-            return -1;
+            return "-1";
         }
 
         for (String s : lore) {
             if (s != null && s.startsWith(Recipes.RECIPE_ID_STRING)) {
                 try {
-                    return Integer.parseInt(s.substring(Recipes.RECIPE_ID_STRING.length()));
+                    return s.substring(Recipes.RECIPE_ID_STRING.length());
                 } catch (Throwable e) {
                     MessageSender.getInstance().debug("Invalid recipe identifier found: " + s);
                     break;
@@ -988,7 +986,7 @@ public class Tools {
             }
         }
 
-        return -1;
+        return "-1";
     }
 
     public static ItemStack[] mirrorItemMatrix(ItemStack[] matrix) {

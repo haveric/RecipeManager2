@@ -146,7 +146,8 @@ public class RMStonecuttingRecipe extends SingleResultRecipe {
         customName = false;
     }
 
-    public List<String> getIndexString() {
+    @Override
+    public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
         for (Material material : ingredientChoice) {

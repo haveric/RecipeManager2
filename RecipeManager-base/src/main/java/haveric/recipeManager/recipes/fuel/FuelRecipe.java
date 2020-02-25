@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FuelRecipe extends BaseRecipe {
@@ -124,14 +125,15 @@ public class FuelRecipe extends BaseRecipe {
         return (int) Math.round(20.0 * time);
     }
 
-    public String getIndexString() {
+    @Override
+    public List<String> getIndexes() {
         String indexString = "" + ingredient.getType().toString();
 
         if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
             indexString += ":" + ingredient.getDurability();
         }
 
-        return indexString;
+        return Collections.singletonList(indexString);
     }
 
     @Override
@@ -220,5 +222,17 @@ public class FuelRecipe extends BaseRecipe {
         }
 
         return s.toString();
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() == 1) {
+            ItemStack ingredient = ingredients.get(0);
+            recipeIndexes.add(ingredient.getType().toString());
+            recipeIndexes.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
+        }
+
+        return recipeIndexes;
     }
 }

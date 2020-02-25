@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.Damageable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -291,17 +292,9 @@ public class CraftRecipe extends PreparableResultRecipe {
 
         ShapedRecipe bukkitRecipe;
         if (Version.has1_12Support()) {
-            if (vanilla) {
-                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
-            } else {
-                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            if (vanilla) {
-                bukkitRecipe = new ShapedRecipe(getFirstResult());
-            } else {
-                bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), getIndex()));
-            }
+            bukkitRecipe = new ShapedRecipe(getFirstResult());
         }
 
         switch (height) {
@@ -493,5 +486,15 @@ public class CraftRecipe extends PreparableResultRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (result != null) {
+            recipeIndexes.add(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipeIndexes;
     }
 }

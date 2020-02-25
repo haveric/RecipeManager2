@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.anvil;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.Settings;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
@@ -10,6 +11,7 @@ import haveric.recipeManager.flag.flags.any.FlagModLevel;
 import haveric.recipeManager.flag.flags.any.FlagNeedLevel;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.anvil.data.Anvil;
@@ -56,8 +58,67 @@ public class AnvilEvents extends BaseRecipeEvents {
         ItemStack left = inventory.getItem(0);
         ItemStack right = inventory.getItem(1);
 
-        AnvilRecipe recipe = Recipes.getInstance().getAnvilRecipe(left, right);
-        if (recipe == null) {
+        List<ItemStack> ingredients = new ArrayList<>();
+        ingredients.add(left);
+        ingredients.add(right);
+
+        BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.ANVIL, ingredients, null);
+        if (baseRecipe instanceof AnvilRecipe) {
+            AnvilRecipe recipe = (AnvilRecipe) baseRecipe;
+
+            Location location = inventory.getLocation();
+
+            if (location != null) {
+                Block block = location.getBlock();
+                InventoryView view = event.getView();
+
+                Player player = (Player) view.getPlayer();
+
+                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
+                ItemResult result = recipe.getDisplayResult(a);
+                if (result != null) {
+                    a.setResult(result);
+
+                    if (recipe.sendPrepare(a)) {
+                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                    } else {
+                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        result = null;
+                    }
+
+                    if (result != null) {
+                        if (result.sendPrepare(a)) {
+                            a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                        } else {
+                            a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
+                            result = null;
+                        }
+                    }
+                }
+
+                event.setResult(result);
+
+
+                String renameText = "";
+
+                // 1.10 didn't support repair cost or rename text
+                if (Version.has1_11Support()) {
+                    renameText = inventory.getRenameText();
+                    int repairCost = recipe.getRepairCost();
+                    if (recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty()) {
+                        repairCost += 1;
+                    }
+
+                    int finalRepairCost = repairCost;
+
+                    updateRepairCost(player, inventory, finalRepairCost);
+                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> updateRepairCost(player, inventory, finalRepairCost), 2);
+                }
+
+                Anvils.remove(player);
+                Anvils.add(player, recipe, ingredients, result, renameText);
+            }
+        } else {
             InventoryView view = event.getView();
             Player player = (Player) view.getPlayer();
 
@@ -160,62 +221,6 @@ public class AnvilEvents extends BaseRecipeEvents {
                         }
                     }
                 }
-            }
-        } else {
-            Location location = inventory.getLocation();
-
-            if (location != null) {
-                Block block = location.getBlock();
-                InventoryView view = event.getView();
-
-                Player player = (Player) view.getPlayer();
-
-                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
-                ItemResult result = recipe.getDisplayResult(a);
-                if (result != null) {
-                    a.setResult(result);
-
-                    if (recipe.sendPrepare(a)) {
-                        a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                    } else {
-                        a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                        result = null;
-                    }
-
-                    if (result != null) {
-                        if (result.sendPrepare(a)) {
-                            a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                        } else {
-                            a.sendReasons(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
-                            result = null;
-                        }
-                    }
-                }
-
-                event.setResult(result);
-
-
-                String renameText = "";
-
-                // 1.10 didn't support repair cost or rename text
-                if (Version.has1_11Support()) {
-                    renameText = inventory.getRenameText();
-                    int repairCost = recipe.getRepairCost();
-                    if (recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty()) {
-                        repairCost += 1;
-                    }
-
-                    int finalRepairCost = repairCost;
-
-                    updateRepairCost(player, inventory, finalRepairCost);
-                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> updateRepairCost(player, inventory, finalRepairCost), 2);
-                }
-
-                Anvils.remove(player);
-                List<ItemStack> ingredients = new ArrayList<>();
-                ingredients.add(left);
-                ingredients.add(right);
-                Anvils.add(player, recipe, ingredients, result, renameText);
             }
         }
     }

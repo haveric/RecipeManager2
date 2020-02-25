@@ -166,7 +166,7 @@ public class CombineRecipe1_13 extends CombineRecipe {
         if (vanilla) {
             bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), getIndex()));
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
         }
 
         for (List<Material> materialChoice : ingredientChoiceList) {

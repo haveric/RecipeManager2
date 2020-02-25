@@ -1,13 +1,17 @@
 package haveric.recipeManager.recipes.brew;
 
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BrewRecipe extends MultiResultRecipe {
     private ItemStack ingredient;
@@ -97,7 +101,8 @@ public class BrewRecipe extends MultiResultRecipe {
         hash = ("brew" + ingredient.getType().toString() + ':' + ingredient.getDurability() + ';').hashCode();
     }
 
-    public String getIndexString() {
+    @Override
+    public List<String> getIndexes() {
         String indexString = ingredient.getType().toString();
 
         if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
@@ -106,7 +111,7 @@ public class BrewRecipe extends MultiResultRecipe {
             indexString += ":" + RMCVanilla.DATA_WILDCARD;
         }
 
-        return indexString;
+        return Collections.singletonList(indexString);
     }
 
     public ItemStack getPotion() {
@@ -130,5 +135,17 @@ public class BrewRecipe extends MultiResultRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() == 1) {
+            ItemStack ingredient = ingredients.get(0);
+            recipeIndexes.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
+            recipeIndexes.add(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+        }
+
+        return recipeIndexes;
     }
 }
