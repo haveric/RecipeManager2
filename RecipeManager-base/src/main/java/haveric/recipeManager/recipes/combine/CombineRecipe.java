@@ -199,9 +199,17 @@ public class CombineRecipe extends PreparableResultRecipe {
 
         ShapelessRecipe bukkitRecipe;
         if (Version.has1_12Support()) {
-            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
+            if (vanilla) {
+                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
+            } else {
+                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
+            }
         } else {
-            bukkitRecipe = new ShapelessRecipe(getFirstResult());
+            if (vanilla) {
+                bukkitRecipe = new ShapelessRecipe(getFirstResult());
+            } else {
+                bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), hashCode()));
+            }
         }
 
         for (ItemStack item : ingredients) {

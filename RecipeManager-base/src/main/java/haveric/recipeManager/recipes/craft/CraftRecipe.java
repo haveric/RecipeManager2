@@ -292,9 +292,17 @@ public class CraftRecipe extends PreparableResultRecipe {
 
         ShapedRecipe bukkitRecipe;
         if (Version.has1_12Support()) {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
+            if (vanilla) {
+                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
+            } else {
+                bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
+            }
         } else {
-            bukkitRecipe = new ShapedRecipe(getFirstResult());
+            if (vanilla) {
+                bukkitRecipe = new ShapedRecipe(getFirstResult());
+            } else {
+                bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), hashCode()));
+            }
         }
 
         switch (height) {
