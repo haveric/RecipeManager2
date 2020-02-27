@@ -2,13 +2,18 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,48 +32,27 @@ public class Events extends BaseRecipeEvents {
         Bukkit.getPluginManager().registerEvents(RecipeManager.getEvents(), RecipeManager.getPlugin());
     }
 
-
-
-
-
-
-
-
-
-// TODO: Apparently we were blocking enchanting based on canCraft permissions
-// TODO: Should add a new permission for blocking enchanting
-/*
+    // TODO: Apparently we are blocking enchanting based on canCraft permissions. Replace with a new permission for blocking enchanting
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent event) {
-        switch (event.getAction()) {
-            case RIGHT_CLICK_BLOCK:
-                Block block = event.getClickedBlock();
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = event.getClickedBlock();
 
-                Material enchantingTableMaterial;
-                if (Version.has1_13Support()) {
-                    enchantingTableMaterial = Material.ENCHANTING_TABLE;
-                } else {
-                    enchantingTableMaterial = Material.getMaterial("ENCHANTMENT_TABLE");
+            Material enchantingTableMaterial;
+            if (Version.has1_13Support()) {
+                enchantingTableMaterial = Material.ENCHANTING_TABLE;
+            } else {
+                enchantingTableMaterial = Material.getMaterial("ENCHANTMENT_TABLE");
+            }
+
+            if (block.getType() == enchantingTableMaterial) {
+                if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
+                    event.setCancelled(true);
+                    return;
                 }
-
-                if (block.getType() == enchantingTableMaterial) {
-                    if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                }
-
-                break;
-
-            case PHYSICAL:
-                break;
-
-            default:
-                break;
+            }
         }
     }
- */
-
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void inventoryClose(InventoryCloseEvent event) {
