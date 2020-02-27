@@ -16,21 +16,23 @@ public class BaseRecipeData {
     public BaseRecipeData(BaseRecipe recipe, List<ItemStack> ingredients, ItemResult result) {
         this.recipe = recipe;
 
-        for (ItemStack ingredient : ingredients) {
-            if (ingredient == null) {
-                this.ingredients.add(null);
-            } else {
-                this.ingredients.add(ingredient.clone());
+        if (ingredients != null) {
+            for (ItemStack ingredient : ingredients) {
+                if (ingredient == null) {
+                    this.ingredients.add(null);
+                } else {
+                    this.ingredients.add(ingredient.clone());
+                }
             }
-        }
 
-        for (ItemStack ingredient : ingredients) {
-            if (ingredient == null) {
-                this.ingredientsSingleStack.add(null);
-            } else {
-                ItemStack clone = ingredient.clone();
-                clone.setAmount(1);
-                this.ingredientsSingleStack.add(clone);
+            for (ItemStack ingredient : ingredients) {
+                if (ingredient == null) {
+                    this.ingredientsSingleStack.add(null);
+                } else {
+                    ItemStack clone = ingredient.clone();
+                    clone.setAmount(1);
+                    this.ingredientsSingleStack.add(clone);
+                }
             }
         }
 
