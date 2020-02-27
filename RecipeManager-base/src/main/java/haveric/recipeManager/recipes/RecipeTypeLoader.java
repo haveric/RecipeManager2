@@ -1,6 +1,5 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.Events;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.anvil.AnvilEvents;
@@ -48,12 +47,12 @@ public class RecipeTypeLoader {
         loadRecipeType(RMCRecipeType.SPECIAL.getDirective(), new RemoveResultRecipe(), new RemoveResultsParser());
 
         if (Version.has1_13Support()) {
-            loadRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe1_13(), new CombineRecipeParser(), new Events());
-            loadRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe1_13(), new CraftRecipeParser(), new Events());
+            loadRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe1_13(), new CombineRecipeParser(), new WorkbenchEvents());
+            loadRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe1_13(), new CraftRecipeParser(), new WorkbenchEvents());
             loadRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe1_13(), new RMBaseFurnaceRecipeParser(RMCRecipeType.SMELT), new RMBaseFurnaceEvents());
         } else {
-            loadRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe(), new CombineRecipeParser(), new Events());
-            loadRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe(), new CraftRecipeParser(), new Events());
+            loadRecipeType(RMCRecipeType.COMBINE.getDirective(), new CombineRecipe(), new CombineRecipeParser(), new WorkbenchEvents());
+            loadRecipeType(RMCRecipeType.CRAFT.getDirective(), new CraftRecipe(), new CraftRecipeParser(), new WorkbenchEvents());
             loadRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe(), new RMBaseFurnaceRecipeParser(RMCRecipeType.SMELT), new RMBaseFurnaceEvents());
         }
 

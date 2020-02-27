@@ -1003,6 +1003,28 @@ public class Tools {
         return m;
     }
 
+    public static boolean isDifferentMatrix(ItemStack[] original, ItemStack[] current) {
+        boolean different = false;
+
+        if (original.length == current.length) {
+            for (int i = 0; i < original.length; i++) {
+                ItemStack originalStack = original[i];
+                ItemStack currentStack = current[i];
+
+                if (originalStack != null) {
+                    if (currentStack == null && originalStack.getType() == Material.AIR) {
+                        // Null == AIR
+                    } else if (currentStack == null || currentStack.getType() != originalStack.getType()) {
+                        different = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return different;
+    }
+
     public static boolean saveTextToFile(String text, String filePath) {
         try {
             File file = new File(filePath);

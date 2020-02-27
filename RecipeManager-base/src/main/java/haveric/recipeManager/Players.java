@@ -21,7 +21,7 @@ public class Players {
         RecipeCommand.clean();
     }
 
-    protected static void remove(Player player) {
+    public static void remove(Player player) {
         removeJoined(player);
         RecipeCommand.clean(player.getUniqueId());
     }

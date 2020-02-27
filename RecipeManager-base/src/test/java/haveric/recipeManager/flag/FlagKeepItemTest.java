@@ -1,10 +1,11 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.*;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.WorkbenchEvents;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -24,7 +25,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class FlagKeepItemTest extends FlagBaseTest {
     private TestCraftingInventory inventory;
     private CraftItemEvent craftEvent;
-    private static Events events;
+    private static WorkbenchEvents workbenchEvents;
 
     private ItemStack ironSword;
     private ItemStack goldSword;
@@ -56,7 +57,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
 
         inventory = new TestCraftingInventory();
 
-        events = new Events();
+        workbenchEvents = new WorkbenchEvents();
 
 
         PlayerInventory playerInventory = new TestPlayerInventory();
@@ -104,7 +105,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
                 when(craftEvent.isShiftClick()).thenReturn(true);
-                events.craftFinish(craftEvent);
+                workbenchEvents.craftFinish(craftEvent);
                 assertNull(craftEvent.getCurrentItem());
 
                 ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();
@@ -128,7 +129,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
                 when(craftEvent.isShiftClick()).thenReturn(true);
-                events.craftFinish(craftEvent);
+                workbenchEvents.craftFinish(craftEvent);
                 assertNull(craftEvent.getCurrentItem());
 
                 ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();
@@ -152,7 +153,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
                 when(craftEvent.isShiftClick()).thenReturn(true);
-                events.craftFinish(craftEvent);
+                workbenchEvents.craftFinish(craftEvent);
                 assertNull(craftEvent.getCurrentItem());
 
                 ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();

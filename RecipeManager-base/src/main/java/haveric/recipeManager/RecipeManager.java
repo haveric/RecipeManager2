@@ -45,6 +45,8 @@ public class RecipeManager extends JavaPlugin {
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
 
+    private static Events events;
+
     private HashMap<String, String> plugins = new HashMap<>();
 
     // constants
@@ -80,6 +82,7 @@ public class RecipeManager extends JavaPlugin {
             Composters.load();
         }
 
+        events = new Events();
         recipeTypeLoader = new RecipeTypeLoader();
 
         recipes = new Recipes();
@@ -195,6 +198,7 @@ public class RecipeManager extends JavaPlugin {
         }
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
+        Events.reload();
         RecipeTypeFactory.getInstance().reloadEvents();
     }
 
@@ -284,6 +288,11 @@ public class RecipeManager extends JavaPlugin {
             }
             recipeBooks = null;
 
+            if (events != null) {
+                events.clean();
+            }
+            events = null;
+
             RecipeTypeFactory.getInstance().cleanEvents();
             Settings.clean();
 
@@ -334,6 +343,10 @@ public class RecipeManager extends JavaPlugin {
         }
 
         return canCraft;
+    }
+
+    public static Events getEvents() {
+        return events;
     }
 
     public static FlagLoader getFlagLoader() {

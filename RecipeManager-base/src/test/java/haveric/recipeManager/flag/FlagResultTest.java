@@ -3,6 +3,7 @@ package haveric.recipeManager.flag;
 import haveric.recipeManager.*;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.WorkbenchEvents;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
@@ -25,7 +26,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class FlagResultTest extends FlagBaseTest {
     private CraftItemEvent craftEvent;
     private CraftItemEvent shiftCraftEvent;
-    private static Events events;
+    private static WorkbenchEvents workbenchEvents;
 
     @Before
     public void prepare() {
@@ -76,7 +77,7 @@ public class FlagResultTest extends FlagBaseTest {
         shiftInventory.setMatrix(matrixStack);
         shiftInventory.setResult(stoneSword);
 
-        events = new Events();
+        workbenchEvents = new WorkbenchEvents();
 
 
         PlayerInventory playerInventory = new TestPlayerInventory();
@@ -129,7 +130,7 @@ public class FlagResultTest extends FlagBaseTest {
             if (resultType == Material.STONE_SWORD) {
                 //a = ArgBuilder.create().recipe(recipe).player(testUUID).inventory(inventory).build();
 
-                events.craftFinish(craftEvent);
+                workbenchEvents.craftFinish(craftEvent);
                 assertNull(craftEvent.getCurrentItem());
                 ItemStack[] contents = craftEvent.getView().getPlayer().getInventory().getContents();
 
@@ -142,7 +143,7 @@ public class FlagResultTest extends FlagBaseTest {
                 assertEquals(0, count);
                 assertNull(craftEvent.getCurrentItem());
 
-                events.craftFinish(shiftCraftEvent);
+                workbenchEvents.craftFinish(shiftCraftEvent);
                 assertNull(shiftCraftEvent.getCurrentItem());
 
                 ItemStack[] shiftContents = shiftCraftEvent.getView().getPlayer().getInventory().getContents();

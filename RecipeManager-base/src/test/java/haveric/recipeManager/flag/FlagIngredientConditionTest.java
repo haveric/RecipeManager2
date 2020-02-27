@@ -1,15 +1,16 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.*;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.WorkbenchEvents;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -44,7 +45,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
     private TestCraftingInventory inventory;
     private CraftItemEvent craftEvent;
-    private static Events events;
+    private static WorkbenchEvents workbenchEvents;
 
     @Before
     public void before() {
@@ -95,7 +96,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
         inventory = new TestCraftingInventory();
 
-        events = new Events();
+        workbenchEvents = new WorkbenchEvents();
 
 
         PlayerInventory playerInventory = new TestPlayerInventory();
@@ -225,7 +226,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
                 when(craftEvent.isShiftClick()).thenReturn(true);
-                events.craftFinish(craftEvent);
+                workbenchEvents.craftFinish(craftEvent);
 
                 ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();
                 int count = 0;
@@ -251,7 +252,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
                 // Switch to shift click
                 craftEvent.getView().getPlayer().getInventory().clear();
                 when(craftEvent.isShiftClick()).thenReturn(true);
-                events.craftFinish(craftEvent);
+                workbenchEvents.craftFinish(craftEvent);
 
                 ItemStack[] shiftContents = craftEvent.getView().getPlayer().getInventory().getContents();
                 int count = 0;
