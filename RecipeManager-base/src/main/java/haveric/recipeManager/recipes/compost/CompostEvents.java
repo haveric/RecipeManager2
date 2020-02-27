@@ -302,7 +302,7 @@ public class CompostEvents extends BaseRecipeEvents {
                                 toString.append(":").append(ingredient.getItemMeta());
                             }
                         }
-                        player.sendMessage("Composter contains: " + toString.toString());
+                        player.sendMessage("Composter contains: " + toString);
                     }
                 }
             }
