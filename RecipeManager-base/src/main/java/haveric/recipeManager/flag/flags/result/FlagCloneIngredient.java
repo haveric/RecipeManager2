@@ -1,17 +1,16 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -317,7 +316,7 @@ public class FlagCloneIngredient extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult() || !a.hasInventoryView()) { // || a.inventory() instanceof CraftingInventory == false)
+        if (!a.hasResult() || !a.hasInventoryView()) {
             a.addCustomReason("Needs inventory and result!");
             return;
         }
@@ -347,6 +346,14 @@ public class FlagCloneIngredient extends Flag {
 
             if (i != null && result.getType() == i.getType()) {
                 ingredient = i;
+            }
+        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory))) {
+            ItemStack first = a.inventory().getItem(0);
+            ItemStack second = a.inventory().getItem(1);
+            if (first != null && result.getType() == first.getType()) {
+                ingredient = first;
+            } else if (second != null && result.getType() == second.getType()) {
+                ingredient = second;
             }
         } else {
             a.addCustomReason("Unknown inventory type: " + a.inventory());
