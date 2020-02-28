@@ -9,10 +9,14 @@ import org.bukkit.ChatColor;
 
 public class FlagLoader {
     public FlagLoader() {
-        loadDefaultFlags();
+        loadDefaultFlags(false);
     }
 
-    private void loadDefaultFlags() {
+    public FlagLoader(boolean force) {
+        loadDefaultFlags(force);
+    }
+
+    private void loadDefaultFlags(boolean force) {
         loadFlag(FlagType.BIOME, new FlagBiome(), FlagBit.NONE);
         loadFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), FlagBit.NO_VALUE_REQUIRED, "poweredblock", "blockpower", "redstonepowered");
         loadFlag(FlagType.BROADCAST, new FlagBroadcast(), FlagBit.NONE, "announce", "msgall");
@@ -93,7 +97,7 @@ public class FlagLoader {
         loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), FlagBit.RESULT);
         loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), FlagBit.RESULT, "skullitem, skull, head");
 
-        if (!Version.has1_13BasicSupport()) {
+        if (!Version.has1_13BasicSupport() || force) {
             loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), FlagBit.RESULT, "monsteregg", "egg");
         }
 

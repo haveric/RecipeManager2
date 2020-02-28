@@ -55,7 +55,7 @@ public class FlagBaseTest {
 
         new RecipeTypeLoader();
         RecipeTypeFactory.getInstance().init();
-        new FlagLoader();
+        new FlagLoader(true);
         FlagFactory.getInstance().init();
 
         File baseSrcDir = new File("src");
