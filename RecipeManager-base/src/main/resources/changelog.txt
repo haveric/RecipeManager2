@@ -16,6 +16,7 @@ This file will be automatically overwritten when a new version is installed.
 ** Add 'parrot' option for setting a parrot's variant
 ** Add 'pandamaingene' and 'pandahiddengene' option for setting a panda's genes
 ** Add 'fox', 'foxcrouching', 'foxfirsttrustedplayer', 'foxsecondtrustedplayer', and 'foxsleeping' options
+* FIX/NEW: @MonsterSpawner Add 'delay', 'mindelay', 'maxdelay', 'maxnearbyentities', 'playerrange', 'spawnrange', and 'spawncount' options
 * NEW: @IngredientCondition, @HoldItem: Add potioneffect's particles and icon checks
 * NEW: @IngredientCondition, @HoldItem: Add suspiciousstew potioneffect options
 * FIX: @IngredientCondition, @HoldItem: Fix potioneffect functionality

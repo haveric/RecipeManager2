@@ -81,11 +81,11 @@ public class FlagPotionItem extends Flag {
         }, String.class);
 
         if (Version.has1_13BasicSupport()) {
-        description = ObjectArrays.concat(description, new String[]{
-                "  icon [false]        = (defaults true) show the effect icon.",
-                "  !icon               = equivalent to 'icon false'",
-        }, String.class);
-    }
+            description = ObjectArrays.concat(description, new String[]{
+                    "  icon [false]        = (defaults true) show the effect icon.",
+                    "  !icon               = equivalent to 'icon false'",
+            }, String.class);
+        }
 
         return description;
     }
