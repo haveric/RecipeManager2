@@ -336,7 +336,7 @@ public class FlagCloneIngredient extends Flag {
 
             for (ItemStack i : inv.getMatrix()) {
                 if (i != null && result.getType() == i.getType()) {
-                    ingredient = i;
+                    ingredient = i.clone();
                     break;
                 }
             }
@@ -345,15 +345,15 @@ public class FlagCloneIngredient extends Flag {
             ItemStack i = inv.getSmelting();
 
             if (i != null && result.getType() == i.getType()) {
-                ingredient = i;
+                ingredient = i.clone();
             }
         } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory))) {
             ItemStack first = a.inventory().getItem(0);
             ItemStack second = a.inventory().getItem(1);
             if (first != null && result.getType() == first.getType()) {
-                ingredient = first;
+                ingredient = first.clone();
             } else if (second != null && result.getType() == second.getType()) {
-                ingredient = second;
+                ingredient = second.clone();
             }
         } else {
             a.addCustomReason("Unknown inventory type: " + a.inventory());
@@ -372,6 +372,10 @@ public class FlagCloneIngredient extends Flag {
             data = modValue(data, mod);
 
             result.setDurability((short) data);
+
+            if (hasCopyBit(Bit.SPECIAL)) {
+                ingredient.setDurability((short) data);
+            }
         }
 
         if (hasCopyBit(Bit.AMOUNT)) {
