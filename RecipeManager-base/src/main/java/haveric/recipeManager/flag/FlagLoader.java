@@ -92,7 +92,11 @@ public class FlagLoader {
         loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), FlagBit.RESULT, "potion");
         loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), FlagBit.RESULT);
         loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), FlagBit.RESULT, "skullitem, skull, head");
-        loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), FlagBit.RESULT, "monsteregg", "egg");
+
+        if (!Version.has1_13BasicSupport()) {
+            loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), FlagBit.RESULT, "monsteregg", "egg");
+        }
+
         if (Version.has1_14PlusSupport()) {
             loadFlag(FlagType.SUSPICIOUS_STEW, new FlagSuspiciousStew(), FlagBit.RESULT, "suspicioussoup");
         }
