@@ -112,8 +112,8 @@ public class FlagSkullOwner extends Flag {
             if (result == null || !(result.getItemMeta() instanceof SkullMeta)) {
                 return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a PLAYER_HEAD");
             }
-
         } else {
+            //noinspection deprecation
             if (result == null || !(result.getItemMeta() instanceof SkullMeta) || result.getDurability() != 3) {
                 return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a SKULL_ITEM with data value 3 to work!");
             }

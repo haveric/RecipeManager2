@@ -341,6 +341,7 @@ public class FlagHoldItem extends Flag {
                 }
             } else {
                 if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
+                    //noinspection deprecation
                     mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
                 }
             }

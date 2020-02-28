@@ -177,6 +177,7 @@ public class RecipeCommand implements TabExecutor {
                         if (Version.has1_12Support()) {
                             item = player.getInventory().getItemInMainHand();
                         } else {
+                            //noinspection deprecation
                             item = player.getItemInHand();
                         }
 

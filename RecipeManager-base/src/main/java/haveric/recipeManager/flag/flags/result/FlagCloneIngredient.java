@@ -11,6 +11,7 @@ import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -365,15 +366,19 @@ public class FlagCloneIngredient extends Flag {
             return false;
         }
 
-        if (hasCopyBit(Bit.DATA)) {
+        // 1.12 version of handling data
+        if (!Version.has1_13BasicSupport() && hasCopyBit(Bit.DATA)) {
+            //noinspection deprecation
             int data = ingredient.getDurability();
             int[] mod = getDataModifier();
 
             data = modValue(data, mod);
 
+            //noinspection deprecation
             result.setDurability((short) data);
 
             if (hasCopyBit(Bit.SPECIAL)) {
+                //noinspection deprecation
                 ingredient.setDurability((short) data);
             }
         }
@@ -392,6 +397,22 @@ public class FlagCloneIngredient extends Flag {
 
         if (ingredientMeta == null || resultMeta == null) {
             return true;
+        }
+
+        // 1.13+ version of handling data
+        if (Version.has1_13BasicSupport() && hasCopyBit(Bit.DATA) && ingredientMeta instanceof Damageable && resultMeta instanceof Damageable) {
+            Damageable ingredientDamageable = (Damageable) ingredientMeta;
+            int data = ingredientDamageable.getDamage();
+            int[] mod = getDataModifier();
+
+            data = modValue(data, mod);
+
+            Damageable resultDamageable = (Damageable) resultMeta;
+            resultDamageable.setDamage(data);
+
+            if (hasCopyBit(Bit.SPECIAL)) {
+                ingredientDamageable.setDamage(data);
+            }
         }
 
         if (hasCopyBit(Bit.ENCHANTS)) {

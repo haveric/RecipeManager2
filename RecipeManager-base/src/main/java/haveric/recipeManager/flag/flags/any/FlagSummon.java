@@ -64,6 +64,7 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
             }, String.class);
         } else {
+            //noinspection deprecation
             description = ObjectArrays.concat(description, new String[]{
                 String.format(argFormat, "cat <type>", "ocelot type, available values: " + RMCUtil.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
             }, String.class);
@@ -103,6 +104,7 @@ public class FlagSummon extends Flag {
         }, String.class);
 
         if (!Version.has1_12Support()) {
+            //noinspection deprecation
             description = ObjectArrays.concat(description, new String[] {
                 // Horse variants (DONKEY, MULE, ZOMBIE_HORSE, SKELETON_HORSE) are now their own entity types
                 String.format(argFormat, "horse <type>", "set the horse type, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Variant.values())).toLowerCase()) }, String.class);
@@ -152,6 +154,7 @@ public class FlagSummon extends Flag {
         }, String.class);
 
         if (!Version.has1_12Support()) {
+            //noinspection deprecation
             description = ObjectArrays.concat(description, new String[] {
                 // Skeleton variants (STRAY, WITHER_SKELETON) are now their own entity types
                 String.format(argFormat, "skeleton <type>", "set the skeleton type, values: " + RMCUtil.collectionToString(Arrays.asList(SkeletonType.values())).toLowerCase()) }, String.class);
@@ -207,12 +210,14 @@ public class FlagSummon extends Flag {
         private boolean angry = false;
         private boolean pet = false;
         private boolean noSit = false;
+        @SuppressWarnings("deprecation")
         private Ocelot.Type ocelot = null;
         private Cat.Type cat = null;
         private boolean saddle = false;
         private boolean mount = false;
         private DyeColor color = null;
         private boolean shearedSheep = false;
+        @SuppressWarnings("deprecation")
         private SkeletonType skeleton = null;
         private boolean zombieVillager = false;
         private Villager.Profession villager = null;
@@ -230,6 +235,7 @@ public class FlagSummon extends Flag {
         private ItemStack[] equip = new ItemStack[6];
         private float[] drop = new float[6];
         private List<PotionEffect> potions = new ArrayList<>();
+        @SuppressWarnings("deprecation")
         private Horse.Variant horse = null;
         private Horse.Color horseColor = null;
         private Horse.Style horseStyle = null;
@@ -493,6 +499,7 @@ public class FlagSummon extends Flag {
                     }
 
                     if (!Version.has1_12Support() && zombieVillager) {
+                        //noinspection deprecation
                         npc.setVillager(true);
                     }
                 }
@@ -524,6 +531,7 @@ public class FlagSummon extends Flag {
 
                 if (!Version.has1_12Support() && skeleton != null && ent instanceof Skeleton) {
                     Skeleton npc = (Skeleton) ent;
+                    //noinspection deprecation
                     npc.setSkeletonType(skeleton);
                 }
 
@@ -531,6 +539,7 @@ public class FlagSummon extends Flag {
                     Horse npc = (Horse) ent;
 
                     if (!Version.has1_12Support() && horse != null) {
+                        //noinspection deprecation
                         npc.setVariant(horse);
                     }
 
@@ -552,6 +561,7 @@ public class FlagSummon extends Flag {
                                 chestedHorse.setCarryingChest(true);
                             }
                         } else {
+                            //noinspection deprecation
                             npc.setCarryingChest(true);
                         }
                     }
@@ -617,6 +627,7 @@ public class FlagSummon extends Flag {
 
                 if (!Version.has1_12Support() && elder && ent instanceof Guardian) {
                     Guardian npc = (Guardian) ent;
+                    //noinspection deprecation
                     npc.setElder(true);
                 }
 
@@ -687,7 +698,9 @@ public class FlagSummon extends Flag {
                                         eq.setItemInMainHand(item);
                                         eq.setItemInMainHandDropChance(drop[j]);
                                     } else {
+                                        //noinspection deprecation
                                         eq.setItemInHand(item);
+                                        //noinspection deprecation
                                         eq.setItemInHandDropChance(drop[j]);
                                     }
                                 }
@@ -959,11 +972,12 @@ public class FlagSummon extends Flag {
             angry = newAngry;
         }
 
+        @SuppressWarnings("deprecation")
         public Ocelot.Type getOcelot() {
             return ocelot;
         }
 
-        public void setOcelot(Ocelot.Type newOcelot) {
+        public void setOcelot(@SuppressWarnings("deprecation") Ocelot.Type newOcelot) {
             ocelot = newOcelot;
         }
 
@@ -991,11 +1005,12 @@ public class FlagSummon extends Flag {
             shearedSheep = newShearedSheep;
         }
 
+        @SuppressWarnings("deprecation")
         public SkeletonType getSkeleton() {
             return skeleton;
         }
 
-        public void setSkeleton(SkeletonType newSkeleton) {
+        public void setSkeleton(@SuppressWarnings("deprecation") SkeletonType newSkeleton) {
             skeleton = newSkeleton;
         }
 
@@ -1063,10 +1078,11 @@ public class FlagSummon extends Flag {
             noBreed = newNoBreed;
         }
 
-        public void setHorseVariant(Horse.Variant newVariant) {
+        public void setHorseVariant(@SuppressWarnings("deprecation") Horse.Variant newVariant) {
             horse = newVariant;
         }
 
+        @SuppressWarnings("deprecation")
         public Horse.Variant getHorseVariant() {
             return horse;
         }
@@ -1524,6 +1540,7 @@ public class FlagSummon extends Flag {
 
                     value = value.substring("skeleton".length()).trim();
 
+                    //noinspection deprecation
                     c.setSkeleton(RMCUtil.parseEnum(value, SkeletonType.values()));
 
                     if (c.getSkeleton() == null) {
@@ -1550,6 +1567,7 @@ public class FlagSummon extends Flag {
 
                     value = value.substring("cat".length()).trim();
 
+                    //noinspection deprecation
                     c.setOcelot(RMCUtil.parseEnum(value, Ocelot.Type.values()));
 
                     if (c.getOcelot() == null) {
@@ -1712,6 +1730,7 @@ public class FlagSummon extends Flag {
 
                     value = value.substring("horse".length()).trim();
 
+                    //noinspection deprecation
                     c.setHorseVariant(RMCUtil.parseEnum(value, Horse.Variant.values()));
 
                     if (c.getHorseVariant() == null) {

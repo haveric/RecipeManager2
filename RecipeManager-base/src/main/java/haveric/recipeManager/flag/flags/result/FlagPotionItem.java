@@ -182,9 +182,11 @@ public class FlagPotionItem extends Flag {
             if (Version.has1_9Support()) {
                 basePotion = Tools.parsePotion19(value, getFlagType());
             } else {
+                //noinspection deprecation
                 Potion p = Tools.parsePotion18(value, getFlagType());
 
                 if (p != null) {
+                    //noinspection deprecation
                     data = p.toDamageValue();
                 }
             }

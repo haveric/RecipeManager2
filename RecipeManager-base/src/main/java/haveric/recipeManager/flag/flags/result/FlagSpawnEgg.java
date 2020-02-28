@@ -106,6 +106,7 @@ public class FlagSpawnEgg extends Flag {
             }
 
             SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
+            //noinspection deprecation
             spawnEggMeta.setSpawnedType(entityType);
 
             a.result().setItemMeta(spawnEggMeta);

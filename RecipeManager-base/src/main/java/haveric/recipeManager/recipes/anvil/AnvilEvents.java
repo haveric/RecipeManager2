@@ -554,9 +554,11 @@ public class AnvilEvents extends BaseRecipeEvents {
                             broken = true;
                         }
                     } else {
+                        //noinspection deprecation
                         byte blockData = block.getData();
                         if (blockData < 8) {
                             BlockState state = block.getState();
+                            //noinspection deprecation
                             state.setRawData((byte) (blockData + 4));
                             state.update();
                         } else {

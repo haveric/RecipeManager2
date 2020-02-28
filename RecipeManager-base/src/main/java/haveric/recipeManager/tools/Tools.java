@@ -506,6 +506,7 @@ public class Tools {
         return item;
     }
 
+    @SuppressWarnings("deprecation")
     public static Potion parsePotion18(String value, String type) {
         String[] split = value.toLowerCase().split("\\|");
 
