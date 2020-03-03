@@ -623,7 +623,7 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror)) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -963,7 +963,7 @@ public class Vanilla {
 
                     if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                        baseRecipeIterator.replace(recipe, overrideItem);
+                        baseRecipeIterator.replace(overrideItem);
                         baseRecipeIterator.finish();
                         return sr;
                     }
@@ -1006,9 +1006,9 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
                     sh = sr.getShape();
 
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror, width, height)) {
+                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror)) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                        baseRecipeIterator.replace(recipe, overrideItem);
+                        baseRecipeIterator.replace(overrideItem);
                         baseRecipeIterator.finish();
                         return sr;
                     }
@@ -1044,7 +1044,7 @@ public class Vanilla {
                     if (r instanceof ShapelessRecipe) {
                         if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, choiceList)) {
                             ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(recipe, overrideItem);
+                            baseRecipeIterator.replace(overrideItem);
                             baseRecipeIterator.finish();
                             return r;
                         }
@@ -1063,7 +1063,7 @@ public class Vanilla {
                     if (r instanceof ShapelessRecipe) {
                         if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
                             ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(recipe, overrideItem);
+                            baseRecipeIterator.replace(overrideItem);
                             baseRecipeIterator.finish();
                             return r;
                         }
@@ -1359,7 +1359,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesMapExtending(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesMapExtending(Recipe recipe) {
         boolean matches = false;
         if (recipe instanceof ShapedRecipe) {
             ShapedRecipe shaped = (ShapedRecipe) recipe;

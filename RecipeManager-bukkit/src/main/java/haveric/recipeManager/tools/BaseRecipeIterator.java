@@ -1,6 +1,5 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -10,7 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
 public abstract class BaseRecipeIterator {
-    public void replace(AbstractBaseRecipe recipe, ItemStack overrideItem) {
+    public void replace(ItemStack overrideItem) {
 
     }
 

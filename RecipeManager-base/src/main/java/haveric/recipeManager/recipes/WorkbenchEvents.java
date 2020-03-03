@@ -176,7 +176,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!Settings.getInstance().getSpecialMapExtending()) {
-                if (Vanilla.recipeMatchesMapExtending(recipe, result)) {
+                if (Vanilla.recipeMatchesMapExtending(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.map.extending");
                     inv.setResult(null);
                     return true;

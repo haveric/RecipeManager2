@@ -15,11 +15,12 @@ public class SoundNotifier {
         sendSound(player, location, soundBlockNoteBass, 0.8f, 4, Settings.getInstance().getSoundsFailedClick());
     }
 
+/*  TODO: Currently unused. Remove along with config options OR find a use
     public static void sendFailSound(Player player, Location location) {
         Sound soundBlockNotePling = Tools.getSound("BLOCK_NOTE_PLING");
         sendSound(player, location, soundBlockNotePling, 0.8f, 4, Settings.getInstance().getSoundsFailed());
     }
-
+*/
     public static void sendRepairSound(Player player, Location location) {
         Sound soundBlockAnvilUse = Tools.getSound("BLOCK_ANVIL_USE");
         sendSound(player, location, soundBlockAnvilUse, 0.8f, 4, Settings.getInstance().getSoundsRepair());

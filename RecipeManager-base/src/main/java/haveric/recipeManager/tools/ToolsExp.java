@@ -56,18 +56,6 @@ public class ToolsExp {
         return (2 * level) + 7;
     }
 
-    public static int getExpToLevel(final int level) {
-        int currentLevel = 0;
-        int exp = 0;
-
-        while (currentLevel < level) {
-            exp += getExpAtLevel(currentLevel);
-            currentLevel++;
-        }
-
-        return exp;
-    }
-
     // This method is required because the Bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
     // Without this people would be able to use exp and then still sell it.
     public static int getTotalExperience(final Player player) {
@@ -83,6 +71,18 @@ public class ToolsExp {
     }
 
 /* Currently unused, but may be needed in the future
+    public static int getExpToLevel(final int level) {
+        int currentLevel = 0;
+        int exp = 0;
+
+        while (currentLevel < level) {
+            exp += getExpAtLevel(currentLevel);
+            currentLevel++;
+        }
+
+        return exp;
+    }
+
     public static int getExpUntilNextLevel(final Player player) {
         int exp = Math.round(getExpAtLevel(player) * player.getExp());
         int nextLevel = player.getLevel();

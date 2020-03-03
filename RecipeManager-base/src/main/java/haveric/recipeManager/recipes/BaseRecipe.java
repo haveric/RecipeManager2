@@ -101,15 +101,6 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         } else {
             return new NamespacedKey(RecipeManager.getPlugin(), key);
         }
-
-    }
-
-    /**
-     * Register recipe with the server and RecipeManager.<br>
-     * Alias for RecipeManager.getRecipes().registerRecipe(this);
-     */
-    public void register() {
-        RecipeManager.getRecipes().registerRecipe(this);
     }
 
     /**

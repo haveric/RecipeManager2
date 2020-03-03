@@ -2,7 +2,6 @@ package haveric.recipeManager.nms;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.BaseRecipeIterator;
-import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
@@ -95,7 +94,7 @@ public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterat
      * For Smelting, use traditional remove / add.
      */
     @Override
-    public void replace(AbstractBaseRecipe recipe, org.bukkit.inventory.ItemStack overrideItem) {
+    public void replace(org.bukkit.inventory.ItemStack overrideItem) {
         // A _key_ assumption with replace is that the original items and shape is _unchanged_. Only result is overridden.
         try {
             // MessageSender.getInstance().info("NMS for 1.14 replacing recipe " + recipe.getName());

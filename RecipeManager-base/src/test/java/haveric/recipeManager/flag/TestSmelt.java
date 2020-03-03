@@ -2,10 +2,9 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
 import org.bukkit.Material;
 import org.junit.Test;
 
@@ -27,8 +26,6 @@ public class TestSmelt extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
             List<Material> ingredientMaterials = recipe.getIngredientChoice();
-
-            ItemResult result = recipe.getResult();
 
             if (ingredientMaterials.contains(Material.STONE_SWORD)) {
                 assertEquals(Vanilla.FURNACE_RECIPE_TIME, recipe.getCookTime(), .001);
