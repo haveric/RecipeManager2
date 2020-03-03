@@ -23,7 +23,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: @HoldItem: Add missing potion, potioneffect, and banner documentation
 * FIX: @CloneIngredient: Add support for Anvils, Cartography Tables, and Grindstones
 * FIX: @CloneIngredient: Using allmeta with a data attribute will respect data adjustments
-* NEW FLAG: @SuspiciousStew: Adds potion effects to a suspicious stew
+* NEW FLAG: @SuspiciousStewItem: Adds potion effects to a suspicious stew
 
 === v2.20.0 ===
 * NEW: Grindstone and Cartography Table recipe support

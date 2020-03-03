@@ -14,11 +14,11 @@ import org.bukkit.potion.PotionEffect;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlagSuspiciousStew extends Flag {
+public class FlagSuspiciousStewItem extends Flag {
 
     @Override
     public String getFlagType() {
-        return FlagType.SUSPICIOUS_STEW;
+        return FlagType.SUSPICIOUS_STEW_ITEM;
     }
 
     @Override
@@ -57,16 +57,16 @@ public class FlagSuspiciousStew extends Flag {
 
     private List<PotionEffect> effects = new ArrayList<>();
 
-    public FlagSuspiciousStew() {
+    public FlagSuspiciousStewItem() {
     }
 
-    public FlagSuspiciousStew(FlagSuspiciousStew flag) {
+    public FlagSuspiciousStewItem(FlagSuspiciousStewItem flag) {
         effects.addAll(flag.effects);
     }
 
     @Override
-    public FlagSuspiciousStew clone() {
-        return new FlagSuspiciousStew((FlagSuspiciousStew) super.clone());
+    public FlagSuspiciousStewItem clone() {
+        return new FlagSuspiciousStewItem((FlagSuspiciousStewItem) super.clone());
     }
 
     public List<PotionEffect> getEffects() {

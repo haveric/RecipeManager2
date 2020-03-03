@@ -102,7 +102,7 @@ public class FlagLoader {
         }
 
         if (Version.has1_14PlusSupport()) {
-            loadFlag(FlagType.SUSPICIOUS_STEW, new FlagSuspiciousStew(), FlagBit.RESULT, "suspicioussoup");
+            loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), FlagBit.RESULT, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
         }
     }
 
