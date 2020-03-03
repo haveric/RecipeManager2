@@ -1,26 +1,23 @@
 package haveric.recipeManager.tools;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Minecraft v1.13 NMS solution for matching if a RM recipe is already represented by an MC recipe.
+ * Minecraft v1.13 solution for matching if a RM recipe is already represented by an MC recipe.
  *
  * Basically duplicates the "internal" matching code.
  **/
 public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
     @Override
-    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> choiceMap) {
+    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> choice) {
         if (bukkitRecipe instanceof ShapedRecipe) {
             ShapedRecipe shapedRecipe = (ShapedRecipe) bukkitRecipe;
 
-            return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, choiceMap);
+            return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, choice);
         }
 
         return false;
@@ -41,9 +38,9 @@ public class ToolsRecipeV1_13_2 extends BaseToolsRecipe {
 
 
     @Override
-    public boolean matchesFurnace(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack furnaceIngredient) {
-        if (bukkitRecipe instanceof org.bukkit.inventory.FurnaceRecipe) {
-            org.bukkit.inventory.FurnaceRecipe furnaceRecipe = (org.bukkit.inventory.FurnaceRecipe) bukkitRecipe;
+    public boolean matchesFurnace(Recipe bukkitRecipe, ItemStack furnaceIngredient) {
+        if (bukkitRecipe instanceof FurnaceRecipe) {
+            FurnaceRecipe furnaceRecipe = (FurnaceRecipe) bukkitRecipe;
 
             return RMBukkitTools.isSameItemFromChoice(furnaceRecipe.getInputChoice(), furnaceIngredient);
         }

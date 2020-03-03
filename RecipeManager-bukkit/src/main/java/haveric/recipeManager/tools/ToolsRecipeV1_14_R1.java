@@ -1,56 +1,15 @@
 package haveric.recipeManager.tools;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.*;
 
-import java.util.List;
-import java.util.Map;
-
 /**
- * Minecraft v1.13 NMS solution for matching if a RM recipe is already represented by an MC recipe.
+ * Minecraft v1.14 solution for matching if a RM recipe is already represented by an MC recipe.
  *
  * Basically duplicates the "internal" matching code.
  **/
-public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
+public class ToolsRecipeV1_14_R1 extends ToolsRecipeV1_13_2 {
     @Override
-    public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> choice) {
-        if (bukkitRecipe instanceof ShapedRecipe) {
-            ShapedRecipe shapedRecipe = (ShapedRecipe) bukkitRecipe;
-
-            return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, choice);
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean matchesShapeless(Recipe bukkitRecipe, List<List<Material>> materialsList) {
-        if (bukkitRecipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkitRecipe;
-
-            List<RecipeChoice> choices = shapelessRecipe.getChoiceList();
-
-            return RMBukkitTools.compareShapelessChoiceList(choices, materialsList);
-        }
-
-        return false;
-    }
-
-
-    @Override
-    public boolean matchesFurnace(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack furnaceIngredient) {
-        if (bukkitRecipe instanceof org.bukkit.inventory.FurnaceRecipe) {
-            org.bukkit.inventory.FurnaceRecipe furnaceRecipe = (org.bukkit.inventory.FurnaceRecipe) bukkitRecipe;
-
-            return RMBukkitTools.isSameItemFromChoice(furnaceRecipe.getInputChoice(), furnaceIngredient);
-        }
-
-        return false;
-    }
-
-
-    @Override
-    public boolean matchesBlasting(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack blastingIngredient) {
+    public boolean matchesBlasting(Recipe bukkitRecipe, ItemStack blastingIngredient) {
         if (bukkitRecipe instanceof BlastingRecipe) {
             BlastingRecipe blastingRecipe = (BlastingRecipe) bukkitRecipe;
 
@@ -61,7 +20,7 @@ public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
     }
 
     @Override
-    public boolean matchesSmoking(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack smokingIngredient) {
+    public boolean matchesSmoking(Recipe bukkitRecipe, ItemStack smokingIngredient) {
         if (bukkitRecipe instanceof SmokingRecipe) {
             SmokingRecipe smokingRecipe = (SmokingRecipe) bukkitRecipe;
 
@@ -72,7 +31,7 @@ public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
     }
 
     @Override
-    public boolean matchesCampfire(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack campfireIngredient) {
+    public boolean matchesCampfire(Recipe bukkitRecipe, ItemStack campfireIngredient) {
         if (bukkitRecipe instanceof CampfireRecipe) {
             CampfireRecipe campfireRecipe = (CampfireRecipe) bukkitRecipe;
 
@@ -83,7 +42,7 @@ public class ToolsRecipeV1_14_R1 extends BaseToolsRecipe {
     }
 
     @Override
-    public boolean matchesStonecutting(Recipe bukkitRecipe, org.bukkit.inventory.ItemStack stonecuttingIngredient, ItemStack stonecuttingResult) {
+    public boolean matchesStonecutting(Recipe bukkitRecipe, ItemStack stonecuttingIngredient, ItemStack stonecuttingResult) {
         if (bukkitRecipe instanceof StonecuttingRecipe) {
             StonecuttingRecipe stonecuttingRecipe = (StonecuttingRecipe) bukkitRecipe;
 
