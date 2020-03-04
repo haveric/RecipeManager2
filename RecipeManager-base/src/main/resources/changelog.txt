@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.21.0 ===
 * FIX/NEW: @PotionEffect flag updates:
 ** Replaced 'morefx' with 'ambient'
 ** Added options for particles and icon. Changed defaults to true
