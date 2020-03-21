@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+* FIX: @PotionItem, @PotionEffect, @SuspiciousStewItem: Fixed potion and potion effect parsing
 * FIX: @MonsterSpawner: Removed "Set min delay" message on parse
 
 === v2.21.0 ===

@@ -613,14 +613,14 @@ public class Tools {
                 extended = true;
             } else if (s.startsWith("type")) {
                 needsPotionType = true;
-                split = s.split(" ", 2);
+                String[] typeSplit = s.split(" ", 2);
 
-                if (split.length <= 1) {
+                if (typeSplit.length <= 1) {
                     ErrorReporter.getInstance().error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
                 }
 
-                value = split[1].trim();
+                value = typeSplit[1].trim();
 
                 try {
                     potionType = PotionType.valueOf(value.toUpperCase());
@@ -630,14 +630,14 @@ public class Tools {
                 }
             } else if (s.startsWith("level")) {
                 needsPotionType = true;
-                split = s.split(" ", 2);
+                String[] levelSplit = s.split(" ", 2);
 
-                if (split.length <= 1) {
+                if (levelSplit.length <= 1) {
                     ErrorReporter.getInstance().error("Flag " + type + " has 'level' argument with no level!");
                     continue;
                 }
 
-                value = split[1].trim();
+                value = levelSplit[1].trim();
 
                 if (value.equals("max")) {
                     level = 9999;
@@ -649,14 +649,14 @@ public class Tools {
                     }
                 }
             } else if (s.startsWith("color")) {
-                split = s.split(" ", 2);
+                String[] colorSplit = s.split(" ", 2);
 
-                if (split.length <= 1) {
+                if (colorSplit.length <= 1) {
                     ErrorReporter.getInstance().error("Flag " + type + " has 'color' argument with no colors!");
                     continue;
                 }
 
-                Color color = Tools.parseColor(split[1]);
+                Color color = Tools.parseColor(colorSplit[1]);
                 if (color == null) {
                     ErrorReporter.getInstance().error("Flag " + type + " has invalid color numbers!", "Use 3 numbers ranging from 0 to 255, e.g. 255 128 0 for orange.");
                 } else {
@@ -760,15 +760,14 @@ public class Tools {
                     continue;
                 }
 
-                split = s.split(" ", 2);
+                String[] durSplit = s.split(" ", 2);
 
-
-                if (split.length <= 1) {
+                if (durSplit.length <= 1) {
                     ErrorReporter.getInstance().error("Flag " + flagType + " has 'duration' argument with no number!");
                     continue;
                 }
 
-                value = split[1].trim();
+                value = durSplit[1].trim();
 
                 try {
                     duration = Float.parseFloat(value);
@@ -776,14 +775,14 @@ public class Tools {
                     ErrorReporter.getInstance().error("Flag " + flagType + " has invalid 'duration' number: " + value);
                 }
             } else if (s.startsWith("amplifier")) {
-                split = s.split(" ", 2);
+                String[] amplifierSplit = s.split(" ", 2);
 
-                if (split.length <= 1) {
+                if (amplifierSplit.length <= 1) {
                     ErrorReporter.getInstance().error("Flag " + flagType + " has 'amplify' argument with no number!");
                     continue;
                 }
 
-                value = split[1].trim();
+                value = amplifierSplit[1].trim();
 
                 try {
                     amplifier = Integer.parseInt(value);
