@@ -93,11 +93,11 @@ public class FlagPotionItem extends Flag {
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} level max | type FIRE_RESISTANCE | extended // basic extended fire resistance potion",
+            "{flag} type FIRE_RESISTANCE | level max | extended // basic extended fire resistance potion",
             "// advanced potion example:",
             "{flag} type POISON | splash | color 255 128 0 // set the bottle design and set it as splash with a custom color",
             "{flag} custom WITHER | duration 10 // add wither effect",
-            "{flag} custom BLINDNESS | duration 2.5 | amplify 5 // add blindness effect", };
+            "{flag} custom BLINDNESS | duration 2.5 | amplifier 5 // add blindness effect", };
     }
 
 
