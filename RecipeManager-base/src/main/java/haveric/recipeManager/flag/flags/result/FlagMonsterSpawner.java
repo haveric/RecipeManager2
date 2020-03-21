@@ -6,7 +6,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
@@ -161,7 +160,6 @@ public class FlagMonsterSpawner extends Flag {
                         if (parsed < 0) {
                             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid mindelay value: " + s + ". Expecting an integer >= 0.");
                         } else {
-                            MessageSender.getInstance().info("Set min delay: " + parsed);
                             minDelay = parsed;
                         }
                     } catch (NumberFormatException e) {
