@@ -8,7 +8,9 @@ public class FlagType {
     public static final String COOLDOWN = "@cooldown";
     public static final String EXPLODE = "@explode";
     public static final String FOR_CHANCE = "@forchance";
+    public static final String FOR_DELAY = "@fordelay";
     public static final String FOR_PERMISSION = "@forpermission";
+    public static final String FOR_REPEAT = "@forrepeat";
     public static final String GAMEMODE = "@gamemode";
     public static final String GROUP = "@group";
     public static final String HEIGHT = "@height";

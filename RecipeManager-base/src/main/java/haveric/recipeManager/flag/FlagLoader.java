@@ -17,43 +17,45 @@ public class FlagLoader {
     }
 
     private void loadDefaultFlags(boolean force) {
-        loadFlag(FlagType.BIOME, new FlagBiome(), FlagBit.NONE);
-        loadFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), FlagBit.NO_VALUE_REQUIRED, "poweredblock", "blockpower", "redstonepowered");
+        loadFlag(FlagType.BIOME, new FlagBiome(), FlagBit.NO_DELAY);
+        loadFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "poweredblock", "blockpower", "redstonepowered");
         loadFlag(FlagType.BROADCAST, new FlagBroadcast(), FlagBit.NONE, "announce", "msgall");
         loadFlag(FlagType.COMMAND, new FlagCommand(), FlagBit.NONE, "cmd", "commands");
-        loadFlag(FlagType.COOLDOWN, new FlagCooldown(), FlagBit.NONE, "cooltime", "delay");
+        loadFlag(FlagType.COOLDOWN, new FlagCooldown(), FlagBit.NO_DELAY, "cooltime");
         loadFlag(FlagType.EXPLODE, new FlagExplode(), FlagBit.NONE | FlagBit.NO_VALUE_REQUIRED, "explosion", "boom", "tnt");
         loadFlag(FlagType.FOR_CHANCE, new FlagForChance(), FlagBit.NONE, "bychance", "chance");
+        loadFlag(FlagType.FOR_DELAY, new FlagForDelay(), FlagBit.NONE, "delay");
         loadFlag(FlagType.FOR_PERMISSION, new FlagForPermission(), FlagBit.NONE, "forperm");
-        loadFlag(FlagType.GAMEMODE, new FlagGameMode(), FlagBit.NONE, "needgm");
-        loadFlag(FlagType.GROUP, new FlagGroup(), FlagBit.NONE, "groups", "permissiongroup", "permgroup");
-        loadFlag(FlagType.HEIGHT, new FlagHeight(), FlagBit.NONE, "depth");
-        loadFlag(FlagType.HOLD_ITEM, new FlagHoldItem(), FlagBit.NONE, "hold");
-        loadFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.NO_VALUE_REQUIRED, "lore", "itemdesc");
-        loadFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.NONE, "name", "displayname");
-        loadFlag(FlagType.ITEM_NBT, new FlagItemNBT(), FlagBit.NONE, "nbt");
-        loadFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), FlagBit.NONE, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
-        loadFlag(FlagType.INVENTORY, new FlagInventory(), FlagBit.NONE);
-        loadFlag(FlagType.KEEP_ITEM, new FlagKeepItem(), FlagBit.NONE, "returnitem", "replaceitem");
+        loadFlag(FlagType.FOR_REPEAT, new FlagForRepeat(), FlagBit.NONE, "repeat");
+        loadFlag(FlagType.GAMEMODE, new FlagGameMode(), FlagBit.NO_DELAY, "needgm");
+        loadFlag(FlagType.GROUP, new FlagGroup(), FlagBit.NO_DELAY, "groups", "permissiongroup", "permgroup");
+        loadFlag(FlagType.HEIGHT, new FlagHeight(), FlagBit.NO_DELAY, "depth");
+        loadFlag(FlagType.HOLD_ITEM, new FlagHoldItem(), FlagBit.NO_DELAY, "hold");
+        loadFlag(FlagType.ITEM_LORE, new FlagItemLore(), FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "lore", "itemdesc");
+        loadFlag(FlagType.ITEM_NAME, new FlagItemName(), FlagBit.NO_DELAY, "name", "displayname");
+        loadFlag(FlagType.ITEM_NBT, new FlagItemNBT(), FlagBit.NO_DELAY, "nbt");
+        loadFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), FlagBit.NO_DELAY, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
+        loadFlag(FlagType.INVENTORY, new FlagInventory(), FlagBit.NO_DELAY);
+        loadFlag(FlagType.KEEP_ITEM, new FlagKeepItem(), FlagBit.NO_DELAY, "returnitem", "replaceitem");
         loadFlag(FlagType.LAUNCH_FIREWORK, new FlagLaunchFirework(), FlagBit.ONCE_PER_SHIFT, "setfirework");
-        loadFlag(FlagType.LIGHT_LEVEL, new FlagLightLevel(), FlagBit.NONE, "blocklight", "sunlight", "light");
+        loadFlag(FlagType.LIGHT_LEVEL, new FlagLightLevel(), FlagBit.NO_DELAY, "blocklight", "sunlight", "light");
         loadFlag(FlagType.MESSAGE, new FlagMessage(), FlagBit.NONE, "craftmsg", "msg");
         loadFlag(FlagType.MOD_EXP, new FlagModExp(), FlagBit.NONE, "expmod", "modxp", "xpmod", "exp", "xp", "giveexp", "givexp", "takeexp", "takexp");
         loadFlag(FlagType.MOD_LEVEL, new FlagModLevel(), FlagBit.NONE, "levelmod", "setlevel", "level");
         loadFlag(FlagType.MOD_MONEY, new FlagModMoney(), FlagBit.NONE, "moneymod", "setmoney", "money");
-        loadFlag(FlagType.NEED_EXP, new FlagNeedExp(), FlagBit.NONE, "needxp", "reqexp", "expreq", "reqxp", "xpreq");
-        loadFlag(FlagType.NEED_LEVEL, new FlagNeedLevel(), FlagBit.NONE, "reqlevel", "levelreq");
-        loadFlag(FlagType.NEED_MONEY, new FlagNeedMoney(), FlagBit.NONE, "reqmoney", "moneyreq");
-        loadFlag(FlagType.PERMISSION, new FlagPermission(), FlagBit.NONE, "permissions", "perm");
-        loadFlag(FlagType.POTION_EFFECT, new FlagPotionEffect(), FlagBit.NONE, "potionfx");
-        loadFlag(FlagType.SECRET, new FlagSecret(), FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_FOR);
-        loadFlag(FlagType.SET_BLOCK, new FlagSetBlock(), FlagBit.NONE, "changeblock");
+        loadFlag(FlagType.NEED_EXP, new FlagNeedExp(), FlagBit.NO_DELAY, "needxp", "reqexp", "expreq", "reqxp", "xpreq");
+        loadFlag(FlagType.NEED_LEVEL, new FlagNeedLevel(), FlagBit.NO_DELAY, "reqlevel", "levelreq");
+        loadFlag(FlagType.NEED_MONEY, new FlagNeedMoney(), FlagBit.NO_DELAY, "reqmoney", "moneyreq");
+        loadFlag(FlagType.PERMISSION, new FlagPermission(), FlagBit.NO_DELAY, "permissions", "perm");
+        loadFlag(FlagType.POTION_EFFECT, new FlagPotionEffect(), FlagBit.NO_DELAY, "potionfx");
+        loadFlag(FlagType.SECRET, new FlagSecret(), FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_FOR | FlagBit.NO_DELAY);
+        loadFlag(FlagType.SET_BLOCK, new FlagSetBlock(), FlagBit.NO_DELAY, "changeblock");
         loadFlag(FlagType.SOUND, new FlagSound(), FlagBit.ONCE_PER_SHIFT, "playsound");
         loadFlag(FlagType.SPAWN_PARTICLE, new FlagSpawnParticle(), FlagBit.ONCE_PER_SHIFT, "particle");
         loadFlag(FlagType.SUMMON, new FlagSummon(), FlagBit.NONE, "spawn", "creature", "mob", "animal");
-        loadFlag(FlagType.TEMPERATURE, new FlagTemperature(), FlagBit.NONE, "temp");
-        loadFlag(FlagType.WEATHER, new FlagWeather(), FlagBit.NONE);
-        loadFlag(FlagType.WORLD, new FlagWorld(), FlagBit.NONE, "needworld", "worlds");
+        loadFlag(FlagType.TEMPERATURE, new FlagTemperature(), FlagBit.NO_DELAY, "temp");
+        loadFlag(FlagType.WEATHER, new FlagWeather(), FlagBit.NO_DELAY);
+        loadFlag(FlagType.WORLD, new FlagWorld(), FlagBit.NO_DELAY, "needworld", "worlds");
 
         // TELEPORT(FlagTeleport(), "tpto", "goto"), // TODO finish flag
         // REALTIME(FlagRealTime(), FlagBit.NONE, "time", "date"),

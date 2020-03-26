@@ -184,7 +184,6 @@ public class FlagForChance extends Flag {
      * @return false if flag can only be added on specific flaggables
      */
     public boolean canAdd(Flag flag) {
-
         return flag != null && flag.validate() && !FlagFactory.getInstance().getFlagByName(getFlagType()).hasBit(FlagBit.NO_FOR);
     }
 
@@ -567,7 +566,6 @@ public class FlagForChance extends Flag {
                 break;
         }
     }
-
 
     @Override
     public int hashCode() {

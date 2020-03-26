@@ -4,6 +4,11 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * FIX: @PotionItem, @PotionEffect, @SuspiciousStewItem: Fixed potion and potion effect parsing
 * FIX: @MonsterSpawner: Removed "Set min delay" message on parse
+* NEW FLAG: @ForDelay, alias 'delay': Run other flags after a delay
+** Format: @ForDelay <delay> @<flag declaration>
+* NEW FLAG: @ForRepeat, alias 'repeat': Run other flags multiple times with an optional delay between them
+** Format: @ForRepeat <times to repeat> <delay per repeat> @<flag declaration>
+* REMOVE: @Cooldown 'delay' alias removed in favor of @ForDelay
 
 === v2.21.0 ===
 * FIX/NEW: @PotionEffect flag updates:

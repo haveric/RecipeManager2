@@ -99,7 +99,6 @@ public class FlagForPermission extends Flag {
      * @return false if flag can only be added on specific flaggables
      */
     public boolean canAdd(Flag flag) {
-
         return flag != null && flag.validate() && !FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.NO_FOR);
     }
 
