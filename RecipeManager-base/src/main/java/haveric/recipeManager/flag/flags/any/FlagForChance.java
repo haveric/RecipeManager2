@@ -5,7 +5,6 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.Args;
-import org.apache.commons.lang.Validate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,57 +174,6 @@ public class FlagForChance extends Flag {
      */
     public void setFlagsForGroup(String group, List<ChanceFlag> flags) {
         flagMap.put(group, flags);
-    }
-
-    /**
-     * Checks if the flag can be added to this flag list.
-     *
-     * @param flag
-     * @return false if flag can only be added on specific flaggables
-     */
-    public boolean canAdd(Flag flag) {
-        return flag != null && flag.validate() && !FlagFactory.getInstance().getFlagByName(getFlagType()).hasBit(FlagBit.NO_FOR);
-    }
-
-    /**
-     * Attempts to add a flag to this flag list for the chance group.<br>
-     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
-     *
-     * @param group
-     *            the chance group, can be null for no group/individual
-     * @param flag
-     *            the flag
-     */
-    public void addFlag(String group, Flag flag) {
-        addFlag(group, flag, 100.0f);
-    }
-
-    /**
-     * Attempts to add a flag to this flag list for the chance group.<br>
-     * Adds an error to the {@link ErrorReporter} class if flag is not compatible with recipe/result.
-     *
-     * @param group
-     *            the chance group, can be null for no group/individual
-     * @param flag
-     *            the flag
-     * @param chance
-     *            trigger chance, valid values between 0.01f to 100.0f or null to auto-calculate
-     */
-    public void addFlag(String group, Flag flag, Float chance) {
-        Validate.notNull(flag, "Argument flag must not be null!");
-
-        if (canAdd(flag)) {
-            List<ChanceFlag> flags = flagMap.computeIfAbsent(group, k -> new ArrayList<>());
-
-            flag.setFlagsContainer(getFlagsContainer());
-
-            if (chance != null) {
-                chance = Math.min(Math.max(chance, 0.01f), 100.0f);
-            }
-
-            flags.add(new ChanceFlag(flag, chance));
-            recalculateChances(group, flags);
-        }
     }
 
     @Override
