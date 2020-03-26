@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * FIX: @PotionItem, @PotionEffect, @SuspiciousStewItem: Fixed potion and potion effect parsing
 * FIX: @MonsterSpawner: Removed "Set min delay" message on parse
+* NEW: @ApplyEnchantment: Add 'anvil' action to increase levels by one if they match or take the max of the two
 * NEW FLAG: @ForDelay, alias 'delay': Run other flags after a delay
 ** Format: @ForDelay <delay> @<flag declaration>
 * NEW FLAG: @ForRepeat, alias 'repeat': Run other flags multiple times with an optional delay between them

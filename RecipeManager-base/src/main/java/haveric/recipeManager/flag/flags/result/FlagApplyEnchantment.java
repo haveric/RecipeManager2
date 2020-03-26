@@ -41,6 +41,7 @@ public class FlagApplyEnchantment extends Flag {
             "Actions include:",
             "  largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)",
             "  combine = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)",
+            "  anvil   = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)",
             "", };
     }
 
@@ -54,7 +55,8 @@ public class FlagApplyEnchantment extends Flag {
 
     public enum ApplyEnchantmentAction {
         LARGEST,
-        COMBINE
+        COMBINE,
+        ANVIL
     }
 
     private ApplyEnchantmentAction ingredientAction = ApplyEnchantmentAction.LARGEST;
@@ -112,6 +114,8 @@ public class FlagApplyEnchantment extends Flag {
                     ingredientAction = ApplyEnchantmentAction.LARGEST;
                 } else if (value.equals("combine")) {
                     ingredientAction = ApplyEnchantmentAction.COMBINE;
+                } else if (value.equals("anvil")) {
+                    ingredientAction = ApplyEnchantmentAction.ANVIL;
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has ingredientaction argument with invalid action: " + value);
                 }
@@ -122,6 +126,8 @@ public class FlagApplyEnchantment extends Flag {
                     resultAction = ApplyEnchantmentAction.LARGEST;
                 } else if (value.equals("combine")) {
                     resultAction = ApplyEnchantmentAction.COMBINE;
+                } else if (value.equals("anvil")) {
+                    resultAction = ApplyEnchantmentAction.ANVIL;
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has resultaction argument with invalid action: " + value);
                 }
@@ -192,8 +198,17 @@ public class FlagApplyEnchantment extends Flag {
                 int currentLevel = resultMeta.getEnchantLevel(enchantment);
                 if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
                     resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
-                } else if (resultAction == ApplyEnchantmentAction.COMBINE){
+                } else if (resultAction == ApplyEnchantmentAction.COMBINE) {
                     resultMeta.addEnchant(enchantment, level + currentLevel, ignoreLevelRestriction);
+                } else if (resultAction == ApplyEnchantmentAction.ANVIL) {
+                    int newLevel;
+                    if (level == currentLevel) {
+                        newLevel = level + 1;
+                    } else {
+                        newLevel = Math.max(level, currentLevel);
+                    }
+
+                    resultMeta.addEnchant(enchantment, newLevel, ignoreLevelRestriction);
                 }
             } else {
                 resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
@@ -227,6 +242,15 @@ public class FlagApplyEnchantment extends Flag {
                                 enchantments.put(enchantment, level);
                             } else if (ingredientAction == ApplyEnchantmentAction.COMBINE) {
                                 enchantments.put(enchantment, level + currentLevel);
+                            } else if (ingredientAction == ApplyEnchantmentAction.ANVIL) {
+                                int newLevel;
+                                if (level == currentLevel) {
+                                    newLevel = level + 1;
+                                } else {
+                                    newLevel = Math.max(level, currentLevel);
+                                }
+
+                                enchantments.put(enchantment, newLevel);
                             }
                         } else {
                             enchantments.put(enchantment, level);
@@ -246,6 +270,15 @@ public class FlagApplyEnchantment extends Flag {
                                     enchantments.put(enchantment, level);
                                 } else if (ingredientAction == ApplyEnchantmentAction.COMBINE) {
                                     enchantments.put(enchantment, level + currentLevel);
+                                } else if (ingredientAction == ApplyEnchantmentAction.ANVIL) {
+                                    int newLevel;
+                                    if (level == currentLevel) {
+                                        newLevel = level + 1;
+                                    } else {
+                                        newLevel = Math.max(level, currentLevel);
+                                    }
+
+                                    enchantments.put(enchantment, newLevel);
                                 }
                             } else {
                                 enchantments.put(enchantment, level);
