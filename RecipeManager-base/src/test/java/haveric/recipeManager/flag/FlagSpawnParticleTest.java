@@ -23,7 +23,7 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(10, queued.size());
+        assertEquals(8, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
@@ -42,14 +42,11 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(Particle.HEART, particles.get(0).getParticle());
                     assertEquals(3, particles.get(0).getCount());
 
-                    assertEquals(0, particles.get(0).getDelay());
                     assertEquals(Double.NaN, particles.get(0).getExtra(), .001);
                     break;
                 case "second":
                     assertEquals(1, particles.size());
                     assertEquals(Particle.HEART, particles.get(0).getParticle());
-                    assertEquals(40, particles.get(0).getDelay());
-
 
                     assertEquals(1, particles.get(0).getCount());
                     assertEquals(Double.NaN, particles.get(0).getExtra(), .001);
@@ -59,7 +56,6 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(Particle.HEART, particles.get(0).getParticle());
                     assertEquals(3, particles.get(0).getExtra(), .001);
 
-                    assertEquals(0, particles.get(0).getDelay());
                     assertEquals(1, particles.get(0).getCount());
 
                     assertEquals(RMParticle.DEFAULT_RANDOM_OFFSET, particles.get(0).getRandomOffsetX(), .001);
@@ -74,7 +70,6 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(1, particles.size());
                     assertEquals(Particle.HEART, particles.get(0).getParticle());
                     assertEquals(20, particles.get(0).getCount());
-                    assertEquals(80, particles.get(0).getDelay());
 
                     assertEquals(-1, particles.get(0).getRandomOffsetX(), .001);
                     assertEquals(2, particles.get(0).getRandomOffsetY(), .001);
@@ -88,7 +83,6 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(1, particles.size());
                     assertEquals(Particle.HEART, particles.get(0).getParticle());
                     assertEquals(20, particles.get(0).getCount());
-                    assertEquals(80, particles.get(0).getDelay());
 
                     assertEquals(-1, particles.get(0).getRandomOffsetX(), .001);
                     assertEquals(2, particles.get(0).getRandomOffsetY(), .001);
@@ -102,7 +96,6 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(1, particles.size());
                     assertEquals(Particle.HEART, particles.get(0).getParticle());
                     assertEquals(20, particles.get(0).getCount());
-                    assertEquals(80, particles.get(0).getDelay());
 
                     assertEquals(-1, particles.get(0).getRandomOffsetX(), .001);
                     assertEquals(RMParticle.DEFAULT_RANDOM_OFFSET, particles.get(0).getRandomOffsetY(), .001);
@@ -111,20 +104,6 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(-2, particles.get(0).getOffsetX(), .001);
                     assertEquals(RMParticle.DEFAULT_OFFSET_Y, particles.get(0).getOffsetY(), .001);
                     assertEquals(RMParticle.DEFAULT_OFFSET_Z, particles.get(0).getOffsetZ(), .001);
-                    break;
-                case "repeat":
-                    assertEquals(1, particles.size());
-                    assertEquals(Particle.HEART, particles.get(0).getParticle());
-
-                    assertEquals(5, particles.get(0).getRepeatTimes());
-                    assertEquals(40, particles.get(0).getRepeatDelay());
-                    break;
-                case "repeat2":
-                    assertEquals(1, particles.size());
-                    assertEquals(Particle.HEART, particles.get(0).getParticle());
-
-                    assertEquals(7, particles.get(0).getRepeatTimes());
-                    assertEquals(20, particles.get(0).getRepeatDelay());
                     break;
                 case "multiple":
                     assertEquals(3, particles.size());
@@ -141,13 +120,8 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     assertEquals(RMParticle.DEFAULT_OFFSET_Z, particles.get(0).getOffsetZ(), .001);
 
                     assertEquals(3, particles.get(0).getCount());
-                    assertEquals(0, particles.get(0).getDelay());
-
                     assertEquals(5, particles.get(1).getCount());
-                    assertEquals(40, particles.get(1).getDelay());
-
                     assertEquals(20, particles.get(2).getCount());
-                    assertEquals(80, particles.get(2).getDelay());
 
                     assertEquals(-1, particles.get(2).getRandomOffsetX(), .001);
                     assertEquals(2, particles.get(2).getRandomOffsetY(), .001);

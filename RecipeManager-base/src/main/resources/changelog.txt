@@ -8,7 +8,8 @@ This file will be automatically overwritten when a new version is installed.
 ** Format: @ForDelay <delay> @<flag declaration>
 * NEW FLAG: @ForRepeat, alias 'repeat': Run other flags multiple times with an optional delay between them
 ** Format: @ForRepeat <times to repeat> <delay per repeat> @<flag declaration>
-* REMOVE: @Cooldown 'delay' alias removed in favor of @ForDelay
+* REMOVE: @Cooldown: Removed 'delay' alias in favor of @ForDelay
+* REMOVE: @SpawnParticle: Removed 'delay' and 'repeat' arguments in favor of @ForDelay and @ForRepeat
 
 === v2.21.0 ===
 * FIX/NEW: @PotionEffect flag updates:

@@ -10,7 +10,6 @@ public class RMParticle {
     public static double DEFAULT_RANDOM_OFFSET = .25;
 
     private Particle particle;
-    private int delay = 0;
 
     private double offsetX = DEFAULT_OFFSET_X;
     private double offsetY = DEFAULT_OFFSET_Y;
@@ -23,9 +22,6 @@ public class RMParticle {
     private int count = 1;
     private Double extra = Double.NaN;
 
-    private int repeatTimes = 0;
-    private int repeatDelay = 20;
-
     public RMParticle(Particle newParticle) {
         particle = newParticle;
     }
@@ -36,14 +32,6 @@ public class RMParticle {
 
     public void setParticle(Particle particle) {
         this.particle = particle;
-    }
-
-    public int getDelay() {
-        return delay;
-    }
-
-    public void setDelay(int delay) {
-        this.delay = delay;
     }
 
     public double getOffsetX() {
@@ -110,28 +98,11 @@ public class RMParticle {
         this.extra = extra;
     }
 
-    public int getRepeatTimes() {
-        return repeatTimes;
-    }
-
-    public void setRepeatTimes(int repeatTimes) {
-        this.repeatTimes = repeatTimes;
-    }
-
-    public int getRepeatDelay() {
-        return repeatDelay;
-    }
-
-    public void setRepeatDelay(int repeatDelay) {
-        this.repeatDelay = repeatDelay;
-    }
-
     @Override
     public int hashCode() {
         String toHash = "rmparticle:";
 
         toHash += "particle: " + particle.toString();
-        toHash += "delay: " + delay;
         toHash += "offsetX: " + offsetX;
         toHash += "offsetY: " + offsetY;
         toHash += "offsetZ: " + offsetZ;
@@ -140,8 +111,6 @@ public class RMParticle {
         toHash += "randomOffsetZ: " + randomOffsetZ;
         toHash += "count: " + count;
         toHash += "extra: " + extra.toString();
-        toHash += "repeatTimes: " + repeatTimes;
-        toHash += "repeatDelay: " + repeatDelay;
 
         return toHash.hashCode();
     }
