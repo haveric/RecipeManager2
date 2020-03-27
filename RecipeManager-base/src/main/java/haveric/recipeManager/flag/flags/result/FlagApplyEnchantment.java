@@ -36,6 +36,7 @@ public class FlagApplyEnchantment extends Flag {
             "  ingredientaction <action> = (default largest) merge action for all of the ingredients",
             "  resultaction <action>     = (default largest) merge action applied to the result",
             "  ignorelevel               = Ignore enchantment level restrictions",
+            "  maxlevel <level>          = Restrict the maximum level",
             "  onlybooks                 = Only copies enchantments from Enchanted Books. Without this, all item enchantments will be copied",
             "",
             "Actions include:",
@@ -62,6 +63,7 @@ public class FlagApplyEnchantment extends Flag {
     private ApplyEnchantmentAction ingredientAction = ApplyEnchantmentAction.LARGEST;
     private ApplyEnchantmentAction resultAction = ApplyEnchantmentAction.LARGEST;
     private boolean ignoreLevelRestriction = false;
+    private int maxLevel = -1;
     private boolean onlyBooks = false;
 
 
@@ -71,6 +73,7 @@ public class FlagApplyEnchantment extends Flag {
         ingredientAction = flag.ingredientAction;
         resultAction = flag.resultAction;
         ignoreLevelRestriction = flag.ignoreLevelRestriction;
+        maxLevel = flag.maxLevel;
         onlyBooks = flag.onlyBooks;
     }
 
@@ -133,6 +136,19 @@ public class FlagApplyEnchantment extends Flag {
                 }
             } else if (arg.startsWith("ignorelevel")) {
                 ignoreLevelRestriction = true;
+            } else if  (arg.startsWith("maxLevel")) {
+                value = arg.substring("maxlevel".length()).trim();
+
+                try {
+                    maxLevel = Integer.parseInt(value);
+
+                    if (maxLevel <= 1) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxLevel value: " + maxLevel + ". Value must be > 1.");
+                        maxLevel = -1;
+                    }
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxLevel value: " + value + ". Value must be an integer > 1.");
+                }
             } else if (arg.startsWith("onlybooks")) {
                 onlyBooks = true;
             } else {
@@ -197,15 +213,26 @@ public class FlagApplyEnchantment extends Flag {
             if (resultMeta.hasEnchant(enchantment)) {
                 int currentLevel = resultMeta.getEnchantLevel(enchantment);
                 if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
+                    if (maxLevel > 1) {
+                        level = Math.min(level, maxLevel);
+                    }
                     resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
                 } else if (resultAction == ApplyEnchantmentAction.COMBINE) {
-                    resultMeta.addEnchant(enchantment, level + currentLevel, ignoreLevelRestriction);
+                    level += currentLevel;
+                    if (maxLevel > 1) {
+                        level = Math.min(level, maxLevel);
+                    }
+                    resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
                 } else if (resultAction == ApplyEnchantmentAction.ANVIL) {
                     int newLevel;
                     if (level == currentLevel) {
                         newLevel = level + 1;
                     } else {
                         newLevel = Math.max(level, currentLevel);
+                    }
+
+                    if (maxLevel > 1) {
+                        newLevel = Math.min(newLevel, maxLevel);
                     }
 
                     resultMeta.addEnchant(enchantment, newLevel, ignoreLevelRestriction);
@@ -233,56 +260,14 @@ public class FlagApplyEnchantment extends Flag {
                     EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
 
                     for (Map.Entry<Enchantment, Integer> entry : enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-                        Enchantment enchantment = entry.getKey();
-                        int level = entry.getValue();
-
-                        if (enchantments.containsKey(enchantment)) {
-                            int currentLevel = enchantments.get(enchantment);
-                            if (ingredientAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
-                                enchantments.put(enchantment, level);
-                            } else if (ingredientAction == ApplyEnchantmentAction.COMBINE) {
-                                enchantments.put(enchantment, level + currentLevel);
-                            } else if (ingredientAction == ApplyEnchantmentAction.ANVIL) {
-                                int newLevel;
-                                if (level == currentLevel) {
-                                    newLevel = level + 1;
-                                } else {
-                                    newLevel = Math.max(level, currentLevel);
-                                }
-
-                                enchantments.put(enchantment, newLevel);
-                            }
-                        } else {
-                            enchantments.put(enchantment, level);
-                        }
+                        evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
                     }
                 }
 
                 if(!onlyBooks) {
                     if (meta != null && meta.hasEnchants()) {
                         for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                            Enchantment enchantment = entry.getKey();
-                            int level = entry.getValue();
-
-                            if (enchantments.containsKey(enchantment)) {
-                                int currentLevel = enchantments.get(enchantment);
-                                if (ingredientAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
-                                    enchantments.put(enchantment, level);
-                                } else if (ingredientAction == ApplyEnchantmentAction.COMBINE) {
-                                    enchantments.put(enchantment, level + currentLevel);
-                                } else if (ingredientAction == ApplyEnchantmentAction.ANVIL) {
-                                    int newLevel;
-                                    if (level == currentLevel) {
-                                        newLevel = level + 1;
-                                    } else {
-                                        newLevel = Math.max(level, currentLevel);
-                                    }
-
-                                    enchantments.put(enchantment, newLevel);
-                                }
-                            } else {
-                                enchantments.put(enchantment, level);
-                            }
+                            evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
                         }
                     }
                 }
@@ -290,6 +275,39 @@ public class FlagApplyEnchantment extends Flag {
         }
 
         return enchantments;
+    }
+
+    private void evaluateEnchantments(Map<Enchantment, Integer> enchantments, Enchantment enchantment, int level) {
+        if (enchantments.containsKey(enchantment)) {
+            int currentLevel = enchantments.get(enchantment);
+            if (ingredientAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
+                if (maxLevel > 1) {
+                    level = Math.min(level, maxLevel);
+                }
+                enchantments.put(enchantment, level);
+            } else if (ingredientAction == ApplyEnchantmentAction.COMBINE) {
+                level += currentLevel;
+                if (maxLevel > 1) {
+                    level = Math.min(level, maxLevel);
+                }
+                enchantments.put(enchantment, level);
+            } else if (ingredientAction == ApplyEnchantmentAction.ANVIL) {
+                int newLevel;
+                if (level == currentLevel) {
+                    newLevel = level + 1;
+                } else {
+                    newLevel = Math.max(level, currentLevel);
+                }
+
+                if (maxLevel > 1) {
+                    newLevel = Math.min(newLevel, maxLevel);
+                }
+
+                enchantments.put(enchantment, newLevel);
+            }
+        } else {
+            enchantments.put(enchantment, level);
+        }
     }
 
     @Override
