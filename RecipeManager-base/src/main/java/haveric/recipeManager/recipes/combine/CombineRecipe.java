@@ -282,7 +282,7 @@ public class CombineRecipe extends PreparableResultRecipe {
                 }
             }
 
-            if (print.equals("")) {
+            if (print.isEmpty()) {
                 print = ToolsItem.print(item, RMCChatColor.RESET, RMCChatColor.BLACK);
             }
 

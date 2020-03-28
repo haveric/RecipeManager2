@@ -84,7 +84,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 continue;
             }
 
-            if (recipeName != null && !recipeName.equals("")) {
+            if (recipeName != null && !recipeName.isEmpty()) {
                 String name = recipeName;
                 if (added > 1) {
                     name += " (" + added + ")";

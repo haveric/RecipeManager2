@@ -104,7 +104,7 @@ public class AnvilRecipeParser extends BaseRecipeParser {
             return recipe.hasFlag(FlagType.REMOVE);
         }
 
-        if (recipeName != null && !recipeName.equals("")) {
+        if (recipeName != null && !recipeName.isEmpty()) {
             recipe.setName(recipeName); // set recipe's name if defined
         }
 

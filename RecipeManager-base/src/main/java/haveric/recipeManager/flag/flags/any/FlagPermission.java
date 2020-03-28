@@ -39,7 +39,7 @@ public class FlagPermission extends Flag {
             "Optionally you can specify a failure message that will be used on the specific permission(s) defined.",
             "The messages can have the following variables:",
             "  {permission}  = permission that was not found or was found and it's unallowed.",
-            "  {permissions}  = a comma separated list of the allowed or unallowed permission nodes.", };
+            "  {permissions} = a comma separated list of the allowed or unallowed permission nodes.", };
     }
 
     @Override

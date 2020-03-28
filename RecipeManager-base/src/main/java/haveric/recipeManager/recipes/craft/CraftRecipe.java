@@ -449,7 +449,7 @@ public class CraftRecipe extends PreparableResultRecipe {
                         }
                     }
 
-                    if (print.equals("")) {
+                    if (print.isEmpty()) {
                         print = ToolsItem.print(displayIngredients[i], RMCChatColor.BLACK, RMCChatColor.BLACK);
                     }
 

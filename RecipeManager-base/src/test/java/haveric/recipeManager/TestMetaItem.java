@@ -26,7 +26,7 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     private Integer customModelData;
     private String blockData;
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
-    private Set<ItemFlag> flags = new HashSet<>();
+    private Set<ItemFlag> flags = EnumSet.noneOf(ItemFlag.class);
     private int repairCost;
     private int hideFlag;
     private boolean unbreakable;

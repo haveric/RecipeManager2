@@ -255,7 +255,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
 
         String print = getConditionResultName(result);
 
-        if (print.equals("")) {
+        if (print.isEmpty()) {
             print = ToolsItem.printChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 

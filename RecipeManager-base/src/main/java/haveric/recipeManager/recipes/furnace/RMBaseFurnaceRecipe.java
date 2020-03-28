@@ -240,7 +240,7 @@ public class RMBaseFurnaceRecipe extends SingleResultRecipe {
 
         String print = getConditionResultName(result);
 
-        if (print.equals("")) {
+        if (print.isEmpty()) {
             print = ToolsItem.print(getIngredient(), RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 

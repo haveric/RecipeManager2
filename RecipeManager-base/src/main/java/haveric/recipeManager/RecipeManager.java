@@ -229,7 +229,7 @@ public class RecipeManager extends JavaPlugin {
         for (int i = 0; i < tracesLength; i++) {
             trace = traces[i];
 
-            if (trace.getMethodName().equals(method) && tracesLength >= i) {
+            if (trace.getMethodName().equals(method)) {
                 trace = traces[++i];
 
                 packageName = trace.getClassName();

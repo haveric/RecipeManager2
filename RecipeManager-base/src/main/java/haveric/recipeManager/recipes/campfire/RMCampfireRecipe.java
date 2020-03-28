@@ -237,7 +237,7 @@ public class RMCampfireRecipe extends SingleResultRecipe {
 
         String print = getConditionResultName(result);
 
-        if (print.equals("")) {
+        if (print.isEmpty()) {
             print = ToolsItem.printChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 

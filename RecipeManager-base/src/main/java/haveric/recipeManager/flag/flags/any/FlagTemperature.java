@@ -108,7 +108,7 @@ public class FlagTemperature extends Flag {
             tempString += "<= " + lteTemp;
         }
 
-        if (!tempString.equals("") && (gtTemp != null || gteTemp != null)) {
+        if (!tempString.isEmpty() && (gtTemp != null || gteTemp != null)) {
             tempString += " and ";
         }
 

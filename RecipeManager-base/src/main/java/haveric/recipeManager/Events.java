@@ -48,7 +48,6 @@ public class Events extends BaseRecipeEvents {
             if (block.getType() == enchantingTableMaterial) {
                 if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
                     event.setCancelled(true);
-                    return;
                 }
             }
         }
