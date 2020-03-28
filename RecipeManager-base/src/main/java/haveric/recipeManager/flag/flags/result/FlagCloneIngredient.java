@@ -1,12 +1,12 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Settings;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -52,6 +52,7 @@ public class FlagCloneIngredient extends Flag {
             "  special                                = copies item's special feature like leather armor color, firework effects, book contents, skull owner, etc.",
             "  allmeta                                = copies enchants, name, lore and special.",
             "  all                                    = copies entire item (data, amount, enchants, name, lore, special)",
+            "  allowedtypes <type, ...>               = set material types other than the result type that can be cloned from",
             "",
             "NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.",
             "",
@@ -66,7 +67,8 @@ public class FlagCloneIngredient extends Flag {
             "{flag} amount * 2 // copy amount and multiply it by 2",
             "{flag} data % 2 // get the remainder from data divided by 2.",
             "{flag} data | amount | lore // only copy these things",
-            "{flag} all // copy entire ingredient", };
+            "{flag} all // copy entire ingredient",
+            "{flag} all | allowedtypes stone_axe, iron_axe // copy ingredients from the first ingredient that matches a stone axe, iron axe, or the result type"};
     }
 
 
@@ -75,6 +77,7 @@ public class FlagCloneIngredient extends Flag {
     private int[] amountModifier = new int[2];
     private List<String> loreConditions = new ArrayList<>();
     private List<Integer> loreLines = new ArrayList<>();
+    private List<Material> allowedTypes = new ArrayList<>();
 
     /**
      * Contains static constants that are usable in the 'copy' methods of {@link FlagCloneIngredient}.
@@ -100,6 +103,7 @@ public class FlagCloneIngredient extends Flag {
         System.arraycopy(flag.amountModifier, 0, amountModifier, 0, amountModifier.length);
         loreConditions = flag.loreConditions;
         loreLines = flag.loreLines;
+        allowedTypes = flag.allowedTypes;
     }
 
     @Override
@@ -210,30 +214,16 @@ public class FlagCloneIngredient extends Flag {
             return false;
         }
 
-        /*
-         * BaseRecipe recipe = result.getRecipe();
-         *
-         * if(recipe instanceof WorkbenchRecipe == false) { RecipeErrorReporter.error("Flag " + getType() + " only works on workbench (craft and combine) recipes!"); return false; }
-         */
-
         return true;
     }
 
     @Override
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
+
         // Match on single pipes '|', but not double '||'
         // Double pipes will be replaced by single pipes for each arg
         String[] args = value.toLowerCase().split("(?<!\\|)\\|(?!\\|)");
-
-        int found = getResult().getRecipe().findItemInIngredients(getResult().getType(), null);
-
-        if (found == 0) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(getResult()));
-            return false;
-        } else if (found > 1) {
-            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has found the " + ToolsItem.print(getResult()) + " ingredient more than once, only data from the first one will be cloned!");
-        }
 
         for (String arg : args) {
             arg = arg.trim();
@@ -243,7 +233,7 @@ public class FlagCloneIngredient extends Flag {
 
             if (arg.equals("all")) {
                 copyBitsum = Bit.ALL;
-                break;
+                continue;
             } else if (arg.equals("allmeta")) {
                 addCopyBit(Bit.ALLMETA);
                 continue;
@@ -268,6 +258,24 @@ public class FlagCloneIngredient extends Flag {
                 continue;
             } else if (arg.equals("special")) {
                 addCopyBit(Bit.SPECIAL);
+                continue;
+            } else if (arg.startsWith("allowedtypes")) {
+                value = arg.substring("allowedtypes".length()).trim();
+                String[] types = value.split(",");
+
+                for (String type : types) {
+                    Material material = Settings.getInstance().getMaterial(type);
+                    if (material == null) {
+                        material = Material.matchMaterial(type);
+                    }
+
+                    if (material == null) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid allowedtypes value: " + type + ". Value must be a material name.");
+                    } else {
+                        allowedTypes.add(material);
+                    }
+                }
+
                 continue;
             }
 
@@ -307,6 +315,28 @@ public class FlagCloneIngredient extends Flag {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
         }
 
+        List<Material> allTypes = new ArrayList<>();
+        allTypes.add(getResult().getType());
+        allTypes.addAll(allowedTypes);
+
+        int found = 0;
+        Material foundMaterial = null;
+        for (Material material : allTypes) {
+            found = getResult().getRecipe().findItemInIngredients(material, null);
+
+            if (found > 0) {
+                foundMaterial = material;
+                break;
+            }
+        }
+
+        if (found == 0) {
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient of type: " + allTypes.toString());
+            return false;
+        } else if (found > 1) {
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has found the " + foundMaterial + " ingredient more than once, only data from the first one will be cloned!");
+        }
+
         return true;
     }
 
@@ -330,13 +360,17 @@ public class FlagCloneIngredient extends Flag {
     }
 
     private boolean cloneIngredientToResult(ItemStack result, Args a) {
+        List<Material> allTypes = new ArrayList<>();
+        allTypes.add(result.getType());
+        allTypes.addAll(allowedTypes);
+
         ItemStack ingredient = null;
 
         if (a.inventory() instanceof CraftingInventory) {
             CraftingInventory inv = (CraftingInventory) a.inventory();
 
             for (ItemStack i : inv.getMatrix()) {
-                if (i != null && result.getType() == i.getType()) {
+                if (i != null && allTypes.contains(i.getType())) {
                     ingredient = i.clone();
                     break;
                 }
@@ -345,15 +379,15 @@ public class FlagCloneIngredient extends Flag {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
             ItemStack i = inv.getSmelting();
 
-            if (i != null && result.getType() == i.getType()) {
+            if (i != null && allTypes.contains(i.getType())) {
                 ingredient = i.clone();
             }
         } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory))) {
             ItemStack first = a.inventory().getItem(0);
             ItemStack second = a.inventory().getItem(1);
-            if (first != null && result.getType() == first.getType()) {
+            if (first != null && allTypes.contains(first.getType())) {
                 ingredient = first.clone();
-            } else if (second != null && result.getType() == second.getType()) {
+            } else if (second != null && allTypes.contains(second.getType())) {
                 ingredient = second.clone();
             }
         } else {
@@ -520,6 +554,10 @@ public class FlagCloneIngredient extends Flag {
 
         for (Integer loreline : loreLines) {
             toHash += loreline + ", ";
+        }
+
+        for (Material material : allowedTypes) {
+            toHash += material.name() + ", ";
         }
 
         return toHash.hashCode();
