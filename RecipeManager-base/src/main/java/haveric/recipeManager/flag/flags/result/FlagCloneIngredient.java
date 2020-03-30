@@ -82,7 +82,7 @@ public class FlagCloneIngredient extends Flag {
     /**
      * Contains static constants that are usable in the 'copy' methods of {@link FlagCloneIngredient}.
      */
-    public class Bit {
+    public static class Bit {
         public static final byte NONE = 0;
         public static final byte DATA = 1;
         public static final byte AMOUNT = 1 << 1;

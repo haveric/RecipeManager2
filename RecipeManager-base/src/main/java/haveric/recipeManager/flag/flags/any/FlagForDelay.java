@@ -42,7 +42,7 @@ public class FlagForDelay extends Flag {
         };
     }
 
-    public class DelayFlag {
+    public static class DelayFlag {
         private List<Flag> flags = new ArrayList<>();
         private int delay;
 

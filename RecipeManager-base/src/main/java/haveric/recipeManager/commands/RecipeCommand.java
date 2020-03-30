@@ -78,7 +78,7 @@ public class RecipeCommand implements TabExecutor {
         return list;
     }
 
-    public class Pages {
+    public static class Pages {
         private UUID playerUUID;
         private ItemStack item;
         private int page = -1;

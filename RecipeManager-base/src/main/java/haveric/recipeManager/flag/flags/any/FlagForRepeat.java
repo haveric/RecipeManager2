@@ -44,7 +44,7 @@ public class FlagForRepeat extends Flag {
         };
     }
 
-    public class RepeatFlag {
+    public static class RepeatFlag {
         private List<Flag> flags = new ArrayList<>();
         private int repeatTimes;
         private int delayPerRepeat;

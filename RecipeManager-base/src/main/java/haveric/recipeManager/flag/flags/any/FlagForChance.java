@@ -69,7 +69,7 @@ public class FlagForChance extends Flag {
     }
 
 
-    public class ChanceFlag {
+    public static class ChanceFlag {
         private Flag flag;
         private float chance;
         private boolean autoChance = false;
