@@ -182,8 +182,10 @@ public class Files {
             }
         }
 
-        s.append("<title>Recipe Flags</title><pre style='font-family:Lucida Console;font-size:16px;width:100%;'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
+        s.append("<title>Recipe Flags</title>");
+        s.append("<style>body {margin: 0;} nav {font-family: Arial;max-width: 990px;margin: 0 auto;padding: 15px;} pre {font-family:Lucida Console;font-size:16px;width:calc(100% - 30px);padding: 0 15px;} .back-to-top {padding-left: 5px; font-size: 12px;}</style>");
+        s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a></nav>");
+        s.append(NL).append("<pre>");
         s.append(NL).append("<h1>Recipe flags</h1>");
         s.append(NL);
         s.append(NL).append("<b>WHAT ARE FLAGS ?</b>");
@@ -237,7 +239,7 @@ public class Files {
                 String[] ex = flag.getExamples();
 
                 s.append(NL);
-                s.append("<hr><a href='#contents' style='font-size:12px;'>^ Contents</a><a name='").append(flag.getName()).append("'></a>");
+                s.append("<hr><a href='#contents' class='back-to-top'>^ Contents</a><a name='").append(flag.getName()).append("'></a>");
                 s.append(NL);
                 s.append(NL);
 
@@ -307,13 +309,15 @@ public class Files {
 
         StringBuilder s = new StringBuilder();
 
-        s.append("<title>Commands &amp; permissions</title><pre style='font-family:Lucida Console;font-size:16px;width:100%;'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
+        s.append("<title>Commands &amp; permissions</title>");
+        s.append("<style>body {margin: 0;} nav {font-family: Arial;max-width: 990px;margin: 0 auto;padding: 15px;} pre {font-family:Lucida Console;font-size:16px;width:calc(100% - 30px);padding: 0 15px;} table {border-collapse: collapse;} table, th, td {border: 1px solid #000;} th, td {padding: 5px;} .command {width: 40%;} .command__text {font-size: 14px;}</style>");
+        s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b></nav>");
+        s.append(NL).append("<pre>");
         s.append(NL).append("<h1>Commands &amp; permissions</h1>");
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<h2>Commands</h2>");
-        s.append("<table style='border-collapse:collapse;' border='1' cellpadding='5'>");
+        s.append("<table>");
 
         PluginDescriptionFile desc = RecipeManager.getPlugin().getDescription();
         Map<String, Map<String, Object>> cmds = desc.getCommands();
@@ -366,8 +370,8 @@ public class Files {
             }
 
             s.append(NL).append("<tr>");
-            s.append("<td width='40%'><b>");
-            s.append(StringEscapeUtils.escapeHtml(usage)).append("</b><span style='font-size:14px;'>");
+            s.append("<td class='command'><b>");
+            s.append(StringEscapeUtils.escapeHtml(usage)).append("</b><span class='command__text'>");
             s.append("<br>Permission: ").append(permission);
             s.append("<br>Aliases: ").append(aliasesString);
             s.append("</span></td>");
@@ -379,7 +383,7 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("<h2>Permissions</h2>");
-        s.append("<table style='border-collapse:collapse;' border='1' cellpadding='5'>");
+        s.append("<table>");
         s.append(NL).append("<tr>");
         s.append("<th>Permission node</th>");
         s.append("<th>Defaulted to</th>");
@@ -449,8 +453,10 @@ public class Files {
 
         StringBuilder s = new StringBuilder(24000);
 
-        s.append("<title>Name index</title><pre style='font-family:Lucida Console;font-size:16px;width:100%;'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
+        s.append("<title>Name Index</title>");
+        s.append("<style>body {margin: 0;} nav {font-family: Arial;max-width: 990px;margin: 0 auto;padding: 15px;} pre {font-family:Lucida Console;font-size:16px;width:calc(100% - 30px);padding: 0 15px;}</style>");
+        s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a></nav>");
+        s.append(NL).append("<pre>");
         s.append(NL).append("<h1>Name Index</h1>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods!");
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
