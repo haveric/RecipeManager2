@@ -63,10 +63,6 @@ commands:
     description: creates a recipe from the leftmost 3x3 ingredients in an inventory and the held item as a result
     usage: /<command>
     permission: recipemanager.command.rmcreaterecipe
-  rmruntests:
-    description: used for testing the plugin
-    usage: /<command>
-    permission: recipemanager.command.rmruntests
 permissions:
   recipemanager.craft:
     description: Toggles ability to craft all recipes
@@ -127,8 +123,5 @@ permissions:
     description:
     default: op
   recipemanager.command.rmcreaterecipe:
-    description:
-    default: op
-  recipemanager.command.rmruntests:
     description:
     default: op
