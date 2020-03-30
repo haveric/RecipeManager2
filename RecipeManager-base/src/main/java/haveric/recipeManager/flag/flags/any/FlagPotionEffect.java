@@ -34,7 +34,7 @@ public class FlagPotionEffect extends Flag {
             "",
             "Using 'clear' will remove all potion effects from player before adding any defined ones.",
             "",
-            "The <effect type> argument must be an effect type, names for them can be found in '" + Files.FILE_INFO_NAMES + "' file at 'POTION EFFECT TYPE'.",
+            "The &lt;effect type&gt; argument must be an effect type, see " + Files.getNameIndexHashLink("potioneffect"),
             "",
             "Optionally you can add more arguments separated by | character in any order:",
             "  duration <float>    = (default 1.0) potion effect duration in seconds, only works on non-instant effect types.",

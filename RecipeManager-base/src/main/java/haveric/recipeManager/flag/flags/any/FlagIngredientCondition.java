@@ -3,6 +3,9 @@ package haveric.recipeManager.flag.flags.any;
 import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -11,12 +14,8 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.ParseBit;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.DyeColor;
-import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.*;
 
 import java.util.*;
@@ -66,7 +65,7 @@ public class FlagIngredientCondition extends Flag {
             "  enchant <name> [[!]num or min-max], [...]",
             "    Condition for applied enchantments (not stored in books).",
             "    This argument can be used more than once to add more enchantments as conditions.",
-            "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+            "    The name must be an enchantment name, see " + Files.getNameIndexHashLink("enchantment"),
             "    The 2nd argument is the levels, it's optional",
             "    A number can be used as level to set that level as requirement.",
             "    You can also use 'max' to use the max supported level for that enchantment.",
@@ -80,7 +79,7 @@ public class FlagIngredientCondition extends Flag {
             "  bookenchant <name> [[!]num or min-max], [...]",
             "    Condition for book enchantments (not applied enchantments)",
             "    This argument can be used more than once to add more enchantments as conditions.",
-            "    The name must be an enchantment name, see '" + Files.FILE_INFO_NAMES + "' at 'ENCHANTMENTS' section.",
+            "    The name must be an enchantment name, see " + Files.getNameIndexHashLink("enchantment"),
             "    The 2nd argument is the levels, it's optional",
             "    A number can be used as level to set that level as requirement.",
             "    You can also use 'max' to use the max supported level for that enchantment.",
@@ -110,7 +109,8 @@ public class FlagIngredientCondition extends Flag {
             "    Ingredient must have no lore",
             "    Overrides lore condition if set",
             "",
-            "  color <colorname or R,G,B>       = only works for leather armor, checks color, the values can be individual values or ranged separated by - char or you can use a color name constant, see '" + Files.FILE_INFO_NAMES + "' at 'DYE COLOR'.",
+            "  color &lt;colorname or R,G,B&gt;       = only works for leather armor, checks color" +
+            "                                     values can be individual values or ranged separated by - char or you can use a color name constant, see " + Files.getNameIndexHashLink("dyecolor"),
             "",
             "  nocolor or !color",
             "    Only works for leather armor",
@@ -135,12 +135,12 @@ public class FlagIngredientCondition extends Flag {
             "    Defaults to all of the ingredientcondition type",
             "",
             "  potion <condition>, [...]",
-            "    type <potiontype>      = Type of potion, read '" + Files.FILE_INFO_NAMES + "' at 'POTION TYPES' section (not POTION EFFECT TYPE!)",
+            "    type &lt;potiontype&gt;      = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
             "    level                  = Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
             "    extended or !extended  = Potion's extended duration",
             "",
             "  potioneffect <condition>, [...]",
-            "    type <effecttype>         = Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
+            "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
             "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
             "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
             "    ambient or !ambient       = Check effect's extra visual particles setting",
@@ -154,8 +154,9 @@ public class FlagIngredientCondition extends Flag {
 
             if (Version.has1_14PlusSupport()) {
                 description = ObjectArrays.concat(description, new String[]{
+                    "",
                     "  suspiciousstew <condition>, [...]",
-                    "    type <effecttype>         = Type of potion effect, read '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE' section (not POTION TYPE!)",
+                    "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
                     "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
                     "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
                     "    ambient or !ambient       = Check effect's extra visual particles setting",
@@ -171,14 +172,14 @@ public class FlagIngredientCondition extends Flag {
                 "    pattern <pattern> [dyecolor]",
                 "",
                 "    Dye Colors: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
-                "    Patterns: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
+                    "    Patterns: " + Files.getNameIndexHashLink("bannerpattern"),
                 "",
-                "  spawnegg <entitytype> = Type of entity contained in a spawn egg, read '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section",
+                "  spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see " + Files.getNameIndexHashLink("entitytype"),
                 "",
                 // TODO mark
                 // "  recipebook <name> [volume <num>] = checks if ingredient is a recipebook generated by this plugin, partial name matching; optionally you can require a specific volume, accepts any volume by default.",
                 // "  extinctrecipebook                = checks if the ingredient is a recipe book generated by this plugin but no longer exists, useful to give players a chance to recycle their extinct recipe books.",
-                "  failmsg <text>                   = overwrite message sent to crafter when failing to provide required ingredient.",
+                "  failmsg <text>        = overwrite message sent to crafter when failing to provide required ingredient.",
                 "",
                 "This flag can be used on recipe results to determine a specific outcome for the recipe depending on the ingredients, however in that case you would need 'failmsg false' along with " + FlagType.DISPLAY_RESULT + " flag too, see 'advanced recipes.html' file for example.",
                 "",

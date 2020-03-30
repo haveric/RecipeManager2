@@ -1,10 +1,11 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -39,7 +40,7 @@ public class FlagBannerItem extends Flag {
             "",
             "Patterns can be added after the base color and are separated by the '|' character",
             "  [pattern] is the banner pattern type",
-            "    Values: " + RMCUtil.collectionToString(Arrays.asList(PatternType.values())).toLowerCase(),
+            "    Values: " + Files.getNameIndexHashLink("bannerpattern"),
             "  <color> is required for each pattern, color values are the same as <basecolor>",
             "  Multiple patterns can be added", };
     }

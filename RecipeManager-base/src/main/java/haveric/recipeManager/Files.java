@@ -90,6 +90,10 @@ public class Files {
         }
     }
 
+    public static String getNameIndexHashLink(String hash) {
+        return "<a href='" + FILE_INFO_NAMES + "#" + hash + "'>" + FILE_INFO_NAMES + "#" + hash + "</a>";
+    }
+
     private boolean isNewVersion() {
         boolean newVersion = true;
 
@@ -255,13 +259,20 @@ public class Files {
 
                 s.append(NL);
 
+                s.append("<span>");
                 for (String d : desc) {
                     s.append(NL);
 
                     if (d != null) {
-                        s.append("    ").append(StringEscapeUtils.escapeHtml(d));
+                        s.append("    ");
+                        if (d.contains("<a href")) {
+                            s.append(d);
+                        } else {
+                            s.append(StringEscapeUtils.escapeHtml(d));
+                        }
                     }
                 }
+                s.append("</span>");
 
                 if (!flag.hasBit(FlagBit.NO_FALSE)) {
                     s.append(NL).append(NL).append("    Setting to 'false' or 'remove' will disable the flag.");

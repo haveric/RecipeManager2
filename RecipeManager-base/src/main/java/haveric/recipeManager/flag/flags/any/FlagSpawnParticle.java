@@ -32,7 +32,7 @@ public class FlagSpawnParticle extends Flag {
             "Spawn a particle at crafting location",
             "This flag can be used more than once to spawn more particles.",
             "",
-            "The <particle> argument must be a particle name, you can find them in '" + Files.FILE_INFO_NAMES + "' file at 'PARTICLE LIST' section.",
+            "The &lt;particle&gt; argument must be a particle name, see " + Files.getNameIndexHashLink("particle"),
             "",
             "Optionally you can specify some arguments separated by | character:",
             "  offset <x> <y> <z>          = (default: 0.5 1.0 0.5) Offset positioning of the particle relative to the block/player crafting. Allows doubles (0.0)",

@@ -7,14 +7,12 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FlagFireworkItem extends Flag {
@@ -42,7 +40,7 @@ public class FlagFireworkItem extends Flag {
             "Effects can be:",
             "  color <red> <green> <blue>, ...           = (Required) Sets the primary explosion color(s), you can define more colors separated by comma.",
             "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
-            "  type <explode type>                       = (Optional) Shape/size of explosion, can be: " + RMCUtil.collectionToString(Arrays.asList(FireworkEffect.Type.values())).toLowerCase() + "  (see '" + Files.FILE_INFO_NAMES + "' file)",
+            "  type &lt;explode type&gt;                       = (Optional) Shape/size of explosion, see: " + Files.getNameIndexHashLink("fireworkeffect"),
             "  trail                                     = (Optional) Adds a trail to the explosion",
             "  flicker                                   = (Optional) Adds a flicker to explosion",
             "Effects can be listed in any order.",

@@ -29,7 +29,7 @@ public class FlagSpawnEgg extends Flag {
         return new String[] {
             "Sets the entity type that will be spawned from the spawn egg.",
             "",
-            "The <entity type> argument must be an entity type name, you can find them in '" + Files.FILE_INFO_NAMES + "' file at 'ENTITY TYPES' section.",
+            "The &lt;entity type&gt; argument must be an entity type name, see " + Files.getNameIndexHashLink("entitytype"),
         };
     }
 

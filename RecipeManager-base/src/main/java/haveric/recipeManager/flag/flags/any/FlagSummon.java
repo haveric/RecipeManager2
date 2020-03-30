@@ -33,6 +33,7 @@ import java.util.UUID;
 public class FlagSummon extends Flag {
 
     private static String argFormat = "  %-26s = %s";
+    private static String argFormatExtra = "  %-30s %s";
 
     @Override
     public String getFlagType() {
@@ -51,7 +52,7 @@ public class FlagSummon extends Flag {
                 "Summons a creature.",
                 "Using this flag more than once will add more creatures.",
                 "",
-                "The <type> argument can be a living entity type, you can find all entity types in '" + Files.FILE_INFO_NAMES + "' file.",
+                "The &lt;type&gt; argument can be a living entity type, you can find all entity types here: " + Files.getNameIndexHashLink("entitytype"),
                 "",
                 "Optionally you can add some arguments separated by | character, those being:",
                 String.format(argFormat, "adult", "forces creature to spawn as an adult, works with animals and villagers (works opposite of baby)."),
@@ -73,7 +74,7 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
             String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
-            String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf/cats; values can be found in '" + Files.FILE_INFO_NAMES + "' file at 'DYE COLORS' section."),
+            String.format(argFormat, "color &lt;dye>&gt;", "sets the color of animal, only works for sheep and pet wolf/cats. Values: " + Files.getNameIndexHashLink("dyecolor")),
         }, String.class);
 
         if (!Version.has1_12Support()) {
@@ -146,7 +147,10 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for tameable creatures, optionally specify 'nosit' to not spawn creature in sit stance."),
             String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
             String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
-            String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; for <type> see '" + Files.FILE_INFO_NAMES + "' at 'POTION EFFECT TYPE'; [time] can be a decimal of duration in seconds; [amp] can be an integer that defines amplifier; this argument can be used more than once to add more effects."),
+            String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; this argument can be used more than once to add more effects."),
+            String.format(argFormatExtra, "", "type values: " + Files.getNameIndexHashLink("potioneffect")),
+            String.format(argFormatExtra, "", "[time] can be a decimal of duration in seconds"),
+            String.format(argFormatExtra, "", "[amp] can be an integer that defines amplifier;"),
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
             String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()),
             String.format(argFormat, "saddle [mount]", "adds saddle on creature (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount creature."),

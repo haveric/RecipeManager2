@@ -35,7 +35,7 @@ public class FlagEnchantedBook extends Flag {
             "Adds stored enchantments in a enchanted book item.",
             "This flag may be used more times to add more enchantments to the item.",
             "",
-            "You must specify an enchantment name or id, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file.",
+            "You must specify an enchantment name or id, see " + Files.getNameIndexHashLink("enchantment"),
             "Optionally you can set the level of enchantment",
             "  Default is the enchantment's start level",
             "  You can use 'max' to set it to enchantment's max level.",

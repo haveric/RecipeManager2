@@ -41,7 +41,7 @@ public class FlagLaunchFirework extends Flag {
             "Effects can be:",
             "  color <red> <green> <blue>, ...           = (Required at least 1 color) Sets the primary explosion color(s), you can define more colors separated by comma.",
             "  fadecolor <red> <green> <blue>, ...       = (Optional) Color(s) of the explosion fading, you can define more colors separated by comma.",
-            "  type <explode type>                       = (Optional) Shape/size of explosion, can be: BALL, BALL_LARGE, BURST, CREEPER or STAR... or see " + Files.FILE_INFO_NAMES + " file.",
+            "  type &lt;explode type&gt;                       = (Optional) Shape/size of explosion, see: " + Files.getNameIndexHashLink("fireworkeffect"),
             "  trail                                     = (Optional) Adds a trail to the explosion",
             "  flicker                                   = (Optional) Adds a flicker to explosion",
             "",

@@ -4,7 +4,8 @@ This file will be automatically overwritten when a new version is installed.
 === Coming Soon ===
 * FIX: @PotionItem, @PotionEffect, @SuspiciousStewItem: Fixed potion and potion effect parsing
 * FIX: @MonsterSpawner: Removed "Set min delay" message on parse
-* FIX: Made the nav in the html documentation consistent across static and generated files
+* FIX: HTML Docs: Made the nav consistent across static and generated files
+* FIX: HTML Docs: Added links in 'recipe flags.html' for 'name index.html' for quicker referencing
 * NEW: @ApplyEnchantment: Add 'anvil' action to increase levels by one if they match or take the max of the two
 * NEW: @ApplyEnchantment: Add 'maxlevel' argument to restrict the enchantment levels
 * NEW: @CloneIngredient: Add 'allowedtypes' argument to clone from ingredients other than the result type

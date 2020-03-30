@@ -2,15 +2,14 @@ package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,17 +36,15 @@ public class FlagBiome extends Flag {
             "For '<types>' you can list the biomes you want to allow or disallow.",
             "It needs at least one biome name and you can add more separated by , character.",
             "Also you can disallow biomes by prefixing them with ! character.",
-            "Biomes: " + RMCUtil.collectionToString(Arrays.asList(Biome.values())).toLowerCase(),
-            "The biomes names can also be found in '" + Files.FILE_INFO_NAMES + "' file at 'BIOMES' section.", };
+            "Biomes: " + Files.getNameIndexHashLink("biomes"), };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} jungle, jungle_hills",
-            "{flag} !mushroom_island, !mushroom_island_shore", };
+            "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.JUNGLE_HILLS.name().toLowerCase(),
+            "{flag} !" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !" + Biome.MUSHROOM_FIELD_SHORE.name().toLowerCase(), };
     }
-
 
     private Map<Biome, Boolean> biomes = new EnumMap<>(Biome.class);
     private String failMessage;

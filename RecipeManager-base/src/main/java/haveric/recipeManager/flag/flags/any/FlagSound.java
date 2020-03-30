@@ -29,7 +29,7 @@ public class FlagSound extends Flag {
             "Plays a sound at crafting location.",
             "Using this flag more than once will overwrite the previous flag.",
             "",
-            "The <sound> argument must be a sound name, you can find them in '" + Files.FILE_INFO_NAMES + "' file at 'SOUND LIST' section.",
+            "The &lt;sound&gt; argument must be a sound name, see " + Files.getNameIndexHashLink("sound"),
             "",
             "Optionally you can specify some arguments separated by | character:",
             "  volume <0.0 to 100.0> = (default 1.0) sound volume, if exceeds 1.0 it extends range, each 1.0 extends range by about 10 blocks.",

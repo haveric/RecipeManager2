@@ -31,7 +31,7 @@ public class FlagEnchantItem extends Flag {
     protected String[] getDescription() {
         return new String[] {
             "Enchants the result with the specified enchantment at specified level.",
-            "You must specify an enchantment name, you can find all of them in '" + Files.FILE_INFO_NAMES + "' file at 'ENCHANTMENTS LIST' section.",
+            "You must specify an enchantment name, see " + Files.getNameIndexHashLink("enchantment"),
             "Optionally you can set the level of enchantment",
             "  Default is the enchantment's start level",
             "  You can use 'max' to set it to enchantment's max level.",
