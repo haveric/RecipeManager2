@@ -1,14 +1,14 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FlagInventory extends Flag {
@@ -30,7 +30,7 @@ public class FlagInventory extends Flag {
             "Checks if crafting in the specific type of inventory",
             "",
             "The <inventory type> argument is required",
-            "  Values: " + RMCUtil.collectionToString(Arrays.asList(InventoryType.values())).toLowerCase(),
+            "  Values: " + Files.getNameIndexHashLink("inventory"),
             "",
             "Can declare multiple inventory types separated by commas",
             "",

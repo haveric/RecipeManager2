@@ -3,6 +3,7 @@ package haveric.recipeManager.flag.flags.result;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -36,7 +37,7 @@ public class FlagItemAttribute extends Flag {
                 "Adds an attribute, such as max health to the result",
                 "",
                 "<attribute> The attribute you want to modify.",
-                "  Values: all, " + RMCUtil.collectionToString(Arrays.asList(Attribute.values())).toLowerCase(),
+                "  Values: all, or see: " + Files.getNameIndexHashLink("itemattribute"),
                 "    Values starting with 'GENERIC_' such as " + Attribute.GENERIC_MAX_HEALTH + " can be used without 'GENERIC_' for ease of use. max_health would be valid in this case.",
                 "",
                 "[modifier] can be x for multiplication otherwise it will use addition",

@@ -1,22 +1,24 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.Sets;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagDescriptor;
 import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffectType;
@@ -465,7 +467,7 @@ public class Files {
         StringBuilder s = new StringBuilder(24000);
 
         s.append("<title>Name Index</title>");
-        s.append("<style>body {margin: 0;} nav {font-family: Arial;max-width: 990px;margin: 0 auto;padding: 15px;} pre {font-family:Lucida Console;font-size:16px;width:calc(100% - 30px);padding: 0 15px;}</style>");
+        s.append("<style>body {margin: 0;} nav {font-family: Arial;max-width: 990px;margin: 0 auto;padding: 15px;} pre {font-family:Lucida Console;font-size:16px;width:calc(100% - 30px);padding: 0 15px;} .back-to-top {padding-left: 5px; font-size: 12px;}</style>");
         s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a></nav>");
         s.append(NL).append("<pre>");
         s.append(NL).append("<h1>Name Index</h1>");
@@ -482,6 +484,10 @@ public class Files {
         s.append(NL).append("- <a href='#enchantment'><b>ENCHANTMENTS LIST</b></a>");
         s.append(NL).append("- <a href='#entitytype'><b>ENTITY TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#fireworkeffect'><b>FIREWORK EFFECT TYPE LIST</b></a>");
+        s.append(NL).append("- <a href='#inventory'><b>INVENTORY LIST</b></a>");
+        if (Version.has1_13BasicSupport()) {
+            s.append(NL).append("- <a href='#itemattribute'><b>ITEM ATTRIBUTE LIST</b></a>");
+        }
         s.append(NL).append("- <a href='#material'><b>MATERIAL LIST</b></a>");
         if (Version.has1_9Support()) {
             s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
@@ -577,6 +583,20 @@ public class Files {
 
         for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
             s.append(NL).append(' ').append(t.toString());
+        }
+
+        addNameIndexHeading(s, "inventory", "INVENTORY LIST", "event/inventory/InventoryType", "Inventory Type");
+
+        for (InventoryType t : InventoryType.values()) {
+            s.append(NL).append(' ').append(t.toString());
+        }
+
+        if (Version.has1_13BasicSupport()) {
+            addNameIndexHeading(s, "itemattribute", "ITEM ATTRIBUTE LIST", "attribute/Attribute", "Attribute Type");
+
+            for (Attribute a : Attribute.values()) {
+                s.append(NL).append(' ').append(a.toString());
+            }
         }
 
         addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
@@ -707,7 +727,7 @@ public class Files {
     private void addNameIndexHeading(StringBuilder s, String name, String title, String partialUrl, String urlTitle) {
         s.append(NL);
         s.append(NL);
-        s.append(NL).append("<a name='").append(name).append("'></a><a href='#contents'>^ Contents</a><h3>").append(title).append("</h3>");
+        s.append(NL).append("<a name='").append(name).append("'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>").append(title).append("</h3>");
         s.append("<a href='").append(BUKKIT_DOCS).append(partialUrl).append(".html'>BukkitAPI / ").append(urlTitle).append("</a>");
         s.append(NL);
     }

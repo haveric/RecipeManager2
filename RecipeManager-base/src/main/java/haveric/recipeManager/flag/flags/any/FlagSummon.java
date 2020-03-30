@@ -167,7 +167,8 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[] {
                 String.format(argFormat, "spread <range>", "spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
                 String.format(argFormat, "target", "creature targets crafter, that means monsters attack and animals follow and the rest do nothing"),
-                String.format(argFormat, "villager <type>", "set the villager profession, values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
+                String.format(argFormat, "villager <type>", "set the villager profession"),
+                String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
         }, String.class);
 
         if (!Version.has1_12Support()) {
