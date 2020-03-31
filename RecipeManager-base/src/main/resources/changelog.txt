@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+=== Coming Soon ===
+* FIX: @Biome example references causing NoSuchFieldError before 1.13
+
 === v2.22.0 ===
 * FIX: @PotionItem, @PotionEffect, @SuspiciousStewItem: Fixed potion and potion effect parsing
 * FIX: @MonsterSpawner: Removed "Set min delay" message on parse

@@ -1,11 +1,13 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -41,9 +43,25 @@ public class FlagBiome extends Flag {
 
     @Override
     protected String[] getExamples() {
-        return new String[] {
+        String[] description = new String[]{
             "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.JUNGLE_HILLS.name().toLowerCase(),
-            "{flag} !" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !" + Biome.MUSHROOM_FIELD_SHORE.name().toLowerCase(), };
+        };
+
+        if (Version.has1_13BasicSupport()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "{flag} !" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !" + Biome.MUSHROOM_FIELD_SHORE.name().toLowerCase(),
+            }, String.class);
+        } else if (Version.has1_9Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "{flag} !mushroom_island, !mushroom_island_shore",
+            }, String.class);
+        } else {
+            description = ObjectArrays.concat(description, new String[]{
+                    "{flag} !mushroom_island, !mushroom_shore",
+            }, String.class);
+        }
+
+        return description;
     }
 
     private Map<Biome, Boolean> biomes = new EnumMap<>(Biome.class);
