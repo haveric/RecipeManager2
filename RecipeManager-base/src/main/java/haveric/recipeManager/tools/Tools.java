@@ -64,15 +64,30 @@ public class Tools {
 
         int itemMaxStackSize = item.getType().getMaxStackSize();
         int inventoryMaxStackSize = inv.getMaxStackSize();
-        for (ItemStack i : inv.getStorageContents()) {
-            if (i == null || i.getType() == Material.AIR) {
-                available += itemMaxStackSize;
-            } else if (item.isSimilar(i)) {
-                available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
-            }
+        if (Version.has1_9Support()) {
+            for (ItemStack i : inv.getStorageContents()) {
+                if (i == null || i.getType() == Material.AIR) {
+                    available += itemMaxStackSize;
+                } else if (item.isSimilar(i)) {
+                    available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
+                }
 
-            if (available >= amount) {
-                return true;
+                if (available >= amount) {
+                    return true;
+                }
+            }
+        } else {
+            for (int j = 0; j < 36; j++) {
+                ItemStack i = inv.getItem(j);
+                if (i == null || i.getType() == Material.AIR) {
+                    available += itemMaxStackSize;
+                } else if (item.isSimilar(i)) {
+                    available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
+                }
+
+                if (available >= amount) {
+                    return true;
+                }
             }
         }
 
