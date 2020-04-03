@@ -1,0 +1,327 @@
+@font-face {
+    font-family: 'minecraftfont';
+
+    src: url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.eot');
+    src: url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.eot?#iefix') format('embedded-opentype'),
+         url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.woff') format('woff'),
+         url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.ttf') format('truetype');
+}
+
+.slot {
+    position: relative;
+    background-color: #8b8b8b;
+    width: 32px;
+    height: 32px;
+    border-left: 2px solid #373737;
+    border-top: 2px solid #373737;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    text-align: center;
+}
+
+.slot img {
+    max-width: 32px;
+    position: relative;
+    z-index: 10;
+}
+
+.slot:hover {
+    background-color: #c5c5c5;
+}
+
+.slot--result {
+    float: left;
+    width: 48px;
+    height: 48px;
+}
+
+.slot--result:hover {
+    background-color: #8b8b8b;
+}
+
+.slot--result:hover:before {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    bottom: ;
+    content: "";
+    background-color: #c5c5c5;
+    display: block;
+    z-index: 0;
+}
+
+.slot--result img {
+    margin-top: 8px;
+}
+
+.detail {
+    display: none;
+}
+
+.chance {
+    position: absolute;
+    top: 108%;
+    right: 1px;
+    pointer-events: none;
+    font-size: 12px;
+
+    font-family: 'minecraftfont';
+
+    text-shadow: 2px 2px 0px #aaa;
+}
+
+.amount {
+    position: absolute;
+    bottom: 0px;
+    right: -2px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 16px;
+    cursor: default;
+    z-index: 10;
+
+    font-family: 'minecraftfont';
+
+    text-shadow: 2px 2px 0px #373737;
+}
+
+.inventory {
+    display: table;
+    background-color: #c6c6c6;
+    padding: 5px 10px 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 2px solid #000;
+}
+
+.inventory__wrap {
+    display: block;
+}
+
+.inventory__wrap .inventory {
+    display: inline-block;
+}
+
+.inventory__header {
+    position: relative;
+}
+
+.inventory__logo {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+}
+
+.inventory__logo img {
+    max-width: 100%;
+}
+
+.inventory__title {
+    margin: 0 0 5px;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 32px;
+    display: inline-block;
+
+    font-family: 'minecraftfont';
+    text-shadow: 2px 2px 0 #aaa;
+}
+
+.inventory__logo + .inventory__title {
+    margin-left: 40px;
+}
+
+.inventory__ingredients {
+    float: left;
+}
+
+.inventory__arrow {
+    float: left;
+    width: 44px;
+    height: 30px;
+    padding: 37.5px 25px;
+}
+
+.inventory__arrow img {
+    max-width: 100%;
+}
+
+.cook_time {
+    font-size: 12px;
+    margin-left: -15px;
+    margin-right: -15px;
+    text-align: center;
+
+    font-family: 'minecraftfont';
+    text-shadow: 2px 2px 0px #aaa;
+}
+
+.burn_time {
+    font-size: 12px;
+    margin-left: 5px;
+    margin-top: 47px;
+    font-family: 'minecraftfont';
+    text-shadow: 2px 2px 0px #aaa;
+}
+
+.inventory__burntimer {
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+}
+
+.inventory__burntimer img {
+    max-width: 100%;
+}
+
+.inventory__result {
+    float: left;
+    padding-top: 28px;
+    padding-bottom: 28px;
+}
+
+.inventory--crafting .inventory__ingredients {
+    display: grid;
+    grid-template-columns: 36px 36px 36px;
+}
+
+
+.item-tooltip {
+    border: 2px solid #1e0f1e;
+    border: 2px solid rgba(16,0,16,0.941);
+    background: #1e0f1e;
+    background: rgba(16,0,16,0.941);
+    border-radius: 3px;
+    display: none;
+    position: absolute;
+    z-index: 100;
+}
+
+.item-tooltip.active {
+    display: block;
+}
+
+.item-tooltip__detail {
+    padding: 2px 5px;
+    border: 2px solid #1e0f1e;
+    border: 2px solid rgba(37,0,95,0.961);
+}
+
+.line {
+    color: #fff;
+    height: 20px;
+    font-size: 16px;
+    line-height: 16px;
+
+    font-family: 'minecraftfont';
+
+    text-shadow: 2px 2px 0px #373737;
+}
+
+.line:first-of-type + .line {
+    padding-top: 3px;
+}
+
+.color-black {
+    color: #000;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.color-darkBlue {
+    color: #00a;
+    text-shadow: 2px 2px 0px #00002a;
+}
+
+.color-darkGreen {
+    color: #0a0;
+    text-shadow: 2px 2px 0px #002a00;
+}
+
+.color-darkAqua {
+    color: #0aa;
+    text-shadow: 2px 2px 0px #002a2a;
+}
+
+.color-darkRed {
+    color: #a00;
+    text-shadow: 2px 2px 0px #2a0000;
+}
+
+.color-darkPurple {
+    color: #a0a;
+    text-shadow: 2px 2px 0px #2a002a;
+}
+
+.color-gold {
+    color: #fa0;
+    text-shadow: 2px 2px 0px #2a2a00;
+}
+
+.color-gray {
+    color: #aaa;
+    text-shadow: 2px 2px 0px #2a2a2a;
+}
+
+.color-darkGray {
+    color: #555;
+    text-shadow: 2px 2px 0px #151515;
+}
+
+.color-blue {
+    color: #55f;
+    text-shadow: 2px 2px 0px #15153f;
+}
+
+.color-green {
+    color: #5f5;
+    text-shadow: 2px 2px 0px #153f15;
+}
+
+.color-aqua {
+    color: #5ff;
+    text-shadow: 2px 2px 0px #153f3f;
+}
+
+.color-red {
+    color: #f55;
+    text-shadow: 2px 2px 0px #3f1515;
+}
+
+.color-lightPurple {
+    color: #f5f;
+    text-shadow: 2px 2px 0px #3f153f;
+}
+
+.color-yellow {
+    color: #ff5;
+    text-shadow: 2px 2px 0px #3f3f15;
+}
+
+.color-white {
+    color: #fff;
+    text-shadow: 2px 2px 0px #3f3f3f;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.noitalic {
+    font-style: normal;
+}
