@@ -1,10 +1,12 @@
+---
+---
 @font-face {
     font-family: 'minecraftfont';
 
-    src: url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.eot');
-    src: url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.eot?#iefix') format('embedded-opentype'),
-         url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.woff') format('woff'),
-         url('https://www.ryanbreuer.com/RecipeManager2/fonts/minecraftfont/minecraftfont.ttf') format('truetype');
+    src: url('https://www.recipemanager.dev/fonts/minecraftfont/minecraftfont.eot');
+    src: url('https://www.recipemanager.dev/fonts/minecraftfont/minecraftfont.eot?#iefix') format('embedded-opentype'),
+         url('https://www.recipemanager.dev/fonts/minecraftfont/minecraftfont.woff') format('woff'),
+         url('https://www.recipemanager.dev/fonts/minecraftfont/minecraftfont.ttf') format('truetype');
 }
 
 .slot {
@@ -17,43 +19,43 @@
     border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
     text-align: center;
-}
 
-.slot img {
-    max-width: 32px;
-    position: relative;
-    z-index: 10;
-}
 
-.slot:hover {
-    background-color: #c5c5c5;
+    &:hover {
+        background-color: #c5c5c5;
+    }
+
+    img {
+        max-width: 32px;
+        position: relative;
+        z-index: 10;
+    }
 }
 
 .slot--result {
     float: left;
     width: 48px;
     height: 48px;
-}
 
-.slot--result:hover {
-    background-color: #8b8b8b;
-}
+    &:hover {
+        background-color: #8b8b8b;
 
-.slot--result:hover:before {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    bottom: ;
-    content: "";
-    background-color: #c5c5c5;
-    display: block;
-    z-index: 0;
-}
+        &:before {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            content: "";
+            background-color: #c5c5c5;
+            display: block;
+            z-index: 0;
+        }
+    }
 
-.slot--result img {
-    margin-top: 8px;
+    img {
+        margin-top: 8px;
+    }
 }
 
 .slot__cycle {
@@ -61,10 +63,10 @@
     position: absolute;
     top: 0;
     left: 0;
-}
 
-.slot__cycle.active {
-    display: block;
+    &.active {
+        display: block;
+    }
 }
 
 .detail {
@@ -109,10 +111,10 @@
 
 .inventory__wrap {
     display: block;
-}
 
-.inventory__wrap .inventory {
-    display: inline-block;
+    .inventory {
+        display: inline-block;
+    }
 }
 
 .inventory__header {
@@ -125,10 +127,10 @@
     display: inline-block;
     position: absolute;
     left: 0;
-}
 
-.inventory__logo img {
-    max-width: 100%;
+    img {
+        max-width: 100%;
+    }
 }
 
 .inventory__title {
@@ -140,14 +142,19 @@
 
     font-family: 'minecraftfont';
     text-shadow: 2px 2px 0 #aaa;
-}
 
-.inventory__logo + .inventory__title {
-    margin-left: 40px;
+    .inventory__logo + & {
+        margin-left: 40px;
+    }
 }
 
 .inventory__ingredients {
     float: left;
+
+    .inventory--crafting & {
+        display: grid;
+        grid-template-columns: 36px 36px 36px;
+    }
 }
 
 .inventory__arrow {
@@ -155,10 +162,10 @@
     width: 44px;
     height: 30px;
     padding: 37.5px 25px;
-}
 
-.inventory__arrow img {
-    max-width: 100%;
+    img {
+        max-width: 100%;
+    }
 }
 
 .cook_time {
@@ -183,10 +190,10 @@
     width: 32px;
     height: 32px;
     padding: 2px;
-}
 
-.inventory__burntimer img {
-    max-width: 100%;
+    img {
+        max-width: 100%;
+    }
 }
 
 .inventory__result {
@@ -194,12 +201,6 @@
     padding-top: 28px;
     padding-bottom: 28px;
 }
-
-.inventory--crafting .inventory__ingredients {
-    display: grid;
-    grid-template-columns: 36px 36px 36px;
-}
-
 
 .item-tooltip {
     border: 2px solid #1e0f1e;
@@ -210,10 +211,10 @@
     display: none;
     position: absolute;
     z-index: 100;
-}
 
-.item-tooltip.active {
-    display: block;
+    &.active {
+        display: block;
+    }
 }
 
 .item-tooltip__detail {
@@ -231,10 +232,10 @@
     font-family: 'minecraftfont';
 
     text-shadow: 2px 2px 0px #373737;
-}
 
-.line:first-of-type + .line {
-    padding-top: 3px;
+    &:first-of-type + .line {
+        padding-top: 3px;
+    }
 }
 
 .color-black {
