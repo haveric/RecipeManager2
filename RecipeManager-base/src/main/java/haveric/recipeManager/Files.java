@@ -545,7 +545,7 @@ public class Files {
                 } else {
                     targetString = target.toString().toLowerCase();
                 }
-                s.append(NL).append(String.format(" %-26s %-26s %-24s %-14s %s", e.getKey().getKey(), e.getName(), Settings.getInstance().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
+                s.append(NL).append(String.format(" %-26s %-26s %-24s %-14s %s", e.getKey().getKey(), e.getName(), RecipeManager.getSettings().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         } else { // Key didn't exist yet in 1.12
             s.append(NL).append(String.format(" %-26s %-24s %-14s %s", "Name", "Alias", "Item type", "Level range"));
@@ -564,7 +564,7 @@ public class Files {
                     targetString = target.toString().toLowerCase();
                 }
 
-                s.append(NL).append(String.format(" %-26s %-24s %-12s %s", e.getName(), Settings.getInstance().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
+                s.append(NL).append(String.format(" %-26s %-24s %-12s %s", e.getName(), RecipeManager.getSettings().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         }
 
@@ -607,7 +607,7 @@ public class Files {
         }
 
         for (Material m : Material.values()) {
-            String alias = Settings.getInstance().getMaterialPrint(m);
+            String alias = RecipeManager.getSettings().getMaterialPrint(m);
 
             String aliasString;
             if (alias == null) {

@@ -34,7 +34,6 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
     @Before
     public void setup() {
         Enchantment.registerEnchantment(new TestEnchantmentSharpness(Enchantment.DAMAGE_ALL));
-        when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
 
         mockStatic(Inventory.class);
         CraftingInventory inventory = mock(CraftingInventory.class);

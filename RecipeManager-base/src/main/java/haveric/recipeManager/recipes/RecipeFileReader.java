@@ -2,10 +2,10 @@ package haveric.recipeManager.recipes;
 
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Settings;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 
 import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
@@ -137,7 +137,7 @@ public class RecipeFileReader {
         }
 
         // now check for in-line comments
-        List<String> comments = Settings.getInstance().getRecipeCommentCharactersAsList();
+        List<String> comments = RecipeManager.getSettings().getRecipeCommentCharactersAsList();
         for (String comment : comments) {
             index = line.indexOf(comment);
 

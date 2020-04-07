@@ -1,13 +1,13 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.*;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.result.FlagEnchantedBook;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.enchantments.Enchantment;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 public class FlagEnchantedBookTest extends FlagBaseTest {
 
@@ -26,10 +25,9 @@ public class FlagEnchantedBookTest extends FlagBaseTest {
         Enchantment.registerEnchantment(new TestEnchantmentSharpness(Enchantment.DAMAGE_ALL));
         Enchantment.registerEnchantment(new TestEnchantmentOxygen(Enchantment.OXYGEN));
         Enchantment.registerEnchantment(new TestEnchantmentDigSpeed(Enchantment.DIG_SPEED));
-        when(settings.getEnchantment("damageall")).thenReturn(Enchantment.DAMAGE_ALL);
-        when(settings.getEnchantment("sharpness")).thenReturn(Enchantment.DAMAGE_ALL);
-        when(settings.getEnchantment("oxygen")).thenReturn(Enchantment.OXYGEN);
-        when(settings.getEnchantment("digspeed")).thenReturn(Enchantment.DIG_SPEED);
+        settings.addEnchantName("damageall", Enchantment.DAMAGE_ALL);
+        settings.addEnchantName("sharpness", Enchantment.DAMAGE_ALL);
+        settings.addEnchantName("digspeed", Enchantment.DIG_SPEED);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes;
 
-import haveric.recipeManager.Settings;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -11,7 +12,6 @@ import haveric.recipeManager.flag.flags.recipe.FlagDisplayResult;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
@@ -54,7 +54,7 @@ public class PreparableResultRecipe extends MultiResultRecipe {
                 reasons.add(RMCUtil.parseColors(reason, false));
             }
 
-            return ToolsItem.create(Settings.getInstance().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), reasons);
+            return ToolsItem.create(RecipeManager.getSettings().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), reasons);
         }
 
         boolean recipeHasSecret = false;
@@ -108,7 +108,7 @@ public class PreparableResultRecipe extends MultiResultRecipe {
             if (displayNum > 0) {
                 displayResult = displayResults.get(0);
             } else if (secretNum > 0 && secretNum == itemResults.size()) {
-                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
+                return ToolsItem.create(RecipeManager.getSettings().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
             } else {
                 ItemStack air = new ItemStack(Material.AIR);
                 return new ItemResult(air);
@@ -141,7 +141,7 @@ public class PreparableResultRecipe extends MultiResultRecipe {
             if (displayNum == 1 && secretNum == 0) {
                 return displayResult;
             } else if (secretNum > 0 && secretNum == itemResults.size()) {
-                return ToolsItem.create(Settings.getInstance().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
+                return ToolsItem.create(RecipeManager.getSettings().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
             }
 
         }/* else if (displayNum == 1) {
@@ -191,9 +191,9 @@ public class PreparableResultRecipe extends MultiResultRecipe {
 
         Material displayMaterial;
         if (receive) {
-            displayMaterial = Settings.getInstance().getMultipleResultsMaterial();
+            displayMaterial = RecipeManager.getSettings().getMultipleResultsMaterial();
         } else {
-            displayMaterial = Settings.getInstance().getFailMaterial();
+            displayMaterial = RecipeManager.getSettings().getFailMaterial();
         }
 
         return ToolsItem.create(displayMaterial, 0, displayAmount, title, lore);

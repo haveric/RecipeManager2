@@ -84,7 +84,7 @@ public class FlagIngredientConditionTest extends FlagBaseTest {
 
         air = new ItemStack(Material.AIR);
 
-        when(Settings.getCustomData(Material.STONE_SWORD)).thenReturn((short)132);
+        settings.loadItemDatas(null, new File(baseDataPath), "item datas.yml");
 
         File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();

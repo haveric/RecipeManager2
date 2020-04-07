@@ -227,17 +227,17 @@ public class CartographyEvents extends BaseRecipeEvents {
                 if (top.getType() == Material.FILLED_MAP) {
                     Material bottomType = bottom.getType();
                     if (bottomType == Material.PAPER) {
-                        if (!Settings.getInstance().getSpecialCartographyExtend()) {
+                        if (!RecipeManager.getSettings().getSpecialCartographyExtend()) {
                             inventory.setItem(2, null);
                             player.updateInventory();
                         }
                     } else if (bottomType == Material.MAP) {
-                        if (!Settings.getInstance().getSpecialCartographyClone()) {
+                        if (!RecipeManager.getSettings().getSpecialCartographyClone()) {
                             inventory.setItem(2, null);
                             player.updateInventory();
                         }
                     } else if (bottomType == Material.GLASS_PANE) {
-                        if (!Settings.getInstance().getSpecialCartographyLock()) {
+                        if (!RecipeManager.getSettings().getSpecialCartographyLock()) {
                             inventory.setItem(2, null);
                             player.updateInventory();
                         }

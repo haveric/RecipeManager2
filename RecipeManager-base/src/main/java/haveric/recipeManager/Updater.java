@@ -63,7 +63,7 @@ public class Updater {
 
         updateOnce(null); // Do one initial check
 
-        int time = Settings.getInstance().getUpdateCheckFrequency();
+        int time = RecipeManager.getSettings().getUpdateCheckFrequency();
 
         if (time > 0) {
             time *= 60 * 60 * 20;
@@ -211,7 +211,7 @@ public class Updater {
      * Query the API to find the latest approved file's details.
      */
     public static void query(CommandSender sender) {
-        if (Settings.getInstance().getUpdateCheckEnabled()) {
+        if (RecipeManager.getSettings().getUpdateCheckEnabled()) {
 
             try {
                 // Create the URL to query using the project's ID

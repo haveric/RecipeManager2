@@ -24,86 +24,73 @@ import static org.bukkit.Tag.REGISTRY_ITEMS;
  * RecipeManager's settings loaded from its config.yml, values are read-only.
  */
 public class Settings {
-    private static boolean hasBeenInited = false;
+    private boolean hasBeenInited = false;
 
-    private static final boolean SPECIAL_RECIPE_DEFAULT = true;
-    private static final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
-    private static final String SPECIAL_ANVIL_CUSTOM_DEFAULT = "false";
-    private static final String SPECIAL_GRINDSTONE_CUSTOM_DEFAULT = "false";
+    private final boolean SPECIAL_RECIPE_DEFAULT = true;
+    private final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
+    private final String SPECIAL_ANVIL_CUSTOM_DEFAULT = "false";
+    private final String SPECIAL_GRINDSTONE_CUSTOM_DEFAULT = "false";
 
-    private static final boolean SOUNDS_REPAIR_DEFAULT = true;
-    private static final boolean SOUNDS_FAILED_DEFAULT = true;
-    private static final boolean SOUNDS_FAILED_CLICK_DEFAULT = true;
+    private final boolean SOUNDS_REPAIR_DEFAULT = true;
+    private final boolean SOUNDS_FAILED_DEFAULT = true;
+    private final boolean SOUNDS_FAILED_CLICK_DEFAULT = true;
 
-    private static final boolean FIX_MOD_RESULTS_DEFAULT = false;
-    private static final boolean UPDATE_BOOKS_DEFAULT = true;
-    private static final boolean COLOR_CONSOLE_DEFAULT = true;
+    private final boolean FIX_MOD_RESULTS_DEFAULT = false;
+    private final boolean UPDATE_BOOKS_DEFAULT = true;
+    private final boolean COLOR_CONSOLE_DEFAULT = true;
 
-    private static final String FURNACE_SHIFT_CLICK_DEFAULT = "f";
+    private final String FURNACE_SHIFT_CLICK_DEFAULT = "f";
 
-    private static final boolean MULTITHREADING_DEFAULT = true;
+    private final boolean MULTITHREADING_DEFAULT = true;
 
-    private static final boolean CLEAR_RECIPES_DEFAULT = false;
+    private final boolean CLEAR_RECIPES_DEFAULT = false;
 
-    private static final boolean UPDATE_CHECK_ENABLED_DEFAULT = true;
-    private static final int UPDATE_CHECK_FREQUENCY_DEFAULT = 6;
+    private final boolean UPDATE_CHECK_ENABLED_DEFAULT = true;
+    private final int UPDATE_CHECK_FREQUENCY_DEFAULT = 6;
 
-    private static Material MATERIAL_FAIL_DEFAULT;
-    private static final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
-    private static final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
+    private  Material MATERIAL_FAIL_DEFAULT;
+    private final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
+    private final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
 
-    private static final boolean DISABLE_OVERRIDE_WARNINGS_DEFAULT = false;
+    private final boolean DISABLE_OVERRIDE_WARNINGS_DEFAULT = false;
 
-    private static List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
+    private List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
 
-    private static FileConfiguration fileConfig;
-    private static Settings instance;
+    private FileConfiguration fileConfig;
 
-    private static Map<Material, Short> itemDatas;
+    private Map<Material, Short> itemDatas;
 
-    private static Map<String, List<Material>> choicesAliases;
-    private static Map<String, Material> materialNames;
-    private static Map<Material, Map<String, Short>> materialDataNames;
-    private static Map<String, Enchantment> enchantNames;
+    private Map<String, List<Material>> choicesAliases;
+    private Map<String, Material> materialNames;
+    private Map<Material, Map<String, Short>> materialDataNames;
+    private Map<String, Enchantment> enchantNames;
 
-    private static Map<Material, String> materialPrint;
-    private static Map<Material, Map<Short, String>> materialDataPrint;
-    private static Map<Enchantment, String> enchantPrint;
+    private Map<Material, String> materialPrint;
+    private Map<Material, Map<Short, String>> materialDataPrint;
+    private Map<Enchantment, String> enchantPrint;
 
-    private static List<Material> anvilCombineItem = new ArrayList<>();
-    private static List<Material> anvilMaterialEnchant = new ArrayList<>();
-    private static List<Material> anvilRepairMaterial = new ArrayList<>();
-    private static List<Material> anvilRenaming = new ArrayList<>();
-    private static Map<Enchantment, List<Integer>> anvilEnchantments = new HashMap<>();
+    private List<Material> anvilCombineItem = new ArrayList<>();
+    private List<Material> anvilMaterialEnchant = new ArrayList<>();
+    private List<Material> anvilRepairMaterial = new ArrayList<>();
+    private List<Material> anvilRenaming = new ArrayList<>();
+    private Map<Enchantment, List<Integer>> anvilEnchantments = new HashMap<>();
 
-    private static List<Material> grindstoneCombineItem = new ArrayList<>();
-    private static List<Material> grindstoneItemMaterials = new ArrayList<>();
-    private static Map<Enchantment, List<Integer>> grindstoneBookEnchantments = new HashMap<>();
-    private static Map<Enchantment, List<Integer>> grindstoneItemEnchantments = new HashMap<>();
+    private List<Material> grindstoneCombineItem = new ArrayList<>();
+    private List<Material> grindstoneItemMaterials = new ArrayList<>();
+    private Map<Enchantment, List<Integer>> grindstoneBookEnchantments = new HashMap<>();
+    private Map<Enchantment, List<Integer>> grindstoneItemEnchantments = new HashMap<>();
 
-    protected Settings() {
-       // Exists only to defeat instantiation.
+    private File DEFAULT_DATA_FOLDER;
+
+    public Settings(boolean loadDefaultConfig) {
+        init(loadDefaultConfig);
     }
 
-    public static Settings getInstance() {
-        if (instance == null) {
-            instance = new Settings();
-
-            init();
-        }
-
-        return instance;
-    }
-
-    public static void clean() {
-        instance = null;
-    }
-
-    public static void clearInit() {
+    public void clearInit() {
         hasBeenInited = false;
     }
 
-    private static void init() {
+    private void init(boolean loadDefaultConfig) {
         if (!hasBeenInited) {
             RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<>();
             RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
@@ -120,15 +107,23 @@ public class Settings {
             materialDataPrint = new EnumMap<>(Material.class);
             enchantPrint = new HashMap<>();
 
-            // Load/reload/generate config.yml
-            fileConfig = loadYML(Files.FILE_CONFIG);
+            if (loadDefaultConfig) {
+                DEFAULT_DATA_FOLDER = RecipeManager.getPlugin().getDataFolder();
+
+                // Load/reload/generate config.yml
+                loadFileConfig(DEFAULT_DATA_FOLDER, Files.FILE_CONFIG);
+            }
 
             hasBeenInited = true;
         }
     }
 
+    public void loadFileConfig(File dataFolder, String fileName) {
+        fileConfig = loadYML(dataFolder, fileName);
+    }
+
     public void reload(CommandSender sender) {
-        init();
+        init(true);
 
         MessageSender.init(getColorConsole());
 
@@ -181,186 +176,10 @@ public class Settings {
         MessageSender.getInstance().log("    disable-override-warnings: " + getDisableOverrideWarnings());
         MessageSender.getInstance().log("    recipe-comment-characters: " + getRecipeCommentCharacters());
 
-
-        FileConfiguration itemAliasesConfig = loadYML(Files.FILE_ITEM_ALIASES);
-
-        if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.getString("lastchanged"))) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
-        }
-
-        for (String arg : itemAliasesConfig.getKeys(false)) {
-            if (arg.equals("lastchanged")) {
-                continue;
-            }
-
-            Material material = Material.matchMaterial(arg);
-
-            if (material == null) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid material definition: " + arg);
-                continue;
-            }
-
-            Object value = itemAliasesConfig.get(arg);
-
-            if (value instanceof String) {
-                parseMaterialNames(sender, (String) value, material);
-            } else if (value instanceof ConfigurationSection) {
-                ConfigurationSection section = (ConfigurationSection) value;
-
-                for (String key : section.getKeys(false)) {
-                    if (key.equals("names")) {
-                        parseMaterialNames(sender, section.getString(key), material);
-                    } else {
-                        try {
-                            parseMaterialDataNames(sender, section.getString(key), Short.parseShort(key), material);
-                        } catch (NumberFormatException e) {
-                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data value number: " + key + " for material: " + material);
-                        }
-                    }
-                }
-            } else {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has invalid data type at: " + arg);
-            }
-        }
-
-        FileConfiguration choiceAliasesConfig = loadYML(Files.FILE_CHOICE_ALIASES);
-
-        if (!Files.LASTCHANGED_CHOICE_ALIASES.equals(choiceAliasesConfig.getString("lastchanged"))) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CHOICE_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
-        }
-
-        for (String arg : choiceAliasesConfig.getKeys(false)) {
-            if (arg.equals("lastchanged")) {
-                continue;
-            }
-
-            String aliases = choiceAliasesConfig.getString(arg);
-            if (aliases != null) {
-                List<Material> materials = new ArrayList<>();
-                String[] materialSplit = aliases.split(",");
-                for (String materialString : materialSplit) {
-                    materialString = materialString.trim();
-
-                    if (materialString.startsWith("tag:") || materialString.startsWith("t:")) {
-                        String tagString = materialString.substring(materialString.indexOf(':') + 1);
-
-                        String[] tagSplit = tagString.split(":");
-                        String namespace;
-                        String material;
-                        if (tagSplit.length > 1) {
-                            namespace = tagSplit[0].trim();
-                            material = tagSplit[1].trim();
-                        } else {
-                            namespace = NamespacedKey.MINECRAFT;
-                            material = tagSplit[0].trim();
-                        }
-
-                        NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
-                        Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
-
-                        if (tag == null || tag.getValues().isEmpty()) {
-                            tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
-                        }
-
-                        if (tag == null || tag.getValues().isEmpty()) {
-                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid tag definition: " + arg);
-                        } else {
-                            materials.addAll(tag.getValues());
-                        }
-                    } else if (materialString.startsWith("alias:") || materialString.startsWith("a:")) {
-                        String aliasString = materialString.substring(materialString.indexOf(':') + 1);
-
-                        List<Material> choiceMaterials = getChoicesAlias(aliasString);
-                        if (choiceMaterials == null) {
-                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid choice alias definition: " + arg);
-                        } else {
-                            materials.addAll(choiceMaterials);
-                        }
-                    } else {
-                        Material material = getMaterial(materialString);
-
-                        if (material == null) {
-                            material = Material.matchMaterial(materialString);
-                        }
-
-                        if (material == null) {
-                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_CHOICE_ALIASES + "' has invalid material (or item alias) definition: " + arg);
-                        } else {
-                            materials.add(material);
-                        }
-                    }
-                }
-
-                if (!materials.isEmpty()) {
-                    choicesAliases.put(arg.toLowerCase(), materials);
-                }
-            }
-        }
-
-        FileConfiguration itemDatasConfig = loadYML(Files.FILE_ITEM_DATAS);
-
-        if (!Files.LASTCHANGED_ITEM_DATAS.equals(itemDatasConfig.getString("lastchanged"))) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ITEM_DATAS + "' file is outdated, please delete it to allow it to be generated again.");
-        }
-
-        for (String arg : itemDatasConfig.getKeys(false)) {
-            if (arg.equals("lastchanged")) {
-                continue;
-            }
-
-            Material material = getMaterial(arg);
-
-            if (material == null) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid material definition: " + arg);
-                continue;
-            }
-
-            String value = itemDatasConfig.getString(arg);
-            try {
-                itemDatas.put(material, Short.parseShort(value));
-            } catch (NumberFormatException e) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_DATAS + "' has invalid data value number: " + value + " for material: " + material);
-            }
-        }
-
-        FileConfiguration enchantAliasesConfig = loadYML(Files.FILE_ENCHANT_ALIASES);
-
-        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.getString("lastchanged"))) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' file is outdated, please delete it to allow it to be generated again.");
-        }
-
-        for (String arg : enchantAliasesConfig.getKeys(false)) {
-            if (arg.equals("lastchanged")) {
-                continue;
-            }
-
-            Enchantment enchant = Enchantment.getByName(arg.toUpperCase());
-
-            if (enchant == null) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has invalid enchant definition: " + arg);
-                continue;
-            }
-
-            String names = enchantAliasesConfig.getString(arg);
-            String[] split = names.split(",");
-
-            for (String str : split) {
-                str = str.trim();
-                String parsed = RMCUtil.parseAliasName(str);
-
-                if (enchantNames.containsKey(parsed)) {
-                    MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ENCHANT_ALIASES + "' has duplicate enchant alias '" + str + "' for enchant " + enchant);
-                    continue;
-                }
-
-                enchantNames.put(parsed, enchant);
-
-                if (!enchantPrint.containsKey(enchant)) {
-                    enchantPrint.put(enchant, Tools.parseAliasPrint(str));
-                }
-            }
-        }
-
+        loadItemAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_ITEM_ALIASES);
+        loadChoiceAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_CHOICE_ALIASES);
+        loadItemDatas(sender, DEFAULT_DATA_FOLDER, Files.FILE_ITEM_DATAS);
+        loadEnchantAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_ENCHANT_ALIASES);
 
         anvilCombineItem.clear();
         String combineItemMaterials = fileConfig.getString("special-recipes.anvil.combine-item.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
@@ -579,6 +398,197 @@ public class Settings {
         }
     }
 
+    public void loadItemAliases(CommandSender sender, File dataFolder, String fileName) {
+        FileConfiguration itemAliasesConfig = loadYML(dataFolder, fileName);
+
+        if (!Files.LASTCHANGED_ITEM_ALIASES.equals(itemAliasesConfig.getString("lastchanged"))) {
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + fileName + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+
+        for (String arg : itemAliasesConfig.getKeys(false)) {
+            if (arg.equals("lastchanged")) {
+                continue;
+            }
+
+            Material material = Material.matchMaterial(arg);
+
+            if (material == null) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid material definition: " + arg);
+                continue;
+            }
+
+            Object value = itemAliasesConfig.get(arg);
+
+            if (value instanceof String) {
+                parseMaterialNames(sender, (String) value, material);
+            } else if (value instanceof ConfigurationSection) {
+                ConfigurationSection section = (ConfigurationSection) value;
+
+                for (String key : section.getKeys(false)) {
+                    if (key.equals("names")) {
+                        parseMaterialNames(sender, section.getString(key), material);
+                    } else {
+                        try {
+                            parseMaterialDataNames(sender, section.getString(key), Short.parseShort(key), material);
+                        } catch (NumberFormatException e) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid data value number: " + key + " for material: " + material);
+                        }
+                    }
+                }
+            } else {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid data type at: " + arg);
+            }
+        }
+    }
+
+    public void loadChoiceAliases(CommandSender sender, File dataFolder, String fileName) {
+        FileConfiguration choiceAliasesConfig = loadYML(dataFolder, fileName);
+
+        if (!Files.LASTCHANGED_CHOICE_ALIASES.equals(choiceAliasesConfig.getString("lastchanged"))) {
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + fileName + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+
+        for (String arg : choiceAliasesConfig.getKeys(false)) {
+            if (arg.equals("lastchanged")) {
+                continue;
+            }
+
+            String aliases = choiceAliasesConfig.getString(arg);
+            if (aliases != null) {
+                List<Material> materials = new ArrayList<>();
+                String[] materialSplit = aliases.split(",");
+                for (String materialString : materialSplit) {
+                    materialString = materialString.trim();
+
+                    if (materialString.startsWith("tag:") || materialString.startsWith("t:")) {
+                        String tagString = materialString.substring(materialString.indexOf(':') + 1);
+
+                        String[] tagSplit = tagString.split(":");
+                        String namespace;
+                        String material;
+                        if (tagSplit.length > 1) {
+                            namespace = tagSplit[0].trim();
+                            material = tagSplit[1].trim();
+                        } else {
+                            namespace = NamespacedKey.MINECRAFT;
+                            material = tagSplit[0].trim();
+                        }
+
+                        NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                        Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
+
+                        if (tag == null || tag.getValues().isEmpty()) {
+                            tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                        }
+
+                        if (tag == null || tag.getValues().isEmpty()) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid tag definition: " + arg);
+                        } else {
+                            materials.addAll(tag.getValues());
+                        }
+                    } else if (materialString.startsWith("alias:") || materialString.startsWith("a:")) {
+                        String aliasString = materialString.substring(materialString.indexOf(':') + 1);
+
+                        List<Material> choiceMaterials = getChoicesAlias(aliasString);
+                        if (choiceMaterials == null) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid choice alias definition: " + arg);
+                        } else {
+                            materials.addAll(choiceMaterials);
+                        }
+                    } else {
+                        Material material = getMaterial(materialString);
+
+                        if (material == null) {
+                            material = Material.matchMaterial(materialString);
+                        }
+
+                        if (material == null) {
+                            MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid material (or item alias) definition: " + arg);
+                        } else {
+                            materials.add(material);
+                        }
+                    }
+                }
+
+                if (!materials.isEmpty()) {
+                    choicesAliases.put(arg.toLowerCase(), materials);
+                }
+            }
+        }
+    }
+
+    public void loadItemDatas(CommandSender sender, File dataFolder, String fileName) {
+        FileConfiguration itemDatasConfig = loadYML(dataFolder, fileName);
+
+        if (!Files.LASTCHANGED_ITEM_DATAS.equals(itemDatasConfig.getString("lastchanged"))) {
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + fileName + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+
+        for (String arg : itemDatasConfig.getKeys(false)) {
+            if (arg.equals("lastchanged")) {
+                continue;
+            }
+
+            Material material = getMaterial(arg);
+
+            if (material == null) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid material definition: " + arg);
+                continue;
+            }
+
+            String value = itemDatasConfig.getString(arg);
+            try {
+                itemDatas.put(material, Short.parseShort(value));
+            } catch (NumberFormatException e) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid data value number: " + value + " for material: " + material);
+            }
+        }
+    }
+
+    public void loadEnchantAliases(CommandSender sender, File dataFolder, String fileName) {
+        FileConfiguration enchantAliasesConfig = loadYML(dataFolder, fileName);
+
+        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.getString("lastchanged"))) {
+            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + fileName + "' file is outdated, please delete it to allow it to be generated again.");
+        }
+
+        for (String arg : enchantAliasesConfig.getKeys(false)) {
+            if (arg.equals("lastchanged")) {
+                continue;
+            }
+
+            Enchantment enchant = Enchantment.getByName(arg.toUpperCase());
+
+            if (enchant == null) {
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid enchant definition: " + arg);
+                continue;
+            }
+
+            String names = enchantAliasesConfig.getString(arg);
+            String[] split = names.split(",");
+
+            for (String str : split) {
+                str = str.trim();
+                String parsed = RMCUtil.parseAliasName(str);
+
+                if (enchantNames.containsKey(parsed)) {
+                    MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has duplicate enchant alias '" + str + "' for enchant " + enchant);
+                    continue;
+                }
+
+                addEnchantName(parsed, enchant);
+
+                if (!enchantPrint.containsKey(enchant)) {
+                    enchantPrint.put(enchant, Tools.parseAliasPrint(str));
+                }
+            }
+        }
+    }
+
+    public void addEnchantName(String name, Enchantment enchantment) {
+        enchantNames.put(name, enchantment);
+    }
+
     private void parseMaterialNames(CommandSender sender, String names, Material material) {
         if (names == null) {
             return;
@@ -631,8 +641,8 @@ public class Settings {
         }
     }
 
-    private static FileConfiguration loadYML(String fileName) {
-        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + fileName);
+    private static FileConfiguration loadYML(File dataFolder, String fileName) {
+        File file = new File(dataFolder + File.separator + fileName);
 
         if (!file.exists()) {
             RecipeManager.getPlugin().saveResource(fileName, false);
@@ -853,7 +863,7 @@ public class Settings {
         return enchantNames.get(name);
     }
 
-    public static Short getCustomData(Material material) {
+    public Short getCustomData(Material material) {
         Short data = null;
 
         if (itemDatas.containsKey(material)) {

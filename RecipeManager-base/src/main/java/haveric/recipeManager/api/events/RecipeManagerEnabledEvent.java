@@ -2,8 +2,6 @@ package haveric.recipeManager.api.events;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -29,13 +27,6 @@ public class RecipeManagerEnabledEvent extends Event {
      */
     public Recipes getRecipes() {
         return RecipeManager.getRecipes();
-    }
-
-    /**
-     * @return RecipeManager.getSettings();
-     */
-    public Settings getSettings() {
-        return Settings.getInstance();
     }
 
     @Override

@@ -37,7 +37,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
 
     @Before
     public void prepare() {
-        when(Settings.getCustomData(Material.STONE_SWORD)).thenReturn((short)132);
+        settings.loadItemDatas(null, new File(baseDataPath), "item datas.yml");
 
         ironSword = new ItemStack(Material.IRON_SWORD);
         goldSword = new ItemStack(Material.GOLDEN_SWORD);

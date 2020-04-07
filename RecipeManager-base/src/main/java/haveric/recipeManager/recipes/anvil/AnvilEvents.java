@@ -130,9 +130,9 @@ public class AnvilEvents extends BaseRecipeEvents {
             }
 
             if (left != null && renameText != null && !renameText.isEmpty()) {
-                List<Material> renamingMaterials = Settings.getInstance().getAnvilRenaming();
+                List<Material> renamingMaterials = RecipeManager.getSettings().getAnvilRenaming();
 
-                if (Settings.getInstance().getSpecialAnvilRenaming()) {
+                if (RecipeManager.getSettings().getSpecialAnvilRenaming()) {
                     if (!renamingMaterials.isEmpty() && !renamingMaterials.contains(left.getType())) {
                         event.setResult(new ItemStack(Material.AIR));
                         player.updateInventory();
@@ -146,10 +146,10 @@ public class AnvilEvents extends BaseRecipeEvents {
             if (left != null && right != null) {
                 if (left.getType().getMaxDurability() > 0) {
                     if (right.getItemMeta() instanceof EnchantmentStorageMeta) {
-                        List<Material> enchantMaterials = Settings.getInstance().getAnvilMaterialEnchant();
-                        Map<Enchantment, List<Integer>> enchantEnchantments = Settings.getInstance().getAnvilEnchantments();
+                        List<Material> enchantMaterials = RecipeManager.getSettings().getAnvilMaterialEnchant();
+                        Map<Enchantment, List<Integer>> enchantEnchantments = RecipeManager.getSettings().getAnvilEnchantments();
 
-                        if (Settings.getInstance().getSpecialAnvilEnchant()) {
+                        if (RecipeManager.getSettings().getSpecialAnvilEnchant()) {
                             if (!enchantMaterials.isEmpty() && !enchantMaterials.contains(left.getType())) {
                                 event.setResult(new ItemStack(Material.AIR));
                                 player.updateInventory();
@@ -198,8 +198,8 @@ public class AnvilEvents extends BaseRecipeEvents {
                             }
                         }
                     } else if (right.getType().getMaxDurability() > 0) {
-                        List<Material> combineMaterials = Settings.getInstance().getAnvilCombineItem();
-                        if (Settings.getInstance().getSpecialAnvilCombineItem()) {
+                        List<Material> combineMaterials = RecipeManager.getSettings().getAnvilCombineItem();
+                        if (RecipeManager.getSettings().getSpecialAnvilCombineItem()) {
                             if (!combineMaterials.isEmpty() && !combineMaterials.contains(left.getType())) {
                                 event.setResult(new ItemStack(Material.AIR));
                                 player.updateInventory();
@@ -209,8 +209,8 @@ public class AnvilEvents extends BaseRecipeEvents {
                             player.updateInventory();
                         }
                     } else {
-                        List<Material> repairMaterial = Settings.getInstance().getAnvilRepairMaterial();
-                        if (Settings.getInstance().getSpecialAnvilRepairMaterial()) {
+                        List<Material> repairMaterial = RecipeManager.getSettings().getAnvilRepairMaterial();
+                        if (RecipeManager.getSettings().getSpecialAnvilRepairMaterial()) {
                             if (!repairMaterial.isEmpty() && !repairMaterial.contains(right.getType())) {
                                 event.setResult(new ItemStack(Material.AIR));
                                 player.updateInventory();

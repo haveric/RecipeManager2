@@ -1,7 +1,7 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Settings;
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
@@ -264,7 +264,7 @@ public class FlagCloneIngredient extends Flag {
                 String[] types = value.split(",");
 
                 for (String type : types) {
-                    Material material = Settings.getInstance().getMaterial(type);
+                    Material material = RecipeManager.getSettings().getMaterial(type);
                     if (material == null) {
                         material = Material.matchMaterial(type);
                     }

@@ -1,7 +1,9 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Settings;
+import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -9,8 +11,6 @@ import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.ParseBit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.*;
@@ -142,7 +142,7 @@ public class FlagKeepItem extends Flag {
             if (value.startsWith("damage")) {
                 int damage = 0;
 
-                Short maxDurability = Settings.getCustomData(item.getType());
+                Short maxDurability = RecipeManager.getSettings().getCustomData(item.getType());
                 if (maxDurability > 0) {
                     value = value.substring("damage".length()).trim();
 
@@ -196,7 +196,7 @@ public class FlagKeepItem extends Flag {
                 clone = item.clone();
                 int dmg = (Integer) obj;
 
-                short maxDurability = Settings.getCustomData(item.getType());
+                short maxDurability = RecipeManager.getSettings().getCustomData(item.getType());
                 if (dmg != 0 && maxDurability > 0) {
                     if (dmg > 0) {
                         short data = (short) (dmg + clone.getDurability());

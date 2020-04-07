@@ -412,7 +412,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 // If it's left/right click mode then see if it's right click and send to fuel slot otherwise to ingredient slot
                 int targetSlot = 0;
 
-                if (Settings.getInstance().getFurnaceShiftClick() == 'f' || event.isRightClick()) {
+                if (RecipeManager.getSettings().getFurnaceShiftClick() == 'f' || event.isRightClick()) {
                     if (Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, clicked) != null) {
                         targetSlot = 1;
                     }
@@ -422,7 +422,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 boolean similarItems = clicked.isSimilar(item); // Check if the clicked item is similar to the item at the targeted slot
 
                 // Check if it's normal shift+click mode setting and if targeted slot is the fuel slot and there is an item there but it's not similar to our clicked item
-                if (Settings.getInstance().getFurnaceShiftClick() == 'f' && targetSlot == 1 && item != null && !similarItems) {
+                if (RecipeManager.getSettings().getFurnaceShiftClick() == 'f' && targetSlot == 1 && item != null && !similarItems) {
                     targetSlot = 0; // change the target slot to ingredient slot
                     item = inventory.getItem(targetSlot); // get the item at the new set slot
                     similarItems = clicked.isSimilar(item); // update similarity check

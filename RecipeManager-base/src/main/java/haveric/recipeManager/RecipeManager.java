@@ -41,6 +41,7 @@ import java.util.Random;
  * It has static methods for the API.
  */
 public class RecipeManager extends JavaPlugin {
+    private static Settings settings;
     private static RecipeManager plugin;
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
@@ -171,21 +172,25 @@ public class RecipeManager extends JavaPlugin {
      *            Set to true to only check recipes, settings are unaffected.
      */
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
-        Settings.clearInit();
+        if (settings == null) {
+            settings = new Settings(true);
+        } else {
+            settings.clearInit();
+        }
 
-        Settings.getInstance().reload(sender); // (re)load settings
+        settings.reload(sender); // (re)load settings
         Messages.getInstance().reload(sender); // (re)load messages from messages.yml
         Files.reload(sender); // (re)generate info files if they do not exist
 
         Updater.init(this, 32835, null);
 
         if (!check) {
-            if (Settings.getInstance().getClearRecipes() || !firstTime) {
+            if (settings.getClearRecipes() || !firstTime) {
                 Vanilla.removeAllButSpecialRecipes();
                 Recipes.getInstance().clean();
             }
 
-            if (!firstTime && !Settings.getInstance().getClearRecipes()) {
+            if (!firstTime && !settings.getClearRecipes()) {
                 if (!Version.has1_12Support()) {
                     Vanilla.restoreAllButSpecialRecipes();
                     Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
@@ -294,7 +299,6 @@ public class RecipeManager extends JavaPlugin {
             events = null;
 
             RecipeTypeFactory.getInstance().cleanEvents();
-            Settings.clean();
 
             try {
                 Econ.getInstance().clean();
@@ -355,5 +359,9 @@ public class RecipeManager extends JavaPlugin {
 
     public static RecipeTypeLoader getRecipeTypeLoader() {
         return recipeTypeLoader;
+    }
+
+    public static Settings getSettings() {
+        return settings;
     }
 }

@@ -203,8 +203,8 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         } else {
             if (top != null && bottom != null) {
                 if (top.getType() == bottom.getType() && top.getType().getMaxDurability() > 0) {
-                    List<Material> combineMaterials = Settings.getInstance().getGrindstoneCombineItem();
-                    if (Settings.getInstance().getSpecialGrindstoneCombineItem()) {
+                    List<Material> combineMaterials = RecipeManager.getSettings().getGrindstoneCombineItem();
+                    if (RecipeManager.getSettings().getSpecialGrindstoneCombineItem()) {
                         if (!combineMaterials.isEmpty() && !combineMaterials.contains(top.getType())) {
                             inventory.setItem(2, null);
                             player.updateInventory();
@@ -224,9 +224,9 @@ public class GrindstoneEvents extends BaseRecipeEvents {
 
                 if (toCheck != null) {
                     if (toCheck.getItemMeta() instanceof EnchantmentStorageMeta) {
-                        Map<Enchantment, List<Integer>> disallowEnchantments = Settings.getInstance().getGrindstoneBookEnchantments();
+                        Map<Enchantment, List<Integer>> disallowEnchantments = RecipeManager.getSettings().getGrindstoneBookEnchantments();
 
-                        if (Settings.getInstance().getSpecialGrindstoneDisenchantBook()) {
+                        if (RecipeManager.getSettings().getSpecialGrindstoneDisenchantBook()) {
                             if (!disallowEnchantments.isEmpty()) {
                                 Map<Enchantment, Integer> bookEnchantments = ((EnchantmentStorageMeta) toCheck.getItemMeta()).getStoredEnchants();
 
@@ -267,10 +267,10 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                             }
                         }
                     } else if (toCheck.getType().getMaxDurability() > 0) {
-                        List<Material> disenchantMaterials = Settings.getInstance().getGrindstoneItemMaterials();
-                        Map<Enchantment, List<Integer>> disallowEnchantments = Settings.getInstance().getGrindstoneItemEnchantments();
+                        List<Material> disenchantMaterials = RecipeManager.getSettings().getGrindstoneItemMaterials();
+                        Map<Enchantment, List<Integer>> disallowEnchantments = RecipeManager.getSettings().getGrindstoneItemEnchantments();
 
-                        if (Settings.getInstance().getSpecialGrindstoneDisenchantItem()) {
+                        if (RecipeManager.getSettings().getSpecialGrindstoneDisenchantItem()) {
                             if (!disenchantMaterials.isEmpty() && !disenchantMaterials.contains(toCheck.getType())) {
                                 inventory.setItem(2, null);
                                 player.updateInventory();

@@ -57,7 +57,7 @@ public class Events extends BaseRecipeEvents {
     public void inventoryClose(InventoryCloseEvent event) {
         HumanEntity human = event.getPlayer();
 
-        if (Settings.getInstance().getFixModResults()) {
+        if (RecipeManager.getSettings().getFixModResults()) {
             for (ItemStack item : human.getInventory().getContents()) {
                 itemProcess(item);
             }
@@ -72,11 +72,11 @@ public class Events extends BaseRecipeEvents {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItem(event.getNewSlot());
 
-        if (Settings.getInstance().getUpdateBooks()) {
+        if (RecipeManager.getSettings().getUpdateBooks()) {
             RecipeBooks.getInstance().updateBook(player, item);
         }
 
-        if (Settings.getInstance().getFixModResults()) {
+        if (RecipeManager.getSettings().getFixModResults()) {
             itemProcess(item);
         }
     }
@@ -119,7 +119,7 @@ public class Events extends BaseRecipeEvents {
 
         Players.addJoined(player);
 
-        if (Settings.getInstance().getUpdateCheckEnabled() && player.hasPermission("recipemanager.command.rmupdate")) {
+        if (RecipeManager.getSettings().getUpdateCheckEnabled() && player.hasPermission("recipemanager.command.rmupdate")) {
             String latestVersion = Updater.getLatestVersion();
             String currentVersion = Updater.getCurrentVersion();
 

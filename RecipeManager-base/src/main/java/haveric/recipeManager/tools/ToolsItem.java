@@ -95,7 +95,7 @@ public class ToolsItem {
         if (material == Material.AIR) {
             print = RMCChatColor.GRAY + "(air)" + endTextColor;
         } else {
-            name = Settings.getInstance().getMaterialPrint(material);
+            name = RecipeManager.getSettings().getMaterialPrint(material);
 
             if (name == null) {
                 name = Tools.parseAliasPrint(material.toString());
@@ -151,14 +151,14 @@ public class ToolsItem {
         if (meta != null && meta.hasDisplayName()) {
             name = RMCChatColor.ITALIC + meta.getDisplayName();
         } else {
-            name = Settings.getInstance().getMaterialPrint(item.getType());
+            name = RecipeManager.getSettings().getMaterialPrint(item.getType());
 
             if (name == null) {
                 name = Tools.parseAliasPrint(item.getType().toString());
             }
         }
 
-        Map<Short, String> dataMap = Settings.getInstance().getMaterialDataPrint(item.getType());
+        Map<Short, String> dataMap = RecipeManager.getSettings().getMaterialDataPrint(item.getType());
 
         if (dataMap != null) {
             itemData = dataMap.get(item.getDurability());
@@ -214,14 +214,14 @@ public class ToolsItem {
         if (meta != null && meta.hasDisplayName()) {
             name = RMCChatColor.ITALIC + meta.getDisplayName();
         } else {
-            name = Settings.getInstance().getMaterialPrint(item.getType());
+            name = RecipeManager.getSettings().getMaterialPrint(item.getType());
 
             if (name == null) {
                 name = Tools.parseAliasPrint(item.getType().toString());
             }
         }
 
-        Map<Short, String> dataMap = Settings.getInstance().getMaterialDataPrint(item.getType());
+        Map<Short, String> dataMap = RecipeManager.getSettings().getMaterialDataPrint(item.getType());
 
         if (dataMap != null) {
             itemData = dataMap.get(item.getDurability());

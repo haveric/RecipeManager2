@@ -3,13 +3,12 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeRegistrator;
-import haveric.recipeManager.Settings;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.recipe.FlagOverride;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -96,7 +95,7 @@ public class ConditionEvaluator {
             } else {
                 recipe.getFlags().addFlag(new FlagOverride());
 
-                if (!(recipe.hasFlag(FlagType.RESTRICT) || Settings.getInstance().getDisableOverrideWarnings())) {
+                if (!(recipe.hasFlag(FlagType.RESTRICT) || RecipeManager.getSettings().getDisableOverrideWarnings())) {
                     ErrorReporter.getInstance().warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");
                 }
 

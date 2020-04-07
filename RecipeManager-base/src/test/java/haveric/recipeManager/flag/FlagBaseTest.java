@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.UUID;
 
 import static haveric.recipeManager.Files.FILE_MESSAGES;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -28,7 +27,9 @@ public class FlagBaseTest {
     protected Settings settings;
     protected TestUnsafeValues unsafeValues;
     protected File workDir;
+    protected String originalResourcesPath;
     protected String baseResourcesPath;
+    protected String baseDataPath;
     protected String baseRecipePath;
     protected UUID testUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
@@ -38,10 +39,9 @@ public class FlagBaseTest {
         unsafeValues = new TestUnsafeValues();
         when(Bukkit.getUnsafe()).thenReturn(unsafeValues);
 
-        mockStatic(Settings.class);
-        settings = mock(Settings.class);
-        when(Settings.getInstance()).thenReturn(settings);
-        when(settings.getMultithreading()).thenReturn(false);
+        mockStatic(RecipeManager.class);
+        settings = new Settings(false);
+        when(RecipeManager.getSettings()).thenReturn(settings);
 
         mockStatic(MessageSender.class);
         when(MessageSender.getInstance()).thenReturn(TestMessageSender.getInstance());
@@ -66,7 +66,11 @@ public class FlagBaseTest {
         workDir.delete();
         workDir.mkdirs();
 
+        originalResourcesPath = baseSrcPath + "main/resources/";
         baseResourcesPath = baseTestPath + "resources/";
+        baseDataPath = baseResourcesPath + "data/";
+        settings.loadFileConfig(new File(baseDataPath), "config-no-multithreading.yml");
+
         baseRecipePath = baseResourcesPath + "recipes/";
 
         File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
@@ -74,7 +78,6 @@ public class FlagBaseTest {
 
         Recipes recipes = new Recipes();
 
-        mockStatic(RecipeManager.class);
         when(RecipeManager.getRecipes()).thenReturn(recipes);
     }
 }
