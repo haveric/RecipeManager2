@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Advanced Recipes - RecipeManager2</title>
     <style>
-        pre { 
+        pre {
+            display: inline-block;
             border: 1px dashed #999; 
             font-family: Lucida Console;
             margin-left:20px; 
@@ -23,6 +25,7 @@
             padding: 15px;
         }
     </style>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/inventory/inventory.css?v=1"/>
 </head>
 <body>
     <div class="container">
@@ -43,20 +46,21 @@
         - <a href="#flags"><b>Advanced recipe examples</b></a>
         
         <hr><a name="books"></a><h2>RECIPE BOOKS AND NAMED RECIPES</h2>
-        
-        You can name recipes by just writing something after the type definition, e.g.:
-        
+        <div>
+            You can name recipes by just writing something after the type definition, e.g.:
+        </div>
         <pre>&lt;recipe definition&gt; [recipe name]</pre>
+        <div>
+            That name can be used in recipe books.
+
+            To learn more about recipe books, see the <a href="recipe books.html"><b>Recipe Books</b></a> page.
         
-        That name can be used in recipe books.
-        
-        To learn more about recipe books, see the <a href="recipe books.html"><b>Recipe Books</b></a> page.
-        
-        
+        </div>
         <hr><a name="flags"></a><h2>USING FLAGS</h2>
-        
+
+    <div>
         Here's the full syntax of a recipe file:
-    
+    </div>
 <pre>
 [@shared or recipe flag]
 [... more flags]
@@ -72,36 +76,106 @@
 
 [... more recipes]
 </pre>
-    
-    
-        Here's a quick example of the above syntax by using all available options:
-    
+<div>
+    Here's a quick example of the above syntax by using all available options:
+</div>
 <pre>
 @message You crafted this! // this applies to all recipes within this file
 
 COMBINE
 @broadcast {player} has crafted a fine sword!
-
 iron_ingot + gold_ingot + diamond:2
-
 = golden_sword
   @enchant durability max
   @name Fine Gold Sword
   @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
+</pre>
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shapeless</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/iron_ingot.png"/>
+            <div class="detail">
+                <div class="line">Iron Ingot</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_ingot.png"/>
+            <div class="detail">
+                <div class="line">Gold Ingot</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/diamond.png"/>
+            <div class="detail">
+                <div class="line">Diamond</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/diamond.png"/>
+            <div class="detail">
+                <div class="line">Diamond</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/golden_sword.png"/>
+            <div class="detail">
+                <div class="line color-aqua italic">Fine Gold Sword</div>
+                <div class="line color-gray">Unbreaking III</div>
+                <div class="line color-gray">This sword has been crafted from pure awesomeness! </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
+<pre>
 CRAFT Some Awesome Recipe
 @modexp +1
 @message false // disable the file-wide flag on this recipe
-
 apple
-
 = apple
-
 </pre>
-    
-        The spacing is not required as I put it but it's recommended because you can see stuff easier.
-        
+
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shaped</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/apple.png"/>
+            <div class="detail">
+                <div class="line">Apple</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/apple.png"/>
+            <div class="detail">
+                <div class="line">Apple</div>
+            </div>
+        </div>
+    </div>
+</div>
+
         <hr><a name="flags"></a><h2>ADVANCED RECIPE EXAMPLES</h2>
         
         <h3>Same ingredients, different names, different results</h3>
@@ -114,10 +188,91 @@ gold_nugget:3
 = diamond
   @ingredientcondition gold_nugget | name Diamond Nugget | failmsg false
 </pre>
-        This recipe lets you combine 3 gold nuggets named differently to create different results.
-        If you combine 3 unnamed ones nothing will result, but if they're named "Silver Nugget" you'll get an iron_ingot.
-        And if they're named "Diamond Nugget" you'll get a diamond, try it out!
-        
+        <div>
+            This recipe lets you combine 3 gold nuggets named differently to create different results.
+            If you combine 3 unnamed ones nothing will result, but if they're named "Silver Nugget" you'll get an iron_ingot.
+            And if they're named "Diamond Nugget" you'll get a diamond, try it out!
+        </div>
+<div class="inventory__wrap">
+    <div class="inventory inventory--crafting">
+        <div class="inventory__header">
+            <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+            <h1 class="inventory__title">Shapeless</h1>
+        </div>
+        <div class="inventory__ingredients">
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_nugget.png"/>
+                <div class="detail">
+                    <div class="line">Silver Nugget</div>
+                </div>
+            </div>
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_nugget.png"/>
+                <div class="detail">
+                    <div class="line">Silver Nugget</div>
+                </div>
+            </div>
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_nugget.png"/>
+                <div class="detail">
+                    <div class="line">Silver Nugget</div>
+                </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+        </div>
+        <div class="inventory__arrow">
+            <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+        </div>
+        <div class="inventory__result">
+            <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/iron_ingot.png"/>
+                <div class="detail">
+                    <div class="line">Iron Ingot</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="inventory inventory--crafting">
+        <div class="inventory__header">
+            <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+            <h1 class="inventory__title">Shapeless</h1>
+        </div>
+        <div class="inventory__ingredients">
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_nugget.png"/>
+                <div class="detail">
+                    <div class="line">Diamond Nugget</div>
+                </div>
+            </div>
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_nugget.png"/>
+                <div class="detail">
+                    <div class="line">Diamond Nugget</div>
+                </div>
+            </div>
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_nugget.png"/>
+                <div class="detail">
+                    <div class="line">Diamond Nugget</div>
+                </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+        </div>
+        <div class="inventory__arrow">
+            <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+        </div>
+        <div class="inventory__result">
+            <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/diamond.png"/>
+                <div class="detail">
+                    <div class="line">Diamond</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         
         <h3>Explosive fuel</h3>
 <pre>
@@ -125,7 +280,36 @@ fuel
 @forchance 25% @explode fire
 sulphur % 30
 </pre>
+        <p>
         When sulphur burns it has 25% chance of exploding and causing fires.
+        </p>
+
+<div class="inventory inventory--fuel">
+    <div class="inventory__header">
+        <h1 class="inventory__title">Fuel</h1>
     </div>
+    <div class="inventory__ingredients">
+        <div class="slot"></div>
+        <div class="inventory__burntimer">
+            <img src="https://www.recipemanager.dev/img/icons/64/burn_timer.png"/>
+        </div>
+        <div class="inventory__fuel">
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gunpowder.png"/>
+                <div class="detail">
+                    <div class="line">Gunpowder</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="burn_time">30s</div>
+    </div>
+</div>
+
+    </div>
+    <div id="item-tooltip" class="item-tooltip">
+        <div class="item-tooltip__detail"></div>
+    </div>
+    <script src="https://www.recipemanager.dev/js/inventory/inventory.js?v=1"></script>
 </body>
 </html>

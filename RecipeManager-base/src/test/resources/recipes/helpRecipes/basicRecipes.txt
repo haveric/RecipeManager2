@@ -1,0 +1,47 @@
+craft
+oak_planks + oak_planks
+stick
+= wood_hoe
+
+craft   Bowl craft attempt
+stick + oak_planks + stick
+air + stick
+= bowl
+= 25% fail
+
+craft
+cobblestone,stone + dirt,grass
+= light_gray_terracotta
+
+combine
+sulphur:3 + sand + sand
+= TNT:0:2
+
+combine Smash 2 diamonds and pray
+diamond + diamond
+= 0.1% diamond:0:32
+= coal:0:4
+= iron_ingot
+= gold_ingot
+= 75% fail
+
+smelt
+gold_ingot
+= gold_ore
+
+smelt Exp Bottle Alchemy
+glowstone % 20.5-30
+& bottle
+= 25% exp_bottle
+
+FUEL
+sulphur % 0.75
+jackolantern % 20
+
+brew
+nether_wart
+potion
+= stone
+@name <red>Test Stone. Please Ignore
+@ingredientcondition nether_wart | name &cTest
+@ingredientcondition potion | potion type water

@@ -1,0 +1,27 @@
+@message You crafted this! // this applies to all recipes within this file
+
+COMBINE
+@broadcast {player} has crafted a fine sword!
+iron_ingot + gold_ingot + diamond:2
+= golden_sword
+  @enchant durability max
+  @name Fine Gold Sword
+  @lore <gray>This sword has been crafted from pure awesomeness!
+
+CRAFT Some Awesome Recipe
+@modexp +1
+@message false // disable the file-wide flag on this recipe
+apple
+= apple
+
+combine
+@individualresults
+gold_nugget:3
+= iron_ingot
+  @ingredientcondition gold_nugget | name Silver Nugget | failmsg false
+= diamond
+  @ingredientcondition gold_nugget | name Diamond Nugget | failmsg false
+
+fuel
+@forchance 25% @explode fire
+sulphur % 30

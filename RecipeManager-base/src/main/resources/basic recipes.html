@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Basic Recipes - RecipeManager2</title>
     <style>
-        pre { 
+        pre {
+            display: inline-block;
             border: 1px dashed #999; 
             font-family: Lucida Console;
             margin-left:20px; 
@@ -28,6 +30,7 @@
             list-style: none;
         }
     </style>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/inventory/inventory.css?v=1"/>
 </head>
 <body>
     <div class="container">
@@ -116,29 +119,171 @@ CRAFT [recipe name]
           <li>You can avoid defining the chance number or use *% even to allow it to be calculated.</li>
           <li>You can also add a chance of failure to the recipe by using fail, air or 0 as one of the results.</li>
       </ul>
-      <b>Examples:</b>
+      <div>
+          <b>Examples:</b>
+      </div>
 <pre>
 // this is just a comment by the way
 // a hoe craftable in player inventory
 craft
-wood + wood
+oak_planks + oak_planks
 stick
 = wood_hoe
-
+</pre>
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shaped</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/oak_planks.png"/>
+            <div class="detail">
+                <div class="line">Oak Planks</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/oak_planks.png"/>
+            <div class="detail">
+                <div class="line">Oak Planks</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/stick.png"/>
+            <div class="detail">
+                <div class="line">Stick</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/wooden_hoe.png"/>
+            <div class="detail">
+                <div class="line">Wooden Hoe</div>
+            </div>
+        </div>
+    </div>
+</div>
+<pre>
 // fragile bowl named recipe
 craft   Bowl craft attempt
-stick + wood + stick
+stick + oak_planks + stick
 air + stick
 = bowl // undefined chance, will be calculated
 = 25% fail // 'fail' is alias for 'air'
-
+</pre>
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shaped</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/stick.png"/>
+            <div class="detail">
+                <div class="line">Stick</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/oak_planks.png"/>
+            <div class="detail">
+                <div class="line">Oak Planks</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/stick.png"/>
+            <div class="detail">
+                <div class="line">Stick</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/stick.png"/>
+            <div class="detail">
+                <div class="line">Stick</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/bowl.png"/>
+            <div class="chance">75%</div>
+            <div class="detail">
+                <div class="line">Bowl</div>
+            </div>
+        </div>
+        <div class="slot slot--result">
+            <div class="chance">25%</div>
+        </div>
+    </div>
+</div>
+<pre>
 // Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
 // as long as the combination of ingredients is still unique to each recipe
 craft
 cobblestone,stone + dirt,grass
 = light_gray_terracotta
 </pre>
-    
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shaped</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot slot--cycle" data-cycle="2000">
+            <div class="slot__cycle active">
+                <img src="https://www.recipemanager.dev/img/icons/64/cobblestone.png"/>
+                <div class="detail">
+                    <div class="line">Cobblestone</div>
+                </div>
+            </div>
+            <div class="slot__cycle">
+                <img src="https://www.recipemanager.dev/img/icons/64/stone.png"/>
+                <div class="detail">
+                    <div class="line">Stone</div>
+                </div>
+            </div>
+        </div>
+        <div class="slot slot--cycle" data-cycle="1000">
+            <div class="slot__cycle active">
+                <img src="https://www.recipemanager.dev/img/icons/64/dirt.png"/>
+                <div class="detail">
+                    <div class="line">Dirt</div>
+                </div>
+            </div>
+            <div class="slot__cycle">
+                <img src="https://www.recipemanager.dev/img/icons/64/grass.png"/>
+                <div class="detail">
+                    <div class="line">Grass</div>
+                </div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/light_gray_terracotta.png"/>
+            <div class="detail">
+                <div class="line">Light Gray Terracotta</div>
+            </div>
+        </div>
+    </div>
+</div>
     
     
     <h3>COMBINE RECIPE - shapeless workbench recipe</h3>
@@ -156,13 +301,64 @@ COMBINE [recipe name]
         <li></li>
         <li>This recipe also supports multiple results just like shaped recipe, read above for information. </li>
     </ul>
-      <b>Examples:</b>
+    <div>
+        <b>Examples:</b>
+    </div>
 <pre>
 // 3 sulphur + 2 sand = 2 TNT
 combine
-sulphur:*:3 + sand + sand
+sulphur:3 + sand + sand
 = TNT:0:2
-
+</pre>
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shapeless</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gunpowder.png"/>
+            <div class="detail">
+                <div class="line">Gunpowder</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gunpowder.png"/>
+            <div class="detail">
+                <div class="line">Gunpowder</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gunpowder.png"/>
+            <div class="detail">
+                <div class="line">Gunpowder</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/sand.png"/>
+            <div class="detail">
+                <div class="line">Sand</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/sand.png"/>
+            <div class="detail">
+                <div class="line">Sand</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/tnt.png"/>
+            <div class="amount">2</div>
+            <div class="detail">
+                <div class="line">TNT</div>
+            </div>
+        </div>
+    </div>
+</div>
+<pre>
 // smash 2 diamonds and pray for something good
 combine Smash 2 diamonds and pray
 diamond + diamond
@@ -172,7 +368,65 @@ diamond + diamond
 = gold_ingot
 = 75% fail
 </pre>
-    
+<div class="inventory inventory--crafting">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png"/></div>
+        <h1 class="inventory__title">Shapeless</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/diamond.png"/>
+            <div class="detail">
+                <div class="line">Diamond</div>
+            </div>
+        </div>
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/diamond.png"/>
+            <div class="detail">
+                <div class="line">Diamond</div>
+            </div>
+        </div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/diamond.png"/>
+            <div class="amount">32</div>
+            <div class="chance">0.1%</div>
+            <div class="detail">
+                <div class="line">Diamond</div>
+            </div>
+        </div>
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/coal.png"/>
+            <div class="amount">4</div>
+            <div class="chance">8.3%</div>
+            <div class="detail">
+                <div class="line">Coal</div>
+            </div>
+        </div>
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/iron_ingot.png"/>
+            <div class="chance">8.3%</div>
+            <div class="detail">
+                <div class="line">Iron Ingot</div>
+            </div>
+        </div>
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/gold_ingot.png"/>
+            <div class="chance">8.3%</div>
+            <div class="detail">
+                <div class="line">Gold Ingot</div>
+            </div>
+        </div>
+        <div class="slot slot--result">
+            <div class="chance">75%</div>
+        </div>
+    </div>
+</div>
     
     <h3>SMELT RECIPE - furnace smelting recipe</h3>
 <pre>
@@ -189,19 +443,90 @@ SMELT [recipe name]
         <li>(optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)</li>
         <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!</li>
     </ul>
-      <b>Examples:</b>
+    <div>
+        <b>Examples:</b>
+    </div>
 <pre>
 // smelt gold_ingot to ore
 smelt
 gold_ingot
 = gold_ore
-
+</pre>
+<div class="inventory inventory--furnace">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/furnace.png"/></div>
+        <h1 class="inventory__title">Furnace</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gold_ingot.png"/>
+            <div class="detail">
+                <div class="line">Gold Ingot</div>
+            </div>
+        </div>
+        <div class="inventory__burntimer">
+            <img src="https://www.recipemanager.dev/img/icons/64/burn_timer.png"/>
+        </div>
+        <div class="inventory__fuel">
+            <div class="slot"></div>
+        </div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+        <div class="cook_time">10s</div>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/gold_ore.png"/>
+            <div class="detail">
+                <div class="line">Gold Ore</div>
+            </div>
+        </div>
+    </div>
+</div>
+<pre>
 // glowstone and bottle as fuel makes an exp bottle
 smelt Exp Bottle Alchemy
 glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
 &amp; bottle // fuel
 = 25% exp_bottle // 25% chance to get the result, rest 75% will result in nothing
 </pre>
+<div class="inventory inventory--furnace">
+    <div class="inventory__header">
+        <div class="inventory__logo"><img src="https://www.recipemanager.dev/img/icons/64/furnace.png"/></div>
+        <h1 class="inventory__title">Furnace</h1>
+    </div>
+    <div class="inventory__ingredients">
+        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/glowstone.png"/>
+            <div class="detail">
+                <div class="line">Glowstone</div>
+            </div>
+        </div>
+        <div class="inventory__burntimer">
+            <img src="https://www.recipemanager.dev/img/icons/64/burn_timer.png"/>
+        </div>
+        <div class="inventory__fuel">
+            <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/bottle.png"/>
+                <div class="detail">
+                    <div class="line">Bottle</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="inventory__arrow">
+        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png"/>
+        <div class="cook_time">20.5 - 30s</div>
+    </div>
+    <div class="inventory__result">
+        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/64/bottle_of_enchanting.png"/>
+            <div class="chance">25%</div>
+            <div class="detail">
+                <div class="line">Bottle of Enchanting</div>
+            </div>
+        </div>
+        <div class="slot slot--result">
+            <div class="chance">75%</div>
+        </div>
+    </div>
+</div>
 
     <h3>BLASTING RECIPE - blast furnace smelting recipe</h3>
 <pre>
@@ -243,11 +568,57 @@ FUEL [recipe name]
         <li>'time' is required and can be a float number or a range of float numbers separated by a dash.</li>
         <li>The '...' part means you can specify more than one item, they are all added just like individual fuel recipes.</li>
     </ul>
-      <b>Example:</b>
+    <div>
+        <b>Example:</b>
+    </div>
 <pre>FUEL
-sulphur % 0.75 // see <a href='advanced recipes.html'><b>advanced recipes.html</b></a> how to make this EXPLODE!
-lantern % 20 // 'lantern' is alias for 'jack_o_lantern'
+sulphur % 0.75 // see <a href='advanced recipes.html'><b>advanced recipes.html</b></a> for how to make this EXPLODE!
+jackolantern % 20 // 'jackolantern' is alias for 'jack_o_lantern'
 </pre>
+<div class="inventory__wrap">
+    <div class="inventory inventory--fuel">
+        <div class="inventory__header">
+            <h1 class="inventory__title">Fuel</h1>
+        </div>
+        <div class="inventory__ingredients">
+            <div class="slot"></div>
+            <div class="inventory__burntimer">
+                <img src="https://www.recipemanager.dev/img/icons/64/burn_timer.png"/>
+            </div>
+            <div class="inventory__fuel">
+                <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/gunpowder.png"/>
+                    <div class="detail">
+                        <div class="line">Gunpowder</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inventory__ingredients">
+            <div class="burn_time">.75s</div>
+        </div>
+    </div>
+    <div class="inventory inventory--fuel">
+        <div class="inventory__header">
+            <h1 class="inventory__title">Fuel</h1>
+        </div>
+        <div class="inventory__ingredients">
+            <div class="slot"></div>
+            <div class="inventory__burntimer">
+                <img src="https://www.recipemanager.dev/img/icons/64/burn_timer.png"/>
+            </div>
+            <div class="inventory__fuel">
+                <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/jack_o_lantern.png"/>
+                    <div class="detail">
+                        <div class="line">Jack O' Lantern</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inventory__ingredients">
+            <div class="burn_time">20s</div>
+        </div>
+    </div>
+</div>
 
     <h3>CAMPFIRE RECIPE - campfire recipe</h3>
 <pre>
@@ -338,7 +709,9 @@ BREW [recipe name]
         <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</li>
         <li>Note: Currently requires a vanilla brewing recipe, but can have customized items.</li>
     </ul>
-    <b>Example:</b>
+    <div>
+        <b>Example:</b>
+    </div>
 <pre>
 brew
 nether_wart
@@ -357,5 +730,10 @@ potion
       If you don't get these instructions you can ask people in the <a href="https://dev.bukkit.org/projects/recipemanager"><b>plugin's dev.bukkit.org page</b></a> to make a recipe for you.
     </p>
     </div>
+    <div id="item-tooltip" class="item-tooltip">
+        <div class="item-tooltip__detail"></div>
+    </div>
+
+    <script src="https://www.recipemanager.dev/js/inventory/inventory.js?v=1"></script>
 </body>
 </html>
