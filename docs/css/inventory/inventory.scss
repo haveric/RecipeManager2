@@ -26,9 +26,11 @@
     }
 
     img {
-        max-width: 32px;
+        width: 32px;
         position: relative;
         z-index: 10;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
     }
 }
 
