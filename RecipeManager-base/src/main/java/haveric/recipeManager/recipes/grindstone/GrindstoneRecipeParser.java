@@ -23,7 +23,7 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
         String[] ingredientsRaw = reader.getLine().split("\\+");
 
         List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
-        if (choicesList == null) {
+        if (choicesList == null || choicesList.isEmpty()) {
             return false;
         }
 

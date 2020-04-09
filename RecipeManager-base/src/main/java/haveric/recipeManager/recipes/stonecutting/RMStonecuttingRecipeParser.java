@@ -23,7 +23,7 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
         String line = reader.getLine();
 
         List<Material> choices = parseIngredient(new String[] { line }, recipe.getType());
-        if (choices == null) {
+        if (choices == null || choices.isEmpty()) {
             return false;
         }
 

@@ -156,6 +156,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                     ingredientsChoiceMap.put(characterKey, airList);
                 }
             }
+
             if (recipe instanceof CraftRecipe1_13) {
                 CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
                 craftRecipe.setChoiceShape(choiceShapeString.toArray(new String[0]));

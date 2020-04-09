@@ -24,7 +24,7 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
         String[] split = reader.getLine().split("%");
 
         List<Material> choices = parseIngredient(split, recipe.getType());
-        if (choices == null) {
+        if (choices == null || choices.isEmpty()) {
             return false;
         }
 

@@ -47,7 +47,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
         if (Version.has1_13Support()) {
             List<Material> choices = parseIngredient(split, recipe.getType());
-            if (choices == null) {
+            if (choices == null || choices.isEmpty()) {
                 return false;
             }
 

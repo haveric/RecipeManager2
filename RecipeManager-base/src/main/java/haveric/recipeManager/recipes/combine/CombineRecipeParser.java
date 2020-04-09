@@ -46,8 +46,8 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 List<Material> choices = entry.getKey();
 
 
-                if (choices == null) {
-                    return ErrorReporter.getInstance().error("Ingredient cannot be empty");
+                if (choices == null || choices.isEmpty()) {
+                    return ErrorReporter.getInstance().error("Ingredient cannot be empty: " + str, "Check for incorrect spelling or missing tags or aliases.");
                 }
 
                 if (choices.contains(Material.AIR)) {

@@ -31,7 +31,7 @@ public class AnvilRecipeParser extends BaseRecipeParser {
         String[] ingredientsRaw = split[0].split("\\+");
 
         List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
-        if (choicesList == null) {
+        if (choicesList == null || choicesList.isEmpty()) {
             return false;
         }
 
