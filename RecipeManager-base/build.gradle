@@ -15,3 +15,10 @@ dependencies {
     extra project(':RecipeManager-common')
     extra project(':nms')
 }
+
+task copyJar(type: Copy) {
+    from jar
+    into '../build/libs/'
+}
+
+build.dependsOn copyJar
