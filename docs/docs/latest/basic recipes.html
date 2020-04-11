@@ -756,7 +756,7 @@ potion
                 return spanOf("code__comment", match);
             });
 
-            html = html.replace(/\bcraft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew\b/gi, function(match) {
+            html = html.replace(/\b(craft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew)\b/gi, function(match) {
                 return spanOf("code__recipe-tag", match);
             });
             el.innerHTML = html;
