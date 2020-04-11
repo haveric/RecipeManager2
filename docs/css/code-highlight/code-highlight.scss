@@ -7,6 +7,7 @@
 
 .code__comment {
     color: green;
+
 }
 
 .code__required {
@@ -16,8 +17,17 @@
 
 .code__optional {
     color: #666;
+    font-weight: normal;
 }
 
 .code__recipe-tag {
     color: blue;
+}
+
+.code__result {
+    color: darkorange;
+}
+
+.code__flag {
+    color: magenta;
 }

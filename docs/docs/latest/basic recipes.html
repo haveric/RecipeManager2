@@ -58,7 +58,15 @@
         <li>The text in recipe files can be any letter case and can have any amount of spaces, tabs and new lines.</li>
 
         <li>They also support different styles of comments: //, /* */ and #</li>
-
+        <li>
+<pre class="code">
+// This is a comment
+#  This is also a comment
+/* Multi line comments
+   are also supported
+*/
+</pre>
+        </li>
         <li>Also, <b>&lt; &gt;</b> are used to enclose required arguments and <b>[ ]</b> optional ones.</li>
         <li><b>Do not type &lt;, &gt;, [ or ] !</b>, anything outside their bounds are constant characters that need to be used, anything inside are variables.</li>
         <li><b>NOTE:</b> If you are having issues with special characters not showing up:<br/>
@@ -751,16 +759,44 @@ potion
     var syntaxHighlight = function(el) {
         var html = el.innerHTML;
 
-        if (html) {
-            html = html.replace(/\/\/.*\n/g, function(match) {
+        html = html.replace(/\/\*(.*\n?)[^\*\/]*\*\//gm, function(match) {
+            return spanOf("code__comment", match);
+        });
+
+        var lines = html.split("\n");
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+
+            line = line.replace(/(\/\/|#).*/, function(match) {
                 return spanOf("code__comment", match);
             });
 
-            html = html.replace(/\b(craft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew)\b/gi, function(match) {
+            line = line.replace(/\[[^\]]*\]/g, function(match) {
+                return spanOf("code__optional", match);
+            });
+
+            line = line.replace(/&lt;[^;]*&gt;/g, function(match) {
+                return spanOf("code__required", match);
+            });
+
+            line = line.replace(/^ *=[^"']/, function(match) {
+                return spanOf("code__result", match);
+            });
+
+            line = line.replace(/@[^ ]*/, function(match) {
+                return spanOf("code__flag", match);
+            });
+
+
+            line = line.replace(/^ *\b(craft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew)\b/i, function(match) {
                 return spanOf("code__recipe-tag", match);
             });
-            el.innerHTML = html;
+
+            lines[i] = line;
         }
+        html = lines.join("\n");
+        el.innerHTML = html;
     }
 
     var codeBlocks = document.querySelectorAll(".code");
