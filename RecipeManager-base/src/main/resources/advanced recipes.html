@@ -50,7 +50,7 @@
     <div>
         You can name recipes by just writing something after the type definition, e.g.:
     </div>
-    <pre>&lt;recipe definition&gt; [recipe name]</pre>
+    <pre class="code">&lt;recipe definition&gt; [recipe name]</pre>
     <div>
         That name can be used in recipe books.
 
@@ -62,7 +62,7 @@
     <div>
         Here's the full syntax of a recipe file:
     </div>
-    <pre>
+    <pre class="code">
 [@shared or recipe flag]
 [... more flags]
 
@@ -80,7 +80,7 @@
     <div>
         Here's a quick example of the above syntax by using all available options:
     </div>
-    <pre>
+    <pre class="code">
 @message You crafted this! // this applies to all recipes within this file
 
 COMBINE
@@ -137,7 +137,7 @@ iron_ingot + gold_ingot + diamond:2
         </div>
     </div>
 
-    <pre>
+    <pre class="code">
 CRAFT Some Awesome Recipe
 @modexp +1
 @message false // disable the file-wide flag on this recipe
@@ -180,7 +180,7 @@ apple
     <hr><a name="flags"></a><h2>ADVANCED RECIPE EXAMPLES</h2>
 
     <h3>Same ingredients, different names, different results</h3>
-    <pre>
+    <pre class="code">
 combine
 @individualresults
 gold_nugget:3
@@ -276,7 +276,7 @@ gold_nugget:3
     </div>
 
     <h3>Explosive fuel</h3>
-    <pre>
+    <pre class="code">
 fuel
 @forchance 25% @explode fire
 sulphur % 30
