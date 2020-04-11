@@ -1,0 +1,23 @@
+---
+---
+.code {
+    background-color: #eee;
+    color: #000;
+}
+
+.code__comment {
+    color: green;
+}
+
+.code__required {
+    color: #000;
+    font-weight: bold;
+}
+
+.code__optional {
+    color: #666;
+}
+
+.code__recipe-tag {
+    color: blue;
+}

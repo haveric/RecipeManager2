@@ -36,6 +36,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/inventory/inventory.css?v=1"/>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/code-highlight/code-highlight.css?v=1"/>
 </head>
 <body>
 <div class="container">
@@ -105,7 +106,7 @@
 
 
     <h3>CRAFT RECIPE - shaped workbench recipe</h3>
-    <pre>
+<pre class="code">
 CRAFT [recipe name]
 &lt;material[, ...]&gt; + [material[, ...]] + [material[, ...]]
 [material[, ...]] + [material[, ...]] + [material[, ...]]
@@ -128,7 +129,7 @@ CRAFT [recipe name]
     <div>
         <b>Examples:</b>
     </div>
-    <pre>
+<pre class="code">
 // this is just a comment by the way
 // a hoe craftable in player inventory
 craft
@@ -175,7 +176,7 @@ stick
             </div>
         </div>
     </div>
-    <pre>
+    <pre class="code">
 // fragile bowl named recipe
 craft   Bowl craft attempt
 stick + oak_planks + stick
@@ -230,7 +231,7 @@ air + stick
             </div>
         </div>
     </div>
-    <pre>
+    <pre class="code">
 // Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
 // as long as the combination of ingredients is still unique to each recipe
 craft
@@ -293,7 +294,7 @@ cobblestone,stone + dirt,grass
 
 
     <h3>COMBINE RECIPE - shapeless workbench recipe</h3>
-    <pre>
+    <pre class="code">
 COMBINE [recipe name]
 &lt;material[, ...]:[amount]&gt; + [...]
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -310,7 +311,7 @@ COMBINE [recipe name]
     <div>
         <b>Examples:</b>
     </div>
-    <pre>
+    <pre class="code">
 // 3 sulphur + 2 sand = 2 TNT
 combine
 sulphur:3 + sand + sand
@@ -364,7 +365,7 @@ sulphur:3 + sand + sand
             </div>
         </div>
     </div>
-    <pre>
+    <pre class="code">
 // smash 2 diamonds and pray for something good
 combine Smash 2 diamonds and pray
 diamond + diamond
@@ -435,7 +436,7 @@ diamond + diamond
     </div>
 
     <h3>SMELT RECIPE - furnace smelting recipe</h3>
-    <pre>
+    <pre class="code">
 SMELT [recipe name]
 &lt;material[, ...]&gt; % [time]
 &amp; [material:[data]]
@@ -452,7 +453,7 @@ SMELT [recipe name]
     <div>
         <b>Examples:</b>
     </div>
-    <pre>
+    <pre class="code">
 // smelt gold_ingot to ore
 smelt
 gold_ingot
@@ -488,7 +489,7 @@ gold_ingot
             </div>
         </div>
     </div>
-    <pre>
+    <pre class="code">
 // glowstone and bottle as fuel makes an exp bottle
 smelt Exp Bottle Alchemy
 glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
@@ -535,7 +536,7 @@ glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
     </div>
 
     <h3>BLASTING RECIPE - blast furnace smelting recipe</h3>
-    <pre>
+    <pre class="code">
 BLASTING [recipe name]
 &lt;material[, ...]&gt; % [time]
 &amp; [material:[data]]
@@ -549,7 +550,7 @@ BLASTING [recipe name]
     </ul>
 
     <h3>SMOKING RECIPE - smoker smelting recipe</h3>
-    <pre>
+    <pre class="code">
 SMOKING [recipe name]
 &lt;material[, ...]&gt; % [time]
 &amp; [material:[data]]
@@ -563,7 +564,7 @@ SMOKING [recipe name]
     </ul>
 
     <h3>FUEL RECIPE - furnace fuel</h3>
-    <pre>
+    <pre class="code">
 FUEL [recipe name]
 &lt;material:data&gt; % &lt;time&gt;
 ...
@@ -577,7 +578,8 @@ FUEL [recipe name]
     <div>
         <b>Example:</b>
     </div>
-    <pre>FUEL
+    <pre class="code">
+FUEL
 sulphur % 0.75 // see <a href='advanced recipes.html'><b>advanced recipes.html</b></a> for how to make this EXPLODE!
 jackolantern % 20 // 'jackolantern' is alias for 'jack_o_lantern'
 </pre>
@@ -627,7 +629,7 @@ jackolantern % 20 // 'jackolantern' is alias for 'jack_o_lantern'
     </div>
 
     <h3>CAMPFIRE RECIPE - campfire recipe</h3>
-    <pre>
+    <pre class="code">
 CAMPFIRE [recipe name]
 &lt;material[, ...]&gt; % [time]
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -640,7 +642,7 @@ CAMPFIRE [recipe name]
     </ul>
 
     <h3>STONECUTTING RECIPE - stonecutter recipe</h3>
-    <pre>
+    <pre class="code">
 STONECUTTING [recipe name]
 &lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -652,7 +654,7 @@ STONECUTTING [recipe name]
     </ul>
 
     <h3>COMPOST RECIPE - composter recipes</h3>
-    <pre>
+    <pre class="code">
 COMPOST [recipe name]
 &lt;material[, ...]&gt; % [chance per level] % [levels]
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -665,7 +667,7 @@ COMPOST [recipe name]
     </ul>
 
     <h3>ANVIL RECIPE - anvil recipes</h3>
-    <pre>
+    <pre class="code">
 ANVIL [recipe name]
 &lt;material[, ...]&gt; + &lt;material[, ...]&gt; % [experience levels] % [allowrename or true] % [anvil damage chance]
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -679,7 +681,7 @@ ANVIL [recipe name]
     </ul>
 
     <h3>GRINDSTONE RECIPE - grindstone crafting recipes</h3>
-    <pre>
+    <pre class="code">
 GRINDSTONE [recipe name]
 &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -690,7 +692,7 @@ GRINDSTONE [recipe name]
     </ul>
 
     <h3>CARTOGRAPHY RECIPE - cartography crafting recipes</h3>
-    <pre>
+    <pre class="code">
 CARTOGRAPHY [recipe name]
 &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -702,7 +704,7 @@ CARTOGRAPHY [recipe name]
 
     <h3>BREW RECIPE - brewing stand recipes</h3>
     <h4 style="margin: 0; color: red;">This is an experimental feature. Expect bugs and frequent changes.</h4>
-    <pre>
+    <pre class="code">
 BREW [recipe name]
 &lt;material:[data]:[amount]&gt; // ingredient
 &lt;material:[data]&gt; // potion
@@ -718,7 +720,7 @@ BREW [recipe name]
     <div>
         <b>Example:</b>
     </div>
-    <pre>
+    <pre class="code">
 brew
 nether_wart
 potion
@@ -741,5 +743,30 @@ potion
 </div>
 
 <script src="https://www.recipemanager.dev/js/inventory/inventory.js?v=1"></script>
+<script type="text/javascript">
+    var spanOf = function(clazz, text) {
+        return '<span class="' + clazz + '">' + text + '</span>';
+    }
+
+    var syntaxHighlight = function(el) {
+        var html = el.innerHTML;
+
+        if (html) {
+            html = html.replace(/\/\/.*\n/g, function(match) {
+                return spanOf("code__comment", match);
+            });
+
+            html = html.replace(/\bcraft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew\b/gi, function(match) {
+                return spanOf("code__recipe-tag", match);
+            });
+            el.innerHTML = html;
+        }
+    }
+
+    var codeBlocks = document.querySelectorAll(".code");
+    for (var i = 0; i < codeBlocks.length; i++) {
+        syntaxHighlight(codeBlocks[i]);
+    }
+</script>
 </body>
 </html>
