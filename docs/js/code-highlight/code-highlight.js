@@ -9,39 +9,30 @@ var syntaxHighlight = function(el) {
         return spanOf("code__comment", match);
     });
 
-    var lines = html.split("\n");
+    html = html.replace(/(\/\/|#).*/gm, function(match) {
+        return spanOf("code__comment", match);
+    });
 
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
+    html = html.replace(/\[[^\]]*\]*/gm, function(match) {
+        return spanOf("code__optional", match);
+    });
 
-        line = line.replace(/(\/\/|#).*/, function(match) {
-            return spanOf("code__comment", match);
-        });
+    html = html.replace(/&lt;[^;]*&gt;/gm, function(match) {
+        return spanOf("code__required", match);
+    });
 
-        line = line.replace(/\[[^\]]*\]/g, function(match) {
-            return spanOf("code__optional", match);
-        });
+    html = html.replace(/^ *\b(craft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew)\b|(&lt;|<)recipe definition(&gt;|>)/gim, function(match) {
+        return spanOf("code__recipe-tag", match);
+    });
 
-        line = line.replace(/&lt;[^;]*&gt;/g, function(match) {
-            return spanOf("code__required", match);
-        });
+    html = html.replace(/^ *=[^"']/gm, function(match) {
+        return spanOf("code__result", match);
+    });
 
-        line = line.replace(/^ *=[^"']/, function(match) {
-            return spanOf("code__result", match);
-        });
+    html = html.replace(/@[^ \n]*/gm, function(match) {
+        return spanOf("code__flag", match);
+    });
 
-        line = line.replace(/@[^ ]*/, function(match) {
-            return spanOf("code__flag", match);
-        });
-
-
-        line = line.replace(/^ *\b(craft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew)\b/i, function(match) {
-            return spanOf("code__recipe-tag", match);
-        });
-
-        lines[i] = line;
-    }
-    html = lines.join("\n");
     el.innerHTML = html;
 }
 
