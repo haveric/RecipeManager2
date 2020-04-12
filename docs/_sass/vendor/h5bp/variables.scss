@@ -1,0 +1,67 @@
+// Browser Support
+$supportIE10: false;
+$supportIE: true;
+
+// Document
+$useHtml: true;
+$useMainLineHeight: true;
+
+// Sections
+$useBody: true;
+$useMain: false;
+$useH1: true;
+
+// Grouping content
+$useHR: false;
+$usePre: true;
+
+// Text-level semantics
+$useA: true;
+$useAbbr: false;
+$useBoldStrong: true;
+$useCode: false;
+$useKbd: false;
+$useSamp: false;
+$useSmall: false;
+$useSub: false;
+$useSup: false;
+
+// Embedded content
+$useImg: true;
+$useAudio: false;
+$useCanvas: false;
+$useIframe: false;
+$useSvg: false;
+$useVideo: false;
+
+// Forms
+$useForms: false;
+$useFieldset: false;
+$useLegend: false;
+$useProgress: false;
+$useTextarea: false;
+$useCheckboxes: false;
+$useInputNumber: false;
+$useInputSearch: false;
+$useFileUpload: false;
+
+// Interactive
+$useDetails: false;
+$useSummary: false;
+
+// Misc
+$useTemplate: false;
+$useAttrHidden: false;
+$useSelection: true;
+
+// Helper classes
+$useHidden: false;
+$useScreenReader: false;
+$useInvisible: false;
+$useClearfix: false;
+
+// Print
+$usePrint: false;
+
+// Tables
+$useThead: false;
