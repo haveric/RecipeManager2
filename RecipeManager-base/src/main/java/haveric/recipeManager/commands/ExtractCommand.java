@@ -246,6 +246,8 @@ public class ExtractCommand implements TabExecutor {
                 recipesNum++;
             } catch (NullPointerException e) {
                 // Catch any invalid Bukkit recipes
+            } catch (NoSuchElementException e) {
+                // Vanilla datapack is disabled
             }
         }
 
