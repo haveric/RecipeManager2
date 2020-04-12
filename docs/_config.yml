@@ -1,6 +1,4 @@
 title: RecipeManager
 theme:
-exclude:
-  - temp
 sass:
   style: compressed
