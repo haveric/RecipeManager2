@@ -12,8 +12,109 @@ a {
     }
 }
 
+pre {
+    font-family: Lucida Console;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid #000;
+}
+
+th,
+td {
+    padding: 5px;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
+    padding-top: 15px;
+    padding-bottom: 15px;
     @extend .clearfix;
+}
+
+.container-full {
+    padding: 15px;
+}
+
+.header {
+    background-color: #07f;
+}
+
+.header__link {
+    display: inline-block;
+    margin-left: 15px;
+    margin-right: 15px;
+    color: #eee;
+    font-size: 24px;
+    font-weight: bold;
+
+    &:hover {
+        color: #fff;
+    }
+}
+
+.header__logo {
+    width: 64px;
+    height: 64px;
+}
+
+.nav-docs {
+    background-color: #ddd;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.back-to-top {
+    padding-left: 5px;
+    font-size: 12px;
+}
+
+.command {
+    width: 40%;
+}
+
+.command__text {
+    font-size: 14px;
+}
+
+.explorer {
+    border: 2px dashed #ccc;
+    padding: 5px;
+}
+
+.references {
+    width: 20%;
+    float: right;
+}
+
+.reference {
+    margin-bottom: 15px;
+}
+
+.reference__link {
+    display: block;
+}
+
+.reference__logo {
+    max-width: 100%;
+}
+
+.logo-bukkitdev {
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.logo-discord {
+    height: 45px;
+}
+
+.logo-github {
+    height: 35px;
 }

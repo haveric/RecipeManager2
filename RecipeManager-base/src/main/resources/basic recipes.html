@@ -3,112 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>Basic Recipes - RecipeManager2</title>
-    <style>
-        pre {
-            display: inline-block;
-            border: 1px dashed #999; 
-            font-family: Lucida Console;
-            margin-left:20px; 
-            padding:10px; 
-        }
-        
-        body {
-            margin: 0;
-            font-family: Arial;
-            font-size: 16px;
-            width: 100%;
-        }
-        
-        .container {
-            max-width: 990px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-        
-        li {
-            margin-bottom: 10px;
-            list-style: none;
-        }
-
-        .explorer {
-            border: 2px dashed #ccc;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/vendor.css?v=1"/>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/app.css?v=1"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/inventory/inventory.css?v=1"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/code-highlight/code-highlight.css?v=1"/>
 </head>
 <body>
+<nav class="nav-docs">
+    <div class="container">
+        <b>Basic Recipes</b> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+    </div>
+</nav>
 <div class="container">
-    <b>Basic Recipes</b> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
     <h1>Basic Recipes</h1>
 
-
     <h4>HOW TO MAKE A RECIPE FILE</h4>
-    <ul>
-        <li>First go to <b>/plugins/RecipeManager/recipes</b> folder and create a file with the <b>.txt</b> extension.</li>
-        <li><img src="https://www.recipemanager.dev/img/explorer/single-file.png" class="explorer"/></li>
-        <li>Then you can just open that with a text editor and start writing recipes.</li>
-    </ul>
+    <p>First go to <b>/plugins/RecipeManager/recipes</b> folder and create a file with the <b>.txt</b> extension.</p>
+    <img src="https://www.recipemanager.dev/img/explorer/single-file.png" class="explorer"/>
+    <p>Then you can just open that with a text editor and start writing recipes.</p>
 
     <h4>ABOUT RECIPE FILES</h4>
-    <ul>
-        <li>You can have as many recipe files and recipes per file as you want, you can also create folders for organization.</li>
-        <li><img src="https://www.recipemanager.dev/img/explorer/multiple-files.png" class="explorer"/></li>
-        <li>The text in recipe files can be any letter case and can have any amount of spaces, tabs and new lines.</li>
-
-        <li>They also support different styles of comments: //, /* */ and #</li>
-        <li>
-<pre class="code">
+    <p>You can have as many recipe files and recipes per file as you want, you can also create folders for organization.</p>
+    <img src="https://www.recipemanager.dev/img/explorer/multiple-files.png" class="explorer"/>
+    <p>The text in recipe files can be any letter case and can have any amount of spaces, tabs and new lines.</p>
+    <p>They also support different styles of comments: //, /* */ and #</p>
+    <pre class="code">
 // This is a comment
 #  This is also a comment
 /* Multi line comments
    are also supported
 */
 </pre>
-        </li>
-        <li>Also, <b>&lt; &gt;</b> are used to enclose required arguments and <b>[ ]</b> optional ones.</li>
-        <li><b>Do not type &lt;, &gt;, [ or ] !</b>, anything outside their bounds are constant characters that need to be used, anything inside are variables.</li>
-        <li><b>NOTE:</b> If you are having issues with special characters not showing up:<br/>
-            - Make sure that your recipe files are saved as UTF-8 and <br/>
-            - Include the following flag: " -Dfile.encoding=UTF-8" in your startup script.
-        </li>
-    </ul>
+    <p>Also, <b>&lt; &gt;</b> are used to enclose required arguments and <b>[ ]</b> optional ones.</p>
+    <p><b>Do not type &lt;, &gt;, [ or ] !</b>, anything outside their bounds are constant characters that need to be used, anything inside are variables.</p>
+    <p>
+        <b>NOTE:</b> If you are having issues with special characters not showing up:<br/>
+        - Make sure that your recipe files are saved as UTF-8 and <br/>
+        - Include the following flag: " -Dfile.encoding=UTF-8" in your startup script.
+    </p>
 
     <h4>ABOUT DEFINING ITEMS</h4>
-    <ul>
-        <li>Item formats are usually 'material[, ...]' and results are 'material:data:amount'<br/>
-            - 'material' = name, id or alias (see '<a href="name index.html#material">name index.html</a>' and 'item aliases.yml')<br/>
-            - 'material' can also be defined by tag:&lt;tagname&gt; or t:&lt;tagname&gt;. (see '<a href="name index.html#tag">name index.html</a>')<br/>
-            - 'material' can also be defined by alias:&lt;aliasname&gt; or a:&lt;aliasname&gt;. (see 'choice aliases.yml')<br/>
-            - (optional) 'data' = data name (from 'item aliases.yml'), number or * for any data value (default). Only valid in results as of 1.13<br/>
-            - (optional) 'amount' = number, default 1</li>
+    <p>Item formats are usually 'material[, ...]' and results are 'material:data:amount'<br/>
+        - 'material' = name, id or alias (see '<a href="name index.html#material">name index.html</a>' and 'item aliases.yml')<br/>
+        - 'material' can also be defined by tag:&lt;tagname&gt; or t:&lt;tagname&gt;. (see '<a href="name index.html#tag">name index.html</a>')<br/>
+        - 'material' can also be defined by alias:&lt;aliasname&gt; or a:&lt;aliasname&gt;. (see 'choice aliases.yml')<br/>
+        - (optional) 'data' = data name (from 'item aliases.yml'), number or * for any data value (default). Only valid in results as of 1.13<br/>
+        - (optional) 'amount' = number, default 1</p>
 
-        <li>(1.12 or older ONLY) Item definitions also support names, lore and enchantments.<br/>
-            Full format is: <b>&lt;material&gt;:&lt;data&gt;:&lt;amount&gt; ; name &lt;name&gt; ; lore &lt;line&gt; ; enchant &lt;enchant&gt; &lt;level&gt;</b><br/>
-            Where lore and enchant can be repeated.<br/>
-            And of course all meta definitions are optional and order does not matter (unlike material:data:amount).</li>
+    <p>(1.12 or older ONLY) Item definitions also support names, lore and enchantments.<br/>
+        Full format is: <b>&lt;material&gt;:&lt;data&gt;:&lt;amount&gt; ; name &lt;name&gt; ; lore &lt;line&gt; ; enchant &lt;enchant&gt; &lt;level&gt;</b><br/>
+        Where lore and enchant can be repeated.<br/>
+        And of course all meta definitions are optional and order does not matter (unlike material:data:amount).</p>
 
-        <li>For more stuff that can be set using flags on items, see <a href="recipe flags.html">recipe flags.html</a>.</li>
-    </ul>
+    <p>For more stuff that can be set using flags on items, see <a href="recipe flags.html">recipe flags.html</a>.</p>
 
     <h4>ABOUT MULTI-RESULTS</h4>
-    <ul>
-        <li>Certain recipes support having multiple results.</li>
-        <li>Only one result type can be crafted at one time, therefore each result has a set chance of success.</li>
-        <li>Additionally you can set 'air' as result to make the recipe fail by that chance, which gives no result item but still decreases ingredients.</li>
-        <li>Chances must be a total of 100%, if you do not define the chance for one or more items the chance will be evenly calculated for the remaining chance up to 100%.</li>
-        <li>The options for this can be extended even more with flags, be sure to see the <a href="advanced recipes.html"><b>advanced recipes.html</b></a> file after reading this one.</li>
-    </ul>
+    <p>Certain recipes support having multiple results.</p>
+    <p>Only one result type can be crafted at one time, therefore each result has a set chance of success.</p>
+    <p>Additionally you can set 'air' as result to make the recipe fail by that chance, which gives no result item but still decreases ingredients.</p>
+    <p>Chances must be a total of 100%, if you do not define the chance for one or more items the chance will be evenly calculated for the remaining chance up to 100%.</p>
+    <p>The options for this can be extended even more with flags, be sure to see the <a href="advanced recipes.html"><b>advanced recipes.html</b></a> file after reading this one.</p>
 
     <h4>ABOUT RECIPE NAMES</h4>
-    <ul>
-        <li>Recipe names are used by recipe books.</li>
-        <li>If you define a custom name it must be unique and between 3 and 32 characters long (18 recommended).</li>
-        <li>The custom name will be displayed in the books if defined, otherwise it will use the result.</li>
-        <li>In the 'books/*.yml' files the recipe names (custom or auto-generated) are used to add and sort recipes in the books.</li>
-        <li><a href="recipe books.html"><b>More about recipe books...</b></a></li>
-    </ul>
+    <p>Recipe names are used by recipe books.</p>
+    <p>If you define a custom name it must be unique and between 3 and 32 characters long (18 recommended).</p>
+    <p>The custom name will be displayed in the books if defined, otherwise it will use the result.</p>
+    <p>In the 'books/*.yml' files the recipe names (custom or auto-generated) are used to add and sort recipes in the books.</p>
+    <p><a href="recipe books.html"><b>More about recipe books...</b></a></p>
 
     <hr><h2>RECIPE SYNTAXES</h2>
 
@@ -122,18 +83,16 @@ CRAFT [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-    <ul>
-        <li>The ingredients are in the shape of the recipe grid, it will also work if horizontally mirrored.</li>
-        <li><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</li>
-        <li>Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.</li>
-        <li>Specifying a square of 4 or smaller makes it work in player's inventory crafting.</li>
-        <li>The '[, ...]' part means that you can add multiple ingredients as matches for that grid item.</li>
-        <li>&nbsp;</li>
-        <li>As for the result the 'chance%' part is optional and if defined then 'chance' must be a number between 0.0 and 100.0 (yes, accepts decimals)</li>
-        <li>The '[...]' part means that you can repeat the previous statement, so you can define more than one result and the recipe will randomly pick one of the results.</li>
-        <li>You can avoid defining the chance number or use *% even to allow it to be calculated.</li>
-        <li>You can also add a chance of failure to the recipe by using fail, air or 0 as one of the results.</li>
-    </ul>
+    <p>The ingredients are in the shape of the recipe grid, it will also work if horizontally mirrored.</p>
+    <p><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</p>
+    <p>Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.</p>
+    <p>Specifying a square of 4 or smaller makes it work in player's inventory crafting.</p>
+    <p>The '[, ...]' part means that you can add multiple ingredients as matches for that grid item.</p>
+    <p>&nbsp;</p>
+    <p>As for the result the 'chance%' part is optional and if defined then 'chance' must be a number between 0.0 and 100.0 (yes, accepts decimals)</p>
+    <p>The '[...]' part means that you can repeat the previous statement, so you can define more than one result and the recipe will randomly pick one of the results.</p>
+    <p>You can avoid defining the chance number or use *% even to allow it to be calculated.</p>
+    <p>You can also add a chance of failure to the recipe by using fail, air or 0 as one of the results.</p>
     <div>
         <b>Examples:</b>
     </div>
@@ -308,14 +267,12 @@ COMBINE [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-    <ul>
-        <li>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</li>
-        <li>You can specify up to 9 items added up.</li>
-        <li>The optional amount can only be added at the end of a list of materials</li>
-        <li><b>EXAMPLE:</b> cobblestone,stone:5 would be valid and expect the recipe to have 5 ingredients of either cobblestone OR stone</li>
-        <li></li>
-        <li>This recipe also supports multiple results just like shaped recipe, read above for information. </li>
-    </ul>
+    <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
+    <p>You can specify up to 9 items added up.</p>
+    <p>The optional amount can only be added at the end of a list of materials</p>
+    <p><b>EXAMPLE:</b> cobblestone,stone:5 would be valid and expect the recipe to have 5 ingredients of either cobblestone OR stone</p>
+    <p></p>
+    <p>This recipe also supports multiple results just like shaped recipe, read above for information. </p>
     <div>
         <b>Examples:</b>
     </div>
@@ -452,12 +409,10 @@ SMELT [recipe name]
 // one result max!
 </pre>
 
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
-        <li>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 10</li>
-        <li>(optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)</li>
-        <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
+    <p>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 10</p>
+    <p>(optional) '&amp; [material:[data]]' can be an item to act as the ONLY fuel for this recipe (no need to have a fuel recipe for the item!)</p>
+    <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance but this recipe type only supports 1 result!</p>
     <div>
         <b>Examples:</b>
     </div>
@@ -551,11 +506,9 @@ BLASTING [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 // one result max!
 </pre>
-    <ul>
-        <li>Works the same as SMELT RECIPES, but for BLAST FURNACES</li>
-        <li>Default time: 5</li>
-        <li>See SMELT RECIPE for examples</li>
-    </ul>
+    <p>Works the same as SMELT RECIPES, but for BLAST FURNACES</p>
+    <p>Default time: 5</p>
+    <p>See SMELT RECIPE for examples</p>
 
     <h3>SMOKING RECIPE - smoker smelting recipe</h3>
     <pre class="code">
@@ -565,11 +518,9 @@ SMOKING [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 // one result max!
 </pre>
-    <ul>
-        <li>Works the same as SMELT RECIPES, but for SMOKERS</li>
-        <li>Default time: 5</li>
-        <li>See SMELT RECIPE for examples</li>
-    </ul>
+    <p>Works the same as SMELT RECIPES, but for SMOKERS</p>
+    <p>Default time: 5</p>
+    <p>See SMELT RECIPE for examples</p>
 
     <h3>FUEL RECIPE - furnace fuel</h3>
     <pre class="code">
@@ -578,11 +529,9 @@ FUEL [recipe name]
 ...
 </pre>
 
-    <ul>
-        <li>Adds a fuel with the specified burn time.</li>
-        <li>'time' is required and can be a float number or a range of float numbers separated by a dash.</li>
-        <li>The '...' part means you can specify more than one item, they are all added just like individual fuel recipes.</li>
-    </ul>
+    <p>Adds a fuel with the specified burn time.</p>
+    <p>'time' is required and can be a float number or a range of float numbers separated by a dash.</p>
+    <p>The '...' part means you can specify more than one item, they are all added just like individual fuel recipes.</p>
     <div>
         <b>Example:</b>
     </div>
@@ -642,12 +591,10 @@ CAMPFIRE [recipe name]
 &lt;material[, ...]&gt; % [time]
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
-        <li>(optional) '% [time]' can be the time to cook, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 30</li>
-        <li>  NOTE: Due to API limitations, random cook times will only be set random on server start for campfire recipes.</li>
-        <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
+    <p>(optional) '% [time]' can be the time to cook, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 30</p>
+    <p>  NOTE: Due to API limitations, random cook times will only be set random on server start for campfire recipes.</p>
+    <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
 
     <h3>STONECUTTING RECIPE - stonecutter recipe</h3>
     <pre class="code">
@@ -655,11 +602,9 @@ STONECUTTING [recipe name]
 &lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
-        <li>Multiple recipes can be added with the same ingredient as long as the result is different for each.</li>
-        <li>No Flag support yet</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
+    <p>Multiple recipes can be added with the same ingredient as long as the result is different for each.</p>
+    <p>No Flag support yet</p>
 
     <h3>COMPOST RECIPE - composter recipes</h3>
     <pre class="code">
@@ -667,12 +612,10 @@ COMPOST [recipe name]
 &lt;material[, ...]&gt; % [chance per level] % [levels]
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the ingredient.</li>
-        <li>(optional) '% [chance per level]' is the percentage chance that the level will be increased by [levels]. Value can be a float number >0 and <=100. Default is 100.</li>
-        <li>(optional) '% [levels]' is the levels to Value can be a float number >0 and <=7. Default is 1.</li>
-        <li>While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made.</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
+    <p>(optional) '% [chance per level]' is the percentage chance that the level will be increased by [levels]. Value can be a float number >0 and <=100. Default is 100.</p>
+    <p>(optional) '% [levels]' is the levels to Value can be a float number >0 and <=7. Default is 1.</p>
+    <p>While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made.</p>
 
     <h3>ANVIL RECIPE - anvil recipes</h3>
     <pre class="code">
@@ -680,13 +623,11 @@ ANVIL [recipe name]
 &lt;material[, ...]&gt; + &lt;material[, ...]&gt; % [experience levels] % [allowrename or true] % [anvil damage chance]
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the left ingredient.</li>
-        <li>The second '&lt;material[, ...]&gt;' is the right ingredient.</li>
-        <li>(optional) '% [experience levels]' is the experience levels per craft and shown in the anvil.</li>
-        <li>(optional) '% [allowrename or true]' will enable renaming. Will add an extra experience level to the cost and set the name after all flags. Defaults to false.</li>
-        <li>(optional) '% [anvil damage chance]' will adjust the chance to damage the anvil on craft. Default is 12. Allowed values from 0-300. Over 100 will damage multiple levels. Ex: 150 will damage 1 level with a 50% chance of damaging a second.</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the left ingredient.</p>
+    <p>The second '&lt;material[, ...]&gt;' is the right ingredient.</p>
+    <p>(optional) '% [experience levels]' is the experience levels per craft and shown in the anvil.</p>
+    <p>(optional) '% [allowrename or true]' will enable renaming. Will add an extra experience level to the cost and set the name after all flags. Defaults to false.</p>
+    <p>(optional) '% [anvil damage chance]' will adjust the chance to damage the anvil on craft. Default is 12. Allowed values from 0-300. Over 100 will damage multiple levels. Ex: 150 will damage 1 level with a 50% chance of damaging a second.</p>
 
     <h3>GRINDSTONE RECIPE - grindstone crafting recipes</h3>
     <pre class="code">
@@ -694,10 +635,8 @@ GRINDSTONE [recipe name]
 &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the top ingredient.</li>
-        <li>The second '&lt;material[, ...]&gt;' is the bottom ingredient.</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the top ingredient.</p>
+    <p>The second '&lt;material[, ...]&gt;' is the bottom ingredient.</p>
 
     <h3>CARTOGRAPHY RECIPE - cartography crafting recipes</h3>
     <pre class="code">
@@ -705,10 +644,8 @@ CARTOGRAPHY [recipe name]
 &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
 = [chance]% &lt;material:[data]:[amount]&gt;
 </pre>
-    <ul>
-        <li>The first '&lt;material[, ...]&gt;' is the top ingredient.</li>
-        <li>The second '&lt;material[, ...]&gt;' is the bottom ingredient.</li>
-    </ul>
+    <p>The first '&lt;material[, ...]&gt;' is the top ingredient.</p>
+    <p>The second '&lt;material[, ...]&gt;' is the bottom ingredient.</p>
 
     <h3>BREW RECIPE - brewing stand recipes</h3>
     <h4 style="margin: 0; color: red;">This is an experimental feature. Expect bugs and frequent changes.</h4>
@@ -719,12 +656,10 @@ BREW [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-    <ul>
-        <li>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</li>
-        <li>The second '&lt;material&gt;:[data]' is the potion with optional data.</li>
-        <li>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</li>
-        <li>Note: Currently requires a vanilla brewing recipe, but can have customized items.</li>
-    </ul>
+    <p>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</p>
+    <p>The second '&lt;material&gt;:[data]' is the potion with optional data.</p>
+    <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
+    <p>Note: Currently requires a vanilla brewing recipe, but can have customized items.</p>
     <div>
         <b>Example:</b>
     </div>
@@ -749,6 +684,11 @@ potion
 <div id="item-tooltip" class="item-tooltip">
     <div class="item-tooltip__detail"></div>
 </div>
+<nav class="nav-docs">
+    <div class="container">
+        <b>Basic Recipes</b> | <a href="advanced recipes.html">Advanced Recipes</a> | <a href="recipe flags.html">Recipe Flags</a> | <a href="recipe books.html">Recipe Books</a> | <a href="name index.html">Name Index</a> | <a href="commands & permissions.html">Commands &amp; Permissions</a>
+    </div>
+</nav>
 
 <script src="https://www.recipemanager.dev/js/inventory/inventory.js?v=1"></script>
 <script src="https://www.recipemanager.dev/js/code-highlight/code-highlight.js?v=1"></script>

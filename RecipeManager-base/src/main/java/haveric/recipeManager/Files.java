@@ -189,8 +189,12 @@ public class Files {
         }
 
         s.append("<title>Recipe Flags - RecipeManager2</title>");
-        s.append("<style>body {margin: 0;font-family: Arial;padding: 15px;} nav {max-width: 990px;margin: 0 auto;} pre {font-family:Lucida Console;font-size:16px;} .back-to-top {padding-left: 5px; font-size: 12px;}</style>");
-        s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a></nav>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
+        s.append(NL).append("</div></nav>");
+        s.append(NL).append("<div class='container-full'>");
         s.append(NL).append("<h1>Recipe Flags</h1>");
         s.append(NL).append("<pre>");
         s.append(NL);
@@ -309,6 +313,10 @@ public class Files {
         }
         s.append(NL);
         s.append("</pre>");
+        s.append("</div>");
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
+        s.append(NL).append("</div></nav>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_FLAGS);
 
@@ -323,8 +331,12 @@ public class Files {
         StringBuilder s = new StringBuilder();
 
         s.append("<title>Commands &amp; Permissions - RecipeManager2</title>");
-        s.append("<style>body {margin: 0;font-family: Arial;padding: 15px;} nav {max-width: 990px;margin: 0 auto;} pre {font-family:Lucida Console;font-size:16px;} table {border-collapse: collapse;} table, th, td {border: 1px solid #000;} th, td {padding: 5px;} .command {width: 40%;} .command__text {font-size: 14px;}</style>");
-        s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b></nav>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
+        s.append(NL).append("</div></nav>");
+        s.append(NL).append("<div class='container-full'>");
         s.append(NL).append("<h1>Commands &amp; Permissions</h1>");
         s.append(NL).append("<pre>");
         s.append(NL).append("<h2>Commands</h2>");
@@ -451,6 +463,10 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append("</pre>");
+        s.append("</div>");
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
+        s.append(NL).append("</div></nav>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_COMMANDS);
 
@@ -465,8 +481,12 @@ public class Files {
         StringBuilder s = new StringBuilder(24000);
 
         s.append("<title>Name Index - RecipeManager2</title>");
-        s.append("<style>body {margin: 0;font-family: Arial;padding: 15px;} nav {max-width: 990px;margin: 0 auto;} pre {font-family:Lucida Console;font-size:16px;} .back-to-top {padding-left: 5px; font-size: 12px;}</style>");
-        s.append(NL).append("<nav><a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a></nav>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
+        s.append(NL).append("</div></nav>");
+        s.append(NL).append("<div class='container-full'>");
         s.append(NL).append("<h1>Name Index</h1>");
         s.append(NL).append("<pre>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods!");
@@ -716,6 +736,10 @@ public class Files {
         s.append(NL);
         s.append(NL);
         s.append(NL).append("</pre>");
+        s.append(NL).append("</div>");
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
+        s.append(NL).append("</div></nav>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_NAMES);
 
