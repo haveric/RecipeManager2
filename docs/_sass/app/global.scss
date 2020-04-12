@@ -1,4 +1,19 @@
+@import "vendor/h5bp/clearfix";
+
+body {
+    font-family: Arial;
+}
+
+a {
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
+    @extend .clearfix;
 }
