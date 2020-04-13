@@ -9,6 +9,20 @@ title: RecipeManager
 
     </div>
     <div class="references">
+        <div class="releases">
+            <h4 class="releases__title">Latest Releases:</h4>
+            {% for release in site.github.releases limit:3 %}
+                <a href="{{ release.html_url }}">{{ release.name }}</a> - <small>{{ release.published_at | date: "%b %d, %Y" }}</small><br/>
+                {% for asset in release.assets %}
+                    {% if asset.name == "RecipeManager.jar" %}
+                        <small><a href="{{ asset.browser_download_url }}">RecipeManager.jar</a> - {{ asset.download_count }} download{% if asset.download_count > 1 %}s{% endif %}</small><br/>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            <p>
+                <a href="/releases">View All Releases</a>
+            </p>
+        </div>
         <div class="reference">
             <a class="reference__link"  href="https://dev.bukkit.org/projects/recipemanager">
                 <img class="reference__logo logo-bukkitdev" src="/img/logos/bukkit-dev.png" alt="BukkitDev"/>

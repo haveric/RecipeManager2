@@ -1,0 +1,21 @@
+---
+layout: default
+title: Releases
+---
+
+
+<div class="container">
+    <div>
+        <h1>Releases</h1>
+        {% for release in site.github.releases %}
+            <a href="{{ release.html_url }}">{{ release.name }}</a> - <small>{{ release.published_at | date: "%b %d, %Y" }}</small><br/>
+            {% for asset in release.assets %}
+                {% if asset.name == "RecipeManager.jar" %}
+                    <small><a href="{{ asset.browser_download_url }}">RecipeManager.jar</a> - {{ asset.download_count }} download{% if asset.download_count > 1 %}s{% endif %}</small><br/>
+                {% endif %}
+            {% endfor %}
+
+            <pre style="font-size: 14px;">{{ release.body }}</pre>
+        {% endfor %}
+    </div>
+</div>
