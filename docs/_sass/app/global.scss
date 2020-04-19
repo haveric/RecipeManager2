@@ -89,6 +89,11 @@ td {
     padding: 5px;
 }
 
+.experimental {
+    margin: 0;
+    color: red;
+}
+
 .releases {
     margin-bottom: 25px;
     border-bottom: 1px solid #222;
@@ -96,6 +101,10 @@ td {
 
 .releases__title {
     margin-bottom: 5px;
+}
+
+.releases__changelog {
+    font-size: 14px;
 }
 
 .references {
