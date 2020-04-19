@@ -351,7 +351,8 @@ title: Recipe Flags
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
-      @fordelay 5 10 @command /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // Summon lightning 5 times, with a 10 tick delay between them
+      @fordelay 100 @command /summon lightning_bolt ~ ~ ~ // 100 ticks after craft, summon lightning
+      @fordelay 100 @forrepeat 5 10 @command /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // @fordelay can be chained with @forrepeat for even more customization
 
     <b>Aliases:</b> @delay
 
@@ -401,8 +402,7 @@ title: Recipe Flags
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
-      @forrepeat 100 @command /summon lightning_bolt ~ ~ ~ // 100 ticks after craft, summon lightning
-      @forrepeat 100 @forrepeat 5 10 @command /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // @forrepeat can be chained with @forrepeat for even more customization
+      @forrepeat 5 10 @command /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // Summon lightning 5 times, with a 10 tick delay between them
 
     <b>Aliases:</b> @repeat
 

@@ -38,7 +38,8 @@ public class FlagForDelay extends Flag {
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} 5 10 " + FlagType.COMMAND + " /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // Summon lightning 5 times, with a 10 tick delay between them",
+            "{flag} 100 " + FlagType.COMMAND + " /summon lightning_bolt ~ ~ ~ // 100 ticks after craft, summon lightning",
+            "{flag} 100 " + FlagType.FOR_REPEAT + " 5 10 " + FlagType.COMMAND + " /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // {flag} can be chained with " + FlagType.FOR_REPEAT + " for even more customization",
         };
     }
 
