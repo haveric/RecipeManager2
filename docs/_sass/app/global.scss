@@ -133,3 +133,20 @@ td {
 .logo-github {
     height: 35px;
 }
+
+.table-of-contents {
+    ul {
+        padding-left: 20px;
+    }
+
+    ul,
+    li {
+        list-style: none;
+    }
+
+    img {
+        width: 28px;
+        margin-right: 10px;
+        margin-bottom: 2px;
+    }
+}
