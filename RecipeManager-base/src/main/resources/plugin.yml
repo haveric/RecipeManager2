@@ -63,6 +63,10 @@ commands:
     description: creates a recipe from the leftmost 3x3 ingredients in an inventory and the held item as a result
     usage: /<command>
     permission: recipemanager.command.rmcreaterecipe
+  rmdebug:
+    description: debugging help for checking permissions and block data
+    usage: /<command>
+    permission: recipemanager.command.rmdebug
 permissions:
   recipemanager.craft:
     description: Toggles ability to craft all recipes
@@ -86,6 +90,7 @@ permissions:
       recipemanager.command.rmbooks: true
       recipemanager.command.rmupdate: true
       recipemanager.command.rmcreaterecipe: true
+      recipemanager.command.rmdebug: true
   recipemanager.debugger:
     description: Get error messages when online
     default: op
@@ -123,5 +128,8 @@ permissions:
     description:
     default: op
   recipemanager.command.rmcreaterecipe:
+    description:
+    default: op
+  recipemanager.command.rmdebug:
     description:
     default: op

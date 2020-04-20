@@ -32,6 +32,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
@@ -45,6 +46,7 @@ public class RecipeManager extends JavaPlugin {
     private static RecipeManager plugin;
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
+    private static LocalDateTime lastReload = null;
 
     private static Events events;
 
@@ -139,6 +141,7 @@ public class RecipeManager extends JavaPlugin {
         getCommand("rmbooks").setExecutor(new BooksCommand());
         getCommand("rmupdate").setExecutor(new UpdateCommand());
         getCommand("rmcreaterecipe").setExecutor(new CreateRecipeCommand());
+        getCommand("rmdebug").setExecutor(new DebugCommand());
     }
 
     @Override
@@ -172,6 +175,8 @@ public class RecipeManager extends JavaPlugin {
      *            Set to true to only check recipes, settings are unaffected.
      */
     public void reload(CommandSender sender, boolean check, boolean firstTime) {
+        lastReload = LocalDateTime.now();
+
         if (settings == null) {
             settings = new Settings(true);
         } else {
@@ -363,5 +368,9 @@ public class RecipeManager extends JavaPlugin {
 
     public static Settings getSettings() {
         return settings;
+    }
+
+    public static LocalDateTime getLastReload() {
+        return lastReload;
     }
 }
