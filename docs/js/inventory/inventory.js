@@ -1,6 +1,8 @@
 var tooltip = document.getElementById("item-tooltip");
 var tooltipDetails = tooltip.querySelector(".item-tooltip__detail");
 
+var inventories = document.getElementsByClassName("inventory");
+
 var slots = document.getElementsByClassName("slot");
 var slotCycles = document.getElementsByClassName("slot--cycle");
 
@@ -8,6 +10,41 @@ var updateTooltipPosition = function(mouseX, mouseY) {
     tooltip.style.left = (mouseX + 16) + "px";
     tooltip.style.top = (mouseY) + "px";
 }
+
+var zoomOut = function() {
+    var body = document.body;
+
+    if (body.classList.contains("inventory__zoom2")) {
+        body.classList.remove("inventory__zoom2");
+        body.classList.add("inventory__zoom1_5");
+    } else {
+        body.classList.remove("inventory__zoom1_5");
+    }
+}
+
+var zoomIn = function() {
+    var body = document.body;
+
+    if (body.classList.contains("inventory__zoom1_5")) {
+        body.classList.remove("inventory__zoom1_5");
+        body.classList.add("inventory__zoom2");
+    } else {
+        body.classList.add("inventory__zoom1_5");
+    }
+}
+
+Array.from(inventories).forEach(function(el) {
+    var zoomOutSpan = document.createElement("span");
+    zoomOutSpan.classList.add("inventory__zoom-out");
+    zoomOutSpan.addEventListener('click', zoomOut);
+
+    var zoomInSpan = document.createElement("span");
+    zoomInSpan.classList.add("inventory__zoom-in");
+    zoomInSpan.addEventListener('click', zoomIn);
+
+    el.appendChild(zoomOutSpan);
+    el.appendChild(zoomInSpan);
+});
 
 
 var mouseEnter = function(el) {
