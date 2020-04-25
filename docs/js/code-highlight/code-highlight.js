@@ -17,8 +17,16 @@ var syntaxHighlight = function(el) {
         return spanOf("code__optional", match);
     });
 
+    html = html.replace(/\[|\]/gm, function(match) {
+        return spanOf("code__optional-char", match);
+    });
+
     html = html.replace(/&lt;[^;]*&gt;/gm, function(match) {
         return spanOf("code__required", match);
+    });
+
+    html = html.replace(/&lt;|&gt;/gm, function(match) {
+        return spanOf("code__required-char", match);
     });
 
     html = html.replace(/^ *\b(craft|combine|smelt|blasting|smoking|fuel|campfire|stonecutting|compost|anvil|grindstone|cartography|brew)\b|(&lt;|<)recipe definition(&gt;|>)/gim, function(match) {

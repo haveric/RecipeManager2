@@ -91,6 +91,43 @@ td {
     color: red;
 }
 
+.doc-section {
+    padding: 15px;
+
+    p + .code {
+        margin-top: 0;
+    }
+}
+.doc-section + .doc-section {
+    border-top: 1px solid #ccc;
+}
+
+.doc-section:nth-child(2n) {
+    background-color: #f7f7f7;
+}
+
+.doc-section__inn {
+    margin-left: 15px;
+}
+
+.doc-section__title {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.doc-section__group-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-decoration: underline;
+    font-size: 32px;
+}
+
+.doc-section__group + .doc-section__group {
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 3px solid #999;
+}
+
 .releases {
     margin-bottom: 25px;
     border-bottom: 1px solid #222;
@@ -136,6 +173,7 @@ td {
 
 .table-of-contents {
     ul {
+        margin-top: 0;
         padding-left: 20px;
     }
 
@@ -149,4 +187,9 @@ td {
         margin-right: 10px;
         margin-bottom: 2px;
     }
+}
+
+.table-of-contents__title {
+    margin-top: 0;
+    margin-bottom: 0;
 }
