@@ -317,6 +317,11 @@ public class Files {
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
+        s.append(NL).append("<footer class='footer'><div class='container'><div class='footer__links'>");
+        s.append(NL).append("<a class='footer__link' href='https://dev.bukkit.org/projects/recipemanager'><img class='logo-bukkitdev' src='https://www.recipemanager.dev/img/logos/bukkit-dev.png?v=1' alt='BukkitDev'/></a>");
+        s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
+        s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
+        s.append(NL).append("</div></div></footer>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_FLAGS);
 
@@ -467,6 +472,11 @@ public class Files {
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
         s.append(NL).append("</div></nav>");
+        s.append(NL).append("<footer class='footer'><div class='container'><div class='footer__links'>");
+        s.append(NL).append("<a class='footer__link' href='https://dev.bukkit.org/projects/recipemanager'><img class='logo-bukkitdev' src='https://www.recipemanager.dev/img/logos/bukkit-dev.png?v=1' alt='BukkitDev'/></a>");
+        s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
+        s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
+        s.append(NL).append("</div></div></footer>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_COMMANDS);
 
@@ -740,6 +750,11 @@ public class Files {
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
+        s.append(NL).append("<footer class='footer'><div class='container'><div class='footer__links'>");
+        s.append(NL).append("<a class='footer__link' href='https://dev.bukkit.org/projects/recipemanager'><img class='logo-bukkitdev' src='https://www.recipemanager.dev/img/logos/bukkit-dev.png?v=1' alt='BukkitDev'/></a>");
+        s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
+        s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
+        s.append(NL).append("</div></div></footer>");
 
         Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_NAMES);
 
