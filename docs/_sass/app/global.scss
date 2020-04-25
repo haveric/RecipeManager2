@@ -1,7 +1,14 @@
 @import "vendor/h5bp/clearfix";
 
+$footer-height: 75px;
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     font-family: Arial;
+    padding-bottom: $footer-height;
 }
 
 a {
@@ -62,6 +69,27 @@ td {
 .header__logo {
     width: 64px;
     height: 64px;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    height: $footer-height;
+}
+
+.footer__links {
+    float: right;
+}
+
+.footer__link {
+    display: inline-block;
+}
+
+.footer__link + .footer__link {
+    margin-left: 40px;
 }
 
 .nav-docs {
