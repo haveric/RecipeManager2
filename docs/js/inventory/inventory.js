@@ -11,14 +11,28 @@ var updateTooltipPosition = function(mouseX, mouseY) {
     tooltip.style.top = (mouseY) + "px";
 }
 
+var zoom = window.localStorage.getItem("zoom");
+if (!zoom) {
+    window.localStorage.setItem("zoom", "1");
+    zoom = "1";
+} else if (zoom == "1.5") {
+    var body = document.body;
+    body.classList.add("inventory__zoom1_5");
+} else if (zoom == "2") {
+    var body = document.body;
+    body.classList.add("inventory__zoom2");
+}
+
 var zoomOut = function() {
     var body = document.body;
 
     if (body.classList.contains("inventory__zoom2")) {
         body.classList.remove("inventory__zoom2");
         body.classList.add("inventory__zoom1_5");
+        window.localStorage.setItem("zoom", "1.5");
     } else {
         body.classList.remove("inventory__zoom1_5");
+        window.localStorage.setItem("zoom", "1");
     }
 }
 
@@ -28,8 +42,10 @@ var zoomIn = function() {
     if (body.classList.contains("inventory__zoom1_5")) {
         body.classList.remove("inventory__zoom1_5");
         body.classList.add("inventory__zoom2");
+        window.localStorage.setItem("zoom", "2");
     } else {
         body.classList.add("inventory__zoom1_5");
+        window.localStorage.setItem("zoom", "1.5");
     }
 }
 
