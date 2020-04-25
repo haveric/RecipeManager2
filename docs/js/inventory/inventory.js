@@ -44,6 +44,20 @@ Array.from(slots).forEach(function(el) {
     el.addEventListener('mousemove', mouseMove);
 });
 
+var currentCycle = 1;
+var toggleSlots = function(maxCycles) {
+    Array.from(slotCycles).forEach(function(el) {
+        if (currentCycle % el.getAttribute('data-cycle') == 0) {
+            toggleSlotCycle(el);
+        }
+    });
+
+    currentCycle++;
+    if (currentCycle > maxCycles) {
+        currentCycle = 1;
+    }
+};
+
 var toggleSlotCycle = function(el) {
     var activeCycle = el.querySelector(".slot__cycle.active");
     activeCycle.classList.remove("active");
@@ -61,7 +75,14 @@ var toggleSlotCycle = function(el) {
     }
 }
 
-Array.from(slotCycles).forEach(function(el) {
-    var delay = el.getAttribute('data-cycle');
-    setInterval(toggleSlotCycle, delay, el);
-});
+if (slotCycles.length > 0) {
+    var maxCycles = 1;
+    Array.from(slotCycles).forEach(function(el) {
+        var dataCycle = el.getAttribute('data-cycle');
+        if (dataCycle > maxCycles) {
+            maxCycles = dataCycle;
+        }
+    });
+
+    setInterval(toggleSlots, 1000, maxCycles);
+}
