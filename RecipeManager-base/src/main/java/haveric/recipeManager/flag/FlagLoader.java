@@ -108,6 +108,10 @@ public class FlagLoader {
         }
     }
 
+    public void loadFlag(String mainAlias, Flag newFlag, String aliases) {
+        loadFlag(mainAlias, newFlag, FlagBit.NONE, aliases);
+    }
+
     public void loadFlag(String mainAlias, Flag newFlag, int bits, String... aliases) {
         if (FlagFactory.getInstance().isInitialized()) {
             MessageSender.getInstance().info(ChatColor.RED + "Custom flags must be added in your onEnable() method.");
