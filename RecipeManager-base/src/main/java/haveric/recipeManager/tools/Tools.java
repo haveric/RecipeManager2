@@ -102,6 +102,16 @@ public class Tools {
         return l.getWorld().getName() + ":" + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
     }
 
+    public static Material parseMaterial(String string) {
+        Material material = RecipeManager.getSettings().getMaterial(string);
+
+        if (material == null) {
+            material = Material.matchMaterial(string);
+        }
+
+        return material;
+    }
+
     public static ItemResult parseItemResult(String string, int defaultData) {
         return parseItemResult(string, defaultData, 0);
     }
@@ -199,12 +209,7 @@ public class Tools {
                     ErrorReporter.getInstance().warning("Ingredient data is no longer supported in 1.13 or newer. Ignoring data.", "Try using " + FlagType.INGREDIENT_CONDITION + " with the data attribute. Use the needed attribute if multiple of the same ingredient exist and need to be unique.");
                 }
 
-                Material material = RecipeManager.getSettings().getMaterial(value);
-
-                if (material == null) {
-                    material = Material.matchMaterial(value);
-                }
-
+                Material material = parseMaterial(value);
                 if (material == null) {
                     ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
                 } else {
@@ -298,12 +303,7 @@ public class Tools {
                     amountString = durSplit[2].trim();
                 }
             } else {
-                Material material = RecipeManager.getSettings().getMaterial(value);
-
-                if (material == null) {
-                    material = Material.matchMaterial(value);
-                }
-
+                Material material = parseMaterial(value);
                 if (material == null) {
                     if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
                         ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
@@ -360,12 +360,7 @@ public class Tools {
 
         value = split[0].trim();
 
-        Material material = RecipeManager.getSettings().getMaterial(value);
-
-        if (material == null) {
-            material = Material.matchMaterial(value);
-        }
-
+        Material material = parseMaterial(value);
         if (material == null) {
             if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
                 ErrorReporter.getInstance().error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
