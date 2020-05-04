@@ -8,7 +8,8 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
@@ -255,7 +256,7 @@ public class FlagKeepItem extends Flag {
         } else if (a.inventory() instanceof FurnaceInventory) {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 
-            if (a.recipe() instanceof RMBaseFurnaceRecipe) {
+            if (a.recipe() instanceof RMFurnaceRecipe || a.recipe() instanceof RMBaseFurnaceRecipe1_13) {
                 parse(inv, a, 0);
                 parse(inv, a, 1);
             } else if (a.recipe() instanceof FuelRecipe) {

@@ -1,19 +1,29 @@
 package haveric.recipeManager.tools;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Settings;
-import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.messages.Messages;
+import haveric.recipeManager.recipes.ItemResult;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Furnace;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +59,17 @@ public class ToolsItem {
         return item;
     }
 
+    public static String printRecipeChoice(RecipeChoice choice, RMCChatColor defColor, RMCChatColor endColor) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return printChoice(materialChoice.getChoices(), defColor, endColor);
+        } else if (choice instanceof  RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            return printExactChoice(exactChoice.getChoices(), defColor, endColor);
+        }
+
+        return "";
+    }
     public static String printExactChoice(List<ItemStack> items, RMCChatColor defColor, RMCChatColor endColor) {
         String print = "";
 
@@ -255,6 +276,48 @@ public class ToolsItem {
         return nullIfAir;
     }
 
+    public static RecipeChoice mergeRecipeChoiceWithMaterials(RecipeChoice choice, List<Material> materials) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> newMaterials = new ArrayList<>();
+            newMaterials.addAll(materialChoice.getChoices());
+            newMaterials.addAll(materials);
+
+            choice = new RecipeChoice.MaterialChoice(newMaterials);
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            List<ItemStack> items = new ArrayList<>();
+            for (Material material : materials) {
+                items.add(new ItemStack(material));
+            }
+
+            return mergeRecipeChoiceWithItems(choice, items);
+        }
+
+        return choice;
+    }
+
+    public static RecipeChoice mergeRecipeChoiceWithItems(RecipeChoice choice, List<ItemStack> items) {
+        if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> newItems = new ArrayList<>();
+            newItems.addAll(exactChoice.getChoices());
+            newItems.addAll(items);
+
+            choice = new RecipeChoice.ExactChoice(newItems);
+        } else if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<ItemStack> newItems = new ArrayList<>();
+            for (Material material : materialChoice.getChoices()) {
+                newItems.add(new ItemStack(material));
+            }
+            newItems.addAll(items);
+
+            choice = new RecipeChoice.ExactChoice(newItems);
+        }
+
+        return choice;
+    }
+
     public static ItemStack merge(ItemStack into, ItemStack item) {
         if (into == null || into.getType() == Material.AIR) {
             return item;
@@ -334,6 +397,413 @@ public class ToolsItem {
         }
 
         return match;
+    }
+
+    public static int getIngredientMatchQuality(ItemStack ingredient, RecipeChoice choice) {
+        Material ingredientType = ingredient.getType();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            for (Material material : materialChoice.getChoices()) {
+                if (material == ingredientType) {
+                    return 1;
+                }
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            ItemMeta ingredientMeta = ingredient.getItemMeta();
+
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> items = exactChoice.getChoices();
+
+            int bestQuality = 0;
+            for (ItemStack item : items) {
+                int quality = 0;
+                if (item.getType() == ingredientType) {
+                    ItemMeta itemMeta = item.getItemMeta();
+
+                    if (itemMeta != null && ingredientMeta != null) {
+                        if (itemMeta.hasDisplayName() && ingredientMeta.hasDisplayName()) {
+                            if (itemMeta.getDisplayName().equals(ingredientMeta.getDisplayName())) {
+                                quality ++; // Display name matches
+                            }
+                        }
+
+                        if (itemMeta.hasLore() && ingredientMeta.hasLore()) {
+                            List<String> itemLore = itemMeta.getLore();
+                            List<String> ingredientLore = ingredientMeta.getLore();
+
+                            if (itemLore != null && ingredientLore != null && itemLore.size() == ingredientLore.size()) {
+                                int numMatches = 0;
+                                for (int i = 0; i < itemLore.size(); i++) {
+                                    if (itemLore.get(i).equals(ingredientLore.get(i))) {
+                                        numMatches ++;
+                                    }
+                                }
+
+                                if (numMatches == itemLore.size()) {
+                                    quality ++; // All Lores match
+                                }
+                            }
+                        }
+
+                        if (itemMeta.hasLocalizedName() && ingredientMeta.hasLocalizedName()) {
+                            if (itemMeta.getLocalizedName().equals(ingredientMeta.getLocalizedName())) {
+                                quality ++; // Localized name matches
+                            }
+                        }
+
+                        if (itemMeta.hasEnchants() && ingredientMeta.hasEnchants()) {
+                            Map<Enchantment, Integer> itemEnchants = itemMeta.getEnchants();
+                            Map<Enchantment, Integer> ingredientEnchants = ingredientMeta.getEnchants();
+
+                            for (Map.Entry<Enchantment, Integer> entry : itemEnchants.entrySet()) {
+                                if (ingredientEnchants.containsKey(entry.getKey())) {
+                                    if (ingredientEnchants.get(entry.getKey()) == entry.getValue()) {
+                                        quality ++; // Enchantment matches
+                                    }
+                                }
+                            }
+                        }
+
+                        if (itemMeta.hasCustomModelData() && ingredientMeta.hasCustomModelData()) {
+                            if (itemMeta.getCustomModelData() == ingredientMeta.getCustomModelData()) {
+                                quality ++; // Custom Model Data matches
+                            }
+                        }
+
+                        for (ItemFlag itemFlag : ItemFlag.values()) {
+                            if (itemMeta.hasItemFlag(itemFlag) && ingredientMeta.hasItemFlag(itemFlag)) {
+                                quality ++; // Item Flag matches
+                            }
+                        }
+
+                        if (itemMeta.isUnbreakable() == ingredientMeta.isUnbreakable()) {
+                            quality ++;
+                        }
+
+                        if (itemMeta instanceof BannerMeta) {
+                            BannerMeta itemBannerMeta = (BannerMeta) itemMeta;
+                            BannerMeta ingredientBannerMeta = (BannerMeta) ingredientMeta;
+
+                            if (itemBannerMeta.numberOfPatterns() == ingredientBannerMeta.numberOfPatterns()) {
+                                quality ++;
+
+                                for (int i = 0; i < itemBannerMeta.numberOfPatterns(); i++) {
+                                    Pattern itemPattern = itemBannerMeta.getPattern(i);
+                                    Pattern ingredientPattern = ingredientBannerMeta.getPattern(i);
+                                    if (itemPattern.getPattern() == ingredientPattern.getPattern()) {
+                                        quality ++;
+                                    }
+
+                                    if (itemPattern.getColor() == ingredientPattern.getColor()) {
+                                        quality ++;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (itemMeta instanceof BookMeta) {
+                            BookMeta itemBookMeta = (BookMeta) itemMeta;
+                            BookMeta ingredientBookMeta = (BookMeta) ingredientMeta;
+
+                            if (itemBookMeta.hasAuthor() && ingredientBookMeta.hasAuthor()) {
+                                String itemAuthor = itemBookMeta.getAuthor();
+                                String ingredientAuthor = ingredientBookMeta.getAuthor();
+                                if (itemAuthor == null && ingredientAuthor == null) {
+                                    quality ++;
+                                } else if (itemAuthor != null && itemAuthor.equals(ingredientAuthor)) {
+                                    quality ++;
+                                }
+                            } else if (!itemBookMeta.hasAuthor() && !ingredientBookMeta.hasAuthor()) {
+                                quality ++;
+                            }
+
+                            if (itemBookMeta.hasTitle() && ingredientBookMeta.hasTitle()) {
+                                String itemTitle = itemBookMeta.getTitle();
+                                String ingredientTitle = ingredientBookMeta.getTitle();
+                                if (itemTitle == null && ingredientTitle == null) {
+                                    quality ++;
+                                } else if (itemTitle != null && itemTitle.equals(ingredientTitle)) {
+                                    quality ++;
+                                }
+                            } else if (!itemBookMeta.hasTitle() && !ingredientBookMeta.hasTitle()) {
+                                quality ++;
+                            }
+
+                            if (itemBookMeta.hasGeneration() && ingredientBookMeta.hasGeneration()) {
+                                if (itemBookMeta.getGeneration() == ingredientBookMeta.getGeneration()) {
+                                    quality ++;
+                                }
+                            }
+
+                            if (itemBookMeta.getPageCount() == ingredientBookMeta.getPageCount()) {
+                                quality ++;
+                            }
+                        }
+
+                        if (itemMeta instanceof EnchantmentStorageMeta) {
+                            EnchantmentStorageMeta itemStorageMeta = (EnchantmentStorageMeta) itemMeta;
+                            EnchantmentStorageMeta ingredientStorageMeta = (EnchantmentStorageMeta) ingredientMeta;
+
+                            if (itemStorageMeta.hasEnchants() && ingredientStorageMeta.hasEnchants()) {
+                                Map<Enchantment, Integer> itemEnchants = itemStorageMeta.getEnchants();
+                                Map<Enchantment, Integer> ingredientEnchants = ingredientStorageMeta.getEnchants();
+
+                                for (Map.Entry<Enchantment, Integer> entry : itemEnchants.entrySet()) {
+                                    if (ingredientEnchants.containsKey(entry.getKey())) {
+                                        if (ingredientEnchants.get(entry.getKey()) == entry.getValue()) {
+                                            quality ++; // Enchantment matches
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (itemMeta instanceof FireworkMeta) {
+                            FireworkMeta itemFireworkMeta = (FireworkMeta) itemMeta;
+                            FireworkMeta ingredientFireworkMeta = (FireworkMeta) ingredientMeta;
+
+                            if (itemFireworkMeta.getPower() == ingredientFireworkMeta.getPower()) {
+                                quality ++;
+                            }
+
+                            if (itemFireworkMeta.hasEffects() && ingredientFireworkMeta.hasEffects()) {
+                                if (itemFireworkMeta.getEffectsSize() == ingredientFireworkMeta.getEffectsSize()) {
+                                    quality ++;
+
+                                    List<FireworkEffect> itemEffects = itemFireworkMeta.getEffects();
+                                    List<FireworkEffect> ingredientEffects = ingredientFireworkMeta.getEffects();
+                                    for (int i = 0; i < itemFireworkMeta.getEffectsSize(); i++) {
+                                        quality += getFireworkEffectQuality(itemEffects.get(i), ingredientEffects.get(i));
+                                    }
+                                }
+                            } else if (!itemFireworkMeta.hasEffects() && !ingredientFireworkMeta.hasEffects()) {
+                                quality ++;
+                            }
+                        }
+
+                        if (itemMeta instanceof FireworkEffectMeta) {
+                            FireworkEffectMeta itemFireworkEffectMeta = (FireworkEffectMeta) itemMeta;
+                            FireworkEffectMeta ingredientFireworkEffectMeta = (FireworkEffectMeta) ingredientMeta;
+
+                            if (itemFireworkEffectMeta.hasEffect() == ingredientFireworkEffectMeta.hasEffect()) {
+                                quality ++;
+
+                                if (itemFireworkEffectMeta.getEffect() != null && ingredientFireworkEffectMeta.getEffect() != null) {
+                                    quality += getFireworkEffectQuality(itemFireworkEffectMeta.getEffect(), ingredientFireworkEffectMeta.getEffect());
+                                }
+                            }
+                        }
+
+                        if (itemMeta instanceof LeatherArmorMeta) {
+                            LeatherArmorMeta itemLeatherMeta = (LeatherArmorMeta) itemMeta;
+                            LeatherArmorMeta ingredientLeatherMeta = (LeatherArmorMeta) ingredientMeta;
+
+                            if (itemLeatherMeta.getColor().equals(ingredientLeatherMeta.getColor())) {
+                                quality ++;
+                            }
+                        }
+
+                        if (itemMeta instanceof PotionMeta) {
+                            PotionMeta itemPotion = (PotionMeta) itemMeta;
+                            PotionMeta ingredientPotion = (PotionMeta) ingredientMeta;
+
+                            if (itemPotion.hasColor() && ingredientPotion.hasColor()) {
+                                if (itemPotion.getColor() != null) {
+                                    if (itemPotion.getColor().equals(ingredientPotion.getColor())) {
+                                        quality++;
+                                    }
+                                }
+                            }
+
+                            PotionData itemPotionData = itemPotion.getBasePotionData();
+                            PotionData ingredientPotionData = ingredientPotion.getBasePotionData();
+
+                            if (itemPotionData.getType() == ingredientPotionData.getType()) {
+                                quality ++;
+                            }
+
+                            if (itemPotionData.isExtended() == ingredientPotionData.isExtended()) {
+                                quality ++;
+                            }
+
+                            if (itemPotionData.isUpgraded() == ingredientPotionData.isUpgraded()) {
+                                quality ++;
+                            }
+
+                            if (itemPotion.hasCustomEffects() && ingredientPotion.hasCustomEffects()) {
+                                quality ++;
+
+                                quality += getPotionEffectsQuality(itemPotion.getCustomEffects(), ingredientPotion.getCustomEffects());
+                            } else if (!itemPotion.hasCustomEffects() && !ingredientPotion.hasCustomEffects()) {
+                                quality ++;
+                            }
+                        }
+
+                        if (itemMeta instanceof Repairable) {
+                            Repairable itemRepairable = (Repairable) itemMeta;
+                            Repairable ingredientRepairable = (Repairable) ingredientMeta;
+
+                            if (itemRepairable.hasRepairCost() && ingredientRepairable.hasRepairCost()) {
+                                quality ++;
+
+                                if (itemRepairable.getRepairCost() == ingredientRepairable.getRepairCost()) {
+                                    quality++;
+                                }
+                            } else if (!itemRepairable.hasRepairCost() && !ingredientRepairable.hasRepairCost()) {
+                                quality ++;
+                            }
+                        }
+
+                        if (itemMeta instanceof BlockStateMeta) {
+                            BlockStateMeta itemBlockStateMeta = (BlockStateMeta) itemMeta;
+                            BlockStateMeta ingredientBlockStateMeta = (BlockStateMeta) ingredientMeta;
+                            BlockState itemBlockState = itemBlockStateMeta.getBlockState();
+                            BlockState ingredientBlockState = ingredientBlockStateMeta.getBlockState();
+
+                            if (itemBlockState instanceof CreatureSpawner) {
+                                CreatureSpawner itemSpawner = (CreatureSpawner) itemBlockState;
+                                CreatureSpawner ingredientSpawner = (CreatureSpawner) ingredientBlockState;
+
+                                if (itemSpawner.getSpawnedType() == ingredientSpawner.getSpawnedType()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getDelay() == ingredientSpawner.getDelay()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getMinSpawnDelay() == ingredientSpawner.getMinSpawnDelay()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getMaxSpawnDelay() == ingredientSpawner.getMaxSpawnDelay()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getMaxNearbyEntities() == ingredientSpawner.getMaxNearbyEntities()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getRequiredPlayerRange() == ingredientSpawner.getRequiredPlayerRange()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getSpawnRange() == ingredientSpawner.getSpawnRange()) {
+                                    quality ++;
+                                }
+
+                                if (itemSpawner.getSpawnCount() == ingredientSpawner.getSpawnCount()) {
+                                    quality ++;
+                                }
+                            }
+                        }
+
+                        if (itemMeta instanceof SuspiciousStewMeta) {
+                            SuspiciousStewMeta itemStewMeta = (SuspiciousStewMeta) itemMeta;
+                            SuspiciousStewMeta ingredientStewMeta = (SuspiciousStewMeta) ingredientMeta;
+
+                            if (itemStewMeta.hasCustomEffects() && ingredientStewMeta.hasCustomEffects()) {
+                                quality ++;
+
+                                quality += getPotionEffectsQuality(itemStewMeta.getCustomEffects(), ingredientStewMeta.getCustomEffects());
+                            } else if (!itemStewMeta.hasCustomEffects() && !ingredientStewMeta.hasCustomEffects()) {
+                                quality ++;
+                            }
+                        }
+                    }
+                }
+
+                if (quality > bestQuality) {
+                    bestQuality = quality;
+                }
+            }
+
+            return bestQuality;
+        }
+
+        return 0; // No item match
+    }
+
+    private static int getFireworkEffectQuality(FireworkEffect itemEffect, FireworkEffect ingredientEffect) {
+        int quality = 0;
+        if (itemEffect.getType() == ingredientEffect.getType()) {
+            quality ++;
+        }
+
+        if (itemEffect.hasFlicker() == ingredientEffect.hasFlicker()) {
+            quality ++;
+        }
+
+        if (itemEffect.hasTrail() == ingredientEffect.hasTrail()) {
+            quality ++;
+        }
+
+        List<Color> itemColors = itemEffect.getColors();
+        List<Color> ingredientColors = ingredientEffect.getColors();
+
+        if (itemColors.isEmpty() && ingredientColors.isEmpty()) {
+            quality ++;
+        } else if (itemColors.size() == ingredientColors.size()) {
+            quality ++;
+
+            for (int i = 0; i < itemColors.size(); i++) {
+                if (itemColors.get(i).equals(ingredientColors.get(i))) {
+                    quality ++;
+                }
+            }
+        }
+
+        List<Color> itemFadeColors = itemEffect.getFadeColors();
+        List<Color> ingredientFadeColors = ingredientEffect.getFadeColors();
+
+        if (itemFadeColors.isEmpty() && ingredientFadeColors.isEmpty()) {
+            quality ++;
+        } else if (itemFadeColors.size() == ingredientFadeColors.size()) {
+            quality ++;
+
+            for (int i = 0; i < itemFadeColors.size(); i++) {
+                if (itemFadeColors.get(i).equals(ingredientFadeColors.get(i))) {
+                    quality ++;
+                }
+            }
+        }
+
+        return quality;
+    }
+
+    private static int getPotionEffectsQuality(List<PotionEffect> itemPotionEffects, List<PotionEffect> ingredientPotionEffects) {
+        int quality = 0;
+        if (itemPotionEffects.size() == ingredientPotionEffects.size()) {
+            quality ++;
+
+            for (int i = 0; i < itemPotionEffects.size(); i++) {
+                PotionEffect itemPotionEffect = itemPotionEffects.get(i);
+                PotionEffect ingredientPotionEffect = ingredientPotionEffects.get(i);
+
+                if (itemPotionEffect.getType() == ingredientPotionEffect.getType()) {
+                    quality ++;
+                }
+
+                if (itemPotionEffect.getDuration() == ingredientPotionEffect.getDuration()) {
+                    quality ++;
+                }
+
+                if (itemPotionEffect.getAmplifier() == ingredientPotionEffect.getAmplifier()) {
+                    quality ++;
+                }
+
+                if (itemPotionEffect.hasParticles() == ingredientPotionEffect.hasParticles()) {
+                    quality ++;
+                }
+
+                if (itemPotionEffect.hasIcon() == ingredientPotionEffect.hasIcon()) {
+                    quality ++;
+                }
+            }
+        }
+
+        return quality;
     }
 
     public static void replaceItem(final Inventory inventory, final int slot, final ItemStack stack) {

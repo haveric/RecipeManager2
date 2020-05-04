@@ -76,6 +76,11 @@ public class FlagEnchantItem extends Flag {
     }
 
     @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
+    @Override
     public void onRemove() {
         getResult().getEnchantments().clear();
     }

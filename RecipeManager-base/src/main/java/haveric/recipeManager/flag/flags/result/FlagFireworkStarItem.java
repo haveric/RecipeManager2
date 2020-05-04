@@ -65,6 +65,11 @@ public class FlagFireworkStarItem extends Flag {
         return new FlagFireworkStarItem((FlagFireworkStarItem) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public FireworkEffect getEffect() {
         return effect;
     }

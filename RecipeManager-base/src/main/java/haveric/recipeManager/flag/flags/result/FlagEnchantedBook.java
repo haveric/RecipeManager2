@@ -72,6 +72,11 @@ public class FlagEnchantedBook extends Flag {
         return new FlagEnchantedBook((FlagEnchantedBook) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public Map<Enchantment, Integer> getEnchants() {
         return enchants;
     }

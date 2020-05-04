@@ -11,6 +11,7 @@ import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,45 @@ public class ConditionEvaluator {
         this.registrator = registrator;
     }
 
+    public boolean checkRecipeChoices(Map<Character, RecipeChoice> ingredientsChoiceMap) {
+        List<Material> repairableItems = new ArrayList<>();
+
+        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+            RecipeChoice choice = entry.getValue();
+
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> materials = materialChoice.getChoices();
+
+                for (Material material : materials) {
+                    if (material.getMaxDurability() > 0) {
+                        if (repairableItems.contains(material)) {
+                            return ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
+                        } else {
+                            repairableItems.add(material);
+                        }
+                    }
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                for (ItemStack item : items) {
+                    Material material = item.getType();
+                    if (material.getMaxDurability() > 0) {
+                        if (repairableItems.contains(material)) {
+                            return ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
+                        } else {
+                            repairableItems.add(material);
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     public boolean checkMaterialChoices(Map<Character, List<Material>> ingredientsChoiceMap) {
         List<Material> repairableItems = new ArrayList<>();
 
@@ -33,8 +73,7 @@ public class ConditionEvaluator {
             for (Material material : materials) {
                 if (material.getMaxDurability() > 0) {
                     if (repairableItems.contains(material)) {
-                        ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
-                        return false;
+                        return ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
                     } else {
                         repairableItems.add(material);
                     }
@@ -51,8 +90,7 @@ public class ConditionEvaluator {
         for (ItemStack i : ingredients) {
             if (i != null && i.getType().getMaxDurability() > 0) {
                 if (toolType == i.getType()) {
-                    ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
-                    return false;
+                    return ErrorReporter.getInstance().error("Recipes can't have exactly 2 ingredients that are identical repairable items!", "Add another ingredient to make it work or even another tool and use " + FlagType.KEEP_ITEM + " flag to keep it.");
                 }
 
                 toolType = i.getType();

@@ -124,6 +124,11 @@ public class FlagPotionItem extends Flag {
         return new FlagPotionItem((FlagPotionItem) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public short getData() {
         return data;
     }

@@ -2,9 +2,13 @@ package haveric.recipeManager.recipes.stonecutting;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +23,31 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
         RMStonecuttingRecipe recipe = new RMStonecuttingRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // check for @flags
 
-        // get the ingredient
-        String line = reader.getLine();
+        while (!reader.lineIsResult()) {
+            // get the ingredient
+            String line = reader.getLine();
 
-        List<Material> choices = parseIngredient(new String[] { line }, recipe.getType());
-        if (choices == null || choices.isEmpty()) {
-            return false;
+            List<Material> choices = parseIngredient(new String[]{line}, recipe.getType());
+            if (choices == null || choices.isEmpty()) {
+                return false;
+            }
+
+            Flags ingredientFlags = new Flags();
+            reader.parseFlags(ingredientFlags);
+
+            if (ingredientFlags.hasFlags()) {
+                List<ItemStack> items = new ArrayList<>();
+                for (Material choice : choices) {
+                    Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
+                    ingredientFlags.sendCrafted(a, true);
+
+                    items.add(a.result());
+                }
+                recipe.addIngredientChoiceItems(items);
+            } else {
+                recipe.addIngredientChoice(choices);
+            }
         }
-
-        recipe.setIngredientChoice(choices);
 
         if (recipe.hasFlag(FlagType.OVERRIDE)) {
             return ErrorReporter.getInstance().error("Recipe does not allow Overriding. Try removing the original and adding a new one.");

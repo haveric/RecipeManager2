@@ -45,6 +45,10 @@ public class Flag implements Cloneable {
         return sourceLineNum;
     }
 
+    public boolean requiresRecipeManagerModification() {
+        return true;
+    }
+
     /**
      * Parses a string to get the values for this flag.<br>
      * Has different effects for each extension of Flag object.
@@ -96,16 +100,23 @@ public class Flag implements Cloneable {
         }
     }
 
+    public final void prepare(Args a) {
+        prepare(a, false);
+    }
     /**
      * Apply the flag's effects - triggered when recipe is prepared or result is displayed
      *
      * @param a
      *            the arguments class for easily maintainable argument class
      */
-    public final void prepare(Args a) {
-        if (hasFlagPermission(a.player())) {
+    public final void prepare(Args a, boolean ignorePermission) {
+        if (ignorePermission || hasFlagPermission(a.player())) {
             onPrepare(a);
         }
+    }
+
+    public final void crafted(Args a) {
+        crafted(a, false);
     }
 
     /**
@@ -116,8 +127,8 @@ public class Flag implements Cloneable {
      * @param a
      *            the arguments class for easily maintainable argument class
      */
-    public final void crafted(Args a) {
-        if (hasFlagPermission(a.player())) {
+    public final void crafted(Args a, boolean ignorePermission) {
+        if (ignorePermission || hasFlagPermission(a.player())) {
             onCrafted(a);
         }
     }
@@ -187,12 +198,7 @@ public class Flag implements Cloneable {
     @Override
     public boolean equals(Object obj) {
         return obj == this || obj instanceof Flag && obj.hashCode() == hashCode();
-
     }
-
-    /*
-     * Non-public tools/final methods
-     */
 
     protected String[] getArguments() {
         return EMPTY_STRING;

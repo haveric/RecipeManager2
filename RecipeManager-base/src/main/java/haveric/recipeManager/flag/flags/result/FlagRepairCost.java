@@ -34,7 +34,6 @@ public class FlagRepairCost extends Flag {
             "{flag} 25 // Sets the default repair cost to 25", };
     }
 
-
     private int cost;
 
     public FlagRepairCost() {

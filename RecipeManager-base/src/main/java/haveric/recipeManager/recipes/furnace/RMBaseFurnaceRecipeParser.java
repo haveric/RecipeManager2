@@ -6,8 +6,12 @@ import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
@@ -27,7 +31,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        RMBaseFurnaceRecipe recipe;
+        SingleResultRecipe recipe;
         if (recipeType == RMCRecipeType.BLASTING) {
             recipe = new RMBlastingRecipe(fileFlags); // create recipe and copy flags from file
         } else if (recipeType == RMCRecipeType.SMOKING) {
@@ -45,13 +49,31 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         // get the ingredient and smelting time
         String[] split = reader.getLine().split("%");
 
-        if (Version.has1_13Support()) {
-            List<Material> choices = parseIngredient(split, recipe.getType());
-            if (choices == null || choices.isEmpty()) {
-                return false;
-            }
+        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+            while (!reader.lineIsResult()) {
+                String[] splitIngredient = reader.getLine().split("%");
 
-            recipe.setIngredientChoice(choices);
+                List<Material> choices = parseIngredient(splitIngredient, recipe.getType());
+                if (choices == null || choices.isEmpty()) {
+                    return false;
+                }
+
+                Flags ingredientFlags = new Flags();
+                reader.parseFlags(ingredientFlags);
+
+                if (ingredientFlags.hasFlags()) {
+                    List<ItemStack> items = new ArrayList<>();
+                    for (Material choice : choices) {
+                        Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
+                    ((RMBaseFurnaceRecipe1_13) recipe).addIngredientChoiceItems(items);
+                } else {
+                    ((RMBaseFurnaceRecipe1_13) recipe).addIngredientChoice(choices);
+                }
+            }
         } else {
             if (split.length == 0) {
                 return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
@@ -67,7 +89,8 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                 return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
             }
 
-            recipe.setIngredient(ingredient);
+            ((RMFurnaceRecipe) recipe).setIngredient(ingredient);
+            reader.nextLine();
         }
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
@@ -116,11 +139,13 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                     return ErrorReporter.getInstance().error("Smelting recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
                 }
             }
-
-            recipe.setMinTime(minTime);
-            recipe.setMaxTime(maxTime);
-
-            reader.nextLine();
+            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                ((RMBaseFurnaceRecipe1_13) recipe).setMinTime(minTime);
+                ((RMBaseFurnaceRecipe1_13) recipe).setMaxTime(maxTime);
+            } else {
+                ((RMFurnaceRecipe) recipe).setMinTime(minTime);
+                ((RMFurnaceRecipe) recipe).setMaxTime(maxTime);
+            }
 
             if (reader.getLine().charAt(0) == '&') { // check if we have a fuel
                 ItemStack fuelItem = Tools.parseItem(reader.getLine().substring(1), 0, ParseBit.NO_AMOUNT);
@@ -133,8 +158,13 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                     return ErrorReporter.getInstance().error("Fuel can not be air!");
                 }
 
-                recipe.setFuel(fuelItem);
-                reader.parseFlags(recipe.getFuel().getFlags());
+                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                    ((RMBaseFurnaceRecipe1_13) recipe).setFuel(fuelItem);
+                    reader.parseFlags(((RMBaseFurnaceRecipe1_13) recipe).getFuel().getFlags());
+                } else {
+                    ((RMFurnaceRecipe) recipe).setFuel(fuelItem);
+                    reader.parseFlags(((RMFurnaceRecipe) recipe).getFuel().getFlags());
+                }
             }
         }
 

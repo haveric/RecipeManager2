@@ -3,9 +3,13 @@ package haveric.recipeManager.recipes.campfire;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +27,30 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
         // get the ingredient and cooking time
         String[] split = reader.getLine().split("%");
 
-        List<Material> choices = parseIngredient(split, recipe.getType());
-        if (choices == null || choices.isEmpty()) {
-            return false;
-        }
+        while (!reader.lineIsResult()) {
+            String[] splitIngredient = reader.getLine().split("%");
 
-        recipe.setIngredientChoice(choices);
+            List<Material> choices = parseIngredient(splitIngredient, recipe.getType());
+            if (choices == null || choices.isEmpty()) {
+                return false;
+            }
+
+            Flags ingredientFlags = new Flags();
+            reader.parseFlags(ingredientFlags);
+
+            if (ingredientFlags.hasFlags()) {
+                List<ItemStack> items = new ArrayList<>();
+                for (Material choice : choices) {
+                    Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
+                    ingredientFlags.sendCrafted(a, true);
+
+                    items.add(a.result());
+                }
+                recipe.addIngredientChoiceItems(items);
+            } else {
+                recipe.addIngredientChoice(choices);
+            }
+        }
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 

@@ -10,7 +10,6 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -26,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class CombineRecipe extends PreparableResultRecipe {
+public class CombineRecipe extends BaseCombineRecipe {
     private List<List<Material>> ingredientChoiceList = new ArrayList<>();
     private List<ItemStack> ingredients;
 

@@ -61,7 +61,7 @@ public abstract class AbstractBaseRecipe {
     }
 
     public String getInvalidErrorMessage() {
-        return WordUtils.capitalizeFully(getType().getDirective()) + " Recipe" + getName() + " is invalid!";
+        return WordUtils.capitalizeFully(getType().getDirective()) + " Recipe " + getName() + " is invalid!";
     }
 
     public List<String> getIndexes() {

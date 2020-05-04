@@ -1,12 +1,13 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.junit.Test;
 
@@ -165,11 +166,11 @@ public class IngredientTest extends FlagBaseTest {
 
         assertEquals(9, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CombineRecipe recipe = (CombineRecipe) entry.getKey();
+            CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            List<List<Material>> ingredientChoiceMap = recipe.getIngredientChoiceList();
+            List<RecipeChoice> ingredientChoiceMap = recipe.getIngredientChoiceList();
 
             assertTrue(containsItem(ingredientChoiceMap, Material.DIRT));
 
@@ -231,11 +232,11 @@ public class IngredientTest extends FlagBaseTest {
 
         assertEquals(2, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CombineRecipe recipe = (CombineRecipe) entry.getKey();
+            CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            List<List<Material>> ingredientChoiceMap = recipe.getIngredientChoiceList();
+            List<RecipeChoice> ingredientChoiceMap = recipe.getIngredientChoiceList();
             if (resultType == Material.DIRT) {
                 assertFalse(containsItem(ingredientChoiceMap, Material.STONE));
             } else if (resultType == Material.STONE) {
@@ -244,13 +245,29 @@ public class IngredientTest extends FlagBaseTest {
         }
     }
 
-    private boolean containsItem(List<List<Material>> list, Material mat) {
+    private boolean containsItem(List<RecipeChoice> list, Material mat) {
         boolean contains = false;
 
-        for (List<Material> materials : list) {
-            if (materials.contains(mat)) {
-                contains = true;
-                break;
+        for (RecipeChoice choice : list) {
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> materials = materialChoice.getChoices();
+
+                if (materials.contains(mat)) {
+                    contains = true;
+                    break;
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                for (ItemStack item : items) {
+                    Material material = item.getType();
+                    if (material == mat) {
+                        contains = true;
+                        break;
+                    }
+                }
             }
         }
 

@@ -1,14 +1,16 @@
 package haveric.recipeManager.recipes.combine;
 
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -16,16 +18,17 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class CombineRecipe1_13 extends CombineRecipe {
-    private List<List<Material>> ingredientChoiceList = new ArrayList<>();
+public class CombineRecipe1_13 extends BaseCombineRecipe {
+    private List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
 
     public CombineRecipe1_13() {
     }
 
     public CombineRecipe1_13(ShapelessRecipe recipe) {
-        setIngredientChoice(recipe.getChoiceList());
+        setIngredientChoiceList(recipe.getChoiceList());
 
         setResult(recipe.getResult());
     }
@@ -37,9 +40,8 @@ public class CombineRecipe1_13 extends CombineRecipe {
             CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
 
             if (!r.ingredientChoiceList.isEmpty()) {
-                for (List<Material> ingredientChoice : r.ingredientChoiceList) {
-                    ArrayList<Material> cloneList = new ArrayList<>(ingredientChoice);
-                    ingredientChoiceList.add(cloneList);
+                for (RecipeChoice ingredientChoice : r.ingredientChoiceList) {
+                    ingredientChoiceList.add(ingredientChoice.clone());
                 }
             }
         }
@@ -49,47 +51,11 @@ public class CombineRecipe1_13 extends CombineRecipe {
         super(flags);
     }
 
-    /**
-     * @return clone of ingredients list
-     */
-    public List<ItemStack> getIngredients() {
-        return null; // TODO: 1.13 doesn't use this, can we remove?
-    }
-
-    public void addIngredient(int amount, Material type, short data) {
-        // TODO: 1.13 doesn't use this, can we remove?
-    }
-
-    public void setIngredients(List<ItemStack> newIngredients) {
-        // TODO: 1.13 doesn't use this, can we remove?
-    }
-
-    public List<List<Material>> getIngredientChoiceList() {
+    public List<RecipeChoice> getIngredientChoiceList() {
         return ingredientChoiceList;
     }
 
-    public void addIngredientChoice(RecipeChoice choice) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-            List<Material> choices = materialChoice.getChoices();
-            ingredientChoiceList.add(choices);
-        }
-
-        updateHash();
-    }
-
-    public void setIngredientChoice(List<RecipeChoice> recipeChoices) {
-        ingredientChoiceList.clear();
-
-        for (RecipeChoice choice : recipeChoices) {
-            addIngredientChoice(choice);
-        }
-
-        updateHash();
-    }
-
-    public void setIngredientChoiceList(List<List<Material>> recipeChoices) {
+    public void setIngredientChoiceList(List<RecipeChoice> recipeChoices) {
         ingredientChoiceList.clear();
 
         ingredientChoiceList.addAll(recipeChoices);
@@ -100,19 +66,41 @@ public class CombineRecipe1_13 extends CombineRecipe {
     private void updateHash() {
         StringBuilder str = new StringBuilder("combine");
 
-        int size = ingredientChoiceList.size();
-        for (int i = 0; i < size; i++) {
-            List<Material> ingredientChoice = ingredientChoiceList.get(i);
+        for (RecipeChoice choice : ingredientChoiceList) {
+            str.append(" ");
 
-            List<Material> sorted = new ArrayList<>(ingredientChoice);
-            Collections.sort(sorted);
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                str.append("material:");
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
 
-            for (Material material : sorted) {
-                str.append(material.toString()).append(';');
-            }
+                List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
+                Collections.sort(sorted);
 
-            if (i + 1 < size) {
-                str.append(",");
+                int materialsSize = sorted.size();
+                for (int i = 0; i < materialsSize; i++) {
+                    str.append(sorted.get(i).toString());
+
+                    if (i + 1 < materialsSize) {
+                        str.append(",");
+                    }
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                str.append("exact:");
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+
+                List<ItemStack> sorted = new ArrayList<>(exactChoice.getChoices());
+                sorted.sort(Comparator.comparing(ItemStack::getType));
+
+                int itemsSize = sorted.size();
+                for (int i = 0; i < itemsSize; i++) {
+                    str.append(sorted.get(i).hashCode());
+
+                    if (i + 1 < itemsSize) {
+                        str.append(",");
+                    }
+                }
+            } else {
+                str.append("air");
             }
         }
 
@@ -128,20 +116,40 @@ public class CombineRecipe1_13 extends CombineRecipe {
         s.append(" (");
 
         int ingredientChoiceListSize = ingredientChoiceList.size();
-        for (int i = 0; i < ingredientChoiceListSize; i++) {
-            List<Material> ingredientChoice = ingredientChoiceList.get(i);
+        for (int j = 0; j < ingredientChoiceListSize; j++) {
+            RecipeChoice choice = ingredientChoiceList.get(j);
 
-            int ingredientChoiceSize = ingredientChoice.size();
-            for (int j = 0; j < ingredientChoiceSize; j++) {
-                s.append(ingredientChoice.get(j).toString().toLowerCase());
-
-                if (j + 1 < ingredientChoiceSize) {
-                    s.append(",");
-                }
+            if (j > 0) {
+                s.append(" ");
             }
 
-            if (i + 1 < ingredientChoiceListSize) {
-                s.append(" ");
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                s.append("material:");
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                List<Material> materials = materialChoice.getChoices();
+                int materialsSize = materials.size();
+                for (int i = 0; i < materialsSize; i++) {
+                    s.append(materials.get(i).toString());
+
+                    if (i + 1 < materialsSize) {
+                        s.append(",");
+                    }
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                s.append("exact:");
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                int itemsSize = items.size();
+                for (int i = 0; i < itemsSize; i++) {
+                    s.append(items.get(i).getType().toString()).append("-").append(items.get(i).hashCode());
+
+                    if (i + 1 < itemsSize) {
+                        s.append(",");
+                    }
+                }
+            } else {
+                s.append("air");
             }
         }
 
@@ -166,11 +174,19 @@ public class CombineRecipe1_13 extends CombineRecipe {
         if (vanilla) {
             bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
+            ItemResult firstResult = getFirstResult();
+
+            Args a = ArgBuilder.create().result(firstResult).build();
+            getFlags().sendPrepare(a, true);
+            firstResult.getFlags().sendPrepare(a, true);
+
+            ItemStack result = Tools.createItemRecipeId(a.result(), hashCode());
+
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
         }
 
-        for (List<Material> materialChoice : ingredientChoiceList) {
-            bukkitRecipe.addIngredient(new RecipeChoice.MaterialChoice(materialChoice));
+        for (RecipeChoice choice : ingredientChoiceList) {
+            bukkitRecipe.addIngredient(choice);
         }
 
         return bukkitRecipe;
@@ -196,10 +212,8 @@ public class CombineRecipe1_13 extends CombineRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        for (List<Material> materials : ingredientChoiceList) {
-            // TODO: Check IngredientConditions to get Names
-
-            s.append('\n').append(ToolsItem.printChoice(materials, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        for (RecipeChoice choice : ingredientChoiceList) {
+            s.append('\n').append(ToolsItem.printRecipeChoice(choice, RMCChatColor.BLACK, RMCChatColor.BLACK));
         }
 
         return s.toString();
@@ -209,10 +223,26 @@ public class CombineRecipe1_13 extends CombineRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        for (List<Material> materials : ingredientChoiceList) {
-            if (materials.contains(type)) {
-                found++;
-                break;
+        for (RecipeChoice choice : ingredientChoiceList) {
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+                List<Material> materials = materialChoice.getChoices();
+
+                if (materials.contains(type)) {
+                    found++;
+                    break;
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                List<ItemStack> items = exactChoice.getChoices();
+
+                for (ItemStack item : items) {
+                    if (item.getType() == type) {
+                        found++;
+                        break;
+                    }
+                }
             }
         }
 

@@ -77,6 +77,11 @@ public class FlagFireworkItem extends Flag {
         return new FlagFireworkItem((FlagFireworkItem) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public int getPower() {
         return power;
     }

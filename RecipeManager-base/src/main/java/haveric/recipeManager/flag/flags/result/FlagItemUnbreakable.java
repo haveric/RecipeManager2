@@ -56,6 +56,11 @@ public class FlagItemUnbreakable extends Flag {
     }
 
     @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
+    @Override
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
         if (value != null && value.equalsIgnoreCase("false")) {

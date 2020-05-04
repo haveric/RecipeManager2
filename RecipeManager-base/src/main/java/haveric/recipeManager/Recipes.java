@@ -7,8 +7,8 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.*;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.combine.BaseCombineRecipe;
+import haveric.recipeManager.recipes.craft.BaseCraftRecipe;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,8 +30,8 @@ public class Recipes {
 
     // Quick-find index
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
-    private Map<String, Map<String, BaseRecipe>> indexRecipes = new HashMap<>();
-    private Map<String, Map<String, BaseRecipe>> indexRemovedRecipes = new HashMap<>();
+    private Map<String, Map<String, List<BaseRecipe>>> indexRecipes = new HashMap<>();
+    private Map<String, Map<String, List<BaseRecipe>>> indexRemovedRecipes = new HashMap<>();
     private Map<String, Boolean> recipeTypeContainsOverride = new HashMap<>();
 
     public Recipes() {
@@ -115,7 +115,11 @@ public class Recipes {
     public List<BaseRecipe> getRecipesOfType(String type) {
         List<BaseRecipe> recipes = new ArrayList<>();
         if (indexRecipes.containsKey(type)) {
-            recipes.addAll(indexRecipes.get(type).values());
+            Map<String, List<BaseRecipe>> mappedRecipes = indexRecipes.get(type);
+            Collection<List<BaseRecipe>> recipeCollection = mappedRecipes.values();
+            for (List<BaseRecipe> recipeList : recipeCollection) {
+                recipes.addAll(recipeList);
+            }
         }
 
         return recipes;
@@ -142,27 +146,41 @@ public class Recipes {
     }
 
     public BaseRecipe getRecipe(String type, List<ItemStack> ingredients, ItemStack result) {
-        BaseRecipe potentialRecipe = null;
-
+        List<BaseRecipe> potentialRecipes = new ArrayList<>();
         replaceNullItemsWithAir(ingredients);
 
         BaseRecipe blankBaseRecipe = RecipeTypeFactory.getInstance().getRecipeType(type);
         List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
         if (recipeIndexes != null) {
             if (indexRecipes.containsKey(type)) {
-                Map<String, BaseRecipe> recipes = indexRecipes.get(type);
+                Map<String, List<BaseRecipe>> recipes = indexRecipes.get(type);
 
                 for (String recipeIndex : recipeIndexes) {
-                    potentialRecipe = recipes.get(recipeIndex);
-
-                    if (potentialRecipe != null) {
-                        break;
+                    if (recipes.containsKey(recipeIndex)) {
+                        potentialRecipes.addAll(recipes.get(recipeIndex));
                     }
                 }
             }
         }
 
-        return potentialRecipe;
+        if (potentialRecipes.isEmpty()) {
+            return null;
+        } else if (potentialRecipes.size() == 1) {
+            return potentialRecipes.get(0);
+        } else {
+            int matchQuality = 0;
+            BaseRecipe closestRecipe = null;
+
+            for (BaseRecipe recipe : potentialRecipes) {
+                int quality = recipe.getIngredientMatchQuality(ingredients);
+                if (quality > matchQuality) {
+                    matchQuality = quality;
+                    closestRecipe = recipe;
+                }
+            }
+
+            return closestRecipe;
+        }
     }
 
     public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient) {
@@ -178,27 +196,41 @@ public class Recipes {
     }
 
     public BaseRecipe getRemovedRecipe(String type, List<ItemStack> ingredients, ItemStack result) {
-        BaseRecipe potentialRecipe = null;
-
+        List<BaseRecipe> potentialRecipes = new ArrayList<>();
         replaceNullItemsWithAir(ingredients);
 
         BaseRecipe blankBaseRecipe = RecipeTypeFactory.getInstance().getRecipeType(type);
         List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
         if (recipeIndexes != null) {
             if (indexRemovedRecipes.containsKey(type)) {
-                Map<String, BaseRecipe> recipes = indexRemovedRecipes.get(type);
+                Map<String, List<BaseRecipe>> recipes = indexRemovedRecipes.get(type);
 
                 for (String recipeIndex : recipeIndexes) {
-                    potentialRecipe = recipes.get(recipeIndex);
-
-                    if (potentialRecipe != null) {
-                        break;
+                    if (recipes.containsKey(recipeIndex)) {
+                        potentialRecipes.addAll(recipes.get(recipeIndex));
                     }
                 }
             }
         }
 
-        return potentialRecipe;
+        if (potentialRecipes.isEmpty()) {
+            return null;
+        } else if (potentialRecipes.size() == 1) {
+            return potentialRecipes.get(0);
+        } else {
+            int matchQuality = 0;
+            BaseRecipe closestRecipe = null;
+
+            for (BaseRecipe recipe : potentialRecipes) {
+                int quality = recipe.getIngredientMatchQuality(ingredients);
+                if (quality > matchQuality) {
+                    matchQuality = quality;
+                    closestRecipe = recipe;
+                }
+            }
+
+            return closestRecipe;
+        }
     }
 
     private void replaceNullItemsWithAir(List<ItemStack> items) {
@@ -306,7 +338,11 @@ public class Recipes {
                 indexRemovedRecipes.put(recipeDirective, new HashMap<>());
             }
             for (String index : recipe.getIndexes()) {
-                indexRemovedRecipes.get(recipeDirective).put(index, recipe);
+                if (!indexRemovedRecipes.get(recipeDirective).containsKey(index)) {
+                    indexRemovedRecipes.get(recipeDirective).put(index, new ArrayList<>());
+                }
+
+                indexRemovedRecipes.get(recipeDirective).get(index).add(recipe);
             }
         } else { // Add to quickfind index if it's not removed
             addRecipeToQuickfindIndex(recipeDirective, recipe);
@@ -317,7 +353,7 @@ public class Recipes {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
         }
 
-        boolean isBasicRecipe = recipe instanceof CraftRecipe || recipe instanceof CombineRecipe;
+        boolean isBasicRecipe = recipe instanceof BaseCraftRecipe || recipe instanceof BaseCombineRecipe;
         if (!Version.has1_15Support()) {
             // For 1.12 AND NEWER, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
             if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
@@ -381,7 +417,10 @@ public class Recipes {
             indexRecipes.put(recipeDirective, new HashMap<>());
         }
         for (String index : recipe.getIndexes()) {
-            indexRecipes.get(recipeDirective).put(index, recipe);
+            if (!indexRecipes.get(recipeDirective).containsKey(index)) {
+                indexRecipes.get(recipeDirective).put(index, new ArrayList<>());
+            }
+            indexRecipes.get(recipeDirective).get(index).add(recipe);
         }
 
         if (!recipeTypeContainsOverride.containsKey(recipeDirective)) {

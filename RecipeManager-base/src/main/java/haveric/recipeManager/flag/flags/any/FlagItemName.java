@@ -78,6 +78,11 @@ public class FlagItemName extends Flag {
         return new FlagItemName((FlagItemName) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return !displayName.equals(resultName);
+    }
+
     public String getDisplayName() {
         return displayName;
     }

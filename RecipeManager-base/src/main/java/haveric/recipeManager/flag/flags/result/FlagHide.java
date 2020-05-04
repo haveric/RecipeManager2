@@ -70,6 +70,11 @@ public class FlagHide extends Flag {
     }
 
     @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
+    @Override
     public boolean onParse(String value, String fileName, int lineNum) {
         super.onParse(value, fileName, lineNum);
         String[] args = value.toLowerCase().split("\\|");

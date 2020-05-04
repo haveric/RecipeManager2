@@ -83,6 +83,11 @@ public class FlagBookItem extends Flag {
         return new FlagBookItem((FlagBookItem) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public String getTitle() {
         return title;
     }

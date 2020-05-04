@@ -53,6 +53,11 @@ public class FlagLeatherColor extends Flag {
     }
 
     @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
+    @Override
     public boolean onValidate() {
         ItemResult result = getResult();
 

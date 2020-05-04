@@ -67,6 +67,11 @@ public class FlagLocalizedName extends Flag {
         return new FlagLocalizedName((FlagLocalizedName) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public String getName() {
         return name;
     }

@@ -68,6 +68,11 @@ public class FlagSkullOwner extends Flag {
         return new FlagSkullOwner((FlagSkullOwner) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public boolean hasOwner() {
         return owner != null;
     }

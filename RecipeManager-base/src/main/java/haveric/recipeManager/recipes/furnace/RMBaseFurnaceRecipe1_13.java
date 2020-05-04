@@ -13,17 +13,18 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.SingleRecipeChoiceSingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Material;
-import org.bukkit.inventory.*;
-
+import org.bukkit.inventory.CookingRecipe;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
-    private List<Material> ingredientChoice = new ArrayList<>();
+public class RMBaseFurnaceRecipe1_13 extends SingleRecipeChoiceSingleResultRecipe {
     private ItemResult fuel;
     private float minTime = Vanilla.FURNACE_RECIPE_TIME;
     private float maxTime = -1;
@@ -40,7 +41,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
             if (r.ingredientChoice == null) {
                 ingredientChoice = null;
             } else {
-                ingredientChoice.addAll(r.ingredientChoice);
+                ingredientChoice = r.ingredientChoice.clone();
             }
 
             if (r.fuel == null) {
@@ -69,52 +70,6 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
     public RMBaseFurnaceRecipe1_13(CookingRecipe recipe) {
         setIngredientChoice(recipe.getInputChoice());
         setResult(recipe.getResult());
-    }
-
-    public String getRecipeBaseHash() {
-        return "";
-    }
-
-    public ItemStack getIngredient() {
-        return null; // TODO: 1.13 doesn't use this, can we remove?
-    }
-
-    public void setIngredient(ItemStack newIngredient) {
-        // TODO: 1.13 doesn't use this, can we remove?
-    }
-
-    public List<Material> getIngredientChoice() {
-        return ingredientChoice;
-    }
-
-    public void setIngredientChoice(List<Material> materials) {
-        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
-        setIngredientChoice(materialChoice);
-    }
-
-    private void setIngredientChoice(RecipeChoice choice) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            ingredientChoice.clear();
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-            List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
-            Collections.sort(sorted);
-
-            ingredientChoice.addAll(sorted);
-
-            String newHash = getRecipeBaseHash();
-
-            int size = sorted.size();
-            for (int i = 0; i < size; i++) {
-                newHash += sorted.get(i).toString();
-
-                if (i + 1 < size) {
-                    newHash += ", ";
-                }
-            }
-
-            hash = newHash.hashCode();
-        }
     }
 
     public ItemResult getFuel() {
@@ -188,44 +143,6 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         return Math.round(getCookTime() * 20.0f);
     }
 
-    @Override
-    public void resetName() {
-        StringBuilder s = new StringBuilder();
-        boolean removed = hasFlag(FlagType.REMOVE);
-
-        s.append(getRecipeBaseHash()).append(" ");
-
-        int size = ingredientChoice.size();
-        for (int i = 0; i < size; i++) {
-            s.append(ingredientChoice.get(i).toString().toLowerCase());
-
-            if (i + 1 < size) {
-                s.append(", ");
-            }
-        }
-
-        s.append(" to ");
-        s.append(getResultString());
-
-        if (removed) {
-            s.append(" [removed recipe]");
-        }
-
-        name = s.toString();
-        customName = false;
-    }
-
-    @Override
-    public List<String> getIndexes() {
-        List<String> indexString = new ArrayList<>();
-
-        for (Material material : ingredientChoice) {
-            indexString.add(material.toString());
-        }
-
-        return indexString;
-    }
-
     public String getFuelIndex() {
         String fuelIndex = "" + fuel.getType().toString();
 
@@ -236,32 +153,18 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         return fuelIndex;
     }
 
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    public boolean hasIngredientChoice() {
-        return ingredientChoice != null;
-    }
-
     public boolean hasFuel() {
         return fuel != null;
     }
 
     @Override
-    public boolean isValid() {
-        return hasIngredientChoice() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
-    }
-
-    @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult(getRecipeBaseHash());
+        StringBuilder s = getHeaderResult(getType().getDirective());
 
         String print = getConditionResultName(result);
 
         if (print.isEmpty()) {
-            print = ToolsItem.printChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);
@@ -334,29 +237,5 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
                 }
             }
         }
-    }
-
-    @Override
-    public int findItemInIngredients(Material type, Short data) {
-        int found = 0;
-
-        for (Material material : ingredientChoice) {
-            if (type == material) {
-                found++;
-                break;
-            }
-        }
-
-        return found;
-    }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 1) {
-            recipeIndexes.add(ingredients.get(0).getType().toString());
-        }
-
-        return recipeIndexes;
     }
 }

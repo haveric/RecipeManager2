@@ -69,6 +69,11 @@ public class FlagSuspiciousStewItem extends Flag {
         return new FlagSuspiciousStewItem((FlagSuspiciousStewItem) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public List<PotionEffect> getEffects() {
         return effects;
     }
@@ -108,6 +113,12 @@ public class FlagSuspiciousStewItem extends Flag {
         }
 
         return true;
+    }
+
+
+    @Override
+    public void onPrepare(Args a) {
+        onCrafted(a);
     }
 
     @Override

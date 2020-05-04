@@ -4,10 +4,11 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
@@ -18,7 +19,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class CraftRecipe1_13 extends PreparableResultRecipe {
+public class CraftRecipe1_13 extends BaseCraftRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choiceShape;
 
@@ -59,6 +60,13 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
     private void setIngredientsChoiceMap(ShapedRecipe recipe) {
         ingredientsChoiceMap.clear();
         ingredientsChoiceMap.putAll(recipe.getChoiceMap());
+
+        updateChoiceHash();
+    }
+
+    public void setIngredientsRecipeChoiceMap(Map<Character, RecipeChoice> newIngredientsChoiceMap) {
+        ingredientsChoiceMap.clear();
+        ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
 
         updateChoiceHash();
     }
@@ -237,7 +245,15 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
         if (vanilla) {
             bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
         } else {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
+            ItemResult firstResult = getFirstResult();
+
+            Args a = ArgBuilder.create().result(firstResult).build();
+            getFlags().sendPrepare(a, true);
+            firstResult.getFlags().sendPrepare(a, true);
+
+            ItemStack result = Tools.createItemRecipeId(a.result(), hashCode());
+
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), result);
         }
 
         bukkitRecipe.shape(choiceShape);

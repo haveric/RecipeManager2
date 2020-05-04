@@ -82,6 +82,11 @@ public class FlagItemLore extends Flag {
         return new FlagItemLore((FlagItemLore) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return !displayLores.equals(resultLores);
+    }
+
     public List<String> getDisplayLores() {
         return displayLores;
     }

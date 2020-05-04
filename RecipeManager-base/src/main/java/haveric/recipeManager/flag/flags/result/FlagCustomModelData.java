@@ -48,6 +48,11 @@ public class FlagCustomModelData extends Flag {
         return new FlagCustomModelData((FlagCustomModelData) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public int getCustomModelData() {
         return customModelData;
     }

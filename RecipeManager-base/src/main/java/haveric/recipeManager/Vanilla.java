@@ -565,8 +565,12 @@ public class Vanilla {
             return removeCraftLegacyRecipe((CraftRecipe) recipe);
         }
 
+        if (recipe instanceof CombineRecipe1_13) {
+            return removeCombineRecipe((CombineRecipe1_13) recipe);
+        }
+
         if (recipe instanceof CombineRecipe) {
-            return removeCombineRecipe((CombineRecipe) recipe);
+            return removeCombineLegacyRecipe((CombineRecipe) recipe);
         }
 
         if (recipe instanceof RMFurnaceRecipe1_13) {
@@ -688,52 +692,75 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    public static Recipe removeCombineRecipe(CombineRecipe recipe) {
+    public static Recipe removeCombineRecipe(CombineRecipe1_13 recipe) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
-        if (Version.has1_13Support()) {
-            List<List<Material>> ingredientChoices = recipe.getIngredientChoiceList();
+        List<RecipeChoice> ingredientChoices = recipe.getIngredientChoiceList();
+        List<List<Material>> ingredientChoiceList = new ArrayList<>();
 
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
-
-                    if (r instanceof ShapelessRecipe) {
-                        if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoices)) {
-                            iterator.remove();
-
-                            baseRecipeIterator.finish();
-
-                            return r;
-                        }
-                    }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                } catch (NoSuchElementException e) {
-                    // Vanilla datapack is disabled
+        for (RecipeChoice choice : ingredientChoices) {
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                ingredientChoiceList.add(materialChoice.getChoices());
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) ingredientChoices;
+                List<ItemStack> items = exactChoice.getChoices();
+                List<Material> materials = new ArrayList<>();
+                for (ItemStack item : items) {
+                    materials.add(item.getType());
                 }
+
+                ingredientChoiceList.add(materials);
             }
-        } else {
-            List<ItemStack> items = recipe.getIngredients();
+        }
 
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
 
-                    if (r instanceof ShapelessRecipe) {
-                        if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
-                            iterator.remove();
+                if (r instanceof ShapelessRecipe) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
+                        iterator.remove();
 
-                            baseRecipeIterator.finish();
+                        baseRecipeIterator.finish();
 
-                            return r;
-                        }
+                        return r;
                     }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
                 }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            } catch (NoSuchElementException e) {
+                // Vanilla datapack is disabled
+            }
+        }
+
+        return null;
+    }
+
+    public static Recipe removeCombineLegacyRecipe(CombineRecipe recipe) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Recipe r;
+
+        List<ItemStack> items = recipe.getIngredients();
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof ShapelessRecipe) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return r;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
 
@@ -759,7 +786,16 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     private static Recipe removeSmeltRecipe(RMFurnaceRecipe1_13 recipe) {
-        return removeFurnaceRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        RecipeChoice choice = recipe.getIngredientChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return removeFurnaceRecipe(new ItemStack(materialChoice.getChoices().get(0)));
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            return removeFurnaceRecipe(exactChoice.getChoices().get(0));
+        } else {
+            return null;
+        }
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
@@ -792,10 +828,15 @@ public class Vanilla {
     }
 
     private static Recipe removeBlastingRecipe(RMBlastingRecipe recipe) {
-        if (Version.has1_13Support()) {
-            return removeBlastingRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        RecipeChoice choice = recipe.getIngredientChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return removeBlastingRecipe(new ItemStack(materialChoice.getChoices().get(0)));
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            return removeBlastingRecipe(exactChoice.getChoices().get(0));
         } else {
-            return removeBlastingRecipe(recipe.getIngredient());
+            return null;
         }
     }
 
@@ -829,10 +870,15 @@ public class Vanilla {
     }
 
     private static Recipe removeSmokingRecipe(RMSmokingRecipe recipe) {
-        if (Version.has1_13Support()) {
-            return removeSmokingRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        RecipeChoice choice = recipe.getIngredientChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return removeSmokingRecipe(new ItemStack(materialChoice.getChoices().get(0)));
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            return removeSmokingRecipe(exactChoice.getChoices().get(0));
         } else {
-            return removeSmokingRecipe(recipe.getIngredient());
+            return null;
         }
     }
 
@@ -866,7 +912,16 @@ public class Vanilla {
     }
 
     private static Recipe removeCampfireRecipe(RMCampfireRecipe recipe) {
-        return removeCampfireRecipe(new ItemStack(recipe.getIngredientChoice().get(0)));
+        RecipeChoice choice = recipe.getIngredientChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return removeCampfireRecipe(new ItemStack(materialChoice.getChoices().get(0)));
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            return removeCampfireRecipe(exactChoice.getChoices().get(0));
+        } else {
+            return null;
+        }
     }
 
     private static Recipe removeCampfireRecipe(ItemStack ingredient) {
@@ -899,7 +954,16 @@ public class Vanilla {
     }
 
     private static Recipe removeStonecuttingRecipe(RMStonecuttingRecipe recipe) {
-        return removeStonecuttingRecipe(new ItemStack(recipe.getIngredientChoice().get(0)), recipe.getResult());
+        RecipeChoice choice = recipe.getIngredientChoice();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            return removeStonecuttingRecipe(new ItemStack(materialChoice.getChoices().get(0)), recipe.getResult());
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            return removeStonecuttingRecipe(exactChoice.getChoices().get(0), recipe.getResult());
+        } else {
+            return null;
+        }
     }
 
     private static Recipe removeStonecuttingRecipe(ItemStack ingredient, ItemStack result) {
@@ -950,6 +1014,9 @@ public class Vanilla {
             return replaceCraftRecipeV1_12((CraftRecipe) recipe);
         }
 
+        if (recipe instanceof CombineRecipe1_13) {
+            return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe);
+        }
         if (recipe instanceof CombineRecipe) {
             return replaceCombineRecipeV1_12((CombineRecipe) recipe);
         }
@@ -1044,7 +1111,61 @@ public class Vanilla {
     }
 
     /**
-     * V1_12 or newer supported only.
+     * V1_13 or newer supported only.
+     * Replaces a RecipeManager recipe from the <b>server</b>
+     *
+     * @param recipe
+     *            RecipeManager recipe
+     * @return replaced recipe or null if not found
+     */
+    public static Recipe replaceCombineRecipeV1_13(CombineRecipe1_13 recipe) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Recipe r;
+
+        List<RecipeChoice> ingredientChoices = recipe.getIngredientChoiceList();
+        List<List<Material>> ingredientChoiceList = new ArrayList<>();
+
+        for (RecipeChoice choice : ingredientChoices) {
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                ingredientChoiceList.add(materialChoice.getChoices());
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) ingredientChoices;
+                List<ItemStack> items = exactChoice.getChoices();
+                List<Material> materials = new ArrayList<>();
+                for (ItemStack item : items) {
+                    materials.add(item.getType());
+                }
+
+                ingredientChoiceList.add(materials);
+            }
+        }
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof ShapelessRecipe) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
+                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                        baseRecipeIterator.replace(overrideItem);
+                        baseRecipeIterator.finish();
+                        return r;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            } catch (NoSuchElementException e) {
+                // Vanilla datapack is disabled
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * V1_12 only.
      * Replaces a RecipeManager recipe from the <b>server</b>
      *
      * @param recipe
@@ -1056,45 +1177,22 @@ public class Vanilla {
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
-        if (Version.has1_13Support()) {
-            List<List<Material>> choiceList = recipe.getIngredientChoiceList();
+        List<ItemStack> items = recipe.getIngredients();
 
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
 
-                    if (r instanceof ShapelessRecipe) {
-                        if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, choiceList)) {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(overrideItem);
-                            baseRecipeIterator.finish();
-                            return r;
-                        }
+                if (r instanceof ShapelessRecipe) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
+                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                        baseRecipeIterator.replace(overrideItem);
+                        baseRecipeIterator.finish();
+                        return r;
                     }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                } catch (NoSuchElementException e) {
-                    // Vanilla datapack is disabled
                 }
-            }
-        } else {
-            List<ItemStack> items = recipe.getIngredients();
-
-            while (iterator.hasNext()) {
-                try {
-                    r = iterator.next();
-
-                    if (r instanceof ShapelessRecipe) {
-                        if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(overrideItem);
-                            baseRecipeIterator.finish();
-                            return r;
-                        }
-                    }
-                } catch (NullPointerException e) {
-                    // Catch any invalid Bukkit recipes
-                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
             }
         }
 

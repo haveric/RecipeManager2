@@ -42,7 +42,6 @@ public class FlagItemNBT extends Flag {
             "{flag} {display:{Name: '{\"text\":\"CUSTOM NAME\"}'}} // Basic example, but should use " + FlagType.ITEM_NAME + " instead.", };
     }
 
-
     private String displayNBT;
     private String resultNBT;
 
@@ -57,6 +56,11 @@ public class FlagItemNBT extends Flag {
     @Override
     public FlagItemNBT clone() {
         return new FlagItemNBT((FlagItemNBT) super.clone());
+    }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return !displayNBT.equals(resultNBT);
     }
 
     public String getDisplayNBT() {

@@ -1,0 +1,249 @@
+package haveric.recipeManager.recipes;
+
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.tools.ToolsItem;
+import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
+    protected RecipeChoice ingredientChoice;
+
+    public SingleRecipeChoiceSingleResultRecipe() {
+
+    }
+
+    public SingleRecipeChoiceSingleResultRecipe(BaseRecipe recipe) {
+        super(recipe);
+
+        if (recipe instanceof SingleRecipeChoiceSingleResultRecipe) {
+            SingleRecipeChoiceSingleResultRecipe r = (SingleRecipeChoiceSingleResultRecipe) recipe;
+
+            if (r.ingredientChoice == null) {
+                ingredientChoice = null;
+            } else {
+                ingredientChoice = r.ingredientChoice.clone();
+            }
+        }
+    }
+
+    public SingleRecipeChoiceSingleResultRecipe(Flags flags) {
+        super(flags);
+    }
+
+    public RecipeChoice getIngredientChoice() {
+        return ingredientChoice;
+    }
+
+    public void addIngredientChoice(List<Material> materials) {
+        if (ingredientChoice == null) {
+            setIngredientChoice(materials);
+        } else {
+            ingredientChoice = ToolsItem.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
+            updateHash();
+        }
+    }
+
+    public void addIngredientChoiceItems(List<ItemStack> items) {
+        if (ingredientChoice == null) {
+            setIngredientChoiceItems(items);
+        } else {
+            ingredientChoice = ToolsItem.mergeRecipeChoiceWithItems(ingredientChoice, items);
+            updateHash();
+        }
+    }
+
+    public void setIngredientChoice(List<Material> materials) {
+        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
+        setIngredientChoice(materialChoice);
+    }
+
+    public void setIngredientChoiceItems(List<ItemStack> items) {
+        RecipeChoice.ExactChoice exactChoice = new RecipeChoice.ExactChoice(items);
+        setIngredientChoice(exactChoice);
+    }
+
+    protected void setIngredientChoice(RecipeChoice choice) {
+        ingredientChoice = choice.clone();
+
+        updateHash();
+    }
+
+    @Override
+    public void setResult(ItemStack newResult) {
+        Validate.notNull(newResult);
+
+        if (newResult instanceof ItemResult) {
+            result = ((ItemResult) newResult).setRecipe(this);
+        } else {
+            result = new ItemResult(newResult).setRecipe(this);
+        }
+
+        updateHash();
+    }
+
+    private void updateHash() {
+        String newHash = getType().getDirective();
+
+        if (hasIngredientChoice()) {
+            if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) ingredientChoice;
+
+                List<Material> choices = materialChoice.getChoices();
+                int size = choices.size();
+                for (int i = 0; i < size; i++) {
+                    newHash += choices.get(i).toString();
+
+                    if (i + 1 < size) {
+                        newHash += ", ";
+                    }
+                }
+            } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
+                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) ingredientChoice;
+
+                List<ItemStack> choices = exactChoice.getChoices();
+                int size = choices.size();
+                for (int i = 0; i < size; i++) {
+                    newHash += choices.get(i).toString();
+
+                    if (i + 1 < size) {
+                        newHash += ", ";
+                    }
+                }
+            }
+        }
+
+        if (hasResult()) {
+            newHash += " - " + result.getType().toString();
+        }
+
+        hash = newHash.hashCode();
+    }
+
+
+    public boolean hasIngredientChoice() {
+        return ingredientChoice != null;
+    }
+
+    @Override
+    public List<String> getIndexes() {
+        List<String> indexString = new ArrayList<>();
+
+        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
+            for (Material material : ((RecipeChoice.MaterialChoice) ingredientChoice).getChoices()) {
+                indexString.add(material.toString());
+            }
+        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
+            for (ItemStack item : ((RecipeChoice.ExactChoice) ingredientChoice).getChoices()) {
+                indexString.add(item.getType().toString());
+            }
+        }
+
+        return indexString;
+    }
+
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
+    @Override
+    public boolean isValid() {
+        return hasIngredientChoice() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
+    }
+
+    @Override
+    public void resetName() {
+        StringBuilder s = new StringBuilder();
+        boolean removed = hasFlag(FlagType.REMOVE);
+
+        s.append(getType().getDirective()).append(" ");
+
+        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materials = (RecipeChoice.MaterialChoice) ingredientChoice;
+            List<Material> materialChoices = materials.getChoices();
+            int size = materialChoices.size();
+            for (int i = 0; i < size; i++) {
+                s.append(materialChoices.get(i).toString().toLowerCase());
+
+                if (i + 1 < size) {
+                    s.append(", ");
+                }
+            }
+        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice items = (RecipeChoice.ExactChoice) ingredientChoice;
+            List<ItemStack> itemChoices = items.getChoices();
+            int size = itemChoices.size();
+            for (int i = 0; i < size; i++) {
+                s.append(itemChoices.get(i).toString().toLowerCase());
+
+                if (i + 1 < size) {
+                    s.append(", ");
+                }
+            }
+        }
+
+        s.append(" to ");
+        s.append(getResultString());
+        if (removed) {
+            s.append(" [removed recipe]");
+        }
+
+        name = s.toString();
+        customName = false;
+    }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
+            for (Material material : ((RecipeChoice.MaterialChoice) ingredientChoice).getChoices()) {
+                if (type == material) {
+                    found++;
+                    break;
+                }
+            }
+        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
+            for (ItemStack item : ((RecipeChoice.ExactChoice) ingredientChoice).getChoices()) {
+                if (type == item.getType()) {
+                    found++;
+                    break;
+                }
+            }
+        }
+
+        return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() == 1) {
+            recipeIndexes.add(ingredients.get(0).getType().toString());
+        }
+
+        return recipeIndexes;
+    }
+
+    @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and ingredient!";
+    }
+
+    @Override
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        if (ingredients.size() == 1) {
+            ItemStack ingredient = ingredients.get(0);
+
+            return ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice);
+        }
+
+        return 0;
+    }
+}

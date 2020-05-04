@@ -93,6 +93,11 @@ public class FlagMonsterSpawner extends Flag {
         return new FlagMonsterSpawner((FlagMonsterSpawner) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public EntityType getEntityType() {
         return entityType;
     }

@@ -207,6 +207,9 @@ public class Flags implements Cloneable {
         return FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.ONCE_PER_SHIFT);
     }
 
+    public boolean sendPrepare(Args a) {
+        return sendPrepare(a, false);
+    }
     /**
      * Applies all flags to the display result, specifically used for Craft/Combine recipes
      *
@@ -214,14 +217,14 @@ public class Flags implements Cloneable {
      *            arguments class
      * @return false if something was absolutely required and crafting should be cancelled
      */
-    public boolean sendPrepare(Args a) {
+    public boolean sendPrepare(Args a, boolean ignorePermission) {
         a.clear();
 
         // Prepare skull owner and nbt first so they don't get overwritten
         for (Flag flag : flags.values()) {
             if (flag.getFlagType().equals(FlagType.SKULL_OWNER) || flag.getFlagType().equals(FlagType.ITEM_NBT)) {
                 if (!isOncePerShift(flag) || a.isFirstRun()) {
-                    flag.prepare(a);
+                    flag.prepare(a, ignorePermission);
                 }
             }
         }
@@ -230,7 +233,7 @@ public class Flags implements Cloneable {
         for (Flag flag : flags.values()) {
             if (!flag.getFlagType().equals(FlagType.SKULL_OWNER) && !flag.getFlagType().equals(FlagType.ITEM_NBT)) {
                 if (!isOncePerShift(flag) || a.isFirstRun()) {
-                    flag.prepare(a);
+                    flag.prepare(a, ignorePermission);
                 }
             }
         }
@@ -238,6 +241,9 @@ public class Flags implements Cloneable {
         return !a.hasReasons();
     }
 
+    public boolean sendCrafted(Args a) {
+        return sendCrafted(a, false);
+    }
     /**
      * Applies all flags to player/location/result and compiles a list of failure reasons while returning if the list is empty (no errors). Note: not all arguments are used, you may use null wherever
      * you don't have anything to give.
@@ -246,14 +252,14 @@ public class Flags implements Cloneable {
      *            arguments class
      * @return false if something was absolutely required and crafting should be cancelled
      */
-    public boolean sendCrafted(Args a) {
+    public boolean sendCrafted(Args a, boolean ignorePermission) {
         a.clear();
 
         // Prepare skull owner and nbt first so they don't get overwritten
         for (Flag flag : flags.values()) {
             if (flag.getFlagType().equals(FlagType.SKULL_OWNER) || flag.getFlagType().equals(FlagType.ITEM_NBT)) {
                 if (!isOncePerShift(flag) || a.isFirstRun()) {
-                    flag.crafted(a);
+                    flag.crafted(a, ignorePermission);
                 }
             }
         }
@@ -262,7 +268,7 @@ public class Flags implements Cloneable {
         for (Flag flag : flags.values()) {
             if (!flag.getFlagType().equals(FlagType.SKULL_OWNER) && !flag.getFlagType().equals(FlagType.ITEM_NBT)) {
                 if (!isOncePerShift(flag) || a.isFirstRun()) {
-                    flag.crafted(a);
+                    flag.crafted(a, ignorePermission);
                 }
             }
         }

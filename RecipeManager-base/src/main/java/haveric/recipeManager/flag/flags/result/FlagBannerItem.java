@@ -69,6 +69,11 @@ public class FlagBannerItem extends Flag {
         return new FlagBannerItem((FlagBannerItem) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public DyeColor getBaseColor() {
         return baseColor;
     }

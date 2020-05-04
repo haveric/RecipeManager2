@@ -6,7 +6,8 @@ import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public abstract class BaseRecipeParser {
         boolean allowAir = true;
         boolean oneResult = false;
 
-        if (recipe instanceof RMBaseFurnaceRecipe) {
+        if (recipe instanceof RMFurnaceRecipe || recipe instanceof RMBaseFurnaceRecipe1_13) {
             allowAir = false;
             oneResult = true;
         }

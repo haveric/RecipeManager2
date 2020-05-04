@@ -1,10 +1,11 @@
 package haveric.recipeManager.recipes.furnace;
 
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
-import org.bukkit.inventory.RecipeChoice;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.BaseRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 
 public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
@@ -29,11 +30,6 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
     }
 
     @Override
-    public String getRecipeBaseHash() {
-        return "smoking";
-    }
-
-    @Override
     public RMCRecipeType getType() {
         return RMCRecipeType.SMOKING;
     }
@@ -49,7 +45,11 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
             return null;
         }
 
-        return new SmokingRecipe(getNamespacedKey(), getResult(), new RecipeChoice.MaterialChoice(getIngredientChoice()), 0, getCookTicks());
+        Args a = ArgBuilder.create().result(getResult()).build();
+        getFlags().sendPrepare(a, true);
+        getResult().getFlags().sendPrepare(a, true);
+
+        return new SmokingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), 0, getCookTicks());
     }
 
     @Override

@@ -15,6 +15,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.furnace.data.Furnaces;
@@ -33,10 +34,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 public class RMBaseFurnaceEvents extends BaseRecipeEvents {
     public RMBaseFurnaceEvents() { }
@@ -87,7 +85,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         }
     }
 
-    private RMBaseFurnaceRecipe getSpecificFurnaceRecipe(Furnace furnace, ItemStack item) {
+    private SingleResultRecipe getSpecificFurnaceRecipe(Furnace furnace, ItemStack item) {
         RMCRecipeType type;
 
         if (Version.has1_14Support() && furnace instanceof BlastFurnace) {
@@ -99,9 +97,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         }
 
         BaseRecipe recipe = RecipeManager.getRecipes().getRecipe(type, item);
-        RMBaseFurnaceRecipe furnaceRecipe = null;
-        if (recipe instanceof RMBaseFurnaceRecipe) {
-            furnaceRecipe = (RMBaseFurnaceRecipe) recipe;
+        SingleResultRecipe furnaceRecipe = null;
+        if (recipe instanceof SingleResultRecipe) {
+            furnaceRecipe = (SingleResultRecipe) recipe;
         }
 
         return furnaceRecipe;
@@ -127,7 +125,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     if (slot == null || slot.getType() == Material.AIR) {
                         ItemStack cursor = event.getOldCursor();
 
-                        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
+                        SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
 
                         if (recipe != null) {
                             FurnaceData data = Furnaces.get(furnace.getLocation());
@@ -137,7 +135,12 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                                 fuel = inventory.getFuel();
                             }
 
-                            ItemStack recipeFuel = recipe.getFuel();
+                            ItemStack recipeFuel;
+                            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                            } else {
+                                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                            }
 
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
@@ -147,11 +150,16 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
                                     if (Version.has1_14Support()) {
-                                        if (recipe.hasRandomTime()) {
-                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) recipe.getCookTicks());
+                                        assert recipe instanceof RMBaseFurnaceRecipe1_13;
+                                        if (((RMBaseFurnaceRecipe1_13) recipe).hasRandomTime()) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
                                         }
                                     } else {
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks()));
+                                        } else {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks()));
+                                        }
                                     }
                                 } else {
                                     // TODO: Handle preventing the furnace with a different result in a different way
@@ -209,7 +217,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                         ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
 
                         if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
-                            RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, hotbarItem);
+                            SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, hotbarItem);
 
                             if (recipe != null) {
                                 data.setFuelerUUID(player.getUniqueId());
@@ -218,11 +226,16 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
                                     if (Version.has1_14Support()) {
-                                        if (recipe.hasRandomTime()) {
-                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) recipe.getCookTicks());
+                                        assert recipe instanceof RMBaseFurnaceRecipe1_13;
+                                        if (((RMBaseFurnaceRecipe1_13) recipe).hasRandomTime()) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
                                         }
                                     } else {
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks()));
+                                        } else {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks()));
+                                        }
                                     }
                                 } else {
                                     // TODO: Handle preventing the furnace with a different result in a different way
@@ -235,7 +248,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     }
                 } else if (cursor != null && cursor.getType() != Material.AIR) {
                     if (clicked == null || clicked.getType() == Material.AIR || !ToolsItem.isSameItem(cursor, clicked, true)) {
-                        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
+                        SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
                         if (recipe != null) {
                             data.setFuelerUUID(player.getUniqueId());
 
@@ -245,7 +258,12 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                                 fuel = inventory.getFuel();
                             }
 
-                            ItemStack recipeFuel = recipe.getFuel();
+                            ItemStack recipeFuel;
+                            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                            } else {
+                                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                            }
 
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
@@ -256,11 +274,16 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
                                     if (Version.has1_14Support()) {
-                                        if (recipe.hasRandomTime()) {
-                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) recipe.getCookTicks());
+                                        assert recipe instanceof RMBaseFurnaceRecipe1_13;
+                                        if (((RMBaseFurnaceRecipe1_13) recipe).hasRandomTime()) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
                                         }
                                     } else {
-                                        ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks()));
+                                        } else {
+                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks()));
+                                        }
                                     }
                                 } else {
                                     // TODO: Handle preventing the furnace with a different result in a different way
@@ -423,22 +446,38 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                         event.setCancelled(true); // cancel only if we're going to mess with the items
                         new UpdateInventory(player, 0); // update inventory to see the changes client-side
                     } else {
-                        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, clicked);
+                        SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, clicked);
 
                         if (recipe != null) {
                             data.setFuelerUUID(player.getUniqueId());
 
                             boolean same = false;
 
-                            if (Version.has1_13Support()) {
-                                for (Material material : recipe.getIngredientChoice()) {
-                                    if (clicked.getType() == material) {
-                                        same = true;
-                                        break;
+                            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                RMBaseFurnaceRecipe1_13 recipe1_13 = (RMBaseFurnaceRecipe1_13) recipe;
+                                RecipeChoice choice = recipe1_13.getIngredientChoice();
+
+                                if (choice instanceof RecipeChoice.MaterialChoice) {
+                                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+                                    for (Material material : materialChoice.getChoices()) {
+                                        if (clicked.getType() == material) {
+                                            same = true;
+                                            break;
+                                        }
+                                    }
+                                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+
+                                    for (ItemStack exactItem : exactChoice.getChoices()) {
+                                        if (clicked.getType() == exactItem.getType()) {
+                                            same = true;
+                                            break;
+                                        }
                                     }
                                 }
                             } else {
-                                same = ToolsItem.isSameItem(clicked, recipe.getIngredient(), true);
+                                same = ToolsItem.isSameItem(clicked, ((RMFurnaceRecipe) recipe).getIngredient(), true);
                             }
 
                             if (same) {
@@ -449,7 +488,12 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                                     fuel = inventory.getFuel();
                                 }
 
-                                ItemStack recipeFuel = recipe.getFuel();
+                                ItemStack recipeFuel;
+                                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                    recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                                } else {
+                                    recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                                }
 
                                 if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                     event.setCancelled(true);
@@ -462,11 +506,16 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                                         event.setCurrentItem(null); // clear the clicked slot
 
                                         if (Version.has1_14Support()) {
-                                            if (recipe.hasRandomTime()) {
-                                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) recipe.getCookTicks());
+                                            assert recipe instanceof RMBaseFurnaceRecipe1_13;
+                                            if (((RMBaseFurnaceRecipe1_13) recipe).hasRandomTime()) {
+                                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
                                             }
                                         } else {
-                                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                                            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks()));
+                                            } else {
+                                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks()));
+                                            }
                                         }
                                     } else {
                                         // TODO: Handle preventing the furnace with a different result in a different way
@@ -578,7 +627,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         data.setFuel(fuel);
 
         ItemStack ingredient = inventory.getSmelting();
-        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
+        SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
         if (recipe == null) {
             if (!Version.has1_12Support()) {
@@ -588,7 +637,12 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 }
             }
         } else {
-            ItemStack recipeFuel = recipe.getFuel();
+            ItemStack recipeFuel;
+            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+            } else {
+                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+            }
 
             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                 event.setCancelled(true);
@@ -608,9 +662,14 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
             }
 
             if (Version.has1_14Support()) {
-                cookTime = (short) recipe.getCookTicks();
+                assert recipe instanceof RMBaseFurnaceRecipe1_13;
+                cookTime = (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks();
             } else {
-                cookTime = (short) (200 - recipe.getCookTicks());
+                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                    cookTime = (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
+                } else {
+                    cookTime = (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks());
+                }
             }
         }
 
@@ -680,7 +739,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
         short cookTime = 0;
         ItemStack ingredient = inventory.getSmelting();
-        RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
+        SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
         if (recipe == null) {
             RMBaseFurnaceRecipe removedRecipe = (RMBaseFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
@@ -711,20 +770,33 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     event.setResult(result.toItemStack());
 
                     if (recipe.hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
-                        recipe.subtractIngredient(inventory, result, true);
+                        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                            ((RMBaseFurnaceRecipe1_13) recipe).subtractIngredient(inventory, result, true);
+                        } else {
+                            ((RMFurnaceRecipe) recipe).subtractIngredient(inventory, result, true);
+                        }
                     }
                 }
             }
 
             if (Version.has1_14Support()) {
-                cookTime = (short) recipe.getCookTicks();
+                cookTime = (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks();
             } else {
-                cookTime = (short) (200 - recipe.getCookTicks());
+                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                    cookTime = (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
+                } else {
+                    cookTime = (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks());
+                }
             }
         }
 
         if (recipe != null) {
-            ItemStack recipeFuel = recipe.getFuel();
+            ItemStack recipeFuel;
+            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+            } else {
+                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+            }
 
             // TODO: Handle Furnace disabling recipe in 1.14
             if (!Version.has1_14Support()) {
@@ -751,7 +823,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
             }
 
 
-            RMBaseFurnaceRecipe recipe = furnaceResultRecipe((Furnace) state);
+            SingleResultRecipe recipe = furnaceResultRecipe((Furnace) state);
 
             if (recipe != null) {
                 event.setExpToDrop(0);
@@ -761,9 +833,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         }
     }
 
-    private RMBaseFurnaceRecipe furnaceResultRecipe(Furnace furnace) {
+    private SingleResultRecipe furnaceResultRecipe(Furnace furnace) {
         ItemStack ingredient = ToolsItem.nullIfAir(furnace.getInventory().getSmelting());
-        RMBaseFurnaceRecipe smeltRecipe = null;
+        SingleResultRecipe smeltRecipe = null;
         ItemStack result = furnace.getInventory().getResult();
 
         if (ingredient == null) {
@@ -836,7 +908,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 ItemStack movedItem = event.getItem();
                 Furnace furnace = furnaceInventory.getHolder();
 
-                RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, movedItem);
+                SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, movedItem);
 
                 if (recipe != null) {
                     FurnaceData data = Furnaces.get(furnace.getLocation());
@@ -845,11 +917,16 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                     if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
                         if (Version.has1_14Support()) {
-                            if (recipe.hasRandomTime()) {
-                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) recipe.getCookTicks());
+                            assert recipe instanceof RMBaseFurnaceRecipe1_13;
+                            if (((RMBaseFurnaceRecipe1_13) recipe).hasRandomTime()) {
+                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks());
                             }
                         } else {
-                            ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - recipe.getCookTicks()));
+                            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks()));
+                            } else {
+                                ToolsItem.updateFurnaceCookTimeDelayed(furnace, (short) (200 - ((RMFurnaceRecipe) recipe).getCookTicks()));
+                            }
                         }
                     } else {
                         // TODO: Handle preventing the furnace with a different result in a different way

@@ -73,6 +73,11 @@ public class FlagItemAttribute extends Flag {
         return new FlagItemAttribute((FlagItemAttribute) super.clone());
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return false;
+    }
+
     public Multimap<Attribute, AttributeModifier> getAttributes() {
         return attributes;
     }

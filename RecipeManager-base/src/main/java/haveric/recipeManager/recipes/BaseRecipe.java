@@ -270,4 +270,8 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     public boolean isValidBlockMaterial(Material material) {
         return false;
     }
+
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        return 0;
+    }
 }
