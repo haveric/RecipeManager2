@@ -1,23 +1,23 @@
 package haveric.recipeManager.recipes.grindstone;
 
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GrindstoneRecipe extends PreparableResultRecipe {
-    private List<Material> primaryIngredient = new ArrayList<>();
-    private List<Material> secondaryIngredient = new ArrayList<>();
+    private RecipeChoice primaryIngredient;
+    private RecipeChoice secondaryIngredient;
 
     public GrindstoneRecipe() {
 
@@ -29,8 +29,8 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
         if (recipe instanceof GrindstoneRecipe) {
             GrindstoneRecipe r = (GrindstoneRecipe) recipe;
 
-            setPrimaryIngredient(r.primaryIngredient);
-            setSecondaryIngredient(r.secondaryIngredient);
+            primaryIngredient = r.primaryIngredient.clone();
+            secondaryIngredient = r.secondaryIngredient.clone();
 
             updateHash();
         }
@@ -44,50 +44,66 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
         return material == Material.GRINDSTONE;
     }
 
-    public List<Material> getPrimaryIngredient() {
+    public boolean hasIngredient(char character) {
+        if (character == 'a') {
+            return primaryIngredient != null;
+        } else if (character == 'b') {
+            return secondaryIngredient != null;
+        }
+
+        return false;
+    }
+
+    public RecipeChoice getIngredient(char character) {
+        if (character == 'a') {
+            return primaryIngredient;
+        } else if (character == 'b') {
+            return secondaryIngredient;
+        }
+
+        return null;
+    }
+
+    public void setIngredient(char character, RecipeChoice choice) {
+        if (character == 'a') {
+            setPrimaryIngredient(choice);
+        } else if (character == 'b') {
+            setSecondaryIngredient(choice);
+        }
+    }
+
+    public RecipeChoice getPrimaryIngredient() {
         return primaryIngredient;
     }
 
-    public void setPrimaryIngredient(List<Material> ingredientList) {
-        primaryIngredient.clear();
-        primaryIngredient.addAll(ingredientList);
+    public void setPrimaryIngredient(RecipeChoice choice) {
+        primaryIngredient = choice.clone();
 
         updateHash();
     }
 
-    public List<Material> getSecondaryIngredient() {
+    public RecipeChoice getSecondaryIngredient() {
         return secondaryIngredient;
     }
 
-    public void setSecondaryIngredient(List<Material> ingredientList) {
-        secondaryIngredient.clear();
-        secondaryIngredient.addAll(ingredientList);
+    public void setSecondaryIngredient(RecipeChoice choice) {
+        secondaryIngredient = choice.clone();
 
         updateHash();
     }
 
     public boolean hasIngredients() {
-        return primaryIngredient != null && !primaryIngredient.isEmpty() && secondaryIngredient != null && !secondaryIngredient.isEmpty();
+        return primaryIngredient != null && secondaryIngredient != null;
     }
 
     private void updateHash() {
         StringBuilder str = new StringBuilder("grindstone");
 
-        List<Material> sortedPrimary = new ArrayList<>(primaryIngredient);
-        Collections.sort(sortedPrimary);
+        str.append(" a:");
+        str.append(ToolsItem.getRecipeChoiceHash(primaryIngredient));
 
-        for (Material material : sortedPrimary) {
-            str.append(material.toString()).append(";");
-        }
-
-        str.append(" + ");
-
-        List<Material> sortedSecondary = new ArrayList<>(secondaryIngredient);
-        Collections.sort(sortedSecondary);
-
-        for (Material material : sortedSecondary) {
-            str.append(material.toString()).append(";");
-        }
+        str.append(" b:");
+        str.append(ToolsItem.getRecipeChoiceHash(secondaryIngredient));
 
         hash = str.toString().hashCode();
     }
@@ -98,33 +114,11 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
 
         str.append("grindstone (");
 
-        List<Material> sortedPrimary = new ArrayList<>(primaryIngredient);
-        Collections.sort(sortedPrimary);
+        str.append(" a:");
+        str.append(ToolsItem.getRecipeChoiceName(primaryIngredient));
 
-        boolean first = true;
-        for (Material material : sortedPrimary) {
-            if (first) {
-                first = false;
-            } else {
-                str.append(";");
-            }
-            str.append(material.toString());
-        }
-
-        str.append(" + ");
-
-        List<Material> sortedSecondary = new ArrayList<>(secondaryIngredient);
-        Collections.sort(sortedSecondary);
-
-        first = true;
-        for (Material material : sortedSecondary) {
-            if (first) {
-                first = false;
-            } else {
-                str.append(";");
-            }
-            str.append(material.toString());
-        }
+        str.append(" b:");
+        str.append(ToolsItem.getRecipeChoiceName(secondaryIngredient));
 
         str.append(")");
 
@@ -138,9 +132,29 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
     public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
-        for (Material primary : primaryIngredient) {
-            for (Material secondary : secondaryIngredient) {
-                indexString.add(primary.toString() + "-" + secondary.toString());
+        if (primaryIngredient instanceof RecipeChoice.MaterialChoice) {
+            for (Material material : ((RecipeChoice.MaterialChoice) primaryIngredient).getChoices()) {
+                if (secondaryIngredient instanceof RecipeChoice.MaterialChoice) {
+                    for (Material material2 : ((RecipeChoice.MaterialChoice) secondaryIngredient).getChoices()) {
+                        indexString.add(material.toString() + "-" + material2.toString());
+                    }
+                } else if (secondaryIngredient instanceof RecipeChoice.ExactChoice) {
+                    for (ItemStack item : ((RecipeChoice.ExactChoice) secondaryIngredient).getChoices()) {
+                        indexString.add(material.toString() + "-" + item.getType().toString());
+                    }
+                }
+            }
+        } else if (primaryIngredient instanceof RecipeChoice.ExactChoice) {
+            for (ItemStack item : ((RecipeChoice.ExactChoice) primaryIngredient).getChoices()) {
+                if (secondaryIngredient instanceof RecipeChoice.MaterialChoice) {
+                    for (Material material : ((RecipeChoice.MaterialChoice) secondaryIngredient).getChoices()) {
+                        indexString.add(item.getType().toString() + "-" + material.toString());
+                    }
+                } else if (secondaryIngredient instanceof RecipeChoice.ExactChoice) {
+                    for (ItemStack item2 : ((RecipeChoice.ExactChoice) secondaryIngredient).getChoices()) {
+                        indexString.add(item.getType().toString() + "-" + item2.getType().toString());
+                    }
+                }
             }
         }
 
@@ -169,8 +183,8 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsItem.printChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-        s.append('\n').append(ToolsItem.printChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsItem.printRecipeChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsItem.printRecipeChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         return s.toString();
     }
@@ -180,19 +194,8 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        for (Material material : primaryIngredient) {
-            if (type == material) {
-                found++;
-                break;
-            }
-        }
-
-        for (Material material : secondaryIngredient) {
-            if (type == material) {
-                found++;
-                break;
-            }
-        }
+        found += ToolsItem.getNumMaterialsInRecipeChoice(type, primaryIngredient);
+        found += ToolsItem.getNumMaterialsInRecipeChoice(type, secondaryIngredient);
 
         return found;
     }

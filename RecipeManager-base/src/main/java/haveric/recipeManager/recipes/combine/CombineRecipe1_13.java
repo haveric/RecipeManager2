@@ -17,11 +17,10 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class CombineRecipe1_13 extends BaseCombineRecipe {
+    private String shape = "";
     private List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
 
     public CombineRecipe1_13() {
@@ -39,6 +38,8 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         if (recipe instanceof CombineRecipe1_13) {
             CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
 
+            shape = r.shape;
+
             if (!r.ingredientChoiceList.isEmpty()) {
                 for (RecipeChoice ingredientChoice : r.ingredientChoiceList) {
                     ingredientChoiceList.add(ingredientChoice.clone());
@@ -49,6 +50,10 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
     public CombineRecipe1_13(Flags flags) {
         super(flags);
+    }
+
+    public void setShape(String newShape) {
+        shape = newShape;
     }
 
     public List<RecipeChoice> getIngredientChoiceList() {
@@ -69,39 +74,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         for (RecipeChoice choice : ingredientChoiceList) {
             str.append(" ");
 
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                str.append("material:");
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-                List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
-                Collections.sort(sorted);
-
-                int materialsSize = sorted.size();
-                for (int i = 0; i < materialsSize; i++) {
-                    str.append(sorted.get(i).toString());
-
-                    if (i + 1 < materialsSize) {
-                        str.append(",");
-                    }
-                }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                str.append("exact:");
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-
-                List<ItemStack> sorted = new ArrayList<>(exactChoice.getChoices());
-                sorted.sort(Comparator.comparing(ItemStack::getType));
-
-                int itemsSize = sorted.size();
-                for (int i = 0; i < itemsSize; i++) {
-                    str.append(sorted.get(i).hashCode());
-
-                    if (i + 1 < itemsSize) {
-                        str.append(",");
-                    }
-                }
-            } else {
-                str.append("air");
-            }
+            str.append(ToolsItem.getRecipeChoiceHash(choice));
         }
 
         hash = str.toString().hashCode();
@@ -123,34 +96,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
                 s.append(" ");
             }
 
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                s.append("material:");
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                List<Material> materials = materialChoice.getChoices();
-                int materialsSize = materials.size();
-                for (int i = 0; i < materialsSize; i++) {
-                    s.append(materials.get(i).toString());
-
-                    if (i + 1 < materialsSize) {
-                        s.append(",");
-                    }
-                }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                s.append("exact:");
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                List<ItemStack> items = exactChoice.getChoices();
-
-                int itemsSize = items.size();
-                for (int i = 0; i < itemsSize; i++) {
-                    s.append(items.get(i).getType().toString()).append("-").append(items.get(i).hashCode());
-
-                    if (i + 1 < itemsSize) {
-                        s.append(",");
-                    }
-                }
-            } else {
-                s.append("air");
-            }
+            s.append(ToolsItem.getRecipeChoiceName(choice));
         }
 
         s.append(") to ");
@@ -224,25 +170,10 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         int found = 0;
 
         for (RecipeChoice choice : ingredientChoiceList) {
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-                List<Material> materials = materialChoice.getChoices();
-
-                if (materials.contains(type)) {
-                    found++;
-                    break;
-                }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                List<ItemStack> items = exactChoice.getChoices();
-
-                for (ItemStack item : items) {
-                    if (item.getType() == type) {
-                        found++;
-                        break;
-                    }
-                }
+            int num = ToolsItem.getNumMaterialsInRecipeChoice(type, choice);
+            if (num > 0) {
+                found += num;
+                break;
             }
         }
 

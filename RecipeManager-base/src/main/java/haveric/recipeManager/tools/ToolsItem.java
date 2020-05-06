@@ -23,10 +23,7 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ToolsItem {
     public static ItemResult create(Material type, int data, int amount, String name, String... lore) {
@@ -66,10 +63,11 @@ public class ToolsItem {
         } else if (choice instanceof  RecipeChoice.ExactChoice) {
             RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
             return printExactChoice(exactChoice.getChoices(), defColor, endColor);
+        } else {
+            return RMCChatColor.GRAY + "(air)" + endColor;
         }
-
-        return "";
     }
+
     public static String printExactChoice(List<ItemStack> items, RMCChatColor defColor, RMCChatColor endColor) {
         String print = "";
 
@@ -274,6 +272,104 @@ public class ToolsItem {
         }
 
         return nullIfAir;
+    }
+
+    public static int getNumMaterialsInRecipeChoice(Material type, RecipeChoice choice) {
+        int found = 0;
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            List<Material> materials = materialChoice.getChoices();
+
+            if (materials.contains(type)) {
+                found++;
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> items = exactChoice.getChoices();
+
+            for (ItemStack item : items) {
+                if (item.getType() == type) {
+                    found++;
+                }
+            }
+        }
+
+        return found;
+    }
+
+    public static String getRecipeChoiceHash(RecipeChoice choice) {
+        StringBuilder s = new StringBuilder();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            s.append("material:");
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
+            Collections.sort(sorted);
+
+            int materialsSize = sorted.size();
+            for (int i = 0; i < materialsSize; i++) {
+                s.append(sorted.get(i).toString());
+
+                if (i + 1 < materialsSize) {
+                    s.append(",");
+                }
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            s.append("exact:");
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+
+            List<ItemStack> sorted = new ArrayList<>(exactChoice.getChoices());
+            sorted.sort(Comparator.comparing(ItemStack::getType));
+
+            int itemsSize = sorted.size();
+            for (int i = 0; i < itemsSize; i++) {
+                s.append(sorted.get(i).hashCode());
+
+                if (i + 1 < itemsSize) {
+                    s.append(",");
+                }
+            }
+        } else {
+            s.append("air");
+        }
+
+        return s.toString();
+    }
+
+    public static String getRecipeChoiceName(RecipeChoice choice) {
+        StringBuilder s = new StringBuilder();
+
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            s.append("material:");
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> materials = materialChoice.getChoices();
+            int materialsSize = materials.size();
+            for (int i = 0; i < materialsSize; i++) {
+                s.append(materials.get(i).toString());
+
+                if (i + 1 < materialsSize) {
+                    s.append(",");
+                }
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            s.append("exact:");
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> items = exactChoice.getChoices();
+
+            int itemsSize = items.size();
+            for (int i = 0; i < itemsSize; i++) {
+                s.append(items.get(i).getType().toString()).append("-").append(items.get(i).hashCode());
+
+                if (i + 1 < itemsSize) {
+                    s.append(",");
+                }
+            }
+        } else {
+            s.append("air");
+        }
+
+        return s.toString();
     }
 
     public static RecipeChoice mergeRecipeChoiceWithMaterials(RecipeChoice choice, List<Material> materials) {

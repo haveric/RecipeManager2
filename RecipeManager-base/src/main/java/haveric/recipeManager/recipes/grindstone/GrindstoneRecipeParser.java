@@ -1,9 +1,17 @@
 package haveric.recipeManager.recipes.grindstone;
 
+import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +27,54 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
 
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
-        // get the ingredients
-        String[] ingredientsRaw = reader.getLine().split("\\+");
+        while (!reader.lineIsResult()) {
+            String line = reader.getLine();
+            char ingredientChar = line.substring(0, 2).trim().charAt(0);
 
-        List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
-        if (choicesList == null || choicesList.isEmpty()) {
-            return false;
-        }
+            if (ingredientChar == 'a' || ingredientChar == 'b') {
+                List<Material> choices = Tools.parseChoice(line.substring(2), ParseBit.NONE);
+                if (choices == null || choices.isEmpty()) {
+                    return false;
+                }
 
-        recipe.setPrimaryIngredient(choicesList.get(0));
-        if (choicesList.size() > 1) {
-            recipe.setSecondaryIngredient(choicesList.get(1));
+                Flags ingredientFlags = new Flags();
+                reader.parseFlags(ingredientFlags);
+
+                if (ingredientFlags.hasFlags()) {
+                    List<ItemStack> items = new ArrayList<>();
+                    for (Material choice : choices) {
+                        Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
+
+                    if (!recipe.hasIngredient(ingredientChar)) {
+                        recipe.setIngredient(ingredientChar, new RecipeChoice.ExactChoice(items));
+                    } else {
+                        recipe.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoiceWithItems(recipe.getIngredient(ingredientChar), items));
+                    }
+                } else {
+                    if (!recipe.hasIngredient(ingredientChar)) {
+                        recipe.setIngredient(ingredientChar, new RecipeChoice.MaterialChoice(choices));
+                    } else {
+                        recipe.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoiceWithMaterials(recipe.getIngredient(ingredientChar), choices));
+                    }
+                }
+            } else {
+                // get the ingredients
+                String[] ingredientsRaw = reader.getLine().split("\\+");
+
+                List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
+                if (choicesList == null || choicesList.isEmpty()) {
+                    return false;
+                }
+
+                recipe.setPrimaryIngredient(new RecipeChoice.MaterialChoice(choicesList.get(0)));
+                if (choicesList.size() > 1) {
+                    recipe.setSecondaryIngredient(new RecipeChoice.MaterialChoice(choicesList.get(1)));
+                }
+            }
         }
 
         List<ItemResult> results = new ArrayList<>();

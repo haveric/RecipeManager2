@@ -50,6 +50,8 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     shapeLine = shapeLine.substring(0, 9);
                 }
 
+                ((CombineRecipe1_13) recipe).setShape(shapeLine);
+
                 for (char c : shapeLine.toCharArray()) {
                     if (!ingredientCharacters.containsKey(c)) {
                         ingredientCharacters.put(c, 1);
@@ -126,13 +128,14 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 return ErrorReporter.getInstance().error("Shape is only supported on 1.13 or newer servers.");
             }
         } else {
-
             // get the ingredients
             String[] ingredientsRaw = reader.getLine().split("\\+");
 
             if (recipe instanceof CombineRecipe1_13) {
                 List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
 
+                StringBuilder shape = new StringBuilder();
+                char letter = 'a';
                 int items = 0;
                 for (String str : ingredientsRaw) {
                     Map<List<Material>, Integer> choiceAmountMap = Tools.parseChoiceWithAmount(str, ParseBit.NONE);
@@ -140,7 +143,6 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     // We're always returning only one item, so this should always work
                     Map.Entry<List<Material>, Integer> entry = choiceAmountMap.entrySet().iterator().next();
                     List<Material> choices = entry.getKey();
-
 
                     if (choices == null || choices.isEmpty()) {
                         return ErrorReporter.getInstance().error("Ingredient cannot be empty: " + str, "Check for incorrect spelling or missing tags or aliases.");
@@ -171,9 +173,12 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
                     for (int i = 0; i < newAmount; i++) {
                         ingredientChoiceList.add(new RecipeChoice.MaterialChoice(choices));
+                        shape.append(letter);
                     }
-                }
 
+                    letter ++;
+                }
+                ((CombineRecipe1_13) recipe).setShape(shape.toString());
                 ((CombineRecipe1_13) recipe).setIngredientChoiceList(ingredientChoiceList);
             } else {
                 List<ItemStack> ingredients = new ArrayList<>();

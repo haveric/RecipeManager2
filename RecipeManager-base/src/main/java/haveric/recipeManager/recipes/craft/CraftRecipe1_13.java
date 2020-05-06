@@ -117,40 +117,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             str.append(" ").append(entry.getKey()).append(":");
 
-            RecipeChoice choice = entry.getValue();
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                str.append("material:");
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-                List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
-                Collections.sort(sorted);
-
-                int materialsSize = sorted.size();
-                for (int i = 0; i < materialsSize; i++) {
-                    str.append(sorted.get(i).toString());
-
-                    if (i + 1 < materialsSize) {
-                        str.append(",");
-                    }
-                }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                str.append("exact:");
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-
-                List<ItemStack> sorted = new ArrayList<>(exactChoice.getChoices());
-                sorted.sort(Comparator.comparing(ItemStack::getType));
-
-                int itemsSize = sorted.size();
-                for (int i = 0; i < itemsSize; i++) {
-                    str.append(sorted.get(i).hashCode());
-
-                    if (i + 1 < itemsSize) {
-                        str.append(",");
-                    }
-                }
-            } else {
-                str.append("air");
-            }
+            str.append(ToolsItem.getRecipeChoiceHash(entry.getValue()));
         }
 
         hash = str.toString().hashCode();
@@ -179,35 +146,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             s.append(" ").append(entry.getKey()).append(":");
 
-            RecipeChoice choice = entry.getValue();
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                s.append("material:");
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                List<Material> materials = materialChoice.getChoices();
-                int materialsSize = materials.size();
-                for (int i = 0; i < materialsSize; i++) {
-                    s.append(materials.get(i).toString());
-
-                    if (i + 1 < materialsSize) {
-                        s.append(",");
-                    }
-                }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                s.append("exact:");
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                List<ItemStack> items = exactChoice.getChoices();
-
-                int itemsSize = items.size();
-                for (int i = 0; i < itemsSize; i++) {
-                    s.append(items.get(i).getType().toString()).append("-").append(items.get(i).hashCode());
-
-                    if (i + 1 < itemsSize) {
-                        s.append(",");
-                    }
-                }
-            } else {
-                s.append("air");
-            }
+            s.append(ToolsItem.getRecipeChoiceName(entry.getValue()));
         }
 
         s.append(") to ");
@@ -354,25 +293,10 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
-                List<Material> materials = materialChoice.getChoices();
-
-                if (materials.contains(type)) {
-                    found++;
-                    break;
-                }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                List<ItemStack> items = exactChoice.getChoices();
-
-                for (ItemStack item : items) {
-                    if (item.getType() == type) {
-                        found++;
-                        break;
-                    }
-                }
+            int num = ToolsItem.getNumMaterialsInRecipeChoice(type, choice);
+            if (num > 0) {
+                found += num;
+                break;
             }
         }
 

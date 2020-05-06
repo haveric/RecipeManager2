@@ -91,31 +91,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         String newHash = getType().getDirective();
 
         if (hasIngredientChoice()) {
-            if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) ingredientChoice;
-
-                List<Material> choices = materialChoice.getChoices();
-                int size = choices.size();
-                for (int i = 0; i < size; i++) {
-                    newHash += choices.get(i).toString();
-
-                    if (i + 1 < size) {
-                        newHash += ", ";
-                    }
-                }
-            } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) ingredientChoice;
-
-                List<ItemStack> choices = exactChoice.getChoices();
-                int size = choices.size();
-                for (int i = 0; i < size; i++) {
-                    newHash += choices.get(i).toString();
-
-                    if (i + 1 < size) {
-                        newHash += ", ";
-                    }
-                }
-            }
+            newHash += ToolsItem.getRecipeChoiceHash(ingredientChoice);
         }
 
         if (hasResult()) {
@@ -164,29 +140,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
 
         s.append(getType().getDirective()).append(" ");
 
-        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materials = (RecipeChoice.MaterialChoice) ingredientChoice;
-            List<Material> materialChoices = materials.getChoices();
-            int size = materialChoices.size();
-            for (int i = 0; i < size; i++) {
-                s.append(materialChoices.get(i).toString().toLowerCase());
-
-                if (i + 1 < size) {
-                    s.append(", ");
-                }
-            }
-        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice items = (RecipeChoice.ExactChoice) ingredientChoice;
-            List<ItemStack> itemChoices = items.getChoices();
-            int size = itemChoices.size();
-            for (int i = 0; i < size; i++) {
-                s.append(itemChoices.get(i).toString().toLowerCase());
-
-                if (i + 1 < size) {
-                    s.append(", ");
-                }
-            }
-        }
+        s.append(ToolsItem.getRecipeChoiceName(ingredientChoice));
 
         s.append(" to ");
         s.append(getResultString());
