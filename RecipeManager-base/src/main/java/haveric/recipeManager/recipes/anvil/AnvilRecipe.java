@@ -1,14 +1,13 @@
 package haveric.recipeManager.recipes.anvil;
 
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,12 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AnvilRecipe extends PreparableResultRecipe {
+public class AnvilRecipe extends BaseAnvilRecipe {
     private List<Material> primaryIngredient = new ArrayList<>();
     private List<Material> secondaryIngredient = new ArrayList<>();
-    private int repairCost = 0;
-    private boolean renamingAllowed = false;
-    private double anvilDamageChance = 12;
 
     public AnvilRecipe() {
 
@@ -35,11 +31,6 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
             setPrimaryIngredient(r.primaryIngredient);
             setSecondaryIngredient(r.secondaryIngredient);
-
-            repairCost = r.repairCost;
-
-            renamingAllowed = r.renamingAllowed;
-            anvilDamageChance = r.anvilDamageChance;
 
             updateHash();
         }
@@ -88,30 +79,6 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
     public boolean hasIngredients() {
         return primaryIngredient != null && !primaryIngredient.isEmpty() && secondaryIngredient != null && !secondaryIngredient.isEmpty();
-    }
-
-    public int getRepairCost() {
-        return repairCost;
-    }
-
-    public void setRepairCost(int newCost) {
-        repairCost = newCost;
-    }
-
-    public boolean isRenamingAllowed() {
-        return renamingAllowed;
-    }
-
-    public void setRenamingAllowed(boolean allowRenaming) {
-        this.renamingAllowed = allowRenaming;
-    }
-
-    public double getAnvilDamageChance() {
-        return anvilDamageChance;
-    }
-
-    public void setAnvilDamageChance(double anvilDamageChance) {
-        this.anvilDamageChance = anvilDamageChance;
     }
 
     private void updateHash() {
