@@ -1,30 +1,22 @@
 package haveric.recipeManager.flag;
 
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeProcessor;
-import haveric.recipeManager.Settings;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Settings.class, MessageSender.class, RecipeManager.class})
 public class FlagItemNameTest extends FlagBaseTest {
 
     @Test
