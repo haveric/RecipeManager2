@@ -4,10 +4,17 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuelRecipeParser extends BaseRecipeParser {
     public FuelRecipeParser() {
@@ -16,7 +23,12 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        FuelRecipe recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
+        BaseFuelRecipe recipe;
+        if (Version.has1_13Support()) {
+            recipe = new FuelRecipe1_13(fileFlags); // create recipe and copy flags from file
+        } else {
+            recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
+        }
         reader.parseFlags(recipe.getFlags()); // check for @flags
         int added = 0;
 
@@ -25,7 +37,11 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 break;
             }
 
-            recipe = new FuelRecipe(recipe);
+            if (Version.has1_13Support()) {
+                recipe = new FuelRecipe1_13(recipe);
+            } else {
+                recipe = new FuelRecipe(recipe);
+            }
 
             String[] split = reader.getLine().split("%");
 
@@ -65,19 +81,42 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 recipe.setMaxTime(maxTime);
             }
 
-            // set ingredient
-            ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+            if (recipe instanceof FuelRecipe1_13) {
+                List<Material> choices = parseIngredient(split, recipe.getType());
+                if (choices == null || choices.isEmpty()) {
+                    return false;
+                }
 
-            if (ingredient == null) {
-                continue;
+                Flags ingredientFlags = new Flags();
+                reader.parseFlags(ingredientFlags);
+
+                if (ingredientFlags.hasFlags()) {
+                    List<ItemStack> items = new ArrayList<>();
+                    for (Material choice : choices) {
+                        Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
+                    ((FuelRecipe1_13) recipe).addIngredientChoiceItems(items);
+                } else {
+                    ((FuelRecipe1_13) recipe).addIngredientChoice(choices);
+                }
+            } else {
+                // set ingredient
+                ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+
+                if (ingredient == null) {
+                    continue;
+                }
+
+                if (ingredient.getType() == Material.AIR) {
+                    ErrorReporter.getInstance().error("Can not use AIR as ingredient!");
+                    continue;
+                }
+
+                ((FuelRecipe) recipe).setIngredient(ingredient);
             }
-
-            if (ingredient.getType() == Material.AIR) {
-                ErrorReporter.getInstance().error("Can not use AIR as ingredient!");
-                continue;
-            }
-
-            recipe.setIngredient(ingredient);
 
             // check if the recipe already exists
             if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {

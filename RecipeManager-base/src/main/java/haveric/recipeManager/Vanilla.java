@@ -12,7 +12,9 @@ import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
@@ -369,7 +371,7 @@ public class Vanilla {
 
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
-            if (recipe instanceof FuelRecipe) {
+            if (recipe instanceof BaseFuelRecipe) {
                 RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
             }
         }
@@ -380,7 +382,11 @@ public class Vanilla {
     }
 
     private static void addFuelRecipe(Material material, float burnTime) {
-        initialRecipes.put(new FuelRecipe(material, burnTime), info);
+        if (Version.has1_13Support()) {
+            initialRecipes.put(new FuelRecipe1_13(material, burnTime), info);
+        } else {
+            initialRecipes.put(new FuelRecipe(material, burnTime), info);
+        }
     }
 
     private static void initCompostRecipes() {
@@ -1295,7 +1301,7 @@ public class Vanilla {
         for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 
-            if (recipe instanceof FuelRecipe) {
+            if (recipe instanceof BaseFuelRecipe) {
                 RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
             } else {
                 if (recipe.isVanillaSpecialRecipe()) {

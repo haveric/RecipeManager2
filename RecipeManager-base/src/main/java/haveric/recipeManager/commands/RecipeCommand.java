@@ -16,6 +16,7 @@ import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
@@ -273,6 +274,8 @@ public class RecipeCommand implements TabExecutor {
                 return containsRecipeChoice(((RMCampfireRecipe) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 return containsRecipeChoice(((RMStonecuttingRecipe) recipe).getIngredientChoice(), item.getType());
+            } else if (recipe instanceof FuelRecipe1_13) {
+                return containsRecipeChoice(((FuelRecipe1_13) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof FuelRecipe) {
                 return containsItem(Collections.singletonList(((FuelRecipe) recipe).getIngredient()), item, true);
             }

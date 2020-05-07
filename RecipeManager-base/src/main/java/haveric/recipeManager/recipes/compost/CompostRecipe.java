@@ -59,6 +59,10 @@ public class CompostRecipe extends MultiResultRecipe {
         super(flags);
     }
 
+    public RecipeChoice getIngredientChoice() {
+        return ingredientChoice;
+    }
+
     public void addIngredientChoice(List<Material> materials) {
         if (ingredientChoice == null) {
             setIngredientChoice(materials);

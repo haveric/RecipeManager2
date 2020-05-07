@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -63,8 +62,8 @@ public class AnvilEvents extends BaseRecipeEvents {
         ingredients.add(right);
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.ANVIL, ingredients, null);
-        if (baseRecipe instanceof AnvilRecipe) {
-            AnvilRecipe recipe = (AnvilRecipe) baseRecipe;
+        if (baseRecipe instanceof BaseAnvilRecipe) {
+            BaseAnvilRecipe recipe = (BaseAnvilRecipe) baseRecipe;
 
             Location location = inventory.getLocation();
 

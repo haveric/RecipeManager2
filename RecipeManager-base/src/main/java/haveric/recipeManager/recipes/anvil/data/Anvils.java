@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.anvil.data;
 
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.anvil.AnvilRecipe;
+import haveric.recipeManager.recipes.anvil.BaseAnvilRecipe;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,7 +27,7 @@ public class Anvils {
         anvils.clear();
     }
 
-    public static void add(Player player, AnvilRecipe recipe, List<ItemStack> ingredients, ItemResult result, String renameText) {
+    public static void add(Player player, BaseAnvilRecipe recipe, List<ItemStack> ingredients, ItemResult result, String renameText) {
         anvils.put(player.getUniqueId(), new Anvil(recipe, ingredients, result, renameText));
     }
 

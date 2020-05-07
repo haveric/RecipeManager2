@@ -7,7 +7,7 @@ import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
@@ -259,7 +259,7 @@ public class FlagKeepItem extends Flag {
             if (a.recipe() instanceof RMFurnaceRecipe || a.recipe() instanceof RMBaseFurnaceRecipe1_13) {
                 parse(inv, a, 0);
                 parse(inv, a, 1);
-            } else if (a.recipe() instanceof FuelRecipe) {
+            } else if (a.recipe() instanceof BaseFuelRecipe) {
                 parse(inv, a, 1);
             } else {
                 a.addCustomReason("Needs a recipe!");

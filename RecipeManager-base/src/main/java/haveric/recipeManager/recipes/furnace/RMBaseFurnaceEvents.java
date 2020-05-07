@@ -16,6 +16,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
+import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.furnace.data.Furnaces;
@@ -309,7 +310,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                     BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, hotbarItem);
 
-                    if (fuelRecipe instanceof FuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(hotbarItem.clone());
@@ -321,7 +322,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 } else if (event.isLeftClick()) {
                     BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, cursor);
 
-                    if (fuelRecipe instanceof FuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(cursor.clone());
@@ -365,7 +366,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 } else if (event.isRightClick()) {
                     BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, cursor);
 
-                    if (fuelRecipe instanceof FuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 int cursorAmount = cursor.getAmount();

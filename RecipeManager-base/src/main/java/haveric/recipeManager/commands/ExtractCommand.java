@@ -3,15 +3,16 @@ package haveric.recipeManager.commands;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -256,7 +257,17 @@ public class ExtractCommand implements TabExecutor {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 
-            if (recipe instanceof FuelRecipe) {
+            if (recipe instanceof FuelRecipe1_13) {
+                FuelRecipe1_13 fuelRecipe = (FuelRecipe1_13) recipe;
+                StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
+
+                parseChoice(fuelRecipe.getIngredientChoice(), recipeString);
+                recipeString.append(" % ").append(fuelRecipe.getMinTime());
+
+                recipeString.append(Files.NL).append(Files.NL);
+
+                parsedFuelRecipes.add(recipeString.toString());
+            } else if (recipe instanceof FuelRecipe) {
                 FuelRecipe fuelRecipe = (FuelRecipe) recipe;
                 StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
 
@@ -270,7 +281,8 @@ public class ExtractCommand implements TabExecutor {
                 CompostRecipe compostRecipe = (CompostRecipe) recipe;
                 StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMPOST.getDirective()).append(Files.NL);
 
-                parseMaterialList(compostRecipe.getIngredients(), recipeString);
+                parseChoice(compostRecipe.getIngredientChoice(), recipeString);
+
                 recipeString.append(" % ").append(compostRecipe.getLevelSuccessChance()).append(" % ").append(compostRecipe.getLevels());
 
                 recipeString.append(Files.NL);
