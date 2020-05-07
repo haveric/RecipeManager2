@@ -156,21 +156,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
-            for (Material material : ((RecipeChoice.MaterialChoice) ingredientChoice).getChoices()) {
-                if (type == material) {
-                    found++;
-                    break;
-                }
-            }
-        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
-            for (ItemStack item : ((RecipeChoice.ExactChoice) ingredientChoice).getChoices()) {
-                if (type == item.getType()) {
-                    found++;
-                    break;
-                }
-            }
-        }
+        found += ToolsItem.getNumMaterialsInRecipeChoice(type, ingredientChoice);
 
         return found;
     }
