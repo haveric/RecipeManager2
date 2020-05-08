@@ -82,7 +82,6 @@ public class BrewRecipeParser extends BaseRecipeParser {
                     }
 
                     brewRecipe1_13.setIngredientChoice(choices);
-
                     reader.nextLine();
 
                     String[] potionLine = { reader.getLine() };
@@ -91,7 +90,8 @@ public class BrewRecipeParser extends BaseRecipeParser {
                         return ErrorReporter.getInstance().error("Recipe has an invalid potion, needs fixing!");
                     }
 
-                    brewRecipe1_13.setPotionChoice(choices);
+                    brewRecipe1_13.setPotionChoice(choicesPotion);
+                    reader.nextLine();
                 }
             }
         } else {

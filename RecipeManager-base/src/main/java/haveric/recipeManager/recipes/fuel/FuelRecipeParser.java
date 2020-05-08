@@ -32,7 +32,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
         reader.parseFlags(recipe.getFlags()); // check for @flags
         int added = 0;
 
-        do {
+        while (!reader.lineIsRecipe() && !reader.lineIsFlag()) {
             if (reader.lineIsRecipe() || reader.lineIsFlag()) {
                 break;
             }
@@ -116,6 +116,8 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 }
 
                 ((FuelRecipe) recipe).setIngredient(ingredient);
+
+                reader.nextLine();
             }
 
             // check if the recipe already exists
@@ -134,7 +136,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
             recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
             added++;
-        } while (reader.nextLine());
+        }
 
         return added > 0;
     }

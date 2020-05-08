@@ -29,8 +29,12 @@ public class CartographyRecipe extends PreparableResultRecipe {
         if (recipe instanceof CartographyRecipe) {
             CartographyRecipe r = (CartographyRecipe) recipe;
 
-            primaryIngredient = r.primaryIngredient.clone();
-            secondaryIngredient = r.secondaryIngredient.clone();
+            if (r.primaryIngredient != null) {
+                primaryIngredient = r.primaryIngredient.clone();
+            }
+            if (r.secondaryIngredient != null) {
+                secondaryIngredient = r.secondaryIngredient.clone();
+            }
 
             updateHash();
         }

@@ -5,17 +5,19 @@ import haveric.recipeManager.flag.FlagBaseTest;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.brew.BrewRecipe;
+import haveric.recipeManager.recipes.brew.BrewRecipe1_13;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMBaseFurnaceRecipe1_13;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.RecipeChoice;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -75,17 +77,20 @@ public class TestHelpRecipes extends FlagBaseTest {
                 } else if (resultType == Material.EXPERIENCE_BOTTLE) {
                     numSmeltRecipes ++;
                 }
-            } else if (baseRecipe instanceof FuelRecipe) {
-                FuelRecipe recipe = (FuelRecipe) baseRecipe;
-                Material ingredientType = recipe.getIngredient().getType();
+            } else if (baseRecipe instanceof FuelRecipe1_13) {
+                FuelRecipe1_13 recipe = (FuelRecipe1_13) baseRecipe;
+                RecipeChoice choice = recipe.getIngredientChoice();
+                assertTrue(choice instanceof RecipeChoice.MaterialChoice);
 
-                if (ingredientType == Material.GUNPOWDER) {
+                List<Material> choices = ((RecipeChoice.MaterialChoice) choice).getChoices();
+
+                if (choices.contains(Material.GUNPOWDER)) {
                     numFuelRecipes ++;
-                } else if (ingredientType == Material.JACK_O_LANTERN) {
+                } else if (choices.contains(Material.JACK_O_LANTERN)) {
                     numFuelRecipes ++;
                 }
-            } else if (baseRecipe instanceof BrewRecipe) {
-                BrewRecipe recipe = (BrewRecipe) baseRecipe;
+            } else if (baseRecipe instanceof BrewRecipe1_13) {
+                BrewRecipe1_13 recipe = (BrewRecipe1_13) baseRecipe;
                 ItemResult result = recipe.getResults().get(0);
                 Material resultType = result.getType();
 
@@ -121,7 +126,7 @@ public class TestHelpRecipes extends FlagBaseTest {
                 assertTrue(baseRecipe.hasFlag(FlagType.MESSAGE));
             } else if (baseRecipe instanceof CraftRecipe1_13) {
                 assertFalse(baseRecipe.hasFlag(FlagType.MESSAGE));
-            } else if (baseRecipe instanceof FuelRecipe) {
+            } else if (baseRecipe instanceof FuelRecipe1_13) {
                 assertTrue(baseRecipe.hasFlag(FlagType.MESSAGE));
             }
 

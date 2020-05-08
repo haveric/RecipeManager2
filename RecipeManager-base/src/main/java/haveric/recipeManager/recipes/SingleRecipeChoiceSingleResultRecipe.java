@@ -24,9 +24,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         if (recipe instanceof SingleRecipeChoiceSingleResultRecipe) {
             SingleRecipeChoiceSingleResultRecipe r = (SingleRecipeChoiceSingleResultRecipe) recipe;
 
-            if (r.ingredientChoice == null) {
-                ingredientChoice = null;
-            } else {
+            if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }
         }

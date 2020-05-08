@@ -26,8 +26,12 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         if (recipe instanceof BrewRecipe1_13) {
             BrewRecipe1_13 r = (BrewRecipe1_13) recipe;
 
-            ingredientChoice = r.ingredientChoice.clone();
-            potionChoice = r.potionChoice.clone();
+            if (r.ingredientChoice != null) {
+                ingredientChoice = r.ingredientChoice.clone();
+            }
+            if (r.potionChoice != null) {
+                potionChoice = r.potionChoice.clone();
+            }
         }
     }
 
@@ -152,7 +156,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
 
     public void addPotionChoice(List<Material> materials) {
         if (potionChoice == null) {
-            setIngredientChoice(materials);
+            setPotionChoice(materials);
         } else {
             potionChoice = ToolsItem.mergeRecipeChoiceWithMaterials(potionChoice, materials);
             updateHash();
@@ -161,7 +165,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
 
     public void addPotionChoiceItems(List<ItemStack> items) {
         if (potionChoice == null) {
-            setIngredientChoiceItems(items);
+            setPotionChoiceItems(items);
         } else {
             potionChoice = ToolsItem.mergeRecipeChoiceWithItems(potionChoice, items);
             updateHash();
@@ -170,12 +174,12 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
 
     public void setPotionChoice(List<Material> materials) {
         RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
-        setIngredientChoice(materialChoice);
+        setPotionChoice(materialChoice);
     }
 
     public void setPotionChoiceItems(List<ItemStack> items) {
         RecipeChoice.ExactChoice exactChoice = new RecipeChoice.ExactChoice(items);
-        setIngredientChoice(exactChoice);
+        setPotionChoice(exactChoice);
     }
 
     protected void setPotionChoice(RecipeChoice choice) {

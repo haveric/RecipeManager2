@@ -34,7 +34,9 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
         if (recipe instanceof FuelRecipe1_13) {
             FuelRecipe1_13 r = (FuelRecipe1_13) recipe;
 
-            ingredientChoice = r.ingredientChoice.clone();
+            if (r.ingredientChoice != null) {
+                ingredientChoice = r.ingredientChoice.clone();
+            }
         }
     }
 

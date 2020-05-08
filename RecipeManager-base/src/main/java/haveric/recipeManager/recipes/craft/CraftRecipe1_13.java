@@ -42,7 +42,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         if (recipe instanceof CraftRecipe1_13) {
             CraftRecipe1_13 r = (CraftRecipe1_13) recipe;
 
-            if (r.ingredientsChoiceMap.size() > 0) {
+            if (!r.ingredientsChoiceMap.isEmpty()) {
                 ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
             }
 

@@ -29,8 +29,12 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
         if (recipe instanceof AnvilRecipe1_13) {
             AnvilRecipe1_13 r = (AnvilRecipe1_13) recipe;
 
-            primaryIngredient = r.primaryIngredient.clone();
-            secondaryIngredient = r.secondaryIngredient.clone();
+            if (r.primaryIngredient != null) {
+                primaryIngredient = r.primaryIngredient.clone();
+            }
+            if (r.secondaryIngredient != null) {
+                secondaryIngredient = r.secondaryIngredient.clone();
+            }
 
             updateHash();
         }

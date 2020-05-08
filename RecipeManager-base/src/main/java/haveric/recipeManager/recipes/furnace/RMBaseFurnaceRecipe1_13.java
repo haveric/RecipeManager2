@@ -38,9 +38,7 @@ public class RMBaseFurnaceRecipe1_13 extends SingleRecipeChoiceSingleResultRecip
         if (recipe instanceof RMBaseFurnaceRecipe1_13) {
             RMBaseFurnaceRecipe1_13 r = (RMBaseFurnaceRecipe1_13) recipe;
 
-            if (r.ingredientChoice == null) {
-                ingredientChoice = null;
-            } else {
+            if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }
 

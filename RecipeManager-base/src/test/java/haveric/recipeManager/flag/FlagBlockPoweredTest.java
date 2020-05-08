@@ -1,15 +1,15 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagBlockPowered;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.brew.BrewRecipe;
+import haveric.recipeManager.recipes.brew.BrewRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import org.bukkit.Material;
 import org.junit.Test;
 
@@ -131,7 +131,7 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         assertEquals(2, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            BrewRecipe recipe = (BrewRecipe) entry.getKey();
+            BrewRecipe1_13 recipe = (BrewRecipe1_13) entry.getKey();
 
             ItemResult result = recipe.getFirstResult();
 

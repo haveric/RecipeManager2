@@ -46,7 +46,9 @@ public class CompostRecipe extends MultiResultRecipe {
         if (recipe instanceof CompostRecipe) {
             CompostRecipe r = (CompostRecipe) recipe;
 
-            ingredientChoice = r.ingredientChoice.clone();
+            if (r.ingredientChoice != null) {
+                ingredientChoice = r.ingredientChoice.clone();
+            }
 
             levelSuccessChance = r.levelSuccessChance;
             levels = r.levels;
