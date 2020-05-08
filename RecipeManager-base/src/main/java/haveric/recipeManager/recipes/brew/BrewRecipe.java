@@ -4,7 +4,6 @@ import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.MultiResultRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BrewRecipe extends MultiResultRecipe {
+public class BrewRecipe extends BaseBrewRecipe {
     private ItemStack ingredient;
     private ItemStack potion;
 

@@ -84,8 +84,8 @@ public class BrewEvents extends BaseRecipeEvents {
 
         ItemStack ingredient = inventory.getIngredient();
         BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.BREW, ingredient);
-        if (baseRecipe instanceof BrewRecipe) {
-            BrewRecipe recipe = (BrewRecipe) baseRecipe;
+        if (baseRecipe instanceof BaseBrewRecipe) {
+            BaseBrewRecipe recipe = (BaseBrewRecipe) baseRecipe;
 
             Block block = event.getBlock();
             Location location = block.getLocation();
