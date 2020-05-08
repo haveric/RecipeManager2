@@ -34,7 +34,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
             recipe = new BrewRecipe();
         }
 
-        this.reader.parseFlags(recipe.getFlags());
+        reader.parseFlags(recipe.getFlags());
 
         if (recipe instanceof BrewRecipe1_13) {
             BrewRecipe1_13 brewRecipe1_13 = (BrewRecipe1_13) recipe;
@@ -107,7 +107,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
 
             brewRecipe.setIngredient(ingredient);
 
-            this.reader.nextLine();
+            reader.nextLine();
 
             if (reader.getLine() == null || reader.lineIsResult()) {
                 return ErrorReporter.getInstance().error("No potion defined!");
@@ -130,7 +130,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
         recipe.setResults(results); // done with results, set 'em
 
         // check if the recipe already exists
-        if (!conditionEvaluator.recipeExists(recipe, directiveLine, this.reader.getFileName())) {
+        if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
             return recipe.hasFlag(FlagType.REMOVE);
         }
 
@@ -139,7 +139,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
         }
 
         // add the recipe to the Recipes class and to the list for later adding to the server
-        recipeRegistrator.queueRecipe(recipe, this.reader.getFileName());
+        recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
         return true;
     }

@@ -23,7 +23,7 @@ public class RecipeFileReader {
 
     public RecipeFileReader(BufferedReader bufferedReader, String fileName) {
         lineNum = 0;
-        this.reader = bufferedReader;
+        reader = bufferedReader;
         commentBlock = false;
         this.fileName = fileName;
     }

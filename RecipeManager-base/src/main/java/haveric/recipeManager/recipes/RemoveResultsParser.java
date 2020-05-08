@@ -16,7 +16,7 @@ public class RemoveResultsParser extends BaseRecipeParser {
         int added = 0;
 
         do {
-            if (this.reader.lineIsRecipe()) {
+            if (reader.lineIsRecipe()) {
                 break;
             }
 

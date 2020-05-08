@@ -46,14 +46,14 @@ public abstract class BaseRecipeParser {
             oneResult = true;
         }
 
-        if (this.reader.getLine() == null) {
+        if (reader.getLine() == null) {
             return false;
         }
 
-        if (!this.reader.lineIsResult()) { // check if current line is a result, if not move on
-            this.reader.nextLine();
+        if (!reader.lineIsResult()) { // check if current line is a result, if not move on
+            reader.nextLine();
 
-            if (!this.reader.lineIsResult() && !this.reader.lineIsRecipe()) {
+            if (!reader.lineIsResult() && !reader.lineIsRecipe()) {
                 return ErrorReporter.getInstance().error("Recipe has more rows of ingredients than allowed!");
             }
         }
@@ -62,11 +62,11 @@ public abstract class BaseRecipeParser {
         int splitChanceBy = 0;
 
         int lastResultLine = -1;
-        while (this.reader.getLine() != null && this.reader.lineIsResult()) {
+        while (reader.getLine() != null && reader.lineIsResult()) {
             lastResultLine = ErrorReporter.getInstance().getLine();
-            result = Tools.parseItemResult(this.reader.getLine(), 0); // convert result to ItemResult, grabbing chance and what other stuff
+            result = Tools.parseItemResult(reader.getLine(), 0); // convert result to ItemResult, grabbing chance and what other stuff
             if (result == null) {
-                this.reader.nextLine();
+                reader.nextLine();
                 continue;
             }
 
@@ -84,7 +84,7 @@ public abstract class BaseRecipeParser {
                 totalPercentage += result.getChance();
             }
 
-            this.reader.parseFlags(result.getFlags()); // check for result flags and keeps the line flow going too
+            reader.parseFlags(result.getFlags()); // check for result flags and keeps the line flow going too
         }
 
         if (results.isEmpty()) {
