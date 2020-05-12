@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.22.2 ===
 * FIX/NEW: HTML Docs: Fixed some item names and added visual inventories
 * FIX: HTML Docs: @ForDelay and @ForRepeat examples were switched
 * FIX: IllegalArgumentException when an ingredient has no choices, such as from a missing tag
