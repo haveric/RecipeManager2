@@ -1,0 +1,49 @@
+smelt default
+dirt
+= dirt
+
+smelt shape
+a dirt
+= grass
+
+smelt data
+wooden_sword:2
+= wooden_sword
+
+smelt shape-data
+a iron_sword:2
+= iron_sword
+
+smelt ingredient-flag-data
+golden_sword:3
+@name Gold Sword
+= golden_sword
+
+smelt shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+= diamond_sword
+
+smelt fuel
+cobblestone
+& coal
+= coal
+
+smelt shape-fuel
+a stone
+& charcoal
+= charcoal
+
+smelt time
+sponge % 5
+= sponge
+
+smelt time2
+sand % 4
+red_sand
+= sand
+
+smelt time3
+glass
+glass_pane % 3
+= glass

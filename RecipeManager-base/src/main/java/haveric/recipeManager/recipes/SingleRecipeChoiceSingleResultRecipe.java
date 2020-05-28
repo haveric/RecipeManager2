@@ -66,7 +66,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         setIngredientChoice(exactChoice);
     }
 
-    protected void setIngredientChoice(RecipeChoice choice) {
+    public void setIngredientChoice(RecipeChoice choice) {
         ingredientChoice = choice.clone();
 
         updateHash();

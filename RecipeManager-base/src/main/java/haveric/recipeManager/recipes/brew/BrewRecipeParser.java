@@ -41,11 +41,12 @@ public class BrewRecipeParser extends BaseRecipeParser {
 
             while (!reader.lineIsResult()) {
                 String line = reader.getLine();
-                char ingredientChar = line.substring(0, 2).trim().charAt(0);
+                String lineChars = line.substring(0, 2).trim();
+                char ingredientChar = lineChars.charAt(0);
 
-                if (ingredientChar == 'a' || ingredientChar == 'b') {
-                    List<Material> choices = Tools.parseChoice(line.substring(2), ParseBit.NONE);
-                    if (choices == null || choices.isEmpty()) {
+                if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
+                    RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
+                    if (choice == null) {
                         return false;
                     }
 
@@ -54,11 +55,26 @@ public class BrewRecipeParser extends BaseRecipeParser {
 
                     if (ingredientFlags.hasFlags()) {
                         List<ItemStack> items = new ArrayList<>();
-                        for (Material choice : choices) {
-                            Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                            ingredientFlags.sendCrafted(a, true);
+                        if (choice instanceof RecipeChoice.MaterialChoice) {
+                            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                            List<Material> materials = materialChoice.getChoices();
 
-                            items.add(a.result());
+                            for (Material material : materials) {
+                                Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                                ingredientFlags.sendCrafted(a, true);
+
+                                items.add(a.result());
+                            }
+                        } else if (choice instanceof RecipeChoice.ExactChoice) {
+                            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                            List<ItemStack> exactItems = exactChoice.getChoices();
+
+                            for (ItemStack exactItem : exactItems) {
+                                Args a = ArgBuilder.create().result(exactItem).build();
+                                ingredientFlags.sendCrafted(a, true);
+
+                                items.add(a.result());
+                            }
                         }
 
                         if (!brewRecipe1_13.hasIngredient(ingredientChar)) {
@@ -68,29 +84,27 @@ public class BrewRecipeParser extends BaseRecipeParser {
                         }
                     } else {
                         if (!brewRecipe1_13.hasIngredient(ingredientChar)) {
-                            brewRecipe1_13.setIngredient(ingredientChar, new RecipeChoice.MaterialChoice(choices));
+                            brewRecipe1_13.setIngredient(ingredientChar, choice);
                         } else {
-                            brewRecipe1_13.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoiceWithMaterials(brewRecipe1_13.getIngredient(ingredientChar), choices));
+                            brewRecipe1_13.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoices(brewRecipe1_13.getIngredient(ingredientChar), choice));
                         }
                     }
                 } else {
-                    String[] ingredientLine = { line };
-
-                    List<Material> choices = parseIngredient(ingredientLine, recipe.getType());
-                    if (choices == null || choices.isEmpty()) {
+                    RecipeChoice ingredientChoice = Tools.parseRecipeChoice(line, ParseBit.NO_WARNINGS);
+                    if (ingredientChoice == null) {
                         return ErrorReporter.getInstance().error("Recipe has an invalid ingredient, needs fixing!");
                     }
 
-                    brewRecipe1_13.setIngredientChoice(choices);
+                    brewRecipe1_13.setIngredientChoice(ingredientChoice);
                     reader.nextLine();
 
-                    String[] potionLine = { reader.getLine() };
-                    List<Material> choicesPotion = parseIngredient(potionLine, recipe.getType());
-                    if (choicesPotion == null || choicesPotion.isEmpty()) {
+                    String potionLine = reader.getLine();
+                    RecipeChoice potionChoice = Tools.parseRecipeChoice(potionLine, ParseBit.NO_WARNINGS);
+                    if (potionChoice == null) {
                         return ErrorReporter.getInstance().error("Recipe has an invalid potion, needs fixing!");
                     }
 
-                    brewRecipe1_13.setPotionChoice(choicesPotion);
+                    brewRecipe1_13.setPotionChoice(potionChoice);
                     reader.nextLine();
                 }
             }

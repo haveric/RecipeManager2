@@ -13,9 +13,11 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +48,22 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
         reader.parseFlags(recipe.getFlags()); // check for @flags
 
-        // get the ingredient and smelting time
-        String[] split = reader.getLine().split("%");
+        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
         if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-            while (!reader.lineIsResult()) {
+            RMBaseFurnaceRecipe1_13 furnaceRecipe1_13 = (RMBaseFurnaceRecipe1_13) recipe;
+            while (!reader.lineIsResult() && !reader.lineIsFuel()) {
                 String[] splitIngredient = reader.getLine().split("%");
 
-                List<Material> choices = parseIngredient(splitIngredient, recipe.getType());
-                if (choices == null || choices.isEmpty()) {
+                String materialsValue = splitIngredient[0].trim();
+
+                // There's no needed logic for shapes here, so trim the shape declaration
+                if (materialsValue.startsWith("a ")) {
+                    materialsValue = materialsValue.substring(2);
+                }
+
+                RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
+                if (choice == null) {
                     return false;
                 }
 
@@ -63,18 +72,40 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();
-                    for (Material choice : choices) {
-                        Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                        ingredientFlags.sendCrafted(a, true);
+                    if (choice instanceof RecipeChoice.MaterialChoice) {
+                        RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                        List<Material> materials = materialChoice.getChoices();
 
-                        items.add(a.result());
+                        for (Material material : materials) {
+                            Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                            ingredientFlags.sendCrafted(a, true);
+
+                            items.add(a.result());
+                        }
+                    } else if (choice instanceof RecipeChoice.ExactChoice) {
+                        RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                        List<ItemStack> exactItems = exactChoice.getChoices();
+
+                        for (ItemStack exactItem : exactItems) {
+                            Args a = ArgBuilder.create().result(exactItem).build();
+                            ingredientFlags.sendCrafted(a, true);
+
+                            items.add(a.result());
+                        }
                     }
-                    ((RMBaseFurnaceRecipe1_13) recipe).addIngredientChoiceItems(items);
+
+                    furnaceRecipe1_13.addIngredientChoiceItems(items);
                 } else {
-                    ((RMBaseFurnaceRecipe1_13) recipe).addIngredientChoice(choices);
+                    furnaceRecipe1_13.setIngredientChoice(ToolsItem.mergeRecipeChoices(furnaceRecipe1_13.getIngredientChoice(), choice));
+                }
+
+                if (!parseArgs(recipe, splitIngredient, isRemove)) {
+                    return false;
                 }
             }
         } else {
+            // get the ingredient and smelting time
+            String[] split = reader.getLine().split("%");
             if (split.length == 0) {
                 return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
             }
@@ -91,63 +122,14 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
             ((RMFurnaceRecipe) recipe).setIngredient(ingredient);
             reader.nextLine();
+
+            if (!parseArgs(recipe, split, isRemove)) {
+                return false;
+            }
         }
 
-        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
-
-        // get min-max or fixed smelting time
-        if (!isRemove) { // if it's got @remove we don't care about burn time or fuel
-            float minTime;
-            if (recipeType == RMCRecipeType.BLASTING) {
-                minTime = Vanilla.BLASTING_RECIPE_TIME;
-            } else if (recipeType == RMCRecipeType.SMOKING) {
-                minTime = Vanilla.SMOKER_RECIPE_TIME;
-            } else {
-                minTime = Vanilla.FURNACE_RECIPE_TIME;
-            }
-
-            float maxTime = -1;
-
-            if (split.length >= 2) {
-                String[] timeSplit = split[1].trim().toLowerCase().split("-");
-
-                if (timeSplit[0].equals("instant")) {
-                    minTime = 0;
-                } else {
-                    try {
-                        minTime = Float.parseFloat(timeSplit[0]);
-
-                        if (timeSplit.length >= 2) {
-                            maxTime = Float.parseFloat(timeSplit[1]);
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Invalid burn time float number! Smelt time left as default.");
-
-                        if (recipeType == RMCRecipeType.BLASTING) {
-                            minTime = Vanilla.BLASTING_RECIPE_TIME;
-                        } else if (recipeType == RMCRecipeType.SMOKING) {
-                            minTime = Vanilla.SMOKER_RECIPE_TIME;
-                        } else {
-                            minTime = Vanilla.FURNACE_RECIPE_TIME;
-                        }
-
-                        maxTime = -1;
-                    }
-                }
-
-                if (maxTime > -1.0 && minTime >= maxTime) {
-                    return ErrorReporter.getInstance().error("Smelting recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
-                }
-            }
-            if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                ((RMBaseFurnaceRecipe1_13) recipe).setMinTime(minTime);
-                ((RMBaseFurnaceRecipe1_13) recipe).setMaxTime(maxTime);
-            } else {
-                ((RMFurnaceRecipe) recipe).setMinTime(minTime);
-                ((RMFurnaceRecipe) recipe).setMaxTime(maxTime);
-            }
-
-            if (reader.getLine().charAt(0) == '&') { // check if we have a fuel
+        if (!isRemove) { // if it's got @remove we don't care about fuel
+            if (reader.lineIsFuel()) {
                 ItemStack fuelItem = Tools.parseItem(reader.getLine().substring(1), 0, ParseBit.NO_AMOUNT);
 
                 if (fuelItem == null) {
@@ -201,6 +183,56 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         // add the recipe to the Recipes class and to the list for later adding to the server
         recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
+
+        return true;
+    }
+
+    // get min-max or fixed smelting time
+    private boolean parseArgs(SingleResultRecipe recipe, String[] split, boolean isRemove) {
+        if (!isRemove) { // if it's got @remove we don't care about burn time or fuel
+            float minTime;
+            float maxTime = -1;
+
+            if (split.length >= 2) {
+                String[] timeSplit = split[1].trim().toLowerCase().split("-");
+
+                if (timeSplit[0].equals("instant")) {
+                    minTime = 0;
+                } else {
+                    try {
+                        minTime = Float.parseFloat(timeSplit[0]);
+
+                        if (timeSplit.length >= 2) {
+                            maxTime = Float.parseFloat(timeSplit[1]);
+                        }
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Invalid burn time float number! Smelt time left as default.");
+
+                        if (recipeType == RMCRecipeType.BLASTING) {
+                            minTime = Vanilla.BLASTING_RECIPE_TIME;
+                        } else if (recipeType == RMCRecipeType.SMOKING) {
+                            minTime = Vanilla.SMOKER_RECIPE_TIME;
+                        } else {
+                            minTime = Vanilla.FURNACE_RECIPE_TIME;
+                        }
+
+                        maxTime = -1;
+                    }
+                }
+
+                if (maxTime > -1.0 && minTime >= maxTime) {
+                    return ErrorReporter.getInstance().error("Smelting recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
+                }
+
+                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                    ((RMBaseFurnaceRecipe1_13) recipe).setMinTime(minTime);
+                    ((RMBaseFurnaceRecipe1_13) recipe).setMaxTime(maxTime);
+                } else {
+                    ((RMFurnaceRecipe) recipe).setMinTime(minTime);
+                    ((RMFurnaceRecipe) recipe).setMaxTime(maxTime);
+                }
+            }
+        }
 
         return true;
     }

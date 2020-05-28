@@ -2,14 +2,18 @@ package haveric.recipeManager.recipes.campfire;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +28,20 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
         RMCampfireRecipe recipe = new RMCampfireRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // check for @flags
 
-        // get the ingredient and cooking time
-        String[] split = reader.getLine().split("%");
+        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
         while (!reader.lineIsResult()) {
             String[] splitIngredient = reader.getLine().split("%");
 
-            List<Material> choices = parseIngredient(splitIngredient, recipe.getType());
-            if (choices == null || choices.isEmpty()) {
+            String materialsValue = splitIngredient[0].trim();
+
+            // There's no needed logic for shapes here, so trim the shape declaration
+            if (materialsValue.startsWith("a ")) {
+                materialsValue = materialsValue.substring(2);
+            }
+
+            RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
+            if (choice == null) {
                 return false;
             }
 
@@ -40,53 +50,36 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
 
             if (ingredientFlags.hasFlags()) {
                 List<ItemStack> items = new ArrayList<>();
-                for (Material choice : choices) {
-                    Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                    ingredientFlags.sendCrafted(a, true);
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> materials = materialChoice.getChoices();
 
-                    items.add(a.result());
-                }
-                recipe.addIngredientChoiceItems(items);
-            } else {
-                recipe.addIngredientChoice(choices);
-            }
-        }
+                    for (Material material : materials) {
+                        Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                        ingredientFlags.sendCrafted(a, true);
 
-        boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
+                        items.add(a.result());
+                    }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> exactItems = exactChoice.getChoices();
 
-        if (!isRemove) { // if it's got @remove we don't care about cook time
-            float minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
-            float maxTime = -1;
+                    for (ItemStack exactItem : exactItems) {
+                        Args a = ArgBuilder.create().result(exactItem).build();
+                        ingredientFlags.sendCrafted(a, true);
 
-            if (split.length >= 2) {
-                String[] timeSplit = split[1].trim().toLowerCase().split("-");
-
-                if (timeSplit[0].equals("instant")) {
-                    minTime = 0;
-                } else {
-                    try {
-                        minTime = Float.parseFloat(timeSplit[0]);
-
-                        if (timeSplit.length >= 2) {
-                            maxTime = Float.parseFloat(timeSplit[1]);
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Invalid burn time float number! Campfire time left as default.");
-
-                        minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
-                        maxTime = -1;
+                        items.add(a.result());
                     }
                 }
 
-                if (maxTime > -1.0 && minTime >= maxTime) {
-                    return ErrorReporter.getInstance().error("Campfire recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
-                }
+                recipe.addIngredientChoiceItems(items);
+            } else {
+                recipe.setIngredientChoice(ToolsItem.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
             }
 
-            recipe.setMinTime(minTime);
-            recipe.setMaxTime(maxTime);
-
-            reader.nextLine();
+            if (!parseArgs(recipe, splitIngredient, isRemove)) {
+                return false;
+            }
         }
 
         // get result or move current line after them if we got @remove and results
@@ -122,6 +115,44 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
         // add the recipe to the Recipes class and to the list for later adding to the server
         recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
+
+        return true;
+    }
+
+    private boolean parseArgs(RMCampfireRecipe recipe, String[] split, boolean isRemove) {
+        if (!isRemove) { // if it's got @remove we don't care about cook time
+            float minTime;
+            float maxTime = -1;
+
+            if (split.length >= 2) {
+                String[] timeSplit = split[1].trim().toLowerCase().split("-");
+
+                if (timeSplit[0].equals("instant")) {
+                    minTime = 0;
+                } else {
+                    try {
+                        minTime = Float.parseFloat(timeSplit[0]);
+
+                        if (timeSplit.length >= 2) {
+                            maxTime = Float.parseFloat(timeSplit[1]);
+                        }
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Invalid burn time float number! Campfire time left as default.");
+
+                        minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
+                        maxTime = -1;
+                    }
+                }
+
+                if (maxTime > -1.0 && minTime >= maxTime) {
+                    return ErrorReporter.getInstance().error("Campfire recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
+                }
+
+                recipe.setMinTime(minTime);
+                recipe.setMaxTime(maxTime);
+            }
+
+        }
 
         return true;
     }

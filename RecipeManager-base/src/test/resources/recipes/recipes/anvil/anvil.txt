@@ -1,0 +1,38 @@
+anvil default
+dirt + grass
+= dirt
+
+anvil shape
+a dirt
+b stone
+= grass
+
+anvil data
+wooden_sword:2 + wooden_sword:3
+= wooden_sword
+
+anvil shape-data
+a iron_sword:2
+b iron_sword:3
+= iron_sword
+
+anvil shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+b diamond_sword
+@name Test Sword 2
+= diamond_sword
+
+anvil args
+cobblestone + stone % 3 % false % 10
+= cobblestone
+
+anvil shape-args
+a stone % 4 % true % 20
+b cobblestone
+= stone
+
+anvil shape-args2
+a cobblestone
+b sponge % 5 % allowrename % 30
+= sponge

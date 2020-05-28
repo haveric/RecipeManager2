@@ -9,9 +9,11 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +40,9 @@ public class FuelRecipeParser extends BaseRecipeParser {
             }
 
             if (Version.has1_13Support()) {
-                recipe = new FuelRecipe1_13(recipe);
+                recipe = new FuelRecipe1_13(fileFlags);
             } else {
-                recipe = new FuelRecipe(recipe);
+                recipe = new FuelRecipe(fileFlags);
             }
 
             String[] split = reader.getLine().split("%");
@@ -82,8 +84,9 @@ public class FuelRecipeParser extends BaseRecipeParser {
             }
 
             if (recipe instanceof FuelRecipe1_13) {
-                List<Material> choices = parseIngredient(split, recipe.getType());
-                if (choices == null || choices.isEmpty()) {
+                FuelRecipe1_13 fuelRecipe1_13 = (FuelRecipe1_13) recipe;
+                RecipeChoice choice = Tools.parseRecipeChoice(split[0], ParseBit.NONE);
+                if (choice == null) {
                     return false;
                 }
 
@@ -92,15 +95,31 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();
-                    for (Material choice : choices) {
-                        Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                        ingredientFlags.sendCrafted(a, true);
+                    if (choice instanceof RecipeChoice.MaterialChoice) {
+                        RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                        List<Material> materials = materialChoice.getChoices();
 
-                        items.add(a.result());
+                        for (Material material : materials) {
+                            Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                            ingredientFlags.sendCrafted(a, true);
+
+                            items.add(a.result());
+                        }
+                    } else if (choice instanceof RecipeChoice.ExactChoice) {
+                        RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                        List<ItemStack> exactItems = exactChoice.getChoices();
+
+                        for (ItemStack exactItem : exactItems) {
+                            Args a = ArgBuilder.create().result(exactItem).build();
+                            ingredientFlags.sendCrafted(a, true);
+
+                            items.add(a.result());
+                        }
                     }
-                    ((FuelRecipe1_13) recipe).addIngredientChoiceItems(items);
+
+                    fuelRecipe1_13.addIngredientChoiceItems(items);
                 } else {
-                    ((FuelRecipe1_13) recipe).addIngredientChoice(choices);
+                    fuelRecipe1_13.setIngredientChoice(ToolsItem.mergeRecipeChoices(fuelRecipe1_13.getIngredientChoice(), choice));
                 }
             } else {
                 // set ingredient
@@ -136,6 +155,19 @@ public class FuelRecipeParser extends BaseRecipeParser {
             recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
             added++;
+
+            boolean lineExists = true;
+            while (reader.lineIsEmpty()) {
+                lineExists = reader.nextLine();
+
+                if (!lineExists) {
+                    break;
+                }
+            }
+
+            if (!lineExists) {
+                break;
+            }
         }
 
         return added > 0;

@@ -1,0 +1,15 @@
+fuel default
+dirt % 5
+
+fuel data
+wooden_sword:2 % 5
+
+fuel multiple
+iron_sword:2 % 4
+golden_sword:3 % 5
+@name Gold Sword
+
+fuel multiple2
+diamond_sword % 5
+@name Test Sword
+stone_sword % 4

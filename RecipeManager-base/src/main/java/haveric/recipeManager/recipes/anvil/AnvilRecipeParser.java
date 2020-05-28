@@ -34,21 +34,16 @@ public class AnvilRecipeParser extends BaseRecipeParser {
 
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
-        // get the ingredient
-        String[] split = reader.getLine().split("%");
-        if (split.length == 0) {
-            return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
-        }
-
         if (recipe instanceof AnvilRecipe1_13) {
             AnvilRecipe1_13 anvilRecipe1_13 = (AnvilRecipe1_13) recipe;
             while (!reader.lineIsResult()) {
                 String[] lineSplit = reader.getLine().split("%");
-                char ingredientChar = lineSplit[0].substring(0, 2).trim().charAt(0);
+                String lineChars = lineSplit[0].substring(0, 2).trim();
+                char ingredientChar = lineChars.charAt(0);
 
-                if (ingredientChar == 'a' || ingredientChar == 'b') {
-                    List<Material> choices = Tools.parseChoice(lineSplit[0].substring(2), ParseBit.NONE);
-                    if (choices == null || choices.isEmpty()) {
+                if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
+                    RecipeChoice choice = Tools.parseRecipeChoice(lineSplit[0].substring(2), ParseBit.NONE);
+                    if (choice == null) {
                         return false;
                     }
 
@@ -57,11 +52,26 @@ public class AnvilRecipeParser extends BaseRecipeParser {
 
                     if (ingredientFlags.hasFlags()) {
                         List<ItemStack> items = new ArrayList<>();
-                        for (Material choice : choices) {
-                            Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                            ingredientFlags.sendCrafted(a, true);
+                        if (choice instanceof RecipeChoice.MaterialChoice) {
+                            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                            List<Material> materials = materialChoice.getChoices();
 
-                            items.add(a.result());
+                            for (Material material : materials) {
+                                Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                                ingredientFlags.sendCrafted(a, true);
+
+                                items.add(a.result());
+                            }
+                        } else if (choice instanceof RecipeChoice.ExactChoice) {
+                            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                            List<ItemStack> exactItems = exactChoice.getChoices();
+
+                            for (ItemStack exactItem : exactItems) {
+                                Args a = ArgBuilder.create().result(exactItem).build();
+                                ingredientFlags.sendCrafted(a, true);
+
+                                items.add(a.result());
+                            }
                         }
 
                         if (!anvilRecipe1_13.hasIngredient(ingredientChar)) {
@@ -71,27 +81,43 @@ public class AnvilRecipeParser extends BaseRecipeParser {
                         }
                     } else {
                         if (!anvilRecipe1_13.hasIngredient(ingredientChar)) {
-                            anvilRecipe1_13.setIngredient(ingredientChar, new RecipeChoice.MaterialChoice(choices));
+                            anvilRecipe1_13.setIngredient(ingredientChar, choice);
                         } else {
-                            anvilRecipe1_13.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoiceWithMaterials(anvilRecipe1_13.getIngredient(ingredientChar), choices));
+                            anvilRecipe1_13.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoices(anvilRecipe1_13.getIngredient(ingredientChar), choice));
                         }
                     }
                 } else {
                     // get the ingredients
-                    String[] ingredientsRaw = reader.getLine().split("\\+");
+                    String[] ingredientsRaw = lineSplit[0].split("\\+", 2);
 
-                    List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
-                    if (choicesList == null || choicesList.isEmpty()) {
+                    RecipeChoice primaryChoice = Tools.parseRecipeChoice(ingredientsRaw[0], ParseBit.NO_WARNINGS);
+                    if (primaryChoice == null) {
                         return false;
                     }
 
-                    anvilRecipe1_13.setPrimaryIngredient(new RecipeChoice.MaterialChoice(choicesList.get(0)));
-                    if (choicesList.size() > 1) {
-                        anvilRecipe1_13.setSecondaryIngredient(new RecipeChoice.MaterialChoice(choicesList.get(1)));
+                    anvilRecipe1_13.setPrimaryIngredient(primaryChoice);
+
+                    if (ingredientsRaw.length > 1) {
+                        RecipeChoice secondaryChoice = Tools.parseRecipeChoice(ingredientsRaw[1], ParseBit.NO_WARNINGS);
+                        if (secondaryChoice == null) {
+                            return false;
+                        }
+
+                        anvilRecipe1_13.setSecondaryIngredient(secondaryChoice);
                     }
+
+                    reader.nextLine();
                 }
+
+                parseArgs(recipe, lineSplit);
             }
         } else {
+            // get the ingredient
+            String[] split = reader.getLine().split("%");
+            if (split.length == 0) {
+                return ErrorReporter.getInstance().error("Recipe needs an ingredient!");
+            }
+
             // get the ingredients
             String[] ingredientsRaw = split[0].split("\\+");
 
@@ -104,8 +130,35 @@ public class AnvilRecipeParser extends BaseRecipeParser {
             if (choicesList.size() > 1) {
                 ((AnvilRecipe) recipe).setSecondaryIngredient(choicesList.get(1));
             }
+
+            parseArgs(recipe, split);
         }
 
+        List<ItemResult> results = new ArrayList<>();
+        boolean hasResults = parseResults(recipe, results);
+
+        if (!hasResults) {
+            return false;
+        }
+
+        recipe.setResults(results);
+
+        // check if the recipe already exists
+        if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
+            return recipe.hasFlag(FlagType.REMOVE);
+        }
+
+        if (recipeName != null && !recipeName.isEmpty()) {
+            recipe.setName(recipeName); // set recipe's name if defined
+        }
+
+        // add the recipe to the Recipes class and to the list for later adding to the server
+        recipeRegistrator.queueRecipe(recipe, reader.getFileName());
+
+        return true;
+    }
+
+    private void parseArgs(BaseAnvilRecipe recipe, String[] split) {
         if (split.length > 1) {
             String repairString = split[1].trim();
 
@@ -132,8 +185,10 @@ public class AnvilRecipeParser extends BaseRecipeParser {
             if (!renameText.isEmpty()) {
                 if (renameText.equals("allowrename") || renameText.equals("true")) {
                     recipe.setRenamingAllowed(true);
+                } else if (renameText.equals("false")) {
+                    recipe.setRenamingAllowed(false);
                 } else {
-                    ErrorReporter.getInstance().warning("Invalid rename attribute: " + split[2] + ". Defaulting to false. Accepted values: allowrename, true, false.");
+                    ErrorReporter.getInstance().warning("Invalid rename attribute: " + renameText + ". Defaulting to false. Accepted values: allowrename, true, false.");
                 }
             }
         }
@@ -155,28 +210,5 @@ public class AnvilRecipeParser extends BaseRecipeParser {
                 ErrorReporter.getInstance().error("Invalid anvil damage chance: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 12.");
             }
         }
-
-        List<ItemResult> results = new ArrayList<>();
-        boolean hasResults = parseResults(recipe, results);
-
-        if (!hasResults) {
-            return false;
-        }
-
-        recipe.setResults(results);
-
-        // check if the recipe already exists
-        if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return recipe.hasFlag(FlagType.REMOVE);
-        }
-
-        if (recipeName != null && !recipeName.isEmpty()) {
-            recipe.setName(recipeName); // set recipe's name if defined
-        }
-
-        // add the recipe to the Recipes class and to the list for later adding to the server
-        recipeRegistrator.queueRecipe(recipe, reader.getFileName());
-
-        return true;
     }
 }

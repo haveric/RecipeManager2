@@ -39,28 +39,33 @@ public class CombineRecipeParser extends BaseRecipeParser {
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         String shapeFormatLine = reader.getLine().toLowerCase();
-        if (shapeFormatLine.startsWith("shape")) {
+        if (shapeFormatLine.startsWith("shape") || shapeFormatLine.startsWith("a ")) {
             if (recipe instanceof CombineRecipe1_13) {
                 Map<Character, Integer> ingredientCharacters = new HashMap<>();
                 Map<Character, RecipeChoice> ingredientRecipeChoiceMap = new HashMap<>();
-                String shapeLine = shapeFormatLine.substring("shape".length()).trim();
+                String shapeLine;
+                if (shapeFormatLine.startsWith("shape")) {
+                    shapeLine = shapeFormatLine.substring("shape".length()).trim();
 
-                if (shapeLine.length() > 9) {
-                    ErrorReporter.getInstance().warning("Shape has more than 9 characters: " + shapeLine + ". Using only the nine three: " + shapeLine.substring(0, 9));
-                    shapeLine = shapeLine.substring(0, 9);
-                }
-
-                ((CombineRecipe1_13) recipe).setShape(shapeLine);
-
-                for (char c : shapeLine.toCharArray()) {
-                    if (!ingredientCharacters.containsKey(c)) {
-                        ingredientCharacters.put(c, 1);
-                    } else {
-                        ingredientCharacters.put(c, ingredientCharacters.get(c) + 1);
+                    if (shapeLine.length() > 9) {
+                        ErrorReporter.getInstance().warning("Shape has more than 9 characters: " + shapeLine + ". Using only the nine three: " + shapeLine.substring(0, 9));
+                        shapeLine = shapeLine.substring(0, 9);
                     }
-                }
 
-                reader.nextLine();
+                    for (char c : shapeLine.toCharArray()) {
+                        if (!ingredientCharacters.containsKey(c)) {
+                            ingredientCharacters.put(c, 1);
+                        } else {
+                            ingredientCharacters.put(c, ingredientCharacters.get(c) + 1);
+                        }
+                    }
+
+                    reader.nextLine();
+                } else {
+                    // Default to a single item
+                    shapeLine = "a";
+                    ingredientCharacters.put('a', 1);
+                }
 
                 int ingredientsNum = 0;
                 while (!reader.lineIsResult()) {
@@ -68,8 +73,8 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     char ingredientChar = line.substring(0, 2).trim().charAt(0);
 
                     if (ingredientCharacters.containsKey(ingredientChar)) {
-                        List<Material> choices = Tools.parseChoice(line.substring(2), ParseBit.NONE);
-                        if (choices == null || choices.isEmpty()) {
+                        RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
+                        if (choice == null) {
                             return false;
                         }
 
@@ -80,11 +85,26 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
                         if (ingredientFlags.hasFlags()) {
                             List<ItemStack> items = new ArrayList<>();
-                            for (Material choice : choices) {
-                                Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                                ingredientFlags.sendCrafted(a, true);
+                            if (choice instanceof RecipeChoice.MaterialChoice) {
+                                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                                List<Material> materials = materialChoice.getChoices();
 
-                                items.add(a.result());
+                                for (Material material : materials) {
+                                    Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                                    ingredientFlags.sendCrafted(a, true);
+
+                                    items.add(a.result());
+                                }
+                            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                                List<ItemStack> exactItems = exactChoice.getChoices();
+
+                                for (ItemStack exactItem : exactItems) {
+                                    Args a = ArgBuilder.create().result(exactItem).build();
+                                    ingredientFlags.sendCrafted(a, true);
+
+                                    items.add(a.result());
+                                }
                             }
 
                             if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
@@ -94,9 +114,9 @@ public class CombineRecipeParser extends BaseRecipeParser {
                             }
                         } else {
                             if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
-                                ingredientRecipeChoiceMap.put(ingredientChar, new RecipeChoice.MaterialChoice(choices));
+                                ingredientRecipeChoiceMap.put(ingredientChar, choice);
                             } else {
-                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsItem.mergeRecipeChoiceWithMaterials(ingredientRecipeChoiceMap.get(ingredientChar), choices));
+                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsItem.mergeRecipeChoices(ingredientRecipeChoiceMap.get(ingredientChar), choice));
                             }
                         }
                     } else {
@@ -112,18 +132,8 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     }
                 }
 
-                List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
-                for (Map.Entry<Character, RecipeChoice> entry : ingredientRecipeChoiceMap.entrySet()) {
-                    RecipeChoice choice = entry.getValue();
-
-                    int num = ingredientCharacters.get(entry.getKey());
-
-                    for (int i = 0; i < num; i++) {
-                        ingredientChoiceList.add(choice.clone());
-                    }
-                }
-
-                ((CombineRecipe1_13) recipe).setIngredientChoiceList(ingredientChoiceList);
+                ((CombineRecipe1_13) recipe).setChoiceShape(shapeLine);
+                ((CombineRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
             } else {
                 return ErrorReporter.getInstance().error("Shape is only supported on 1.13 or newer servers.");
             }
@@ -132,24 +142,38 @@ public class CombineRecipeParser extends BaseRecipeParser {
             String[] ingredientsRaw = reader.getLine().split("\\+");
 
             if (recipe instanceof CombineRecipe1_13) {
-                List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
+                Map<Character, RecipeChoice> ingredientRecipeChoiceMap = new HashMap<>();
 
                 StringBuilder shape = new StringBuilder();
                 char letter = 'a';
                 int items = 0;
                 for (String str : ingredientsRaw) {
-                    Map<List<Material>, Integer> choiceAmountMap = Tools.parseChoiceWithAmount(str, ParseBit.NONE);
+                    Map<RecipeChoice, Integer> choiceAmountMap = Tools.parseRecipeChoiceWithAmount(str, ParseBit.NONE);
 
-                    // We're always returning only one item, so this should always work
-                    Map.Entry<List<Material>, Integer> entry = choiceAmountMap.entrySet().iterator().next();
-                    List<Material> choices = entry.getKey();
-
-                    if (choices == null || choices.isEmpty()) {
+                    if (choiceAmountMap == null) {
                         return ErrorReporter.getInstance().error("Ingredient cannot be empty: " + str, "Check for incorrect spelling or missing tags or aliases.");
                     }
 
-                    if (choices.contains(Material.AIR)) {
-                        return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+                    // We're always returning only one item, so this should always work
+                    Map.Entry<RecipeChoice, Integer> entry = choiceAmountMap.entrySet().iterator().next();
+                    RecipeChoice choice = entry.getKey();
+
+                    if (choice == null) {
+                        return ErrorReporter.getInstance().error("Ingredient cannot be empty: " + str, "Check for incorrect spelling or missing tags or aliases.");
+                    }
+
+                    if (choice instanceof RecipeChoice.MaterialChoice) {
+                        RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                        if (materialChoice.getChoices().contains(Material.AIR)) {
+                            return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+                        }
+                    } else if (choice instanceof RecipeChoice.ExactChoice) {
+                        RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                        for (ItemStack item : exactChoice.getChoices()) {
+                            if (item.getType() == Material.AIR) {
+                                return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+                            }
+                        }
                     }
 
                     int newAmount;
@@ -171,15 +195,16 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
                     items += newAmount;
 
+                    ingredientRecipeChoiceMap.put(letter, choice);
                     for (int i = 0; i < newAmount; i++) {
-                        ingredientChoiceList.add(new RecipeChoice.MaterialChoice(choices));
                         shape.append(letter);
                     }
 
                     letter ++;
                 }
-                ((CombineRecipe1_13) recipe).setShape(shape.toString());
-                ((CombineRecipe1_13) recipe).setIngredientChoiceList(ingredientChoiceList);
+
+                ((CombineRecipe1_13) recipe).setChoiceShape(shape.toString());
+                ((CombineRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
             } else {
                 List<ItemStack> ingredients = new ArrayList<>();
                 ItemStack item;

@@ -14,14 +14,14 @@ import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CombineRecipe1_13 extends BaseCombineRecipe {
-    private String shape = "";
-    private List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
+    private String choiceShape = "";
+    private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
 
     public CombineRecipe1_13() {
     }
@@ -38,12 +38,10 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         if (recipe instanceof CombineRecipe1_13) {
             CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
 
-            shape = r.shape;
+            choiceShape = r.choiceShape;
 
-            if (!r.ingredientChoiceList.isEmpty()) {
-                for (RecipeChoice ingredientChoice : r.ingredientChoiceList) {
-                    ingredientChoiceList.add(ingredientChoice.clone());
-                }
+            if (!r.ingredientsChoiceMap.isEmpty()) {
+                ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
             }
         }
     }
@@ -52,29 +50,78 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         super(flags);
     }
 
-    public void setShape(String newShape) {
-        shape = newShape;
+    public void setChoiceShape(String shape) {
+        choiceShape = shape;
     }
 
-    public List<RecipeChoice> getIngredientChoiceList() {
-        return ingredientChoiceList;
+    public String getChoiceShape() {
+        return choiceShape;
+    }
+
+    private void setIngredientsChoiceMap(ShapedRecipe recipe) {
+        ingredientsChoiceMap.clear();
+        ingredientsChoiceMap.putAll(recipe.getChoiceMap());
+
+        updateHash();
+    }
+
+    public void setIngredientsRecipeChoiceMap(Map<Character, RecipeChoice> newIngredientsChoiceMap) {
+        ingredientsChoiceMap.clear();
+        ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
+
+        updateHash();
+    }
+
+    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
+        ingredientsChoiceMap.clear();
+
+        for (Map.Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
+            List<Material> materials = entry.getValue();
+
+            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
+                ingredientsChoiceMap.put(entry.getKey(), null);
+            } else {
+                RecipeChoice.MaterialChoice newMaterialList = new RecipeChoice.MaterialChoice(entry.getValue());
+                ingredientsChoiceMap.put(entry.getKey(), newMaterialList);
+            }
+        }
+
+        updateHash();
+    }
+
+    public Map<Character, RecipeChoice> getIngredientsChoiceMap() {
+        return ingredientsChoiceMap;
     }
 
     public void setIngredientChoiceList(List<RecipeChoice> recipeChoices) {
-        ingredientChoiceList.clear();
+        char letter = 'a';
+        String shape = "";
 
-        ingredientChoiceList.addAll(recipeChoices);
+        for (RecipeChoice recipeChoice : recipeChoices) {
+            ingredientsChoiceMap.put(letter, recipeChoice);
+            shape += letter;
+            letter ++;
+        }
 
+        choiceShape = shape;
         updateHash();
+    }
+
+    public List<RecipeChoice> getIngredientChoiceList() {
+        List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
+
+        for (char c : choiceShape.toCharArray()) {
+            ingredientChoiceList.add(ingredientsChoiceMap.get(c));
+        }
+
+        return ingredientChoiceList;
     }
 
     private void updateHash() {
         StringBuilder str = new StringBuilder("combine");
 
-        for (RecipeChoice choice : ingredientChoiceList) {
-            str.append(" ");
-
-            str.append(ToolsItem.getRecipeChoiceHash(choice));
+        for (RecipeChoice choice : getIngredientChoiceList()) {
+            str.append(" ").append(ToolsItem.getRecipeChoiceHash(choice));
         }
 
         hash = str.toString().hashCode();
@@ -85,18 +132,11 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append("shapeless");
+        s.append("combine");
         s.append(" (");
 
-        int ingredientChoiceListSize = ingredientChoiceList.size();
-        for (int j = 0; j < ingredientChoiceListSize; j++) {
-            RecipeChoice choice = ingredientChoiceList.get(j);
-
-            if (j > 0) {
-                s.append(" ");
-            }
-
-            s.append(ToolsItem.getRecipeChoiceName(choice));
+        for (RecipeChoice choice : getIngredientChoiceList()) {
+            s.append(" ").append(ToolsItem.getRecipeChoiceName(choice));
         }
 
         s.append(") to ");
@@ -131,7 +171,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
             bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
         }
 
-        for (RecipeChoice choice : ingredientChoiceList) {
+        for (RecipeChoice choice : getIngredientChoiceList()) {
             bukkitRecipe.addIngredient(choice);
         }
 
@@ -139,7 +179,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
     }
 
     public boolean hasIngredientChoices() {
-        return ingredientChoiceList != null && !ingredientChoiceList.isEmpty();
+        return !ingredientsChoiceMap.isEmpty();
     }
 
     @Override
@@ -154,12 +194,17 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("shapeless", result);
+        StringBuilder s = getHeaderResult("combine", result);
+
+        s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
+        s.append(RMCChatColor.GRAY).append(choiceShape).append('\n');
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        for (RecipeChoice choice : ingredientChoiceList) {
-            s.append('\n').append(ToolsItem.printRecipeChoice(choice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+            s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
+
+            ToolsItem.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
         }
 
         return s.toString();
@@ -169,7 +214,9 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        for (RecipeChoice choice : ingredientChoiceList) {
+        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+            RecipeChoice choice = entry.getValue();
+
             int num = ToolsItem.getNumMaterialsInRecipeChoice(type, choice);
             if (num > 0) {
                 found += num;

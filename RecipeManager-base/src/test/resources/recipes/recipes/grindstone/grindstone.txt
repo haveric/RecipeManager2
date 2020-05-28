@@ -1,0 +1,24 @@
+grindstone default
+dirt + grass
+= dirt
+
+grindstone shape
+a dirt
+b stone
+= grass
+
+grindstone data
+wooden_sword:2 + wooden_sword:3
+= wooden_sword
+
+grindstone shape-data
+a iron_sword:2
+b iron_sword:3
+= iron_sword
+
+grindstone shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+b diamond_sword
+@name Test Sword 2
+= diamond_sword

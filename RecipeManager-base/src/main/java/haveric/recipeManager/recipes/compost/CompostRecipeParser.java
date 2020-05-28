@@ -1,14 +1,18 @@
 package haveric.recipeManager.recipes.compost;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +32,15 @@ public class CompostRecipeParser extends BaseRecipeParser {
             // get the ingredient
             String[] splitIngredient = reader.getLine().split("%");
 
-            List<Material> choices = parseIngredient(splitIngredient, recipe.getType());
-            if (choices == null || choices.isEmpty()) {
+            String materialsValue = splitIngredient[0].trim();
+
+            // There's no needed logic for shapes here, so trim the shape declaration
+            if (materialsValue.startsWith("a ")) {
+                materialsValue = materialsValue.substring(2);
+            }
+
+            RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
+            if (choice == null) {
                 return false;
             }
 
@@ -38,46 +49,34 @@ public class CompostRecipeParser extends BaseRecipeParser {
 
             if (ingredientFlags.hasFlags()) {
                 List<ItemStack> items = new ArrayList<>();
-                for (Material choice : choices) {
-                    Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                    ingredientFlags.sendCrafted(a, true);
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> materials = materialChoice.getChoices();
 
-                    items.add(a.result());
+                    for (Material material : materials) {
+                        Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> exactItems = exactChoice.getChoices();
+
+                    for (ItemStack exactItem : exactItems) {
+                        Args a = ArgBuilder.create().result(exactItem).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
                 }
+
                 recipe.addIngredientChoiceItems(items);
             } else {
-                recipe.addIngredientChoice(choices);
+                recipe.setIngredientChoice(ToolsItem.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
             }
 
-            if (splitIngredient.length > 1) {
-                try {
-                    double chance = Double.parseDouble(splitIngredient[1].trim());
-
-                    if (chance > 0 && chance <= 100) {
-                        recipe.setLevelSuccessChance(chance);
-                    } else {
-                        ErrorReporter.getInstance().warning("Invalid level success chance: " + splitIngredient[1] + ". Defaulting to 100.", "Allowed values > 0, <= 100 (Decimal values allowed).");
-                    }
-
-                } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().warning("Invalid level success chance: " + splitIngredient[1] + ". Defaulting to 100.", "Allowed values > 0, <= 100 (Decimal values allowed).");
-                }
-            }
-
-            if (splitIngredient.length > 2) {
-                try {
-                    double levels = Double.parseDouble(splitIngredient[2].trim());
-
-                    if (levels > 0 && levels <= 7) {
-                        recipe.setLevels(levels);
-                    } else {
-                        ErrorReporter.getInstance().warning("Invalid levels: " + splitIngredient[1] + ". Defaulting to 1.", "Allowed values > 0, <= 7 (Decimal values allowed).");
-                    }
-                } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().warning("Invalid levels: " + splitIngredient[1] + ". Defaulting to 1.", "Allowed values > 0, <= 7 (Decimal values allowed).");
-                }
-
-            }
+            parseArgs(recipe, splitIngredient);
         }
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
@@ -116,5 +115,36 @@ public class CompostRecipeParser extends BaseRecipeParser {
         recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
         return true;
+    }
+
+    private void parseArgs(CompostRecipe recipe, String[] splitIngredient) {
+        if (splitIngredient.length > 1) {
+            try {
+                double chance = Double.parseDouble(splitIngredient[1].trim());
+
+                if (chance > 0 && chance <= 100) {
+                    recipe.setLevelSuccessChance(chance);
+                } else {
+                    ErrorReporter.getInstance().warning("Invalid level success chance: " + splitIngredient[1] + ". Defaulting to 100.", "Allowed values > 0, <= 100 (Decimal values allowed).");
+                }
+
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Invalid level success chance: " + splitIngredient[1] + ". Defaulting to 100.", "Allowed values > 0, <= 100 (Decimal values allowed).");
+            }
+        }
+
+        if (splitIngredient.length > 2) {
+            try {
+                double levels = Double.parseDouble(splitIngredient[2].trim());
+
+                if (levels > 0 && levels <= 7) {
+                    recipe.setLevels(levels);
+                } else {
+                    ErrorReporter.getInstance().warning("Invalid levels: " + splitIngredient[1] + ". Defaulting to 1.", "Allowed values > 0, <= 7 (Decimal values allowed).");
+                }
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Invalid levels: " + splitIngredient[1] + ". Defaulting to 1.", "Allowed values > 0, <= 7 (Decimal values allowed).");
+            }
+        }
     }
 }

@@ -41,31 +41,37 @@ public class CraftRecipeParser extends BaseRecipeParser {
         List<String> choiceShapeString = new ArrayList<>();
 
         String shapeFormatLine = reader.getLine().toLowerCase();
-        if (shapeFormatLine.startsWith("shape")) {
+        if (shapeFormatLine.startsWith("shape") || shapeFormatLine.startsWith("a ")) {
             if (recipe instanceof CraftRecipe1_13) {
                 Map<Character, Integer> ingredientCharacters = new HashMap<>();
                 Map<Character, RecipeChoice> ingredientRecipeChoiceMap = new HashMap<>();
-                String[] shapeLines = shapeFormatLine.substring("shape".length()).split("\\|", 3);
+                if (shapeFormatLine.startsWith("shape")) {
+                    String[] shapeLines = shapeFormatLine.substring("shape".length()).split("\\|", 3);
 
-                for (String shapeLine : shapeLines) {
-                    shapeLine = shapeLine.trim();
+                    for (String shapeLine : shapeLines) {
+                        shapeLine = shapeLine.trim();
 
-                    if (shapeLine.length() > 3) {
-                        ErrorReporter.getInstance().warning("Shape row has more than 3 characters: " + shapeLine + ". Using only the first three: " + shapeLine.substring(0, 3));
-                        shapeLine = shapeLine.substring(0, 3);
-                    }
-                    choiceShapeString.add(shapeLine);
+                        if (shapeLine.length() > 3) {
+                            ErrorReporter.getInstance().warning("Shape row has more than 3 characters: " + shapeLine + ". Using only the first three: " + shapeLine.substring(0, 3));
+                            shapeLine = shapeLine.substring(0, 3);
+                        }
+                        choiceShapeString.add(shapeLine);
 
-                    for (char c : shapeLine.toCharArray()) {
-                        if (!ingredientCharacters.containsKey(c)) {
-                            ingredientCharacters.put(c, 1);
-                        } else {
-                            ingredientCharacters.put(c, ingredientCharacters.get(c) + 1);
+                        for (char c : shapeLine.toCharArray()) {
+                            if (!ingredientCharacters.containsKey(c)) {
+                                ingredientCharacters.put(c, 1);
+                            } else {
+                                ingredientCharacters.put(c, ingredientCharacters.get(c) + 1);
+                            }
                         }
                     }
-                }
 
-                reader.nextLine();
+                    reader.nextLine();
+                } else {
+                    // Default to a single item
+                    choiceShapeString.add("a");
+                    ingredientCharacters.put('a', 1);
+                }
 
                 int ingredientsNum = 0;
                 while (!reader.lineIsResult()) {
@@ -73,8 +79,8 @@ public class CraftRecipeParser extends BaseRecipeParser {
                     char ingredientChar = line.substring(0, 2).trim().charAt(0);
 
                     if (ingredientCharacters.containsKey(ingredientChar)) {
-                        List<Material> choices = Tools.parseChoice(line.substring(2), ParseBit.NONE);
-                        if (choices == null || choices.isEmpty()) {
+                        RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NO_WARNINGS);
+                        if (choice == null) {
                             return false;
                         }
 
@@ -85,11 +91,26 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
                         if (ingredientFlags.hasFlags()) {
                             List<ItemStack> items = new ArrayList<>();
-                            for (Material choice : choices) {
-                                Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                                ingredientFlags.sendCrafted(a, true);
+                            if (choice instanceof RecipeChoice.MaterialChoice) {
+                                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                                List<Material> materials = materialChoice.getChoices();
 
-                                items.add(a.result());
+                                for (Material material : materials) {
+                                    Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                                    ingredientFlags.sendCrafted(a, true);
+
+                                    items.add(a.result());
+                                }
+                            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                                List<ItemStack> exactItems = exactChoice.getChoices();
+
+                                for (ItemStack exactItem : exactItems) {
+                                    Args a = ArgBuilder.create().result(exactItem).build();
+                                    ingredientFlags.sendCrafted(a, true);
+
+                                    items.add(a.result());
+                                }
                             }
 
                             if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
@@ -99,9 +120,9 @@ public class CraftRecipeParser extends BaseRecipeParser {
                             }
                         } else {
                             if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
-                                ingredientRecipeChoiceMap.put(ingredientChar, new RecipeChoice.MaterialChoice(choices));
+                                ingredientRecipeChoiceMap.put(ingredientChar, choice);
                             } else {
-                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsItem.mergeRecipeChoiceWithMaterials(ingredientRecipeChoiceMap.get(ingredientChar), choices));
+                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsItem.mergeRecipeChoices(ingredientRecipeChoiceMap.get(ingredientChar), choice));
                             }
                         }
                     } else {
@@ -155,46 +176,45 @@ public class CraftRecipeParser extends BaseRecipeParser {
                 return ErrorReporter.getInstance().error("Shape is only supported on 1.13 or newer servers.");
             }
         } else {
-            Map<Character, List<Material>> ingredientsChoiceMap = new HashMap<>();
-            char characterKey = 'a';
+            if (recipe instanceof CraftRecipe1_13) {
+                Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
+                char characterKey = 'a';
 
-            ItemStack[] ingredients = new ItemStack[9];
-            String[] split;
+                String[] split;
 
-            int rows = 0;
-            int ingredientsNum = 0;
-            boolean ingredientErrors = false;
+                int rows = 0;
+                int ingredientsNum = 0;
+                boolean ingredientErrors = false;
 
-            while (rows < 3) { // loop until we find 3 rows of ingredients (or bump into the result along the way)
-                if (rows > 0) {
-                    reader.nextLine();
-                }
-
-                if (reader.getLine() == null) {
-                    if (rows == 0) {
-                        return ErrorReporter.getInstance().error("No ingredients defined!");
+                while (rows < 3) { // loop until we find 3 rows of ingredients (or bump into the result along the way)
+                    if (rows > 0) {
+                        reader.nextLine();
                     }
 
-                    break;
-                }
+                    if (reader.getLine() == null) {
+                        if (rows == 0) {
+                            return ErrorReporter.getInstance().error("No ingredients defined!");
+                        }
 
-                if (reader.lineIsResult()) { // if we bump into the result prematurely (smaller recipes)
-                    break;
-                }
+                        break;
+                    }
 
-                split = reader.getLine().split("\\+"); // split ingredients by the + sign
-                int rowLen = split.length;
+                    if (reader.lineIsResult()) { // if we bump into the result prematurely (smaller recipes)
+                        break;
+                    }
 
-                if (rowLen > 3) { // if we find more than 3 ingredients warn the user and limit it to 3
-                    rowLen = 3;
-                    ErrorReporter.getInstance().warning("You can't have more than 3 ingredients on a row, ingredient(s) ignored.", "Remove the extra ingredient(s).");
-                }
+                    split = reader.getLine().split("\\+"); // split ingredients by the + sign
+                    int rowLen = split.length;
 
-                for (int i = 0; i < rowLen; i++) { // go through each ingredient on the line
-                    if (Version.has1_13Support()) {
-                        List<Material> choices = Tools.parseChoice(split[i], ParseBit.NONE);
+                    if (rowLen > 3) { // if we find more than 3 ingredients warn the user and limit it to 3
+                        rowLen = 3;
+                        ErrorReporter.getInstance().warning("You can't have more than 3 ingredients on a row, ingredient(s) ignored.", "Remove the extra ingredient(s).");
+                    }
 
-                        if (choices == null || choices.isEmpty()) { // No items found
+                    for (int i = 0; i < rowLen; i++) { // go through each ingredient on the line
+                        RecipeChoice choice = Tools.parseRecipeChoice(split[i], ParseBit.NO_WARNINGS);
+
+                        if (choice == null) { // No items found
                             ingredientErrors = true;
                         }
 
@@ -205,49 +225,25 @@ public class CraftRecipeParser extends BaseRecipeParser {
                                 choiceShapeString.set(rows, choiceShapeString.get(rows) + characterKey);
                             }
 
-                            ingredientsChoiceMap.put(characterKey, choices);
+                            ingredientsChoiceMap.put(characterKey, choice);
 
                             characterKey++;
                             ingredientsNum++;
                         }
-                    } else {
-                        ItemStack item = Tools.parseItem(split[i], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
-                        if (item == null) { // invalid item
-                            ingredientErrors = true;
-                        }
-
-                        // no point in adding more ingredients if there are errors
-                        if (!ingredientErrors) {
-                            // Minecraft 1.11 required air ingredients to include a data value of 0
-                            if ((Version.has1_11Support() && !Version.has1_12Support()) || item.getType() != Material.AIR) {
-                                ingredients[(rows * 3) + i] = item;
-                                ingredientsNum++;
-                            }
-                        }
                     }
+
+                    rows++;
                 }
 
-                rows++;
-            }
-
-            if (ingredientErrors) { // invalid ingredients found
-                return ErrorReporter.getInstance().error("Recipe has some invalid ingredients, fix them!");
-            } else if (ingredientsNum == 0) { // no ingredients were processed
-                return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult '" + Files.FILE_INFO_BASICS + "' for proper recipe syntax.");
-            } else if (ingredientsNum == 2) {
-                if (Version.has1_13Support()) {
-                    if (!conditionEvaluator.checkMaterialChoices(ingredientsChoiceMap)) {
-                        return false;
-                    }
-                } else {
-                    if (!conditionEvaluator.checkIngredients(ingredients)) {
+                if (ingredientErrors) { // invalid ingredients found
+                    return ErrorReporter.getInstance().error("Recipe has some invalid ingredients, fix them!");
+                } else if (ingredientsNum == 0) { // no ingredients were processed
+                    return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult '" + Files.FILE_INFO_BASICS + "' for proper recipe syntax.");
+                } else if (ingredientsNum == 2) {
+                    if (!conditionEvaluator.checkRecipeChoices(ingredientsChoiceMap)) {
                         return false;
                     }
                 }
-            }
-
-            // done with ingredients, set 'em
-            if (recipe instanceof CraftRecipe1_13) {
 
                 // Add extra air to fill rectangle
                 if (choiceShapeString.size() > 1) {
@@ -272,14 +268,74 @@ public class CraftRecipeParser extends BaseRecipeParser {
                         List<Material> airList = new ArrayList<>();
                         airList.add(Material.AIR);
 
-                        ingredientsChoiceMap.put(characterKey, airList);
+                        ingredientsChoiceMap.put(characterKey, new RecipeChoice.MaterialChoice(airList));
                     }
                 }
 
                 ((CraftRecipe1_13) recipe).setChoiceShape(choiceShapeString.toArray(new String[0]));
-                ((CraftRecipe1_13) recipe).setIngredientsChoiceMap(ingredientsChoiceMap);
-
+                ((CraftRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientsChoiceMap);
             } else {
+                ItemStack[] ingredients = new ItemStack[9];
+                String[] split;
+
+                int rows = 0;
+                int ingredientsNum = 0;
+                boolean ingredientErrors = false;
+
+                while (rows < 3) { // loop until we find 3 rows of ingredients (or bump into the result along the way)
+                    if (rows > 0) {
+                        reader.nextLine();
+                    }
+
+                    if (reader.getLine() == null) {
+                        if (rows == 0) {
+                            return ErrorReporter.getInstance().error("No ingredients defined!");
+                        }
+
+                        break;
+                    }
+
+                    if (reader.lineIsResult()) { // if we bump into the result prematurely (smaller recipes)
+                        break;
+                    }
+
+                    split = reader.getLine().split("\\+"); // split ingredients by the + sign
+                    int rowLen = split.length;
+
+                    if (rowLen > 3) { // if we find more than 3 ingredients warn the user and limit it to 3
+                        rowLen = 3;
+                        ErrorReporter.getInstance().warning("You can't have more than 3 ingredients on a row, ingredient(s) ignored.", "Remove the extra ingredient(s).");
+                    }
+
+                    for (int i = 0; i < rowLen; i++) { // go through each ingredient on the line
+                        ItemStack item = Tools.parseItem(split[i], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+                        if (item == null) { // invalid item
+                            ingredientErrors = true;
+                        }
+
+                        // no point in adding more ingredients if there are errors
+                        if (!ingredientErrors) {
+                            // Minecraft 1.11 required air ingredients to include a data value of 0
+                            if ((Version.has1_11Support() && !Version.has1_12Support()) || item.getType() != Material.AIR) {
+                                ingredients[(rows * 3) + i] = item;
+                                ingredientsNum++;
+                            }
+                        }
+                    }
+
+                    rows++;
+                }
+
+                if (ingredientErrors) { // invalid ingredients found
+                    return ErrorReporter.getInstance().error("Recipe has some invalid ingredients, fix them!");
+                } else if (ingredientsNum == 0) { // no ingredients were processed
+                    return ErrorReporter.getInstance().error("Recipe doesn't have ingredients!", "Consult '" + Files.FILE_INFO_BASICS + "' for proper recipe syntax.");
+                } else if (ingredientsNum == 2) {
+                    if (!conditionEvaluator.checkIngredients(ingredients)) {
+                        return false;
+                    }
+                }
+
                 ((CraftRecipe) recipe).setIngredients(ingredients);
             }
         }

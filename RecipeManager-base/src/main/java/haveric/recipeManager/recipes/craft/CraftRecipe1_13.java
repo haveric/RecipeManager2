@@ -61,14 +61,14 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         ingredientsChoiceMap.clear();
         ingredientsChoiceMap.putAll(recipe.getChoiceMap());
 
-        updateChoiceHash();
+        updateHash();
     }
 
     public void setIngredientsRecipeChoiceMap(Map<Character, RecipeChoice> newIngredientsChoiceMap) {
         ingredientsChoiceMap.clear();
         ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
 
-        updateChoiceHash();
+        updateHash();
     }
 
     public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
@@ -85,7 +85,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
             }
         }
 
-        updateChoiceHash();
+        updateHash();
     }
 
     public Map<Character, RecipeChoice> getIngredientsChoiceMap() {
@@ -103,7 +103,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         return choiceShape;
     }
 
-    private void updateChoiceHash() {
+    private void updateHash() {
         StringBuilder str = new StringBuilder("craft ");
         int shapeSize = choiceShape.length;
         for (int i = 0; i < shapeSize; i++) {
@@ -128,7 +128,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         StringBuilder s = new StringBuilder();
         boolean removed = hasFlag(FlagType.REMOVE);
 
-        s.append("shaped ").append(width).append('x').append(height);
+        s.append("craft ").append(width).append('x').append(height);
 
         s.append(" (");
 
@@ -220,7 +220,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("shaped", result);
+        StringBuilder s = getHeaderResult("craft", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
         s.append(RMCChatColor.GRAY);
@@ -268,19 +268,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
                 s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
             }
 
-            // TODO: Check IngredientConditions to get Names
-
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                List<Material> materials = materialChoice.getChoices();
-
-                s.append(ToolsItem.printChoice(materials, RMCChatColor.BLACK, RMCChatColor.BLACK));
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                List<ItemStack> items = exactChoice.getChoices();
-
-                s.append(ToolsItem.printExactChoice(items, RMCChatColor.BLACK, RMCChatColor.BLACK));
-            }
+            ToolsItem.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
         }
 
         return s.toString();

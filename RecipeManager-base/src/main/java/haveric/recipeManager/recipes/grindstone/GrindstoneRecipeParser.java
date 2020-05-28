@@ -29,11 +29,12 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
 
         while (!reader.lineIsResult()) {
             String line = reader.getLine();
-            char ingredientChar = line.substring(0, 2).trim().charAt(0);
+            String lineChars = line.substring(0, 2).trim();
+            char ingredientChar = lineChars.charAt(0);
 
-            if (ingredientChar == 'a' || ingredientChar == 'b') {
-                List<Material> choices = Tools.parseChoice(line.substring(2), ParseBit.NONE);
-                if (choices == null || choices.isEmpty()) {
+            if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
+                RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
+                if (choice == null) {
                     return false;
                 }
 
@@ -42,11 +43,26 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();
-                    for (Material choice : choices) {
-                        Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                        ingredientFlags.sendCrafted(a, true);
+                    if (choice instanceof RecipeChoice.MaterialChoice) {
+                        RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                        List<Material> materials = materialChoice.getChoices();
 
-                        items.add(a.result());
+                        for (Material material : materials) {
+                            Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                            ingredientFlags.sendCrafted(a, true);
+
+                            items.add(a.result());
+                        }
+                    } else if (choice instanceof RecipeChoice.ExactChoice) {
+                        RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                        List<ItemStack> exactItems = exactChoice.getChoices();
+
+                        for (ItemStack exactItem : exactItems) {
+                            Args a = ArgBuilder.create().result(exactItem).build();
+                            ingredientFlags.sendCrafted(a, true);
+
+                            items.add(a.result());
+                        }
                     }
 
                     if (!recipe.hasIngredient(ingredientChar)) {
@@ -56,24 +72,32 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
                     }
                 } else {
                     if (!recipe.hasIngredient(ingredientChar)) {
-                        recipe.setIngredient(ingredientChar, new RecipeChoice.MaterialChoice(choices));
+                        recipe.setIngredient(ingredientChar, choice);
                     } else {
-                        recipe.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoiceWithMaterials(recipe.getIngredient(ingredientChar), choices));
+                        recipe.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoices(recipe.getIngredient(ingredientChar), choice));
                     }
                 }
             } else {
                 // get the ingredients
                 String[] ingredientsRaw = reader.getLine().split("\\+");
 
-                List<List<Material>> choicesList = parseIngredients(ingredientsRaw, recipe.getType(), 2, true);
-                if (choicesList == null || choicesList.isEmpty()) {
+                RecipeChoice primaryChoice = Tools.parseRecipeChoice(ingredientsRaw[0], ParseBit.NO_WARNINGS);
+                if (primaryChoice == null) {
                     return false;
                 }
 
-                recipe.setPrimaryIngredient(new RecipeChoice.MaterialChoice(choicesList.get(0)));
-                if (choicesList.size() > 1) {
-                    recipe.setSecondaryIngredient(new RecipeChoice.MaterialChoice(choicesList.get(1)));
+                recipe.setPrimaryIngredient(primaryChoice);
+
+                if (ingredientsRaw.length > 1) {
+                    RecipeChoice secondaryChoice = Tools.parseRecipeChoice(ingredientsRaw[1], ParseBit.NO_WARNINGS);
+                    if (secondaryChoice == null) {
+                        return false;
+                    }
+
+                    recipe.setSecondaryIngredient(secondaryChoice);
                 }
+
+                reader.nextLine();
             }
         }
 

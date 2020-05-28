@@ -1,0 +1,25 @@
+stonecutting default
+dirt
+= dirt
+
+stonecutting shape
+a dirt
+= grass
+
+stonecutting data
+wooden_sword:2
+= wooden_sword
+
+stonecutting shape-data
+a iron_sword:2
+= iron_sword
+
+stonecutting ingredient-flag-data
+golden_sword:3
+@name Gold Sword
+= golden_sword
+
+stonecutting shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+= diamond_sword

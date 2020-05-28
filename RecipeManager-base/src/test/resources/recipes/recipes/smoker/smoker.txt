@@ -1,0 +1,35 @@
+smoking default
+dirt
+= dirt
+
+smoking shape
+a dirt
+= grass
+
+smoking data
+wooden_sword:2
+= wooden_sword
+
+smoking shape-data
+a iron_sword:2
+= iron_sword
+
+smoking ingredient-flag-data
+golden_sword:3
+@name Gold Sword
+= golden_sword
+
+smoking shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+= diamond_sword
+
+smoking fuel
+cobblestone
+& coal
+= coal
+
+smoking shape-fuel
+a stone
+& charcoal
+= charcoal

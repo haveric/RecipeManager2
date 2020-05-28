@@ -1,0 +1,168 @@
+package haveric.recipeManager.recipes;
+
+import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import haveric.recipeManager.flag.FlagBaseTest;
+import haveric.recipeManager.recipes.furnace.RMBlastingRecipe;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.junit.Test;
+
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
+
+public class TestBlastFurnaceRecipe extends FlagBaseTest {
+
+    @Test
+    public void onRecipeParse() {
+        File file = new File(baseRecipePath + "recipes/blastFurnace");
+        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+
+        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+
+        int totalRecipes = 8;
+        assertEquals(totalRecipes, queued.size());
+
+        int numRecipesChecked = 0;
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
+            RMBlastingRecipe recipe = (RMBlastingRecipe) entry.getKey();
+
+            ItemResult result = recipe.getResult();
+
+            String name = recipe.getName();
+            if (name.equals("default")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryMaterials.size());
+                assertTrue(primaryMaterials.contains(Material.DIRT));
+
+                assertFalse(recipe.hasFuel());
+
+                assertEquals(Material.DIRT, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("shape")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryMaterials.size());
+                assertTrue(primaryMaterials.contains(Material.DIRT));
+
+                assertFalse(recipe.hasFuel());
+
+                assertEquals(Material.GRASS, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("data")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryItems.size());
+
+                ItemStack primaryItem = primaryItems.get(0);
+                assertEquals(Material.WOODEN_SWORD, primaryItem.getType());
+                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
+                assertEquals(2, primaryDamageable.getDamage());
+
+                assertFalse(recipe.hasFuel());
+
+                assertEquals(Material.WOODEN_SWORD, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("shape-data")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryItems.size());
+
+                ItemStack primaryItem = primaryItems.get(0);
+                assertEquals(Material.IRON_SWORD, primaryItem.getType());
+                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
+                assertEquals(2, primaryDamageable.getDamage());
+
+                assertFalse(recipe.hasFuel());
+
+                assertEquals(Material.IRON_SWORD, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("ingredient-flag-data")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryItems.size());
+
+                ItemStack primaryItem = primaryItems.get(0);
+                assertEquals(Material.GOLDEN_SWORD, primaryItem.getType());
+                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                ItemMeta primaryMeta = primaryItem.getItemMeta();
+                Damageable primaryDamageable = (Damageable) primaryMeta;
+                assertEquals(3, primaryDamageable.getDamage());
+
+                assertEquals("Gold Sword", primaryMeta.getDisplayName());
+
+                assertFalse(recipe.hasFuel());
+
+                assertEquals(Material.GOLDEN_SWORD, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("shape-ingredient-flag")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryItems.size());
+
+                ItemStack primaryItem = primaryItems.get(0);
+                assertEquals(Material.DIAMOND_SWORD, primaryItem.getType());
+                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                ItemMeta primaryMeta = primaryItem.getItemMeta();
+                Damageable primaryDamageable = (Damageable) primaryMeta;
+                assertEquals(0, primaryDamageable.getDamage());
+
+                assertEquals("Test Sword", primaryMeta.getDisplayName());
+
+                assertFalse(recipe.hasFuel());
+
+                assertEquals(Material.DIAMOND_SWORD, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("fuel")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryMaterials.size());
+                assertTrue(primaryMaterials.contains(Material.COBBLESTONE));
+
+                assertTrue(recipe.hasFuel());
+                assertEquals(Material.COAL, recipe.getFuel().getType());
+
+                assertEquals(Material.COAL, result.getType());
+
+                numRecipesChecked ++;
+            } else if (name.equals("shape-fuel")) {
+                RecipeChoice primaryChoice = recipe.getIngredientChoice();
+                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
+                assertEquals(1, primaryMaterials.size());
+                assertTrue(primaryMaterials.contains(Material.STONE));
+
+                assertTrue(recipe.hasFuel());
+                assertEquals(Material.CHARCOAL, recipe.getFuel().getType());
+
+                assertEquals(Material.CHARCOAL, result.getType());
+
+                numRecipesChecked ++;
+            }
+        }
+
+        assertEquals(totalRecipes, numRecipesChecked);
+    }
+}

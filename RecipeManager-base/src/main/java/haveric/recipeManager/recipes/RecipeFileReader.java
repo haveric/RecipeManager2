@@ -45,6 +45,10 @@ public class RecipeFileReader {
 
     }
 
+    public boolean lineIsEmpty() {
+        return line == null || line.isEmpty();
+    }
+
     public boolean lineIsRecipe() {
         String lowered = line.toLowerCase();
 
@@ -65,6 +69,10 @@ public class RecipeFileReader {
 
     public boolean lineIsResult() {
         return line.charAt(0) == '=';
+    }
+
+    public boolean lineIsFuel() {
+        return line.charAt(0) == '&';
     }
 
     public String getFileName() {

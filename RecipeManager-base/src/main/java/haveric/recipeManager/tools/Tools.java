@@ -17,9 +17,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.*;
 
 import java.io.BufferedWriter;
@@ -148,6 +150,263 @@ public class Tools {
         return result;
     }
 
+    public static RecipeChoice parseRecipeChoice(String value, int settings) {
+        RecipeChoice choice = null;
+        value = value.trim();
+
+        if (value.length() == 0) {
+            return null;
+        }
+
+        String[] split = value.split(",");
+        if (split.length <= 0 || split[0].isEmpty()) {
+            return null;
+        }
+
+        for (String s : split) {
+            String[] durSplit = s.trim().split(":");
+            value = durSplit[0].trim();
+
+            if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
+                String namespace;
+                String material;
+                if (durSplit.length > 2) {
+                    namespace = durSplit[1].trim();
+                    material = durSplit[2].trim();
+                } else {
+                    namespace = NamespacedKey.MINECRAFT;
+                    material = durSplit[1].trim();
+                }
+
+                NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
+
+                if (tag == null || tag.getValues().isEmpty()) {
+                    tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                }
+
+                if (tag == null || tag.getValues().isEmpty()) {
+                    ErrorReporter.getInstance().warning("Invalid tag: " + s);
+                } else {
+                    List<Material> materials = new ArrayList<>(tag.getValues());
+                    choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                }
+            } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
+                String alias = durSplit[1].trim();
+                List<Material> materials = RecipeManager.getSettings().getChoicesAlias(alias);
+
+                if (materials == null) {
+                    ErrorReporter.getInstance().warning("Invalid alias: " + s);
+                } else {
+                    choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                }
+            } else {
+                Material material = parseMaterial(value);
+                if (material == null) {
+                    ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                } else {
+                    if (durSplit.length > 1) {
+                        String dataString = durSplit[1].toLowerCase().trim();
+
+                        choice = parseMaterialDataToChoice(choice, material, dataString, settings);
+                    } else {
+                        choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, material);
+                    }
+                }
+            }
+        }
+
+        return choice;
+    }
+
+    public static Map<RecipeChoice, Integer> parseRecipeChoiceWithAmount(String value, int settings) {
+        value = value.trim();
+        if (value.length() == 0) {
+            return null;
+        }
+
+        RecipeChoice choice = null;
+        String[] args = value.split(";");
+        if (args.length > 1) {
+            ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
+        }
+
+        String[] split = args[0].split(",");
+        if (split.length <= 0 || split[0].isEmpty()) {
+            return null;
+        }
+
+        int amount = 1;
+        int choicesSize = split.length;
+        String amountString = null;
+        for (int i = 0; i < choicesSize; i++) {
+            String[] durSplit = split[i].trim().split(":");
+            value = durSplit[0];
+
+            // Formats
+            // tag:namespace:tagname:data:amount
+            // tag:tagname:data:amount
+            // tag:namespace:tagname:data
+            // tag:tagname:data
+            // tag:namespace:tagname
+            // tag:tagname
+            if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
+                String namespace = null;
+                String tagName = null;
+                String dataString = null;
+                if (durSplit.length > 5) {
+                    ErrorReporter.getInstance().warning("Invalid tag format: " + split[i]);
+                    continue;
+                } else if (durSplit.length >= 3) {
+                    String potentialNamespaceOrTagName = durSplit[1].trim();
+                    String potentialTagName = durSplit[2].trim();
+
+                    boolean foundNamespace = false;
+                    for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+                        String pluginName = plugin.getName().toLowerCase();
+                        if (potentialNamespaceOrTagName.equals(pluginName)) {
+                            namespace = potentialNamespaceOrTagName;
+                            tagName = potentialTagName;
+                            foundNamespace = true;
+                            break;
+                        }
+                    }
+
+                    if (foundNamespace) {
+                        if (durSplit.length > 3) {
+                            dataString = durSplit[3].trim();
+                        }
+
+                        if (durSplit.length > 4) {
+                            amountString = durSplit[4].trim();
+                        }
+                    } else {
+                        namespace = NamespacedKey.MINECRAFT;
+                        tagName = potentialNamespaceOrTagName;
+
+                        if (durSplit.length == 3) {
+                            dataString = durSplit[2].trim();
+                        }
+
+                        if (durSplit.length > 3) {
+                            amountString = durSplit[3].trim();
+                        }
+                    }
+                } else {
+                    namespace = NamespacedKey.MINECRAFT;
+                    tagName = durSplit[1].trim();
+                }
+
+                NamespacedKey key = new NamespacedKey(namespace, tagName); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
+
+                if (tag == null || tag.getValues().isEmpty()) {
+                    tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                }
+
+                if (tag == null || tag.getValues().isEmpty()) {
+                    ErrorReporter.getInstance().warning("Invalid tag: " + split[i]);
+                } else {
+                    List<Material> materials = new ArrayList<>(tag.getValues());
+
+                    if (dataString == null || dataString.isEmpty()) {
+                        choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                    } else {
+                        for (Material material : materials) {
+                            choice = parseMaterialDataToChoice(choice, material, dataString, settings);
+                        }
+                    }
+                }
+            } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
+                String alias = durSplit[1].trim();
+                List<Material> materials = RecipeManager.getSettings().getChoicesAlias(alias);
+
+                if (materials == null) {
+                    ErrorReporter.getInstance().warning("Invalid alias: " + split[i]);
+                } else {
+                    if (durSplit.length >= 3) {
+                        String dataString = durSplit[2].trim();
+                        for (Material material : materials) {
+                            choice = parseMaterialDataToChoice(choice, material, dataString, settings);
+                        }
+                    } else {
+                        choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                    }
+                }
+
+                if (durSplit.length == 4) {
+                    amountString = durSplit[3].trim();
+                }
+            } else {
+                Material material = parseMaterial(value);
+                if (material == null) {
+                    if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
+                        ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                    }
+
+                    return null;
+                }
+
+                String dataString = null;
+                if (durSplit.length == 2) {
+                    dataString = durSplit[1].trim();
+                } else if (durSplit.length == 3) {
+                    dataString = durSplit[1].trim();
+                    amountString = durSplit[2].trim();
+                }
+
+                if (dataString == null) {
+                    choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, material);
+                } else {
+                    choice = parseMaterialDataToChoice(choice, material, dataString, settings);
+                }
+            }
+
+            if (amountString != null) {
+                if (i + 1 < choicesSize) {
+                    ErrorReporter.getInstance().warning("Amount is only allowed on the last ingredient of a set. Ignoring amount.");
+                } else {
+                    try {
+                        amount = Integer.parseInt(amountString);
+                    } catch (NumberFormatException e) {
+                        if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
+                            ErrorReporter.getInstance().warning("Item '" + split[i] + "' has amount value that is not a number: " + amountString + ", defaulting to 1");
+                        }
+                    }
+                }
+            }
+        }
+
+        return Collections.singletonMap(choice, amount);
+    }
+
+    private static RecipeChoice parseMaterialDataToChoice(RecipeChoice choice, Material material, String dataString, int settings) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta instanceof Damageable) {
+            Damageable damageable = (Damageable) itemMeta;
+
+            Map<String, Short> dataMap = RecipeManager.getSettings().getMaterialDataNames(material);
+            if (dataMap == null) {
+                try {
+                    damageable.setDamage(Integer.parseInt(dataString));
+                    item.setItemMeta((ItemMeta) damageable);
+                } catch (NumberFormatException e) {
+                    if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
+                        ErrorReporter.getInstance().warning("Item '" + material + " has unknown data number/alias: '" + dataString + "', defaulting to 0");
+                    }
+                }
+            } else {
+                damageable.setDamage(dataMap.get(RMCUtil.parseAliasName(dataString)));
+                item.setItemMeta((ItemMeta) damageable);
+            }
+
+            return ToolsItem.mergeRecipeChoiceWithItems(choice, item);
+        }
+
+        return choice;
+    }
+
     public static List<Material> parseChoice(String value, int settings) {
         value = value.trim();
 
@@ -219,125 +478,6 @@ public class Tools {
         }
 
         return choices;
-    }
-
-    public static Map<List<Material>, Integer> parseChoiceWithAmount(String value, int settings) {
-        value = value.trim();
-
-        if (value.length() == 0) {
-            return null;
-        }
-
-
-        String[] args = value.split(";");
-        if (args.length > 1) {
-            ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
-        }
-
-        String[] split = args[0].split(",");
-        if (split.length <= 0 || split[0].isEmpty()) {
-            return null;
-        }
-
-        List<Material> choices = new ArrayList<>();
-        int amount = 1;
-        int choicesSize = split.length;
-        String amountString = null;
-        for (int i = 0; i < choicesSize; i++) {
-            String[] durSplit = split[i].trim().split(":");
-            value = durSplit[0];
-
-            // Formats
-            // tag:namespace:tagname:amount
-            // tag:tagname:amount
-            // tag:namespace:tagname
-            // tag:tagname
-            if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
-                String namespace;
-                String material;
-                if (durSplit.length > 4) {
-                    ErrorReporter.getInstance().warning("Invalid tag format: " + split[i]);
-                    continue;
-                } else if (durSplit.length == 4) {
-                    namespace = durSplit[1].trim();
-                    material = durSplit[2].trim();
-                    amountString = durSplit[3].trim();
-                } else if (durSplit.length == 3) {
-                    try {
-                        Integer.parseInt(durSplit[2].trim());
-                        amountString = durSplit[2].trim();
-                        namespace = NamespacedKey.MINECRAFT;
-                        material = durSplit[1].trim();
-                    } catch (NumberFormatException e) {
-                        namespace = durSplit[1].trim();
-                        material = durSplit[2].trim();
-                    }
-                } else {
-                    namespace = NamespacedKey.MINECRAFT;
-                    material = durSplit[1].trim();
-                }
-
-                NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
-                Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
-
-                if (tag == null || tag.getValues().isEmpty()) {
-                    tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
-                }
-
-                if (tag == null || tag.getValues().isEmpty()) {
-                    ErrorReporter.getInstance().warning("Invalid tag: " + split[i]);
-                } else {
-                    choices.addAll(tag.getValues());
-                }
-            } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
-                String alias = durSplit[1].trim();
-                List<Material> materials = RecipeManager.getSettings().getChoicesAlias(alias);
-
-                if (materials == null) {
-                    ErrorReporter.getInstance().warning("Invalid alias: " + split[i]);
-                } else {
-                    choices.addAll(materials);
-                }
-
-                if (durSplit.length == 3) {
-                    amountString = durSplit[2].trim();
-                }
-            } else {
-                Material material = parseMaterial(value);
-                if (material == null) {
-                    if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                        ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
-                    }
-
-                    return null;
-                }
-
-                choices.add(material);
-
-                if (durSplit.length == 2) {
-                    amountString = durSplit[1].trim();
-                } else if (durSplit.length == 3) {
-                    ErrorReporter.getInstance().warning("Data is no longer supported on ingredients. " + durSplit[1].trim() + " ignored. Using " + durSplit[2].trim() + " for amount.");
-                    amountString = durSplit[2].trim();
-                }
-            }
-
-            if (amountString != null) {
-                if (i + 1 < choicesSize) {
-                    ErrorReporter.getInstance().warning("Amount is only allowed on the last ingredient of a set. Ignoring amount.");
-                } else {
-                    try {
-                        amount = Integer.parseInt(amountString);
-                    } catch (NumberFormatException e) {
-                        if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                            ErrorReporter.getInstance().warning("Item '" + split[i] + "' has amount value that is not a number: " + amountString + ", defaulting to 1");
-                        }
-                    }
-                }
-            }
-        }
-
-        return Collections.singletonMap(choices, amount);
     }
 
     public static ItemStack parseItem(String value, int defaultData) {

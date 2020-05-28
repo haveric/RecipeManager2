@@ -1,0 +1,56 @@
+craft default
+dirt + cobblestone
+= stone
+
+craft shape-default
+shape ab
+a dirt
+b grass
+= cobblestone
+
+craft choice
+dirt, grass
+sponge, brick
+= brick
+
+craft shape-choice
+shape a | b
+a sponge, brick
+b dirt, grass
+= sponge
+
+craft shape-ingredient-flag
+shape a
+a diamond_sword
+@name Test Sword
+= diamond_sword
+
+craft data
+iron_sword:1
+= iron_sword
+
+craft shape-data
+shape a
+a golden_sword:1
+= golden_sword
+
+craft multiple-data
+wooden_sword:1, iron_sword:2
+= glass
+
+craft multiple-data-shape
+shape a
+a wooden_sword:1, iron_sword:2
+= glass_pane
+
+craft multiple-data-shape2
+shape a
+a wooden_sword:1
+a iron_sword:2
+= glass_pane
+
+craft multiple-data-shape3
+a wooden_sword:1
+a iron_sword:2
+= glass_pane
+

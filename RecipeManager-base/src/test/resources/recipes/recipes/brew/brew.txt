@@ -1,0 +1,26 @@
+brew default
+dirt
+grass
+= dirt
+
+brew shape
+a dirt
+b stone
+= grass
+
+brew data
+wooden_sword:2
+wooden_sword:3
+= wooden_sword
+
+brew shape-data
+a iron_sword:2
+b iron_sword:3
+= iron_sword
+
+brew shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+b diamond_sword
+@name Test Sword 2
+= diamond_sword

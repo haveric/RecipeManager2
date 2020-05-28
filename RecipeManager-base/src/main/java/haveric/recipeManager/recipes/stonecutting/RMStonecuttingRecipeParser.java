@@ -1,14 +1,18 @@
 package haveric.recipeManager.recipes.stonecutting;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +29,15 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
 
         while (!reader.lineIsResult()) {
             // get the ingredient
-            String line = reader.getLine();
+            String materialsValue = reader.getLine();
 
-            List<Material> choices = parseIngredient(new String[]{line}, recipe.getType());
-            if (choices == null || choices.isEmpty()) {
+            // There's no needed logic for shapes here, so trim the shape declaration
+            if (materialsValue.startsWith("a ")) {
+                materialsValue = materialsValue.substring(2);
+            }
+
+            RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
+            if (choice == null) {
                 return false;
             }
 
@@ -37,15 +46,31 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
 
             if (ingredientFlags.hasFlags()) {
                 List<ItemStack> items = new ArrayList<>();
-                for (Material choice : choices) {
-                    Args a = ArgBuilder.create().result(new ItemStack(choice)).build();
-                    ingredientFlags.sendCrafted(a, true);
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> materials = materialChoice.getChoices();
 
-                    items.add(a.result());
+                    for (Material material : materials) {
+                        Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> exactItems = exactChoice.getChoices();
+
+                    for (ItemStack exactItem : exactItems) {
+                        Args a = ArgBuilder.create().result(exactItem).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
                 }
+
                 recipe.addIngredientChoiceItems(items);
             } else {
-                recipe.addIngredientChoice(choices);
+                recipe.setIngredientChoice(ToolsItem.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
             }
         }
 

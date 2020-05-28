@@ -1,0 +1,39 @@
+campfire default
+dirt
+= dirt
+
+campfire shape
+a dirt
+= grass
+
+campfire data
+wooden_sword:2
+= wooden_sword
+
+campfire shape-data
+a iron_sword:2
+= iron_sword
+
+campfire ingredient-flag-data
+golden_sword:3
+@name Gold Sword
+= golden_sword
+
+campfire shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+= diamond_sword
+
+campfire time
+sponge % 5
+= sponge
+
+campfire time2
+sand % 4
+red_sand
+= sand
+
+campfire time3
+glass
+glass_pane % 3
+= glass

@@ -372,8 +372,28 @@ public class ToolsItem {
         return s.toString();
     }
 
+    public static RecipeChoice mergeRecipeChoices(RecipeChoice choice, RecipeChoice choiceToMerge) {
+        if (choiceToMerge instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choiceToMerge;
+            return mergeRecipeChoiceWithMaterials(choice, materialChoice.getChoices());
+        } else if (choiceToMerge instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choiceToMerge;
+            return mergeRecipeChoiceWithItems(choice, exactChoice.getChoices());
+        }
+
+        return choice;
+    }
+
+    public static RecipeChoice mergeRecipeChoiceWithMaterials(RecipeChoice choice, Material material) {
+        List<Material> materials = new ArrayList<>();
+        materials.add(material);
+        return mergeRecipeChoiceWithMaterials(choice, materials);
+    }
+
     public static RecipeChoice mergeRecipeChoiceWithMaterials(RecipeChoice choice, List<Material> materials) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
+        if (choice == null) {
+            choice = new RecipeChoice.MaterialChoice(materials);
+        } else if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             List<Material> newMaterials = new ArrayList<>();
             newMaterials.addAll(materialChoice.getChoices());
@@ -392,8 +412,16 @@ public class ToolsItem {
         return choice;
     }
 
+    public static RecipeChoice mergeRecipeChoiceWithItems(RecipeChoice choice, ItemStack item) {
+        List<ItemStack> items = new ArrayList<>();
+        items.add(item);
+        return mergeRecipeChoiceWithItems(choice, items);
+    }
+
     public static RecipeChoice mergeRecipeChoiceWithItems(RecipeChoice choice, List<ItemStack> items) {
-        if (choice instanceof RecipeChoice.ExactChoice) {
+        if (choice == null) {
+            choice = new RecipeChoice.ExactChoice(items);
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
             RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
             List<ItemStack> newItems = new ArrayList<>();
             newItems.addAll(exactChoice.getChoices());

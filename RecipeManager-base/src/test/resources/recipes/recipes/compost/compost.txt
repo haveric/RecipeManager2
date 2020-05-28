@@ -1,0 +1,39 @@
+compost default
+dirt
+= dirt
+
+compost shape
+a grass
+= grass
+
+compost data
+wooden_sword:2
+= wooden_sword
+
+compost shape-data
+a iron_sword:2
+= iron_sword
+
+compost ingredient-flag-data
+golden_sword:3
+@name Gold Sword
+= golden_sword
+
+compost shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+= diamond_sword
+
+compost args
+sponge % 5 % 2
+= sponge
+
+compost args2
+sand % 4 % 3
+red_sand
+= sand
+
+compost args3
+glass
+glass_pane % 3 % 4
+= glass

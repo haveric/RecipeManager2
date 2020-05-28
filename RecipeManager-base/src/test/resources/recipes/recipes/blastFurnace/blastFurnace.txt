@@ -1,0 +1,35 @@
+blasting default
+dirt
+= dirt
+
+blasting shape
+a dirt
+= grass
+
+blasting data
+wooden_sword:2
+= wooden_sword
+
+blasting shape-data
+a iron_sword:2
+= iron_sword
+
+blasting ingredient-flag-data
+golden_sword:3
+@name Gold Sword
+= golden_sword
+
+blasting shape-ingredient-flag
+a diamond_sword
+@name Test Sword
+= diamond_sword
+
+blasting fuel
+cobblestone
+& coal
+= coal
+
+blasting shape-fuel
+a stone
+& charcoal
+= charcoal
