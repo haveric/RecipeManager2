@@ -39,20 +39,20 @@ public class CombineRecipeParser extends BaseRecipeParser {
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
         String shapeFormatLine = reader.getLine().toLowerCase();
-        if (shapeFormatLine.startsWith("shape") || shapeFormatLine.startsWith("a ")) {
+        if (shapeFormatLine.startsWith("pattern") || shapeFormatLine.startsWith("a ")) {
             if (recipe instanceof CombineRecipe1_13) {
                 Map<Character, Integer> ingredientCharacters = new HashMap<>();
                 Map<Character, RecipeChoice> ingredientRecipeChoiceMap = new HashMap<>();
-                String shapeLine;
-                if (shapeFormatLine.startsWith("shape")) {
-                    shapeLine = shapeFormatLine.substring("shape".length()).trim();
+                String patternLine;
+                if (shapeFormatLine.startsWith("pattern")) {
+                    patternLine = shapeFormatLine.substring("pattern".length()).trim();
 
-                    if (shapeLine.length() > 9) {
-                        ErrorReporter.getInstance().warning("Shape has more than 9 characters: " + shapeLine + ". Using only the nine three: " + shapeLine.substring(0, 9));
-                        shapeLine = shapeLine.substring(0, 9);
+                    if (patternLine.length() > 9) {
+                        ErrorReporter.getInstance().warning("Pattern has more than 9 characters: " + patternLine + ". Using only the first nine: " + patternLine.substring(0, 9));
+                        patternLine = patternLine.substring(0, 9);
                     }
 
-                    for (char c : shapeLine.toCharArray()) {
+                    for (char c : patternLine.toCharArray()) {
                         if (!ingredientCharacters.containsKey(c)) {
                             ingredientCharacters.put(c, 1);
                         } else {
@@ -63,7 +63,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     reader.nextLine();
                 } else {
                     // Default to a single item
-                    shapeLine = "a";
+                    patternLine = "a";
                     ingredientCharacters.put('a', 1);
                 }
 
@@ -132,7 +132,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     }
                 }
 
-                ((CombineRecipe1_13) recipe).setChoiceShape(shapeLine);
+                ((CombineRecipe1_13) recipe).setChoicePattern(patternLine);
                 ((CombineRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
             } else {
                 return ErrorReporter.getInstance().error("Shape is only supported on 1.13 or newer servers.");
@@ -203,7 +203,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     letter ++;
                 }
 
-                ((CombineRecipe1_13) recipe).setChoiceShape(shape.toString());
+                ((CombineRecipe1_13) recipe).setChoicePattern(shape.toString());
                 ((CombineRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
             } else {
                 List<ItemStack> ingredients = new ArrayList<>();

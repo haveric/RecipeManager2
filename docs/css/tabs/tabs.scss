@@ -1,0 +1,40 @@
+.tabs {
+    margin-top: 15px;
+}
+
+.tabs-nav {
+    position: relative;
+}
+
+.tabs-nav:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    z-index: 5;
+}
+
+.tab__title {
+    position: relative;
+    z-index: 10;
+    float: left;
+    padding: 10px 15px;
+    background-color: #ccc;
+    margin: 0;
+    cursor: pointer;
+}
+
+.tab__title.active {
+    background-color: #07f;
+    color: #eee;
+}
+
+.tab__content {
+    display: none;
+}
+
+.tab__content.active {
+    display: block;
+}

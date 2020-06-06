@@ -38,26 +38,26 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
-        List<String> choiceShapeString = new ArrayList<>();
+        List<String> choicePatternString = new ArrayList<>();
 
-        String shapeFormatLine = reader.getLine().toLowerCase();
-        if (shapeFormatLine.startsWith("shape") || shapeFormatLine.startsWith("a ")) {
+        String patternFormatLine = reader.getLine().toLowerCase();
+        if (patternFormatLine.startsWith("pattern") || patternFormatLine.startsWith("a ")) {
             if (recipe instanceof CraftRecipe1_13) {
                 Map<Character, Integer> ingredientCharacters = new HashMap<>();
                 Map<Character, RecipeChoice> ingredientRecipeChoiceMap = new HashMap<>();
-                if (shapeFormatLine.startsWith("shape")) {
-                    String[] shapeLines = shapeFormatLine.substring("shape".length()).split("\\|", 3);
+                if (patternFormatLine.startsWith("pattern")) {
+                    String[] patternLines = patternFormatLine.substring("pattern".length()).split("\\|", 3);
 
-                    for (String shapeLine : shapeLines) {
-                        shapeLine = shapeLine.trim();
+                    for (String patternLine : patternLines) {
+                        patternLine = patternLine.trim();
 
-                        if (shapeLine.length() > 3) {
-                            ErrorReporter.getInstance().warning("Shape row has more than 3 characters: " + shapeLine + ". Using only the first three: " + shapeLine.substring(0, 3));
-                            shapeLine = shapeLine.substring(0, 3);
+                        if (patternLine.length() > 3) {
+                            ErrorReporter.getInstance().warning("Pattern line has more than three characters: " + patternLine + ". Using only the first three: " + patternLine.substring(0, 3));
+                            patternLine = patternLine.substring(0, 3);
                         }
-                        choiceShapeString.add(shapeLine);
+                        choicePatternString.add(patternLine);
 
-                        for (char c : shapeLine.toCharArray()) {
+                        for (char c : patternLine.toCharArray()) {
                             if (!ingredientCharacters.containsKey(c)) {
                                 ingredientCharacters.put(c, 1);
                             } else {
@@ -69,7 +69,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                     reader.nextLine();
                 } else {
                     // Default to a single item
-                    choiceShapeString.add("a");
+                    choicePatternString.add("a");
                     ingredientCharacters.put('a', 1);
                 }
 
@@ -139,12 +139,12 @@ public class CraftRecipeParser extends BaseRecipeParser {
                 }
 
                 // Add extra air to fill rectangle
-                if (choiceShapeString.size() > 1) {
-                    int min = choiceShapeString.get(0).length();
+                if (choicePatternString.size() > 1) {
+                    int min = choicePatternString.get(0).length();
                     int max = min;
 
-                    for (int i = 1; i < choiceShapeString.size(); i++) {
-                        String characters = choiceShapeString.get(i);
+                    for (int i = 1; i < choicePatternString.size(); i++) {
+                        String characters = choicePatternString.get(i);
                         max = Math.max(characters.length(), max);
                         min = Math.min(characters.length(), min);
                     }
@@ -158,19 +158,19 @@ public class CraftRecipeParser extends BaseRecipeParser {
                     }
 
                     if (min < max) {
-                        for (int i = 0; i < choiceShapeString.size(); i++) {
-                            String shape = choiceShapeString.get(i);
+                        for (int i = 0; i < choicePatternString.size(); i++) {
+                            String shape = choicePatternString.get(i);
                             for (int j = shape.length(); j < max; j++) {
                                 shape += availableChar;
                             }
-                            choiceShapeString.set(i, shape);
+                            choicePatternString.set(i, shape);
                         }
 
                         ingredientRecipeChoiceMap.put(availableChar, null);
                     }
                 }
 
-                ((CraftRecipe1_13) recipe).setChoiceShape(choiceShapeString.toArray(new String[0]));
+                ((CraftRecipe1_13) recipe).setChoicePattern(choicePatternString.toArray(new String[0]));
                 ((CraftRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
             } else {
                 return ErrorReporter.getInstance().error("Shape is only supported on 1.13 or newer servers.");
@@ -219,10 +219,10 @@ public class CraftRecipeParser extends BaseRecipeParser {
                         }
 
                         if (!ingredientErrors) {
-                            if (choiceShapeString.size() == rows) {
-                                choiceShapeString.add("" + characterKey);
+                            if (choicePatternString.size() == rows) {
+                                choicePatternString.add("" + characterKey);
                             } else {
-                                choiceShapeString.set(rows, choiceShapeString.get(rows) + characterKey);
+                                choicePatternString.set(rows, choicePatternString.get(rows) + characterKey);
                             }
 
                             ingredientsChoiceMap.put(characterKey, choice);
@@ -246,23 +246,23 @@ public class CraftRecipeParser extends BaseRecipeParser {
                 }
 
                 // Add extra air to fill rectangle
-                if (choiceShapeString.size() > 1) {
-                    int min = choiceShapeString.get(0).length();
+                if (choicePatternString.size() > 1) {
+                    int min = choicePatternString.get(0).length();
                     int max = min;
 
-                    for (int i = 1; i < choiceShapeString.size(); i++) {
-                        String characters = choiceShapeString.get(i);
+                    for (int i = 1; i < choicePatternString.size(); i++) {
+                        String characters = choicePatternString.get(i);
                         max = Math.max(characters.length(), max);
                         min = Math.min(characters.length(), min);
                     }
 
                     if (min < max) {
-                        for (int i = 0; i < choiceShapeString.size(); i++) {
-                            String shape = choiceShapeString.get(i);
+                        for (int i = 0; i < choicePatternString.size(); i++) {
+                            String shape = choicePatternString.get(i);
                             for (int j = shape.length(); j < max; j++) {
                                 shape += characterKey;
                             }
-                            choiceShapeString.set(i, shape);
+                            choicePatternString.set(i, shape);
                         }
 
                         List<Material> airList = new ArrayList<>();
@@ -272,7 +272,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                     }
                 }
 
-                ((CraftRecipe1_13) recipe).setChoiceShape(choiceShapeString.toArray(new String[0]));
+                ((CraftRecipe1_13) recipe).setChoicePattern(choicePatternString.toArray(new String[0]));
                 ((CraftRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientsChoiceMap);
             } else {
                 ItemStack[] ingredients = new ItemStack[9];

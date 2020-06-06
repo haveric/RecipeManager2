@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 
 public class CraftRecipe1_13 extends BaseCraftRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
-    private String[] choiceShape;
+    private String[] choicePattern;
 
     private int width;
     private int height;
@@ -31,7 +31,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
     public CraftRecipe1_13(ShapedRecipe recipe) {
         setBukkitRecipe(recipe);
-        setChoiceShape(recipe.getShape());
+        setChoicePattern(recipe.getShape());
         setIngredientsChoiceMap(recipe);
         setResult(recipe.getResult());
     }
@@ -46,7 +46,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
                 ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
             }
 
-            choiceShape = r.choiceShape;
+            choicePattern = r.choicePattern;
 
             width = r.width;
             height = r.height;
@@ -92,22 +92,22 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         return ingredientsChoiceMap;
     }
 
-    public void setChoiceShape(String[] shape) {
-        choiceShape = shape;
+    public void setChoicePattern(String[] pattern) {
+        choicePattern = pattern;
 
-        width = shape[0].length();
-        height = shape.length;
+        width = pattern[0].length();
+        height = pattern.length;
     }
 
-    public String[] getChoiceShape() {
-        return choiceShape;
+    public String[] getChoicePattern() {
+        return choicePattern;
     }
 
     private void updateHash() {
         StringBuilder str = new StringBuilder("craft ");
-        int shapeSize = choiceShape.length;
+        int shapeSize = choicePattern.length;
         for (int i = 0; i < shapeSize; i++) {
-            str.append(choiceShape[i]);
+            str.append(choicePattern[i]);
 
             if (i + 1 < shapeSize) {
                 str.append(",");
@@ -132,10 +132,10 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
         s.append(" (");
 
-        if (choiceShape != null) {
-            int shapeSize = choiceShape.length;
+        if (choicePattern != null) {
+            int shapeSize = choicePattern.length;
             for (int i = 0; i < shapeSize; i++) {
-                s.append(choiceShape[i]);
+                s.append(choicePattern[i]);
 
                 if (i + 1 < shapeSize) {
                     s.append(",");
@@ -195,7 +195,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
             bukkitRecipe = new ShapedRecipe(getNamespacedKey(), result);
         }
 
-        bukkitRecipe.shape(choiceShape);
+        bukkitRecipe.shape(choicePattern);
 
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             bukkitRecipe.setIngredient(entry.getKey(), entry.getValue());
@@ -222,11 +222,11 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
     public String printBookResult(ItemResult result) {
         StringBuilder s = getHeaderResult("craft", result);
 
-        s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
+        s.append(Messages.getInstance().parse("recipebook.header.pattern")).append('\n');
         s.append(RMCChatColor.GRAY);
 
-        for (String shape : choiceShape) {
-            for (char letter : shape.toCharArray()) {
+        for (String pattern : choicePattern) {
+            for (char letter : pattern.toCharArray()) {
                 s.append('[');
 
                 RecipeChoice choice = ingredientsChoiceMap.get(letter);

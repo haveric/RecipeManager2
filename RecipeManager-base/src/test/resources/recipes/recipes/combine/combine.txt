@@ -2,14 +2,14 @@ combine default
 dirt + cobblestone
 = stone
 
-combine shape-default
-shape ab
+combine pattern-default
+pattern ab
 a dirt
 b grass
 = cobblestone
 
-combine shape-ingredient-flag
-shape a
+combine pattern-ingredient-flag
+pattern a
 a diamond_sword
 @name Test Sword
 = diamond_sword
@@ -18,8 +18,8 @@ combine data
 iron_sword:1
 = iron_sword
 
-combine shape-data
-shape a
+combine pattern-data
+pattern a
 a golden_sword:1
 = golden_sword
 
@@ -27,18 +27,18 @@ combine multiple-data
 wooden_sword:1, iron_sword:2
 = glass
 
-combine multiple-data-shape
-shape a
+combine multiple-data-pattern
+pattern a
 a wooden_sword:1, iron_sword:2
 = glass_pane
 
-combine multiple-data-shape2
-shape a
+combine multiple-data-pattern2
+pattern a
 a wooden_sword:1
 a iron_sword:2
 = glass_pane
 
-combine multiple-data-shape3
+combine multiple-data-pattern3
 a wooden_sword:1
 a iron_sword:2
 = glass_pane

@@ -113,9 +113,12 @@ var toggleSlots = function(maxCycles) {
 
 var toggleSlotCycle = function(el) {
     var activeCycle = el.querySelector(".slot__cycle.active");
-    activeCycle.classList.remove("active");
+    var nextCycle;
+    if (activeCycle) {
+        activeCycle.classList.remove("active");
 
-    var nextCycle = activeCycle.nextElementSibling;
+        nextCycle = activeCycle.nextElementSibling;
+    }
 
     if (!nextCycle) {
         nextCycle = el.firstElementChild;

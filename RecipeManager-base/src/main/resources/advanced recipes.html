@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/app.css?v=1"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/inventory/inventory.css?v=1"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/code-highlight/code-highlight.css?v=1"/>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/tabs/tabs.css?v=1"/>
 </head>
 <body>
 <nav class="nav-docs">
@@ -64,15 +65,16 @@
                     Here's the full syntax of a recipe file:
                 </p>
                 <pre class="code">
-[@shared or recipe flag]
+[@ shared or recipe flag]
 [... more flags]
 
 &lt;recipe definition&gt; [recipe name]
-[@shared or recipe flag]
+[@ shared or recipe flag]
 [... more flags]
 &lt;ingredients&gt;
+[@ ingredient flags]
 = &lt;result&gt;
-  [@shared or result flag]
+  [@ shared or result flag]
   [... more flags]
 [... more results]
 
@@ -81,7 +83,34 @@
                 <div>
                     Here's a quick example of the above syntax by using all available options:
                 </div>
-                <pre class="code">
+                <div class="tabs">
+                    <div class="tabs-nav clearfix">
+                        <div class="tab__title active">
+                            New Format
+                        </div>
+                        <div class="tab__title">
+                            Old Format
+                        </div>
+                    </div>
+                    <div class="tabs-content">
+                        <div class="tab__content active">
+<pre class="code">
+@message You crafted this! // this applies to all recipes within this file
+
+COMBINE
+@broadcast {player} has crafted a fine sword!
+pattern abcc
+a iron_ingot
+b gold_ingot
+c diamond
+= golden_sword
+  @enchant durability max
+  @name Fine Gold Sword
+  @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
+</pre>
+                        </div>
+                        <div class="tab__content">
+<pre class="code">
 @message You crafted this! // this applies to all recipes within this file
 
 COMBINE
@@ -92,6 +121,9 @@ iron_ingot + gold_ingot + diamond:2
   @name Fine Gold Sword
   @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
 </pre>
+                        </div>
+                    </div>
+                </div>
                 <div class="inventory inventory--crafting">
                     <div class="inventory__ingredients">
                         <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/iron_ingot.png?v=1"/>
@@ -187,6 +219,29 @@ apple
         <div id="different-names" class="doc-section">
             <h3 class="doc-section__title">Same Ingredients, Different Names, Different results</h3>
             <div class="doc-section__inn">
+                <div class="tabs">
+                    <div class="tabs-nav clearfix">
+                        <div class="tab__title active">
+                            New Format
+                        </div>
+                        <div class="tab__title">
+                            Old Format
+                        </div>
+                    </div>
+                    <div class="tabs-content">
+                        <div class="tab__content active">
+<pre class="code">
+combine
+@individualresults
+pattern aaa
+a gold_nugget
+= iron_ingot
+  @ingredientcondition gold_nugget | name Silver Nugget
+= diamond
+  @ingredientcondition gold_nugget | name Diamond Nugget
+</pre>
+                        </div>
+                        <div class="tab__content">
 <pre class="code">
 combine
 @individualresults
@@ -196,6 +251,9 @@ gold_nugget:3
 = diamond
   @ingredientcondition gold_nugget | name Diamond Nugget
 </pre>
+                        </div>
+                    </div>
+                </div>
                 <p>
                     This recipe lets you combine 3 gold nuggets named differently to create different results.
                     If you combine 3 unnamed ones nothing will result, but if they're named "Silver Nugget" you'll get an iron_ingot.
@@ -343,5 +401,6 @@ sulphur % 30
 </footer>
 <script src="https://www.recipemanager.dev/js/inventory/inventory.js?v=1"></script>
 <script src="https://www.recipemanager.dev/js/code-highlight/code-highlight.js?v=1"></script>
+<script src="https://www.recipemanager.dev/js/tabs/tabs.js?v=1"></script>
 </body>
 </html>

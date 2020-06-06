@@ -35,8 +35,8 @@ public class TestCombineRecipe extends FlagBaseTest {
 
             String name = recipe.getName();
             if (name.equals("default")) {
-                String shape = "ab";
-                assertEquals(shape, recipe.getChoiceShape());
+                String pattern = "ab";
+                assertEquals(pattern, recipe.getChoicePattern());
 
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
@@ -53,9 +53,9 @@ public class TestCombineRecipe extends FlagBaseTest {
                 assertEquals(Material.STONE, result.getType());
 
                 numRecipesChecked ++;
-            } else if (name.equals("shape-default")) {
-                String shape = "ab";
-                assertEquals(shape, recipe.getChoiceShape());
+            } else if (name.equals("pattern-default")) {
+                String pattern = "ab";
+                assertEquals(pattern, recipe.getChoicePattern());
 
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
@@ -71,7 +71,7 @@ public class TestCombineRecipe extends FlagBaseTest {
 
                 assertEquals(Material.COBBLESTONE, result.getType());
                 numRecipesChecked ++;
-            } else if (name.equals("shape-ingredient-flag")) {
+            } else if (name.equals("pattern-ingredient-flag")) {
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
                 List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
@@ -104,7 +104,7 @@ public class TestCombineRecipe extends FlagBaseTest {
                 assertEquals(Material.IRON_SWORD, result.getType());
 
                 numRecipesChecked ++;
-            } else if (name.equals("shape-data")) {
+            } else if (name.equals("pattern-data")) {
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
                 List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();

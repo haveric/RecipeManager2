@@ -20,7 +20,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import java.util.*;
 
 public class CombineRecipe1_13 extends BaseCombineRecipe {
-    private String choiceShape = "";
+    private String choicePattern = "";
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
 
     public CombineRecipe1_13() {
@@ -38,7 +38,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         if (recipe instanceof CombineRecipe1_13) {
             CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
 
-            choiceShape = r.choiceShape;
+            choicePattern = r.choicePattern;
 
             if (!r.ingredientsChoiceMap.isEmpty()) {
                 ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
@@ -50,12 +50,12 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         super(flags);
     }
 
-    public void setChoiceShape(String shape) {
-        choiceShape = shape;
+    public void setChoicePattern(String pattern) {
+        choicePattern = pattern;
     }
 
-    public String getChoiceShape() {
-        return choiceShape;
+    public String getChoicePattern() {
+        return choicePattern;
     }
 
     private void setIngredientsChoiceMap(ShapedRecipe recipe) {
@@ -103,14 +103,14 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
             letter ++;
         }
 
-        choiceShape = shape;
+        choicePattern = shape;
         updateHash();
     }
 
     public List<RecipeChoice> getIngredientChoiceList() {
         List<RecipeChoice> ingredientChoiceList = new ArrayList<>();
 
-        for (char c : choiceShape.toCharArray()) {
+        for (char c : choicePattern.toCharArray()) {
             ingredientChoiceList.add(ingredientsChoiceMap.get(c));
         }
 
@@ -196,8 +196,8 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
     public String printBookResult(ItemResult result) {
         StringBuilder s = getHeaderResult("combine", result);
 
-        s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
-        s.append(RMCChatColor.GRAY).append(choiceShape).append('\n');
+        s.append(Messages.getInstance().parse("recipebook.header.pattern")).append('\n');
+        s.append(RMCChatColor.GRAY).append(choicePattern).append('\n');
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 

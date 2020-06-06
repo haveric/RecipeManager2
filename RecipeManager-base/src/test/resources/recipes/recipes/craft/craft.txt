@@ -2,8 +2,8 @@ craft default
 dirt + cobblestone
 = stone
 
-craft shape-default
-shape ab
+craft pattern-default
+pattern ab
 a dirt
 b grass
 = cobblestone
@@ -13,14 +13,14 @@ dirt, grass
 sponge, brick
 = brick
 
-craft shape-choice
-shape a | b
+craft pattern-choice
+pattern a | b
 a sponge, brick
 b dirt, grass
 = sponge
 
-craft shape-ingredient-flag
-shape a
+craft pattern-ingredient-flag
+pattern a
 a diamond_sword
 @name Test Sword
 = diamond_sword
@@ -29,8 +29,8 @@ craft data
 iron_sword:1
 = iron_sword
 
-craft shape-data
-shape a
+craft pattern-data
+pattern a
 a golden_sword:1
 = golden_sword
 
@@ -38,18 +38,18 @@ craft multiple-data
 wooden_sword:1, iron_sword:2
 = glass
 
-craft multiple-data-shape
-shape a
+craft multiple-data-pattern
+pattern a
 a wooden_sword:1, iron_sword:2
 = glass_pane
 
-craft multiple-data-shape2
-shape a
+craft multiple-data-pattern2
+pattern a
 a wooden_sword:1
 a iron_sword:2
 = glass_pane
 
-craft multiple-data-shape3
+craft multiple-data-pattern3
 a wooden_sword:1
 a iron_sword:2
 = glass_pane

@@ -673,7 +673,7 @@ public class Vanilla {
                 if (r instanceof ShapedRecipe) {
                     sr = (ShapedRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
                         iterator.remove();
 
                         baseRecipeIterator.finish();
@@ -1052,7 +1052,7 @@ public class Vanilla {
                 if (r instanceof ShapedRecipe) {
                     sr = (ShapedRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoiceShape(), recipe.getIngredientsChoiceMap())) {
+                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
                         ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
                         baseRecipeIterator.replace(overrideItem);
                         baseRecipeIterator.finish();

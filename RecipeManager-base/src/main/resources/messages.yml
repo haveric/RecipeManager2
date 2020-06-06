@@ -134,6 +134,7 @@ recipebook:
     anvil: <black><bold>ANVIL RECIPE
     fuel: <black><bold>FURNACE FUEL
     shape: <black><underline>Shape
+    pattern: <black><underline>Pattern
     ingredients: <black><underline>Ingredients
     ingredient: <black><underline>Ingredient
     cooktime: <black><underline>Cooking time

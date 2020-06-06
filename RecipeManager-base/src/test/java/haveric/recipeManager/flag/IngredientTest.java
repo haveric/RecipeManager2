@@ -132,8 +132,8 @@ public class IngredientTest extends FlagBaseTest {
 
                 assertNull(choiceMap.get('d'));
 
-                assertEquals(1, recipe.getChoiceShape().length);
-                assertEquals("abc", recipe.getChoiceShape()[0]);
+                assertEquals(1, recipe.getChoicePattern().length);
+                assertEquals("abc", recipe.getChoicePattern()[0]);
             } else if (resultType == Material.STONE) {
                 RecipeChoice choiceA = choiceMap.get('a');
                 RecipeChoice.MaterialChoice matChoiceA = (RecipeChoice.MaterialChoice) choiceA;
@@ -149,10 +149,10 @@ public class IngredientTest extends FlagBaseTest {
 
                 assertNull(choiceMap.get('d'));
 
-                assertEquals(3, recipe.getChoiceShape().length);
-                assertEquals("a", recipe.getChoiceShape()[0]);
-                assertEquals("b", recipe.getChoiceShape()[1]);
-                assertEquals("c", recipe.getChoiceShape()[2]);
+                assertEquals(3, recipe.getChoicePattern().length);
+                assertEquals("a", recipe.getChoicePattern()[0]);
+                assertEquals("b", recipe.getChoicePattern()[1]);
+                assertEquals("c", recipe.getChoicePattern()[2]);
             }
         }
     }

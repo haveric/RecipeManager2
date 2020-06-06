@@ -40,8 +40,8 @@ public class TestCraftRecipe extends FlagBaseTest {
                 assertEquals(2, recipe.getWidth());
                 assertEquals(1, recipe.getHeight());
 
-                String[] shape = {"ab"};
-                assertArrayEquals(shape, recipe.getChoiceShape());
+                String[] pattern = {"ab"};
+                assertArrayEquals(pattern, recipe.getChoicePattern());
 
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
@@ -58,12 +58,12 @@ public class TestCraftRecipe extends FlagBaseTest {
                 assertEquals(Material.STONE, result.getType());
 
                 numRecipesChecked ++;
-            } else if (name.equals("shape-default")) {
+            } else if (name.equals("pattern-default")) {
                 assertEquals(2, recipe.getWidth());
                 assertEquals(1, recipe.getHeight());
 
-                String[] shape = {"ab"};
-                assertArrayEquals(shape, recipe.getChoiceShape());
+                String[] pattern = {"ab"};
+                assertArrayEquals(pattern, recipe.getChoicePattern());
 
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
@@ -83,8 +83,8 @@ public class TestCraftRecipe extends FlagBaseTest {
                 assertEquals(1, recipe.getWidth());
                 assertEquals(2, recipe.getHeight());
 
-                String[] shape = {"a", "b"};
-                assertArrayEquals(shape, recipe.getChoiceShape());
+                String[] pattern = {"a", "b"};
+                assertArrayEquals(pattern, recipe.getChoicePattern());
 
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
@@ -103,12 +103,12 @@ public class TestCraftRecipe extends FlagBaseTest {
                 assertEquals(Material.BRICK, result.getType());
 
                 numRecipesChecked ++;
-            } else if (name.equals("shape-choice")) {
+            } else if (name.equals("pattern-choice")) {
                 assertEquals(1, recipe.getWidth());
                 assertEquals(2, recipe.getHeight());
 
-                String[] shape = {"a", "b"};
-                assertArrayEquals(shape, recipe.getChoiceShape());
+                String[] pattern = {"a", "b"};
+                assertArrayEquals(pattern, recipe.getChoicePattern());
 
                 RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
                 assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
@@ -127,7 +127,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                 assertEquals(Material.SPONGE, result.getType());
 
                 numRecipesChecked++;
-            } else if (name.equals("shape-ingredient-flag")) {
+            } else if (name.equals("pattern-ingredient-flag")) {
                 assertEquals(1, recipe.getWidth());
                 assertEquals(1, recipe.getHeight());
 
@@ -166,7 +166,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                 assertEquals(Material.IRON_SWORD, result.getType());
 
                 numRecipesChecked ++;
-            } else if (name.equals("shape-data")) {
+            } else if (name.equals("pattern-data")) {
                 assertEquals(1, recipe.getWidth());
                 assertEquals(1, recipe.getHeight());
 
