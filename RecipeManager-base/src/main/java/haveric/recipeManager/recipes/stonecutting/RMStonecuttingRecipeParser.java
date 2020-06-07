@@ -27,6 +27,15 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
         RMStonecuttingRecipe recipe = new RMStonecuttingRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // check for @flags
 
+        String groupLine = reader.getLine();
+        if (groupLine.toLowerCase().startsWith("group ")) {
+            groupLine = groupLine.substring("group ".length()).trim();
+
+            recipe.setGroup(groupLine);
+
+            reader.nextLine();
+        }
+
         while (!reader.lineIsResult()) {
             // get the ingredient
             String materialsValue = reader.getLine();

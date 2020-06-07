@@ -38,6 +38,19 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
+        String groupLine = reader.getLine();
+        if (groupLine.toLowerCase().startsWith("group ")) {
+            groupLine = groupLine.substring("group ".length()).trim();
+
+            if (recipe instanceof CombineRecipe1_13) {
+                ((CombineRecipe1_13) recipe).setGroup(groupLine);
+            } else {
+                ErrorReporter.getInstance().warning("Group is supported on 1.13 or newer only. Group: " + groupLine + " ignored.");
+            }
+
+            reader.nextLine();
+        }
+
         String shapeFormatLine = reader.getLine().toLowerCase();
         if (shapeFormatLine.startsWith("pattern") || shapeFormatLine.startsWith("a ")) {
             if (recipe instanceof CombineRecipe1_13) {

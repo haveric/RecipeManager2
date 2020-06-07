@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking.furnace;
 
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.BlastingRecipe;
 
 public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMBlastingRecipe() {
-        setMinTime(Vanilla.BLASTING_RECIPE_TIME);
+        minTime = Vanilla.BLASTING_RECIPE_TIME;
     }
 
     public RMBlastingRecipe(BaseRecipe recipe) {
@@ -20,13 +20,11 @@ public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMBlastingRecipe(Flags flags) {
         super(flags);
 
-        setMinTime(Vanilla.BLASTING_RECIPE_TIME);
+        minTime = Vanilla.BLASTING_RECIPE_TIME;
     }
 
     public RMBlastingRecipe(BlastingRecipe recipe) {
         super(recipe);
-
-        setMinTime(Vanilla.BLASTING_RECIPE_TIME);
     }
 
     @Override
@@ -49,8 +47,12 @@ public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        return new BlastingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), 0, getCookTicks());
+        BlastingRecipe bukkitRecipe = new BlastingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(getGroup());
+        }
 
+        return bukkitRecipe;
     }
 
     @Override

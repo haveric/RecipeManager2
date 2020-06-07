@@ -1,5 +1,6 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking.furnace;
 
+import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -9,6 +10,7 @@ import org.bukkit.inventory.FurnaceRecipe;
 
 public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
     public RMFurnaceRecipe1_13() {
+        minTime = Vanilla.FURNACE_RECIPE_TIME;
     }
 
     public RMFurnaceRecipe1_13(BaseRecipe recipe) {
@@ -17,6 +19,8 @@ public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
 
     public RMFurnaceRecipe1_13(Flags flags) {
         super(flags);
+
+        minTime = Vanilla.FURNACE_RECIPE_TIME;
     }
 
     public RMFurnaceRecipe1_13(FurnaceRecipe recipe) {
@@ -43,6 +47,16 @@ public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        return new FurnaceRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), 0, getCookTicks());
+        FurnaceRecipe bukkitRecipe = new FurnaceRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(getGroup());
+        }
+
+        return bukkitRecipe;
+    }
+
+    @Override
+    public boolean hasCustomTime() {
+        return minTime != Vanilla.FURNACE_RECIPE_TIME;
     }
 }

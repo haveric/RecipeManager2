@@ -38,6 +38,19 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
         reader.parseFlags(recipe.getFlags()); // parse recipe's flags
 
+        String groupLine = reader.getLine();
+        if (groupLine.toLowerCase().startsWith("group ")) {
+            groupLine = groupLine.substring("group ".length()).trim();
+
+            if (recipe instanceof CraftRecipe1_13) {
+                ((CraftRecipe1_13) recipe).setGroup(groupLine);
+            } else {
+                ErrorReporter.getInstance().warning("Group is supported on 1.13 or newer only. Group: " + groupLine + " ignored.");
+            }
+
+            reader.nextLine();
+        }
+
         List<String> choicePatternString = new ArrayList<>();
 
         String patternFormatLine = reader.getLine().toLowerCase();

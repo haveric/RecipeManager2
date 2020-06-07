@@ -1,6 +1,5 @@
-package haveric.recipeManager.recipes.campfire;
+package haveric.recipeManager.recipes.cooking.campfire;
 
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
@@ -11,17 +10,13 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.SingleRecipeChoiceSingleResultRecipe;
+import haveric.recipeManager.recipes.cooking.RMBaseCookingRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.inventory.CampfireRecipe;
 
-public class RMCampfireRecipe extends SingleRecipeChoiceSingleResultRecipe {
-    private float minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
-    private float maxTime = -1;
-    private float experience = 2;
-
+public class RMCampfireRecipe extends RMBaseCookingRecipe {
     public RMCampfireRecipe() {
-
+        minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
     }
 
     public RMCampfireRecipe(BaseRecipe recipe) {
@@ -30,83 +25,24 @@ public class RMCampfireRecipe extends SingleRecipeChoiceSingleResultRecipe {
         if (recipe instanceof RMCampfireRecipe) {
             RMCampfireRecipe r = (RMCampfireRecipe) recipe;
 
-            minTime = r.minTime;
-            maxTime = r.maxTime;
-            experience = r.experience;
             hash = r.hash;
         }
     }
 
     public RMCampfireRecipe(Flags flags) {
         super(flags);
+
+        minTime = Vanilla.CAMPFIRE_RECIPE_TIME;
     }
 
     public RMCampfireRecipe(CampfireRecipe recipe) {
-        setIngredientChoice(recipe.getInputChoice());
-
-        setResult(recipe.getResult());
+        super(recipe);
     }
 
+    @Override
     public boolean hasCustomTime() {
         return minTime != Vanilla.CAMPFIRE_RECIPE_TIME;
     }
-
-    public float getMinTime() {
-        return minTime;
-    }
-
-    /**
-     * @param newMinTime
-     *            min random time range (seconds)
-     */
-    public void setMinTime(float newMinTime) {
-        minTime = newMinTime;
-    }
-
-    public float getMaxTime() {
-        return maxTime;
-    }
-
-    /**
-     * @param newMaxTime
-     *            max random time range (seconds) or set to -1 to disable
-     */
-    public void setMaxTime(float newMaxTime) {
-        maxTime = newMaxTime;
-    }
-
-    /**
-     * @return if recipe has random time range
-     */
-    public boolean hasRandomTime() {
-        return maxTime > minTime;
-    }
-
-    /**
-     * @return min time or if hasRandomTime() gets a random between min and max time.
-     */
-    public float getCookTime() {
-        float time;
-
-        if (hasRandomTime()) {
-            time = minTime + ((maxTime - minTime) * RecipeManager.random.nextFloat());
-        } else {
-            time = minTime;
-        }
-
-        return time;
-    }
-
-    /**
-     * @return getCookTime() multiplied by 20.0 and rounded
-     */
-    public int getCookTicks() {
-        return Math.round(getCookTime() * 20.0f);
-    }
-
-    public float getExperience() { return experience; }
-
-    public void setExperience(float newExperience) { experience = newExperience; }
 
     @Override
     public boolean equals(Object obj) {

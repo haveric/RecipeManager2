@@ -23,6 +23,8 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
     private String choicePattern = "";
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
 
+    private String group;
+
     public CombineRecipe1_13() {
     }
 
@@ -43,6 +45,8 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
             if (!r.ingredientsChoiceMap.isEmpty()) {
                 ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
             }
+
+            group = r.group;
         }
     }
 
@@ -117,6 +121,18 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         return ingredientChoiceList;
     }
 
+    public boolean hasGroup() {
+        return group != null;
+    }
+
+    public void setGroup(String newGroup) {
+        group = newGroup;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
     private void updateHash() {
         StringBuilder str = new StringBuilder("combine");
 
@@ -169,6 +185,10 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
             ItemStack result = Tools.createItemRecipeId(a.result(), hashCode());
 
             bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
+        }
+
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(group);
         }
 
         for (RecipeChoice choice : getIngredientChoiceList()) {

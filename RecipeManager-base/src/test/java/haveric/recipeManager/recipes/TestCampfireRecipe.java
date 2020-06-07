@@ -3,7 +3,7 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.FlagBaseTest;
-import haveric.recipeManager.recipes.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;

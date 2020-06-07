@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
 import org.bukkit.Material;
 import org.bukkit.inventory.RecipeChoice;
 import org.junit.Test;

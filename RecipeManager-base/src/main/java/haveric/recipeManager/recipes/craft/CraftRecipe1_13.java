@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 public class CraftRecipe1_13 extends BaseCraftRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choicePattern;
+    private String group;
 
     private int width;
     private int height;
@@ -47,6 +48,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
             }
 
             choicePattern = r.choicePattern;
+            group = r.group;
 
             width = r.width;
             height = r.height;
@@ -101,6 +103,18 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
     public String[] getChoicePattern() {
         return choicePattern;
+    }
+
+    public boolean hasGroup() {
+        return group != null;
+    }
+
+    public void setGroup(String newGroup) {
+        group = newGroup;
+    }
+
+    public String getGroup() {
+        return group;
     }
 
     private void updateHash() {
@@ -196,6 +210,9 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         }
 
         bukkitRecipe.shape(choicePattern);
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(group);
+        }
 
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             bukkitRecipe.setIngredient(entry.getKey(), entry.getValue());

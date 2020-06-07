@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.campfire.data;
+package haveric.recipeManager.recipes.cooking.campfire.data;
 
 import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

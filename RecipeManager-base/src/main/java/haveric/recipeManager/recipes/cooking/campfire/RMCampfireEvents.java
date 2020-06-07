@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.campfire;
+package haveric.recipeManager.recipes.cooking.campfire;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
@@ -7,8 +7,8 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.campfire.data.RMCampfireData;
-import haveric.recipeManager.recipes.campfire.data.RMCampfires;
+import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfireData;
+import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfires;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

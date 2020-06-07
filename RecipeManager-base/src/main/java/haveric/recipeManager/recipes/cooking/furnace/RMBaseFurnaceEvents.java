@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking.furnace;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
@@ -18,8 +18,8 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.furnace.data.FurnaceData;
-import haveric.recipeManager.recipes.furnace.data.Furnaces;
+import haveric.recipeManager.recipes.cooking.furnace.data.FurnaceData;
+import haveric.recipeManager.recipes.cooking.furnace.data.Furnaces;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;

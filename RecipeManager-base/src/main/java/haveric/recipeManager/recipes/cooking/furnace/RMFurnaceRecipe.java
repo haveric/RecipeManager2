@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking.furnace;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;

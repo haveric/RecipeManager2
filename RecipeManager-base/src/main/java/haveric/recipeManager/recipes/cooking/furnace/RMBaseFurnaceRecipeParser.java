@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking.furnace;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
@@ -47,6 +47,8 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         }
 
         reader.parseFlags(recipe.getFlags()); // check for @flags
+
+        checkForArgs(recipe);
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
@@ -185,6 +187,41 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
 
         return true;
+    }
+
+    private void checkForArgs(SingleResultRecipe recipe) {
+        String argLine = reader.getLine();
+
+        String argLower = argLine.toLowerCase();
+        if (argLower.startsWith("group ") || argLower.startsWith("xp ")) {
+            if (argLower.startsWith("group ")) {
+                argLine = argLine.substring("group ".length()).trim();
+
+                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                    ((RMBaseFurnaceRecipe1_13) recipe).setGroup(argLine);
+                } else {
+                    ErrorReporter.getInstance().warning("Group is supported on 1.13 or newer only. Group: " + argLine + " ignored.");
+                }
+            } else if (argLower.startsWith("xp ")) {
+                argLine = argLine.substring("xp ".length()).trim();
+
+                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
+                    try {
+                        float experience = Float.parseFloat(argLine);
+                        ((RMBaseFurnaceRecipe1_13) recipe).setExperience(experience);
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Xp is not a valid float. Xp: " + argLine + " ignored and defaulted to 0.");
+                    }
+                } else {
+                    ErrorReporter.getInstance().warning("Xp is supported on 1.13 or newer only. Xp: " + argLine + " ignored.");
+                }
+            }
+
+            reader.nextLine();
+
+            // Continue checking for other args
+            checkForArgs(recipe);
+        }
     }
 
     // get min-max or fixed smelting time

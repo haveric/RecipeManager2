@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.campfire;
+package haveric.recipeManager.recipes.cooking.campfire;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
@@ -27,6 +27,8 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         RMCampfireRecipe recipe = new RMCampfireRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags()); // check for @flags
+
+        checkForArgs(recipe);
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
@@ -117,6 +119,33 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
 
 
         return true;
+    }
+
+    private void checkForArgs(RMCampfireRecipe recipe) {
+        String argLine = reader.getLine();
+
+        String argLower = argLine.toLowerCase();
+        if (argLower.startsWith("group ") || argLower.startsWith("xp ")) {
+            if (argLower.startsWith("group ")) {
+                argLine = argLine.substring("group ".length()).trim();
+
+                recipe.setGroup(argLine);
+            } else if (argLower.startsWith("xp ")) {
+                argLine = argLine.substring("xp ".length()).trim();
+
+                try {
+                    float experience = Float.parseFloat(argLine);
+                    recipe.setExperience(experience);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Xp is not a valid float. Xp: " + argLine + " ignored and defaulted to 0.");
+                }
+            }
+
+            reader.nextLine();
+
+            // Continue checking for other args
+            checkForArgs(recipe);
+        }
     }
 
     private boolean parseArgs(RMCampfireRecipe recipe, String[] split, boolean isRemove) {

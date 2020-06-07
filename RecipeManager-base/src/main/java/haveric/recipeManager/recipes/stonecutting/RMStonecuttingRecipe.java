@@ -12,6 +12,8 @@ import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.inventory.StonecuttingRecipe;
 
 public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
+    private String group;
+
     public RMStonecuttingRecipe() {
 
     }
@@ -22,6 +24,7 @@ public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
         if (recipe instanceof RMStonecuttingRecipe) {
             RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
 
+            group = r.group;
             hash = r.hash;
         }
     }
@@ -32,8 +35,21 @@ public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
 
     public RMStonecuttingRecipe(StonecuttingRecipe recipe) {
         setIngredientChoice(recipe.getInputChoice());
-
         setResult(recipe.getResult());
+
+        group = recipe.getGroup();
+    }
+
+    public boolean hasGroup() {
+        return group != null;
+    }
+
+    public void setGroup(String newGroup) {
+        group = newGroup;
+    }
+
+    public String getGroup() {
+        return group;
     }
 
     @Override
@@ -51,7 +67,12 @@ public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        return new StonecuttingRecipe(getNamespacedKey(), a.result(), ingredientChoice);
+        StonecuttingRecipe bukkitRecipe = new StonecuttingRecipe(getNamespacedKey(), a.result(), ingredientChoice);
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(group);
+        }
+
+        return bukkitRecipe;
     }
 
     @Override

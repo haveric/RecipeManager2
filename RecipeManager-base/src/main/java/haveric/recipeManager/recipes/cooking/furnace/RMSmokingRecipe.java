@@ -1,4 +1,4 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking.furnace;
 
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.SmokingRecipe;
 
 public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMSmokingRecipe() {
-        setMinTime(Vanilla.SMOKER_RECIPE_TIME);
+        minTime = Vanilla.SMOKER_RECIPE_TIME;
     }
 
     public RMSmokingRecipe(BaseRecipe recipe) {
@@ -20,13 +20,11 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMSmokingRecipe(Flags flags) {
         super(flags);
 
-        setMinTime(Vanilla.SMOKER_RECIPE_TIME);
+        minTime = Vanilla.SMOKER_RECIPE_TIME;
     }
 
     public RMSmokingRecipe(SmokingRecipe recipe) {
         super(recipe);
-
-        setMinTime(Vanilla.SMOKER_RECIPE_TIME);
     }
 
     @Override
@@ -49,7 +47,12 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        return new SmokingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), 0, getCookTicks());
+        SmokingRecipe bukkitRecipe = new SmokingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(getGroup());
+        }
+
+        return bukkitRecipe;
     }
 
     @Override

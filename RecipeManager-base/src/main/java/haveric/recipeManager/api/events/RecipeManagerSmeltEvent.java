@@ -2,7 +2,7 @@ package haveric.recipeManager.api.events;
 
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

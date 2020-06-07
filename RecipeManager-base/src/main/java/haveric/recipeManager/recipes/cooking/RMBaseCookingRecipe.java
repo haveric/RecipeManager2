@@ -1,91 +1,60 @@
-package haveric.recipeManager.recipes.furnace;
+package haveric.recipeManager.recipes.cooking;
 
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleRecipeChoiceSingleResultRecipe;
-import haveric.recipeManager.tools.ToolsItem;
-import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceInventory;
-import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
-public class RMBaseFurnaceRecipe1_13 extends SingleRecipeChoiceSingleResultRecipe {
-    private ItemResult fuel;
-    private float minTime = Vanilla.FURNACE_RECIPE_TIME;
-    private float maxTime = -1;
+public class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResultRecipe {
+    protected float minTime = -1;
+    protected float maxTime = -1;
+    protected String group;
+    protected float experience = 0;
 
-    public RMBaseFurnaceRecipe1_13() {
+    public RMBaseCookingRecipe() {
     }
 
-    public RMBaseFurnaceRecipe1_13(BaseRecipe recipe) {
+    public RMBaseCookingRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-            RMBaseFurnaceRecipe1_13 r = (RMBaseFurnaceRecipe1_13) recipe;
+        if (recipe instanceof RMBaseCookingRecipe) {
+            RMBaseCookingRecipe r = (RMBaseCookingRecipe) recipe;
 
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }
 
-            if (r.fuel == null) {
-                fuel = null;
-            } else {
-                fuel = r.fuel.clone();
-            }
-
             minTime = r.minTime;
             maxTime = r.maxTime;
+
+            group = r.group;
+            experience = r.experience;
+
             hash = r.hash;
         }
     }
 
-    public RMBaseFurnaceRecipe1_13(Flags flags) {
+    public RMBaseCookingRecipe(Flags flags) {
         super(flags);
     }
 
-    // Legacy constructor for 1.13 / 1.12
-    public RMBaseFurnaceRecipe1_13(FurnaceRecipe recipe) {
-        setIngredientChoice(recipe.getInputChoice());
-        setResult(recipe.getResult());
-    }
-
     // Constructor for 1.14 +
-    public RMBaseFurnaceRecipe1_13(CookingRecipe recipe) {
+    public RMBaseCookingRecipe(CookingRecipe recipe) {
         setIngredientChoice(recipe.getInputChoice());
         setResult(recipe.getResult());
-    }
 
-    public ItemResult getFuel() {
-        return fuel;
-    }
-
-    public void setFuel(ItemStack newFuel) {
-        Validate.notNull(newFuel);
-
-        if (newFuel instanceof ItemResult) {
-            fuel = ((ItemResult) newFuel).setRecipe(this);
-        } else {
-            fuel = new ItemResult(newFuel).setRecipe(this);
-        }
-    }
-
-    public boolean hasCustomTime() {
-        return minTime != Vanilla.FURNACE_RECIPE_TIME;
+        group = recipe.getGroup();
+        minTime = recipe.getCookingTime();
     }
 
     public float getMinTime() {
@@ -141,58 +110,21 @@ public class RMBaseFurnaceRecipe1_13 extends SingleRecipeChoiceSingleResultRecip
         return Math.round(getCookTime() * 20.0f);
     }
 
-    public String getFuelIndex() {
-        String fuelIndex = "" + fuel.getType().toString();
-
-        if (fuel.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            fuelIndex += ":" + fuel.getDurability();
-        }
-
-        return fuelIndex;
+    public boolean hasGroup() {
+        return group != null;
     }
 
-    public boolean hasFuel() {
-        return fuel != null;
+    public void setGroup(String newGroup) {
+        group = newGroup;
     }
 
-    @Override
-    public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult(getType().getDirective());
-
-        String print = getConditionResultName(result);
-
-        if (print.isEmpty()) {
-            print = ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
-        }
-
-        s.append('\n').append(print);
-
-        s.append("\n\n");
-        s.append(Messages.getInstance().parse("recipebook.header.cooktime")).append(RMCChatColor.BLACK);
-        s.append('\n');
-
-        if (hasCustomTime()) {
-            if (maxTime > minTime) {
-                s.append(Messages.getInstance().parse("recipebook.smelt.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
-            } else {
-                if (minTime <= 0) {
-                    s.append(Messages.getInstance().parse("recipebook.smelt.time.instant"));
-                } else {
-                    s.append(Messages.getInstance().parse("recipebook.smelt.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
-                }
-            }
-        } else {
-            s.append(Messages.getInstance().parse("recipebook.smelt.time.normal", "{time}", RMCUtil.printNumber(minTime)));
-        }
-
-        if (hasFuel()) {
-            s.append("\n\n");
-            s.append(Messages.getInstance().parse("recipebook.header.requirefuel"));
-            s.append('\n').append(ToolsItem.print(fuel, RMCChatColor.RESET, RMCChatColor.BLACK));
-        }
-
-        return s.toString();
+    public String getGroup() {
+        return group;
     }
+
+    public float getExperience() { return experience; }
+
+    public void setExperience(float newExperience) { experience = newExperience; }
 
     public void subtractIngredient(FurnaceInventory inv, ItemResult result, boolean onlyExtra) {
         FlagIngredientCondition flagIC;
@@ -235,5 +167,9 @@ public class RMBaseFurnaceRecipe1_13 extends SingleRecipeChoiceSingleResultRecip
                 }
             }
         }
+    }
+
+    public boolean hasCustomTime() {
+        return false;
     }
 }
