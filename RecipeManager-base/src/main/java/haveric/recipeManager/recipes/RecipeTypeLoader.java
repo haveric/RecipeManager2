@@ -40,7 +40,10 @@ public class RecipeTypeLoader {
     }
 
     private void loadDefaultRecipeTypes() {
-        loadRecipeType(RMCRecipeType.ANVIL.getDirective(), new AnvilRecipe(), new AnvilRecipeParser(), new AnvilEvents());
+        if (Version.has1_9Support()) {
+            loadRecipeType(RMCRecipeType.ANVIL.getDirective(), new AnvilRecipe(), new AnvilRecipeParser(), new AnvilEvents());
+        }
+
         loadRecipeType(RMCRecipeType.BREW.getDirective(), new BrewRecipe(), new BrewRecipeParser(), new BrewEvents());
         loadRecipeType(RMCRecipeType.FUEL.getDirective(), new FuelRecipe(), new FuelRecipeParser());
 
