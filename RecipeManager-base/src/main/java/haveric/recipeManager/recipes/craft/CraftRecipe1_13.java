@@ -293,6 +293,8 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
                     } else {
                         s.append(RMCChatColor.DARK_PURPLE).append(letter);
                     }
+                } else {
+                    s.append(RMCChatColor.WHITE).append('_');
                 }
 
                 s.append(RMCChatColor.GRAY).append(']');
@@ -304,11 +306,15 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
-            s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
+            RecipeChoice choice = entry.getValue();
+
+            // Don't show air
+            if (choice instanceof RecipeChoice.MaterialChoice || choice instanceof RecipeChoice.ExactChoice) {
+                s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
+            }
 
             // TODO: Check IngredientConditions to get Names
 
-            RecipeChoice choice = entry.getValue();
             if (choice instanceof RecipeChoice.MaterialChoice) {
                 RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
                 List<Material> materials = materialChoice.getChoices();
