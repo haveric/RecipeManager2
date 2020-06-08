@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.furnace;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnEndEvent;
 import haveric.recipeManager.api.events.RecipeManagerFuelBurnRandomEvent;
@@ -131,10 +130,6 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                         RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
 
                         if (recipe != null) {
-                            if (recipe.hasFlag(FlagType.REMOVE)) {
-                                event.setCancelled(true);
-                            }
-
                             FurnaceData data = Furnaces.get(furnace.getLocation());
                             ItemStack fuel = data.getFuel();
 
@@ -217,10 +212,6 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                             RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, hotbarItem);
 
                             if (recipe != null) {
-                                if (recipe.hasFlag(FlagType.REMOVE)) {
-                                    event.setCancelled(true);
-                                }
-
                                 data.setFuelerUUID(player.getUniqueId());
 
                                 Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
@@ -246,10 +237,6 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     if (clicked == null || clicked.getType() == Material.AIR || !ToolsItem.isSameItem(cursor, clicked, true)) {
                         RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, cursor);
                         if (recipe != null) {
-                            if (recipe.hasFlag(FlagType.REMOVE)) {
-                                event.setCancelled(true);
-                            }
-
                             data.setFuelerUUID(player.getUniqueId());
 
                             ItemStack fuel = data.getFuel();
@@ -593,11 +580,14 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         ItemStack ingredient = inventory.getSmelting();
         RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
-        if (recipe != null) {
-            if (recipe.hasFlag(FlagType.REMOVE)) {
-                event.setCancelled(true);
+        if (recipe == null) {
+            if (!Version.has1_12Support()) {
+                RMBaseFurnaceRecipe removedRecipe = (RMBaseFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
+                if (removedRecipe != null) {
+                    event.setCancelled(true);
+                }
             }
-
+        } else {
             ItemStack recipeFuel = recipe.getFuel();
 
             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
@@ -691,11 +681,13 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         short cookTime = 0;
         ItemStack ingredient = inventory.getSmelting();
         RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
-        if (recipe != null) {
-            if (recipe.hasFlag(FlagType.REMOVE)) {
+
+        if (recipe == null) {
+            RMBaseFurnaceRecipe removedRecipe = (RMBaseFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
+            if (removedRecipe != null) {
                 event.setCancelled(true);
             }
-
+        } else {
             FurnaceData data = Furnaces.get(furnace.getLocation());
 
             Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
@@ -774,7 +766,6 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         RMBaseFurnaceRecipe smeltRecipe = null;
         ItemStack result = furnace.getInventory().getResult();
 
-
         if (ingredient == null) {
             // Guess recipe by result - inaccurate
 
@@ -848,10 +839,6 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 RMBaseFurnaceRecipe recipe = getSpecificFurnaceRecipe(furnace, movedItem);
 
                 if (recipe != null) {
-                    if (recipe.hasFlag(FlagType.REMOVE)) {
-                        event.setCancelled(true);
-                    }
-
                     FurnaceData data = Furnaces.get(furnace.getLocation());
 
                     Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventory(furnaceInventory).extra(furnaceInventory.getSmelting()).build();
