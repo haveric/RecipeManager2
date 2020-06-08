@@ -123,7 +123,9 @@ public class RecipeManager extends JavaPlugin {
         Files.init();
         Players.init();
         Workbenches.init();
-        Anvils.init();
+        if (Version.has1_9Support()) {
+            Anvils.init();
+        }
 
         reload(null, false, true); // load data
 
@@ -276,14 +278,20 @@ public class RecipeManager extends JavaPlugin {
             BrewingStands.save();
             BrewingStands.clean();
 
-            RMCampfires.save();
-            RMCampfires.clean();
+            if (Version.has1_14Support()) {
+                RMCampfires.save();
+                RMCampfires.clean();
 
-            Composters.save();
-            Composters.clean();
+                Composters.save();
+                Composters.clean();
+            }
 
             Workbenches.clean();
-            Anvils.clean();
+
+            if (Version.has1_9Support()) {
+                Anvils.clean();
+            }
+
             Players.clean();
             Vanilla.clean();
 
