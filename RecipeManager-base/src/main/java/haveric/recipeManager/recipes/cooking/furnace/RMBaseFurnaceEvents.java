@@ -632,7 +632,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
         if (recipe == null) {
             if (!Version.has1_12Support()) {
-                RMBaseFurnaceRecipe removedRecipe = (RMBaseFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
+                RMFurnaceRecipe removedRecipe = (RMFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
                 if (removedRecipe != null) {
                     event.setCancelled(true);
                 }
@@ -743,7 +743,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
         if (recipe == null) {
-            RMBaseFurnaceRecipe removedRecipe = (RMBaseFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
+            RMFurnaceRecipe removedRecipe = (RMFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
             if (removedRecipe != null) {
                 event.setCancelled(true);
             }
