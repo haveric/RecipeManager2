@@ -644,7 +644,7 @@ pattern abc | def | ghi
 [@ result flags]
 [... more results]
 </pre>
-                            <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                            <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                             <p>The pattern line defines the shape of the recipe grid.
                                 <ul>
                                     <li>Each row is separated by a pipe character: |</li>
@@ -859,7 +859,7 @@ CRAFT [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-                            <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                            <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                             <p>The ingredients are in the shape of the recipe grid, it will also work if horizontally mirrored.</p>
                             <p><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</p>
                             <p>Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.</p>
@@ -1069,7 +1069,7 @@ pattern abcdefghi
 [... more results]
 </pre>
                         <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
-                        <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                        <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                         <p>The pattern line defines the pattern of the recipe grid, where similar characters means an item is used more than once.
                         <ul>
                             <li>Each letter represent one or more ingredients that are defined in the ingredients section.</li>
@@ -1228,7 +1228,7 @@ COMBINE [recipe name]
 [...]
 </pre>
                         <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
-                        <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                        <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                         <p>You can specify up to 9 items added up.</p>
                         <p>The optional amount can only be added at the end of a list of materials</p>
                         <p><b>EXAMPLE:</b> cobblestone,stone:5 would be valid and expect the recipe to have 5 ingredients of either cobblestone OR stone</p>
@@ -1382,7 +1382,7 @@ SMELT [recipe name]
 [@ result flags]
 // one result max!
 </pre>
-                <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                 <p>The [xp amount] defines the amount of xp given for the furnace recipe. Can be a decimal value. Examples ("xp 2", "xp .5", "xp 1.1"). Defaults to 0.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
                 <p>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 10</p>
@@ -1591,7 +1591,7 @@ CAMPFIRE [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [@ result flags]
 </pre>
-                <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                 <p>The [xp amount] defines the amount of xp given for the furnace recipe. Can be a decimal value. Examples ("xp 2", "xp .5", "xp 1.1"). Defaults to 0.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
                 <p>(optional) '% [time]' can be the time to cook, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 30</p>
@@ -1611,7 +1611,7 @@ STONECUTTING [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [@ result flags]
 </pre>
-                <p>The [group name] defines the recipe book group this recipe belongs to.</p>
+                <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
                 <p>Multiple recipes can be added with the same ingredient as long as the result is different for each.</p>
                 <p>Limited Flag support</p>
