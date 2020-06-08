@@ -20,32 +20,46 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class DebugCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        MessageSender.getInstance().send(sender, "RM Version : " + RecipeManager.getPlugin().getDescription().getVersion());
+        MessageSender.getInstance().send(sender, "Bukkit Version : " + Bukkit.getVersion());
         MessageSender.getInstance().send(sender, "Last Reload : " + RecipeManager.getLastReload());
         MessageSender.getInstance().send(sender, "Current Time: " + LocalDateTime.now());
 
         sendPermissionMessage(sender, "");
 
-        MessageSender.getInstance().send(sender, "Gamerule 'doLimitedCrafting':");
-        for (World world : Bukkit.getWorlds()) {
-            String worldName = world.getName();
-            Boolean gamerule = world.getGameRuleValue(GameRule.DO_LIMITED_CRAFTING);
+        if (Version.has1_12Support()) {
+            MessageSender.getInstance().send(sender, "Gamerule 'doLimitedCrafting':");
+            for (World world : Bukkit.getWorlds()) {
+                String worldName = world.getName();
+                Boolean gamerule = world.getGameRuleValue(GameRule.DO_LIMITED_CRAFTING);
 
-            String gameruleMessage;
-            if (gamerule == Boolean.TRUE) {
-                gameruleMessage = RMCChatColor.RED + "true";
-            } else {
-                gameruleMessage = RMCChatColor.GREEN + "false";
+                String gameruleMessage;
+                if (gamerule == Boolean.TRUE) {
+                    gameruleMessage = RMCChatColor.RED + "true";
+                } else {
+                    gameruleMessage = RMCChatColor.GREEN + "false";
+                }
+                MessageSender.getInstance().send(sender, "  " + worldName + ": " + gameruleMessage);
             }
-            MessageSender.getInstance().send(sender, "  " + worldName +": " + gameruleMessage);
         }
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            Block block = player.getTargetBlockExact(20);
+
+            Block block;
+            if (Version.has1_14Support()) {
+                block = player.getTargetBlockExact(20);
+            } else {
+                Set<Material> transparent = EnumSet.noneOf(Material.class);
+                transparent.add(Material.AIR);
+                block = player.getTargetBlock(transparent, 20);
+            }
 
             if (block != null) {
                 Location location = block.getLocation();
@@ -90,7 +104,7 @@ public class DebugCommand implements CommandExecutor {
                     MessageSender.getInstance().send(sender, "  Recipe: " + data.getRecipe());
                     MessageSender.getInstance().send(sender, "  Level: " + data.getLevel());
                     MessageSender.getInstance().send(sender, "  Ingredients: " + data.getIngredients());
-                } else if (type == Material.FURNACE || Version.has1_14Support() && (type == Material.BLAST_FURNACE || type == Material.SMOKER)) {
+                } else if (type == Material.FURNACE || (!Version.has1_13BasicSupport() && type == Material.getMaterial("BURNING_FURNACE")) || Version.has1_14Support() && (type == Material.BLAST_FURNACE || type == Material.SMOKER)) {
                     MessageSender.getInstance().send(sender, block.getType() + " Data: ");
                     FurnaceData data = Furnaces.get(location);
 
