@@ -2,6 +2,9 @@ package haveric.recipeManager.recipes.furnace;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -11,14 +14,12 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
@@ -95,13 +96,17 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseFurnaceRecipe {
         if (choice instanceof RecipeChoice.MaterialChoice) {
             ingredientChoice.clear();
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-            ingredientChoice.addAll(materialChoice.getChoices());
+
+            List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
+            Collections.sort(sorted);
+
+            ingredientChoice.addAll(sorted);
 
             String newHash = getRecipeBaseHash();
 
-            int size = ingredientChoice.size();
+            int size = sorted.size();
             for (int i = 0; i < size; i++) {
-                newHash += ingredientChoice.get(i).toString();
+                newHash += sorted.get(i).toString();
 
                 if (i + 1 < size) {
                     newHash += ", ";
