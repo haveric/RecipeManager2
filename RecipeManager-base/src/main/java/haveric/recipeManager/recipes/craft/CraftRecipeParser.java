@@ -140,6 +140,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                         }
                     } else {
                         ErrorReporter.getInstance().warning("Character " + ingredientChar + " not found in shape.");
+                        reader.nextLine();
                     }
                 }
 
