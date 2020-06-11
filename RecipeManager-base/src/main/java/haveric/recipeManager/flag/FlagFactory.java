@@ -100,6 +100,8 @@ public class FlagFactory {
             name = name.split("@")[1];
         }
 
+        name = name.toLowerCase();
+
         return nameMap.get(name);
     }
 }
