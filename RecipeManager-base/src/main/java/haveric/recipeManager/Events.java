@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,19 +94,23 @@ public class Events extends BaseRecipeEvents {
         }
 
         List<String> lore = meta.getLore();
-
+        List<String> newLore = new ArrayList<>();
         if (lore == null || lore.isEmpty()) {
             return;
         }
 
-        for (int i = 0; i < lore.size(); i++) {
-            String s = lore.get(i);
-
+        boolean overrideLore = false;
+        for (String s : lore) {
             if (s != null && s.startsWith(Recipes.RECIPE_ID_STRING)) {
-                lore.remove(i);
-                meta.setLore(lore);
-                item.setItemMeta(meta);
+                overrideLore = true;
+            } else {
+                newLore.add(s);
             }
+        }
+
+        if (overrideLore) {
+            meta.setLore(newLore);
+            item.setItemMeta(meta);
         }
     }
 
