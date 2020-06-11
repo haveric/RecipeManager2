@@ -21,7 +21,6 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.*;
 
 import java.io.BufferedWriter;
@@ -258,39 +257,15 @@ public class Tools {
                     ErrorReporter.getInstance().warning("Invalid tag format: " + split[i]);
                     continue;
                 } else if (durSplit.length >= 3) {
-                    String potentialNamespaceOrTagName = durSplit[1].trim();
-                    String potentialTagName = durSplit[2].trim();
+                    namespace = durSplit[1].trim();
+                    tagName = durSplit[2].trim();
 
-                    boolean foundNamespace = false;
-                    for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-                        String pluginName = plugin.getName().toLowerCase();
-                        if (potentialNamespaceOrTagName.equals(pluginName)) {
-                            namespace = potentialNamespaceOrTagName;
-                            tagName = potentialTagName;
-                            foundNamespace = true;
-                            break;
-                        }
+                    if (durSplit.length > 3) {
+                        dataString = durSplit[3].trim();
                     }
 
-                    if (foundNamespace) {
-                        if (durSplit.length > 3) {
-                            dataString = durSplit[3].trim();
-                        }
-
-                        if (durSplit.length > 4) {
-                            amountString = durSplit[4].trim();
-                        }
-                    } else {
-                        namespace = NamespacedKey.MINECRAFT;
-                        tagName = potentialNamespaceOrTagName;
-
-                        if (durSplit.length == 3) {
-                            dataString = durSplit[2].trim();
-                        }
-
-                        if (durSplit.length > 3) {
-                            amountString = durSplit[3].trim();
-                        }
+                    if (durSplit.length > 4) {
+                        amountString = durSplit[4].trim();
                     }
                 } else {
                     namespace = NamespacedKey.MINECRAFT;
@@ -302,6 +277,23 @@ public class Tools {
 
                 if (tag == null || tag.getValues().isEmpty()) {
                     tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                }
+
+                if (!namespace.equals(NamespacedKey.MINECRAFT) && (tag == null || tag.getValues().isEmpty())) {
+                    if (durSplit.length == 3) {
+                        dataString = durSplit[2].trim();
+                    }
+
+                    if (durSplit.length > 3) {
+                        amountString = durSplit[3].trim();
+                    }
+
+                    NamespacedKey minecraftKey = new NamespacedKey(NamespacedKey.MINECRAFT, namespace); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                    tag = Bukkit.getTag(REGISTRY_BLOCKS, minecraftKey, Material.class);
+
+                    if (tag == null || tag.getValues().isEmpty()) {
+                        tag = Bukkit.getTag(REGISTRY_ITEMS, minecraftKey, Material.class);
+                    }
                 }
 
                 if (tag == null || tag.getValues().isEmpty()) {
