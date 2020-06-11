@@ -307,14 +307,4 @@ public class CombineRecipe extends BaseCombineRecipe {
 
         return found;
     }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (result != null) {
-            recipeIndexes.add(Tools.getRecipeIdFromItem(result));
-        }
-
-        return recipeIndexes;
-    }
 }
