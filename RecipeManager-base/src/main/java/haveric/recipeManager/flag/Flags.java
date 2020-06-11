@@ -135,6 +135,12 @@ public class Flags implements Cloneable {
 
         // check if parsed flag had valid values and needs to be added to flag list
         if (flag.onParse(value, fileName, lineNum, restrictedBit)) {
+            FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(flag.getFlagType());
+            if (desc.hasBit(FlagBit.INGREDIENT) && flag.requiresRecipeManagerModification()) {
+                ErrorReporter.getInstance().warning("Flag: " + flag.getFlagType() + " has unsupported value for an Ingredient: " + value);
+                return;
+            }
+
             flags.put(flag.getFlagType(), flag);
         }
     }

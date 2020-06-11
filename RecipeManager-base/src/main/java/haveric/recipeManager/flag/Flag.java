@@ -280,18 +280,15 @@ public class Flag implements Cloneable {
         FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
 
         if (restrictedBit == FlagBit.RESULT && !desc.hasBit(FlagBit.RESULT)) {
-            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on results!");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on results!");
         }
 
         if (restrictedBit == FlagBit.INGREDIENT && !desc.hasBit(FlagBit.INGREDIENT)) {
-            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on ingredients!");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on ingredients!");
         }
 
         if (restrictedBit == FlagBit.RECIPE && !desc.hasBit(FlagBit.RECIPE)) {
-            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on recipes!");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on recipes!");
         }
 
         return onValidate();
