@@ -58,8 +58,8 @@ public class Flag implements Cloneable {
      *
      * @return false if an error occurred and the flag should not be added
      */
-    public final boolean parse(String value, String fileName, int lineNum) {
-        return onParse(value, fileName, lineNum);
+    public final boolean parse(String value, String fileName, int lineNum, int restrictedBit) {
+        return onParse(value, fileName, lineNum, restrictedBit);
     }
 
     /**
@@ -259,7 +259,7 @@ public class Flag implements Cloneable {
         return itemResult;
     }
 
-    public final boolean validateParse(String value) {
+    public final boolean validateParse(String value, int restrictedBit) {
         Validate.notNull(getFlagType(), "This can't be used on a blank flag!");
 
         FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
@@ -273,20 +273,24 @@ public class Flag implements Cloneable {
             return false;
         }
 
-        return validate();
+        return validate(restrictedBit);
     }
 
-    public final boolean validate() {
-        Flaggable flaggable = getFlaggable();
-
+    public final boolean validate(int restrictedBit) {
         FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
-        if (desc.hasBit(FlagBit.RESULT) && !(flaggable instanceof ItemResult)) {
-            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " only works on results!");
+
+        if (restrictedBit == FlagBit.RESULT && !desc.hasBit(FlagBit.RESULT)) {
+            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on results!");
             return false;
         }
 
-        if (desc.hasBit(FlagBit.RECIPE) && flaggable instanceof ItemResult) {
-            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " only works on recipes!");
+        if (restrictedBit == FlagBit.INGREDIENT && !desc.hasBit(FlagBit.INGREDIENT)) {
+            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on ingredients!");
+            return false;
+        }
+
+        if (restrictedBit == FlagBit.RECIPE && !desc.hasBit(FlagBit.RECIPE)) {
+            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " not supported on recipes!");
             return false;
         }
 
@@ -310,7 +314,7 @@ public class Flag implements Cloneable {
         return (getFlagType() != null);
     }
 
-    public boolean onParse(String value, String fileName, int lineNum) {
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         this.sourceFileName = fileName;
         this.sourceLineNum = lineNum;
         return false; // it didn't parse anything

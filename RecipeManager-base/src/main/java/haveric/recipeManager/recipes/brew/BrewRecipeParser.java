@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.brew;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
@@ -21,7 +22,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         BrewRecipe recipe = new BrewRecipe();
 
-        reader.parseFlags(recipe.getFlags());
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE);
 
         if (reader.getLine() == null || reader.lineIsResult()) {
             return ErrorReporter.getInstance().error("No ingredient defined!");

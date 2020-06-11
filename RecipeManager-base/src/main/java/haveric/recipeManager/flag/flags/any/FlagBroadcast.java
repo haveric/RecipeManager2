@@ -89,8 +89,8 @@ public class FlagBroadcast extends Flag {
     }
 
     @Override
-    public boolean onParse(String value, String fileName, int lineNum) {
-        super.onParse(value, fileName, lineNum);
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
+        super.onParse(value, fileName, lineNum, restrictedBit);
         String[] split = value.split("\\|", 2);
 
         message = RMCUtil.trimExactQuotes(split[0]);

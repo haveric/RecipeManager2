@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.flag.Flag;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flaggable;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
@@ -130,7 +131,7 @@ public class ItemResult extends ItemStack implements Flaggable {
     }
 
     public void addFlag(Flag flag) {
-        flags.addFlag(flag);
+        flags.addFlag(flag, FlagBit.RESULT);
     }
 
     public boolean checkFlags(Args a) {

@@ -68,8 +68,8 @@ public class Flags implements Cloneable {
      * @param flag
      * @return false if flag can only be added on specific flaggables
      */
-    public boolean canAdd(Flag flag) {
-        return flag != null && flag.validate();
+    public boolean canAdd(Flag flag, int restrictedBit) {
+        return flag != null && flag.validate(restrictedBit);
     }
 
     /**
@@ -78,11 +78,11 @@ public class Flags implements Cloneable {
      *
      * @param flag
      */
-    public void addFlag(Flag flag) {
+    public void addFlag(Flag flag, int restrictedBit) {
         Flags prevContainer = flag.getFlagsContainer();
         flag.setFlagsContainer(this);
 
-        if (canAdd(flag)) {
+        if (canAdd(flag, restrictedBit)) {
             flags.put(flag.getFlagType(), flag);
         } else {
             flag.setFlagsContainer(prevContainer);
@@ -96,7 +96,7 @@ public class Flags implements Cloneable {
      * @param value
      *            flag expression string like the ones in recipe files
      */
-    public void parseFlag(String value, String fileName, int lineNum) {
+    public void parseFlag(String value, String fileName, int lineNum, int restrictedBit) {
         Validate.notNull(value, "Input value must not be null!");
         value = value.trim();
 
@@ -129,12 +129,12 @@ public class Flags implements Cloneable {
         }
 
         // make sure the flag can be added to this flag list
-        if (!flag.validateParse(value)) {
+        if (!flag.validateParse(value, restrictedBit)) {
             return;
         }
 
         // check if parsed flag had valid values and needs to be added to flag list
-        if (flag.onParse(value, fileName, lineNum)) {
+        if (flag.onParse(value, fileName, lineNum, restrictedBit)) {
             flags.put(flag.getFlagType(), flag);
         }
     }

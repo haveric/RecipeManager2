@@ -161,11 +161,11 @@ public class RecipeFileReader {
         return line;
     }
 
-    public void parseFlags(Flags flags) {
+    public void parseFlags(Flags flags, int restrictedBit) {
         nextLine();
 
         while (line != null && line.length() > 0 && lineIsFlag()) {
-            flags.parseFlag(line, fileName, lineNum);
+            flags.parseFlag(line, fileName, lineNum, restrictedBit);
             nextLine();
         }
     }

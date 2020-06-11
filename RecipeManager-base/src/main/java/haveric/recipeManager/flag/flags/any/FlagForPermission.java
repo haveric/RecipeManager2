@@ -98,8 +98,8 @@ public class FlagForPermission extends Flag {
      * @param flag
      * @return false if flag can only be added on specific flaggables
      */
-    public boolean canAdd(Flag flag) {
-        return flag != null && flag.validate() && !FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.NO_FOR);
+    public boolean canAdd(Flag flag, int restrictedBit) {
+        return flag != null && flag.validate(restrictedBit) && !FlagFactory.getInstance().getFlagByName(flag.getFlagType()).hasBit(FlagBit.NO_FOR);
     }
 
     /**
@@ -109,10 +109,10 @@ public class FlagForPermission extends Flag {
      * @param permission
      * @param flag
      */
-    public void addFlag(String permission, Flag flag) {
+    public void addFlag(String permission, Flag flag, int restrictedBit) {
         Validate.notNull(flag, "Argument flag must not be null!");
 
-        if (canAdd(flag)) {
+        if (canAdd(flag, restrictedBit)) {
             Map<String, Flag> flags = flagMap.computeIfAbsent(permission, k -> new LinkedHashMap<>());
 
             flag.setFlagsContainer(getFlagsContainer());
@@ -121,8 +121,8 @@ public class FlagForPermission extends Flag {
     }
 
     @Override
-    public boolean onParse(String value, String fileName, int lineNum) {
-        super.onParse(value, fileName, lineNum);
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
+        super.onParse(value, fileName, lineNum, restrictedBit);
         String[] split = value.split("@");
 
         if (split.length <= 1) {
@@ -156,16 +156,16 @@ public class FlagForPermission extends Flag {
         }
 
         // make sure the flag can be added to this flag list
-        if (!flag.validateParse(value)) {
+        if (!flag.validateParse(value, restrictedBit)) {
             return false;
         }
 
         // check if parsed flag had valid values and needs to be added to flag list
-        if (!flag.onParse(value, fileName, lineNum)) {
+        if (!flag.onParse(value, fileName, lineNum, restrictedBit)) {
             return false;
         }
 
-        addFlag(permission, flag);
+        addFlag(permission, flag, restrictedBit);
 
         return true;
     }

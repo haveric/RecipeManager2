@@ -5,6 +5,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.recipe.FlagOverride;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
@@ -131,7 +132,7 @@ public class ConditionEvaluator {
                     return false; // can't re-add recipes
                 }
             } else {
-                recipe.getFlags().addFlag(new FlagOverride());
+                recipe.getFlags().addFlag(new FlagOverride(), FlagBit.RECIPE);
 
                 if (!(recipe.hasFlag(FlagType.RESTRICT) || RecipeManager.getSettings().getDisableOverrideWarnings())) {
                     ErrorReporter.getInstance().warning("Recipe already created by " + registered.getOwner() + ", recipe overwritten!", "You can use @override flag to overwrite the recipe or @remove to just remove it.");

@@ -75,8 +75,8 @@ public class FlagHide extends Flag {
     }
 
     @Override
-    public boolean onParse(String value, String fileName, int lineNum) {
-        super.onParse(value, fileName, lineNum);
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
+        super.onParse(value, fileName, lineNum, restrictedBit);
         String[] args = value.toLowerCase().split("\\|");
 
         if (args.length < 1) {

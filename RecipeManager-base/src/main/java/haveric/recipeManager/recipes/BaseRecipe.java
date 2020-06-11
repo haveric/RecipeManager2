@@ -6,10 +6,7 @@ import haveric.recipeManager.Recipes;
 import haveric.recipeManager.common.recipes.AbstractBaseRecipe;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.util.RMCUtil;
-import haveric.recipeManager.flag.Flag;
-import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.flag.Flaggable;
-import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.tools.ToolsItem;
@@ -176,7 +173,7 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     }
 
     public void addFlag(Flag flag) {
-        getFlags().addFlag(flag);
+        getFlags().addFlag(flag, FlagBit.RECIPE);
     }
 
     public boolean checkFlags(Args a) {

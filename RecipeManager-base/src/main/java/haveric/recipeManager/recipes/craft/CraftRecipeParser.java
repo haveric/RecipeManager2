@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -36,7 +37,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
             recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
         }
 
-        reader.parseFlags(recipe.getFlags()); // parse recipe's flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 
         String groupLine = reader.getLine();
         if (groupLine.toLowerCase().startsWith("group ")) {
@@ -100,7 +101,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                         ingredientsNum += ingredientCharacters.get(ingredientChar);
 
                         Flags ingredientFlags = new Flags();
-                        reader.parseFlags(ingredientFlags);
+                        reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                         if (ingredientFlags.hasFlags()) {
                             List<ItemStack> items = new ArrayList<>();

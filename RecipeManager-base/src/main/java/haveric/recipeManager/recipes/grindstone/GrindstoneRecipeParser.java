@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes.grindstone;
 
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -25,7 +26,7 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         GrindstoneRecipe recipe = new GrindstoneRecipe(fileFlags); // create recipe and copy flags from file
 
-        reader.parseFlags(recipe.getFlags()); // parse recipe's flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 
         while (!reader.lineIsResult()) {
             String line = reader.getLine();
@@ -39,7 +40,7 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
                 }
 
                 Flags ingredientFlags = new Flags();
-                reader.parseFlags(ingredientFlags);
+                reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();

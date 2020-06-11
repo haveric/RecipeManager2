@@ -174,8 +174,8 @@ public class FlagPotionItem extends Flag {
     }
 
     @Override
-    public boolean onParse(String value, String fileName, int lineNum) {
-        super.onParse(value, fileName, lineNum);
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
+        super.onParse(value, fileName, lineNum, restrictedBit);
         if (value.startsWith("custom")) {
             value = value.substring("custom".length()).trim();
             PotionEffect effect = Tools.parsePotionEffect(value, getFlagType());

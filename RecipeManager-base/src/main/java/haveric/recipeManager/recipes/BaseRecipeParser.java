@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
@@ -84,7 +85,7 @@ public abstract class BaseRecipeParser {
                 totalPercentage += result.getChance();
             }
 
-            reader.parseFlags(result.getFlags()); // check for result flags and keeps the line flow going too
+            reader.parseFlags(result.getFlags(), FlagBit.RESULT); // check for result flags and keeps the line flow going too
         }
 
         if (results.isEmpty()) {

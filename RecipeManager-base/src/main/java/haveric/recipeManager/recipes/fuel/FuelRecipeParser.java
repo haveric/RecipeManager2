@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.fuel;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -31,7 +32,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
         } else {
             recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
         }
-        reader.parseFlags(recipe.getFlags()); // check for @flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
         int added = 0;
 
         while (!reader.lineIsRecipe() && !reader.lineIsFlag()) {
@@ -91,7 +92,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 }
 
                 Flags ingredientFlags = new Flags();
-                reader.parseFlags(ingredientFlags);
+                reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();

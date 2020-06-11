@@ -3,6 +3,7 @@ package haveric.recipeManager.recipes.cooking.campfire;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -26,7 +27,7 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
     @Override
     public boolean parseRecipe(int directiveLine) {
         RMCampfireRecipe recipe = new RMCampfireRecipe(fileFlags); // create recipe and copy flags from file
-        reader.parseFlags(recipe.getFlags()); // check for @flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
 
         checkForArgs(recipe);
 
@@ -48,7 +49,7 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
             }
 
             Flags ingredientFlags = new Flags();
-            reader.parseFlags(ingredientFlags);
+            reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
             if (ingredientFlags.hasFlags()) {
                 List<ItemStack> items = new ArrayList<>();

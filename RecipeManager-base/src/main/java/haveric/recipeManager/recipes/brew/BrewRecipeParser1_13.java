@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -26,7 +27,7 @@ public class BrewRecipeParser1_13 extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         BrewRecipe1_13 recipe = new BrewRecipe1_13();
 
-        reader.parseFlags(recipe.getFlags());
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE);
 
         while (!reader.lineIsResult()) {
             String line = reader.getLine();
@@ -40,7 +41,7 @@ public class BrewRecipeParser1_13 extends BaseRecipeParser {
                 }
 
                 Flags ingredientFlags = new Flags();
-                reader.parseFlags(ingredientFlags);
+                reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();

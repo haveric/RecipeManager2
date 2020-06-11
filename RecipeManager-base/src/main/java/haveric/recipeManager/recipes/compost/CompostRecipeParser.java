@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.compost;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -26,7 +27,7 @@ public class CompostRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         CompostRecipe recipe = new CompostRecipe(fileFlags);
 
-        reader.parseFlags(recipe.getFlags()); // parse recipe's flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 
         while (!reader.lineIsResult()) {
             // get the ingredient
@@ -45,7 +46,7 @@ public class CompostRecipeParser extends BaseRecipeParser {
             }
 
             Flags ingredientFlags = new Flags();
-            reader.parseFlags(ingredientFlags);
+            reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
             if (ingredientFlags.hasFlags()) {
                 List<ItemStack> items = new ArrayList<>();

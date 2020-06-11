@@ -113,8 +113,8 @@ public class FlagForRepeat extends Flag {
     }
 
     @Override
-    public boolean onParse(String value, String fileName, int lineNum) {
-        super.onParse(value, fileName, lineNum);
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
+        super.onParse(value, fileName, lineNum, restrictedBit);
         int flagIndex = value.indexOf('@');
 
         if (flagIndex == -1) {
@@ -126,7 +126,7 @@ public class FlagForRepeat extends Flag {
             if (repeatFlags.isEmpty()) {
                 return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs <times to repeat> and <delay per repeat> declared on initial declaration.");
             } else {
-                Flag flag = getFlag(value.substring(flagIndex));
+                Flag flag = getFlag(value.substring(flagIndex), restrictedBit);
                 if (flag == null) {
                     return false;
                 }
@@ -161,7 +161,7 @@ public class FlagForRepeat extends Flag {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid <delay per repeat> value: " + delay + ". Defaulting to 0.");
             }
 
-            Flag flag = getFlag(value.substring(flagIndex));
+            Flag flag = getFlag(value.substring(flagIndex), restrictedBit);
             if (flag == null) {
                 return false;
             }
@@ -172,7 +172,7 @@ public class FlagForRepeat extends Flag {
         return true;
     }
 
-    private Flag getFlag(String flagDeclaration) {
+    private Flag getFlag(String flagDeclaration, int restrictedBit) {
         String[] split = flagDeclaration.split("[:\\s]+", 2); // split by space or : char
         String flagString = split[0].trim(); // format flag name
 
@@ -199,12 +199,12 @@ public class FlagForRepeat extends Flag {
         }
 
         // make sure the flag can be added to this flag list
-        if (!flag.validateParse(value)) {
+        if (!flag.validateParse(value, restrictedBit)) {
             return null;
         }
 
         // check if parsed flag had valid values and needs to be added to flag list
-        if (!flag.onParse(value, sourceFileName, sourceLineNum)) {
+        if (!flag.onParse(value, sourceFileName, sourceLineNum, restrictedBit)) {
             return null;
         }
 

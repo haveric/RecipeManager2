@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
@@ -19,7 +20,7 @@ public class AnvilRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         AnvilRecipe recipe = new AnvilRecipe(fileFlags); // create recipe and copy flags from file
 
-        reader.parseFlags(recipe.getFlags()); // parse recipe's flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 
         // get the ingredient
         String[] split = reader.getLine().split("%");

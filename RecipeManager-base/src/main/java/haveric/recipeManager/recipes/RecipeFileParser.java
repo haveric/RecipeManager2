@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flags;
 
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ public class RecipeFileParser {
 
         RecipeFileReader fileReader = new RecipeFileReader(reader, fileName);
 
-        fileReader.parseFlags(fileFlags); // parse file header flags that apply to all recipes
+        fileReader.parseFlags(fileFlags, FlagBit.RECIPE); // parse file header flags that apply to all recipes
 
         while (fileReader.searchRecipes()) { // search for recipes...
             int directiveLine = fileReader.getLineNum();

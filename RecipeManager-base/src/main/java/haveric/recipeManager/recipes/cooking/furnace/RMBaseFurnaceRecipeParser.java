@@ -5,6 +5,7 @@ import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -46,7 +47,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
             }
         }
 
-        reader.parseFlags(recipe.getFlags()); // check for @flags
+        reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
 
         checkForArgs(recipe);
 
@@ -70,7 +71,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                 }
 
                 Flags ingredientFlags = new Flags();
-                reader.parseFlags(ingredientFlags);
+                reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                 if (ingredientFlags.hasFlags()) {
                     List<ItemStack> items = new ArrayList<>();
@@ -144,10 +145,10 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
                 if (recipe instanceof RMBaseFurnaceRecipe1_13) {
                     ((RMBaseFurnaceRecipe1_13) recipe).setFuel(fuelItem);
-                    reader.parseFlags(((RMBaseFurnaceRecipe1_13) recipe).getFuel().getFlags());
+                    reader.parseFlags(((RMBaseFurnaceRecipe1_13) recipe).getFuel().getFlags(), FlagBit.INGREDIENT);
                 } else {
                     ((RMFurnaceRecipe) recipe).setFuel(fuelItem);
-                    reader.parseFlags(((RMFurnaceRecipe) recipe).getFuel().getFlags());
+                    reader.parseFlags(((RMFurnaceRecipe) recipe).getFuel().getFlags(), FlagBit.INGREDIENT);
                 }
             }
         }

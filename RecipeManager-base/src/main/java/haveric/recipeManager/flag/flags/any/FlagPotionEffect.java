@@ -106,8 +106,8 @@ public class FlagPotionEffect extends Flag {
     }
 
     @Override
-    public boolean onParse(String value, String fileName, int lineNum) {
-        super.onParse(value, fileName, lineNum);
+    public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
+        super.onParse(value, fileName, lineNum, restrictedBit);
         value = value.toLowerCase();
 
         if (value.equals("clear")) {
