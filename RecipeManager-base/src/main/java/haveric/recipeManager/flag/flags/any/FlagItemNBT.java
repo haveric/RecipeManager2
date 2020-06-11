@@ -9,7 +9,7 @@ public class FlagItemNBT extends Flag {
 
     @Override
     public String getFlagType() {
-        return FlagType.ITEM_NAME;
+        return FlagType.ITEM_NBT;
     }
 
     @Override
