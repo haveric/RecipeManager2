@@ -148,6 +148,12 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 }
 
                 ((CombineRecipe1_13) recipe).setChoicePattern(patternLine);
+
+                for (Map.Entry<Character, Integer> entry : ingredientCharacters.entrySet()) {
+                    if (!ingredientRecipeChoiceMap.containsKey(entry.getKey())) {
+                        return ErrorReporter.getInstance().error("Character from pattern not found in ingredients: " + entry.getKey());
+                    }
+                }
                 ((CombineRecipe1_13) recipe).setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
             } else {
                 return ErrorReporter.getInstance().error("Shape is only supported on 1.13 or newer servers.");
