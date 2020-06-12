@@ -11,6 +11,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -284,8 +285,7 @@ public class FlagIngredientCondition extends Flag {
 
         List<ConditionsIngredient> conditionsList = new ArrayList<>();
         for (ConditionsIngredient condition : conditions) {
-            // TODO: Check more than just type
-            if (condition.getIngredient().getType() == item.getType()) {
+            if (RMBukkitTools.isSameItemPlusDur(condition.getIngredient(), item)) {
                 conditionsList.add(condition);
             }
         }
