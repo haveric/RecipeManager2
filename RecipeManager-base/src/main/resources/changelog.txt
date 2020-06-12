@@ -9,6 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: 1.13+ Xp can be set for Furnace, Blast Furnace, Smoker, and Campfire recipes
 * FIX: HTML Docs: Fixed composter levels description
 * FIX: @ItemNBT: FlagType was using @ItemName
+* FIX: @IngredientCondition: Multiple declarations will not override previous ones
 
 === v2.22.3 ===
 * FIX: 1.13+ Recipe Book air display for craft recipes

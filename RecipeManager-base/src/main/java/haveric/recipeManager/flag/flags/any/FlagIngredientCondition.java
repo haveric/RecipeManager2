@@ -18,8 +18,9 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.*;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FlagIngredientCondition extends Flag {
 
@@ -208,14 +209,14 @@ public class FlagIngredientCondition extends Flag {
             "{flag} stick | name Crafted Stick | nolore | noenchant // makes ingredient require a stick with a name of 'Crafted Stick', but no lore or enchantments.", };
     }
 
-    private Map<String, ConditionsIngredient> conditions = new HashMap<>();
+    private List<ConditionsIngredient> conditions = new ArrayList<>();
 
     public FlagIngredientCondition() {
     }
 
     public FlagIngredientCondition(FlagIngredientCondition flag) {
-        for (Entry<String, ConditionsIngredient> e : flag.conditions.entrySet()) {
-            conditions.put(e.getKey(), e.getValue().clone());
+        for (ConditionsIngredient condition : flag.conditions) {
+            conditions.add(condition.clone());
         }
     }
 
@@ -255,25 +256,25 @@ public class FlagIngredientCondition extends Flag {
 
     @Override
     public void onRegistered() {
-        Iterator<ConditionsIngredient> it = conditions.values().iterator();
         BaseRecipe recipe = getRecipeDeep();
 
-        while (it.hasNext()) {
-            ConditionsIngredient c = it.next();
-
-            if (c.getIngredient() != null && recipe.findItemInIngredients(c.getIngredient().getType(), c.getIngredient().getDurability()) == 0) {
-                ErrorReporter.getInstance().flagError(this, "Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(c.getIngredient()));
-                it.remove();
+        List<ConditionsIngredient> newConditions = new ArrayList<>();
+        for (ConditionsIngredient condition : conditions) {
+            if (condition.getIngredient() != null && recipe.findItemInIngredients(condition.getIngredient().getType(), condition.getIngredient().getDurability()) == 0) {
+                ErrorReporter.getInstance().flagError(this, "Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(condition.getIngredient()));
+            } else {
+                newConditions.add(condition);
             }
         }
+
+        conditions = newConditions;
     }
     // TODO: Better handle conditions to allow multiple recipes per item:dur
     public void setIngredientConditions(ItemStack item, ConditionsIngredient cond) {
         Validate.notNull(item, "item argument must not be null!");
         Validate.notNull(cond, "cond argument must not be null!");
 
-        String conditionIdentifier = Tools.convertItemToStringId(item) + "-" + cond.hashCode();
-        conditions.put(conditionIdentifier, cond);
+        conditions.add(cond);
     }
 
     public List<ConditionsIngredient> getIngredientConditions(ItemStack item) {
@@ -282,12 +283,10 @@ public class FlagIngredientCondition extends Flag {
         }
 
         List<ConditionsIngredient> conditionsList = new ArrayList<>();
-        for (Entry<String, ConditionsIngredient> entry : conditions.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith(item.getType().toString() + ":" + item.getDurability() + "-")) {
-                conditionsList.add(entry.getValue());
-            } else if (key.startsWith(item.getType().toString() + "-")) {
-                conditionsList.add(entry.getValue());
+        for (ConditionsIngredient condition : conditions) {
+            // TODO: Check more than just type
+            if (condition.getIngredient().getType() == item.getType()) {
+                conditionsList.add(condition);
             }
         }
 
@@ -339,12 +338,7 @@ public class FlagIngredientCondition extends Flag {
             if (extra instanceof List) {
                 List<?> ingredients = (List<?>) extra;
 
-                Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
-
-                while (iter.hasNext()) {
-                    Entry<String, ConditionsIngredient> entry = iter.next();
-                    ConditionsIngredient checkConditions = entry.getValue();
-
+                for (ConditionsIngredient checkConditions : conditions) {
                     if (checkConditions.hasNeeded()) {
                         checkConditions.setNeededLeft(checkConditions.getNeeded());
                     }
@@ -361,12 +355,7 @@ public class FlagIngredientCondition extends Flag {
                     }
                 }
 
-                iter = conditions.entrySet().iterator();
-
-                while (iter.hasNext()) {
-                    Entry<String, ConditionsIngredient> entry = iter.next();
-                    ConditionsIngredient checkConditions = entry.getValue();
-
+                for (ConditionsIngredient checkConditions : conditions) {
                     if (checkConditions.hasNeeded()) {
                         if (!a.hasReasons() && checkConditions.getNeededLeft() > 0) {
                             a.addCustomReason("Needed items mismatch!");
@@ -379,12 +368,7 @@ public class FlagIngredientCondition extends Flag {
                 return;
             }
         } else if (a.inventory() instanceof CraftingInventory) {
-            Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
-
-            while (iter.hasNext()) {
-                Entry<String, ConditionsIngredient> entry = iter.next();
-                ConditionsIngredient checkConditions = entry.getValue();
-
+            for (ConditionsIngredient checkConditions : conditions) {
                 if (checkConditions.hasNeeded()) {
                     checkConditions.setNeededLeft(checkConditions.getNeeded());
                 }
@@ -398,12 +382,7 @@ public class FlagIngredientCondition extends Flag {
                 }
             }
 
-            iter = conditions.entrySet().iterator();
-
-            while (iter.hasNext()) {
-                Entry<String, ConditionsIngredient> entry = iter.next();
-                ConditionsIngredient checkConditions = entry.getValue();
-
+            for (ConditionsIngredient checkConditions : conditions) {
                 if (checkConditions.hasNeeded()) {
                     if (!a.hasReasons() && checkConditions.getNeededLeft() > 0) {
                         a.addCustomReason("Needed items mismatch!");
@@ -415,12 +394,7 @@ public class FlagIngredientCondition extends Flag {
 
             return;
         } else if (a.inventory() instanceof AnvilInventory) {
-            Iterator<Entry<String, ConditionsIngredient>> iter = conditions.entrySet().iterator();
-
-            while (iter.hasNext()) {
-                Entry<String, ConditionsIngredient> entry = iter.next();
-                ConditionsIngredient checkConditions = entry.getValue();
-
+            for (ConditionsIngredient checkConditions : conditions) {
                 if (checkConditions.hasNeeded()) {
                     checkConditions.setNeededLeft(checkConditions.getNeeded());
                 }
@@ -434,12 +408,7 @@ public class FlagIngredientCondition extends Flag {
                 }
             }
 
-            iter = conditions.entrySet().iterator();
-
-            while (iter.hasNext()) {
-                Entry<String, ConditionsIngredient> entry = iter.next();
-                ConditionsIngredient checkConditions = entry.getValue();
-
+            for (ConditionsIngredient checkConditions : conditions) {
                 if (checkConditions.hasNeeded()) {
                     if (!a.hasReasons() && checkConditions.getNeededLeft() > 0) {
                         a.addCustomReason("Needed items mismatch!");
@@ -496,8 +465,8 @@ public class FlagIngredientCondition extends Flag {
     public int hashCode() {
         String toHash = "" + super.hashCode();
 
-        for (Map.Entry<String, ConditionsIngredient> entry : conditions.entrySet()) {
-            toHash += entry.getKey() + entry.getValue().hashCode();
+        for (ConditionsIngredient condition : conditions) {
+            toHash += condition.hashCode();
         }
 
         return toHash.hashCode();
