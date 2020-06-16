@@ -250,12 +250,15 @@ public class Recipes {
     public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe, ItemStack[] matrix) {
         BaseRecipe baseRecipe = null;
 
-        List<ItemStack> ingredients = new ArrayList<>(Arrays.asList(matrix));
+        List<ItemStack> ingredients = new ArrayList<>();
+        for (int i = 1; i < matrix.length; i++) {
+            ingredients.add(matrix[i].clone());
+        }
 
         if (recipe instanceof ShapedRecipe) {
             baseRecipe = getRecipe(RMCRecipeType.CRAFT, ingredients, recipe.getResult());
         } else if (recipe instanceof ShapelessRecipe) {
-            baseRecipe =  getRecipe(RMCRecipeType.COMBINE, ingredients, recipe.getResult());
+            baseRecipe = getRecipe(RMCRecipeType.COMBINE, ingredients, recipe.getResult());
         }
 
         PreparableResultRecipe resultRecipe = null;
