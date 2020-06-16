@@ -302,10 +302,10 @@ public class AnvilEvents extends BaseRecipeEvents {
                             }
 
                             ClickType clickType = event.getClick();
-                            if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                            if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
                                 event.setCancelled(true);
                                 craftFinishAnvil(event, player, anvilInventory, true);
-                            } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
+                            } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
                                 event.setCancelled(true);
                                 craftFinishAnvil(event, player, anvilInventory, false);
                             }
@@ -353,6 +353,7 @@ public class AnvilEvents extends BaseRecipeEvents {
 
         if (!recipe.checkFlags(a)) {
             SoundNotifier.sendDenySound(player, location);
+            event.setCancelled(true);
             return;
         }
 

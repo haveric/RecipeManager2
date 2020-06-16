@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.grindstone;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.data.BaseRecipeData;
@@ -110,11 +109,11 @@ public class GrindstoneEvents extends BaseRecipeEvents {
 
                         BaseRecipeData grindstone = Grindstones.get(player);
                         if (grindstone != null) {
-                            if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                            if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
                                 craftFinishGrindstone(event, player, grindstoneInventory, true);
                                 prepareGrindstoneLater(grindstoneInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
-                            } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
+                            } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
                                 craftFinishGrindstone(event, player, grindstoneInventory, false);
                                 prepareGrindstoneLater(grindstoneInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
@@ -334,13 +333,13 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         if (isShiftClick) {
             times = 64;
         }
-
         // Clone the recipe so we can add custom flags to it
         GrindstoneRecipe recipe = new GrindstoneRecipe(grindstone.getRecipe());
         Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 
         if (!recipe.checkFlags(a)) {
             SoundNotifier.sendDenySound(player, location);
+            event.setCancelled(true);
             return;
         }
 

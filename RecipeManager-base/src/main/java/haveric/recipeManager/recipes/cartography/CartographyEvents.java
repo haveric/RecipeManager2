@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.cartography;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
-import haveric.recipeManager.Settings;
 import haveric.recipeManager.UpdateInventory;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
@@ -123,11 +122,11 @@ public class CartographyEvents extends BaseRecipeEvents {
                         }
 
                         if (cartographyTable.getRecipe() != null) {
-                            if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                            if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
                                 craftFinishCartography(event, player, cartographyInventory, true);
                                 prepareCartographyLater(cartographyInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
-                            } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
+                            } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
                                 craftFinishCartography(event, player, cartographyInventory, false);
                                 prepareCartographyLater(cartographyInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
@@ -263,6 +262,7 @@ public class CartographyEvents extends BaseRecipeEvents {
 
         if (!recipe.checkFlags(a)) {
             SoundNotifier.sendDenySound(player, location);
+            event.setCancelled(true);
             return;
         }
 
