@@ -252,7 +252,9 @@ public class Recipes {
 
         List<ItemStack> ingredients = new ArrayList<>();
         for (int i = 1; i < matrix.length; i++) {
-            ingredients.add(matrix[i].clone());
+            if (matrix[i] != null && matrix[i].getType() != Material.AIR) {
+                ingredients.add(matrix[i].clone());
+            }
         }
 
         if (recipe instanceof ShapedRecipe) {
