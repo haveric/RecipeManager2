@@ -223,4 +223,27 @@ public class CompostRecipe extends MultiResultRecipe {
 
         return recipeIndexes;
     }
+
+    @Override
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        if (ingredients.size() == 1) {
+            ItemStack ingredient = ingredients.get(0);
+
+            boolean checkExact = true;
+            if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                checkExact = false;
+            } else {
+                for (ItemResult result : getResults()) {
+                    if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                        checkExact = false;
+                        break;
+                    }
+                }
+            }
+
+            return ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+        }
+
+        return 0;
+    }
 }

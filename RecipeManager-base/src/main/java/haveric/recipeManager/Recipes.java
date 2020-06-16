@@ -165,9 +165,7 @@ public class Recipes {
 
         if (potentialRecipes.isEmpty()) {
             return null;
-        } else if (potentialRecipes.size() == 1) {
-            return potentialRecipes.get(0);
-        } else {
+        } else if (Version.has1_13BasicSupport()) {
             int matchQuality = 0;
             BaseRecipe closestRecipe = null;
 
@@ -180,6 +178,8 @@ public class Recipes {
             }
 
             return closestRecipe;
+        } else {
+            return potentialRecipes.get(0);
         }
     }
 
@@ -215,8 +215,6 @@ public class Recipes {
 
         if (potentialRecipes.isEmpty()) {
             return null;
-        } else if (potentialRecipes.size() == 1) {
-            return potentialRecipes.get(0);
         } else {
             int matchQuality = 0;
             BaseRecipe closestRecipe = null;
@@ -249,14 +247,15 @@ public class Recipes {
      * @param recipe
      * @return Workbench recipe, otherwise it can be null if doesn't exist or you inputted a furnace recipe
      */
-    public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe) {
+    public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe, ItemStack[] matrix) {
         BaseRecipe baseRecipe = null;
 
-        if (recipe instanceof ShapedRecipe) {
+        List<ItemStack> ingredients = new ArrayList<>(Arrays.asList(matrix));
 
-            baseRecipe = getRecipe(RMCRecipeType.CRAFT, new ItemStack(Material.AIR), recipe.getResult());
+        if (recipe instanceof ShapedRecipe) {
+            baseRecipe = getRecipe(RMCRecipeType.CRAFT, ingredients, recipe.getResult());
         } else if (recipe instanceof ShapelessRecipe) {
-            baseRecipe =  getRecipe(RMCRecipeType.COMBINE, new ItemStack(Material.AIR), recipe.getResult());
+            baseRecipe =  getRecipe(RMCRecipeType.COMBINE, ingredients, recipe.getResult());
         }
 
         PreparableResultRecipe resultRecipe = null;

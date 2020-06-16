@@ -523,7 +523,7 @@ public class ToolsItem {
         return match;
     }
 
-    public static int getIngredientMatchQuality(ItemStack ingredient, RecipeChoice choice) {
+    public static int getIngredientMatchQuality(ItemStack ingredient, RecipeChoice choice, boolean checkExact) {
         Material ingredientType = ingredient.getType();
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
@@ -541,6 +541,14 @@ public class ToolsItem {
 
             int bestQuality = 0;
             for (ItemStack item : items) {
+                if (checkExact) {
+                    if (ToolsItem.isSameItemHash(item, ingredient)) {
+                        bestQuality = Integer.MAX_VALUE;
+                        break;
+                    }
+
+                    continue;
+                }
                 int quality = 0;
                 if (item.getType() == ingredientType) {
                     ItemMeta itemMeta = item.getItemMeta();

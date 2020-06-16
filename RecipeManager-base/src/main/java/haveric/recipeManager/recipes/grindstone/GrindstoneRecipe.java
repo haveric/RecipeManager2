@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.grindstone;
 
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -212,5 +213,43 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
         }
 
         return recipeIndexes;
+    }
+
+    @Override
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        boolean checkExact = true;
+        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            checkExact = false;
+        } else {
+            for (ItemResult result : getResults()) {
+                if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                    checkExact = false;
+                    break;
+                }
+            }
+        }
+
+        int totalQuality = 0;
+        for (ItemStack ingredient : ingredients) {
+            if (ingredient.getType() != Material.AIR) {
+                int quality = 0;
+                String pattern = "ab";
+                for (Character c : pattern.toCharArray()) {
+                    RecipeChoice ingredientChoice = getIngredient(c);
+                    int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                    if (newQuality > quality) {
+                        quality = newQuality;
+                        totalQuality += quality;
+                    }
+                }
+
+                if (quality == 0) {
+                    totalQuality = 0;
+                    break;
+                }
+            }
+        }
+
+        return totalQuality;
     }
 }

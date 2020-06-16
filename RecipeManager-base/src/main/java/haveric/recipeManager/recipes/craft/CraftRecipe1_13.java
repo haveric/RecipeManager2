@@ -16,7 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class CraftRecipe1_13 extends BaseCraftRecipe {
@@ -316,5 +319,44 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         }
 
         return recipeIndexes;
+    }
+
+    @Override
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        boolean checkExact = true;
+        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            checkExact = false;
+        } else {
+            for (ItemResult result : getResults()) {
+                if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                    checkExact = false;
+                    break;
+                }
+            }
+        }
+
+        int totalQuality = 0;
+        for (ItemStack ingredient : ingredients) {
+            if (ingredient.getType() != Material.AIR) {
+                int quality = 0;
+                for (String pattern : choicePattern) {
+                    for (Character c : pattern.toCharArray()) {
+                        RecipeChoice ingredientChoice = ingredientsChoiceMap.get(c);
+                        int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                        if (newQuality > quality) {
+                            quality = newQuality;
+                            totalQuality += quality;
+                        }
+                    }
+                }
+
+                if (quality == 0) {
+                    totalQuality = 0;
+                    break;
+                }
+            }
+        }
+
+        return totalQuality;
     }
 }

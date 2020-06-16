@@ -246,4 +246,41 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
         return found;
     }
+
+    @Override
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        boolean checkExact = true;
+        if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+            checkExact = false;
+        } else {
+            for (ItemResult result : getResults()) {
+                if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                    checkExact = false;
+                    break;
+                }
+            }
+        }
+
+        int totalQuality = 0;
+        for (ItemStack ingredient : ingredients) {
+            if (ingredient.getType() != Material.AIR) {
+                int quality = 0;
+                for (Character c : choicePattern.toCharArray()) {
+                    RecipeChoice ingredientChoice = ingredientsChoiceMap.get(c);
+                    int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                    if (newQuality > quality) {
+                        quality = newQuality;
+                        totalQuality += quality;
+                    }
+                }
+
+                if (quality == 0) {
+                    totalQuality = 0;
+                    break;
+                }
+            }
+        }
+
+        return totalQuality;
+    }
 }

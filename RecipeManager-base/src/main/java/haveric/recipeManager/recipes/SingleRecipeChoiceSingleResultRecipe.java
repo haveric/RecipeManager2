@@ -179,7 +179,11 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         if (ingredients.size() == 1) {
             ItemStack ingredient = ingredients.get(0);
 
-            return ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice);
+            boolean checkExact = true;
+            if (hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                checkExact = false;
+            }
+            return ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
         }
 
         return 0;
