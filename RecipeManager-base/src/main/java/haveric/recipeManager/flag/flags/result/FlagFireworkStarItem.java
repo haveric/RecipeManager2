@@ -5,8 +5,11 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -81,10 +84,22 @@ public class FlagFireworkStarItem extends Flag {
     @Override
     public boolean onValidate() {
         ItemResult result = getResult();
+        boolean validResult = false;
+        if (result != null && (result.getItemMeta() instanceof FireworkEffectMeta)) {
+            validResult = true;
+        }
 
-        if (result == null || !(result.getItemMeta() instanceof FireworkEffectMeta)) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a FIREWORK_STAR item!");
-            return false;
+        boolean validFlaggable = false;
+        if (Version.has1_13BasicSupport()) {
+            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+
+            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), FireworkEffectMeta.class)) {
+                validFlaggable = true;
+            }
+        }
+
+        if (!validResult && !validFlaggable) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a FIREWORK_STAR item!");
         }
 
         return true;

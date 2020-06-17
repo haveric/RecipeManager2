@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Perms;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -248,6 +249,15 @@ public class Flag implements Cloneable {
         }
 
         return null;
+    }
+
+    protected final FlaggableRecipeChoice getFlaggableRecipeChoice() {
+        Flaggable flaggable = getFlaggable();
+        FlaggableRecipeChoice flaggableRecipeChoice = null;
+        if (flaggable instanceof FlaggableRecipeChoice) {
+            flaggableRecipeChoice = (FlaggableRecipeChoice) flaggable;
+        }
+        return flaggableRecipeChoice;
     }
 
     protected final ItemResult getResult() {

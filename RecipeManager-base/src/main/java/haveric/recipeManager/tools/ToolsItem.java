@@ -543,7 +543,7 @@ public class ToolsItem {
             for (ItemStack item : items) {
                 if (checkExact) {
                     if (ToolsItem.isSameItemHash(item, ingredient)) {
-                        bestQuality = Integer.MAX_VALUE;
+                        bestQuality = 1000;
                         break;
                     }
 

@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -41,7 +42,10 @@ public class AnvilRecipeParser1_13 extends BaseRecipeParser {
                     return false;
                 }
 
-                Flags ingredientFlags = new Flags();
+                FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
+                flaggable.setChoice(choice);
+                Flags ingredientFlags = flaggable.getFlags();
+
                 reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                 if (ingredientFlags.hasFlags()) {

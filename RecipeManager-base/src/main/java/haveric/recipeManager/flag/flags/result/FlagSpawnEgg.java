@@ -5,7 +5,10 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -67,8 +70,21 @@ public class FlagSpawnEgg extends Flag {
     @Override
     public boolean onValidate() {
         ItemResult result = getResult();
+        boolean validResult = false;
+        if (result != null && (result.getItemMeta() instanceof SpawnEggMeta)) {
+            validResult = true;
+        }
 
-        if (result == null || !(result.getItemMeta() instanceof SpawnEggMeta)) {
+        boolean validFlaggable = false;
+        if (Version.has1_13BasicSupport()) {
+            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+
+            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), SpawnEggMeta.class)) {
+                validFlaggable = true;
+            }
+        }
+
+        if (!validResult && !validFlaggable) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a spawn egg item!");
         }
 

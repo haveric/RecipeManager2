@@ -5,8 +5,11 @@ import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
@@ -100,10 +103,22 @@ public class FlagEnchantedBook extends Flag {
     @Override
     public boolean onValidate() {
         ItemResult result = getResult();
+        boolean validResult = false;
+        if (result != null && (result.getItemMeta() instanceof EnchantmentStorageMeta)) {
+            validResult = true;
+        }
 
-        if (result == null || !(result.getItemMeta() instanceof EnchantmentStorageMeta)) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs an enchantable book!");
-            return false;
+        boolean validFlaggable = false;
+        if (Version.has1_13BasicSupport()) {
+            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+
+            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), EnchantmentStorageMeta.class)) {
+                validFlaggable = true;
+            }
+        }
+
+        if (!validResult && !validFlaggable) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs an enchantable book!");
         }
 
         return true;

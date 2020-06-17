@@ -4,8 +4,11 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -60,8 +63,21 @@ public class FlagLeatherColor extends Flag {
     @Override
     public boolean onValidate() {
         ItemResult result = getResult();
+        boolean validResult = false;
+        if (result != null && (result.getItemMeta() instanceof LeatherArmorMeta)) {
+            validResult = true;
+        }
 
-        if (result == null || !(result.getItemMeta() instanceof LeatherArmorMeta)) {
+        boolean validFlaggable = false;
+        if (Version.has1_13BasicSupport()) {
+            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+
+            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), LeatherArmorMeta.class)) {
+                validFlaggable = true;
+            }
+        }
+
+        if (!validResult && !validFlaggable) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a leather armor item!");
         }
 

@@ -5,95 +5,46 @@ import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flaggable;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.RecipeChoice;
 
-public class ItemResult extends ItemStack implements Flaggable {
+public class FlaggableRecipeChoice implements Flaggable {
+    private RecipeChoice choice;
     private Flags flags;
-    private float chance = 100;
     private BaseRecipe recipe;
 
-    public ItemResult() {
+    public FlaggableRecipeChoice() {
     }
 
-    public ItemResult(ItemStack item) {
-        super(item);
-    }
+    public FlaggableRecipeChoice(FlaggableRecipeChoice flaggable) {
 
-    public ItemResult(ItemResult result) {
-        super(result);
-
-        if (result.hasFlags()) {
-            flags = result.getFlags().clone(this);
+        if (flaggable.hasFlags()) {
+            flags = flaggable.getFlags().clone(this);
         } else {
             flags = null;
         }
 
-        chance = result.chance;
-        recipe = result.recipe; // don't clone, needs to be a pointer
-    }
-
-    public ItemResult(ItemStack item, float newChance) {
-        super(item);
-
-        chance = newChance;
-    }
-
-    public ItemResult(Material type, int amount, int data, float newChance) {
-        super(type, amount, (short) data);
-
-        chance = newChance;
-    }
-
-    public ItemResult(ItemStack item, Flags newFlags) {
-        super(item);
-
-        flags = newFlags.clone(this);
+        choice = flaggable.choice;
+        recipe = flaggable.recipe; // don't clone, needs to be a pointer
     }
 
     @Override
-    public ItemResult clone() {
-        super.clone();
-        return new ItemResult(this);
+    public FlaggableRecipeChoice clone() {
+        return new FlaggableRecipeChoice(this);
     }
 
-    public void setItemStack(ItemStack item) {
-        setType(item.getType());
-        setAmount(item.getAmount());
-
-        if (!Version.has1_13BasicSupport() || item instanceof Damageable) {
-            setDurability(item.getDurability());
-        }
-
-        setItemMeta(item.getItemMeta());
+    public RecipeChoice getChoice() {
+        return choice;
     }
 
-    public void clearMetadata() {
-        setItemMeta(null);
-    }
-
-    public ItemStack toItemStack() {
-        ItemStack converted = new ItemStack(getType(), getAmount(), getDurability());
-        converted.setItemMeta(getItemMeta());
-
-        return converted;
-    }
-
-    public void setChance(float newChance) {
-        chance = newChance;
-    }
-
-    public float getChance() {
-        return chance;
+    public void setChoice(RecipeChoice choice) {
+        this.choice = choice;
     }
 
     public BaseRecipe getRecipe() {
         return recipe;
     }
 
-    public ItemResult setRecipe(BaseRecipe newRecipe) {
+    public FlaggableRecipeChoice setRecipe(BaseRecipe newRecipe) {
         recipe = newRecipe;
         return this;
     }
@@ -194,8 +145,6 @@ public class ItemResult extends ItemStack implements Flaggable {
         if (hasFlags() && flags.hasFlags()) {
             toHash += flags.hashCode();
         }
-
-        toHash += "chance: " + chance;
 
         return toHash.hashCode();
     }
