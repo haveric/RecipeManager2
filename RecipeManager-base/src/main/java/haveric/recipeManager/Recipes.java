@@ -247,13 +247,13 @@ public class Recipes {
      * @param recipe
      * @return Workbench recipe, otherwise it can be null if doesn't exist or you inputted a furnace recipe
      */
-    public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe, ItemStack[] matrix) {
+    public PreparableResultRecipe getWorkbenchRecipe(Recipe recipe, ItemStack[] contents) {
         BaseRecipe baseRecipe = null;
 
         List<ItemStack> ingredients = new ArrayList<>();
-        for (int i = 1; i < matrix.length; i++) {
-            if (matrix[i] != null && matrix[i].getType() != Material.AIR) {
-                ingredients.add(matrix[i].clone());
+        for (int i = 1; i < contents.length; i++) {
+            if (contents[i] != null && contents[i].getType() != Material.AIR) {
+                ingredients.add(contents[i].clone());
             }
         }
 

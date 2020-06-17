@@ -95,7 +95,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return; // stop here if it's a special recipe
             }
 
-            PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe, inv.getMatrix());
+            PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe, inv.getContents());
 
             if (recipe == null) {
                 return; // not a custom recipe or recipe not found, no need to move on
@@ -345,7 +345,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             Recipe bukkitRecipe = event.getRecipe();
-            PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe, inv.getMatrix());
+            PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe, inv.getContents());
             if (recipe == null) {
                 return;
             }
