@@ -92,6 +92,9 @@ public class ExtractCommand implements TabExecutor {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
 
                     if (Version.has1_13Support()) {
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                        }
                         Map<Character, RecipeChoice> choices = recipe.getChoiceMap();
                         char[] cols;
                         RecipeChoice choice;
@@ -143,6 +146,9 @@ public class ExtractCommand implements TabExecutor {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective()).append(Files.NL);
 
                     if (Version.has1_13Support()) {
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                        }
                         List<RecipeChoice> ingredientChoices = recipe.getChoiceList();
 
                         int size = ingredientChoices.size();
@@ -175,6 +181,11 @@ public class ExtractCommand implements TabExecutor {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective()).append(Files.NL);
 
                     if (Version.has1_13Support()) {
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                        }
+                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
                         parseChoice(recipe.getInputChoice(), recipeString);
                     } else {
                         recipeString.append(parseIngredient(recipe.getInput()));
@@ -189,11 +200,12 @@ public class ExtractCommand implements TabExecutor {
                         BlastingRecipe recipe = (BlastingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective()).append(Files.NL);
 
-                        if (Version.has1_13Support()) {
-                            parseChoice(recipe.getInputChoice(), recipeString);
-                        } else {
-                            recipeString.append(parseIngredient(recipe.getInput()));
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                        parseChoice(recipe.getInputChoice(), recipeString);
 
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
@@ -203,11 +215,12 @@ public class ExtractCommand implements TabExecutor {
                         SmokingRecipe recipe = (SmokingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMOKING.getDirective()).append(Files.NL);
 
-                        if (Version.has1_13Support()) {
-                            parseChoice(recipe.getInputChoice(), recipeString);
-                        } else {
-                            recipeString.append(parseIngredient(recipe.getInput()));
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                        parseChoice(recipe.getInputChoice(), recipeString);
 
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
@@ -217,11 +230,12 @@ public class ExtractCommand implements TabExecutor {
                         CampfireRecipe recipe = (CampfireRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.CAMPFIRE.getDirective()).append(Files.NL);
 
-                        if (Version.has1_13Support()) {
-                            parseChoice(recipe.getInputChoice(), recipeString);
-                        } else {
-                            recipeString.append(parseIngredient(recipe.getInput()));
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                        parseChoice(recipe.getInputChoice(), recipeString);
 
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
@@ -231,11 +245,11 @@ public class ExtractCommand implements TabExecutor {
                         StonecuttingRecipe recipe = (StonecuttingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.STONECUTTING.getDirective()).append(Files.NL);
 
-                        if (Version.has1_13Support()) {
-                            parseChoice(recipe.getInputChoice(), recipeString);
-                        } else {
-                            recipeString.append(parseIngredient(recipe.getInput()));
+                        if (!recipe.getGroup().isEmpty()) {
+                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        parseChoice(recipe.getInputChoice(), recipeString);
 
                         recipeString.append(Files.NL);
                         parseResult(recipe.getResult(), recipeString);
