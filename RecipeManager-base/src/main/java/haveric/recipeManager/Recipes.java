@@ -30,6 +30,7 @@ public class Recipes {
 
     // Quick-find index
     protected Map<String, BaseRecipe> indexName = new HashMap<>();
+    private Map<String, Map<String, List<BaseRecipe>>> indexRecipesSimple = new HashMap<>();
     private Map<String, Map<String, List<BaseRecipe>>> indexRecipes = new HashMap<>();
     private Map<String, Map<String, List<BaseRecipe>>> indexRemovedRecipes = new HashMap<>();
     private Map<String, Boolean> recipeTypeContainsOverride = new HashMap<>();
@@ -41,6 +42,7 @@ public class Recipes {
         index.clear();
 
         indexName.clear();
+        indexRecipesSimple.clear();
         indexRecipes.clear();
         indexRemovedRecipes.clear();
         recipeTypeContainsOverride.clear();
@@ -55,6 +57,33 @@ public class Recipes {
         return RecipeManager.getRecipes();
     }
 
+    public int getNumRecipesSimple() {
+        int numRecipes = 0;
+        for (Map<String, List<BaseRecipe>> recipeMap: indexRecipesSimple.values()) {
+            for (List<BaseRecipe> baseRecipes : recipeMap.values()) {
+                for (BaseRecipe baseRecipe : baseRecipes) {
+                    if (!Vanilla.initialRecipes.containsKey(baseRecipe)) {
+                        numRecipes ++;
+                    }
+                }
+            }
+        }
+        return numRecipes;
+    }
+
+    public int getNumRecipesRequireRecipeManager() {
+        int numRecipes = 0;
+        for (Map<String, List<BaseRecipe>> recipeMap: indexRecipes.values()) {
+            for (List<BaseRecipe> baseRecipes : recipeMap.values()) {
+                for (BaseRecipe baseRecipe : baseRecipes) {
+                    if (!Vanilla.initialRecipes.containsKey(baseRecipe)) {
+                        numRecipes ++;
+                    }
+                }
+            }
+        }
+        return numRecipes;
+    }
     /**
      * Checks if result is part of a recipe added by RecipeManager by checking item's lore.
      *
@@ -417,14 +446,26 @@ public class Recipes {
     public void addRecipeToQuickfindIndex(String recipeDirective, BaseRecipe recipe) {
         indexName.put(recipe.getName().toLowerCase(), recipe); // Add to name index
 
-        if (!indexRecipes.containsKey(recipeDirective)) {
-            indexRecipes.put(recipeDirective, new HashMap<>());
-        }
-        for (String index : recipe.getIndexes()) {
-            if (!indexRecipes.get(recipeDirective).containsKey(index)) {
-                indexRecipes.get(recipeDirective).put(index, new ArrayList<>());
+        if (recipe.requiresRecipeManagerModification()) {
+            if (!indexRecipes.containsKey(recipeDirective)) {
+                indexRecipes.put(recipeDirective, new HashMap<>());
             }
-            indexRecipes.get(recipeDirective).get(index).add(recipe);
+            for (String index : recipe.getIndexes()) {
+                if (!indexRecipes.get(recipeDirective).containsKey(index)) {
+                    indexRecipes.get(recipeDirective).put(index, new ArrayList<>());
+                }
+                indexRecipes.get(recipeDirective).get(index).add(recipe);
+            }
+        } else {
+            if (!indexRecipesSimple.containsKey(recipeDirective)) {
+                indexRecipesSimple.put(recipeDirective, new HashMap<>());
+            }
+            for (String index : recipe.getIndexes()) {
+                if (!indexRecipesSimple.get(recipeDirective).containsKey(index)) {
+                    indexRecipesSimple.get(recipeDirective).put(index, new ArrayList<>());
+                }
+                indexRecipesSimple.get(recipeDirective).get(index).add(recipe);
+            }
         }
 
         if (!recipeTypeContainsOverride.containsKey(recipeDirective)) {
@@ -457,12 +498,17 @@ public class Recipes {
         indexName.remove(recipe.getName().toLowerCase()); // Remove from name index
 
         String recipeDirective = recipe.getType().getDirective();
+        if (!indexRecipesSimple.containsKey(recipeDirective)) {
+            indexRecipesSimple.put(recipeDirective, new HashMap<>());
+        }
+
         if (!indexRecipes.containsKey(recipeDirective)) {
             indexRecipes.put(recipeDirective, new HashMap<>());
         }
 
         // Remove from quickfind index
         for (String index : recipe.getIndexes()) {
+            indexRecipesSimple.get(recipeDirective).remove(index);
             indexRecipes.get(recipeDirective).remove(index);
         }
 

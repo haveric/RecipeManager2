@@ -7,6 +7,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: 1.13+ Recipe formats that allow for patterns and ingredient flags (See "basic recipes.html")
     * Ingredients in the new formats can now have some flags set on them, such as @name, @lore, etc.
     * Knowledge Book improvements to show ingredients and results with prepared flags
+* NEW: Recipes that do not require RecipeManager modification no longer are processed through RecipeManager events
 * NEW: 1.13+ Knowledge Book groups can be defined for recipes
 * NEW: 1.13+ Xp can be set for Furnace, Blast Furnace, Smoker, and Campfire recipes
 * FIX: HTML Docs: Fixed composter levels description

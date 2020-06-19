@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes;
 
+import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
@@ -229,5 +230,33 @@ public class MultiResultRecipe extends BaseRecipe {
         s.append("\n\n");
 
         return s;
+    }
+
+    public boolean requiresRecipeManagerModification() {
+        boolean requiresModification = false;
+
+        if (isMultiResult()) {
+            requiresModification = true;
+        }
+
+        if (!requiresModification) {
+            for (Flag flag : getFlags().get()) {
+                if (flag.requiresRecipeManagerModification()) {
+                    requiresModification = true;
+                    break;
+                }
+            }
+        }
+
+        if (!requiresModification) {
+            for (Flag flag : results.get(0).getFlags().get()) {
+                if (flag.requiresRecipeManagerModification()) {
+                    requiresModification = true;
+                    break;
+                }
+            }
+        }
+
+        return requiresModification;
     }
 }

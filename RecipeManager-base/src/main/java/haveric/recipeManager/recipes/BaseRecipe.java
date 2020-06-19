@@ -271,4 +271,8 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     public int getIngredientMatchQuality(List<ItemStack> ingredients) {
         return 0;
     }
+
+    public boolean requiresRecipeManagerModification() {
+        return true;
+    }
 }

@@ -198,13 +198,13 @@ public class CombineRecipe extends BaseCombineRecipe {
 
         ShapelessRecipe bukkitRecipe;
         if (Version.has1_12Support()) {
-            if (vanilla) {
+            if (vanilla || !requiresRecipeManagerModification()) {
                 bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
             } else {
                 bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
             }
         } else {
-            if (vanilla) {
+            if (vanilla || !requiresRecipeManagerModification()) {
                 bukkitRecipe = new ShapelessRecipe(getFirstResult());
             } else {
                 bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), hashCode()));

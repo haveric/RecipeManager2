@@ -291,13 +291,13 @@ public class CraftRecipe extends BaseCraftRecipe {
 
         ShapedRecipe bukkitRecipe;
         if (Version.has1_12Support()) {
-            if (vanilla) {
+            if (vanilla || !requiresRecipeManagerModification()) {
                 bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
             } else {
                 bukkitRecipe = new ShapedRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
             }
         } else {
-            if (vanilla) {
+            if (vanilla || !requiresRecipeManagerModification()) {
                 bukkitRecipe = new ShapedRecipe(getFirstResult());
             } else {
                 bukkitRecipe = new ShapedRecipe(Tools.createItemRecipeId(getFirstResult(), hashCode()));

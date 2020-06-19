@@ -182,7 +182,12 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
             getFlags().sendPrepare(a, true);
             firstResult.getFlags().sendPrepare(a, true);
 
-            ItemStack result = Tools.createItemRecipeId(a.result(), hashCode());
+            ItemStack result;
+            if (requiresRecipeManagerModification()) {
+                result = Tools.createItemRecipeId(a.result(), hashCode());
+            } else {
+                result = a.result();
+            }
 
             bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
         }

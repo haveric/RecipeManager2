@@ -1,6 +1,9 @@
 package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
@@ -9,8 +12,6 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -175,5 +176,27 @@ public class SingleResultRecipe extends BaseRecipe {
         }
 
         return print;
+    }
+
+    public boolean requiresRecipeManagerModification() {
+        boolean requiresModification = false;
+
+        for (Flag flag : getFlags().get()) {
+            if (flag.requiresRecipeManagerModification()) {
+                requiresModification = true;
+                break;
+            }
+        }
+
+        if (!requiresModification) {
+            for (Flag flag : result.getFlags().get()) {
+                if (flag.requiresRecipeManagerModification()) {
+                    requiresModification = true;
+                    break;
+                }
+            }
+        }
+
+        return requiresModification;
     }
 }

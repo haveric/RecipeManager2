@@ -83,8 +83,15 @@ public class RecipeRegistrator {
         queuedRecipes.clear(); // clear the queue to let the class vanish
 
         RecipeBooks.getInstance().reloadAfterRecipes(sender); // (re)create recipe books for recipes
-        
-        MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d recipes processed.", ((System.currentTimeMillis() - start) / 1000.0), processed));
+
+        int numSimple = Recipes.getInstance().getNumRecipesSimple();
+        int numRM = Recipes.getInstance().getNumRecipesRequireRecipeManager();
+
+        String extraDetails = "";
+        if (numSimple != 0 && numRM != 0) {
+            extraDetails = " (Simple: " + numSimple + " - RM: " + numRM + ")";
+        }
+        MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d recipes processed.%s", ((System.currentTimeMillis() - start) / 1000.0), processed, extraDetails));
     }
 
     public Map<BaseRecipe, RMCRecipeInfo> getQueuedRecipes() {
