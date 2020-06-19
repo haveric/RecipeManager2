@@ -2,3 +2,4 @@ craft
 dirt + stone
 = stone_sword
 @lore One
+@name test | display // Force the recipe to be processed by RM
