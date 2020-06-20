@@ -140,7 +140,7 @@ public class FlagKeepItemTest extends FlagBaseTest {
                     }
                 }
 
-                assertEquals(1, count);
+                assertEquals(2, count);
             } else if (resultType == Material.DIAMOND_SWORD) {
                 ItemStack[] matrix = new ItemStack[3];
                 matrix[0] = diamondSword.clone();
