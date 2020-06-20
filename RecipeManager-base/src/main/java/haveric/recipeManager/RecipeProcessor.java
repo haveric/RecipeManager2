@@ -122,6 +122,20 @@ public class RecipeProcessor implements Runnable {
 
                 int loaded = registrator.getNumQueuedRecipes();
 
+                String recipesString;
+                if (loaded > 1) {
+                    recipesString = " recipes";
+                } else {
+                    recipesString = " recipe";
+                }
+
+                String filesString;
+                if (fileList.size() > 1) {
+                    filesString = " files";
+                } else {
+                    filesString = " file";
+                }
+
                 if (errors > 0) {
                     String senderMessage;
                     if (errors == 1) {
@@ -136,11 +150,11 @@ public class RecipeProcessor implements Runnable {
                         senderMessage += ", see console.";
                     }
 
-                    MessageSender.getInstance().sendAndLog(sender, RMCChatColor.YELLOW + parsed + " " + loaded + " recipes from " + fileList.size() + " files in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + senderMessage);
+                    MessageSender.getInstance().sendAndLog(sender, RMCChatColor.YELLOW + parsed + " " + loaded + recipesString + " from " + fileList.size() + filesString + " in " + (System.currentTimeMillis() - start) / 1000.0 + " seconds, " + errors + senderMessage);
 
                     ErrorReporter.getInstance().print(FILE_ERRORLOG);
                 } else {
-                    MessageSender.getInstance().sendAndLog(sender, parsed + " " + loaded + " recipes from " + fileList.size() + " files without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
+                    MessageSender.getInstance().sendAndLog(sender, parsed + " " + loaded + recipesString + " from " + fileList.size() + filesString + " without errors, elapsed time " + (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
 
                     File log = new File(FILE_ERRORLOG);
 

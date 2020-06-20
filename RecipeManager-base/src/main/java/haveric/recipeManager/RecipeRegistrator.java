@@ -87,11 +87,15 @@ public class RecipeRegistrator {
         int numSimple = Recipes.getInstance().getNumRecipesSimple();
         int numRM = Recipes.getInstance().getNumRecipesRequireRecipeManager();
 
-        String extraDetails = "";
-        if (numSimple != 0 && numRM != 0) {
-            extraDetails = " (Simple: " + numSimple + " - RM: " + numRM + ")";
+        String extraDetails = " (Simple: " + numSimple + " - RM: " + numRM + ")";
+
+        String recipeString;
+        if (processed > 1) {
+            recipeString = "recipes";
+        } else {
+            recipeString = "recipe";
         }
-        MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d recipes processed.%s", ((System.currentTimeMillis() - start) / 1000.0), processed, extraDetails));
+        MessageSender.getInstance().send(sender, String.format("All done in %.3f seconds, %d %s processed.%s", ((System.currentTimeMillis() - start) / 1000.0), processed, recipeString, extraDetails));
     }
 
     public Map<BaseRecipe, RMCRecipeInfo> getQueuedRecipes() {
