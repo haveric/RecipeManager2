@@ -524,6 +524,45 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                                 } else {
                                     player.getWorld().dropItem(player.getLocation(), result.clone());
                                 }
+
+                                for (ItemStack item : originalMatrix) {
+                                    if (item != null) {
+                                        Material itemType = item.getType();
+
+                                        if (itemType != Material.AIR) {
+                                            Material returnedMaterial = null;
+                                            if (Version.has1_15Support()) {
+                                                returnedMaterial = itemType.getCraftingRemainingItem();
+                                            } else {
+                                                if (Version.has1_13BasicSupport()) {
+                                                    if (itemType == Material.DRAGON_BREATH) {
+                                                        returnedMaterial = Material.GLASS_BOTTLE;
+                                                    }
+                                                }
+
+                                                switch (itemType) {
+                                                    case WATER_BUCKET:
+                                                    case LAVA_BUCKET:
+                                                    case MILK_BUCKET:
+                                                        returnedMaterial = Material.BUCKET;
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+
+                                            if (returnedMaterial != null) {
+                                                ItemStack returnedItem = new ItemStack(returnedMaterial);
+
+                                                if (Tools.playerCanAddItem(player, returnedItem)) {
+                                                    player.getInventory().addItem(returnedItem);
+                                                } else {
+                                                    player.getWorld().dropItem(player.getLocation(), returnedItem);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
 
