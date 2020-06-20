@@ -1003,4 +1003,39 @@ public class ToolsItem {
 
         return isShulkerBox;
     }
+
+    /**
+     * This is used for Early 1.15 or below to replicate the method of the same name in Material added in late 1.15
+     *
+     * Determines the remaining item in a crafting grid after crafting with this ingredient.
+     *
+     * @return the item left behind when crafting, or null if nothing is.
+     */
+    public static Material getCraftingRemainingItem(Material itemType) {
+        Material returnedMaterial = null;
+
+        if (Version.has1_15Support()) {
+            if (itemType == Material.HONEY_BOTTLE) {
+                returnedMaterial = Material.GLASS_BOTTLE;
+            }
+        }
+
+        if (Version.has1_13BasicSupport()) {
+            if (itemType == Material.DRAGON_BREATH) {
+                returnedMaterial = Material.GLASS_BOTTLE;
+            }
+        }
+
+        switch (itemType) {
+            case WATER_BUCKET:
+            case LAVA_BUCKET:
+            case MILK_BUCKET:
+                returnedMaterial = Material.BUCKET;
+                break;
+            default:
+                break;
+        }
+
+        return returnedMaterial;
+    }
 }

@@ -530,25 +530,15 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                                         Material itemType = item.getType();
 
                                         if (itemType != Material.AIR) {
-                                            Material returnedMaterial = null;
+                                            Material returnedMaterial;
                                             if (Version.has1_15Support()) {
-                                                returnedMaterial = itemType.getCraftingRemainingItem();
+                                                try {
+                                                    returnedMaterial = itemType.getCraftingRemainingItem();
+                                                } catch (NoSuchMethodError e) {
+                                                    returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
+                                                }
                                             } else {
-                                                if (Version.has1_13BasicSupport()) {
-                                                    if (itemType == Material.DRAGON_BREATH) {
-                                                        returnedMaterial = Material.GLASS_BOTTLE;
-                                                    }
-                                                }
-
-                                                switch (itemType) {
-                                                    case WATER_BUCKET:
-                                                    case LAVA_BUCKET:
-                                                    case MILK_BUCKET:
-                                                        returnedMaterial = Material.BUCKET;
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
+                                                returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
                                             }
 
                                             if (returnedMaterial != null) {
