@@ -230,7 +230,7 @@ public class FlagKeepItem extends Flag {
                 inv.setItem(index, new ItemStack(Material.AIR));
             } else {
                 ItemStack invItem = inv.getItem(index);
-                if (invItem != null && invItem.getAmount() > 1 && invItem.getType() != clone.getType()) {
+                if (invItem != null && invItem.getType() != clone.getType()) {
                     if (a.hasPlayer()) {
                         Player player = a.player();
                         if (Tools.playerCanAddItem(player, clone)) {
