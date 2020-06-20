@@ -7,13 +7,16 @@ import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
 import java.util.HashMap;
@@ -158,11 +161,6 @@ public class FlagKeepItem extends Flag {
 
                 keepItems.put(key, damage);
             } else if (value.startsWith("replace")) {
-                if (item.getType().getMaxStackSize() > 1) {
-                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't replace stackable ingredient: " + ToolsItem.print(item));
-                    return false;
-                }
-
                 value = value.substring("replace".length());
 
                 ItemStack replace = Tools.parseItem(value, 0);
@@ -231,11 +229,29 @@ public class FlagKeepItem extends Flag {
             if (clone == null) {
                 inv.setItem(index, new ItemStack(Material.AIR));
             } else {
-                if (inv instanceof CraftingInventory || inv instanceof GrindstoneInventory || inv instanceof CartographyInventory) {
-                    clone.setAmount(clone.getAmount() + 1);
-                }
+                ItemStack invItem = inv.getItem(index);
+                if (invItem != null && invItem.getAmount() > 1 && invItem.getType() != clone.getType()) {
+                    if (a.hasPlayer()) {
+                        Player player = a.player();
+                        if (Tools.playerCanAddItem(player, clone)) {
+                            player.getInventory().addItem(clone);
+                        } else {
+                            player.getWorld().dropItem(player.getLocation(), clone);
+                        }
+                    } else if (a.hasLocation()) {
+                        Location loc = a.location();
+                        World world = loc.getWorld();
+                        if (world != null) {
+                            world.dropItemNaturally(loc, clone);
+                        }
+                    }
+                } else {
+                    if (inv instanceof CraftingInventory || inv instanceof GrindstoneInventory || inv instanceof CartographyInventory) {
+                        clone.setAmount(clone.getAmount() + 1);
+                    }
 
-                inv.setItem(index, clone);
+                    inv.setItem(index, clone);
+                }
             }
         }
     }
