@@ -49,7 +49,7 @@ js:
             <h2 class="doc-section__title">Recipe Books and Named Recipes</h2>
             <div class="doc-section__inn">
                 <p>You can name recipes by just writing something after the type definition, e.g.:</p>
-    <pre class="code">&lt;recipe definition&gt; [recipe name]</pre>
+                <pre class="code">&lt;recipe definition&gt; [recipe name]</pre>
                 <p>
                     That name can be used in recipe books.
                 </p>
@@ -59,128 +59,159 @@ js:
             </div>
         </div>
         <div id="flags" class="doc-section">
-        <h2 class="doc-section__title">Using Flags</h2>
-        <div class="doc-section__inn">
-            <p>
-                Here's the full syntax of a recipe file:
-            </p>
-            <pre class="code">
-[@shared or recipe flag]
+            <h2 class="doc-section__title">Using Flags</h2>
+            <div class="doc-section__inn">
+                <p>
+                    Here's the full syntax of a recipe file:
+                </p>
+                <pre class="code">
+[@ shared or recipe flag]
 [... more flags]
 
 &lt;recipe definition&gt; [recipe name]
-[@shared or recipe flag]
+[@ shared or recipe flag]
 [... more flags]
 &lt;ingredients&gt;
+[@ ingredient flags]
 = &lt;result&gt;
-  [@shared or result flag]
+  [@ shared or result flag]
   [... more flags]
 [... more results]
 
 [... more recipes]
 </pre>
-            <div>
-                Here's a quick example of the above syntax by using all available options:
-            </div>
-            <pre class="code">
+                <div>
+                    Here's a quick example of the above syntax by using all available options:
+                </div>
+                <div class="tabs">
+                    <div class="tabs-nav clearfix">
+                        <div class="tab__title active">
+                            Pattern Format
+                        </div>
+                        <div class="tab__title">
+                            Simple Format
+                        </div>
+                    </div>
+                    <div class="tabs-content">
+                        <div class="tab__content active">
+<pre class="code">
 @message You crafted this! // this applies to all recipes within this file
 
 COMBINE
 @broadcast {player} has crafted a fine sword!
-iron_ingot + gold_ingot + diamond:2
+pattern abcc
+a iron_ingot
+b gold_ingot
+c diamond
 = golden_sword
   @enchant durability max
   @name Fine Gold Sword
   @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
 </pre>
-            <div class="inventory inventory--crafting">
-                <div class="inventory__ingredients">
-                    <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/iron_ingot.png?v=1"/>
-                        <div class="detail">
-                            <div class="line">Iron Ingot</div>
                         </div>
-                    </div>
-                    <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/gold_ingot.png?v=1"/>
-                        <div class="detail">
-                            <div class="line">Gold Ingot</div>
-                        </div>
-                    </div>
-                    <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/diamond.png?v=1"/>
-                        <div class="detail">
-                            <div class="line">Diamond</div>
-                        </div>
-                    </div>
-                    <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/diamond.png?v=1"/>
-                        <div class="detail">
-                            <div class="line">Diamond</div>
-                        </div>
-                    </div>
-                    <div class="slot"></div>
-                    <div class="slot"></div>
-                    <div class="slot"></div>
-                    <div class="slot"></div>
-                    <div class="slot"></div>
-                </div>
-                <div class="inventory__arrow">
-                    <div class="slot slot--nobg"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png?v=1"/>
-                        <div class="detail">
-                            <div class="line">Shapeless Workbench</div>
-                        </div>
-                    </div>
-                    <img src="https://www.recipemanager.dev/img/icons/64/arrow.png?v=1"/>
-                </div>
-                <div class="inventory__result">
-                    <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/16/golden_sword.png?v=1"/>
-                        <div class="detail">
-                            <div class="line color-aqua italic">Fine Gold Sword</div>
-                            <div class="line color-gray">Unbreaking III</div>
-                            <div class="line color-gray">This sword has been crafted from pure awesomeness! </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                        <div class="tab__content">
 <pre class="code">
+@message You crafted this! // this applies to all recipes within this file
+
+COMBINE
+@broadcast {player} has crafted a fine sword!
+iron_ingot + gold_ingot + diamond:0:2
+= golden_sword
+  @enchant durability max
+  @name Fine Gold Sword
+  @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
+</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="inventory inventory--crafting">
+                    <div class="inventory__ingredients">
+                        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/iron_ingot.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Iron Ingot</div>
+                            </div>
+                        </div>
+                        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/gold_ingot.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Gold Ingot</div>
+                            </div>
+                        </div>
+                        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/diamond.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Diamond</div>
+                            </div>
+                        </div>
+                        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/diamond.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Diamond</div>
+                            </div>
+                        </div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                    </div>
+                    <div class="inventory__arrow">
+                        <div class="slot slot--nobg"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Shapeless Workbench</div>
+                            </div>
+                        </div>
+                        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png?v=1"/>
+                    </div>
+                    <div class="inventory__result">
+                        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/16/golden_sword.png?v=1"/>
+                            <div class="detail">
+                                <div class="line color-aqua italic">Fine Gold Sword</div>
+                                <div class="line color-gray">Unbreaking III</div>
+                                <div class="line color-gray">This sword has been crafted from pure awesomeness! </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <pre class="code">
 CRAFT Some Awesome Recipe
 @modexp +1
 @message false // disable the file-wide flag on this recipe
 apple
 = apple
 </pre>
-            <div class="inventory inventory--crafting">
-            <div class="inventory__ingredients">
-                <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/apple.png?v=1"/>
-                    <div class="detail">
-                        <div class="line">Apple</div>
+                <div class="inventory inventory--crafting">
+                    <div class="inventory__ingredients">
+                        <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/apple.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Apple</div>
+                            </div>
+                        </div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
+                        <div class="slot"></div>
                     </div>
-                </div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-            </div>
-            <div class="inventory__arrow">
-                <div class="slot slot--nobg"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png?v=1"/>
-                    <div class="detail">
-                        <div class="line">Shaped Workbench</div>
+                    <div class="inventory__arrow">
+                        <div class="slot slot--nobg"><img src="https://www.recipemanager.dev/img/icons/64/crafting_table.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Shaped Workbench</div>
+                            </div>
+                        </div>
+                        <img src="https://www.recipemanager.dev/img/icons/64/arrow.png?v=1"/>
                     </div>
-                </div>
-                <img src="https://www.recipemanager.dev/img/icons/64/arrow.png?v=1"/>
-            </div>
-            <div class="inventory__result">
-                <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/16/apple.png?v=1"/>
-                    <div class="detail">
-                        <div class="line">Apple</div>
+                    <div class="inventory__result">
+                        <div class="slot slot--result"><img src="https://www.recipemanager.dev/img/icons/16/apple.png?v=1"/>
+                            <div class="detail">
+                                <div class="line">Apple</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-    </div>
     </div>
     <div id="advanced-examples" class="doc-section__group">
         <h2 class="doc-section__group-title">Advanced Recipe Examples</h2>
@@ -188,15 +219,41 @@ apple
         <div id="different-names" class="doc-section">
             <h3 class="doc-section__title">Same Ingredients, Different Names, Different results</h3>
             <div class="doc-section__inn">
+                <div class="tabs">
+                    <div class="tabs-nav clearfix">
+                        <div class="tab__title active">
+                            Pattern Format
+                        </div>
+                        <div class="tab__title">
+                            Simple Format
+                        </div>
+                    </div>
+                    <div class="tabs-content">
+                        <div class="tab__content active">
 <pre class="code">
 combine
 @individualresults
-gold_nugget:3
+pattern aaa
+a gold_nugget
 = iron_ingot
   @ingredientcondition gold_nugget | name Silver Nugget
 = diamond
   @ingredientcondition gold_nugget | name Diamond Nugget
 </pre>
+                        </div>
+                        <div class="tab__content">
+<pre class="code">
+combine
+@individualresults
+gold_nugget:0:3
+= iron_ingot
+  @ingredientcondition gold_nugget | name Silver Nugget
+= diamond
+  @ingredientcondition gold_nugget | name Diamond Nugget
+</pre>
+                        </div>
+                    </div>
+                </div>
                 <p>
                     This recipe lets you combine 3 gold nuggets named differently to create different results.
                     If you combine 3 unnamed ones nothing will result, but if they're named "Silver Nugget" you'll get an iron_ingot.
@@ -317,7 +374,6 @@ sulphur % 30
         </div>
     </div>
 </div>
-
 <div id="item-tooltip" class="item-tooltip">
     <div class="item-tooltip__detail"></div>
 </div>

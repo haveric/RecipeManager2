@@ -5,18 +5,22 @@ This file will be automatically overwritten when a new version is installed.
 * FIX/NEW: 1.13+ Re-added durability support in recipes.
     * Please check your recipes and modify them if necessary, mainly COMBINE recipes that rely on the amount shorthand
 * NEW: 1.13+ Recipe formats that allow for patterns and ingredient flags (See "basic recipes.html")
+    * Both formats are valid, so you should not need to change anything to a pattern format
     * Ingredients in the new formats can now have some flags set on them, such as @name, @lore, etc.
+    * NOTE: @ingredientcondition will not work on ingredients that have flags, only use flags if you want an exact ingredient
     * Knowledge Book improvements to show ingredients and results with prepared flags
+    * Furnace type recipes can have multiple ingredients with differing flags that all work for the same recipe (See "basic recipes.html")
 * NEW: Recipes that do not require RecipeManager modification no longer are processed through RecipeManager events
 * NEW: 1.13+ Knowledge Book groups can be defined for recipes
 * NEW: 1.13+ Xp can be set for Furnace, Blast Furnace, Smoker, and Campfire recipes
-* FIX: HTML Docs: Fixed composter levels description
 * FIX: @ItemNBT: FlagType was using @ItemName
 * FIX: @IngredientCondition: Multiple declarations will not override previous ones
 * FIX: Anvil, Grindstone, Cartography recipes didn't prevent recipe from crafting in some cases
 * FIX: Fixed extended potions not matching correctly causing a NullPointerException
 * FIX: Buckets/Bottles being returned in crafting tables (from milk buckets, water buckets, lava buckets, honey bottles, and dragon breath)
 * FIX: @KeepItem now supports stackable items, such as dirt, grass_block, etc. and gives items to the inventory if the stack doesn't match
+* FIX: HTML Docs: Fixed composter levels description
+* FIX: HTML Docs: Sort tags in name index
 
 === v2.22.3 ===
 * FIX: 1.13+ Recipe Book air display for craft recipes

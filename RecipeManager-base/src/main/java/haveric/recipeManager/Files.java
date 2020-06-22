@@ -728,13 +728,17 @@ public class Files {
             s.append(NL).append("<b>Blocks</b>");
             Iterable<Tag<Material>> blockTags = Bukkit.getTags(REGISTRY_BLOCKS, Material.class);
             for (Tag<Material> tag : blockTags) {
-                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), tag.getValues()));
+                List<Material> materials = new ArrayList<>(tag.getValues());
+                Collections.sort(materials);
+                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), materials));
             }
 
             s.append(NL).append(NL).append("<b>Items</b>");
             Iterable<Tag<Material>> itemTags = Bukkit.getTags(REGISTRY_ITEMS, Material.class);
             for (Tag<Material> tag : itemTags) {
-                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), tag.getValues()));
+                List<Material> materials = new ArrayList<>(tag.getValues());
+                Collections.sort(materials);
+                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), materials));
             }
         }
 

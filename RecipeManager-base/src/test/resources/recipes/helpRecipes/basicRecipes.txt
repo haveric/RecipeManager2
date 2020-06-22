@@ -14,7 +14,7 @@ cobblestone,stone + dirt,grass
 = light_gray_terracotta
 
 combine
-sulphur:3 + sand + sand
+sulphur:0:3 + sand + sand
 = TNT:0:2
 
 combine Smash 2 diamonds and pray
