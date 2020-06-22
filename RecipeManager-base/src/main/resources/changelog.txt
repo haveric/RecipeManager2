@@ -2,6 +2,8 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+
+=== v2.23.0 ===
 * FIX/NEW: 1.13+ Re-added durability support in recipes.
     * Please check your recipes and modify them if necessary, mainly COMBINE recipes that rely on the amount shorthand
 * NEW: 1.13+ Recipe formats that allow for patterns and ingredient flags (See "basic recipes.html")
