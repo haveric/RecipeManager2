@@ -15,7 +15,7 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -103,7 +103,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
                     furnaceRecipe1_13.addIngredientChoiceItems(items);
                 } else {
-                    furnaceRecipe1_13.setIngredientChoice(ToolsItem.mergeRecipeChoices(furnaceRecipe1_13.getIngredientChoice(), choice));
+                    furnaceRecipe1_13.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(furnaceRecipe1_13.getIngredientChoice(), choice));
                 }
 
                 if (!parseArgs(recipe, splitIngredient, isRemove)) {

@@ -10,13 +10,11 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cooking.RMBaseCookingRecipe;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
     private ItemResult fuel;
@@ -95,7 +93,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
         String print = getConditionResultName(result);
 
         if (print.isEmpty()) {
-            print = ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

@@ -8,7 +8,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -69,7 +69,7 @@ public class CompostRecipe extends MultiResultRecipe {
         if (ingredientChoice == null) {
             setIngredientChoice(materials);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
             updateHash();
         }
     }
@@ -78,7 +78,7 @@ public class CompostRecipe extends MultiResultRecipe {
         if (ingredientChoice == null) {
             setIngredientChoiceItems(items);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithItems(ingredientChoice, items);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
             updateHash();
         }
     }
@@ -103,7 +103,7 @@ public class CompostRecipe extends MultiResultRecipe {
         String newHash = "compost";
 
         if (hasIngredientChoice()) {
-            newHash += ToolsItem.getRecipeChoiceHash(ingredientChoice);
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(ingredientChoice);
         }
 
         hash = newHash.hashCode();
@@ -144,7 +144,7 @@ public class CompostRecipe extends MultiResultRecipe {
             s.append("levels x").append(levels).append(" ");
         }
 
-        s.append(ToolsItem.getRecipeChoiceName(ingredientChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice));
 
         s.append(" to ");
 
@@ -196,7 +196,7 @@ public class CompostRecipe extends MultiResultRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.compostlevel")).append(RMCChatColor.BLACK);
@@ -209,7 +209,7 @@ public class CompostRecipe extends MultiResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        found += ToolsItem.getNumMaterialsInRecipeChoice(type, ingredientChoice);
+        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, ingredientChoice);
 
         return found;
     }
@@ -241,7 +241,7 @@ public class CompostRecipe extends MultiResultRecipe {
                 }
             }
 
-            return ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+            return ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
         }
 
         return 0;

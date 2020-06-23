@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -115,10 +115,10 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
         StringBuilder str = new StringBuilder("anvil");
 
         str.append(" a:");
-        str.append(ToolsItem.getRecipeChoiceHash(primaryIngredient));
+        str.append(ToolsRecipeChoice.getRecipeChoiceHash(primaryIngredient));
 
         str.append(" b:");
-        str.append(ToolsItem.getRecipeChoiceHash(secondaryIngredient));
+        str.append(ToolsRecipeChoice.getRecipeChoiceHash(secondaryIngredient));
 
         hash = str.toString().hashCode();
     }
@@ -130,10 +130,10 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
         str.append("anvil (");
 
         str.append(" a:");
-        str.append(ToolsItem.getRecipeChoiceName(primaryIngredient));
+        str.append(ToolsRecipeChoice.getRecipeChoiceName(primaryIngredient));
 
         str.append(" b:");
-        str.append(ToolsItem.getRecipeChoiceName(secondaryIngredient));
+        str.append(ToolsRecipeChoice.getRecipeChoiceName(secondaryIngredient));
 
         str.append(")");
 
@@ -200,8 +200,8 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsItem.printRecipeChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-        s.append('\n').append(ToolsItem.printRecipeChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.anvil.repaircost", "{repaircost}", repairCost));
@@ -213,8 +213,8 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        found += ToolsItem.getNumMaterialsInRecipeChoice(type, primaryIngredient);
-        found += ToolsItem.getNumMaterialsInRecipeChoice(type, secondaryIngredient);
+        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, primaryIngredient);
+        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, secondaryIngredient);
 
         return found;
     }
@@ -250,7 +250,7 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
                 String pattern = "ab";
                 for (Character c : pattern.toCharArray()) {
                     RecipeChoice ingredientChoice = getIngredient(c);
-                    int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
                     if (newQuality > quality) {
                         quality = newQuality;
                         totalQuality += quality;

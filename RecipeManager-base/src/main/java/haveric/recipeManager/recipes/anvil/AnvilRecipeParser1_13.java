@@ -11,7 +11,7 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -75,13 +75,13 @@ public class AnvilRecipeParser1_13 extends BaseRecipeParser {
                     if (!recipe.hasIngredient(ingredientChar)) {
                         recipe.setIngredient(ingredientChar, new RecipeChoice.ExactChoice(items));
                     } else {
-                        recipe.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoiceWithItems(recipe.getIngredient(ingredientChar), items));
+                        recipe.setIngredient(ingredientChar, ToolsRecipeChoice.mergeRecipeChoiceWithItems(recipe.getIngredient(ingredientChar), items));
                     }
                 } else {
                     if (!recipe.hasIngredient(ingredientChar)) {
                         recipe.setIngredient(ingredientChar, choice);
                     } else {
-                        recipe.setIngredient(ingredientChar, ToolsItem.mergeRecipeChoices(recipe.getIngredient(ingredientChar), choice));
+                        recipe.setIngredient(ingredientChar, ToolsRecipeChoice.mergeRecipeChoices(recipe.getIngredient(ingredientChar), choice));
                     }
                 }
             } else {

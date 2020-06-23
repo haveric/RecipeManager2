@@ -12,7 +12,7 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -81,7 +81,7 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
 
                 recipe.addIngredientChoiceItems(items);
             } else {
-                recipe.setIngredientChoice(ToolsItem.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
+                recipe.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
             }
 
             if (!parseArgs(recipe, splitIngredient, isRemove)) {

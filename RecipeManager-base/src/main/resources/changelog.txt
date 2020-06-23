@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 === Coming Soon ===
+* FIX: 1.12 and below: Some recipes are giving NoClassDefFoundError
 
 === v2.23.0 ===
 * FIX/NEW: 1.13+ Re-added durability support in recipes.

@@ -11,7 +11,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cooking.RMBaseCookingRecipe;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.inventory.CampfireRecipe;
 
 public class RMCampfireRecipe extends RMBaseCookingRecipe {
@@ -74,7 +74,7 @@ public class RMCampfireRecipe extends RMBaseCookingRecipe {
         String print = getConditionResultName(result);
 
         if (print.isEmpty()) {
-            print = ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

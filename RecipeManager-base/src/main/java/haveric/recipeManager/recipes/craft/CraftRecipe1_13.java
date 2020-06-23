@@ -10,7 +10,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -134,7 +134,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             str.append(" ").append(entry.getKey()).append(":");
 
-            str.append(ToolsItem.getRecipeChoiceHash(entry.getValue()));
+            str.append(ToolsRecipeChoice.getRecipeChoiceHash(entry.getValue()));
         }
 
         hash = str.toString().hashCode();
@@ -163,7 +163,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             s.append(" ").append(entry.getKey()).append(":");
 
-            s.append(ToolsItem.getRecipeChoiceName(entry.getValue()));
+            s.append(ToolsRecipeChoice.getRecipeChoiceName(entry.getValue()));
         }
 
         s.append(") to ");
@@ -293,7 +293,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
                 s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
             }
 
-            ToolsItem.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
+            ToolsRecipeChoice.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
         }
 
         return s.toString();
@@ -306,7 +306,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
-            int num = ToolsItem.getNumMaterialsInRecipeChoice(type, choice);
+            int num = ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, choice);
             if (num > 0) {
                 found += num;
                 break;
@@ -347,7 +347,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
                 for (String pattern : choicePattern) {
                     for (Character c : pattern.toCharArray()) {
                         RecipeChoice ingredientChoice = ingredientsChoiceMap.get(c);
-                        int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                        int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
                         if (newQuality > quality) {
                             quality = newQuality;
                             totalQuality += quality;

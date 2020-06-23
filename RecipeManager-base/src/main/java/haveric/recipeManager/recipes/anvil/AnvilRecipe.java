@@ -6,7 +6,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -182,8 +182,8 @@ public class AnvilRecipe extends BaseAnvilRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsItem.printChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-        s.append('\n').append(ToolsItem.printChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.anvil.repaircost", "{repaircost}", repairCost));

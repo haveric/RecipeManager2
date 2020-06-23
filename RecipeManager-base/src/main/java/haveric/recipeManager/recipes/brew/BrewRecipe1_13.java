@@ -5,7 +5,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -60,9 +60,9 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
     public void resetName() {
         StringBuilder s = new StringBuilder();
 
-        s.append(ToolsItem.getRecipeChoiceName(ingredientChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice));
         s.append(" + ");
-        s.append(ToolsItem.getRecipeChoiceName(potionChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(potionChoice));
 
         s.append(" to ").append(getResultsString());
 
@@ -122,7 +122,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         if (ingredientChoice == null) {
             setIngredientChoice(materials);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
             updateHash();
         }
     }
@@ -131,7 +131,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         if (ingredientChoice == null) {
             setIngredientChoiceItems(items);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithItems(ingredientChoice, items);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
             updateHash();
         }
     }
@@ -160,7 +160,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         if (potionChoice == null) {
             setPotionChoice(materials);
         } else {
-            potionChoice = ToolsItem.mergeRecipeChoiceWithMaterials(potionChoice, materials);
+            potionChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(potionChoice, materials);
             updateHash();
         }
     }
@@ -169,7 +169,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         if (potionChoice == null) {
             setPotionChoiceItems(items);
         } else {
-            potionChoice = ToolsItem.mergeRecipeChoiceWithItems(potionChoice, items);
+            potionChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(potionChoice, items);
             updateHash();
         }
     }
@@ -194,13 +194,13 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         String newHash = "brew";
 
         if (hasIngredientChoice()) {
-            newHash += ToolsItem.getRecipeChoiceHash(ingredientChoice);
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(ingredientChoice);
         }
 
         newHash += " + ";
 
         if (hasPotionChoice()) {
-            newHash += ToolsItem.getRecipeChoiceHash(potionChoice);
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(potionChoice);
         }
 
         hash = newHash.hashCode();
@@ -235,8 +235,8 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        found += ToolsItem.getNumMaterialsInRecipeChoice(type, ingredientChoice);
-        found += ToolsItem.getNumMaterialsInRecipeChoice(type, potionChoice);
+        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, ingredientChoice);
+        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, potionChoice);
 
         return found;
     }
@@ -273,7 +273,7 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
                 String pattern = "ab";
                 for (Character c : pattern.toCharArray()) {
                     RecipeChoice ingredientChoice = getIngredient(c);
-                    int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
                     if (newQuality > quality) {
                         quality = newQuality;
                         totalQuality += quality;

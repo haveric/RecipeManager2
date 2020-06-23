@@ -10,7 +10,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -137,7 +137,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         StringBuilder str = new StringBuilder("combine");
 
         for (RecipeChoice choice : getIngredientChoiceList()) {
-            str.append(" ").append(ToolsItem.getRecipeChoiceHash(choice));
+            str.append(" ").append(ToolsRecipeChoice.getRecipeChoiceHash(choice));
         }
 
         hash = str.toString().hashCode();
@@ -152,7 +152,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         s.append(" (");
 
         for (RecipeChoice choice : getIngredientChoiceList()) {
-            s.append(" ").append(ToolsItem.getRecipeChoiceName(choice));
+            s.append(" ").append(ToolsRecipeChoice.getRecipeChoiceName(choice));
         }
 
         s.append(") to ");
@@ -229,7 +229,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
 
-            ToolsItem.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
+            ToolsRecipeChoice.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
         }
 
         return s.toString();
@@ -242,7 +242,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
-            int num = ToolsItem.getNumMaterialsInRecipeChoice(type, choice);
+            int num = ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, choice);
             if (num > 0) {
                 found += num;
                 break;
@@ -272,7 +272,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
                 int quality = 0;
                 for (Character c : choicePattern.toCharArray()) {
                     RecipeChoice ingredientChoice = ingredientsChoiceMap.get(c);
-                    int newQuality = ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
                     if (newQuality > quality) {
                         quality = newQuality;
                         totalQuality += quality;

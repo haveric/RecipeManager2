@@ -8,7 +8,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleRecipeChoiceSingleResultRecipe;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.inventory.StonecuttingRecipe;
 
 public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
@@ -87,7 +87,7 @@ public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
         String print = getConditionResultName(result);
 
         if (print.isEmpty()) {
-            print = ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
+            print = ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.RESET, RMCChatColor.BLACK);
         }
 
         s.append('\n').append(print);

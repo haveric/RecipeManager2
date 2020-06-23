@@ -2,7 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +42,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         if (ingredientChoice == null) {
             setIngredientChoice(materials);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
             updateHash();
         }
     }
@@ -51,7 +51,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         if (ingredientChoice == null) {
             setIngredientChoiceItems(items);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithItems(ingredientChoice, items);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
             updateHash();
         }
     }
@@ -89,7 +89,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         String newHash = getType().getDirective();
 
         if (hasIngredientChoice()) {
-            newHash += ToolsItem.getRecipeChoiceHash(ingredientChoice);
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(ingredientChoice);
         }
 
         if (hasResult()) {
@@ -138,7 +138,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
 
         s.append(getType().getDirective()).append(" ");
 
-        s.append(ToolsItem.getRecipeChoiceName(ingredientChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice));
 
         s.append(" to ");
         s.append(getResultString());
@@ -154,7 +154,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        found += ToolsItem.getNumMaterialsInRecipeChoice(type, ingredientChoice);
+        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, ingredientChoice);
 
         return found;
     }
@@ -183,7 +183,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
             if (hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
                 checkExact = false;
             }
-            return ToolsItem.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+            return ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
         }
 
         return 0;

@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -52,7 +52,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
         if (ingredientChoice == null) {
             setIngredientChoice(materials);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
             updateHash();
         }
     }
@@ -61,7 +61,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
         if (ingredientChoice == null) {
             setIngredientChoiceItems(items);
         } else {
-            ingredientChoice = ToolsItem.mergeRecipeChoiceWithItems(ingredientChoice, items);
+            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
             updateHash();
         }
     }
@@ -86,7 +86,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
         String newHash = "fuel";
 
         if (hasIngredientChoice()) {
-            newHash += ToolsItem.getRecipeChoiceHash(ingredientChoice);
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(ingredientChoice);
         }
 
         hash = newHash.hashCode();
@@ -120,7 +120,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
 
         s.append("fuel ");
 
-        s.append(ToolsItem.getRecipeChoiceName(ingredientChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice));
 
         if (removed) {
             s.append(" [removed recipe]");
@@ -152,7 +152,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
         if (hasCustomName()) {
             print.add(RMCChatColor.ITALIC + getName());
         } else {
-            print.add(ToolsItem.getRecipeChoiceName(ingredientChoice) + " Fuel");
+            print.add(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice) + " Fuel");
         }
 
         return print;
@@ -178,7 +178,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);

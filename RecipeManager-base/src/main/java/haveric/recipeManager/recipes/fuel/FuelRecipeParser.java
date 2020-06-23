@@ -11,7 +11,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -124,7 +124,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
                     fuelRecipe1_13.addIngredientChoiceItems(items);
                 } else {
-                    fuelRecipe1_13.setIngredientChoice(ToolsItem.mergeRecipeChoices(fuelRecipe1_13.getIngredientChoice(), choice));
+                    fuelRecipe1_13.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(fuelRecipe1_13.getIngredientChoice(), choice));
                 }
             } else {
                 // set ingredient

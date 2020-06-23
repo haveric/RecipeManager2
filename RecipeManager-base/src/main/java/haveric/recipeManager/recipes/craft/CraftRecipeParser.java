@@ -13,7 +13,7 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -134,13 +134,13 @@ public class CraftRecipeParser extends BaseRecipeParser {
                             if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
                                 ingredientRecipeChoiceMap.put(ingredientChar, new RecipeChoice.ExactChoice(items));
                             } else {
-                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsItem.mergeRecipeChoiceWithItems(ingredientRecipeChoiceMap.get(ingredientChar), items));
+                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientRecipeChoiceMap.get(ingredientChar), items));
                             }
                         } else {
                             if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
                                 ingredientRecipeChoiceMap.put(ingredientChar, choice);
                             } else {
-                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsItem.mergeRecipeChoices(ingredientRecipeChoiceMap.get(ingredientChar), choice));
+                                ingredientRecipeChoiceMap.put(ingredientChar, ToolsRecipeChoice.mergeRecipeChoices(ingredientRecipeChoiceMap.get(ingredientChar), choice));
                             }
                         }
                     } else {

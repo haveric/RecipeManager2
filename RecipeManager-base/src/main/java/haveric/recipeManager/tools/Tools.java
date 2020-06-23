@@ -188,7 +188,7 @@ public class Tools {
                     ErrorReporter.getInstance().warning("Invalid tag: " + s);
                 } else {
                     List<Material> materials = new ArrayList<>(tag.getValues());
-                    choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                    choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
                 }
             } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
                 String alias = durSplit[1].trim();
@@ -197,7 +197,7 @@ public class Tools {
                 if (materials == null) {
                     ErrorReporter.getInstance().warning("Invalid alias: " + s);
                 } else {
-                    choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                    choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
                 }
             } else {
                 Material material = parseMaterial(value);
@@ -209,7 +209,7 @@ public class Tools {
 
                         choice = parseMaterialDataToChoice(choice, material, dataString, settings);
                     } else {
-                        choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, material);
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, material);
                     }
                 }
             }
@@ -302,7 +302,7 @@ public class Tools {
                     List<Material> materials = new ArrayList<>(tag.getValues());
 
                     if (dataString == null || dataString.isEmpty()) {
-                        choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
                     } else {
                         for (Material material : materials) {
                             choice = parseMaterialDataToChoice(choice, material, dataString, settings);
@@ -322,7 +322,7 @@ public class Tools {
                             choice = parseMaterialDataToChoice(choice, material, dataString, settings);
                         }
                     } else {
-                        choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, materials);
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
                     }
                 }
 
@@ -348,7 +348,7 @@ public class Tools {
                 }
 
                 if (dataString == null) {
-                    choice = ToolsItem.mergeRecipeChoiceWithMaterials(choice, material);
+                    choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, material);
                 } else {
                     choice = parseMaterialDataToChoice(choice, material, dataString, settings);
                 }
@@ -393,7 +393,7 @@ public class Tools {
                 item.setItemMeta((ItemMeta) damageable);
             }
 
-            return ToolsItem.mergeRecipeChoiceWithItems(choice, item);
+            return ToolsRecipeChoice.mergeRecipeChoiceWithItems(choice, item);
         }
 
         return choice;
