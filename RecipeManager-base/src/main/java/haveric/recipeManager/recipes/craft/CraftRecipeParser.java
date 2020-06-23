@@ -237,6 +237,8 @@ public class CraftRecipeParser extends BaseRecipeParser {
                             ingredientErrors = true;
                         }
 
+                        choice = ToolsRecipeChoice.convertAirMaterialChoiceToNull(choice);
+
                         if (!ingredientErrors) {
                             if (choicePatternString.size() == rows) {
                                 choicePatternString.add("" + characterKey);
@@ -284,10 +286,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                             choicePatternString.set(i, shape);
                         }
 
-                        List<Material> airList = new ArrayList<>();
-                        airList.add(Material.AIR);
-
-                        ingredientsChoiceMap.put(characterKey, new RecipeChoice.MaterialChoice(airList));
+                        ingredientsChoiceMap.put(characterKey, null); // Null = Air
                     }
                 }
 

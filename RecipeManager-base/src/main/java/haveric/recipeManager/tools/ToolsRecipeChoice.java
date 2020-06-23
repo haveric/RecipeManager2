@@ -148,18 +148,23 @@ public class ToolsRecipeChoice {
     public static String getRecipeChoiceHash(RecipeChoice choice) {
         StringBuilder s = new StringBuilder();
         if (choice instanceof RecipeChoice.MaterialChoice) {
-            s.append("material:");
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
 
             List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
             Collections.sort(sorted);
 
             int materialsSize = sorted.size();
-            for (int i = 0; i < materialsSize; i++) {
-                s.append(sorted.get(i).toString());
 
-                if (i + 1 < materialsSize) {
-                    s.append(",");
+            if (materialsSize == 1 && sorted.get(0) == Material.AIR) {
+                s.append("AIR");
+            } else {
+                s.append("material:");
+                for (int i = 0; i < materialsSize; i++) {
+                    s.append(sorted.get(i).toString());
+
+                    if (i + 1 < materialsSize) {
+                        s.append(",");
+                    }
                 }
             }
         } else if (choice instanceof RecipeChoice.ExactChoice) {
@@ -178,7 +183,7 @@ public class ToolsRecipeChoice {
                 }
             }
         } else {
-            s.append("air");
+            s.append("AIR");
         }
 
         return s.toString();
@@ -188,15 +193,20 @@ public class ToolsRecipeChoice {
         StringBuilder s = new StringBuilder();
 
         if (choice instanceof RecipeChoice.MaterialChoice) {
-            s.append("material:");
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             List<Material> materials = materialChoice.getChoices();
             int materialsSize = materials.size();
-            for (int i = 0; i < materialsSize; i++) {
-                s.append(materials.get(i).toString());
 
-                if (i + 1 < materialsSize) {
-                    s.append(",");
+            if (materialsSize == 1 && materials.get(0) == Material.AIR) {
+                s.append("AIR");
+            } else {
+                s.append("material:");
+                for (int i = 0; i < materialsSize; i++) {
+                    s.append(materials.get(i).toString());
+
+                    if (i + 1 < materialsSize) {
+                        s.append(",");
+                    }
                 }
             }
         } else if (choice instanceof RecipeChoice.ExactChoice) {
@@ -213,7 +223,7 @@ public class ToolsRecipeChoice {
                 }
             }
         } else {
-            s.append("air");
+            s.append("AIR");
         }
 
         return s.toString();
@@ -621,5 +631,17 @@ public class ToolsRecipeChoice {
         }
 
         return 0; // No item match
+    }
+
+    public static RecipeChoice convertAirMaterialChoiceToNull(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> materials = materialChoice.getChoices();
+            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
+                return null;
+            }
+        }
+
+        return choice;
     }
 }
