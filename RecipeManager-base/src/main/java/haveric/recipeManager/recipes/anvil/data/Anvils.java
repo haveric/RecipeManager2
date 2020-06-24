@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.anvil.data;
 
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.anvil.BaseAnvilRecipe;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
