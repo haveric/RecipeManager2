@@ -90,7 +90,7 @@ public class FlagLoader {
         loadFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), INGREDIENT_OR_RESULT, "firework", "fireworkrocket");
         loadFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), INGREDIENT_OR_RESULT, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
         loadFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT | FlagBit.NONE, "getbook", "bookresult");
-        loadFlag(FlagType.HIDE, new FlagHide(), FlagBit.RESULT);
+        loadFlag(FlagType.HIDE, new FlagHide(), INGREDIENT_OR_RESULT);
         if (Version.has1_13BasicSupport()) {
             loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), INGREDIENT_OR_RESULT, "attribute");
         }
