@@ -1352,14 +1352,25 @@ public class FlagSummon extends Flag {
                 } else if (value.equals("mountnext")) {
                     c.setMountNext(true);
                 } else if (value.equals("angry")) {
-                    switch (type) {
-                        case WOLF:
-                        case PIG_ZOMBIE:
-                            break;
+                    boolean error = false;
+                    if (Version.has1_16Support()) {
+                        switch (type) {
+                            case WOLF:
+                            case ZOMBIFIED_PIGLIN:
+                                break;
 
-                        default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'angry' on unsupported creature!");
-                            continue;
+                            default:
+                                error = true;
+                        }
+                    } else {
+                        if (type != EntityType.WOLF && type != EntityType.valueOf("PIG_ZOMBIE")) {
+                            error = true;
+                        }
+                    }
+
+                    if (error) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'angry' on unsupported creature!");
+                        continue;
                     }
 
                     c.setAngry(true);

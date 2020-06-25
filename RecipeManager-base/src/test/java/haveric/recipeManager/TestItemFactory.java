@@ -110,6 +110,7 @@ public class TestItemFactory implements ItemFactory {
             case EVOKER_SPAWN_EGG:
             case GHAST_SPAWN_EGG:
             case GUARDIAN_SPAWN_EGG:
+            case HOGLIN_SPAWN_EGG:
             case HORSE_SPAWN_EGG:
             case HUSK_SPAWN_EGG:
             case LLAMA_SPAWN_EGG:
@@ -119,6 +120,7 @@ public class TestItemFactory implements ItemFactory {
             case OCELOT_SPAWN_EGG:
             case PARROT_SPAWN_EGG:
             case PHANTOM_SPAWN_EGG:
+            case PIGLIN_SPAWN_EGG:
             case PIG_SPAWN_EGG:
             case POLAR_BEAR_SPAWN_EGG:
             case PUFFERFISH_SPAWN_EGG:
@@ -133,6 +135,7 @@ public class TestItemFactory implements ItemFactory {
             case SPIDER_SPAWN_EGG:
             case SQUID_SPAWN_EGG:
             case STRAY_SPAWN_EGG:
+            case STRIDER_SPAWN_EGG:
             case TROPICAL_FISH_SPAWN_EGG:
             case TURTLE_SPAWN_EGG:
             case VEX_SPAWN_EGG:
@@ -141,10 +144,11 @@ public class TestItemFactory implements ItemFactory {
             case WITCH_SPAWN_EGG:
             case WITHER_SKELETON_SPAWN_EGG:
             case WOLF_SPAWN_EGG:
+            case ZOGLIN_SPAWN_EGG:
             case ZOMBIE_HORSE_SPAWN_EGG:
-            case ZOMBIE_PIGMAN_SPAWN_EGG:
             case ZOMBIE_SPAWN_EGG:
             case ZOMBIE_VILLAGER_SPAWN_EGG:
+            case ZOMBIFIED_PIGLIN_SPAWN_EGG:
                 return meta instanceof TestMetaSpawnEgg ? meta : new TestMetaSpawnEgg(meta);
             case FURNACE:
             case CHEST:
