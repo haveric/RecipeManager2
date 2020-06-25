@@ -464,6 +464,22 @@ public class Vanilla {
             addCompostRecipe(Material.CAKE, 100);
             addCompostRecipe(Material.PUMPKIN_PIE, 100);
         }
+
+        if (Version.has1_16Support()) {
+            addCompostRecipe(Material.WEEPING_VINES, 50);
+            addCompostRecipe(Material.TWISTING_VINES, 50);
+            addCompostRecipe(Material.NETHER_SPROUTS, 50);
+
+            addCompostRecipe(Material.CRIMSON_ROOTS, 65);
+            addCompostRecipe(Material.WARPED_ROOTS, 65);
+
+            addCompostRecipe(Material.CRIMSON_FUNGUS, 65);
+            addCompostRecipe(Material.WARPED_FUNGUS, 65);
+            addCompostRecipe(Material.NETHER_WART, 65);
+
+            addCompostRecipe(Material.NETHER_WART_BLOCK, 85);
+            addCompostRecipe(Material.WARPED_WART_BLOCK, 85);
+        }
     }
 
     private static void addCompostRecipe(Material ingredient, double chance) {
