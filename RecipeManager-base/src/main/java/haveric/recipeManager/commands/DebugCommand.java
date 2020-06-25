@@ -76,7 +76,7 @@ public class DebugCommand implements CommandExecutor {
                         MessageSender.getInstance().send(sender, "  Fueler: " + fueler.getName());
                         sendPermissionMessage(fueler, "  ");
                     }
-                } else if (Version.has1_14Support() && type == Material.CAMPFIRE) {
+                } else if ((Version.has1_14Support() && type == Material.CAMPFIRE) || (Version.has1_16Support() && type == Material.SOUL_CAMPFIRE)) {
                     MessageSender.getInstance().send(sender, block.getType() + " Data: ");
                     RMCampfireData data = RMCampfires.get(location);
 

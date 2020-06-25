@@ -142,6 +142,10 @@ public class FlagBlockPowered extends Flag {
                     } else if (blockType == Material.CAMPFIRE) {
                         blockName = "campfire";
                     }
+                } else if (Version.has1_16Support()) {
+                    if (blockType == Material.SOUL_CAMPFIRE) {
+                        blockName = "soul campfire";
+                    }
                 }
 
                 if (blockName == null) {
