@@ -154,6 +154,11 @@ public class TestMetaBook extends TestMetaItem implements BookMeta {
         return meta;
     }
 
+    @Override
+    public Spigot spigot() {
+        return null;
+    }
+
     boolean applicableTo(Material type) {
         switch (type) {
             case WRITTEN_BOOK:

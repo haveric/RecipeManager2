@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
@@ -12,6 +13,7 @@ import static org.bukkit.Tag.REGISTRY_BLOCKS;
 public class Version {
 
     private static String supportVersion = null;
+    private static boolean spigotSupport = false;
 
     public static void init() {
         if (supports1_16()) {
@@ -37,6 +39,28 @@ public class Version {
         } else {
             supportVersion = "1.8";
         }
+
+        spigotSupport = supportsSpigot();
+    }
+
+    private static boolean supportsSpigot() {
+        boolean supports;
+
+        try {
+            ItemStack item = new ItemStack(Material.WRITTEN_BOOK);
+            BookMeta bookMeta = (BookMeta) item.getItemMeta();
+            @SuppressWarnings("unused")
+            BookMeta.Spigot spigot = bookMeta.spigot();
+            supports = true;
+        } catch (NoSuchMethodError e) {
+            supports = false;
+        }
+
+        return supports;
+    }
+
+    public static boolean hasSpigotSupport() {
+        return spigotSupport;
     }
 
     private static boolean supports1_16() {
