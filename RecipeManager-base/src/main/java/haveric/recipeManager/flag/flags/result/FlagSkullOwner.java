@@ -206,8 +206,16 @@ public class FlagSkullOwner extends Flag {
             uuid = offlinePlayer.getUniqueId();
         }
 
-        if (uuid != null) {
-            id = "Id:\"" + uuid + "\",";
+        if (Version.has1_16Support()) {
+            if (uuid != null) {
+                long most = uuid.getMostSignificantBits();
+                long least = uuid.getLeastSignificantBits();
+                id = "Id:[I;" + (int) least + "," + (int) (least >> 32) + "," + (int) most + "," + (int) (most >> 32) + "],";
+            }
+        } else {
+            if (uuid != null) {
+                id = "Id:\"" + uuid + "\",";
+            }
         }
 
         if (ownerString != null) {
