@@ -278,4 +278,10 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         return totalQuality;
     }
+
+    // TODO: Temporarily handle all smithing recipes with RM until they work normally
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
+    }
 }
