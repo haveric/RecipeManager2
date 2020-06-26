@@ -12,6 +12,7 @@ public enum RMCRecipeType {
     FUEL("fuel"),
     GRINDSTONE("grindstone"),
     SMELT("smelt"),
+    SMITHING("smithing"),
     SMOKING("smoking"),
     STONECUTTING("stonecutting"),
 

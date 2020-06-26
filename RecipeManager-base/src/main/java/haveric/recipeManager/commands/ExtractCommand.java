@@ -64,6 +64,7 @@ public class ExtractCommand implements TabExecutor {
         List<String> parsedSmokingRecipes = new ArrayList<>();
         List<String> parsedCampfireRecipes = new ArrayList<>();
         List<String> parsedStonecuttingRecipes = new ArrayList<>();
+        List<String> parsedSmithingRecipes = new ArrayList<>();
 
         List<String> parsedFuelRecipes = new ArrayList<>();
         List<String> parsedCompostRecipes = new ArrayList<>();
@@ -195,7 +196,9 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedSmeltRecipes.add(recipeString.toString());
-                } else if (Version.has1_14Support()){
+                }
+
+                if (Version.has1_14Support()) {
                     if (r instanceof BlastingRecipe) {
                         BlastingRecipe recipe = (BlastingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective()).append(Files.NL);
@@ -255,6 +258,22 @@ public class ExtractCommand implements TabExecutor {
                         parseResult(recipe.getResult(), recipeString);
 
                         parsedStonecuttingRecipes.add(recipeString.toString());
+                    }
+                }
+
+                if (Version.has1_16Support()) {
+                    if (r instanceof SmithingRecipe) {
+                        SmithingRecipe recipe = (SmithingRecipe) r;
+                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMITHING.getDirective()).append(Files.NL);
+
+                        parseChoice(recipe.getBase(), recipeString);
+                        recipeString.append(" + ");
+                        parseChoice(recipe.getAddition(), recipeString);
+
+                        recipeString.append(Files.NL);
+                        parseResult(recipe.getResult(), recipeString);
+
+                        parsedSmithingRecipes.add(recipeString.toString());
                     }
                 }
 
@@ -329,6 +348,10 @@ public class ExtractCommand implements TabExecutor {
                     writeRecipes(stream, parsedCampfireRecipes, "Campfire");
                     writeRecipes(stream, parsedStonecuttingRecipes, "Stonecutting");
                     writeRecipes(stream, parsedCompostRecipes, "Compost");
+                }
+
+                if (Version.has1_16Support()) {
+                    writeRecipes(stream, parsedSmithingRecipes, "Smithing");
                 }
 
                 writeRecipes(stream, parsedFuelRecipes, "Fuel");

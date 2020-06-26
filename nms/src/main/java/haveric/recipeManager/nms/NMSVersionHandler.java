@@ -36,7 +36,9 @@ public class NMSVersionHandler {
             String serverVersion = getServerVersion();
 
             int minorVersion = getMinorVersion(serverVersion);
-            if (minorVersion >= 14) {
+            if (minorVersion >= 16) {
+                toolsRecipe = new ToolsRecipeV1_16_1();
+            } else if (minorVersion >= 14) {
                 toolsRecipe = new ToolsRecipeV1_14_R1();
             } else {
                 switch (serverVersion) {

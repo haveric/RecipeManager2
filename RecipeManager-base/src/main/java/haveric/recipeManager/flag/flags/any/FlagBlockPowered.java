@@ -132,7 +132,9 @@ public class FlagBlockPowered extends Flag {
                     blockName = "brewing stand";
                 } else if (blockType == Material.FURNACE || (!Version.has1_13BasicSupport() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
                     blockName = "furnace";
-                } else if (Version.has1_14Support()) {
+                }
+
+                if (Version.has1_14Support()) {
                     if (blockType == Material.BLAST_FURNACE) {
                         blockName = "blast furnace";
                     } else if (blockType == Material.SMOKER) {
@@ -142,7 +144,9 @@ public class FlagBlockPowered extends Flag {
                     } else if (blockType == Material.CAMPFIRE) {
                         blockName = "campfire";
                     }
-                } else if (Version.has1_16Support()) {
+                }
+
+                if (Version.has1_16Support()) {
                     if (blockType == Material.SOUL_CAMPFIRE) {
                         blockName = "soul campfire";
                     }

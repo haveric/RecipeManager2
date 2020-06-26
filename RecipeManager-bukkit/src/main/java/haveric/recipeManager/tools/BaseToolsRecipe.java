@@ -44,4 +44,8 @@ public abstract class BaseToolsRecipe {
     public boolean matchesStonecutting(Recipe bukkitRecipe, ItemStack stoneCuttingIngredient, ItemStack stonecuttingResult) {
         return false;
     }
+
+    public boolean matchesSmithing(Recipe bukkitRecipe, ItemStack mainIngredient, ItemStack addIngredient) {
+        return false;
+    }
 }

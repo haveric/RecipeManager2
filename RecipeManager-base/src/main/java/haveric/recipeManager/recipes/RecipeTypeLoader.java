@@ -26,6 +26,9 @@ import haveric.recipeManager.recipes.fuel.FuelRecipeParser;
 import haveric.recipeManager.recipes.grindstone.GrindstoneEvents;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipeParser;
+import haveric.recipeManager.recipes.smithing.RMSmithingEvents;
+import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
+import haveric.recipeManager.recipes.smithing.RMSmithingRecipeParser;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipeParser;
 import haveric.recipeManager.tools.Version;
@@ -66,6 +69,10 @@ public class RecipeTypeLoader {
             loadRecipeType(RMCRecipeType.COMPOST.getDirective(), new CompostRecipe(), new CompostRecipeParser(), new CompostEvents());
             loadRecipeType(RMCRecipeType.SMOKING.getDirective(), new RMSmokingRecipe(), new RMBaseFurnaceRecipeParser(RMCRecipeType.SMOKING), new RMBaseFurnaceEvents());
             loadRecipeType(RMCRecipeType.STONECUTTING.getDirective(), new RMStonecuttingRecipe(), new RMStonecuttingRecipeParser());
+        }
+
+        if (Version.has1_16Support()) {
+            loadRecipeType(RMCRecipeType.SMITHING.getDirective(), new RMSmithingRecipe(), new RMSmithingRecipeParser(), new RMSmithingEvents());
         }
     }
 
