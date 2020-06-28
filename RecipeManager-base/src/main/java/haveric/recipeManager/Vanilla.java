@@ -546,7 +546,7 @@ public class Vanilla {
                     recipe = new RMCampfireRecipe((CampfireRecipe) r);
                 } else if (r instanceof StonecuttingRecipe) {
                     recipe = new RMStonecuttingRecipe((StonecuttingRecipe) r);
-                } else if (r instanceof SmithingRecipe) {
+                } else if (Version.has1_16Support() && r instanceof SmithingRecipe) {
                     recipe = new RMSmithingRecipe((SmithingRecipe) r);
                 }
 
