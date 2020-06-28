@@ -19,7 +19,7 @@ public class FlagLoader {
     private void loadDefaultFlags(boolean force) {
         int ANY = FlagBit.RECIPE | FlagBit.INGREDIENT | FlagBit.RESULT;
         int RECIPE_OR_RESULT = FlagBit.RECIPE | FlagBit.RESULT;
-        int INGREDIENT_OR_RESULT = FlagBit.INGREDIENT | FlagBit.RESULT;
+        int APPLIED_TO_ITEM = FlagBit.INGREDIENT | FlagBit.RESULT | FlagBit.NO_DELAY;
 
         loadFlag(FlagType.BIOME, new FlagBiome(), RECIPE_OR_RESULT | FlagBit.NO_DELAY);
         loadFlag(FlagType.BLOCK_POWERED, new FlagBlockPowered(), RECIPE_OR_RESULT | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "poweredblock", "blockpower", "redstonepowered");
@@ -70,45 +70,47 @@ public class FlagLoader {
 
         // Recipe only flags
         loadFlag(FlagType.ADD_TO_BOOK, new FlagAddToBook(), FlagBit.RECIPE | FlagBit.NO_FOR | FlagBit.NO_SKIP_PERMISSION, "recipebook");
-        loadFlag(FlagType.DISPLAY_RESULT, new FlagDisplayResult(), FlagBit.RECIPE, "resultdisplay", "showresult");
-        loadFlag(FlagType.FAIL_MESSAGE, new FlagFailMessage(), FlagBit.RECIPE, "failmsg");
-        loadFlag(FlagType.INDIVIDUAL_RESULTS, new FlagIndividualResults(), FlagBit.RECIPE | FlagBit.NO_VALUE_REQUIRED, "individual");
+        loadFlag(FlagType.DISPLAY_RESULT, new FlagDisplayResult(), FlagBit.RECIPE | FlagBit.NO_DELAY, "resultdisplay", "showresult");
+        loadFlag(FlagType.FAIL_MESSAGE, new FlagFailMessage(), FlagBit.RECIPE | FlagBit.NO_DELAY, "failmsg");
+        loadFlag(FlagType.INDIVIDUAL_RESULTS, new FlagIndividualResults(), FlagBit.RECIPE | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_FOR, "individual");
         loadFlag(FlagType.OVERRIDE, new FlagOverride(), FlagBit.RECIPE | FlagBit.NO_FOR | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_SKIP_PERMISSION, "edit", "overwrite", "supercede", "replace");
         loadFlag(FlagType.REMOVE, new FlagRemove(), FlagBit.RECIPE | FlagBit.NO_FOR | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_SKIP_PERMISSION, "delete");
-        loadFlag(FlagType.RESTRICT, new FlagRestrict(), FlagBit.RECIPE | FlagBit.NO_VALUE_REQUIRED, "disable", "denied", "deny");
+        loadFlag(FlagType.RESTRICT, new FlagRestrict(), FlagBit.RECIPE | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_FOR, "disable", "denied", "deny");
 
         // Result only flags
         loadFlag(FlagType.NO_RESULT, new FlagNoResult(), FlagBit.RESULT | FlagBit.NO_FOR | FlagBit.NO_VALUE_REQUIRED);
 
-        loadFlag(FlagType.APPLY_ENCHANTMENT, new FlagApplyEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED, "applyenchant", "applyenchantments", "applyenchants");
-        loadFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), INGREDIENT_OR_RESULT, "banner");
-        loadFlag(FlagType.BOOK_ITEM, new FlagBookItem(), INGREDIENT_OR_RESULT, "book");
-        loadFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NONE, "clone", "copy", "copyingredient"); // TODO finish
-        loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), INGREDIENT_OR_RESULT, "modeldata");
-        loadFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), INGREDIENT_OR_RESULT, "enchantbook", "enchantingbook");
-        loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), INGREDIENT_OR_RESULT, "enchant", "enchantment");
-        loadFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), INGREDIENT_OR_RESULT, "firework", "fireworkrocket");
-        loadFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), INGREDIENT_OR_RESULT, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
-        loadFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT | FlagBit.NONE, "getbook", "bookresult");
-        loadFlag(FlagType.HIDE, new FlagHide(), INGREDIENT_OR_RESULT);
+        loadFlag(FlagType.APPLY_ENCHANTMENT, new FlagApplyEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "applyenchant", "applyenchantments", "applyenchants");
+        loadFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NO_DELAY, "clone", "copy", "copyingredient"); // TODO finish
+        loadFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT, "getbook", "bookresult");
+
+        // Ingredient or Result flags
+        loadFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), APPLIED_TO_ITEM, "banner");
+        loadFlag(FlagType.BOOK_ITEM, new FlagBookItem(), APPLIED_TO_ITEM, "book");
+        loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
+        loadFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), APPLIED_TO_ITEM, "enchantbook", "enchantingbook");
+        loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), APPLIED_TO_ITEM, "enchant", "enchantment");
+        loadFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), APPLIED_TO_ITEM, "firework", "fireworkrocket");
+        loadFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), APPLIED_TO_ITEM, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
+        loadFlag(FlagType.HIDE, new FlagHide(), APPLIED_TO_ITEM);
         if (Version.has1_13BasicSupport()) {
-            loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), INGREDIENT_OR_RESULT, "attribute");
+            loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), APPLIED_TO_ITEM, "attribute");
         }
-        loadFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), INGREDIENT_OR_RESULT | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
-        loadFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), INGREDIENT_OR_RESULT, "leathercolour", "color", "colour");
-        loadFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), INGREDIENT_OR_RESULT);
+        loadFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), APPLIED_TO_ITEM | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
+        loadFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), APPLIED_TO_ITEM, "leathercolour", "color", "colour");
+        loadFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), APPLIED_TO_ITEM);
         // MAPITEM(FlagMapItem(), FlagBit.RESULT, "map"), // TODO finish this flag
-        loadFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), INGREDIENT_OR_RESULT, "spawner", "mobspawner");
-        loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), INGREDIENT_OR_RESULT, "potion");
-        loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), INGREDIENT_OR_RESULT);
-        loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), INGREDIENT_OR_RESULT, "skullitem, skull, head");
+        loadFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), APPLIED_TO_ITEM, "spawner", "mobspawner");
+        loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), APPLIED_TO_ITEM, "potion");
+        loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), APPLIED_TO_ITEM);
+        loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), APPLIED_TO_ITEM, "skullitem, skull, head");
 
         if (!Version.has1_13BasicSupport() || force) {
-            loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), INGREDIENT_OR_RESULT, "monsteregg", "egg");
+            loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), APPLIED_TO_ITEM, "monsteregg", "egg");
         }
 
         if (Version.has1_14PlusSupport()) {
-            loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), INGREDIENT_OR_RESULT, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
+            loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
         }
     }
 
