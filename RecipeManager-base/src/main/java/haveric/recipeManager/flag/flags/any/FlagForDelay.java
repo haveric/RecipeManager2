@@ -156,12 +156,12 @@ public class FlagForDelay extends Flag {
         FlagDescriptor type = FlagFactory.getInstance().getFlagByName(flagString); // Find the current flag
 
         if (type == null) {
-            ErrorReporter.getInstance().error("Flag " + type.getNameDisplay() + " has unknown flag type: " + flagString);
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has unknown flag type: " + flagString);
             return null;
         }
 
         if (type.hasBit(FlagBit.NO_FOR) || type.hasBit(FlagBit.NO_DELAY) || type.hasBit(FlagBit.RECIPE) || type.hasBit(FlagBit.RESULT)) {
-            ErrorReporter.getInstance().error("Flag " + type.getNameDisplay() + "'s flag " + flagString + " can not be used with this!");
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + "'s flag " + flagString + " can not be used with this!");
             return null;
         }
 

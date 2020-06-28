@@ -309,12 +309,12 @@ public class FlagForChance extends Flag {
             FlagDescriptor type = FlagFactory.getInstance().getFlagByName(flagString); // Find the current flag
 
             if (type == null) {
-                ErrorReporter.getInstance().warning("Flag " + type.getNameDisplay() + " has unknown flag type: " + flagString);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown flag type: " + flagString);
                 return false;
             }
 
             if (type.hasBit(FlagBit.NO_FOR)) {
-                ErrorReporter.getInstance().warning("Flag " + type.getNameDisplay() + "'s flag " + flagString + " can not be used with this!");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + "'s flag " + flagString + " can not be used with this!");
                 return false;
             }
 
