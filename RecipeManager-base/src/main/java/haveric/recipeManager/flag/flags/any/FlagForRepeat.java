@@ -183,7 +183,7 @@ public class FlagForRepeat extends Flag {
             return null;
         }
 
-        if (type.hasBit(FlagBit.NO_FOR) || type.hasBit(FlagBit.NO_DELAY) || type.hasBit(FlagBit.RECIPE) || type.hasBit(FlagBit.RESULT)) {
+        if (type.hasBit(FlagBit.NO_FOR) || type.hasBit(FlagBit.NO_DELAY)) {
             ErrorReporter.getInstance().error("Flag " + getFlagType() + "'s flag " + flagString + " can not be used with this!");
             return null;
         }
