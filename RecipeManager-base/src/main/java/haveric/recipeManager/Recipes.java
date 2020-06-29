@@ -416,7 +416,11 @@ public class Recipes {
 
                 // Note that since we don't "replace" smelt recipes, we need special handling here.
                 if (Version.has1_15Support() || !(Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE) && isBasicRecipe)) {
-                    Bukkit.addRecipe(bukkitRecipe);
+                    try {
+                        Bukkit.addRecipe(bukkitRecipe);
+                    } catch (IllegalStateException e) {
+                        ErrorReporter.getInstance().warning("Duplicate recipe found while adding. Cannot add: " + recipe.toString());
+                    }
                 }
             }
         }
