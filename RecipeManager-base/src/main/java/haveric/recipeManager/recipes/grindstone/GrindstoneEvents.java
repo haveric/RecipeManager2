@@ -110,10 +110,12 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                         BaseRecipeData grindstone = Grindstones.get(player);
                         if (grindstone != null) {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
+                                event.setCancelled(true);
                                 craftFinishGrindstone(event, player, grindstoneInventory, true);
                                 prepareGrindstoneLater(grindstoneInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
+                                event.setCancelled(true);
                                 craftFinishGrindstone(event, player, grindstoneInventory, false);
                                 prepareGrindstoneLater(grindstoneInventory, player, event.getView());
                                 new UpdateInventory(player, 2);

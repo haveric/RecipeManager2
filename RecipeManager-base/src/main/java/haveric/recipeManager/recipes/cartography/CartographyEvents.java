@@ -123,10 +123,12 @@ public class CartographyEvents extends BaseRecipeEvents {
 
                         if (cartographyTable.getRecipe() != null) {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
+                                event.setCancelled(true);
                                 craftFinishCartography(event, player, cartographyInventory, true);
                                 prepareCartographyLater(cartographyInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
+                                event.setCancelled(true);
                                 craftFinishCartography(event, player, cartographyInventory, false);
                                 prepareCartographyLater(cartographyInventory, player, event.getView());
                                 new UpdateInventory(player, 2);
