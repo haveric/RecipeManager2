@@ -8,6 +8,7 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.Messages;
@@ -221,7 +222,11 @@ public class RMFurnaceRecipe extends SingleResultRecipe {
             return null;
         }
 
-        return new FurnaceRecipe(getResult(), ingredient.getType(), ingredient.getDurability());
+        Args a = ArgBuilder.create().result(getResult()).build();
+        getFlags().sendPrepare(a, true);
+        getResult().getFlags().sendPrepare(a, true);
+
+        return new FurnaceRecipe(a.result(), ingredient.getType(), ingredient.getDurability());
     }
 
     @Override

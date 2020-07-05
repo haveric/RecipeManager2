@@ -5,6 +5,8 @@ import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.Messages;
@@ -197,18 +199,27 @@ public class CombineRecipe extends BaseCombineRecipe {
         }
 
         ShapelessRecipe bukkitRecipe;
-        if (Version.has1_12Support()) {
-            if (vanilla || !requiresRecipeManagerModification()) {
-                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
-            } else {
-                bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()));
-            }
+        ItemStack result;
+        if (vanilla) {
+            result = getFirstResult();
         } else {
-            if (vanilla || !requiresRecipeManagerModification()) {
-                bukkitRecipe = new ShapelessRecipe(getFirstResult());
+            ItemResult firstResult = getFirstResult();
+
+            Args a = ArgBuilder.create().result(firstResult).build();
+            getFlags().sendPrepare(a, true);
+            firstResult.getFlags().sendPrepare(a, true);
+
+            if (requiresRecipeManagerModification()) {
+                result = Tools.createItemRecipeId(a.result(), hashCode());
             } else {
-                bukkitRecipe = new ShapelessRecipe(Tools.createItemRecipeId(getFirstResult(), hashCode()));
+                result = a.result();
             }
+        }
+
+        if (Version.has1_12Support()) {
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
+        } else {
+            bukkitRecipe = new ShapelessRecipe(result);
         }
 
         for (ItemStack item : ingredients) {

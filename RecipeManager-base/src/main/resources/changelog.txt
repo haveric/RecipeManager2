@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: 1.16: Add nether compost items
 * NEW: 1.16: Smithing Recipe support
 * FIX: 1.16: @SkullOwner not setting texture
+* FIX: 1.12 and below: Fixed result flags in simple recipes
 * FIX: @ForChance, @ForDelay, @ForRepeat: error message was using the child flag in errors
 * FIX: @ForDelay, @ForRepeat: some flags weren't being allowed that should be
 * FIX: Handle IllegalStateException if somehow adding a duplicate recipe, allowing for other recipes to still work
