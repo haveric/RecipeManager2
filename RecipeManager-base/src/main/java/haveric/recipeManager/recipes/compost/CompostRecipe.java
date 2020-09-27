@@ -246,4 +246,9 @@ public class CompostRecipe extends MultiResultRecipe {
 
         return 0;
     }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
+    }
 }
