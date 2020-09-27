@@ -96,7 +96,9 @@ public class FlagLoader {
         if (Version.has1_13BasicSupport()) {
             loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), APPLIED_TO_ITEM, "attribute");
         }
-        loadFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), APPLIED_TO_ITEM | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
+        if (Version.has1_11Support()) {
+            loadFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), APPLIED_TO_ITEM | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
+        }
         loadFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), APPLIED_TO_ITEM, "leathercolour", "color", "colour");
         loadFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), APPLIED_TO_ITEM);
         // MAPITEM(FlagMapItem(), FlagBit.RESULT, "map"), // TODO finish this flag
