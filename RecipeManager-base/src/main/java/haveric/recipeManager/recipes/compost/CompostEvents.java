@@ -123,9 +123,13 @@ public class CompostEvents extends BaseRecipeEvents {
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.COMPOST, item);
         if (baseRecipe instanceof CompostRecipe) {
             CompostRecipe recipe = (CompostRecipe) baseRecipe;
-            // No overridden compost recipes, so let's ignore vanilla recipes
-            if (recipe.getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT && !Recipes.getInstance().getRecipeTypeHasOverride(RMCRecipeType.COMPOST)) {
-                return;
+            
+            // If existing composter already has a recipe, it must be a vanilla recipe if we are to ignore it
+            if (data.getRecipe() == null || data.getRecipe().getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT) {
+                // No overridden compost recipes, so let's ignore vanilla recipes
+                if (recipe.getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT && !Recipes.getInstance().getRecipeTypeHasOverride(RMCRecipeType.COMPOST)) {
+                    return;
+                }
             }
 
             boolean spawnParticles = false;
