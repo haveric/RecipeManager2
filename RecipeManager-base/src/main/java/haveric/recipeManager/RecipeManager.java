@@ -13,12 +13,13 @@ import haveric.recipeManager.recipes.RecipeTypeLoader;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
 import haveric.recipeManager.recipes.brew.data.BrewingStands;
-import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfireData;
-import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfires;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
+import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfireData;
+import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfires;
 import haveric.recipeManager.recipes.cooking.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.cooking.furnace.data.Furnaces;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -69,6 +70,8 @@ public class RecipeManager extends JavaPlugin {
         Locale.setDefault(Locale.ENGLISH); // avoid needless complications
 
         PluginManager pm = getServer().getPluginManager();
+        Supports.init();
+
         FurnaceData.init(); // dummy caller to initialize Serialization class
         BrewingStandData.init();
 

@@ -1,10 +1,12 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -23,7 +25,7 @@ public class FlagHide extends Flag {
 
     @Override
     protected String[] getDescription() {
-        return new String[] {
+        String[] description = new String[]{
             "Configures hide attributes for items",
             "",
             "Replace '<arguments>' with the following arguments separated by | character.",
@@ -34,8 +36,20 @@ public class FlagHide extends Flag {
             "  placedon       = Hide where this item can be placed on",
             "  potioneffects  = Hide potion effects on this item",
             "  unbreakable    = Hide the unbreakable state",
+        };
+
+        if (Supports.itemFlagHideDye()) {
+            description = ObjectArrays.concat(description, new String[] {
+                "  dye            = Hides dyes from colored leather armor",
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[] {
             "  all            = Hides everything",
-            "Arguments can be listed in any order.", };
+            "Arguments can be listed in any order.",
+        }, String.class);
+
+        return description;
     }
 
     @Override
@@ -52,6 +66,7 @@ public class FlagHide extends Flag {
     private boolean placedon = false;
     private boolean potioneffects = false;
     private boolean unbreakable = false;
+    private boolean dye = false;
 
     public FlagHide() { }
 
@@ -62,6 +77,7 @@ public class FlagHide extends Flag {
         placedon = flag.placedon;
         potioneffects = flag.potioneffects;
         unbreakable = flag.unbreakable;
+        dye = flag.dye;
     }
 
     @Override
@@ -98,6 +114,8 @@ public class FlagHide extends Flag {
                 potioneffects = true;
             } else if (arg.startsWith("unbreakable")) {
                 unbreakable = true;
+            } else if (arg.startsWith("dye")) {
+                dye = true;
             } else if (arg.startsWith("all")) {
                 attributes = true;
                 destroys = true;
@@ -105,6 +123,7 @@ public class FlagHide extends Flag {
                 placedon = true;
                 potioneffects = true;
                 unbreakable = true;
+                dye = true;
             }
         }
 
@@ -145,6 +164,10 @@ public class FlagHide extends Flag {
                     meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
 
+                if (dye && Supports.itemFlagHideDye()) {
+                    meta.addItemFlags(ItemFlag.HIDE_DYE);
+                }
+
                 a.result().setItemMeta(meta);
             }
         }
@@ -160,6 +183,7 @@ public class FlagHide extends Flag {
         toHash += "placedon: " + placedon;
         toHash += "potioneffects: " + potioneffects;
         toHash += "unbreakable: " + unbreakable;
+        toHash += "dye: " + dye;
 
         return toHash.hashCode();
     }
