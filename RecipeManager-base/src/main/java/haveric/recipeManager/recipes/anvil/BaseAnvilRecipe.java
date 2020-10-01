@@ -68,5 +68,4 @@ public class BaseAnvilRecipe extends PreparableResultRecipe {
 
         return valid;
     }
-
 }

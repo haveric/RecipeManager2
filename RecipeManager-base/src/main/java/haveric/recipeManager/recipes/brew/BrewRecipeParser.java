@@ -4,16 +4,10 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
-import haveric.recipeManager.flag.FlagType;
-import haveric.recipeManager.recipes.BaseRecipeParser;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class BrewRecipeParser extends BaseRecipeParser {
+public class BrewRecipeParser extends BaseBrewParser {
     public BrewRecipeParser() {
         super();
     }
@@ -48,27 +42,7 @@ public class BrewRecipeParser extends BaseRecipeParser {
 
         recipe.setPotion(potion);
 
-        List<ItemResult> results = new ArrayList<>();
-
-        if (!parseResults(recipe, results)) { // results have errors
-            return false;
-        }
-
-        recipe.setResults(results); // done with results, set 'em
-
-        // check if the recipe already exists
-        if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return recipe.hasFlag(FlagType.REMOVE);
-        }
-
-        if (recipeName != null && !recipeName.isEmpty()) {
-            recipe.setName(recipeName); // set recipe's name if defined
-        }
-
-        // add the recipe to the Recipes class and to the list for later adding to the server
-        recipeRegistrator.queueRecipe(recipe, reader.getFileName());
-
-        return true;
+        return parseAndSetResults(recipe, directiveLine);
     }
 
 }

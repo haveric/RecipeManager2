@@ -3,13 +3,10 @@ package haveric.recipeManager.recipes.brew;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
-import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
-import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
@@ -19,7 +16,7 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrewRecipeParser1_13 extends BaseRecipeParser {
+public class BrewRecipeParser1_13 extends BaseBrewParser {
     public BrewRecipeParser1_13() {
         super();
     }
@@ -103,27 +100,6 @@ public class BrewRecipeParser1_13 extends BaseRecipeParser {
             }
         }
 
-        List<ItemResult> results = new ArrayList<>();
-
-        if (!parseResults(recipe, results)) { // results have errors
-            return false;
-        }
-
-        recipe.setResults(results); // done with results, set 'em
-
-        // check if the recipe already exists
-        if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return recipe.hasFlag(FlagType.REMOVE);
-        }
-
-        if (recipeName != null && !recipeName.isEmpty()) {
-            recipe.setName(recipeName); // set recipe's name if defined
-        }
-
-        // add the recipe to the Recipes class and to the list for later adding to the server
-        recipeRegistrator.queueRecipe(recipe, reader.getFileName());
-
-        return true;
+        return parseAndSetResults(recipe, directiveLine);
     }
-
 }
