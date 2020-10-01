@@ -312,15 +312,8 @@ public class Files {
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
-        s.append(NL).append("<footer class='footer'><div class='container'><div class='footer__links'>");
-        s.append(NL).append("<a class='footer__link' href='https://dev.bukkit.org/projects/recipemanager'><img class='logo-bukkitdev' src='https://www.recipemanager.dev/img/logos/bukkit-dev.png?v=1' alt='BukkitDev'/></a>");
-        s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
-        s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
-        s.append(NL).append("</div></div></footer>");
-
-        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_FLAGS);
-
-        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_FLAGS + "' file.");
+        appendFooter(s);
+        saveAndLog(s, FILE_INFO_FLAGS);
     }
 
     private void createCommands(boolean overwrite) {
@@ -467,15 +460,8 @@ public class Files {
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
         s.append(NL).append("</div></nav>");
-        s.append(NL).append("<footer class='footer'><div class='container'><div class='footer__links'>");
-        s.append(NL).append("<a class='footer__link' href='https://dev.bukkit.org/projects/recipemanager'><img class='logo-bukkitdev' src='https://www.recipemanager.dev/img/logos/bukkit-dev.png?v=1' alt='BukkitDev'/></a>");
-        s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
-        s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
-        s.append(NL).append("</div></div></footer>");
-
-        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_COMMANDS);
-
-        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_COMMANDS + "' file.");
+        appendFooter(s);
+        saveAndLog(s, FILE_INFO_COMMANDS);
     }
 
     private void createNameIndex(boolean overwrite) {
@@ -725,21 +711,9 @@ public class Files {
         if (Version.has1_13Support()) {
             addNameIndexHeading(s, "tag", "TAG LIST", "Tag", "Tag");
 
-            s.append(NL).append("<b>Blocks</b>");
-            Iterable<Tag<Material>> blockTags = Bukkit.getTags(REGISTRY_BLOCKS, Material.class);
-            for (Tag<Material> tag : blockTags) {
-                List<Material> materials = new ArrayList<>(tag.getValues());
-                Collections.sort(materials);
-                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), materials));
-            }
-
-            s.append(NL).append(NL).append("<b>Items</b>");
-            Iterable<Tag<Material>> itemTags = Bukkit.getTags(REGISTRY_ITEMS, Material.class);
-            for (Tag<Material> tag : itemTags) {
-                List<Material> materials = new ArrayList<>(tag.getValues());
-                Collections.sort(materials);
-                s.append(NL).append(String.format(" %-36s %s", tag.getKey(), materials));
-            }
+            displayTags(s, "Blocks", REGISTRY_BLOCKS);
+            s.append(NL);
+            displayTags(s, "Items", REGISTRY_ITEMS);
         }
 
         s.append(NL);
@@ -749,15 +723,31 @@ public class Files {
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
+        appendFooter(s);
+        saveAndLog(s, FILE_INFO_NAMES);
+    }
+
+    private void displayTags(StringBuilder s, String name, String tagType) {
+        s.append(NL).append("<b>").append(name).append("</b>");
+        Iterable<Tag<Material>> blockTags = Bukkit.getTags(tagType, Material.class);
+        for (Tag<Material> tag : blockTags) {
+            List<Material> materials = new ArrayList<>(tag.getValues());
+            Collections.sort(materials);
+            s.append(NL).append(String.format(" %-36s %s", tag.getKey(), materials));
+        }
+    }
+
+    private void appendFooter(StringBuilder s) {
         s.append(NL).append("<footer class='footer'><div class='container'><div class='footer__links'>");
         s.append(NL).append("<a class='footer__link' href='https://dev.bukkit.org/projects/recipemanager'><img class='logo-bukkitdev' src='https://www.recipemanager.dev/img/logos/bukkit-dev.png?v=1' alt='BukkitDev'/></a>");
         s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
         s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
         s.append(NL).append("</div></div></footer>");
+    }
 
-        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + FILE_INFO_NAMES);
-
-        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + FILE_INFO_NAMES + "' file.");
+    private void saveAndLog(StringBuilder s, String file) {
+        Tools.saveTextToFile(s.toString(), RecipeManager.getPlugin().getDataFolder() + File.separator + file);
+        MessageSender.getInstance().sendAndLog(sender, RMCChatColor.GREEN + "Generated '" + file + "' file.");
     }
 
     private void addNameIndexHeading(StringBuilder s, String name, String title, String partialUrl, String urlTitle) {
