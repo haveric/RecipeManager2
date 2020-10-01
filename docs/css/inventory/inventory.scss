@@ -138,7 +138,7 @@
     pointer-events: none;
     font-size: 12px;
     font-family: 'minecraftfont';
-    text-shadow: 2px 2px 0px #aaa;
+    text-shadow: 2px 2px 0 #aaa;
 
     .inventory__zoom1_5 & {
         font-size: 18px;
@@ -151,7 +151,7 @@
 
 .amount {
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     right: -2px;
     color: #fff;
     font-size: 16px;
@@ -159,18 +159,18 @@
     cursor: default;
     z-index: 10;
     font-family: 'minecraftfont';
-    text-shadow: 2px 2px 0px #373737;
+    text-shadow: 2px 2px 0 #373737;
 
     .inventory__zoom1_5 & {
         font-size: 24px;
         line-height: 24px;
-        text-shadow: 3px 3px 0px #373737;
+        text-shadow: 3px 3px 0 #373737;
     }
 
     .inventory__zoom2 & {
         font-size: 32px;
         line-height: 32px;
-        text-shadow: 4px 4px 0px #373737;
+        text-shadow: 4px 4px 0 #373737;
     }
 }
 
@@ -324,16 +324,16 @@
     margin-right: -15px;
     text-align: center;
     font-family: 'minecraftfont';
-    text-shadow: 2px 2px 0px #aaa;
+    text-shadow: 2px 2px 0 #aaa;
 
     .inventory__zoom1_5 & {
         font-size: 18px;
-        text-shadow: 3px 3px 0px #aaa;
+        text-shadow: 3px 3px 0 #aaa;
     }
 
     .inventory__zoom2 & {
         font-size: 24px;
-        text-shadow: 4px 4px 0px #aaa;
+        text-shadow: 4px 4px 0 #aaa;
     }
 }
 
@@ -342,17 +342,17 @@
     margin-left: 5px;
     margin-top: 47px;
     font-family: 'minecraftfont';
-    text-shadow: 2px 2px 0px #aaa;
+    text-shadow: 2px 2px 0 #aaa;
 
     .inventory__zoom1_5 & {
         font-size: 18px;
-        text-shadow: 3px 3px 0px #aaa;
+        text-shadow: 3px 3px 0 #aaa;
         margin-top: 65px;
     }
 
     .inventory__zoom2 & {
         font-size: 24px;
-        text-shadow: 4px 4px 0px #aaa;
+        text-shadow: 4px 4px 0 #aaa;
         margin-top: 89px;
     }
 }
@@ -428,7 +428,7 @@
     font-size: 16px;
     line-height: 16px;
     font-family: 'minecraftfont';
-    text-shadow: 2px 2px 0px #373737;
+    text-shadow: 2px 2px 0 #373737;
 
     &:first-of-type + .line {
         padding-top: 3px;
@@ -438,222 +438,222 @@
         height: 30px;
         font-size: 24px;
         line-height: 24px;
-        text-shadow: 3px 3px 0px #373737;
+        text-shadow: 3px 3px 0 #373737;
     }
 
     .inventory__zoom2 & {
         height: 40px;
         font-size: 32px;
         line-height: 32px;
-        text-shadow: 4px 4px 0px #373737;
+        text-shadow: 4px 4px 0 #373737;
     }
 }
 
 .color-black {
     color: #000;
-    text-shadow: 2px 2px 0px #000;
+    text-shadow: 2px 2px 0 #000;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #000;
+        text-shadow: 3px 3px 0 #000;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #000;
+        text-shadow: 4px 4px 0 #000;
     }
 }
 
 .color-darkBlue {
     color: #00a;
-    text-shadow: 2px 2px 0px #00002a;
+    text-shadow: 2px 2px 0 #00002a;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #00002a;
+        text-shadow: 3px 3px 0 #00002a;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #00002a;
+        text-shadow: 4px 4px 0 #00002a;
     }
 }
 
 .color-darkGreen {
     color: #0a0;
-    text-shadow: 2px 2px 0px #002a00;
+    text-shadow: 2px 2px 0 #002a00;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #002a00;
+        text-shadow: 3px 3px 0 #002a00;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #002a00;
+        text-shadow: 4px 4px 0 #002a00;
     }
 }
 
 .color-darkAqua {
     color: #0aa;
-    text-shadow: 2px 2px 0px #002a2a;
+    text-shadow: 2px 2px 0 #002a2a;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #002a2a;
+        text-shadow: 3px 3px 0 #002a2a;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #002a2a;
+        text-shadow: 4px 4px 0 #002a2a;
     }
 }
 
 .color-darkRed {
     color: #a00;
-    text-shadow: 2px 2px 0px #2a0000;
+    text-shadow: 2px 2px 0 #2a0000;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #2a0000;
+        text-shadow: 3px 3px 0 #2a0000;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #2a0000;
+        text-shadow: 4px 4px 0 #2a0000;
     }
 }
 
 .color-darkPurple {
     color: #a0a;
-    text-shadow: 2px 2px 0px #2a002a;
+    text-shadow: 2px 2px 0 #2a002a;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #2a002a;
+        text-shadow: 3px 3px 0 #2a002a;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #2a002a;
+        text-shadow: 4px 4px 0 #2a002a;
     }
 }
 
 .color-gold {
     color: #fa0;
-    text-shadow: 2px 2px 0px #2a2a00;
+    text-shadow: 2px 2px 0 #2a2a00;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #2a2a00;
+        text-shadow: 3px 3px 0 #2a2a00;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #2a2a00;
+        text-shadow: 4px 4px 0 #2a2a00;
     }
 }
 
 .color-gray {
     color: #aaa;
-    text-shadow: 2px 2px 0px #2a2a2a;
+    text-shadow: 2px 2px 0 #2a2a2a;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #2a2a2a;
+        text-shadow: 3px 3px 0 #2a2a2a;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #2a2a2a;
+        text-shadow: 4px 4px 0 #2a2a2a;
     }
 }
 
 .color-darkGray {
     color: #555;
-    text-shadow: 2px 2px 0px #151515;
+    text-shadow: 2px 2px 0 #151515;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #151515;
+        text-shadow: 3px 3px 0 #151515;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #151515;
+        text-shadow: 4px 4px 0 #151515;
     }
 }
 
 .color-blue {
     color: #55f;
-    text-shadow: 2px 2px 0px #15153f;
+    text-shadow: 2px 2px 0 #15153f;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #15153f;
+        text-shadow: 3px 3px 0 #15153f;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #15153f;
+        text-shadow: 4px 4px 0 #15153f;
     }
 }
 
 .color-green {
     color: #5f5;
-    text-shadow: 2px 2px 0px #153f15;
+    text-shadow: 2px 2px 0 #153f15;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #153f15;
+        text-shadow: 3px 3px 0 #153f15;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #153f15;
+        text-shadow: 4px 4px 0 #153f15;
     }
 }
 
 .color-aqua {
     color: #5ff;
-    text-shadow: 2px 2px 0px #153f3f;
+    text-shadow: 2px 2px 0 #153f3f;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #153f3f;
+        text-shadow: 3px 3px 0 #153f3f;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #153f3f;
+        text-shadow: 4px 4px 0 #153f3f;
     }
 }
 
 .color-red {
     color: #f55;
-    text-shadow: 2px 2px 0px #3f1515;
+    text-shadow: 2px 2px 0 #3f1515;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #3f1515;
+        text-shadow: 3px 3px 0 #3f1515;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #3f1515;
+        text-shadow: 4px 4px 0 #3f1515;
     }
 }
 
 .color-lightPurple {
     color: #f5f;
-    text-shadow: 2px 2px 0px #3f153f;
+    text-shadow: 2px 2px 0 #3f153f;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #3f153f;
+        text-shadow: 3px 3px 0 #3f153f;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #3f153f;
+        text-shadow: 4px 4px 0 #3f153f;
     }
 }
 
 .color-yellow {
     color: #ff5;
-    text-shadow: 2px 2px 0px #3f3f15;
+    text-shadow: 2px 2px 0 #3f3f15;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #3f3f15;
+        text-shadow: 3px 3px 0 #3f3f15;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #3f3f15;
+        text-shadow: 4px 4px 0 #3f3f15;
     }
 }
 
 .color-white {
     color: #fff;
-    text-shadow: 2px 2px 0px #3f3f3f;
+    text-shadow: 2px 2px 0 #3f3f3f;
 
     .inventory__zoom1_5 & {
-        text-shadow: 3px 3px 0px #3f3f3f;
+        text-shadow: 3px 3px 0 #3f3f3f;
     }
 
     .inventory__zoom2 & {
-        text-shadow: 4px 4px 0px #3f3f3f;
+        text-shadow: 4px 4px 0 #3f3f3f;
     }
 }
 
