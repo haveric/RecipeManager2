@@ -7,7 +7,6 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,21 +38,6 @@ public class AnvilRecipe extends BaseAnvilRecipe {
     public AnvilRecipe(Flags flags) {
         super(flags);
     }
-
-    public boolean isValidBlockMaterial(Material material) {
-        boolean valid = material == Material.ANVIL;
-
-        if (!valid && Version.has1_13BasicSupport()) {
-            valid = material == Material.CHIPPED_ANVIL;
-
-            if (!valid) {
-                valid = material == Material.DAMAGED_ANVIL;
-            }
-        }
-
-        return valid;
-    }
-
 
     public List<Material> getPrimaryIngredient() {
         return primaryIngredient;

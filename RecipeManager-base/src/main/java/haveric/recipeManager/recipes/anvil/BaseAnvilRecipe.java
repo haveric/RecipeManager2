@@ -3,6 +3,8 @@ package haveric.recipeManager.recipes.anvil;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
+import haveric.recipeManager.tools.Version;
+import org.bukkit.Material;
 
 public class BaseAnvilRecipe extends PreparableResultRecipe {
     protected int repairCost = 0;
@@ -51,6 +53,20 @@ public class BaseAnvilRecipe extends PreparableResultRecipe {
 
     public void setAnvilDamageChance(double anvilDamageChance) {
         this.anvilDamageChance = anvilDamageChance;
+    }
+
+    public boolean isValidBlockMaterial(Material material) {
+        boolean valid = material == Material.ANVIL;
+
+        if (!valid && Version.has1_13BasicSupport()) {
+            valid = material == Material.CHIPPED_ANVIL;
+
+            if (!valid) {
+                valid = material == Material.DAMAGED_ANVIL;
+            }
+        }
+
+        return valid;
     }
 
 }

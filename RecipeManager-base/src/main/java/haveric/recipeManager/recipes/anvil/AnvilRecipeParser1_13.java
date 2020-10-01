@@ -1,18 +1,16 @@
 package haveric.recipeManager.recipes.anvil;
 
-import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.anvil.data.BaseAnvilParser;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -20,7 +18,7 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilRecipeParser1_13 extends BaseRecipeParser {
+public class AnvilRecipeParser1_13 extends BaseAnvilParser {
     public AnvilRecipeParser1_13() {
         super();
     }
@@ -132,59 +130,5 @@ public class AnvilRecipeParser1_13 extends BaseRecipeParser {
         recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
         return true;
-    }
-
-    private void parseArgs(BaseAnvilRecipe recipe, String[] split) {
-        if (split.length > 1) {
-            String repairString = split[1].trim();
-
-            // Skip if empty
-            if (!repairString.isEmpty()) {
-                try {
-                    int repairCost = Integer.parseInt(repairString);
-
-                    recipe.setRepairCost(repairCost);
-
-                    if (!Version.has1_11Support()) {
-                        ErrorReporter.getInstance().warning("Repair Cost is only supported in 1.11 or newer.");
-                    }
-                } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().error("Recipe has invalid repair cost: " + split[1] + ". Defaulting to 0.");
-                }
-            }
-        }
-
-        if (split.length > 2) {
-            String renameText = split[2].trim().toLowerCase();
-
-            // Skip if empty
-            if (!renameText.isEmpty()) {
-                if (renameText.equals("allowrename") || renameText.equals("true")) {
-                    recipe.setRenamingAllowed(true);
-                } else if (renameText.equals("false")) {
-                    recipe.setRenamingAllowed(false);
-                } else {
-                    ErrorReporter.getInstance().warning("Invalid rename attribute: " + renameText + ". Defaulting to false. Accepted values: allowrename, true, false.");
-                }
-            }
-        }
-
-        if (split.length > 3) {
-            try {
-                double anvilDamageChance = Double.parseDouble(split[3].trim());
-
-                if (anvilDamageChance < 0) {
-                    ErrorReporter.getInstance().warning("Anvil damage chance cannot be below 0: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 0.");
-                    anvilDamageChance = 0;
-                } else if (anvilDamageChance > 300) {
-                    ErrorReporter.getInstance().warning("Anvil damage chance cannot be above 300: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 300.");
-                    anvilDamageChance = 300;
-                }
-
-                recipe.setAnvilDamageChance(anvilDamageChance);
-            } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().error("Invalid anvil damage chance: " + split[3] + ". Allowed values from 0-300 (decimal values allowed). Defaulting to 12.");
-            }
-        }
     }
 }
