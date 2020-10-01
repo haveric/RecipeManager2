@@ -310,6 +310,11 @@ public class TestCraftInventory implements Inventory {
         return -1;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
     public int firstPartial(Material material) {
         Validate.notNull(material, "Material cannot be null");
         ItemStack[] inventory = getStorageContents();
