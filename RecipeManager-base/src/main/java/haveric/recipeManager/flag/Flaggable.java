@@ -36,7 +36,7 @@ public interface Flaggable {
     void clearFlags();
 
     /**
-     * Shortcut for {@link Flags#addFlag(Flag)}
+     * Shortcut for {@link Flags#addFlag(Flag, int)}
      */
     void addFlag(Flag flag);
 
