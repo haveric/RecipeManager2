@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -148,16 +147,6 @@ public class AnvilRecipe extends BaseAnvilRecipe {
     @Override
     public boolean isValid() {
         return hasIngredients() && hasResults();
-    }
-
-    @Override
-    public String getInvalidErrorMessage() {
-        return super.getInvalidErrorMessage() + " Needs a result and two ingredients!";
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.ANVIL;
     }
 
     @Override

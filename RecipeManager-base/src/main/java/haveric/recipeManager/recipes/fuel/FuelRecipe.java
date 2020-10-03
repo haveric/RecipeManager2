@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.fuel;
 
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
@@ -95,16 +94,6 @@ public class FuelRecipe extends BaseFuelRecipe {
     @Override
     public boolean isValid() {
         return hasIngredient();
-    }
-
-    @Override
-    public String getInvalidErrorMessage() {
-        return super.getInvalidErrorMessage() + " Needs an ingredient!";
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.FUEL;
     }
 
     @Override

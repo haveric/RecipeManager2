@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.brew;
 
 import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import org.bukkit.Material;
@@ -77,16 +76,6 @@ public class BrewRecipe extends BaseBrewRecipe {
     @Override
     public boolean isValid() {
         return ingredient != null && potion != null && hasResults();
-    }
-
-    @Override
-    public String getInvalidErrorMessage() {
-        return super.getInvalidErrorMessage() + " Needs a result and ingredient!";
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.BREW;
     }
 
     public ItemStack getIngredient() {

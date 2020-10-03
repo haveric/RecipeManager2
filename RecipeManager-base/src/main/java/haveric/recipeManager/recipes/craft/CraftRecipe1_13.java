@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.craft;
 
 import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -236,11 +235,6 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
     @Override
     public boolean isValid() {
         return hasIngredientChoices() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.CRAFT;
     }
 
     @Override

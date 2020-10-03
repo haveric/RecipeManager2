@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes.fuel;
 
 import haveric.recipeManager.RecipeManager;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 
@@ -73,4 +74,16 @@ public class BaseFuelRecipe extends BaseRecipe {
 
         return (int) Math.round(20.0 * time);
     }
+
+
+    @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs an ingredient!";
+    }
+
+    @Override
+    public RMCRecipeType getType() {
+        return RMCRecipeType.FUEL;
+    }
+
 }

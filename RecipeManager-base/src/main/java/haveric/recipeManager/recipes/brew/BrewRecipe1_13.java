@@ -1,6 +1,5 @@
 package haveric.recipeManager.recipes.brew;
 
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -74,17 +73,6 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
     public boolean isValid() {
         return hasIngredientChoice() && hasPotionChoice() && hasResults();
     }
-
-    @Override
-    public String getInvalidErrorMessage() {
-        return super.getInvalidErrorMessage() + " Needs a result and ingredient!";
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.BREW;
-    }
-
 
     public boolean hasIngredient(char character) {
         if (character == 'a') {

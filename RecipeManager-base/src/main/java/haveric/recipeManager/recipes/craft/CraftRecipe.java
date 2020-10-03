@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.craft;
 
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -410,11 +409,6 @@ public class CraftRecipe extends BaseCraftRecipe {
     @Override
     public String getInvalidErrorMessage() {
         return super.getInvalidErrorMessage() + " Needs at least one result and exactly 9 ingredient slots, empty ones can be null.";
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.CRAFT;
     }
 
     @Override
