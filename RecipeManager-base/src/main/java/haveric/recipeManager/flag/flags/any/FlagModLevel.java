@@ -223,28 +223,6 @@ public class FlagModLevel extends Flag {
         }
     }
 
-    /*
-    @Override
-    public List<String> information() {
-        List<String> list = new ArrayList<String>(1);
-
-        switch(mod) {
-            case '+':
-                list.add(MessagesOld.FLAG_MODLEVEL_ADD.get("{amount}", amount, "{modifier}", mod));
-                break;
-            case '-':
-                list.add(MessagesOld.FLAG_MODLEVEL_SUB.get("{amount}", amount, "{modifier}", mod, "{actualamount}", amount));
-                break;
-            case '=':
-                list.add(MessagesOld.FLAG_MODLEVEL_SET.get("{amount}", amount, "{modifier}", mod));
-                break;
-        }
-
-        return list;
-    }
-    */
-
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

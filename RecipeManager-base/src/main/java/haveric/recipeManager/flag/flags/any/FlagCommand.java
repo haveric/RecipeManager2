@@ -135,17 +135,6 @@ public class FlagCommand extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { if(commands.isEmpty()) { return null; }
-     *
-     * List<String> list = new ArrayList<String>(commands.size());
-     *
-     * for(String command : commands) { if(command.charAt(0) == '/') { list.add(MessagesOld.FLAG_COMMAND_PLAYER.get("{command}", command)); } else { list.add(MessagesOld.FLAG_COMMAND_SERVER.get("{command}",
-     * command)); } }
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

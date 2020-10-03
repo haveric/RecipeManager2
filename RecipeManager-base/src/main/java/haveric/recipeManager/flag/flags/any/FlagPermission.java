@@ -190,20 +190,6 @@ public class FlagPermission extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(2);
-     *
-     * String allowed = getPermissionsString(true); String unallowed = getPermissionsString(false);
-     *
-     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String permission = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(MessagesOld.FLAG_PERMISSION_ALLOWED.get("{permission}",
-     * permission, "{permissions}", allowed)); }
-     *
-     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String permission = unallowed.substring(0, (i > 0 ? i : unallowed.length()));
-     * list.add(MessagesOld.FLAG_PERMISSION_UNALLOWED.get("{permission}", permission, "{permissions}", unallowed)); }
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

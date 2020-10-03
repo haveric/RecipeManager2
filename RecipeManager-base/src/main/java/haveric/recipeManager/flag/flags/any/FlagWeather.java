@@ -186,14 +186,6 @@ public class FlagWeather extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * list.add(MessagesOld.FLAG_WEATHER.get("{weather}", getWeatherString()));
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

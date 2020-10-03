@@ -316,14 +316,6 @@ public class FlagCooldown extends Flag {
         a.addEffect(message, craftMessage, "{time}", timeToString(cooldown));
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * list.add((global ? MessagesOld.FLAG_COOLDOWN_SET_GLOBAL : MessagesOld.FLAG_COOLDOWN_SET_PERPLAYER).get("{time}", timeToString(getCooldownTime())));
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

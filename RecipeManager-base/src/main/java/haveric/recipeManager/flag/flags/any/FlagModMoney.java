@@ -220,27 +220,6 @@ public class FlagModMoney extends Flag {
         }
     }
 
-    /*
-    @Override
-    public List<String> information() {
-        List<String> list = new ArrayList<String>(1);
-
-        switch(mod) {
-            case '+':
-                list.add(MessagesOld.FLAG_MODMONEY_ADD.get("{amount}", amount, "{modifier}", mod));
-                break;
-            case '-':
-                list.add(MessagesOld.FLAG_MODMONEY_SUB.get("{amount}", amount, "{modifier}", mod));
-                break;
-            case '=':
-                list.add(MessagesOld.FLAG_MODMONEY_SET.get("{amount}", amount, "{modifier}", mod));
-                break;
-        }
-
-        return list;
-    }
-    */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

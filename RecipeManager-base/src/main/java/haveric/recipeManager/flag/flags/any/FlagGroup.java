@@ -155,20 +155,6 @@ public class FlagGroup extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(2);
-     *
-     * String allowed = getGroupsString(true); String unallowed = getGroupsString(false);
-     *
-     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String group = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(MessagesOld.FLAG_GROUP_ALLOWED.get("{group}", group,
-     * "{groups}", allowed)); }
-     *
-     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String group = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(MessagesOld.FLAG_GROUP_UNALLOWED.get("{group}", group,
-     * "{groups}", unallowed)); }
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

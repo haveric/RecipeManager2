@@ -213,26 +213,6 @@ public class FlagModExp extends Flag {
         ToolsExp.setTotalExperience(p, exp);
     }
 
-    /*
-    @Override
-    public List<String> information() {
-        List<String> list = new ArrayList<String>(1);
-
-        switch(mod) {
-           case '+':
-               list.add(MessagesOld.FLAG_MODEXP_ADD.get("{amount}", amount, "{modifier}", mod));
-               break;
-           case '-':
-               list.add(MessagesOld.FLAG_MODEXP_SUB.get("{amount}", amount, "{modifier}", mod, "{actualamount}", amount));
-               break;
-           case '=':
-               list.add(MessagesOld.FLAG_MODEXP_SET.get("{amount}", amount, "{modifier}", mod));
-               break;
-        }
-
-        return list; }
-    */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

@@ -147,14 +147,6 @@ public class FlagEnchantItem extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * list.add("enchant...");
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

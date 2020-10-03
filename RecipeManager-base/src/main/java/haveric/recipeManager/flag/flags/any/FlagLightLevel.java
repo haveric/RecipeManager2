@@ -264,14 +264,6 @@ public class FlagLightLevel extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * list.add(MessagesOld.FLAG_LIGHTLEVEL.get("{light}", getLightString(), "{type}", getLightTypeString()));
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();

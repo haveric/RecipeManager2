@@ -76,12 +76,4 @@ public class FlagOverride extends Flag {
             recipe.getInfo().setStatus(RecipeStatus.OVERRIDDEN);
         }
     }
-
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(1);
-     *
-     * list.add(MessagesOld.FLAG_OVERRIDE.get());
-     *
-     * return list; }
-     */
 }

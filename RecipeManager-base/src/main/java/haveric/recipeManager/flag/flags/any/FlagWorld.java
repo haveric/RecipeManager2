@@ -142,20 +142,6 @@ public class FlagWorld extends Flag {
         }
     }
 
-    /*
-     * @Override public List<String> information() { List<String> list = new ArrayList<String>(2);
-     *
-     * String allowed = getWorldsString(true); String unallowed = getWorldsString(false);
-     *
-     * if(!allowed.isEmpty()) { int i = allowed.indexOf(','); String world = allowed.substring(0, (i > 0 ? i : allowed.length())); list.add(MessagesOld.FLAG_WORLD_ALLOWED.get("{world}", world,
-     * "{worlds}", allowed)); }
-     *
-     * if(!unallowed.isEmpty()) { int i = unallowed.indexOf(','); String world = unallowed.substring(0, (i > 0 ? i : unallowed.length())); list.add(MessagesOld.FLAG_WORLD_UNALLOWED.get("{world}", world,
-     * "{worlds}", unallowed)); }
-     *
-     * return list; }
-     */
-
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();
