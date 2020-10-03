@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.combine;
 
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
@@ -30,5 +31,10 @@ public class BaseCombineRecipe extends PreparableResultRecipe {
         }
 
         return recipeIndexes;
+    }
+
+    @Override
+    public RMCRecipeType getType() {
+        return RMCRecipeType.COMBINE;
     }
 }

@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -245,11 +244,6 @@ public class CombineRecipe extends BaseCombineRecipe {
     @Override
     public String getInvalidErrorMessage() {
         return super.getInvalidErrorMessage() + " Needs at least one result and ingredient!";
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.COMBINE;
     }
 
     @Override

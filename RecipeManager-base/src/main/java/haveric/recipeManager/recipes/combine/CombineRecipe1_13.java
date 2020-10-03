@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -17,7 +16,10 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CombineRecipe1_13 extends BaseCombineRecipe {
     private String choicePattern = "";
@@ -213,13 +215,8 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
     }
 
     @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.COMBINE;
-    }
-
-    @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("combine", result);
+        StringBuilder s = getHeaderResult("shapeless", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.pattern")).append('\n');
         s.append(RMCChatColor.GRAY).append(choicePattern).append('\n');
