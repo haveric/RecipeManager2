@@ -47,19 +47,15 @@ public class FlagBiome extends Flag {
             "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.JUNGLE_HILLS.name().toLowerCase(),
         };
 
+        String mushrooms = "{flag} ";
         if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "{flag} !" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !" + Biome.MUSHROOM_FIELD_SHORE.name().toLowerCase(),
-            }, String.class);
+            mushrooms += "!" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !" + Biome.MUSHROOM_FIELD_SHORE.name().toLowerCase();
         } else if (Version.has1_9Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "{flag} !mushroom_island, !mushroom_island_shore",
-            }, String.class);
+            mushrooms += "!mushroom_island, !mushroom_island_shore";
         } else {
-            description = ObjectArrays.concat(description, new String[]{
-                    "{flag} !mushroom_island, !mushroom_shore",
-            }, String.class);
+            mushrooms += "!mushroom_island, !mushroom_shore";
         }
+        description = ObjectArrays.concat(description, new String[]{ mushrooms }, String.class);
 
         return description;
     }
