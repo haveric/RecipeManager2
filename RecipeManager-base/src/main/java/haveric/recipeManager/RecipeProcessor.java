@@ -194,9 +194,7 @@ public class RecipeProcessor implements Runnable {
             if (listOfFiles != null) {
                 for (File file : listOfFiles) {
                     if (file.isDirectory()) {
-                        if (!file.getName().equalsIgnoreCase("disabled")) {
-                            analyzeDirectory(file);
-                        }
+                        analyzeDirectory(file);
                     } else {
                         addFile(file);
                     }
