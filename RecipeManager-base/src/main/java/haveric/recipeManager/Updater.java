@@ -195,6 +195,113 @@ public class Updater {
         return compare;
     }
 
+    /**
+     * @return compare<br>
+     *  1: Version is newer than the check<br>
+     *  0: Same version as check<br>
+     * -1: Check is newer than version
+     * -2: An error occurred
+     */
+    public static int isVersionNewerThan(String version, String check) {
+        // Remove initial "v". Ex: v1.0.0 -> 1.0.0
+        if (version.startsWith("v")) {
+            version = version.substring(1);
+        }
+
+        if (check.startsWith("v")) {
+            check = check.substring(1);
+        }
+
+        if (version.equals(check)) {
+            return 0;
+        }
+
+        String[] versionSplit = version.split("[ -]");
+        String[] checkSplit = check.split("[ -]");
+
+        int compare = -2;
+        String[] currentArray = versionSplit[0].split("\\.");
+        String[] latestArray = checkSplit[0].split("\\.");
+
+        int shortest = currentArray.length;
+        int latestLength = latestArray.length;
+        if (latestLength < shortest) {
+            shortest = latestLength;
+        }
+
+        for (int i = 0; i < shortest; i++) {
+            int c = Integer.parseInt(currentArray[i]);
+            int l = Integer.parseInt(latestArray[i]);
+
+            if (c > l) {
+                compare = 1;
+                break;
+            } else if (l > c) {
+                compare = -1;
+                break;
+            }
+        }
+
+        if (compare == -2) {
+            boolean versionHasBeta = versionSplit.length > 1;
+            boolean checkHasBeta = checkSplit.length > 1;
+            if (versionHasBeta && checkHasBeta) {
+                String versionBeta = versionSplit[1];
+                versionBeta = versionBeta.replace("dev", "0.");
+                versionBeta = versionBeta.replace("alpha", "1.");
+                versionBeta = versionBeta.replace("beta", "2.");
+
+                String checkBeta = checkSplit[1];
+                checkBeta = checkBeta.replace("dev", "0.");
+                checkBeta = checkBeta.replace("alpha", "1.");
+                checkBeta = checkBeta.replace("beta", "2.");
+
+                try {
+                    double versionDouble = Double.parseDouble(versionBeta);
+                    double checkDouble = Double.parseDouble(checkBeta);
+                    if (versionDouble > checkDouble) {
+                        compare = 1;
+                    } else if (versionDouble < checkDouble) {
+                        compare = -1;
+                    }
+                } catch (NumberFormatException e) {
+                    // Versions aren't doubles, fail quietly
+                }
+            } else if (versionHasBeta) {
+                // Only beta status on version means it's newer
+                compare = 1;
+            } else if (checkHasBeta) {
+                // Only beta status on check means version is older
+                compare = -1;
+            }
+        }
+
+        return compare;
+    }
+
+    /**
+     * @return compare<br>
+     *  1: Version is older than the check<br>
+     *  0: Same version as check<br>
+     * -1: Check is older than version
+     * -2: An error occurred
+     */
+    public static int isVersionOlderThan(String version, String check) {
+        int isOlder;
+        int isNewer = isVersionNewerThan(version, check);
+
+        // Flip newer to older
+        if (isNewer == 1) {
+            isOlder = -1;
+        } else if (isNewer == -1) {
+            isOlder = 1;
+        } else {
+            isOlder = isNewer;
+        }
+
+        return isOlder;
+    }
+
     public static String getLatestBetaStatus() {
         return latestBetaStatus;
     }

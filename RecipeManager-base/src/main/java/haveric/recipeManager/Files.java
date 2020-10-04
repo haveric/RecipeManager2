@@ -25,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.io.*;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -105,9 +106,19 @@ public class Files {
 
             if (file.exists()) {
                 BufferedReader b = new BufferedReader(new FileReader(file));
-                String version = b.readLine();
+                String oldVersion = b.readLine();
                 b.close();
-                newVersion = (version == null || !version.equals(currentVersion));
+                newVersion = (oldVersion == null || !oldVersion.equals(currentVersion));
+
+                // Port disabled folder to extracted folder outside recipes
+                if (Updater.isVersionOlderThan(oldVersion, "2.24.0") == 1) {
+                    File oldDisabledFolder = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled");
+                    File oldIgnoredFile = new File(oldDisabledFolder.getPath() + File.separator + "Recipe files in here are ignored!");
+                    File newExtractedFolder = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "extracted");
+
+                    oldIgnoredFile.delete();
+                    java.nio.file.Files.move(oldDisabledFolder.toPath(), newExtractedFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                }
             }
 
             if (newVersion || file.exists()) {
@@ -124,15 +135,8 @@ public class Files {
 
     private void createDirectories() {
         // Create base directories
-        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled");
+        File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "extracted");
         file.mkdirs();
-
-        // Create disable directory info file
-        file = new File(file.getPath() + File.separator + "Recipe files in here are ignored!");
-
-        if (!file.exists()) {
-            Tools.saveTextToFile("In the disabled folder you can place recipe files you don't want to load, instead of deleting them.", file.getPath());
-        }
     }
 
     private boolean fileExists(String file, boolean overwrite) {
