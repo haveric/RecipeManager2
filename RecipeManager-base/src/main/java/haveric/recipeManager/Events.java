@@ -129,14 +129,10 @@ public class Events extends BaseRecipeEvents {
             String currentVersion = Updater.getCurrentVersion();
 
             if (latestVersion != null) {
-                int compare = Updater.compareVersions();
+                int compare = Updater.isVersionNewerThan(currentVersion, latestVersion);
 
                 if (compare == -1) {
                     MessageSender.getInstance().send(player, "[RecipeManager] New version: <green>" + latestVersion + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
-                } else if (compare == 2) {
-                    MessageSender.getInstance().send(player, "[RecipeManager] New alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
-                } else if (compare == 3) {
-                    MessageSender.getInstance().send(player, "[RecipeManager] BukkitDev has a different alpha/beta version: <green>" + latestVersion + " " + Updater.getLatestBetaStatus() + "<reset>! You're using <yellow>" + currentVersion + " " + Updater.getCurrentBetaStatus() + "<reset>, grab it at: <light_purple>" + Updater.getLatestLink());
                 }
             }
         }
