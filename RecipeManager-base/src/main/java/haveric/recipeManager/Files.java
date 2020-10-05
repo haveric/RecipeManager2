@@ -111,13 +111,15 @@ public class Files {
                 newVersion = (oldVersion == null || !oldVersion.equals(currentVersion));
 
                 // Port disabled folder to extracted folder outside recipes
-                if (Updater.isVersionOlderThan(oldVersion, "2.24.0") == 1) {
+                if (Updater.isVersionOlderThan(oldVersion, "2.23.1-dev4") == 1) {
                     File oldDisabledFolder = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled");
                     File oldIgnoredFile = new File(oldDisabledFolder.getPath() + File.separator + "Recipe files in here are ignored!");
                     File newExtractedFolder = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "extracted");
 
                     oldIgnoredFile.delete();
-                    java.nio.file.Files.move(oldDisabledFolder.toPath(), newExtractedFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    if (oldDisabledFolder.exists()) {
+                        java.nio.file.Files.move(oldDisabledFolder.toPath(), newExtractedFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
                 }
             }
 
