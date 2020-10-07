@@ -209,7 +209,7 @@ public class Updater {
      * Query the API to find the latest approved file's details.
      */
     public static void query(CommandSender sender) {
-        if (RecipeManager.getSettings().getUpdateCheckEnabled()) {
+        if (sender != null || RecipeManager.getSettings().getUpdateCheckEnabled()) {
             try {
                 // Create the URL to query using the project's ID
                 URL url = new URL(API_HOST + API_QUERY + projectID);
