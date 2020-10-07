@@ -210,7 +210,6 @@ public class Updater {
      */
     public static void query(CommandSender sender) {
         if (RecipeManager.getSettings().getUpdateCheckEnabled()) {
-
             try {
                 // Create the URL to query using the project's ID
                 URL url = new URL(API_HOST + API_QUERY + projectID);
@@ -267,12 +266,14 @@ public class Updater {
                             MessageSender.getInstance().sendAndLog(sender, "New version: <green>" + latestVersion + "<reset>! You're using <yellow>" + currentVersion);
                             MessageSender.getInstance().sendAndLog(sender, "Grab it at: <green>" + latestLink);
                         } else if (compare == 1) {
-                            MessageSender.getInstance().sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latestVersion);
+                            if (sender != null || !RecipeManager.getSettings().getUpdateCheckLogNewOnly()) {
+                                MessageSender.getInstance().sendAndLog(sender, "<gray>You are using a newer version: <green>" + currentVersion + "<reset>. Latest on BukkitDev: <yellow>" + latestVersion);
+                            }
                         }
                     }
                 }
 
-                if (sender == null) {
+                if (sender == null && !RecipeManager.getSettings().getUpdateCheckLogNewOnly()) {
                     MessageSender.getInstance().sendAndLog(null, "<gray>You can disable this check from config.yml.");
                 }
             } catch (IOException e) {

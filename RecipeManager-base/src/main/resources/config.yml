@@ -110,8 +110,9 @@ clear-recipes: false
 
 # Automatic update checker (no auto download)
 update-check:
-  enabled: true     # Enable/disable update checking. (default: true)
-  frequency: 6      # Check for updates each N hours, use 0 to check only at startup. (default: 6)
+  enabled: true      # Enable/disable update checking. (default: true)
+  frequency: 6       # Check for updates each N hours, use 0 to check only at startup. (default: 6)
+  log-new-only: true # If true, only log when there is a new update. If false, log every time
 
 # Customize materials used when crafting recipes
 # Material names reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html

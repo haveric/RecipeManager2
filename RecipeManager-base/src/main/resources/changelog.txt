@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: 1.16: Add Soul Campfire support to Campfire recipes
 * NEW: 1.16: Add nether compost items
 * NEW: 1.16: Smithing Recipe support
+* NEW: Added new config "update-check.log-new-only" that defaults to true to reduce log spam
 * FIX: 1.16: @SkullOwner not setting texture
 * FIX: 1.13: Combine recipe book header
 * FIX: 1.12 and below: Fixed result flags in simple recipes
