@@ -413,7 +413,7 @@ public class CraftRecipe extends BaseCraftRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("shaped", result);
+        StringBuilder s = getHeaderResult("craft", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.shape")).append('\n');
         s.append(RMCChatColor.GRAY);

@@ -248,7 +248,7 @@ public class CombineRecipe extends BaseCombineRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("shapeless", result);
+        StringBuilder s = getHeaderResult("combine", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 

@@ -123,8 +123,8 @@ recipebook:
   volumeofvolumes: Volume {volume} of {volumes}
   header:
     contents: <black><bold><underline>CONTENTS INDEX
-    shaped: <black><bold>SHAPED RECIPE
-    shapeless: <black><bold>SHAPELESS RECIPE
+    craft: <black><bold>SHAPED RECIPE
+    combine: <black><bold>SHAPELESS RECIPE
     smelt: <black><bold>FURNACE RECIPE
     blasting: <black><bold>BLASTING RECIPE
     smoking: <black><bold>SMOKING RECIPE

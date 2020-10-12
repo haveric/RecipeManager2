@@ -216,7 +216,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
     @Override
     public String printBookResult(ItemResult result) {
-        StringBuilder s = getHeaderResult("shapeless", result);
+        StringBuilder s = getHeaderResult("combine", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.pattern")).append('\n');
         s.append(RMCChatColor.GRAY).append(choicePattern).append('\n');
