@@ -282,12 +282,22 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
-            // Don't show air
+            // Skip empty choices which might be air
             if (choice instanceof RecipeChoice.MaterialChoice || choice instanceof RecipeChoice.ExactChoice) {
-                s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
-            }
+                boolean isAir = false;
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> choices = materialChoice.getChoices();
+                    if (choices.size() == 1 && choices.get(0) == Material.AIR) {
+                        isAir = true;
+                    }
+                }
 
-            ToolsRecipeChoice.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
+                if (!isAir) {
+                    s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
+                    s.append(ToolsRecipeChoice.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK));
+                }
+            }
         }
 
         return s.toString();

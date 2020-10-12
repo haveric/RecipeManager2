@@ -226,7 +226,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             s.append('\n').append(RMCChatColor.DARK_PURPLE).append(entry.getKey()).append(RMCChatColor.GRAY).append(": ");
 
-            ToolsRecipeChoice.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK);
+            s.append(ToolsRecipeChoice.printRecipeChoice(entry.getValue(), RMCChatColor.BLACK, RMCChatColor.BLACK));
         }
 
         return s.toString();

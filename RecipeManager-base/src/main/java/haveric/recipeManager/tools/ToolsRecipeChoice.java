@@ -55,7 +55,7 @@ public class ToolsRecipeChoice {
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             return printChoice(materialChoice.getChoices(), defColor, endColor);
-        } else if (choice instanceof  RecipeChoice.ExactChoice) {
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
             RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
             return printExactChoice(exactChoice.getChoices(), defColor, endColor);
         } else {
