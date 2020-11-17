@@ -53,6 +53,13 @@
                         <li><img src="https://www.recipemanager.dev/img/icons/64/brewing_stand.png?v=1"/><a href="#brew">Brew/Brewing Stand Recipe</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#removing-recipe">Removing a Recipe</a>
+                    <ul>
+                        <li><a href="#extracting-recipes">Extracting Vanilla Recipes</a></li>
+                        <li><a href="#remove-syntax">Remove Syntax</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -1830,6 +1837,54 @@ potion
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="removing-recipe" class="doc-section__group">
+        <h2 class="doc-section__group-title">Removing a Recipe</h2>
+        <div id="extracting-recipes" class="doc-section">
+            <h3 class="doc-section__title">Extracting Vanilla Recipes</h3>
+            <div class="doc-section__inn">
+                <p>Use the /rmextract command to export all vanilla recipes.</p>
+                <p>A file will be generated at "/plugins/RecipeManager/extracted/" (For Legacy versions: "/plugins/RecipeManager/recipes/disabled/")</p>
+                <p>Open the generated file in a text editor and search for a recipe you would like to remove.</p>
+                <p>For example, an iron sword should look similar to this:</p>
+<pre class="code">
+craft
+iron_ingot
+iron_ingot
+stick
+= iron_sword:0:1
+</pre>
+                <p>After finding the recipes that you want to remove, copy them over to a file in "/plugins/RecipeManager/recipes/"</p>
+                <p>Once the recipes are in your new file, add @remove per the <a href="#remove-syntax">Remove Syntax</a> below.</p>
+            </div>
+        </div>
+        <div id="remove-syntax" class="doc-section">
+            <h3 class="doc-section__title">Remove Syntax</h3>
+            <div class="doc-section__inn">
+                <p>To remove an individual recipe, place @remove just after the craft/combine/smelt line:</p>
+<pre class="code">
+craft
+@remove
+iron_ingot
+iron_ingot
+stick
+= iron_sword:0:1
+</pre>
+
+                <p>Place @remove at the top of the file to remove all recipes in the file</p>
+                <pre class="code">
+@remove
+
+craft
+iron_ingot
+iron_ingot
+stick
+= iron_sword:0:1
+
+[... more recipes]
+</pre>
             </div>
         </div>
     </div>
