@@ -80,4 +80,8 @@ public class BaseAnvilRecipe extends PreparableResultRecipe {
         return super.getInvalidErrorMessage() + " Needs a result and two ingredients!";
     }
 
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
+    }
 }
