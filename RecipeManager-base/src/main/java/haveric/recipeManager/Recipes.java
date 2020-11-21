@@ -84,6 +84,16 @@ public class Recipes {
         }
         return numRecipes;
     }
+
+    public int getNumRemovedRecipes() {
+        int numRecipes = 0;
+        for (Map<String, List<BaseRecipe>> recipeMap: indexRemovedRecipes.values()) {
+            for (List<BaseRecipe> baseRecipes : recipeMap.values()) {
+                numRecipes += baseRecipes.size();
+            }
+        }
+        return numRecipes;
+    }
     /**
      * Checks if result is part of a recipe added by RecipeManager by checking item's lore.
      *
