@@ -86,11 +86,13 @@ title: Recipe Flags
 <a href='#ingredient_flags'><b>INGREDIENT FLAGS</b></a>
 - <a href='#banneritem'><b>@banneritem</b></a>
 - <a href='#bookitem'><b>@bookitem</b></a>
+- <a href='#compassitem'><b>@compassitem</b></a>
 - <a href='#custommodeldata'><b>@custommodeldata</b></a>
 - <a href='#enchantedbook'><b>@enchantedbook</b></a>
 - <a href='#enchantitem'><b>@enchantitem</b></a>
 - <a href='#fireworkitem'><b>@fireworkitem</b></a>
 - <a href='#fireworkstaritem'><b>@fireworkstaritem</b></a>
+- <a href='#hide'><b>@hide</b></a>
 - <a href='#itemattribute'><b>@itemattribute</b></a>
 - <a href='#itemlore'><b>@itemlore</b></a>
 - <a href='#itemname'><b>@itemname</b></a>
@@ -113,6 +115,7 @@ title: Recipe Flags
 - <a href='#broadcast'><b>@broadcast</b></a>
 - <a href='#cloneingredient'><b>@cloneingredient</b></a>
 - <a href='#command'><b>@command</b></a>
+- <a href='#compassitem'><b>@compassitem</b></a>
 - <a href='#cooldown'><b>@cooldown</b></a>
 - <a href='#custommodeldata'><b>@custommodeldata</b></a>
 - <a href='#enchantedbook'><b>@enchantedbook</b></a>
@@ -441,6 +444,42 @@ title: Recipe Flags
       @command kick {player}
 
     <b>Aliases:</b> @cmd, @commands
+
+
+<hr><a href='#contents' class='back-to-top'>^ Contents</a><a name='compassitem'></a>
+
+
+  <b>@compassitem &lt;worldName&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt; | [requiresLodestone]</b>
+<span>
+    Sets the position that a compass points to.
+
+    &lt;worldName&gt; is the name of the world you want to compass to work in.
+
+    &lt;x&gt; &lt;y&gt; &lt;z&gt; are the x, y, and z coordinates you want to point to. &lt;y&gt; being the vertical only matters if you set requiresLodestone option to true
+
+    The following variables may also be used
+      {world}          = world name of event location or '(unknown)' if not available
+      {x}              = event location's X coord
+      {y}              = event location's Y coord
+      {z}              = event location's Z coord
+        Relative positions are supported: {x-1},{y+7},{z+12}
+      {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
+      {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
+      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+
+    [requiresLodestone] is optional and defaults to false:
+      Requires a lodestone at the location set
+      values: true or false
+
+    Specific items: compass.</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @compassitem world 100 65 200 // Will track this location without a lodestone
+      @compassitem world 100 65 200 | true // Requires a lodestone to be at x=100, y=65, z=200 for the compass to track this location
+
+    <b>Aliases:</b> @compass
 
 
 <hr><a href='#contents' class='back-to-top'>^ Contents</a><a name='cooldown'></a>
@@ -931,6 +970,7 @@ title: Recipe Flags
       placedon       = Hide where this item can be placed on
       potioneffects  = Hide potion effects on this item
       unbreakable    = Hide the unbreakable state
+      dye            = Hides dyes from colored leather armor
       all            = Hides everything
     Arguments can be listed in any order.</span>
 
