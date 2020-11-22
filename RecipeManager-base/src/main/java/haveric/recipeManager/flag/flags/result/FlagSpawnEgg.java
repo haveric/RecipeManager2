@@ -99,8 +99,7 @@ public class FlagSpawnEgg extends Flag {
         try {
             setEntityType(EntityType.valueOf(value));
         } catch (IllegalArgumentException e) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid entity type name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for entity type list.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid entity type name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for entity type list.");
         }
 
         return true;

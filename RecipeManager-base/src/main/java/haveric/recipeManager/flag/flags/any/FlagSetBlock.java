@@ -82,8 +82,7 @@ public class FlagSetBlock extends Flag {
         ItemStack item = Tools.parseItem(value, 0, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
         if (item == null || !item.getType().isBlock()) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid block material type: " + value, "Note that block materials have IDs from 0 to 255.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid block material type: " + value, "Note that block materials have IDs from 0 to 255.");
         }
 
         type = item.getType();

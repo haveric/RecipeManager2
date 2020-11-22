@@ -274,8 +274,7 @@ public class Flag implements Cloneable {
 
         FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
         if (!desc.hasBit(FlagBit.NO_VALUE_REQUIRED) && value == null) {
-            ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " needs a value!");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + desc.getNameDisplay() + " needs a value!");
         }
 
         if (!desc.hasBit(FlagBit.NO_FALSE) && value != null && (value.equalsIgnoreCase("false") || value.equalsIgnoreCase("remove"))) {

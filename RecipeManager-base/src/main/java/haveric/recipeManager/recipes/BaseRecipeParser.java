@@ -72,8 +72,7 @@ public abstract class BaseRecipeParser {
             }
 
             if (!allowAir && result.getType() == Material.AIR) {
-                ErrorReporter.getInstance().error("Result can not be AIR in this recipe!");
-                return false;
+                return ErrorReporter.getInstance().error("Result can not be AIR in this recipe!");
             }
 
             results.add(result);

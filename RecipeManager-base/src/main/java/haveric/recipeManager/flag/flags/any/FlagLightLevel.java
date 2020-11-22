@@ -213,8 +213,7 @@ public class FlagLightLevel extends Flag {
         try {
             minLight = Byte.parseByte(value);
         } catch (NumberFormatException e) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
         }
 
         if (split.length > 1) {
@@ -223,14 +222,12 @@ public class FlagLightLevel extends Flag {
             try {
                 maxLight = Byte.parseByte(value);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
-                return false;
+                return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
             }
         }
 
         if (minLight > 15 || maxLight > 15 || (maxLight > 0 && (minLight > maxLight || minLight < 0))) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
         }
 
         return true;

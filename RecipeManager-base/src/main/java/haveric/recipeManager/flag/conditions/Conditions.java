@@ -651,8 +651,7 @@ public class Conditions implements Cloneable {
                     Pattern pattern = Pattern.compile(name.substring("regex:".length()));
                     return pattern.matcher(nameToCheck).matches();
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
-                    return false;
+                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                 }
             }
 
@@ -694,8 +693,7 @@ public class Conditions implements Cloneable {
                     Pattern pattern = Pattern.compile(localizedName.substring("regex:".length()));
                     return pattern.matcher(nameToCheck).matches();
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
-                    return false;
+                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                 }
             }
 
@@ -737,8 +735,7 @@ public class Conditions implements Cloneable {
                 try {
                     pattern = Pattern.compile(lore.substring("regex:".length()));
                 } catch (PatternSyntaxException e) {
-                    ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
-                    return false;
+                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                 }
             }
 

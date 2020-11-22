@@ -210,8 +210,7 @@ public class FlagCloneIngredient extends Flag {
         ItemResult result = getResult();
 
         if (result == null || result.getType() == Material.AIR) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
         }
 
         return true;
@@ -331,8 +330,7 @@ public class FlagCloneIngredient extends Flag {
         }
 
         if (found == 0) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient of type: " + allTypes.toString());
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient of type: " + allTypes.toString());
         } else if (found > 1) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has found the " + foundMaterial + " ingredient more than once, only data from the first one will be cloned!");
         }

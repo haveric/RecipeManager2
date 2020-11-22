@@ -155,8 +155,7 @@ public class FlagWeather extends Flag {
         }
 
         if (weather == 0) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs at least one valid weather type!");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs at least one valid weather type!");
         }
 
         return true;

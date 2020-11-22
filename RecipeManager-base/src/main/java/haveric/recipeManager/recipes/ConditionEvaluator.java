@@ -116,9 +116,8 @@ public class ConditionEvaluator {
                     return true; // allow recipe to be added
                 }
             } else if (registered.getOwner() == RMCRecipeInfo.RecipeOwner.RECIPEMANAGER && registered.getStatus() == null) {
-                ErrorReporter.getInstance().error("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
-
-                return false; // can't re-add recipes
+                // can't re-add recipes
+                return ErrorReporter.getInstance().error("Can't override/remove RecipeManager's recipes - just edit the recipe files!");
             }
 
             return true; // all ok, allow it to be added
@@ -127,9 +126,8 @@ public class ConditionEvaluator {
         if (registered != null) {
             if (registered.getOwner() == RMCRecipeInfo.RecipeOwner.RECIPEMANAGER) {
                 if (!currentFile.equals(registered.getAdder())) {
-                    ErrorReporter.getInstance().error("Recipe already created with this plugin, file: " + registered.getAdder());
-
-                    return false; // can't re-add recipes
+                    // can't re-add recipes
+                    return ErrorReporter.getInstance().error("Recipe already created with this plugin, file: " + registered.getAdder());
                 }
             } else {
                 recipe.getFlags().addFlag(new FlagOverride(), FlagBit.RECIPE);
@@ -145,9 +143,8 @@ public class ConditionEvaluator {
         RMCRecipeInfo queued = getRecipeFromMap(recipe, registrator.getQueuedRecipes());
 
         if (queued != null) {
-            ErrorReporter.getInstance().error("Recipe already created with this plugin, file: " + queued.getAdder());
-
-            return false; // can't re-add recipes
+            // can't re-add recipes
+            return ErrorReporter.getInstance().error("Recipe already created with this plugin, file: " + queued.getAdder());
         }
 
         return true; // nothing found, let it be added

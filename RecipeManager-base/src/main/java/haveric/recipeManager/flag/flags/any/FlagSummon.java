@@ -1326,8 +1326,7 @@ public class FlagSummon extends Flag {
         EntityType type = RMCUtil.parseEnum(value, EntityType.values());
 
         if (type == null || !type.isAlive()) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid creature: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section for ALIVE entities.");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid creature: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section for ALIVE entities.");
         }
 
         Customization c = new Customization(type);

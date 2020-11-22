@@ -156,8 +156,7 @@ public class FlagFireworkItem extends Flag {
             }
 
             if (power < 0 || power > 128) {
-                ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
-                return false;
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
             }
         } else {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);

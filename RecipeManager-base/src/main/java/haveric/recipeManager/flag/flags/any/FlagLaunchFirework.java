@@ -130,8 +130,7 @@ public class FlagLaunchFirework extends Flag {
             }
 
             if (power < 0 || power > 128) {
-                ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument value: '" + value + "', it must be a number from 0 to 128");
-                return false;
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument value: '" + value + "', it must be a number from 0 to 128");
             }
 
             firework.setPower(power);
@@ -145,8 +144,7 @@ public class FlagLaunchFirework extends Flag {
             }
 
             if (chance < 0 || chance > 100) {
-                ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'chance' argument value: '" + value + "', it must be a number from 0 to 100");
-                return false;
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'chance' argument value: '" + value + "', it must be a number from 0 to 100");
             }
         } else {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);

@@ -129,8 +129,7 @@ public class FlagNeedLevel extends Flag {
             minLevel = Integer.parseInt(value);
             maxLevel = minLevel;
         } catch (NumberFormatException e) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required level number: " + value);
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required level number: " + value);
         }
 
         if (split.length > 1) {
@@ -140,14 +139,12 @@ public class FlagNeedLevel extends Flag {
                 maxLevel = Integer.parseInt(value);
                 setBoth = true;
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required level number: " + value);
-                return false;
+                return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required level number: " + value);
             }
         }
 
         if ((minLevel <= 0 && maxLevel <= 0) || maxLevel < minLevel) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
         }
 
         return true;

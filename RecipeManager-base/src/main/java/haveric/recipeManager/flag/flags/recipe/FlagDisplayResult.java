@@ -90,8 +90,7 @@ public class FlagDisplayResult extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (!(recipe instanceof PreparableResultRecipe)) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on workbench recipes.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on workbench recipes.");
         }
 
         return true;

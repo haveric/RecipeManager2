@@ -94,8 +94,7 @@ public class FlagEnchantItem extends Flag {
         Enchantment enchant = Tools.parseEnchant(value);
 
         if (enchant == null) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
         }
 
         int level = enchant.getStartLevel();
@@ -114,8 +113,7 @@ public class FlagEnchantItem extends Flag {
                     try {
                         level = Integer.parseInt(value);
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
                     }
                     break;
             }

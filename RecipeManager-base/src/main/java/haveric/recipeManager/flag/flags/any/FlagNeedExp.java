@@ -127,38 +127,33 @@ public class FlagNeedExp extends Flag {
         value = split[0].trim();
 
         if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has min exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
         }
 
         try {
             minExp = Integer.parseInt(value);
             maxExp = minExp;
         } catch (NumberFormatException e) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min req exp number: " + value);
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min req exp number: " + value);
         }
 
         if (split.length > 1) {
             value = split[1].trim();
 
             if (value.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
-                return false;
+                return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has max exp value that is too long: " + value, "Value for integers can be between " + RMCUtil.printNumber(Integer.MIN_VALUE) + " and " + RMCUtil.printNumber(Integer.MAX_VALUE) + ".");
             }
 
             try {
                 maxExp = Integer.parseInt(value);
                 setBoth = true;
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max req exp number: " + value);
-                return false;
+                return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max req exp number: " + value);
             }
         }
 
         if ((minExp <= 0 && maxExp <= 0) || maxExp < minExp) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
         }
 
         return true;

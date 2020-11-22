@@ -77,8 +77,7 @@ public class FlagSpawnParticle extends Flag {
 
         Particle particle = RMCUtil.parseEnum(value, Particle.values());
         if (particle == null) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid particle: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'PARTICLE LIST' section for particles.");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid particle: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'PARTICLE LIST' section for particles.");
         }
 
         RMParticle rmParticle = new RMParticle(particle);
@@ -93,8 +92,7 @@ public class FlagSpawnParticle extends Flag {
                     String[] offsets = value.split(" ", 3);
 
                     if (offsets.length < 1) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'offset' argument with no values!", "Add values separated by a space (ex: 1.0 2.2 1.2)");
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'offset' argument with no values!", "Add values separated by a space (ex: 1.0 2.2 1.2)");
                     }
 
                     try {
@@ -123,8 +121,7 @@ public class FlagSpawnParticle extends Flag {
                     String[] offsets = value.split(" ", 3);
 
                     if (offsets.length < 1) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'randomoffset' argument with no values!", "Add values separated by a space (ex: 1.0 2.2 1.2)");
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'randomoffset' argument with no values!", "Add values separated by a space (ex: 1.0 2.2 1.2)");
                     }
 
                     try {

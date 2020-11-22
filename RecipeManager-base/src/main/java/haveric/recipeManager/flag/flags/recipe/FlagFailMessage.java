@@ -80,8 +80,7 @@ public class FlagFailMessage extends Flag {
         BaseRecipe recipe = getRecipe();
 
         if (!(recipe instanceof MultiResultRecipe) && !(recipe instanceof SingleResultRecipe)) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on recipes that support failure chance.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on recipes that support failure chance.");
         }
 
         return true;

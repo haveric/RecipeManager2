@@ -234,15 +234,13 @@ public class FlagCooldown extends Flag {
         }
 
         if (value.length() > String.valueOf(Float.MAX_VALUE).length()) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + RMCUtil.printNumber(Float.MIN_VALUE) + " and " + RMCUtil.printNumber(Float.MAX_VALUE) + ".");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has cooldown value that is too long: " + value, "Value for float numbers can be between " + RMCUtil.printNumber(Float.MIN_VALUE) + " and " + RMCUtil.printNumber(Float.MAX_VALUE) + ".");
         }
 
         try {
             time = Float.parseFloat(value);
         } catch (NumberFormatException e) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid number: " + value);
         }
 
         if (multiplier > 0) {
@@ -252,8 +250,7 @@ public class FlagCooldown extends Flag {
         }
 
         if (time <= 0.0f) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag must have cooldown value more than 0!");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag must have cooldown value more than 0!");
         }
 
         if (split.length > 1) {

@@ -136,8 +136,7 @@ public class FlagMonsterSpawner extends Flag {
         try {
             setEntityType(EntityType.valueOf(entityType));
         } catch (IllegalArgumentException e) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid entity type name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for entity type list.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid entity type name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for entity type list.");
         }
 
         for (int i = 1; i < split.length; i++) {

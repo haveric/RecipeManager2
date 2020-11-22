@@ -139,8 +139,7 @@ public class FlagNeedMoney extends Flag {
             minMoney = Double.parseDouble(value);
             maxMoney = minMoney;
         } catch (NumberFormatException e) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required money number: " + value);
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid min required money number: " + value);
         }
 
         if (split.length > 1) {
@@ -150,14 +149,12 @@ public class FlagNeedMoney extends Flag {
                 maxMoney = Double.parseDouble(value);
                 setBoth = true;
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required money number: " + value);
-                return false;
+                return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid max required money number: " + value);
             }
         }
 
         if ((minMoney <= 0 && maxMoney <= 0) || maxMoney < minMoney) {
-            ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
-            return false;
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0 and max higher than min.");
         }
 
         return true;

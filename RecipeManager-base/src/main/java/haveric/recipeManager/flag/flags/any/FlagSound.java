@@ -137,8 +137,7 @@ public class FlagSound extends Flag {
         try {
             setSound(Sound.valueOf(value));
         } catch (IllegalArgumentException e) {
-            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
-            return false;
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid sound name: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for sounds list.");
         }
 
         if (split.length > 1) {
@@ -151,29 +150,25 @@ public class FlagSound extends Flag {
                     value = value.substring("volume".length()).trim();
 
                     if (value.isEmpty()) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'volume' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'volume' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                     }
 
                     try {
                         setVolume(Float.parseFloat(value));
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'volume' argument float number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                     }
                 } else if (value.startsWith("pitch")) {
                     value = value.substring("pitch".length()).trim();
 
                     if (value.isEmpty()) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'pitch' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has 'pitch' argument with number!", "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                     }
 
                     try {
                         setPitch(Float.parseFloat(value));
                     } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
-                        return false;
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid 'pitch' argument number: " + value, "Read '" + Files.FILE_INFO_FLAGS + "' for argument info.");
                     }
                 } else {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value, "Maybe it's spelled wrong, check it in " + Files.FILE_INFO_FLAGS + " file.");
