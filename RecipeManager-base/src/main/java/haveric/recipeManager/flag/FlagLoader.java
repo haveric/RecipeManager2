@@ -4,6 +4,7 @@ import haveric.recipeManager.flag.flags.any.*;
 import haveric.recipeManager.flag.flags.recipe.*;
 import haveric.recipeManager.flag.flags.result.*;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.ChatColor;
 
@@ -87,6 +88,9 @@ public class FlagLoader {
         // Ingredient or Result flags
         loadFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), APPLIED_TO_ITEM, "banner");
         loadFlag(FlagType.BOOK_ITEM, new FlagBookItem(), APPLIED_TO_ITEM, "book");
+        if (Supports.compassMeta()) {
+            loadFlag(FlagType.COMPASS_ITEM, new FlagCompassItem(), APPLIED_TO_ITEM, "compass");
+        }
         loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
         loadFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), APPLIED_TO_ITEM, "enchantbook", "enchantingbook");
         loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), APPLIED_TO_ITEM, "enchant", "enchantment");
