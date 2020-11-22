@@ -366,7 +366,7 @@ public class ToolsRecipeChoice {
 
                             for (Map.Entry<Enchantment, Integer> entry : itemEnchants.entrySet()) {
                                 if (ingredientEnchants.containsKey(entry.getKey())) {
-                                    if (ingredientEnchants.get(entry.getKey()) == entry.getValue()) {
+                                    if (ingredientEnchants.get(entry.getKey()).equals(entry.getValue())) {
                                         quality ++; // Enchantment matches
                                     }
                                 }
@@ -459,7 +459,7 @@ public class ToolsRecipeChoice {
 
                                 for (Map.Entry<Enchantment, Integer> entry : itemEnchants.entrySet()) {
                                     if (ingredientEnchants.containsKey(entry.getKey())) {
-                                        if (ingredientEnchants.get(entry.getKey()) == entry.getValue()) {
+                                        if (ingredientEnchants.get(entry.getKey()).equals(entry.getValue())) {
                                             quality ++; // Enchantment matches
                                         }
                                     }
