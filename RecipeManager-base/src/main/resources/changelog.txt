@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-=== Coming Soon ===
+=== v2.24.0 ===
 * NEW: 1.16.2: @Hide: Added support for hiding dyes from colored leather armors
 * NEW: 1.16.1: New @compass flag to set compass locations
     * Format: @compass <worldName> <x> <y> <z> | [requiresLodestone]
