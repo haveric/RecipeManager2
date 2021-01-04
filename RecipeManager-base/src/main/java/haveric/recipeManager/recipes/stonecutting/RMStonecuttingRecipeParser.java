@@ -117,7 +117,7 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
 
         // check if the recipe already exists
         if (!conditionEvaluator.recipeExists(recipe, directiveLine, reader.getFileName())) {
-            return recipe.hasFlag(FlagType.REMOVE);
+            return isRemove;
         }
 
         if (recipeName != null && !recipeName.isEmpty()) {
@@ -126,7 +126,6 @@ public class RMStonecuttingRecipeParser extends BaseRecipeParser {
 
         // add the recipe to the Recipes class and to the list for later adding to the server
         recipeRegistrator.queueRecipe(recipe, reader.getFileName());
-
 
         return true;
     }
