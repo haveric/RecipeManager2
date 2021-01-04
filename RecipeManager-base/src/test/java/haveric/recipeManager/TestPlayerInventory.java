@@ -123,6 +123,11 @@ public class TestPlayerInventory extends TestCraftInventory implements PlayerInv
     }
 
     @Override
+    public void setItem(EquipmentSlot slot, ItemStack item, boolean silent) {
+
+    }
+
+    @Override
     public ItemStack getItem(EquipmentSlot slot) {
         return null;
     }
@@ -143,7 +148,17 @@ public class TestPlayerInventory extends TestCraftInventory implements PlayerInv
     }
 
     @Override
+    public void setHelmet(ItemStack helmet, boolean silent) {
+
+    }
+
+    @Override
     public void setChestplate(ItemStack chestplate) {
+
+    }
+
+    @Override
+    public void setChestplate(ItemStack chestplate, boolean silent) {
 
     }
 
@@ -153,7 +168,17 @@ public class TestPlayerInventory extends TestCraftInventory implements PlayerInv
     }
 
     @Override
+    public void setLeggings(ItemStack leggings, boolean silent) {
+
+    }
+
+    @Override
     public void setBoots(ItemStack boots) {
+
+    }
+
+    @Override
+    public void setBoots(ItemStack boots, boolean silent) {
 
     }
 
@@ -168,12 +193,22 @@ public class TestPlayerInventory extends TestCraftInventory implements PlayerInv
     }
 
     @Override
+    public void setItemInMainHand(ItemStack item, boolean silent) {
+
+    }
+
+    @Override
     public ItemStack getItemInOffHand() {
         return null;
     }
 
     @Override
     public void setItemInOffHand(ItemStack item) {
+
+    }
+
+    @Override
+    public void setItemInOffHand(ItemStack item, boolean silent) {
 
     }
 
