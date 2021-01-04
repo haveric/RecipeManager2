@@ -7,7 +7,7 @@ import org.bukkit.inventory.*;
  *
  * Basically duplicates the "internal" matching code.
  **/
-public class ToolsRecipeV1_16_1 extends ToolsRecipeV1_13_2 {
+public class ToolsRecipeV1_16_1 extends ToolsRecipeV1_14_R1 {
 
     @Override
     public boolean matchesSmithing(Recipe bukkitRecipe, ItemStack baseIngredient, ItemStack addIngredient) {
