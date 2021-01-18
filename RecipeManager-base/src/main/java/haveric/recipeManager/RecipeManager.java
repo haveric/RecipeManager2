@@ -19,6 +19,8 @@ import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfires;
 import haveric.recipeManager.recipes.cooking.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.cooking.furnace.data.Furnaces;
+import haveric.recipeManager.settings.BaseSettings;
+import haveric.recipeManager.settings.SettingsYaml;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
@@ -43,7 +45,7 @@ import java.util.Random;
  * It has static methods for the API.
  */
 public class RecipeManager extends JavaPlugin {
-    private static Settings settings;
+    private static BaseSettings settings;
     private static RecipeManager plugin;
     private static Recipes recipes;
     private static RecipeBooks recipeBooks;
@@ -183,7 +185,7 @@ public class RecipeManager extends JavaPlugin {
         lastReload = LocalDateTime.now();
 
         if (settings == null) {
-            settings = new Settings(true);
+            settings = new SettingsYaml(true);
         } else {
             settings.clearInit();
         }
@@ -377,7 +379,7 @@ public class RecipeManager extends JavaPlugin {
         return recipeTypeLoader;
     }
 
-    public static Settings getSettings() {
+    public static BaseSettings getSettings() {
         return settings;
     }
 

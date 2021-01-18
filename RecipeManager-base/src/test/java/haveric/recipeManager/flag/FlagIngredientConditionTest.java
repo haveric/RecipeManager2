@@ -29,7 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-public class FlagIngredientConditionTest extends FlagBaseTest {
+public class FlagIngredientConditionTest extends FlagBaseYamlTest {
     private ItemStack hammerOfFoo;
     private ItemStack oneTwoThree;
     private ItemStack oneTwoThreeQuotes;

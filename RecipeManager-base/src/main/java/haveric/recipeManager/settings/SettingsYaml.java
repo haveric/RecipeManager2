@@ -1,5 +1,8 @@
-package haveric.recipeManager;
+package haveric.recipeManager.settings;
 
+import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
+import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.messages.MessageSender;
@@ -15,7 +18,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 import static org.bukkit.Tag.REGISTRY_ITEMS;
@@ -23,90 +27,17 @@ import static org.bukkit.Tag.REGISTRY_ITEMS;
 /**
  * RecipeManager's settings loaded from its config.yml, values are read-only.
  */
-public class Settings {
-    private boolean hasBeenInited = false;
-
-    private final boolean SPECIAL_RECIPE_DEFAULT = true;
-    private final boolean SPECIAL_REPAIR_METADATA_DEFAULT = false;
-    private final String SPECIAL_ANVIL_CUSTOM_DEFAULT = "false";
-    private final String SPECIAL_GRINDSTONE_CUSTOM_DEFAULT = "false";
-
-    private final boolean SOUNDS_REPAIR_DEFAULT = true;
-    private final boolean SOUNDS_FAILED_DEFAULT = true;
-    private final boolean SOUNDS_FAILED_CLICK_DEFAULT = true;
-
-    private final boolean FIX_MOD_RESULTS_DEFAULT = false;
-    private final boolean UPDATE_BOOKS_DEFAULT = true;
-    private final boolean COLOR_CONSOLE_DEFAULT = true;
-
-    private final String FURNACE_SHIFT_CLICK_DEFAULT = "f";
-
-    private final boolean MULTITHREADING_DEFAULT = true;
-
-    private final boolean CLEAR_RECIPES_DEFAULT = false;
-
-    private final boolean UPDATE_CHECK_ENABLED_DEFAULT = true;
-    private final int UPDATE_CHECK_FREQUENCY_DEFAULT = 6;
-    private final boolean UPDATE_CHECK_LOG_NEW_ONLY_DEFAULT = true;
-
-    private  Material MATERIAL_FAIL_DEFAULT;
-    private final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
-    private final Material MATERIAL_MULTIPLE_RESULTS_DEFAULT = Material.CHEST;
-
-    private final boolean DISABLE_OVERRIDE_WARNINGS_DEFAULT = false;
-
-    private List<String> RECIPE_COMMENT_CHARACTERS_DEFAULT;
-
+public class SettingsYaml extends BaseSettings {
     private FileConfiguration fileConfig;
-
-    private Map<Material, Short> itemDatas;
-
-    private Map<String, List<Material>> choicesAliases;
-    private Map<String, Material> materialNames;
-    private Map<Material, Map<String, Short>> materialDataNames;
-    private Map<String, Enchantment> enchantNames;
-
-    private Map<Material, String> materialPrint;
-    private Map<Material, Map<Short, String>> materialDataPrint;
-    private Map<Enchantment, String> enchantPrint;
-
-    private List<Material> anvilCombineItem = new ArrayList<>();
-    private List<Material> anvilMaterialEnchant = new ArrayList<>();
-    private List<Material> anvilRepairMaterial = new ArrayList<>();
-    private List<Material> anvilRenaming = new ArrayList<>();
-    private Map<Enchantment, List<Integer>> anvilEnchantments = new HashMap<>();
-
-    private List<Material> grindstoneCombineItem = new ArrayList<>();
-    private List<Material> grindstoneItemMaterials = new ArrayList<>();
-    private Map<Enchantment, List<Integer>> grindstoneBookEnchantments = new HashMap<>();
-    private Map<Enchantment, List<Integer>> grindstoneItemEnchantments = new HashMap<>();
-
     private File DEFAULT_DATA_FOLDER;
 
-    public Settings(boolean loadDefaultConfig) {
-        init(loadDefaultConfig);
+    public SettingsYaml(boolean loadDefaultConfig) {
+        super(loadDefaultConfig);
     }
 
-    public void clearInit() {
-        hasBeenInited = false;
-    }
-
-    private void init(boolean loadDefaultConfig) {
+    protected void init(boolean loadDefaultConfig) {
         if (!hasBeenInited) {
-            RECIPE_COMMENT_CHARACTERS_DEFAULT = new ArrayList<>();
-            RECIPE_COMMENT_CHARACTERS_DEFAULT.add("//");
-            RECIPE_COMMENT_CHARACTERS_DEFAULT.add("#");
-
-            MATERIAL_FAIL_DEFAULT = Material.BARRIER;
-
-            itemDatas = new EnumMap<>(Material.class);
-            choicesAliases = new HashMap<>();
-            materialNames = new HashMap<>();
-            materialDataNames = new EnumMap<>(Material.class);
-            enchantNames = new HashMap<>();
-            materialPrint = new EnumMap<>(Material.class);
-            materialDataPrint = new EnumMap<>(Material.class);
-            enchantPrint = new HashMap<>();
+            super.init(loadDefaultConfig);
 
             if (loadDefaultConfig) {
                 DEFAULT_DATA_FOLDER = RecipeManager.getPlugin().getDataFolder();
@@ -114,8 +45,6 @@ public class Settings {
                 // Load/reload/generate config.yml
                 loadFileConfig(DEFAULT_DATA_FOLDER, Files.FILE_CONFIG);
             }
-
-            hasBeenInited = true;
         }
     }
 
@@ -124,59 +53,13 @@ public class Settings {
     }
 
     public void reload(CommandSender sender) {
-        init(true);
-
-        MessageSender.init(getColorConsole());
-
         String lastChanged = fileConfig.getString("lastchanged");
 
         if (!Files.LASTCHANGED_CONFIG.equals(lastChanged)) {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CONFIG + "' file is outdated, please delete it to allow it to be generated again.");
         }
 
-        MessageSender.getInstance().log("config.yml settings:");
-        MessageSender.getInstance().log("    special-recipes.anvil.enchant.enabled: " + getSpecialAnvilEnchant());
-        MessageSender.getInstance().log("    special-recipes.anvil.combine-item.enabled: " + getSpecialAnvilCombineItem());
-        MessageSender.getInstance().log("    special-recipes.anvil.repair-material.enabled: " + getSpecialAnvilRepairMaterial());
-        MessageSender.getInstance().log("    special-recipes.anvil.renaming.enabled: " + getSpecialAnvilRenaming());
-        MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
-        MessageSender.getInstance().log("    special-recipes.banner-duplicate: " + getSpecialBannerDuplicate());
-        MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
-        MessageSender.getInstance().log("    special-recipes.cartography.clone: " + getSpecialCartographyClone());
-        MessageSender.getInstance().log("    special-recipes.cartography.extend: " + getSpecialCartographyExtend());
-        MessageSender.getInstance().log("    special-recipes.cartography.lock: " + getSpecialCartographyLock());
-        MessageSender.getInstance().log("    special-recipes.fireworks: " + getSpecialFireworks());
-        MessageSender.getInstance().log("    special-recipes.firework-star: " + getSpecialFireworkStar());
-        MessageSender.getInstance().log("    special-recipes.firework-star-fade: " + getSpecialFireworkStarFade());
-        MessageSender.getInstance().log("    special-recipes.grindstone.combine-item.enabled: " + getSpecialGrindstoneCombineItem());
-        MessageSender.getInstance().log("    special-recipes.grindstone.disenchant.book.enabled: " + getSpecialGrindstoneDisenchantBook());
-        MessageSender.getInstance().log("    special-recipes.grindstone.disenchant.item.enabled: " + getSpecialGrindstoneDisenchantItem());
-        MessageSender.getInstance().log("    special-recipes.leather-armor-dye: " + getSpecialLeatherDye());
-        MessageSender.getInstance().log("    special-recipes.map-cloning: " + getSpecialMapCloning());
-        MessageSender.getInstance().log("    special-recipes.map-extending: " + getSpecialMapExtending());
-        MessageSender.getInstance().log("    special-recipes.repair: " + getSpecialRepair());
-        MessageSender.getInstance().log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
-        MessageSender.getInstance().log("    special-recipes.shield-banner: " + getSpecialShieldBanner());
-        MessageSender.getInstance().log("    special-recipes.shulker-dye: " + getSpecialShulkerDye());
-        MessageSender.getInstance().log("    special-recipes.suspicious-stew: " + getSpecialSuspiciousStew());
-        MessageSender.getInstance().log("    special-recipes.tipped-arrows: " + getSpecialTippedArrows());
-        MessageSender.getInstance().log("    sounds.failed: " + getSoundsFailed());
-        MessageSender.getInstance().log("    sounds.failed_click: " + getSoundsFailedClick());
-        MessageSender.getInstance().log("    sounds.repair: " + getSoundsRepair());
-        MessageSender.getInstance().log("    update-books: " + getUpdateBooks());
-        MessageSender.getInstance().log("    color-console: " + getColorConsole());
-        MessageSender.getInstance().log("    furnace-shift-click: " + getFurnaceShiftClick());
-        MessageSender.getInstance().log("    multithreading: " + getMultithreading());
-        MessageSender.getInstance().log("    fix-mod-results: " + getFixModResults());
-        MessageSender.getInstance().log("    clear-recipes: " + getClearRecipes());
-        MessageSender.getInstance().log("    update-check.enabled: " + getUpdateCheckEnabled());
-        MessageSender.getInstance().log("    update-check.frequency: " + getUpdateCheckFrequency());
-        MessageSender.getInstance().log("    update-check.log-new-only: " + getUpdateCheckLogNewOnly());
-        MessageSender.getInstance().log("    material.fail: " + getFailMaterial());
-        MessageSender.getInstance().log("    material.secret: " + getSecretMaterial());
-        MessageSender.getInstance().log("    material.multiple-results: " + getMultipleResultsMaterial());
-        MessageSender.getInstance().log("    disable-override-warnings: " + getDisableOverrideWarnings());
-        MessageSender.getInstance().log("    recipe-comment-characters: " + getRecipeCommentCharacters());
+        super.reload(sender);
 
         loadItemAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_ITEM_ALIASES);
         loadChoiceAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_CHOICE_ALIASES);
@@ -587,62 +470,6 @@ public class Settings {
         }
     }
 
-    public void addEnchantName(String name, Enchantment enchantment) {
-        enchantNames.put(name, enchantment);
-    }
-
-    private void parseMaterialNames(CommandSender sender, String names, Material material) {
-        if (names == null) {
-            return;
-        }
-
-        String[] split = names.split(",");
-
-        for (String str : split) {
-            str = str.trim();
-            String parsed = RMCUtil.parseAliasName(str);
-
-            if (materialNames.containsKey(parsed)) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate material alias '" + str + "' for material " + material);
-                continue;
-            }
-
-            materialNames.put(parsed, material);
-
-            if (!materialPrint.containsKey(material)) {
-                materialPrint.put(material, Tools.parseAliasPrint(str));
-            }
-        }
-    }
-
-    private void parseMaterialDataNames(CommandSender sender, String names, short data, Material material) {
-        if (names == null) {
-            return;
-        }
-
-        String[] split = names.split(",");
-
-        for (String str : split) {
-            str = str.trim();
-            Map<String, Short> dataMap = materialDataNames.computeIfAbsent(material, k -> new HashMap<>());
-
-            String parsed = RMCUtil.parseAliasName(str);
-
-            if (dataMap.containsKey(parsed)) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + Files.FILE_ITEM_ALIASES + "' has duplicate data alias '" + str + "' for material " + material + " and data value " + data);
-                continue;
-            }
-
-            dataMap.put(parsed, data);
-
-            Map<Short, String> printMap = materialDataPrint.computeIfAbsent(material, k -> new HashMap<>());
-
-            if (!printMap.containsKey(data)) {
-                printMap.put(data, Tools.parseAliasPrint(str));
-            }
-        }
-    }
-
     private static FileConfiguration loadYML(File dataFolder, String fileName) {
         File file = new File(dataFolder + File.separator + fileName);
 
@@ -844,102 +671,8 @@ public class Settings {
         return fileConfig.getBoolean("disable-override-warnings", DISABLE_OVERRIDE_WARNINGS_DEFAULT);
     }
 
-    public String getRecipeCommentCharacters() {
-        String allComments = "";
-        List<String> comments = getRecipeCommentCharactersAsList();
-
-        for (int i = 0; i < comments.size(); i++) {
-            if (i > 0) {
-                allComments += ",";
-            }
-
-            allComments += comments.get(i);
-        }
-
-        return allComments;
-    }
-
     @SuppressWarnings("unchecked")
     public List<String> getRecipeCommentCharactersAsList() {
         return (List<String>) fileConfig.getList("recipe-comment-characters", RECIPE_COMMENT_CHARACTERS_DEFAULT);
-    }
-
-
-    public Enchantment getEnchantment(String name) {
-        return enchantNames.get(name);
-    }
-
-    public Short getCustomData(Material material) {
-        Short data = null;
-
-        if (itemDatas.containsKey(material)) {
-            data = itemDatas.get(material);
-        }
-
-        if (data == null) {
-            data = material.getMaxDurability();
-        }
-
-        return data;
-    }
-
-    public List<Material> getChoicesAlias(String alias) {
-        return choicesAliases.get(alias.trim().toLowerCase());
-    }
-
-    public Material getMaterial(String name) {
-        return materialNames.get(RMCUtil.parseAliasName(name));
-    }
-
-    public Map<String, Short> getMaterialDataNames(Material material) {
-        return materialDataNames.get(material);
-    }
-
-    public String getMaterialPrint(Material material) {
-        return materialPrint.get(material);
-    }
-
-    public Map<Short, String> getMaterialDataPrint(Material material) {
-        return materialDataPrint.get(material);
-    }
-
-    public String getEnchantPrint(Enchantment enchant) {
-        return enchantPrint.get(enchant);
-    }
-
-    public List<Material> getAnvilCombineItem() {
-        return anvilCombineItem;
-    }
-
-    public List<Material> getAnvilMaterialEnchant() {
-        return anvilMaterialEnchant;
-    }
-
-    public List<Material> getAnvilRepairMaterial() {
-        return anvilRepairMaterial;
-    }
-
-    public List<Material> getAnvilRenaming() {
-        return anvilRenaming;
-    }
-
-    public Map<Enchantment, List<Integer>> getAnvilEnchantments() {
-        return anvilEnchantments;
-    }
-
-    public List<Material> getGrindstoneCombineItem() {
-        return grindstoneCombineItem;
-    }
-
-    public Map<Enchantment, List<Integer>> getGrindstoneBookEnchantments() {
-        return grindstoneBookEnchantments;
-    }
-
-    public List<Material> getGrindstoneItemMaterials() {
-        return grindstoneItemMaterials;
-    }
-
-    public Map<Enchantment, List<Integer>> getGrindstoneItemEnchantments() {
-        return grindstoneItemEnchantments;
     }
 }

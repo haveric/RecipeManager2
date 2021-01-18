@@ -1,15 +1,15 @@
 package haveric.recipeManager;
 
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
-import haveric.recipeManager.flag.FlagBaseTest;
+import haveric.recipeManager.flag.FlagBaseYamlTest;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.BrewRecipe1_13;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
-import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.RecipeChoice;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class TestHelpRecipes extends FlagBaseTest {
+public class TestHelpRecipes extends FlagBaseYamlTest {
     @Before
     public void before() {
         settings.loadItemAliases(null, new File(originalResourcesPath), "item aliases.yml");

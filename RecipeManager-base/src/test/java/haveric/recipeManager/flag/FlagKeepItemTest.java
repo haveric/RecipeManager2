@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-public class FlagKeepItemTest extends FlagBaseTest {
+public class FlagKeepItemTest extends FlagBaseYamlTest {
     private TestCraftingInventory inventory;
     private CraftItemEvent craftEvent;
     private static WorkbenchEvents workbenchEvents;

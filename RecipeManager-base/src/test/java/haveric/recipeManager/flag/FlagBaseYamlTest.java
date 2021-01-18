@@ -6,7 +6,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.RecipeTypeFactory;
 import haveric.recipeManager.recipes.RecipeTypeLoader;
-import haveric.recipeManager.settings.BaseSettings;
+import haveric.recipeManager.settings.SettingsYaml;
 import org.bukkit.Bukkit;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -24,8 +24,8 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @Ignore
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({MessageSender.class, Bukkit.class, RecipeManager.class})
-public class FlagBaseTest {
-    protected BaseSettings settings;
+public class FlagBaseYamlTest {
+    protected SettingsYaml settings;
     protected TestUnsafeValues unsafeValues;
     protected File workDir;
     protected String originalResourcesPath;
@@ -41,7 +41,7 @@ public class FlagBaseTest {
         when(Bukkit.getUnsafe()).thenReturn(unsafeValues);
 
         mockStatic(RecipeManager.class);
-        settings = new TestSettings(false);
+        settings = new SettingsYaml(false);
         when(RecipeManager.getSettings()).thenReturn(settings);
 
         mockStatic(MessageSender.class);
@@ -70,6 +70,7 @@ public class FlagBaseTest {
         originalResourcesPath = baseSrcPath + "main/resources/";
         baseResourcesPath = baseTestPath + "resources/";
         baseDataPath = baseResourcesPath + "data/";
+        settings.loadFileConfig(new File(baseDataPath), "config-no-multithreading.yml");
 
         baseRecipePath = baseResourcesPath + "recipes/";
 
