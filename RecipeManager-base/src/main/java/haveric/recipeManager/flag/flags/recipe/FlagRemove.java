@@ -45,6 +45,7 @@ public class FlagRemove extends Flag {
     }
 
     public FlagRemove(FlagRemove flag) {
+        super(flag);
     }
 
     @Override

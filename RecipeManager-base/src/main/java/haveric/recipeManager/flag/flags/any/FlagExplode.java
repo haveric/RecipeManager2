@@ -68,6 +68,7 @@ public class FlagExplode extends Flag {
     }
 
     public FlagExplode(FlagExplode flag) {
+        super(flag);
         power = flag.power;
         fire = flag.fire;
         noBreak = flag.noBreak;

@@ -60,6 +60,7 @@ public class FlagModLevel extends Flag {
     }
 
     public FlagModLevel(FlagModLevel flag) {
+        super(flag);
         mod = flag.mod;
         amount = flag.amount;
         failMessage = flag.failMessage;

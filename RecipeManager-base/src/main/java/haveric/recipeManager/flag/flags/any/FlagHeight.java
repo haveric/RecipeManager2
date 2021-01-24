@@ -46,6 +46,7 @@ public class FlagHeight extends Flag {
     }
 
     public FlagHeight(FlagHeight flag) {
+        super(flag);
         minHeight = flag.minHeight;
         maxHeight = flag.maxHeight;
         failMessage = flag.failMessage;

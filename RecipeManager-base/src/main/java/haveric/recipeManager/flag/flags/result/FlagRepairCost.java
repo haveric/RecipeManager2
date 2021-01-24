@@ -43,6 +43,7 @@ public class FlagRepairCost extends Flag {
     }
 
     public FlagRepairCost(FlagRepairCost flag) {
+        super(flag);
         cost = flag.cost;
     }
 

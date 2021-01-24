@@ -240,25 +240,29 @@ public class ErrorReporter {
     }
 
     public void flagWarning(Flag flag, String warning) {
-        flagWarning(flag, warning, null);
+        flagWarning(flag, warning, null, -1);
     }
 
-    public void flagWarning(Flag flag, String warning, String tip) {
-        flagEntry(flag, RMCChatColor.YELLOW.toString() + RMCChatColor.UNDERLINE + "Warning", warning, tip);
+    public void flagWarning(Flag flag, String warning, String tip, int line) {
+        flagEntry(flag, RMCChatColor.YELLOW.toString() + RMCChatColor.UNDERLINE + "Warning", warning, tip, line);
     }
 
-    public boolean flagError(Flag flag, String error) {
-        return flagError(flag, error, null);
+    public boolean flagError(Flag flag, String error, int line) {
+        return flagError(flag, error, null, line);
     }
 
-    public boolean flagError(Flag flag, String error, String tip) {
-        flagEntry(flag, RMCChatColor.RED.toString() + RMCChatColor.UNDERLINE + "Fatal", error, tip);
+    public boolean flagError(Flag flag, String error, String tip, int line) {
+        flagEntry(flag, RMCChatColor.RED.toString() + RMCChatColor.UNDERLINE + "Fatal", error, tip, line);
         return false;
     }
 
-    private void flagEntry(Flag flag, String type, String message, String tip) {
+    private void flagEntry(Flag flag, String type, String message, String tip, int line) {
         String sourceFile = flag.getSourceFileName();
-        int lineNum = flag.getSourceLineNum();
+
+        int lineNum = line;
+        if (lineNum == -1) {
+            lineNum = flag.getSourceLineNum();
+        }
         String errorMessage = RMCChatColor.AQUA + "File: " + sourceFile + Files.NL;
         errorMessage += RMCChatColor.WHITE + "line " + String.format("%-5d", lineNum) + type + ": " + RMCChatColor.RESET + message;
 

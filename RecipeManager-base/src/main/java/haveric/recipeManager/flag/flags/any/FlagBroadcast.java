@@ -63,6 +63,7 @@ public class FlagBroadcast extends Flag {
     }
 
     public FlagBroadcast(FlagBroadcast flag) {
+        super(flag);
         message = flag.message;
         permission = flag.permission;
     }

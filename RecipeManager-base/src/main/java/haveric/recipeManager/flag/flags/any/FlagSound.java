@@ -56,6 +56,7 @@ public class FlagSound extends Flag {
     }
 
     public FlagSound(FlagSound flag) {
+        super(flag);
         sound = flag.sound;
         volume = flag.volume;
         pitch = flag.pitch;

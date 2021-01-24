@@ -68,6 +68,7 @@ public class FlagCompassItem extends Flag {
     }
 
     public FlagCompassItem(FlagCompassItem flag) {
+        super(flag);
         isLodestoneTracked = flag.isLodestoneTracked;
         world = flag.world;
         x = flag.x;

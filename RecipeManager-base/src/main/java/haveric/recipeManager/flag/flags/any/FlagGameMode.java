@@ -56,6 +56,7 @@ public class FlagGameMode extends Flag {
     }
 
     public FlagGameMode(FlagGameMode flag) {
+        super(flag);
         gameModes.addAll(flag.gameModes);
         failMessage = flag.failMessage;
     }

@@ -60,6 +60,7 @@ public class FlagBannerItem extends Flag {
     public FlagBannerItem() { }
 
     public FlagBannerItem(FlagBannerItem flag) {
+        super(flag);
         baseColor = flag.baseColor;
         patterns.addAll(flag.patterns);
     }

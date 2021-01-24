@@ -97,6 +97,7 @@ public class FlagForRepeat extends Flag {
     }
 
     public FlagForRepeat(FlagForRepeat flag) {
+        super(flag);
         for (RepeatFlag repeatFlag : flag.repeatFlags) {
             List<Flag> flags = new ArrayList<>();
             for (Flag f : repeatFlag.flags) {

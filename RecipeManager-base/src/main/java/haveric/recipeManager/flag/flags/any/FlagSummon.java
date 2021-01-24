@@ -1289,6 +1289,7 @@ public class FlagSummon extends Flag {
     public FlagSummon() { }
 
     public FlagSummon(FlagSummon flag) {
+        super(flag);
         for (Customization c : flag.spawn) {
             spawn.add(c.clone());
         }

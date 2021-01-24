@@ -60,6 +60,7 @@ public class FlagSkullOwner extends Flag {
     }
 
     public FlagSkullOwner(FlagSkullOwner flag) {
+        super(flag);
         owner = flag.owner;
         ownerUUID = flag.ownerUUID;
         textureBase64 = flag.textureBase64;

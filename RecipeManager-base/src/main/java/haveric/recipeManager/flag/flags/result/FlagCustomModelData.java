@@ -40,6 +40,7 @@ public class FlagCustomModelData extends Flag {
     }
 
     public FlagCustomModelData(FlagCustomModelData flag) {
+        super(flag);
         customModelData = flag.customModelData;
     }
 

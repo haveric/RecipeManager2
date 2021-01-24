@@ -70,6 +70,7 @@ public class FlagApplyEnchantment extends Flag {
     public FlagApplyEnchantment() { }
 
     public FlagApplyEnchantment(FlagApplyEnchantment flag) {
+        super(flag);
         ingredientAction = flag.ingredientAction;
         resultAction = flag.resultAction;
         ignoreLevelRestriction = flag.ignoreLevelRestriction;

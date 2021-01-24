@@ -63,6 +63,7 @@ public class FlagGroup extends Flag {
     }
 
     public FlagGroup(FlagGroup flag) {
+        super(flag);
         groups.putAll(flag.groups);
         messages.putAll(flag.messages);
     }

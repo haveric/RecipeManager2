@@ -49,6 +49,7 @@ public class FlagItemNBT extends Flag {
     }
 
     public FlagItemNBT(FlagItemNBT flag) {
+        super(flag);
         displayNBT = flag.displayNBT;
         resultNBT = flag.resultNBT;
     }

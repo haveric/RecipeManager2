@@ -216,6 +216,7 @@ public class FlagIngredientCondition extends Flag {
     }
 
     public FlagIngredientCondition(FlagIngredientCondition flag) {
+        super(flag);
         for (ConditionsIngredient condition : flag.conditions) {
             conditions.add(condition.clone());
         }
@@ -245,6 +246,7 @@ public class FlagIngredientCondition extends Flag {
         }
 
         ConditionsIngredient cond = new ConditionsIngredient();
+        cond.setSourceLineNum(lineNum);
         cond.setFlagType(getFlagType());
         setIngredientConditions(item, cond);
 
@@ -262,7 +264,7 @@ public class FlagIngredientCondition extends Flag {
         List<ConditionsIngredient> newConditions = new ArrayList<>();
         for (ConditionsIngredient condition : conditions) {
             if (condition.getIngredient() != null && recipe.findItemInIngredients(condition.getIngredient().getType(), condition.getIngredient().getDurability()) == 0) {
-                ErrorReporter.getInstance().flagError(this, "Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(condition.getIngredient()));
+                ErrorReporter.getInstance().flagError(this, "Flag " + getFlagType() + " couldn't find ingredient: " + ToolsItem.print(condition.getIngredient()), condition.getSourceLineNum());
             } else {
                 newConditions.add(condition);
             }

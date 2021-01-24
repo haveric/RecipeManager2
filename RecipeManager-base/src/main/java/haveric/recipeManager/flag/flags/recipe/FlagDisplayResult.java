@@ -53,6 +53,7 @@ public class FlagDisplayResult extends Flag {
     }
 
     public FlagDisplayResult(FlagDisplayResult flag) {
+        super(flag);
         displayItem = flag.displayItem;
         silentFail = flag.silentFail;
     }

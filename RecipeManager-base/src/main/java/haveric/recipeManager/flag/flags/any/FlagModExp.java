@@ -60,6 +60,7 @@ public class FlagModExp extends Flag {
     }
 
     public FlagModExp(FlagModExp flag) {
+        super(flag);
         mod = flag.mod;
         amount = flag.amount;
         failMessage = flag.failMessage;

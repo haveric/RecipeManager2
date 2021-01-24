@@ -23,6 +23,12 @@ public class Flag implements Cloneable {
 
     protected Flag() { }
 
+    protected Flag(Flag flag) {
+        this.flagsContainer = flag.flagsContainer;
+        this.sourceFileName = flag.sourceFileName;
+        this.sourceLineNum = flag.sourceLineNum;
+    }
+
     /*
      * Public tools/final methods
      */

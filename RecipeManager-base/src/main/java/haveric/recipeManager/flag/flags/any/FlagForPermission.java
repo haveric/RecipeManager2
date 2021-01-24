@@ -54,6 +54,7 @@ public class FlagForPermission extends Flag {
     }
 
     public FlagForPermission(FlagForPermission flag) {
+        super(flag);
         for (Entry<String, Map<String, Flag>> e : flag.flagMap.entrySet()) {
             Map<String, Flag> flags = new LinkedHashMap<>();
 

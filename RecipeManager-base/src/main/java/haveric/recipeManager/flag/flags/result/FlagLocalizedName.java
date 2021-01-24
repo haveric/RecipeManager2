@@ -59,6 +59,7 @@ public class FlagLocalizedName extends Flag {
     }
 
     public FlagLocalizedName(FlagLocalizedName flag) {
+        super(flag);
         name = flag.name;
     }
 

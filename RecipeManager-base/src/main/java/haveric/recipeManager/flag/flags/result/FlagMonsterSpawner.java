@@ -78,6 +78,7 @@ public class FlagMonsterSpawner extends Flag {
     }
 
     public FlagMonsterSpawner(FlagMonsterSpawner flag) {
+        super(flag);
         entityType = flag.entityType;
         delay = flag.delay;
         minDelay = flag.minDelay;

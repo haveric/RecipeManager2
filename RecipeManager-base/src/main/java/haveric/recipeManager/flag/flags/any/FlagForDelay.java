@@ -89,6 +89,7 @@ public class FlagForDelay extends Flag {
     }
 
     public FlagForDelay(FlagForDelay flag) {
+        super(flag);
         for (DelayFlag delayFlag : flag.delayFlags) {
             List<Flag> flags = new ArrayList<>();
             for (Flag f : delayFlag.flags) {

@@ -51,6 +51,7 @@ public class FlagNeedLevel extends Flag {
     }
 
     public FlagNeedLevel(FlagNeedLevel flag) {
+        super(flag);
         minLevel = flag.minLevel;
         maxLevel = flag.maxLevel;
         failMessage = flag.failMessage;

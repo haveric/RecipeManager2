@@ -64,6 +64,7 @@ public class FlagSuspiciousStewItem extends Flag {
     }
 
     public FlagSuspiciousStewItem(FlagSuspiciousStewItem flag) {
+        super(flag);
         effects.addAll(flag.effects);
     }
 

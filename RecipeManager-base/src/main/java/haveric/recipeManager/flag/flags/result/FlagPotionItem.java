@@ -111,6 +111,7 @@ public class FlagPotionItem extends Flag {
     }
 
     public FlagPotionItem(FlagPotionItem flag) {
+        super(flag);
         data = flag.data;
         effects.addAll(flag.effects);
 

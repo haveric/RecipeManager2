@@ -60,6 +60,7 @@ public class FlagSetBlock extends Flag {
     }
 
     public FlagSetBlock(FlagSetBlock flag) {
+        super(flag);
         type = flag.type;
         data = flag.data;
         drop = flag.drop;

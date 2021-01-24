@@ -47,6 +47,7 @@ public class FlagLeatherColor extends Flag {
     }
 
     public FlagLeatherColor(FlagLeatherColor flag) {
+        super(flag);
         color = flag.color;
     }
 

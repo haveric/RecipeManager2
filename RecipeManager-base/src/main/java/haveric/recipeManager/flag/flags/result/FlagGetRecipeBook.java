@@ -50,6 +50,7 @@ public class FlagGetRecipeBook extends Flag {
     }
 
     public FlagGetRecipeBook(FlagGetRecipeBook flag) {
+        super(flag);
         bookID = flag.bookID;
         volume = flag.volume;
     }

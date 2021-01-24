@@ -67,6 +67,7 @@ public class FlagInventory extends Flag {
     }
 
     public FlagInventory(FlagInventory flag) {
+        super(flag);
         inventories = flag.inventories;
         allowedTitles.addAll(flag.allowedTitles);
         unallowedTitles.addAll(flag.unallowedTitles);

@@ -69,6 +69,7 @@ public class FlagItemName extends Flag {
     }
 
     public FlagItemName(FlagItemName flag) {
+        super(flag);
         displayName = flag.displayName;
         resultName = flag.resultName;
     }

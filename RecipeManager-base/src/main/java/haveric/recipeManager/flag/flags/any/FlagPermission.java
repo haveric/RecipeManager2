@@ -59,6 +59,7 @@ public class FlagPermission extends Flag {
     }
 
     public FlagPermission(FlagPermission flag) {
+        super(flag);
         permissions.putAll(flag.permissions);
         messages.putAll(flag.messages);
     }

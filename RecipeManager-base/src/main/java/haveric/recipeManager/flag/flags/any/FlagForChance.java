@@ -118,6 +118,7 @@ public class FlagForChance extends Flag {
     }
 
     public FlagForChance(FlagForChance flag) {
+        super(flag);
         for (Entry<String, List<ChanceFlag>> e : flag.flagMap.entrySet()) {
             List<ChanceFlag> flags = new ArrayList<>();
 

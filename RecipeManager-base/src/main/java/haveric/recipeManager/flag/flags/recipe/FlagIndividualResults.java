@@ -41,6 +41,7 @@ public class FlagIndividualResults extends Flag {
     }
 
     public FlagIndividualResults(FlagIndividualResults flag) {
+        super(flag);
     }
 
     @Override

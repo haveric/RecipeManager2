@@ -60,6 +60,7 @@ public class FlagFireworkStarItem extends Flag {
     }
 
     public FlagFireworkStarItem(FlagFireworkStarItem flag) {
+        super(flag);
         effect = flag.effect;
     }
 

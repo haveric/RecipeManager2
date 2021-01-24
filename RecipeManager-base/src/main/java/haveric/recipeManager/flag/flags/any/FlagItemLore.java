@@ -73,6 +73,7 @@ public class FlagItemLore extends Flag {
     }
 
     public FlagItemLore(FlagItemLore flag) {
+        super(flag);
         displayLores.addAll(flag.displayLores);
         resultLores.addAll(flag.resultLores);
     }

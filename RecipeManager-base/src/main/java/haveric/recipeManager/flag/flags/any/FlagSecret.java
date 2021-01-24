@@ -36,6 +36,7 @@ public class FlagSecret extends Flag {
     }
 
     public FlagSecret(FlagSecret flag) {
+        super(flag);
     }
 
     @Override

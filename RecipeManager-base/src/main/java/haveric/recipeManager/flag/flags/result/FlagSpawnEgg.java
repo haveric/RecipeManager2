@@ -49,6 +49,7 @@ public class FlagSpawnEgg extends Flag {
     }
 
     public FlagSpawnEgg(FlagSpawnEgg flag) {
+        super(flag);
         entityType = flag.entityType;
     }
 

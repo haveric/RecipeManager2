@@ -75,6 +75,7 @@ public class FlagBookItem extends Flag {
     }
 
     public FlagBookItem(FlagBookItem flag) {
+        super(flag);
         title = flag.title;
         author = flag.author;
         pages.addAll(flag.pages);

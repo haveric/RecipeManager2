@@ -55,6 +55,7 @@ public class FlagLightLevel extends Flag {
     }
 
     public FlagLightLevel(FlagLightLevel flag) {
+        super(flag);
         minLight = flag.minLight;
         maxLight = flag.maxLight;
         lightType = flag.lightType;

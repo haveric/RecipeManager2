@@ -66,6 +66,7 @@ public class FlagEnchantedBook extends Flag {
     }
 
     public FlagEnchantedBook(FlagEnchantedBook flag) {
+        super(flag);
         enchants.putAll(flag.enchants);
         enchantsToRemove.addAll(flag.enchantsToRemove);
     }

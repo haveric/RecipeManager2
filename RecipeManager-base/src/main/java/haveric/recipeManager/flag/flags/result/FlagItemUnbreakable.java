@@ -39,6 +39,7 @@ public class FlagItemUnbreakable extends Flag {
     }
 
     public FlagItemUnbreakable(FlagItemUnbreakable flag) {
+        super(flag);
         unbreakable = flag.unbreakable;
     }
 

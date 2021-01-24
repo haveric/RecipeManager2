@@ -43,6 +43,7 @@ public class FlagOverride extends Flag {
     }
 
     public FlagOverride(FlagOverride flag) {
+        super(flag);
     }
 
     @Override

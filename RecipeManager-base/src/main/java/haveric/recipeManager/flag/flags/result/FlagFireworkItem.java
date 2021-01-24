@@ -70,6 +70,7 @@ public class FlagFireworkItem extends Flag {
     }
 
     public FlagFireworkItem(FlagFireworkItem flag) {
+        super(flag);
         effects.addAll(flag.effects);
 
         power = flag.power;

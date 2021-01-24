@@ -46,6 +46,7 @@ public class FlagAddToBook extends Flag {
     }
 
     public FlagAddToBook(FlagAddToBook flag) {
+        super(flag);
         bookName = flag.bookName;
         volume = flag.volume;
     }

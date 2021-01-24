@@ -209,6 +209,7 @@ public class FlagHoldItem extends Flag {
     }
 
     public FlagHoldItem(FlagHoldItem flag) {
+        super(flag);
         for (Entry<String, ConditionsHold> e : flag.conditions.entrySet()) {
             conditions.put(e.getKey(), e.getValue().clone());
         }

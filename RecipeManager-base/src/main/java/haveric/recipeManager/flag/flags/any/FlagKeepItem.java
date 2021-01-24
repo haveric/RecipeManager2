@@ -71,6 +71,7 @@ public class FlagKeepItem extends Flag {
     }
 
     public FlagKeepItem(FlagKeepItem flag) {
+        super(flag);
         for (Entry<String, Object> e : flag.keepItems.entrySet()) {
             Object obj = e.getValue();
 

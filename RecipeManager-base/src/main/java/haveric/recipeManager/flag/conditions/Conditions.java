@@ -32,6 +32,8 @@ import java.util.regex.PatternSyntaxException;
 //TODO written book title, author, page num, chars per page, etc
 
 public class Conditions implements Cloneable {
+    private int sourceLineNum = -1;
+
     private String flagType;
     private ItemStack ingredient;
     private String failMessage;
@@ -74,6 +76,8 @@ public class Conditions implements Cloneable {
     }
 
     public Conditions(Conditions original) {
+        sourceLineNum = original.sourceLineNum;
+
         flagType = original.flagType;
         ingredient = original.ingredient.clone();
 
@@ -1582,6 +1586,14 @@ public class Conditions implements Cloneable {
 
     public ItemStack getIngredient() {
         return ingredient;
+    }
+
+    public int getSourceLineNum() {
+        return sourceLineNum;
+    }
+
+    public void setSourceLineNum(int newSourceLineNum) {
+        sourceLineNum = newSourceLineNum;
     }
 
     public String getFlagType() {

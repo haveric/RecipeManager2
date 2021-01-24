@@ -41,6 +41,7 @@ public class FlagRestrict extends Flag {
     }
 
     public FlagRestrict(FlagRestrict flag) {
+        super(flag);
         message = flag.message;
     }
 

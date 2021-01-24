@@ -55,6 +55,7 @@ public class FlagTemperature extends Flag {
     public FlagTemperature() { }
 
     public FlagTemperature(FlagTemperature flag) {
+        super(flag);
         lteTemp = flag.lteTemp;
         gteTemp = flag.gteTemp;
         ltTemp = flag.ltTemp;

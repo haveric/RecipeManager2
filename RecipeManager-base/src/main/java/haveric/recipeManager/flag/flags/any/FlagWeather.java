@@ -64,6 +64,7 @@ public class FlagWeather extends Flag {
     }
 
     public FlagWeather(FlagWeather flag) {
+        super(flag);
         weather = flag.weather;
         failMessage = flag.failMessage;
     }

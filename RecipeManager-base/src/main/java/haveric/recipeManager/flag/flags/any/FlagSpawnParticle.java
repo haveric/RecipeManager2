@@ -56,6 +56,7 @@ public class FlagSpawnParticle extends Flag {
     public FlagSpawnParticle() {}
 
     public FlagSpawnParticle(FlagSpawnParticle flag) {
+        super(flag);
         particles.addAll(flag.particles);
     }
 

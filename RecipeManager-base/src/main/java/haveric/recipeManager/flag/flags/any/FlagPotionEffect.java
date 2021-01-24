@@ -71,6 +71,7 @@ public class FlagPotionEffect extends Flag {
     }
 
     public FlagPotionEffect(FlagPotionEffect flag) {
+        super(flag);
         effects.addAll(flag.effects);
         clear = flag.clear;
     }

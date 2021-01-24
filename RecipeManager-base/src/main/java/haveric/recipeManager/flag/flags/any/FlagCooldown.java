@@ -69,6 +69,7 @@ public class FlagCooldown extends Flag {
     }
 
     public FlagCooldown(FlagCooldown flag) {
+        super(flag);
         cooldown = flag.cooldown;
         global = flag.global;
         failMessage = flag.failMessage;

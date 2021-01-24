@@ -46,6 +46,7 @@ public class FlagBlockPowered extends Flag {
     }
 
     public FlagBlockPowered(FlagBlockPowered flag) {
+        super(flag);
         failMessage = flag.failMessage;
         indirect = flag.indirect;
     }

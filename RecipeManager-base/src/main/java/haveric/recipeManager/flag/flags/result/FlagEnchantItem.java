@@ -58,6 +58,7 @@ public class FlagEnchantItem extends Flag {
     }
 
     public FlagEnchantItem(FlagEnchantItem flag) {
+        super(flag);
         enchants.putAll(flag.enchants);
         enchantsToRemove.addAll(flag.enchantsToRemove);
     }

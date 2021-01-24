@@ -67,6 +67,7 @@ public class FlagBiome extends Flag {
     }
 
     public FlagBiome(FlagBiome flag) {
+        super(flag);
         biomes.putAll(flag.biomes);
         failMessage = flag.failMessage;
     }

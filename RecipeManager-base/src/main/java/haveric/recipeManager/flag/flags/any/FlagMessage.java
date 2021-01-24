@@ -63,6 +63,7 @@ public class FlagMessage extends Flag {
     }
 
     public FlagMessage(FlagMessage flag) {
+        super(flag);
         messages.addAll(flag.messages);
     }
 

@@ -55,6 +55,7 @@ public class FlagNeedExp extends Flag {
     }
 
     public FlagNeedExp(FlagNeedExp flag) {
+        super(flag);
         minExp = flag.minExp;
         maxExp = flag.maxExp;
         failMessage = flag.failMessage;

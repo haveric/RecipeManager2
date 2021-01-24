@@ -68,6 +68,7 @@ public class FlagLaunchFirework extends Flag {
     }
 
     public FlagLaunchFirework(FlagLaunchFirework flag) {
+        super(flag);
         firework = flag.firework.clone();
         chance = flag.chance;
     }

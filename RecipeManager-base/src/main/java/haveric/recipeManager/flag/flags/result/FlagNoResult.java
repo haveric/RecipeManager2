@@ -34,6 +34,7 @@ public class FlagNoResult extends Flag {
     }
 
     public FlagNoResult(FlagNoResult flag) {
+        super(flag);
     }
 
     @Override

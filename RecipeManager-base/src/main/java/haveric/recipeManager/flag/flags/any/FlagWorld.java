@@ -53,6 +53,7 @@ public class FlagWorld extends Flag {
     }
 
     public FlagWorld(FlagWorld flag) {
+        super(flag);
         worlds.putAll(flag.worlds);
         messages.putAll(flag.messages);
     }

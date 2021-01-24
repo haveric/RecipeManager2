@@ -60,6 +60,7 @@ public class FlagCommand extends Flag {
     }
 
     public FlagCommand(FlagCommand flag) {
+        super(flag);
         commands.addAll(flag.commands);
     }
 

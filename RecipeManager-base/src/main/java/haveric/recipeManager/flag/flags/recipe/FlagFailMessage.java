@@ -55,6 +55,7 @@ public class FlagFailMessage extends Flag {
     }
 
     public FlagFailMessage(FlagFailMessage flag) {
+        super(flag);
         message = flag.message;
     }
 

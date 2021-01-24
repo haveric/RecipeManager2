@@ -51,6 +51,7 @@ public class FlagNeedMoney extends Flag {
     }
 
     public FlagNeedMoney(FlagNeedMoney flag) {
+        super(flag);
         minMoney = flag.minMoney;
         maxMoney = flag.maxMoney;
         failMessage = flag.failMessage;

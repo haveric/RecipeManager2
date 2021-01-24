@@ -98,6 +98,7 @@ public class FlagCloneIngredient extends Flag {
     }
 
     public FlagCloneIngredient(FlagCloneIngredient flag) {
+        super(flag);
         copyBitsum = flag.copyBitsum;
         System.arraycopy(flag.dataModifier, 0, dataModifier, 0, dataModifier.length);
         System.arraycopy(flag.amountModifier, 0, amountModifier, 0, amountModifier.length);

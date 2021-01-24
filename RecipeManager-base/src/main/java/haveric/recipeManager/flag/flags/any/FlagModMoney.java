@@ -58,6 +58,7 @@ public class FlagModMoney extends Flag {
     }
 
     public FlagModMoney(FlagModMoney flag) {
+        super(flag);
         mod = flag.mod;
         amount = flag.amount;
         failMessage = flag.failMessage;

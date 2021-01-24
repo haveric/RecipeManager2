@@ -71,6 +71,7 @@ public class FlagHide extends Flag {
     public FlagHide() { }
 
     public FlagHide(FlagHide flag) {
+        super(flag);
         attributes = flag.attributes;
         destroys = flag.destroys;
         enchants = flag.enchants;

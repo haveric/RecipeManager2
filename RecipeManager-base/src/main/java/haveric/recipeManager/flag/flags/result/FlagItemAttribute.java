@@ -65,6 +65,7 @@ public class FlagItemAttribute extends Flag {
     }
 
     public FlagItemAttribute(FlagItemAttribute flag) {
+        super(flag);
         attributes.putAll(flag.attributes);
     }
 
