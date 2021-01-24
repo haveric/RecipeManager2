@@ -35,7 +35,6 @@ import java.util.Map.Entry;
 public class CreateRecipeCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
         if (sender instanceof Player) {
             Player player = ((Player) sender);
             ItemStack holdingStack;
@@ -49,7 +48,7 @@ public class CreateRecipeCommand implements CommandExecutor {
             if (holdingStack == null || holdingStack.getType() == Material.AIR) {
                 MessageSender.getInstance().send(sender, "No item to extract a recipe from.");
             } else {
-                File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator + "disabled" + File.separator + "extracted recipe (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
+                File file = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "extracted" + File.separator + "extracted recipe (" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ").txt");
 
                 if (file.exists()) {
                     Messages.getInstance().send(sender, "cmd.extract.wait");
