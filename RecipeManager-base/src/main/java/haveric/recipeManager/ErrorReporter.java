@@ -263,7 +263,7 @@ public class ErrorReporter {
         if (lineNum == -1) {
             lineNum = flag.getSourceLineNum();
         }
-        String errorMessage = RMCChatColor.AQUA + "File: " + sourceFile + Files.NL;
+        String errorMessage = RMCChatColor.AQUA + "File: " + sourceFile + RMCChatColor.RESET + Files.NL;
         errorMessage += RMCChatColor.WHITE + "line " + String.format("%-5d", lineNum) + type + ": " + RMCChatColor.RESET + message;
 
         if (tip != null) {

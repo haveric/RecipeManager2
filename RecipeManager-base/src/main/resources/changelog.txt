@@ -5,6 +5,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: 1.16+: Blasting, Smoking, Campfire, and Stonecutting recipe removal
 * FIX: /rmcreaterecipe will now export to "/RecipeManager/extracted/" similar to /rmextract
 * FIX: @ingredientcondition error showing the incorrect recipe line
+* FIX: Outdated config message was missing color on "NOTE"
+* FIX: Error file color was wrapping to the next line
 
 === v2.24.0 ===
 * NEW: 1.16.2: @Hide: Added support for hiding dyes from colored leather armors

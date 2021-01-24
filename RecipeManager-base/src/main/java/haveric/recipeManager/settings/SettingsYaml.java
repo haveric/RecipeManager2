@@ -55,11 +55,11 @@ public class SettingsYaml extends BaseSettings {
     public void reload(CommandSender sender) {
         String lastChanged = fileConfig.getString("lastchanged");
 
+        super.reload(sender);
+
         if (!Files.LASTCHANGED_CONFIG.equals(lastChanged)) {
             MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + Files.FILE_CONFIG + "' file is outdated, please delete it to allow it to be generated again.");
         }
-
-        super.reload(sender);
 
         loadItemAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_ITEM_ALIASES);
         loadChoiceAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_CHOICE_ALIASES);
