@@ -228,7 +228,7 @@ public class ErrorReporter {
                 errors = new ArrayList<>();
             }
 
-            String errorMessage = "line " + String.format("%-5d", currentLine) + type + ": " + RMCChatColor.RESET + message;
+            String errorMessage = "line " + String.format("%-5d", currentLine) + type + ":" + RMCChatColor.RESET + " " + message;
 
             if (tip != null) {
                 errorMessage += Files.NL + RMCChatColor.DARK_GREEN + "          TIP: " + RMCChatColor.GRAY + tip;
