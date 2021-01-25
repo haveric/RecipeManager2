@@ -3,8 +3,8 @@ dependencies {
     implementation project(':nms-v1_12')
     implementation project(':nms-v1_13_2')
     implementation project(':nms-v1_14_4')
-    implementation 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
-    implementation 'org.bukkit:bukkit:1.16.4-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    implementation 'org.bukkit:bukkit:1.16.5-R0.1-SNAPSHOT'
 
     extra project(':nms-v1_12')
     extra project(':nms-v1_13_2')
