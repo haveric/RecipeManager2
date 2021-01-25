@@ -95,7 +95,7 @@ public class ErrorReporter {
 
         for (Map.Entry<String, List<String>> entry : fileErrors.entrySet()) {
             buffer = new StringBuilder();
-            buffer.append(RMCChatColor.BOLD).append(RMCChatColor.AQUA).append("File: ").append(entry.getKey()).append(Files.NL);
+            buffer.append(RMCChatColor.BOLD).append(RMCChatColor.AQUA).append("File: ").append(entry.getKey()).append(RMCChatColor.RESET).append(Files.NL);
 
             lastError = "";
             lastErrorNum = 0;
@@ -109,7 +109,7 @@ public class ErrorReporter {
                     }
                 } else {
                     if (similarErrors > 0) {
-                        buffer.append(RMCChatColor.RED).append("... and ").append(similarErrors).append(" more similar errors.").append(Files.NL);
+                        buffer.append(RMCChatColor.RED).append("... and ").append(similarErrors).append(" more similar errors.").append(RMCChatColor.RESET).append(Files.NL);
                     }
 
                     lastErrorNum = 0;
@@ -121,7 +121,7 @@ public class ErrorReporter {
             }
 
             if (similarErrors > 0) {
-                buffer.append(RMCChatColor.RED).append("... and ").append(similarErrors).append(" more similar errors.").append(Files.NL);
+                buffer.append(RMCChatColor.RED).append("... and ").append(similarErrors).append(" more similar errors.").append(RMCChatColor.RESET).append(Files.NL);
             }
 
             buffer.append(Files.NL);
