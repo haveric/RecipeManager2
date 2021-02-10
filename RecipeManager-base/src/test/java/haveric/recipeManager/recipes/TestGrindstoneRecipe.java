@@ -4,26 +4,29 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.FlagBaseTest;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mockStatic;
 
 public class TestGrindstoneRecipe extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "recipes/grindstone");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -34,125 +37,129 @@ public class TestGrindstoneRecipe extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             GrindstoneRecipe recipe = (GrindstoneRecipe) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            String name = recipe.getName();
-            if (name.equals("default")) {
-                RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
-                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
-                List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
-                assertEquals(1, primaryMaterials.size());
-                assertTrue(primaryMaterials.contains(Material.DIRT));
+                ItemResult result = recipe.getFirstResult();
 
-                RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
-                assertTrue(secondaryChoice instanceof RecipeChoice.MaterialChoice);
-                List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
-                assertEquals(1, secondaryMaterials.size());
-                assertTrue(secondaryMaterials.contains(Material.GRASS));
+                String name = recipe.getName();
+                if (name.equals("default")) {
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                    List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
+                    assertEquals(1, primaryMaterials.size());
+                    assertTrue(primaryMaterials.contains(Material.DIRT));
 
-                assertEquals(Material.DIRT, result.getType());
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    assertTrue(secondaryChoice instanceof RecipeChoice.MaterialChoice);
+                    List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
+                    assertEquals(1, secondaryMaterials.size());
+                    assertTrue(secondaryMaterials.contains(Material.GRASS));
 
-                numRecipesChecked ++;
-            } else if (name.equals("shape")) {
-                RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
-                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
-                List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
-                assertEquals(1, primaryMaterials.size());
-                assertTrue(primaryMaterials.contains(Material.DIRT));
+                    assertEquals(Material.DIRT, result.getType());
 
-                RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
-                assertTrue(secondaryChoice instanceof RecipeChoice.MaterialChoice);
-                List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
-                assertEquals(1, secondaryMaterials.size());
-                assertTrue(secondaryMaterials.contains(Material.STONE));
+                    numRecipesChecked++;
+                } else if (name.equals("shape")) {
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                    List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
+                    assertEquals(1, primaryMaterials.size());
+                    assertTrue(primaryMaterials.contains(Material.DIRT));
 
-                assertEquals(Material.GRASS, result.getType());
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    assertTrue(secondaryChoice instanceof RecipeChoice.MaterialChoice);
+                    List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
+                    assertEquals(1, secondaryMaterials.size());
+                    assertTrue(secondaryMaterials.contains(Material.STONE));
 
-                numRecipesChecked ++;
-            } else if (name.equals("data")) {
-                RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
-                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
-                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
-                assertEquals(1, primaryItems.size());
+                    assertEquals(Material.GRASS, result.getType());
 
-                ItemStack primaryItem = primaryItems.get(0);
-                assertEquals(Material.WOODEN_SWORD, primaryItem.getType());
-                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
-                Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
-                assertEquals(2, primaryDamageable.getDamage());
+                    numRecipesChecked++;
+                } else if (name.equals("data")) {
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                    assertEquals(1, primaryItems.size());
 
-                RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
-                assertTrue(secondaryChoice instanceof RecipeChoice.ExactChoice);
-                List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
-                assertEquals(1, secondaryItems.size());
+                    ItemStack primaryItem = primaryItems.get(0);
+                    assertEquals(Material.WOODEN_SWORD, primaryItem.getType());
+                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
+                    assertEquals(2, primaryDamageable.getDamage());
 
-                ItemStack secondaryItem = secondaryItems.get(0);
-                assertEquals(Material.WOODEN_SWORD, secondaryItem.getType());
-                assertTrue(secondaryItem.getItemMeta() instanceof Damageable);
-                Damageable secondaryDamageable = (Damageable) secondaryItem.getItemMeta();
-                assertEquals(3, secondaryDamageable.getDamage());
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    assertTrue(secondaryChoice instanceof RecipeChoice.ExactChoice);
+                    List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
+                    assertEquals(1, secondaryItems.size());
 
-                assertEquals(Material.WOODEN_SWORD, result.getType());
+                    ItemStack secondaryItem = secondaryItems.get(0);
+                    assertEquals(Material.WOODEN_SWORD, secondaryItem.getType());
+                    assertTrue(secondaryItem.getItemMeta() instanceof Damageable);
+                    Damageable secondaryDamageable = (Damageable) secondaryItem.getItemMeta();
+                    assertEquals(3, secondaryDamageable.getDamage());
 
-                numRecipesChecked ++;
-            } else if (name.equals("shape-data")) {
-                RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
-                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
-                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
-                assertEquals(1, primaryItems.size());
+                    assertEquals(Material.WOODEN_SWORD, result.getType());
 
-                ItemStack primaryItem = primaryItems.get(0);
-                assertEquals(Material.IRON_SWORD, primaryItem.getType());
-                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
-                Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
-                assertEquals(2, primaryDamageable.getDamage());
+                    numRecipesChecked++;
+                } else if (name.equals("shape-data")) {
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                    assertEquals(1, primaryItems.size());
 
-                RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
-                assertTrue(secondaryChoice instanceof RecipeChoice.ExactChoice);
-                List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
-                assertEquals(1, secondaryItems.size());
+                    ItemStack primaryItem = primaryItems.get(0);
+                    assertEquals(Material.IRON_SWORD, primaryItem.getType());
+                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
+                    assertEquals(2, primaryDamageable.getDamage());
 
-                ItemStack secondaryItem = secondaryItems.get(0);
-                assertEquals(Material.IRON_SWORD, secondaryItem.getType());
-                assertTrue(secondaryItem.getItemMeta() instanceof Damageable);
-                Damageable secondaryDamageable = (Damageable) secondaryItem.getItemMeta();
-                assertEquals(3, secondaryDamageable.getDamage());
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    assertTrue(secondaryChoice instanceof RecipeChoice.ExactChoice);
+                    List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
+                    assertEquals(1, secondaryItems.size());
 
-                assertEquals(Material.IRON_SWORD, result.getType());
+                    ItemStack secondaryItem = secondaryItems.get(0);
+                    assertEquals(Material.IRON_SWORD, secondaryItem.getType());
+                    assertTrue(secondaryItem.getItemMeta() instanceof Damageable);
+                    Damageable secondaryDamageable = (Damageable) secondaryItem.getItemMeta();
+                    assertEquals(3, secondaryDamageable.getDamage());
 
-                numRecipesChecked ++;
-            } else if (name.equals("shape-ingredient-flag")) {
-                RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
-                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
-                List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
-                assertEquals(1, primaryItems.size());
+                    assertEquals(Material.IRON_SWORD, result.getType());
 
-                ItemStack primaryItem = primaryItems.get(0);
-                assertEquals(Material.DIAMOND_SWORD, primaryItem.getType());
-                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
-                ItemMeta primaryMeta = primaryItem.getItemMeta();
-                Damageable primaryDamageable = (Damageable) primaryMeta;
-                assertEquals(0, primaryDamageable.getDamage());
+                    numRecipesChecked++;
+                } else if (name.equals("shape-ingredient-flag")) {
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
+                    assertEquals(1, primaryItems.size());
 
-                assertEquals("Test Sword", primaryMeta.getDisplayName());
+                    ItemStack primaryItem = primaryItems.get(0);
+                    assertEquals(Material.DIAMOND_SWORD, primaryItem.getType());
+                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    ItemMeta primaryMeta = primaryItem.getItemMeta();
+                    Damageable primaryDamageable = (Damageable) primaryMeta;
+                    assertEquals(0, primaryDamageable.getDamage());
 
-                RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
-                assertTrue(secondaryChoice instanceof RecipeChoice.ExactChoice);
-                List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
-                assertEquals(1, secondaryItems.size());
+                    assertEquals("Test Sword", primaryMeta.getDisplayName());
 
-                ItemStack secondaryItem = secondaryItems.get(0);
-                assertEquals(Material.DIAMOND_SWORD, secondaryItem.getType());
-                assertTrue(secondaryItem.getItemMeta() instanceof Damageable);
-                ItemMeta secondaryMeta = secondaryItem.getItemMeta();
-                Damageable secondaryDamageable = (Damageable) secondaryMeta;
-                assertEquals(0, secondaryDamageable.getDamage());
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    assertTrue(secondaryChoice instanceof RecipeChoice.ExactChoice);
+                    List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
+                    assertEquals(1, secondaryItems.size());
 
-                assertEquals("Test Sword 2", secondaryMeta.getDisplayName());
+                    ItemStack secondaryItem = secondaryItems.get(0);
+                    assertEquals(Material.DIAMOND_SWORD, secondaryItem.getType());
+                    assertTrue(secondaryItem.getItemMeta() instanceof Damageable);
+                    ItemMeta secondaryMeta = secondaryItem.getItemMeta();
+                    Damageable secondaryDamageable = (Damageable) secondaryMeta;
+                    assertEquals(0, secondaryDamageable.getDamage());
 
-                assertEquals(Material.DIAMOND_SWORD, result.getType());
+                    assertEquals("Test Sword 2", secondaryMeta.getDisplayName());
 
-                numRecipesChecked ++;
+                    assertEquals(Material.DIAMOND_SWORD, result.getType());
+
+                    numRecipesChecked++;
+                }
             }
         }
 

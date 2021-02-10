@@ -351,6 +351,10 @@ public class RecipeManager extends JavaPlugin {
         return recipes;
     }
 
+    public static void setRecipes(Recipes newRecipes) {
+        recipes = newRecipes;
+    }
+
     /**
      * Checks sender's <i>recipemanager.craft</i> permission
      *

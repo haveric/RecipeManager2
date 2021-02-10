@@ -9,20 +9,23 @@ import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mockStatic;
 
 public class FlagItemNameTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagItemName/");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -31,32 +34,38 @@ public class FlagItemNameTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
+                mockedBukkit.when(() -> Bukkit.getOfflinePlayer(testUUID)).thenReturn(player);
 
-            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
+                ItemResult result = recipe.getFirstResult();
 
-            FlagItemName flag = (FlagItemName) result.getFlag(FlagType.ITEM_NAME);
-            flag.onPrepare(a);
+                Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
 
-            Material resultType = result.getType();
-            if (resultType == Material.STONE_SWORD) {
-                assertEquals("Weird Item", flag.getResultName());
-                assertEquals("Weird Item", result.getItemMeta().getDisplayName());
-            } else if (resultType == Material.IRON_SWORD) {
-                assertEquals("{player}'s Sword", flag.getResultName());
-                assertEquals("TestPlayer's Sword", result.getItemMeta().getDisplayName());
-            } else if (resultType == Material.GOLDEN_SWORD) {
-                assertEquals(RMCChatColor.COLOR_CHAR + "6 Gold", flag.getResultName());
-                assertEquals(RMCChatColor.COLOR_CHAR + "6 Gold", result.getItemMeta().getDisplayName());
-            } else if (resultType == Material.DIAMOND_SWORD) {
-                assertEquals("Second", flag.getResultName());
-                assertEquals("Second", result.getItemMeta().getDisplayName());
-            } else if (resultType == Material.COBBLESTONE) {
-                assertEquals("First", flag.getResultName());
-                assertEquals("First", result.getItemMeta().getDisplayName());
-            } else if (resultType == Material.BRICK) {
-                assertEquals("   Second   ", flag.getResultName());
-                assertEquals("   Second   ", result.getItemMeta().getDisplayName());
+                FlagItemName flag = (FlagItemName) result.getFlag(FlagType.ITEM_NAME);
+
+                flag.onPrepare(a);
+
+                Material resultType = result.getType();
+                if (resultType == Material.STONE_SWORD) {
+                    assertEquals("Weird Item", flag.getResultName());
+                    assertEquals("Weird Item", result.getItemMeta().getDisplayName());
+                } else if (resultType == Material.IRON_SWORD) {
+                    assertEquals("{player}'s Sword", flag.getResultName());
+                    assertEquals("TestPlayer's Sword", result.getItemMeta().getDisplayName());
+                } else if (resultType == Material.GOLDEN_SWORD) {
+                    assertEquals(RMCChatColor.COLOR_CHAR + "6 Gold", flag.getResultName());
+                    assertEquals(RMCChatColor.COLOR_CHAR + "6 Gold", result.getItemMeta().getDisplayName());
+                } else if (resultType == Material.DIAMOND_SWORD) {
+                    assertEquals("Second", flag.getResultName());
+                    assertEquals("Second", result.getItemMeta().getDisplayName());
+                } else if (resultType == Material.COBBLESTONE) {
+                    assertEquals("First", flag.getResultName());
+                    assertEquals("First", result.getItemMeta().getDisplayName());
+                } else if (resultType == Material.BRICK) {
+                    assertEquals("   Second   ", flag.getResultName());
+                    assertEquals("   Second   ", result.getItemMeta().getDisplayName());
+                }
             }
         }
     }

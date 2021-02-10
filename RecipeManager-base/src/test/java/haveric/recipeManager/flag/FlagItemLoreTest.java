@@ -5,32 +5,34 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagItemLore;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchEvents;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class FlagItemLoreTest extends FlagBaseTest {
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagItemLore/flagItemLore.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -38,24 +40,28 @@ public class FlagItemLoreTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            Args a = ArgBuilder.create().recipe(recipe).result(result).result(result).build();
+                ItemResult result = recipe.getFirstResult();
 
-            FlagItemLore flag = (FlagItemLore) result.getFlag(FlagType.ITEM_LORE);
-            flag.onPrepare(a);
+                Args a = ArgBuilder.create().recipe(recipe).result(result).result(result).build();
 
-            List<String> lores = result.getItemMeta().getLore();
+                FlagItemLore flag = (FlagItemLore) result.getFlag(FlagType.ITEM_LORE);
+                flag.onPrepare(a);
 
-            Material resultType = result.getType();
-            if (resultType == Material.DIRT) {
-                assertTrue(lores.contains("One"));
-                assertTrue(lores.contains("Two"));
-                assertEquals(lores.size(), 2);
-            } else if (resultType == Material.COBBLESTONE) {
-                assertTrue(lores.contains("One"));
-                assertTrue(lores.contains("   Two   "));
-                assertEquals(lores.size(), 2);
+                List<String> lores = result.getItemMeta().getLore();
+
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertTrue(lores.contains("One"));
+                    assertTrue(lores.contains("Two"));
+                    assertEquals(lores.size(), 2);
+                } else if (resultType == Material.COBBLESTONE) {
+                    assertTrue(lores.contains("One"));
+                    assertTrue(lores.contains("   Two   "));
+                    assertEquals(lores.size(), 2);
+                }
             }
         }
 
@@ -70,11 +76,11 @@ public class FlagItemLoreTest extends FlagBaseTest {
         booksDir.mkdirs();
 
         RecipeBooks.getInstance().init(booksDir);
-        RecipeBooks.getInstance().reload(null);
+        try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
+            mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
 
-        mockStatic(Inventory.class);
-
-
+            RecipeBooks.getInstance().reload(null);
+        }
 
         ItemStack air = new ItemStack(Material.AIR);
         ItemStack stoneSword = new ItemStack(Material.STONE_SWORD);
@@ -114,7 +120,6 @@ public class FlagItemLoreTest extends FlagBaseTest {
         Player player = mock(Player.class);
         when(player.hasPermission(Perms.FLAG_ALL)).thenReturn(true);
         when(player.getInventory()).thenReturn(playerInventory);
-        when(player.getDisplayName()).thenReturn("TestPlayer");
 
         InventoryView view = mock(InventoryView.class);
         when(view.getPlayer()).thenReturn(player);
@@ -140,7 +145,7 @@ public class FlagItemLoreTest extends FlagBaseTest {
         // Actual Event
 
         File file = new File(baseRecipePath + "flagItemLore/flagItemLoreShift.txt");
-        RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(false, file);
 
 
         Map<BaseRecipe, RMCRecipeInfo> indexedRecipes = Recipes.getInstance().getIndex();
@@ -150,51 +155,64 @@ public class FlagItemLoreTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : indexedRecipes.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getResults().get(0);
-            Material resultType = result.getType();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            bukkitRecipe = recipe.getBukkitRecipe(false);
-            when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
-            when(prepareCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+                ItemResult result = recipe.getResults().get(0);
+                Material resultType = result.getType();
 
-            when(shiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
-            when(prepareShiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+                bukkitRecipe = recipe.getBukkitRecipe(false);
+                when(craftEvent.getRecipe()).thenReturn(bukkitRecipe);
+                when(prepareCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
-            if (resultType == Material.STONE_SWORD) {
-                workbenchEvents.prepareCraft((prepareCraftEvent));
+                when(shiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
+                when(prepareShiftCraftEvent.getRecipe()).thenReturn(bukkitRecipe);
 
-                workbenchEvents.craftFinish(craftEvent);
+                try (MockedStatic<RecipeManager> mockedRecipeManager = mockStatic(RecipeManager.class)) {
+                    mockedRecipeManager.when(RecipeManager::getSettings).thenReturn(settings);
+                    mockedRecipeManager.when(RecipeManager::getRecipes).thenReturn(recipes);
 
-                ItemStack eventResult = craftEvent.getInventory().getResult();
-                assertNotNull(eventResult);
-                ItemMeta meta = eventResult.getItemMeta();
-                assertNotNull(meta);
-                assertNotNull(meta.getLore());
-                assertEquals(1, meta.getLore().size());
-                assertEquals("One", meta.getLore().get(0));
+                    try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
+                        mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
+
+                        if (resultType == Material.STONE_SWORD) {
+                            workbenchEvents.prepareCraft((prepareCraftEvent));
+
+                            workbenchEvents.craftFinish(craftEvent);
+
+                            ItemStack eventResult = craftEvent.getInventory().getResult();
+                            assertNotNull(eventResult);
+                            ItemMeta meta = eventResult.getItemMeta();
+                            assertNotNull(meta);
+                            assertNotNull(meta.getLore());
+                            assertEquals(1, meta.getLore().size());
+                            assertEquals("One", meta.getLore().get(0));
 
 
-                workbenchEvents.prepareCraft(prepareShiftCraftEvent);
+                            workbenchEvents.prepareCraft(prepareShiftCraftEvent);
 
-                workbenchEvents.craftFinish(shiftCraftEvent);
-                assertNull(shiftCraftEvent.getCurrentItem());
-                ItemStack[] shiftContents = shiftCraftEvent.getView().getPlayer().getInventory().getContents();
+                            workbenchEvents.craftFinish(shiftCraftEvent);
+                            assertNull(shiftCraftEvent.getCurrentItem());
+                            ItemStack[] shiftContents = shiftCraftEvent.getView().getPlayer().getInventory().getContents();
 
-                int count = 0;
-                for (ItemStack item : shiftContents) {
-                    if (item != null && item.getType() != Material.AIR) {
-                        count += item.getAmount();
-                        ItemMeta stackMeta = item.getItemMeta();
-                        assertNotNull(stackMeta);
-                        if (stackMeta.hasLore()) {
-                            List<String> loreLines = stackMeta.getLore();
-                            assertEquals(1, loreLines.size());
-                            assertEquals("One", loreLines.get(0));
+                            int count = 0;
+                            for (ItemStack item : shiftContents) {
+                                if (item != null && item.getType() != Material.AIR) {
+                                    count += item.getAmount();
+                                    ItemMeta stackMeta = item.getItemMeta();
+                                    assertNotNull(stackMeta);
+                                    if (stackMeta.hasLore()) {
+                                        List<String> loreLines = stackMeta.getLore();
+                                        assertEquals(1, loreLines.size());
+                                        assertEquals("One", loreLines.get(0));
+                                    }
+                                }
+                            }
+
+                            assertEquals(3, count);
                         }
                     }
                 }
-
-                assertEquals(3, count);
             }
         }
     }

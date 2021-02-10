@@ -1,32 +1,30 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.any.FlagLightLevel;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Location.class, Block.class})
+@ExtendWith(MockitoExtension.class)
 public class FlagLightLevelTest extends FlagBaseTest {
     private Location light0Loc;
     private Location light11SkyLoc;
@@ -38,7 +36,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
     private Location light14BlocksLoc;
     private Location light15BlocksLoc;
 
-    @Before
+    @BeforeEach
     public void setup() {
         mockStatic(Location.class);
         light0Loc = mock(Location.class);
@@ -106,7 +104,7 @@ public class FlagLightLevelTest extends FlagBaseTest {
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagLightLevel/");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -115,109 +113,113 @@ public class FlagLightLevelTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(light0Loc).build();
+                ItemResult result = recipe.getFirstResult();
 
-            FlagLightLevel flag = (FlagLightLevel) result.getFlag(FlagType.LIGHT_LEVEL);
-            flag.onCheck(a);
+                Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(light0Loc).build();
 
-            Material resultType = result.getType();
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-                assertEquals(14, flag.getMinLight());
-                assertEquals(0, flag.getMaxLight());
-                assertEquals("sun", flag.getLightType());
-                assertNull(flag.getFailMessage());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
-                assertEquals(0, flag.getMinLight());
-                assertEquals(4, flag.getMaxLight());
-                assertEquals("blocks", flag.getLightType());
-                assertEquals("<red>Kill the lights!", flag.getFailMessage());
-            } else if (resultType == Material.IRON_SWORD) {
-                assertFalse(a.hasReasons());
-                assertEquals(0, flag.getMinLight());
-                assertEquals(4, flag.getMaxLight());
-                assertEquals("blocks", flag.getLightType());
-                assertNull(flag.getFailMessage());
-            } else if (resultType == Material.DIAMOND_SWORD) {
-                assertTrue(a.hasReasons());
-                assertEquals(12, flag.getMinLight());
-                assertEquals(14, flag.getMaxLight());
-                assertEquals("any", flag.getLightType());
-                assertNull(flag.getFailMessage());
-            }
+                FlagLightLevel flag = (FlagLightLevel) result.getFlag(FlagType.LIGHT_LEVEL);
+                flag.onCheck(a);
+
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                    assertEquals(14, flag.getMinLight());
+                    assertEquals(0, flag.getMaxLight());
+                    assertEquals("sun", flag.getLightType());
+                    assertNull(flag.getFailMessage());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                    assertEquals(0, flag.getMinLight());
+                    assertEquals(4, flag.getMaxLight());
+                    assertEquals("blocks", flag.getLightType());
+                    assertEquals("<red>Kill the lights!", flag.getFailMessage());
+                } else if (resultType == Material.IRON_SWORD) {
+                    assertFalse(a.hasReasons());
+                    assertEquals(0, flag.getMinLight());
+                    assertEquals(4, flag.getMaxLight());
+                    assertEquals("blocks", flag.getLightType());
+                    assertNull(flag.getFailMessage());
+                } else if (resultType == Material.DIAMOND_SWORD) {
+                    assertTrue(a.hasReasons());
+                    assertEquals(12, flag.getMinLight());
+                    assertEquals(14, flag.getMaxLight());
+                    assertEquals("any", flag.getLightType());
+                    assertNull(flag.getFailMessage());
+                }
 
 
-            a.clear();
-            a.setLocation(light11SkyLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light11SkyLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIAMOND_SWORD) {
-                assertTrue(a.hasReasons());
-            }
+                if (resultType == Material.DIAMOND_SWORD) {
+                    assertTrue(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light12SkyLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light12SkyLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIAMOND_SWORD) {
-                assertFalse(a.hasReasons());
-            }
+                if (resultType == Material.DIAMOND_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light13SkyLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light13SkyLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.DIAMOND_SWORD) {
-                assertFalse(a.hasReasons());
-            }
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.DIAMOND_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light14SkyLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light14SkyLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIRT) {
-                assertFalse(a.hasReasons());
-            } else if (resultType == Material.DIAMOND_SWORD) {
-                assertFalse(a.hasReasons());
-            }
+                if (resultType == Material.DIRT) {
+                    assertFalse(a.hasReasons());
+                } else if (resultType == Material.DIAMOND_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light15SkyLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light15SkyLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIRT) {
-                assertFalse(a.hasReasons());
-            } else if (resultType == Material.DIAMOND_SWORD) {
-                assertTrue(a.hasReasons());
-            }
+                if (resultType == Material.DIRT) {
+                    assertFalse(a.hasReasons());
+                } else if (resultType == Material.DIAMOND_SWORD) {
+                    assertTrue(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light13BlocksLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light13BlocksLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            }
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light14BlocksLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light14BlocksLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            }
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                }
 
-            a.clear();
-            a.setLocation(light15BlocksLoc);
-            flag.onCheck(a);
+                a.clear();
+                a.setLocation(light15BlocksLoc);
+                flag.onCheck(a);
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                }
             }
         }
     }

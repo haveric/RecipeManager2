@@ -1,21 +1,22 @@
 package haveric.recipeManager.flag;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 public class FlagTypeOldTest {
 
     @Test
     public void flagDocumentation() {
         for (FlagDescriptor flagType : FlagFactory.getInstance().getFlags().values()) {
-            assertTrue("Arguments missing for " + flagType.getName(), flagType.getArguments().length > 0);
-            assertTrue("Examples missing for " + flagType.getName(), flagType.getExamples().length > 0);
-            assertTrue("Description missing for " + flagType.getName(), flagType.getDescription().length > 0);
+            assertTrue(flagType.getArguments().length > 0, "Arguments missing for " + flagType.getName());
+            assertTrue(flagType.getExamples().length > 0, "Examples missing for " + flagType.getName());
+            assertTrue(flagType.getDescription().length > 0, "Description missing for " + flagType.getName());
         }
     }
 

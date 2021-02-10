@@ -1,6 +1,5 @@
 package haveric.recipeManager.flag;
 
-import haveric.recipeManager.Perms;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -12,13 +11,13 @@ import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +25,7 @@ public class FlagGameModeTest extends FlagBaseTest{
 
     private FlagGameMode flag;
 
-    @Before
+    @BeforeEach
     public void setup() {
         flag = new FlagGameMode();
     }
@@ -55,7 +54,7 @@ public class FlagGameModeTest extends FlagBaseTest{
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagGameMode/");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -105,7 +104,6 @@ public class FlagGameModeTest extends FlagBaseTest{
     @Test
     public void onCrafted() {
         Player mockPlayer = mock(Player.class);
-        when(mockPlayer.hasPermission(Perms.FLAG_ALL)).thenReturn(true);
         when(mockPlayer.getGameMode()).thenReturn(GameMode.SURVIVAL);
         Args a = ArgBuilder.create().player(mockPlayer).build().processArgs();
 

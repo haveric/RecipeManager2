@@ -7,20 +7,20 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
 import org.bukkit.Material;
 import org.bukkit.inventory.RecipeChoice;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestSmelt extends FlagBaseTest {
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "smelt/");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 

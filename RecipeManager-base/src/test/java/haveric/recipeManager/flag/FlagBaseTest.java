@@ -8,22 +8,20 @@ import haveric.recipeManager.recipes.RecipeTypeFactory;
 import haveric.recipeManager.recipes.RecipeTypeLoader;
 import haveric.recipeManager.settings.BaseSettings;
 import org.bukkit.Bukkit;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.UUID;
 
 import static haveric.recipeManager.Files.FILE_MESSAGES;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.mockito.Mockito.mockStatic;
 
-@Ignore
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({MessageSender.class, Bukkit.class, RecipeManager.class})
+@Disabled
+@ExtendWith(MockitoExtension.class)
 public class FlagBaseTest {
     protected BaseSettings settings;
     protected TestUnsafeValues unsafeValues;
@@ -32,52 +30,84 @@ public class FlagBaseTest {
     protected String baseResourcesPath;
     protected String baseDataPath;
     protected String baseRecipePath;
+    protected Recipes recipes;
+    protected TestItemFactory itemFactory;
+    protected TestOfflinePlayer player;
     protected UUID testUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
-    @Before
+    @BeforeEach
     public void setupBase() {
+        settings = new TestSettings(false);
+        /*
         mockStatic(Bukkit.class);
         unsafeValues = new TestUnsafeValues();
         when(Bukkit.getUnsafe()).thenReturn(unsafeValues);
 
         mockStatic(RecipeManager.class);
-        settings = new TestSettings(false);
+
         when(RecipeManager.getSettings()).thenReturn(settings);
 
         mockStatic(MessageSender.class);
         when(MessageSender.getInstance()).thenReturn(TestMessageSender.getInstance());
 
 
-        TestItemFactory itemFactory = new TestItemFactory();
         when(Bukkit.getItemFactory()).thenReturn(itemFactory);
 
         TestOfflinePlayer player = new TestOfflinePlayer();
         when(Bukkit.getOfflinePlayer(testUUID)).thenReturn(player);
+*/
+        itemFactory = new TestItemFactory();
+        try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
+            mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
 
-        new RecipeTypeLoader();
-        RecipeTypeFactory.getInstance().init();
-        new FlagLoader(true);
-        FlagFactory.getInstance().init();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-        File baseSrcDir = new File("src");
-        String baseSrcPath = baseSrcDir.getAbsolutePath().replace(".idea\\modules\\", "") + "/";
-        String baseTestPath = baseSrcPath + "test/";
+                new RecipeTypeLoader();
+            }
 
-        workDir = new File(baseTestPath + "work/");
-        workDir.delete();
-        workDir.mkdirs();
+            RecipeTypeFactory.getInstance().init();
+            new FlagLoader(true);
 
-        originalResourcesPath = baseSrcPath + "main/resources/";
-        baseResourcesPath = baseTestPath + "resources/";
-        baseDataPath = baseResourcesPath + "data/";
+            FlagFactory.getInstance().init();
 
-        baseRecipePath = baseResourcesPath + "recipes/";
+            File baseSrcDir = new File("src");
+            String baseSrcPath = baseSrcDir.getAbsolutePath().replace(".idea\\modules\\", "") + "/";
+            String baseTestPath = baseSrcPath + "test/";
 
-        File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
-        Messages.getInstance().loadMessages(null, messagesFile);
+            workDir = new File(baseTestPath + "work/");
+            workDir.delete();
+            workDir.mkdirs();
 
-        Recipes recipes = new Recipes();
+            originalResourcesPath = baseSrcPath + "main/resources/";
+            baseResourcesPath = baseTestPath + "resources/";
+            baseDataPath = baseResourcesPath + "data/";
 
-        when(RecipeManager.getRecipes()).thenReturn(recipes);
+            baseRecipePath = baseResourcesPath + "recipes/";
+
+            File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
+            Messages.getInstance().loadMessages(null, messagesFile);
+        }
+
+        recipes = new Recipes();
+        RecipeManager.setRecipes(recipes);
+        player = new TestOfflinePlayer();
+    }
+
+    public void reloadRecipeProcessor(boolean check, File file) {
+        try (MockedStatic<RecipeManager> mockedRecipeManager = mockStatic(RecipeManager.class)) {
+            mockedRecipeManager.when(RecipeManager::getSettings).thenReturn(settings);
+            mockedRecipeManager.when(RecipeManager::getRecipes).thenReturn(recipes);
+
+            try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
+                mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
+
+                try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                    mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
+
+                    RecipeProcessor.reload(null, check, file.getPath(), workDir.getPath());
+                }
+            }
+        }
     }
 }

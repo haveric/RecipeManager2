@@ -8,23 +8,65 @@ import haveric.recipeManager.flag.flags.any.FlagBlockPowered;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.BrewRecipe1_13;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.junit.Test;
+import org.bukkit.block.Block;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class FlagBlockPoweredTest extends FlagBlockTest {
+public class FlagBlockPoweredTest extends FlagBaseTest {
+    @Mock
+    protected Location unpoweredWorkbenchLoc;
+    @Mock
+    protected Location directWorkbenchLoc;
+    @Mock
+    protected Location indirectWorkbenchLoc;
+
+    @Mock
+    protected Location unpoweredFurnaceLoc;
+    @Mock
+    protected Location directFurnaceLoc;
+    @Mock
+    protected Location indirectFurnaceLoc;
+
+    @Mock
+    protected Location unpoweredBrewingStandLoc;
+    @Mock
+    protected Location directBrewingStandLoc;
+    @Mock
+    protected Location indirectBrewingStandLoc;
 
     @Test
     public void onRecipeParseCraft() {
+        Block unpoweredWorkbench = mock(Block.class);
+        when(unpoweredWorkbench.getType()).thenReturn(Material.CRAFTING_TABLE);
+        when(unpoweredWorkbenchLoc.getBlock()).thenReturn(unpoweredWorkbench);
+
+        Block directWorkbench = mock(Block.class);
+        when(directWorkbench.getType()).thenReturn(Material.CRAFTING_TABLE);
+        when(directWorkbench.isBlockPowered()).thenReturn(true);
+        when(directWorkbench.isBlockIndirectlyPowered()).thenReturn(false);
+        when(directWorkbenchLoc.getBlock()).thenReturn(directWorkbench);
+
+        Block indirectWorkbench = mock(Block.class);
+        when(indirectWorkbench.getType()).thenReturn(Material.CRAFTING_TABLE);
+        when(indirectWorkbench.isBlockPowered()).thenReturn(false);
+        when(indirectWorkbench.isBlockIndirectlyPowered()).thenReturn(true);
+        when(indirectWorkbenchLoc.getBlock()).thenReturn(indirectWorkbench);
+
         File file = new File(baseRecipePath + "flagBlockPowered/flagBlockPoweredCraft.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -33,49 +75,69 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(unpoweredWorkbenchLoc).build();
+                ItemResult result = recipe.getFirstResult();
 
-            FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
-            flag.onCheck(a);
+                Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(unpoweredWorkbenchLoc).build();
 
-            Material resultType = result.getType();
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertTrue(a.hasReasons());
-                assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
-            }
+                FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
+                flag.onCheck(a);
 
-            a.clear();
-            a.setLocation(directWorkbenchLoc);
-            flag.onCheck(a);
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertTrue(a.hasReasons());
+                    assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
+                }
 
-            if (resultType == Material.DIRT) {
-                assertFalse(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
-                assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
-            }
+                a.clear();
+                a.setLocation(directWorkbenchLoc);
+                flag.onCheck(a);
 
-            a.clear();
-            a.setLocation(indirectWorkbenchLoc);
-            flag.onCheck(a);
+                if (resultType == Material.DIRT) {
+                    assertFalse(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                    assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
+                }
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
-                assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
+                a.clear();
+                a.setLocation(indirectWorkbenchLoc);
+                flag.onCheck(a);
+
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                    assertEquals("<red><bold>YOU HAVE NO (indirect) POWAAH!!!", flag.getFailMessage());
+                }
             }
         }
     }
 
     @Test
     public void onRecipeParseSmelt() {
+        Block unpoweredFurnace = mock(Block.class);
+        when(unpoweredFurnace.getType()).thenReturn(Material.FURNACE);
+        when(unpoweredFurnaceLoc.getBlock()).thenReturn(unpoweredFurnace);
+
+        Block directFurnace = mock(Block.class);
+        when(directFurnace.getType()).thenReturn(Material.FURNACE);
+        when(directFurnace.isBlockPowered()).thenReturn(true);
+        when(directFurnace.isBlockIndirectlyPowered()).thenReturn(false);
+        when(directFurnaceLoc.getBlock()).thenReturn(directFurnace);
+
+        Block indirectFurnace = mock(Block.class);
+        when(indirectFurnace.getType()).thenReturn(Material.FURNACE);
+        when(indirectFurnace.isBlockPowered()).thenReturn(false);
+        when(indirectFurnace.isBlockIndirectlyPowered()).thenReturn(true);
+        when(indirectFurnaceLoc.getBlock()).thenReturn(indirectFurnace);
+
         File file = new File(baseRecipePath + "flagBlockPowered/flagBlockPoweredSmelt.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -84,47 +146,68 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
-            a.setLocation(unpoweredFurnaceLoc);
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
+                mockedBukkit.when(() -> Bukkit.getOfflinePlayer(testUUID)).thenReturn(player);
 
-            ItemResult result = recipe.getResult(a);
+                Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
+                a.setLocation(unpoweredFurnaceLoc);
 
-            FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
-            flag.onCheck(a);
+                ItemResult result = recipe.getResult(a);
 
-            Material resultType = result.getType();
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertTrue(a.hasReasons());
-            }
+                FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
+                flag.onCheck(a);
 
-            a.clear();
-            a.setLocation(directFurnaceLoc);
-            flag.onCheck(a);
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertTrue(a.hasReasons());
+                }
 
-            if (resultType == Material.DIRT) {
-                assertFalse(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
-            }
+                a.clear();
+                a.setLocation(directFurnaceLoc);
+                flag.onCheck(a);
 
-            a.clear();
-            a.setLocation(indirectFurnaceLoc);
-            flag.onCheck(a);
+                if (resultType == Material.DIRT) {
+                    assertFalse(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
+                a.clear();
+                a.setLocation(indirectFurnaceLoc);
+                flag.onCheck(a);
+
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
             }
         }
     }
 
     @Test
     public void onRecipeParseBrew() {
+        Block unpoweredBrewingStand = mock(Block.class);
+        when(unpoweredBrewingStand.getType()).thenReturn(Material.BREWING_STAND);
+        when(unpoweredBrewingStandLoc.getBlock()).thenReturn(unpoweredBrewingStand);
+
+        Block directBrewingStand = mock(Block.class);
+        when(directBrewingStand.getType()).thenReturn(Material.BREWING_STAND);
+        when(directBrewingStand.isBlockPowered()).thenReturn(true);
+        when(directBrewingStand.isBlockIndirectlyPowered()).thenReturn(false);
+        when(directBrewingStandLoc.getBlock()).thenReturn(directBrewingStand);
+
+        Block indirectBrewingStand = mock(Block.class);
+        when(indirectBrewingStand.getType()).thenReturn(Material.BREWING_STAND);
+        when(indirectBrewingStand.isBlockPowered()).thenReturn(false);
+        when(indirectBrewingStand.isBlockIndirectlyPowered()).thenReturn(true);
+        when(indirectBrewingStandLoc.getBlock()).thenReturn(indirectBrewingStand);
+
         File file = new File(baseRecipePath + "flagBlockPowered/flagBlockPoweredBrew.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -133,38 +216,42 @@ public class FlagBlockPoweredTest extends FlagBlockTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             BrewRecipe1_13 recipe = (BrewRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(unpoweredBrewingStandLoc).build();
+                ItemResult result = recipe.getFirstResult();
 
-            FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
-            flag.onCheck(a);
+                Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).location(unpoweredBrewingStandLoc).build();
 
-            Material resultType = result.getType();
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertTrue(a.hasReasons());
-            }
+                FlagBlockPowered flag = (FlagBlockPowered) result.getFlag(FlagType.BLOCK_POWERED);
+                flag.onCheck(a);
 
-            a.clear();
-            a.setLocation(directBrewingStandLoc);
-            flag.onCheck(a);
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertTrue(a.hasReasons());
+                }
 
-            if (resultType == Material.DIRT) {
-                assertFalse(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
-            }
+                a.clear();
+                a.setLocation(directBrewingStandLoc);
+                flag.onCheck(a);
 
-            a.clear();
-            a.setLocation(indirectBrewingStandLoc);
-            flag.onCheck(a);
+                if (resultType == Material.DIRT) {
+                    assertFalse(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
 
-            if (resultType == Material.DIRT) {
-                assertTrue(a.hasReasons());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertFalse(a.hasReasons());
+                a.clear();
+                a.setLocation(indirectBrewingStandLoc);
+                flag.onCheck(a);
+
+                if (resultType == Material.DIRT) {
+                    assertTrue(a.hasReasons());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertFalse(a.hasReasons());
+                }
             }
         }
     }

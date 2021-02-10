@@ -2,22 +2,25 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeBooks;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Recipes;
 import haveric.recipeManager.data.RecipeBook;
-import org.junit.Before;
-import org.junit.Test;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.TestMessageSender;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 public class FlagAddToBookTest extends FlagBaseTest {
 
-    @Before
+    @BeforeEach
     public void createBookFiles() {
         File booksDir = new File(workDir.getPath() + "/books/");
         booksDir.mkdirs();
@@ -34,19 +37,27 @@ public class FlagAddToBookTest extends FlagBaseTest {
         }
 
         RecipeBooks.getInstance().init(booksDir);
-        RecipeBooks.getInstance().reload(null);
+
+        try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
+            mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
+
+            RecipeBooks.getInstance().reload(null);
+        }
     }
 
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagAddToBook/");
-        RecipeProcessor.reload(null, false, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(false, file);
+        try (MockedStatic<RecipeManager> mockedRecipeManager = mockStatic(RecipeManager.class)) {
+            mockedRecipeManager.when(RecipeManager::getSettings).thenReturn(settings);
+            mockedRecipeManager.when(RecipeManager::getRecipes).thenReturn(recipes);
 
-        //Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+            //Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        Recipes recipes = RecipeManager.getRecipes();
-
-        assertEquals(5, recipes.getIndex().size());
+            Recipes actualRecipes = RecipeManager.getRecipes();
+            assertEquals(5, actualRecipes.getIndex().size());
+        }
 
         Map<String, RecipeBook> books = RecipeBooks.getInstance().getBooks();
         assertEquals(2, books.entrySet().size());

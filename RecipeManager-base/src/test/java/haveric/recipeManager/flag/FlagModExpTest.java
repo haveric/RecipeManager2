@@ -1,25 +1,28 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
+import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.flags.any.FlagModExp;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.common.recipes.RMCRecipeInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mockStatic;
 
 public class FlagModExpTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagModExp/");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -28,23 +31,27 @@ public class FlagModExpTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            FlagModExp flag = (FlagModExp) result.getFlag(FlagType.MOD_EXP);
+                ItemResult result = recipe.getFirstResult();
 
-            Material resultType = result.getType();
-            if (resultType == Material.DIRT) {
-                assertEquals(25, flag.getAmount(), .01);
-                assertEquals('+', flag.getModifier());
-            } else if (resultType == Material.STONE_SWORD) {
-                assertEquals(50, flag.getAmount(), .01);
-                assertEquals('-', flag.getModifier());
-            } else if (resultType == Material.IRON_SWORD) {
-                assertEquals(0, flag.getAmount(), .01);
-                assertEquals('=', flag.getModifier());
-            } else if (resultType == Material.GOLDEN_SWORD) {
-                assertEquals(50, flag.getAmount(), .01);
-                assertEquals('-', flag.getModifier());
+                FlagModExp flag = (FlagModExp) result.getFlag(FlagType.MOD_EXP);
+
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertEquals(25, flag.getAmount(), .01);
+                    assertEquals('+', flag.getModifier());
+                } else if (resultType == Material.STONE_SWORD) {
+                    assertEquals(50, flag.getAmount(), .01);
+                    assertEquals('-', flag.getModifier());
+                } else if (resultType == Material.IRON_SWORD) {
+                    assertEquals(0, flag.getAmount(), .01);
+                    assertEquals('=', flag.getModifier());
+                } else if (resultType == Material.GOLDEN_SWORD) {
+                    assertEquals(50, flag.getAmount(), .01);
+                    assertEquals('-', flag.getModifier());
+                }
             }
         }
     }

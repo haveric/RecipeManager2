@@ -3,6 +3,8 @@ package haveric.recipeManager;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.FlagBaseYamlTest;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.BrewRecipe1_13;
@@ -10,28 +12,35 @@ import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.RecipeChoice;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 public class TestHelpRecipes extends FlagBaseYamlTest {
-    @Before
+    @BeforeEach
     public void before() {
-        settings.loadItemAliases(null, new File(originalResourcesPath), "item aliases.yml");
+        try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
+            mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
+
+            settings.loadItemAliases(null, new File(originalResourcesPath), "item aliases.yml");
+        }
     }
 
     @Test
     public void basicRecipes() {
         File file = new File(baseRecipePath + "helpRecipes/basicRecipes.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -45,57 +54,61 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             BaseRecipe baseRecipe = entry.getKey();
 
-            if (baseRecipe instanceof CraftRecipe1_13) {
-                CraftRecipe1_13 recipe = (CraftRecipe1_13) baseRecipe;
-                ItemResult result = recipe.getResults().get(0);
-                Material resultType = result.getType();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-                if (resultType == Material.WOODEN_HOE) {
-                    numCraftRecipes ++;
-                } else if (resultType == Material.BOWL) {
-                    numCraftRecipes ++;
-                } else if (resultType == Material.LIGHT_GRAY_TERRACOTTA) {
-                    numCraftRecipes ++;
-                }
-            } else if (baseRecipe instanceof CombineRecipe1_13) {
-                CombineRecipe1_13 recipe = (CombineRecipe1_13) baseRecipe;
-                ItemResult result = recipe.getResults().get(0);
-                Material resultType = result.getType();
+                if (baseRecipe instanceof CraftRecipe1_13) {
+                    CraftRecipe1_13 recipe = (CraftRecipe1_13) baseRecipe;
+                    ItemResult result = recipe.getResults().get(0);
+                    Material resultType = result.getType();
 
-                if (resultType == Material.TNT) {
-                    numCombineRecipes ++;
-                } else if (resultType == Material.DIAMOND) {
-                    numCombineRecipes ++;
-                }
-            } else if (baseRecipe instanceof RMBaseFurnaceRecipe1_13) {
-                RMBaseFurnaceRecipe1_13 recipe = (RMBaseFurnaceRecipe1_13) baseRecipe;
-                ItemResult result = recipe.getResult();
-                Material resultType = result.getType();
+                    if (resultType == Material.WOODEN_HOE) {
+                        numCraftRecipes++;
+                    } else if (resultType == Material.BOWL) {
+                        numCraftRecipes++;
+                    } else if (resultType == Material.LIGHT_GRAY_TERRACOTTA) {
+                        numCraftRecipes++;
+                    }
+                } else if (baseRecipe instanceof CombineRecipe1_13) {
+                    CombineRecipe1_13 recipe = (CombineRecipe1_13) baseRecipe;
+                    ItemResult result = recipe.getResults().get(0);
+                    Material resultType = result.getType();
 
-                if (resultType == Material.GOLD_ORE) {
-                    numSmeltRecipes ++;
-                } else if (resultType == Material.EXPERIENCE_BOTTLE) {
-                    numSmeltRecipes ++;
-                }
-            } else if (baseRecipe instanceof FuelRecipe1_13) {
-                FuelRecipe1_13 recipe = (FuelRecipe1_13) baseRecipe;
-                RecipeChoice choice = recipe.getIngredientChoice();
-                assertTrue(choice instanceof RecipeChoice.MaterialChoice);
+                    if (resultType == Material.TNT) {
+                        numCombineRecipes++;
+                    } else if (resultType == Material.DIAMOND) {
+                        numCombineRecipes++;
+                    }
+                } else if (baseRecipe instanceof RMBaseFurnaceRecipe1_13) {
+                    RMBaseFurnaceRecipe1_13 recipe = (RMBaseFurnaceRecipe1_13) baseRecipe;
+                    ItemResult result = recipe.getResult();
+                    Material resultType = result.getType();
 
-                List<Material> choices = ((RecipeChoice.MaterialChoice) choice).getChoices();
+                    if (resultType == Material.GOLD_ORE) {
+                        numSmeltRecipes++;
+                    } else if (resultType == Material.EXPERIENCE_BOTTLE) {
+                        numSmeltRecipes++;
+                    }
+                } else if (baseRecipe instanceof FuelRecipe1_13) {
+                    FuelRecipe1_13 recipe = (FuelRecipe1_13) baseRecipe;
+                    RecipeChoice choice = recipe.getIngredientChoice();
+                    assertTrue(choice instanceof RecipeChoice.MaterialChoice);
 
-                if (choices.contains(Material.GUNPOWDER)) {
-                    numFuelRecipes ++;
-                } else if (choices.contains(Material.JACK_O_LANTERN)) {
-                    numFuelRecipes ++;
-                }
-            } else if (baseRecipe instanceof BrewRecipe1_13) {
-                BrewRecipe1_13 recipe = (BrewRecipe1_13) baseRecipe;
-                ItemResult result = recipe.getResults().get(0);
-                Material resultType = result.getType();
+                    List<Material> choices = ((RecipeChoice.MaterialChoice) choice).getChoices();
 
-                if (resultType == Material.STONE) {
-                    numBrewingRecipes ++;
+                    if (choices.contains(Material.GUNPOWDER)) {
+                        numFuelRecipes++;
+                    } else if (choices.contains(Material.JACK_O_LANTERN)) {
+                        numFuelRecipes++;
+                    }
+                } else if (baseRecipe instanceof BrewRecipe1_13) {
+                    BrewRecipe1_13 recipe = (BrewRecipe1_13) baseRecipe;
+                    ItemResult result = recipe.getResults().get(0);
+                    Material resultType = result.getType();
+
+                    if (resultType == Material.STONE) {
+                        numBrewingRecipes++;
+                    }
                 }
             }
         }
@@ -113,7 +126,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
         settings.addEnchantName("durability", Enchantment.DURABILITY);
 
         File file = new File(baseRecipePath + "helpRecipes/advancedRecipes.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 

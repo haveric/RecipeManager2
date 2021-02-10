@@ -7,21 +7,24 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 public class NamingTest extends FlagBaseTest {
     @Test
     public void testNamingCraft() {
         File file = new File(baseRecipePath + "naming/namingCraft.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -30,16 +33,20 @@ public class NamingTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            String name = recipe.getName();
+                ItemResult result = recipe.getFirstResult();
 
-            Material resultType = result.getType();
-            if (resultType == Material.STONE_SWORD) {
-                assertTrue(recipe.hasCustomName());
-                assertEquals("Boomstick", name);
-            } else if (resultType == Material.IRON_SWORD) {
-                assertFalse(recipe.hasCustomName());
+                String name = recipe.getName();
+
+                Material resultType = result.getType();
+                if (resultType == Material.STONE_SWORD) {
+                    assertTrue(recipe.hasCustomName());
+                    assertEquals("Boomstick", name);
+                } else if (resultType == Material.IRON_SWORD) {
+                    assertFalse(recipe.hasCustomName());
+                }
             }
         }
     }
@@ -47,7 +54,7 @@ public class NamingTest extends FlagBaseTest {
     @Test
     public void testNamingCombine() {
         File file = new File(baseRecipePath + "naming/namingCombine.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -56,16 +63,20 @@ public class NamingTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
 
-            ItemResult result = recipe.getFirstResult();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            String name = recipe.getName();
+                ItemResult result = recipe.getFirstResult();
 
-            Material resultType = result.getType();
-            if (resultType == Material.STONE_SWORD) {
-                assertTrue(recipe.hasCustomName());
-                assertEquals("Random Stuff", name);
-            } else if (resultType == Material.IRON_SWORD) {
-                assertFalse(recipe.hasCustomName());
+                String name = recipe.getName();
+
+                Material resultType = result.getType();
+                if (resultType == Material.STONE_SWORD) {
+                    assertTrue(recipe.hasCustomName());
+                    assertEquals("Random Stuff", name);
+                } else if (resultType == Material.IRON_SWORD) {
+                    assertFalse(recipe.hasCustomName());
+                }
             }
         }
     }
@@ -73,7 +84,7 @@ public class NamingTest extends FlagBaseTest {
     @Test
     public void testNamingSmelt() {
         File file = new File(baseRecipePath + "naming/namingSmelt.txt");
-        RecipeProcessor.reload(null, true, file.getPath(), workDir.getPath());
+        reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
@@ -82,18 +93,23 @@ public class NamingTest extends FlagBaseTest {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
 
-            Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-            ItemResult result = recipe.getResult(a);
+                mockedBukkit.when(() -> Bukkit.getOfflinePlayer(testUUID)).thenReturn(player);
+                Args a = ArgBuilder.create().recipe(recipe).player(testUUID).build();
 
-            String name = recipe.getName();
+                ItemResult result = recipe.getResult(a);
 
-            Material resultType = result.getType();
-            if (resultType == Material.STONE_SWORD) {
-                assertTrue(recipe.hasCustomName());
-                assertEquals("Diamond Sword", name);
-            } else if (resultType == Material.IRON_SWORD) {
-                assertFalse(recipe.hasCustomName());
+                String name = recipe.getName();
+
+                Material resultType = result.getType();
+                if (resultType == Material.STONE_SWORD) {
+                    assertTrue(recipe.hasCustomName());
+                    assertEquals("Diamond Sword", name);
+                } else if (resultType == Material.IRON_SWORD) {
+                    assertFalse(recipe.hasCustomName());
+                }
             }
         }
     }

@@ -40,4 +40,8 @@ subprojects {
         // For 1.12-1.14, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
         mavenLocal()
     }
+
+    test {
+        useJUnitPlatform()
+    }
 }
