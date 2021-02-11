@@ -122,7 +122,10 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
 
     @Test
     public void advancedRecipes() {
-        Enchantment.registerEnchantment(new TestEnchantmentUnbreaking(Enchantment.DURABILITY));
+        try {
+            Enchantment.registerEnchantment(new TestEnchantmentUnbreaking(Enchantment.DURABILITY));
+        } catch (IllegalArgumentException ignored) { }
+
         settings.addEnchantName("durability", Enchantment.DURABILITY);
 
         File file = new File(baseRecipePath + "helpRecipes/advancedRecipes.txt");

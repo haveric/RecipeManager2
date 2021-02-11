@@ -33,7 +33,9 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
 
     @BeforeEach
     public void setup() {
-        Enchantment.registerEnchantment(new TestEnchantmentSharpness(Enchantment.DAMAGE_ALL));
+        try {
+            Enchantment.registerEnchantment(new TestEnchantmentSharpness(Enchantment.DAMAGE_ALL));
+        } catch (IllegalArgumentException ignored) { }
 
         mockStatic(Inventory.class);
         CraftingInventory inventory = mock(CraftingInventory.class);
