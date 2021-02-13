@@ -12,6 +12,7 @@ import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.settings.SettingsYaml;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -33,7 +34,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
         try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
             mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
 
-            settings.loadItemAliases(null, new File(originalResourcesPath), "item aliases.yml");
+            ((SettingsYaml) settings).loadItemAliases(null, new File(originalResourcesPath), "item aliases.yml");
         }
     }
 

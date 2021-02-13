@@ -8,6 +8,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchEvents;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.settings.SettingsYaml;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class FlagKeepItemTest extends FlagBaseYamlTest {
         try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
             mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
 
-            settings.loadItemDatas(null, new File(baseDataPath), "item datas.yml");
+            ((SettingsYaml) settings).loadItemDatas(null, new File(baseDataPath), "item datas.yml");
 
             ironSword = new ItemStack(Material.IRON_SWORD);
             goldSword = new ItemStack(Material.GOLDEN_SWORD);

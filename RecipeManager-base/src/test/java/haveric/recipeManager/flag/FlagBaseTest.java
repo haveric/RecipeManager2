@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.RecipeTypeLoader;
 import haveric.recipeManager.settings.BaseSettings;
 import org.bukkit.Bukkit;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,11 +19,9 @@ import java.util.UUID;
 import static haveric.recipeManager.Files.FILE_MESSAGES;
 import static org.mockito.Mockito.mockStatic;
 
-@Disabled
 @ExtendWith(MockitoExtension.class)
 public class FlagBaseTest {
     protected BaseSettings settings;
-    protected TestUnsafeValues unsafeValues;
     protected File workDir;
     protected String originalResourcesPath;
     protected String baseResourcesPath;
@@ -35,27 +32,18 @@ public class FlagBaseTest {
     protected TestOfflinePlayer player;
     protected UUID testUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
+    protected void init() {
+        settings = new TestSettings(false);
+    }
+
+    protected void loadSettings() {
+
+    }
+
     @BeforeEach
     public void setupBase() {
-        settings = new TestSettings(false);
-        /*
-        mockStatic(Bukkit.class);
-        unsafeValues = new TestUnsafeValues();
-        when(Bukkit.getUnsafe()).thenReturn(unsafeValues);
+        init();
 
-        mockStatic(RecipeManager.class);
-
-        when(RecipeManager.getSettings()).thenReturn(settings);
-
-        mockStatic(MessageSender.class);
-        when(MessageSender.getInstance()).thenReturn(TestMessageSender.getInstance());
-
-
-        when(Bukkit.getItemFactory()).thenReturn(itemFactory);
-
-        TestOfflinePlayer player = new TestOfflinePlayer();
-        when(Bukkit.getOfflinePlayer(testUUID)).thenReturn(player);
-*/
         itemFactory = new TestItemFactory();
         try (MockedStatic<MessageSender> mockedMessageSender = mockStatic(MessageSender.class)) {
             mockedMessageSender.when(MessageSender::getInstance).thenReturn(TestMessageSender.getInstance());
@@ -83,6 +71,7 @@ public class FlagBaseTest {
             baseResourcesPath = baseTestPath + "resources/";
             baseDataPath = baseResourcesPath + "data/";
 
+            loadSettings();
             baseRecipePath = baseResourcesPath + "recipes/";
 
             File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
