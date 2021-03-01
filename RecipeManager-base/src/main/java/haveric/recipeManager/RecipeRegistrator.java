@@ -1,10 +1,11 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.messages.MessageSender;
-import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.recipes.BaseRecipe;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map.Entry;
 
 public class RecipeRegistrator {
     private Map<BaseRecipe, RMCRecipeInfo> queuedRecipes = new HashMap<>();
+    private Map<BaseRecipe, RMCRecipeInfo> queuedRemovedRecipes = new HashMap<>();
     private boolean registered = false;
 
     protected RecipeRegistrator() {
@@ -28,8 +30,13 @@ public class RecipeRegistrator {
             throw new IllegalArgumentException(recipe.getInvalidErrorMessage());
         }
 
-        queuedRecipes.remove(recipe); // if exists, update key too!
-        queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
+        if (recipe.hasFlag(FlagType.REMOVE)) {
+            queuedRemovedRecipes.remove(recipe); // if exists, update key too!
+            queuedRemovedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
+        } else {
+            queuedRecipes.remove(recipe); // if exists, update key too!
+            queuedRecipes.put(recipe, new RMCRecipeInfo(RecipeOwner.RECIPEMANAGER, adder));
+        }
     }
 
     protected void registerRecipesToServer(CommandSender sender, long start) {
@@ -37,32 +44,48 @@ public class RecipeRegistrator {
             throw new IllegalAccessError("This class is already registered, create a new one!");
         }
 
-        Iterator<Entry<BaseRecipe, RMCRecipeInfo>> iterator;
         Entry<BaseRecipe, RMCRecipeInfo> entry;
         BaseRecipe recipe;
         RMCRecipeInfo info;
 
         // Remove old custom recipes/re-add old original recipes
-        iterator = RecipeManager.getRecipes().index.entrySet().iterator();
+        Iterator<Entry<BaseRecipe, RMCRecipeInfo>> oldIterator = RecipeManager.getRecipes().index.entrySet().iterator();
 
-        while (iterator.hasNext()) {
-            entry = iterator.next();
+        while (oldIterator.hasNext()) {
+            entry = oldIterator.next();
             info = entry.getValue();
             recipe = entry.getKey();
 
             if (info.getOwner() == RecipeOwner.RECIPEMANAGER) {
-                iterator.remove();
+                oldIterator.remove();
                 recipe.remove();
             }
         }
 
         // TODO registering event or something to re-register plugin recipes
 
-        iterator = queuedRecipes.entrySet().iterator();
+        Iterator<Entry<BaseRecipe, RMCRecipeInfo>> removedIterator = queuedRemovedRecipes.entrySet().iterator();
+        Iterator<Entry<BaseRecipe, RMCRecipeInfo>> iterator = queuedRecipes.entrySet().iterator();
         long lastDisplay = System.currentTimeMillis();
         long time;
         int processed = 0;
-        int size = queuedRecipes.size();
+        int size = queuedRemovedRecipes.size() + queuedRecipes.size();
+
+        // Handle remove recipes first to avoid removing new recipes
+        while (removedIterator.hasNext()) {
+            entry = removedIterator.next();
+
+            RecipeManager.getRecipes().registerRecipe(entry.getKey(), entry.getValue());
+
+            time = System.currentTimeMillis();
+
+            if (time > lastDisplay + 1000) {
+                MessageSender.getInstance().sendAndLog(sender, String.format("%sRegistering recipes %d%%...", RMCChatColor.YELLOW, ((processed * 100) / size)));
+                lastDisplay = time;
+            }
+
+            processed++;
+        }
 
         while (iterator.hasNext()) {
             entry = iterator.next();
@@ -80,7 +103,9 @@ public class RecipeRegistrator {
         }
 
         registered = true; // mark this class as registered so it doesn't get re-registered
-        queuedRecipes.clear(); // clear the queue to let the class vanish
+        // clear the queues to let the classes vanish
+        queuedRemovedRecipes.clear();
+        queuedRecipes.clear();
 
         RecipeBooks.getInstance().reloadAfterRecipes(sender); // (re)create recipe books for recipes
 
@@ -123,7 +148,11 @@ public class RecipeRegistrator {
         return queuedRecipes;
     }
 
+    public Map<BaseRecipe, RMCRecipeInfo> getQueuedRemovedRecipes() {
+        return queuedRemovedRecipes;
+    }
+
     public int getNumQueuedRecipes() {
-        return queuedRecipes.size();
+        return queuedRemovedRecipes.size() + queuedRecipes.size();
     }
 }

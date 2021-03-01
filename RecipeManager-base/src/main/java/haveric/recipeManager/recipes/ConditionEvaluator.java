@@ -141,8 +141,9 @@ public class ConditionEvaluator {
         }
 
         RMCRecipeInfo queued = getRecipeFromMap(recipe, registrator.getQueuedRecipes());
+        RMCRecipeInfo queuedRemovedRecipes = getRecipeFromMap(recipe, registrator.getQueuedRemovedRecipes());
 
-        if (queued != null) {
+        if (queued != null && queuedRemovedRecipes != null) {
             // can't re-add recipes
             return ErrorReporter.getInstance().error("Recipe already created with this plugin, file: " + queued.getAdder());
         }

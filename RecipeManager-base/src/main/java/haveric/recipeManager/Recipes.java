@@ -181,18 +181,42 @@ public class Recipes {
     }
 
     public BaseRecipe getRecipe(RMCRecipeType type, List<ItemStack> ingredients, ItemStack result) {
-        return getRecipe(type.getDirective(), ingredients, result);
+        return getRecipeFromIndex(type.getDirective(), ingredients, result, indexRecipes);
     }
 
-    public BaseRecipe getRecipe(String type, List<ItemStack> ingredients, ItemStack result) {
+    public BaseRecipe getSimpleRecipe(RMCRecipeType type, ItemStack ingredient) {
+        return getSimpleRecipe(type, ingredient, null);
+    }
+
+    public BaseRecipe getSimpleRecipe(RMCRecipeType type, ItemStack ingredient, ItemStack result) {
+        return getSimpleRecipe(type, Collections.singletonList(ingredient), result);
+    }
+
+    public BaseRecipe getSimpleRecipe(RMCRecipeType type, List<ItemStack> ingredients, ItemStack result) {
+        return getRecipeFromIndex(type.getDirective(), ingredients, result, indexRecipesSimple);
+    }
+
+    public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient) {
+        return getRemovedRecipe(type, ingredient, null);
+    }
+
+    public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient, ItemStack result) {
+        return getRemovedRecipe(type, Collections.singletonList(ingredient), result);
+    }
+
+    public BaseRecipe getRemovedRecipe(RMCRecipeType type, List<ItemStack> ingredients, ItemStack result) {
+        return getRecipeFromIndex(type.getDirective(), ingredients, result, indexRemovedRecipes);
+    }
+
+    public BaseRecipe getRecipeFromIndex(String type, List<ItemStack> ingredients, ItemStack result, Map<String, Map<String, List<BaseRecipe>>> index) {
         List<BaseRecipe> potentialRecipes = new ArrayList<>();
         replaceNullItemsWithAir(ingredients);
 
         BaseRecipe blankBaseRecipe = RecipeTypeFactory.getInstance().getRecipeType(type);
         List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
         if (recipeIndexes != null) {
-            if (indexRecipes.containsKey(type)) {
-                Map<String, List<BaseRecipe>> recipes = indexRecipes.get(type);
+            if (index.containsKey(type)) {
+                Map<String, List<BaseRecipe>> recipes = index.get(type);
 
                 for (String recipeIndex : recipeIndexes) {
                     if (recipes.containsKey(recipeIndex)) {
@@ -219,54 +243,6 @@ public class Recipes {
             return closestRecipe;
         } else {
             return potentialRecipes.get(0);
-        }
-    }
-
-    public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient) {
-        return getRemovedRecipe(type, ingredient, null);
-    }
-
-    public BaseRecipe getRemovedRecipe(RMCRecipeType type, ItemStack ingredient, ItemStack result) {
-        return getRemovedRecipe(type, Collections.singletonList(ingredient), result);
-    }
-
-    public BaseRecipe getRemovedRecipe(RMCRecipeType type, List<ItemStack> ingredients, ItemStack result) {
-        return getRemovedRecipe(type.getDirective(), ingredients, result);
-    }
-
-    public BaseRecipe getRemovedRecipe(String type, List<ItemStack> ingredients, ItemStack result) {
-        List<BaseRecipe> potentialRecipes = new ArrayList<>();
-        replaceNullItemsWithAir(ingredients);
-
-        BaseRecipe blankBaseRecipe = RecipeTypeFactory.getInstance().getRecipeType(type);
-        List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
-        if (recipeIndexes != null) {
-            if (indexRemovedRecipes.containsKey(type)) {
-                Map<String, List<BaseRecipe>> recipes = indexRemovedRecipes.get(type);
-
-                for (String recipeIndex : recipeIndexes) {
-                    if (recipes.containsKey(recipeIndex)) {
-                        potentialRecipes.addAll(recipes.get(recipeIndex));
-                    }
-                }
-            }
-        }
-
-        if (potentialRecipes.isEmpty()) {
-            return null;
-        } else {
-            int matchQuality = 0;
-            BaseRecipe closestRecipe = null;
-
-            for (BaseRecipe recipe : potentialRecipes) {
-                int quality = recipe.getIngredientMatchQuality(ingredients);
-                if (quality > matchQuality) {
-                    matchQuality = quality;
-                    closestRecipe = recipe;
-                }
-            }
-
-            return closestRecipe;
         }
     }
 

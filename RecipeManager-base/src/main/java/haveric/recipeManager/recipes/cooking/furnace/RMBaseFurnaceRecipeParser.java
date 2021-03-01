@@ -190,7 +190,6 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         // add the recipe to the Recipes class and to the list for later adding to the server
         recipeRegistrator.queueRecipe(recipe, reader.getFileName());
 
-
         return true;
     }
 
