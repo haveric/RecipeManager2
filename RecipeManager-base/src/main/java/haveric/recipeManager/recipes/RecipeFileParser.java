@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeRegistrator;
+import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flags;
 
@@ -47,7 +48,7 @@ public class RecipeFileParser {
 
             BaseRecipeParser parser = RecipeTypeFactory.getInstance().getRecipeParser(directive);
             if (parser == null) {
-                ErrorReporter.getInstance().warning("Unexpected directive: '" + fileReader.getLine() + "'", "This might be caused by previous errors.");
+                ErrorReporter.getInstance().warning("Unexpected directive: '" + fileReader.getLine() + RMCChatColor.RESET + "'", "This might be caused by previous errors.");
                 fileReader.nextLine();
             } else {
                 parser.init(fileReader, recipeName, fileFlags, registrator);
