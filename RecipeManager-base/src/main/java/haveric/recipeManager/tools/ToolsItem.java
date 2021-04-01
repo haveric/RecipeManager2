@@ -275,6 +275,10 @@ public class ToolsItem {
 
                 match = oneHash == twoHash;
             }
+        } else if (one == null && two != null && two.getType() == Material.AIR) {
+            match = true;
+        } else if (two == null && one != null && one.getType() == Material.AIR) {
+            match = true;
         }
 
         return match;
