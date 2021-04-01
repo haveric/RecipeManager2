@@ -240,6 +240,12 @@ public class MultiResultRecipe extends BaseRecipe {
         }
 
         if (!requiresModification) {
+            if (getFailChance() != 0) {
+                requiresModification = true;
+            }
+        }
+
+        if (!requiresModification) {
             for (Flag flag : getFlags().get()) {
                 if (flag.requiresRecipeManagerModification()) {
                     requiresModification = true;

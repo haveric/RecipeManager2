@@ -181,10 +181,16 @@ public class SingleResultRecipe extends BaseRecipe {
     public boolean requiresRecipeManagerModification() {
         boolean requiresModification = false;
 
-        for (Flag flag : getFlags().get()) {
-            if (flag.requiresRecipeManagerModification()) {
-                requiresModification = true;
-                break;
+        if (result.getChance() < 100) {
+            requiresModification = true;
+        }
+
+        if (!requiresModification) {
+            for (Flag flag : getFlags().get()) {
+                if (flag.requiresRecipeManagerModification()) {
+                    requiresModification = true;
+                    break;
+                }
             }
         }
 
