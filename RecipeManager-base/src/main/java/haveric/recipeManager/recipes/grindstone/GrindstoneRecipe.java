@@ -252,4 +252,9 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
 
         return totalQuality;
     }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
+    }
 }
