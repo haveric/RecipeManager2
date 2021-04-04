@@ -121,6 +121,7 @@ public class AnvilEvents extends BaseRecipeEvents {
             InventoryView view = event.getView();
             Player player = (Player) view.getPlayer();
 
+            Anvils.remove(player);
             String renameText = "";
 
             // 1.10 didn't support repair cost or rename text
