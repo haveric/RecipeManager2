@@ -1,10 +1,11 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class FlagItemName extends Flag {
@@ -127,7 +128,7 @@ public class FlagItemName extends Flag {
             } else if (display.equals("result")) {
                 resultName = name;
             } else {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ". Defaulting to set name in both locations.");
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + RMCChatColor.RESET + ". Defaulting to set name in both locations.");
                 displayName = name;
                 resultName = name;
             }

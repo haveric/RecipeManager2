@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: Removing a furnace recipe and adding a simple recipe now works correctly
 * FIX: 1.13+: Furnace recipe removal throwing ClassCastException
 * FIX: Unexpected directive warning text no longer allows colors to wrap to the next line
+* FIX: @ItemName `Defaulting to set name in both locations` message no longer allows colors to wrap to the next line
 * FIX: Recipes specifying air were not matching
 * FIX: Simple recipes with chance weren't applying the chance
 * FIX: Some grindstone recipes were not working
