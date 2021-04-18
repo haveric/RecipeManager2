@@ -79,7 +79,7 @@ public class FlagLoader {
         loadFlag(FlagType.RESTRICT, new FlagRestrict(), FlagBit.RECIPE | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_FOR, "disable", "denied", "deny");
 
         // Result only flags
-        loadFlag(FlagType.NO_RESULT, new FlagNoResult(), FlagBit.RESULT | FlagBit.NO_FOR | FlagBit.NO_VALUE_REQUIRED);
+        loadFlag(FlagType.NO_RESULT, new FlagNoResult(), FlagBit.RESULT | FlagBit.NO_DELAY | FlagBit.NO_VALUE_REQUIRED);
 
         loadFlag(FlagType.APPLY_ENCHANTMENT, new FlagApplyEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "applyenchant", "applyenchantments", "applyenchants");
         loadFlag(FlagType.CLONE_INGREDIENT, new FlagCloneIngredient(), FlagBit.RESULT | FlagBit.NO_DELAY, "clone", "copy", "copyingredient"); // TODO finish
