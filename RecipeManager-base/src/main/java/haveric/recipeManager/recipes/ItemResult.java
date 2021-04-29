@@ -26,13 +26,14 @@ public class ItemResult extends ItemStack implements Flaggable {
         super(result);
 
         if (result.hasFlags()) {
-            flags = result.getFlags().clone(this);
+            // don't clone, needs to be a reference to allow some flags (ex: FlagCooldown) to work
+            flags = result.getFlags();
         } else {
             flags = null;
         }
 
         chance = result.chance;
-        recipe = result.recipe; // don't clone, needs to be a pointer
+        recipe = result.recipe; // don't clone, needs to be a reference
     }
 
     public ItemResult(ItemStack item, float newChance) {

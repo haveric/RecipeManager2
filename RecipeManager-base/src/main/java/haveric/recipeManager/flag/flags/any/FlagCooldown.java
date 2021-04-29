@@ -1,10 +1,10 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.apache.commons.lang.mutable.MutableInt;
 
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class FlagCooldown extends Flag {
     }
 
 
-    private final Map<UUID, MutableInt> cooldownTime = new HashMap<>();
+    private Map<UUID, MutableInt> cooldownTime;
 
     private int cooldown;
     private boolean global = false;
@@ -66,6 +66,7 @@ public class FlagCooldown extends Flag {
     private String craftMessage;
 
     public FlagCooldown() {
+        cooldownTime = new HashMap<>();
     }
 
     public FlagCooldown(FlagCooldown flag) {
@@ -75,7 +76,11 @@ public class FlagCooldown extends Flag {
         failMessage = flag.failMessage;
         craftMessage = flag.craftMessage;
 
-        // no cloning of cooldownTime Map.
+        if (flag.cooldownTime == null) {
+            cooldownTime = new HashMap<>();
+        } else {
+            cooldownTime = new HashMap<>(flag.cooldownTime);
+        }
     }
 
     @Override

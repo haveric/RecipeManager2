@@ -410,6 +410,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                     }
 
                     boolean skipCraft = false;
+                    boolean cancelCraft = false;
                     List<ItemResult> potentialResults = recipe.getResults();
                     if (recipe.isMultiResult()) {
                         boolean hasMatch = false;
@@ -433,19 +434,24 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                                 if (r.checkFlags(a)) {
                                     matchingResults.add(r);
                                     maxChance += r.getChance();
+                                } else {
+                                    cancelCraft = true;
+                                    break;
                                 }
                             }
 
-                            float rand = RecipeManager.random.nextFloat() * maxChance;
-                            float chance = 0;
+                            if (!cancelCraft) {
+                                float rand = RecipeManager.random.nextFloat() * maxChance;
+                                float chance = 0;
 
-                            for (ItemResult r : matchingResults) {
-                                chance += r.getChance();
+                                for (ItemResult r : matchingResults) {
+                                    chance += r.getChance();
 
-                                if (chance >= rand) {
-                                    hasMatch = true;
-                                    result = r.clone();
-                                    break;
+                                    if (chance >= rand) {
+                                        hasMatch = true;
+                                        result = r.clone();
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -557,8 +563,10 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                         }
 
                         if (noResult) {
-                            subtract = true;
-                            onlyExtra = false;
+                            if (!cancelCraft) {
+                                subtract = true;
+                                onlyExtra = false;
+                            }
                             event.setCancelled(true);
                         } else {
                             event.setCurrentItem(result);

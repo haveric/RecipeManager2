@@ -69,6 +69,7 @@ public class PreparableResultRecipe extends MultiResultRecipe {
         int unavailableNum = 0;
         float unavailableChance = 0;
         int displayNum;
+        List<String> unavailableReasons = new ArrayList<>();
 
         List<ItemResult> itemResults = getResults();
         for (ItemResult r : itemResults) {
@@ -90,6 +91,10 @@ public class PreparableResultRecipe extends MultiResultRecipe {
             } else {
                 unavailableNum++;
                 unavailableChance += r.getChance();
+
+                for (String reason : a.reasons()) {
+                    unavailableReasons.add(RMCUtil.parseColors(reason, false));
+                }
             }
         }
 
@@ -109,6 +114,11 @@ public class PreparableResultRecipe extends MultiResultRecipe {
                 displayResult = displayResults.get(0);
             } else if (secretNum > 0 && secretNum == itemResults.size()) {
                 return ToolsItem.create(RecipeManager.getSettings().getSecretMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.receive.title.unknown"));
+            } else if (unavailableNum > 0) {
+                for (String reason : unavailableReasons) {
+                    a.addCustomReason(reason);
+                }
+                return ToolsItem.create(RecipeManager.getSettings().getFailMaterial(), 0, displayAmount, Messages.getInstance().parse("craft.result.denied.title"), unavailableReasons);
             } else {
                 ItemStack air = new ItemStack(Material.AIR);
                 return new ItemResult(air);
