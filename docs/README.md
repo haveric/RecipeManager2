@@ -5,3 +5,8 @@ https://help.github.com/en/github/working-with-github-pages/testing-your-github-
 <pre>
 $ bundle exec jekyll serve
 </pre>
+
+## Update bundle:
+<pre>
+$ bundle update github-pages
+</pre>
