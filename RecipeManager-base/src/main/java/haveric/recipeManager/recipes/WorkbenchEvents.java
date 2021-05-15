@@ -520,40 +520,42 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                                 subtract = true;
                             }
 
-                            if (result.hasFlag(FlagType.NO_RESULT)) {
-                                noResult = true;
-                            } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
-                                noResult = true;
-                                // Make sure inventory can fit the results or drop on the ground
-                                if (Tools.playerCanAddItem(player, result)) {
-                                    player.getInventory().addItem(result.clone());
-                                } else {
-                                    player.getWorld().dropItem(player.getLocation(), result.clone());
-                                }
+                            if (!noResult) {
+                                if (result.hasFlag(FlagType.NO_RESULT)) {
+                                    noResult = true;
+                                } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                                    noResult = true;
+                                    // Make sure inventory can fit the results or drop on the ground
+                                    if (Tools.playerCanAddItem(player, result)) {
+                                        player.getInventory().addItem(result.clone());
+                                    } else {
+                                        player.getWorld().dropItem(player.getLocation(), result.clone());
+                                    }
 
-                                for (ItemStack item : originalMatrix) {
-                                    if (item != null) {
-                                        Material itemType = item.getType();
+                                    for (ItemStack item : originalMatrix) {
+                                        if (item != null) {
+                                            Material itemType = item.getType();
 
-                                        if (itemType != Material.AIR) {
-                                            Material returnedMaterial;
-                                            if (Version.has1_15Support()) {
-                                                try {
-                                                    returnedMaterial = itemType.getCraftingRemainingItem();
-                                                } catch (NoSuchMethodError e) {
+                                            if (itemType != Material.AIR) {
+                                                Material returnedMaterial;
+                                                if (Version.has1_15Support()) {
+                                                    try {
+                                                        returnedMaterial = itemType.getCraftingRemainingItem();
+                                                    } catch (NoSuchMethodError e) {
+                                                        returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
+                                                    }
+                                                } else {
                                                     returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
                                                 }
-                                            } else {
-                                                returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
-                                            }
 
-                                            if (returnedMaterial != null) {
-                                                ItemStack returnedItem = new ItemStack(returnedMaterial);
+                                                if (returnedMaterial != null) {
+                                                    ItemStack returnedItem = new ItemStack(returnedMaterial);
 
-                                                if (Tools.playerCanAddItem(player, returnedItem)) {
-                                                    player.getInventory().addItem(returnedItem);
-                                                } else {
-                                                    player.getWorld().dropItem(player.getLocation(), returnedItem);
+                                                    if (Tools.playerCanAddItem(player, returnedItem)) {
+                                                        player.getInventory().addItem(returnedItem);
+                                                    } else {
+                                                        player.getWorld().dropItem(player.getLocation(), returnedItem);
+                                                    }
                                                 }
                                             }
                                         }
