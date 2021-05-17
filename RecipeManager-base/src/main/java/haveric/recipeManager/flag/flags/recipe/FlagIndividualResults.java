@@ -53,7 +53,7 @@ public class FlagIndividualResults extends Flag {
     public boolean onValidate() {
         BaseRecipe recipe = getRecipe();
 
-        if (!(recipe instanceof MultiResultRecipe)) {
+        if (recipe != null && !(recipe instanceof MultiResultRecipe)) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " only works with recipes that support multiple results!");
         }
 
