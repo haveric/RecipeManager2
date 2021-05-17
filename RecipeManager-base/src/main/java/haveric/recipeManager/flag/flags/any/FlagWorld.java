@@ -1,9 +1,9 @@
 package haveric.recipeManager.flag.flags.any;
 
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -130,15 +130,28 @@ public class FlagWorld extends Flag {
             world = a.location().getWorld().getName().toLowerCase();
         }
 
+        boolean anyAllowed = false;
+        boolean anyAllowedIsValid = false;
+        Args anyArgs = Args.create().build();
+
         for (Entry<String, Boolean> e : worlds.entrySet()) {
             if (e.getValue()) {
-                if (world == null || !world.equals(e.getKey())) {
-                    a.addReason("flag.world.allowed", getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(true));
+                anyAllowedIsValid = true;
+                if (world != null && world.equals(e.getKey())) {
+                    anyAllowed = true;
+                } else {
+                    anyArgs.addReason("flag.world.allowed", getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(true));
                 }
             } else {
                 if (world != null && world.equals(e.getKey())) {
                     a.addReason("flag.world.unallowed", getWorldMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsString(false));
                 }
+            }
+        }
+
+        if (anyAllowedIsValid && !anyAllowed) {
+            for (String reason : anyArgs.reasons()) {
+                a.addCustomReason(reason);
             }
         }
     }
