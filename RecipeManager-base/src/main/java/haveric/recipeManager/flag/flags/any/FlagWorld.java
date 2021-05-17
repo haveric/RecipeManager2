@@ -19,7 +19,7 @@ public class FlagWorld extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} [!]<world>, [...] | [fail message]", };
+            "{flag} [!][~]<world>, [...] | [fail message]", };
     }
 
     @Override
@@ -29,8 +29,12 @@ public class FlagWorld extends Flag {
             "Using this flag more than once will add more worlds.",
             "",
             "The '<world>' argument can be a world name.",
-            "Adding ! character as prefix to individual worlds will do the opposite check, will not craft in specified world.",
+            "",
+            "Adding a ! character as prefix to individual worlds will do the opposite check, will not craft in specified world.",
             "You should require or disallow worlds, using both would be logically pointless.",
+            "",
+            "Adding a ~ character as prefix to individual worlds will allow a partial match.",
+            "  Any world that contains the partial match will be allowed or disallowed.",
             "",
             "Optionally you can specify a failure message that will be used on the specific world(s) defined.",
             "The messages can have the following variables:",
@@ -43,11 +47,17 @@ public class FlagWorld extends Flag {
         return new String[] {
             "{flag} world // only allows 'world'",
             "{flag} !world_nether // disallows 'world_nether'",
-            "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds", };
+            "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds",
+            "{flag} ~hardcore // Will match any world including hardcore in it's name, (ex: world_hardcore, hardcore_parkour)",
+            "{flag} !~hardcore // Disallows any worlds with hardcore in it's name",
+        };
     }
 
     private Map<String, Boolean> worlds = new HashMap<>();
     private Map<String, String> messages = new HashMap<>();
+
+    private Map<String, Boolean> worldsPartial = new HashMap<>();
+    private Map<String, String> messagesPartial = new HashMap<>();
 
     public FlagWorld() {
     }
@@ -56,6 +66,9 @@ public class FlagWorld extends Flag {
         super(flag);
         worlds.putAll(flag.worlds);
         messages.putAll(flag.messages);
+
+        worldsPartial.putAll(flag.worldsPartial);
+        messagesPartial.putAll(flag.messagesPartial);
     }
 
     @Override
@@ -72,10 +85,6 @@ public class FlagWorld extends Flag {
         messages.put(world, message);
     }
 
-    public Map<String, String> getMessages() {
-        return messages;
-    }
-
     public String getWorldMessage(String world) {
         return messages.get(world);
     }
@@ -84,6 +93,31 @@ public class FlagWorld extends Flag {
         StringBuilder s = new StringBuilder();
 
         for (Entry<String, Boolean> e : worlds.entrySet()) {
+            if (allowed == e.getValue()) {
+                if (s.length() > 0) {
+                    s.append(", ");
+                }
+
+                s.append(e.getKey());
+            }
+        }
+
+        return s.toString();
+    }
+
+    public void addWorldPartialMatch(String worldPartialMatch, String message, boolean allowed) {
+        worldsPartial.put(worldPartialMatch, allowed);
+        messagesPartial.put(worldPartialMatch, message);
+    }
+
+    public String getWorldPartialMessage(String world) {
+        return messagesPartial.get(world);
+    }
+
+    public String getWorldsPartialString(boolean allowed) {
+        StringBuilder s = new StringBuilder();
+
+        for (Entry<String, Boolean> e : worldsPartial.entrySet()) {
             if (allowed == e.getValue()) {
                 if (s.length() > 0) {
                     s.append(", ");
@@ -110,13 +144,19 @@ public class FlagWorld extends Flag {
 
         for (String arg : split) {
             arg = arg.trim();
-            boolean not = arg.charAt(0) == '!';
 
+            boolean not = arg.charAt(0) == '!';
             if (not) {
                 arg = arg.substring(1).trim();
             }
 
-            addWorld(arg, message, !not);
+            boolean partialMatch = arg.charAt(0) == '~';
+            if (partialMatch) {
+                arg = arg.substring(1).trim();
+                addWorldPartialMatch(arg, message, !not);
+            } else {
+                addWorld(arg, message, !not);
+            }
         }
 
         return true;
@@ -149,6 +189,21 @@ public class FlagWorld extends Flag {
             }
         }
 
+        for (Entry<String, Boolean> e : worldsPartial.entrySet()) {
+            if (e.getValue()) {
+                anyAllowedIsValid = true;
+                if (world != null && world.contains(e.getKey())) {
+                    anyAllowed = true;
+                } else {
+                    anyArgs.addReason("flag.world.allowed", getWorldPartialMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsPartialString(true));
+                }
+            } else {
+                if (world != null && world.contains(e.getKey())) {
+                    a.addReason("flag.world.unallowed", getWorldPartialMessage(e.getKey()), "{world}", e.getKey(), "{worlds}", getWorldsPartialString(false));
+                }
+            }
+        }
+
         if (anyAllowedIsValid && !anyAllowed) {
             for (String reason : anyArgs.reasons()) {
                 a.addCustomReason(reason);
@@ -167,6 +222,16 @@ public class FlagWorld extends Flag {
 
         toHash += "messages: ";
         for (Map.Entry<String, String> entry : messages.entrySet()) {
+            toHash += entry.getKey() + entry.getValue();
+        }
+
+        toHash += "worldsPartial: ";
+        for (Map.Entry<String, Boolean> entry : worldsPartial.entrySet()) {
+            toHash += entry.getKey() + entry.getValue().toString();
+        }
+
+        toHash += "messagesPartial: ";
+        for (Map.Entry<String, String> entry : messagesPartial.entrySet()) {
             toHash += entry.getKey() + entry.getValue();
         }
 
