@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManager.common.util.RMCUtil;
 
@@ -163,24 +164,25 @@ public class FlagNeedExp extends Flag {
     @Override
     public void onCheck(Args a) {
         if (!a.hasPlayer() || !checkExp(ToolsExp.getTotalExperience(a.player()))) {
-            a.addReason("flag.needexp", failMessage, "{exp}", getExpString(), "{minexp}", minExp, "{maxexp}", maxExp, "{playerexp}", ToolsExp.getTotalExperience(a.player()));
+            a.addReason("flag.needexp.checkmessage", failMessage, "{exp}", getExpString(), "{minexp}", minExp, "{maxexp}", maxExp, "{playerexp}", ToolsExp.getTotalExperience(a.player()));
         }
     }
 
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            String resultString = "Need ";
+            String message = "flag.needexp.preparelore.";
             if (setBoth) {
-                resultString += "exact ";
+                message += "exact";
+            } else {
+                message += "default";
             }
-
-            resultString += "exp: " + minExp;
 
             if (maxExp > minExp) {
-                resultString += "-" + maxExp;
+                message += "both";
             }
-            addResultLore(a, resultString);
+
+            addResultLore(a, Messages.getInstance().parse(message, "{exp}", getExpString(), "{minexp}", minExp, "{maxexp}", maxExp, "{playerexp}", ToolsExp.getTotalExperience(a.player())));
         }
     }
 

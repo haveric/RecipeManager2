@@ -348,7 +348,7 @@ public class AnvilEvents extends BaseRecipeEvents {
 
             FlagModLevel modLevel = new FlagModLevel();
             modLevel.setAmount(-repairCost);
-            modLevel.setFailMessage("false");
+            modLevel.setCraftMessage("false");
             recipe.addFlag(modLevel);
         }
 

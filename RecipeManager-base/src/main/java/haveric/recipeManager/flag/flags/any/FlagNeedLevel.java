@@ -1,10 +1,11 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.messages.Messages;
 
 public class FlagNeedLevel extends Flag {
 
@@ -27,7 +28,9 @@ public class FlagNeedLevel extends Flag {
             "",
             "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
             "In the message the following variables can be used:",
-            "  {level}  = level or level range",
+            "  {level}    = level or level range",
+            "  {minlevel} = defined min level range.",
+            "  {maxlevel} = defined max level range.",
             "",
             "NOTE: This is for experience levels, for experience points use " + FlagType.NEED_EXP + " or for world height use " + FlagType.HEIGHT + ".", };
     }
@@ -154,25 +157,25 @@ public class FlagNeedLevel extends Flag {
     @Override
     public void onCheck(Args a) {
         if (!a.hasPlayer() || !checkLevel(a.player().getLevel())) {
-            a.addReason("flag.needlevel", failMessage, "{level}", getLevelString());
+            a.addReason("flag.needlevel.checkmessage", failMessage, "{level}", getLevelString(), "{minlevel}", minLevel, "{maxlevel}", maxLevel);
         }
     }
 
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            String resultString = "Need ";
+            String message = "flag.needlevel.preparelore.";
             if (setBoth) {
-                resultString += "exact ";
+                message += "exact";
+            } else {
+                message += "default";
             }
-
-            resultString += "level: " + minLevel;
 
             if (maxLevel > minLevel) {
-                resultString += "-" + maxLevel;
+                message += "both";
             }
 
-            addResultLore(a, resultString);
+            addResultLore(a, Messages.getInstance().parse(message, "{level}", getLevelString(), "{minlevel}", minLevel, "{maxlevel}", maxLevel));
         }
     }
 

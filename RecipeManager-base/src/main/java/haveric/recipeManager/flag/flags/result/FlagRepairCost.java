@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
@@ -105,7 +106,7 @@ public class FlagRepairCost extends Flag {
                 return;
             }
 
-            addResultLore(a, "Repair cost: " + cost);
+            addResultLore(a, Messages.getInstance().parse("flag.repaircost.preparelore", "{cost}", cost));
         }
     }
 

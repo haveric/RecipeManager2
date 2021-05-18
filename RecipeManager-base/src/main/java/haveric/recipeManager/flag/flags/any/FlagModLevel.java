@@ -5,6 +5,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.messages.Messages;
 import org.bukkit.entity.Player;
 
 public class FlagModLevel extends Flag {
@@ -17,7 +18,7 @@ public class FlagModLevel extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} [modifier]<number> | [fail message]", };
+            "{flag} [modifier]<number> | [craft message]", };
     }
 
     @Override
@@ -32,8 +33,8 @@ public class FlagModLevel extends Flag {
             "  = (to set)",
             "",
             "The '<number>' argument must be the amount of levels to modify.",
-            "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
-            "For the fail message you can use the following arguments:",
+            "The '[craft message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "For the craft message you can use the following arguments:",
             "  {amount}       = amount defined in the flag, never has modifier prefix.",
             "  {modifier}     = the modifier prefix.",
             "  {actualamount} = (only works for - modifier) the actual amount lost.",
@@ -54,7 +55,7 @@ public class FlagModLevel extends Flag {
 
     private char mod = '+';
     private int amount = 0;
-    private String failMessage;
+    private String craftMessage;
 
     public FlagModLevel() {
     }
@@ -63,7 +64,7 @@ public class FlagModLevel extends Flag {
         super(flag);
         mod = flag.mod;
         amount = flag.amount;
-        failMessage = flag.failMessage;
+        craftMessage = flag.craftMessage;
     }
 
     @Override
@@ -125,12 +126,12 @@ public class FlagModLevel extends Flag {
         amount = Math.abs(newAmount);
     }
 
-    public String getFailMessage() {
-        return failMessage;
+    public String getCraftMessage() {
+        return craftMessage;
     }
 
-    public void setFailMessage(String newFailMessage) {
-        failMessage = newFailMessage;
+    public void setCraftMessage(String newCraftMessage) {
+        craftMessage = newCraftMessage;
     }
 
     @Override
@@ -139,7 +140,7 @@ public class FlagModLevel extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            failMessage = RMCUtil.trimExactQuotes(split[1]);
+            craftMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         value = split[0].trim();
@@ -179,7 +180,21 @@ public class FlagModLevel extends Flag {
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addResultLore(a, "Mod Level: " + mod + " " + amount);
+            String resultLore = "";
+            switch (mod) {
+                case '+':
+                    resultLore = Messages.getInstance().parse("flag.modlevel.preparelore.add", "{amount}", amount, "{modifier}", mod);
+                    break;
+                case '-':
+                    resultLore = Messages.getInstance().parse("flag.modlevel.preparelore.sub", "{amount}", amount, "{modifier}", mod);
+                    break;
+                case '=':
+                    resultLore = Messages.getInstance().parse("flag.modlevel.preparelore.set", "{amount}", amount, "{modifier}", mod);
+                    break;
+                default:
+                    break;
+            }
+            addResultLore(a, resultLore);
         }
     }
 
@@ -200,9 +215,7 @@ public class FlagModLevel extends Flag {
             case '+':
                 p.giveExpLevels(amount);
 
-                if (!failMessage.isEmpty()) {
-                    a.addEffect("flag.modlevel.add", failMessage, "{amount}", amount, "{modifier}", mod);
-                }
+                a.addEffect("flag.modlevel.craftmessage.add", craftMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
@@ -210,13 +223,13 @@ public class FlagModLevel extends Flag {
 
                 p.setLevel(level);
 
-                a.addEffect("flag.modlevel.sub", failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", level);
+                a.addEffect("flag.modlevel.craftmessage.sub", craftMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", level);
 
                 break;
             case '=':
                 p.setLevel(amount);
 
-                a.addEffect("flag.modlevel.set", failMessage, "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modlevel.craftmessage.set", craftMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             default:
@@ -230,7 +243,7 @@ public class FlagModLevel extends Flag {
 
         toHash += "mod: " + mod;
         toHash += "amount: " + amount;
-        toHash += "failMessage: " + failMessage;
+        toHash += "craftMessage: " + craftMessage;
 
         return toHash.hashCode();
     }

@@ -4,9 +4,9 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
-import haveric.recipeManager.common.RMCChatColor;
 
 public class FlagIndividualResults extends Flag {
 
@@ -71,7 +71,7 @@ public class FlagIndividualResults extends Flag {
         if (canAddMeta(a)) {
             double failChance = 100 - a.result().getChance();
             if (failChance > 0 && failChance < 100) {
-                addResultLore(a, RMCChatColor.RED + "Chance to fail: " + RMCChatColor.WHITE + failChance + "%");
+                addResultLore(a, Messages.getInstance().parse("flag.individualresults.preparelore.failchance", "{chance}", failChance));
             }
         }
     }

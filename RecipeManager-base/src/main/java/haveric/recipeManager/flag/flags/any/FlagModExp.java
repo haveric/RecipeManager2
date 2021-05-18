@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsExp;
 import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class FlagModExp extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} [modifier]<amount> | [fail message]", };
+            "{flag} [modifier]<amount> | [craft message]", };
     }
 
     @Override
@@ -33,7 +34,8 @@ public class FlagModExp extends Flag {
             "  = (to set)",
             "",
             "The '<amount>' argument must be the amount of experience to modify.",
-            "The '[fail message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.", "For the fail message you can use the following arguments:",
+            "The '[craft message]' argument is optional and can be used to overwrite the default message or you can set it to false to hide it. Message will be printed in chat.",
+            "For the craft message you can use the following arguments:",
             "  {amount}       = amount defined in the flag, never has modifier prefix.",
             "  {modifier}     = the modifier prefix.",
             "  {actualamount} = (only works for - modifier) the actual amount lost.",
@@ -54,7 +56,7 @@ public class FlagModExp extends Flag {
 
     private char mod = '+';
     private int amount = 0;
-    private String failMessage = null;
+    private String craftMessage = null;
 
     public FlagModExp() {
     }
@@ -63,7 +65,7 @@ public class FlagModExp extends Flag {
         super(flag);
         mod = flag.mod;
         amount = flag.amount;
-        failMessage = flag.failMessage;
+        craftMessage = flag.craftMessage;
     }
 
     @Override
@@ -116,12 +118,12 @@ public class FlagModExp extends Flag {
         amount = Math.abs(newAmount);
     }
 
-    public String getFailMessage() {
-        return failMessage;
+    public String getCraftMessage() {
+        return craftMessage;
     }
 
-    public void setFailMessage(String message) {
-        failMessage = message;
+    public void setCraftMessage(String message) {
+        craftMessage = message;
     }
 
     @Override
@@ -130,7 +132,7 @@ public class FlagModExp extends Flag {
         String[] split = value.split("\\|");
 
         if (split.length > 1) {
-            failMessage = RMCUtil.trimExactQuotes(split[1]);
+            craftMessage = RMCUtil.trimExactQuotes(split[1]);
         }
 
         value = split[0].trim();
@@ -170,7 +172,21 @@ public class FlagModExp extends Flag {
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addResultLore(a, "Mod Exp: " + mod + " " + amount);
+            String resultLore = "";
+            switch (mod) {
+                case '+':
+                    resultLore = Messages.getInstance().parse("flag.modexp.preparelore.add", "{amount}", amount, "{modifier}", mod);
+                    break;
+                case '-':
+                    resultLore = Messages.getInstance().parse("flag.modexp.preparelore.sub", "{amount}", amount, "{modifier}", mod);
+                    break;
+                case '=':
+                    resultLore = Messages.getInstance().parse("flag.modexp.preparelore.set", "{amount}", amount, "{modifier}", mod);
+                    break;
+                default:
+                    break;
+            }
+            addResultLore(a, resultLore);
         }
     }
 
@@ -192,19 +208,19 @@ public class FlagModExp extends Flag {
             case '+':
                 exp = ToolsExp.getTotalExperience(p) + amount;
 
-                a.addEffect("flag.modexp.add", failMessage, "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modexp.craftmessage.add", craftMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
                 exp = Math.max(ToolsExp.getTotalExperience(p) - amount, 0);
 
-                a.addEffect("flag.modexp.sub", failMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
+                a.addEffect("flag.modexp.craftmessage.sub", craftMessage, "{amount}", amount, "{modifier}", mod, "{actualamount}", exp);
 
                 break;
             case '=':
                 exp = Math.max(amount, 0);
 
-                a.addEffect("flag.modexp.set", failMessage, "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modexp.craftmessage.set", craftMessage, "{amount}", amount, "{modifier}", mod);
 
                 break;
             default:
@@ -220,7 +236,7 @@ public class FlagModExp extends Flag {
 
         toHash += "mod: " + mod;
         toHash += "amount: " + amount;
-        toHash += "failMessage: " + failMessage;
+        toHash += "craftMessage: " + craftMessage;
 
         return toHash.hashCode();
     }

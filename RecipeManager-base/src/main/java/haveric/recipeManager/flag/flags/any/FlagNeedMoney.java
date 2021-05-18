@@ -2,10 +2,11 @@ package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.Econ;
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.messages.Messages;
 
 public class FlagNeedMoney extends Flag {
 
@@ -28,7 +29,12 @@ public class FlagNeedMoney extends Flag {
             "",
             "Optionally you can overwrite the fail message or you can use 'false' to hide it.",
             "In the message the following variables can be used:",
-            "  {money}      = money or money range; formatted with currency.",
+            "  {money}      = money or money range",
+            "  {minmoney}   = defined min money range.",
+            "  {maxmoney}   = defined max money range.",
+            "  {fmoney}      = money or money range; formatted with currency.",
+            "  {fminmoney}  = defined min money range; formatted with currency.",
+            "  {fmaxmoney}  = defined max money range; formatted with currency.",
             "",
             "NOTE: Vault with a supported economy plugin is required for this flag to work.", };
     }
@@ -86,16 +92,39 @@ public class FlagNeedMoney extends Flag {
     public String getMoneyString() {
         String moneyString;
         if (Econ.getInstance().isEnabled()) {
-            moneyString = Econ.getInstance().getFormat(minMoney);
+            moneyString = "" + minMoney;
 
             if (maxMoney > minMoney) {
-                moneyString += " - " + Econ.getInstance().getFormat(maxMoney);
+                moneyString += " - " + maxMoney;
             }
         } else {
             moneyString = null;
         }
 
         return moneyString;
+    }
+
+    public String getFormattedMoneyString() {
+        String moneyString;
+        if (Econ.getInstance().isEnabled()) {
+            moneyString = getFormattedMinMoney();
+
+            if (maxMoney > minMoney) {
+                moneyString += " - " + getFormattedMaxMoney();
+            }
+        } else {
+            moneyString = null;
+        }
+
+        return moneyString;
+    }
+
+    public String getFormattedMinMoney() {
+        return Econ.getInstance().getFormat(minMoney);
+    }
+
+    public String getFormattedMaxMoney() {
+        return Econ.getInstance().getFormat(maxMoney);
     }
 
     public boolean checkMoney(double money) {
@@ -168,14 +197,25 @@ public class FlagNeedMoney extends Flag {
         }
 
         if (!a.hasPlayerUUID() || !checkMoney(Econ.getInstance().getMoney(a.playerUUID()))) {
-            a.addReason("flag.needmoney", failMessage, "{money}", getMoneyString());
+            a.addReason("flag.needmoney.checkmessage", failMessage, "{money}", getMoneyString(), "{fmoney}", getFormattedMoneyString(), "{minmoney}", minMoney, "{maxmoney}", maxMoney, "{fminmoney}", getFormattedMinMoney(), "{fmaxmoney}", getFormattedMaxMoney());
         }
     }
 
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addResultLore(a, "Need Money: " + getMoneyString());
+            String message = "flag.needmoney.preparelore.";
+            if (setBoth) {
+                message += "exact";
+            } else {
+                message += "default";
+            }
+
+            if (maxMoney > minMoney) {
+                message += "both";
+            }
+
+            addResultLore(a, Messages.getInstance().parse(message, "{money}", getMoneyString(), "{fmoney}", getFormattedMoneyString(), "{minmoney}", minMoney, "{maxmoney}", maxMoney, "{fminmoney}", getFormattedMinMoney(), "{fmaxmoney}", getFormattedMaxMoney()));
         }
     }
 

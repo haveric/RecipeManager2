@@ -45,11 +45,11 @@ public class FlagModLevelTest extends FlagBaseTest {
                 } else if (resultType == Material.STONE_SWORD) {
                     assertEquals(2, flag.getAmount(), .1);
                     assertEquals('-', flag.getModifier());
-                    assertEquals("<red>You lost {amount} levels.", flag.getFailMessage());
+                    assertEquals("<red>You lost {amount} levels.", flag.getCraftMessage());
                 } else if (resultType == Material.IRON_SWORD) {
                     assertEquals(0, flag.getAmount(), .1);
                     assertEquals('=', flag.getModifier());
-                    assertEquals("<red>You've been set to level 0!", flag.getFailMessage());
+                    assertEquals("<red>You've been set to level 0!", flag.getCraftMessage());
                 } else if (resultType == Material.GOLDEN_SWORD) {
                     assertEquals(2, flag.getAmount(), .1);
                     assertEquals('-', flag.getModifier());

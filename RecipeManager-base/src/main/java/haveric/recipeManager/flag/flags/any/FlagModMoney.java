@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.messages.Messages;
 
 public class FlagModMoney extends Flag {
 
@@ -172,7 +173,21 @@ public class FlagModMoney extends Flag {
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addResultLore(a, "Mod Money: " + mod + " " + amount);
+            String resultLore = "";
+            switch (mod) {
+                case '+':
+                    resultLore = Messages.getInstance().parse("flag.modmoney.preparelore.add", "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                    break;
+                case '-':
+                    resultLore = Messages.getInstance().parse("flag.modmoney.preparelore.sub", "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                    break;
+                case '=':
+                    resultLore = Messages.getInstance().parse("flag.modmoney.preparelore.set", "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                    break;
+                default:
+                    break;
+            }
+            addResultLore(a, resultLore);
         }
     }
 
@@ -195,13 +210,13 @@ public class FlagModMoney extends Flag {
             case '+':
                 Econ.getInstance().modMoney(a.playerUUID(), amount);
 
-                a.addEffect("flag.modmoney.add", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modmoney.craftmessage.add", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '-':
                 Econ.getInstance().modMoney(a.playerUUID(), -amount);
 
-                a.addEffect("flag.modmoney.sub", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modmoney.craftmessage.sub", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             case '=':
@@ -213,7 +228,7 @@ public class FlagModMoney extends Flag {
                     Econ.getInstance().modMoney(a.playerUUID(), amount);
                 }
 
-                a.addEffect("flag.modmoney.set", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
+                a.addEffect("flag.modmoney.craftmessage.set", failMessage, "{money}", Econ.getInstance().getFormat(amount), "{amount}", amount, "{modifier}", mod);
 
                 break;
             default:
