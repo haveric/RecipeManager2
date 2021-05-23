@@ -45,11 +45,11 @@ public class FlagPotionItem extends Flag {
                 "",
                 "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
                 "Arguments for basic effect:",
-                "  type &lt;potion type&gt;     = (REQUIRED if you want to use level or extended) Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
-                "  level <number or max>  = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
-                "  extended               = (optional) Potion has extended duration",
-                "  color <r> <g> <b>      = (optional) Sets the base color",
-                "  splash                 = (optional) Throwable/breakable potion instead of drinkable",
+                "  type &lt;potion type&gt;   = (REQUIRED if you want to use level or extended) Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
+                "  level <number or max>      = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
+                "  extended                   = (optional) Potion has extended duration",
+                "  color <red> <green> <blue> = (optional) Sets the base color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
+                "  splash                     = (optional) Throwable/breakable potion instead of drinkable",
         };
 
         if (Version.has1_9Support()) {
