@@ -11,6 +11,7 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.RecipeTypeFactory;
 import haveric.recipeManager.recipes.RecipeTypeLoader;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
+import haveric.recipeManager.recipes.brew.BrewInventoryUtil;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
 import haveric.recipeManager.recipes.brew.data.BrewingStands;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
@@ -132,6 +133,8 @@ public class RecipeManager extends JavaPlugin {
             Anvils.init();
         }
 
+        BrewInventoryUtil.init();
+
         reload(null, false, true); // load data
 
         pm.callEvent(new RecipeManagerEnabledEvent()); // Call the enabled event to notify other plugins that use this plugin's API
@@ -213,6 +216,8 @@ public class RecipeManager extends JavaPlugin {
                 }
             }
         }
+
+        BrewInventoryUtil.clean();
 
         RecipeProcessor.reload(sender, check); // (re)parse recipe files
         Events.reload();
@@ -296,6 +301,8 @@ public class RecipeManager extends JavaPlugin {
             if (Version.has1_9Support()) {
                 Anvils.clean();
             }
+
+            BrewInventoryUtil.clean();
 
             Players.clean();
             Vanilla.clean();

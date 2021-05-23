@@ -4,6 +4,7 @@ import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,12 @@ public class BrewingStandData implements ConfigurationSerializable {
     private UUID fuelerUUID;
 
     private static final String ID_FUELER_UUID = "fuelerUUID";
+
+    private float currentBrewTime = -1;
+
+    private BukkitTask updateTask = null;
+
+    private BukkitTask finishBrewingTask = null;
 
     public static void init() {
 
@@ -64,5 +71,52 @@ public class BrewingStandData implements ConfigurationSerializable {
 
     public void setFuelerUUID(UUID newFueler) {
         fuelerUUID = newFueler;
+    }
+
+    public float getCurrentBrewTime() {
+        return currentBrewTime;
+    }
+
+    public void setCurrentBrewTime(float newBrewTime) {
+        currentBrewTime = newBrewTime;
+    }
+
+    public BukkitTask getUpdateTask() {
+        return updateTask;
+    }
+
+    public void setUpdateTask(BukkitTask newTask) {
+        updateTask = newTask;
+    }
+
+    public BukkitTask getFinishBrewingTask() {
+        return finishBrewingTask;
+    }
+
+    public void setFinishBrewingTask(BukkitTask newTask) {
+        finishBrewingTask = newTask;
+    }
+
+    public void cancelBrewing() {
+        currentBrewTime = -1;
+        if (updateTask != null) {
+            updateTask.cancel();
+            updateTask = null;
+        }
+
+        if (finishBrewingTask != null) {
+            finishBrewingTask.cancel();
+            finishBrewingTask = null;
+        }
+    }
+
+    public void completeBrewing() {
+        currentBrewTime = -1;
+        updateTask = null;
+        finishBrewingTask = null;
+    }
+
+    public boolean isBrewing() {
+        return updateTask != null || finishBrewingTask != null;
     }
 }

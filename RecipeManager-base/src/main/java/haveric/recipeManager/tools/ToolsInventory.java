@@ -7,39 +7,60 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class ToolsInventory {
-    public static void simulateHotbarSwap(Inventory inventoryOne, int slotOne, Inventory inventoryTwo, int slotTwo) {
-        ItemStack itemOne = inventoryOne.getItem(slotOne);
-        ItemStack itemTwo = inventoryTwo.getItem(slotTwo);
 
-        boolean itemOneIsAir = itemOne == null || itemOne.getType() == Material.AIR;
-        boolean itemTwoIsAir = itemTwo == null || itemTwo.getType() == Material.AIR;
+    public static void simulateHotbarSwap(Inventory inventoryOne, int slotTop, Inventory inventoryTwo, int slotHotbar) {
+        simulateHotbarSwap(inventoryOne, slotTop, inventoryTwo, slotHotbar, 64);
+    }
 
-        if (itemOneIsAir && !itemTwoIsAir) {
-            ItemStack newItemOne = itemTwo.clone();
+    public static void simulateHotbarSwap(Inventory inventoryOne, int slotTop, Inventory inventoryTwo, int slotHotbar, int maxStackSize) {
+        ItemStack itemTop = inventoryOne.getItem(slotTop);
+        ItemStack itemHotbar = inventoryTwo.getItem(slotHotbar);
 
-            inventoryOne.setItem(slotOne, newItemOne);
-            inventoryTwo.setItem(slotTwo, null);
-        } else if (!itemOneIsAir && itemTwoIsAir) {
-            ItemStack newItemTwo = itemOne.clone();
+        boolean itemTopIsAir = itemTop == null || itemTop.getType() == Material.AIR;
+        boolean itemHotbarIsAir = itemHotbar == null || itemHotbar.getType() == Material.AIR;
 
-            inventoryOne.setItem(slotOne, null);
-            inventoryTwo.setItem(slotTwo, newItemTwo);
-        } else if (!itemOneIsAir) {
-            ItemStack newItemOne = itemTwo.clone();
-            ItemStack newItemTwo = itemOne.clone();
+        if (itemTopIsAir && !itemHotbarIsAir) {
+            ItemStack newItemTop = itemHotbar.clone();
 
-            inventoryOne.setItem(slotOne, newItemOne);
-            inventoryTwo.setItem(slotTwo, newItemTwo);
+            if (newItemTop.getAmount() >= maxStackSize) {
+                inventoryOne.setItem(slotTop, newItemTop);
+                inventoryTwo.setItem(slotHotbar, null);
+            } else {
+                ItemStack newItemHotbar = itemHotbar.clone();
+
+                int actualMoved = Math.min(newItemTop.getAmount(), maxStackSize);
+                newItemTop.setAmount(actualMoved);
+                inventoryOne.setItem(slotTop, newItemTop);
+
+                newItemHotbar.setAmount(newItemHotbar.getAmount() - actualMoved);
+                inventoryTwo.setItem(slotHotbar, newItemHotbar);
+            }
+        } else if (!itemTopIsAir && itemHotbarIsAir) {
+            ItemStack newItemTwo = itemTop.clone();
+
+            inventoryOne.setItem(slotTop, null);
+            inventoryTwo.setItem(slotHotbar, newItemTwo);
+        } else if (!itemTopIsAir) {
+            if (itemHotbar.getAmount() <= maxStackSize) {
+                ItemStack newItemTop = itemHotbar.clone();
+                ItemStack newItemHotbar = itemTop.clone();
+
+                inventoryOne.setItem(slotTop, newItemTop);
+                inventoryTwo.setItem(slotHotbar, newItemHotbar);
+            }
         }
     }
 
+    public static void simulateDefaultClick(Player player, Inventory inventory, int slot, ClickType clickType) {
+        simulateDefaultClick(player, inventory, slot, clickType, 64);
+    }
     /**
      * Due to some inventories limiting allowed items, we need to simulate all inventory behavior manually and cannot rely on the InventoryAction
      * @param player
      * @param inventory
      * @param slot
      */
-    public static void simulateDefaultClick(Player player, Inventory inventory, int slot, ClickType clickType) {
+    public static void simulateDefaultClick(Player player, Inventory inventory, int slot, ClickType clickType, int maxStackSize) {
         ItemStack cursor = player.getItemOnCursor();
         ItemStack clicked = inventory.getItem(slot);
 
@@ -53,13 +74,31 @@ public class ToolsInventory {
             ItemStack newClicked = cursor.clone();
             ItemStack newCursor = clicked.clone();
 
-            inventory.setItem(slot, newClicked);
-            player.setItemOnCursor(newCursor);
+            if (newClicked.getAmount() <= maxStackSize && newCursor.getAmount() <= maxStackSize) {
+                inventory.setItem(slot, newClicked);
+                player.setItemOnCursor(newCursor);
+            }
         } else if (clickType == ClickType.LEFT) {
             if (clickedIsAir && !cursorIsAir) {
                 // PLACE_ALL
-                inventory.setItem(slot, cursor.clone());
-                player.setItemOnCursor(null);
+                ItemStack toPlace = cursor.clone();
+                if (toPlace.getAmount() <= maxStackSize) {
+                    inventory.setItem(slot, toPlace);
+                    player.setItemOnCursor(null);
+                } else {
+                    int stackSize = toPlace.getType().getMaxStackSize();
+                    int minimumStackSize = Math.min(stackSize, maxStackSize);
+
+                    int originalAmount = toPlace.getAmount();
+                    int leftOnCursorAmount = originalAmount - minimumStackSize;
+                    toPlace.setAmount(minimumStackSize);
+
+                    ItemStack leftOnCursor = toPlace.clone();
+                    leftOnCursor.setAmount(leftOnCursorAmount);
+
+                    inventory.setItem(slot, toPlace);
+                    player.setItemOnCursor(leftOnCursor);
+                }
             } else if (!clickedIsAir && cursorIsAir) {
                 // PICKUP_ALL
                 player.setItemOnCursor(clicked.clone());
@@ -69,11 +108,12 @@ public class ToolsInventory {
                 int cursorAmount = cursor.getAmount();
 
                 int stackSize = cursor.getType().getMaxStackSize();
+                int minimumStackSize = Math.min(stackSize, maxStackSize);
 
                 if (clickedAmount < stackSize) {
                     int combinedAmount = clickedAmount + cursorAmount;
 
-                    if (combinedAmount <= stackSize) {
+                    if (combinedAmount <= minimumStackSize) {
                         // PLACE_ALL
                         ItemStack newClicked = clicked.clone();
                         newClicked.setAmount(combinedAmount);
@@ -81,9 +121,10 @@ public class ToolsInventory {
                         player.setItemOnCursor(null);
                     } else {
                         // PLACE_SOME
-                        int remaining = combinedAmount - stackSize;
+
+                        int remaining = combinedAmount - minimumStackSize;
                         ItemStack newClicked = clicked.clone();
-                        newClicked.setAmount(stackSize);
+                        newClicked.setAmount(minimumStackSize);
                         inventory.setItem(slot, newClicked);
 
                         ItemStack newCursor = cursor.clone();
@@ -122,11 +163,15 @@ public class ToolsInventory {
                 int newCursorAmount = cursorAmount - 1;
                 int newClickedAmount = clickedAmount + 1;
 
-                newClicked.setAmount(newClickedAmount);
-                newCursor.setAmount(newCursorAmount);
+                int stackSize = cursor.getType().getMaxStackSize();
+                int minimumStackSize = Math.min(stackSize, maxStackSize);
+                if (newClickedAmount <= minimumStackSize) {
+                    newClicked.setAmount(newClickedAmount);
+                    newCursor.setAmount(newCursorAmount);
 
-                inventory.setItem(slot, newClicked);
-                player.setItemOnCursor(newCursor);
+                    inventory.setItem(slot, newClicked);
+                    player.setItemOnCursor(newCursor);
+                }
             }
         }
     }

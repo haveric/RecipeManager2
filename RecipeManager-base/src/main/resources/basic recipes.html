@@ -1771,7 +1771,6 @@ CARTOGRAPHY [recipe name]
         <div id="brew" class="doc-section">
             <h3 class="doc-section__title">Brew/Brewing Stand Recipe</h3>
             <div class="doc-section__inn">
-                <h4 class="experimental">This is an experimental feature. Expect bugs and frequent changes.</h4>
                 <div class="tabs">
                     <div class="tabs-nav clearfix">
                         <div class="tab__title active">
@@ -1785,8 +1784,8 @@ CARTOGRAPHY [recipe name]
                         <div class="tab__content active">
                             <pre class="code">
 BREW [recipe name]
-[@ ingredient flags]
-&lt;letter&gt; &lt;material&gt;:[data][, ...]
+[@ recipe flags]
+&lt;letter&gt; &lt;material:[data][, ...]&gt; % [time]
 [@ ingredient flags]
 [... more ingredients]
 = [chance]% &lt;material:[data]:[amount]&gt;
@@ -1795,19 +1794,19 @@ BREW [recipe name]
                             <p>Brewing Stands have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
                             <p>An ingredient with a letter of "a" is the main ingredient.</p>
                             <p>An ingredient with a letter of "b" is the potion.</p>
+                            <p>(optional) '% [time]' can be the time (in ticks) to brew. Values can be: 'instant' for instant brewing, a single integer (ex: '200') for a fixed number of ticks, or a range for a random number of ticks between the two values (ex: '200 - 800'). Defaults to: 400.<br></p>
                             <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
-                            <p>Note: Currently requires a vanilla brewing recipe, but can have customized items.</p>
                             <div>
                                 <b>Example:</b>
                             </div>
                             <pre class="code">
 brew
 a nether_wart
+@name &cTest
 b potion
+@potion type water
 = stone
 @name &lt;red&gt;Test Stone. Please Ignore
-@ingredientcondition nether_wart | name &cTest
-@ingredientcondition potion | potion type water
 </pre>
                         </div>
                         <div class="tab__content">

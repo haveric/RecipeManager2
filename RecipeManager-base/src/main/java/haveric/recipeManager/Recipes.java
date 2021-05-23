@@ -176,6 +176,10 @@ public class Recipes {
         return getRecipe(type, ingredient, null);
     }
 
+    public BaseRecipe getRecipe(RMCRecipeType type, List<ItemStack> ingredients) {
+        return getRecipe(type, ingredients, null);
+    }
+
     public BaseRecipe getRecipe(RMCRecipeType type, ItemStack ingredient, ItemStack result) {
         return getRecipe(type, Collections.singletonList(ingredient), result);
     }
@@ -365,6 +369,7 @@ public class Recipes {
             }
         } else { // Add to quickfind index if it's not removed
             addRecipeToQuickfindIndex(recipeDirective, recipe);
+            recipe.onRegister();
         }
 
         // Remove original recipe - Special case for 1.12 below

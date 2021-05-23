@@ -25,8 +25,8 @@ public class BrewRecipe extends BaseBrewRecipe {
         if (recipe instanceof BrewRecipe) {
             BrewRecipe r = (BrewRecipe) recipe;
 
-            ingredient = r.ingredient;
-            potion = r.potion;
+            setIngredient(r.ingredient.clone());
+            potion = r.potion.clone();
         }
     }
 
@@ -75,9 +75,26 @@ public class BrewRecipe extends BaseBrewRecipe {
 
     @Override
     public boolean isValid() {
-        return ingredient != null && potion != null && hasResults();
+        return hasIngredient() && hasPotion() && hasResults();
     }
 
+    @Override
+    public void onRegister() {
+        if (hasIngredient()) {
+            BrewInventoryUtil.addIngredient(ingredient.getType());
+        }
+        if (hasPotion()) {
+            BrewInventoryUtil.addPotion(potion.getType());
+        }
+    }
+
+    public boolean hasIngredient() {
+        return ingredient != null;
+    }
+
+    public boolean hasPotion() {
+        return potion != null;
+    }
     public ItemStack getIngredient() {
         return ingredient;
     }
@@ -86,7 +103,7 @@ public class BrewRecipe extends BaseBrewRecipe {
         this.ingredient = ingredient;
 
         // build hashCode
-        hash = ("brew" + ingredient.getType().toString() + ':' + ingredient.getDurability() + ';').hashCode();
+        hash = ("brew" + ingredient.getType() + ':' + ingredient.getDurability() + ';').hashCode();
     }
 
     @Override
@@ -130,8 +147,8 @@ public class BrewRecipe extends BaseBrewRecipe {
         List<String> recipeIndexes = new ArrayList<>();
         if (ingredients.size() == 1) {
             ItemStack ingredient = ingredients.get(0);
-            recipeIndexes.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
-            recipeIndexes.add(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+            recipeIndexes.add(ingredient.getType() + ":" + ingredient.getDurability());
+            recipeIndexes.add(ingredient.getType() + ":" + RMCVanilla.DATA_WILDCARD);
         }
 
         return recipeIndexes;

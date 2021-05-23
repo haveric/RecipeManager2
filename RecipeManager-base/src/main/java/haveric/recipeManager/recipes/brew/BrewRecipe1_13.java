@@ -28,10 +28,10 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
             BrewRecipe1_13 r = (BrewRecipe1_13) recipe;
 
             if (r.ingredientChoice != null) {
-                ingredientChoice = r.ingredientChoice.clone();
+                setIngredientChoice(r.ingredientChoice.clone());
             }
             if (r.potionChoice != null) {
-                potionChoice = r.potionChoice.clone();
+                setPotionChoice(r.potionChoice.clone());
             }
         }
     }
@@ -72,6 +72,26 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
     @Override
     public boolean isValid() {
         return hasIngredientChoice() && hasPotionChoice() && hasResults();
+    }
+
+    @Override
+    public void onRegister() {
+        if (hasIngredientChoice()) {
+            List<Material> ingredientMaterials = ToolsRecipeChoice.getMaterialsInRecipeChoice(ingredientChoice);
+            BrewInventoryUtil.addIngredients(ingredientMaterials);
+        }
+
+        if (hasPotionChoice()) {
+            List<Material> potionMaterials = ToolsRecipeChoice.getMaterialsInRecipeChoice(potionChoice);
+            BrewInventoryUtil.addPotions(potionMaterials);
+        }
+
+        if (hasResults()) {
+            List<ItemResult> results = getResults();
+            for (ItemResult itemResult : results) {
+                BrewInventoryUtil.addResult(itemResult.getType());
+            }
+        }
     }
 
     public boolean hasIngredient(char character) {
@@ -206,15 +226,30 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
     public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
+        StringBuilder index = new StringBuilder();
         if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
             for (Material material : ((RecipeChoice.MaterialChoice) ingredientChoice).getChoices()) {
-                indexString.add(material.toString());
+                index.append(material);
             }
         } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
             for (ItemStack item : ((RecipeChoice.ExactChoice) ingredientChoice).getChoices()) {
-                indexString.add(item.getType().toString());
+                index.append(item.getType());
             }
         }
+
+        index.append(" - ");
+
+        if (potionChoice instanceof RecipeChoice.MaterialChoice) {
+            for (Material material : ((RecipeChoice.MaterialChoice) potionChoice).getChoices()) {
+                index.append(material);
+            }
+        } else if (potionChoice instanceof RecipeChoice.ExactChoice) {
+            for (ItemStack item : ((RecipeChoice.ExactChoice) potionChoice).getChoices()) {
+                index.append(item.getType());
+            }
+        }
+
+        indexString.add(index.toString());
 
         return indexString;
     }
@@ -232,9 +267,12 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
     @Override
     public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
         List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 1) {
+        if (ingredients.size() > 1) {
             ItemStack ingredient = ingredients.get(0);
-            recipeIndexes.add(ingredient.getType().toString());
+
+            for (int i = 1; i < ingredients.size(); i++) {
+                recipeIndexes.add(ingredient.getType() + " - " + ingredients.get(i).getType());
+            }
         }
 
         return recipeIndexes;
@@ -255,23 +293,35 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         }
 
         int totalQuality = 0;
-        for (ItemStack ingredient : ingredients) {
-            if (ingredient.getType() != Material.AIR) {
-                int quality = 0;
-                String pattern = "ab";
-                for (Character c : pattern.toCharArray()) {
-                    RecipeChoice ingredientChoice = getIngredient(c);
-                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
-                    if (newQuality > quality) {
-                        quality = newQuality;
-                        totalQuality += quality;
+        int ingredientQuality = 0;
+        int potionQuality = 0;
+
+        ItemStack ingredient = ingredients.get(0);
+        if (ingredient.getType() != Material.AIR) {
+            RecipeChoice ingredientChoice = getIngredient('a');
+
+            int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+            if (newQuality > ingredientQuality) {
+                ingredientQuality = newQuality;
+            }
+        }
+
+        if (ingredientQuality > 0) {
+            for (int i = 1; i < ingredients.size(); i++) {
+                ItemStack potion = ingredients.get(i);
+
+                if (potion.getType() != Material.AIR) {
+                    RecipeChoice potionChoice = getIngredient('b');
+
+                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(potion, potionChoice, checkExact);
+                    if (newQuality > potionQuality) {
+                        potionQuality = newQuality;
                     }
                 }
+            }
 
-                if (quality == 0) {
-                    totalQuality = 0;
-                    break;
-                }
+            if (potionQuality > 0) {
+                totalQuality = ingredientQuality + potionQuality;
             }
         }
 

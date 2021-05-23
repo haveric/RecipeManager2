@@ -43,6 +43,11 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     }
 
     /**
+     * Called when a recipe is registered to the server
+     */
+    public void onRegister() { }
+
+    /**
      * See: {@link Recipes #getRecipeInfo(BaseRecipe)}
      *
      * @return Recipe info or null if doesn't exist

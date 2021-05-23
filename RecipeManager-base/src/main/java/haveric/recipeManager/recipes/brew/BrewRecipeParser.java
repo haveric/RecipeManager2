@@ -22,7 +22,8 @@ public class BrewRecipeParser extends BaseBrewParser {
             return ErrorReporter.getInstance().error("No ingredient defined!");
         }
 
-        ItemStack ingredient = Tools.parseItem(reader.getLine(), RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
+        String[] ingredientSplit = reader.getLine().split("%");
+        ItemStack ingredient = Tools.parseItem(ingredientSplit[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
         if (ingredient == null) {
             return ErrorReporter.getInstance().error("Recipe has an invalid ingredient, needs fixing!");
         }
@@ -41,6 +42,10 @@ public class BrewRecipeParser extends BaseBrewParser {
         }
 
         recipe.setPotion(potion);
+
+        if (!parseArgs(recipe, ingredientSplit)) {
+            return false;
+        }
 
         return parseAndSetResults(recipe, directiveLine);
     }

@@ -83,6 +83,8 @@ public class Vanilla {
     public static final float BLASTING_RECIPE_TIME = 5f;
     public static final float SMOKER_RECIPE_TIME = 5f;
     public static final float CAMPFIRE_RECIPE_TIME = 30f;
+    public static final int BREWING_RECIPE_DEFAULT_TICKS = 400;
+
     private static final RMCRecipeInfo info = new RMCRecipeInfo(RecipeOwner.MINECRAFT, null); // shared info
 
     protected static void init() {

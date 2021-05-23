@@ -145,6 +145,25 @@ public class ToolsRecipeChoice {
         return found;
     }
 
+    public static List<Material> getMaterialsInRecipeChoice(RecipeChoice choice) {
+        List<Material> materials = new ArrayList<>();
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+
+            materials.addAll(materialChoice.getChoices());
+
+        } else if (choice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            List<ItemStack> items = exactChoice.getChoices();
+
+            for (ItemStack item : items) {
+                materials.add(item.getType());
+            }
+        }
+
+        return materials;
+    }
+
     public static String getRecipeChoiceHash(RecipeChoice choice) {
         StringBuilder s = new StringBuilder();
         if (choice instanceof RecipeChoice.MaterialChoice) {
