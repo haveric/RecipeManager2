@@ -70,6 +70,14 @@
     background-color: inherit;
 }
 
+.slot--potionresult {
+    float: left;
+    background-image: url('https://www.recipemanager.dev/img/icons/16/slot-potion_bg.png?v=1');
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
 .slot--result {
     float: left;
     width: 48px;
@@ -360,6 +368,26 @@
     .inventory__zoom2 & {
         font-size: 24px;
         margin-top: 89px;
+    }
+}
+
+.inventory__brewtimer {
+    width: 32px;
+    height: 56px;
+    padding: 2px;
+
+    .inventory__zoom1_5 & {
+        width: 48px;
+        height: 84px;
+    }
+
+    .inventory__zoom2 & {
+        width: 64px;
+        height: 112px;
+    }
+
+    img {
+        max-width: 100%;
     }
 }
 
