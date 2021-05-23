@@ -21,11 +21,8 @@ public class ReloadCommand implements CommandExecutor {
                 }).withFirstPrompt(new StringPrompt() {
                     @Override
                     public String getPromptText(ConversationContext context) {
-                        return "Reloading in MC 1.12 or newer is not guaranteed to function " +
-                                "and may disrupt other plugins that also manage recipes.\n " +
-                                "Are you sure you want to continue? Type \"yes\" to continue " +
-                                "and anything else to cancel.";
-                                
+                        return "Reloading in MC 1.12 - 1.14 is not guaranteed to function and may disrupt other plugins that also manage recipes.\n " +
+                                "Are you sure you want to continue? Type \"yes\" to continue and anything else to cancel.";
                     }
 
                     @Override
@@ -49,11 +46,9 @@ public class ReloadCommand implements CommandExecutor {
                                     }
                                     return Prompt.END_OF_CONVERSATION;
                                 }
-                                
                             };
                         } else {
                             return new MessagePrompt() {
-
                                 @Override
                                 public String getPromptText(ConversationContext context) {
                                     return "As requested, cancelling reload.";
@@ -63,7 +58,6 @@ public class ReloadCommand implements CommandExecutor {
                                 protected Prompt getNextPrompt(ConversationContext context) {
                                     return Prompt.END_OF_CONVERSATION;
                                 }
-                                
                             };
                         }
                     }
@@ -71,9 +65,9 @@ public class ReloadCommand implements CommandExecutor {
     }
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (Version.has1_12Support()) {
+        if (Version.has1_12Support() && !Version.has1_15Support()) {
             if (sender instanceof Conversable) {
-                reloadConversation.buildConversation( (Conversable) sender).begin();
+                reloadConversation.buildConversation((Conversable) sender).begin();
                 return true;
             } else {
                 MessageSender.getInstance().sendAndLog(sender, "WARNING: reload may cause instability or loss of recipe function in MC 1.12 or newer!");
