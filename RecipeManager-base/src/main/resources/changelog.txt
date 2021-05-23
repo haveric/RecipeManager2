@@ -24,8 +24,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: messages.yml: Added flag.repaircost.preparelore and flag.individualresults.preparelore.failchance
 * FIX: Right click placing blocks into a grindstone, cartography table, or smithing table could stack higher than normal
 * NEW: Improved Brewing support
-** Brewing recipes can be made with any ingredient now
-** Add custom brew lengths similar to furnace recipes
+    * Brewing recipes can be made with any ingredient now
+    * Add custom brew lengths similar to furnace recipes
 
 === v2.24.1 ===
 * FIX: 1.16+: Blasting, Smoking, Campfire, and Stonecutting recipe removal
