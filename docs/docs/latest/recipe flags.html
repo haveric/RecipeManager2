@@ -34,143 +34,159 @@ title: Recipe Flags
     </div>
     <div class='doc-section__group clearfix'>
         <div class='table-of-contents'>
-            <a name='contents'></a>
+            <a id='contents'></a>
             <h2 class='table-of-contents__title'>Contents</h2>
-        </div><div class='flaggroup'>
-        <span class='flagtype flagtype-recipe'>Recipe Flags</span><ul class='flaggroup__list'>
-        <li><a href='#addtobook'><b>@addtobook</b></a></li>
-        <li><a href='#biome'><b>@biome</b></a></li>
-        <li><a href='#blockpowered'><b>@blockpowered</b></a></li>
-        <li><a href='#broadcast'><b>@broadcast</b></a></li>
-        <li><a href='#command'><b>@command</b></a></li>
-        <li><a href='#cooldown'><b>@cooldown</b></a></li>
-        <li><a href='#displayresult'><b>@displayresult</b></a></li>
-        <li><a href='#explode'><b>@explode</b></a></li>
-        <li><a href='#failmessage'><b>@failmessage</b></a></li>
-        <li><a href='#forchance'><b>@forchance</b></a></li>
-        <li><a href='#fordelay'><b>@fordelay</b></a></li>
-        <li><a href='#forpermission'><b>@forpermission</b></a></li>
-        <li><a href='#forrepeat'><b>@forrepeat</b></a></li>
-        <li><a href='#gamemode'><b>@gamemode</b></a></li>
-        <li><a href='#group'><b>@group</b></a></li>
-        <li><a href='#height'><b>@height</b></a></li>
-        <li><a href='#holditem'><b>@holditem</b></a></li>
-        <li><a href='#individualresults'><b>@individualresults</b></a></li>
-        <li><a href='#ingredientcondition'><b>@ingredientcondition</b></a></li>
-        <li><a href='#inventory'><b>@inventory</b></a></li>
-        <li><a href='#itemlore'><b>@itemlore</b></a></li>
-        <li><a href='#itemname'><b>@itemname</b></a></li>
-        <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
-        <li><a href='#keepitem'><b>@keepitem</b></a></li>
-        <li><a href='#launchfirework'><b>@launchfirework</b></a></li>
-        <li><a href='#lightlevel'><b>@lightlevel</b></a></li>
-        <li><a href='#message'><b>@message</b></a></li>
-        <li><a href='#modexp'><b>@modexp</b></a></li>
-        <li><a href='#modlevel'><b>@modlevel</b></a></li>
-        <li><a href='#modmoney'><b>@modmoney</b></a></li>
-        <li><a href='#needexp'><b>@needexp</b></a></li>
-        <li><a href='#needlevel'><b>@needlevel</b></a></li>
-        <li><a href='#needmoney'><b>@needmoney</b></a></li>
-        <li><a href='#override'><b>@override</b></a></li>
-        <li><a href='#permission'><b>@permission</b></a></li>
-        <li><a href='#potioneffect'><b>@potioneffect</b></a></li>
-        <li><a href='#remove'><b>@remove</b></a></li>
-        <li><a href='#restrict'><b>@restrict</b></a></li>
-        <li><a href='#secret'><b>@secret</b></a></li>
-        <li><a href='#setblock'><b>@setblock</b></a></li>
-        <li><a href='#sound'><b>@sound</b></a></li>
-        <li><a href='#spawnparticle'><b>@spawnparticle</b></a></li>
-        <li><a href='#summon'><b>@summon</b></a></li>
-        <li><a href='#temperature'><b>@temperature</b></a></li>
-        <li><a href='#weather'><b>@weather</b></a></li>
-        <li><a href='#world'><b>@world</b></a></li></ul></div><div class='flaggroup'>
-        <span class='flagtype flagtype-ingredient'>Ingredient Flags</span><ul class='flaggroup__list'>
-        <li><a href='#banneritem'><b>@banneritem</b></a></li>
-        <li><a href='#bookitem'><b>@bookitem</b></a></li>
-        <li><a href='#compassitem'><b>@compassitem</b></a></li>
-        <li><a href='#custommodeldata'><b>@custommodeldata</b></a></li>
-        <li><a href='#enchantedbook'><b>@enchantedbook</b></a></li>
-        <li><a href='#enchantitem'><b>@enchantitem</b></a></li>
-        <li><a href='#fireworkitem'><b>@fireworkitem</b></a></li>
-        <li><a href='#fireworkstaritem'><b>@fireworkstaritem</b></a></li>
-        <li><a href='#hide'><b>@hide</b></a></li>
-        <li><a href='#itemattribute'><b>@itemattribute</b></a></li>
-        <li><a href='#itemlore'><b>@itemlore</b></a></li>
-        <li><a href='#itemname'><b>@itemname</b></a></li>
-        <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
-        <li><a href='#itemunbreakable'><b>@itemunbreakable</b></a></li>
-        <li><a href='#leathercolor'><b>@leathercolor</b></a></li>
-        <li><a href='#localizedname'><b>@localizedname</b></a></li>
-        <li><a href='#monsterspawner'><b>@monsterspawner</b></a></li>
-        <li><a href='#potionitem'><b>@potionitem</b></a></li>
-        <li><a href='#repaircost'><b>@repaircost</b></a></li>
-        <li><a href='#skullowner'><b>@skullowner</b></a></li>
-        <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li></ul></div><div class='flaggroup'>
-        <span class='flagtype flagtype-result'>Result Flags</span><ul class='flaggroup__list'>
-        <li><a href='#applyenchantment'><b>@applyenchantment</b></a></li>
-        <li><a href='#banneritem'><b>@banneritem</b></a></li>
-        <li><a href='#biome'><b>@biome</b></a></li>
-        <li><a href='#blockpowered'><b>@blockpowered</b></a></li>
-        <li><a href='#bookitem'><b>@bookitem</b></a></li>
-        <li><a href='#broadcast'><b>@broadcast</b></a></li>
-        <li><a href='#cloneingredient'><b>@cloneingredient</b></a></li>
-        <li><a href='#command'><b>@command</b></a></li>
-        <li><a href='#compassitem'><b>@compassitem</b></a></li>
-        <li><a href='#cooldown'><b>@cooldown</b></a></li>
-        <li><a href='#custommodeldata'><b>@custommodeldata</b></a></li>
-        <li><a href='#enchantedbook'><b>@enchantedbook</b></a></li>
-        <li><a href='#enchantitem'><b>@enchantitem</b></a></li>
-        <li><a href='#explode'><b>@explode</b></a></li>
-        <li><a href='#fireworkitem'><b>@fireworkitem</b></a></li>
-        <li><a href='#fireworkstaritem'><b>@fireworkstaritem</b></a></li>
-        <li><a href='#forchance'><b>@forchance</b></a></li>
-        <li><a href='#fordelay'><b>@fordelay</b></a></li>
-        <li><a href='#forpermission'><b>@forpermission</b></a></li>
-        <li><a href='#forrepeat'><b>@forrepeat</b></a></li>
-        <li><a href='#gamemode'><b>@gamemode</b></a></li>
-        <li><a href='#getrecipebook'><b>@getrecipebook</b></a></li>
-        <li><a href='#group'><b>@group</b></a></li>
-        <li><a href='#height'><b>@height</b></a></li>
-        <li><a href='#hide'><b>@hide</b></a></li>
-        <li><a href='#holditem'><b>@holditem</b></a></li>
-        <li><a href='#ingredientcondition'><b>@ingredientcondition</b></a></li>
-        <li><a href='#inventory'><b>@inventory</b></a></li>
-        <li><a href='#itemattribute'><b>@itemattribute</b></a></li>
-        <li><a href='#itemlore'><b>@itemlore</b></a></li>
-        <li><a href='#itemname'><b>@itemname</b></a></li>
-        <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
-        <li><a href='#itemunbreakable'><b>@itemunbreakable</b></a></li>
-        <li><a href='#keepitem'><b>@keepitem</b></a></li>
-        <li><a href='#launchfirework'><b>@launchfirework</b></a></li>
-        <li><a href='#leathercolor'><b>@leathercolor</b></a></li>
-        <li><a href='#lightlevel'><b>@lightlevel</b></a></li>
-        <li><a href='#localizedname'><b>@localizedname</b></a></li>
-        <li><a href='#message'><b>@message</b></a></li>
-        <li><a href='#modexp'><b>@modexp</b></a></li>
-        <li><a href='#modlevel'><b>@modlevel</b></a></li>
-        <li><a href='#modmoney'><b>@modmoney</b></a></li>
-        <li><a href='#monsterspawner'><b>@monsterspawner</b></a></li>
-        <li><a href='#needexp'><b>@needexp</b></a></li>
-        <li><a href='#needlevel'><b>@needlevel</b></a></li>
-        <li><a href='#needmoney'><b>@needmoney</b></a></li>
-        <li><a href='#noresult'><b>@noresult</b></a></li>
-        <li><a href='#permission'><b>@permission</b></a></li>
-        <li><a href='#potioneffect'><b>@potioneffect</b></a></li>
-        <li><a href='#potionitem'><b>@potionitem</b></a></li>
-        <li><a href='#repaircost'><b>@repaircost</b></a></li>
-        <li><a href='#secret'><b>@secret</b></a></li>
-        <li><a href='#setblock'><b>@setblock</b></a></li>
-        <li><a href='#skullowner'><b>@skullowner</b></a></li>
-        <li><a href='#sound'><b>@sound</b></a></li>
-        <li><a href='#spawnparticle'><b>@spawnparticle</b></a></li>
-        <li><a href='#summon'><b>@summon</b></a></li>
-        <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li>
-        <li><a href='#temperature'><b>@temperature</b></a></li>
-        <li><a href='#weather'><b>@weather</b></a></li>
-        <li><a href='#world'><b>@world</b></a></li></ul></div></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='addtobook'></a>
-    <h3 class='doc-section__title'>@addtobook &lt;book id&gt; [volume &lt;num&gt;]</h3>
-    <pre>
+        </div>
+        <div class='flaggroup'>
+            <span class='flagtype flagtype-recipe'>Recipe Flags</span>
+            <ul class='flaggroup__list'>
+                <li><a href='#addtobook'><b>@addtobook</b></a></li>
+                <li><a href='#biome'><b>@biome</b></a></li>
+                <li><a href='#blockpowered'><b>@blockpowered</b></a></li>
+                <li><a href='#broadcast'><b>@broadcast</b></a></li>
+                <li><a href='#command'><b>@command</b></a></li>
+                <li><a href='#cooldown'><b>@cooldown</b></a></li>
+                <li><a href='#displayresult'><b>@displayresult</b></a></li>
+                <li><a href='#explode'><b>@explode</b></a></li>
+                <li><a href='#failmessage'><b>@failmessage</b></a></li>
+                <li><a href='#forchance'><b>@forchance</b></a></li>
+                <li><a href='#fordelay'><b>@fordelay</b></a></li>
+                <li><a href='#forpermission'><b>@forpermission</b></a></li>
+                <li><a href='#forrepeat'><b>@forrepeat</b></a></li>
+                <li><a href='#gamemode'><b>@gamemode</b></a></li>
+                <li><a href='#group'><b>@group</b></a></li>
+                <li><a href='#height'><b>@height</b></a></li>
+                <li><a href='#holditem'><b>@holditem</b></a></li>
+                <li><a href='#individualresults'><b>@individualresults</b></a></li>
+                <li><a href='#ingredientcondition'><b>@ingredientcondition</b></a></li>
+                <li><a href='#inventory'><b>@inventory</b></a></li>
+                <li><a href='#itemlore'><b>@itemlore</b></a></li>
+                <li><a href='#itemname'><b>@itemname</b></a></li>
+                <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
+                <li><a href='#keepitem'><b>@keepitem</b></a></li>
+                <li><a href='#launchfirework'><b>@launchfirework</b></a></li>
+                <li><a href='#lightlevel'><b>@lightlevel</b></a></li>
+                <li><a href='#message'><b>@message</b></a></li>
+                <li><a href='#modexp'><b>@modexp</b></a></li>
+                <li><a href='#modlevel'><b>@modlevel</b></a></li>
+                <li><a href='#modmoney'><b>@modmoney</b></a></li>
+                <li><a href='#needexp'><b>@needexp</b></a></li>
+                <li><a href='#needlevel'><b>@needlevel</b></a></li>
+                <li><a href='#needmoney'><b>@needmoney</b></a></li>
+                <li><a href='#override'><b>@override</b></a></li>
+                <li><a href='#permission'><b>@permission</b></a></li>
+                <li><a href='#potioneffect'><b>@potioneffect</b></a></li>
+                <li><a href='#remove'><b>@remove</b></a></li>
+                <li><a href='#restrict'><b>@restrict</b></a></li>
+                <li><a href='#secret'><b>@secret</b></a></li>
+                <li><a href='#setblock'><b>@setblock</b></a></li>
+                <li><a href='#sound'><b>@sound</b></a></li>
+                <li><a href='#spawnparticle'><b>@spawnparticle</b></a></li>
+                <li><a href='#summon'><b>@summon</b></a></li>
+                <li><a href='#temperature'><b>@temperature</b></a></li>
+                <li><a href='#weather'><b>@weather</b></a></li>
+                <li><a href='#world'><b>@world</b></a></li>
+            </ul>
+        </div>
+        <div class='flaggroup'>
+            <span class='flagtype flagtype-ingredient'>Ingredient Flags</span>
+            <ul class='flaggroup__list'>
+                <li><a href='#banneritem'><b>@banneritem</b></a></li>
+                <li><a href='#bookitem'><b>@bookitem</b></a></li>
+                <li><a href='#compassitem'><b>@compassitem</b></a></li>
+                <li><a href='#custommodeldata'><b>@custommodeldata</b></a></li>
+                <li><a href='#enchantedbook'><b>@enchantedbook</b></a></li>
+                <li><a href='#enchantitem'><b>@enchantitem</b></a></li>
+                <li><a href='#fireworkitem'><b>@fireworkitem</b></a></li>
+                <li><a href='#fireworkstaritem'><b>@fireworkstaritem</b></a></li>
+                <li><a href='#hide'><b>@hide</b></a></li>
+                <li><a href='#itemattribute'><b>@itemattribute</b></a></li>
+                <li><a href='#itemlore'><b>@itemlore</b></a></li>
+                <li><a href='#itemname'><b>@itemname</b></a></li>
+                <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
+                <li><a href='#itemunbreakable'><b>@itemunbreakable</b></a></li>
+                <li><a href='#leathercolor'><b>@leathercolor</b></a></li>
+                <li><a href='#localizedname'><b>@localizedname</b></a></li>
+                <li><a href='#monsterspawner'><b>@monsterspawner</b></a></li>
+                <li><a href='#potionitem'><b>@potionitem</b></a></li>
+                <li><a href='#repaircost'><b>@repaircost</b></a></li>
+                <li><a href='#skullowner'><b>@skullowner</b></a></li>
+                <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li>
+            </ul>
+        </div>
+        <div class='flaggroup'>
+            <span class='flagtype flagtype-result'>Result Flags</span>
+            <ul class='flaggroup__list'>
+                <li><a href='#applyenchantment'><b>@applyenchantment</b></a></li>
+                <li><a href='#banneritem'><b>@banneritem</b></a></li>
+                <li><a href='#biome'><b>@biome</b></a></li>
+                <li><a href='#blockpowered'><b>@blockpowered</b></a></li>
+                <li><a href='#bookitem'><b>@bookitem</b></a></li>
+                <li><a href='#broadcast'><b>@broadcast</b></a></li>
+                <li><a href='#cloneingredient'><b>@cloneingredient</b></a></li>
+                <li><a href='#command'><b>@command</b></a></li>
+                <li><a href='#compassitem'><b>@compassitem</b></a></li>
+                <li><a href='#cooldown'><b>@cooldown</b></a></li>
+                <li><a href='#custommodeldata'><b>@custommodeldata</b></a></li>
+                <li><a href='#enchantedbook'><b>@enchantedbook</b></a></li>
+                <li><a href='#enchantitem'><b>@enchantitem</b></a></li>
+                <li><a href='#explode'><b>@explode</b></a></li>
+                <li><a href='#fireworkitem'><b>@fireworkitem</b></a></li>
+                <li><a href='#fireworkstaritem'><b>@fireworkstaritem</b></a></li>
+                <li><a href='#forchance'><b>@forchance</b></a></li>
+                <li><a href='#fordelay'><b>@fordelay</b></a></li>
+                <li><a href='#forpermission'><b>@forpermission</b></a></li>
+                <li><a href='#forrepeat'><b>@forrepeat</b></a></li>
+                <li><a href='#gamemode'><b>@gamemode</b></a></li>
+                <li><a href='#getrecipebook'><b>@getrecipebook</b></a></li>
+                <li><a href='#group'><b>@group</b></a></li>
+                <li><a href='#height'><b>@height</b></a></li>
+                <li><a href='#hide'><b>@hide</b></a></li>
+                <li><a href='#holditem'><b>@holditem</b></a></li>
+                <li><a href='#ingredientcondition'><b>@ingredientcondition</b></a></li>
+                <li><a href='#inventory'><b>@inventory</b></a></li>
+                <li><a href='#itemattribute'><b>@itemattribute</b></a></li>
+                <li><a href='#itemlore'><b>@itemlore</b></a></li>
+                <li><a href='#itemname'><b>@itemname</b></a></li>
+                <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
+                <li><a href='#itemunbreakable'><b>@itemunbreakable</b></a></li>
+                <li><a href='#keepitem'><b>@keepitem</b></a></li>
+                <li><a href='#launchfirework'><b>@launchfirework</b></a></li>
+                <li><a href='#leathercolor'><b>@leathercolor</b></a></li>
+                <li><a href='#lightlevel'><b>@lightlevel</b></a></li>
+                <li><a href='#localizedname'><b>@localizedname</b></a></li>
+                <li><a href='#message'><b>@message</b></a></li>
+                <li><a href='#modexp'><b>@modexp</b></a></li>
+                <li><a href='#modlevel'><b>@modlevel</b></a></li>
+                <li><a href='#modmoney'><b>@modmoney</b></a></li>
+                <li><a href='#monsterspawner'><b>@monsterspawner</b></a></li>
+                <li><a href='#needexp'><b>@needexp</b></a></li>
+                <li><a href='#needlevel'><b>@needlevel</b></a></li>
+                <li><a href='#needmoney'><b>@needmoney</b></a></li>
+                <li><a href='#noresult'><b>@noresult</b></a></li>
+                <li><a href='#permission'><b>@permission</b></a></li>
+                <li><a href='#potioneffect'><b>@potioneffect</b></a></li>
+                <li><a href='#potionitem'><b>@potionitem</b></a></li>
+                <li><a href='#repaircost'><b>@repaircost</b></a></li>
+                <li><a href='#secret'><b>@secret</b></a></li>
+                <li><a href='#setblock'><b>@setblock</b></a></li>
+                <li><a href='#skullowner'><b>@skullowner</b></a></li>
+                <li><a href='#sound'><b>@sound</b></a></li>
+                <li><a href='#spawnparticle'><b>@spawnparticle</b></a></li>
+                <li><a href='#summon'><b>@summon</b></a></li>
+                <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li>
+                <li><a href='#temperature'><b>@temperature</b></a></li>
+                <li><a href='#weather'><b>@weather</b></a></li>
+                <li><a href='#world'><b>@world</b></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='addtobook'></a>
+        <h3 class='doc-section__title'>@addtobook &lt;book id&gt; [volume &lt;num&gt;]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     This flag is a shortcut for quickly adding recipe(s) to books.
     Using this flag more than once will overwrite the previous one.
@@ -180,7 +196,8 @@ title: Recipe Flags
     The '&lt;book id&gt;' argument must be an existing book's ID/filename, case insensitive.
     Optionally you can specify which volume to add it to, otherwise it will be added in its 'recipes' node and left to be added automatically to the latest volume with free slots.
 
-    NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.</span>
+    NOTE: To properly remove recipes from books you must first remove this flag (to avoid re-adding them) then go to the book's YML file and remove them from there as well.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -189,10 +206,14 @@ title: Recipe Flags
       @addtobook random stuff volume 3 // matches a 'Random Stuff.yml' with volume 3 book for example
 
     <b>Aliases:</b> @recipebook
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='applyenchantment'></a>
-    <h3 class='doc-section__title'>@applyenchantment &lt;arguments&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='applyenchantment'></a>
+        <h3 class='doc-section__title'>@applyenchantment &lt;arguments&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Applies the enchantments from books onto the result
     Using this flag more than once will overwrite the previous one.
@@ -209,7 +230,8 @@ title: Recipe Flags
       largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)
       combine = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)
       anvil   = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)
-    </span>
+
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -219,10 +241,14 @@ title: Recipe Flags
       @applyenchantment ingredientaction combine | ignorelevels | onlybooks // Combines all ingredients levels from books while allowing higher than vanilla allowed enchants
 
     <b>Aliases:</b> @applyenchant, @applyenchantments, @applyenchants
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='banneritem'></a>
-    <h3 class='doc-section__title'>@banneritem &lt;basecolor&gt; | [pattern] &lt;color&gt; | [...]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='banneritem'></a>
+        <h3 class='doc-section__title'>@banneritem &lt;basecolor&gt; | [pattern] &lt;color&gt; | [...]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Creates a custom banner
     Using this flag more than once will overwrite the previous one.
@@ -234,7 +260,8 @@ title: Recipe Flags
       [pattern] is the banner pattern type
         Values: <a href='name index.html#bannerpattern'>name index.html#bannerpattern</a>
       &lt;color&gt; is required for each pattern, color values are the same as &lt;basecolor&gt;
-      Multiple patterns can be added</span>
+      Multiple patterns can be added
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -244,10 +271,14 @@ title: Recipe Flags
       @banneritem green | half_horizontal yellow | circle_middle orange
 
     <b>Aliases:</b> @banner
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='biome'></a>
-    <h3 class='doc-section__title'>@biome &lt;types&gt; | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='biome'></a>
+        <h3 class='doc-section__title'>@biome &lt;types&gt; | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets the biome required to allow crafting.
     Using this flag more than once will overwrite the previous one.
@@ -255,23 +286,29 @@ title: Recipe Flags
     For '&lt;types&gt;' you can list the biomes you want to allow or disallow.
     It needs at least one biome name and you can add more separated by , character.
     Also you can disallow biomes by prefixing them with ! character.
-    Biomes: <a href='name index.html#biomes'>name index.html#biomes</a></span>
+    Biomes: <a href='name index.html#biomes'>name index.html#biomes</a>
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
       @biome jungle, jungle_hills
       @biome !mushroom_fields, !mushroom_field_shore
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='blockpowered'></a>
-    <h3 class='doc-section__title'>@blockpowered [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='blockpowered'></a>
+        <h3 class='doc-section__title'>@blockpowered [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Requires the workbench or furnace block to be powered by redstone.
 
     Optionally you can use the following arguments separated by | character and in any order:
       indirect          = check for indirect redstone power, through other blocks.
-      failmsg &lt;message&gt; = overwrite the failure message.</span>
+      failmsg &lt;message&gt; = overwrite the failure message.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -280,12 +317,16 @@ title: Recipe Flags
       @blockpowered failmsg &lt;red&gt;&lt;bold&gt;YOU HAVE NO (indirect) POWAAH!!! | indirect
 
     <b>Aliases:</b> @poweredblock, @blockpower, @redstonepowered
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='bookitem'></a>
-    <h3 class='doc-section__title'>@bookitem title [text]</h3>
-    <h3 class='doc-section__title'>@bookitem author [text]</h3>
-    <h3 class='doc-section__title'>@bookitem addpage [text]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='bookitem'></a>
+        <h3 class='doc-section__title'>@bookitem title [text]</h3>
+        <h3 class='doc-section__title'>@bookitem author [text]</h3>
+        <h3 class='doc-section__title'>@bookitem addpage [text]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Changes book's contents.
     Using this flag more than once will configure the same flag.
@@ -301,7 +342,8 @@ title: Recipe Flags
 
     Supported items: written book, book and quill.
 
-    Allows quotes to prevent spaces being trimmed.</span>
+    Allows quotes to prevent spaces being trimmed.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -316,10 +358,14 @@ title: Recipe Flags
       @bookitem addpage &quot; &lt;bold&gt;O&lt;reset&gt;nce upon a time... &quot;
 
     <b>Aliases:</b> @book
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='broadcast'></a>
-    <h3 class='doc-section__title'>@broadcast &lt;text&gt; | [permission]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='broadcast'></a>
+        <h3 class='doc-section__title'>@broadcast &lt;text&gt; | [permission]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Prints a chat message for all online players.
     Using this flag more than once will overwrite the previous message.
@@ -343,7 +389,8 @@ title: Recipe Flags
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
       {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
 
-    Allows quotes to prevent spaces being trimmed.</span>
+    Allows quotes to prevent spaces being trimmed.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -353,10 +400,14 @@ title: Recipe Flags
       @broadcast &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
 
     <b>Aliases:</b> @announce, @msgall
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='cloneingredient'></a>
-    <h3 class='doc-section__title'>@cloneingredient &lt;arguments&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='cloneingredient'></a>
+        <h3 class='doc-section__title'>@cloneingredient &lt;arguments&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Clones the ingredient matching material of the result used on.
     Using this flag more than once will overwrite the previous one.
@@ -378,7 +429,8 @@ title: Recipe Flags
 
     NOTE: If the result's material is present in the ingredients more than once, when using the recipe it will clone the details of first item in the grid.
 
-    To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the @ingredientcondition flag too.</span>
+    To apply conditions for ingredients (ranged data values, specific names, etc) then you can use the @ingredientcondition flag too.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -392,10 +444,14 @@ title: Recipe Flags
       @cloneingredient all | allowedtypes stone_axe, iron_axe // copy ingredients from the first ingredient that matches a stone axe, iron axe, or the result type
 
     <b>Aliases:</b> @clone, @copy, @copyingredient
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='command'></a>
-    <h3 class='doc-section__title'>@command &lt;text or false&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='command'></a>
+        <h3 class='doc-section__title'>@command &lt;text or false&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Executes the command when recipe is successful.
     This flag can be used more than once to add more commands to the list.
@@ -416,7 +472,8 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format</span>
+      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -425,10 +482,14 @@ title: Recipe Flags
       @command kick {player}
 
     <b>Aliases:</b> @cmd, @commands
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='compassitem'></a>
-    <h3 class='doc-section__title'>@compassitem &lt;worldName&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt; | [requiresLodestone]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='compassitem'></a>
+        <h3 class='doc-section__title'>@compassitem &lt;worldName&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt; | [requiresLodestone]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets the position that a compass points to.
 
@@ -450,7 +511,8 @@ title: Recipe Flags
       Requires a lodestone at the location set
       values: true or false
 
-    Specific items: compass.</span>
+    Specific items: compass.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -459,11 +521,15 @@ title: Recipe Flags
       @compassitem world 100 65 200 | true // Requires a lodestone to be at x=100, y=65, z=200 for the compass to track this location
 
     <b>Aliases:</b> @compass
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='cooldown'></a>
-    <h3 class='doc-section__title'>@cooldown &lt;number&gt;[suffix] | [arguments]</h3>
-    <h3 class='doc-section__title'>@cooldown false</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='cooldown'></a>
+        <h3 class='doc-section__title'>@cooldown &lt;number&gt;[suffix] | [arguments]</h3>
+        <h3 class='doc-section__title'>@cooldown false</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets a cooldown time for crafting a recipe or result.
     Once a recipe/result is used, the crafter can not craft it again for the specified amount of time.
@@ -482,7 +548,8 @@ title: Recipe Flags
 
       msg &lt;text&gt;        = overwrites the information message; false to hide; supports colors; use {time} variable to display the new cooldown time.
 
-      failmsg &lt;text&gt;    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.</span>
+      failmsg &lt;text&gt;    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -493,13 +560,18 @@ title: Recipe Flags
       @cooldown .5h | global | failmsg &lt;red&gt;Someone used this recently, wait: {time} | msg &lt;yellow&gt;Cooldown time: {time} // half an hour
 
     <b>Aliases:</b> @cooltime
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='custommodeldata'></a>
-    <h3 class='doc-section__title'>@custommodeldata &lt;number&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='custommodeldata'></a>
+        <h3 class='doc-section__title'>@custommodeldata &lt;number&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Changes result's custom model data.
-    Used with custom datapacks</span>
+    Used with custom datapacks
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -508,10 +580,14 @@ title: Recipe Flags
       @custommodeldata 1234567
 
     <b>Aliases:</b> @modeldata
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='displayresult'></a>
-    <h3 class='doc-section__title'>@displayresult &lt;item or first&gt; | [silentfail]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='displayresult'></a>
+        <h3 class='doc-section__title'>@displayresult &lt;item or first&gt; | [silentfail]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     Sets the display result of the recipe.
     Using this flag more than once will overwrite the previous message.
@@ -522,7 +598,8 @@ title: Recipe Flags
     Optionally, using 'silentfail' argument you can make the recipe print no result if it wouldn't give anything in the case of no results being allowed to craft (by other flags, like @ingredientcondition).
 
     NOTE: If there is no item to be displayed (all are secret or unavailable), using this with 'first' will not do anything.
-    NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.</span>
+    NOTE: Can only be used on workbench recipes because it can not have effect on other recipes.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -531,10 +608,14 @@ title: Recipe Flags
       @displayresult diamond_helmet:120 // damaged diamond helmet
 
     <b>Aliases:</b> @resultdisplay, @showresult
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='enchantedbook'></a>
-    <h3 class='doc-section__title'>@enchantedbook &lt;enchant&gt; [level or max]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='enchantedbook'></a>
+        <h3 class='doc-section__title'>@enchantedbook &lt;enchant&gt; [level or max]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds stored enchantments in a enchanted book item.
     This flag may be used more times to add more enchantments to the item.
@@ -547,7 +628,8 @@ title: Recipe Flags
 
     Enchantments are forced and there is no level cap!
 
-    Specific item: enchanted_book</span>
+    Specific item: enchanted_book
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -558,10 +640,14 @@ title: Recipe Flags
       @enchantedbook sharpness remove
 
     <b>Aliases:</b> @enchantbook, @enchantingbook
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='enchantitem'></a>
-    <h3 class='doc-section__title'>@enchantitem &lt;enchantment&gt; [level]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='enchantitem'></a>
+        <h3 class='doc-section__title'>@enchantitem &lt;enchantment&gt; [level]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Enchants the result with the specified enchantment at specified level.
     You must specify an enchantment name, see <a href='name index.html#enchantment'>name index.html#enchantment</a>
@@ -571,7 +657,8 @@ title: Recipe Flags
       You can use 'remove' to remove the enchantment (from a cloned ingredient)
 
     Enchantments are forced and there is no level cap!
-    This flag may be used more times to add more enchantments to the item.</span>
+    This flag may be used more times to add more enchantments to the item.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -582,10 +669,14 @@ title: Recipe Flags
       @enchantitem SHARPNESS remove // removes a sharpness enchant
 
     <b>Aliases:</b> @enchant, @enchantment
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='explode'></a>
-    <h3 class='doc-section__title'>@explode &lt;arguments or false&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='explode'></a>
+        <h3 class='doc-section__title'>@explode &lt;arguments or false&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Makes the workbench/furnace/player explode when recipe is crafted.
     This flag can only be declared once per recipe and once per result.
@@ -597,7 +688,8 @@ title: Recipe Flags
       nodamage [self]         = (default not set) Explosion doesn't damage players or only the crafter if 'self' is specified.
       fail                    = (default not set) Explode if recipe failed as opposed to succeed.
       fuel &lt;start,end,random&gt; = (default start) Causes the explosion to happen at different times. Can only be used on fuel recipes.
-    All arguments are optional and you can specify these arguments in any order.</span>
+    All arguments are optional and you can specify these arguments in any order.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -609,10 +701,14 @@ title: Recipe Flags
       @explode fuel random // On a fuel recipe, will cause the explosion to happen sometime randomly before the fuel runs out
 
     <b>Aliases:</b> @explosion, @boom, @tnt
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='failmessage'></a>
-    <h3 class='doc-section__title'>@failmessage [message or false]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='failmessage'></a>
+        <h3 class='doc-section__title'>@failmessage [message or false]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     Changes the message when recipe fails due to failure chance.
     Using this flag more than once will overwrite the previous message.
@@ -626,7 +722,8 @@ title: Recipe Flags
 
     The same effect can be achieved by using @message on the fail result item.
 
-    Allows quotes to prevent spaces being trimmed.</span>
+    Allows quotes to prevent spaces being trimmed.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -635,11 +732,15 @@ title: Recipe Flags
       @failmessage &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
 
     <b>Aliases:</b> @failmsg
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='fireworkitem'></a>
-    <h3 class='doc-section__title'>@fireworkitem effect &lt;effect data&gt;</h3>
-    <h3 class='doc-section__title'>@fireworkitem power &lt;0-128&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='fireworkitem'></a>
+        <h3 class='doc-section__title'>@fireworkitem effect &lt;effect data&gt;</h3>
+        <h3 class='doc-section__title'>@fireworkitem power &lt;0-128&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Configures firework rocket's effects.
     Using this flag more than once will append changes to the item.
@@ -657,7 +758,8 @@ title: Recipe Flags
 
     The 'power &lt;number 0-128&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.
 
-    Specific item: firework.</span>
+    Specific item: firework.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -668,10 +770,14 @@ title: Recipe Flags
       @fireworkitem power 1
 
     <b>Aliases:</b> @firework, @fireworkrocket
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='fireworkstaritem'></a>
-    <h3 class='doc-section__title'>@fireworkstaritem &lt;effect arguments&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='fireworkstaritem'></a>
+        <h3 class='doc-section__title'>@fireworkstaritem &lt;effect arguments&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Configures firework charge's effect.
     Using this flag more than once will overwrite previous changes since the item only supports one effect.
@@ -686,7 +792,8 @@ title: Recipe Flags
     Effects can be listed in any order.
     Colors must be 3 numbers ranging from 0 to 255, basic RGB format.
 
-    Specific item: firework_star.</span>
+    Specific item: firework_star.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -695,11 +802,15 @@ title: Recipe Flags
       @fireworkstaritem type creeper | color 0 255 0 | fadecolor 255 0 0, 0 255 0 | flicker
 
     <b>Aliases:</b> @fireworkstar, @fireworkchargeitem, @fireworkcharge, @fireworkeffect
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='forchance'></a>
-    <h3 class='doc-section__title'>@forchance &lt;group&gt; [chance]% [^]@[flag declaration]</h3>
-    <h3 class='doc-section__title'>@forchance &lt;chance&gt;% [^]@&lt;flag declaration&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='forchance'></a>
+        <h3 class='doc-section__title'>@forchance &lt;group&gt; [chance]% [^]@[flag declaration]</h3>
+        <h3 class='doc-section__title'>@forchance &lt;chance&gt;% [^]@&lt;flag declaration&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Triggers other flags or groups of flags by specified chance.
     Using this flag more than once will add more flags.
@@ -716,7 +827,8 @@ title: Recipe Flags
     Optionally you can prefix the flag declaration with the '^' character to append the data from the flag to the previous flag of the same type from the same group (no group is still a group, but a special one).
 
     NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.
-    NOTE: In a group there must be at least a chance value or a flag declaration.</span>
+    NOTE: In a group there must be at least a chance value or a flag declaration.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -740,17 +852,22 @@ title: Recipe Flags
       // NOTE all of the examples above can be used in a single recipe if you want, there's no limit to the combinations!
 
     <b>Aliases:</b> @bychance, @chance
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='fordelay'></a>
-    <h3 class='doc-section__title'>@fordelay &lt;delay&gt; @&lt;flag declaration&gt;</h3>
-    <h3 class='doc-section__title'>@fordelay @&lt;flag declaration&gt; // Add more flags to the previous one</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='fordelay'></a>
+        <h3 class='doc-section__title'>@fordelay &lt;delay&gt; @&lt;flag declaration&gt;</h3>
+        <h3 class='doc-section__title'>@fordelay @&lt;flag declaration&gt; // Add more flags to the previous one</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Run other flags after a delay.
     You can specify this flag more than once.
 
     The &lt;delay&gt; is the number of ticks that the &lt;flag declarations&gt;'s will be delayed by.
-    The '&lt;flag declaration&gt;' must be a flag that will work without affecting the result.</span>
+    The '&lt;flag declaration&gt;' must be a flag that will work without affecting the result.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -759,10 +876,14 @@ title: Recipe Flags
       @fordelay 100 @forrepeat 5 10 @command /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // @fordelay can be chained with @forrepeat for even more customization
 
     <b>Aliases:</b> @delay
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='forpermission'></a>
-    <h3 class='doc-section__title'>@forpermission &lt;permission node&gt; @&lt;flag declaration&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='forpermission'></a>
+        <h3 class='doc-section__title'>@forpermission &lt;permission node&gt; @&lt;flag declaration&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds other flags with permission requirements.
     You can specify this flag more than once to add more permissions or more flags to a permission.
@@ -774,7 +895,8 @@ title: Recipe Flags
     The '&lt;flag declaration&gt;' must be a flag that will work on the current recipe or result.
     For extra awesomeness you can even add this flag inside itself!
 
-    NOTE: This will trigger all flags that player has permission for which means that flag effects will stack up.</span>
+    NOTE: This will trigger all flags that player has permission for which means that flag effects will stack up.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -785,19 +907,24 @@ title: Recipe Flags
       @forpermission farmer.uber @level 1  // if has required  give the crafter 1 level
 
     <b>Aliases:</b> @forperm
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='forrepeat'></a>
-    <h3 class='doc-section__title'>@forrepeat &lt;times to repeat&gt; &lt;delay per repeat&gt; @&lt;flag declaration&gt;</h3>
-    <h3 class='doc-section__title'>@forrepeat &lt;times to repeat&gt; @&lt;flag declaration&gt; // Defaults to a &lt;delay per repeat&gt; of 0</h3>
-    <h3 class='doc-section__title'>@forrepeat @&lt;flag declaration&gt; // Add more flags to the previous one</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='forrepeat'></a>
+        <h3 class='doc-section__title'>@forrepeat &lt;times to repeat&gt; &lt;delay per repeat&gt; @&lt;flag declaration&gt;</h3>
+        <h3 class='doc-section__title'>@forrepeat &lt;times to repeat&gt; @&lt;flag declaration&gt; // Defaults to a &lt;delay per repeat&gt; of 0</h3>
+        <h3 class='doc-section__title'>@forrepeat @&lt;flag declaration&gt; // Add more flags to the previous one</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Run other flags multiple times with an optional delay between them.
     You can specify this flag more than once.
 
     The &lt;times to repeat&gt; is the number of times the contained flags will be repeated.
     The &lt;delay per repeat&gt; is the number of ticks that each repeat after the first will be delayed by.
-    The '&lt;flag declaration&gt;' must be a flag that will work without affecting the result.</span>
+    The '&lt;flag declaration&gt;' must be a flag that will work without affecting the result.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -805,12 +932,16 @@ title: Recipe Flags
       @forrepeat 5 10 @command /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // Summon lightning 5 times, with a 10 tick delay between them
 
     <b>Aliases:</b> @repeat
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='gamemode'></a>
-    <h3 class='doc-section__title'>@gamemode &lt;game mode&gt;</h3>
-    <h3 class='doc-section__title'>@gamemode &lt;game mode&gt; | [message]</h3>
-    <h3 class='doc-section__title'>@gamemode false</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='gamemode'></a>
+        <h3 class='doc-section__title'>@gamemode &lt;game mode&gt;</h3>
+        <h3 class='doc-section__title'>@gamemode &lt;game mode&gt; | [message]</h3>
+        <h3 class='doc-section__title'>@gamemode false</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Requires the crafter to be in a specific game mode.
     Using this flag more than once will overwrite the previous ones.
@@ -820,7 +951,8 @@ title: Recipe Flags
     Optionally you can specify a failure message, should be short because it prints in the display result.
     Additionally you can use the following variables in the message:
       {playergm}  = player's game mode (which is not allowed)
-      {gamemodes}  = list of required game modes</span>
+      {gamemodes}  = list of required game modes
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -831,16 +963,21 @@ title: Recipe Flags
       @gamemode false // disable flag, allow all gamemodes
 
     <b>Aliases:</b> @needgm
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='getrecipebook'></a>
-    <h3 class='doc-section__title'>@getrecipebook &lt;book id&gt; [volume &lt;num&gt;]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='getrecipebook'></a>
+        <h3 class='doc-section__title'>@getrecipebook &lt;book id&gt; [volume &lt;num&gt;]</h3>
+        <pre>
     <span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Overwrites result with the specified recipe book.
 
     For the '&lt;book id&gt;' argument you need to specify the book ID/filename, case insensitive.
 
-    Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.</span>
+    Optionally you can set which volume to give, will give first by default, using a bigger number than the number of volumes will pick the last volume.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -849,10 +986,14 @@ title: Recipe Flags
       @getrecipebook vanilla_recipes volume 2 // matches a 'vanilla_recipes.yml' with volume 2 for example.
 
     <b>Aliases:</b> @getbook, @bookresult
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='group'></a>
-    <h3 class='doc-section__title'>@group [!]&lt;group&gt;, [...] | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='group'></a>
+        <h3 class='doc-section__title'>@group [!]&lt;group&gt;, [...] | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Makes the recipe or item require the crafter to be in a permission group.
     Using this flag more than once will add more groups, the player must be in at least one group.
@@ -868,7 +1009,8 @@ title: Recipe Flags
       {group}   = group that was not found or was found and it's unallowed.
       {groups}  = a comma separated list of the allowed or unallowed groups.
 
-    NOTE: Vault with a supported permission plugin is required for this flag to work.</span>
+    NOTE: Vault with a supported permission plugin is required for this flag to work.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -879,17 +1021,22 @@ title: Recipe Flags
       @group ! ranks.newbs, ! ranks.newbies | &lt;yellow&gt;Noobs can't use this. // valid with spaces too
 
     <b>Aliases:</b> @groups, @permissiongroup, @permgroup
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='height'></a>
-    <h3 class='doc-section__title'>@height &lt;min or min-max&gt; | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='height'></a>
+        <h3 class='doc-section__title'>@height &lt;min or min-max&gt; | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks if crafter or furnace is at least at 'min' height and optionally at most 'max' height.
     Using this flag more than once will overwrite the previous one.
 
     Optionally you can overwrite the fail message or you can use 'false' to hide it.
     In the message the following variables can be used:
-      {height}  = height or height range</span>
+      {height}  = height or height range
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -898,10 +1045,14 @@ title: Recipe Flags
       @height 0-30 | &lt;red&gt;You need to be deep underground!
 
     <b>Aliases:</b> @depth
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='hide'></a>
-    <h3 class='doc-section__title'>@hide &lt;arguments&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='hide'></a>
+        <h3 class='doc-section__title'>@hide &lt;arguments&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Configures hide attributes for items
 
@@ -915,17 +1066,22 @@ title: Recipe Flags
       unbreakable    = Hide the unbreakable state
       dye            = Hides dyes from colored leather armor
       all            = Hides everything
-    Arguments can be listed in any order.</span>
+    Arguments can be listed in any order.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
       @hide attributes // Removes Damage on a sword
       @hide placedon | destroys // Removes placed on line and break/destroy lines
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='holditem'></a>
-    <h3 class='doc-section__title'>@holditem &lt;item or false&gt; | [conditions]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='holditem'></a>
+        <h3 class='doc-section__title'>@holditem &lt;item or false&gt; | [conditions]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Makes the recipe require crafter to hold an item.
 
@@ -1059,7 +1215,8 @@ title: Recipe Flags
         Dye Colors: white, orange, magenta, light_blue, yellow, lime, pink, gray, light_gray, cyan, purple, blue, brown, green, red, black
         Patterns: <a href='name index.html#bannerpattern'>name index.html#bannerpattern</a>
 
-      spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see <a href='name index.html#entitytype'>name index.html#entitytype</a></span>
+      spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see <a href='name index.html#entitytype'>name index.html#entitytype</a>
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1070,15 +1227,20 @@ title: Recipe Flags
       @holditem false // makes all previous statements useless
 
     <b>Aliases:</b> @hold
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='individualresults'></a>
-    <h3 class='doc-section__title'>@individualresults</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='individualresults'></a>
+        <h3 class='doc-section__title'>@individualresults</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     Allows multi-result recipes to have individual result outcomes, instead of a chance based outcome between all results.
     With this flag set, the first valid recipe found will be the one crafted
 
-    A percent chance on a result will cause the recipe to fail the rest of the percent out of 100.</span>
+    A percent chance on a result will cause the recipe to fail the rest of the percent out of 100.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1086,10 +1248,14 @@ title: Recipe Flags
       @individualresults
 
     <b>Aliases:</b> @individual
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='ingredientcondition'></a>
-    <h3 class='doc-section__title'>@ingredientcondition &lt;item&gt; | &lt;conditions&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='ingredientcondition'></a>
+        <h3 class='doc-section__title'>@ingredientcondition &lt;item&gt; | &lt;conditions&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds conditions for individual ingredients like ranged data values, enchantments or using stacks.
     This flag can be called more than once to add more ingredients with conditions.
@@ -1222,7 +1388,8 @@ title: Recipe Flags
     This flag can be used on recipe results to determine a specific outcome for the recipe depending on the ingredients.
       However, you would need 'failmsg false' along with @displayresult flag, see <a href='advanced recipes.html'>advanced recipes.html</a> for an example.
 
-    NOTE: this flag can not be used in recipe header, needs to be defined on individual results or recipes.</span>
+    NOTE: this flag can not be used in recipe header, needs to be defined on individual results or recipes.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1242,10 +1409,14 @@ title: Recipe Flags
       @ingredientcondition stick | name Crafted Stick | nolore | noenchant // makes ingredient require a stick with a name of 'Crafted Stick', but no lore or enchantments.
 
     <b>Aliases:</b> @ingrcondition, @ingrcond, @ifingredient, @ifingr
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='inventory'></a>
-    <h3 class='doc-section__title'>@inventory &lt;inventory type&gt; , ... | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='inventory'></a>
+        <h3 class='doc-section__title'>@inventory &lt;inventory type&gt; , ... | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks if crafting in the specific type of inventory
 
@@ -1265,7 +1436,8 @@ title: Recipe Flags
       failmsg &lt;message&gt; - Overwrite the fail message or you can use 'false' to hide it.
         In the message the following variables can be used:
           {inventory} = name of inventory type(s)
-          {title}     = title of inventory</span>
+          {title}     = title of inventory
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1273,11 +1445,15 @@ title: Recipe Flags
       @inventory crafting // Player crafting menu
       @inventory workbench // Must use a crafting table
       @inventory workbench | title Custom // Must use a crafting table named 'Custom'
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='itemattribute'></a>
-    <h3 class='doc-section__title'>@itemattribute &lt;attribute&gt; [modifier]&lt;num&gt;</h3>
-    <h3 class='doc-section__title'>@itemattribute &lt;attribute&gt; [modifier]&lt;num&gt; | slot &lt;slot&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='itemattribute'></a>
+        <h3 class='doc-section__title'>@itemattribute &lt;attribute&gt; [modifier]&lt;num&gt;</h3>
+        <h3 class='doc-section__title'>@itemattribute &lt;attribute&gt; [modifier]&lt;num&gt; | slot &lt;slot&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds an attribute, such as max health to the result
 
@@ -1292,7 +1468,8 @@ title: Recipe Flags
     The &lt;slot&gt; argument is the slot you want the attribute to affect. Default is HAND.
       Values: all, hand, off_hand, feet, legs, chest, head
         'all' will let the attribute affect all of the equipment slots
-        offhand can be used instead of off_hand as well.</span>
+        offhand can be used instead of off_hand as well.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1302,12 +1479,16 @@ title: Recipe Flags
       @itemattribute armor x.2 | slot offhand // Adds +20% Armor
 
     <b>Aliases:</b> @attribute
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='itemlore'></a>
-    <h3 class='doc-section__title'>@itemlore &lt;text&gt;</h3>
-    <h3 class='doc-section__title'>@itemlore &lt;text&gt; | display</h3>
-    <h3 class='doc-section__title'>@itemlore &lt;text&gt; | result</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='itemlore'></a>
+        <h3 class='doc-section__title'>@itemlore &lt;text&gt;</h3>
+        <h3 class='doc-section__title'>@itemlore &lt;text&gt; | display</h3>
+        <h3 class='doc-section__title'>@itemlore &lt;text&gt; | result</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds a line to result's lore (description)
 
@@ -1334,7 +1515,8 @@ title: Recipe Flags
     Optional Arguments:
       display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)
       result           = only show on the result, but hide from the prepared result
-        Default behavior with neither of these arguments is to display in both locations</span>
+        Default behavior with neither of these arguments is to display in both locations
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1345,12 +1527,16 @@ title: Recipe Flags
       @itemlore &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
 
     <b>Aliases:</b> @lore, @itemdesc
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='itemname'></a>
-    <h3 class='doc-section__title'>@itemname &lt;text&gt;</h3>
-    <h3 class='doc-section__title'>@itemname &lt;text&gt; | display</h3>
-    <h3 class='doc-section__title'>@itemname &lt;text&gt; | result</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='itemname'></a>
+        <h3 class='doc-section__title'>@itemname &lt;text&gt;</h3>
+        <h3 class='doc-section__title'>@itemname &lt;text&gt; | display</h3>
+        <h3 class='doc-section__title'>@itemname &lt;text&gt; | result</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Changes result's display name.
 
@@ -1377,7 +1563,8 @@ title: Recipe Flags
     Optional Arguments:
       display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)
       result           = only show on the result, but hide from the prepared result
-        Default behavior with neither of these arguments is to display in both locations</span>
+        Default behavior with neither of these arguments is to display in both locations
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1387,12 +1574,16 @@ title: Recipe Flags
       @itemname &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
 
     <b>Aliases:</b> @name, @displayname
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='itemnbt'></a>
-    <h3 class='doc-section__title'>@itemnbt &lt;nbtRaw&gt;</h3>
-    <h3 class='doc-section__title'>@itemnbt &lt;nbtRaw&gt; | display</h3>
-    <h3 class='doc-section__title'>@itemnbt &lt;nbtRaw&gt; | result</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='itemnbt'></a>
+        <h3 class='doc-section__title'>@itemnbt &lt;nbtRaw&gt;</h3>
+        <h3 class='doc-section__title'>@itemnbt &lt;nbtRaw&gt; | display</h3>
+        <h3 class='doc-section__title'>@itemnbt &lt;nbtRaw&gt; | result</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets raw nbt data on the result.
       WARNING: This exists only to support features that may not exist in the Bukkit/Spigot API yet. Support is NOT GUARANTEED, especially across future versions.
@@ -1404,7 +1595,8 @@ title: Recipe Flags
     Optional Arguments:
       display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)
       result           = only show on the result, but hide from the prepared result
-        Default behavior with neither of these arguments is to display in both locations</span>
+        Default behavior with neither of these arguments is to display in both locations
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1412,26 +1604,35 @@ title: Recipe Flags
       @itemnbt {display:{Name: '{&quot;text&quot;:&quot;CUSTOM NAME&quot;}'}} // Basic example, but should use @itemname instead.
 
     <b>Aliases:</b> @nbt
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='itemunbreakable'></a>
-    <h3 class='doc-section__title'>@itemunbreakable [false]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='itemunbreakable'></a>
+        <h3 class='doc-section__title'>@itemunbreakable [false]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Makes the result unbreakable
 
-    Optionally, adding false will make the result breakable again</span>
+    Optionally, adding false will make the result breakable again
+</span>
 
     <b>Examples:</b>
       @itemunbreakable // Makes the result unbreakable
       @itemunbreakable false // Remove the unbreakable status, allowing for the item to be destroyed
 
     <b>Aliases:</b> @unbreakable
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='keepitem'></a>
-    <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt;</h3>
-    <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | damage &lt;num&gt;</h3>
-    <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | replace &lt;item&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='keepitem'></a>
+        <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt;</h3>
+        <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | damage &lt;num&gt;</h3>
+        <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | replace &lt;item&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Keeps the specified ingredient material from being used when crafting.
     This flag can be used more than once to specify more ingredients.
@@ -1444,7 +1645,8 @@ title: Recipe Flags
 
     For the optional 'replace &lt;item&gt;' argument you can specify an item that will replace the ingredient.
     The &lt;item&gt; on 'replace' argument can support material:data:amount and enchantments, just like recipe results.
-    This argument only works for unstackable ingredients. The item specified as replacement can be stackable.</span>
+    This argument only works for unstackable ingredients. The item specified as replacement can be stackable.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1455,11 +1657,15 @@ title: Recipe Flags
       @keepitem shears | damage -99999 // keeps shears and fully repairs it
 
     <b>Aliases:</b> @returnitem, @replaceitem
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='launchfirework'></a>
-    <h3 class='doc-section__title'>@launchfirework effect &lt;effects&gt;</h3>
-    <h3 class='doc-section__title'>@launchfirework power &lt;number 0-128&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='launchfirework'></a>
+        <h3 class='doc-section__title'>@launchfirework effect &lt;effects&gt;</h3>
+        <h3 class='doc-section__title'>@launchfirework power &lt;number 0-128&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Launches a firework from workbench/player/furnace when recipe or result item is crafted.
     This flag can be defined multiple times add effects and set power to the same rocket.
@@ -1476,7 +1682,8 @@ title: Recipe Flags
     Effects can be listed in any order.
     Colors must be 3 numbers ranging from 0 to 255, basic RGB format.
 
-    The 'power &lt;number 0-128&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, values above 4 are NOT recommended because it heavily affects client performance, default 2.</span>
+    The 'power &lt;number 0-128&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, values above 4 are NOT recommended because it heavily affects client performance, default 2.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1487,14 +1694,19 @@ title: Recipe Flags
       @launchfirework power 2
 
     <b>Aliases:</b> @setfirework
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='leathercolor'></a>
-    <h3 class='doc-section__title'>@leathercolor &lt;red&gt; &lt;green&gt; &lt;blue&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='leathercolor'></a>
+        <h3 class='doc-section__title'>@leathercolor &lt;red&gt; &lt;green&gt; &lt;blue&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Changes result's leather armor color, colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.
 
-    Specific items: leather armor.</span>
+    Specific items: leather armor.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1502,10 +1714,14 @@ title: Recipe Flags
       @leathercolor 255 100 50
 
     <b>Aliases:</b> @leathercolour, @color, @colour
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='lightlevel'></a>
-    <h3 class='doc-section__title'>@lightlevel &lt;min or min-max&gt; [type] | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='lightlevel'></a>
+        <h3 class='doc-section__title'>@lightlevel &lt;min or min-max&gt; [type] | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks for the light level.
     Using this flag more than once will overwrite the previous one.
@@ -1519,7 +1735,8 @@ title: Recipe Flags
 
     Be careful using blocks light level with furnace recipes as the furnace will provide light to itself.
 
-    You can also overwrite the fail message or use 'false' to hide it.</span>
+    You can also overwrite the fail message or use 'false' to hide it.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1528,10 +1745,14 @@ title: Recipe Flags
       @lightlevel 0-4 blocks | &lt;red&gt;Kill the lights!
 
     <b>Aliases:</b> @blocklight, @sunlight, @light
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='localizedname'></a>
-    <h3 class='doc-section__title'>@localizedname &lt;text or false&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='localizedname'></a>
+        <h3 class='doc-section__title'>@localizedname &lt;text or false&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Changes result's localized name.
 
@@ -1552,7 +1773,8 @@ title: Recipe Flags
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
 
-    Allows quotes to prevent spaces being trimmed.</span>
+    Allows quotes to prevent spaces being trimmed.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1560,10 +1782,14 @@ title: Recipe Flags
       @localizedname &lt;light_purple&gt;Weird Item
       @localizedname &lt;yellow&gt;{player}'s Sword
       @localizedname &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='message'></a>
-    <h3 class='doc-section__title'>@message &lt;text&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='message'></a>
+        <h3 class='doc-section__title'>@message &lt;text&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Prints a message when recipe or item is successfully crafted.
     This flag can be used more than once to add more messages.
@@ -1585,7 +1811,8 @@ title: Recipe Flags
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
       {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
 
-    Allows quotes to prevent spaces being trimmed.</span>
+    Allows quotes to prevent spaces being trimmed.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1595,10 +1822,14 @@ title: Recipe Flags
       @message &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
 
     <b>Aliases:</b> @craftmsg, @msg
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='modexp'></a>
-    <h3 class='doc-section__title'>@modexp [modifier]&lt;amount&gt; | [craft message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='modexp'></a>
+        <h3 class='doc-section__title'>@modexp [modifier]&lt;amount&gt; | [craft message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Modifies crafter's experience points.
     Using this flag more than once will overwrite the previous one.
@@ -1616,7 +1847,8 @@ title: Recipe Flags
       {actualamount} = (only works for - modifier) the actual amount lost.
 
     NOTE: This is for total experience points, for experience levels use @modlevel
-    NOTE: This flag does not check if player has enough experience when subtracting! Use in combination with @needexp if you want to check.</span>
+    NOTE: This flag does not check if player has enough experience when subtracting! Use in combination with @needexp if you want to check.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1627,10 +1859,14 @@ title: Recipe Flags
       @modexp = 0 | &lt;red&gt;You lost all your experience!  // sets crafter experience to 0, that space is valid there too.
 
     <b>Aliases:</b> @expmod, @modxp, @xpmod, @exp, @xp, @giveexp, @givexp, @takeexp, @takexp
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='modlevel'></a>
-    <h3 class='doc-section__title'>@modlevel [modifier]&lt;number&gt; | [craft message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='modlevel'></a>
+        <h3 class='doc-section__title'>@modlevel [modifier]&lt;number&gt; | [craft message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Modifies crafter's level.
     Using this flag more than once will overwrite the previous one.
@@ -1648,7 +1884,8 @@ title: Recipe Flags
       {actualamount} = (only works for - modifier) the actual amount lost.
 
     NOTE: This is for experience levels, for experience points use @modexp
-    NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with @needlevel if you want to check.</span>
+    NOTE: This flag does not check if player has enough levels when subtracting! Use in combination with @needlevel if you want to check.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1659,10 +1896,14 @@ title: Recipe Flags
       @modlevel = 0 | &lt;red&gt;You've been set to level 0!  // sets crafter's level to 0, that space is valid there too.
 
     <b>Aliases:</b> @levelmod, @setlevel, @level
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='modmoney'></a>
-    <h3 class='doc-section__title'>@modmoney [modifier]&lt;float number&gt; | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='modmoney'></a>
+        <h3 class='doc-section__title'>@modmoney [modifier]&lt;float number&gt; | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Modifies crafter's money.
     Using this flag more than once will overwrite the previous one.
@@ -1679,7 +1920,8 @@ title: Recipe Flags
       {modifier}     = the modifier prefix.
 
     NOTE: Vault with a supported economy plugin is required for this flag to work.
-    NOTE: This flag does not check if player has enough money when subtracting! Use in combination with @needmoney if you want to check.</span>
+    NOTE: This flag does not check if player has enough money when subtracting! Use in combination with @needmoney if you want to check.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1690,10 +1932,14 @@ title: Recipe Flags
       @modmoney = 0 | &lt;red&gt;You lost all your money!  // sets crafter's money to 0, that space is valid there too.
 
     <b>Aliases:</b> @moneymod, @setmoney, @money
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='monsterspawner'></a>
-    <h3 class='doc-section__title'>@monsterspawner &lt;entity type&gt; | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='monsterspawner'></a>
+        <h3 class='doc-section__title'>@monsterspawner &lt;entity type&gt; | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets the entity type that will be spawned from the spawner.
 
@@ -1706,7 +1952,8 @@ title: Recipe Flags
       maxnearbyentities = (default 6) Sets the max number of similar entities that are allowed to be within spawning range.
       playerrange       = (default 16) Sets the maximum distance (squared) a player can be in order for this spawner to be active. (0 is always active if players are online)
       spawnrange        = (default 4) Sets the radius around which the spawner will attempt to spawn mobs in.
-      spawncount        = (default 4) Sets how many mobs attempt to spawn.</span>
+      spawncount        = (default 4) Sets how many mobs attempt to spawn.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1715,10 +1962,14 @@ title: Recipe Flags
       @monsterspawner horse
 
     <b>Aliases:</b> @spawner, @mobspawner
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='needexp'></a>
-    <h3 class='doc-section__title'>@needexp &lt;min or min-max&gt; | [message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='needexp'></a>
+        <h3 class='doc-section__title'>@needexp &lt;min or min-max&gt; | [message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks if crafter has at least 'min' experience and optionally at most 'max' experience.
     Using this flag more than once will overwrite the previous one.
@@ -1730,7 +1981,8 @@ title: Recipe Flags
       {maxexp} = defined max exp range.
       {playerexp} = player's current experience.
 
-    NOTE: This is for total experience points, for experience levels use @needlevel</span>
+    NOTE: This is for total experience points, for experience levels use @needlevel
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1741,10 +1993,14 @@ title: Recipe Flags
       @needexp 1000 | &lt;red&gt;Need {exp} exp!
 
     <b>Aliases:</b> @needxp, @reqexp, @expreq, @reqxp, @xpreq
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='needlevel'></a>
-    <h3 class='doc-section__title'>@needlevel &lt;min or min-max&gt; | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='needlevel'></a>
+        <h3 class='doc-section__title'>@needlevel &lt;min or min-max&gt; | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks if crafter has at least 'min' levels and optionally at most 'max' levels.
     Using this flag more than once will overwrite the previous one.
@@ -1755,7 +2011,8 @@ title: Recipe Flags
       {minlevel} = defined min level range.
       {maxlevel} = defined max level range.
 
-    NOTE: This is for experience levels, for experience points use @needexp or for world height use @height.</span>
+    NOTE: This is for experience levels, for experience points use @needexp or for world height use @height.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1765,10 +2022,14 @@ title: Recipe Flags
       @needlevel 25-100 | &lt;red&gt;Need level 25 to 100!
 
     <b>Aliases:</b> @reqlevel, @levelreq
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='needmoney'></a>
-    <h3 class='doc-section__title'>@needmoney &lt;min or min-max&gt; | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='needmoney'></a>
+        <h3 class='doc-section__title'>@needmoney &lt;min or min-max&gt; | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks if crafter has at least 'min' money and optionally at most 'max' money.
     Using this flag more than once will overwrite the previous one.
@@ -1782,7 +2043,8 @@ title: Recipe Flags
       {fminmoney}  = defined min money range; formatted with currency.
       {fmaxmoney}  = defined max money range; formatted with currency.
 
-    NOTE: Vault with a supported economy plugin is required for this flag to work.</span>
+    NOTE: Vault with a supported economy plugin is required for this flag to work.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1791,23 +2053,32 @@ title: Recipe Flags
       @needmoney 0.1 - 1000 | &lt;red&gt;Need {money}!
 
     <b>Aliases:</b> @reqmoney, @moneyreq
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='noresult'></a>
-    <h3 class='doc-section__title'>@noresult</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='noresult'></a>
+        <h3 class='doc-section__title'>@noresult</h3>
+        <pre>
     <span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Prevents the result item from being crafted.
 
-    Useful when giving items through @command or providing non-item results, such as @modexp.</span>
+    Useful when giving items through @command or providing non-item results, such as @modexp.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
       @noresult
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='override'></a>
-    <h3 class='doc-section__title'>@override [true or false]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='override'></a>
+        <h3 class='doc-section__title'>@override [true or false]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     Overwrites an existing recipe from vanilla Minecraft or other plugins/mods.
     The recipe definition must have the exact ingredients of the recipe you want to overwrite.
@@ -1815,7 +2086,8 @@ title: Recipe Flags
     You may set whatever result(s) you want and add any other flags, this flag allows RecipeManager to take control over that recipe.
     If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.
 
-    Value is optional, if value is not specified it will just be enabled.</span>
+    Value is optional, if value is not specified it will just be enabled.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1823,10 +2095,14 @@ title: Recipe Flags
       @override
 
     <b>Aliases:</b> @edit, @overwrite, @supercede, @replace
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='permission'></a>
-    <h3 class='doc-section__title'>@permission [!]&lt;permission&gt;, [...] | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='permission'></a>
+        <h3 class='doc-section__title'>@permission [!]&lt;permission&gt;, [...] | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Makes the recipe or item require the crafter to have a permission.
     Using this flag more than once will add more permissions, the player must have at least one to allow crafting.
@@ -1840,7 +2116,8 @@ title: Recipe Flags
     Optionally you can specify a failure message that will be used on the specific permission(s) defined.
     The messages can have the following variables:
       {permission}  = permission that was not found or was found and it's unallowed.
-      {permissions} = a comma separated list of the allowed or unallowed permission nodes.</span>
+      {permissions} = a comma separated list of the allowed or unallowed permission nodes.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1851,11 +2128,15 @@ title: Recipe Flags
       @permission ! ranks.newbs, ! ranks.newbies | &lt;yellow&gt;Noobs can't use this. // valid with spaces too
 
     <b>Aliases:</b> @permissions, @perm
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='potioneffect'></a>
-    <h3 class='doc-section__title'>@potioneffect &lt;effect type&gt; | [arguments]</h3>
-    <h3 class='doc-section__title'>@potioneffect clear</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='potioneffect'></a>
+        <h3 class='doc-section__title'>@potioneffect &lt;effect type&gt; | [arguments]</h3>
+        <h3 class='doc-section__title'>@potioneffect clear</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds potion effects to crafter.
     This flag can be used more than once to add more effects.
@@ -1872,7 +2153,8 @@ title: Recipe Flags
       particles [false]   = (defaults true) display particles.
       !particles          = equivalent to 'particles false'
       icon [false]        = (defaults true) show the effect icon.
-      !icon               = equivalent to 'icon false'</span>
+      !icon               = equivalent to 'icon false'
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1883,11 +2165,15 @@ title: Recipe Flags
       @potioneffect poison | chance 6.66% | ambient | amplifier 666 | duration 6.66
 
     <b>Aliases:</b> @potionfx
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='potionitem'></a>
-    <h3 class='doc-section__title'>@potionitem &lt;basic effect&gt;</h3>
-    <h3 class='doc-section__title'>@potionitem custom &lt;custom effect&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='potionitem'></a>
+        <h3 class='doc-section__title'>@potionitem &lt;basic effect&gt;</h3>
+        <h3 class='doc-section__title'>@potionitem custom &lt;custom effect&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Builds a potion item, only works with POTION item.
 
@@ -1926,7 +2212,8 @@ title: Recipe Flags
       particles [false]   = (defaults true) display particles.
       !particles          = equivalent to 'particles false'
       icon [false]        = (defaults true) show the effect icon.
-      !icon               = equivalent to 'icon false'</span>
+      !icon               = equivalent to 'icon false'
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1938,10 +2225,14 @@ title: Recipe Flags
       @potionitem custom BLINDNESS | duration 2.5 | amplifier 5 // add blindness effect
 
     <b>Aliases:</b> @potion
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='remove'></a>
-    <h3 class='doc-section__title'>@remove [true or false]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='remove'></a>
+        <h3 class='doc-section__title'>@remove [true or false]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     Removes an existing recipe that was added by vanilla Minecraft or other plugins/mods.
     The recipe definition must have the exact ingredients of the recipe you want to overwrite.
@@ -1951,7 +2242,8 @@ title: Recipe Flags
     If you don't know the exact ingredients you can use 'rmextract' command to extract all existing recipes in RecipeManager format.
     Value is optional, if value is not specified it will just be enabled.
 
-    This can't be used along with @override flag.</span>
+    This can't be used along with @override flag.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1959,27 +2251,37 @@ title: Recipe Flags
       @remove
 
     <b>Aliases:</b> @delete
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='repaircost'></a>
-    <h3 class='doc-section__title'>@repaircost &lt;text or false&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='repaircost'></a>
+        <h3 class='doc-section__title'>@repaircost &lt;text or false&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
-    Changes result's repair cost.</span>
+    Changes result's repair cost.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
       @repaircost 1 // Sets the default repair cost to 1
       @repaircost 25 // Sets the default repair cost to 25
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='restrict'></a>
-    <h3 class='doc-section__title'>@restrict [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='restrict'></a>
+        <h3 class='doc-section__title'>@restrict [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
+
 <span>
     Restricts the recipe for everybody.
     This is the player-friendly version of @remove because crafter gets a message when trying to craft the recipe.
 
-    Optionally you can overwrite the default restrict message.</span>
+    Optionally you can overwrite the default restrict message.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -1988,24 +2290,33 @@ title: Recipe Flags
       @restrict &lt;red&gt;Access denied!
 
     <b>Aliases:</b> @disable, @denied, @deny
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='secret'></a>
-    <h3 class='doc-section__title'>@secret [true or false]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='secret'></a>
+        <h3 class='doc-section__title'>@secret [true or false]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Hides the recipe or result from common info sources.
     Recipes are hidden from commands, books, etc.
     Results are also hidden from commands, books and most importantly from multiresult item display.
-    This also means recipes/results won't give out any fail craft reasons!</span>
+    This also means recipes/results won't give out any fail craft reasons!
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
       @secret
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='setblock'></a>
-    <h3 class='doc-section__title'>@setblock &lt;block material&gt;:[data] | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='setblock'></a>
+        <h3 class='doc-section__title'>@setblock &lt;block material&gt;:[data] | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Changes the workbench/furnace/block-at-player into other block type.
     Using this flag more than once will overwrite the previous flag.
@@ -2016,7 +2327,8 @@ title: Recipe Flags
 
     Additionally you can define a set of arguments separated by | character:
       drop            = breaks the existing block and drops its item.
-      noinv [failmsg] = prevent inventory crafting, if this is not set, the flag will set the block at player location too; optionally you can overwrite the failure message for this condition.</span>
+      noinv [failmsg] = prevent inventory crafting, if this is not set, the flag will set the block at player location too; optionally you can overwrite the failure message for this condition.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2026,14 +2338,18 @@ title: Recipe Flags
       @setblock air | drop | noinv &lt;red&gt;Only workbench! // simulate block break
 
     <b>Aliases:</b> @changeblock
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='skullowner'></a>
-    <h3 class='doc-section__title'>@skullowner &lt;name&gt;</h3>
-    <h3 class='doc-section__title'>@skullowner &lt;uuid&gt;</h3>
-    <h3 class='doc-section__title'>@skullowner texture &lt;base64&gt;</h3>
-    <h3 class='doc-section__title'>@skullowner &lt;name&gt; | texture &lt;base64&gt;</h3>
-    <h3 class='doc-section__title'>@skullowner &lt;uuid&gt; | texture &lt;base64&gt;</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='skullowner'></a>
+        <h3 class='doc-section__title'>@skullowner &lt;name&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner &lt;uuid&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner texture &lt;base64&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner &lt;name&gt; | texture &lt;base64&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner &lt;uuid&gt; | texture &lt;base64&gt;</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets the human skull's owner to apply the skin.
     If you set it to '{player}' then it will use crafter's name.
@@ -2041,7 +2357,8 @@ title: Recipe Flags
     For base64 textures, you can reference https://freshcoal.com/, https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository
       You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those
 
-      WARNING: The texture parameter will conflict with @itemnbt and whichever is used last will be the one that gets used.</span>
+      WARNING: The texture parameter will conflict with @itemnbt and whichever is used last will be the one that gets used.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2051,10 +2368,14 @@ title: Recipe Flags
       @skullowner texture eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzBiOGI1ODg5ZWUxYzYzODhkYzZjMmM1ZGJkNzBiNjk4NGFlZmU1NDMxOWEwOTVlNjRkYjc2MzgwOTdiODIxIn19fQ== // Jam texture
 
     <b>Aliases:</b> @skullitem, skull, head
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='sound'></a>
-    <h3 class='doc-section__title'>@sound &lt;sound&gt; | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='sound'></a>
+        <h3 class='doc-section__title'>@sound &lt;sound&gt; | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Plays a sound at crafting location.
     Using this flag more than once will overwrite the previous flag.
@@ -2065,7 +2386,8 @@ title: Recipe Flags
       volume &lt;0.0 to 100.0&gt; = (default 1.0) sound volume, if exceeds 1.0 it extends range, each 1.0 extends range by about 10 blocks.
       pitch &lt;0.0 to 4.0&gt;    = (default 0.0) sound pitch value.
       player                = (default not set) if set it will only play the sound to the crafter.
-    You can specify these arguments in any order and they're completely optional.</span>
+    You can specify these arguments in any order and they're completely optional.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2075,10 +2397,14 @@ title: Recipe Flags
       @sound portal_travel | player | volume 0.65 | pitch 3.33
 
     <b>Aliases:</b> @playsound
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='spawnparticle'></a>
-    <h3 class='doc-section__title'>@spawnparticle &lt;particle&gt; | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='spawnparticle'></a>
+        <h3 class='doc-section__title'>@spawnparticle &lt;particle&gt; | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Spawn a particle at crafting location
     This flag can be used more than once to spawn more particles.
@@ -2090,7 +2416,8 @@ title: Recipe Flags
       randomoffset &lt;x&gt; &lt;y&gt; &lt;z&gt;    = (default: .25 .25 .25) Random offset of the particle relative to the block/player crafting. Allows doubles (0.0)
       count &lt;amount&gt;              = How many particles are spawned
       extra &lt;value&gt;               = Used to set extra data for certain particles. For example, speed. Allows doubles (0.0)
-    You can specify these arguments in any order and they're completely optional.</span>
+    You can specify these arguments in any order and they're completely optional.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2101,10 +2428,14 @@ title: Recipe Flags
       @spawnparticle lava | count 20 | randomoffset 0.5 1 .5 | offset 0 2
 
     <b>Aliases:</b> @particle
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='summon'></a>
-    <h3 class='doc-section__title'>@summon &lt;type&gt; | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='summon'></a>
+        <h3 class='doc-section__title'>@summon &lt;type&gt; | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Summons a creature.
     Using this flag more than once will add more creatures.
@@ -2165,7 +2496,8 @@ title: Recipe Flags
       villager &lt;type&gt;            = set the villager profession
                                      Values: none, armorer, butcher, cartographer, cleric, farmer, fisherman, fletcher, leatherworker, librarian, mason, nitwit, shepherd, toolsmith, weaponsmith
 
-    These arguments can be used in any order and they're all optional.</span>
+    These arguments can be used in any order and they're all optional.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2181,10 +2513,14 @@ title: Recipe Flags
       @summon cow
 
     <b>Aliases:</b> @spawn, @creature, @mob, @animal
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='suspiciousstewitem'></a>
-    <h3 class='doc-section__title'>@suspiciousstewitem &lt;effect type&gt; | [arguments]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='suspiciousstewitem'></a>
+        <h3 class='doc-section__title'>@suspiciousstewitem &lt;effect type&gt; | [arguments]</h3>
+        <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Adds potion effects to a suspicious stew.
     This flag can be used more than once to add more effects.
@@ -2199,7 +2535,8 @@ title: Recipe Flags
       particles [false]   = (defaults true) display particles.
       !particles          = equivalent to 'particles false'
       icon [false]        = (defaults true) show the effect icon.
-      !icon               = equivalent to 'icon false'</span>
+      !icon               = equivalent to 'icon false'
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2209,10 +2546,14 @@ title: Recipe Flags
       @suspiciousstewitem poison | chance 6.66% | ambient | amplifier 666 | duration 6.66
 
     <b>Aliases:</b> @suspicioussoupitem, @suspiciousstew, @suspicioussoup
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='temperature'></a>
-    <h3 class='doc-section__title'>@temperature [operator]&lt;number&gt; | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='temperature'></a>
+        <h3 class='doc-section__title'>@temperature [operator]&lt;number&gt; | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Checks if the crafter or furnace has at least 'min' temperature unless [operator] is set.
     Using this flag more than once will overwrite the previous one.
@@ -2224,7 +2565,8 @@ title: Recipe Flags
     Optionally you can overwrite the fail message or you can use 'false' to hide it.
     In the message the following variables can be used:
       {temperature} = temperature conditions
-      {actual}      = the actual temperature player or furnace is at</span>
+      {actual}      = the actual temperature player or furnace is at
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2235,10 +2577,14 @@ title: Recipe Flags
       @temperature &gt;= .15, &lt;= .95 // Must be within a temperature where it can rain
 
     <b>Aliases:</b> @temp
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='weather'></a>
-    <h3 class='doc-section__title'>@weather &lt;type&gt;, [type] | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='weather'></a>
+        <h3 class='doc-section__title'>@weather &lt;type&gt;, [type] | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Sets the weather type(s) required to allow crafting.
     Using this flag more than once will overwrite the previous one.
@@ -2253,17 +2599,22 @@ title: Recipe Flags
     In the fail message you can use the following variables:
       {weather} = the weather type required.
 
-    NOTE: If you need to check if it's raining or snowing then use the @temperature flag.</span>
+    NOTE: If you need to check if it's raining or snowing then use the @temperature flag.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
       @weather downfall // works only if it's raining peacefully.
       @weather clear, thunder | &lt;red&gt;To be struck by lightning... or to be not.
-</pre></div><div class='doc-section__group'><a href='#contents' class='back-to-top'>^ Contents</a><a name='world'></a>
-    <h3 class='doc-section__title'>@world [!][~]&lt;world&gt;, [...] | [fail message]</h3>
-    <pre>
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='world'></a>
+        <h3 class='doc-section__title'>@world [!][~]&lt;world&gt;, [...] | [fail message]</h3>
+        <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
+
 <span>
     Makes the recipe or item work only in certain worlds.
     Using this flag more than once will add more worlds.
@@ -2279,7 +2630,8 @@ title: Recipe Flags
     Optionally you can specify a failure message that will be used on the specific world(s) defined.
     The messages can have the following variables:
       {world}   = current world.
-      {worlds}  = a comma separated list of the required or unallowed worlds.</span>
+      {worlds}  = a comma separated list of the required or unallowed worlds.
+</span>
 
     Setting to 'false' or 'remove' will disable the flag.
 
@@ -2291,7 +2643,9 @@ title: Recipe Flags
       @world !~hardcore // Disallows any worlds with hardcore in it's name
 
     <b>Aliases:</b> @needworld, @worlds
-</pre></div></div></div>
+</pre>
+    </div>
+</div>
 <nav class="nav-docs">
     <div class="container">
         <a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>

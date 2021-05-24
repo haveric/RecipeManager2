@@ -229,29 +229,30 @@ public class Files {
         s.append(NL).append("</div>");
         s.append(NL).append("<div class='doc-section__group clearfix'>");
         s.append(NL).append("<div class='table-of-contents'>");
-        s.append(NL).append("<a name='contents'></a>");
+        s.append(NL).append("<a id='contents'></a>");
         s.append(NL).append("<h2 class='table-of-contents__title'>Contents</h2>");
         s.append(NL).append("</div>");
 
         for (String c : category) {
-            s.append("<div class='flaggroup'>");
+            s.append(NL).append("<div class='flaggroup'>");
             s.append(NL).append("<span class='flagtype flagtype-").append(c.toLowerCase()).append("'>").append(c).append(" Flags").append("</span>");
-            s.append("<ul class='flaggroup__list'>");
+            s.append(NL).append("<ul class='flaggroup__list'>");
             for (FlagDescriptor flag : flags.get(c)) {
                 s.append(NL).append("<li><a href='#").append(flag.getName()).append("'><b>").append(flag.getNameDisplay()).append("</b></a></li>");
             }
-            s.append("</ul></div>");
+            s.append(NL).append("</ul>");
+            s.append(NL).append("</div>");
         }
 
-        s.append("</div>");
+        s.append(NL).append("</div>");
 
         for (FlagDescriptor flag : sortedFlags.values()) {
             String[] args = flag.getArguments();
             String[] desc = flag.getDescription();
             String[] ex = flag.getExamples();
 
-            s.append("<div class='doc-section__group'>");
-            s.append("<a href='#contents' class='back-to-top'>^ Contents</a><a name='").append(flag.getName()).append("'></a>");
+            s.append(NL).append("<div class='doc-section__group'>");
+            s.append(NL).append("<a href='#contents' class='back-to-top'>^ Contents</a><a id='").append(flag.getName()).append("'></a>");
 
             if (args != null) {
                 for (String a : args) {
@@ -277,7 +278,7 @@ public class Files {
             }
             s.append(NL);
 
-            s.append("<span>");
+            s.append(NL).append("<span>");
             for (String d : desc) {
                 s.append(NL);
 
@@ -290,7 +291,7 @@ public class Files {
                     }
                 }
             }
-            s.append("</span>");
+            s.append(NL).append("</span>");
 
             if (!flag.hasBit(FlagBit.NO_FALSE)) {
                 s.append(NL).append(NL).append("    Setting to 'false' or 'remove' will disable the flag.");
@@ -317,10 +318,11 @@ public class Files {
                 }
             }
 
-            s.append(NL).append("</pre></div>");
+            s.append(NL).append("</pre>");
+            s.append(NL).append("</div>");
         }
 
-        s.append("</div></div>");
+        s.append(NL).append("</div>");
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
@@ -498,7 +500,7 @@ public class Files {
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
         s.append(NL).append("</pre>");
         s.append(NL).append("<div class='table-of-contents'>");
-        s.append(NL).append("<a name='contents'></a><h2 class='table-of-contents__title'>Contents</h2>");
+        s.append(NL).append("<a id='contents'></a><h2 class='table-of-contents__title'>Contents</h2>");
         s.append(NL).append("</div>");
         s.append(NL).append("<pre>");
         s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
@@ -775,7 +777,7 @@ public class Files {
     }
 
     private void addNameIndexHeading(StringBuilder s, String name, String title, String partialUrl, String urlTitle) {
-        s.append("<a name='").append(name).append("'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>").append(title).append("</h3>");
+        s.append("<a id='").append(name).append("'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>").append(title).append("</h3>");
         s.append("<a href='").append(BUKKIT_DOCS).append(partialUrl).append(".html'>BukkitAPI / ").append(urlTitle).append("</a>");
         s.append(NL);
     }
