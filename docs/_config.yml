@@ -2,3 +2,16 @@ title: RecipeManager
 theme:
 sass:
   style: compressed
+navlinks:
+  - url: "basic recipes.html"
+    title: "Basic Recipes"
+  - url: "advanced recipes.html"
+    title: "Advanced Recipes"
+  - url: "recipe flags.html"
+    title: "Recipe Flags"
+  - url: "recipe books.html"
+    title: "Recipe Books"
+  - url: "name index.html"
+    title: "Name Index"
+  - url: "commands & permissions.html"
+    title: "Commands &amp; Permissions"

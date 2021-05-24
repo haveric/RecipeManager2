@@ -3,28 +3,29 @@
     <head>
         <meta charset="utf-8">
         <title>{% if page.title %}{{ page.title }}{% endif %}{% if page.title != site.title %} - {{ site.title }}{% endif %}</title>
-        {%if page.description %}
-        <meta name="description" content="{{ page.description }}">
-        {% endif %}
+        {% if page.description -%}
+            <meta name="description" content="{{ page.description }}">
+        {%- endif %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/css/vendor.css">
         <link rel="stylesheet" href="/css/app.css">
-        {% if page.css %}
-            {% for stylesheet in page.css %}
-                <link rel="stylesheet" href="{{ site.baseurl }}/css/{{ stylesheet }}.css">
-            {% endfor %}
-        {% endif %}
+        {% if page.css -%}
+        {%- for stylesheet in page.css -%}
+            <link rel="stylesheet" href="{{ site.baseurl }}/css/{{ stylesheet }}.css">
+        {% endfor -%}
+        {%- endif %}
     </head>
-    <body{% if page.bodyClass %} class="{{ page.bodyClass }}"{% endif %}>
-        {% include header.html %}
+    <body class="{{ page.bodyClass }}">
+        {% include header.html -%}
 
         {{ content }}
 
         {% include footer.html %}
-        {% if page.js %}
-            {% for script in page.js %}
-                <script type="text/javascript" src="{{ site.baseurl }}/js/{{ script }}.js"></script>
-            {% endfor %}
-        {% endif %}
+
+        {% if page.js -%}
+        {%- for script in page.js -%}
+            <script type="text/javascript" src="{{ site.baseurl }}/js/{{ script }}.js"></script>
+        {% endfor -%}
+        {%- endif %}
     </body>
 </html>

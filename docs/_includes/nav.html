@@ -1,0 +1,12 @@
+<nav class="nav-docs">
+    <div class="container">
+        {% for navitem in site.navlinks %}
+            {%- if page.title == navitem.title -%}
+                <b>{{ navitem.title }}</b>
+            {%- else -%}
+                <a href="{{ navitem.url }}">{{ navitem.title }}</a>
+            {%- endif -%}
+            {% if forloop.last %}{% else %} | {% endif %}
+        {% endfor %}
+    </div>
+</nav>
