@@ -1,11 +1,11 @@
-var spanOf = function(clazz, text) {
+const spanOf = function(clazz, text) {
     return '<span class="' + clazz + '">' + text + '</span>';
 }
 
-var syntaxHighlight = function(el) {
-    var html = el.innerHTML;
+const syntaxHighlight = function(el) {
+    let html = el.innerHTML;
 
-    html = html.replace(/\/\*(.*\n?)[^\*\/]*\*\//gm, function(match) {
+    html = html.replace(/\/\*(.*\n?)[^*\/]*\*\//gm, function(match) {
         return spanOf("code__comment", match);
     });
 
@@ -13,11 +13,11 @@ var syntaxHighlight = function(el) {
         return spanOf("code__comment", match);
     });
 
-    html = html.replace(/\[[^\]]*\]*/gm, function(match) {
+    html = html.replace(/\[[^\]]*]*/gm, function(match) {
         return spanOf("code__optional", match);
     });
 
-    html = html.replace(/\[|\]/gm, function(match) {
+    html = html.replace(/[\[\]]/gm, function(match) {
         return spanOf("code__optional-char", match);
     });
 
@@ -44,7 +44,7 @@ var syntaxHighlight = function(el) {
     el.innerHTML = html;
 }
 
-var codeBlocks = document.querySelectorAll(".code");
-for (var i = 0; i < codeBlocks.length; i++) {
+const codeBlocks = document.querySelectorAll(".code");
+for (let i = 0; i < codeBlocks.length; i++) {
     syntaxHighlight(codeBlocks[i]);
 }

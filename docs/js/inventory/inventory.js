@@ -1,30 +1,30 @@
-var tooltip = document.getElementById("item-tooltip");
-var tooltipDetails = tooltip.querySelector(".item-tooltip__detail");
+const tooltip = document.getElementById("item-tooltip");
+const tooltipDetails = tooltip.querySelector(".item-tooltip__detail");
 
-var inventories = document.getElementsByClassName("inventory");
+const inventories = document.getElementsByClassName("inventory");
 
-var slots = document.getElementsByClassName("slot");
-var slotCycles = document.getElementsByClassName("slot--cycle");
+const slots = document.getElementsByClassName("slot");
+const slotCycles = document.getElementsByClassName("slot--cycle");
 
-var updateTooltipPosition = function(mouseX, mouseY) {
+const updateTooltipPosition = function(mouseX, mouseY) {
     tooltip.style.left = (mouseX + 16) + "px";
     tooltip.style.top = (mouseY) + "px";
 }
 
-var zoom = window.localStorage.getItem("zoom");
+let zoom = window.localStorage.getItem("zoom");
 if (!zoom) {
     window.localStorage.setItem("zoom", "1");
     zoom = "1";
-} else if (zoom == "1.5") {
-    var body = document.body;
+} else if (zoom === "1.5") {
+    const body = document.body;
     body.classList.add("inventory__zoom1_5");
-} else if (zoom == "2") {
-    var body = document.body;
+} else if (zoom === "2") {
+    const body = document.body;
     body.classList.add("inventory__zoom2");
 }
 
-var zoomOut = function() {
-    var body = document.body;
+const zoomOut = function() {
+    const body = document.body;
 
     if (body.classList.contains("inventory__zoom2")) {
         body.classList.remove("inventory__zoom2");
@@ -36,8 +36,8 @@ var zoomOut = function() {
     }
 }
 
-var zoomIn = function() {
-    var body = document.body;
+const zoomIn = function() {
+    const body = document.body;
 
     if (body.classList.contains("inventory__zoom1_5")) {
         body.classList.remove("inventory__zoom1_5");
@@ -50,11 +50,11 @@ var zoomIn = function() {
 }
 
 Array.from(inventories).forEach(function(el) {
-    var zoomOutSpan = document.createElement("span");
+    const zoomOutSpan = document.createElement("span");
     zoomOutSpan.classList.add("inventory__zoom-out");
     zoomOutSpan.addEventListener('click', zoomOut);
 
-    var zoomInSpan = document.createElement("span");
+    const zoomInSpan = document.createElement("span");
     zoomInSpan.classList.add("inventory__zoom-in");
     zoomInSpan.addEventListener('click', zoomIn);
 
@@ -63,10 +63,10 @@ Array.from(inventories).forEach(function(el) {
 });
 
 
-var mouseEnter = function(el) {
-    var target = el.target;
-    var detail;
-    var slotCycle = target.querySelector(".slot__cycle.active");
+const mouseEnter = function(el) {
+    const target = el.target;
+    let detail;
+    const slotCycle = target.querySelector(".slot__cycle.active");
     if (slotCycle) {
         detail = slotCycle.querySelector(".detail");
     } else {
@@ -80,12 +80,12 @@ var mouseEnter = function(el) {
     }
 };
 
-var mouseLeave = function(el) {
+const mouseLeave = function(el) {
     el.target.classList.remove("active");
     tooltip.classList.remove("active");
 };
 
-var mouseMove = function(el) {
+const mouseMove = function(el) {
     if (tooltip.classList.contains("active")) {
         updateTooltipPosition(el.pageX, el.pageY);
     }
@@ -97,10 +97,10 @@ Array.from(slots).forEach(function(el) {
     el.addEventListener('mousemove', mouseMove);
 });
 
-var currentCycle = 1;
-var toggleSlots = function(maxCycles) {
+let currentCycle = 1;
+const toggleSlots = function(maxCycles) {
     Array.from(slotCycles).forEach(function(el) {
-        if (currentCycle % el.getAttribute('data-cycle') == 0) {
+        if (currentCycle % el.getAttribute('data-cycle') === 0) {
             toggleSlotCycle(el);
         }
     });
@@ -111,9 +111,9 @@ var toggleSlots = function(maxCycles) {
     }
 };
 
-var toggleSlotCycle = function(el) {
-    var activeCycle = el.querySelector(".slot__cycle.active");
-    var nextCycle;
+const toggleSlotCycle = function(el) {
+    const activeCycle = el.querySelector(".slot__cycle.active");
+    let nextCycle;
     if (activeCycle) {
         activeCycle.classList.remove("active");
 
@@ -126,15 +126,15 @@ var toggleSlotCycle = function(el) {
     nextCycle.classList.add("active");
 
     if (el.classList.contains("active")) {
-        var detail = nextCycle.querySelector(".detail");
+        const detail = nextCycle.querySelector(".detail");
         tooltipDetails.innerHTML = detail.innerHTML;
     }
 }
 
 if (slotCycles.length > 0) {
-    var maxCycles = 1;
+    let maxCycles = 1;
     Array.from(slotCycles).forEach(function(el) {
-        var dataCycle = el.getAttribute('data-cycle');
+        const dataCycle = el.getAttribute('data-cycle');
         if (dataCycle > maxCycles) {
             maxCycles = dataCycle;
         }
