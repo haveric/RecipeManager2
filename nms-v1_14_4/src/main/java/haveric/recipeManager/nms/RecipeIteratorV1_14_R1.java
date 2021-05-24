@@ -19,7 +19,7 @@ import java.util.Map;
 public class RecipeIteratorV1_14_R1 extends BaseRecipeIterator implements Iterator<Recipe> {
     private Iterator<IRecipe<?>> recipes;
 
-    private IRecipe removeRecipe = null;
+    private IRecipe<?> removeRecipe = null;
 
     private List<IRecipe<?>> recipesToRemove = new LinkedList<>();
 

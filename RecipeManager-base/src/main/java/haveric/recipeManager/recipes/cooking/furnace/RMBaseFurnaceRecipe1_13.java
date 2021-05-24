@@ -54,7 +54,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
     }
 
     // Constructor for 1.14 +
-    public RMBaseFurnaceRecipe1_13(CookingRecipe recipe) {
+    public RMBaseFurnaceRecipe1_13(CookingRecipe<?> recipe) {
         super(recipe);
     }
 

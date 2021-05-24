@@ -49,7 +49,7 @@ public class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResultRecipe {
     }
 
     // Constructor for 1.14 +
-    public RMBaseCookingRecipe(CookingRecipe recipe) {
+    public RMBaseCookingRecipe(CookingRecipe<?> recipe) {
         setIngredientChoice(recipe.getInputChoice());
         setResult(recipe.getResult());
 

@@ -25,7 +25,7 @@ public abstract class BaseRecipeIterator {
         return Bukkit.recipeIterator();
     }
 
-    protected Field stripPrivateFinal(Class clazz, String field) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+    protected Field stripPrivateFinal(Class<?> clazz, String field) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
         Field fieldF = clazz.getDeclaredField(field);
         fieldF.setAccessible(true);
         // Remove final modifier
