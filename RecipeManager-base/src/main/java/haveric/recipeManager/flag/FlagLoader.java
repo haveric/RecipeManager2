@@ -115,7 +115,7 @@ public class FlagLoader {
             loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), APPLIED_TO_ITEM, "monsteregg", "egg");
         }
 
-        if (Version.has1_14PlusSupport()) {
+        if (Supports.suspiciousStewMeta()) {
             loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
         }
     }

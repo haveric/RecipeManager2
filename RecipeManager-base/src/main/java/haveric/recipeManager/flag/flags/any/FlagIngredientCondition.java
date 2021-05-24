@@ -11,10 +11,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.tools.RMBukkitTools;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
+import haveric.recipeManager.tools.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.*;
@@ -154,7 +151,7 @@ public class FlagIngredientCondition extends Flag {
                 }, String.class);
             }
 
-            if (Version.has1_14PlusSupport()) {
+            if (Supports.suspiciousStewMeta()) {
                 description = ObjectArrays.concat(description, new String[]{
                     "",
                     "  suspiciousstew <condition>, [...]",

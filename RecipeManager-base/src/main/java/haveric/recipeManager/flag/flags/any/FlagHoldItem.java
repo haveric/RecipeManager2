@@ -11,6 +11,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsHold;
 import haveric.recipeManager.flag.conditions.ConditionsHold.ConditionsSlot;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.apache.commons.lang.Validate;
@@ -168,7 +169,7 @@ public class FlagHoldItem extends Flag {
             }, String.class);
         }
 
-        if (Version.has1_14PlusSupport()) {
+        if (Supports.suspiciousStewMeta()) {
             description = ObjectArrays.concat(description, new String[]{
                 "  suspiciousstew <condition>, [...]",
                 "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),

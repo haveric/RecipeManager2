@@ -6,7 +6,6 @@ import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.SuspiciousStewMeta;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 
@@ -20,8 +19,6 @@ public class Version {
             supportVersion = "1.16";
         } else if (supports1_15()) {
             supportVersion = "1.15";
-        } else if (supports1_14_plus()) {
-            supportVersion = "1.14+";
         } else if (supports1_14()) {
             supportVersion = "1.14";
         } else if (supports1_13_plus()) {
@@ -85,21 +82,6 @@ public class Version {
             Material beeNest = Material.BEE_NEST;
             supports = true;
         } catch (NoSuchFieldError e) {
-            supports = false;
-        }
-
-        return supports;
-    }
-
-    private static boolean supports1_14_plus() {
-        boolean supports;
-
-        try {
-            ItemStack stew = new ItemStack(Material.SUSPICIOUS_STEW);
-            @SuppressWarnings("unused")
-            SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) stew.getItemMeta();
-            supports = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
             supports = false;
         }
 
@@ -234,22 +216,11 @@ public class Version {
         return hasSupport;
     }
 
-    public static boolean has1_14PlusSupport() {
-        boolean hasSupport = false;
-        String version = getVersion();
-
-        if (version.equals("1.16") || version.equals("1.15") || version.equals("1.14+")) {
-            hasSupport = true;
-        }
-
-        return hasSupport;
-    }
-
     public static boolean has1_14Support() {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.16") || version.equals("1.15") || version.equals("1.14+") || version.equals("1.14")) {
+        if (version.equals("1.16") || version.equals("1.15") || version.equals("1.14")) {
             hasSupport = true;
         }
 
@@ -261,7 +232,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.16") || version.equals("1.15") || version.equals("1.14+")  || version.equals("1.14") || version.equals("1.13+")) {
+        if (version.equals("1.16") || version.equals("1.15") || version.equals("1.14") || version.equals("1.13+")) {
             hasSupport = true;
         }
 
