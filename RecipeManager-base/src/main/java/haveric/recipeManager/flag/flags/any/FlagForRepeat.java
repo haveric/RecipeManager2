@@ -251,7 +251,7 @@ public class FlagForRepeat extends Flag {
                 if (delay == 0) {
                     trigger(repeatFlag.getFlags(), a, method);
                 } else {
-                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> trigger(repeatFlag.getFlags(), a, method), delay * i);
+                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> trigger(repeatFlag.getFlags(), a, method), (long) delay * i);
                 }
             }
         }
