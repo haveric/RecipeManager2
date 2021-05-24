@@ -12,6 +12,11 @@
     }
 }
 
+@mixin scalepixels() {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
 @font-face {
     font-family: 'minecraftfont';
 
@@ -20,6 +25,8 @@
          url('https://www.recipemanager.dev/fonts/minecraftfont/minecraftfont.woff') format('woff'),
          url('https://www.recipemanager.dev/fonts/minecraftfont/minecraftfont.ttf') format('truetype');
 }
+
+$font-minecraft: 'minecraftfont', Arial, serif;
 
 .slot {
     position: relative;
@@ -52,8 +59,7 @@
         width: 32px;
         position: relative;
         z-index: 10;
-        image-rendering: pixelated;
-        image-rendering: crisp-edges;
+        @include scalepixels();
 
         .inventory__zoom1_5 & {
             width: 48px;
@@ -74,8 +80,7 @@
     float: left;
     background-image: url('https://www.recipemanager.dev/img/icons/16/slot-potion_bg.png?v=1');
     background-size: cover;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
+    @include scalepixels;
 }
 
 .slot--result {
@@ -157,7 +162,7 @@
     right: 1px;
     pointer-events: none;
     font-size: 12px;
-    font-family: 'minecraftfont';
+    font-family: $font-minecraft;
     text-shadow: 2px 2px 0 #aaa;
 
     .inventory__zoom1_5 & {
@@ -178,7 +183,7 @@
     line-height: 16px;
     cursor: default;
     z-index: 10;
-    font-family: 'minecraftfont';
+    font-family: $font-minecraft;
     @include lineshadow(#373737);
 
     .inventory__zoom1_5 & {
@@ -229,8 +234,7 @@
     height: 18px;
     background-image: url('https://www.recipemanager.dev/img/icons/zoom-out.png?v=1');
     background-size: cover;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
+    @include scalepixels();
 
     &:hover {
         cursor: pointer;
@@ -262,8 +266,7 @@
     height: 18px;
     background-image: url('https://www.recipemanager.dev/img/icons/zoom-in.png?v=1');
     background-size: cover;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
+    @include scalepixels();
 
     &:hover {
         cursor: pointer;
@@ -341,7 +344,7 @@
     margin-left: -15px;
     margin-right: -15px;
     text-align: center;
-    font-family: 'minecraftfont';
+    font-family: $font-minecraft;
     @include lineshadow(#aaa);
 
     .inventory__zoom1_5 & {
@@ -357,7 +360,7 @@
     font-size: 12px;
     margin-left: 5px;
     margin-top: 47px;
-    font-family: 'minecraftfont';
+    font-family: $font-minecraft;
     @include lineshadow(#aaa);
 
     .inventory__zoom1_5 & {
@@ -418,10 +421,12 @@
 }
 
 .item-tooltip {
-    border: 2px solid #1e0f1e;
-    border: 2px solid rgba(16,0,16,0.941);
-    background: #1e0f1e;
-    background: rgba(16,0,16,0.941);
+    border-width: 2px;
+    border-style: solid;
+    border-color: #1e0f1e;
+    border-color: rgba(16,0,16,0.941);
+    background-color: #1e0f1e;
+    background-color: rgba(16,0,16,0.941);
     border-radius: 3px;
     display: none;
     position: absolute;
@@ -442,8 +447,10 @@
 
 .item-tooltip__detail {
     padding: 2px 5px;
-    border: 2px solid #1e0f1e;
-    border: 2px solid rgba(37,0,95,0.961);
+    border-width: 2px;
+    border-style: solid;
+    border-color: #1e0f1e;
+    border-color: rgba(37,0,95,0.961);
 
     .inventory__zoom1_5 & {
         border-width: 3px;
@@ -461,7 +468,7 @@
     height: 20px;
     font-size: 16px;
     line-height: 16px;
-    font-family: 'minecraftfont';
+    font-family: $font-minecraft;
     @include lineshadow(#373737);
 
     &:first-of-type + .line {
