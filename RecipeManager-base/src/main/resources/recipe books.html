@@ -13,19 +13,19 @@
     </div>
 </nav>
 <div class="container">
-    <h1>Recipe Books</h1>
+    <div class="doc-section__group">
+        <h1 class="doc-section__group-title">Recipe Books</h1>
 
+        <p>This plugin auto-generates written book items with recipes written in them.<br/>
+            Books are configured and stored in /plugins/RecipeManager/books/ as .yml files.</p>
 
-    <p>This plugin auto-generates written book items with recipes written in them.<br/>
-        Books are configured and stored in /plugins/RecipeManager/books/ as .yml files.</p>
+        <p>You can create new books just by creating a new .yml file in that folder but unlike recipes that folder does not support sub-folders.</p>
 
-    <p>You can create new books just by creating a new .yml file in that folder but unlike recipes that folder does not support sub-folders.</p>
+        <p>The book's filename defines the book's ID which will be used to identify books even if they're renamed.<br/>
+            This is useful when editing books that players already have which the plugin will automatically update, if you edit the file name their old book items will not be updated any more.</p>
 
-    <p>The book's filename defines the book's ID which will be used to identify books even if they're renamed.<br/>
-        This is useful when editing books that players already have which the plugin will automatically update, if you edit the file name their old book items will not be updated any more.</p>
-
-    <p>A book's .yml file can have:</p>
-
+        <p>A book's .yml file can have:</p>
+    </div>
     <pre class="code">title: The Book Title
 author: RecipeManager
 description: Book description written on the first page

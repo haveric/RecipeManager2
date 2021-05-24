@@ -165,7 +165,7 @@ public class Files {
         StringBuilder s = new StringBuilder(32000);
         Map<String, List<FlagDescriptor>> flags = new LinkedHashMap<>();
 
-        String[] category = new String[] { "RECIPE FLAGS", "INGREDIENT FLAGS", "RESULT FLAGS" };
+        String[] category = new String[] { "Recipe", "Ingredient", "Result" };
 
         int size = FlagFactory.getInstance().getFlags().values().size();
 
@@ -204,9 +204,9 @@ public class Files {
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
         s.append(NL).append("<div class='container-full'>");
-        s.append(NL).append("<h1>Recipe Flags</h1>");
+        s.append(NL).append("<div class='doc-section__group'>");
+        s.append(NL).append("<h1 class='doc-section__group-title'>Recipe Flags</h1>");
         s.append(NL).append("<pre>");
-        s.append(NL);
         s.append(NL).append("<b>WHAT ARE FLAGS ?</b>");
         s.append(NL).append("  Flags are the stuff that make a recipe very special! You can add various features to a recipe by using flags.");
         s.append(NL).append("  For examples see <a href='advanced recipes.html'><b>advanced recipes.html</b></a>.");
@@ -225,47 +225,56 @@ public class Files {
         s.append(NL);
         s.append(NL).append("<b>ALIASES</b>");
         s.append(NL).append("  They're just other names for the flag that you can use, they have no special effect if used, only for your preference.");
-        s.append(NL);
-        s.append(NL);
-        s.append(NL);
-        s.append("<hr>");
-        s.append(NL);
-        s.append(NL).append("<a name='contents'></a><h3>CONTENTS</h3>");
+        s.append(NL).append("</pre>");
+        s.append(NL).append("</div>");
+        s.append(NL).append("<div class='doc-section__group clearfix'>");
+        s.append(NL).append("<div class='table-of-contents'>");
+        s.append(NL).append("<a name='contents'></a>");
+        s.append(NL).append("<h2 class='table-of-contents__title'>Contents</h2>");
+        s.append(NL).append("</div>");
 
         for (String c : category) {
-            String key = c.replace(' ', '_').toLowerCase();
-
-            s.append(NL).append("<a href='#").append(key).append("'><b>").append(c).append("</b></a>");
-
+            s.append("<div class='flaggroup'>");
+            s.append(NL).append("<span class='flagtype flagtype-").append(c.toLowerCase()).append("'>").append(c).append(" Flags").append("</span>");
+            s.append("<ul class='flaggroup__list'>");
             for (FlagDescriptor flag : flags.get(c)) {
-                s.append(NL).append("- <a href='#").append(flag.getName()).append("'><b>").append(flag.getNameDisplay()).append("</b></a>");
+                s.append(NL).append("<li><a href='#").append(flag.getName()).append("'><b>").append(flag.getNameDisplay()).append("</b></a></li>");
             }
-
-            s.append(NL);
+            s.append("</ul></div>");
         }
 
-        s.append(NL);
+        s.append("</div>");
 
         for (FlagDescriptor flag : sortedFlags.values()) {
             String[] args = flag.getArguments();
             String[] desc = flag.getDescription();
             String[] ex = flag.getExamples();
 
-            s.append(NL);
-            s.append("<hr><a href='#contents' class='back-to-top'>^ Contents</a><a name='").append(flag.getName()).append("'></a>");
-            s.append(NL);
-            s.append(NL);
+            s.append("<div class='doc-section__group'>");
+            s.append("<a href='#contents' class='back-to-top'>^ Contents</a><a name='").append(flag.getName()).append("'></a>");
 
             if (args != null) {
                 for (String a : args) {
-                    s.append(NL).append("  <b>").append(StringEscapeUtils.escapeHtml(a.replace("{flag}", flag.getNameDisplay()))).append("</b>");
+                    s.append(NL).append("<h3 class='doc-section__title'>").append(StringEscapeUtils.escapeHtml(a.replace("{flag}", flag.getNameDisplay()))).append("</h3>");
                 }
             }
-
+            s.append(NL).append("<pre>");
             if (desc == null) {
                 desc = new String[] { "Flag not yet documented...", };
             }
 
+            s.append(NL).append("    ");
+            if (flag.hasBit(FlagBit.RECIPE)) {
+                s.append("<span class='flagtype flagtype-recipe'>Recipe</span>");
+            }
+
+            if (flag.hasBit(FlagBit.INGREDIENT)) {
+                s.append("<span class='flagtype flagtype-ingredient'>Ingredient</span>");
+            }
+
+            if (flag.hasBit(FlagBit.RESULT)) {
+                s.append("<span class='flagtype flagtype-result'>Result</span>");
+            }
             s.append(NL);
 
             s.append("<span>");
@@ -308,13 +317,10 @@ public class Files {
                 }
             }
 
-            s.append(NL);
-            s.append(NL);
+            s.append(NL).append("</pre></div>");
         }
 
-        s.append(NL);
-        s.append("</pre>");
-        s.append("</div>");
+        s.append("</div></div>");
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
@@ -336,8 +342,9 @@ public class Files {
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
         s.append(NL).append("</div></nav>");
         s.append(NL).append("<div class='container-full'>");
-        s.append(NL).append("<h1>Commands &amp; Permissions</h1>");
-        s.append(NL).append("<pre>");
+        s.append(NL).append("<div class='doc-section__group'>");
+        s.append(NL).append("<h1 class='doc-section__group-title'>Commands &amp; Permissions</h1>");
+        s.append(NL).append("</div><pre>");
         s.append(NL).append("<h2>Commands</h2>");
         s.append("<table>");
 
@@ -484,14 +491,16 @@ public class Files {
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
         s.append(NL).append("<div class='container-full'>");
-        s.append(NL).append("<h1>Name Index</h1>");
+        s.append(NL).append("<div class='doc-section__group'>");
+        s.append(NL).append("<h1 class='doc-section__group-title'>Name Index</h1>");
         s.append(NL).append("<pre>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods!");
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
-        s.append(NL);
-        s.append(NL).append("<hr>");
-        s.append(NL);
-        s.append(NL).append("<a name='contents'></a><h3>CONTENTS</h3>");
+        s.append(NL).append("</pre>");
+        s.append(NL).append("<div class='table-of-contents'>");
+        s.append(NL).append("<a name='contents'></a><h2 class='table-of-contents__title'>Contents</h2>");
+        s.append(NL).append("</div>");
+        s.append(NL).append("<pre>");
         s.append(NL).append("- <a href='#bannerpattern'><b>BANNER PATTERN LIST</b></a>");
         s.append(NL).append("- <a href='#biomes'><b>BIOMES LIST</b></a>");
         s.append(NL).append("- <a href='#chatcolor'><b>CHAT COLOR LIST</b></a>");
@@ -514,15 +523,13 @@ public class Files {
             s.append(NL).append("- <a href='#tag'><b>TAG LIST</b></a>");
         }
 
-        s.append(NL);
-        s.append(NL);
-        s.append(NL).append("<hr>");
-
+        s.append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "bannerpattern", "BANNER PATTERN LIST", "block/banner/PatternType", "PatternType");
         for (PatternType p : PatternType.values()) {
             s.append(NL).append(' ').append(p.name());
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "biomes", "BIOMES LIST", "block/Biome", "Biome");
         s.append(NL).append(String.format("<b> %-5s %-24s</b>", "ID", "Name"));
 
@@ -530,6 +537,7 @@ public class Files {
             s.append(NL).append(String.format(" %-5d %-24s", b.ordinal(), b.name()));
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "chatcolor", "CHAT COLOR LIST", "ChatColor", "ChatColor");
         s.append(NL).append(String.format("<b> %-16s %s</b>", "Name", "Color character"));
 
@@ -537,6 +545,7 @@ public class Files {
             s.append(NL).append(String.format(" %-16s %s", c.name(), c.getChar()));
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "dyecolor", "DYE COLOR LIST", "DyeColor", "DyeColor");
         s.append(NL).append(String.format("<b> %-17s %-6s</b>", "", "Color"));
         s.append(NL).append(String.format("<b> %-14s %-4s %-4s %-4s %-12s %s</b>", "Name", "R", "G", " B", "Wool data", "Dye data"));
@@ -545,6 +554,7 @@ public class Files {
             s.append(NL).append(String.format(" %-14s %-4d %-4d %-4d %-12d %d", c.name(), c.getColor().getRed(), c.getColor().getGreen(), c.getColor().getBlue(), c.getWoolData(), c.getDyeData()));
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "enchantment", "ENCHANTMENTS LIST", "enchantments/Enchantment", "Enchantment");
         if (Version.has1_13Support()) {
             s.append(NL).append(String.format("<b> %-26s %-26s %-24s %-12s %s</b>", "Key", "Name", "Alias", "Item type", "Level range"));
@@ -585,6 +595,7 @@ public class Files {
             }
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "entitytype", "ENTITY TYPE LIST", "entity/EntityType", "EntityType");
         s.append(NL).append(String.format("<b> %-5s %-24s %-24s %s</b>", "ID", "Constant", "Name", "Alive ?"));
 
@@ -594,12 +605,14 @@ public class Files {
             }
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "fireworkeffect", "FIREWORK EFFECT TYPE LIST", "FireworkEffect.Type", "Firework Effect Type");
 
         for (FireworkEffect.Type t : FireworkEffect.Type.values()) {
             s.append(NL).append(' ').append(t.toString());
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "inventory", "INVENTORY LIST", "event/inventory/InventoryType", "Inventory Type");
 
         for (InventoryType t : InventoryType.values()) {
@@ -607,6 +620,7 @@ public class Files {
         }
 
         if (Version.has1_13BasicSupport()) {
+            s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
             addNameIndexHeading(s, "itemattribute", "ITEM ATTRIBUTE LIST", "attribute/Attribute", "Attribute Type");
 
             for (Attribute a : Attribute.values()) {
@@ -614,6 +628,7 @@ public class Files {
             }
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
         s.append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
         s.append(NL);
@@ -656,6 +671,7 @@ public class Files {
         }
 
         if (Version.has1_9Support()) {
+            s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
             addNameIndexHeading(s, "particle", "PARTICLE LIST", "Particle", "Particle");
 
             for (Particle p : Particle.values()) {
@@ -663,6 +679,7 @@ public class Files {
             }
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "potioneffect", "POTION EFFECT TYPE LIST", "potion/PotionEffect", "PotionEffect");
         s.append(NL).append(String.format("<b> %-5s %-24s %-10s</b>", "ID", "Name", "Instant ?"));
 
@@ -677,6 +694,7 @@ public class Files {
         s.append(NL);
         s.append(NL).append("More about potions, effects and custom effects: <a href=\"https://minecraft.gamepedia.com/Status_effect\">https://minecraft.gamepedia.com/Status_effect</a>");
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "potiontype", "POTION TYPE LIST", "potion/PotionType", "PotionType");
         s.append(NL).append(String.format("<b> %-5s %-24s %-10s %-10s %-16s</b>", "ID", "Name", "Instant ?", "Max level", "Effect type"));
 
@@ -692,6 +710,7 @@ public class Files {
             }
         }
 
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "sound", "SOUND LIST", "Sound", "Sound");
         Sound[] sounds = Sound.values();
 
@@ -715,6 +734,7 @@ public class Files {
         }
 
         if (Version.has1_13Support()) {
+            s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
             addNameIndexHeading(s, "tag", "TAG LIST", "Tag", "Tag");
 
             displayTags(s, "Blocks", REGISTRY_BLOCKS);
@@ -722,10 +742,8 @@ public class Files {
             displayTags(s, "Items", REGISTRY_ITEMS);
         }
 
-        s.append(NL);
-        s.append(NL);
         s.append(NL).append("</pre>");
-        s.append(NL).append("</div>");
+        s.append(NL).append("</div></div>");
         s.append(NL).append("<nav class='nav-docs'><div class='container'>");
         s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
         s.append(NL).append("</div></nav>");
@@ -757,9 +775,7 @@ public class Files {
     }
 
     private void addNameIndexHeading(StringBuilder s, String name, String title, String partialUrl, String urlTitle) {
-        s.append(NL);
-        s.append(NL);
-        s.append(NL).append("<a name='").append(name).append("'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>").append(title).append("</h3>");
+        s.append("<a name='").append(name).append("'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>").append(title).append("</h3>");
         s.append("<a href='").append(BUKKIT_DOCS).append(partialUrl).append(".html'>BukkitAPI / ").append(urlTitle).append("</a>");
         s.append(NL);
     }

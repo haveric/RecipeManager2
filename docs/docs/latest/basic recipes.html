@@ -1844,8 +1844,7 @@ b potion
                                 </div>
                                 <span class="inventory__zoom-out"></span><span class="inventory__zoom-in"></span>
                             </div>
-                        </div>
-                        <div class="tab__content">
+                            <div class="tab__content">
                             <pre class="code">
 BREW [recipe name]
 &lt;material:[data]:[amount]&gt; // ingredient
@@ -1853,14 +1852,14 @@ BREW [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-                            <p>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</p>
-                            <p>The second '&lt;material&gt;:[data]' is the potion with optional data.</p>
-                            <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
-                            <p>Note: Currently requires a vanilla brewing recipe, but can have customized items.</p>
-                            <div>
-                                <b>Example:</b>
-                            </div>
-                            <pre class="code">
+                                <p>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</p>
+                                <p>The second '&lt;material&gt;:[data]' is the potion with optional data.</p>
+                                <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
+                                <p>Note: Currently requires a vanilla brewing recipe, but can have customized items.</p>
+                                <div>
+                                    <b>Example:</b>
+                                </div>
+                                <pre class="code">
 brew
 nether_wart
 potion
@@ -1869,37 +1868,37 @@ potion
 @ingredientcondition nether_wart | name &cTest
 @ingredientcondition potion | potion type water
 </pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="removing-recipe" class="doc-section__group">
-        <h2 class="doc-section__group-title">Removing a Recipe</h2>
-        <div id="extracting-recipes" class="doc-section">
-            <h3 class="doc-section__title">Extracting Vanilla Recipes</h3>
-            <div class="doc-section__inn">
-                <p>Use the /rmextract command to export all vanilla recipes.</p>
-                <p>A file will be generated at "/plugins/RecipeManager/extracted/" (For Legacy versions: "/plugins/RecipeManager/recipes/disabled/")</p>
-                <p>Open the generated file in a text editor and search for a recipe you would like to remove.</p>
-                <p>For example, an iron sword should look similar to this:</p>
-                <pre class="code">
+        <div id="removing-recipe" class="doc-section__group">
+            <h2 class="doc-section__group-title">Removing a Recipe</h2>
+            <div id="extracting-recipes" class="doc-section">
+                <h3 class="doc-section__title">Extracting Vanilla Recipes</h3>
+                <div class="doc-section__inn">
+                    <p>Use the /rmextract command to export all vanilla recipes.</p>
+                    <p>A file will be generated at "/plugins/RecipeManager/extracted/" (For Legacy versions: "/plugins/RecipeManager/recipes/disabled/")</p>
+                    <p>Open the generated file in a text editor and search for a recipe you would like to remove.</p>
+                    <p>For example, an iron sword should look similar to this:</p>
+                    <pre class="code">
 craft
 iron_ingot
 iron_ingot
 stick
 = iron_sword:0:1
 </pre>
-                <p>After finding the recipes that you want to remove, copy them over to a file in "/plugins/RecipeManager/recipes/"</p>
-                <p>Once the recipes are in your new file, add @remove per the <a href="#remove-syntax">Remove Syntax</a> below.</p>
+                    <p>After finding the recipes that you want to remove, copy them over to a file in "/plugins/RecipeManager/recipes/"</p>
+                    <p>Once the recipes are in your new file, add @remove per the <a href="#remove-syntax">Remove Syntax</a> below.</p>
+                </div>
             </div>
-        </div>
-        <div id="remove-syntax" class="doc-section">
-            <h3 class="doc-section__title">Remove Syntax</h3>
-            <div class="doc-section__inn">
-                <p>To remove an individual recipe, place @remove just after the craft/combine/smelt line:</p>
-                <pre class="code">
+            <div id="remove-syntax" class="doc-section">
+                <h3 class="doc-section__title">Remove Syntax</h3>
+                <div class="doc-section__inn">
+                    <p>To remove an individual recipe, place @remove just after the craft/combine/smelt line:</p>
+                    <pre class="code">
 craft
 @remove
 iron_ingot
@@ -1908,8 +1907,8 @@ stick
 = iron_sword:0:1
 </pre>
 
-                <p>Place @remove at the top of the file to remove all recipes in the file</p>
-                <pre class="code">
+                    <p>Place @remove at the top of the file to remove all recipes in the file</p>
+                    <pre class="code">
 @remove
 
 craft
@@ -1920,17 +1919,18 @@ stick
 
 [... more recipes]
 </pre>
+                </div>
             </div>
         </div>
-    </div>
 
-    <hr>
-    <p>
-        For more customization options and examples see <a href="advanced recipes.html"><b>advanced recipes.html</b></a>.
-    </p>
-    <p>
-        If you don't get these instructions, please stop by <a href="https://discordapp.com/invite/3JY9JC3">Discord</a> and ask for assistance. Please be as descriptive as possible in your questions.
-    </p>
+        <hr>
+        <p>
+            For more customization options and examples see <a href="advanced recipes.html"><b>advanced recipes.html</b></a>.
+        </p>
+        <p>
+            If you don't get these instructions, please stop by <a href="https://discordapp.com/invite/3JY9JC3">Discord</a> and ask for assistance. Please be as descriptive as possible in your questions.
+        </p>
+    </div>
 </div>
 <div id="item-tooltip" class="item-tooltip">
     <div class="item-tooltip__detail"></div>
