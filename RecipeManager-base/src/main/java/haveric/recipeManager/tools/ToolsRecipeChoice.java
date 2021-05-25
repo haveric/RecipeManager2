@@ -235,7 +235,7 @@ public class ToolsRecipeChoice {
 
             int itemsSize = items.size();
             for (int i = 0; i < itemsSize; i++) {
-                s.append(items.get(i).getType().toString()).append("-").append(items.get(i).hashCode());
+                s.append(items.get(i).getType()).append("-").append(items.get(i).hashCode());
 
                 if (i + 1 < itemsSize) {
                     s.append(",");

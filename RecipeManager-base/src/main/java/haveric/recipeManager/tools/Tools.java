@@ -580,7 +580,7 @@ public class Tools {
             ItemMeta meta = item.getItemMeta();
 
             if (meta == null && (settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                ErrorReporter.getInstance().warning("The " + material.toString() + " material doesn't support item meta, name/lore/enchants ignored.");
+                ErrorReporter.getInstance().warning("The " + material + " material doesn't support item meta, name/lore/enchants ignored.");
                 return item;
             }
 
@@ -898,7 +898,7 @@ public class Tools {
                 icon = false;
             } else if (s.startsWith("duration")) {
                 if (effectType.isInstant()) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has effect type '" + effectType.toString() + "' which is instant, it can't have duration, ignored.");
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has effect type '" + effectType + "' which is instant, it can't have duration, ignored.");
                     continue;
                 }
 
@@ -937,7 +937,7 @@ public class Tools {
         }
 
         if (duration != 1 && effectType.isInstant()) {
-            ErrorReporter.getInstance().warning("Flag " + flagType + " can't have duration on instant effect: " + effectType.toString());
+            ErrorReporter.getInstance().warning("Flag " + flagType + " can't have duration on instant effect: " + effectType);
         }
 
         PotionEffect effect;
@@ -1068,7 +1068,7 @@ public class Tools {
      * For use in furnace smelting and fuel recipes HashMap
      */
     public static String convertItemToStringId(ItemStack item) {
-        String stringId = "" + item.getType().toString();
+        String stringId = item.getType().toString();
 
         if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
             stringId += ":" + item.getDurability();
