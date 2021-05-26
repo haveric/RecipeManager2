@@ -454,7 +454,7 @@
 * `@IngredientCondition`: Added 'needed' parameter which allows you to match against less than all ingredients of a type
     * For Example:
     * `@ingredientcondition sugar | nometa | needed 2` // Recipe will require 2 vanilla sugar
-    * `@ingredientcondition sugar | name �fFlour | needed 3` // Also require 3 sugars named �fFlour
+    * `@ingredientcondition sugar | name &fFlour | needed 3` // Also require 3 sugars named &fFlour
 * Added recipe-comment-characters config option for customizing inline comments
 * `@ForChance`: Fixed a couple issues when using groups
 * Brewing updates
