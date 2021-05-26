@@ -54,7 +54,7 @@ public class FlagSuspiciousStewItem extends Flag {
         return new String[] {
             "{flag} heal",
             "{flag} blindness | duration 60 | amplifier 5",
-            "{flag} poison | chance 6.66% | ambient | amplifier 666 | duration 6.66", };
+            "{flag} poison | ambient | amplifier 666 | duration 6.66", };
     }
 
 

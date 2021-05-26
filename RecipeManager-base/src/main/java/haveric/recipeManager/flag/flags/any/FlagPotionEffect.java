@@ -60,7 +60,7 @@ public class FlagPotionEffect extends Flag {
             "{flag} clear // remove all player's potion effects beforehand",
             "{flag} heal",
             "{flag} blindness | duration 60 | amplifier 5",
-            "{flag} poison | chance 6.66% | ambient | amplifier 666 | duration 6.66", };
+            "{flag} poison | ambient | amplifier 666 | duration 6.66", };
     }
 
 
