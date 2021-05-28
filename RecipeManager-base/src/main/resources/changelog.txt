@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### Coming Soon
+* NEW: `BookItem`: Added generation argument
 
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft

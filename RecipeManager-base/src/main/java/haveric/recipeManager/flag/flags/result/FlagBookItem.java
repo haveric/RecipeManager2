@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FlagBookItem extends Flag {
@@ -30,6 +31,7 @@ public class FlagBookItem extends Flag {
         return new String[] {
             "{flag} title [text]",
             "{flag} author [text]",
+            "{flag} generation <generation>",
             "{flag} addpage [text]", };
     }
 
@@ -43,6 +45,9 @@ public class FlagBookItem extends Flag {
             "",
             "Use 'title <text>' and 'author <text>' only on written books, it doesn't work on book and quill therefore they're optional.",
             "Title and author must not exceed 64 characters, colors included (2 chars each).",
+            "",
+            "Use generation <generation> to set the book's generation. Defaults to ORIGINAL",
+            "  <generation> values: " + RMCUtil.collectionToString(Arrays.asList(BookMeta.Generation.values())).toLowerCase(),
             "",
             "Use 'addpage <text>' to add a new page, the text can contain \\n to add new lines to it, but it mainly word-wraps itself.",
             "Page contents must not exceed 256 characters, colors (2 chars each) and new line (1 char each) included.",
@@ -58,6 +63,7 @@ public class FlagBookItem extends Flag {
         return new String[] {
             "{flag} title The Art of Stealing",
             "{flag} author Gray Fox",
+            "{flag} generation COPY_OF_ORIGINAL",
             "{flag} addpage <bold>O<reset>nce upon a time...",
             "{flag} addpage // added blank page",
             "{flag} addpage \\n\\n\\n\\n<italic>      The End.",
@@ -69,6 +75,7 @@ public class FlagBookItem extends Flag {
 
     private String title;
     private String author;
+    private BookMeta.Generation generation;
     private List<String> pages = new ArrayList<>(50);
 
     public FlagBookItem() {
@@ -78,6 +85,7 @@ public class FlagBookItem extends Flag {
         super(flag);
         title = flag.title;
         author = flag.author;
+        generation = flag.generation;
         pages.addAll(flag.pages);
     }
 
@@ -105,6 +113,14 @@ public class FlagBookItem extends Flag {
 
     public void setAuthor(String newAuthor) {
         author = RMCUtil.parseColors(newAuthor, false);
+    }
+
+    public BookMeta.Generation getGeneration() {
+        return generation;
+    }
+
+    public void setGeneration(BookMeta.Generation newGeneration) {
+        generation = newGeneration;
     }
 
     public List<String> getPages() {
@@ -169,7 +185,6 @@ public class FlagBookItem extends Flag {
 
         String trimmed = RMCUtil.trimExactQuotes(value);
         if (setTitle || setAuthor) {
-
             String bookType;
             Material writableBookMaterial;
             if (Version.has1_13BasicSupport()) {
@@ -194,6 +209,15 @@ public class FlagBookItem extends Flag {
                 setTitle(trimmed);
             } else {
                 setAuthor(trimmed);
+            }
+        } else if (key.equals("generation")) {
+            BookMeta.Generation parsedGeneration = RMCUtil.parseEnum(trimmed, BookMeta.Generation.values());
+
+            if (parsedGeneration == null) {
+                generation = BookMeta.Generation.ORIGINAL;
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid generation: " + trimmed + ". Defaulting to ORIGINAL.");
+            } else {
+                generation = parsedGeneration;
             }
         } else if (key.equals("addpage")) {
             if (pages.size() == 50) {
@@ -229,6 +253,7 @@ public class FlagBookItem extends Flag {
 
             bookMeta.setTitle(title);
             bookMeta.setAuthor(author);
+            bookMeta.setGeneration(generation);
             bookMeta.setPages(pages);
 
             a.result().setItemMeta(bookMeta);
@@ -241,6 +266,7 @@ public class FlagBookItem extends Flag {
 
         toHash += "title: " + title;
         toHash += "author: " + author;
+        toHash += "generation: " + generation;
 
         for (String page : pages) {
             toHash += page;
