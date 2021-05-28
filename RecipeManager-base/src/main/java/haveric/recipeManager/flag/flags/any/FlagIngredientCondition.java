@@ -147,7 +147,7 @@ public class FlagIngredientCondition extends Flag {
 
             if (Version.has1_13BasicSupport()) {
                 description = ObjectArrays.concat(description, new String[]{
-                        "    icon or !icon             = Check effect's icon setting",
+                    "    icon or !icon             = Check effect's icon setting",
                 }, String.class);
             }
 

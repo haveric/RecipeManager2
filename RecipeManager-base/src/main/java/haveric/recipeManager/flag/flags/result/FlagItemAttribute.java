@@ -155,7 +155,7 @@ public class FlagItemAttribute extends Flag {
         }
 
         UUID uuid = UUID.randomUUID();
-        attributes.put(attribute, new AttributeModifier(uuid, attribute.name() + "-" + uuid.toString(), modifier, operation, slot));
+        attributes.put(attribute, new AttributeModifier(uuid, attribute.name() + "-" + uuid, modifier, operation, slot));
 
         return true;
     }

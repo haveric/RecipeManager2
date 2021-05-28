@@ -37,7 +37,7 @@ public class ConditionPotion {
         String toHash = "ConditionPotion:";
 
         if (extended != null) {
-            toHash += "extended: " + extended.toString();
+            toHash += "extended: " + extended;
         }
         toHash += "level: " + level;
 
