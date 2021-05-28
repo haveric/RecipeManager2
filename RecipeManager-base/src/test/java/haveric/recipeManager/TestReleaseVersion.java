@@ -14,7 +14,7 @@ public class TestReleaseVersion {
     private YamlConfiguration yamlConfig;
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeAll() {
         File baseSrcDir = new File("src");
         String baseSrcPath = baseSrcDir.getAbsolutePath().replace(".idea\\modules\\", "") + "/";
 
