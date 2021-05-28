@@ -74,7 +74,7 @@ public class FlagBaseTest {
             loadSettings();
             baseRecipePath = baseResourcesPath + "recipes/";
 
-            File messagesFile = new File(baseSrcPath + "/main/resources/" + FILE_MESSAGES);
+            File messagesFile = new File(originalResourcesPath + FILE_MESSAGES);
             Messages.getInstance().loadMessages(null, messagesFile);
         }
 
