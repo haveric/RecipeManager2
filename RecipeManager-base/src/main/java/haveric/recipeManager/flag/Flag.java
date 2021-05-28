@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Flag implements Cloneable {
+public abstract class Flag implements Cloneable {
     private Flags flagsContainer;
-    private static final String[] EMPTY_STRING = {};
     protected String sourceFileName = "";
     protected int sourceLineNum = -1;
 
@@ -207,21 +206,13 @@ public class Flag implements Cloneable {
         return obj == this || obj instanceof Flag && obj.hashCode() == hashCode();
     }
 
-    protected String[] getArguments() {
-        return EMPTY_STRING;
-    }
+    protected abstract String[] getArguments();
 
-    protected String[] getDescription() {
-        return EMPTY_STRING;
-    }
+    protected abstract String[] getDescription();
 
-    protected String[] getExamples() {
-        return EMPTY_STRING;
-    }
+    protected abstract String[] getExamples();
 
-    public String getFlagType() {
-        return null;
-    }
+    public abstract String getFlagType();
 
     protected final Flaggable getFlaggable() {
         Flaggable flaggable = null;
