@@ -109,39 +109,12 @@ public class CreateRecipeCommand implements CommandExecutor {
                 width++;
                 height++;
 
-                parseIngredient(ingredients[0], craftString, conditionString);
-                if (width > 1) {
-                    craftString.append(" + ");
-                    parseIngredient(ingredients[1], craftString, conditionString);
-                }
-                if (width > 2) {
-                    craftString.append(" + ");
-                    parseIngredient(ingredients[2], craftString, conditionString);
-                }
-                craftString.append(Files.NL);
-
-                if (height > 1) {
-                    parseIngredient(ingredients[3], craftString, conditionString);
-                    if (width > 1) {
+                for (int i = 0; i < height; i++) {
+                    int rowStart = 3 * i;
+                    parseIngredient(ingredients[rowStart], craftString, conditionString);
+                    for (int j = 1; j < width; j++) {
                         craftString.append(" + ");
-                        parseIngredient(ingredients[4], craftString, conditionString);
-                    }
-                    if (width > 2) {
-                        craftString.append(" + ");
-                        parseIngredient(ingredients[5], craftString, conditionString);
-                    }
-                    craftString.append(Files.NL);
-                }
-
-                if (height > 2) {
-                    parseIngredient(ingredients[6], craftString, conditionString);
-                    if (width > 1) {
-                        craftString.append(" + ");
-                        parseIngredient(ingredients[7], craftString, conditionString);
-                    }
-                    if (width > 2) {
-                        craftString.append(" + ");
-                        parseIngredient(ingredients[8], craftString, conditionString);
+                        parseIngredient(ingredients[rowStart + j], craftString, conditionString);
                     }
                     craftString.append(Files.NL);
                 }
