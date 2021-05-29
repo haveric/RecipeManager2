@@ -6,6 +6,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: /rmextract: Added a comment with namespace:key format to help with `@KnowledgeBookItem`
 * NEW: `BookItem`: Added generation argument
 * FIX: /rmcreaterecipe and /rmextract: Increased support for most flags
+* FIX: /rmcreaterecipe: Improve `@ingredientcondition` support
 
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft

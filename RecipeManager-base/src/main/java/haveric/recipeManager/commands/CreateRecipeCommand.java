@@ -5,7 +5,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
-import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.RMBukkitTools;
@@ -37,9 +36,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class CreateRecipeCommand implements CommandExecutor {
@@ -67,9 +64,9 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 StringBuilder craftString = new StringBuilder(RMCRecipeType.CRAFT.getDirective()).append(Files.NL);
                 StringBuilder combineString = new StringBuilder(RMCRecipeType.COMBINE.getDirective()).append(Files.NL);
-                StringBuilder conditionString = new StringBuilder();
+                StringBuilder resultString = new StringBuilder();
 
-                parseResult(holdingStack, conditionString);
+                parseResult(holdingStack, resultString);
 
                 ItemStack[] ingredients = new ItemStack[9];
 
@@ -111,15 +108,36 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 width++;
                 height++;
-
+                Map<Material, Map<String, Integer>> conditions = new EnumMap<>(Material.class);
                 for (int i = 0; i < height; i++) {
                     int rowStart = 3 * i;
-                    parseIngredientForConditions(ingredients[rowStart], craftString, conditionString);
+                    parseIngredientForConditions(ingredients[rowStart], craftString, conditions);
                     for (int j = 1; j < width; j++) {
                         craftString.append(" + ");
-                        parseIngredientForConditions(ingredients[rowStart + j], craftString, conditionString);
+                        parseIngredientForConditions(ingredients[rowStart + j], craftString, conditions);
                     }
                     craftString.append(Files.NL);
+                }
+
+                StringBuilder conditionString = new StringBuilder();
+                for (Entry<Material, Map<String, Integer>> materialEntry : conditions.entrySet()) {
+                    Material material = materialEntry.getKey();
+                    Map<String, Integer> conditionStrings = materialEntry.getValue();
+
+                    int numConditions = conditionStrings.size();
+
+                    for (Entry<String, Integer> conditionEntry : conditionStrings.entrySet()) {
+                        String condition = conditionEntry.getKey();
+                        int needed = conditionEntry.getValue();
+
+                        if (numConditions == 1) {
+                            if (!condition.equals(" | nometa")) {
+                                conditionString.append("@ingredientcondition ").append(material).append(condition).append(Files.NL);
+                            }
+                        } else {
+                            conditionString.append("@ingredientcondition ").append(material).append(condition).append(" | needed ").append(needed).append(Files.NL);
+                        }
+                    }
                 }
 
                 boolean first = true;
@@ -136,8 +154,8 @@ public class CreateRecipeCommand implements CommandExecutor {
                 combineString.append(Files.NL);
 
                 StringBuilder recipeString = new StringBuilder();
-                recipeString.append(craftString).append(conditionString).append(Files.NL);
-                recipeString.append(combineString).append(conditionString).append(Files.NL);
+                recipeString.append(craftString).append(resultString).append(conditionString).append(Files.NL);
+                recipeString.append(combineString).append(resultString).append(conditionString).append(Files.NL);
 
                 file.getParentFile().mkdirs();
 
@@ -158,7 +176,7 @@ public class CreateRecipeCommand implements CommandExecutor {
         return true;
     }
 
-    private void parseIngredientForConditions(ItemStack item, StringBuilder recipeString, StringBuilder conditionString) {
+    private void parseIngredientForConditions(ItemStack item, StringBuilder recipeString, Map<Material, Map<String, Integer>> conditions) {
         parseIngredientName(item, recipeString);
 
         if (item != null && item.getType() != Material.AIR) {
@@ -310,9 +328,21 @@ public class CreateRecipeCommand implements CommandExecutor {
             }
 
             String finalIngredientCondition = ingredientCondition.toString();
-            if (finalIngredientCondition.length() > 0) {
-                conditionString.append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(finalIngredientCondition);
-                conditionString.append(Files.NL);
+            if (finalIngredientCondition.isEmpty()) {
+                finalIngredientCondition = " | nometa";
+            }
+
+            Material type = item.getType();
+            if (!conditions.containsKey(type)) {
+                conditions.put(type, new HashMap<>());
+            }
+
+            Map<String, Integer> conditionsForType = conditions.get(type);
+            if (conditionsForType.containsKey(finalIngredientCondition)) {
+                int num = conditionsForType.get(finalIngredientCondition);
+                conditionsForType.put(finalIngredientCondition, num + 1);
+            } else {
+                conditionsForType.put(finalIngredientCondition, 1);
             }
         }
     }
@@ -361,15 +391,15 @@ public class CreateRecipeCommand implements CommandExecutor {
         recipeString.append(name);
     }
 
-    private void parseResult(ItemStack result, StringBuilder recipeString) {
-        recipeString.append("= ").append(result.getType().toString().toLowerCase());
+    private void parseResult(ItemStack result, StringBuilder resultString) {
+        resultString.append("= ").append(result.getType().toString().toLowerCase());
         if (result.getDurability() != 0 || result.getAmount() > 1) {
-            recipeString.append(':').append(result.getDurability());
+            resultString.append(':').append(result.getDurability());
         }
         if (result.getAmount() > 1) {
-            recipeString.append(':').append(result.getAmount());
+            resultString.append(':').append(result.getAmount());
         }
 
-        ToolsFlag.parseItemMeta(result, recipeString);
+        ToolsFlag.parseItemMeta(result, resultString);
     }
 }
