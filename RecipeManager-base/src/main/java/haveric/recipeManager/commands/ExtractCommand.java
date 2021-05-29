@@ -12,15 +12,16 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.tools.ToolsFlag;
 import haveric.recipeManager.tools.Version;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,7 +29,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Map.Entry;
 
 import static haveric.recipeManager.Vanilla.isSpecialRecipe;
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
@@ -484,36 +484,9 @@ public class ExtractCommand implements TabExecutor {
     private void parseResult(ItemStack result, StringBuilder recipeString) {
         recipeString.append("= ").append(result.getType().toString().toLowerCase()).append(':').append(result.getDurability()).append(':').append(result.getAmount());
 
-        if (result.getEnchantments().size() > 0) {
-            for (Entry<Enchantment, Integer> entry : result.getEnchantments().entrySet()) {
-                recipeString.append(Files.NL).append("@enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
-            }
-        }
+        ToolsFlag.parseItemMeta(result, recipeString);
 
-        ItemMeta meta = result.getItemMeta();
-        if (meta != null) {
-            if (meta.hasDisplayName()) {
-                recipeString.append(Files.NL).append("@name ").append(meta.getDisplayName());
-            }
-
-            if (meta.hasLore()) {
-                List<String> lores = meta.getLore();
-                for (String lore : lores) {
-                    recipeString.append(Files.NL).append("@lore ").append(lore);
-                }
-            }
-
-            if (meta instanceof LeatherArmorMeta) {
-                LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
-                Color color = leatherMeta.getColor();
-
-                if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
-                    recipeString.append(Files.NL).append("@leathercolor ").append(color.getRed()).append(' ').append(color.getGreen()).append(' ').append(color.getBlue());
-                }
-            }
-        }
-
-        recipeString.append(Files.NL).append(Files.NL);
+        recipeString.append(Files.NL);
     }
 
     @Override
