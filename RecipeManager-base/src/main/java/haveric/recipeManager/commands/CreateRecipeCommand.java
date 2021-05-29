@@ -73,9 +73,16 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 ItemStack[] ingredients = new ItemStack[9];
 
+                int inventoryOffset = 9;
                 int numNulls = 0;
                 for (int i = 0; i <= 8; i++) {
-                    ingredients[i] = inventory.getItem(i + 9);
+                    if (i > 5) {
+                        inventoryOffset = 21;
+                    } else if (i > 2) {
+                        inventoryOffset = 15;
+                    }
+                    ingredients[i] = inventory.getItem(i + inventoryOffset);
+
                     if (ingredients[i] == null) {
                         numNulls ++;
                     }
