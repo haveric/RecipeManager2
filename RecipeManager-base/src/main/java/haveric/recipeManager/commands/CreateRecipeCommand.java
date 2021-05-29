@@ -268,30 +268,9 @@ public class CreateRecipeCommand implements CommandExecutor {
                     if (potionMeta.hasCustomEffects()) {
                         List<PotionEffect> potionEffects = potionMeta.getCustomEffects();
                         for (PotionEffect effect : potionEffects) {
-                            PotionEffectType effectType = effect.getType();
-                            ingredientCondition.append(" | potioneffect type ").append(effectType);
+                            ingredientCondition.append(" | potioneffect type ");
 
-                            int duration = effect.getDuration();
-                            if (duration != 20) {
-                                float durationInSeconds = (float) (duration / 20);
-                                ingredientCondition.append(", duration ").append(durationInSeconds);
-                            }
-                            int amplifier = effect.getAmplifier();
-                            if (amplifier != 0) {
-                                ingredientCondition.append(", amplifier ").append(amplifier);
-                            }
-                            if (!effect.isAmbient()) {
-                                ingredientCondition.append(", !ambient");
-                            }
-                            if (!effect.hasParticles()) {
-                                ingredientCondition.append(", !particles");
-                            }
-
-                            if (Version.has1_13BasicSupport()) {
-                                if (!effect.hasIcon()) {
-                                    ingredientCondition.append(", !icon");
-                                }
-                            }
+                            parsePotionEffectForCondition(effect, ingredientCondition);
                         }
                     }
                 }
@@ -312,30 +291,9 @@ public class CreateRecipeCommand implements CommandExecutor {
                     if (stewMeta.hasCustomEffects()) {
                         List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
                         for (PotionEffect effect : potionEffects) {
-                            PotionEffectType effectType = effect.getType();
-                            ingredientCondition.append(" | suspiciousstew type ").append(effectType);
+                            ingredientCondition.append(" | suspiciousstew type ");
 
-                            int duration = effect.getDuration();
-                            if (duration != 20) {
-                                float durationInSeconds = (float) (duration / 20);
-                                ingredientCondition.append(", duration ").append(durationInSeconds);
-                            }
-                            int amplifier = effect.getAmplifier();
-                            if (amplifier != 0) {
-                                ingredientCondition.append(", amplifier ").append(amplifier);
-                            }
-                            if (!effect.isAmbient()) {
-                                ingredientCondition.append(", !ambient");
-                            }
-                            if (!effect.hasParticles()) {
-                                ingredientCondition.append(", !particles");
-                            }
-
-                            if (Version.has1_13BasicSupport()) {
-                                if (!effect.hasIcon()) {
-                                    ingredientCondition.append(", !icon");
-                                }
-                            }
+                            parsePotionEffectForCondition(effect, ingredientCondition);
                         }
                     }
                 }
@@ -355,6 +313,32 @@ public class CreateRecipeCommand implements CommandExecutor {
             if (finalIngredientCondition.length() > 0) {
                 conditionString.append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(finalIngredientCondition);
                 conditionString.append(Files.NL);
+            }
+        }
+    }
+
+    private void parsePotionEffectForCondition(PotionEffect effect, StringBuilder ingredientCondition) {
+        PotionEffectType effectType = effect.getType();
+        ingredientCondition.append(effectType);
+        int duration = effect.getDuration();
+        if (duration != 20) {
+            float durationInSeconds = (float) (duration / 20);
+            ingredientCondition.append(", duration ").append(durationInSeconds);
+        }
+        int amplifier = effect.getAmplifier();
+        if (amplifier != 0) {
+            ingredientCondition.append(", amplifier ").append(amplifier);
+        }
+        if (!effect.isAmbient()) {
+            ingredientCondition.append(", !ambient");
+        }
+        if (!effect.hasParticles()) {
+            ingredientCondition.append(", !particles");
+        }
+
+        if (Version.has1_13BasicSupport()) {
+            if (!effect.hasIcon()) {
+                ingredientCondition.append(", !icon");
             }
         }
     }
