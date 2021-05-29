@@ -352,7 +352,7 @@ public class ToolsFlag {
                 PotionData potionData = potionMeta.getBasePotionData();
                 PotionType potionType = potionData.getType();
 
-                recipeString.append(Files.NL).append("@potionitem type").append(potionType);
+                recipeString.append(Files.NL).append("@potionitem type ").append(potionType);
                 if (potionData.isUpgraded()) {
                     recipeString.append(" | level 2");
                 }
