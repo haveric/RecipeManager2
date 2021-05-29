@@ -76,20 +76,10 @@ public class CreateRecipeCommand implements CommandExecutor {
                 parseResult(holdingStack, conditionString);
 
                 ItemStack[] ingredients = new ItemStack[9];
-                ingredients[0] = inventory.getItem(9);
-                ingredients[1] = inventory.getItem(10);
-                ingredients[2] = inventory.getItem(11);
-
-                ingredients[3] = inventory.getItem(18);
-                ingredients[4] = inventory.getItem(19);
-                ingredients[5] = inventory.getItem(20);
-
-                ingredients[6] = inventory.getItem(27);
-                ingredients[7] = inventory.getItem(28);
-                ingredients[8] = inventory.getItem(29);
 
                 int numNulls = 0;
                 for (int i = 0; i <= 8; i++) {
+                    ingredients[i] = inventory.getItem(i + 9);
                     if (ingredients[i] == null) {
                         numNulls ++;
                     }
