@@ -159,33 +159,33 @@ public class CreateRecipeCommand implements CommandExecutor {
         parseIngredientName(item, recipeString);
 
         if (item != null && item.getType() != Material.AIR) {
-            String ingredientCondition = "";
+            StringBuilder ingredientCondition = new StringBuilder(100);
 
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 if (meta.hasDisplayName()) {
-                    ingredientCondition += " | name " + meta.getDisplayName();
+                    ingredientCondition.append(" | name ").append(meta.getDisplayName());
                 }
 
                 if (meta.hasLore()) {
                     List<String> lores = meta.getLore();
                     for (String lore : lores) {
-                        ingredientCondition += " | lore " + lore;
+                        ingredientCondition.append(" | lore ").append(lore);
                     }
                 }
 
                 // TODO: Add FlagHide support to Conditions
 
                 if (meta.hasCustomModelData()) {
-                    recipeString.append(" | custommodeldata ").append(meta.getCustomModelData());
+                    ingredientCondition.append(" | custommodeldata ").append(meta.getCustomModelData());
                 }
 
                 if (meta.hasLocalizedName()) {
-                    recipeString.append(" | localizedname ").append(meta.getLocalizedName());
+                    ingredientCondition.append(" | localizedname ").append(meta.getLocalizedName());
                 }
 
                 if (Version.has1_11Support() && meta.isUnbreakable()) {
-                    recipeString.append(" | unbreakable");
+                    ingredientCondition.append(" | unbreakable");
                 }
 
                 // TODO: Add FlagItemAttribute support to Conditions
@@ -194,12 +194,12 @@ public class CreateRecipeCommand implements CommandExecutor {
                     BannerMeta bannerMeta = (BannerMeta) meta;
 
                     DyeColor bannerColor = bannerMeta.getBaseColor();
-                    recipeString.append(" | banneritem color ").append(bannerColor.name());
+                    ingredientCondition.append(" | banner color ").append(bannerColor.name());
 
                     for (Pattern pattern : bannerMeta.getPatterns()) {
                         PatternType patternType = pattern.getPattern();
                         DyeColor patternColor = pattern.getColor();
-                        recipeString.append(" | banneritem pattern").append(patternType.name()).append(" ").append(patternColor.name());
+                        ingredientCondition.append(", pattern ").append(patternType.name()).append(" ").append(patternColor.name());
                     }
                 }
 
@@ -216,10 +216,10 @@ public class CreateRecipeCommand implements CommandExecutor {
                             Enchantment enchantment = entry.getKey();
                             Integer level = entry.getValue();
 
-                            recipeString.append(" | bookenchant ").append(enchantment.toString());
+                            ingredientCondition.append(" | bookenchant ").append(enchantment.toString());
 
                             if (level != enchantment.getStartLevel()) {
-                                recipeString.append(" ").append(level);
+                                ingredientCondition.append(" ").append(level);
                             }
                         }
                     }
@@ -233,7 +233,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                     Color color = leatherMeta.getColor();
 
                     if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
-                        ingredientCondition += " | color " + color.getRed() + "," + color.getGreen() + "," + color.getBlue();
+                        ingredientCondition.append(" | color ").append(color.getRed()).append(",").append(color.getGreen()).append(",").append(color.getBlue());
                     }
                 }
 
@@ -242,12 +242,12 @@ public class CreateRecipeCommand implements CommandExecutor {
                     PotionData potionData = potionMeta.getBasePotionData();
                     PotionType potionType = potionData.getType();
 
-                    recipeString.append(" | potion type ").append(potionType);
+                    ingredientCondition.append(" | potion type ").append(potionType);
                     if (potionData.isUpgraded()) {
-                        recipeString.append(", level 2");
+                        ingredientCondition.append(", level 2");
                     }
                     if (potionData.isExtended()) {
-                        recipeString.append(", extended");
+                        ingredientCondition.append(", extended");
                     }
 
                     // TODO: Add color support to ConditionPotion
@@ -264,27 +264,27 @@ public class CreateRecipeCommand implements CommandExecutor {
                         List<PotionEffect> potionEffects = potionMeta.getCustomEffects();
                         for (PotionEffect effect : potionEffects) {
                             PotionEffectType effectType = effect.getType();
-                            recipeString.append(" | potioneffect type ").append(effectType);
+                            ingredientCondition.append(" | potioneffect type ").append(effectType);
 
                             int duration = effect.getDuration();
                             if (duration != 20) {
                                 float durationInSeconds = (float) (duration / 20);
-                                recipeString.append(", duration ").append(durationInSeconds);
+                                ingredientCondition.append(", duration ").append(durationInSeconds);
                             }
                             int amplifier = effect.getAmplifier();
                             if (amplifier != 0) {
-                                recipeString.append(", amplifier ").append(amplifier);
+                                ingredientCondition.append(", amplifier ").append(amplifier);
                             }
                             if (!effect.isAmbient()) {
-                                recipeString.append(", !ambient");
+                                ingredientCondition.append(", !ambient");
                             }
                             if (!effect.hasParticles()) {
-                                recipeString.append(", !particles");
+                                ingredientCondition.append(", !particles");
                             }
 
                             if (Version.has1_13BasicSupport()) {
                                 if (!effect.hasIcon()) {
-                                    recipeString.append(", !icon");
+                                    ingredientCondition.append(", !icon");
                                 }
                             }
                         }
@@ -298,7 +298,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                     SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
                     EntityType spawnedType = spawnEggMeta.getSpawnedType();
                     if (spawnedType != null) {
-                        recipeString.append(Files.NL).append("| spawnegg ").append(spawnedType.name());
+                        ingredientCondition.append(Files.NL).append("| spawnegg ").append(spawnedType.name());
                     }
                 }
 
@@ -308,27 +308,27 @@ public class CreateRecipeCommand implements CommandExecutor {
                         List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
                         for (PotionEffect effect : potionEffects) {
                             PotionEffectType effectType = effect.getType();
-                            recipeString.append(" | suspiciousstew type ").append(effectType);
+                            ingredientCondition.append(" | suspiciousstew type ").append(effectType);
 
                             int duration = effect.getDuration();
                             if (duration != 20) {
                                 float durationInSeconds = (float) (duration / 20);
-                                recipeString.append(", duration ").append(durationInSeconds);
+                                ingredientCondition.append(", duration ").append(durationInSeconds);
                             }
                             int amplifier = effect.getAmplifier();
                             if (amplifier != 0) {
-                                recipeString.append(", amplifier ").append(amplifier);
+                                ingredientCondition.append(", amplifier ").append(amplifier);
                             }
                             if (!effect.isAmbient()) {
-                                recipeString.append(", !ambient");
+                                ingredientCondition.append(", !ambient");
                             }
                             if (!effect.hasParticles()) {
-                                recipeString.append(", !particles");
+                                ingredientCondition.append(", !particles");
                             }
 
                             if (Version.has1_13BasicSupport()) {
                                 if (!effect.hasIcon()) {
-                                    recipeString.append(", !icon");
+                                    ingredientCondition.append(", !icon");
                                 }
                             }
                         }
@@ -337,17 +337,18 @@ public class CreateRecipeCommand implements CommandExecutor {
             }
 
             if (item.getAmount() != 1) {
-                ingredientCondition += " | amount " + item.getAmount();
+                ingredientCondition.append(" | amount ").append(item.getAmount());
             }
 
             if (item.getEnchantments().size() > 0) {
                 for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
-                    ingredientCondition += " | enchant " + entry.getKey().getName() + " " + entry.getValue();
+                    ingredientCondition.append(" | enchant ").append(entry.getKey().getName()).append(" ").append(entry.getValue());
                 }
             }
 
-            if (ingredientCondition.length() > 0) {
-                conditionString.append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(ingredientCondition);
+            String finalIngredientCondition = ingredientCondition.toString();
+            if (finalIngredientCondition.length() > 0) {
+                conditionString.append(FlagType.INGREDIENT_CONDITION).append(' ').append(item.getType().toString().toLowerCase()).append(finalIngredientCondition);
                 conditionString.append(Files.NL);
             }
         }
