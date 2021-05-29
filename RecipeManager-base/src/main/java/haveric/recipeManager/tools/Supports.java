@@ -4,17 +4,32 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
+import org.bukkit.inventory.meta.KnowledgeBookMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 
 public class Supports {
+    static boolean knowledgeBookMeta = false;
     static boolean suspiciousStewMeta = false;
     static boolean compassMeta = false;
     static boolean itemFlagHideDye = false;
 
     public static void init() {
+        checkKnowledgeBookMeta();
         checkSuspiciousStewMeta();
         checkCompassMetaSupport();
         checkItemFlagHideDyeSupport();
+    }
+
+    // 1.12
+    private static void checkKnowledgeBookMeta() {
+        try {
+            ItemStack book = new ItemStack(Material.KNOWLEDGE_BOOK);
+            @SuppressWarnings("unused")
+            KnowledgeBookMeta bookMeta = (KnowledgeBookMeta) book.getItemMeta();
+            knowledgeBookMeta = true;
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
+            knowledgeBookMeta = false;
+        }
     }
 
     // 1.14.? (Added sometime after initial 1.14 release)
@@ -52,6 +67,9 @@ public class Supports {
         }
     }
 
+    public static boolean knowledgeBookMeta() {
+        return knowledgeBookMeta;
+    }
     public static boolean suspiciousStewMeta() {
         return suspiciousStewMeta;
     }

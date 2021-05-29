@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### Coming Soon
+* NEW FLAG: `@KnowledgeBookItem` <namespace:key>, [...]
 * NEW: `BookItem`: Added generation argument
 * FIX: /rmcreaterecipe: Increased support for most flags
 

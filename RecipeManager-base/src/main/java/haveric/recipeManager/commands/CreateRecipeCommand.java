@@ -724,6 +724,8 @@ public class CreateRecipeCommand implements CommandExecutor {
                 }
             }
 
+            // TODO: Add FlagKnowledgeBookItem to Conditions
+
             if (meta instanceof LeatherArmorMeta) {
                 LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
                 Color color = leatherMeta.getColor();
@@ -801,6 +803,30 @@ public class CreateRecipeCommand implements CommandExecutor {
                 }
 
                 // TODO: Handle texture somehow
+            }
+
+            if (Supports.knowledgeBookMeta() && meta instanceof KnowledgeBookMeta) {
+                KnowledgeBookMeta knowledgeBookMeta = (KnowledgeBookMeta) meta;
+                if (knowledgeBookMeta.hasRecipes()) {
+                    List<NamespacedKey> recipes = knowledgeBookMeta.getRecipes();
+                    if (!recipes.isEmpty()) {
+                        recipeString.append(Files.NL).append("@knowledgebook ");
+                        boolean first = true;
+                        for (NamespacedKey recipe : recipes) {
+                            if (!first) {
+                                recipeString.append(", ");
+                            }
+                            String namespace = recipe.getNamespace();
+                            if (!namespace.equals(NamespacedKey.MINECRAFT)) {
+                                recipeString.append(namespace).append(":");
+                            }
+                            String key = recipe.getKey();
+                            recipeString.append(key);
+
+                            first = false;
+                        }
+                    }
+                }
             }
 
             if (!Version.has1_13BasicSupport() && meta instanceof SpawnEggMeta) {

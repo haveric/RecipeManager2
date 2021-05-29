@@ -65,6 +65,7 @@ public class FlagType {
     public static final String HIDE = "@hide";
     public static final String ITEM_ATTRIBUTE = "@itemattribute";
     public static final String ITEM_UNBREAKABLE = "@itemunbreakable";
+    public static final String KNOWLEDGE_BOOK_ITEM = "@knowledgebookitem";
     public static final String LEATHER_COLOR = "@leathercolor";
     public static final String LOCALIZED_NAME = "@localizedname";
     public static final String MONSTER_SPAWNER = "@monsterspawner";
