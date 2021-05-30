@@ -206,13 +206,13 @@ public abstract class Flag implements Cloneable {
         return obj == this || obj instanceof Flag && obj.hashCode() == hashCode();
     }
 
+    public abstract String getFlagType();
+
     protected abstract String[] getArguments();
 
     protected abstract String[] getDescription();
 
     protected abstract String[] getExamples();
-
-    public abstract String getFlagType();
 
     protected final Flaggable getFlaggable() {
         Flaggable flaggable = null;
