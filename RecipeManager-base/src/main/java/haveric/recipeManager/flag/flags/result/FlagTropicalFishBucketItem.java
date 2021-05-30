@@ -5,6 +5,10 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -102,6 +106,30 @@ public class FlagTropicalFishBucketItem extends Flag {
 
     public boolean hasPatternColor() {
         return patternColor != null;
+    }
+
+    @Override
+    public boolean onValidate() {
+        ItemResult result = getResult();
+        boolean validResult = false;
+        if (result != null && (result.getItemMeta() instanceof TropicalFishBucketMeta)) {
+            validResult = true;
+        }
+
+        boolean validFlaggable = false;
+        if (Version.has1_13BasicSupport()) {
+            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+
+            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), TropicalFishBucketMeta.class)) {
+                validFlaggable = true;
+            }
+        }
+
+        if (!validResult && !validFlaggable) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a tropical fish bucket item!");
+        }
+
+        return true;
     }
 
     @Override

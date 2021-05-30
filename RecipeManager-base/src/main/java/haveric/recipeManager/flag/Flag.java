@@ -313,6 +313,11 @@ public abstract class Flag implements Cloneable {
         return this; // pointless to clone an empty flag
     }
 
+    /**
+     * Validates if this flag is allowed when parsing the recipe/results.
+     *
+     * @return whether the flag is allowed to be added to the given recipe
+     */
     public boolean onValidate() {
         return (getFlagType() != null);
     }
