@@ -1,8 +1,3 @@
-craft
-dirt + dirt
-= dirt
-@banner black
-
 craft base
 dirt + stone_sword
 = black_banner

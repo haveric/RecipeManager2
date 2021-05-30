@@ -9,6 +9,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: `BookItem`: Added generation argument
 * FIX: /rmcreaterecipe and /rmextract: Increased support for most flags
 * FIX: /rmcreaterecipe: Improved `@ingredientcondition` support
+* FIX: `@BannerItem`: Validate recipe has a banner item when parsing the recipe
 
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft

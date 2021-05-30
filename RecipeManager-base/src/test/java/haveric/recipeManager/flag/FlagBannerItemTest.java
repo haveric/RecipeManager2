@@ -25,13 +25,43 @@ import static org.mockito.Mockito.mockStatic;
 public class FlagBannerItemTest extends FlagBaseTest {
 
     @Test
-    public void onRecipeParse() {
-        File file = new File(baseRecipePath + "flagBannerItem/");
+    public void onRecipeValidate() {
+        File file = new File(baseRecipePath + "flagBannerItem/flagBannerValidate.txt");
         reloadRecipeProcessor(true, file);
 
         Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
 
-        assertEquals(5, queued.size());
+        assertEquals(2, queued.size());
+
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
+            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+
+            try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+                mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
+
+                ItemResult result = recipe.getFirstResult();
+
+                FlagBannerItem flag = (FlagBannerItem) result.getFlag(FlagType.BANNER_ITEM);
+                boolean success = flag != null;
+
+                Material resultType = result.getType();
+                if (resultType == Material.DIRT) {
+                    assertFalse(success);
+                } else {
+                    assertTrue(success);
+                }
+
+            }
+        }
+    }
+    @Test
+    public void onRecipeParse() {
+        File file = new File(baseRecipePath + "flagBannerItem/flagBannerItem.txt");
+        reloadRecipeProcessor(true, file);
+
+        Map<BaseRecipe, RMCRecipeInfo> queued = RecipeProcessor.getRegistrator().getQueuedRecipes();
+
+        assertEquals(4, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
             CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
@@ -46,42 +76,37 @@ public class FlagBannerItemTest extends FlagBaseTest {
                 FlagBannerItem flag = (FlagBannerItem) result.getFlag(FlagType.BANNER_ITEM);
                 flag.onPrepare(a);
 
-                Material resultType = result.getType();
-                if (resultType == Material.DIRT) {
-                    assertTrue(a.hasReasons());
-                } else {
-                    TestMetaBanner meta = (TestMetaBanner) result.getItemMeta();
-                    String name = recipe.getName();
-                    assertFalse(a.hasReasons());
+                TestMetaBanner meta = (TestMetaBanner) result.getItemMeta();
+                String name = recipe.getName();
+                assertFalse(a.hasReasons());
 
-                    switch (name) {
-                        case "base":
-                            assertEquals(DyeColor.BLACK, meta.getBaseColor());
-                            assertTrue(meta.getPatterns().isEmpty());
-                            break;
-                        case "one":
-                            assertEquals(DyeColor.RED, meta.getBaseColor());
-                            assertEquals(1, meta.numberOfPatterns());
-                            assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(0).getPattern());
-                            assertEquals(DyeColor.BLUE, meta.getPattern(0).getColor());
-                            break;
-                        case "two":
-                            assertEquals(DyeColor.RED, meta.getBaseColor());
-                            assertEquals(2, meta.numberOfPatterns());
-                            assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(0).getPattern());
-                            assertEquals(DyeColor.BLUE, meta.getPattern(0).getColor());
-                            assertEquals(PatternType.SKULL, meta.getPattern(1).getPattern());
-                            assertEquals(DyeColor.YELLOW, meta.getPattern(1).getColor());
-                            break;
-                        case "override":
-                            assertEquals(DyeColor.GREEN, meta.getBaseColor());
-                            assertEquals(2, meta.numberOfPatterns());
-                            assertEquals(PatternType.HALF_HORIZONTAL, meta.getPattern(0).getPattern());
-                            assertEquals(DyeColor.YELLOW, meta.getPattern(0).getColor());
-                            assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(1).getPattern());
-                            assertEquals(DyeColor.ORANGE, meta.getPattern(1).getColor());
-                            break;
-                    }
+                switch (name) {
+                    case "base":
+                        assertEquals(DyeColor.BLACK, meta.getBaseColor());
+                        assertTrue(meta.getPatterns().isEmpty());
+                        break;
+                    case "one":
+                        assertEquals(DyeColor.RED, meta.getBaseColor());
+                        assertEquals(1, meta.numberOfPatterns());
+                        assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(0).getPattern());
+                        assertEquals(DyeColor.BLUE, meta.getPattern(0).getColor());
+                        break;
+                    case "two":
+                        assertEquals(DyeColor.RED, meta.getBaseColor());
+                        assertEquals(2, meta.numberOfPatterns());
+                        assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(0).getPattern());
+                        assertEquals(DyeColor.BLUE, meta.getPattern(0).getColor());
+                        assertEquals(PatternType.SKULL, meta.getPattern(1).getPattern());
+                        assertEquals(DyeColor.YELLOW, meta.getPattern(1).getColor());
+                        break;
+                    case "override":
+                        assertEquals(DyeColor.GREEN, meta.getBaseColor());
+                        assertEquals(2, meta.numberOfPatterns());
+                        assertEquals(PatternType.HALF_HORIZONTAL, meta.getPattern(0).getPattern());
+                        assertEquals(DyeColor.YELLOW, meta.getPattern(0).getColor());
+                        assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(1).getPattern());
+                        assertEquals(DyeColor.ORANGE, meta.getPattern(1).getColor());
+                        break;
                 }
             }
         }
