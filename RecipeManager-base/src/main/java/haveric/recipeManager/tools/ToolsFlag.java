@@ -11,6 +11,7 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -479,6 +480,17 @@ public class ToolsFlag {
                             }
                         }
                     }
+                }
+            }
+
+            if (Supports.tropicalFishBucketMeta() && meta instanceof TropicalFishBucketMeta) {
+                TropicalFishBucketMeta tropicalFishBucketMeta = (TropicalFishBucketMeta) meta;
+                if (tropicalFishBucketMeta.hasVariant()) {
+                    DyeColor bodyColor = tropicalFishBucketMeta.getBodyColor();
+                    TropicalFish.Pattern pattern = tropicalFishBucketMeta.getPattern();
+                    DyeColor patternColor = tropicalFishBucketMeta.getPatternColor();
+
+                    recipeString.append(Files.NL).append("@tropicalfishbucket bodycolor ").append(bodyColor.name()).append(" | pattern ").append(pattern.name()).append(" | patterncolor ").append(patternColor.name());
                 }
             }
         }

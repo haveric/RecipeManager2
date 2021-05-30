@@ -293,8 +293,8 @@ public class CreateRecipeCommand implements CommandExecutor {
                     }
                 }
 
-                // TODO: Add FlagRepairCost to Conditions
-                // TODO: Add FlagSkullOwner to Conditions
+                // TODO: Add FlagRepairCost support to Conditions
+                // TODO: Add FlagSkullOwner support to Conditions
 
                 if (!Version.has1_13BasicSupport() && meta instanceof SpawnEggMeta) {
                     SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
@@ -315,6 +315,8 @@ public class CreateRecipeCommand implements CommandExecutor {
                         }
                     }
                 }
+
+                // TODO: Add FlagTropicalFishBucketItem support to Conditions
             }
 
             if (item.getAmount() != 1) {

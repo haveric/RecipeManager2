@@ -6,14 +6,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.KnowledgeBookMeta;
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
+import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 
 public class Supports {
+    static boolean tropicalFishBucketMeta = false;
     static boolean knowledgeBookMeta = false;
     static boolean suspiciousStewMeta = false;
     static boolean compassMeta = false;
     static boolean itemFlagHideDye = false;
 
     public static void init() {
+        checkTropicalFishBucketMeta();
         checkKnowledgeBookMeta();
         checkSuspiciousStewMeta();
         checkCompassMetaSupport();
@@ -29,6 +32,18 @@ public class Supports {
             knowledgeBookMeta = true;
         } catch (NoSuchFieldError | NoClassDefFoundError e) {
             knowledgeBookMeta = false;
+        }
+    }
+
+    // 1.13
+    private static void checkTropicalFishBucketMeta() {
+        try {
+            ItemStack fishBucket = new ItemStack(Material.TROPICAL_FISH_BUCKET);
+            @SuppressWarnings("unused")
+            TropicalFishBucketMeta fishBucketMeta = (TropicalFishBucketMeta) fishBucket.getItemMeta();
+            tropicalFishBucketMeta = true;
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
+            tropicalFishBucketMeta = false;
         }
     }
 
@@ -67,9 +82,14 @@ public class Supports {
         }
     }
 
+    public static boolean tropicalFishBucketMeta() {
+        return tropicalFishBucketMeta;
+    }
+
     public static boolean knowledgeBookMeta() {
         return knowledgeBookMeta;
     }
+
     public static boolean suspiciousStewMeta() {
         return suspiciousStewMeta;
     }

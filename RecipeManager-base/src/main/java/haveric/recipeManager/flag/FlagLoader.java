@@ -113,13 +113,14 @@ public class FlagLoader {
         loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), APPLIED_TO_ITEM, "potion");
         loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), APPLIED_TO_ITEM);
         loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), APPLIED_TO_ITEM, "skullitem, skull, head");
-
         if (!Version.has1_13BasicSupport() || force) {
             loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), APPLIED_TO_ITEM, "monsteregg", "egg");
         }
-
         if (Supports.suspiciousStewMeta()) {
             loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
+        }
+        if (Supports.tropicalFishBucketMeta()) {
+            loadFlag(FlagType.TROPICAL_FISH_BUCKET_ITEM, new FlagTropicalFishBucketItem(), APPLIED_TO_ITEM, "tropicalfishbucket", "fishbucket");
         }
     }
 
