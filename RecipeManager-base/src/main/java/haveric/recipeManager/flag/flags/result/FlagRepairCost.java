@@ -1,6 +1,7 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -22,13 +23,20 @@ public class FlagRepairCost extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <text or false>", };
+            "{flag} <text or false> | prepareLore [message]", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-            "Changes result's repair cost.", };
+            "Changes result's repair cost when repaired in an anvil.",
+            "",
+            "prepareLore [message] sets a lore message that will display when preparing the recipe.",
+            "  Setting message to true will use the default message: flag.repaircost.preparelore",
+            "  For the prepare lore you can use the following arguments:",
+            "    {cost} = the repair cost",
+            "  Allows quotes to prevent spaces being trimmed.",
+        };
     }
 
     @Override
@@ -39,6 +47,9 @@ public class FlagRepairCost extends Flag {
     }
 
     private int cost;
+    boolean useLoreMessage = false;
+    String loreMessage = null;
+
 
     public FlagRepairCost() {
     }
@@ -46,6 +57,8 @@ public class FlagRepairCost extends Flag {
     public FlagRepairCost(FlagRepairCost flag) {
         super(flag);
         cost = flag.cost;
+        useLoreMessage = flag.useLoreMessage;
+        loreMessage = flag.loreMessage;
     }
 
     @Override
@@ -59,6 +72,27 @@ public class FlagRepairCost extends Flag {
 
     public void setCost(int newCost) {
         cost = newCost;
+    }
+
+    public boolean isUseLoreMessage() {
+        return useLoreMessage;
+    }
+
+    public void setUseLoreMessage(boolean useLoreMessage) {
+        this.useLoreMessage = useLoreMessage;
+    }
+
+    public String getLoreMessage() {
+        return loreMessage;
+    }
+
+    public void setLoreMessage(String loreMessage) {
+        this.loreMessage = loreMessage;
+    }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return useLoreMessage;
     }
 
     @Override
@@ -88,11 +122,32 @@ public class FlagRepairCost extends Flag {
     @Override
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
+        // Match on single pipes '|', but not double '||'
+        String[] args = value.split("(?<!\\|)\\|(?!\\|)");
+
         try {
-            cost = Integer.parseInt(value.trim());
+            cost = Integer.parseInt(args[0].trim());
         } catch (NumberFormatException e) {
-            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid number: " + value);
+            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid number for cost: " + value);
             return false;
+        }
+
+        if (args.length > 1) {
+            String prepareLore = args[1].trim();
+            if (prepareLore.toLowerCase().startsWith("preparelore")) {
+                useLoreMessage = true;
+                prepareLore = prepareLore.substring("preparelore".length()).trim();
+
+                if (!prepareLore.equalsIgnoreCase("true")) {
+                    // Replace double pipes with single pipe: || -> |
+                    prepareLore = prepareLore.replaceAll("\\|\\|", "|");
+                    prepareLore = RMCUtil.trimExactQuotes(prepareLore);
+
+                    loreMessage = prepareLore;
+                }
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ".");
+            }
         }
 
         return true;
@@ -106,7 +161,15 @@ public class FlagRepairCost extends Flag {
                 return;
             }
 
-            addResultLore(a, Messages.getInstance().parse("flag.repaircost.preparelore", "{cost}", cost));
+            if (useLoreMessage) {
+                addResultLore(a, Messages.getInstance().parseCustom("flag.repaircost.preparelore", loreMessage, "{cost}", cost));
+            }
+
+            Repairable repairable = (Repairable) meta;
+
+            repairable.setRepairCost(cost);
+
+            a.result().setItemMeta(meta);
         }
     }
 
@@ -131,6 +194,8 @@ public class FlagRepairCost extends Flag {
         String toHash = "" + super.hashCode();
 
         toHash += "cost: " + cost;
+        toHash += "useLoreMessage: " + useLoreMessage;
+        toHash += "loreMessage: " + loreMessage;
 
         return toHash.hashCode();
     }
