@@ -632,7 +632,7 @@ public class Files {
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
-        s.append("Data/damage/durability values are listed at <a href='http://www.minecraftwiki.net/wiki/Data_value#Data'>Minecraft Wiki / Data Value</a>");
+        s.append("Data/damage/durability values are listed at <a href='https://minecraft.fandom.com/wiki/Data_values#Data'>Minecraft Fandom / Data Values</a>");
         s.append(NL);
         if (Version.has1_12Support()) {
             s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s  %-5s %-4s</b>", "Name", "Alias", "Stack", "Max durability", "Block", "Item"));
