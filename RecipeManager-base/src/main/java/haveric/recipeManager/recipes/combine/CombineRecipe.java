@@ -138,7 +138,7 @@ public class CombineRecipe extends BaseCombineRecipe {
         StringBuilder str = new StringBuilder("combine");
 
         for (ItemStack item : ingredients) {
-            str.append(item.getType().toString()).append(':').append(item.getDurability()).append(';');
+            str.append(item.getType()).append(':').append(item.getDurability()).append(';');
         }
 
         hash = str.toString().hashCode();

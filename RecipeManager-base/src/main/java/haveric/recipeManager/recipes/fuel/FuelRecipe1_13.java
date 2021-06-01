@@ -188,7 +188,7 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
         if (ingredients.size() == 1) {
             ItemStack ingredient = ingredients.get(0);
             recipeIndexes.add(ingredient.getType().toString());
-            recipeIndexes.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
+            recipeIndexes.add(ingredient.getType() + ":" + ingredient.getDurability());
         }
 
         return recipeIndexes;

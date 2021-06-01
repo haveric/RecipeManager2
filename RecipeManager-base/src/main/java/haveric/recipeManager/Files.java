@@ -666,9 +666,9 @@ public class Files {
                     item = "Item";
                 }
 
-                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s   %-5s %-4s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString, block, item));
+                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s   %-5s %-4s", m, aliasString, m.getMaxStackSize(), durabilityString, block, item));
             } else {
-                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s", m.toString(), aliasString, m.getMaxStackSize(), durabilityString));
+                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s", m, aliasString, m.getMaxStackSize(), durabilityString));
             }
         }
 
@@ -708,7 +708,7 @@ public class Files {
                 } else {
                     effectType = t.getEffectType().getName();
                 }
-                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s", t.ordinal(), t.toString(), t.isInstant(), t.getMaxLevel(), effectType));
+                s.append(NL).append(String.format(" %-5d %-24s %-10s %-10d %-16s", t.ordinal(), t, t.isInstant(), t.getMaxLevel(), effectType));
             }
         }
 

@@ -64,7 +64,7 @@ public class ComposterData implements ConfigurationSerializable {
                 try {
                     level = Double.parseDouble((String) obj);
                 } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().error("Invalid composter level data: " + obj.toString());
+                    ErrorReporter.getInstance().error("Invalid composter level data: " + obj);
                 }
             }
         } catch (Throwable e) {

@@ -331,7 +331,7 @@ public class FlagCloneIngredient extends Flag {
         }
 
         if (found == 0) {
-            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient of type: " + allTypes.toString());
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " couldn't find ingredient of type: " + allTypes);
         } else if (found > 1) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has found the " + foundMaterial + " ingredient more than once, only data from the first one will be cloned!");
         }

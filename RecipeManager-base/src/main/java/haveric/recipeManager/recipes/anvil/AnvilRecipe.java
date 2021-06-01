@@ -191,7 +191,7 @@ public class AnvilRecipe extends BaseAnvilRecipe {
     public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
         List<String> recipeIndexes = new ArrayList<>();
         if (ingredients.size() == 2) {
-            recipeIndexes.add(ingredients.get(0).getType().toString() + "-" + ingredients.get(1).getType().toString());
+            recipeIndexes.add(ingredients.get(0).getType() + "-" + ingredients.get(1).getType());
         }
 
         return recipeIndexes;

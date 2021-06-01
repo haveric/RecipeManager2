@@ -270,7 +270,7 @@ public class SettingsYaml extends BaseSettings {
         if (secretString != null) {
             Material secretMaterial = Material.matchMaterial(secretString);
             if (secretMaterial == null) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT.toString() + ".");
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.secret has invalid material definition: " + secretString + ". Defaulting to " + MATERIAL_SECRET_DEFAULT + ".");
             }
         }
 
@@ -278,7 +278,7 @@ public class SettingsYaml extends BaseSettings {
         if (multipleResultsString != null) {
             Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
             if (multipleResultsMaterial == null) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString() + ".");
+                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + "material.multiple-results has invalid material definition: " + multipleResultsString + ". Defaulting to " + MATERIAL_MULTIPLE_RESULTS_DEFAULT + ".");
             }
         }
     }

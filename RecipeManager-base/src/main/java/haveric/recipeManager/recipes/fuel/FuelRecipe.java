@@ -52,12 +52,12 @@ public class FuelRecipe extends BaseFuelRecipe {
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
 
-        hash = ("fuel" + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
+        hash = ("fuel" + newIngredient.getType() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     @Override
     public List<String> getIndexes() {
-        String indexString = "" + ingredient.getType().toString();
+        String indexString = "" + ingredient.getType();
 
         if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
             indexString += ":" + ingredient.getDurability();
@@ -150,7 +150,7 @@ public class FuelRecipe extends BaseFuelRecipe {
         if (ingredients.size() == 1) {
             ItemStack ingredient = ingredients.get(0);
             recipeIndexes.add(ingredient.getType().toString());
-            recipeIndexes.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
+            recipeIndexes.add(ingredient.getType() + ":" + ingredient.getDurability());
         }
 
         return recipeIndexes;

@@ -93,7 +93,7 @@ public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
         }
 
         if (hasResult()) {
-            newHash += " - " + result.getType().toString();
+            newHash += " - " + result.getType();
         }
 
         hash = newHash.hashCode();

@@ -73,7 +73,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
     }
 
     public String getFuelIndex() {
-        String fuelIndex = "" + fuel.getType().toString();
+        String fuelIndex = "" + fuel.getType();
 
         if (fuel.getDurability() != RMCVanilla.DATA_WILDCARD) {
             fuelIndex += ":" + fuel.getDurability();

@@ -410,7 +410,7 @@ public class Recipes {
                     try {
                         Bukkit.addRecipe(bukkitRecipe);
                     } catch (IllegalStateException e) {
-                        ErrorReporter.getInstance().warning("Duplicate recipe found while adding. Cannot add: " + recipe.toString());
+                        ErrorReporter.getInstance().warning("Duplicate recipe found while adding. Cannot add: " + recipe);
                     }
                 }
             }

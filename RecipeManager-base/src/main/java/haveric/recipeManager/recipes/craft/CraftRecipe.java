@@ -202,7 +202,7 @@ public class CraftRecipe extends BaseCraftRecipe {
                     width = Math.max(width, w);
                     height = Math.max(height, h);
 
-                    str.append(item.getType().toString());
+                    str.append(item.getType());
                     if (!Version.has1_13BasicSupport() || item instanceof Damageable) {
                         str.append(':').append(item.getDurability());
                     }

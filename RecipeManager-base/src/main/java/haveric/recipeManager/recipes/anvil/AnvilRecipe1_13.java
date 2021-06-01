@@ -142,7 +142,7 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
                     }
                 } else if (secondaryIngredient instanceof RecipeChoice.ExactChoice) {
                     for (ItemStack item : ((RecipeChoice.ExactChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(material.toString() + "-" + item.getType().toString());
+                        indexString.add(material.toString() + "-" + item.getType());
                     }
                 }
             }
@@ -150,11 +150,11 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
             for (ItemStack item : ((RecipeChoice.ExactChoice) primaryIngredient).getChoices()) {
                 if (secondaryIngredient instanceof RecipeChoice.MaterialChoice) {
                     for (Material material : ((RecipeChoice.MaterialChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(item.getType().toString() + "-" + material.toString());
+                        indexString.add(item.getType() + "-" + material.toString());
                     }
                 } else if (secondaryIngredient instanceof RecipeChoice.ExactChoice) {
                     for (ItemStack item2 : ((RecipeChoice.ExactChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(item.getType().toString() + "-" + item2.getType().toString());
+                        indexString.add(item.getType() + "-" + item2.getType());
                     }
                 }
             }
@@ -197,7 +197,7 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
     public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
         List<String> recipeIndexes = new ArrayList<>();
         if (ingredients.size() == 2) {
-            recipeIndexes.add(ingredients.get(0).getType().toString() + "-" + ingredients.get(1).getType().toString());
+            recipeIndexes.add(ingredients.get(0).getType() + "-" + ingredients.get(1).getType());
         }
 
         return recipeIndexes;

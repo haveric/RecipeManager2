@@ -78,7 +78,7 @@ public class RMFurnaceRecipe extends SingleResultRecipe {
 
     public void setIngredient(ItemStack newIngredient) {
         ingredient = newIngredient;
-        hash = (getRecipeBaseHash() + newIngredient.getType().toString() + ":" + newIngredient.getDurability()).hashCode();
+        hash = (getRecipeBaseHash() + newIngredient.getType() + ":" + newIngredient.getDurability()).hashCode();
     }
 
     @Override
@@ -183,13 +183,13 @@ public class RMFurnaceRecipe extends SingleResultRecipe {
     public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
-        indexString.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
+        indexString.add(ingredient.getType() + ":" + ingredient.getDurability());
 
         return indexString;
     }
 
     public String getFuelIndex() {
-        String fuelIndex = "" + fuel.getType().toString();
+        String fuelIndex = "" + fuel.getType();
 
         if (fuel.getDurability() != RMCVanilla.DATA_WILDCARD) {
             fuelIndex += ":" + fuel.getDurability();
@@ -339,8 +339,8 @@ public class RMFurnaceRecipe extends SingleResultRecipe {
         List<String> recipeIndexes = new ArrayList<>();
         if (ingredients.size() == 1) {
             ItemStack ingredient = ingredients.get(0);
-            recipeIndexes.add(ingredient.getType().toString() + ":" + ingredient.getDurability());
-            recipeIndexes.add(ingredient.getType().toString() + ":" + RMCVanilla.DATA_WILDCARD);
+            recipeIndexes.add(ingredient.getType() + ":" + ingredient.getDurability());
+            recipeIndexes.add(ingredient.getType() + ":" + RMCVanilla.DATA_WILDCARD);
         }
 
         return recipeIndexes;

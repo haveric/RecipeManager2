@@ -97,7 +97,7 @@ public class FlagKeepItem extends Flag {
     }
 
     public Object getItem(ItemStack item) {
-        Object obj = keepItems.get(item.getType().toString() + ":" + item.getDurability());
+        Object obj = keepItems.get(item.getType() + ":" + item.getDurability());
 
         if (obj == null) {
             return keepItems.get(String.valueOf(item.getType().toString()));
