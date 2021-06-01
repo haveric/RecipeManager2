@@ -302,7 +302,7 @@ public class Args {
             return string;
         }
 
-        Pattern regex = Pattern.compile("\\{(?:rand)(?:om)* (-?\\d*\\.?\\d*)(?: *- *(-?\\d*\\.?\\d))? *(?:, *(\\d*))*}");
+        Pattern regex = Pattern.compile("\\{rand(?:om)* (-?\\d*\\.?\\d*)(?: *- *(-?\\d*\\.?\\d))? *(?:, *(\\d*))*}");
         Matcher regexMatcher = regex.matcher(string);
 
         List<String> savedRandoms = new ArrayList<>();
