@@ -207,7 +207,7 @@
 * NEW: `@SkullOwner`: Added texture <base64> option
 * NEW: `@ItemNBT <nbtRaw>`: Sets raw nbt data on the result.
     * See 'recipe flags.html' before using
-* NEW: Add tag support to ingredients in recipes (Use 'tag:' or 't:' before the tag name
+* NEW: Add tag support to ingredients in recipes (Use 'tag:' or 't:' before the tag name)
     * Tags are vanilla or datapack collections of materials (Tag names can be found in 'name index.html')
     * Example: t:oak_logs (or t:minecraft:oak_logs) would be equivalent to "OAK_WOOD, STRIPPED_OAK_WOOD, STRIPPED_OAK_LOG, OAK_LOG"
 * NEW: Added 'choice aliases.yml' to create custom ingredient choice lists similar to tags
@@ -390,7 +390,7 @@
     * Fixed shift clicking an ingredient into a furnace not setting the permission owner
     * Fixed some flags getting called before craft in furnaces
 * /rmcreaterecipe improvements:
-    * Collapse recipes down to smallest craft size
+    * Collapse recipes down to the smallest craft size
     * Added combine variant
     * Fixed amount being added to ingredients instead of `@ingredientcondition`
     * Clean up unneeded data and amount outputs
@@ -431,7 +431,7 @@
     * `@hide potioneffects`  // Hide potion effects on this item
     * `@hide unbreakable`    // Hide the unbreakable state
     * `@hide all`            // Hides everything
-    * `@hide placedon | destroys` // Removes placed on line and break/destroy lines
+    * `@hide placedon | destroys` // Removes placedon line and break/destroy lines
 * `@Enchant` and `@EnchantBook` Added 'remove' option for cloned ingredients
 * Added `@BannerItem` flag (See 'recipe flags.html' for patterns and colors)
     * `@banner black`
@@ -618,7 +618,7 @@
 * API: Added clearFlags() method for Flaggable interface (use by ItemResult and BaseRecipe).
 * Added check to ensure recipe is complete before generating the Bukkit recipe.
 * Removed 'item' alias for 'rmfinditem' to prevent collisions with more important commands from other plugins
-* Possible fix for an startup error that triggers if you have a plugin with no package name, just the main class.
+* Possible fix for a startup error that triggers if you have a plugin with no package name, just the main class.
 * Fixed `@keepitem` flag not working if set on results
 * Fixed `@ingredientcondition` not subtracting ingredients if used on results
   (Haveric)

@@ -137,8 +137,8 @@ public class FlagTropicalFishBucketItem extends Flag {
         super.onParse(value, fileName, lineNum, restrictedBit);
         String[] args = value.toUpperCase().split("\\|");
 
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i].trim().toLowerCase();
+        for (String s : args) {
+            String arg = s.trim().toLowerCase();
 
             if (arg.startsWith("bodycolor")) {
                 arg = arg.substring("bodycolor".length()).trim();
