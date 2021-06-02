@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.List;
@@ -371,30 +370,9 @@ public class ToolsFlag {
                 if (potionMeta.hasCustomEffects()) {
                     List<PotionEffect> potionEffects = potionMeta.getCustomEffects();
                     for (PotionEffect effect : potionEffects) {
-                        PotionEffectType effectType = effect.getType();
-                        recipeString.append(Files.NL).append("@potionitem custom ").append(effectType);
+                        recipeString.append(Files.NL).append("@potionitem custom ");
 
-                        int duration = effect.getDuration();
-                        if (duration != 20) {
-                            float durationInSeconds = (float) (duration / 20);
-                            recipeString.append(" | duration ").append(durationInSeconds);
-                        }
-                        int amplifier = effect.getAmplifier();
-                        if (amplifier != 0) {
-                            recipeString.append(" | amplifier ").append(amplifier);
-                        }
-                        if (!effect.isAmbient()) {
-                            recipeString.append(" | !ambient");
-                        }
-                        if (!effect.hasParticles()) {
-                            recipeString.append(" | !particles");
-                        }
-
-                        if (Version.has1_13BasicSupport()) {
-                            if (!effect.hasIcon()) {
-                                recipeString.append(" | !icon");
-                            }
-                        }
+                        parsePotionEffectForItemMeta(recipeString, effect);
                     }
                 }
             }
@@ -455,30 +433,9 @@ public class ToolsFlag {
                 if (stewMeta.hasCustomEffects()) {
                     List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
                     for (PotionEffect effect : potionEffects) {
-                        PotionEffectType effectType = effect.getType();
-                        recipeString.append(Files.NL).append("@suspiciousstewitem ").append(effectType);
+                        recipeString.append(Files.NL).append("@suspiciousstewitem ");
 
-                        int duration = effect.getDuration();
-                        if (duration != 20) {
-                            float durationInSeconds = (float) (duration / 20);
-                            recipeString.append(" | duration ").append(durationInSeconds);
-                        }
-                        int amplifier = effect.getAmplifier();
-                        if (amplifier != 0) {
-                            recipeString.append(" | amplifier ").append(amplifier);
-                        }
-                        if (!effect.isAmbient()) {
-                            recipeString.append(" | !ambient");
-                        }
-                        if (!effect.hasParticles()) {
-                            recipeString.append(" | !particles");
-                        }
-
-                        if (Version.has1_13BasicSupport()) {
-                            if (!effect.hasIcon()) {
-                                recipeString.append(" | !icon");
-                            }
-                        }
+                        parsePotionEffectForItemMeta(recipeString, effect);
                     }
                 }
             }
@@ -498,4 +455,29 @@ public class ToolsFlag {
         recipeString.append(Files.NL);
     }
 
+    private static void parsePotionEffectForItemMeta(StringBuilder recipeString, PotionEffect effect) {
+        recipeString.append(effect.getType());
+
+        int duration = effect.getDuration();
+        if (duration != 20) {
+            float durationInSeconds = (float) (duration / 20);
+            recipeString.append(" | duration ").append(durationInSeconds);
+        }
+        int amplifier = effect.getAmplifier();
+        if (amplifier != 0) {
+            recipeString.append(" | amplifier ").append(amplifier);
+        }
+        if (!effect.isAmbient()) {
+            recipeString.append(" | !ambient");
+        }
+        if (!effect.hasParticles()) {
+            recipeString.append(" | !particles");
+        }
+
+        if (Version.has1_13BasicSupport()) {
+            if (!effect.hasIcon()) {
+                recipeString.append(" | !icon");
+            }
+        }
+    }
 }
