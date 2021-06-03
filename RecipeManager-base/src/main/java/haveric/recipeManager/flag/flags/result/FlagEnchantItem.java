@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsEnchantment;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ public class FlagEnchantItem extends Flag {
             "  You can use 'max' to set it to enchantment's max level.",
             "  You can use 'remove' to remove the enchantment (from a cloned ingredient)",
             "",
+            "You can set a random level using the {rand} format:",
+            "  {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 2-3} will output an integer from 2-3",
+            "",
             "Enchantments are forced and there is no level cap!",
             "This flag may be used more times to add more enchantments to the item.", };
     }
@@ -47,11 +51,14 @@ public class FlagEnchantItem extends Flag {
             "{flag} OXYGEN // enchant with oxygen at level 1",
             "{flag} DIG_SPEED max // enchant with dig speed at max valid level",
             "{flag} ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127",
-            "{flag} SHARPNESS remove // removes a sharpness enchant", };
+            "{flag} SHARPNESS remove // removes a sharpness enchant",
+            "{flag} SHARPNESS {rand 3-5} // Gives a random level of 3, 4, or 5", };
     }
 
 
     private Map<Enchantment, Integer> enchants = new HashMap<>();
+    private Map<Enchantment, String> randomEnchants = new HashMap<>();
+
     private List<Enchantment> enchantsToRemove = new ArrayList<>();
 
     public FlagEnchantItem() {
@@ -60,6 +67,7 @@ public class FlagEnchantItem extends Flag {
     public FlagEnchantItem(FlagEnchantItem flag) {
         super(flag);
         enchants.putAll(flag.enchants);
+        randomEnchants.putAll(flag.randomEnchants);
         enchantsToRemove.addAll(flag.enchantsToRemove);
     }
 
@@ -78,7 +86,7 @@ public class FlagEnchantItem extends Flag {
 
     @Override
     public boolean requiresRecipeManagerModification() {
-        return false;
+        return !randomEnchants.isEmpty();
     }
 
     @Override
@@ -89,7 +97,7 @@ public class FlagEnchantItem extends Flag {
     @Override
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
-        String[] split = value.split(" ");
+        String[] split = value.split(" ", 2);
         value = split[0].trim();
 
         Enchantment enchant = Tools.parseEnchant(value);
@@ -103,35 +111,45 @@ public class FlagEnchantItem extends Flag {
         if (split.length > 1) {
             value = split[1].toLowerCase().trim();
 
-            switch (value) {
-                case "max":
-                    level = enchant.getMaxLevel();
-                    break;
-                case "remove":
-                    enchantsToRemove.add(enchant);
-                    break;
-                default:
-                    try {
-                        level = Integer.parseInt(value);
-                    } catch (NumberFormatException e) {
-                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
-                    }
-                    break;
-            }
-        }
+            if (value.startsWith("{rand")) {
+                randomEnchants.put(enchant, value);
+            } else {
+                switch (value) {
+                    case "max":
+                        level = enchant.getMaxLevel();
+                        break;
+                    case "remove":
+                        enchantsToRemove.add(enchant);
+                        break;
+                    default:
+                        try {
+                            level = Integer.parseInt(value);
+                        } catch (NumberFormatException e) {
+                            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid enchantment level number: " + value);
+                        }
+                        break;
+                }
 
-        enchants.put(enchant, level);
+                enchants.put(enchant, level);
+            }
+        } else {
+            enchants.put(enchant, level);
+        }
 
         return true;
     }
 
     @Override
     public void onPrepare(Args a) {
-        onCrafted(a);
+        craft(a, true);
     }
 
     @Override
     public void onCrafted(Args a) {
+        craft(a, false);
+    }
+
+    private void craft(Args a, boolean prepare) {
         if (!a.hasResult()) {
             a.addCustomReason("Needs result!");
             return;
@@ -140,6 +158,21 @@ public class FlagEnchantItem extends Flag {
         for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
             a.result().addUnsafeEnchantment(e.getKey(), e.getValue());
         }
+
+        if (prepare) {
+            List<String> lores = new ArrayList<>();
+            for (Entry<Enchantment, String> e : randomEnchants.entrySet()) {
+                a.result().addUnsafeEnchantment(e.getKey(), e.getKey().getStartLevel());
+                lores.add(ToolsEnchantment.getPrintableName(e.getKey()) + ": " + a.parseRandomInt(e.getValue(), true));
+            }
+
+            addResultLores(a, lores);
+        } else {
+            for (Entry<Enchantment, String> e : randomEnchants.entrySet()) {
+                a.result().addUnsafeEnchantment(e.getKey(), Integer.parseInt(a.parseRandomInt(e.getValue(), false)));
+            }
+        }
+
 
         for (Enchantment e : enchantsToRemove) {
             a.result().removeEnchantment(e);
@@ -153,6 +186,11 @@ public class FlagEnchantItem extends Flag {
         toHash += "Enchants: ";
         for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
             toHash += entry.getKey().hashCode() + "-" + entry.getValue().toString();
+        }
+
+        toHash += "RandomEnchants: ";
+        for (Map.Entry<Enchantment, String> entry : randomEnchants.entrySet()) {
+            toHash += entry.getKey().hashCode() + "-" + entry.getValue();
         }
 
         toHash += "EnchantsToRemove: ";

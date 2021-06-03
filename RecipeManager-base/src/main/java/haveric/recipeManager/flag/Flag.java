@@ -363,6 +363,10 @@ public abstract class Flag implements Cloneable {
     }
 
     protected void addResultLores(Args a, List<String> lores) {
+        if (lores.isEmpty()) {
+            return;
+        }
+
         ItemMeta meta = a.result().getItemMeta();
         if (meta != null) {
             List<String> newLore = meta.getLore();

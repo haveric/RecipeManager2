@@ -297,7 +297,12 @@ public class Args {
         return string;
     }
 
-    private String parseRandom(String string, boolean displayOnly) {
+
+    public String parseRandomInt(String string, boolean displayOnly) {
+        return parseRandom(string, false, displayOnly);
+    }
+
+    private String parseRandom(String string, boolean allowDecimals, boolean displayOnly) {
         if (!string.contains("{rand")) {
             return string;
         }
@@ -326,7 +331,12 @@ public class Args {
                     replaceString = "{" + indexOffset + "}";
                 } else {
                     if (savedRandoms.isEmpty()) {
-                        ErrorReporter.getInstance().warning("Non-first {rand} needs at least two numbers to parse: " + string + ". Example: {rand 1-2} or {rand 1.0-2.0, 2}.");
+                        String example = "Example: {rand 1-2}";
+                        if (allowDecimals) {
+                            example += " or {rand 1.0-2.0, 2}";
+                        }
+                        ErrorReporter.getInstance().warning("Non-first {rand} needs at least two numbers to parse: " + string + ". " + example + ".");
+
                         return string;
                     } else if (savedRandoms.size() < indexOffset) {
                         ErrorReporter.getInstance().warning("Non-first {rand} trying to reference non-existing {rand} index: " + indexOffset + " .From: " + string);
@@ -344,12 +354,22 @@ public class Args {
                 continue;
             }
 
+            String format;
+            if (allowDecimals) {
+                format = "{rand #1-#2, #3}";
+            } else {
+                format = "{rand #1-#2}";
+            }
             int decimals = 0;
             if (group3 != null) {
-                try {
-                    decimals = Integer.parseInt(group3);
-                } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid decimal(#3) value:" + group3 + ". Defaulting to 0.");
+                if (allowDecimals) {
+                    try {
+                        decimals = Integer.parseInt(group3);
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning(format + " of " + string + " has invalid decimal(#3) value:" + group3 + ". Defaulting to 0.");
+                    }
+                } else {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " does not support the decimal parameter.");
                 }
             }
 
@@ -358,19 +378,19 @@ public class Args {
             try {
                 min = Double.parseDouble(group1);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid number(#1) value:" + group1);
+                ErrorReporter.getInstance().warning(format + " of " + string + " has invalid number(#1) value:" + group1);
                 return string;
             }
 
             try {
                 max = Double.parseDouble(group2);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has invalid number(#1) value:" + group1);
+                ErrorReporter.getInstance().warning(format + " of " + string + " has invalid number(#1) value:" + group1);
                 return string;
             }
 
             if (max < min) {
-                ErrorReporter.getInstance().warning("{rand #1-#2, #3} of " + string + " has max(#2): " + max + " less than min(#1): " + min);
+                ErrorReporter.getInstance().warning(format + " of " + string + " has max(#2): " + max + " less than min(#1): " + min);
                 return string;
             }
 
@@ -436,7 +456,7 @@ public class Args {
         string = parsePosition(string, "y");
         string = parsePosition(string, "z");
 
-        string = parseRandom(string, displayOnly);
+        string = parseRandom(string, true, displayOnly);
 
         if (hasResult()) {
             if (string.contains("{result}")) {
