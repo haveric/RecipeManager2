@@ -250,6 +250,7 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 // TODO: Add FlagFireworkItem support to Conditions
                 // TODO: Add FlagFireworkStarItem support to Conditions
+                // TODO: Add FlagKnowledgeBookItem to Conditions
 
                 if (meta instanceof LeatherArmorMeta) {
                     LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
