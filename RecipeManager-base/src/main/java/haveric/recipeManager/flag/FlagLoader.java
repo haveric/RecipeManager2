@@ -108,7 +108,7 @@ public class FlagLoader {
         }
         loadFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), APPLIED_TO_ITEM, "leathercolour", "color", "colour");
         loadFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), APPLIED_TO_ITEM);
-        // MAPITEM(FlagMapItem(), FlagBit.RESULT, "map"), // TODO finish this flag
+        loadFlag(FlagType.MAP_ITEM, new FlagMapItem(), APPLIED_TO_ITEM, "map");
         loadFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), APPLIED_TO_ITEM, "spawner", "mobspawner");
         loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), APPLIED_TO_ITEM, "potion");
         loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), APPLIED_TO_ITEM);

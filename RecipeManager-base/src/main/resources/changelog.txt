@@ -5,6 +5,8 @@ This file will be automatically overwritten when a new version is installed.
 * NEW FLAG: `@KnowledgeBookItem` <namespace:key>, [...]
 * NEW FLAG: `@TropicalFishBucketItem` <arguments> | [...]
     * Arguments: bodycolor <dyecolor>, pattern <pattern>, patterncolor <dyecolor>
+* NEW FLAG: `@MapItem` <arguments>
+    * See your 'recipe flags.html' file for usage information
 * NEW: /rmextract: Added a comment with namespace:key format to help with `@KnowledgeBookItem`
 * NEW: `BookItem`: Added generation argument
 * FIX: /rmcreaterecipe and /rmextract: Increased support for most flags

@@ -370,6 +370,66 @@ public class ToolsFlag {
                 }
             }
 
+            if (meta instanceof MapMeta) {
+                MapMeta mapMeta = (MapMeta) meta;
+                recipeString.append(Files.NL).append("@map scaling");
+                if (!mapMeta.isScaling()) {
+                    recipeString.append(" false");
+                }
+
+                if (Version.has1_11Support()) {
+                    if (mapMeta.hasLocationName()) {
+                        String locationName = mapMeta.getLocationName();
+                        recipeString.append(" | locationname ").append(locationName);
+                    }
+
+                    if (mapMeta.hasColor()) {
+                        Color mapColor = mapMeta.getColor();
+                        if (mapColor != null) {
+                            recipeString.append(" | color ").append(mapColor.getRed()).append(mapColor.getGreen()).append(mapColor.getBlue());
+                        }
+                    }
+                }
+
+                if (Version.has1_13Support()) {
+                    MapView mapView = mapMeta.getMapView();
+                    if (mapView != null) {
+                        World world = mapView.getWorld();
+                        if (world != null) {
+                            recipeString.append(" | world ").append(world.getName());
+                        }
+
+                        int centerX = mapView.getCenterX();
+                        recipeString.append(" | centerx ").append(centerX);
+
+                        int centerZ = mapView.getCenterZ();
+                        recipeString.append(" | centerz ").append(centerZ);
+
+                        MapView.Scale scale = mapView.getScale();
+                        recipeString.append(" | scale ").append(scale.name());
+
+
+                        if (mapView.isLocked()) {
+                            recipeString.append(" | locked");
+                        }
+
+                        if (mapView.isTrackingPosition()) {
+                            recipeString.append(" | trackingposition");
+                        }
+
+                        if (mapView.isUnlimitedTracking()) {
+                            recipeString.append(" | unlimitedtracking");
+                        }
+
+                        /* TODO: Custom renderer, warn user?
+                        if (mapView.isVirtual()) {
+
+                        }
+                        */
+                    }
+                }
+            }
+
             if (meta instanceof PotionMeta) {
                 PotionMeta potionMeta = (PotionMeta) meta;
                 PotionData potionData = potionMeta.getBasePotionData();
