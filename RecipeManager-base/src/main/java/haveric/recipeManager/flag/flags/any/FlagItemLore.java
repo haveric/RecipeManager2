@@ -46,7 +46,7 @@ public class FlagItemLore extends Flag {
             "    Relative positions are supported: {x-1},{y+7},{z+12}",
             "  {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10",
             "  {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50",
-            "  {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format",
+            "  {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format",
             "",
             "Allows quotes to prevent spaces being trimmed.",
             "",

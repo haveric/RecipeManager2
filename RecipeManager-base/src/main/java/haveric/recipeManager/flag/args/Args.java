@@ -42,6 +42,7 @@ public class Args {
 
     private List<String> reasons;
     private List<String> effects;
+    private List<String> savedRandoms;
 
     protected Args() { }
 
@@ -233,9 +234,24 @@ public class Args {
         sendList(sender, prefix, effects());
     }
 
+    private void addSavedRandom(String savedRandom) {
+        if (savedRandoms == null) {
+            savedRandoms = new ArrayList<>();
+        }
+
+        savedRandoms.add(savedRandom);
+    }
+
+    private void clearSavedRandoms() {
+        if (savedRandoms != null) {
+            savedRandoms.clear();
+        }
+    }
+
     public void clear() {
         clearReasons();
         clearEffects();
+        clearSavedRandoms();
     }
 
     private void sendList(CommandSender sender, String prefix, List<String> list) {
@@ -310,7 +326,6 @@ public class Args {
         Pattern regex = Pattern.compile("\\{rand(?:om)* (-?\\d*\\.?\\d*)(?: *- *(-?\\d*\\.?\\d))? *(?:, *(\\d*))*}");
         Matcher regexMatcher = regex.matcher(string);
 
-        List<String> savedRandoms = new ArrayList<>();
         while (regexMatcher.find()) {
             String group1 = regexMatcher.group(1);
             String group2 = regexMatcher.group(2);
@@ -330,7 +345,7 @@ public class Args {
                 if (displayOnly) {
                     replaceString = "{" + indexOffset + "}";
                 } else {
-                    if (savedRandoms.isEmpty()) {
+                    if (savedRandoms == null || savedRandoms.isEmpty()) {
                         String example = "Example: {rand 1-2}";
                         if (allowDecimals) {
                             example += " or {rand 1.0-2.0, 2}";
@@ -373,39 +388,71 @@ public class Args {
                 }
             }
 
-            double min;
-            double max;
-            try {
-                min = Double.parseDouble(group1);
-            } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning(format + " of " + string + " has invalid number(#1) value:" + group1);
-                return string;
-            }
-
-            try {
-                max = Double.parseDouble(group2);
-            } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning(format + " of " + string + " has invalid number(#1) value:" + group1);
-                return string;
-            }
-
-            if (max < min) {
-                ErrorReporter.getInstance().warning(format + " of " + string + " has max(#2): " + max + " less than min(#1): " + min);
-                return string;
-            }
-
             String replaceString;
-            if (displayOnly) {
-                String minString = String.format("%." + decimals + "f", min);
-                String maxString = String.format("%." + decimals + "f", max);
+            if (allowDecimals) {
+                double min;
+                double max;
+                try {
+                    min = Double.parseDouble(group1);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " has invalid number(#1) value:" + group1);
+                    return string;
+                }
 
-                replaceString = "{" + minString + "-" + maxString + "}";
+                try {
+                    max = Double.parseDouble(group2);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " has invalid number(#1) value:" + group1);
+                    return string;
+                }
+
+                if (max < min) {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " has max(#2): " + max + " less than min(#1): " + min);
+                    return string;
+                }
+
+                if (displayOnly) {
+                    String minString = String.format("%." + decimals + "f", min);
+                    String maxString = String.format("%." + decimals + "f", max);
+
+                    replaceString = "{" + minString + "-" + maxString + "}";
+                } else {
+                    double generated = RecipeManager.random.nextDouble();
+                    double random = min + (generated * (max - min));
+                    String formattedRandom = String.format("%." + decimals + "f", random);
+                    addSavedRandom(formattedRandom);
+                    replaceString = formattedRandom;
+                }
             } else {
-                double generated = RecipeManager.random.nextDouble();
-                double random = min + (generated * (max - min));
-                String formattedRandom = String.format("%." + decimals + "f", random);
-                savedRandoms.add(formattedRandom);
-                replaceString = formattedRandom;
+                int min;
+                int max;
+                try {
+                    min = Integer.parseInt(group1);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " has invalid integer(#1) value:" + group1);
+                    return string;
+                }
+
+                try {
+                    max = Integer.parseInt(group2);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " has invalid integer(#1) value:" + group1);
+                    return string;
+                }
+
+                if (max < min) {
+                    ErrorReporter.getInstance().warning(format + " of " + string + " has max(#2): " + max + " less than min(#1): " + min);
+                    return string;
+                }
+
+                if (displayOnly) {
+                    replaceString = "{" + min + "-" + max + "}";
+                } else {
+                    int random = RecipeManager.random.nextInt(max - min + 1) + min;
+                    String formattedRandom = String.valueOf(random);
+                    addSavedRandom(formattedRandom);
+                    replaceString = formattedRandom;
+                }
             }
 
             string = regexMatcher.replaceFirst(replaceString);

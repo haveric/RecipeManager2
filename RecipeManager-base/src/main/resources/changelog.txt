@@ -10,6 +10,8 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: /rmextract: Added a comment with namespace:key format to help with `@KnowledgeBookItem`
 * NEW: `BookItem`: Added generation argument
 * NEW: `@EnchantItem` and `@EnchantedBook`: Added {rand #1-#2} support
+* NEW: Random numbers from {rand} can now be reused throughout a recipe instead of just the flag they are in with the {rand #1} format
+* FIX: Random integers from {rand #1-#2} arguments weren't properly random
 * FIX: /rmcreaterecipe and /rmextract: Increased support for most flags
 * FIX: /rmcreaterecipe: Improved `@ingredientcondition` support
 * FIX: `@BannerItem`: Validate recipe has a banner item when parsing the recipe

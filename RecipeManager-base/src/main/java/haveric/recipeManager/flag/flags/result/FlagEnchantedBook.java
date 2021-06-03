@@ -47,6 +47,8 @@ public class FlagEnchantedBook extends Flag {
             "",
             "You can set a random level using the {rand} format:",
             "  {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 2-3} will output an integer from 2-3",
+            "  {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format",
+            "    If using a saved random output that includes decimals, it will be rounded to the nearest integer.",
             "",
             "Enchantments are forced and there is no level cap!",
             "",
@@ -218,7 +220,9 @@ public class FlagEnchantedBook extends Flag {
                     addResultLores(a, lores);
                 } else {
                     for (Entry<Enchantment, String> e : randomEnchants.entrySet()) {
-                        meta.addStoredEnchant(e.getKey(), Integer.parseInt(a.parseRandomInt(e.getValue(), false)), true);
+                        double levelAsDouble = Double.parseDouble(a.parseRandomInt(e.getValue(), false));
+                        int level = (int) Math.round(levelAsDouble);
+                        meta.addStoredEnchant(e.getKey(), level, true);
                     }
                 }
 
