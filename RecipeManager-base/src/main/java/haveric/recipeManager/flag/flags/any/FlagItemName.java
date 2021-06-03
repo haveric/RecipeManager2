@@ -82,7 +82,7 @@ public class FlagItemName extends Flag {
 
     @Override
     public boolean requiresRecipeManagerModification() {
-        return !displayName.equals(resultName);
+        return !displayName.equals(resultName) || Args.hasVariables(resultName);
     }
 
     public String getDisplayName() {

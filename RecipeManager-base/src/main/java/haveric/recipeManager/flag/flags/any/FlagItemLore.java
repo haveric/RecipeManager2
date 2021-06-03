@@ -85,7 +85,14 @@ public class FlagItemLore extends Flag {
 
     @Override
     public boolean requiresRecipeManagerModification() {
-        return !displayLores.equals(resultLores);
+        boolean anyLoresHaveVariables = false;
+        for (String line : resultLores) {
+            if (Args.hasVariables(line)) {
+                anyLoresHaveVariables = true;
+                break;
+            }
+        }
+        return !displayLores.equals(resultLores) || anyLoresHaveVariables;
     }
 
     public List<String> getDisplayLores() {

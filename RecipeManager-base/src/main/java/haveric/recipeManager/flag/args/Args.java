@@ -462,6 +462,43 @@ public class Args {
         return string;
     }
 
+    public static boolean hasVariables(String string) {
+        String lower = string.toLowerCase();
+
+        if (lower.contains("{player}")) {
+            return true;
+        } else if (lower.contains("{playerdisplay}")) {
+            return true;
+        } else if (lower.contains("{recipename}")) {
+            return true;
+        } else if (lower.contains("{recipetype}")) {
+            return true;
+        } else if (lower.contains("{inventorytype}")) {
+            return true;
+        } else if (lower.contains("{world}")) {
+            return true;
+        } else if (lower.contains("{lore}")) {
+            return true;
+        } else if (lower.contains("{result}")) {
+            return true;
+        } else if (lower.contains("{booktitle}")) {
+            return true;
+        } else if (lower.contains("{bookauthor}")) {
+            return true;
+        } else if (lower.contains("{bookpages}")) {
+            return true;
+        } else if (lower.contains("{rand ") | lower.contains("{random ")) {
+            return true;
+        } else if (lower.contains("{x ")) {
+            return true;
+        } else if (lower.contains("{y ")) {
+            return true;
+        } else if (lower.contains("{z ")) {
+            return true;
+        }
+
+        return false;
+    }
     public String parseVariables(String string) {
         return parseVariables(string, false);
     }
