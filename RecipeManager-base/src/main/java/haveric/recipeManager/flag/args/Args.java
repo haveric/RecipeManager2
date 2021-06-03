@@ -487,13 +487,17 @@ public class Args {
             return true;
         } else if (lower.contains("{bookpages}")) {
             return true;
-        } else if (lower.contains("{rand ") | lower.contains("{random ")) {
+        }
+
+        Pattern regexRandom = Pattern.compile("\\{rand(?:om)* (-?\\d*\\.?\\d*)(?: *- *(-?\\d*\\.?\\d))? *(?:, *(\\d*))*}");
+        Matcher regexRandomMatcher = regexRandom.matcher(lower);
+        if (regexRandomMatcher.find()) {
             return true;
-        } else if (lower.contains("{x ")) {
-            return true;
-        } else if (lower.contains("{y ")) {
-            return true;
-        } else if (lower.contains("{z ")) {
+        }
+
+        Pattern regexXYZ = Pattern.compile("\\{[xyz] *([+-])? *(\\d*)}");
+        Matcher regexXYZMatcher = regexXYZ.matcher(lower);
+        if (regexXYZMatcher.find()) {
             return true;
         }
 
