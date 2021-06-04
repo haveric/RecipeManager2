@@ -110,14 +110,11 @@ public class Customization implements Cloneable {
         horseColor = c.horseColor;
         horseStyle = c.horseStyle;
         hp = c.hp;
-        invisible = c.invisible;
-        invulnerable = c.invulnerable;
         jumpStrength = c.jumpStrength;
         maxHp = c.maxHp;
         mount = c.mount;
         mountNext = c.mountNext;
         name = c.name;
-        noAi = c.noAi;
         noBreed = c.noBreed;
         noEffect = c.noEffect;
         noHideName = c.noHideName;
@@ -126,7 +123,6 @@ public class Customization implements Cloneable {
         num = c.num;
         ocelot = c.ocelot;
         onFire = c.onFire;
-        persistent = c.persistent;
         pet = c.pet;
         pickup = c.pickup;
         pigAnger = c.pigAnger;
@@ -140,6 +136,11 @@ public class Customization implements Cloneable {
         target = c.target;
         villager = c.villager;
 
+        if (Version.has1_10Support()) {
+            invulnerable = c.invulnerable;
+            noAi = c.noAi;
+        }
+
         if (!Version.has1_12Support()) {
             elder = c.elder;
             horse = c.horse;
@@ -149,6 +150,10 @@ public class Customization implements Cloneable {
 
         if (Version.has1_12Support()) {
             parrot = c.parrot;
+        }
+
+        if (Version.has1_13Support()) {
+            persistent = c.persistent;
         }
 
         if (Version.has1_14Support()) {
@@ -161,6 +166,10 @@ public class Customization implements Cloneable {
             foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
             foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
             foxSleeping = c.foxSleeping;
+        }
+
+        if (Version.has1_16Support()) {
+            invisible = c.invisible;
         }
     }
 
@@ -409,52 +418,56 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (Version.has1_12Support() && ent instanceof Parrot) {
-                Parrot npc = (Parrot) ent;
+            if (Version.has1_12Support()) {
+                if (ent instanceof Parrot) {
+                    Parrot npc = (Parrot) ent;
 
-                if (parrot != null) {
-                    npc.setVariant(parrot);
+                    if (parrot != null) {
+                        npc.setVariant(parrot);
+                    }
                 }
             }
 
-            if (Version.has1_14Support() && ent instanceof Panda) {
-                Panda npc = (Panda) ent;
+            if (Version.has1_14Support()) {
+                if (ent instanceof Fox) {
+                    Fox npc = (Fox) ent;
 
-                if (pandaMainGene != null) {
-                    npc.setMainGene(pandaMainGene);
-                }
-                if (pandaHiddenGene != null) {
-                    npc.setHiddenGene(pandaHiddenGene);
-                }
-            }
+                    if (fox != null) {
+                        npc.setFoxType(fox);
+                    }
 
-            if (Version.has1_14Support() && ent instanceof Fox) {
-                Fox npc = (Fox) ent;
+                    if (foxCrouching) {
+                        npc.setCrouching(true);
+                    }
 
-                if (fox != null) {
-                    npc.setFoxType(fox);
-                }
+                    if (foxFirstTrustedPlayerUUID != null) {
+                        OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
+                        npc.setFirstTrustedPlayer(firstPlayer);
+                    } else if (foxFirstTrustedPlayer) {
+                        npc.setFirstTrustedPlayer(player);
+                    }
 
-                if (foxCrouching) {
-                    npc.setCrouching(true);
-                }
+                    if (foxSecondTrustedPlayerUUID != null) {
+                        OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
+                        npc.setFirstTrustedPlayer(secondPlayer);
+                    } else if (foxSecondTrustedPlayer) {
+                        npc.setSecondTrustedPlayer(player);
+                    }
 
-                if (foxFirstTrustedPlayerUUID != null) {
-                    OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
-                    npc.setFirstTrustedPlayer(firstPlayer);
-                } else if (foxFirstTrustedPlayer) {
-                    npc.setFirstTrustedPlayer(player);
-                }
-
-                if (foxSecondTrustedPlayerUUID != null) {
-                    OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
-                    npc.setFirstTrustedPlayer(secondPlayer);
-                } else if (foxSecondTrustedPlayer) {
-                    npc.setSecondTrustedPlayer(player);
+                    if (foxSleeping) {
+                        npc.setSleeping(true);
+                    }
                 }
 
-                if (foxSleeping) {
-                    npc.setSleeping(true);
+                if (ent instanceof Panda) {
+                    Panda npc = (Panda) ent;
+
+                    if (pandaMainGene != null) {
+                        npc.setMainGene(pandaMainGene);
+                    }
+                    if (pandaHiddenGene != null) {
+                        npc.setHiddenGene(pandaHiddenGene);
+                    }
                 }
             }
 
@@ -1260,14 +1273,11 @@ public class Customization implements Cloneable {
         toHash += "horseStyle: " + horseStyle.toString();
         toHash += "hit: " + hit;
         toHash += "hp: " + hp;
-        toHash += "invisible: " + invisible;
-        toHash += "invulnerable: " + invulnerable;
         toHash += "jumpStrength: " + jumpStrength.toString();
         toHash += "maxHp: " + maxHp;
         toHash += "mount: " + mount;
         toHash += "mountNext: " + mountNext;
         toHash += "name: " + name;
-        toHash += "noAi: " + noAi;
         toHash += "noBreed: " + noBreed;
         toHash += "noEffect: " + noEffect;
         toHash += "noHideName: " + noHideName;
@@ -1276,7 +1286,6 @@ public class Customization implements Cloneable {
         toHash += "num: " + num;
         toHash += "ocelot: " + ocelot.toString();
         toHash += "onFire: " + onFire;
-        toHash += "persistent: " + persistent;
         toHash += "pet: " + pet;
         toHash += "pickup: " + pickup.toString();
         toHash += "pigAnger: " + pigAnger;
@@ -1294,6 +1303,11 @@ public class Customization implements Cloneable {
         toHash += "target: " + target;
         toHash += "villager: " + villager.toString();
 
+        if (Version.has1_10Support()) {
+            toHash += "invulnerable: " + invulnerable;
+            toHash += "noAi: " + noAi;
+        }
+
         if (!Version.has1_12Support()) {
             toHash += "elder: " + elder;
             toHash += "horse: " + horse.toString();
@@ -1303,6 +1317,10 @@ public class Customization implements Cloneable {
 
         if (Version.has1_12Support()) {
             toHash += "parrot: " + parrot;
+        }
+
+        if (Version.has1_13Support()) {
+            toHash += "persistent: " + persistent;
         }
 
         if (Version.has1_14Support()) {
@@ -1315,6 +1333,10 @@ public class Customization implements Cloneable {
             toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
             toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
             toHash += "foxSleeping: " + foxSleeping;
+        }
+
+        if (Version.has1_16Support()) {
+            toHash += "invisible: " + invisible;
         }
 
         return toHash.hashCode();
