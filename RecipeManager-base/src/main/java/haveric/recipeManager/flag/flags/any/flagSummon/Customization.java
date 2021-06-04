@@ -4,6 +4,8 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsEntity;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -22,125 +24,125 @@ import java.util.UUID;
 
 public class Customization implements Cloneable {
     private String flagType;
+    private EntityType entityType;
 
-    private EntityType type;
-    private boolean noAi = false;
-    private boolean noEffect = false;
-    private boolean noRemove = false;
-    private boolean invulnerable = false;
-    private boolean invisible = false;
-    private boolean persistent = false;
-    private boolean mountNext = false;
-    private float chance = 100.0f;
-    private int num = 1;
-    private int spread = 0;
-    private float onFire = 0;
-    private Boolean pickup = null;
-    private boolean target = false;
-    private boolean hit = false;
-    private boolean angry = false;
-    private boolean pet = false;
-    private boolean noSit = false;
-    @SuppressWarnings("deprecation")
-    private Ocelot.Type ocelot = null;
-    private Cat.Type cat = null;
-    private boolean saddle = false;
-    private boolean mount = false;
-    private DyeColor color = null;
-    private boolean shearedSheep = false;
-    @SuppressWarnings("deprecation")
-    private Skeleton.SkeletonType skeleton = null;
-    private boolean zombieVillager = false;
-    private Villager.Profession villager = null;
-    private boolean poweredCreeper = false;
-    private boolean playerIronGolem = false;
-    private int pigAnger = 0;
-    private String name = null;
-    private boolean noHideName = false;
-    private int hp = 0;
-    private int maxHp = 0;
     private boolean adult = false;
-    private boolean baby = false;
     private boolean ageLock = false;
-    private boolean noBreed = false;
-    private ItemStack[] equip = new ItemStack[6];
+    private boolean angry = false;
+    private boolean baby = false;
+    private Cat.Type cat = null;
+    private float chance = 100.0f;
+    private DyeColor color = null;
     private float[] drop = new float[6];
-    private List<PotionEffect> potions = new ArrayList<>();
+    private boolean elder = false;
+    private ItemStack[] equip = new ItemStack[6];
+    private Fox.Type fox = null;
+    private boolean foxCrouching = false;
+    private boolean foxFirstTrustedPlayer = false;
+    private UUID foxFirstTrustedPlayerUUID = null;
+    private boolean foxSecondTrustedPlayer = false;
+    private UUID foxSecondTrustedPlayerUUID = null;
+    private boolean foxSleeping = false;
+    private boolean hasChest = false;
+    private boolean hit = false;
     @SuppressWarnings("deprecation")
     private Horse.Variant horse = null;
     private Horse.Color horseColor = null;
     private Horse.Style horseStyle = null;
-    private Parrot.Variant parrot = null;
-    private boolean hasChest = false;
+    private int hp = 0;
+    private boolean invisible = false;
+    private boolean invulnerable = false;
     private Float jumpStrength = null;
-    private Rabbit.Type rabbit = null;
-    private boolean elder = false;
+    private int maxHp = 0;
+    private boolean mount = false;
+    private boolean mountNext = false;
+    private String name = null;
+    private boolean noAi = false;
+    private boolean noBreed = false;
+    private boolean noEffect = false;
+    private boolean noHideName = false;
+    private boolean noRemove = false;
+    private boolean noSit = false;
+    private int num = 1;
+    @SuppressWarnings("deprecation")
+    private Ocelot.Type ocelot = null;
+    private float onFire = 0;
     private Panda.Gene pandaHiddenGene = null;
     private Panda.Gene pandaMainGene = null;
-    private Fox.Type fox = null;
-    private boolean foxCrouching = false;
-    private UUID foxFirstTrustedPlayerUUID = null;
-    private UUID foxSecondTrustedPlayerUUID = null;
-    private boolean foxFirstTrustedPlayer = false;
-    private boolean foxSecondTrustedPlayer = false;
-    private boolean foxSleeping = false;
+    private Parrot.Variant parrot = null;
+    private boolean persistent = false;
+    private boolean pet = false;
+    private Boolean pickup = null;
+    private int pigAnger = 0;
+    private boolean playerIronGolem = false;
+    private List<PotionEffect> potions = new ArrayList<>();
+    private boolean poweredCreeper = false;
+    private Rabbit.Type rabbit = null;
+    private boolean saddle = false;
+    private boolean shearedSheep = false;
+    @SuppressWarnings("deprecation")
+    private Skeleton.SkeletonType skeleton = null;
+    private int spread = 0;
+    private boolean target = false;
+    private Villager.Profession villager = null;
+    private boolean zombieVillager = false;
 
     public Customization(String newFlagType, EntityType newType) {
         flagType = newFlagType;
-        type = newType;
+        entityType = newType;
     }
 
     public Customization(Customization c) {
         flagType = c.flagType;
+        entityType = c.entityType;
 
-        type = c.type;
-        noAi = c.noAi;
-        noEffect = c.noEffect;
-        noRemove = c.noRemove;
-        invulnerable = c.invulnerable;
-        invisible = c.invisible;
-        persistent = c.persistent;
-        chance = c.chance;
-        num = c.num;
-        spread = c.spread;
-        onFire = c.onFire;
-        pickup = c.pickup;
-        target = c.target;
-        hit = c.hit;
-        angry = c.angry;
-        pet = c.pet;
-        noSit = c.noSit;
-        ocelot = c.ocelot;
-        cat = c.cat;
-        saddle = c.saddle;
-        mount = c.mount;
-        color = c.color;
-        shearedSheep = c.shearedSheep;
-        villager = c.villager;
-        poweredCreeper = c.poweredCreeper;
-        playerIronGolem = c.playerIronGolem;
-        pigAnger = c.pigAnger;
-        name = c.name;
-        noHideName = c.noHideName;
-        hp = c.hp;
-        maxHp = c.maxHp;
         adult = c.adult;
-        baby = c.baby;
         ageLock = c.ageLock;
-        noBreed = c.noBreed;
-        System.arraycopy(c.equip, 0, equip, 0, c.equip.length);
+        angry = c.angry;
+        baby = c.baby;
+        cat = c.cat;
+        chance = c.chance;
+        color = c.color;
         System.arraycopy(c.drop, 0, drop, 0, c.drop.length);
-        potions.addAll(c.potions);
-        mountNext = c.mountNext;
+        System.arraycopy(c.equip, 0, equip, 0, c.equip.length);
+        hasChest = c.hasChest;
+        hit = c.hit;
         horseColor = c.horseColor;
         horseStyle = c.horseStyle;
-        hasChest = c.hasChest;
+        hp = c.hp;
+        invisible = c.invisible;
+        invulnerable = c.invulnerable;
         jumpStrength = c.jumpStrength;
+        maxHp = c.maxHp;
+        mount = c.mount;
+        mountNext = c.mountNext;
+        name = c.name;
+        noAi = c.noAi;
+        noBreed = c.noBreed;
+        noEffect = c.noEffect;
+        noHideName = c.noHideName;
+        noRemove = c.noRemove;
+        noSit = c.noSit;
+        num = c.num;
+        ocelot = c.ocelot;
+        onFire = c.onFire;
+        persistent = c.persistent;
+        pet = c.pet;
+        pickup = c.pickup;
+        pigAnger = c.pigAnger;
+        playerIronGolem = c.playerIronGolem;
+        potions.addAll(c.potions);
+        poweredCreeper = c.poweredCreeper;
         rabbit = c.rabbit;
+        saddle = c.saddle;
+        shearedSheep = c.shearedSheep;
+        spread = c.spread;
+        target = c.target;
+        villager = c.villager;
 
         if (!Version.has1_12Support()) {
-            horse = c.horse;
             elder = c.elder;
+            horse = c.horse;
             skeleton = c.skeleton;
             zombieVillager = c.zombieVillager;
         }
@@ -154,10 +156,10 @@ public class Customization implements Cloneable {
             pandaMainGene = c.pandaMainGene;
             fox = c.fox;
             foxCrouching = c.foxCrouching;
-            foxFirstTrustedPlayerUUID = c.foxFirstTrustedPlayerUUID;
-            foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
             foxFirstTrustedPlayer = c.foxFirstTrustedPlayer;
+            foxFirstTrustedPlayerUUID = c.foxFirstTrustedPlayerUUID;
             foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
+            foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
             foxSleeping = c.foxSleeping;
         }
     }
@@ -211,7 +213,7 @@ public class Customization implements Cloneable {
                 location.add(0.5, 0, 0.5);
             }
 
-            LivingEntity ent = (LivingEntity) world.spawnEntity(location, type);
+            LivingEntity ent = (LivingEntity) world.spawnEntity(location, entityType);
             entities.add(ent);
 
             if (!noEffect) {
@@ -563,28 +565,12 @@ public class Customization implements Cloneable {
         return entities;
     }
 
-    public EntityType getType() {
-        return type;
+    public EntityType getEntityType() {
+        return entityType;
     }
 
-    public void setType(EntityType newType) {
-        type = newType;
-    }
-
-    public boolean isNoAi() {
-        return noAi;
-    }
-
-    public void setNoAi(boolean newNoAi) {
-        noAi = newNoAi;
-    }
-
-    public boolean isNoEffect() {
-        return noEffect;
-    }
-
-    public void setNoEffect(boolean newNoEffect) {
-        noEffect = newNoEffect;
+    public void setEntityType(EntityType newType) {
+        entityType = newType;
     }
 
     public boolean isNoRemove() {
@@ -593,30 +579,6 @@ public class Customization implements Cloneable {
 
     public void setNoRemove(boolean newNoRemove) {
         noRemove = newNoRemove;
-    }
-
-    public boolean isInvulnerable() {
-        return invulnerable;
-    }
-
-    public void setInvulnerable(boolean newInvulnerable) {
-        invulnerable = newInvulnerable;
-    }
-
-    public boolean isInvisible() {
-        return invisible;
-    }
-
-    public void setInvisible(boolean newInvisible) {
-        invisible = newInvisible;
-    }
-
-    public boolean isPersistent() {
-        return persistent;
-    }
-
-    public void setPersistent(boolean newPersistent) {
-        persistent = newPersistent;
     }
 
     public float getChance() {
@@ -631,10 +593,6 @@ public class Customization implements Cloneable {
         } else {
             chance = newChance;
         }
-    }
-
-    public float getJumpStrength() {
-        return jumpStrength;
     }
 
     public void setJumpStrength(float newJumpStrength) {
@@ -661,44 +619,20 @@ public class Customization implements Cloneable {
         }
     }
 
-    public int getSpread() {
-        return spread;
-    }
-
-    public void setSpread(int newSpread) {
-        spread = newSpread;
-    }
-
     public boolean isTarget() {
         return target;
-    }
-
-    public void setTarget(boolean newTarget) {
-        target = newTarget;
     }
 
     public boolean isPet() {
         return pet;
     }
 
-    public void setPet(boolean newPet) {
-        pet = newPet;
-    }
-
     public boolean isSaddle() {
         return saddle;
     }
 
-    public void setSaddle(boolean newSaddle) {
-        saddle = newSaddle;
-    }
-
     public boolean isMount() {
         return mount;
-    }
-
-    public void setMount(boolean newMount) {
-        mount = newMount;
     }
 
     public String getName() {
@@ -709,74 +643,10 @@ public class Customization implements Cloneable {
         name = RMCUtil.parseColors(newName, false);
     }
 
-    public boolean isNoHideName() {
-        return noHideName;
-    }
-
-    public void setNoHideName(boolean newNoHideName) {
-        noHideName = newNoHideName;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int newHp) {
-        hp = newHp;
-    }
-
-    public int getMaxHp() {
-        return maxHp;
-    }
-
-    public void setMaxHp(int newMaxHp) {
-        maxHp = newMaxHp;
-    }
-
-    public boolean isAdult() {
-        return adult;
-    }
-
-    public void setAdult(boolean newAdult) {
-        adult = newAdult;
-    }
-
-    public boolean isBaby() {
-        return baby;
-    }
-
-    public void setBaby(boolean newBaby) {
-        baby = newBaby;
-    }
-
-    public boolean isAgeLock() {
-        return ageLock;
-    }
-
-    public void setAgeLock(boolean lock) {
-        ageLock = lock;
-    }
-
-    public ItemStack[] getEquip() {
-        return equip.clone();
-    }
-
-    public void setEquip(ItemStack[] newEquip) {
-        equip = newEquip.clone();
-    }
-
     public void setEquip(ItemStack item, int index) {
         if (index < equip.length) {
             equip[index] = item.clone();
         }
-    }
-
-    public float[] getDrop() {
-        return drop.clone();
-    }
-
-    public void setDrop(float[] newDrop) {
-        drop = newDrop.clone();
     }
 
     public void setDrop(float newDrop, int index) {
@@ -785,44 +655,8 @@ public class Customization implements Cloneable {
         }
     }
 
-    public List<PotionEffect> getPotionEffects() {
-        return potions;
-    }
-
-    public void setPotionEFfects(List<PotionEffect> effects) {
-        if (effects == null) {
-            potions.clear();
-        } else {
-            potions = effects;
-        }
-    }
-
     public void addPotionEffect(PotionEffectType newType, float duration, int amplifier) {
         potions.add(new PotionEffect(newType, (int) Math.ceil(duration * 20), amplifier));
-    }
-
-    public float getOnFire() {
-        return onFire;
-    }
-
-    public void setOnFire(float newOnFire) {
-        onFire = newOnFire;
-    }
-
-    public Boolean getPickup() {
-        return pickup;
-    }
-
-    public void setPickup(Boolean newPickup) {
-        pickup = newPickup;
-    }
-
-    public boolean isNoSit() {
-        return noSit;
-    }
-
-    public void setNoSit(boolean newNoSit) {
-        noSit = newNoSit;
     }
 
     public boolean isAngry() {
@@ -833,23 +667,6 @@ public class Customization implements Cloneable {
         angry = newAngry;
     }
 
-    @SuppressWarnings("deprecation")
-    public Ocelot.Type getOcelot() {
-        return ocelot;
-    }
-
-    public void setOcelot(@SuppressWarnings("deprecation") Ocelot.Type newOcelot) {
-        ocelot = newOcelot;
-    }
-
-    public Cat.Type getCat() {
-        return cat;
-    }
-
-    public void setCat(Cat.Type newCat) {
-        cat = newCat;
-    }
-
     public DyeColor getColor() {
         return color;
     }
@@ -858,285 +675,647 @@ public class Customization implements Cloneable {
         color = newColor;
     }
 
-    public boolean isShearedSheep() {
-        return shearedSheep;
-    }
-
-    public void setShearedSheep(boolean newShearedSheep) {
-        shearedSheep = newShearedSheep;
-    }
-
-    @SuppressWarnings("deprecation")
-    public Skeleton.SkeletonType getSkeleton() {
-        return skeleton;
-    }
-
-    public void setSkeleton(@SuppressWarnings("deprecation") Skeleton.SkeletonType newSkeleton) {
-        skeleton = newSkeleton;
-    }
-
-    public boolean isZombieVillager() {
-        return zombieVillager;
-    }
-
-    public void setZombieVillager(boolean newZombieVillager) {
-        zombieVillager = newZombieVillager;
-    }
-
-    public Villager.Profession getVillager() {
-        return villager;
-    }
-
-    public void setVillager(Villager.Profession newVillager) {
-        villager = newVillager;
-    }
-
-    public boolean isPoweredCreeper() {
-        return poweredCreeper;
-    }
-
-    public void setPoweredCreeper(boolean newPoweredCreeper) {
-        poweredCreeper = newPoweredCreeper;
-    }
-
-    public boolean isPlayerIronGolem() {
-        return playerIronGolem;
-    }
-
-    public void setPlayerIronGolem(boolean newPlayerIronGolem) {
-        playerIronGolem = newPlayerIronGolem;
-    }
-
-    public int getPigAnger() {
-        return pigAnger;
-    }
-
-    public void setPigAnger(int anger) {
-        pigAnger = anger;
-    }
-
     public boolean isMountNext() {
         return mountNext;
     }
 
-    public void setMountNext(boolean newMountNext) {
-        mountNext = newMountNext;
-    }
+    public boolean parseArgument(String original) {
+        String lower = original.toLowerCase();
 
-    public boolean isHit() {
-        return hit;
-    }
+        if (lower.startsWith("hand") || lower.startsWith("mainhand") || lower.startsWith("offhand") || lower.startsWith("hold") || lower.startsWith("head") || lower.startsWith("helmet") || lower.startsWith("chest") || lower.startsWith("leg") || lower.startsWith("feet") || lower.startsWith("boot")) {
+            int index = -1;
 
-    public void setHit(boolean newHit) {
-        hit = newHit;
-    }
+            switch (lower.charAt(0)) {
+                case 'h':
+                    switch (lower.charAt(1)) {
+                        case 'e':
+                            index = 0;
+                            break;
 
-    public boolean isNoBreed() {
-        return noBreed;
-    }
+                        case 'o':
+                        case 'a':
+                            index = 4;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
 
-    public void setNoBreed(boolean newNoBreed) {
-        noBreed = newNoBreed;
-    }
+                case 'c':
+                    index = 1;
+                    break;
 
-    public void setHorseVariant(@SuppressWarnings("deprecation") Horse.Variant newVariant) {
-        horse = newVariant;
-    }
+                case 'l':
+                    index = 2;
+                    break;
 
-    @SuppressWarnings("deprecation")
-    public Horse.Variant getHorseVariant() {
-        return horse;
-    }
+                case 'b':
+                case 'f':
+                    index = 3;
+                    break;
+                case 'm':
+                    index = 4;
+                    break;
+                case 'o':
+                    index = 5;
+                    break;
+                default:
+                    break;
+            }
 
-    public void setHorseColor(Horse.Color newColor) {
-        horseColor = newColor;
-    }
+            if (index < 0) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
+                return false;
+            }
 
-    public Horse.Color getHorseColor() {
-        return horseColor;
-    }
+            int i = lower.indexOf(' ');
+            String[] args = lower.substring(i + 1).trim().split(" ");
+            lower = args[0].trim();
 
-    public void setHorseStyle(Horse.Style newStyle) {
-        horseStyle = newStyle;
-    }
+            ItemStack item = Tools.parseItem(lower, 0);
 
-    public Horse.Style getHorseStyle() {
-        return horseStyle;
-    }
+            if (item == null) {
+                return false;
+            }
 
-    public void setParrotVariant(Parrot.Variant newVariant) {
-        parrot = newVariant;
-    }
+            setEquip(item, index);
 
-    public Parrot.Variant getParrotVariant() {
-        return parrot;
-    }
+            if (args.length > 1) {
+                lower = args[1].trim();
 
-    public void setPandaMainGene(Panda.Gene gene) {
-        pandaMainGene = gene;
-    }
+                if (lower.charAt(lower.length() - 1) == '%') {
+                    lower = lower.substring(0, lower.length() - 1);
+                }
 
-    public Panda.Gene getPandaMainGene() {
-        return pandaMainGene;
-    }
+                try {
+                    setDrop( Math.min(Math.max(Float.parseFloat(lower), 0), 100), index);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'chance' argument with invalid number: " + lower);
+                }
+            }
+        } else if (lower.equals("adult")) {
+            if (ToolsEntity.isAgeable(entityType)) {
+                adult = true;
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'adult' set on unsupported entity!");
+            }
+        } else if (lower.equals("agelock")) {
+            if (ToolsEntity.isAgeable(entityType)) {
+                ageLock = true;
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'agelock' set on unsupported entity!");
+            }
+        } else if (lower.equals("angry")) {
+            boolean error = false;
+            if (Version.has1_16Support()) {
+                switch (entityType) {
+                    case WOLF:
+                    case ZOMBIFIED_PIGLIN:
+                        break;
 
-    public void setPandaHiddenGene(Panda.Gene gene) {
-        pandaHiddenGene = gene;
-    }
+                    default:
+                        error = true;
+                }
+            } else {
+                if (entityType != EntityType.WOLF && entityType != EntityType.valueOf("PIG_ZOMBIE")) {
+                    error = true;
+                }
+            }
 
-    public Panda.Gene getPandaHiddenGene() {
-        return pandaHiddenGene;
-    }
+            if (error) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'angry' on unsupported entity!");
+                return false;
+            }
 
-    public void setFoxType(Fox.Type newType) {
-        fox = newType;
-    }
+            angry = true;
+        } else if (lower.equals("baby")) {
+            if (ToolsEntity.isAgeable(entityType) || entityType == EntityType.ZOMBIE) {
+                baby = true;
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'baby' set on unsupported entity!");
+            }
+        } else if (lower.startsWith("cat")) {
+            lower = lower.substring("cat".length()).trim();
 
-    public Fox.Type getFoxType() {
-        return fox;
-    }
+            if (Version.has1_14Support()) {
+                if (entityType != EntityType.CAT) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument on non-cat entity!");
+                    return false;
+                }
 
-    public void setFoxSleeping(boolean sleeping) {
-        foxSleeping = sleeping;
-    }
+                cat = RMCUtil.parseEnum(lower, Cat.Type.values());
 
-    public boolean isFoxSleeping() {
-        return foxSleeping;
-    }
+                if (cat == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument with invalid entityType: " + lower);
+                }
+            } else {
+                if (entityType != EntityType.OCELOT) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument on non-ocelot entity!");
+                    return false;
+                }
 
-    public void setFoxFirstTrustedPlayerUUID(UUID uuid) {
-        foxFirstTrustedPlayerUUID = uuid;
-    }
+                //noinspection deprecation
+                ocelot = RMCUtil.parseEnum(lower, Ocelot.Type.values());
 
-    public UUID getFoxFirstTrustedPlayerUUID() {
-        return foxFirstTrustedPlayerUUID;
-    }
+                if (ocelot == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument with invalid entityType: " + lower);
+                }
+            }
+        } else if (lower.startsWith("chance")) {
+            lower = lower.substring("chance".length()).trim();
 
-    public void setFoxSecondTrustedPlayerUUID(UUID uuid) {
-        foxSecondTrustedPlayerUUID = uuid;
-    }
+            if (lower.charAt(lower.length() - 1) == '%') {
+                lower = lower.substring(0, lower.length() - 1);
+            }
 
-    public UUID getFoxSecondTrustedPlayerUUID() {
-        return foxSecondTrustedPlayerUUID;
-    }
+            try {
+                setChance(Float.parseFloat(lower));
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'chance' argument with invalid number: " + lower);
+            }
+        } else if (lower.startsWith("color")) {
+            switch (entityType) {
+                case SHEEP:
+                case WOLF:
+                    break;
 
-    public void setFoxFirstTrustedPlayer(boolean usePlayer) {
-        foxFirstTrustedPlayer = usePlayer;
-    }
+                case CAT:
+                    break;
 
-    public boolean getFoxFirstTrustedPlayer() {
-        return foxFirstTrustedPlayer;
-    }
+                default:
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' on unsupported entity!");
+                    return false;
+            }
 
-    public void setFoxSecondTrustedPlayer(boolean usePlayer) {
-        foxSecondTrustedPlayer = usePlayer;
-    }
+            lower = lower.substring("color".length()).trim();
 
-    public boolean getFoxSecondTrustedPlayer() {
-        return foxSecondTrustedPlayer;
-    }
+            color = RMCUtil.parseEnum(lower, DyeColor.values());
 
-    public void setFoxCrouching(boolean crouching) {
-        foxCrouching = crouching;
-    }
+            if (color == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument with invalid dye color: " + lower);
+            }
+        } else if (lower.equals("haschest")) {
+            hasChest = true;
+        } else if (lower.equals("hit")) {
+            hit = true;
+        } else if (lower.startsWith("horsecolor")) {
+            if (entityType != EntityType.HORSE) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horsecolor' argument on non-horse entity!");
+                return false;
+            }
 
-    public boolean getFoxCrouching() {
-        return foxCrouching;
-    }
+            lower = lower.substring("horsecolor".length()).trim();
 
-    public void setHasChest(boolean newHasChest) {
-        hasChest = newHasChest;
-    }
+            horseColor = RMCUtil.parseEnum(lower, Horse.Color.values());
 
-    public void setRabbit(Rabbit.Type newRabbit) {
-        rabbit = newRabbit;
-    }
+            if (horseColor == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horsecolor' argument with invalid entityType: " + lower);
+            }
+        } else if (lower.startsWith("horsestyle")) {
+            if (entityType != EntityType.HORSE) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horsestyle' argument on non-horse entity!");
+                return false;
+            }
 
-    public Rabbit.Type getRabbit() {
-        return rabbit;
-    }
+            lower = lower.substring("horsestyle".length()).trim();
 
-    public void setElder(boolean newElder) {
-        elder = newElder;
-    }
+            horseStyle = RMCUtil.parseEnum(lower, Horse.Style.values());
 
-    public boolean isElder() {
-        return elder;
+            if (horseStyle == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horsestyle' argument with invalid entityType: " + lower);
+            }
+        } else if (lower.startsWith("hp")) {
+            lower = lower.substring("hp".length()).trim();
+
+            String[] args = lower.split(" ");
+
+            lower = args[0].trim();
+
+            try {
+                hp = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'hp' argument with invalid number: " + lower);
+                return false;
+            }
+
+            if (args.length > 1) {
+                lower = args[1].trim();
+
+                try {
+                    maxHp = Integer.parseInt(lower);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'hp' argument with invalid number for maxhp: " + lower);
+                }
+            }
+        } else if (lower.equals("invisible")) {
+            invisible = true;
+        } else if (lower.equals("invulnerable")) {
+            invulnerable = true;
+        } else if (lower.startsWith("jumpstrength")) {
+            lower = lower.substring("jumpstrength".length()).trim();
+
+            try {
+                setJumpStrength(Float.parseFloat(lower));
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'jumpstrength' argument with invalid number: " + lower);
+            }
+        } else if (lower.equals("mountnext")) {
+            mountNext = true;
+        } else if (lower.startsWith("name")) {
+            original = original.substring("name".length()).trim();
+
+            setName(original);
+        } else if (lower.equals("noai")) {
+            noAi = true;
+        } else if (lower.equals("nobreed")) {
+            if (ToolsEntity.isAgeable(entityType)) {
+                noBreed = true;
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'nobreed' set on unsupported entity!");
+            }
+        } else if (lower.equals("noeffect")) {
+            noEffect = true;
+        } else if (lower.equals("nohidename")) {
+            noHideName = true;
+        } else if (lower.equals("noremove")) {
+            noRemove = true;
+        } else if (lower.startsWith("num")) {
+            lower = lower.substring("num".length()).trim();
+
+            try {
+                setNum(Integer.parseInt(lower));
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'num' argument with invalid value number: " + lower);
+            }
+        } else if (lower.startsWith("onfire")) {
+            lower = lower.substring("onfire".length()).trim();
+
+            try {
+                onFire = Float.parseFloat(lower) * 20.0f;
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'onfire' argument with invalid value number: " + lower);
+            }
+        } else if (lower.equals("persistent")) {
+            persistent = true;
+        } else if (lower.startsWith("pet")) {
+            if (ToolsEntity.isTameable(entityType)) {
+                pet = true;
+
+                if (lower.length() > "pet".length()) {
+                    lower = lower.substring("pet".length()).trim();
+
+                    if (lower.equals("nosit")) {
+                        noSit = true;
+                    } else {
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pet' argument with unknown value: " + lower);
+                    }
+                }
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pet' on untameable entity!");
+            }
+        } else if (lower.startsWith("pickup")) {
+            lower = lower.substring("pickup".length()).trim();
+
+            if (lower.isEmpty()) {
+                pickup = true;
+            } else {
+                pickup = lower.equals("true");
+            }
+        } else if (lower.equals("playerirongolem")) {
+            if (entityType != EntityType.IRON_GOLEM) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'playerirongolem' on non-irongolem entity!");
+                return false;
+            }
+
+            playerIronGolem = true;
+        } else if (lower.startsWith("potion")) {
+            lower = lower.substring("potion".length()).trim();
+            String[] args = lower.split(" ");
+            lower = args[0].trim();
+
+            PotionEffectType effect = PotionEffectType.getByName(lower); // Tools.parseEnum(lower, PotionEffectType.values());
+
+            if (effect == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'potion' argument with invalid entityType: " + lower);
+                return false;
+            }
+
+            float duration = 1;
+            int amplifier = 0;
+
+            if (args.length > 1) {
+                lower = args[1].trim();
+
+                try {
+                    duration = Float.parseFloat(lower);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'potion' argument with invalid number for duration: " + lower);
+                    return false;
+                }
+            }
+
+            if (args.length > 2) {
+                lower = args[2].trim();
+
+                try {
+                    amplifier = Integer.parseInt(lower);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'potion' argument with invalid number for amplifier: " + lower);
+                    return false;
+                }
+            }
+
+            addPotionEffect(effect, duration, amplifier);
+        } else if (lower.equals("poweredcreeper")) {
+            if (entityType != EntityType.CREEPER) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'poweredcreeper' on non-creeper entity!");
+                return false;
+            }
+
+            poweredCreeper = true;
+        } else if (lower.startsWith("rabbit")) {
+            if (entityType != EntityType.RABBIT) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'rabbit' argument on non-rabbit entity!");
+                return false;
+            }
+
+            lower = lower.substring("rabbit".length()).trim();
+
+            rabbit = RMCUtil.parseEnum(lower, Rabbit.Type.values());
+
+            if (rabbit == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'rabbit' argument with invalid entityType: " + lower);
+            }
+        } else if (lower.startsWith("saddle")) {
+            if (entityType != EntityType.PIG && entityType != EntityType.HORSE ||
+                    (Version.has1_12Support() && entityType != EntityType.SKELETON_HORSE && entityType != EntityType.ZOMBIE_HORSE && entityType != EntityType.MULE && entityType != EntityType.DONKEY)) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'saddle' on non-pig and non-horse entity!");
+                return false;
+            }
+
+            saddle = true;
+
+            if (lower.length() > "saddle".length()) {
+                lower = lower.substring("saddle".length()).trim();
+
+                if (lower.equals("mount")) {
+                    mount = true;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'saddle' argument with unknown value: " + lower);
+                }
+            }
+        } else if (lower.equals("shearedsheep")) {
+            if (entityType != EntityType.SHEEP) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'shearedsheep' on non-sheep entity!");
+                return false;
+            }
+
+            shearedSheep = true;
+        } else if (lower.startsWith("spread")) {
+            lower = lower.substring("spread".length()).trim();
+
+            try {
+                spread = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'spread' argument with invalid value number: " + lower);
+            }
+        } else if (lower.equals("target")) {
+            target = true;
+        } else if (lower.startsWith("villager")) {
+            if (entityType != EntityType.VILLAGER) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'villager' argument on non-villager entity!");
+                return false;
+            }
+
+            lower = lower.substring("villager".length()).trim();
+
+            villager = RMCUtil.parseEnum(lower, Villager.Profession.values());
+
+            if (villager == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'villager' argument with invalid entityType: " + lower);
+            }
+        } else if (!Version.has1_12Support()) {
+            if (lower.equals("elder")) {
+                if (entityType != EntityType.GUARDIAN) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'elder' on non-guardian entity!");
+                    return false;
+                }
+
+                poweredCreeper = true;
+            } else if (lower.startsWith("horse")) {
+                if (entityType != EntityType.HORSE) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument on non-horse entity!");
+                    return false;
+                }
+
+                lower = lower.substring("horse".length()).trim();
+
+                //noinspection deprecation
+                horse = RMCUtil.parseEnum(lower, Horse.Variant.values());
+
+                if (horse == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument with invalid entityType: " + lower);
+                }
+            } else if (lower.startsWith("skeleton")) {
+                if (entityType != EntityType.SKELETON) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument on non-skeleton entity!");
+                    return false;
+                }
+
+                lower = lower.substring("skeleton".length()).trim();
+
+                //noinspection deprecation
+                skeleton = RMCUtil.parseEnum(lower, Skeleton.SkeletonType.values());
+
+                if (skeleton == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument with invalid entityType: " + lower);
+                }
+            } else if (lower.equals("zombievillager")) {
+                if (entityType != EntityType.ZOMBIE) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'zombievillager' on non-zombie entity!");
+                    return false;
+                }
+
+                zombieVillager = true;
+            }
+        } else if (Version.has1_12Support()) {
+            if (lower.startsWith("parrot")) {
+                if (entityType != EntityType.PARROT) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument on non-parrot entity!");
+                    return false;
+                }
+
+                lower = lower.substring("parrot".length()).trim();
+
+                parrot = RMCUtil.parseEnum(lower, Parrot.Variant.values());
+
+                if (parrot == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument with invalid entityType: " + lower);
+                }
+            }
+        } else if (Version.has1_14Support()) {
+            if (lower.startsWith("pandahiddengene")) {
+                if (entityType != EntityType.PANDA) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument on non-panda entity!");
+                    return false;
+                }
+
+                lower = lower.substring("pandahiddengene".length()).trim();
+
+                pandaHiddenGene = RMCUtil.parseEnum(lower, Panda.Gene.values());
+
+                if (pandaHiddenGene == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument with invalid entityType: " + lower);
+                }
+            } else if (lower.startsWith("pandamaingene")) {
+                if (entityType != EntityType.PANDA) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument on non-panda entity!");
+                    return false;
+                }
+
+                lower = lower.substring("pandamaingene".length()).trim();
+
+                pandaMainGene = RMCUtil.parseEnum(lower, Panda.Gene.values());
+
+                if (pandaMainGene == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument with invalid entityType: " + lower);
+                }
+            } else if (lower.startsWith("fox")) {
+                String[] foxSplit = lower.split(" ");
+                if (entityType != EntityType.FOX) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has '" + foxSplit[0] + "' argument on non-fox entity!");
+                }
+
+                if (lower.startsWith("foxcrouching")) {
+                    foxCrouching = true;
+                } else if (lower.startsWith("foxfirsttrustedplayer")) {
+                    lower = lower.substring("foxfirsttrustedplayer".length()).trim();
+
+                    if (lower.equals("player")) {
+                        foxFirstTrustedPlayer = true;
+                    } else {
+                        try {
+                            UUID uuid = UUID.fromString(lower);
+                            foxFirstTrustedPlayerUUID = uuid;
+                        } catch (IllegalArgumentException e) {
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxfirsttrustedplayer' with invalid uuid: " + lower);
+                        }
+                    }
+                } else if (lower.startsWith("foxsecondtrustedplayer")) {
+                    lower = lower.substring("foxsecondtrustedplayer".length()).trim();
+
+                    if (lower.equals("player")) {
+                        foxSecondTrustedPlayer = true;
+                    } else {
+                        try {
+                            UUID uuid = UUID.fromString(lower);
+                            foxSecondTrustedPlayerUUID = uuid;
+                        } catch (IllegalArgumentException e) {
+                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxsecondtrustedplayer' with invalid uuid: " + lower);
+                        }
+                    }
+                } else if (lower.startsWith("foxsleeping")) {
+                    foxSleeping = true;
+                } else if (lower.startsWith("fox")) {
+                    lower = lower.substring("fox".length()).trim();
+
+                    fox = RMCUtil.parseEnum(lower, Fox.Type.values());
+
+                    if (fox == null) {
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'fox' argument with invalid entityType: " + lower);
+                    }
+                }
+            }
+        } else {
+            ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();
+        toHash += "flagType: " + flagType;
+        toHash += "entityType: " + entityType.toString();
 
-        toHash += "type: " + type.toString();
-        toHash += "noAi: " + noAi;
-        toHash += "noEffect: " + noEffect;
-        toHash += "noRemove: " + noRemove;
-        toHash += "invulnerable: " + invulnerable;
-        toHash += "invisible: " + invisible;
-        toHash += "persistent: " + persistent;
-        toHash += "mountNext: " + mountNext;
-        toHash += "chance: " + chance;
-        toHash += "num: " + num;
-        toHash += "spread: " + spread;
-        toHash += "onFire: " + onFire;
-        toHash += "pickup: " + pickup.toString();
-        toHash += "target: " + target;
-        toHash += "hit: " + hit;
-        toHash += "angry: " + angry;
-        toHash += "pet: " + pet;
-        toHash += "noSit: " + noSit;
-        toHash += "ocelot: " + ocelot.toString();
-        toHash += "cat: " + cat.toString();
-        toHash += "saddle: " + saddle;
-        toHash += "mount: " + mount;
-        toHash += "color: " + color.toString();
-        toHash += "shearedSheep: " + shearedSheep;
-        toHash += "skeleton: " + skeleton.toString();
-        toHash += "zombieVillager: " + zombieVillager;
-        toHash += "villager: " + villager.toString();
-        toHash += "poweredCreeper: " + poweredCreeper;
-        toHash += "playerIronGolem: " + playerIronGolem;
-        toHash += "pigAnger: " + pigAnger;
-        toHash += "name: " + name;
-        toHash += "noHideName: " + noHideName;
-        toHash += "hp: " + hp;
-        toHash += "maxHp: " + maxHp;
         toHash += "adult: " + adult;
-        toHash += "baby: " + baby;
         toHash += "ageLock: " + ageLock;
-        toHash += "noBreed: " + noBreed;
-
-        for (ItemStack item : equip) {
-            toHash += "equip: " + item.hashCode();
-        }
+        toHash += "angry: " + angry;
+        toHash += "baby: " + baby;
+        toHash += "cat: " + cat.toString();
+        toHash += "chance: " + chance;
+        toHash += "color: " + color.toString();
 
         for (Float itemDrop : drop) {
             toHash += "drop: " + itemDrop;
         }
 
+        for (ItemStack item : equip) {
+            toHash += "equip: " + item.hashCode();
+        }
+
+        toHash += "hasChest: " + hasChest;
+        toHash += "horseColor: " + horseColor.toString();
+        toHash += "horseStyle: " + horseStyle.toString();
+        toHash += "hit: " + hit;
+        toHash += "hp: " + hp;
+        toHash += "invisible: " + invisible;
+        toHash += "invulnerable: " + invulnerable;
+        toHash += "jumpStrength: " + jumpStrength.toString();
+        toHash += "maxHp: " + maxHp;
+        toHash += "mount: " + mount;
+        toHash += "mountNext: " + mountNext;
+        toHash += "name: " + name;
+        toHash += "noAi: " + noAi;
+        toHash += "noBreed: " + noBreed;
+        toHash += "noEffect: " + noEffect;
+        toHash += "noHideName: " + noHideName;
+        toHash += "noRemove: " + noRemove;
+        toHash += "noSit: " + noSit;
+        toHash += "num: " + num;
+        toHash += "ocelot: " + ocelot.toString();
+        toHash += "onFire: " + onFire;
+        toHash += "persistent: " + persistent;
+        toHash += "pet: " + pet;
+        toHash += "pickup: " + pickup.toString();
+        toHash += "pigAnger: " + pigAnger;
+        toHash += "playerIronGolem: " + playerIronGolem;
+
         for (PotionEffect effect : potions) {
             toHash += "potion: " + effect.hashCode();
         }
 
-        toHash += "horse: " + horse.toString();
-        toHash += "horseColor: " + horseColor.toString();
-        toHash += "horseStyle: " + horseStyle.toString();
-        toHash += "hasChest: " + hasChest;
-        toHash += "jumpStrength: " + jumpStrength.toString();
+        toHash += "poweredCreeper: " + poweredCreeper;
         toHash += "rabbit: " + rabbit.toString();
-        toHash += "elder: " + elder;
+        toHash += "saddle: " + saddle;
+        toHash += "shearedSheep: " + shearedSheep;
+        toHash += "spread: " + spread;
+        toHash += "target: " + target;
+        toHash += "villager: " + villager.toString();
 
-        toHash += "parrot: " + parrot;
-        toHash += "pandaHiddenGene: " + pandaHiddenGene;
-        toHash += "pandaMainGene: " + pandaMainGene;
-        toHash += "fox: " + fox;
-        toHash += "foxCrouching: " + foxCrouching;
-        toHash += "foxFirstTrustedPlayerUUID: " + foxFirstTrustedPlayerUUID;
-        toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
-        toHash += "foxFirstTrustedPlayer: " + foxFirstTrustedPlayer;
-        toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
-        toHash += "foxSleeping: " + foxSleeping;
+        if (!Version.has1_12Support()) {
+            toHash += "elder: " + elder;
+            toHash += "horse: " + horse.toString();
+            toHash += "skeleton: " + skeleton.toString();
+            toHash += "zombieVillager: " + zombieVillager;
+        }
+
+        if (Version.has1_12Support()) {
+            toHash += "parrot: " + parrot;
+        }
+
+        if (Version.has1_14Support()) {
+            toHash += "pandaHiddenGene: " + pandaHiddenGene;
+            toHash += "pandaMainGene: " + pandaMainGene;
+            toHash += "fox: " + fox;
+            toHash += "foxCrouching: " + foxCrouching;
+            toHash += "foxFirstTrustedPlayer: " + foxFirstTrustedPlayer;
+            toHash += "foxFirstTrustedPlayerUUID: " + foxFirstTrustedPlayerUUID;
+            toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
+            toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
+            toHash += "foxSleeping: " + foxSleeping;
+        }
 
         return toHash.hashCode();
     }
