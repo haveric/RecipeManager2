@@ -117,6 +117,15 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
             String.format(argFormat, "offhand <item> [drop%]", "equip an item on the creature's offhand with optional drop chance."),
             String.format(argFormat, "invulnerable", "makes the creature invulnerable."),
+        }, String.class);
+
+        if (Version.has1_16Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "invisible", "makes the creature invisible."),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the creature's jump strength (Only works for horses). 0 = no jump"),
             String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
             String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
@@ -204,6 +213,7 @@ public class FlagSummon extends Flag {
         private boolean noEffect = false;
         private boolean noRemove = false;
         private boolean invulnerable = false;
+        private boolean invisible = false;
         private boolean mountNext = false;
         private float chance = 100.0f;
         private int num = 1;
@@ -269,6 +279,7 @@ public class FlagSummon extends Flag {
             noEffect = c.noEffect;
             noRemove = c.noRemove;
             invulnerable = c.invulnerable;
+            invisible = c.invisible;
             chance = c.chance;
             num = c.num;
             spread = c.spread;
@@ -663,6 +674,10 @@ public class FlagSummon extends Flag {
                     ent.setAI(!noAi);
                 }
 
+                if (Version.has1_16Support()) {
+                    ent.setInvisible(invisible);
+                }
+
                 EntityEquipment eq = ent.getEquipment();
                 if (eq != null) {
                     for (int j = 0; j < equip.length; j++) {
@@ -762,6 +777,14 @@ public class FlagSummon extends Flag {
 
         public void setInvulnerable(boolean newInvulnerable) {
             invulnerable = newInvulnerable;
+        }
+
+        public boolean isInvisible() {
+            return invisible;
+        }
+
+        public void setInvisible(boolean newInvisible) {
+            invisible = newInvisible;
         }
 
         public float getChance() {
@@ -1217,6 +1240,7 @@ public class FlagSummon extends Flag {
             toHash += "noEffect: " + noEffect;
             toHash += "noRemove: " + noRemove;
             toHash += "invulnerable: " + invulnerable;
+            toHash += "invisible: " + invisible;
             toHash += "mountNext: " + mountNext;
             toHash += "chance: " + chance;
             toHash += "num: " + num;
@@ -1341,6 +1365,8 @@ public class FlagSummon extends Flag {
                     c.setNoRemove(true);
                 } else if (value.equals("invulnerable")) {
                     c.setInvulnerable(true);
+                } else if (value.equals("invisible")) {
+                    c.setInvisible(true);
                 } else if (value.equals("noai")) {
                     c.setNoAi(true);
                 } else if (value.equals("noeffect")) {
