@@ -152,6 +152,12 @@ public class FlagSummon extends Flag {
             }, String.class);
         }
 
+        if (Version.has1_13Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "persistent", "Makes the creature persistent"),
+            }, String.class);
+        }
+
         description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for tameable creatures, optionally specify 'nosit' to not spawn creature in sit stance."),
             String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
@@ -214,6 +220,7 @@ public class FlagSummon extends Flag {
         private boolean noRemove = false;
         private boolean invulnerable = false;
         private boolean invisible = false;
+        private boolean persistent = false;
         private boolean mountNext = false;
         private float chance = 100.0f;
         private int num = 1;
@@ -280,6 +287,7 @@ public class FlagSummon extends Flag {
             noRemove = c.noRemove;
             invulnerable = c.invulnerable;
             invisible = c.invisible;
+            persistent = c.persistent;
             chance = c.chance;
             num = c.num;
             spread = c.spread;
@@ -678,6 +686,10 @@ public class FlagSummon extends Flag {
                     ent.setInvisible(invisible);
                 }
 
+                if (Version.has1_13Support()) {
+                    ent.setPersistent(persistent);
+                }
+
                 EntityEquipment eq = ent.getEquipment();
                 if (eq != null) {
                     for (int j = 0; j < equip.length; j++) {
@@ -785,6 +797,14 @@ public class FlagSummon extends Flag {
 
         public void setInvisible(boolean newInvisible) {
             invisible = newInvisible;
+        }
+
+        public boolean isPersistent() {
+            return persistent;
+        }
+
+        public void setPersistent(boolean newPersistent) {
+            persistent = newPersistent;
         }
 
         public float getChance() {
@@ -1241,6 +1261,7 @@ public class FlagSummon extends Flag {
             toHash += "noRemove: " + noRemove;
             toHash += "invulnerable: " + invulnerable;
             toHash += "invisible: " + invisible;
+            toHash += "persistent: " + persistent;
             toHash += "mountNext: " + mountNext;
             toHash += "chance: " + chance;
             toHash += "num: " + num;
@@ -1367,6 +1388,8 @@ public class FlagSummon extends Flag {
                     c.setInvulnerable(true);
                 } else if (value.equals("invisible")) {
                     c.setInvisible(true);
+                } else if (value.equals("persistent")) {
+                    c.setPersistent(true);
                 } else if (value.equals("noai")) {
                     c.setNoAi(true);
                 } else if (value.equals("noeffect")) {
