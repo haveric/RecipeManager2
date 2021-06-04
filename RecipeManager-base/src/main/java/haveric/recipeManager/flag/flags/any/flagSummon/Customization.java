@@ -920,10 +920,6 @@ public class Customization implements Cloneable {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'hp' argument with invalid number for maxhp: " + lower);
                 }
             }
-        } else if (lower.equals("invisible")) {
-            invisible = true;
-        } else if (lower.equals("invulnerable")) {
-            invulnerable = true;
         } else if (lower.startsWith("jumpstrength")) {
             lower = lower.substring("jumpstrength".length()).trim();
 
@@ -938,8 +934,6 @@ public class Customization implements Cloneable {
             original = original.substring("name".length()).trim();
 
             setName(original);
-        } else if (lower.equals("noai")) {
-            noAi = true;
         } else if (lower.equals("nobreed")) {
             if (ToolsEntity.isAgeable(entityType)) {
                 noBreed = true;
@@ -968,8 +962,6 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'onfire' argument with invalid value number: " + lower);
             }
-        } else if (lower.equals("persistent")) {
-            persistent = true;
         } else if (lower.startsWith("pet")) {
             if (ToolsEntity.isTameable(entityType)) {
                 pet = true;
@@ -1107,138 +1099,140 @@ public class Customization implements Cloneable {
             if (villager == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'villager' argument with invalid entityType: " + lower);
             }
-        } else if (!Version.has1_12Support()) {
-            if (lower.equals("elder")) {
-                if (entityType != EntityType.GUARDIAN) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'elder' on non-guardian entity!");
-                    return false;
-                }
-
-                poweredCreeper = true;
-            } else if (lower.startsWith("horse")) {
-                if (entityType != EntityType.HORSE) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument on non-horse entity!");
-                    return false;
-                }
-
-                lower = lower.substring("horse".length()).trim();
-
-                //noinspection deprecation
-                horse = RMCUtil.parseEnum(lower, Horse.Variant.values());
-
-                if (horse == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument with invalid entityType: " + lower);
-                }
-            } else if (lower.startsWith("skeleton")) {
-                if (entityType != EntityType.SKELETON) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument on non-skeleton entity!");
-                    return false;
-                }
-
-                lower = lower.substring("skeleton".length()).trim();
-
-                //noinspection deprecation
-                skeleton = RMCUtil.parseEnum(lower, Skeleton.SkeletonType.values());
-
-                if (skeleton == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument with invalid entityType: " + lower);
-                }
-            } else if (lower.equals("zombievillager")) {
-                if (entityType != EntityType.ZOMBIE) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'zombievillager' on non-zombie entity!");
-                    return false;
-                }
-
-                zombieVillager = true;
+        } else if (Version.has1_10Support() && lower.equals("invulnerable")) {
+            invulnerable = true;
+        } else if (Version.has1_10Support() && lower.equals("noai")) {
+            noAi = true;
+        } else if (!Version.has1_12Support() && lower.equals("elder")) {
+            if (entityType != EntityType.GUARDIAN) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'elder' on non-guardian entity!");
+                return false;
             }
-        } else if (Version.has1_12Support()) {
-            if (lower.startsWith("parrot")) {
-                if (entityType != EntityType.PARROT) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument on non-parrot entity!");
-                    return false;
-                }
 
-                lower = lower.substring("parrot".length()).trim();
-
-                parrot = RMCUtil.parseEnum(lower, Parrot.Variant.values());
-
-                if (parrot == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument with invalid entityType: " + lower);
-                }
+            poweredCreeper = true;
+        } else if (!Version.has1_12Support() && lower.startsWith("horse")) {
+            if (entityType != EntityType.HORSE) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument on non-horse entity!");
+                return false;
             }
-        } else if (Version.has1_14Support()) {
-            if (lower.startsWith("pandahiddengene")) {
-                if (entityType != EntityType.PANDA) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument on non-panda entity!");
-                    return false;
+
+            lower = lower.substring("horse".length()).trim();
+
+            //noinspection deprecation
+            horse = RMCUtil.parseEnum(lower, Horse.Variant.values());
+
+            if (horse == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument with invalid entityType: " + lower);
+            }
+        } else if (!Version.has1_12Support() && lower.startsWith("skeleton")) {
+            if (entityType != EntityType.SKELETON) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument on non-skeleton entity!");
+                return false;
+            }
+
+            lower = lower.substring("skeleton".length()).trim();
+
+            //noinspection deprecation
+            skeleton = RMCUtil.parseEnum(lower, Skeleton.SkeletonType.values());
+
+            if (skeleton == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument with invalid entityType: " + lower);
+            }
+        } else if (!Version.has1_12Support() && lower.equals("zombievillager")) {
+            if (entityType != EntityType.ZOMBIE) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'zombievillager' on non-zombie entity!");
+                return false;
+            }
+
+            zombieVillager = true;
+        } else if (Version.has1_12Support() && lower.startsWith("parrot")) {
+            if (entityType != EntityType.PARROT) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument on non-parrot entity!");
+                return false;
+            }
+
+            lower = lower.substring("parrot".length()).trim();
+
+            parrot = RMCUtil.parseEnum(lower, Parrot.Variant.values());
+
+            if (parrot == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument with invalid entityType: " + lower);
+            }
+        } else if (Version.has1_13Support() && lower.equals("persistent")) {
+            persistent = true;
+        } else if (Version.has1_14Support() && lower.startsWith("pandahiddengene")) {
+            if (entityType != EntityType.PANDA) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument on non-panda entity!");
+                return false;
+            }
+
+            lower = lower.substring("pandahiddengene".length()).trim();
+
+            pandaHiddenGene = RMCUtil.parseEnum(lower, Panda.Gene.values());
+
+            if (pandaHiddenGene == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument with invalid entityType: " + lower);
+            }
+        } else if (Version.has1_14Support() && lower.startsWith("pandamaingene")) {
+            if (entityType != EntityType.PANDA) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument on non-panda entity!");
+                return false;
+            }
+
+            lower = lower.substring("pandamaingene".length()).trim();
+
+            pandaMainGene = RMCUtil.parseEnum(lower, Panda.Gene.values());
+
+            if (pandaMainGene == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument with invalid entityType: " + lower);
+            }
+        } else if (Version.has1_14Support() && lower.startsWith("fox")) {
+            String[] foxSplit = lower.split(" ");
+            if (entityType != EntityType.FOX) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has '" + foxSplit[0] + "' argument on non-fox entity!");
+            }
+
+            if (lower.startsWith("foxcrouching")) {
+                foxCrouching = true;
+            } else if (lower.startsWith("foxfirsttrustedplayer")) {
+                lower = lower.substring("foxfirsttrustedplayer".length()).trim();
+
+                if (lower.equals("player")) {
+                    foxFirstTrustedPlayer = true;
+                } else {
+                    try {
+                        UUID uuid = UUID.fromString(lower);
+                        foxFirstTrustedPlayerUUID = uuid;
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxfirsttrustedplayer' with invalid uuid: " + lower);
+                    }
                 }
+            } else if (lower.startsWith("foxsecondtrustedplayer")) {
+                lower = lower.substring("foxsecondtrustedplayer".length()).trim();
 
-                lower = lower.substring("pandahiddengene".length()).trim();
-
-                pandaHiddenGene = RMCUtil.parseEnum(lower, Panda.Gene.values());
-
-                if (pandaHiddenGene == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument with invalid entityType: " + lower);
+                if (lower.equals("player")) {
+                    foxSecondTrustedPlayer = true;
+                } else {
+                    try {
+                        UUID uuid = UUID.fromString(lower);
+                        foxSecondTrustedPlayerUUID = uuid;
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxsecondtrustedplayer' with invalid uuid: " + lower);
+                    }
                 }
-            } else if (lower.startsWith("pandamaingene")) {
-                if (entityType != EntityType.PANDA) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument on non-panda entity!");
-                    return false;
-                }
-
-                lower = lower.substring("pandamaingene".length()).trim();
-
-                pandaMainGene = RMCUtil.parseEnum(lower, Panda.Gene.values());
-
-                if (pandaMainGene == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument with invalid entityType: " + lower);
-                }
+            } else if (lower.startsWith("foxsleeping")) {
+                foxSleeping = true;
             } else if (lower.startsWith("fox")) {
-                String[] foxSplit = lower.split(" ");
-                if (entityType != EntityType.FOX) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has '" + foxSplit[0] + "' argument on non-fox entity!");
-                }
+                lower = lower.substring("fox".length()).trim();
 
-                if (lower.startsWith("foxcrouching")) {
-                    foxCrouching = true;
-                } else if (lower.startsWith("foxfirsttrustedplayer")) {
-                    lower = lower.substring("foxfirsttrustedplayer".length()).trim();
+                fox = RMCUtil.parseEnum(lower, Fox.Type.values());
 
-                    if (lower.equals("player")) {
-                        foxFirstTrustedPlayer = true;
-                    } else {
-                        try {
-                            UUID uuid = UUID.fromString(lower);
-                            foxFirstTrustedPlayerUUID = uuid;
-                        } catch (IllegalArgumentException e) {
-                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxfirsttrustedplayer' with invalid uuid: " + lower);
-                        }
-                    }
-                } else if (lower.startsWith("foxsecondtrustedplayer")) {
-                    lower = lower.substring("foxsecondtrustedplayer".length()).trim();
-
-                    if (lower.equals("player")) {
-                        foxSecondTrustedPlayer = true;
-                    } else {
-                        try {
-                            UUID uuid = UUID.fromString(lower);
-                            foxSecondTrustedPlayerUUID = uuid;
-                        } catch (IllegalArgumentException e) {
-                            ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxsecondtrustedplayer' with invalid uuid: " + lower);
-                        }
-                    }
-                } else if (lower.startsWith("foxsleeping")) {
-                    foxSleeping = true;
-                } else if (lower.startsWith("fox")) {
-                    lower = lower.substring("fox".length()).trim();
-
-                    fox = RMCUtil.parseEnum(lower, Fox.Type.values());
-
-                    if (fox == null) {
-                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'fox' argument with invalid entityType: " + lower);
-                    }
+                if (fox == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'fox' argument with invalid entityType: " + lower);
                 }
             }
+        } else if (Version.has1_16Support() && lower.equals("invisible")) {
+            invisible = true;
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
