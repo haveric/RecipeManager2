@@ -42,16 +42,16 @@ public class FlagSummon extends Flag {
     @Override
     protected String[] getDescription() {
         String[] description = new String[]{
-                "Summons a creature.",
-                "Using this flag more than once will add more creatures.",
+                "Summons a living entity.",
+                "Using this flag more than once will add more entities.",
                 "",
                 "The &lt;type&gt; argument can be a living entity type, you can find all entity types here: " + Files.getNameIndexHashLink("entitytype"),
                 "",
                 "Optionally you can add some arguments separated by | character, those being:",
-                String.format(argFormat, "adult", "forces creature to spawn as an adult, works with animals and villagers (works opposite of baby)."),
-                String.format(argFormat, "agelock", "prevent the creature from maturing or getting ready for mating, works with animals and villagers."),
-                String.format(argFormat, "angry", "makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
-                String.format(argFormat, "baby", "spawn creature as a baby, works with animals, villagers and zombies (works opposite of adult)."),
+                String.format(argFormat, "adult", "forces entity to spawn as an adult, works with animals and villagers (works opposite of baby)."),
+                String.format(argFormat, "agelock", "prevent the entity from maturing or getting ready for mating, works with animals and villagers."),
+                String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
+                String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
         };
         if (Version.has1_14Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -65,8 +65,8 @@ public class FlagSummon extends Flag {
         }
 
         description = ObjectArrays.concat(description, new String[] {
-            String.format(argFormat, "chance <0.01-100>%", "chance of the creature to spawn, this value is for individual creatures."),
-            String.format(argFormat, "chest <item> [drop%]", "equip an item on the creature's chest with optional drop chance."),
+            String.format(argFormat, "chance <0.01-100>%", "chance of the entity to spawn, this value is for individual entities."),
+            String.format(argFormat, "chest <item> [drop%]", "equip an item on the entity's chest with optional drop chance."),
             String.format(argFormat, "color &lt;dye>&gt;", "sets the color of animal, only works for sheep and pet wolf/cats. Values: " + Files.getNameIndexHashLink("dyecolor")),
         }, String.class);
 
@@ -77,7 +77,7 @@ public class FlagSummon extends Flag {
         }
 
         description = ObjectArrays.concat(description, new String[]{
-            String.format(argFormat, "feet <item> [drop%]", "equip an item on the creature's feet with optional drop chance."),
+            String.format(argFormat, "feet <item> [drop%]", "equip an item on the entity's feet with optional drop chance."),
         }, String.class);
 
         if (Version.has1_14Support()) {
@@ -91,10 +91,10 @@ public class FlagSummon extends Flag {
         }
 
         description = ObjectArrays.concat(description, new String[] {
-            String.format(argFormat, "hand <item> [drop%]", "equip an item on the creature's main hand with optional drop chance; for enderman it only uses material and data from the item."),
-            String.format(argFormat, "head <item> [drop%]", "equip an item on the creature's head with optional drop chance."),
-            String.format(argFormat, "hit", "crafter will fake-attack the creature to provoke it into attacking or scare it away."),
-            String.format(argFormat, "haschest", "adds a chest to creature (Only works on horses, forces horse to be an adult and tamed)."),
+            String.format(argFormat, "hand <item> [drop%]", "equip an item on the entity's main hand with optional drop chance; for enderman it only uses material and data from the item."),
+            String.format(argFormat, "head <item> [drop%]", "equip an item on the entity's head with optional drop chance."),
+            String.format(argFormat, "hit", "crafter will fake-attack the entity to provoke it into attacking or scare it away."),
+            String.format(argFormat, "haschest", "adds a chest to entity (Only works on horses, forces horse to be an adult and tamed)."),
         }, String.class);
 
         if (!Version.has1_12Support()) {
@@ -107,29 +107,29 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
             String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
-            String.format(argFormat, "hp <health> [max]", "set creature's health and optionally max health."),
-            String.format(argFormat, "offhand <item> [drop%]", "equip an item on the creature's offhand with optional drop chance."),
-            String.format(argFormat, "invulnerable", "makes the creature invulnerable."),
+            String.format(argFormat, "hp <health> [max]", "set entity's health and optionally max health."),
+            String.format(argFormat, "offhand <item> [drop%]", "equip an item on the entity's offhand with optional drop chance."),
+            String.format(argFormat, "invulnerable", "makes the entity invulnerable."),
         }, String.class);
 
         if (Version.has1_16Support()) {
             description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "invisible", "makes the creature invisible."),
+                String.format(argFormat, "invisible", "makes the entity invisible."),
             }, String.class);
         }
 
         description = ObjectArrays.concat(description, new String[]{
-            String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the creature's jump strength (Only works for horses). 0 = no jump"),
-            String.format(argFormat, "legs <item> [drop%]", "equip an item on the creature's legs with optional drop chance."),
-            String.format(argFormat, "mountnext", "this creature will mount the next creature definition that triggers after it."),
-            String.format(argFormat, "noai", "disable the ai on creature."),
-            String.format(argFormat, "noeffect", "no spawning particle effects on creature."),
-            String.format(argFormat, "noremove", "prevents creature from being removed if nobody is near it."),
-            String.format(argFormat, "name <text>", "sets the creature's name, supports colors (<red>, &3, etc)."),
-            String.format(argFormat, "nobreed", "prevent the creature being able to breed, works for animals and villagers."),
-            String.format(argFormat, "nohidename", "don't hide name plate when not aiming at creature."),
-            String.format(argFormat, "num <number>", "spawn more cloned creatures."),
-            String.format(argFormat, "onfire <time>", "spawn creature on fire for <time> amount of seconds, value can be float."),
+            String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the entity's jump strength (Only works for horses). 0 = no jump"),
+            String.format(argFormat, "legs <item> [drop%]", "equip an item on the entity's legs with optional drop chance."),
+            String.format(argFormat, "mountnext", "this entity will mount the next entity definition that triggers after it."),
+            String.format(argFormat, "noai", "disable the ai on entity."),
+            String.format(argFormat, "noeffect", "no spawning particle effects on entity."),
+            String.format(argFormat, "noremove", "prevents entity from being removed if nobody is near it."),
+            String.format(argFormat, "name <text>", "sets the entity's name, supports colors (<red>, &3, etc)."),
+            String.format(argFormat, "nobreed", "prevent the entity being able to breed, works for animals and villagers."),
+            String.format(argFormat, "nohidename", "don't hide name plate when not aiming at entity."),
+            String.format(argFormat, "num <number>", "spawn more cloned entities."),
+            String.format(argFormat, "onfire <time>", "spawn entity on fire for <time> amount of seconds, value can be float."),
         }, String.class);
 
         if (Version.has1_14Support()) {
@@ -147,21 +147,21 @@ public class FlagSummon extends Flag {
 
         if (Version.has1_13Support()) {
             description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "persistent", "Makes the creature persistent"),
+                    String.format(argFormat, "persistent", "Makes the entity persistent"),
             }, String.class);
         }
 
         description = ObjectArrays.concat(description, new String[]{
-            String.format(argFormat, "pet [nosit]", "makes creature owned by crafter, only works for tameable creatures, optionally specify 'nosit' to not spawn creature in sit stance."),
-            String.format(argFormat, "pickup [true/false]", "change if creature can pick-up dropped items."),
+            String.format(argFormat, "pet [nosit]", "makes entity owned by crafter, only works for tameable entities, optionally specify 'nosit' to not spawn entity in sit stance."),
+            String.format(argFormat, "pickup [true/false]", "change if entity can pick-up dropped items."),
             String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
-            String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned creature; this argument can be used more than once to add more effects."),
+            String.format(argFormat, "potion <type> [time] [amp]", "adds potion effect on the spawned entity; this argument can be used more than once to add more effects."),
             String.format(argFormatExtra, "", "type values: " + Files.getNameIndexHashLink("potioneffect")),
             String.format(argFormatExtra, "", "[time] can be a decimal of duration in seconds"),
             String.format(argFormatExtra, "", "[amp] can be an integer that defines amplifier;"),
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
             String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()),
-            String.format(argFormat, "saddle [mount]", "adds saddle on creature (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount creature."),
+            String.format(argFormat, "saddle [mount]", "adds saddle on entity (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount entity."),
             String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
         }, String.class);
 
@@ -173,8 +173,8 @@ public class FlagSummon extends Flag {
         }
 
         description = ObjectArrays.concat(description, new String[] {
-                String.format(argFormat, "spread <range>", "spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
-                String.format(argFormat, "target", "creature targets crafter, that means monsters attack and animals follow and the rest do nothing"),
+                String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
+                String.format(argFormat, "target", "entity targets crafter, that means monsters attack and animals follow and the rest do nothing"),
                 String.format(argFormat, "villager <type>", "set the villager profession"),
                 String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
         }, String.class);
@@ -249,7 +249,7 @@ public class FlagSummon extends Flag {
         EntityType entityType = RMCUtil.parseEnum(value, EntityType.values());
 
         if (entityType == null || !entityType.isAlive()) {
-            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid creature: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section for ALIVE entities.");
+            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid entity: " + value, "Look in '" + Files.FILE_INFO_NAMES + "' at 'ENTITY TYPES' section for ALIVE entities.");
         }
 
         Customization c = new Customization(getFlagType(), entityType);
@@ -295,35 +295,35 @@ public class FlagSummon extends Flag {
                     }
 
                     if (error) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'angry' on unsupported creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'angry' on unsupported entity!");
                         continue;
                     }
 
                     c.setAngry(true);
                 } else if (value.equals("shearedsheep")) {
                     if (entityType != EntityType.SHEEP) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'shearedsheep' on non-sheep creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'shearedsheep' on non-sheep entity!");
                         continue;
                     }
 
                     c.setShearedSheep(true);
                 } else if (!Version.has1_12Support() && value.equals("zombievillager")) {
                     if (entityType != EntityType.ZOMBIE) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'zombievillager' on non-zombie creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'zombievillager' on non-zombie entity!");
                         continue;
                     }
 
                     c.setZombieVillager(true);
                 } else if (value.equals("poweredcreeper")) {
                     if (entityType != EntityType.CREEPER) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'poweredcreeper' on non-creeper creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'poweredcreeper' on non-creeper entity!");
                         continue;
                     }
 
                     c.setPoweredCreeper(true);
                 } else if (value.equals("playerirongolem")) {
                     if (entityType != EntityType.IRON_GOLEM) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'playerirongolem' on non-irongolem creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'playerirongolem' on non-irongolem entity!");
                         continue;
                     }
 
@@ -334,25 +334,25 @@ public class FlagSummon extends Flag {
                     if (ToolsEntity.isAgeable(entityType)) {
                         c.setAdult(true);
                     } else {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'adult' set on unsupported creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'adult' set on unsupported entity!");
                     }
                 } else if (value.equals("baby")) {
                     if (ToolsEntity.isAgeable(entityType) || entityType == EntityType.ZOMBIE) {
                         c.setBaby(true);
                     } else {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'baby' set on unsupported creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'baby' set on unsupported entity!");
                     }
                 } else if (value.equals("agelock")) {
                     if (ToolsEntity.isAgeable(entityType)) {
                         c.setAgeLock(true);
                     } else {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'agelock' set on unsupported creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'agelock' set on unsupported entity!");
                     }
                 } else if (value.equals("nobreed")) {
                     if (ToolsEntity.isAgeable(entityType)) {
                         c.setNoBreed(true);
                     } else {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'nobreed' set on unsupported creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'nobreed' set on unsupported entity!");
                     }
                 } else if (value.startsWith("pickup")) {
                     value = value.substring("pickup".length()).trim();
@@ -376,12 +376,12 @@ public class FlagSummon extends Flag {
                             }
                         }
                     } else {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pet' on untameable creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pet' on untameable entity!");
                     }
                 } else if (value.startsWith("saddle")) {
                     if (entityType != EntityType.PIG && entityType != EntityType.HORSE ||
                             (Version.has1_12Support() && entityType != EntityType.SKELETON_HORSE && entityType != EntityType.ZOMBIE_HORSE && entityType != EntityType.MULE && entityType != EntityType.DONKEY)) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'saddle' on non-pig and non-horse creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'saddle' on non-pig and non-horse entity!");
                         continue;
                     }
 
@@ -450,7 +450,7 @@ public class FlagSummon extends Flag {
                             break;
 
                         default:
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' on unsupported creature!");
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'color' on unsupported entity!");
                             continue;
                     }
 
@@ -463,7 +463,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (value.startsWith("villager")) {
                     if (entityType != EntityType.VILLAGER) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'villager' argument on non-villager creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'villager' argument on non-villager entity!");
                         continue;
                     }
 
@@ -476,7 +476,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (!Version.has1_12Support() && value.startsWith("skeleton")) {
                     if (entityType != EntityType.SKELETON) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'skeleton' argument on non-skeleton creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'skeleton' argument on non-skeleton entity!");
                         continue;
                     }
 
@@ -490,7 +490,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (Version.has1_14Support() && value.startsWith("cat")) {
                     if (entityType != EntityType.CAT) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-cat creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-cat entity!");
                         continue;
                     }
 
@@ -503,7 +503,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (!Version.has1_14Support() && value.startsWith("cat")) {
                     if (entityType != EntityType.OCELOT) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-ocelot creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'cat' argument on non-ocelot entity!");
                         continue;
                     }
 
@@ -517,7 +517,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (value.startsWith("rabbit")) {
                     if (entityType != EntityType.RABBIT) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'rabbit' argument on non-rabbit creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'rabbit' argument on non-rabbit entity!");
                         continue;
                     }
 
@@ -666,7 +666,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (!Version.has1_12Support() && value.startsWith("horse")) {
                     if (entityType != EntityType.HORSE) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'horse' argument on non-horse creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'horse' argument on non-horse entity!");
                         continue;
                     }
 
@@ -680,7 +680,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (value.startsWith("horsecolor")) {
                     if (entityType != EntityType.HORSE) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'horsecolor' argument on non-horse creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'horsecolor' argument on non-horse entity!");
                         continue;
                     }
 
@@ -693,7 +693,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (value.startsWith("horsestyle")) {
                     if (entityType != EntityType.HORSE) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'horsestyle' argument on non-horse creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'horsestyle' argument on non-horse entity!");
                         continue;
                     }
 
@@ -708,14 +708,14 @@ public class FlagSummon extends Flag {
                     c.setHasChest(true);
                 } else if (!Version.has1_12Support() && value.equals("elder")) {
                     if (entityType != EntityType.GUARDIAN) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'elder' on non-guardian creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'elder' on non-guardian entity!");
                         continue;
                     }
 
                     c.setPoweredCreeper(true);
                 } else if (Version.has1_12Support() && value.startsWith("parrot")) {
                     if (entityType != EntityType.PARROT) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'parrot' argument on non-parrot creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'parrot' argument on non-parrot entity!");
                         continue;
                     }
 
@@ -728,7 +728,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (Version.has1_14Support() && value.startsWith("pandamaingene")) {
                     if (entityType != EntityType.PANDA) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandamaingene' argument on non-panda creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandamaingene' argument on non-panda entity!");
                         continue;
                     }
 
@@ -741,7 +741,7 @@ public class FlagSummon extends Flag {
                     }
                 } else if (Version.has1_14Support() && value.startsWith("pandahiddengene")) {
                     if (entityType != EntityType.PANDA) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandahiddengene' argument on non-panda creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'pandahiddengene' argument on non-panda entity!");
                         continue;
                     }
 
@@ -755,7 +755,7 @@ public class FlagSummon extends Flag {
                 } else if (Version.has1_14Support() && value.startsWith("fox")) {
                     String[] foxSplit = value.split(" ");
                     if (entityType != EntityType.FOX) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + foxSplit[0] + "' argument on non-fox creature!");
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + foxSplit[0] + "' argument on non-fox entity!");
                     }
 
                     if (value.startsWith("foxcrouching")) {
