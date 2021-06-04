@@ -1,6 +1,7 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.flag.flags.any.*;
+import haveric.recipeManager.flag.flags.any.flagSummon.FlagSummon;
 import haveric.recipeManager.flag.flags.recipe.*;
 import haveric.recipeManager.flag.flags.result.*;
 import haveric.recipeManager.messages.MessageSender;
