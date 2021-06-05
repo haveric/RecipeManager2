@@ -56,7 +56,7 @@ public class FlagForChance extends Flag {
             "{flag} 80% " + FlagType.COMMAND + " say high chance message!",
             "{flag} 50% " + FlagType.COMMAND + " say 50-50 message... // this is a totally new flag, individual from the previous one.",
             "{flag}    ^" + FlagType.COMMAND + " say extra message! // this command will be appended to the previous command flag.",
-            "{flag}    ^" + FlagType.COMMAND + " say extra-large message!!! // this will also add append to the same previous command flag, now it has 3 commands.",
+            "{flag}    ^" + FlagType.COMMAND + " say extra-large message!!! // this will also append to the same previous command flag, now it has 3 commands.",
             "// all flags in a group must have a total of 100% chance since only one triggers, in this case the chance is calculated and it would be 33.33% for each.",
             "{flag} mystuff " + FlagType.SOUND + " level_up",
             "{flag} mystuff " + FlagType.SOUND + " note_bass",
@@ -156,7 +156,7 @@ public class FlagForChance extends Flag {
     }
 
     /**
-     * Gets the first flag matching FlagTypeOld or the last if reverse is set to true.<br>
+     * Gets the first flag matching FlagType or the last if reverse is set to true.<br>
      * There can be more instances of the same type of flag.
      *
      * @param group
@@ -328,7 +328,7 @@ public class FlagForChance extends Flag {
                     for (i = flags.size() - 1; i >= 0; i--) {
                         ChanceFlag c = flags.get(i);
 
-                        if (c.getFlag() != null && c.getFlag().getFlagType().equals(type.getName())) {
+                        if (c.getFlag() != null && c.getFlag().getFlagType().equals(type.getNameDisplay())) {
                             flagChance = c;
 
                             if (chance != null) {

@@ -20,7 +20,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: `@RepairCost`: Add option to customize prepareLore message and disable by default
 * NEW: `@Summon`: Added support for arrowcooldown, arrowsinbody, invisible, persistent, and nocollision
 * NEW: `@Summon`: Added support for bees: beeanger <ticks>, beecannotenterhiveticks <ticks>, beehasnectar, beehasstung
-* FIX: `@Summon`: guardian elder property wasn't being set
+* FIX: `@Summon`: Guardian elder property wasn't being set
+* FIX: `@ForChance`: Fix flag appending
 
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft
