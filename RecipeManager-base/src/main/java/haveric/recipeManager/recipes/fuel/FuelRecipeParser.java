@@ -131,12 +131,12 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
 
                 if (ingredient == null) {
-                    continue;
+                    break;
                 }
 
                 if (ingredient.getType() == Material.AIR) {
                     ErrorReporter.getInstance().error("Can not use AIR as ingredient!");
-                    continue;
+                    break;
                 }
 
                 ((FuelRecipe) recipe).setIngredient(ingredient);
