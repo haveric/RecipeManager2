@@ -1,7 +1,6 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.Args;
@@ -41,7 +40,7 @@ public class FlagForChance extends Flag {
             "",
             "The 'flag declaration' is a flag like you'd add a flag to a recipe or result, you can even add this flag into itself to make multi-chance structures.",
             "The flag declaration argument is only optional if there's a group defined and will act as literally nothing.",
-            "Optionally you can prefix the flag declaration with the '^' character to append the data from the flag to the previous flag of the same type from the same group (no group is still a group, but a special one).",
+            "Optionally you can prefix the flag declaration with the '^' character to add more flags to the same group (no group is still a group, but a special one).",
             "",
             "NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.",
             "NOTE: In a group there must be at least a chance value or a flag declaration.", };
@@ -55,8 +54,14 @@ public class FlagForChance extends Flag {
             "// appending to flags example",
             "{flag} 80% " + FlagType.COMMAND + " say high chance message!",
             "{flag} 50% " + FlagType.COMMAND + " say 50-50 message... // this is a totally new flag, individual from the previous one.",
-            "{flag}    ^" + FlagType.COMMAND + " say extra message! // this command will be appended to the previous command flag.",
-            "{flag}    ^" + FlagType.COMMAND + " say extra-large message!!! // this will also append to the same previous command flag, now it has 3 commands.",
+            "{flag}    ^" + FlagType.COMMAND + " say extra message! // this command will be added to the previous command flag's chance.",
+            "{flag}    ^" + FlagType.SUMMON + " zombie // This will summon a zombie along with the previous two commands.",
+            "// appending flags with multiple chances example",
+            "{flag} attack 40% " + FlagType.MESSAGE + " Zombie Attack! // 40% of the time, it will send 'Zombie Attack!' and summon a zombie",
+            "{flag} attack ^" + FlagType.SUMMON + " zombie",
+            "{flag} attack 40% " + FlagType.MESSAGE + " Skeleton Attack! // 40% of the time, it will send 'Skeleton Attack!' and summon a skeleton.",
+            "{flag} attack ^" + FlagType.SUMMON + " skeleton",
+            "  // The remaining 20% of the time, nothing will happen.",
             "// all flags in a group must have a total of 100% chance since only one triggers, in this case the chance is calculated and it would be 33.33% for each.",
             "{flag} mystuff " + FlagType.SOUND + " level_up",
             "{flag} mystuff " + FlagType.SOUND + " note_bass",
@@ -70,12 +75,14 @@ public class FlagForChance extends Flag {
 
 
     public static class ChanceFlag {
-        private Flag flag;
+        private List<Flag> flags = new ArrayList<>();
         private float chance;
         private boolean autoChance = false;
 
-        public ChanceFlag(Flag newFlag, Float newChance) {
-            flag = newFlag;
+        public ChanceFlag(List<Flag> newFlags, FlagForChance holder, Float newChance) {
+            for (Flag flag: newFlags) {
+                addFlag(flag, holder);
+            }
 
             if (newChance == null) {
                 autoChance = true;
@@ -84,13 +91,25 @@ public class FlagForChance extends Flag {
             }
         }
 
-        public Flag getFlag() {
-            return flag;
+        public ChanceFlag(Flag newFlag, FlagForChance holder, Float newChance) {
+            addFlag(newFlag, holder);
+
+            if (newChance == null) {
+                autoChance = true;
+            } else {
+                chance = newChance;
+            }
         }
 
-        public void setFlag(Flag flagToSet, FlagForChance holder) {
-            flagToSet.setFlagsContainer(holder.getFlagsContainer());
-            flag = flagToSet;
+        public List<Flag> getFlags() {
+            return flags;
+        }
+
+        public void addFlag(Flag flagToSet, FlagForChance holder) {
+            if (flagToSet != null) {
+                flagToSet.setFlagsContainer(holder.getFlagsContainer());
+                flags.add(flagToSet);
+            }
         }
 
         public float getChance() {
@@ -103,7 +122,11 @@ public class FlagForChance extends Flag {
 
         @Override
         public int hashCode() {
-            String toHash = "" + flag.hashCode();
+            String toHash = "";
+
+            for (Flag flag : flags) {
+                toHash += "flag: " + flag.hashCode();
+            }
 
             toHash += "chance: " + chance;
             toHash += "autochance: " + autoChance;
@@ -123,8 +146,8 @@ public class FlagForChance extends Flag {
             List<ChanceFlag> flags = new ArrayList<>();
 
             for (ChanceFlag c : e.getValue()) {
-                if (c.getFlag() == null) {
-                    flags.add(new ChanceFlag(null, c.getChance()));
+                if (c.getFlags().isEmpty()) {
+                    flags.add(new ChanceFlag((Flag) null, this, c.getChance()));
                 } else {
                     Float chance;
                     if (c.isAutoChance()) {
@@ -132,7 +155,7 @@ public class FlagForChance extends Flag {
                     } else {
                         chance = c.getChance();
                     }
-                    flags.add(new ChanceFlag(c.getFlag().clone(getFlagsContainer()), chance));
+                    flags.add(new ChanceFlag(c.getFlags(), this, chance));
                 }
             }
 
@@ -293,14 +316,14 @@ public class FlagForChance extends Flag {
                 flagMap.put(group, flags);
             } else {
                 for (ChanceFlag c : flags) {
-                    if (c.getFlag() == null) {
+                    if (c.getFlags().isEmpty()) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has a blank flag for this group!");
                         return false;
                     }
                 }
             }
 
-            flagChance = new ChanceFlag(null, chance);
+            flagChance = new ChanceFlag((Flag) null, this, chance);
             flags.add(flagChance);
             recalculateChances(group, flags);
         } else {
@@ -324,29 +347,14 @@ public class FlagForChance extends Flag {
                 flagMap.put(group, flags);
             } else {
                 if (appendFlag) {
-                    // Loop through flags backwards to get the last added flag
-                    for (i = flags.size() - 1; i >= 0; i--) {
-                        ChanceFlag c = flags.get(i);
-
-                        if (c.getFlag() != null && c.getFlag().getFlagType().equals(type.getNameDisplay())) {
-                            flagChance = c;
-
-                            if (chance != null) {
-                                ErrorReporter.getInstance().warning("Flag " + type.getNameDisplay() + " has flag @" + flagChance.getFlag().getFlagType() + " with chance defined, chance will be ignored because flag will append the previous one!", "Or remove the '^' prefix to create a new fresh flag, see '" + Files.FILE_INFO_FLAGS + "' for details about the prefix.");
-                            }
-
-                            break;
-                        }
+                    // Get the last added FlagChance
+                    if (!flags.isEmpty()) {
+                        flagChance = flags.get(flags.size() - 1);
                     }
                 }
             }
 
-            Flag flag;
-
-            if (appendFlag && flagChance == null) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can't append to " + type.getNameDisplay() + " flag because it hasn't been defined for this group!");
-            }
-
+            Flag flag = type.createFlagClass();
             if (!appendFlag || flagChance == null) {
                 if (group != null) {
                     float totalChance = 0;
@@ -359,7 +367,7 @@ public class FlagForChance extends Flag {
 
                     if (chance == null) {
                         if (totalChance >= 100) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has 100% chance for '" + group + "' group!", "You can't add more flag to it until you reduce the chance of one or more flag.");
+                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has 100% chance for '" + group + "' group!", "You can't add more flags to it until you reduce the chance of one or more flag.");
                             return false;
                         }
                     } else {
@@ -372,11 +380,9 @@ public class FlagForChance extends Flag {
                     }
                 }
 
-                flag = type.createFlagClass();
-                flag.setFlagsContainer(getFlagsContainer()); // set container before hand to allow checks
-                flagChance = new ChanceFlag(flag, chance);
+                flagChance = new ChanceFlag(flag, this, chance);
             } else {
-                flag = flagChance.getFlag();
+                flagChance.addFlag(flag, this);
             }
 
             if (split.length > 1) {
@@ -468,7 +474,7 @@ public class FlagForChance extends Flag {
                 // flags without group, get all flags that match the chance
                 for (ChanceFlag c : flags) {
                     if (c.getChance() >= (RecipeManager.random.nextFloat() * 100)) {
-                        trigger(c.getFlag(), a, method);
+                        trigger(c.getFlags(), a, method);
                     }
                 }
             } else {
@@ -479,7 +485,7 @@ public class FlagForChance extends Flag {
                 for (ChanceFlag c : flags) {
                     chance += c.getChance();
                     if (chance >= random) {
-                        trigger(c.getFlag(), a, method);
+                        trigger(c.getFlags(), a, method);
                         break;
                     }
                 }
@@ -487,32 +493,34 @@ public class FlagForChance extends Flag {
         }
     }
 
-    private void trigger(Flag flag, Args a, char method) {
-        if (flag == null) {
+    private void trigger(List<Flag> flags, Args a, char method) {
+        if (flags == null || flags.isEmpty()) {
             return;
         }
 
-        switch (method) {
-            case 'c':
-                flag.check(a);
-                break;
-            case 'p':
-                flag.prepare(a);
-                break;
-            case 'r':
-                flag.crafted(a);
-                break;
-            case 'f':
-                flag.failed(a);
-                break;
-            case 'd':
-                flag.fuelRandom(a);
-                break;
-            case 'e':
-                flag.fuelEnd(a);
-                break;
-            default:
-                break;
+        for (Flag flag : flags) {
+            switch (method) {
+                case 'c':
+                    flag.check(a);
+                    break;
+                case 'p':
+                    flag.prepare(a);
+                    break;
+                case 'r':
+                    flag.crafted(a);
+                    break;
+                case 'f':
+                    flag.failed(a);
+                    break;
+                case 'd':
+                    flag.fuelRandom(a);
+                    break;
+                case 'e':
+                    flag.fuelEnd(a);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
