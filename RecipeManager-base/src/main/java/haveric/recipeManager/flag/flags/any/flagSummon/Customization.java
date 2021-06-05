@@ -30,6 +30,10 @@ public class Customization implements Cloneable {
     private boolean ageLock = false;
     private boolean angry = false;
     private boolean baby = false;
+    private int beeAnger = 0;
+    private int beeCannotEnterHiveTicks = 0;
+    private boolean beeHasNectar = false;
+    private boolean beeHasStung = false;
     private Cat.Type cat = null;
     private float chance = 100.0f;
     private DyeColor color = null;
@@ -166,6 +170,13 @@ public class Customization implements Cloneable {
             foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
             foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
             foxSleeping = c.foxSleeping;
+        }
+
+        if (Version.has1_15Support()) {
+            beeAnger = c.beeAnger;
+            beeCannotEnterHiveTicks = c.beeCannotEnterHiveTicks;
+            beeHasNectar = c.beeHasNectar;
+            beeHasStung = c.beeHasStung;
         }
 
         if (Version.has1_16Support()) {
@@ -515,6 +526,16 @@ public class Customization implements Cloneable {
 
             if (Version.has1_13Support()) {
                 ent.setPersistent(persistent);
+            }
+
+            if (Version.has1_15Support()) {
+                if (ent instanceof Bee) {
+                    Bee bee = (Bee) ent;
+                    bee.setAnger(beeAnger);
+                    bee.setCannotEnterHiveTicks(beeCannotEnterHiveTicks);
+                    bee.setHasNectar(beeHasNectar);
+                    bee.setHasStung(beeHasStung);
+                }
             }
 
             EntityEquipment eq = ent.getEquipment();
@@ -1231,6 +1252,28 @@ public class Customization implements Cloneable {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'fox' argument with invalid entityType: " + lower);
                 }
             }
+        } else if (Version.has1_15Support() && lower.startsWith("bee")) {
+            if (lower.startsWith("beeanger")) {
+                lower = lower.substring("beeanger".length()).trim();
+
+                try {
+                    beeAnger = Integer.parseInt(lower);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'beeanger' argument with invalid value number: " + lower);
+                }
+            } else if (lower.startsWith("beecannotenterhiveticks")) {
+                lower = lower.substring("beecannotenterhiveticks".length()).trim();
+
+                try {
+                    beeCannotEnterHiveTicks = Integer.parseInt(lower);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'beecannotenterhiveticks' argument with invalid value number: " + lower);
+                }
+            } else if (lower.startsWith("beehasnectar")) {
+                beeHasNectar = true;
+            } else if (lower.startsWith("beehasstung")) {
+                beeHasStung = true;
+            }
         } else if (Version.has1_16Support() && lower.equals("invisible")) {
             invisible = true;
         } else {
@@ -1327,6 +1370,13 @@ public class Customization implements Cloneable {
             toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
             toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
             toHash += "foxSleeping: " + foxSleeping;
+        }
+
+        if (Version.has1_15Support()) {
+            toHash += "beeAnger: " + beeAnger;
+            toHash += "beeCannotEnterHiveTicks: " + beeCannotEnterHiveTicks;
+            toHash += "beeHasNectar: " + beeHasNectar;
+            toHash += "beeHasStung: " + beeHasStung;
         }
 
         if (Version.has1_16Support()) {

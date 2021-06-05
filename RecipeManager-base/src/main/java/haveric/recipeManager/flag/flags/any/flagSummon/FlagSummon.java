@@ -48,6 +48,16 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
                 String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
         };
+
+        if (Version.has1_15Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "beeanger <ticks>", "sets the anger level to the number of ticks the bee will remain angry for."),
+                String.format(argFormat, "beecannotenterhiveticks <ticks>", "sets the ticks the bee cannot enter a hive for."),
+                String.format(argFormat, "beehasnectar", "sets the bee to have nectar."),
+                String.format(argFormat, "beehasstung", "sets if the bee has stung."),
+            }, String.class);
+        }
+
         if (Version.has1_14Support()) {
             description = ObjectArrays.concat(description, new String[]{
                 String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
