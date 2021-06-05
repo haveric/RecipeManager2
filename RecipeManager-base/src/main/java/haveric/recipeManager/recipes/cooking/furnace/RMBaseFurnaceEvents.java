@@ -16,10 +16,9 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
-import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.cooking.furnace.data.Furnaces;
+import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -610,8 +609,8 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         ItemStack fuel = event.getFuel();
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, fuel);
-        if (baseRecipe instanceof FuelRecipe) {
-            FuelRecipe fuelRecipe = (FuelRecipe) baseRecipe;
+        if (baseRecipe instanceof BaseFuelRecipe) {
+            BaseFuelRecipe fuelRecipe = (BaseFuelRecipe) baseRecipe;
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
             }
@@ -676,8 +675,8 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
             }
         }
 
-        if (baseRecipe instanceof FuelRecipe) {
-            FuelRecipe fuelRecipe = (FuelRecipe) baseRecipe;
+        if (baseRecipe instanceof BaseFuelRecipe) {
+            BaseFuelRecipe fuelRecipe = (BaseFuelRecipe) baseRecipe;
             event.setBurnTime(burnTime);
 
             long randTime = (long) Math.floor(Math.random() * burnTime);
@@ -700,7 +699,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
     @EventHandler(priority = EventPriority.LOW)
     public void randomBurn(RecipeManagerFuelBurnRandomEvent event) {
-        FuelRecipe recipe = event.getRecipe();
+        BaseFuelRecipe recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
         Args a = Args.create().player(event.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
@@ -716,7 +715,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
     @EventHandler(priority = EventPriority.LOW)
     public void afterBurn(RecipeManagerFuelBurnEndEvent event) {
-        FuelRecipe recipe = event.getRecipe();
+        BaseFuelRecipe recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
         Location furnaceLocation = furnace.getLocation();

@@ -1,24 +1,23 @@
 package haveric.recipeManager.api.events;
 
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
+import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
 public class RecipeManagerFuelBurnEndEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
-    private FuelRecipe recipe;
+    private BaseFuelRecipe recipe;
     private Furnace furnace;
     private UUID fuelerUUID;
 
-    public RecipeManagerFuelBurnEndEvent(FuelRecipe newRecipe, Furnace newFurnace, UUID newFuelerUUID) {
+    public RecipeManagerFuelBurnEndEvent(BaseFuelRecipe newRecipe, Furnace newFurnace, UUID newFuelerUUID) {
         recipe = newRecipe;
         furnace = newFurnace;
         fuelerUUID = newFuelerUUID;
@@ -27,17 +26,8 @@ public class RecipeManagerFuelBurnEndEvent extends Event implements Cancellable 
     /**
      * @return RecipeManager's Fuel class recipe
      */
-    public FuelRecipe getRecipe() {
+    public BaseFuelRecipe getRecipe() {
         return recipe;
-    }
-
-    /**
-     * Shortcut from: event.getRecipe().getFuel().getItemStack();
-     *
-     * @return fuel as ItemStack
-     */
-    public ItemStack getFuel() {
-        return recipe.getIngredient();
     }
 
     /**
