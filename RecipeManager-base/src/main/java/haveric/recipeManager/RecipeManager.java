@@ -6,6 +6,8 @@ import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.flag.FlagLoader;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.flags.any.flagCooldown.CooldownData;
+import haveric.recipeManager.flag.flags.any.flagCooldown.Cooldowns;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.RecipeTypeFactory;
@@ -77,6 +79,7 @@ public class RecipeManager extends JavaPlugin {
 
         FurnaceData.init(); // dummy caller to initialize Serialization class
         BrewingStandData.init();
+        CooldownData.init();
 
         if (Version.has1_14Support()) {
             RMCampfireData.init(); // dummy caller to initialize Serialization class
@@ -85,6 +88,7 @@ public class RecipeManager extends JavaPlugin {
 
         Furnaces.load(); // load saved furnaces...
         BrewingStands.load();
+        Cooldowns.load();
 
         if (Version.has1_14Support()) {
             RMCampfires.load();
@@ -287,6 +291,9 @@ public class RecipeManager extends JavaPlugin {
 
             BrewingStands.save();
             BrewingStands.clean();
+
+            Cooldowns.save();
+            Cooldowns.clean();
 
             if (Version.has1_14Support()) {
                 RMCampfires.save();

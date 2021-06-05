@@ -2,7 +2,7 @@ package haveric.recipeManager.flag;
 
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
-import haveric.recipeManager.flag.flags.any.FlagCooldown;
+import haveric.recipeManager.flag.flags.any.flagCooldown.FlagCooldown;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
