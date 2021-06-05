@@ -308,10 +308,10 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     int hotbarButton = event.getHotbarButton();
                     ItemStack hotbarItem = player.getInventory().getItem(hotbarButton);
 
-                    BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, hotbarItem);
+                    if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
+                        BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, hotbarItem);
 
-                    if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
-                        if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
+                        if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(hotbarItem.clone());
                                 ToolsItem.replaceItem(player.getInventory(), hotbarButton, new ItemStack(Material.AIR));

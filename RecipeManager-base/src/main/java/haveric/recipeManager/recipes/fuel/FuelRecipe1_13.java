@@ -193,4 +193,19 @@ public class FuelRecipe1_13 extends BaseFuelRecipe {
 
         return recipeIndexes;
     }
+
+    @Override
+    public int getIngredientMatchQuality(List<ItemStack> ingredients) {
+        if (ingredients.size() == 1) {
+            ItemStack ingredient = ingredients.get(0);
+
+            boolean checkExact = true;
+            if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                checkExact = false;
+            }
+            return ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+        }
+
+        return 0;
+    }
 }

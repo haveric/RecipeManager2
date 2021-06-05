@@ -22,6 +22,8 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: `@Summon`: Added support for bees: beeanger <ticks>, beecannotenterhiveticks <ticks>, beehasnectar, beehasstung
 * FIX: `@Summon`: Guardian elder property wasn't being set
 * FIX: `@ForChance`: Fix flag appending
+* FIX: 1.13+ FuelRecipe: Fixed placing custom fuels
+* FIX: FuelRecipe: Fixed an error when moving fuels out using a number key
 
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft
