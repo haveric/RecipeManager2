@@ -39,6 +39,7 @@ public class FlagCooldown extends Flag {
             "  s  = for seconds (default)",
             "  m  = for minutes",
             "  h  = for hours",
+            "  d  = for days",
             "You can also use float values like '0.5m' to get 30 seconds.",
             "",
             "Optionally you can add some arguments separated by | character, those being:",
@@ -57,6 +58,7 @@ public class FlagCooldown extends Flag {
     }
 
 
+    private final UUID globalUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
     private Map<UUID, MutableLong> cooldownTime;
     public static Map<String, Integer> cooldownFlagCounter;
     private String cooldownFlagId = "";
@@ -126,7 +128,7 @@ public class FlagCooldown extends Flag {
      */
     public long getTimeLeftFor(UUID playerUUID) {
         if (global) {
-            playerUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+            playerUUID = globalUUID;
         } else if (playerUUID == null) {
             return -1;
         }
@@ -159,10 +161,15 @@ public class FlagCooldown extends Flag {
         } else {
             long seconds = time % 60;
             long minutes = time % 3600 / 60;
-            long hours = time / 3600;
+            long hours = time % 84600 / 3600;
+            long days = time / 84600;
+
+            if (days > 0) {
+                timeString += days + "d ";
+            }
 
             if (hours > 0) {
-                timeString = hours + "h ";
+                timeString += hours + "h ";
             }
 
             if (minutes > 0) {
@@ -188,7 +195,7 @@ public class FlagCooldown extends Flag {
      */
     public boolean hasCooldown(UUID playerUUID) {
         if (global) {
-            playerUUID = null;
+            playerUUID = globalUUID;
         } else if (playerUUID == null) {
             return true;
         }
@@ -253,6 +260,9 @@ public class FlagCooldown extends Flag {
                 break;
             case 'h':
                 multiplier = 3600.0f;
+                break;
+            case 'd':
+                multiplier = 86400.0f;
                 break;
             case 's':
                 multiplier = 1;
@@ -323,7 +333,7 @@ public class FlagCooldown extends Flag {
 
         UUID playerUUID;
         if (global) {
-            playerUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+            playerUUID = globalUUID;
         } else {
             playerUUID = a.playerUUID();
         }
