@@ -65,6 +65,7 @@ public class Customization implements Cloneable {
     private String name = null;
     private boolean noAi = false;
     private boolean noBreed = false;
+    private boolean noCollision = false;
     private boolean noEffect = false;
     private boolean noHideName = false;
     private boolean noRemove = false;
@@ -141,6 +142,10 @@ public class Customization implements Cloneable {
         spread = c.spread;
         target = c.target;
         villager = c.villager;
+
+        if (Version.has1_9Support()) {
+            noCollision = c.noCollision;
+        }
 
         if (Version.has1_10Support()) {
             invulnerable = c.invulnerable;
@@ -519,6 +524,13 @@ public class Customization implements Cloneable {
             }
 
             ent.setRemoveWhenFarAway(!noRemove);
+
+            if (Version.has1_9Support()) {
+                if (noCollision) {
+                    ent.setCollidable(false);
+                }
+            }
+
             if (Version.has1_10Support()) {
                 ent.setInvulnerable(invulnerable);
                 ent.setAI(!noAi);
@@ -1128,6 +1140,8 @@ public class Customization implements Cloneable {
             if (villager == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'villager' argument with invalid entityType: " + lower);
             }
+        } else if (Version.has1_9Support() && lower.equals("nocollision")) {
+            noCollision = true;
         } else if (Version.has1_10Support() && lower.equals("invulnerable")) {
             invulnerable = true;
         } else if (Version.has1_10Support() && lower.equals("noai")) {
@@ -1363,6 +1377,10 @@ public class Customization implements Cloneable {
         toHash += "spread: " + spread;
         toHash += "target: " + target;
         toHash += "villager: " + villager.toString();
+
+        if (Version.has1_9Support()) {
+            toHash += "noCollision: " + noCollision;
+        }
 
         if (Version.has1_10Support()) {
             toHash += "invulnerable: " + invulnerable;

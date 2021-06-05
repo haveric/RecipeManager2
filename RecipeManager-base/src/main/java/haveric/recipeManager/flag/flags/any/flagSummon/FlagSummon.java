@@ -137,12 +137,21 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the entity's jump strength (Only works for horses). 0 = no jump"),
             String.format(argFormat, "legs <item> [drop%]", "equip an item on the entity's legs with optional drop chance."),
             String.format(argFormat, "mountnext", "this entity will mount the next entity definition that triggers after it."),
-            String.format(argFormat, "noai", "disable the ai on entity."),
-            String.format(argFormat, "noeffect", "no spawning particle effects on entity."),
-            String.format(argFormat, "noremove", "prevents entity from being removed if nobody is near it."),
             String.format(argFormat, "name <text>", "sets the entity's name, supports colors (<red>, &3, etc)."),
+            String.format(argFormat, "noai", "disable the ai on entity."),
             String.format(argFormat, "nobreed", "prevent the entity being able to breed, works for animals and villagers."),
+        }, String.class);
+
+        if (Version.has1_9Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "nocollision", "disables collision with other entities."),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "noeffect", "no spawning particle effects on entity."),
             String.format(argFormat, "nohidename", "don't hide name plate when not aiming at entity."),
+            String.format(argFormat, "noremove", "prevents entity from being removed if nobody is near it."),
             String.format(argFormat, "num <number>", "spawn more cloned entities."),
             String.format(argFormat, "onfire <time>", "spawn entity on fire for <time> amount of seconds, value can be float."),
         }, String.class);
