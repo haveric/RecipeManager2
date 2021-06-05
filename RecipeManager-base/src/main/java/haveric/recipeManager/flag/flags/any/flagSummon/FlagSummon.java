@@ -46,8 +46,18 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "adult", "forces entity to spawn as an adult, works with animals and villagers (works opposite of baby)."),
                 String.format(argFormat, "agelock", "prevent the entity from maturing or getting ready for mating, works with animals and villagers."),
                 String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
-                String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
         };
+
+        if (Version.has1_16Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "arrowcooldown <ticks>", "sets the ticks until the next arrow leaves the entity's body."),
+                String.format(argFormat, "arrowsinbody <amount>", "sets the number of arrows in the entity's body."),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
+        }, String.class);
 
         if (Version.has1_15Support()) {
             description = ObjectArrays.concat(description, new String[]{

@@ -29,6 +29,8 @@ public class Customization implements Cloneable {
     private boolean adult = false;
     private boolean ageLock = false;
     private boolean angry = false;
+    private Integer arrowCooldown = null;
+    private int arrowsInBody = 0;
     private boolean baby = false;
     private int beeAnger = 0;
     private int beeCannotEnterHiveTicks = 0;
@@ -180,6 +182,8 @@ public class Customization implements Cloneable {
         }
 
         if (Version.has1_16Support()) {
+            arrowCooldown = c.arrowCooldown;
+            arrowsInBody = c.arrowsInBody;
             invisible = c.invisible;
         }
     }
@@ -521,6 +525,10 @@ public class Customization implements Cloneable {
             }
 
             if (Version.has1_16Support()) {
+                if (arrowCooldown != null) {
+                    ent.setArrowCooldown(arrowCooldown);
+                }
+                ent.setArrowsInBody(arrowsInBody);
                 ent.setInvisible(invisible);
             }
 
@@ -1269,10 +1277,26 @@ public class Customization implements Cloneable {
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'beecannotenterhiveticks' argument with invalid value number: " + lower);
                 }
-            } else if (lower.startsWith("beehasnectar")) {
+            } else if (lower.equals("beehasnectar")) {
                 beeHasNectar = true;
-            } else if (lower.startsWith("beehasstung")) {
+            } else if (lower.equals("beehasstung")) {
                 beeHasStung = true;
+            }
+        } else if (Version.has1_16Support() && lower.startsWith("arrowcooldown")) {
+            lower = lower.substring("arrowcooldown".length()).trim();
+
+            try {
+                arrowCooldown = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'arrowcooldown' argument with invalid value number: " + lower);
+            }
+        } else if (Version.has1_16Support() && lower.startsWith("arrowsinbody")) {
+            lower = lower.substring("arrowsinbody".length()).trim();
+
+            try {
+                arrowsInBody = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'arrowsinbody' argument with invalid value number: " + lower);
             }
         } else if (Version.has1_16Support() && lower.equals("invisible")) {
             invisible = true;
@@ -1380,6 +1404,8 @@ public class Customization implements Cloneable {
         }
 
         if (Version.has1_16Support()) {
+            toHash += "arrowCooldown: " + arrowCooldown;
+            toHash += "arrowsInBody: " + arrowsInBody;
             toHash += "invisible: " + invisible;
         }
 

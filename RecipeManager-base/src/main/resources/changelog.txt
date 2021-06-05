@@ -12,7 +12,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: `@EnchantItem` and `@EnchantedBook`: Added {rand #1-#2} support
 * NEW: `@ItemNBT`: Added full variable support
 * NEW: Random numbers from {rand} can now be reused throughout a recipe instead of just the flag they are in with the {rand #1} format
-* NEW: `@Summon`: Added support for invisible and persistent
+* NEW: `@Summon`: Added support for invisible, persistent, arrowcooldown, and arrowsinbody
 * NEW: `@Summon`: Added support for bees: beeanger <ticks>, beecannotenterhiveticks <ticks>, beehasnectar, beehasstung
 * FIX: Random integers from {rand #1-#2} arguments weren't properly random
 * FIX: Recipes with variables weren't processing the variables for simple recipes
