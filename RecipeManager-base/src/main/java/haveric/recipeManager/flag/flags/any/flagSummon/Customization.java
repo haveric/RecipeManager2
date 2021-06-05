@@ -1130,7 +1130,7 @@ public class Customization implements Cloneable {
                 return false;
             }
 
-            poweredCreeper = true;
+            elder = true;
         } else if (!Version.has1_12Support() && lower.startsWith("horse")) {
             if (entityType != EntityType.HORSE) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument on non-horse entity!");

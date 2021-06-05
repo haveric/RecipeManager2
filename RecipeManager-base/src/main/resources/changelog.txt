@@ -20,6 +20,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: /rmcreaterecipe: Improved `@ingredientcondition` support
 * FIX: `@BannerItem`: Validate recipe has a banner item when parsing the recipe
 * FIX: `@RepairCost`: Add option to customize prepareLore message and disable by default
+* FIX: `@Summon`: guardian elder property wasn't being set
 
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft
