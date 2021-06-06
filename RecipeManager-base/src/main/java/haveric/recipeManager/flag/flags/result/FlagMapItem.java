@@ -61,7 +61,7 @@ public class FlagMapItem extends Flag {
                 "  trackingposition [false]   = Sets whether a position cursor should be shown when the map is near its center.",
                 "  unlimitedtracking [false]  = Whether the map will show a smaller position cursor (true), or no position cursor (false) when cursor is outside of map's range.",
             }, String.class);
-        };
+        }
 
         return description;
     }

@@ -133,9 +133,8 @@ public abstract class AbstractRecipeBook {
         recipes.add(name);
     }
 
-    public int addVolume(Collection<String> recipes) {
+    public void addVolume(Collection<String> recipes) {
         volumes.add(new LinkedHashSet<>(recipes));
-        return volumes.size() - 1;
     }
 
     public List<Set<String>> getVolumes() {

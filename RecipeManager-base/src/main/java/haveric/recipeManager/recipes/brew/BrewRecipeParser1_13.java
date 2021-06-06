@@ -35,12 +35,9 @@ public class BrewRecipeParser1_13 extends BaseBrewParser {
             String lineChars = materialsValue.substring(0, 2).trim();
             char ingredientChar = lineChars.charAt(0);
 
-            RecipeChoice choice = null;
+            RecipeChoice choice;
             if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
                 choice = Tools.parseRecipeChoice(materialsValue.substring(2), ParseBit.NONE);
-                if (choice == null) {
-                    return false;
-                }
             } else {
                 if (numIngredients == 0) {
                     ingredientChar = 'a';
@@ -49,10 +46,12 @@ public class BrewRecipeParser1_13 extends BaseBrewParser {
                 }
 
                 choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
-                if (choice == null) {
-                    return false;
-                }
             }
+
+            if (choice == null) {
+                return false;
+            }
+
             numIngredients += 1;
 
             FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();

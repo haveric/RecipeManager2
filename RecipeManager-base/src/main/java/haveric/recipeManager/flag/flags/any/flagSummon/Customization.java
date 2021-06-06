@@ -1244,8 +1244,7 @@ public class Customization implements Cloneable {
                     foxFirstTrustedPlayer = true;
                 } else {
                     try {
-                        UUID uuid = UUID.fromString(lower);
-                        foxFirstTrustedPlayerUUID = uuid;
+                        foxFirstTrustedPlayerUUID = UUID.fromString(lower);
                     } catch (IllegalArgumentException e) {
                         ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxfirsttrustedplayer' with invalid uuid: " + lower);
                     }
@@ -1257,8 +1256,7 @@ public class Customization implements Cloneable {
                     foxSecondTrustedPlayer = true;
                 } else {
                     try {
-                        UUID uuid = UUID.fromString(lower);
-                        foxSecondTrustedPlayerUUID = uuid;
+                        foxSecondTrustedPlayerUUID = UUID.fromString(lower);
                     } catch (IllegalArgumentException e) {
                         ErrorReporter.getInstance().warning("Flag " + flagType + " has 'foxsecondtrustedplayer' with invalid uuid: " + lower);
                     }
