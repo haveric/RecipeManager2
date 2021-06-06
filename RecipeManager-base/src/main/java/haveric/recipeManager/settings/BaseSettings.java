@@ -10,7 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 
 import java.util.*;
 
-public class BaseSettings {
+public abstract class BaseSettings {
     protected boolean hasBeenInited = false;
 
     protected final boolean SPECIAL_RECIPE_DEFAULT = true;
@@ -209,193 +209,99 @@ public class BaseSettings {
     }
 
 
-    public boolean getSpecialRepair() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialRepair();
 
-    public boolean getSpecialRepairMetadata() {
-        return SPECIAL_REPAIR_METADATA_DEFAULT;
-    }
+    public abstract boolean getSpecialRepairMetadata();
 
-    public boolean getSpecialLeatherDye() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialLeatherDye();
 
-    public boolean getSpecialFireworks() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialFireworks();
 
-    public boolean getSpecialFireworkStar() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialFireworkStar();
 
-    public boolean getSpecialFireworkStarFade() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialFireworkStarFade();
 
-    public boolean getSpecialMapCloning() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialMapCloning();
 
-    public boolean getSpecialMapExtending() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialMapExtending();
 
-    public boolean getSpecialBookCloning() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialBookCloning();
 
-    public boolean getSpecialAnvilCombineItem() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialAnvilCombineItem();
 
-    public boolean getSpecialAnvilEnchant() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialAnvilEnchant();
 
-    public boolean getSpecialAnvilRepairMaterial() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialAnvilRepairMaterial();
 
-    public boolean getSpecialAnvilRenaming() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialAnvilRenaming();
 
-    public boolean getSpecialGrindstoneCombineItem() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialGrindstoneCombineItem();
 
-    public boolean getSpecialGrindstoneDisenchantBook() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialGrindstoneDisenchantBook();
 
-    public boolean getSpecialGrindstoneDisenchantItem() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialGrindstoneDisenchantItem();
 
-    public boolean getSpecialCartographyClone() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialCartographyClone();
 
-    public boolean getSpecialCartographyExtend() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialCartographyExtend();
 
-    public boolean getSpecialCartographyLock() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialCartographyLock();
 
-    public boolean getSpecialBanner() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialBanner();
 
-    public boolean getSpecialBannerDuplicate() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialBannerDuplicate();
 
-    public boolean getSpecialShieldBanner() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialShieldBanner();
 
-    public boolean getSpecialTippedArrows() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialTippedArrows();
 
-    public boolean getSpecialShulkerDye() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialShulkerDye();
 
-    public boolean getSpecialSuspiciousStew() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
+    public abstract boolean getSpecialSuspiciousStew();
 
-    public boolean getSoundsRepair() {
-        return SOUNDS_REPAIR_DEFAULT;
-    }
+    public abstract boolean getSoundsRepair();
 
-    public boolean getSoundsFailed() {
-        return SOUNDS_FAILED_DEFAULT;
-    }
+    public abstract boolean getSoundsFailed();
 
-    public boolean getSoundsFailedClick() {
-        return SOUNDS_FAILED_CLICK_DEFAULT;
-    }
+    public abstract boolean getSoundsFailedClick();
 
-    public boolean getFixModResults() {
-        return FIX_MOD_RESULTS_DEFAULT;
-    }
+    public abstract boolean getFixModResults();
 
-    public boolean getUpdateBooks() {
-        return UPDATE_BOOKS_DEFAULT;
-    }
+    public abstract boolean getUpdateBooks();
 
-    public boolean getColorConsole() {
-        return COLOR_CONSOLE_DEFAULT;
-    }
+    public abstract boolean getColorConsole();
 
-    public char getFurnaceShiftClick() {
-        return FURNACE_SHIFT_CLICK_DEFAULT.charAt(0);
-    }
+    public abstract char getFurnaceShiftClick();
 
-    public boolean getMultithreading() {
-        return MULTITHREADING_DEFAULT;
-    }
+    public abstract boolean getMultithreading();
 
-    public boolean getClearRecipes() {
-        return CLEAR_RECIPES_DEFAULT;
-    }
+    public abstract boolean getClearRecipes();
 
-    public boolean getUpdateCheckEnabled() {
-        return UPDATE_CHECK_ENABLED_DEFAULT;
-    }
+    public abstract boolean getUpdateCheckEnabled();
 
-    public int getUpdateCheckFrequency() {
-        return UPDATE_CHECK_FREQUENCY_DEFAULT;
-    }
+    public abstract int getUpdateCheckFrequency();
 
-    public boolean getUpdateCheckLogNewOnly() {
-        return UPDATE_CHECK_LOG_NEW_ONLY_DEFAULT;
-    }
+    public abstract boolean getUpdateCheckLogNewOnly();
 
-    public int getSaveFrequencyForBrewingStands() {
-        return SAVE_FREQUENCY_DEFAULT;
-    }
+    public abstract int getSaveFrequencyForBrewingStands();
 
-    public int getSaveFrequencyForCampfires() {
-        return SAVE_FREQUENCY_DEFAULT;
-    }
+    public abstract int getSaveFrequencyForCampfires();
 
-    public int getSaveFrequencyForComposters() {
-        return SAVE_FREQUENCY_DEFAULT;
-    }
+    public abstract int getSaveFrequencyForComposters();
 
-    public int getSaveFrequencyForCooldowns() {
-        return SAVE_FREQUENCY_DEFAULT;
-    }
+    public abstract int getSaveFrequencyForCooldowns();
 
-    public int getSaveFrequencyForFurnaces() {
-        return SAVE_FREQUENCY_DEFAULT;
-    }
+    public abstract int getSaveFrequencyForFurnaces();
 
-    public Material getFailMaterial() {
-        return MATERIAL_FAIL_DEFAULT;
-    }
+    public abstract Material getFailMaterial();
 
-    public Material getSecretMaterial() {
-        return MATERIAL_SECRET_DEFAULT;
-    }
+    public abstract Material getSecretMaterial();
 
-    public Material getMultipleResultsMaterial() {
-        return MATERIAL_MULTIPLE_RESULTS_DEFAULT;
-    }
+    public abstract Material getMultipleResultsMaterial();
 
-    public boolean getDisableOverrideWarnings() {
-        return DISABLE_OVERRIDE_WARNINGS_DEFAULT;
-    }
+    public abstract boolean getDisableOverrideWarnings();
 
-    public List<String> getRecipeCommentCharactersAsList() {
-        return RECIPE_COMMENT_CHARACTERS_DEFAULT;
-    }
+    public abstract List<String> getRecipeCommentCharactersAsList();
 
     public String getRecipeCommentCharacters() {
         String allComments = "";
