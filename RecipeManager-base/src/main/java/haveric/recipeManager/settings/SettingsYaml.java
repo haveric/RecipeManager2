@@ -68,7 +68,7 @@ public class SettingsYaml extends BaseSettings {
 
         anvilCombineItem.clear();
         String combineItemMaterials = fileConfig.getString("special-recipes.anvil.combine-item.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
-        if (combineItemMaterials != null && !combineItemMaterials.equals("false")) {
+        if (!combineItemMaterials.equals("false")) {
             List<Material> materials = Tools.parseChoice(combineItemMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilCombineItem.addAll(materials);
@@ -77,7 +77,7 @@ public class SettingsYaml extends BaseSettings {
 
         grindstoneCombineItem.clear();
         String grindstoneCombineItemMaterials = fileConfig.getString("special-recipes.grindstone.combine-item.materials", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
-        if (grindstoneCombineItemMaterials != null && !grindstoneCombineItemMaterials.equals("false")) {
+        if (!grindstoneCombineItemMaterials.equals("false")) {
             List<Material> materials = Tools.parseChoice(grindstoneCombineItemMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 grindstoneCombineItem.addAll(materials);
@@ -86,7 +86,7 @@ public class SettingsYaml extends BaseSettings {
 
         grindstoneItemMaterials.clear();
         String grindstoneDisenchantItemMaterials = fileConfig.getString("special-recipes.grindstone.disenchant.item.materials", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
-        if (grindstoneDisenchantItemMaterials != null && !grindstoneDisenchantItemMaterials.equals("false")) {
+        if (!grindstoneDisenchantItemMaterials.equals("false")) {
             List<Material> materials = Tools.parseChoice(grindstoneDisenchantItemMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 grindstoneItemMaterials.addAll(materials);
@@ -95,7 +95,7 @@ public class SettingsYaml extends BaseSettings {
 
         anvilMaterialEnchant.clear();
         String enchantMaterials = fileConfig.getString("special-recipes.anvil.enchant.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
-        if (enchantMaterials != null && !enchantMaterials.equals("false")) {
+        if (!enchantMaterials.equals("false")) {
             List<Material> materials = Tools.parseChoice(enchantMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilMaterialEnchant.addAll(materials);
@@ -104,7 +104,7 @@ public class SettingsYaml extends BaseSettings {
 
         anvilEnchantments.clear();
         String enchantEnchantments = fileConfig.getString("special-recipes.anvil.enchant.enchantments", SPECIAL_ANVIL_CUSTOM_DEFAULT);
-        if (enchantEnchantments != null && !enchantEnchantments.equals("false")) {
+        if (!enchantEnchantments.equals("false")) {
             String[] enchantments = enchantEnchantments.split(",");
             for (String enchantString : enchantments) {
                 String[] levelsSplit = enchantString.split(":");
@@ -150,7 +150,7 @@ public class SettingsYaml extends BaseSettings {
 
         grindstoneBookEnchantments.clear();
         String grindstoneDisenchantBookEnchantments = fileConfig.getString("special-recipes.grindstone.disenchant.book.enchantments", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
-        if (grindstoneDisenchantBookEnchantments != null && !grindstoneDisenchantBookEnchantments.equals("false")) {
+        if (!grindstoneDisenchantBookEnchantments.equals("false")) {
             String[] enchantments = grindstoneDisenchantBookEnchantments.split(",");
             for (String enchantString : enchantments) {
                 String[] levelsSplit = enchantString.split(":");
@@ -196,7 +196,7 @@ public class SettingsYaml extends BaseSettings {
 
         grindstoneItemEnchantments.clear();
         String grindstoneDisenchantItemEnchantments = fileConfig.getString("special-recipes.grindstone.disenchant.item.enchantments", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
-        if (grindstoneDisenchantItemEnchantments != null && !grindstoneDisenchantItemEnchantments.equals("false")) {
+        if (!grindstoneDisenchantItemEnchantments.equals("false")) {
             String[] enchantments = grindstoneDisenchantItemEnchantments.split(",");
             for (String enchantString : enchantments) {
                 String[] levelsSplit = enchantString.split(":");
@@ -242,7 +242,7 @@ public class SettingsYaml extends BaseSettings {
 
         anvilRepairMaterial.clear();
         String repairMaterials = fileConfig.getString("special-recipes.anvil.repair-material.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
-        if (repairMaterials != null && !repairMaterials.equals("false")) {
+        if (!repairMaterials.equals("false")) {
             List<Material> materials = Tools.parseChoice(repairMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilRepairMaterial.addAll(materials);
@@ -251,7 +251,7 @@ public class SettingsYaml extends BaseSettings {
 
         anvilRenaming.clear();
         String renameMaterials = fileConfig.getString("special-recipes.anvil.renaming.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
-        if (renameMaterials != null && !renameMaterials.equals("false")) {
+        if (!renameMaterials.equals("false")) {
             List<Material> materials = Tools.parseChoice(renameMaterials, ParseBit.NO_ERRORS);
             if (materials != null) {
                 anvilRenaming.addAll(materials);
@@ -632,64 +632,52 @@ public class SettingsYaml extends BaseSettings {
     }
 
     public int getSaveFrequencyForBrewingStands() {
-        int minutes = Math.max(fileConfig.getInt("save-frequency.brewingstands", SAVE_FREQUENCY_DEFAULT), 1);
-        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+        return getSaveFrequency("brewingstands");
     }
 
     public int getSaveFrequencyForCampfires() {
-        int minutes = Math.max(fileConfig.getInt("save-frequency.campfires", SAVE_FREQUENCY_DEFAULT), 1);
-        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+        return getSaveFrequency("campfires");
     }
 
     public int getSaveFrequencyForComposters() {
-        int minutes = Math.max(fileConfig.getInt("save-frequency.composters", SAVE_FREQUENCY_DEFAULT), 1);
-        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+        return getSaveFrequency("composters");
     }
 
     public int getSaveFrequencyForCooldowns() {
-        int minutes = Math.max(fileConfig.getInt("save-frequency.cooldowns", SAVE_FREQUENCY_DEFAULT), 1);
-        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+        return getSaveFrequency("cooldowns");
     }
 
     public int getSaveFrequencyForFurnaces() {
-        int minutes = Math.max(fileConfig.getInt("save-frequency.furnaces", SAVE_FREQUENCY_DEFAULT), 1);
+        return getSaveFrequency("furnaces");
+    }
+
+    private int getSaveFrequency(String type) {
+        int minutes = Math.max(fileConfig.getInt("save-frequency." + type, SAVE_FREQUENCY_DEFAULT), 1);
         return 1200 * minutes; // Convert to ticks: 20t * 60s * m
     }
 
     public Material getFailMaterial() {
-        String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
-
-        Material failMaterial = Material.matchMaterial(failString);
-
-        if (failMaterial == null) {
-            failMaterial = MATERIAL_FAIL_DEFAULT;
-        }
-
-        return failMaterial;
+        return getMaterial("fail", MATERIAL_FAIL_DEFAULT);
     }
 
     public Material getSecretMaterial() {
-        String secretString = fileConfig.getString("material.secret", MATERIAL_SECRET_DEFAULT.toString());
-
-        Material secretMaterial = Material.matchMaterial(secretString);
-
-        if (secretMaterial == null) {
-            secretMaterial = MATERIAL_SECRET_DEFAULT;
-        }
-
-        return secretMaterial;
+        return getMaterial("secret", MATERIAL_SECRET_DEFAULT);
     }
 
     public Material getMultipleResultsMaterial() {
-        String multipleResultsString = fileConfig.getString("material.multiple-results", MATERIAL_MULTIPLE_RESULTS_DEFAULT.toString());
+        return getMaterial("multiple-results", MATERIAL_MULTIPLE_RESULTS_DEFAULT);
+    }
 
-        Material multipleResultsMaterial = Material.matchMaterial(multipleResultsString);
+    private Material getMaterial(String type, Material defaultMaterial) {
+        String materialString = fileConfig.getString("material." + type, defaultMaterial.toString());
 
-        if (multipleResultsMaterial == null) {
-            multipleResultsMaterial = MATERIAL_MULTIPLE_RESULTS_DEFAULT;
+        Material material = Material.matchMaterial(materialString);
+
+        if (material == null) {
+            material = defaultMaterial;
         }
 
-        return multipleResultsMaterial;
+        return material;
     }
 
     public boolean getDisableOverrideWarnings() {
