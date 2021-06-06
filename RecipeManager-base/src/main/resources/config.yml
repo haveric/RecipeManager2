@@ -114,6 +114,13 @@ update-check:
   frequency: 6       # Check for updates each N hours, use 0 to check only at startup. (default: 6)
   log-new-only: true # If true, only log when there is a new update. If false, log every time
 
+save-frequency:
+  brewingstands: 30  # Save brewing stand data every N minutes. (default: 30)
+  campfires: 30      # Save campfire data every N minutes. (default: 30)
+  composters: 30     # Save composter data every N minutes. (default: 30)
+  cooldowns: 30      # Save cooldowns every N minutes. (default: 30)
+  furnaces: 30       # Save furnace data every N minutes. (default: 30)
+
 # Customize materials used when crafting recipes
 # Material names reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 material:

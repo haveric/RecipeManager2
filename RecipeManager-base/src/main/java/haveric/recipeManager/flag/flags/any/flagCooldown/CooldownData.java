@@ -95,5 +95,6 @@ public class CooldownData implements ConfigurationSerializable {
 
     public void setCooldown(UUID uuid, long cooldownTimestamp) {
         cooldowns.put(uuid, new MutableLong(cooldownTimestamp));
+        Cooldowns.update();
     }
 }

@@ -107,6 +107,8 @@ public class ComposterData implements ConfigurationSerializable {
 
     public void setPlayerUUID(UUID newplayerUUID) {
         playerUUID = newplayerUUID;
+
+        Composters.update();
     }
 
     public List<ItemStack> getIngredients() {
@@ -115,6 +117,8 @@ public class ComposterData implements ConfigurationSerializable {
 
     public void setIngredients(List<ItemStack> items) {
         ingredients = items;
+
+        Composters.update();
     }
 
     public void clearIngredients() {
@@ -123,6 +127,8 @@ public class ComposterData implements ConfigurationSerializable {
         }
 
         level = 0;
+
+        Composters.update();
     }
 
     public void addIngredient(ItemStack item) {
@@ -146,10 +152,14 @@ public class ComposterData implements ConfigurationSerializable {
         if (!found) {
             ingredients.add(item);
         }
+
+        Composters.update();
     }
 
     public void setLevel(int newLevel) {
         level = newLevel;
+
+        Composters.update();
     }
 
     public double getLevel() {
@@ -158,6 +168,8 @@ public class ComposterData implements ConfigurationSerializable {
 
     public void addToLevel(double toAdd) {
         level += toAdd;
+
+        Composters.update();
     }
 
     public CompostRecipe getRecipe() {

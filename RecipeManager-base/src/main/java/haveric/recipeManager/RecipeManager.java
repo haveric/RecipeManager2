@@ -86,15 +86,6 @@ public class RecipeManager extends JavaPlugin {
             ComposterData.init();
         }
 
-        Furnaces.load(); // load saved furnaces...
-        BrewingStands.load();
-        Cooldowns.load();
-
-        if (Version.has1_14Support()) {
-            RMCampfires.load();
-            Composters.load();
-        }
-
         events = new Events();
         recipeTypeLoader = new RecipeTypeLoader();
 
@@ -198,6 +189,28 @@ public class RecipeManager extends JavaPlugin {
         }
 
         settings.reload(sender); // (re)load settings
+
+        if (!firstTime) {
+            Cooldowns.save();
+            Furnaces.save();
+            BrewingStands.save();
+
+            if (Version.has1_14Support()) {
+                RMCampfires.save();
+                Composters.save();
+            }
+        }
+
+        // Load saved datas
+        Cooldowns.load();
+        Furnaces.load();
+        BrewingStands.load();
+
+        if (Version.has1_14Support()) {
+            RMCampfires.load();
+            Composters.load();
+        }
+
         Messages.getInstance().reload(sender); // (re)load messages from messages.yml
         Files.reload(sender); // (re)generate info files if they do not exist
 

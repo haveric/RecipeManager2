@@ -631,6 +631,31 @@ public class SettingsYaml extends BaseSettings {
         return fileConfig.getBoolean("update-check.log-new-only", UPDATE_CHECK_LOG_NEW_ONLY_DEFAULT);
     }
 
+    public int getSaveFrequencyForBrewingStands() {
+        int minutes = Math.max(fileConfig.getInt("save-frequency.brewingstands", SAVE_FREQUENCY_DEFAULT), 1);
+        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+    }
+
+    public int getSaveFrequencyForCampfires() {
+        int minutes = Math.max(fileConfig.getInt("save-frequency.campfires", SAVE_FREQUENCY_DEFAULT), 1);
+        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+    }
+
+    public int getSaveFrequencyForComposters() {
+        int minutes = Math.max(fileConfig.getInt("save-frequency.composters", SAVE_FREQUENCY_DEFAULT), 1);
+        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+    }
+
+    public int getSaveFrequencyForCooldowns() {
+        int minutes = Math.max(fileConfig.getInt("save-frequency.cooldowns", SAVE_FREQUENCY_DEFAULT), 1);
+        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+    }
+
+    public int getSaveFrequencyForFurnaces() {
+        int minutes = Math.max(fileConfig.getInt("save-frequency.furnaces", SAVE_FREQUENCY_DEFAULT), 1);
+        return 1200 * minutes; // Convert to ticks: 20t * 60s * m
+    }
+
     public Material getFailMaterial() {
         String failString = fileConfig.getString("material.fail", MATERIAL_FAIL_DEFAULT.toString());
 

@@ -11,6 +11,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,6 +23,9 @@ import java.util.UUID;
 public class Composters {
     private static final String SAVE_EXTENSION = ".composterdata";
 
+    private static BukkitTask updateTask;
+    private static boolean needsUpdate = false;
+
     private static Map<BlockID, ComposterData> composters = new LinkedHashMap<>(128);
 
     protected static void init() {
@@ -29,6 +34,10 @@ public class Composters {
 
     public static void clean() {
         composters.clear();
+    }
+
+    public static void update() {
+        needsUpdate = true;
     }
 
     public static Map<BlockID, ComposterData> getComposters() {
@@ -104,6 +113,8 @@ public class Composters {
     public static void load() {
         long start = System.currentTimeMillis();
 
+        clean();
+
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
 
         if (!dir.exists()) {
@@ -129,6 +140,19 @@ public class Composters {
                 }
             }
         }
+
+        if (updateTask != null) {
+            updateTask.cancel();
+        }
+
+        int saveFrequency = RecipeManager.getSettings().getSaveFrequencyForComposters();
+        updateTask = new BukkitRunnable() {
+            public void run() {
+                if (needsUpdate) {
+                    save();
+                }
+            }
+        }.runTaskTimerAsynchronously(RecipeManager.getPlugin(), 0, saveFrequency);
 
         MessageSender.getInstance().log("Loaded " + composters.size() + " composters in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
@@ -185,6 +209,9 @@ public class Composters {
                 MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
             }
         }
+
+        // Reset needsUpdate
+        needsUpdate = false;
 
         MessageSender.getInstance().log("Saved composters in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }

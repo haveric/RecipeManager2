@@ -35,6 +35,7 @@ public class BaseSettings {
     protected final boolean UPDATE_CHECK_ENABLED_DEFAULT = true;
     protected final int UPDATE_CHECK_FREQUENCY_DEFAULT = 6;
     protected final boolean UPDATE_CHECK_LOG_NEW_ONLY_DEFAULT = true;
+    protected final int SAVE_FREQUENCY_DEFAULT = 30;
 
     protected Material MATERIAL_FAIL_DEFAULT;
     protected final Material MATERIAL_SECRET_DEFAULT = Material.CHEST;
@@ -138,6 +139,11 @@ public class BaseSettings {
         MessageSender.getInstance().log("    update-check.enabled: " + getUpdateCheckEnabled());
         MessageSender.getInstance().log("    update-check.frequency: " + getUpdateCheckFrequency());
         MessageSender.getInstance().log("    update-check.log-new-only: " + getUpdateCheckLogNewOnly());
+        MessageSender.getInstance().log("    save-frequency.brewingstands: " + getSaveFrequencyForBrewingStands());
+        MessageSender.getInstance().log("    save-frequency.campfires: " + getSaveFrequencyForCampfires());
+        MessageSender.getInstance().log("    save-frequency.composters: " + getSaveFrequencyForComposters());
+        MessageSender.getInstance().log("    save-frequency.cooldowns: " + getSaveFrequencyForCooldowns());
+        MessageSender.getInstance().log("    save-frequency.furnaces: " + getSaveFrequencyForFurnaces());
         MessageSender.getInstance().log("    material.fail: " + getFailMaterial());
         MessageSender.getInstance().log("    material.secret: " + getSecretMaterial());
         MessageSender.getInstance().log("    material.multiple-results: " + getMultipleResultsMaterial());
@@ -349,6 +355,26 @@ public class BaseSettings {
 
     public boolean getUpdateCheckLogNewOnly() {
         return UPDATE_CHECK_LOG_NEW_ONLY_DEFAULT;
+    }
+
+    public int getSaveFrequencyForBrewingStands() {
+        return SAVE_FREQUENCY_DEFAULT;
+    }
+
+    public int getSaveFrequencyForCampfires() {
+        return SAVE_FREQUENCY_DEFAULT;
+    }
+
+    public int getSaveFrequencyForComposters() {
+        return SAVE_FREQUENCY_DEFAULT;
+    }
+
+    public int getSaveFrequencyForCooldowns() {
+        return SAVE_FREQUENCY_DEFAULT;
+    }
+
+    public int getSaveFrequencyForFurnaces() {
+        return SAVE_FREQUENCY_DEFAULT;
     }
 
     public Material getFailMaterial() {

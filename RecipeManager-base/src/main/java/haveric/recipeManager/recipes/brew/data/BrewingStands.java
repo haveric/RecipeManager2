@@ -12,6 +12,8 @@ import org.bukkit.block.BrewingStand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.BrewerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,12 +23,19 @@ import java.util.Map.Entry;
 public class BrewingStands {
     private static final String SAVE_EXTENSION = ".brewingdata";
 
+    private static BukkitTask updateTask;
+    private static boolean needsUpdate = false;
+
     private static Map<BlockID, BrewingStandData> brewingStands = new LinkedHashMap<>(128);
 
     protected static void init() { }
 
     public static void clean() {
         brewingStands.clear();
+    }
+
+    public static void update() {
+        needsUpdate = true;
     }
 
     public static void cleanChunk(Chunk chunk, Set<BlockID> added) {
@@ -123,6 +132,8 @@ public class BrewingStands {
     public static void load() {
         long start = System.currentTimeMillis();
 
+        clean();
+
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
 
         if (!dir.exists()) {
@@ -148,6 +159,19 @@ public class BrewingStands {
                 }
             }
         }
+
+        if (updateTask != null) {
+            updateTask.cancel();
+        }
+
+        int saveFrequency = RecipeManager.getSettings().getSaveFrequencyForBrewingStands();
+        updateTask = new BukkitRunnable() {
+            public void run() {
+                if (needsUpdate) {
+                    save();
+                }
+            }
+        }.runTaskTimerAsynchronously(RecipeManager.getPlugin(), 0, saveFrequency);
 
         MessageSender.getInstance().log("Loaded " + brewingStands.size() + " brewing stands in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
@@ -201,6 +225,9 @@ public class BrewingStands {
                 MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
             }
         }
+
+        // Reset needsUpdate
+        needsUpdate = false;
 
         MessageSender.getInstance().log("Saved brewing standings in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }

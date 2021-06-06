@@ -94,6 +94,8 @@ public class FurnaceData implements ConfigurationSerializable {
 
     public void setFuelerUUID(UUID newFuelerUUID) {
         fuelerUUID = newFuelerUUID;
+
+        Furnaces.update();
     }
 
     public ItemStack getSmelting() {
@@ -106,6 +108,8 @@ public class FurnaceData implements ConfigurationSerializable {
         } else {
             smelting = newSmelting.clone();
         }
+
+        Furnaces.update();
     }
 
     public ItemStack getFuel() {
@@ -118,5 +122,7 @@ public class FurnaceData implements ConfigurationSerializable {
         } else {
             fuel = newFuel.clone();
         }
+
+        Furnaces.update();
     }
 }

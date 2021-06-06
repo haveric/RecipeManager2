@@ -10,6 +10,8 @@ import org.bukkit.World;
 import org.bukkit.block.Campfire;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,12 +23,19 @@ import java.util.UUID;
 public class RMCampfires {
     private static final String SAVE_EXTENSION = ".rmcampfiredata";
 
+    private static BukkitTask updateTask;
+    private static boolean needsUpdate = false;
+
     private static Map<BlockID, RMCampfireData> campfires = new LinkedHashMap<>(128);
 
     protected static void init() { }
 
     public static void clean() {
         campfires.clear();
+    }
+
+    public static void update() {
+        needsUpdate = true;
     }
 
     public static Map<BlockID, RMCampfireData> getRMCampfires() {
@@ -101,6 +110,8 @@ public class RMCampfires {
     public static void load() {
         long start = System.currentTimeMillis();
 
+        clean();
+
         File dir = new File(RecipeManager.getPlugin().getDataFolder() + File.separator + "save" + File.separator);
 
         if (!dir.exists()) {
@@ -126,6 +137,19 @@ public class RMCampfires {
                 }
             }
         }
+
+        if (updateTask != null) {
+            updateTask.cancel();
+        }
+
+        int saveFrequency = RecipeManager.getSettings().getSaveFrequencyForCampfires();
+        updateTask = new BukkitRunnable() {
+            public void run() {
+                if (needsUpdate) {
+                    save();
+                }
+            }
+        }.runTaskTimerAsynchronously(RecipeManager.getPlugin(), 0, saveFrequency);
 
         MessageSender.getInstance().log("Loaded " + campfires.size() + " campfires in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
@@ -178,6 +202,9 @@ public class RMCampfires {
                 MessageSender.getInstance().error(null, e, "Failed to create '" + file.getPath() + "' file!");
             }
         }
+
+        // Reset needsUpdate
+        needsUpdate = false;
 
         MessageSender.getInstance().log("Saved campfires in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }

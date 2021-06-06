@@ -71,6 +71,8 @@ public class BrewingStandData implements ConfigurationSerializable {
 
     public void setFuelerUUID(UUID newFueler) {
         fuelerUUID = newFueler;
+
+        BrewingStands.update();
     }
 
     public float getCurrentBrewTime() {
@@ -79,6 +81,8 @@ public class BrewingStandData implements ConfigurationSerializable {
 
     public void setCurrentBrewTime(float newBrewTime) {
         currentBrewTime = newBrewTime;
+
+        BrewingStands.update();
     }
 
     public BukkitTask getUpdateTask() {
@@ -87,6 +91,8 @@ public class BrewingStandData implements ConfigurationSerializable {
 
     public void setUpdateTask(BukkitTask newTask) {
         updateTask = newTask;
+
+        BrewingStands.update();
     }
 
     public BukkitTask getFinishBrewingTask() {
@@ -95,6 +101,8 @@ public class BrewingStandData implements ConfigurationSerializable {
 
     public void setFinishBrewingTask(BukkitTask newTask) {
         finishBrewingTask = newTask;
+
+        BrewingStands.update();
     }
 
     public void cancelBrewing() {
@@ -108,12 +116,16 @@ public class BrewingStandData implements ConfigurationSerializable {
             finishBrewingTask.cancel();
             finishBrewingTask = null;
         }
+
+        BrewingStands.update();
     }
 
     public void completeBrewing() {
         currentBrewTime = -1;
         updateTask = null;
         finishBrewingTask = null;
+
+        BrewingStands.update();
     }
 
     public boolean isBrewing() {

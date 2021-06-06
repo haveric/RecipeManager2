@@ -114,6 +114,8 @@ public class RMCampfireData implements ConfigurationSerializable {
         } else if (slot == 3) {
             item3UUID = itemUUID;
         }
+
+        RMCampfires.update();
     }
 
     public boolean allSlotsEmpty() {
@@ -127,6 +129,7 @@ public class RMCampfireData implements ConfigurationSerializable {
 
     public void setItem0UUID(UUID item4UUID) {
         this.item0UUID = item4UUID;
+        RMCampfires.update();
     }
 
     public UUID getItem1UUID() {
@@ -135,6 +138,7 @@ public class RMCampfireData implements ConfigurationSerializable {
 
     public void setItem1UUID(UUID item1UUID) {
         this.item1UUID = item1UUID;
+        RMCampfires.update();
     }
 
     public UUID getItem2UUID() {
@@ -143,6 +147,7 @@ public class RMCampfireData implements ConfigurationSerializable {
 
     public void setItem2UUID(UUID item2UUID) {
         this.item2UUID = item2UUID;
+        RMCampfires.update();
     }
 
     public UUID getItem3UUID() {
@@ -151,6 +156,7 @@ public class RMCampfireData implements ConfigurationSerializable {
 
     public void setItem3UUID(UUID item3UUID) {
         this.item3UUID = item3UUID;
+        RMCampfires.update();
     }
 
 }
