@@ -229,6 +229,6 @@ public class BrewingStands {
         // Reset needsUpdate
         needsUpdate = false;
 
-        MessageSender.getInstance().log("Saved brewing standings in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
+        MessageSender.getInstance().log("Saved brewing stands in " + ((System.currentTimeMillis() - start) / 1000.0) + " seconds");
     }
 }
