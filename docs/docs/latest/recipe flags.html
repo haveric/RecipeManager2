@@ -99,13 +99,16 @@ title: Recipe Flags
                 <li><a href='#itemname'><b>@itemname</b></a></li>
                 <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
                 <li><a href='#itemunbreakable'><b>@itemunbreakable</b></a></li>
+                <li><a href='#knowledgebookitem'><b>@knowledgebookitem</b></a></li>
                 <li><a href='#leathercolor'><b>@leathercolor</b></a></li>
                 <li><a href='#localizedname'><b>@localizedname</b></a></li>
+                <li><a href='#mapitem'><b>@mapitem</b></a></li>
                 <li><a href='#monsterspawner'><b>@monsterspawner</b></a></li>
                 <li><a href='#potionitem'><b>@potionitem</b></a></li>
                 <li><a href='#repaircost'><b>@repaircost</b></a></li>
                 <li><a href='#skullowner'><b>@skullowner</b></a></li>
                 <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li>
+                <li><a href='#tropicalfishbucketitem'><b>@tropicalfishbucketitem</b></a></li>
             </ul>
         </div>
         <div class='flaggroup'>
@@ -145,10 +148,12 @@ title: Recipe Flags
                 <li><a href='#itemnbt'><b>@itemnbt</b></a></li>
                 <li><a href='#itemunbreakable'><b>@itemunbreakable</b></a></li>
                 <li><a href='#keepitem'><b>@keepitem</b></a></li>
+                <li><a href='#knowledgebookitem'><b>@knowledgebookitem</b></a></li>
                 <li><a href='#launchfirework'><b>@launchfirework</b></a></li>
                 <li><a href='#leathercolor'><b>@leathercolor</b></a></li>
                 <li><a href='#lightlevel'><b>@lightlevel</b></a></li>
                 <li><a href='#localizedname'><b>@localizedname</b></a></li>
+                <li><a href='#mapitem'><b>@mapitem</b></a></li>
                 <li><a href='#message'><b>@message</b></a></li>
                 <li><a href='#modexp'><b>@modexp</b></a></li>
                 <li><a href='#modlevel'><b>@modlevel</b></a></li>
@@ -170,6 +175,7 @@ title: Recipe Flags
                 <li><a href='#summon'><b>@summon</b></a></li>
                 <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li>
                 <li><a href='#temperature'><b>@temperature</b></a></li>
+                <li><a href='#tropicalfishbucketitem'><b>@tropicalfishbucketitem</b></a></li>
                 <li><a href='#weather'><b>@weather</b></a></li>
                 <li><a href='#world'><b>@world</b></a></li>
             </ul>
@@ -317,6 +323,7 @@ title: Recipe Flags
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='bookitem'></a>
         <h3 class='doc-section__title'>@bookitem title [text]</h3>
         <h3 class='doc-section__title'>@bookitem author [text]</h3>
+        <h3 class='doc-section__title'>@bookitem generation &lt;generation&gt;</h3>
         <h3 class='doc-section__title'>@bookitem addpage [text]</h3>
         <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
@@ -329,6 +336,9 @@ title: Recipe Flags
 
     Use 'title &lt;text&gt;' and 'author &lt;text&gt;' only on written books, it doesn't work on book and quill therefore they're optional.
     Title and author must not exceed 64 characters, colors included (2 chars each).
+
+    Use generation &lt;generation&gt; to set the book's generation. Defaults to ORIGINAL
+      &lt;generation&gt; values: original, copy_of_original, copy_of_copy, tattered
 
     Use 'addpage &lt;text&gt;' to add a new page, the text can contain \n to add new lines to it, but it mainly word-wraps itself.
     Page contents must not exceed 256 characters, colors (2 chars each) and new line (1 char each) included.
@@ -344,6 +354,7 @@ title: Recipe Flags
     <b>Examples:</b>
       @bookitem title The Art of Stealing
       @bookitem author Gray Fox
+      @bookitem generation COPY_OF_ORIGINAL
       @bookitem addpage &lt;bold&gt;O&lt;reset&gt;nce upon a time...
       @bookitem addpage // added blank page
       @bookitem addpage \n\n\n\n&lt;italic&gt;      The End.
@@ -381,7 +392,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 
     Allows quotes to prevent spaces being trimmed.
 </span>
@@ -466,7 +477,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 </span>
 
     Setting to 'false' or 'remove' will disable the flag.
@@ -499,7 +510,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 
     [requiresLodestone] is optional and defaults to false:
       Requires a lodestone at the location set
@@ -528,20 +539,19 @@ title: Recipe Flags
     Sets a cooldown time for crafting a recipe or result.
     Once a recipe/result is used, the crafter can not craft it again for the specified amount of time.
     If set on a result, the result will be unavailable to the crafter for the cooldown time but the rest of results and the recipe will work as before.
-    NOTE: cooldown is reset when reloading/restarting server.
+    NOTE: cooldowns will be saved on server shutdown to maintain longer cooldowns.
 
     The &lt;number&gt; argument must be a number, by default it's seconds.
     The [suffix] argument defines what the &lt;number&gt; value is scaled in, values for suffix can be:
       s  = for seconds (default)
       m  = for minutes
       h  = for hours
+      d  = for days
     You can also use float values like '0.5m' to get 30 seconds.
 
     Optionally you can add some arguments separated by | character, those being:
       global            = make the cooldown global instead of per-player.
-
       msg &lt;text&gt;        = overwrites the information message; false to hide; supports colors; use {time} variable to display the new cooldown time.
-
       failmsg &lt;text&gt;    = overwrites the failure message; false to hide; supports colors; use {time} variable to display the remaining time.
 </span>
 
@@ -620,6 +630,11 @@ title: Recipe Flags
       You can use 'max' to set it to enchantment's max level.
       You can use 'remove' to remove the enchantment (from a cloned ingredient)
 
+    You can set a random level using the {rand} format:
+      {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 2-3} will output an integer from 2-3
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
+        If using a saved random output that includes decimals, it will be rounded to the nearest integer.
+
     Enchantments are forced and there is no level cap!
 
     Specific item: enchanted_book
@@ -632,6 +647,7 @@ title: Recipe Flags
       @enchantedbook damage_all max
       @enchantedbook arrow_fire 127
       @enchantedbook sharpness remove
+      @enchantedbook sharpness {rand 3-5} // Gives a random level of 3, 4, or 5
 
     <b>Aliases:</b> @enchantbook, @enchantingbook
 </pre>
@@ -650,6 +666,11 @@ title: Recipe Flags
       You can use 'max' to set it to enchantment's max level.
       You can use 'remove' to remove the enchantment (from a cloned ingredient)
 
+    You can set a random level using the {rand} format:
+      {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 2-3} will output an integer from 2-3
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
+        If using a saved random output that includes decimals, it will be rounded to the nearest integer.
+
     Enchantments are forced and there is no level cap!
     This flag may be used more times to add more enchantments to the item.
 </span>
@@ -661,6 +682,7 @@ title: Recipe Flags
       @enchantitem DIG_SPEED max // enchant with dig speed at max valid level
       @enchantitem ARROW_INFINITE 127 // enchant with arrow infinite forced at level 127
       @enchantitem SHARPNESS remove // removes a sharpness enchant
+      @enchantitem SHARPNESS {rand 3-5} // Gives a random level of 3, 4, or 5
 
     <b>Aliases:</b> @enchant, @enchantment
 </pre>
@@ -818,7 +840,7 @@ title: Recipe Flags
 
     The 'flag declaration' is a flag like you'd add a flag to a recipe or result, you can even add this flag into itself to make multi-chance structures.
     The flag declaration argument is only optional if there's a group defined and will act as literally nothing.
-    Optionally you can prefix the flag declaration with the '^' character to append the data from the flag to the previous flag of the same type from the same group (no group is still a group, but a special one).
+    Optionally you can prefix the flag declaration with the '^' character to add more flags to the same group (no group is still a group, but a special one).
 
     NOTE: If using '^' prefix, always use '^' and '@' together like '^@', no space in between.
     NOTE: In a group there must be at least a chance value or a flag declaration.
@@ -832,8 +854,14 @@ title: Recipe Flags
       // appending to flags example
       @forchance 80% @command say high chance message!
       @forchance 50% @command say 50-50 message... // this is a totally new flag, individual from the previous one.
-      @forchance    ^@command say extra message! // this command will be appended to the previous command flag.
-      @forchance    ^@command say extra-large message!!! // this will also add append to the same previous command flag, now it has 3 commands.
+      @forchance    ^@command say extra message! // this command will be added to the previous command flag's chance.
+      @forchance    ^@summon zombie // This will summon a zombie along with the previous two commands.
+      // appending flags with multiple chances example
+      @forchance attack 40% @message Zombie Attack! // 40% of the time, it will send 'Zombie Attack!' and summon a zombie
+      @forchance attack ^@summon zombie
+      @forchance attack 40% @message Skeleton Attack! // 40% of the time, it will send 'Skeleton Attack!' and summon a skeleton.
+      @forchance attack ^@summon skeleton
+        // The remaining 20% of the time, nothing will happen.
       // all flags in a group must have a total of 100% chance since only one triggers, in this case the chance is calculated and it would be 33.33% for each.
       @forchance mystuff @sound level_up
       @forchance mystuff @sound note_bass
@@ -1502,7 +1530,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 
     Allows quotes to prevent spaces being trimmed.
 
@@ -1550,7 +1578,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 
     Allows quotes to prevent spaces being trimmed.
 
@@ -1586,6 +1614,22 @@ title: Recipe Flags
 
     Format should include outer brackets: '{}'
 
+    You can also use these variables:
+      {player}         = crafter's name or '(nobody)' if not available
+      {playerdisplay}  = crafter's display name or '(nobody)' if not available
+      {result}         = the result item name or '(nothing)' if recipe failed.
+      {recipename}     = recipe's custom or autogenerated name or '(unknown)' if not available
+      {recipetype}     = recipe type or '(unknown)' if not available
+      {inventorytype}  = inventory type or '(unknown)' if not available
+      {world}          = world name of event location or '(unknown)' if not available
+      {x}              = event location's X coord or '(?)' if not available
+      {y}              = event location's Y coord or '(?)' if not available
+      {z}              = event location's Z coord or '(?)' if not available
+        Relative positions are supported: {x-1},{y+7},{z+12}
+      {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
+      {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
+
     Optional Arguments:
       display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)
       result           = only show on the result, but hide from the prepared result
@@ -1596,6 +1640,7 @@ title: Recipe Flags
 
     <b>Examples:</b>
       @itemnbt {display:{Name: '{&quot;text&quot;:&quot;CUSTOM NAME&quot;}'}} // Basic example, but should use @itemname instead.
+      @itemnbt {MMOITEMS_DURABILITY: {rand 50-100}d, MMOITEMS_MAX_DURABILITY: 67d, MMOITEMS_WILL_BREAK: 1b}
 
     <b>Aliases:</b> @nbt
 </pre>
@@ -1651,6 +1696,33 @@ title: Recipe Flags
       @keepitem shears | damage -99999 // keeps shears and fully repairs it
 
     <b>Aliases:</b> @returnitem, @replaceitem
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='knowledgebookitem'></a>
+        <h3 class='doc-section__title'>@knowledgebookitem &lt;namespace&gt;:&lt;key&gt;, [...]</h3>
+        <h3 class='doc-section__title'>@knowledgebookitem &lt;key&gt;, [...]</h3>
+        <pre>
+    <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    Add recipes to a knowledge book
+
+    The &lt;namespace&gt; argument is the plugin that the recipe was added by or minecraft itself.
+    The &lt;key&gt; is the specific recipe key
+      If the &lt;key&gt; is used alone, the namespace is defaulted to minecraft.
+
+    You can add multiple recipes by separating them with a comma.
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @knowledgebookitem minecraft:bucket
+      @knowledgebookitem campfire
+      @knowledgebookitem minecraft:spruce_boat, birch_boat, minecraft:iron_pickaxe
+
+    <b>Aliases:</b> @knowledgebook
 </pre>
     </div>
     <div class='doc-section__group'>
@@ -1766,6 +1838,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 
     Allows quotes to prevent spaces being trimmed.
 </span>
@@ -1776,6 +1849,41 @@ title: Recipe Flags
       @localizedname &lt;light_purple&gt;Weird Item
       @localizedname &lt;yellow&gt;{player}'s Sword
       @localizedname &quot;  Extra space  &quot; // Quotes at the beginning and end will be removed, but spaces will be kept.
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='mapitem'></a>
+        <h3 class='doc-section__title'>@mapitem [arguments]</h3>
+        <pre>
+    <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    Create a custom map item
+
+    Replace &lt;arguments&gt; with the following arguments separated by | character:
+      scaling [false]            = Sets if the map is scaling.
+
+      locationname &lt;name&gt;        = Sets the location name.
+      color &lt;red&gt; &lt;green&gt; &lt;blue&gt; = Sets the map color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.
+
+      world &lt;worldName&gt;          = Sets the world this map is associated with.
+      centerx &lt;x&gt;                = Sets the center x position of the map. Must be an integer.
+      centerz &lt;z&gt;                = Sets the center z position of the map. Must be an integer.
+      scale &lt;scale&gt;              = Sets the scale of the map.
+        &lt;scale&gt; values: closest, close, normal, far, farthest
+      locked [false]             = Sets the locked status of the map. Locked maps can not be explored further.
+      trackingposition [false]   = Sets whether a position cursor should be shown when the map is near its center.
+      unlimitedtracking [false]  = Whether the map will show a smaller position cursor (true), or no position cursor (false) when cursor is outside of map's range.
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @mapitem scaling
+      @mapitem scaling | color 255 0 0
+      @mapitem locked | trackingposition | unlimitedtracking
+
+    <b>Aliases:</b> @map
 </pre>
     </div>
     <div class='doc-section__group'>
@@ -1803,7 +1911,7 @@ title: Recipe Flags
         Relative positions are supported: {x-1},{y+7},{z+12}
       {rand #1-#2}     = output a random integer between #1 and #2. Example: {rand 5-10} will output an integer from 5-10
       {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50
-      {rand n}         = reuse a random output, where n is the nth {rand} used excluding this format
+      {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format
 
     Allows quotes to prevent spaces being trimmed.
 </span>
@@ -2249,12 +2357,18 @@ title: Recipe Flags
     </div>
     <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='repaircost'></a>
-        <h3 class='doc-section__title'>@repaircost &lt;text or false&gt;</h3>
+        <h3 class='doc-section__title'>@repaircost &lt;text or false&gt; | prepareLore [message]</h3>
         <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
 
 <span>
-    Changes result's repair cost.
+    Changes result's repair cost when repaired in an anvil.
+
+    prepareLore [message] sets a lore message that will display when preparing the recipe.
+      Setting message to true will use the default message: flag.repaircost.preparelore
+      For the prepare lore you can use the following arguments:
+        {cost} = the repair cost
+      Allows quotes to prevent spaces being trimmed.
 </span>
 
     Setting to 'false' or 'remove' will disable the flag.
@@ -2431,62 +2545,71 @@ title: Recipe Flags
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
 
 <span>
-    Summons a creature.
-    Using this flag more than once will add more creatures.
+    Summons a living entity.
+    Using this flag more than once will add more entities.
 
     The &lt;type&gt; argument can be a living entity type, you can find all entity types here: <a href='name index.html#entitytype'>name index.html#entitytype</a>
 
     Optionally you can add some arguments separated by | character, those being:
-      adult                      = forces creature to spawn as an adult, works with animals and villagers (works opposite of baby).
-      agelock                    = prevent the creature from maturing or getting ready for mating, works with animals and villagers.
-      angry                      = makes creature angry, only works for wolves and pigzombies; you can't use 'pet' with this.
-      baby                       = spawn creature as a baby, works with animals, villagers and zombies (works opposite of adult).
+      adult                      = forces entity to spawn as an adult, works with animals and villagers (works opposite of baby).
+      agelock                    = prevent the entity from maturing or getting ready for mating, works with animals and villagers.
+      angry                      = makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this.
+      arrowcooldown &lt;ticks&gt;      = sets the ticks until the next arrow leaves the entity's body.
+      arrowsinbody &lt;amount&gt;      = sets the number of arrows in the entity's body.
+      baby                       = spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult).
+      beeanger &lt;ticks&gt;           = sets the anger level to the number of ticks the bee will remain angry for.
+      beecannotenterhiveticks &lt;ticks&gt; = sets the ticks the bee cannot enter a hive for.
+      beehasnectar               = sets the bee to have nectar.
+      beehasstung                = sets if the bee has stung.
       cat &lt;type&gt;                 = cat type, available values: tabby, black, red, siamese, british_shorthair, calico, persian, ragdoll, white, jellie, all_black
-      chance &lt;0.01-100&gt;%         = chance of the creature to spawn, this value is for individual creatures.
-      chest &lt;item&gt; [drop%]       = equip an item on the creature's chest with optional drop chance.
+      chance &lt;0.01-100&gt;%         = chance of the entity to spawn, this value is for individual entities.
+      chest &lt;item&gt; [drop%]       = equip an item on the entity's chest with optional drop chance.
       color &lt;dye>&gt;         = sets the color of animal, only works for sheep and pet wolf/cats. Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
-      feet &lt;item&gt; [drop%]        = equip an item on the creature's feet with optional drop chance.
+      feet &lt;item&gt; [drop%]        = equip an item on the entity's feet with optional drop chance.
       fox &lt;type&gt;                 = set the fox type, values: red, snow
       foxcrouching               = set the fox to be crouching
       foxfirsttrustedplayer &lt;uuid or player&gt; = set the fox's first trusted player. If set to 'player', the crafter will be used.
       foxsecondtrustedplayer &lt;uuid or player&gt; = set the fox's second trusted player. If set to 'player', the crafter will be used.
       foxsleeping                = set the fox to be sleeping
-      hand &lt;item&gt; [drop%]        = equip an item on the creature's main hand with optional drop chance; for enderman it only uses material and data from the item.
-      head &lt;item&gt; [drop%]        = equip an item on the creature's head with optional drop chance.
-      hit                        = crafter will fake-attack the creature to provoke it into attacking or scare it away.
-      haschest                   = adds a chest to creature (Only works on horses, forces horse to be an adult and tamed).
+      hand &lt;item&gt; [drop%]        = equip an item on the entity's main hand with optional drop chance; for enderman it only uses material and data from the item.
+      head &lt;item&gt; [drop%]        = equip an item on the entity's head with optional drop chance.
+      hit                        = crafter will fake-attack the entity to provoke it into attacking or scare it away.
+      haschest                   = adds a chest to entity (Only works on horses, forces horse to be an adult and tamed).
       horsecolor &lt;type&gt;          = set the horse color, values: white, creamy, chestnut, brown, black, gray, dark_brown
       horsestyle &lt;type&gt;          = set the horse style, values: none, white, whitefield, white_dots, black_dots
-      hp &lt;health&gt; [max]          = set creature's health and optionally max health.
-      offhand &lt;item&gt; [drop%]     = equip an item on the creature's offhand with optional drop chance.
-      invulnerable               = makes the creature invulnerable.
-      jumpstrength &lt;0.0-2.0&gt;     = sets the creature's jump strength (Only works for horses). 0 = no jump
-      legs &lt;item&gt; [drop%]        = equip an item on the creature's legs with optional drop chance.
-      mountnext                  = this creature will mount the next creature definition that triggers after it.
-      noai                       = disable the ai on creature.
-      noeffect                   = no spawning particle effects on creature.
-      noremove                   = prevents creature from being removed if nobody is near it.
-      name &lt;text&gt;                = sets the creature's name, supports colors (&lt;red&gt;, &amp;3, etc).
-      nobreed                    = prevent the creature being able to breed, works for animals and villagers.
-      nohidename                 = don't hide name plate when not aiming at creature.
-      num &lt;number&gt;               = spawn more cloned creatures.
-      onfire &lt;time&gt;              = spawn creature on fire for &lt;time&gt; amount of seconds, value can be float.
+      hp &lt;health&gt; [max]          = set entity's health and optionally max health.
+      offhand &lt;item&gt; [drop%]     = equip an item on the entity's offhand with optional drop chance.
+      invulnerable               = makes the entity invulnerable.
+      invisible                  = makes the entity invisible.
+      jumpstrength &lt;0.0-2.0&gt;     = sets the entity's jump strength (Only works for horses). 0 = no jump
+      legs &lt;item&gt; [drop%]        = equip an item on the entity's legs with optional drop chance.
+      mountnext                  = this entity will mount the next entity definition that triggers after it.
+      name &lt;text&gt;                = sets the entity's name, supports colors (&lt;red&gt;, &amp;3, etc).
+      noai                       = disable the ai on entity.
+      nobreed                    = prevent the entity being able to breed, works for animals and villagers.
+      nocollision                = disables collision with other entities.
+      noeffect                   = no spawning particle effects on entity.
+      nohidename                 = don't hide name plate when not aiming at entity.
+      noremove                   = prevents entity from being removed if nobody is near it.
+      num &lt;number&gt;               = spawn more cloned entities.
+      onfire &lt;time&gt;              = spawn entity on fire for &lt;time&gt; amount of seconds, value can be float.
       pandahiddengene &lt;type&gt;     = set the panda's hidden gene, values: normal, lazy, worried, playful, brown, weak, aggressive
       pandamaingene &lt;type&gt;       = set the panda's main gene, values: normal, lazy, worried, playful, brown, weak, aggressive
       parrot &lt;type&gt;              = set the parrot type, values: red, blue, green, cyan, gray
-      pet [nosit]                = makes creature owned by crafter, only works for tameable creatures, optionally specify 'nosit' to not spawn creature in sit stance.
-      pickup [true/false]        = change if creature can pick-up dropped items.
+      persistent                 = Makes the entity persistent
+      pet [nosit]                = makes entity owned by crafter, only works for tameable entities, optionally specify 'nosit' to not spawn entity in sit stance.
+      pickup [true/false]        = change if entity can pick-up dropped items.
       playerirongolem            = marks iron golem as player-made.
-      potion &lt;type&gt; [time] [amp] = adds potion effect on the spawned creature; this argument can be used more than once to add more effects.
+      potion &lt;type&gt; [time] [amp] = adds potion effect on the spawned entity; this argument can be used more than once to add more effects.
                                      type values: <a href='name index.html#potioneffect'>name index.html#potioneffect</a>
                                      [time] can be a decimal of duration in seconds
                                      [amp] can be an integer that defines amplifier;
       poweredcreeper             = makes creeper a powered one, only works for creepers.
       rabbit &lt;type&gt;              = set the rabbit type, values: brown, white, black, black_and_white, gold, salt_and_pepper, the_killer_bunny
-      saddle [mount]             = adds saddle on creature (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount creature.
+      saddle [mount]             = adds saddle on entity (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount entity.
       shearedsheep               = sets the sheep as sheared, only works for sheep.
-      spread &lt;range&gt;             = spawns creature(s) spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)
-      target                     = creature targets crafter, that means monsters attack and animals follow and the rest do nothing
+      spread &lt;range&gt;             = spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)
+      target                     = entity targets crafter, that means monsters attack and animals follow and the rest do nothing
       villager &lt;type&gt;            = set the villager profession
                                      Values: none, armorer, butcher, cartographer, cleric, farmer, fisherman, fletcher, leatherworker, librarian, mason, nitwit, shepherd, toolsmith, weaponsmith
 
@@ -2571,6 +2694,32 @@ title: Recipe Flags
       @temperature &gt;= .15, &lt;= .95 // Must be within a temperature where it can rain
 
     <b>Aliases:</b> @temp
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='tropicalfishbucketitem'></a>
+        <h3 class='doc-section__title'>@tropicalfishbucketitem &lt;arguments&gt; | [...]</h3>
+        <pre>
+    <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    Customize a tropical fish bucket
+
+    Arguments can be one or more of the following, separated by | character:
+      bodycolor &lt;dyecolor&gt; = (default largest) merge action for all of the ingredients
+      pattern &lt;pattern&gt;     = (default largest) merge action applied to the result
+      patterncolor &lt;dyecolor&gt; = Ignore enchantment level restrictions
+
+    &lt;dyecolor&gt; values: white, orange, magenta, light_blue, yellow, lime, pink, gray, light_gray, cyan, purple, blue, brown, green, red, black
+    &lt;pattern&gt; values: kob, sunstreak, snooper, dasher, brinely, spotty, flopper, stripey, glitter, blockfish, betty, clayfish
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @tropicalfishbucketitem bodycolor blue | pattern dasher
+
+    <b>Aliases:</b> @tropicalfishbucket, @fishbucket
 </pre>
     </div>
     <div class='doc-section__group'>
