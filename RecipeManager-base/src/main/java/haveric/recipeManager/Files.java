@@ -66,6 +66,12 @@ public class Files {
 
     private static final String BUKKIT_DOCS = "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/";
 
+    private static final String TITLE_RECIPE_FLAGS = "Recipe Flags";
+    private static final String TITLE_NAME_INDEX = "Name Index";
+    private static final String TITLE_COMMANDS_PERMISSIONS = "Commands &amp; Permissions";
+
+    List<String> navItems;
+
     protected static void init() {
     }
 
@@ -75,6 +81,14 @@ public class Files {
 
     private Files(CommandSender newSender) {
         sender = newSender;
+
+        navItems = new ArrayList<>();
+        navItems.add("Basic Recipes");
+        navItems.add("Advanced Recipes");
+        navItems.add(TITLE_RECIPE_FLAGS);
+        navItems.add("Recipe Books");
+        navItems.add(TITLE_NAME_INDEX);
+        navItems.add(TITLE_COMMANDS_PERMISSIONS);
 
         createDirectories();
 
@@ -157,6 +171,41 @@ public class Files {
         RecipeManager.getPlugin().saveResource(file, true);
     }
 
+    private void addHeader(StringBuilder s, String title) {
+        s.append("<!doctype html>").append(NL).append("<html lang='en'>").append(NL).append("<head>");
+        s.append(NL).append("<meta charset='UTF-8'>");
+        s.append(NL).append("<title>").append(title).append(" - RecipeManager2</title>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
+        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
+        s.append(NL).append("</head>").append(NL).append("<body>");
+        addNav(s, title);
+        s.append(NL).append("<div class='container-full'>");
+        s.append(NL).append("<div class='doc-section__group'>");
+        s.append(NL).append("<h1 class='doc-section__group-title'>").append(title).append("</h1>");
+    }
+
+    private void addNav(StringBuilder s, String title) {
+        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
+
+        s.append(NL);
+        boolean first = true;
+        for (String navItem : navItems) {
+            if (!first) {
+                s.append(" | ");
+            }
+
+            if (navItem.equals(title)) {
+                s.append("<b>").append(navItem).append("</b>");
+            } else {
+                s.append("<a href='").append(navItem.toLowerCase().replaceAll("&amp;", "&")).append(".html'>").append(navItem).append("</a>");
+            }
+
+            first = false;
+        }
+
+        s.append(NL).append("</div></nav>");
+    }
+
     private void createRecipeFlags(boolean overwrite) {
         if (fileExists(FILE_INFO_FLAGS, overwrite)) {
             return;
@@ -197,15 +246,8 @@ public class Files {
             }
         }
 
-        s.append("<title>Recipe Flags - RecipeManager2</title>");
-        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
-        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
-        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
-        s.append(NL).append("</div></nav>");
-        s.append(NL).append("<div class='container-full'>");
-        s.append(NL).append("<div class='doc-section__group'>");
-        s.append(NL).append("<h1 class='doc-section__group-title'>Recipe Flags</h1>");
+        addHeader(s, TITLE_RECIPE_FLAGS);
+
         s.append(NL).append("<pre>");
         s.append(NL).append("<b>WHAT ARE FLAGS ?</b>");
         s.append(NL).append("  Flags are the stuff that make a recipe very special! You can add various features to a recipe by using flags.");
@@ -323,9 +365,7 @@ public class Files {
         }
 
         s.append(NL).append("</div>");
-        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <b>Recipe Flags</b> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
-        s.append(NL).append("</div></nav>");
+        addNav(s, TITLE_RECIPE_FLAGS);
         appendFooter(s);
         saveAndLog(s, FILE_INFO_FLAGS);
     }
@@ -337,15 +377,8 @@ public class Files {
 
         StringBuilder s = new StringBuilder();
 
-        s.append("<title>Commands &amp; Permissions - RecipeManager2</title>");
-        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
-        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
-        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
-        s.append(NL).append("</div></nav>");
-        s.append(NL).append("<div class='container-full'>");
-        s.append(NL).append("<div class='doc-section__group'>");
-        s.append(NL).append("<h1 class='doc-section__group-title'>Commands &amp; Permissions</h1>");
+        addHeader(s, TITLE_COMMANDS_PERMISSIONS);
+
         s.append(NL).append("</div><pre>");
         s.append(NL).append("<h2>Commands</h2>");
         s.append("<table>");
@@ -472,9 +505,7 @@ public class Files {
         s.append(NL);
         s.append("</pre>");
         s.append("</div>");
-        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <a href='name index.html'>Name Index</a> | <b>Commands &amp; Permissions</b>");
-        s.append(NL).append("</div></nav>");
+        addNav(s, TITLE_COMMANDS_PERMISSIONS);
         appendFooter(s);
         saveAndLog(s, FILE_INFO_COMMANDS);
     }
@@ -486,15 +517,8 @@ public class Files {
 
         StringBuilder s = new StringBuilder(24000);
 
-        s.append("<title>Name Index - RecipeManager2</title>");
-        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/vendor.css?v=1'/>");
-        s.append(NL).append("<link rel='stylesheet' href='https://www.recipemanager.dev/css/app.css?v=1'/>");
-        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
-        s.append(NL).append("</div></nav>");
-        s.append(NL).append("<div class='container-full'>");
-        s.append(NL).append("<div class='doc-section__group'>");
-        s.append(NL).append("<h1 class='doc-section__group-title'>Name Index</h1>");
+        addHeader(s, TITLE_NAME_INDEX);
+
         s.append(NL).append("<pre>");
         s.append(NL).append("Data extracted from your server and it may contain names added by other plugins/mods!");
         s.append(NL).append("If you want to update this file just delete it and use '<i>rmreload</i>' or start the server.");
@@ -746,9 +770,7 @@ public class Files {
 
         s.append(NL).append("</pre>");
         s.append(NL).append("</div></div>");
-        s.append(NL).append("<nav class='nav-docs'><div class='container'>");
-        s.append(NL).append("<a href='basic recipes.html'>Basic Recipes</a> | <a href='advanced recipes.html'>Advanced Recipes</a> | <a href='recipe flags.html'>Recipe Flags</a> | <a href='recipe books.html'>Recipe Books</a> | <b>Name Index</b> | <a href='commands & permissions.html'>Commands &amp; Permissions</a>");
-        s.append(NL).append("</div></nav>");
+        addNav(s, TITLE_NAME_INDEX);
         appendFooter(s);
         saveAndLog(s, FILE_INFO_NAMES);
     }
@@ -769,6 +791,7 @@ public class Files {
         s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
         s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
         s.append(NL).append("</div></div></footer>");
+        s.append(NL).append("</body>").append(NL).append("</html");
     }
 
     private void saveAndLog(StringBuilder s, String file) {
