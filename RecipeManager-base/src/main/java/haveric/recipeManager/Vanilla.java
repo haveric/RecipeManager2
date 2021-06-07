@@ -585,19 +585,19 @@ public class Vanilla {
      */
     public static Recipe removeCustomRecipe(BaseRecipe recipe) {
         if (recipe instanceof CraftRecipe1_13) {
-            return removeCraftRecipe((CraftRecipe1_13) recipe);
+            return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, true);
         }
 
         if (recipe instanceof CraftRecipe) {
-            return removeCraftLegacyRecipe((CraftRecipe) recipe);
+            return replaceCraftRecipeLegacy((CraftRecipe) recipe, true);
         }
 
         if (recipe instanceof CombineRecipe1_13) {
-            return removeCombineRecipe((CombineRecipe1_13) recipe);
+            return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, true);
         }
 
         if (recipe instanceof CombineRecipe) {
-            return removeCombineLegacyRecipe((CombineRecipe) recipe);
+            return replaceCombineRecipeLegacy((CombineRecipe) recipe, true);
         }
 
         if (recipe instanceof RMFurnaceRecipe1_13) {
@@ -626,173 +626,6 @@ public class Vanilla {
 
         if (recipe instanceof RMSmithingRecipe) {
             return removeSmithingRecipe((RMSmithingRecipe) recipe);
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes a RecipeManager recipe from the <b>server</b>
-     *
-     * @param recipe
-     *            RecipeManager recipe
-     * @return removed recipe or null if not found
-     */
-    public static Recipe removeCraftLegacyRecipe(CraftRecipe recipe) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        ShapedRecipe sr;
-        Recipe r;
-
-        String[] sh;
-
-        ItemStack[] matrix = recipe.getIngredients();
-        RMBukkitTools.trimItemMatrix(matrix);
-        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-        int height = recipe.getHeight();
-        int width = recipe.getWidth();
-
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapedRecipe) {
-                    sr = (ShapedRecipe) r;
-                    sh = sr.getShape();
-
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror)) {
-                        iterator.remove();
-
-                        baseRecipeIterator.finish();
-
-                        return sr;
-                    }
-                }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
-            } catch (NoSuchElementException e) {
-                // Vanilla datapack is disabled
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes a RecipeManager recipe from the <b>server</b>
-     *
-     * @param recipe
-     *            RecipeManager recipe
-     * @return removed recipe or null if not found
-     */
-    public static Recipe removeCraftRecipe(CraftRecipe1_13 recipe) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        ShapedRecipe sr;
-        Recipe r;
-
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapedRecipe) {
-                    sr = (ShapedRecipe) r;
-
-                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
-                        iterator.remove();
-
-                        baseRecipeIterator.finish();
-
-                        return sr;
-                    }
-                }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
-            } catch (NoSuchElementException e) {
-                // Vanilla datapack is disabled
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes a RecipeManager recipe from the <b>server</b>
-     *
-     * @param recipe
-     *            RecipeManager recipe
-     * @return removed recipe or null if not found
-     */
-    public static Recipe removeCombineRecipe(CombineRecipe1_13 recipe) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        Recipe r;
-
-        List<RecipeChoice> ingredientChoices = recipe.getIngredientChoiceList();
-        List<List<Material>> ingredientChoiceList = new ArrayList<>();
-
-        for (RecipeChoice choice : ingredientChoices) {
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                ingredientChoiceList.add(materialChoice.getChoices());
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) ingredientChoices;
-                List<ItemStack> items = exactChoice.getChoices();
-                List<Material> materials = new ArrayList<>();
-                for (ItemStack item : items) {
-                    materials.add(item.getType());
-                }
-
-                ingredientChoiceList.add(materials);
-            }
-        }
-
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapelessRecipe) {
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
-                        iterator.remove();
-
-                        baseRecipeIterator.finish();
-
-                        return r;
-                    }
-                }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
-            } catch (NoSuchElementException e) {
-                // Vanilla datapack is disabled
-            }
-        }
-
-        return null;
-    }
-
-    public static Recipe removeCombineLegacyRecipe(CombineRecipe recipe) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        Recipe r;
-
-        List<ItemStack> items = recipe.getIngredients();
-
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapelessRecipe) {
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
-                        iterator.remove();
-
-                        baseRecipeIterator.finish();
-
-                        return r;
-                    }
-                }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
-            }
         }
 
         return null;
@@ -1097,17 +930,17 @@ public class Vanilla {
         if (!Version.has1_12Support()) return null;
 
         if (recipe instanceof CraftRecipe1_13) {
-            return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe);
+            return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, false);
         }
         if (recipe instanceof CraftRecipe) {
-            return replaceCraftRecipeV1_12((CraftRecipe) recipe);
+            return replaceCraftRecipeLegacy((CraftRecipe) recipe, false);
         }
 
         if (recipe instanceof CombineRecipe1_13) {
-            return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe);
+            return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, false);
         }
         if (recipe instanceof CombineRecipe) {
-            return replaceCombineRecipeV1_12((CombineRecipe) recipe);
+            return replaceCombineRecipeLegacy((CombineRecipe) recipe, false);
         }
 
         return null;
@@ -1116,13 +949,14 @@ public class Vanilla {
 
     /**
      * V1_13 or newer only.
-     * Replaces a RecipeManager recipe on the <b>server</b>
+     * Replaces/Removes a RecipeManager craft recipe on the <b>server</b>
      *
-     * @param recipe
-     *            RecipeManager recipe
+     * @param recipe RecipeManager recipe
+     * @param remove Whether the recipe should be removed
+     *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCraftRecipeV1_13(CraftRecipe1_13 recipe) {
+    public static Recipe replaceCraftRecipeV1_13(CraftRecipe1_13 recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
@@ -1136,8 +970,13 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
 
                     if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                        baseRecipeIterator.replace(overrideItem);
+                        if (remove) {
+                            iterator.remove();
+                        } else {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            baseRecipeIterator.replace(overrideItem);
+                        }
+
                         baseRecipeIterator.finish();
                         return sr;
                     }
@@ -1154,13 +993,14 @@ public class Vanilla {
 
     /**
      * V1_12 only.
-     * Replaces a RecipeManager recipe on the <b>server</b>
+     * Replaces/Removes a RecipeManager craft recipe on the <b>server</b>
      *
-     * @param recipe
-     *            RecipeManager recipe
+     * @param recipe RecipeManager recipe
+     * @param remove Whether the recipe should be removed
+     *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCraftRecipeV1_12(CraftRecipe recipe) {
+    public static Recipe replaceCraftRecipeLegacy(CraftRecipe recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
@@ -1183,8 +1023,12 @@ public class Vanilla {
                     sh = sr.getShape();
 
                     if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror)) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                        baseRecipeIterator.replace(overrideItem);
+                        if (remove) {
+                            iterator.remove();
+                        } else {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            baseRecipeIterator.replace(overrideItem);
+                        }
                         baseRecipeIterator.finish();
                         return sr;
                     }
@@ -1201,13 +1045,14 @@ public class Vanilla {
 
     /**
      * V1_13 or newer supported only.
-     * Replaces a RecipeManager recipe from the <b>server</b>
+     * Replaces/Removes a RecipeManager combine recipe from the <b>server</b>
      *
-     * @param recipe
-     *            RecipeManager recipe
+     * @param recipe RecipeManager recipe
+     * @param remove Whether the recipe should be removed
+     *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCombineRecipeV1_13(CombineRecipe1_13 recipe) {
+    public static Recipe replaceCombineRecipeV1_13(CombineRecipe1_13 recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
@@ -1237,8 +1082,13 @@ public class Vanilla {
 
                 if (r instanceof ShapelessRecipe) {
                     if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                        baseRecipeIterator.replace(overrideItem);
+                        if (remove) {
+                            iterator.remove();
+                        } else {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            baseRecipeIterator.replace(overrideItem);
+                        }
+
                         baseRecipeIterator.finish();
                         return r;
                     }
@@ -1255,13 +1105,14 @@ public class Vanilla {
 
     /**
      * V1_12 only.
-     * Replaces a RecipeManager recipe from the <b>server</b>
+     * Replaces/Removes a RecipeManager combine recipe from the <b>server</b>
      *
-     * @param recipe
-     *            RecipeManager recipe
+     * @param recipe RecipeManager recipe
+     * @param remove Whether the recipe should be removed
+     *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCombineRecipeV1_12(CombineRecipe recipe) {
+    public static Recipe replaceCombineRecipeLegacy(CombineRecipe recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
@@ -1274,8 +1125,13 @@ public class Vanilla {
 
                 if (r instanceof ShapelessRecipe) {
                     if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
-                        ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                        baseRecipeIterator.replace(overrideItem);
+                        if (remove) {
+                            iterator.remove();
+                        } else {
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            baseRecipeIterator.replace(overrideItem);
+                        }
+
                         baseRecipeIterator.finish();
                         return r;
                     }
@@ -1303,9 +1159,9 @@ public class Vanilla {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 
-        // In 1.12, we don't use the special iterator here, because "remove" is actually suppress.
+        // In 1.12, we don't use the special iterator here, because "remove" is actually suppressed.
         //  Since we really want to remove, we instead catalogue the non-custom, in case
-        //  other plugins have added recipes. Then, when done, we clear all, and readd just those
+        //  other plugins have added recipes. Then, when done, we clear all, and re-add just those
         //  discovered recipes, in the order we found them, to limit disruption.
         while (iterator.hasNext()) {
             try {
