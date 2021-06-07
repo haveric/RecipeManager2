@@ -1,5 +1,36 @@
 ## Change log
 
+### v2.26.0
+* NEW FLAG: `@KnowledgeBookItem <namespace:key>, [...]`
+* NEW FLAG: `@TropicalFishBucketItem <arguments> | [...]`
+  * Arguments: bodycolor <dyecolor>, pattern <pattern>, patterncolor <dyecolor>
+* NEW FLAG: `@MapItem <arguments>`
+  * See your 'recipe flags.html' file for usage information
+* NEW: /rmextract: Added a comment with namespace:key format to help with `@KnowledgeBookItem`
+* NEW: `BookItem`: Added generation argument
+* NEW: `@EnchantItem` and `@EnchantedBook`: Added {rand #1-#2} support
+* NEW: `@ItemNBT`: Added full variable support
+* NEW: Random numbers from {rand} can now be reused throughout a recipe instead of just the flag they are in with the {rand #1} format
+* FIX: Random integers from {rand #1-#2} arguments weren't properly random
+* FIX: Recipes with variables weren't processing the variables for simple recipes
+* FIX: /rmcreaterecipe and /rmextract: Increased support for most flags
+* FIX: /rmcreaterecipe: Improved `@ingredientcondition` support
+* FIX: `@BannerItem`: Validate recipe has a banner item when parsing the recipe
+* FIX: `@RepairCost`: Add option to customize prepareLore message and disable by default
+* NEW: `@Summon`: Added support for arrowcooldown, arrowsinbody, invisible, persistent, and nocollision
+* NEW: `@Summon`: Added support for bees: beeanger <ticks>, beecannotenterhiveticks <ticks>, beehasnectar, beehasstung
+* FIX: `@Summon`: Guardian elder property wasn't being set
+* FIX: `@ForChance`: Fix flag appending
+* NEW: `@ForChance`: Allow any flag to be appended to a group, not just the same flag
+* FIX: FuelRecipe: Fixed placing custom fuels
+* FIX: FuelRecipe: Fixed an error when moving fuels out using a number key
+* FIX: 1.13+ FuelRecipe: Fixed processing custom fuels
+* NEW: `@Cooldown`: Cooldowns are now saved and reloaded on server start
+* NEW: `@Cooldown`: Added day suffix
+* NEW: Added 'save-frequency' config options: brewingstands, campfires, composters, cooldowns, and furnaces
+  * Defaults to 30 minutes. Will only save if any data is changed in the given interval
+* NEW: Block data is saved on /rmreload
+
 ### v2.25.0
 * NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft
   * This may break some recipes if you're relying on `@ingredientcondition` to define multiple resulting recipes instead of using `@individualresults`

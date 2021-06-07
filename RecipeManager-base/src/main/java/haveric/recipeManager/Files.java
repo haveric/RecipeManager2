@@ -37,7 +37,7 @@ public class Files {
 
     private final CommandSender sender;
 
-    public static final String LASTCHANGED_CONFIG = "2.24.0";
+    public static final String LASTCHANGED_CONFIG = "2.26.0";
     public static final String LASTCHANGED_MESSAGES = "2.25.0";
     public static final String LASTCHANGED_CHOICE_ALIASES = "2.17.0";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
