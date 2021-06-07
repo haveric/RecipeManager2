@@ -471,10 +471,10 @@ public class Conditions implements Cloneable {
         return true;
     }
 
-    public String getEnchantsString() {
+    public String getEnchantsString(Map<Enchantment, Map<Integer, Boolean>> enchantMap) {
         StringBuilder s = new StringBuilder();
 
-        for (Entry<Enchantment, Map<Integer, Boolean>> e : enchants.entrySet()) {
+        for (Entry<Enchantment, Map<Integer, Boolean>> e : enchantMap.entrySet()) {
             if (s.length() > 0) {
                 s.append("; ");
             }
@@ -588,39 +588,6 @@ public class Conditions implements Cloneable {
         }
 
         return true;
-    }
-
-    public String getBookEnchantsString() {
-        StringBuilder s = new StringBuilder();
-
-        for (Entry<Enchantment, Map<Integer, Boolean>> e : bookEnchants.entrySet()) {
-            if (s.length() > 0) {
-                s.append("; ");
-            }
-
-            s.append(e.getKey().getName());
-
-            if (!e.getValue().isEmpty()) {
-                s.append(' ');
-                boolean first = true;
-
-                for (Entry<Integer, Boolean> l : e.getValue().entrySet()) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        s.append(", ");
-                    }
-
-                    if (!l.getValue()) {
-                        s.append("! ");
-                    }
-
-                    s.append(l.getKey());
-                }
-            }
-        }
-
-        return s.toString();
     }
 
     public String getName() {
@@ -1183,7 +1150,7 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     if (hasBookEnchants()) {
-                        a.addReason("flag.ingredientconditions.nobookenchants", failMessage, "{item}", ToolsItem.print(item), "{enchants}", getBookEnchantsString());
+                        a.addReason("flag.ingredientconditions.nobookenchants", failMessage, "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString(bookEnchants));
                     } else {
                         a.addReason("flag.ingredientconditions.emptybookenchants", failMessage, "{item}", ToolsItem.print(item));
                     }
@@ -1203,7 +1170,7 @@ public class Conditions implements Cloneable {
 
             if (addReasons) {
                 if (hasEnchants()) {
-                    a.addReason("flag.ingredientconditions.noenchants", failMessage, "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString());
+                    a.addReason("flag.ingredientconditions.noenchants", failMessage, "{item}", ToolsItem.print(item), "{enchants}", getEnchantsString(enchants));
                 } else {
                     a.addReason("flag.ingredientconditions.emptyenchants", failMessage, "{item}", ToolsItem.print(item));
                 }

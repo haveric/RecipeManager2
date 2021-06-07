@@ -250,8 +250,8 @@ public class Tools {
             // tag:namespace:tagname
             // tag:tagname
             if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
-                String namespace = null;
-                String tagName = null;
+                String namespace;
+                String tagName;
                 String dataString = null;
                 if (durSplit.length > 5) {
                     ErrorReporter.getInstance().warning("Invalid tag format: " + split[i]);
