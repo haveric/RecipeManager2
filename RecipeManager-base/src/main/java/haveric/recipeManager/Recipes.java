@@ -58,20 +58,14 @@ public class Recipes {
     }
 
     public int getNumRecipesSimple() {
-        int numRecipes = 0;
-        for (Map<String, List<BaseRecipe>> recipeMap: indexRecipesSimple.values()) {
-            for (List<BaseRecipe> baseRecipes : recipeMap.values()) {
-                for (BaseRecipe baseRecipe : baseRecipes) {
-                    if (!Vanilla.initialRecipes.containsKey(baseRecipe)) {
-                        numRecipes ++;
-                    }
-                }
-            }
-        }
-        return numRecipes;
+        return getNumRecipes(indexRecipesSimple);
     }
 
     public int getNumRecipesRequireRecipeManager() {
+        return getNumRecipes(indexRecipes);
+    }
+
+    private int getNumRecipes(Map<String, Map<String, List<BaseRecipe>>> indexRecipes) {
         int numRecipes = 0;
         for (Map<String, List<BaseRecipe>> recipeMap: indexRecipes.values()) {
             for (List<BaseRecipe> baseRecipes : recipeMap.values()) {
@@ -383,7 +377,7 @@ public class Recipes {
             if (Version.has1_12Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
                 if (isBasicRecipe) {
                     Vanilla.replaceCustomRecipe(recipe);
-                } else { // 'cept for this.
+                } else { // except for this.
                     recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
                 }
             }

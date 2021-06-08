@@ -922,29 +922,24 @@ public class Vanilla {
     /**
      * Replaces a recipe with a RecipeManager recipe. V1_12 support only!
      *
-     * @param recipe
-     *            RecipeManager recipe
-     * @return replaced recipe or null if not found.
+     * @param recipe RecipeManager recipe
      */
-    public static Recipe replaceCustomRecipe(BaseRecipe recipe) {
-        if (!Version.has1_12Support()) return null;
+    public static void replaceCustomRecipe(BaseRecipe recipe) {
+        if (!Version.has1_12Support()) return;
 
         if (recipe instanceof CraftRecipe1_13) {
-            return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, false);
+            replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, false);
         }
         if (recipe instanceof CraftRecipe) {
-            return replaceCraftRecipeLegacy((CraftRecipe) recipe, false);
+            replaceCraftRecipeLegacy((CraftRecipe) recipe, false);
         }
 
         if (recipe instanceof CombineRecipe1_13) {
-            return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, false);
+            replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, false);
         }
         if (recipe instanceof CombineRecipe) {
-            return replaceCombineRecipeLegacy((CombineRecipe) recipe, false);
+            replaceCombineRecipeLegacy((CombineRecipe) recipe, false);
         }
-
-        return null;
-
     }
 
     /**
