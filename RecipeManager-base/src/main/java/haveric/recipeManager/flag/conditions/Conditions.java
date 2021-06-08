@@ -1464,7 +1464,7 @@ public class Conditions implements Cloneable {
 
             if (addReasons) {
                 if (hasUnbreakable() && unbreakable) {
-                    a.addReason("flag.ingredientconditions.unbreakable", failMessage, "{item}", ToolsItem.print(item));
+                    a.addReason("flag.ingredientconditions.nounbreakable", failMessage, "{item}", ToolsItem.print(item));
                 } else {
                     a.addReason("flag.ingredientconditions.unbreakable", failMessage, "{item}", ToolsItem.print(item));
                 }
