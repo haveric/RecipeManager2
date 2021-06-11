@@ -21,6 +21,7 @@ import java.util.List;
 public class FlagSummon extends Flag {
 
     private static String argFormat = "  %-26s = %s";
+    private static String argFormatTagOffset = "  %-32s = %s";
     private static String argFormatExtra = "  %-30s %s";
 
     @Override
@@ -89,7 +90,7 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "chance <0.01-100>%", "chance of the entity to spawn, this value is for individual entities."),
             String.format(argFormat, "chest <item> [drop%]", "equip an item on the entity's chest with optional drop chance."),
-            String.format(argFormat, "color &lt;dye>&gt;", "sets the color of animal, only works for sheep and pet wolf/cats. Values: " + Files.getNameIndexHashLink("dyecolor")),
+            String.format(argFormatTagOffset, "color &lt;dye&gt;", "sets the color of animal, only works for sheep and pet wolf/cats. Values: " + Files.getNameIndexHashLink("dyecolor")),
         }, String.class);
 
         if (!Version.has1_12Support()) {
