@@ -55,6 +55,13 @@ public class FlagSummon extends Flag {
             }, String.class);
         }
 
+        if (Version.has1_17Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "axolotl <variant>", "sets the axolotl variant, available values: " + RMCUtil.collectionToString(Arrays.asList(Axolotl.Variant.values())).toLowerCase()),
+                    String.format(argFormat, "axolotlplayingdead", "sets the axolotl to be playing dead."),
+            }, String.class);
+        }
+
         description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
         }, String.class);
@@ -102,6 +109,14 @@ public class FlagSummon extends Flag {
                     String.format(argFormat, "foxfirsttrustedplayer <uuid or player>", "set the fox's first trusted player. If set to 'player', the crafter will be used."),
                     String.format(argFormat, "foxsecondtrustedplayer <uuid or player>", "set the fox's second trusted player. If set to 'player', the crafter will be used."),
                     String.format(argFormat, "foxsleeping", "set the fox to be sleeping"),
+            }, String.class);
+        }
+
+        if (Version.has1_17Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "glowsquiddarkticksremaining <ticks>", "sets the number of dark ticks that a glow squid has remaining."),
+                    String.format(argFormat, "goatscreaming", "set the goat to be a screaming goat."),
+
             }, String.class);
         }
 

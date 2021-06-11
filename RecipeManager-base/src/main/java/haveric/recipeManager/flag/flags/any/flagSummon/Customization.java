@@ -31,6 +31,8 @@ public class Customization implements Cloneable {
     private boolean angry = false;
     private Integer arrowCooldown = null;
     private int arrowsInBody = 0;
+    private Axolotl.Variant axolotl = null;
+    private boolean axolotlPlayingDead = false;
     private boolean baby = false;
     private int beeAnger = 0;
     private int beeCannotEnterHiveTicks = 0;
@@ -49,6 +51,8 @@ public class Customization implements Cloneable {
     private boolean foxSecondTrustedPlayer = false;
     private UUID foxSecondTrustedPlayerUUID = null;
     private boolean foxSleeping = false;
+    private Integer glowSquidDarkTicksRemaining = null;
+    private boolean goatScreaming = false;
     private boolean hasChest = false;
     private boolean hit = false;
     @SuppressWarnings("deprecation")
@@ -190,6 +194,13 @@ public class Customization implements Cloneable {
             arrowCooldown = c.arrowCooldown;
             arrowsInBody = c.arrowsInBody;
             invisible = c.invisible;
+        }
+
+        if (Version.has1_17Support()) {
+            axolotl = c.axolotl;
+            axolotlPlayingDead = c.axolotlPlayingDead;
+            glowSquidDarkTicksRemaining = c.glowSquidDarkTicksRemaining;
+            goatScreaming = c.goatScreaming;
         }
     }
 
@@ -555,6 +566,24 @@ public class Customization implements Cloneable {
                     bee.setCannotEnterHiveTicks(beeCannotEnterHiveTicks);
                     bee.setHasNectar(beeHasNectar);
                     bee.setHasStung(beeHasStung);
+                }
+            }
+
+            if (Version.has1_17Support()) {
+                if (ent instanceof Axolotl) {
+                    Axolotl axolotlEntity = (Axolotl) ent;
+                    axolotlEntity.setVariant(axolotl);
+                    axolotlEntity.setPlayingDead(axolotlPlayingDead);
+                }
+
+                if (ent instanceof GlowSquid && glowSquidDarkTicksRemaining != null) {
+                    GlowSquid glowSquid = (GlowSquid) ent;
+                    glowSquid.setDarkTicksRemaining(glowSquidDarkTicksRemaining);
+                }
+
+                if (ent instanceof Goat) {
+                    Goat goat = (Goat) ent;
+                    goat.setScreaming(goatScreaming);
                 }
             }
 
@@ -1312,6 +1341,31 @@ public class Customization implements Cloneable {
             }
         } else if (Version.has1_16Support() && lower.equals("invisible")) {
             invisible = true;
+        } else if (Version.has1_17Support() && lower.equals("axolotlplayingdead")) {
+            axolotlPlayingDead = true;
+        } else if (Version.has1_17Support() && lower.startsWith("axolotl")) {
+            lower = lower.substring("axolotl".length()).trim();
+            axolotl = RMCUtil.parseEnum(lower, Axolotl.Variant.values());
+
+            if (axolotl == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'axolotl' argument with invalid variant: " + lower);
+            }
+        } else if (Version.has1_17Support() && lower.startsWith("glowsquiddarkticksremaining")) {
+            lower = lower.substring("glowsquiddarkticksremaining".length()).trim();
+
+            try {
+                int ticksRemaining = Integer.parseInt(lower);
+
+                if (ticksRemaining > 0) {
+                    glowSquidDarkTicksRemaining = ticksRemaining;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'glowsquiddarkticksremaining' argument with negative or zero value: " + lower);
+                }
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'glowsquiddarkticksremaining' argument with invalid value number: " + lower);
+            }
+        } else if (Version.has1_17Support() && lower.equals("goatscreaming")) {
+            goatScreaming = true;
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
@@ -1423,6 +1477,13 @@ public class Customization implements Cloneable {
             toHash += "arrowCooldown: " + arrowCooldown;
             toHash += "arrowsInBody: " + arrowsInBody;
             toHash += "invisible: " + invisible;
+        }
+
+        if (Version.has1_17Support()) {
+            toHash += "axolotl: " + axolotl;
+            toHash += "axolotlPlayingDead: " + axolotlPlayingDead;
+            toHash += "glowSquidDarkTicksRemaining: " + glowSquidDarkTicksRemaining;
+            toHash += "goatScreaming: " + goatScreaming;
         }
 
         return toHash.hashCode();
