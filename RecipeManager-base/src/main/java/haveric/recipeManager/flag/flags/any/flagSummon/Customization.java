@@ -5,7 +5,6 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsEntity;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -342,12 +341,23 @@ public class Customization implements Cloneable {
                     npc.setAdult();
                 }
 
-                if (ageLock) {
-                    npc.setAgeLock(true);
-                }
+                if (Version.has1_16Support()) {
+                    Breedable breedable = (Breedable) ent;
+                    if (ageLock) {
+                        breedable.setAgeLock(true);
+                    }
 
-                if (noBreed) {
-                    npc.setBreed(false);
+                    if (noBreed) {
+                        breedable.setBreed(false);
+                    }
+                } else {
+                    if (ageLock) {
+                        npc.setAgeLock(true);
+                    }
+
+                    if (noBreed) {
+                        npc.setBreed(false);
+                    }
                 }
             }
 
@@ -847,17 +857,9 @@ public class Customization implements Cloneable {
                 }
             }
         } else if (lower.equals("adult")) {
-            if (ToolsEntity.isAgeable(entityType)) {
-                adult = true;
-            } else {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'adult' set on unsupported entity!");
-            }
+            adult = true;
         } else if (lower.equals("agelock")) {
-            if (ToolsEntity.isAgeable(entityType)) {
-                ageLock = true;
-            } else {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'agelock' set on unsupported entity!");
-            }
+            ageLock = true;
         } else if (lower.equals("angry")) {
             boolean error = false;
             if (Version.has1_16Support()) {
@@ -882,11 +884,7 @@ public class Customization implements Cloneable {
 
             angry = true;
         } else if (lower.equals("baby")) {
-            if (ToolsEntity.isAgeable(entityType) || entityType == EntityType.ZOMBIE) {
-                baby = true;
-            } else {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'baby' set on unsupported entity!");
-            }
+            baby = true;
         } else if (lower.startsWith("cat")) {
             lower = lower.substring("cat".length()).trim();
 
@@ -1015,11 +1013,7 @@ public class Customization implements Cloneable {
 
             setName(original);
         } else if (lower.equals("nobreed")) {
-            if (ToolsEntity.isAgeable(entityType)) {
-                noBreed = true;
-            } else {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'nobreed' set on unsupported entity!");
-            }
+            noBreed = true;
         } else if (lower.equals("noeffect")) {
             noEffect = true;
         } else if (lower.equals("nohidename")) {
@@ -1043,20 +1037,16 @@ public class Customization implements Cloneable {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'onfire' argument with invalid value number: " + lower);
             }
         } else if (lower.startsWith("pet")) {
-            if (ToolsEntity.isTameable(entityType)) {
-                pet = true;
+            pet = true;
 
-                if (lower.length() > "pet".length()) {
-                    lower = lower.substring("pet".length()).trim();
+            if (lower.length() > "pet".length()) {
+                lower = lower.substring("pet".length()).trim();
 
-                    if (lower.equals("nosit")) {
-                        noSit = true;
-                    } else {
-                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pet' argument with unknown value: " + lower);
-                    }
+                if (lower.equals("nosit")) {
+                    noSit = true;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pet' argument with unknown value: " + lower);
                 }
-            } else {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pet' on untameable entity!");
             }
         } else if (lower.startsWith("pickup")) {
             lower = lower.substring("pickup".length()).trim();

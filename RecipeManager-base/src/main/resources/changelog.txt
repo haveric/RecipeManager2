@@ -3,8 +3,9 @@ This file will be automatically overwritten when a new version is installed.
 
 ### Coming Soon
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message
-* NEW: `@Summon`: Added support for `axolotl <variant>, axolotlplayingdead, glowsquiddarkticksremaining <ticks>, and goatscreaming`
-* NEW: `@Summon`: Added support for `freezeticks <ticks> and visualfire`
+* NEW: `@Summon`: Added support for `axolotl <variant>`, `axolotlplayingdead`, `glowsquiddarkticksremaining <ticks>`, and `goatscreaming`
+* NEW: `@Summon`: Added support for `freezeticks <ticks>` and `visualfire`
+* FIX: `@Summon`: Remove entity type validation on adult, agelock, baby, nobreed, and pet
 
 ### v2.26.0
 * NEW FLAG: `@KnowledgeBookItem <namespace:key>, [...]`
