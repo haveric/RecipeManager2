@@ -453,59 +453,6 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (Version.has1_12Support()) {
-                if (ent instanceof Parrot) {
-                    Parrot npc = (Parrot) ent;
-
-                    if (parrot != null) {
-                        npc.setVariant(parrot);
-                    }
-                }
-            }
-
-            if (Version.has1_14Support()) {
-                if (ent instanceof Fox) {
-                    Fox npc = (Fox) ent;
-
-                    if (fox != null) {
-                        npc.setFoxType(fox);
-                    }
-
-                    if (foxCrouching) {
-                        npc.setCrouching(true);
-                    }
-
-                    if (foxFirstTrustedPlayerUUID != null) {
-                        OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
-                        npc.setFirstTrustedPlayer(firstPlayer);
-                    } else if (foxFirstTrustedPlayer) {
-                        npc.setFirstTrustedPlayer(player);
-                    }
-
-                    if (foxSecondTrustedPlayerUUID != null) {
-                        OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
-                        npc.setFirstTrustedPlayer(secondPlayer);
-                    } else if (foxSecondTrustedPlayer) {
-                        npc.setSecondTrustedPlayer(player);
-                    }
-
-                    if (foxSleeping) {
-                        npc.setSleeping(true);
-                    }
-                }
-
-                if (ent instanceof Panda) {
-                    Panda npc = (Panda) ent;
-
-                    if (pandaMainGene != null) {
-                        npc.setMainGene(pandaMainGene);
-                    }
-                    if (pandaHiddenGene != null) {
-                        npc.setHiddenGene(pandaHiddenGene);
-                    }
-                }
-            }
-
             if (rabbit != null && ent instanceof Rabbit) {
                 Rabbit npc = (Rabbit) ent;
                 npc.setRabbitType(rabbit);
@@ -551,16 +498,61 @@ public class Customization implements Cloneable {
                 ent.setAI(!noAi);
             }
 
-            if (Version.has1_16Support()) {
-                if (arrowCooldown != null) {
-                    ent.setArrowCooldown(arrowCooldown);
+            if (Version.has1_12Support()) {
+                if (ent instanceof Parrot) {
+                    Parrot npc = (Parrot) ent;
+
+                    if (parrot != null) {
+                        npc.setVariant(parrot);
+                    }
                 }
-                ent.setArrowsInBody(arrowsInBody);
-                ent.setInvisible(invisible);
             }
 
             if (Version.has1_13Support()) {
                 ent.setPersistent(persistent);
+            }
+
+            if (Version.has1_14Support()) {
+                if (ent instanceof Fox) {
+                    Fox npc = (Fox) ent;
+
+                    if (fox != null) {
+                        npc.setFoxType(fox);
+                    }
+
+                    if (foxCrouching) {
+                        npc.setCrouching(true);
+                    }
+
+                    if (foxFirstTrustedPlayerUUID != null) {
+                        OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
+                        npc.setFirstTrustedPlayer(firstPlayer);
+                    } else if (foxFirstTrustedPlayer) {
+                        npc.setFirstTrustedPlayer(player);
+                    }
+
+                    if (foxSecondTrustedPlayerUUID != null) {
+                        OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
+                        npc.setFirstTrustedPlayer(secondPlayer);
+                    } else if (foxSecondTrustedPlayer) {
+                        npc.setSecondTrustedPlayer(player);
+                    }
+
+                    if (foxSleeping) {
+                        npc.setSleeping(true);
+                    }
+                }
+
+                if (ent instanceof Panda) {
+                    Panda npc = (Panda) ent;
+
+                    if (pandaMainGene != null) {
+                        npc.setMainGene(pandaMainGene);
+                    }
+                    if (pandaHiddenGene != null) {
+                        npc.setHiddenGene(pandaHiddenGene);
+                    }
+                }
             }
 
             if (Version.has1_15Support()) {
@@ -571,6 +563,14 @@ public class Customization implements Cloneable {
                     bee.setHasNectar(beeHasNectar);
                     bee.setHasStung(beeHasStung);
                 }
+            }
+
+            if (Version.has1_16Support()) {
+                if (arrowCooldown != null) {
+                    ent.setArrowCooldown(arrowCooldown);
+                }
+                ent.setArrowsInBody(arrowsInBody);
+                ent.setInvisible(invisible);
             }
 
             if (Version.has1_17Support()) {
