@@ -114,6 +114,7 @@ public class FlagSummon extends Flag {
 
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "freezeticks <ticks>", "sets the entity's current freeze ticks (amount of ticks the entity has been in powdered snow)."),
                     String.format(argFormat, "glowsquiddarkticksremaining <ticks>", "sets the number of dark ticks that a glow squid has remaining."),
                     String.format(argFormat, "goatscreaming", "set the goat to be a screaming goat."),
 
@@ -217,6 +218,11 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "villager <type>", "set the villager profession"),
                 String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
         }, String.class);
+
+        if (Version.has1_17Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire).") }, String.class);
+        }
 
         if (!Version.has1_12Support()) {
             description = ObjectArrays.concat(description, new String[]{

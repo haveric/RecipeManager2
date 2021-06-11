@@ -51,6 +51,7 @@ public class Customization implements Cloneable {
     private boolean foxSecondTrustedPlayer = false;
     private UUID foxSecondTrustedPlayerUUID = null;
     private boolean foxSleeping = false;
+    private Integer freezeTicks = null;
     private Integer glowSquidDarkTicksRemaining = null;
     private boolean goatScreaming = false;
     private boolean hasChest = false;
@@ -96,6 +97,7 @@ public class Customization implements Cloneable {
     private int spread = 0;
     private boolean target = false;
     private Villager.Profession villager = null;
+    private boolean visualFire = false;
     private boolean zombieVillager = false;
 
     public Customization(String newFlagType, EntityType newType) {
@@ -199,8 +201,10 @@ public class Customization implements Cloneable {
         if (Version.has1_17Support()) {
             axolotl = c.axolotl;
             axolotlPlayingDead = c.axolotlPlayingDead;
+            freezeTicks = c.freezeTicks;
             glowSquidDarkTicksRemaining = c.glowSquidDarkTicksRemaining;
             goatScreaming = c.goatScreaming;
+            visualFire = c.visualFire;
         }
     }
 
@@ -585,6 +589,12 @@ public class Customization implements Cloneable {
                     Goat goat = (Goat) ent;
                     goat.setScreaming(goatScreaming);
                 }
+
+                if (freezeTicks != null) {
+                    ent.setFreezeTicks(freezeTicks);
+                }
+
+                ent.setVisualFire(visualFire);
             }
 
             EntityEquipment eq = ent.getEquipment();
@@ -1350,6 +1360,14 @@ public class Customization implements Cloneable {
             if (axolotl == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'axolotl' argument with invalid variant: " + lower);
             }
+        } else if (Version.has1_17Support() && lower.startsWith("freezeticks")) {
+            lower = lower.substring("freezeticks".length()).trim();
+
+            try {
+                freezeTicks = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'freezeticks' argument with invalid value number: " + lower);
+            }
         } else if (Version.has1_17Support() && lower.startsWith("glowsquiddarkticksremaining")) {
             lower = lower.substring("glowsquiddarkticksremaining".length()).trim();
 
@@ -1366,6 +1384,8 @@ public class Customization implements Cloneable {
             }
         } else if (Version.has1_17Support() && lower.equals("goatscreaming")) {
             goatScreaming = true;
+        } else if (Version.has1_17Support() && lower.equals("visualfire")) {
+            visualFire = true;
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
@@ -1482,8 +1502,10 @@ public class Customization implements Cloneable {
         if (Version.has1_17Support()) {
             toHash += "axolotl: " + axolotl;
             toHash += "axolotlPlayingDead: " + axolotlPlayingDead;
+            toHash += "freezeTicks: " + freezeTicks;
             toHash += "glowSquidDarkTicksRemaining: " + glowSquidDarkTicksRemaining;
             toHash += "goatScreaming: " + goatScreaming;
+            toHash += "visualFire: " + visualFire;
         }
 
         return toHash.hashCode();
