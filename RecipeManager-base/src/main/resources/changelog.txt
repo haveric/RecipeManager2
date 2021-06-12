@@ -8,7 +8,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: `@Summon`: Remove entity type validation on adult, agelock, baby, nobreed, and pet
 * NEW: Added 1.17 furnace fuels: azalea and flowering azalea
 * NEW: Added 1.17 composting items and missed shroomlight for 1.16
-* NEW RECIPE: Item: Allows saving an item with flags to be used in other recipes/flags
+* NEW: Added item recipe: Allows saving an item with flags to be used in other recipes/flags
+* NEW: Added support for item recipes in any result, including item recipes for chaining
 * NEW FLAG: `@BundleItem <item>[:data][:amount]`: Adds items to a bundle
     * `@BundleItem item:<name>` can be used to reference an item recipe.
 

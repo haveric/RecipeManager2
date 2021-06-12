@@ -114,7 +114,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 if (callEvent.getResult() == null) {
                     result = null;
                 } else {
-                    result = new ItemResult(callEvent.getResult());
+                    result = new ItemResult(callEvent.getResult(), false);
                 }
             }
 

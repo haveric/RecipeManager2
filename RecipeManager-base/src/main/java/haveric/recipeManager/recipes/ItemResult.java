@@ -22,12 +22,16 @@ public class ItemResult extends ItemStack implements Flaggable {
         super(item);
     }
 
-    public ItemResult(ItemResult result) {
+    public ItemResult(ItemResult result, boolean cloneFlags) {
         super(result);
 
         if (result.hasFlags()) {
             // don't clone, needs to be a reference to allow some flags (ex: FlagCooldown) to work
             flags = result.getFlags();
+
+            if (cloneFlags) {
+                flags = flags.clone();
+            }
         } else {
             flags = null;
         }
@@ -57,7 +61,7 @@ public class ItemResult extends ItemStack implements Flaggable {
     @Override
     public ItemResult clone() {
         super.clone();
-        return new ItemResult(this);
+        return new ItemResult(this, false);
     }
 
     public void setItemStack(ItemStack item) {

@@ -10,6 +10,7 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.item.ItemRecipe;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
@@ -133,18 +134,28 @@ public class Tools {
                 }
             }
 
-            string = split[1];
+            string = split[1].trim();
         } else {
-            string = split[0];
+            string = split[0].trim();
         }
 
-        ItemStack item = parseItem(string, defaultData, settings);
+        String stringLower = string.toLowerCase();
+        if (stringLower.startsWith("item:")) {
+            string = string.substring("item:".length()).trim();
+            ItemRecipe itemRecipe = ItemRecipe.getRecipe(string);
+            if (itemRecipe == null) {
+                return null;
+            }
 
-        if (item == null) {
-            return null;
+            result = new ItemResult(itemRecipe.getResult(), true);
+        } else {
+            ItemStack item = parseItem(string, defaultData, settings);
+            if (item == null) {
+                return null;
+            }
+
+            result.setItemStack(item);
         }
-
-        result.setItemStack(item);
 
         return result;
     }
