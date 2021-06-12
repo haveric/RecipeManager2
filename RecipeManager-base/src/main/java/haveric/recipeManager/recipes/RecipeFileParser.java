@@ -42,7 +42,7 @@ public class RecipeFileParser {
             int i = directive.indexOf(' ');
 
             if (i > 0) {
-                recipeName = fileReader.getLine().substring(i + 1);
+                recipeName = fileReader.getLine().substring(i + 1).trim();
                 directive = directive.substring(0, i);
             }
 

@@ -1,6 +1,7 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.remove;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

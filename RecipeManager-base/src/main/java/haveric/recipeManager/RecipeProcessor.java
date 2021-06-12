@@ -3,6 +3,7 @@ package haveric.recipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.RecipeFileParser;
 import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.recipes.item.ItemRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,6 +31,7 @@ public class RecipeProcessor implements Runnable {
     private static BukkitTask task;
 
     public static void reload(CommandSender sender, boolean check) {
+        ItemRecipe.clearRecipes();
         DIR_RECIPES = RecipeManager.getPlugin().getDataFolder() + File.separator + "recipes" + File.separator;
         FILE_ERRORLOG = DIR_RECIPES + "errors.log";
         new RecipeProcessor(sender, check);
@@ -39,6 +41,7 @@ public class RecipeProcessor implements Runnable {
      * Used for Testing Only
      */
     public static void reload(CommandSender sender, boolean check, String newDirectory, String errorDirectory) {
+        ItemRecipe.clearRecipes();
         DIR_RECIPES = newDirectory;
         FILE_ERRORLOG = errorDirectory + File.separator + "errors.log";
         new RecipeProcessor(sender, check);

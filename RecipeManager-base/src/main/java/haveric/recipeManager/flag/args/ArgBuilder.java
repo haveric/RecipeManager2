@@ -36,15 +36,33 @@ public class ArgBuilder {
     public ArgBuilder() { }
 
     public ArgBuilder(Args newArgs) {
-        a.setPlayerUUID(newArgs.playerUUID());
-        a.setPlayer(newArgs.player());
-        a.setLocation(newArgs.location().clone());
-        a.setRecipe(newArgs.recipe());
-        a.setRecipeType(newArgs.recipeType());
-        a.setInventoryView(newArgs.inventoryView());
-        a.setInventory(newArgs.inventory());
-        a.setResult(newArgs.result().clone());
-        a.setExtra(newArgs.extra());
+        if (newArgs.hasPlayerUUID()) {
+            a.setPlayerUUID(newArgs.playerUUID());
+        }
+        if (newArgs.hasPlayer()) {
+            a.setPlayer(newArgs.player());
+        }
+        if (newArgs.hasLocation()) {
+            a.setLocation(newArgs.location().clone());
+        }
+        if (newArgs.hasRecipe()) {
+            a.setRecipe(newArgs.recipe());
+        }
+        if (newArgs.hasRecipeType()) {
+            a.setRecipeType(newArgs.recipeType());
+        }
+        if (newArgs.hasInventoryView()) {
+            a.setInventoryView(newArgs.inventoryView());
+        }
+        if (newArgs.hasInventory()) {
+            a.setInventory(newArgs.inventory());
+        }
+        if (newArgs.hasResult()) {
+            a.setResult(newArgs.result().clone());
+        }
+        if (newArgs.hasExtra()) {
+            a.setExtra(newArgs.extra());
+        }
     }
 
     public ArgBuilder player(UUID playerUUID) {

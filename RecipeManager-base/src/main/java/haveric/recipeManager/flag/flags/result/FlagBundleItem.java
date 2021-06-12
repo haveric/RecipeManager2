@@ -3,9 +3,11 @@ package haveric.recipeManager.flag.flags.result;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
@@ -26,30 +28,36 @@ public class FlagBundleItem extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <item>[:data][:amount]", };
+            "{flag} <item>[:data][:amount]",
+            "{flag} item:<name>", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
             "{flag} Adds a stack of items to a bundle.",
-            "This flag can be used more than once to add more items to bundle.", };
+            "This flag can be used more than once to add more items to bundle.",
+            "",
+            "You can use a predefined item from an item recipe:",
+            "  Format = item:<name>",
+            "  <name> = The name of an item recipe defined before this flag.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag} dirt:0:40 // Add 40 dirt",
-            "{flag} diamond_sword:1500 // Add an almost destroyed diamond_sword", };
+            "{flag} diamond_sword:1500 // Add an almost destroyed diamond_sword",
+            "{flag} item:test sword // Will use the item from the 'test sword' recipe, assuming it's defined.", };
     }
 
-    private final List<ItemStack> items = new ArrayList<>();
+    private final List<ItemRecipe> itemRecipes = new ArrayList<>();
 
     public FlagBundleItem() { }
 
     public FlagBundleItem(FlagBundleItem flag) {
         super(flag);
-        items.addAll(flag.items);
+        itemRecipes.addAll(flag.itemRecipes);
     }
 
     @Override
@@ -59,7 +67,15 @@ public class FlagBundleItem extends Flag {
 
     @Override
     public boolean requiresRecipeManagerModification() {
-        return false;
+        boolean requiresModification = false;
+        for (ItemRecipe itemRecipe : itemRecipes) {
+            if (itemRecipe.requiresRecipeManagerModification()) {
+                requiresModification = true;
+                break;
+            }
+        }
+
+        return requiresModification;
     }
 
     @Override
@@ -90,11 +106,25 @@ public class FlagBundleItem extends Flag {
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
 
-        ItemStack item = Tools.parseItem(value, 0);
-        if (item == null || item.getType() == Material.AIR) {
-            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid item defined!");
+        String valueLower = value.trim().toLowerCase();
+        if (valueLower.startsWith("item:")) {
+            value = value.substring("item:".length());
+
+            ItemRecipe recipe = ItemRecipe.getRecipe(value);
+            if (recipe == null) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid item reference: " + value + "!");
+            } else {
+                itemRecipes.add(recipe);
+            }
         } else {
-            items.add(item);
+            ItemStack item = Tools.parseItem(value, 0);
+            if (item == null || item.getType() == Material.AIR) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid item defined!");
+            } else {
+                ItemRecipe recipe = new ItemRecipe();
+                recipe.setResult(item);
+                itemRecipes.add(recipe);
+            }
         }
 
         return true;
@@ -103,7 +133,28 @@ public class FlagBundleItem extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        onCrafted(a);
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
+
+            if (!(meta instanceof BundleMeta)) {
+                a.addCustomReason("Needs bundle!");
+                return;
+            }
+
+            BundleMeta bundleMeta = (BundleMeta) meta;
+
+            for (ItemRecipe itemRecipe : itemRecipes) {
+                ItemResult result = itemRecipe.getResult();
+                Args itemArgs = ArgBuilder.create(a).recipe(itemRecipe).result(result).build();
+                itemArgs.setFirstRun(true);
+
+                if (result.getFlags().sendPrepare(itemArgs, true)) {
+                    bundleMeta.addItem(itemArgs.result());
+                }
+            }
+
+            a.result().setItemMeta(bundleMeta);
+        }
     }
 
     @Override
@@ -117,8 +168,15 @@ public class FlagBundleItem extends Flag {
             }
 
             BundleMeta bundleMeta = (BundleMeta) meta;
-            for (ItemStack item : items) {
-                bundleMeta.addItem(item);
+
+            for (ItemRecipe itemRecipe : itemRecipes) {
+                ItemResult result = itemRecipe.getResult();
+                Args itemArgs = ArgBuilder.create(a).recipe(itemRecipe).result(result).build();
+                itemArgs.setFirstRun(true);
+
+                if (result.getFlags().sendCrafted(itemArgs, true)) {
+                    bundleMeta.addItem(itemArgs.result());
+                }
             }
 
             a.result().setItemMeta(bundleMeta);
@@ -127,12 +185,13 @@ public class FlagBundleItem extends Flag {
 
     @Override
     public int hashCode() {
-        String toHash = "" + super.hashCode();
+        StringBuilder toHash = new StringBuilder(super.hashCode());
 
-        for (ItemStack item : items) {
-            toHash += "item: " + item.hashCode();
+        for (ItemRecipe itemRecipe : itemRecipes) {
+            toHash.append("itemRecipe: ").append(itemRecipe.hashCode());
+            toHash.append("item: ").append(itemRecipe.getResult().hashCode());
         }
 
-        return toHash.hashCode();
+        return toHash.toString().hashCode();
     }
 }

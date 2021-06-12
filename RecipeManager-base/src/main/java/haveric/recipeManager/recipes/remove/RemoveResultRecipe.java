@@ -1,8 +1,10 @@
-package haveric.recipeManager.recipes;
+package haveric.recipeManager.recipes.remove;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.MultiResultRecipe;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
