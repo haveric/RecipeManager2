@@ -484,9 +484,28 @@ public class Vanilla {
             addCompostRecipe(Material.CRIMSON_FUNGUS, 65);
             addCompostRecipe(Material.WARPED_FUNGUS, 65);
             addCompostRecipe(Material.NETHER_WART, 65);
+            addCompostRecipe(Material.SHROOMLIGHT, 65);
 
             addCompostRecipe(Material.NETHER_WART_BLOCK, 85);
             addCompostRecipe(Material.WARPED_WART_BLOCK, 85);
+        }
+
+        if (Version.has1_17Support()) {
+            addCompostRecipe(Material.AZALEA_LEAVES, 30);
+            addCompostRecipe(Material.GLOW_BERRIES, 30);
+            addCompostRecipe(Material.HANGING_ROOTS, 30);
+            addCompostRecipe(Material.MOSS_CARPET, 30);
+            addCompostRecipe(Material.SMALL_DRIPLEAF, 30);
+
+            addCompostRecipe(Material.FLOWERING_AZALEA_LEAVES , 50);
+            addCompostRecipe(Material.GLOW_LICHEN, 50);
+
+            addCompostRecipe(Material.AZALEA, 65);
+            addCompostRecipe(Material.BIG_DRIPLEAF, 65);
+            addCompostRecipe(Material.MOSS_BLOCK, 65);
+            addCompostRecipe(Material.SPORE_BLOSSOM, 65);
+
+            addCompostRecipe(Material.FLOWERING_AZALEA, 85);
         }
     }
 

@@ -7,6 +7,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: `@Summon`: Added support for `freezeticks <ticks>` and `visualfire`
 * FIX: `@Summon`: Remove entity type validation on adult, agelock, baby, nobreed, and pet
 * NEW: Added 1.17 furnace fuels: azalea and flowering azalea
+* NEW: Added 1.17 composting items and missed shroomlight for 1.16
 
 ### v2.26.0
 * NEW FLAG: `@KnowledgeBookItem <namespace:key>, [...]`
