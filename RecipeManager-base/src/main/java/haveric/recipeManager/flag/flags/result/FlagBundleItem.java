@@ -174,7 +174,7 @@ public class FlagBundleItem extends Flag {
                 Args itemArgs = ArgBuilder.create(a).recipe(itemRecipe).result(result).build();
                 itemArgs.setFirstRun(true);
 
-                if (result.getFlags().sendCrafted(itemArgs, true)) {
+                if (result.getFlags().sendCrafted(itemArgs)) {
                     bundleMeta.addItem(itemArgs.result());
                 }
             }
