@@ -372,6 +372,11 @@ public class Vanilla {
             addFuelRecipe(Material.SPRUCE_BOAT, 60);
         }
 
+        if (Version.has1_17Support()) {
+            addFuelRecipe(Material.AZALEA, 5);
+            addFuelRecipe(Material.FLOWERING_AZALEA, 5);
+        }
+
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
             if (recipe instanceof BaseFuelRecipe) {
