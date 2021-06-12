@@ -1,17 +1,15 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -92,9 +90,10 @@ public class FlagBundleItem extends Flag {
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
 
-        ItemStack item = Tools.parseItem(value, RMCVanilla.DATA_WILDCARD, ParseBit.NO_META);
-        MessageSender.getInstance().info("Item: " + item);
-        if (item != null) {
+        ItemStack item = Tools.parseItem(value, 0);
+        if (item == null || item.getType() == Material.AIR) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid item defined!");
+        } else {
             items.add(item);
         }
 
