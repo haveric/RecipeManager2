@@ -202,6 +202,15 @@ public class ToolsFlag {
                 }
             }
 
+            if (Version.has1_17Support() && meta instanceof BundleMeta) {
+                BundleMeta bundleMeta = (BundleMeta) meta;
+                List<ItemStack> bundleItems = bundleMeta.getItems();
+                for (ItemStack bundleItem : bundleItems) {
+                    recipeString.append(Files.NL).append("@bundle ").append(bundleItem.getType());
+                    recipeString.append(":").append(bundleItem.getDurability()).append(":").append(bundleItem.getAmount());
+                }
+            }
+
             if (Supports.compassMeta() && meta instanceof CompassMeta) {
                 CompassMeta compassMeta = (CompassMeta) meta;
 

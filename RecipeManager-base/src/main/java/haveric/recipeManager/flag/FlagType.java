@@ -3,6 +3,7 @@ package haveric.recipeManager.flag;
 public class FlagType {
     public static final String BIOME = "@biome";
     public static final String BLOCK_POWERED = "@blockpowered";
+    public static final String BUNDLE_ITEM = "@bundleitem";
     public static final String BROADCAST = "@broadcast";
     public static final String COMMAND = "@command";
     public static final String COOLDOWN = "@cooldown";

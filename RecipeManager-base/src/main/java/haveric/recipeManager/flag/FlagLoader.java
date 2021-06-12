@@ -90,6 +90,9 @@ public class FlagLoader {
         // Ingredient or Result flags
         loadFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), APPLIED_TO_ITEM, "banner");
         loadFlag(FlagType.BOOK_ITEM, new FlagBookItem(), APPLIED_TO_ITEM, "book");
+        if (Version.has1_17Support()) {
+            loadFlag(FlagType.BUNDLE_ITEM, new FlagBundleItem(), APPLIED_TO_ITEM, "bundle");
+        }
         if (Supports.compassMeta()) {
             loadFlag(FlagType.COMPASS_ITEM, new FlagCompassItem(), APPLIED_TO_ITEM, "compass");
         }
