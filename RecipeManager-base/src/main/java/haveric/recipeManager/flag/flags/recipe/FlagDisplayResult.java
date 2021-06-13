@@ -3,12 +3,15 @@ package haveric.recipeManager.flag.flags.recipe;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
+import haveric.recipeManager.recipes.item.ItemRecipe;
+import haveric.recipeManager.tools.Tools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.PreparableResultRecipe;
-import haveric.recipeManager.tools.Tools;
 
 public class FlagDisplayResult extends Flag {
 
@@ -20,7 +23,8 @@ public class FlagDisplayResult extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <item or first> | [silentfail]", };
+            "{flag} <item or first> | [silentfail]",
+            "{flag} item:<name> | [silentfail]", };
     }
 
     @Override
@@ -104,7 +108,20 @@ public class FlagDisplayResult extends Flag {
 
         value = args[0].trim();
 
-        if (!value.equals("first")) {
+        if (value.startsWith("item:")) {
+            value = value.substring("item:".length());
+
+            ItemRecipe recipe = ItemRecipe.getRecipe(value);
+            if (recipe == null) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid item reference: " + value + "!");
+            } else {
+                ItemResult result = new ItemResult(recipe.getResult(), true);
+                Args a = ArgBuilder.create().result(result).build();
+                result.getFlags().sendCrafted(a, true);
+
+                displayItem = a.result();
+            }
+        } else if (!value.equals("first")) {
             ItemStack item = Tools.parseItem(value, 0);
 
             if (item == null || item.getType() == Material.AIR) {
