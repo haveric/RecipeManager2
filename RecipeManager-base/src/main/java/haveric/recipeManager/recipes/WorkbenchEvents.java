@@ -358,14 +358,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return;
             }
 
-            // We're handling durability on the result line outside of flags, so the original damage should be saved here
-            int originalDamage = -1;
-            if (result != null && Version.has1_13Support()) {
-                ItemMeta meta = result.getItemMeta();
-                if (meta instanceof Damageable) {
-                    originalDamage = ((Damageable) meta).getDamage();
-                }
-
+            if (result != null) {
                 result.clearMetadata(); // Reset result's metadata to remove prepare's effects
             }
 
@@ -468,6 +461,16 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                     }
                     a.setResult(result);
 
+                    int originalDamage = -1;
+                    if (Version.has1_13BasicSupport()) {
+                        ItemMeta meta = result.getItemMeta();
+                        if (meta instanceof Damageable) {
+                            originalDamage = ((Damageable) meta).getDamage();
+                        }
+                    } else {
+                        originalDamage = result.getDurability();
+                    }
+
                     boolean recipeCraftSuccess = false;
                     boolean resultCraftSuccess = false;
                     if (!skipCraft) {
@@ -476,10 +479,15 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
                         // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
                         if (originalDamage != -1) {
-                            ItemMeta meta = result.getItemMeta();
-                            if (meta instanceof Damageable) {
-                                ((Damageable) meta).setDamage(originalDamage);
-                                result.setItemMeta(meta);
+                            if (Version.has1_13BasicSupport()) {
+                                ItemMeta meta = result.getItemMeta();
+
+                                if (meta instanceof Damageable) {
+                                    ((Damageable) meta).setDamage(originalDamage);
+                                    result.setItemMeta(meta);
+                                }
+                            } else {
+                                result.setDurability((short) originalDamage);
                             }
                         }
 
