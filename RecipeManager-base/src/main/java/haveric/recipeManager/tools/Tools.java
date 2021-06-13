@@ -8,6 +8,8 @@ import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
@@ -124,16 +126,6 @@ public class Tools {
         result.setChance(-1);
 
         if (split.length >= 2) {
-            string = split[0].trim();
-
-            if (!string.equals("*") && !string.equalsIgnoreCase("calc")) {
-                try {
-                    result.setChance(Math.min(Math.max(Float.parseFloat(string), 0), 100));
-                } catch (NumberFormatException e) {
-                    ErrorReporter.getInstance().warning("Invalid percentage number: " + string);
-                }
-            }
-
             string = split[1].trim();
         } else {
             string = split[0].trim();
@@ -157,6 +149,18 @@ public class Tools {
             result.setItemStack(item);
         }
 
+        if (split.length >= 2) {
+            string = split[0].trim();
+
+            if (!string.equals("*") && !string.equalsIgnoreCase("calc")) {
+                try {
+                    result.setChance(Math.min(Math.max(Float.parseFloat(string), 0), 100));
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Invalid percentage number: " + string);
+                }
+            }
+        }
+
         return result;
     }
 
@@ -174,53 +178,72 @@ public class Tools {
         }
 
         for (String s : split) {
-            String[] durSplit = s.trim().split(":");
-            value = durSplit[0].trim();
+            s = s.trim();
+            String lower = s.toLowerCase();
 
-            if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
-                String namespace;
-                String material;
-                if (durSplit.length > 2) {
-                    namespace = durSplit[1].trim();
-                    material = durSplit[2].trim();
+            if (lower.startsWith("item:")) {
+                s = s.substring("item:".length()).trim();
+                ItemRecipe itemRecipe = ItemRecipe.getRecipe(s);
+                if (itemRecipe == null) {
+                    ErrorReporter.getInstance().warning("Item recipe '" + s + "' does not exist!");
                 } else {
-                    namespace = NamespacedKey.MINECRAFT;
-                    material = durSplit[1].trim();
-                }
+                    ItemResult result = new ItemResult(itemRecipe.getResult(), true);
+                    Args itemArgs = ArgBuilder.create().recipe(itemRecipe).result(result).build();
+                    itemArgs.setFirstRun(true);
 
-                NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
-                Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
-
-                if (tag == null || tag.getValues().isEmpty()) {
-                    tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
-                }
-
-                if (tag == null || tag.getValues().isEmpty()) {
-                    ErrorReporter.getInstance().warning("Invalid tag: " + s);
-                } else {
-                    List<Material> materials = new ArrayList<>(tag.getValues());
-                    choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
-                }
-            } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
-                String alias = durSplit[1].trim();
-                List<Material> materials = RecipeManager.getSettings().getChoicesAlias(alias);
-
-                if (materials == null) {
-                    ErrorReporter.getInstance().warning("Invalid alias: " + s);
-                } else {
-                    choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
+                    if (result.getFlags().sendCrafted(itemArgs, true)) {
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(choice, itemArgs.result());
+                    }
                 }
             } else {
-                Material material = parseMaterial(value);
-                if (material == null) {
-                    ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
-                } else {
-                    if (durSplit.length > 1) {
-                        String dataString = durSplit[1].toLowerCase().trim();
+                String[] durSplit = s.split(":");
+                value = durSplit[0].trim();
 
-                        choice = parseMaterialDataToChoice(choice, material, dataString, settings);
+                if (durSplit.length > 1 && value.equals("tag") || value.equals("t")) {
+                    String namespace;
+                    String material;
+                    if (durSplit.length > 2) {
+                        namespace = durSplit[1].trim();
+                        material = durSplit[2].trim();
                     } else {
-                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, material);
+                        namespace = NamespacedKey.MINECRAFT;
+                        material = durSplit[1].trim();
+                    }
+
+                    NamespacedKey key = new NamespacedKey(namespace, material); // If this deprecated constructor goes away, Loop through Bukkit.getPluginManager().getPlugins() to check any potential namespace?
+                    Tag<Material> tag = Bukkit.getTag(REGISTRY_BLOCKS, key, Material.class);
+
+                    if (tag == null || tag.getValues().isEmpty()) {
+                        tag = Bukkit.getTag(REGISTRY_ITEMS, key, Material.class);
+                    }
+
+                    if (tag == null || tag.getValues().isEmpty()) {
+                        ErrorReporter.getInstance().warning("Invalid tag: " + s);
+                    } else {
+                        List<Material> materials = new ArrayList<>(tag.getValues());
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
+                    }
+                } else if (durSplit.length > 1 && value.equals("alias") || value.equals("a")) {
+                    String alias = durSplit[1].trim();
+                    List<Material> materials = RecipeManager.getSettings().getChoicesAlias(alias);
+
+                    if (materials == null) {
+                        ErrorReporter.getInstance().warning("Invalid alias: " + s);
+                    } else {
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, materials);
+                    }
+                } else {
+                    Material material = parseMaterial(value);
+                    if (material == null) {
+                        ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                    } else {
+                        if (durSplit.length > 1) {
+                            String dataString = durSplit[1].toLowerCase().trim();
+
+                            choice = parseMaterialDataToChoice(choice, material, dataString, settings);
+                        } else {
+                            choice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(choice, material);
+                        }
                     }
                 }
             }
