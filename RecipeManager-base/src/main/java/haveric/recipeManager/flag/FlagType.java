@@ -57,6 +57,7 @@ public class FlagType {
     public static final String BOOK_ITEM = "@bookitem";
     public static final String CLONE_INGREDIENT = "@cloneingredient";
     public static final String COMPASS_ITEM = "@compassitem";
+    public static final String CROSSBOW_ITEM = "@crossbowitem";
     public static final String CUSTOM_MODEL_DATA = "@custommodeldata";
     public static final String ENCHANTED_BOOK = "@enchantedbook";
     public static final String ENCHANT_ITEM = "@enchantitem";
