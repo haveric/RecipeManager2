@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-### Coming Soon
+### v2.27.0
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message
 * NEW: `@Summon`: Added support for `axolotl <variant>`, `axolotlplayingdead`, `glowsquiddarkticksremaining <ticks>`, and `goatscreaming`
 * NEW: `@Summon`: Added support for `freezeticks <ticks>` and `visualfire`
@@ -47,32 +47,5 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: Added 'save-frequency' config options: brewingstands, campfires, composters, cooldowns, and furnaces
     * Defaults to 30 minutes. Will only save if any data is changed in the given interval
 * NEW: Block data is saved on /rmreload
-
-### v2.25.0
-* NOTE: Any result in a chance recipe (multiple results without using `@individualresults`) that fails will cause the recipe to no longer craft
-    * This may break some recipes if you're relying on `@ingredientcondition` to define multiple resulting recipes instead of using `@individualresults`
-* FIX: Removing recipes should now always be done before adding recipes
-* FIX: Removing a furnace recipe and adding a simple recipe now works correctly
-* FIX: 1.13+: Furnace recipe removal throwing ClassCastException
-* FIX: Unexpected directive warning text no longer allows colors to wrap to the next line
-* FIX: `@ItemName`: "Defaulting to set name in both locations" message no longer allows colors to wrap to the next line
-* FIX: Recipes specifying air were not matching
-* FIX: Simple recipes with chance weren't applying the chance
-* FIX: Some grindstone recipes were not working
-* FIX: Anvil renaming wasn't working after crafting a RecipeManager recipe
-* FIX: `@ForChance`: Allow `@NoResult` flag
-* FIX: `@FlagCooldown`: Fix functionality when used as a result flag
-* FIX: `@IndividualResults`: Fix failure chance when shift clicking
-* FIX: `@IndividualResults`: Can now be set as a file flag
-* FIX: `@World`: Allowing multiple worlds was not working
-* NEW: `@World`: Allow partial matching with ~
-    * Examples: `@world ~hardcore`, `@world !~hardcore`
-* FIX: messages.yml: Added need and mod flags' prepare lores, and renamed existing messages under craftmessage
-* FIX: messages.yml: Added flag.repaircost.preparelore and flag.individualresults.preparelore.failchance
-* FIX: Right click placing blocks into a grindstone, cartography table, or smithing table could stack higher than normal
-* NEW: Improved Brewing support
-    * Brewing recipes can be made with any ingredient now
-    * Add custom brew lengths similar to furnace recipes
-* REMOVED: 1.15+: /rmreload no longer requires confirmation. 1.12 - 1.14 will still require confirmation as they have known reload issues
 
 ### For the full changelog, see https://github.com/haveric/RecipeManager2/blob/master/CHANGELOG

@@ -1,5 +1,21 @@
 ## Change log
 
+### v2.27.0
+* Fixed usage of `flag.ingredientconditions.nounbreakable` message
+* NEW: `@Summon`: Added support for `axolotl <variant>`, `axolotlplayingdead`, `glowsquiddarkticksremaining <ticks>`, and `goatscreaming`
+* NEW: `@Summon`: Added support for `freezeticks <ticks>` and `visualfire`
+* FIX: `@Summon`: Remove entity type validation on adult, agelock, baby, nobreed, and pet
+* FIX: `@DisplayResult`: Data wasn't being set correctly if the display result also had data
+* NEW: Added 1.17 furnace fuels: azalea and flowering azalea
+* NEW: Added 1.17 composting items and missed shroomlight for 1.16
+* NEW: Added item recipe: Allows saving an item with flags to be used in other recipes/flags
+* NEW: Added support for item recipes in any result or ingredient choice, including item recipes for chaining
+* NEW: `@DisplayResult`: Added item recipe support
+* NEW FLAG: `@BundleItem <item>[:data][:amount]`: Adds items to a bundle
+  * `@BundleItem item:<name>` can be used to reference an item recipe
+* NEW FLAG: `@CrossbowItem <item>[:data][:amount]`: Add charged projectiles to a crossbow
+  * `@CrossbowItem item:<name>` can be used to reference an item recipe
+
 ### v2.26.0
 * NEW FLAG: `@KnowledgeBookItem <namespace:key>, [...]`
 * NEW FLAG: `@TropicalFishBucketItem <arguments> | [...]`
