@@ -28,6 +28,7 @@ js:
                         <li><a href="#flags">Flags</a></li>
                         <li><a href="#multi-results">Multi-results</a></li>
                         <li><a href="#recipe-names">Recipe Names</a></li>
+                        <li><a href="#item-recipe">Item Recipe</a></li>
                     </ul>
                 </li>
                 <li>
@@ -615,6 +616,24 @@ t:sand + t:sand + t:sand
                 <p>The custom name will be displayed in the books if defined, otherwise it will use the result.</p>
                 <p>In the 'books/*.yml' files the recipe names (custom or auto-generated) are used to add and sort recipes in the books.</p>
                 <p><a href="recipe books.html"><b>More about recipe books...</b></a></p>
+            </div>
+        </div>
+        <div id="item-recipe" class="doc-section">
+            <h3 class="doc-section__title">Item Recipe</h3>
+            <div class="doc-section__inn">
+                <p>Item recipes are predefined recipes that you can use in place of items/results in some places.</p>
+                <p>Unlike most recipes, the recipe name is required so that it can be referenced later.</p>
+                <p><b>Format:</b></p>
+                <pre class="code">
+ITEM &lt;recipe name&gt;
+= &lt;material:[data]:[amount]&gt;
+[@ result flags]
+</pre>
+                <p><b>Usage:</b></p>
+                <p>When mentioned, such as in <a href="recipe flags.html#bundleitem">@BundleItem</a>, the format will be:</p>
+                <pre class="code">
+@bundle item:&lt;recipe name&gt;
+</pre>
             </div>
         </div>
     </div>

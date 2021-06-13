@@ -87,7 +87,9 @@ title: Recipe Flags
             <ul class='flaggroup__list'>
                 <li><a href='#banneritem'><b>@banneritem</b></a></li>
                 <li><a href='#bookitem'><b>@bookitem</b></a></li>
+                <li><a href='#bundleitem'><b>@bundleitem</b></a></li>
                 <li><a href='#compassitem'><b>@compassitem</b></a></li>
+                <li><a href='#crossbowitem'><b>@crossbowitem</b></a></li>
                 <li><a href='#custommodeldata'><b>@custommodeldata</b></a></li>
                 <li><a href='#enchantedbook'><b>@enchantedbook</b></a></li>
                 <li><a href='#enchantitem'><b>@enchantitem</b></a></li>
@@ -120,10 +122,12 @@ title: Recipe Flags
                 <li><a href='#blockpowered'><b>@blockpowered</b></a></li>
                 <li><a href='#bookitem'><b>@bookitem</b></a></li>
                 <li><a href='#broadcast'><b>@broadcast</b></a></li>
+                <li><a href='#bundleitem'><b>@bundleitem</b></a></li>
                 <li><a href='#cloneingredient'><b>@cloneingredient</b></a></li>
                 <li><a href='#command'><b>@command</b></a></li>
                 <li><a href='#compassitem'><b>@compassitem</b></a></li>
                 <li><a href='#cooldown'><b>@cooldown</b></a></li>
+                <li><a href='#crossbowitem'><b>@crossbowitem</b></a></li>
                 <li><a href='#custommodeldata'><b>@custommodeldata</b></a></li>
                 <li><a href='#enchantedbook'><b>@enchantedbook</b></a></li>
                 <li><a href='#enchantitem'><b>@enchantitem</b></a></li>
@@ -408,6 +412,32 @@ title: Recipe Flags
 </pre>
     </div>
     <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='bundleitem'></a>
+        <h3 class='doc-section__title'>@bundleitem &lt;item&gt;[:data][:amount]</h3>
+        <h3 class='doc-section__title'>@bundleitem item:&lt;name&gt;</h3>
+        <pre>
+    <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    {flag} Adds a stack of items to a bundle.
+    This flag can be used more than once to add more items to bundle.
+
+    You can use a predefined item from an item recipe:
+      Format = item:&lt;name&gt;
+      &lt;name&gt; = The name of an item recipe defined before this flag.
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @bundleitem dirt:0:40 // Add 40 dirt
+      @bundleitem diamond_sword:1500 // Add an almost destroyed diamond_sword
+      @bundleitem item:test sword // Will use the item from the 'test sword' recipe, assuming it's defined.
+
+    <b>Aliases:</b> @bundle
+</pre>
+    </div>
+    <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='cloneingredient'></a>
         <h3 class='doc-section__title'>@cloneingredient &lt;arguments&gt;</h3>
         <pre>
@@ -567,6 +597,33 @@ title: Recipe Flags
 </pre>
     </div>
     <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='crossbowitem'></a>
+        <h3 class='doc-section__title'>@crossbowitem &lt;item&gt;[:data][:amount]</h3>
+        <h3 class='doc-section__title'>@crossbowitem item:&lt;name&gt;</h3>
+        <pre>
+    <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    {flag} Adds a charged projectile to a crossbow.
+    This flag can be used more than once to add more charged projectiles.
+      NOTE: The item must be a valid crossbow projectile, such as an arrow or firework rocket.
+
+    You can use a predefined item from an item recipe:
+      Format = item:&lt;name&gt;
+      &lt;name&gt; = The name of an item recipe defined before this flag.
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @crossbowitem arrow:0:40 // Add 40 arrows
+      @crossbowitem firework_rocket // Adds a firework rocket
+      @crossbowitem item:customrocket // Will use the item from the 'customrocket' recipe, assuming it's defined.
+
+    <b>Aliases:</b> @crossbow
+</pre>
+    </div>
+    <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='custommodeldata'></a>
         <h3 class='doc-section__title'>@custommodeldata &lt;number&gt;</h3>
         <pre>
@@ -589,6 +646,7 @@ title: Recipe Flags
     <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='displayresult'></a>
         <h3 class='doc-section__title'>@displayresult &lt;item or first&gt; | [silentfail]</h3>
+        <h3 class='doc-section__title'>@displayresult item:&lt;name&gt; | [silentfail]</h3>
         <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span>
 
@@ -2556,6 +2614,8 @@ title: Recipe Flags
       angry                      = makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this.
       arrowcooldown &lt;ticks&gt;      = sets the ticks until the next arrow leaves the entity's body.
       arrowsinbody &lt;amount&gt;      = sets the number of arrows in the entity's body.
+      axolotl &lt;variant&gt;          = sets the axolotl variant, available values: lucy, wild, gold, cyan, blue
+      axolotlplayingdead         = sets the axolotl to be playing dead.
       baby                       = spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult).
       beeanger &lt;ticks&gt;           = sets the anger level to the number of ticks the bee will remain angry for.
       beecannotenterhiveticks &lt;ticks&gt; = sets the ticks the bee cannot enter a hive for.
@@ -2564,13 +2624,16 @@ title: Recipe Flags
       cat &lt;type&gt;                 = cat type, available values: tabby, black, red, siamese, british_shorthair, calico, persian, ragdoll, white, jellie, all_black
       chance &lt;0.01-100&gt;%         = chance of the entity to spawn, this value is for individual entities.
       chest &lt;item&gt; [drop%]       = equip an item on the entity's chest with optional drop chance.
-      color &lt;dye>&gt;         = sets the color of animal, only works for sheep and pet wolf/cats. Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
+      color &lt;dye&gt;                = sets the color of animal, only works for sheep and pet wolf/cats. Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
       feet &lt;item&gt; [drop%]        = equip an item on the entity's feet with optional drop chance.
       fox &lt;type&gt;                 = set the fox type, values: red, snow
       foxcrouching               = set the fox to be crouching
       foxfirsttrustedplayer &lt;uuid or player&gt; = set the fox's first trusted player. If set to 'player', the crafter will be used.
       foxsecondtrustedplayer &lt;uuid or player&gt; = set the fox's second trusted player. If set to 'player', the crafter will be used.
       foxsleeping                = set the fox to be sleeping
+      freezeticks &lt;ticks&gt;        = sets the entity's current freeze ticks (amount of ticks the entity has been in powdered snow).
+      glowsquiddarkticksremaining &lt;ticks&gt; = sets the number of dark ticks that a glow squid has remaining.
+      goatscreaming              = set the goat to be a screaming goat.
       hand &lt;item&gt; [drop%]        = equip an item on the entity's main hand with optional drop chance; for enderman it only uses material and data from the item.
       head &lt;item&gt; [drop%]        = equip an item on the entity's head with optional drop chance.
       hit                        = crafter will fake-attack the entity to provoke it into attacking or scare it away.
@@ -2612,6 +2675,7 @@ title: Recipe Flags
       target                     = entity targets crafter, that means monsters attack and animals follow and the rest do nothing
       villager &lt;type&gt;            = set the villager profession
                                      Values: none, armorer, butcher, cartographer, cleric, farmer, fisherman, fletcher, leatherworker, librarian, mason, nitwit, shepherd, toolsmith, weaponsmith
+      visualfire                 = sets if the entity has visual fire (it will always appear to be on fire).
 
     These arguments can be used in any order and they're all optional.
 </span>
