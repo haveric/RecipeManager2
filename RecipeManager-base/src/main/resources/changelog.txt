@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+### Coming Soon
+* FIX: 1.13+ `@Summon`: Fixed error when summoning a non-breedable entity
+
 ### v2.27.0
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message
 * NEW: `@Summon`: Added support for `axolotl <variant>`, `axolotlplayingdead`, `glowsquiddarkticksremaining <ticks>`, and `goatscreaming`

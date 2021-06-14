@@ -342,13 +342,15 @@ public class Customization implements Cloneable {
                 }
 
                 if (Version.has1_16Support()) {
-                    Breedable breedable = (Breedable) ent;
-                    if (ageLock) {
-                        breedable.setAgeLock(true);
-                    }
+                    if (ent instanceof Breedable) {
+                        Breedable breedable = (Breedable) ent;
+                        if (ageLock) {
+                            breedable.setAgeLock(true);
+                        }
 
-                    if (noBreed) {
-                        breedable.setBreed(false);
+                        if (noBreed) {
+                            breedable.setBreed(false);
+                        }
                     }
                 } else {
                     if (ageLock) {
