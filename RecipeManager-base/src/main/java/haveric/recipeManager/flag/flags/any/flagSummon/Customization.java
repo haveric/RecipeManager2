@@ -3,7 +3,11 @@ package haveric.recipeManager.flag.flags.any.flagSummon;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.*;
@@ -42,7 +46,7 @@ public class Customization implements Cloneable {
     private DyeColor color = null;
     private float[] drop = new float[6];
     private boolean elder = false;
-    private ItemStack[] equip = new ItemStack[6];
+    private ItemRecipe[] equip = new ItemRecipe[6];
     private Fox.Type fox = null;
     private boolean foxCrouching = false;
     private boolean foxFirstTrustedPlayer = false;
@@ -612,10 +616,20 @@ public class Customization implements Cloneable {
             EntityEquipment eq = ent.getEquipment();
             if (eq != null) {
                 for (int j = 0; j < equip.length; j++) {
-                    ItemStack item = equip[j];
-                    if (item == null) {
+                    ItemRecipe itemRecipe = equip[j];
+                    if (itemRecipe == null) {
                         continue;
                     }
+
+                    ItemResult result = itemRecipe.getResult();
+                    Args itemArgs = ArgBuilder.create().recipe(itemRecipe).result(result).build();
+                    itemArgs.setFirstRun(true);
+
+                    if (!result.getFlags().sendCrafted(itemArgs, true)) {
+                        continue;
+                    }
+
+                    ItemResult item = itemArgs.result();
 
                     switch (j) {
                         case 0:
@@ -748,9 +762,9 @@ public class Customization implements Cloneable {
         name = RMCUtil.parseColors(newName, false);
     }
 
-    public void setEquip(ItemStack item, int index) {
+    public void setEquip(ItemRecipe itemRecipe, int index) {
         if (index < equip.length) {
-            equip[index] = item.clone();
+            equip[index] = itemRecipe;
         }
     }
 
@@ -833,27 +847,44 @@ public class Customization implements Cloneable {
                 return false;
             }
 
-            int i = lower.indexOf(' ');
-            String[] args = lower.substring(i + 1).trim().split(" ");
-            lower = args[0].trim();
+            int startIndex = lower.indexOf(' ') + 1;
+            lower = lower.substring(startIndex).trim();
+            original = original.substring(startIndex).trim();
 
-            ItemStack item = Tools.parseItem(lower, 0);
-
-            if (item == null) {
-                return false;
+            String itemString;
+            String percentString = null;
+            if (lower.endsWith("%")) {
+                int lastIndex = lower.lastIndexOf(' ');
+                itemString = lower.substring(0, lastIndex).trim();
+                original = original.substring(0, lastIndex).trim();
+                percentString = lower.substring(lastIndex + 1, lower.length() - 1).trim();
+            } else {
+                itemString = lower;
             }
 
-            setEquip(item, index);
+            if (itemString.startsWith("item:")) {
+                original = original.substring("item:".length());
 
-            if (args.length > 1) {
-                lower = args[1].trim();
-
-                if (lower.charAt(lower.length() - 1) == '%') {
-                    lower = lower.substring(0, lower.length() - 1);
+                ItemRecipe recipe = ItemRecipe.getRecipe(original);
+                if (recipe == null) {
+                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid item reference: " + original + "!");
+                } else {
+                    setEquip(recipe, index);
                 }
+            } else {
+                ItemStack item = Tools.parseItem(itemString, 0);
 
+                if (item == null) {
+                    return false;
+                }
+                ItemRecipe recipe = new ItemRecipe();
+                recipe.setResult(item);
+                setEquip(recipe, index);
+            }
+
+            if (percentString != null) {
                 try {
-                    setDrop( Math.min(Math.max(Float.parseFloat(lower), 0), 100), index);
+                    setDrop(Math.min(Math.max(Float.parseFloat(percentString), 0), 100), index);
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'chance' argument with invalid number: " + lower);
                 }
@@ -1403,8 +1434,9 @@ public class Customization implements Cloneable {
             toHash += "drop: " + itemDrop;
         }
 
-        for (ItemStack item : equip) {
-            toHash += "equip: " + item.hashCode();
+        for (ItemRecipe itemRecipe : equip) {
+            toHash += "itemRecipe: " + itemRecipe.hashCode();
+            toHash += "equip: " + itemRecipe.getResult().hashCode();
         }
 
         toHash += "hasChest: " + hasChest;
