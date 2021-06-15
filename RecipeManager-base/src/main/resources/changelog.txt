@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 ### Coming Soon
 * FIX: 1.13+ `@Summon`: Fixed error when summoning a non-breedable entity
 * NEW: `@Summon`: Added support for item recipes within equipment slots
+* FIX: NullPointerException when clicking on a smithing result on a newly placed smithing table
 
 ### v2.27.0
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message

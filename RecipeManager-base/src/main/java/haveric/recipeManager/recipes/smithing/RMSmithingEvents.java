@@ -7,7 +7,6 @@ import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.data.BaseRecipeData;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -228,9 +227,16 @@ public class RMSmithingEvents extends BaseRecipeEvents {
         if (isShiftClick) {
             times = 64;
         }
+
+        BaseRecipe baseRecipe = smithingTable.getRecipe();
+        // No recipe has been set yet
+        if (baseRecipe == null) {
+            return;
+        }
+
         // Clone the recipe so we can add custom flags to it
-        RMSmithingRecipe recipe = new RMSmithingRecipe(smithingTable.getRecipe());
-        MessageSender.getInstance().info("Craft finish Smithing: " + recipe);
+        RMSmithingRecipe recipe = new RMSmithingRecipe(baseRecipe);
+
         Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 
         if (!recipe.checkFlags(a)) {
