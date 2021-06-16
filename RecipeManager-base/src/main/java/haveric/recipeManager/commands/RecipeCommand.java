@@ -211,14 +211,25 @@ public class RecipeCommand implements TabExecutor {
                     }
                 }
 
-                boolean ingredient = (args.length > 1 && args[1].charAt(0) == 'i');
+                boolean ingredient = true;
+                boolean result = true;
+
+                if (args.length > 1) {
+                    if (args[1].charAt(0) == 'i') {
+                        ingredient = true;
+                        result = false;
+                    } else if (args[1].charAt(0) == 'r') {
+                        ingredient = false;
+                        result = true;
+                    }
+                }
 
                 List<String> list = new ArrayList<>();
 
                 for (Entry<BaseRecipe, RMCRecipeInfo> e : RecipeManager.getRecipes().getRecipeList().entrySet()) {
                     BaseRecipe recipe = e.getKey();
 
-                    if (hasItem(recipe, item, ingredient)) {
+                    if ((ingredient && hasItem(recipe, item, true)) || (result && hasItem(recipe, item, false))) {
                         list.addAll(recipe.printChat());
                     }
                 }
@@ -257,7 +268,9 @@ public class RecipeCommand implements TabExecutor {
                 }
             }
 
-            Messages.getInstance().send(sender, "cmd.recipes.usage", "{command}", label);
+            Messages.getInstance().send(sender, "cmd.recipes.usage1", "{command}", label);
+            Messages.getInstance().send(sender, "cmd.recipes.usage2", "{command}", label);
+            Messages.getInstance().send(sender, "cmd.recipes.usage3", "{command}", label);
             Messages.getInstance().send(sender, "cmd.recipes.stats.mc", "{num}", mc);
             Messages.getInstance().send(sender, "cmd.recipes.stats.rm", "{num}", rm);
             Messages.getInstance().send(sender, "cmd.recipes.stats.other", "{num}", other);

@@ -218,7 +218,9 @@ cmd:
   extractrecipe:
     done: <green>Done! Recipe saved to '<white>{file}<green>'.
   recipes:
-    usage: "<yellow>Usage: <gray>/{command} <white><material>:[data]:[amount]"
+    usage1: "<yellow>Usage: <gray>/{command} <white><material>:[data]:[amount]"
+    usage2: "<yellow>Only Ingredients: <gray>/{command} <white><material>:[data]:[amount] i"
+    usage3: "<yellow>Only Results: <gray>/{command} <white><material>:[data]:[amount] r"
     stats:
       mc: "Minecraft: <green>{num}"
       rm: "RecipeManager: <green>{num}"
@@ -226,7 +228,7 @@ cmd:
     header: <yellow>----- <white>Recipes for <green>{item} <white>({num} of {total}) <yellow>-----
     more: <yellow>-- <white><blue>{cmdnext} <white>for next, <blue>{cmdprev} <white>for previous <yellow>--
     end: <yellow>----- <white>No more recipes <yellow>-----
-    nonext: <red>No more recipes next, type <blue>{command} <red>to see the previous recipe.
+    nonext: <red>No more recipes, type <blue>{command} <red>to see the previous recipe.
     noprev: <red>Can't go backwards more than this, type <blue>{command} <red>to see the next recipe.
     needquery: <red>No search progress! Use the command with an item name to search.
     noresults: <red>No results for <yellow>{item}
