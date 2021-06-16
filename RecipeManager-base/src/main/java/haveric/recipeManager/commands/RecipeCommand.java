@@ -59,7 +59,9 @@ public class RecipeCommand implements TabExecutor {
                 if (currentPages != null) {
                     if (currentPages.page > 0) {
                         list.add("prev");
-                    } else if (currentPages.page + 1 < currentPages.pages.length) {
+                    }
+
+                    if (currentPages.page + 1 < currentPages.pages.length) {
                         list.add("next");
                     }
                 }
