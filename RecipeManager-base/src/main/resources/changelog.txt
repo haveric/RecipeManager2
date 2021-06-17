@@ -6,7 +6,8 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: `@Summon`: Added support for item recipes within equipment slots
 * FIX: NullPointerException when clicking on a smithing result on a newly placed smithing table
 * FIX: /rmrecipes: Brewing recipes weren't printing
-* FIX: /rmrecipes: next and prev tab completes weren't always visible
+* FIX: /rmrecipes: Added `this` to tab complete
+* NEW: Added /rmnext and /rmprev commands for easier /rmrecipes navigation
 
 ### v2.27.0
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message

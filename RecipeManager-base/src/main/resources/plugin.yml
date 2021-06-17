@@ -18,6 +18,14 @@ commands:
     description: find recipes that use the specified item
     usage: /<command> <material>:[data]:[amount] [i|r]
     permission: recipemanager.command.rmrecipes
+  rmnext:
+    description: go to the next page in an /rmrecipes query
+    usage: /<command>
+    permission: recipemanager.command.rmnext
+  rmprev:
+    description: go the previous page in an /rmrecipes query
+    usage: /<command>
+    permission: recipemanager.command.rmprev
   rmfinditem:
     aliases: [finditem]
     description: search for items by name

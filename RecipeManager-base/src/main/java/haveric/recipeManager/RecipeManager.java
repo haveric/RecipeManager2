@@ -2,6 +2,9 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.api.events.RecipeManagerEnabledEvent;
 import haveric.recipeManager.commands.*;
+import haveric.recipeManager.commands.recipe.RecipeCommand;
+import haveric.recipeManager.commands.recipe.RecipeNextCommand;
+import haveric.recipeManager.commands.recipe.RecipePrevCommand;
 import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.flag.FlagLoader;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -137,6 +140,8 @@ public class RecipeManager extends JavaPlugin {
         // Register commands
         getCommand("rm").setExecutor(new HelpCommand());
         getCommand("rmrecipes").setExecutor(new RecipeCommand());
+        getCommand("rmnext").setExecutor(new RecipeNextCommand());
+        getCommand("rmprev").setExecutor(new RecipePrevCommand());
         getCommand("rmfinditem").setExecutor(new FindItemCommand());
         getCommand("rmcheck").setExecutor(new CheckCommand());
         getCommand("rmreload").setExecutor(new ReloadCommand());

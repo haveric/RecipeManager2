@@ -1,6 +1,6 @@
 package haveric.recipeManager;
 
-import haveric.recipeManager.commands.RecipeCommand;
+import haveric.recipeManager.commands.recipe.RecipePagination;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
@@ -18,12 +18,12 @@ public class Players {
 
     protected static void clean() {
         joined.clear();
-        RecipeCommand.clean();
+        RecipePagination.clean();
     }
 
     public static void remove(Player player) {
         removeJoined(player);
-        RecipeCommand.clean(player.getUniqueId());
+        RecipePagination.clean(player.getUniqueId());
     }
 
     public static void addJoined(Player player) {

@@ -1,4 +1,4 @@
-package haveric.recipeManager.commands;
+package haveric.recipeManager.commands.recipe;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.RMCVanilla;
@@ -38,22 +38,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class RecipeCommand implements TabExecutor {
-    private static Map<UUID, Pages> pagination = new HashMap<>();
-
-    public static void clean(UUID uuid) {
-        pagination.remove(uuid);
-    }
-
-    public static void clean() {
-        pagination.clear();
-    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -61,18 +50,7 @@ public class RecipeCommand implements TabExecutor {
 
         if (args.length == 1) {
             if (sender instanceof Player) {
-                UUID playerUUID = ((Player) sender).getUniqueId();
-
-                Pages currentPages = pagination.get(playerUUID);
-                if (currentPages != null) {
-                    if (currentPages.page > 0) {
-                        list.add("prev");
-                    }
-
-                    if (currentPages.page + 1 < currentPages.pages.length) {
-                        list.add("next");
-                    }
-                }
+                list.add("this");
             }
 
             String input = args[0];
@@ -91,62 +69,6 @@ public class RecipeCommand implements TabExecutor {
         return list;
     }
 
-    public static class Pages {
-        private UUID playerUUID;
-        private ItemStack item;
-        private int page = -1;
-        private String[] pages;
-        private BukkitTask task;
-
-        public Pages(UUID uuid, ItemStack newItem, List<String> newPages) {
-            playerUUID = uuid;
-            item = newItem;
-            pages = newPages.toArray(new String[0]);
-        }
-
-        private void doTask() {
-            if (task != null) {
-                task.cancel();
-            }
-
-            task = new BukkitRunnable() {
-                public void run() {
-                    pagination.remove(playerUUID);
-                }
-            }.runTaskLater(RecipeManager.getPlugin(), 20 * 60);
-
-        }
-
-        public boolean hasNext() {
-            return pages.length > (page + 1);
-        }
-
-        public String next() {
-            page++;
-
-            if (page >= pages.length) {
-                return null;
-            }
-
-            doTask();
-            return pages[page];
-        }
-
-        public boolean hasPrev() {
-            return page > 0;
-        }
-
-        public String prev() {
-            if (page <= 0) {
-                return null;
-            }
-
-            page--;
-
-            doTask();
-            return pages[page];
-        }
-    }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
@@ -155,99 +77,69 @@ public class RecipeCommand implements TabExecutor {
                 playerUUID = ((Player) sender).getUniqueId();
             }
 
-            boolean next = args[0].equalsIgnoreCase("next");
+            ItemStack item;
 
-            if (next || args[0].equalsIgnoreCase("prev")) {
-                Pages pages = pagination.get(playerUUID);
-
-                if (pages == null) {
-                    Messages.getInstance().send(sender, "cmd.recipes.needquery");
-                } else {
-                    if (next ? pages.hasNext() : pages.hasPrev()) {
-                        String page = (next ? pages.next() : pages.prev());
-                        Messages.getInstance().send(sender, "cmd.recipes.header", "{item}", ToolsItem.print(pages.item), "{num}", (pages.page + 1), "{total}", pages.pages.length);
-                        MessageSender.getInstance().send(sender, page);
-
-                        if (pages.hasNext()) {
-                            Messages.getInstance().send(sender, "cmd.recipes.more", "{cmdnext}", "/" + label + " next", "{cmdprev}", "/" + label + " prev");
-                        } else {
-                            Messages.getInstance().send(sender, "cmd.recipes.end");
-                        }
+            if (args[0].equalsIgnoreCase("this")) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (Version.has1_12Support()) {
+                        item = player.getInventory().getItemInMainHand();
                     } else {
-                        if (next) {
-                            Messages.getInstance().send(sender, "cmd.recipes.nonext", "{command}", "/" + label + " prev");
-                        } else {
-                            Messages.getInstance().send(sender, "cmd.recipes.noprev", "{command}", "/" + label + " next");
-                        }
+                        //noinspection deprecation
+                        item = player.getItemInHand();
                     }
+
+                    if (item == null || item.getType() == Material.AIR) {
+                        Messages.getInstance().send(player, "cmd.recipes.nohand");
+                        return true;
+                    }
+                } else {
+                    sender.sendMessage("The 'this' argument can't be used from console.");
+                    return true;
                 }
             } else {
-                ItemStack item;
+                item = Tools.parseItem(args[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_META | ParseBit.NO_PRINT);
 
-                if (args[0].equalsIgnoreCase("this")) {
-                    if (sender instanceof Player) {
-                        Player player = (Player) sender;
-                        if (Version.has1_12Support()) {
-                            item = player.getInventory().getItemInMainHand();
-                        } else {
-                            //noinspection deprecation
-                            item = player.getItemInHand();
-                        }
+                if (item == null) {
+                    Messages.getInstance().send(sender, "cmd.recipes.invaliditem", "{arg}", args[0]);
+                    return true;
+                }
+            }
 
-                        if (item == null) {
-                            Messages.getInstance().send(player, "cmd.recipes.nohand");
-                            return true;
-                        }
-                    } else {
-                        sender.sendMessage("The 'this' argument can't be used from console.");
-                        return true;
-                    }
+            boolean ingredient = true;
+            boolean result = true;
+
+            if (args.length > 1) {
+                if (args[1].charAt(0) == 'i') {
+                    result = false;
+                } else if (args[1].charAt(0) == 'r') {
+                    ingredient = false;
+                }
+            }
+
+            List<String> list = new ArrayList<>();
+
+            for (Entry<BaseRecipe, RMCRecipeInfo> e : RecipeManager.getRecipes().getRecipeList().entrySet()) {
+                BaseRecipe recipe = e.getKey();
+
+                if ((ingredient && hasItem(recipe, item, true)) || (result && hasItem(recipe, item, false))) {
+                    list.addAll(recipe.printChat());
+                }
+            }
+
+            if (list.isEmpty()) {
+                Messages.getInstance().send(sender, "cmd.recipes.noresults", "{item}", ToolsItem.print(item));
+            } else {
+                Pages pages = new Pages(playerUUID, item, list);
+                RecipePagination.put(playerUUID, pages);
+
+                Messages.getInstance().send(sender, "cmd.recipes.header", "{item}", ToolsItem.print(pages.getItem()), "{num}", 1, "{total}", pages.getNumPages());
+                MessageSender.getInstance().send(sender, pages.next());
+
+                if (pages.hasNext()) {
+                    Messages.getInstance().send(sender, "cmd.recipes.more", "{cmdnext}", "/rmnext", "{cmdprev}", "/rmprev");
                 } else {
-                    item = Tools.parseItem(args[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_META | ParseBit.NO_PRINT);
-
-                    if (item == null) {
-                        Messages.getInstance().send(sender, "cmd.recipes.invaliditem", "{arg}", args[0]);
-                        return true;
-                    }
-                }
-
-                boolean ingredient = true;
-                boolean result = true;
-
-                if (args.length > 1) {
-                    if (args[1].charAt(0) == 'i') {
-                        ingredient = true;
-                        result = false;
-                    } else if (args[1].charAt(0) == 'r') {
-                        ingredient = false;
-                        result = true;
-                    }
-                }
-
-                List<String> list = new ArrayList<>();
-
-                for (Entry<BaseRecipe, RMCRecipeInfo> e : RecipeManager.getRecipes().getRecipeList().entrySet()) {
-                    BaseRecipe recipe = e.getKey();
-
-                    if ((ingredient && hasItem(recipe, item, true)) || (result && hasItem(recipe, item, false))) {
-                        list.addAll(recipe.printChat());
-                    }
-                }
-
-                if (list.isEmpty()) {
-                    Messages.getInstance().send(sender, "cmd.recipes.noresults", "{item}", ToolsItem.print(item));
-                } else {
-                    Pages pages = new Pages(playerUUID, item, list);
-                    pagination.put(playerUUID, pages);
-
-                    Messages.getInstance().send(sender, "cmd.recipes.header", "{item}", ToolsItem.print(pages.item), "{num}", 1, "{total}", pages.pages.length);
-                    MessageSender.getInstance().send(sender, pages.next());
-
-                    if (pages.hasNext()) {
-                        Messages.getInstance().send(sender, "cmd.recipes.more", "{cmdnext}", "/" + label + " next", "{cmdprev}", "/" + label + " prev");
-                    } else {
-                        Messages.getInstance().send(sender, "cmd.recipes.end");
-                    }
+                    Messages.getInstance().send(sender, "cmd.recipes.end");
                 }
             }
         } else {
@@ -271,6 +163,7 @@ public class RecipeCommand implements TabExecutor {
             Messages.getInstance().send(sender, "cmd.recipes.usage1", "{command}", label);
             Messages.getInstance().send(sender, "cmd.recipes.usage2", "{command}", label);
             Messages.getInstance().send(sender, "cmd.recipes.usage3", "{command}", label);
+            Messages.getInstance().send(sender, "cmd.recipes.usage4", "{command}", label);
             Messages.getInstance().send(sender, "cmd.recipes.stats.mc", "{num}", mc);
             Messages.getInstance().send(sender, "cmd.recipes.stats.rm", "{num}", rm);
             Messages.getInstance().send(sender, "cmd.recipes.stats.other", "{num}", other);
