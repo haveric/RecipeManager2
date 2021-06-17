@@ -99,6 +99,9 @@ public class Customization implements Cloneable {
     private Skeleton.SkeletonType skeleton = null;
     private int spread = 0;
     private boolean target = false;
+    private DyeColor tropicalFishColor = null;
+    private TropicalFish.Pattern tropicalFishPattern = null;
+    private DyeColor tropicalFishPatternColor = null;
     private Villager.Profession villager = null;
     private boolean visualFire = false;
     private Integer wanderingTraderDespawnDelay = null;
@@ -175,6 +178,9 @@ public class Customization implements Cloneable {
 
         if (Version.has1_13Support()) {
             persistent = c.persistent;
+            tropicalFishColor = c.tropicalFishColor;
+            tropicalFishPattern = c.tropicalFishPattern;
+            tropicalFishPatternColor = c.tropicalFishPatternColor;
         }
 
         if (Version.has1_14Support()) {
@@ -528,6 +534,22 @@ public class Customization implements Cloneable {
 
             if (Version.has1_13Support()) {
                 ent.setPersistent(persistent);
+
+                if (ent instanceof TropicalFish) {
+                    TropicalFish fish = (TropicalFish) ent;
+                    // Set pattern before body color in order to set correctly
+                    if (tropicalFishPattern != null) {
+                        fish.setPattern(tropicalFishPattern);
+                    }
+
+                    if (tropicalFishPatternColor != null) {
+                        fish.setPatternColor(tropicalFishPatternColor);
+                    }
+
+                    if (tropicalFishColor != null) {
+                        fish.setBodyColor(tropicalFishColor);
+                    }
+                }
             }
 
             if (Version.has1_14Support()) {
@@ -1274,6 +1296,29 @@ public class Customization implements Cloneable {
             }
         } else if (Version.has1_13Support() && lower.equals("persistent")) {
             persistent = true;
+        } else if (Version.has1_13Support() && lower.startsWith("tropicalfish")) {
+            if (lower.startsWith("tropicalfishpatterncolor")) {
+                lower = lower.substring("tropicalfishpatterncolor".length()).trim();
+
+                tropicalFishPatternColor = RMCUtil.parseEnum(lower, DyeColor.values());
+                if (tropicalFishPatternColor == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'tropicalfishpatterncolor' argument with invalid dye color: " + lower);
+                }
+            } else if (lower.startsWith("tropicalfishpattern")) {
+                lower = lower.substring("tropicalfishpattern".length()).trim();
+
+                tropicalFishPattern = RMCUtil.parseEnum(lower, TropicalFish.Pattern.values());
+                if (tropicalFishPattern == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'tropicalfishpattern' argument with invalid dye color: " + lower);
+                }
+            } else if (lower.startsWith("tropicalfishcolor")) {
+                lower = lower.substring("tropicalfishcolor".length()).trim();
+
+                tropicalFishColor = RMCUtil.parseEnum(lower, DyeColor.values());
+                if (tropicalFishColor == null) {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'tropicalfishcolor' argument with invalid dye color: " + lower);
+                }
+            }
         } else if (Version.has1_14Support() && lower.startsWith("pandahiddengene")) {
             if (entityType != EntityType.PANDA) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument on non-panda entity!");
@@ -1513,6 +1558,9 @@ public class Customization implements Cloneable {
 
         if (Version.has1_13Support()) {
             toHash += "persistent: " + persistent;
+            toHash += "tropicalFishColor: " + tropicalFishColor;
+            toHash += "tropicalFishPattern: " + tropicalFishPattern;
+            toHash += "tropicalFishPatternColor: " + tropicalFishPatternColor;
         }
 
         if (Version.has1_14Support()) {

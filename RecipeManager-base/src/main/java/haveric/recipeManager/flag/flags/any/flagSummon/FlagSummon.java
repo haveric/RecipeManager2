@@ -21,7 +21,6 @@ import java.util.List;
 public class FlagSummon extends Flag {
 
     private static String argFormat = "  %-26s = %s";
-    private static String argFormatTagOffset = "  %-32s = %s";
     private static String argFormatExtra = "  %-30s %s";
 
     @Override
@@ -90,7 +89,8 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "chance <0.01-100>%", "chance of the entity to spawn, this value is for individual entities."),
             String.format(argFormat, "chest <item> [drop%]", "equip an item on the entity's chest with optional drop chance."),
-            String.format(argFormatTagOffset, "color &lt;dye&gt;", "sets the color of animal, only works for sheep and pet wolf/cats. Values: " + Files.getNameIndexHashLink("dyecolor")),
+            String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf/cats."),
+            String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
         }, String.class);
 
         if (!Version.has1_12Support()) {
@@ -214,10 +214,24 @@ public class FlagSummon extends Flag {
         }
 
         description = ObjectArrays.concat(description, new String[] {
-                String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
-                String.format(argFormat, "target", "entity targets crafter, that means monsters attack and animals follow and the rest do nothing"),
-                String.format(argFormat, "villager <type>", "set the villager profession"),
-                String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
+            String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
+            String.format(argFormat, "target", "entity targets crafter, that means monsters attack and animals follow and the rest do nothing"),
+        }, String.class);
+
+        if (Version.has1_13Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "tropicalfishcolor <dye>", "sets the tropical fish's body color."),
+                String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
+                String.format(argFormat, "tropicalfishpattern <pattern>", "sets the tropical fish's pattern."),
+                String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(TropicalFish.Pattern.values())).toLowerCase()),
+                String.format(argFormat, "tropicalfishpatterncolor <dye>", "sets the color of the tropical fish's pattern."),
+                String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[] {
+            String.format(argFormat, "villager <type>", "set the villager profession"),
+            String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
         }, String.class);
 
         if (Version.has1_17Support()) {
