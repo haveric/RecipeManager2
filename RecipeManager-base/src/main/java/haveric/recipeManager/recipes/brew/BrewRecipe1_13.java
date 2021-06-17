@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
@@ -40,21 +39,6 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
 
     public BrewRecipe1_13(Flags flags) {
         super(flags);
-    }
-
-    @Override
-    public Recipe getBukkitRecipe(boolean vanilla) {
-        return null;
-    }
-
-    @Override
-    public void setBukkitRecipe(Recipe newRecipe) {
-
-    }
-
-    @Override
-    public Recipe toBukkitRecipe(boolean vanilla) {
-        return null;
     }
 
     @Override
@@ -128,24 +112,6 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         return ingredientChoice;
     }
 
-    public void addIngredientChoice(List<Material> materials) {
-        if (ingredientChoice == null) {
-            setIngredientChoice(materials);
-        } else {
-            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
-            updateHash();
-        }
-    }
-
-    public void addIngredientChoiceItems(List<ItemStack> items) {
-        if (ingredientChoice == null) {
-            setIngredientChoiceItems(items);
-        } else {
-            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
-            updateHash();
-        }
-    }
-
     public void setIngredientChoice(List<Material> materials) {
         RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
         setIngredientChoice(materialChoice);
@@ -164,34 +130,6 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
 
     public RecipeChoice getPotionChoice() {
         return potionChoice;
-    }
-
-    public void addPotionChoice(List<Material> materials) {
-        if (potionChoice == null) {
-            setPotionChoice(materials);
-        } else {
-            potionChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(potionChoice, materials);
-            updateHash();
-        }
-    }
-
-    public void addPotionChoiceItems(List<ItemStack> items) {
-        if (potionChoice == null) {
-            setPotionChoiceItems(items);
-        } else {
-            potionChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(potionChoice, items);
-            updateHash();
-        }
-    }
-
-    public void setPotionChoice(List<Material> materials) {
-        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
-        setPotionChoice(materialChoice);
-    }
-
-    public void setPotionChoiceItems(List<ItemStack> items) {
-        RecipeChoice.ExactChoice exactChoice = new RecipeChoice.ExactChoice(items);
-        setPotionChoice(exactChoice);
     }
 
     protected void setPotionChoice(RecipeChoice choice) {

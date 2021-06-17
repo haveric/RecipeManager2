@@ -9,7 +9,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,21 +35,6 @@ public class BrewRecipe extends BaseBrewRecipe {
 
     public BrewRecipe(Flags flags) {
         super(flags);
-    }
-
-    @Override
-    public Recipe getBukkitRecipe(boolean vanilla) {
-        return null;
-    }
-
-    @Override
-    public void setBukkitRecipe(Recipe newRecipe) {
-
-    }
-
-    @Override
-    public Recipe toBukkitRecipe(boolean vanilla) {
-        return null;
     }
 
     @Override
