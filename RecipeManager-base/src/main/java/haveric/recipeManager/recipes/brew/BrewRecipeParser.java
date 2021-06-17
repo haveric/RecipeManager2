@@ -14,7 +14,7 @@ public class BrewRecipeParser extends BaseBrewParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        BrewRecipe recipe = new BrewRecipe();
+        BrewRecipe recipe = new BrewRecipe(fileFlags);
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE);
 
