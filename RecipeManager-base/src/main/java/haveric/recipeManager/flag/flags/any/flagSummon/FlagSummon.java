@@ -222,7 +222,12 @@ public class FlagSummon extends Flag {
 
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire).") }, String.class);
+                String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire).") }, String.class);
+        }
+
+        if (Version.has1_14Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "wanderingtraderdespawndelay <ticks>", "sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.") }, String.class);
         }
 
         if (!Version.has1_12Support()) {

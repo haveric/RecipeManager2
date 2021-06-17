@@ -101,6 +101,7 @@ public class Customization implements Cloneable {
     private boolean target = false;
     private Villager.Profession villager = null;
     private boolean visualFire = false;
+    private Integer wanderingTraderDespawnDelay = null;
     private boolean zombieVillager = false;
 
     public Customization(String newFlagType, EntityType newType) {
@@ -186,6 +187,7 @@ public class Customization implements Cloneable {
             foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
             foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
             foxSleeping = c.foxSleeping;
+            wanderingTraderDespawnDelay = c.wanderingTraderDespawnDelay;
         }
 
         if (Version.has1_15Support()) {
@@ -567,6 +569,13 @@ public class Customization implements Cloneable {
                     }
                     if (pandaHiddenGene != null) {
                         npc.setHiddenGene(pandaHiddenGene);
+                    }
+                }
+
+                if (ent instanceof WanderingTrader) {
+                    WanderingTrader trader = (WanderingTrader) ent;
+                    if (wanderingTraderDespawnDelay != null) {
+                        trader.setDespawnDelay(wanderingTraderDespawnDelay);
                     }
                 }
             }
@@ -1334,6 +1343,14 @@ public class Customization implements Cloneable {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'fox' argument with invalid entityType: " + lower);
                 }
             }
+        } else if (Version.has1_14Support() && lower.startsWith("wanderingtraderdespawndelay")) {
+            lower = lower.substring("wanderingtraderdespawndelay".length()).trim();
+
+            try {
+                wanderingTraderDespawnDelay = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'wanderingtraderdespawndelay' argument with invalid value number: " + lower);
+            }
         } else if (Version.has1_15Support() && lower.startsWith("bee")) {
             if (lower.startsWith("beeanger")) {
                 lower = lower.substring("beeanger".length()).trim();
@@ -1508,6 +1525,7 @@ public class Customization implements Cloneable {
             toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
             toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
             toHash += "foxSleeping: " + foxSleeping;
+            toHash += "wanderingTraderDespawnDelay: " + wanderingTraderDespawnDelay;
         }
 
         if (Version.has1_15Support()) {
