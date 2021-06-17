@@ -16,7 +16,6 @@ public class UpdateInventory extends BukkitRunnable {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public void run() {
         player.updateInventory();
     }
