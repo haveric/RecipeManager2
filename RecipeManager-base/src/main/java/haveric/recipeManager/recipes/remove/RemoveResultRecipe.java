@@ -4,6 +4,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
@@ -86,5 +87,10 @@ public class RemoveResultRecipe extends BaseRecipe {
         }
 
         return super.remove();
+    }
+
+    @Override
+    public String printBookResult(ItemResult result) {
+        return "";
     }
 }

@@ -17,7 +17,7 @@ import org.bukkit.inventory.Recipe;
 
 import java.util.List;
 
-public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
+public abstract class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
     private Flags flags;
     protected Recipe recipe;
     private boolean vanillaSpecialRecipe = false;
@@ -257,9 +257,7 @@ public class BaseRecipe extends AbstractBaseRecipe implements Flaggable {
         return print;
     }
 
-    public String printBookResult(ItemResult result) {
-        return "";
-    }
+    public abstract String printBookResult(ItemResult result);
 
     public int findItemInIngredients(Material type, Short data) {
         return 0;

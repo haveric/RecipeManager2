@@ -7,7 +7,7 @@ import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 
-public class BaseAnvilRecipe extends PreparableResultRecipe {
+public abstract class BaseAnvilRecipe extends PreparableResultRecipe {
     protected int repairCost = 0;
     protected boolean renamingAllowed = false;
     protected double anvilDamageChance = 12;

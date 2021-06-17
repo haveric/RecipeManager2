@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResultRecipe {
+public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResultRecipe {
     protected float minTime = -1;
     protected float maxTime = -1;
     protected String group;

@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 
-public class BaseBrewRecipe extends MultiResultRecipe {
+public abstract class BaseBrewRecipe extends MultiResultRecipe {
     private int minTime = -1;
     private int maxTime = -1;
 

@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleResultRecipe extends BaseRecipe {
+public abstract class SingleResultRecipe extends BaseRecipe {
     protected ItemResult result;
 
     protected SingleResultRecipe() {

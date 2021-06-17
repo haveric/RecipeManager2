@@ -157,25 +157,27 @@ recipebook:
   volume: Volume {volume}
   volumeofvolumes: Volume {volume} of {volumes}
   header:
-    contents: <black><bold><underline>CONTENTS INDEX
-    craft: <black><bold>SHAPED RECIPE
-    combine: <black><bold>SHAPELESS RECIPE
-    smelt: <black><bold>FURNACE RECIPE
-    blasting: <black><bold>BLASTING RECIPE
-    smoking: <black><bold>SMOKING RECIPE
-    campfire: <black><bold>CAMPFIRE RECIPE
-    stonecutting: <black><bold>STONECUTTING RECIPE
-    compost: <black><bold>COMPOST RECIPE
     anvil: <black><bold>ANVIL RECIPE
-    fuel: <black><bold>FURNACE FUEL
-    shape: <black><underline>Shape
-    pattern: <black><underline>Pattern
-    ingredients: <black><underline>Ingredients
-    ingredient: <black><underline>Ingredient
-    cooktime: <black><underline>Cooking time
+    blasting: <black><bold>BLASTING RECIPE
+    brewing: <black><bold>BREWING RECIPE
     burntime: <black><underline>Burning time
-    requirefuel: <black><underline>As fuel
+    campfire: <black><bold>CAMPFIRE RECIPE
+    combine: <black><bold>SHAPELESS RECIPE
+    compost: <black><bold>COMPOST RECIPE
     compostlevel: <black><underline>Levels
+    contents: <black><bold><underline>CONTENTS INDEX
+    cooktime: <black><underline>Cooking time
+    craft: <black><bold>SHAPED RECIPE
+    fuel: <black><bold>FURNACE FUEL
+    ingredient: <black><underline>Ingredient
+    ingredients: <black><underline>Ingredients
+    pattern: <black><underline>Pattern
+    potion: <black><underline>Potion
+    requirefuel: <black><underline>As fuel
+    shape: <black><underline>Shape
+    smelt: <black><bold>FURNACE RECIPE
+    smoking: <black><bold>SMOKING RECIPE
+    stonecutting: <black><bold>STONECUTTING RECIPE
   moreresults: <dark_green>+{amount} more results
   smelt:
     time:

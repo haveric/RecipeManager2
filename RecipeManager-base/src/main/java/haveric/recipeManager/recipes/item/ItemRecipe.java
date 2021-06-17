@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.item;
 
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 
 import java.util.HashMap;
@@ -45,5 +46,10 @@ public class ItemRecipe extends SingleResultRecipe {
         }
 
         return null;
+    }
+
+    @Override
+    public String printBookResult(ItemResult result) {
+        return "";
     }
 }

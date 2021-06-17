@@ -2,11 +2,10 @@ package haveric.recipeManager.recipes.fuel;
 
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -110,49 +109,9 @@ public class FuelRecipe extends BaseFuelRecipe {
     }
 
     @Override
-    public List<String> printBookRecipes() {
-        List<String> recipes = new ArrayList<>();
-
-        recipes.add(printBookResult());
-
-        return recipes;
+    public String printBookResult(ItemResult result) {
+        return getPrintForIngredient(ToolsItem.print(ingredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
     }
 
-    public String printBookResult() {
-        StringBuilder s = new StringBuilder(256);
 
-        s.append(Messages.getInstance().parse("recipebook.header.fuel"));
-
-        if (hasCustomName()) {
-            s.append('\n').append(RMCChatColor.BLACK).append(RMCChatColor.ITALIC).append(getName()).append(RMCChatColor.BLACK);
-        }
-
-        s.append("\n\n");
-        s.append(Messages.getInstance().parse("recipebook.header.ingredient")).append(RMCChatColor.BLACK);
-        s.append('\n').append(ToolsItem.print(ingredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-
-        s.append("\n\n");
-        s.append(Messages.getInstance().parse("recipebook.header.burntime")).append(RMCChatColor.BLACK);
-        s.append('\n');
-
-        if (maxTime > minTime) {
-            s.append(Messages.getInstance().parse("recipebook.fuel.time.random", "{min}", RMCUtil.printNumber(minTime), "{max}", RMCUtil.printNumber(maxTime)));
-        } else {
-            s.append(Messages.getInstance().parse("recipebook.fuel.time.fixed", "{time}", RMCUtil.printNumber(minTime)));
-        }
-
-        return s.toString();
-    }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 1) {
-            ItemStack ingredient = ingredients.get(0);
-            recipeIndexes.add(ingredient.getType().toString());
-            recipeIndexes.add(ingredient.getType() + ":" + ingredient.getDurability());
-        }
-
-        return recipeIndexes;
-    }
 }

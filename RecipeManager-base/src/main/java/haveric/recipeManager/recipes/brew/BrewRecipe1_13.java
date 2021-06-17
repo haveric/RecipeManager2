@@ -1,7 +1,9 @@
 package haveric.recipeManager.recipes.brew;
 
+import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
@@ -326,5 +328,19 @@ public class BrewRecipe1_13 extends BaseBrewRecipe {
         }
 
         return totalQuality;
+    }
+
+    @Override
+    public String printBookResult(ItemResult result) {
+        StringBuilder s = getHeaderResult("brewing", result);
+
+        s.append(Messages.getInstance().parse("recipebook.header.ingredient"));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.potion"));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(potionChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+
+        return s.toString();
     }
 }

@@ -1,8 +1,12 @@
 package haveric.recipeManager.recipes.brew;
 
+import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -152,5 +156,19 @@ public class BrewRecipe extends BaseBrewRecipe {
         }
 
         return recipeIndexes;
+    }
+
+    @Override
+    public String printBookResult(ItemResult result) {
+        StringBuilder s = getHeaderResult("brewing", result);
+
+        s.append(Messages.getInstance().parse("recipebook.header.ingredient"));
+        s.append('\n').append(ToolsItem.print(ingredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
+
+        s.append("\n\n");
+        s.append(Messages.getInstance().parse("recipebook.header.potion"));
+        s.append('\n').append(ToolsItem.print(potion, RMCChatColor.BLACK, RMCChatColor.BLACK));
+
+        return s.toString();
     }
 }

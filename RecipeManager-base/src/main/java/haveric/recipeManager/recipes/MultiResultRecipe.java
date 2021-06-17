@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.Damageable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiResultRecipe extends BaseRecipe {
+public abstract class MultiResultRecipe extends BaseRecipe {
     private List<ItemResult> results = new ArrayList<>();
 
     protected MultiResultRecipe() {

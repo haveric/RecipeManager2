@@ -11,7 +11,7 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
+public abstract class SingleRecipeChoiceSingleResultRecipe extends SingleResultRecipe {
     protected RecipeChoice ingredientChoice;
 
     public SingleRecipeChoiceSingleResultRecipe() {
