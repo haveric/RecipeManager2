@@ -28,8 +28,6 @@ import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipeParser;
 import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.recipes.item.ItemRecipeParser;
-import haveric.recipeManager.recipes.remove.RemoveResultRecipe;
-import haveric.recipeManager.recipes.remove.RemoveResultsParser;
 import haveric.recipeManager.recipes.smithing.RMSmithingEvents;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipeParser;
@@ -44,7 +42,6 @@ public class RecipeTypeLoader {
     }
 
     private void loadDefaultRecipeTypes() {
-        loadRecipeType(RMCRecipeType.SPECIAL.getDirective(), new RemoveResultRecipe(), new RemoveResultsParser());
         loadRecipeType(RMCRecipeType.ITEM.getDirective(), new ItemRecipe(), new ItemRecipeParser());
 
         if (Version.has1_13Support()) {

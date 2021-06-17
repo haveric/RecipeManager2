@@ -15,9 +15,7 @@ public enum RMCRecipeType {
     SMELT("smelt"),
     SMITHING("smithing"),
     SMOKING("smoking"),
-    STONECUTTING("stonecutting"),
-
-    SPECIAL("special");
+    STONECUTTING("stonecutting");
 
     private final String directive;
 
