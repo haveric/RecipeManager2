@@ -85,6 +85,8 @@ permissions:
     children:
       recipemanager.command.rm: true
       recipemanager.command.rmrecipes: true
+      recipemanager.command.rmnext: true
+      recipemanager.command.rmprev: true
       recipemanager.command.rmfinditem: true
   recipemanager.admin:
     description: Access to the admin commands
@@ -106,38 +108,44 @@ permissions:
     description: Allows player's recipe books to be updated
     default: true
   recipemanager.command.rm:
-    description:
+    description: Allows usage of the default /rm command
     default: true
   recipemanager.command.rmrecipes:
-    description:
+    description: Allows usage of /rmrecipes
+    default: true
+  recipemanager.command.rmnext:
+    description: Allows usage of /rmnext
+    default: true
+  recipemanager.command.rmprev:
+    description: Allows usage of /rmprev
     default: true
   recipemanager.command.rmfinditem:
-    description:
+    description: Allows usage of /rmfinditem
     default: true
   recipemanager.command.rmcheck:
-    description:
+    description: Allows usage of /rmcheck
     default: op
   recipemanager.command.rmreload:
-    description:
+    description: Allows usage of /rmreload
     default: op
   recipemanager.command.rmreloadbooks:
-    description:
+    description: Allows usage of /rmreloadbooks
     default: op
   recipemanager.command.rmextract:
-    description:
+    description: Allows usage of /rmextract
     default: op
   recipemanager.command.rmgetbook:
-    description:
+    description: Allows usage of /rmgetbook
     default: op
   recipemanager.command.rmbooks:
-    description:
+    description: Allows usage of /rmbooks
     default: op
   recipemanager.command.rmupdate:
-    description:
+    description: Allows usage of /rmupdate
     default: op
   recipemanager.command.rmcreaterecipe:
-    description:
+    description: Allows usage of /rmcreaterecipe
     default: op
   recipemanager.command.rmdebug:
-    description:
+    description: Allows usage of /rmdebug
     default: op
