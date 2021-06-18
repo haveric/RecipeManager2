@@ -32,9 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BrewEvents extends BaseRecipeEvents {
     public BrewEvents() { }
@@ -399,7 +397,9 @@ public class BrewEvents extends BaseRecipeEvents {
             Location location = holder.getLocation();
 
             boolean anyCrafted = false;
-            List<BaseBrewRecipe> recipesCrafted = new ArrayList<>();
+            boolean hasKeepItem = false;
+            List<BaseBrewRecipe> recipesWithCondition = new ArrayList<>();
+            Map<BaseBrewRecipe, List<Integer>> recipeSlots = new HashMap<>();
             for (int i = 0; i <= 2; i++) {
                 List<ItemStack> ingredients = new ArrayList<>();
                 ItemStack ingredient = inventory.getIngredient();
@@ -413,42 +413,59 @@ public class BrewEvents extends BaseRecipeEvents {
                         BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.BREW, ingredients);
                         if (baseRecipe instanceof BaseBrewRecipe) {
                             BaseBrewRecipe recipe = (BaseBrewRecipe) baseRecipe;
-                            Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
-                            a.setFirstRun(true);
 
-                            List<ItemResult> results = recipe.getResults();
-                            if (!results.isEmpty()) {
-                                ItemResult result = results.get(0);
+                            if (!recipeSlots.containsKey(recipe)) {
+                                recipeSlots.put(recipe, new ArrayList<>());
+                            }
+                            List<Integer> recipeSlot = recipeSlots.get(recipe);
+                            recipeSlot.add(i);
+                        }
+                    }
+                }
+            }
 
-                                if (result != null) {
-                                    a.setResult(result);
-                                    boolean recipeCheckFlags = recipe.checkFlags(a);
-                                    boolean resultCheckFlags = result.checkFlags(a);
+            for (Map.Entry<BaseBrewRecipe, List<Integer>> entry : recipeSlots.entrySet()) {
+                BaseBrewRecipe recipe = entry.getKey();
+                Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
+                a.setFirstRun(true);
 
-                                    if (recipeCheckFlags && resultCheckFlags) {
-                                        boolean recipeCraft = recipe.sendCrafted(a);
-                                        boolean resultCraft = result.sendCrafted(a);
+                List<ItemResult> results = recipe.getResults();
+                if (!results.isEmpty()) {
+                    ItemResult result = results.get(0);
 
-                                        if (recipeCraft && resultCraft) {
-                                            ItemStack bukkitResult = result.toItemStack();
+                    if (result != null) {
+                        a.setResult(result);
+                        boolean recipeCheckFlags = recipe.checkFlags(a);
+                        boolean resultCheckFlags = result.checkFlags(a);
 
-                                            if (a.hasExtra()) {
-                                                @SuppressWarnings("unchecked")
-                                                List<Boolean> potionBools = (List<Boolean>) a.extra();
+                        if (recipeCheckFlags && resultCheckFlags) {
+                            boolean recipeCraft = recipe.sendCrafted(a);
+                            boolean resultCraft = result.sendCrafted(a);
 
-                                                if (potionBools.get(i)) {
-                                                    if (!recipesCrafted.contains(recipe)) {
-                                                        recipesCrafted.add(recipe);
-                                                    }
+                            if (recipeCraft && resultCraft) {
+                                ItemStack bukkitResult = result.toItemStack();
+                                if (a.hasExtra()) {
+                                    @SuppressWarnings("unchecked")
+                                    List<Boolean> potionBools = (List<Boolean>) a.extra();
 
-                                                    inventory.setItem(i, bukkitResult.clone());
-                                                    anyCrafted = true;
-                                                }
-                                            } else {
-                                                inventory.setItem(i, bukkitResult.clone());
-                                                anyCrafted = true;
+                                    for (int i : entry.getValue()) {
+                                        if (potionBools.size() == 1 || potionBools.get(i)) {
+                                            if (!recipesWithCondition.contains(recipe)) {
+                                                recipesWithCondition.add(recipe);
                                             }
+
+                                            inventory.setItem(i, bukkitResult.clone());
+                                            anyCrafted = true;
                                         }
+
+                                        if (potionBools.size() == 1 || potionBools.size() > 3) {
+                                            hasKeepItem = true;
+                                        }
+                                    }
+                                } else {
+                                    for (int i : entry.getValue()) {
+                                        inventory.setItem(i, bukkitResult.clone());
+                                        anyCrafted = true;
                                     }
                                 }
                             }
@@ -458,23 +475,23 @@ public class BrewEvents extends BaseRecipeEvents {
             }
 
             if (anyCrafted) {
-                boolean anySubtracted = false;
-                for (BaseBrewRecipe brewRecipe : recipesCrafted) {
+                int amountToSubtract = 1;
+                for (BaseBrewRecipe brewRecipe : recipesWithCondition) {
                     List<ItemResult> results = brewRecipe.getResults();
                     if (!results.isEmpty()) {
                         ItemResult result = results.get(0);
-                        if (brewRecipe.subtractIngredientCondition(inventory, result)) {
-                            anySubtracted = true;
-                        }
+                        amountToSubtract = Math.max(amountToSubtract, brewRecipe.subtractIngredientCondition(inventory, result));
                     }
                 }
 
-                if (!anySubtracted) {
-                    ItemStack originalIngredient = inventory.getItem(3);
-                    originalIngredient.setAmount(originalIngredient.getAmount() - 1);
-
-                    inventory.setItem(3, originalIngredient);
+                if (hasKeepItem) {
+                    amountToSubtract -= 1;
                 }
+
+                ItemStack originalIngredient = inventory.getItem(3);
+                originalIngredient.setAmount(originalIngredient.getAmount() - amountToSubtract);
+
+                inventory.setItem(3, originalIngredient);
 
                 completeCustomBrewing(inventory);
                 prepareCustomBrewEventLater(inventory);

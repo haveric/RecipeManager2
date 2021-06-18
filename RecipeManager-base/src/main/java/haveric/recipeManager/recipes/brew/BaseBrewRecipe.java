@@ -103,14 +103,11 @@ public abstract class BaseBrewRecipe extends MultiResultRecipe {
         return Math.max(time, 0);
     }
 
-    public boolean subtractIngredientCondition(Inventory inv, ItemResult result) {
-        boolean anySubtracted = false;
+    public int subtractIngredientCondition(Inventory inv, ItemResult result) {
+        int amountToSubtract = 0;
 
         ItemStack item = inv.getItem(3);
         if (item != null) {
-            int amt = item.getAmount();
-            int newAmt = amt;
-
             if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
                 FlagIngredientCondition flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
                 List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
@@ -118,7 +115,7 @@ public abstract class BaseBrewRecipe extends MultiResultRecipe {
                 for (ConditionsIngredient cond : condList) {
                     if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
                         if (cond.getAmount() > 1) {
-                            newAmt -= cond.getAmount();
+                            amountToSubtract += cond.getAmount();
                         }
                     }
                 }
@@ -131,23 +128,12 @@ public abstract class BaseBrewRecipe extends MultiResultRecipe {
                 for (ConditionsIngredient cond : condList) {
                     if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
                         if (cond.getAmount() > 1) {
-                            newAmt -= cond.getAmount();
+                            amountToSubtract += cond.getAmount();
                         }
                     }
                 }
             }
-
-            if (amt != newAmt) {
-                if (newAmt > 0) {
-                    item.setAmount(newAmt);
-                } else {
-                    inv.clear(3);
-                }
-
-                anySubtracted = true;
-            }
-
         }
-        return anySubtracted;
+        return amountToSubtract;
     }
 }

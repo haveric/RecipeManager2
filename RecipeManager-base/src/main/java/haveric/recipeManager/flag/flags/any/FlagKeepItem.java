@@ -19,7 +19,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -249,6 +251,18 @@ public class FlagKeepItem extends Flag {
                 } else {
                     if (inv instanceof AnvilInventory || inv instanceof CraftingInventory || inv instanceof CartographyInventory || inv instanceof GrindstoneInventory) {
                         clone.setAmount(clone.getAmount() + 1);
+                    } else if (inv instanceof BrewerInventory) {
+                        if (a.hasExtra()) {
+                            @SuppressWarnings("unchecked")
+                            List<Boolean> potionBools = (List<Boolean>) a.extra();
+                            if (potionBools.size() < 4) {
+                                potionBools.add(true);
+                            }
+                        } else {
+                            List<Boolean> potionBools = new ArrayList<>();
+                            potionBools.add(true);
+                            a.setExtra(potionBools);
+                        }
                     }
 
                     inv.setItem(index, clone);
@@ -270,6 +284,8 @@ public class FlagKeepItem extends Flag {
             for (int i = 1; i < inv.getSize(); i++) {
                 parse(inv, a, i);
             }
+        } else if (a.inventory() instanceof BrewerInventory) {
+            parse(a.inventory(), a, 3);
         } else if (a.inventory() instanceof FurnaceInventory) {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 
