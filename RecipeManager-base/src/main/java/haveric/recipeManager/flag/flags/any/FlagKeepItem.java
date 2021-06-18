@@ -6,10 +6,13 @@ import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
+import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
+import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Location;
@@ -37,7 +40,8 @@ public class FlagKeepItem extends Flag {
         return new String[] {
             "{flag} <ingredient>",
             "{flag} <ingredient> | damage <num>",
-            "{flag} <ingredient> | replace <item>", };
+            "{flag} <ingredient> | replace <item>",
+            "{flag} <ingredient> | replace item:<name>", };
     }
 
     @Override
@@ -53,8 +57,11 @@ public class FlagKeepItem extends Flag {
             "This argument only works for damageable items and the <num> can be a positive number to damage the item or negative to repair it.",
             "",
             "For the optional 'replace <item>' argument you can specify an item that will replace the ingredient.",
-            "The <item> on 'replace' argument can support material:data:amount and enchantments, just like recipe results.",
-            "This argument only works for unstackable ingredients. The item specified as replacement can be stackable.", };
+            "  The <item> on 'replace' argument can support material:data:amount and enchantments, just like recipe results.",
+            "  You can use a predefined item from an item recipe:",
+            "    Format = item:<name>",
+            "    <name> = The name of an item recipe defined before this flag.",
+            "  This argument only works for unstackable ingredients. The item specified as replacement can be stackable.", };
     }
 
     @Override
@@ -62,6 +69,7 @@ public class FlagKeepItem extends Flag {
         return new String[] {
             "{flag} iron_axe  // makes the iron_axe ingredient persistent",
             "{flag} potion | replace bottle // using any kind of potion would return an empty bottle",
+            "{flag} potion | replace item:test sword // using any kind of potion would return the item from the 'test sword' recipe, assuming it's defined.",
             "{flag} diamond_pickaxe | damage 5  // keeps the diamond pickaxe but damages it by 5 points",
             "{flag} shears | damage -99999 // keeps shears and fully repairs it", };
     }
@@ -164,15 +172,25 @@ public class FlagKeepItem extends Flag {
 
                 keepItems.put(key, damage);
             } else if (value.startsWith("replace")) {
-                value = value.substring("replace".length());
+                value = value.substring("replace".length()).trim();
 
-                ItemStack replace = Tools.parseItem(value, 0);
+                if (value.startsWith("item:")) {
+                    value = value.substring("item:".length());
 
-                if (replace == null || replace.getType() == Material.AIR) {
-                    return false;
+                    ItemRecipe recipe = ItemRecipe.getRecipe(value);
+                    if (recipe == null) {
+                        return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid item reference: " + value + "!");
+                    } else {
+                        keepItems.put(key, recipe);
+                    }
+                } else {
+                    ItemStack replace = Tools.parseItem(value, 0);
+                    if (replace == null || replace.getType() == Material.AIR) {
+                        return false;
+                    }
+
+                    keepItems.put(key, replace);
                 }
-
-                keepItems.put(key, replace);
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
                 return false;
@@ -227,6 +245,15 @@ public class FlagKeepItem extends Flag {
                 }
             } else if (obj instanceof ItemStack) {
                 clone = ((ItemStack) obj).clone();
+            } else if (obj instanceof ItemRecipe) {
+                ItemRecipe itemRecipe = (ItemRecipe) obj;
+                ItemResult result = itemRecipe.getResult();
+                Args itemArgs = ArgBuilder.create(a).recipe(itemRecipe).result(result).build();
+                itemArgs.setFirstRun(true);
+
+                if (result.getFlags().sendCrafted(itemArgs, true)) {
+                    clone = itemArgs.result();
+                }
             }
 
             if (clone == null) {
