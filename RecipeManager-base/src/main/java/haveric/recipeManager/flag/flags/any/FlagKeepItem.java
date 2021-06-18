@@ -247,7 +247,7 @@ public class FlagKeepItem extends Flag {
                         }
                     }
                 } else {
-                    if (inv instanceof CraftingInventory || inv instanceof GrindstoneInventory || inv instanceof CartographyInventory) {
+                    if (inv instanceof AnvilInventory || inv instanceof CraftingInventory || inv instanceof CartographyInventory || inv instanceof GrindstoneInventory) {
                         clone.setAmount(clone.getAmount() + 1);
                     }
 
@@ -281,7 +281,7 @@ public class FlagKeepItem extends Flag {
             } else {
                 a.addCustomReason("Needs a recipe!");
             }
-        } else if (a.inventory() instanceof GrindstoneInventory || a.inventory() instanceof CartographyInventory) {
+        } else if (a.inventory() instanceof AnvilInventory || a.inventory() instanceof GrindstoneInventory || a.inventory() instanceof CartographyInventory) {
             parse(a.inventory(), a, 0);
             parse(a.inventory(), a, 1);
         } else {
