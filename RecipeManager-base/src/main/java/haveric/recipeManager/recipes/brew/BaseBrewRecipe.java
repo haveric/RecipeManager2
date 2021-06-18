@@ -3,9 +3,18 @@ package haveric.recipeManager.recipes.brew;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
+import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public abstract class BaseBrewRecipe extends MultiResultRecipe {
     private int minTime = -1;
@@ -92,5 +101,53 @@ public abstract class BaseBrewRecipe extends MultiResultRecipe {
         }
 
         return Math.max(time, 0);
+    }
+
+    public boolean subtractIngredientCondition(Inventory inv, ItemResult result) {
+        boolean anySubtracted = false;
+
+        ItemStack item = inv.getItem(3);
+        if (item != null) {
+            int amt = item.getAmount();
+            int newAmt = amt;
+
+            if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                FlagIngredientCondition flagIC = (FlagIngredientCondition) getFlag(FlagType.INGREDIENT_CONDITION);
+                List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
+
+                for (ConditionsIngredient cond : condList) {
+                    if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
+                        if (cond.getAmount() > 1) {
+                            newAmt -= cond.getAmount();
+                        }
+                    }
+                }
+            }
+
+            if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
+                FlagIngredientCondition flagIC = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
+                List<ConditionsIngredient> condList = flagIC.getIngredientConditions(item);
+
+                for (ConditionsIngredient cond : condList) {
+                    if (cond != null && cond.checkIngredient(item, ArgBuilder.create().build())) {
+                        if (cond.getAmount() > 1) {
+                            newAmt -= cond.getAmount();
+                        }
+                    }
+                }
+            }
+
+            if (amt != newAmt) {
+                if (newAmt > 0) {
+                    item.setAmount(newAmt);
+                } else {
+                    inv.clear(3);
+                }
+
+                anySubtracted = true;
+            }
+
+        }
+        return anySubtracted;
     }
 }

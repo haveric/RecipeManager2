@@ -10,7 +10,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: /rmrecipes: Added `this` to tab complete
 * NEW: Added /rmnext and /rmprev commands for easier /rmrecipes navigation
 * FIX: Brewing recipes weren't using file flags
-* FIX: `KeepItem`: Added anvil support
+* FIX: `@KeepItem`: Added anvil support
+* FIX: Brewing Recipes: Improved support for `@IngredientCondition` including amount for the ingredient
 
 ### v2.27.0
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message

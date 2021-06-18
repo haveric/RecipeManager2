@@ -306,6 +306,9 @@ public class FlagIngredientCondition extends Flag {
 
         boolean anySuccess = false;
         List<ConditionsIngredient> condList = getIngredientConditions(item);
+        if (condList.isEmpty()) {
+            return true;
+        }
 
         for (ConditionsIngredient cond : condList) {
             if (cond == null) {

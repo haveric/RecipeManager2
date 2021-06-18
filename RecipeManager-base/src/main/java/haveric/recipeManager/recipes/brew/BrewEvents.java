@@ -399,6 +399,7 @@ public class BrewEvents extends BaseRecipeEvents {
             Location location = holder.getLocation();
 
             boolean anyCrafted = false;
+            List<BaseBrewRecipe> recipesCrafted = new ArrayList<>();
             for (int i = 0; i <= 2; i++) {
                 List<ItemStack> ingredients = new ArrayList<>();
                 ItemStack ingredient = inventory.getIngredient();
@@ -416,15 +417,18 @@ public class BrewEvents extends BaseRecipeEvents {
                             a.setFirstRun(true);
 
                             List<ItemResult> results = recipe.getResults();
-
                             if (!results.isEmpty()) {
                                 ItemResult result = results.get(0);
 
                                 if (result != null) {
                                     a.setResult(result);
-                                    if (recipe.checkFlags(a) && result.checkFlags(a)) {
+                                    boolean recipeCheckFlags = recipe.checkFlags(a);
+                                    boolean resultCheckFlags = result.checkFlags(a);
+
+                                    if (recipeCheckFlags && resultCheckFlags) {
                                         boolean recipeCraft = recipe.sendCrafted(a);
                                         boolean resultCraft = result.sendCrafted(a);
+
                                         if (recipeCraft && resultCraft) {
                                             ItemStack bukkitResult = result.toItemStack();
 
@@ -433,6 +437,10 @@ public class BrewEvents extends BaseRecipeEvents {
                                                 List<Boolean> potionBools = (List<Boolean>) a.extra();
 
                                                 if (potionBools.get(i)) {
+                                                    if (!recipesCrafted.contains(recipe)) {
+                                                        recipesCrafted.add(recipe);
+                                                    }
+
                                                     inventory.setItem(i, bukkitResult.clone());
                                                     anyCrafted = true;
                                                 }
@@ -450,10 +458,23 @@ public class BrewEvents extends BaseRecipeEvents {
             }
 
             if (anyCrafted) {
-                ItemStack originalIngredient = inventory.getItem(3);
-                originalIngredient.setAmount(originalIngredient.getAmount() - 1);
+                boolean anySubtracted = false;
+                for (BaseBrewRecipe brewRecipe : recipesCrafted) {
+                    List<ItemResult> results = brewRecipe.getResults();
+                    if (!results.isEmpty()) {
+                        ItemResult result = results.get(0);
+                        if (brewRecipe.subtractIngredientCondition(inventory, result)) {
+                            anySubtracted = true;
+                        }
+                    }
+                }
 
-                inventory.setItem(3, originalIngredient);
+                if (!anySubtracted) {
+                    ItemStack originalIngredient = inventory.getItem(3);
+                    originalIngredient.setAmount(originalIngredient.getAmount() - 1);
+
+                    inventory.setItem(3, originalIngredient);
+                }
 
                 completeCustomBrewing(inventory);
                 prepareCustomBrewEventLater(inventory);
