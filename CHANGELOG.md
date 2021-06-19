@@ -1,5 +1,18 @@
 ## Change log
 
+### v2.27.1
+* FIX: 1.13+ `@Summon`: Fixed error when summoning a non-breedable entity
+* NEW: `@Summon`: Added support for item recipes within equipment slots
+* NEW: `@Summon`: Added support for tropicalfishcolor, tropicalfishpattern, tropicalfishpatterncolor, and wanderingtraderdespawndelay
+* FIX: NullPointerException when clicking on a smithing result on a newly placed smithing table
+* FIX: /rmrecipes: Brewing recipes weren't printing
+* FIX: /rmrecipes: Added `this` to tab complete
+* NEW: Added /rmnext and /rmprev commands for easier /rmrecipes navigation
+* FIX: Brewing recipes weren't using file flags
+* NEW: `@KeepItem`: Added item recipe support for replace
+* FIX: `@KeepItem`: Added anvil and brewing ingredient support
+* FIX: Brewing Recipes: Improved support for `@IngredientCondition` including amount for the ingredient
+
 ### v2.27.0
 * Fixed usage of `flag.ingredientconditions.nounbreakable` message
 * NEW: `@Summon`: Added support for `axolotl <variant>`, `axolotlplayingdead`, `glowsquiddarkticksremaining <ticks>`, and `goatscreaming`
