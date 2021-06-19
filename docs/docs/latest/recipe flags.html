@@ -1727,6 +1727,7 @@ title: Recipe Flags
         <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt;</h3>
         <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | damage &lt;num&gt;</h3>
         <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | replace &lt;item&gt;</h3>
+        <h3 class='doc-section__title'>@keepitem &lt;ingredient&gt; | replace item:&lt;name&gt;</h3>
         <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
 
@@ -1741,8 +1742,11 @@ title: Recipe Flags
     This argument only works for damageable items and the &lt;num&gt; can be a positive number to damage the item or negative to repair it.
 
     For the optional 'replace &lt;item&gt;' argument you can specify an item that will replace the ingredient.
-    The &lt;item&gt; on 'replace' argument can support material:data:amount and enchantments, just like recipe results.
-    This argument only works for unstackable ingredients. The item specified as replacement can be stackable.
+      The &lt;item&gt; on 'replace' argument can support material:data:amount and enchantments, just like recipe results.
+      You can use a predefined item from an item recipe:
+        Format = item:&lt;name&gt;
+        &lt;name&gt; = The name of an item recipe defined before this flag.
+      This argument only works for unstackable ingredients. The item specified as replacement can be stackable.
 </span>
 
     Setting to 'false' or 'remove' will disable the flag.
@@ -1750,6 +1754,7 @@ title: Recipe Flags
     <b>Examples:</b>
       @keepitem iron_axe  // makes the iron_axe ingredient persistent
       @keepitem potion | replace bottle // using any kind of potion would return an empty bottle
+      @keepitem potion | replace item:test sword // using any kind of potion would return the item from the 'test sword' recipe, assuming it's defined.
       @keepitem diamond_pickaxe | damage 5  // keeps the diamond pickaxe but damages it by 5 points
       @keepitem shears | damage -99999 // keeps shears and fully repairs it
 
@@ -2624,7 +2629,8 @@ title: Recipe Flags
       cat &lt;type&gt;                 = cat type, available values: tabby, black, red, siamese, british_shorthair, calico, persian, ragdoll, white, jellie, all_black
       chance &lt;0.01-100&gt;%         = chance of the entity to spawn, this value is for individual entities.
       chest &lt;item&gt; [drop%]       = equip an item on the entity's chest with optional drop chance.
-      color &lt;dye&gt;                = sets the color of animal, only works for sheep and pet wolf/cats. Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
+      color &lt;dye&gt;                = sets the color of animal, only works for sheep and pet wolf/cats.
+                                     Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
       feet &lt;item&gt; [drop%]        = equip an item on the entity's feet with optional drop chance.
       fox &lt;type&gt;                 = set the fox type, values: red, snow
       foxcrouching               = set the fox to be crouching
@@ -2673,9 +2679,16 @@ title: Recipe Flags
       shearedsheep               = sets the sheep as sheared, only works for sheep.
       spread &lt;range&gt;             = spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)
       target                     = entity targets crafter, that means monsters attack and animals follow and the rest do nothing
+      tropicalfishcolor &lt;dye&gt;    = sets the tropical fish's body color.
+                                     Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
+      tropicalfishpattern &lt;pattern&gt; = sets the tropical fish's pattern.
+                                     Values: kob, sunstreak, snooper, dasher, brinely, spotty, flopper, stripey, glitter, blockfish, betty, clayfish
+      tropicalfishpatterncolor &lt;dye&gt; = sets the color of the tropical fish's pattern.
+                                     Values: <a href='name index.html#dyecolor'>name index.html#dyecolor</a>
       villager &lt;type&gt;            = set the villager profession
                                      Values: none, armorer, butcher, cartographer, cleric, farmer, fisherman, fletcher, leatherworker, librarian, mason, nitwit, shepherd, toolsmith, weaponsmith
       visualfire                 = sets if the entity has visual fire (it will always appear to be on fire).
+      wanderingtraderdespawndelay &lt;ticks&gt; = sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.
 
     These arguments can be used in any order and they're all optional.
 </span>

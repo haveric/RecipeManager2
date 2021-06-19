@@ -8,7 +8,9 @@ title: Commands &amp; Permissions
     </div><pre>
 <h2>Commands</h2><table>
 <tr><td class='command'><b>/rm</b><span class='command__text'><br>Permission: recipemanager.command.rm<br>Aliases: recipemanager, rmhelp</span></td><td>plugin info and available commands</td></tr>
-<tr><td class='command'><b>/rmrecipes &lt;material&gt;:[data]:[amount] [i]</b><span class='command__text'><br>Permission: recipemanager.command.rmrecipes<br>Aliases: recipe, recipes</span></td><td>find recipes that use the specified item</td></tr>
+<tr><td class='command'><b>/rmrecipes &lt;material&gt;:[data]:[amount] [i|r]</b><span class='command__text'><br>Permission: recipemanager.command.rmrecipes<br>Aliases: recipe, recipes</span></td><td>find recipes that use the specified item</td></tr>
+<tr><td class='command'><b>/rmnext</b><span class='command__text'><br>Permission: recipemanager.command.rmnext<br>Aliases: N/A</span></td><td>go to the next page in an /rmrecipes query</td></tr>
+<tr><td class='command'><b>/rmprev</b><span class='command__text'><br>Permission: recipemanager.command.rmprev<br>Aliases: N/A</span></td><td>go the previous page in an /rmrecipes query</td></tr>
 <tr><td class='command'><b>/rmfinditem &lt;name&gt;</b><span class='command__text'><br>Permission: recipemanager.command.rmfinditem<br>Aliases: finditem</span></td><td>search for items by name</td></tr>
 <tr><td class='command'><b>/rmcheck</b><span class='command__text'><br>Permission: recipemanager.command.rmcheck<br>Aliases: checkrecipes</span></td><td>simulates loading recipe files to check for errors</td></tr>
 <tr><td class='command'><b>/rmreload</b><span class='command__text'><br>Permission: recipemanager.command.rmreload<br>Aliases: reloadrecipes</span></td><td>reload recipes/settings/books/etc.</td></tr>
@@ -29,18 +31,20 @@ title: Commands &amp; Permissions
 <tr><td>recipemanager.admin</td><td>OP</td><td>Access to the admin commands</td></tr>
 <tr><td>recipemanager.debugger</td><td>OP</td><td>Get error messages when online</td></tr>
 <tr><td>recipemanager.updatebooks</td><td>Everybody</td><td>Allows player's recipe books to be updated</td></tr>
-<tr><td>recipemanager.command.rm</td><td>Everybody</td><td></td></tr>
-<tr><td>recipemanager.command.rmrecipes</td><td>Everybody</td><td></td></tr>
-<tr><td>recipemanager.command.rmfinditem</td><td>Everybody</td><td></td></tr>
-<tr><td>recipemanager.command.rmcheck</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmreload</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmreloadbooks</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmextract</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmgetbook</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmbooks</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmupdate</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmcreaterecipe</td><td>OP</td><td></td></tr>
-<tr><td>recipemanager.command.rmdebug</td><td>OP</td><td></td></tr>
+<tr><td>recipemanager.command.rm</td><td>Everybody</td><td>Allows usage of the default /rm command</td></tr>
+<tr><td>recipemanager.command.rmrecipes</td><td>Everybody</td><td>Allows usage of /rmrecipes</td></tr>
+<tr><td>recipemanager.command.rmnext</td><td>Everybody</td><td>Allows usage of /rmnext</td></tr>
+<tr><td>recipemanager.command.rmprev</td><td>Everybody</td><td>Allows usage of /rmprev</td></tr>
+<tr><td>recipemanager.command.rmfinditem</td><td>Everybody</td><td>Allows usage of /rmfinditem</td></tr>
+<tr><td>recipemanager.command.rmcheck</td><td>OP</td><td>Allows usage of /rmcheck</td></tr>
+<tr><td>recipemanager.command.rmreload</td><td>OP</td><td>Allows usage of /rmreload</td></tr>
+<tr><td>recipemanager.command.rmreloadbooks</td><td>OP</td><td>Allows usage of /rmreloadbooks</td></tr>
+<tr><td>recipemanager.command.rmextract</td><td>OP</td><td>Allows usage of /rmextract</td></tr>
+<tr><td>recipemanager.command.rmgetbook</td><td>OP</td><td>Allows usage of /rmgetbook</td></tr>
+<tr><td>recipemanager.command.rmbooks</td><td>OP</td><td>Allows usage of /rmbooks</td></tr>
+<tr><td>recipemanager.command.rmupdate</td><td>OP</td><td>Allows usage of /rmupdate</td></tr>
+<tr><td>recipemanager.command.rmcreaterecipe</td><td>OP</td><td>Allows usage of /rmcreaterecipe</td></tr>
+<tr><td>recipemanager.command.rmdebug</td><td>OP</td><td>Allows usage of /rmdebug</td></tr>
 <tr><td>recipemanager.flag.*</td><td>Everybody</td><td>Allows use of flag.</td></tr>
 <tr><td>recipemanager.flag.summon</td><td>Everybody</td><td>Allows use of the @summon flag.</td></tr>
 <tr><td>recipemanager.flag.needmoney</td><td>Everybody</td><td>Allows use of the @needmoney flag.</td></tr>
