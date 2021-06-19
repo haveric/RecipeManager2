@@ -32,8 +32,7 @@ public class FlagSpawnEgg extends Flag {
         return new String[] {
             "Sets the entity type that will be spawned from the spawn egg.",
             "",
-            "The &lt;entity type&gt; argument must be an entity type name, see " + Files.getNameIndexHashLink("entitytype"),
-        };
+            "The &lt;entity type&gt; argument must be an entity type name, see " + Files.getNameIndexHashLink("entitytype"), };
     }
 
     @Override

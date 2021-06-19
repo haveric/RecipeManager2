@@ -31,16 +31,14 @@ public class FlagForDelay extends Flag {
             "You can specify this flag more than once.",
             "",
             "The <delay> is the number of ticks that the <flag declarations>'s will be delayed by.",
-            "The '<flag declaration>' must be a flag that will work without affecting the result.",
-        };
+            "The '<flag declaration>' must be a flag that will work without affecting the result.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
             "{flag} 100 " + FlagType.COMMAND + " /summon lightning_bolt ~ ~ ~ // 100 ticks after craft, summon lightning",
-            "{flag} 100 " + FlagType.FOR_REPEAT + " 5 10 " + FlagType.COMMAND + " /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // {flag} can be chained with " + FlagType.FOR_REPEAT + " for even more customization",
-        };
+            "{flag} 100 " + FlagType.FOR_REPEAT + " 5 10 " + FlagType.COMMAND + " /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // {flag} can be chained with " + FlagType.FOR_REPEAT + " for even more customization", };
     }
 
     public static class DelayFlag {

@@ -32,15 +32,13 @@ public class FlagForRepeat extends Flag {
             "",
             "The <times to repeat> is the number of times the contained flags will be repeated.",
             "The <delay per repeat> is the number of ticks that each repeat after the first will be delayed by.",
-            "The '<flag declaration>' must be a flag that will work without affecting the result.",
-        };
+            "The '<flag declaration>' must be a flag that will work without affecting the result.", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} 5 10 " + FlagType.COMMAND + " /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // Summon lightning 5 times, with a 10 tick delay between them",
-        };
+            "{flag} 5 10 " + FlagType.COMMAND + " /summon lightning_bolt ~{rand -5-5} ~ ~{rand -5-5} // Summon lightning 5 times, with a 10 tick delay between them", };
     }
 
     public static class RepeatFlag {

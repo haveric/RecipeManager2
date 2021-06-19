@@ -46,7 +46,7 @@ public class FlagSuspiciousStewItem extends Flag {
             "  particles [false]   = (defaults true) display particles.",
             "  !particles          = equivalent to 'particles false'",
             "  icon [false]        = (defaults true) show the effect icon.",
-            "  !icon               = equivalent to 'icon false'",};
+            "  !icon               = equivalent to 'icon false'", };
     }
 
     @Override

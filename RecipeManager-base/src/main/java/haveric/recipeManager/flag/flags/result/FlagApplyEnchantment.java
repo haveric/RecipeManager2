@@ -42,8 +42,7 @@ public class FlagApplyEnchantment extends Flag {
             "Actions include:",
             "  largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)",
             "  combine = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)",
-            "  anvil   = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)",
-            "", };
+            "  anvil   = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)", };
     }
 
     @Override
@@ -51,7 +50,7 @@ public class FlagApplyEnchantment extends Flag {
         return new String[] {
             "{flag}",
             "{flag} resultaction combine // Combines the levels with the resulting item's enchants",
-            "{flag} ingredientaction combine | ignorelevels | onlybooks // Combines all ingredients levels from books while allowing higher than vanilla allowed enchants"};
+            "{flag} ingredientaction combine | ignorelevels | onlybooks // Combines all ingredients levels from books while allowing higher than vanilla allowed enchants", };
     }
 
     public enum ApplyEnchantmentAction {

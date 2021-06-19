@@ -28,7 +28,7 @@ public class FlagSkullOwner extends Flag {
             "{flag} <uuid>",
             "{flag} texture <base64>",
             "{flag} <name> | texture <base64>",
-            "{flag} <uuid> | texture <base64>"};
+            "{flag} <uuid> | texture <base64>", };
     }
 
     @Override

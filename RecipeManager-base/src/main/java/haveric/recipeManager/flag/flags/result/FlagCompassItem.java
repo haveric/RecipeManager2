@@ -55,7 +55,7 @@ public class FlagCompassItem extends Flag {
     protected String[] getExamples() {
         return new String[] {
                 "{flag} world 100 65 200 // Will track this location without a lodestone",
-                "{flag} world 100 65 200 | true // Requires a lodestone to be at x=100, y=65, z=200 for the compass to track this location"};
+                "{flag} world 100 65 200 | true // Requires a lodestone to be at x=100, y=65, z=200 for the compass to track this location", };
     }
 
     String world;

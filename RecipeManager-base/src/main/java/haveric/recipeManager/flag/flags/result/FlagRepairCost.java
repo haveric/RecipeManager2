@@ -35,8 +35,7 @@ public class FlagRepairCost extends Flag {
             "  Setting message to true will use the default message: flag.repaircost.preparelore",
             "  For the prepare lore you can use the following arguments:",
             "    {cost} = the repair cost",
-            "  Allows quotes to prevent spaces being trimmed.",
-        };
+            "  Allows quotes to prevent spaces being trimmed.", };
     }
 
     @Override

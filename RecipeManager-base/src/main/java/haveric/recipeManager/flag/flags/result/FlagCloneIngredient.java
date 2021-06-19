@@ -68,7 +68,7 @@ public class FlagCloneIngredient extends Flag {
             "{flag} data % 2 // get the remainder from data divided by 2.",
             "{flag} data | amount | lore // only copy these things",
             "{flag} all // copy entire ingredient",
-            "{flag} all | allowedtypes stone_axe, iron_axe // copy ingredients from the first ingredient that matches a stone axe, iron axe, or the result type"};
+            "{flag} all | allowedtypes stone_axe, iron_axe // copy ingredients from the first ingredient that matches a stone axe, iron axe, or the result type", };
     }
 
 

@@ -49,8 +49,7 @@ public class FlagWorld extends Flag {
             "{flag} !world_nether // disallows 'world_nether'",
             "{flag} world1, world2, world3 | <red>Need to be in world 1, 2 or 3! // requires one of the 3 worlds",
             "{flag} ~hardcore // Will match any world including hardcore in it's name, (ex: world_hardcore, hardcore_parkour)",
-            "{flag} !~hardcore // Disallows any worlds with hardcore in it's name",
-        };
+            "{flag} !~hardcore // Disallows any worlds with hardcore in it's name", };
     }
 
     private Map<String, Boolean> worlds = new HashMap<>();

@@ -21,7 +21,7 @@ public class FlagNoResult extends Flag {
         return new String[] {
             "Prevents the result item from being crafted.",
             "",
-            "Useful when giving items through " + FlagType.COMMAND + " or providing non-item results, such as " + FlagType.MOD_EXP + "."};
+            "Useful when giving items through " + FlagType.COMMAND + " or providing non-item results, such as " + FlagType.MOD_EXP + ".", };
     }
 
     @Override

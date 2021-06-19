@@ -42,7 +42,7 @@ public class FlagPotionEffect extends Flag {
             "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
             "  !ambient            = equivalent to 'ambient false'",
             "  particles [false]   = (defaults true) display particles.",
-            "  !particles          = equivalent to 'particles false'",};
+            "  !particles          = equivalent to 'particles false'", };
 
         if (Version.has1_13BasicSupport()) {
             description = ObjectArrays.concat(description, new String[]{

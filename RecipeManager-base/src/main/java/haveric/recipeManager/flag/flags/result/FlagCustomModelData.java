@@ -30,7 +30,7 @@ public class FlagCustomModelData extends Flag {
     protected String[] getExamples() {
         return new String[] {
             "{flag} 7",
-            "{flag} 1234567" , };
+            "{flag} 1234567", };
     }
 
 

@@ -29,7 +29,7 @@ public class FlagItemUnbreakable extends Flag {
     protected String[] getExamples() {
         return new String[] {
                 "{flag} // Makes the result unbreakable",
-                "{flag} false // Remove the unbreakable status, allowing for the item to be destroyed",};
+                "{flag} false // Remove the unbreakable status, allowing for the item to be destroyed", };
     }
 
     private boolean unbreakable;

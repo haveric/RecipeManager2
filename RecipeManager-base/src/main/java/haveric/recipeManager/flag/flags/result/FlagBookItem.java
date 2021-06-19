@@ -69,7 +69,7 @@ public class FlagBookItem extends Flag {
             "{flag} addpage \\n\\n\\n\\n<italic>      The End.",
             "{flag} title \" The Art of Stealing \" // Quotes at the beginning and end will be removed, but spaces will be kept.",
             "{flag} author \"   Gray Fox   \"",
-            "{flag} addpage \" <bold>O<reset>nce upon a time... \"",};
+            "{flag} addpage \" <bold>O<reset>nce upon a time... \"", };
     }
 
 
