@@ -170,7 +170,7 @@ public class FlagNeedExp extends Flag {
 
     @Override
     public void onPrepare(Args a) {
-        if (canAddMeta(a)) {
+        if (a.hasPlayer() && canAddMeta(a)) {
             String message = "flag.needexp.preparelore.";
             if (setBoth) {
                 message += "exact";
