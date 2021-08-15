@@ -88,6 +88,9 @@ public class FlagLoader {
         loadFlag(FlagType.GET_RECIPE_BOOK, new FlagGetRecipeBook(), FlagBit.RESULT, "getbook", "bookresult");
 
         // Ingredient or Result flags
+        if (Supports.axolotlBucketMeta()) {
+            loadFlag(FlagType.AXOLOTL_BUCKET_ITEM, new FlagAxolotlBucketItem(), APPLIED_TO_ITEM, "axolotlbucket");
+        }
         loadFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), APPLIED_TO_ITEM, "banner");
         loadFlag(FlagType.BOOK_ITEM, new FlagBookItem(), APPLIED_TO_ITEM, "book");
         if (Version.has1_17Support()) {

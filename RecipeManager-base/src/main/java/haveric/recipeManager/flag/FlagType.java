@@ -53,6 +53,7 @@ public class FlagType {
     public static final String NO_RESULT = "@noresult";
 
     public static final String APPLY_ENCHANTMENT = "@applyenchantment";
+    public static final String AXOLOTL_BUCKET_ITEM = "@axolotlbucketitem";
     public static final String BANNER_ITEM = "@banneritem";
     public static final String BOOK_ITEM = "@bookitem";
     public static final String CLONE_INGREDIENT = "@cloneingredient";

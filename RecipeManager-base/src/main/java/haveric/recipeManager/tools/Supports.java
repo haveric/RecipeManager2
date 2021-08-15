@@ -3,12 +3,10 @@ package haveric.recipeManager.tools;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.CompassMeta;
-import org.bukkit.inventory.meta.KnowledgeBookMeta;
-import org.bukkit.inventory.meta.SuspiciousStewMeta;
-import org.bukkit.inventory.meta.TropicalFishBucketMeta;
+import org.bukkit.inventory.meta.*;
 
 public class Supports {
+    static boolean axolotlBucketMeta = false;
     static boolean tropicalFishBucketMeta = false;
     static boolean knowledgeBookMeta = false;
     static boolean suspiciousStewMeta = false;
@@ -16,6 +14,7 @@ public class Supports {
     static boolean itemFlagHideDye = false;
 
     public static void init() {
+        checkAxolotlBucketMeta();
         checkTropicalFishBucketMeta();
         checkKnowledgeBookMeta();
         checkSuspiciousStewMeta();
@@ -80,6 +79,22 @@ public class Supports {
         } catch (NoSuchFieldError e) {
             itemFlagHideDye = false;
         }
+    }
+
+    // 1.17+
+    private static void checkAxolotlBucketMeta() {
+        try {
+            ItemStack axolotlBucket = new ItemStack(Material.AXOLOTL_BUCKET);
+            @SuppressWarnings("unused")
+            AxolotlBucketMeta axolotlMeta = (AxolotlBucketMeta) axolotlBucket.getItemMeta();
+            axolotlBucketMeta = true;
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
+            axolotlBucketMeta = false;
+        }
+    }
+
+    public static boolean axolotlBucketMeta() {
+        return axolotlBucketMeta;
     }
 
     public static boolean tropicalFishBucketMeta() {

@@ -117,6 +117,13 @@ public class ToolsFlag {
                 }
             }
 
+            if (Supports.axolotlBucketMeta() && meta instanceof AxolotlBucketMeta) {
+                AxolotlBucketMeta axolotlBucketMeta = (AxolotlBucketMeta) meta;
+                if (axolotlBucketMeta.hasVariant()) {
+                    recipeString.append(Files.NL).append("@axolotlbucketitem ").append(axolotlBucketMeta.getVariant());
+                }
+            }
+
             if (meta instanceof BannerMeta) {
                 BannerMeta bannerMeta = (BannerMeta) meta;
 
