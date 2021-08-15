@@ -1,4 +1,4 @@
-lastchanged: 2.21.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.27.2 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager item and data aliases
 #
@@ -221,7 +221,7 @@ purpur_stairs: "purpur stairs, 203"
 purpur_slab: "purpur slab, purpur step, 205"
 end_stone_bricks: "end stone bricks, 206"
 
-grass_path: "grass path, path, 208"
+dirt_path: "grass path, path, 208"
 
 repeating_command_block: "repeating command block, 210"
 chain_command_block: "chain command block, 211"
