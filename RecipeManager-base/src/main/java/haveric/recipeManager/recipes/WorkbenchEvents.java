@@ -513,6 +513,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                         boolean noResult = false;
 
                         if (skipCraft) {
+                            recipe.sendFailed(a);
                             noResult = true;
                         } else {
                             if (recipe.hasFlag(FlagType.INDIVIDUAL_RESULTS)) {

@@ -205,6 +205,13 @@ public class FlagExplode extends Flag {
     }
 
     @Override
+    public void onFailed(final Args a) {
+        if (fuel.equals("start")) {
+            runBoomLater(a);
+        }
+    }
+
+    @Override
     public void onFuelRandom(final Args a) {
         if (fuel.equals("random")) {
             runBoomLater(a);
