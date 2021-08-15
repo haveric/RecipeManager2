@@ -460,7 +460,7 @@ public class FlagIngredientCondition extends Flag {
             return;
         }
 
-        a.addCustomReason("Unknown inventory type: " + a.inventory());
+        a.addCustomReason("Unknown inventory type: " + a.inventory().getType());
     }
 
     @Override
