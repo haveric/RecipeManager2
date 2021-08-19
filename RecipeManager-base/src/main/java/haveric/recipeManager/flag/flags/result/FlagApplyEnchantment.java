@@ -193,7 +193,7 @@ public class FlagApplyEnchantment extends Flag {
 
             enchantments = copyEnchantments(inv.getIngredient());
         } else {
-            a.addCustomReason("Unknown inventory type: " + a.inventory());
+            a.addCustomReason(getFlagType() + " has unsupported inventory type: " + a.inventory().getType());
         }
 
         if (enchantments.size() == 0) {
