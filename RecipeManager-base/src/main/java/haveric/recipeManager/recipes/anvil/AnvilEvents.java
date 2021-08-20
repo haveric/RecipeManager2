@@ -401,6 +401,7 @@ public class AnvilEvents extends BaseRecipeEvents {
                 }
 
                 boolean skipCraft = false;
+                boolean cancelCraft = false;
                 List<ItemResult> potentialResults = recipe.getResults();
                 if (recipe.isMultiResult()) {
                     boolean hasMatch = false;
@@ -424,19 +425,24 @@ public class AnvilEvents extends BaseRecipeEvents {
                             if (r.checkFlags(a)) {
                                 matchingResults.add(r);
                                 maxChance += r.getChance();
+                            } else {
+                                cancelCraft = true;
+                                break;
                             }
                         }
 
-                        float rand = RecipeManager.random.nextFloat() * maxChance;
-                        float chance = 0;
+                        if (!cancelCraft) {
+                            float rand = RecipeManager.random.nextFloat() * maxChance;
+                            float chance = 0;
 
-                        for (ItemResult r : matchingResults) {
-                            chance += r.getChance();
+                            for (ItemResult r : matchingResults) {
+                                chance += r.getChance();
 
-                            if (chance >= rand) {
-                                hasMatch = true;
-                                result = r.clone();
-                                break;
+                                if (chance >= rand) {
+                                    hasMatch = true;
+                                    result = r.clone();
+                                    break;
+                                }
                             }
                         }
                     }
@@ -448,6 +454,8 @@ public class AnvilEvents extends BaseRecipeEvents {
                     result = potentialResults.get(0).clone();
 
                     if (!result.checkFlags(a)) {
+                        SoundNotifier.sendDenySound(player, location);
+                        event.setCancelled(true);
                         break;
                     }
                 }

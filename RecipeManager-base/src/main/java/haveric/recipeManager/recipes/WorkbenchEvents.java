@@ -79,7 +79,6 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             Recipe bukkitRecipe = event.getRecipe();
-
             if (bukkitRecipe == null) {
                 return; // Bukkit recipe is null ! skip it
             }
@@ -96,7 +95,6 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             PreparableResultRecipe recipe = RecipeManager.getRecipes().getWorkbenchRecipe(bukkitRecipe, inv.getContents());
-
             if (recipe == null) {
                 return; // not a custom recipe or recipe not found, no need to move on
             }
@@ -337,7 +335,6 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             final Player player = (Player) view.getPlayer();
 
             Location location = Workbenches.get(player);
-
             if (!event.isShiftClick() && result == null) {
                 event.setCancelled(true);
                 SoundNotifier.sendDenySound(player, location);
@@ -456,6 +453,8 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                         result = potentialResults.get(0).clone();
 
                         if (!result.checkFlags(a)) {
+                            SoundNotifier.sendDenySound(player, location);
+                            event.setCancelled(true);
                             break;
                         }
                     }
@@ -513,6 +512,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                         boolean noResult = false;
 
                         if (skipCraft) {
+                            SoundNotifier.sendDenySound(player, location);
                             recipe.sendFailed(a);
                             noResult = true;
                         } else {
@@ -602,7 +602,6 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                         Bukkit.getPluginManager().callEvent(new PrepareItemCraftEvent(inv, player.getOpenInventory(), false));
                     }
                 }.runTaskLater(RecipeManager.getPlugin(), 0);
-
 
                 new UpdateInventory(player, 2); // update inventory 2 ticks later
             }
