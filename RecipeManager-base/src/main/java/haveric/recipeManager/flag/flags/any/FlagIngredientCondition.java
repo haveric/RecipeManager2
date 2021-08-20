@@ -452,7 +452,6 @@ public class FlagIngredientCondition extends Flag {
             }
 
             ItemStack ingredient = a.inventory().getItem(3);
-
             if (ingredient != null) {
                 checkIngredientConditions(ingredient, a);
             }

@@ -381,7 +381,7 @@ public class FlagCloneIngredient extends Flag {
             if (i != null && allTypes.contains(i.getType())) {
                 ingredient = i.clone();
             }
-        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory))) {
+        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
             ItemStack first = a.inventory().getItem(0);
             ItemStack second = a.inventory().getItem(1);
             if (first != null && allTypes.contains(first.getType())) {
