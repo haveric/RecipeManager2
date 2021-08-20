@@ -395,7 +395,7 @@ public class FlagIngredientCondition extends Flag {
             }
 
             return;
-        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
+        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
             for (ConditionsIngredient checkConditions : conditions) {
                 if (checkConditions.hasNeeded()) {
                     checkConditions.setNeededLeft(checkConditions.getNeeded());
