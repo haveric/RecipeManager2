@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -180,12 +181,10 @@ public class FlagApplyEnchantment extends Flag {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 
             enchantments = copyEnchantments(inv.getSmelting());
-        } else if (a.inventory() instanceof AnvilInventory) {
-            AnvilInventory inv = (AnvilInventory) a.inventory();
-
+        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
             ItemStack[] anvilIngredients = new ItemStack[2];
-            anvilIngredients[0] = inv.getItem(0);
-            anvilIngredients[1] = inv.getItem(1);
+            anvilIngredients[0] = a.inventory().getItem(0);
+            anvilIngredients[1] = a.inventory().getItem(1);
 
             enchantments = copyEnchantments(anvilIngredients);
         } else if (a.inventory() instanceof BrewerInventory) {
@@ -201,7 +200,6 @@ public class FlagApplyEnchantment extends Flag {
         }
 
         ItemMeta resultMeta = a.result().getItemMeta();
-
         if (resultMeta == null) {
             return;
         }
