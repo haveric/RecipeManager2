@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/vendor.css?v=1"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/app.css?v=1"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/inventory/inventory.css?v=1"/>
-    <link rel="stylesheet" href="https://www.recipemanager.dev/css/code-highlight/code-highlight.css?v=1"/>
+    <link rel="stylesheet" href="https://www.recipemanager.dev/css/code-highlight/code-highlight.css?v=2"/>
     <link rel="stylesheet" href="https://www.recipemanager.dev/css/tabs/tabs.css?v=1"/>
 </head>
 <body>
@@ -87,36 +87,36 @@
             <h3 class="doc-section__title">Comments and Spacing</h3>
             <div class="doc-section__inn">
                 <p>Default supported comments: //, /* */ and #</p>
-                <pre class="code">
-// This is a comment
-#  This is also a comment
-/* Multi line comments
-   are also supported
-*/
-</pre>
+                <div class="code">
+                    // This is a comment
+                    #  This is also a comment
+                    /* Multi line comments
+                       are also supported
+                    */
+                </div>
                 <p>The text in recipe files can be any letter case and can have any amount of spaces, tabs and new lines.</p>
-                <pre class="code">
-// Recipe files support any casing
-craft
-cobblestone
-= cobblestone
+                <div class="code">
+                    // Recipe files support any casing
+                    craft
+                    cobblestone
+                    = cobblestone
 
-// Add any amount of new lines between recipes
+                    // Add any amount of new lines between recipes
 
-CRAFT
-COBBLESTONE
-= COBBLESTONE
+                    CRAFT
+                    COBBLESTONE
+                    = COBBLESTONE
 
-  // Space/Tabs at the beginning are fine as well
-  CrAfT
-  cobbleSTONE
-  = COBBLEstone
+                      // Space/Tabs at the beginning are fine as well
+                      CrAfT
+                      cobbleSTONE
+                      = COBBLEstone
 
-  // Spacing does not need to be consistent
-  craft
-    cobblestone
-      = cobblestone
-</pre>
+                      // Spacing does not need to be consistent
+                      craft
+                        cobblestone
+                          = cobblestone
+                </div>
             </div>
         </div>
         <div id="required-optional" class="doc-section">
@@ -126,26 +126,26 @@ COBBLESTONE
                     Required fields are surrounded by <b>&lt; &gt;</b><br/>
                     Optional fields are surrounded by <b>[ ]</b>
                 </p>
-                <pre class="code">
-craft [recipe name] // A recipe name is optional and can be skipped
-&lt;material&gt; // This material is required
-= &lt;material&gt; // The result material is also required
-</pre>
+                <div class="code">
+                    craft [recipe name] // A recipe name is optional and can be skipped
+                    &lt;material&gt; // This material is required
+                    = &lt;material&gt; // The result material is also required
+                </div>
                 <br/>
-                <pre class="code code--warning">
-// Do not type &lt;, &gt;, [ or ]
-craft [my recipe]
-&lt;cobblestone&gt;
-= &lt;cobblestone&gt;
-</pre>
+                <div class="code code--warning">
+                    // Do not type &lt;, &gt;, [ or ]
+                    craft [my recipe]
+                    &lt;cobblestone&gt;
+                    = &lt;cobblestone&gt;
+                </div>
                 <br/>
-                <pre class="code">
-// Correct way to write the above recipe
-// Note that characters outside of &lt;, &gt;, [ and ] are constants and never change
-craft my recipe // 'craft' is a constant here
-cobblestone
-= cobblestone
-</pre>
+                <div class="code">
+                    // Correct way to write the above recipe
+                    // Note that characters outside of &lt;, &gt;, [ and ] are constants and never change
+                    craft my recipe // 'craft' is a constant here
+                    cobblestone
+                    = cobblestone
+                </div>
             </div>
         </div>
         <div id="special-characters" class="doc-section">
@@ -162,37 +162,37 @@ cobblestone
             <h3 class="doc-section__title">Defining Items</h3>
             <div class="doc-section__inn">
                 <p>Item / Ingredient formats:</p>
-                <pre class="code">
-material // Material name or alias. See <a href="name index.html#material">name index.html</a> and 'item aliases.yml'.
+                <div class="code">
+                    material // Material name or alias. See <a href="name index.html#material">name index.html</a> and 'item aliases.yml'.
 
-// Material and data
-// 'data' is the damage/durability of an item if it has any (tools, weapons, etc.) or a data name defined in 'item aliases.yml', defaults to 0
-material:data
+                    // Material and data
+                    // 'data' is the damage/durability of an item if it has any (tools, weapons, etc.) or a data name defined in 'item aliases.yml', defaults to 0
+                    material:data
 
-// Material Choice (Multiple material options for a single slot)
-material[, ..]
-// '..' means that the format can be repeated as seen below
-material, material2, material3
-</pre>
+                    // Material Choice (Multiple material options for a single slot)
+                    material[, ..]
+                    // '..' means that the format can be repeated as seen below
+                    material, material2, material3
+                </div>
                 <br/>
                 <p>Tags and aliases:</p>
-                <pre class="code">
-// Material can also be defined by tags and aliases, which act as a material choice without having to write all materials
-// Tags (see '<a href="name index.html#tag">name index.html</a>')
-tag:tagname
-t:tagname
+                <div class="code">
+                    // Material can also be defined by tags and aliases, which act as a material choice without having to write all materials
+                    // Tags (see '<a href="name index.html#tag">name index.html</a>')
+                    tag:tagname
+                    t:tagname
 
-// Aliases are RecipeManager's equivalent to tags, but you can define them yourself in 'choice aliases.yml'
-alias:aliasname
-a:aliasname
-</pre>
+                    // Aliases are RecipeManager's equivalent to tags, but you can define them yourself in 'choice aliases.yml'
+                    alias:aliasname
+                    a:aliasname
+                </div>
                 <p>Tag Example:</p>
-                <pre class="code">
-// tag:sand is equivalent to 'sand, red_sand'
-craft
-tag:sand
-= cobblestone
-</pre>
+                <div class="code">
+                    // tag:sand is equivalent to 'sand, red_sand'
+                    craft
+                    tag:sand
+                    = cobblestone
+                </div>
                 <div class="inventory inventory--crafting">
                     <div class="inventory__ingredients">
                         <div class="slot slot--cycle" data-cycle="1">
@@ -236,33 +236,33 @@ tag:sand
                 </div>
 
                 <p>Result formats:</p>
-                <pre class="code">
-// Simple material
-= material
+                <div class="code">
+                    // Simple material
+                    = material
 
-// Material and data
-// 'data' is the damage/durability of an item if it has any (tools, weapons, etc.) or a data name defined in 'item aliases.yml', defaults to 0
-= material:data
+                    // Material and data
+                    // 'data' is the damage/durability of an item if it has any (tools, weapons, etc.) or a data name defined in 'item aliases.yml', defaults to 0
+                    = material:data
 
-// Material with data and stack amount
-// 'amount' is stack amount, defaults to 1
-= material:data:amount
-</pre>
+                    // Material with data and stack amount
+                    // 'amount' is stack amount, defaults to 1
+                    = material:data:amount
+                </div>
             </div>
         </div>
         <div id="flags" class="doc-section">
             <h3 class="doc-section__title">Flags</h3>
             <div class="doc-section__inn">
                 <p>Flags are how you can modify an ingredient or result. See <a href="advanced recipes.html">advanced recipes.html</a> and <a href="recipe flags.html">recipe flags.html</a> for more examples.</p>
-                <pre class="code">
-craft
-cobblestone
-= cobblestone
-@ingredientcondition cobblestone | name Old Cobble
-@name Test Cobblestone
-@lore Test Lore
-@lore &lt;red&gt;Now in red
-</pre>
+                <div class="code">
+                    craft
+                    cobblestone
+                    = cobblestone
+                    @ingredientcondition cobblestone | name Old Cobble
+                    @name Test Cobblestone
+                    @lore Test Lore
+                    @lore &lt;red&gt;Now in red
+                </div>
                 <div class="inventory inventory--crafting">
                     <div class="inventory__ingredients">
                         <div class="slot">
@@ -316,28 +316,28 @@ cobblestone
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-<pre class="code">
-craft
-pattern aaa | aba | aaa
-a dirt
-b grass_block
-= wheat_seeds
-= pumpkin_seeds
-= melon_seeds
-= beetroot_seeds
-</pre>
+                            <div class="code">
+                                craft
+                                pattern aaa | aba | aaa
+                                a dirt
+                                b grass_block
+                                = wheat_seeds
+                                = pumpkin_seeds
+                                = melon_seeds
+                                = beetroot_seeds
+                            </div>
                         </div>
                         <div class="tab__content">
-<pre class="code">
-craft
-dirt + dirt + dirt
-dirt + grass_block + dirt
-dirt + dirt + dirt
-= wheat_seeds
-= pumpkin_seeds
-= melon_seeds
-= beetroot_seeds
-</pre>
+                            <div class="code">
+                                craft
+                                dirt + dirt + dirt
+                                dirt + grass_block + dirt
+                                dirt + dirt + dirt
+                                = wheat_seeds
+                                = pumpkin_seeds
+                                = melon_seeds
+                                = beetroot_seeds
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -437,28 +437,28 @@ dirt + dirt + dirt
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-<pre class="code">
-craft
-pattern aaa | aba | aaa
-a t:sand
-b air
-= 40% bone
-= 10% quartz
-= .1% diamond
-= air
-</pre>
+                            <div class="code">
+                                craft
+                                pattern aaa | aba | aaa
+                                a t:sand
+                                b air
+                                = 40% bone
+                                = 10% quartz
+                                = .1% diamond
+                                = air
+                            </div>
                         </div>
                         <div class="tab__content">
-<pre class="code">
-craft
-t:sand + t:sand + t:sand
-t:sand + air + t:sand
-t:sand + t:sand + t:sand
-= 40% bone
-= 10% quartz
-= .1% diamond
-= air
-</pre>
+                            <div class="code">
+                                craft
+                                t:sand + t:sand + t:sand
+                                t:sand + air + t:sand
+                                t:sand + t:sand + t:sand
+                                = 40% bone
+                                = 10% quartz
+                                = .1% diamond
+                                = air
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -630,16 +630,16 @@ t:sand + t:sand + t:sand
                 <p>Item recipes are predefined recipes that you can use in place of items/results in some places.</p>
                 <p>Unlike most recipes, the recipe name is required so that it can be referenced later.</p>
                 <p><b>Format:</b></p>
-<pre class="code">
-ITEM &lt;recipe name&gt;
-= &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                <div class="code">
+                    ITEM &lt;recipe name&gt;
+                    = &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                </div>
                 <p><b>Usage:</b></p>
                 <p>When mentioned, such as in <a href="recipe flags.html#bundleitem">@BundleItem</a>, the format will be:</p>
-<pre class="code">
-@bundle item:&lt;recipe name&gt;
-</pre>
+                <div class="code">
+                    @bundle item:&lt;recipe name&gt;
+                </div>
             </div>
         </div>
     </div>
@@ -659,18 +659,18 @@ ITEM &lt;recipe name&gt;
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-<pre class="code">
-CRAFT [recipe name]
-[@ recipe flags]
-[group name]
-pattern abc | def | ghi
-&lt;letter&gt; &lt;material:[data][, ...]&gt;
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-[... more results]
-</pre>
+                            <div class="code">
+                                CRAFT [recipe name]
+                                [@ recipe flags]
+                                [group name]
+                                pattern abc | def | ghi
+                                &lt;letter&gt; &lt;material:[data][, ...]&gt;
+                                [@ ingredient flags]
+                                [... more ingredients]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [@ result flags]
+                                [... more results]
+                            </div>
                             <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                             <p>The pattern line defines the shape of the recipe grid.
                                 <ul>
@@ -705,15 +705,15 @@ pattern abc | def | ghi
                             <div>
                                 <b>Examples:</b>
                             </div>
-                            <pre class="code">
-// this is just a comment by the way
-// a hoe craftable in player inventory
-craft
-pattern aa | b
-a oak_planks
-b stick
-= wood_hoe
-</pre>
+                            <div class="code">
+                                // this is just a comment by the way
+                                // a hoe craftable in player inventory
+                                craft
+                                pattern aa | b
+                                a oak_planks
+                                b stick
+                                = wood_hoe
+                            </div>
                             <div class="inventory inventory--crafting">
                                 <div class="inventory__ingredients">
                                     <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/oak_planks.png?v=1"/>
@@ -754,16 +754,16 @@ b stick
                                     </div>
                                 </div>
                             </div>
-                            <pre class="code">
-// fragile bowl named recipe
-craft   Bowl craft attempt
-pattern aba | ca
-a stick
-b oak_planks
-c air
-= bowl // undefined chance, will be calculated
-= 25% fail // 'fail' is alias for 'air'
-</pre>
+                            <div class="code">
+                                // fragile bowl named recipe
+                                craft   Bowl craft attempt
+                                pattern aba | ca
+                                a stick
+                                b oak_planks
+                                c air
+                                = bowl // undefined chance, will be calculated
+                                = 25% fail // 'fail' is alias for 'air'
+                            </div>
                             <div class="inventory inventory--crafting">
                                 <div class="inventory__ingredients">
                                     <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/stick.png?v=1"/>
@@ -812,15 +812,15 @@ c air
                                     </div>
                                 </div>
                             </div>
-                            <pre class="code">
-// Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
-// as long as the combination of ingredients is still unique to each recipe
-craft
-pattern ab
-a cobblestone, stone
-b dirt, grass_block
-= light_gray_terracotta
-</pre>
+                            <div class="code">
+                                // Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
+                                // as long as the combination of ingredients is still unique to each recipe
+                                craft
+                                pattern ab
+                                a cobblestone, stone
+                                b dirt, grass_block
+                                = light_gray_terracotta
+                            </div>
                             <div class="inventory inventory--crafting">
                                 <div class="inventory__ingredients">
                                     <div class="slot slot--cycle" data-cycle="2">
@@ -877,15 +877,15 @@ b dirt, grass_block
                             </div>
                         </div>
                         <div class="tab__content">
-<pre class="code">
-CRAFT [recipe name]
-[group name]
-&lt;material[, ...]&gt; + [material[, ...]] + [material[, ...]]
-[material[, ...]] + [material[, ...]] + [material[, ...]]
-[material[, ...]] + [material[, ...]] + [material[, ...]]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[...]
-</pre>
+                            <div class="code">
+                                CRAFT [recipe name]
+                                [group name]
+                                &lt;material[, ...]&gt; + [material[, ...]] + [material[, ...]]
+                                [material[, ...]] + [material[, ...]] + [material[, ...]]
+                                [material[, ...]] + [material[, ...]] + [material[, ...]]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [...]
+                            </div>
                             <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                             <p>The ingredients are in the shape of the recipe grid, it will also work if horizontally mirrored.</p>
                             <p><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</p>
@@ -900,14 +900,14 @@ CRAFT [recipe name]
                             <div>
                                 <b>Examples:</b>
                             </div>
-                            <pre class="code">
-// this is just a comment by the way
-// a hoe craftable in player inventory
-craft
-oak_planks + oak_planks
-stick
-= wood_hoe
-</pre>
+                            <div class="code">
+                                // this is just a comment by the way
+                                // a hoe craftable in player inventory
+                                craft
+                                oak_planks + oak_planks
+                                stick
+                                = wood_hoe
+                            </div>
                             <div class="inventory inventory--crafting">
                                 <div class="inventory__ingredients">
                                     <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/oak_planks.png?v=1"/>
@@ -948,14 +948,14 @@ stick
                                     </div>
                                 </div>
                             </div>
-                            <pre class="code">
-// fragile bowl named recipe
-craft   Bowl craft attempt
-stick + oak_planks + stick
-air + stick
-= bowl // undefined chance, will be calculated
-= 25% fail // 'fail' is alias for 'air'
-</pre>
+                            <div class="code">
+                                // fragile bowl named recipe
+                                craft   Bowl craft attempt
+                                stick + oak_planks + stick
+                                air + stick
+                                = bowl // undefined chance, will be calculated
+                                = 25% fail // 'fail' is alias for 'air'
+                            </div>
                             <div class="inventory inventory--crafting">
                                 <div class="inventory__ingredients">
                                     <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/stick.png?v=1"/>
@@ -1004,13 +1004,13 @@ air + stick
                                     </div>
                                 </div>
                             </div>
-                            <pre class="code">
-// Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
-// as long as the combination of ingredients is still unique to each recipe
-craft
-cobblestone,stone + dirt,grass_block
-= light_gray_terracotta
-</pre>
+                            <div class="code">
+                                // Multiple ingredients that can match. Each ingredient can have as many material choices as you'd like,
+                                // as long as the combination of ingredients is still unique to each recipe
+                                craft
+                                cobblestone,stone + dirt,grass_block
+                                = light_gray_terracotta
+                            </div>
                             <div class="inventory inventory--crafting">
                                 <div class="inventory__ingredients">
                                     <div class="slot slot--cycle" data-cycle="2">
@@ -1083,18 +1083,18 @@ cobblestone,stone + dirt,grass_block
                 </div>
                 <div class="tabs-content">
                     <div class="tab__content active">
-<pre class="code">
-COMBINE [recipe name]
-[@ recipe flags]
-[group name]
-pattern abcdefghi
-&lt;letter&gt; &lt;material:[data][, ...]&gt;
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-[... more results]
-</pre>
+                        <div class="code">
+                            COMBINE [recipe name]
+                            [@ recipe flags]
+                            [group name]
+                            pattern abcdefghi
+                            &lt;letter&gt; &lt;material:[data][, ...]&gt;
+                            [@ ingredient flags]
+                            [... more ingredients]
+                            = [chance]% &lt;material:[data]:[amount]&gt;
+                            [@ result flags]
+                            [... more results]
+                        </div>
                         <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
                         <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                         <p>The pattern line defines the pattern of the recipe grid, where similar characters means an item is used more than once.
@@ -1117,14 +1117,14 @@ pattern abcdefghi
                         <div>
                             <b>Examples:</b>
                         </div>
-                        <pre class="code">
-// 3 sulphur + 2 sand = 2 TNT
-combine
-pattern aaabb
-a sulphur
-b sand
-= TNT:0:2
-</pre>
+                        <div class="code">
+                            // 3 sulphur + 2 sand = 2 TNT
+                            combine
+                            pattern aaabb
+                            a sulphur
+                            b sand
+                            = TNT:0:2
+                        </div>
                         <div class="inventory inventory--crafting">
                             <div class="inventory__ingredients">
                                 <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/gunpowder.png?v=1"/>
@@ -1174,17 +1174,17 @@ b sand
                                 </div>
                             </div>
                         </div>
-                        <pre class="code">
-// smash 2 diamonds and pray for something good
-combine Smash 2 diamonds and pray
-pattern aa
-a diamond
-= 0.1% diamond:0:32
-= coal:0:4 // let it calculate the chance evenly for this and the next two
-= iron_ingot
-= gold_ingot
-= 75% fail
-</pre>
+                        <div class="code">
+                            // smash 2 diamonds and pray for something good
+                            combine Smash 2 diamonds and pray
+                            pattern aa
+                            a diamond
+                            = 0.1% diamond:0:32
+                            = coal:0:4 // let it calculate the chance evenly for this and the next two
+                            = iron_ingot
+                            = gold_ingot
+                            = 75% fail
+                        </div>
                         <div class="inventory inventory--crafting">
                             <div class="inventory__ingredients">
                                 <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/diamond.png?v=1"/>
@@ -1247,13 +1247,13 @@ a diamond
                         </div>
                     </div>
                     <div class="tab__content">
-<pre class="code">
-COMBINE [recipe name]
-[group name]
-&lt;material[, ...]:[amount]&gt; + [...]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[...]
-</pre>
+                        <div class="code">
+                            COMBINE [recipe name]
+                            [group name]
+                            &lt;material[, ...]:[amount]&gt; + [...]
+                            = [chance]% &lt;material:[data]:[amount]&gt;
+                            [...]
+                        </div>
                         <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
                         <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                         <p>You can specify up to 9 items added up.</p>
@@ -1264,12 +1264,12 @@ COMBINE [recipe name]
                         <div>
                             <b>Examples:</b>
                         </div>
-                        <pre class="code">
-// 3 sulphur + 2 sand = 2 TNT
-combine
-sulphur:0:3 + sand + sand
-= TNT:0:2
-</pre>
+                        <div class="code">
+                            // 3 sulphur + 2 sand = 2 TNT
+                            combine
+                            sulphur:0:3 + sand + sand
+                            = TNT:0:2
+                        </div>
                         <div class="inventory inventory--crafting">
                             <div class="inventory__ingredients">
                                 <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/gunpowder.png?v=1"/>
@@ -1319,16 +1319,16 @@ sulphur:0:3 + sand + sand
                                 </div>
                             </div>
                         </div>
-                        <pre class="code">
-// smash 2 diamonds and pray for something good
-combine Smash 2 diamonds and pray
-diamond + diamond
-= 0.1% diamond:0:32
-= coal:0:4 // let it calculate the chance evenly for this and the next two
-= iron_ingot
-= gold_ingot
-= 75% fail
-</pre>
+                        <div class="code">
+                            // smash 2 diamonds and pray for something good
+                            combine Smash 2 diamonds and pray
+                            diamond + diamond
+                            = 0.1% diamond:0:32
+                            = coal:0:4 // let it calculate the chance evenly for this and the next two
+                            = iron_ingot
+                            = gold_ingot
+                            = 75% fail
+                        </div>
                         <div class="inventory inventory--crafting">
                             <div class="inventory__ingredients">
                                 <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/diamond.png?v=1"/>
@@ -1396,19 +1396,19 @@ diamond + diamond
         <div id="smelt" class="doc-section">
             <h3 class="doc-section__title">Smelt/Furnace Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-SMELT [recipe name]
-[@ recipe flags]
-[group name]
-[xp amount]
-&lt;material:[data][, ...]&gt; % [time]
-[@ ingredient flags]
-[... more ingredients]
-&amp; [material:[data]]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-// one result max!
-</pre>
+                <div class="code">
+                    SMELT [recipe name]
+                    [@ recipe flags]
+                    [group name]
+                    [xp amount]
+                    &lt;material:[data][, ...]&gt; % [time]
+                    [@ ingredient flags]
+                    [... more ingredients]
+                    &amp; [material:[data]]
+                    = [chance]% &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                    // one result max!
+                </div>
                 <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                 <p>The [xp amount] defines the amount of xp given for the furnace recipe. Can be a decimal value. Examples ("xp 2", "xp .5", "xp 1.1"). Defaults to 0.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
@@ -1418,12 +1418,12 @@ SMELT [recipe name]
                 <div>
                     <b>Examples:</b>
                 </div>
-                <pre class="code">
-// smelt gold_ingot to ore
-smelt
-gold_ingot
-= gold_ore
-</pre>
+                <div class="code">
+                    // smelt gold_ingot to ore
+                    smelt
+                    gold_ingot
+                    = gold_ore
+                </div>
                 <div class="inventory inventory--furnace">
                     <div class="inventory__ingredients">
                         <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/gold_ingot.png?v=1"/>
@@ -1455,13 +1455,13 @@ gold_ingot
                         </div>
                     </div>
                 </div>
-                <pre class="code">
-// glowstone and bottle as fuel makes an exp bottle
-smelt Exp Bottle Alchemy
-glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
-&amp; bottle // fuel
-= 25% exp_bottle // 25% chance to get the result, rest 75% will result in nothing
-</pre>
+                <div class="code">
+                    // glowstone and bottle as fuel makes an exp bottle
+                    smelt Exp Bottle Alchemy
+                    glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
+                    &amp; bottle // fuel
+                    = 25% exp_bottle // 25% chance to get the result, rest 75% will result in nothing
+                </div>
                 <div class="inventory inventory--furnace">
                     <div class="inventory__ingredients">
                         <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/glowstone.png?v=1"/>
@@ -1506,19 +1506,19 @@ glowstone % 20.5-30 // random cook time between 20.5 and 30 seconds
         <div id="blasting" class="doc-section">
             <h3 class="doc-section__title">Blasting/Blast Furnace Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-BLASTING [recipe name]
-[@ recipe flags]
-[group name]
-[xp amount]
-&lt;material[, ...]&gt;:[data] % [time]
-[@ ingredient flags]
-[... more ingredients]
-&amp; [material:[data]]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-// one result max!
-</pre>
+                <div class="code">
+                    BLASTING [recipe name]
+                    [@ recipe flags]
+                    [group name]
+                    [xp amount]
+                    &lt;material[, ...]&gt;:[data] % [time]
+                    [@ ingredient flags]
+                    [... more ingredients]
+                    &amp; [material:[data]]
+                    = [chance]% &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                    // one result max!
+                </div>
                 <p>Works the same as SMELT RECIPES, but for BLAST FURNACES</p>
                 <p>Default time: 5</p>
                 <p>See SMELT RECIPE for examples</p>
@@ -1527,19 +1527,19 @@ BLASTING [recipe name]
         <div id="smoking" class="doc-section">
             <h3 class="doc-section__title">Smoking/Smoker Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-SMOKING [recipe name]
-[@ recipe flags]
-[group name]
-[xp amount]
-&lt;material[, ...]&gt;:[data] % [time]
-[@ ingredient flags]
-[... more ingredients]
-&amp; [material:[data]]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-// one result max!
-</pre>
+                <div class="code">
+                    SMOKING [recipe name]
+                    [@ recipe flags]
+                    [group name]
+                    [xp amount]
+                    &lt;material[, ...]&gt;:[data] % [time]
+                    [@ ingredient flags]
+                    [... more ingredients]
+                    &amp; [material:[data]]
+                    = [chance]% &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                    // one result max!
+                </div>
                 <p>Works the same as SMELT RECIPES, but for SMOKERS</p>
                 <p>Default time: 5</p>
                 <p>See SMELT RECIPE for examples</p>
@@ -1548,22 +1548,22 @@ SMOKING [recipe name]
         <div id="fuel" class="doc-section">
             <h3 class="doc-section__title">Furnace Fuel Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-FUEL [recipe name]
-&lt;material:data&gt; % &lt;time&gt;
-...
-</pre>
+                <div class="code">
+                    FUEL [recipe name]
+                    &lt;material:data&gt; % &lt;time&gt;
+                    ...
+                </div>
                 <p>Adds a fuel with the specified burn time.</p>
                 <p>'time' is required and can be a float number or a range of float numbers separated by a dash.</p>
                 <p>The '...' part means you can specify more than one item, they are all added just like individual fuel recipes.</p>
                 <div>
                     <b>Example:</b>
                 </div>
-                <pre class="code">
-FUEL
-sulphur % 0.75 // see <a href='advanced recipes.html'><b>advanced recipes.html</b></a> for how to make this EXPLODE!
-jackolantern % 20 // 'jackolantern' is alias for 'jack_o_lantern'
-</pre>
+                <div class="code">
+                    FUEL
+                    sulphur % 0.75 // see <a href='advanced recipes.html'><b>advanced recipes.html</b></a> for how to make this EXPLODE!
+                    jackolantern % 20 // 'jackolantern' is alias for 'jack_o_lantern'
+                </div>
                 <div class="inventory__wrap">
                     <div class="inventory inventory--fuel">
                         <div class="inventory__ingredients">
@@ -1607,17 +1607,17 @@ jackolantern % 20 // 'jackolantern' is alias for 'jack_o_lantern'
         <div id="campfire" class="doc-section">
             <h3 class="doc-section__title">Campfire Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-CAMPFIRE [recipe name]
-[@ recipe flags]
-[group name]
-[xp amount]
-&lt;material[, ...]&gt;:[data] % [time]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                <div class="code">
+                    CAMPFIRE [recipe name]
+                    [@ recipe flags]
+                    [group name]
+                    [xp amount]
+                    &lt;material[, ...]&gt;:[data] % [time]
+                    [@ ingredient flags]
+                    [... more ingredients]
+                    = [chance]% &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                </div>
                 <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                 <p>The [xp amount] defines the amount of xp given for the furnace recipe. Can be a decimal value. Examples ("xp 2", "xp .5", "xp 1.1"). Defaults to 0.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
@@ -1629,15 +1629,15 @@ CAMPFIRE [recipe name]
         <div id="stonecutting" class="doc-section">
             <h3 class="doc-section__title">Stonecutting/Stonecutter Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-STONECUTTING [recipe name]
-[group name]
-&lt;material[, ...]&gt;:[data]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                <div class="code">
+                    STONECUTTING [recipe name]
+                    [group name]
+                    &lt;material[, ...]&gt;:[data]
+                    [@ ingredient flags]
+                    [... more ingredients]
+                    = [chance]% &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                </div>
                 <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
                 <p>Multiple recipes can be added with the same ingredient as long as the result is different for each.</p>
@@ -1647,18 +1647,18 @@ STONECUTTING [recipe name]
         <div id="compost" class="doc-section">
             <h3 class="doc-section__title">Compost/Composter Recipe</h3>
             <div class="doc-section__inn">
-<pre class="code">
-COMPOST [recipe name]
-[@ recipe flags]
-&lt;material[, ...]&gt;:[data] % [chance per level] % [levels]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                <div class="code">
+                    COMPOST [recipe name]
+                    [@ recipe flags]
+                    &lt;material[, ...]&gt;:[data] % [chance per level] % [levels]
+                    [@ ingredient flags]
+                    [... more ingredients]
+                    = [chance]% &lt;material:[data]:[amount]&gt;
+                    [@ result flags]
+                </div>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
-                <p>(optional) '% [chance per level]' is the percentage chance that the level will be increased by [levels]. Value can be a float number >0 and <=100. Default is 100.</p>
-                <p>(optional) '% [levels]' is the levels to add to the composter. Value can be a float number >0 and <=7. Default is 1.</p>
+                <p>(optional) '% [chance per level]' is the percentage chance that the level will be increased by [levels]. Value can be a float number &gt;0 and &lt;=100. Default is 100.</p>
+                <p>(optional) '% [levels]' is the levels to add to the composter. Value can be a float number &gt;0 and &lt;=7. Default is 1.</p>
                 <p>While the composter is being used for a recipe, it will be locked to that recipe (or the same result from another recipe), so no conflicting recipes can be made.</p>
             </div>
         </div>
@@ -1676,15 +1676,15 @@ COMPOST [recipe name]
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-<pre class="code">
-ANVIL [recipe name]
-[@ ingredient flags]
-&lt;letter&gt; &lt;material&gt;:[data][, ...] % [experience levels] % [allowrename or true] % [anvil damage chance]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                            <div class="code">
+                                ANVIL [recipe name]
+                                [@ ingredient flags]
+                                &lt;letter&gt; &lt;material&gt;:[data][, ...] % [experience levels] % [allowrename or true] % [anvil damage chance]
+                                [@ ingredient flags]
+                                [... more ingredients]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [@ result flags]
+                            </div>
                             <p>Anvils have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
                             <p>An ingredient with a letter of "a" is the left ingredient.</p>
                             <p>An ingredient with a letter of "b" is the right ingredient.</p>
@@ -1693,11 +1693,11 @@ ANVIL [recipe name]
                             <p>(optional) '% [anvil damage chance]' will adjust the chance to damage the anvil on craft. Default is 12. Allowed values from 0-300. Over 100 will damage multiple levels. Ex: 150 will damage 1 level with a 50% chance of damaging a second.</p>
                         </div>
                         <div class="tab__content">
-                            <pre class="code">
-ANVIL [recipe name]
-&lt;material[, ...]&gt; + &lt;material[, ...]&gt; % [experience levels] % [allowrename or true] % [anvil damage chance]
-= [chance]% &lt;material:[data]:[amount]&gt;
-</pre>
+                            <div class="code">
+                                ANVIL [recipe name]
+                                &lt;material[, ...]&gt; + &lt;material[, ...]&gt; % [experience levels] % [allowrename or true] % [anvil damage chance]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                            </div>
                             <p>The first '&lt;material[, ...]&gt;' is the left ingredient.</p>
                             <p>The second '&lt;material[, ...]&gt;' is the right ingredient.</p>
                             <p>(optional) '% [experience levels]' is the experience levels per craft and shown in the anvil.</p>
@@ -1722,25 +1722,25 @@ ANVIL [recipe name]
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-                            <pre class="code">
-GRINDSTONE [recipe name]
-[@ ingredient flags]
-&lt;letter&gt; &lt;material&gt;:[data][, ...]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                            <div class="code">
+                                GRINDSTONE [recipe name]
+                                [@ ingredient flags]
+                                &lt;letter&gt; &lt;material&gt;:[data][, ...]
+                                [@ ingredient flags]
+                                [... more ingredients]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [@ result flags]
+                            </div>
                             <p>Grindstones have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
                             <p>An ingredient with a letter of "a" is the top ingredient.</p>
                             <p>An ingredient with a letter of "b" is the bottom ingredient.</p>
                         </div>
                         <div class="tab__content">
-                            <pre class="code">
-GRINDSTONE [recipe name]
-&lt;material[, ...]&gt; + &lt;material[, ...]&gt;
-= [chance]% &lt;material:[data]:[amount]&gt;
-</pre>
+                            <div class="code">
+                                GRINDSTONE [recipe name]
+                                &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                            </div>
                             <p>The first '&lt;material[, ...]&gt;' is the top ingredient.</p>
                             <p>The second '&lt;material[, ...]&gt;' is the bottom ingredient.</p>
                         </div>
@@ -1762,25 +1762,25 @@ GRINDSTONE [recipe name]
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-                            <pre class="code">
-CARTOGRAPHY [recipe name]
-[@ ingredient flags]
-&lt;letter&gt; &lt;material&gt;:[data][, ...]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                            <div class="code">
+                                CARTOGRAPHY [recipe name]
+                                [@ ingredient flags]
+                                &lt;letter&gt; &lt;material&gt;:[data][, ...]
+                                [@ ingredient flags]
+                                [... more ingredients]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [@ result flags]
+                            </div>
                             <p>Cartography Tables have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
                             <p>An ingredient with a letter of "a" is the top ingredient.</p>
                             <p>An ingredient with a letter of "b" is the bottom ingredient.</p>
                         </div>
                         <div class="tab__content">
-                            <pre class="code">
-CARTOGRAPHY [recipe name]
-&lt;material[, ...]&gt; + &lt;material[, ...]&gt;
-= [chance]% &lt;material:[data]:[amount]&gt;
-</pre>
+                            <div class="code">
+                                CARTOGRAPHY [recipe name]
+                                &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                            </div>
                             <p>The first '&lt;material[, ...]&gt;' is the top ingredient.</p>
                             <p>The second '&lt;material[, ...]&gt;' is the bottom ingredient.</p>
                         </div>
@@ -1802,15 +1802,15 @@ CARTOGRAPHY [recipe name]
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-                            <pre class="code">
-BREW [recipe name]
-[@ recipe flags]
-&lt;letter&gt; &lt;material:[data][, ...]&gt; % [time]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                            <div class="code">
+                                BREW [recipe name]
+                                [@ recipe flags]
+                                &lt;letter&gt; &lt;material:[data][, ...]&gt; % [time]
+                                [@ ingredient flags]
+                                [... more ingredients]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [@ result flags]
+                            </div>
                             <p>Brewing Stands have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
                             <p>An ingredient with a letter of "a" is the main ingredient.</p>
                             <p>An ingredient with a letter of "b" is the potion.</p>
@@ -1819,15 +1819,15 @@ BREW [recipe name]
                             <div>
                                 <b>Example:</b>
                             </div>
-                            <pre class="code">
-brew
-a nether_wart
-@name &cTest
-b potion
-@potion type water
-= stone
-@name &lt;red&gt;Test Stone. Please Ignore
-</pre>
+                            <div class="code">
+                                brew
+                                a nether_wart
+                                @name &cTest
+                                b potion
+                                @potion type water
+                                = stone
+                                @name &lt;red&gt;Test Stone. Please Ignore
+                            </div>
                             <div class="inventory inventory--brewing">
                                 <div class="inventory__ingredients">
                                     <div class="slot"><img src="https://www.recipemanager.dev/img/icons/64/nether_wart.png?v=1">
@@ -1866,13 +1866,13 @@ b potion
                             </div>
                         </div>
                         <div class="tab__content">
-<pre class="code">
-BREW [recipe name]
-&lt;material:[data]:[amount]&gt; // ingredient
-&lt;material:[data]&gt; // potion
-= [chance]% &lt;material:[data]:[amount]&gt;
-[...]
-</pre>
+                            <div class="code">
+                                BREW [recipe name]
+                                &lt;material:[data]:[amount]&gt; // ingredient
+                                &lt;material:[data]&gt; // potion
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [...]
+                            </div>
                             <p>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</p>
                             <p>The second '&lt;material&gt;:[data]' is the potion with optional data.</p>
                             <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
@@ -1880,15 +1880,15 @@ BREW [recipe name]
                             <div>
                                 <b>Example:</b>
                             </div>
-                            <pre class="code">
-brew
-nether_wart
-potion
-= stone
-@name &lt;red&gt;Test Stone. Please Ignore
-@ingredientcondition nether_wart | name &cTest
-@ingredientcondition potion | potion type water
-</pre>
+                            <div class="code">
+                                brew
+                                nether_wart
+                                potion
+                                = stone
+                                @name &lt;red&gt;Test Stone. Please Ignore
+                                @ingredientcondition nether_wart | name &cTest
+                                @ingredientcondition potion | potion type water
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1908,25 +1908,25 @@ potion
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-                            <pre class="code">
-SMITHING [recipe name]
-[@ ingredient flags]
-&lt;letter&gt; &lt;material&gt;:[data][, ...]
-[@ ingredient flags]
-[... more ingredients]
-= [chance]% &lt;material:[data]:[amount]&gt;
-[@ result flags]
-</pre>
+                            <div class="code">
+                                SMITHING [recipe name]
+                                [@ ingredient flags]
+                                &lt;letter&gt; &lt;material&gt;:[data][, ...]
+                                [@ ingredient flags]
+                                [... more ingredients]
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                                [@ result flags]
+                            </div>
                             <p>Smithing Tables have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
                             <p>An ingredient with a letter of "a" is the left ingredient.</p>
                             <p>An ingredient with a letter of "b" is the right ingredient.</p>
                         </div>
                         <div class="tab__content">
-                            <pre class="code">
-SMITHING [recipe name]
-&lt;material[, ...]&gt; + &lt;material[, ...]&gt;
-= [chance]% &lt;material:[data]:[amount]&gt;
-</pre>
+                            <div class="code">
+                                SMITHING [recipe name]
+                                &lt;material[, ...]&gt; + &lt;material[, ...]&gt;
+                                = [chance]% &lt;material:[data]:[amount]&gt;
+                            </div>
                             <p>The first '&lt;material[, ...]&gt;' is the left ingredient.</p>
                             <p>The second '&lt;material[, ...]&gt;' is the right ingredient.</p>
                         </div>
@@ -1943,13 +1943,13 @@ SMITHING [recipe name]
                 <p>A file will be generated at "/plugins/RecipeManager/extracted/" (For Legacy versions: "/plugins/RecipeManager/recipes/disabled/")</p>
                 <p>Open the generated file in a text editor and search for a recipe you would like to remove.</p>
                 <p>For example, an iron sword should look similar to this:</p>
-<pre class="code">
-craft
-iron_ingot
-iron_ingot
-stick
-= iron_sword:0:1
-</pre>
+                <div class="code">
+                    craft
+                    iron_ingot
+                    iron_ingot
+                    stick
+                    = iron_sword:0:1
+                </div>
                 <p>After finding the recipes that you want to remove, copy them over to a file in "/plugins/RecipeManager/recipes/"</p>
                 <p>Once the recipes are in your new file, add @remove per the <a href="#remove-syntax">Remove Syntax</a> below.</p>
             </div>
@@ -1958,27 +1958,27 @@ stick
             <h3 class="doc-section__title">Remove Syntax</h3>
             <div class="doc-section__inn">
                 <p>To remove an individual recipe, place @remove just after the craft/combine/smelt line:</p>
-<pre class="code">
-craft
-@remove
-iron_ingot
-iron_ingot
-stick
-= iron_sword:0:1
-</pre>
+                <div class="code">
+                    craft
+                    @remove
+                    iron_ingot
+                    iron_ingot
+                    stick
+                    = iron_sword:0:1
+                </div>
 
                 <p>Place @remove at the top of the file to remove all recipes in the file</p>
-                <pre class="code">
-@remove
+                <div class="code">
+                    @remove
 
-craft
-iron_ingot
-iron_ingot
-stick
-= iron_sword:0:1
+                    craft
+                    iron_ingot
+                    iron_ingot
+                    stick
+                    = iron_sword:0:1
 
-[... more recipes]
-</pre>
+                    [... more recipes]
+                </div>
             </div>
         </div>
     </div>
@@ -2019,7 +2019,7 @@ stick
 </footer>
 
 <script src="https://www.recipemanager.dev/js/inventory/inventory.js?v=2"></script>
-<script src="https://www.recipemanager.dev/js/code-highlight/code-highlight.js?v=1"></script>
+<script src="https://www.recipemanager.dev/js/code-highlight/code-highlight.js?v=2"></script>
 <script src="https://www.recipemanager.dev/js/tabs/tabs.js?v=1"></script>
 </body>
 </html>

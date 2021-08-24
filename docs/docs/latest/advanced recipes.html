@@ -44,7 +44,9 @@ js:
             <h2 class="doc-section__title">Recipe Books and Named Recipes</h2>
             <div class="doc-section__inn">
                 <p>You can name recipes by just writing something after the type definition, e.g.:</p>
-                <pre class="code">&lt;recipe definition&gt; [recipe name]</pre>
+                <div class="code">
+                    &lt;recipe definition&gt; [recipe name]
+                </div>
                 <p>
                     That name can be used in recipe books.
                 </p>
@@ -59,22 +61,22 @@ js:
                 <p>
                     Here's the full syntax of a recipe file:
                 </p>
-                <pre class="code">
-[@ shared or recipe flag]
-[... more flags]
+                <div class="code">
+                    [@ shared or recipe flag]
+                    [... more flags]
 
-&lt;recipe definition&gt; [recipe name]
-[@ shared or recipe flag]
-[... more flags]
-&lt;ingredients&gt;
-[@ ingredient flags]
-= &lt;result&gt;
-  [@ shared or result flag]
-  [... more flags]
-[... more results]
+                    &lt;recipe definition&gt; [recipe name]
+                    [@ shared or recipe flag]
+                    [... more flags]
+                    &lt;ingredients&gt;
+                    [@ ingredient flags]
+                    = &lt;result&gt;
+                    [@ shared or result flag]
+                    [... more flags]
+                    [... more results]
 
-[... more recipes]
-</pre>
+                    [... more recipes]
+                </div>
                 <div>
                     Here's a quick example of the above syntax by using all available options:
                 </div>
@@ -89,33 +91,33 @@ js:
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-<pre class="code">
-@message You crafted this! // this applies to all recipes within this file
+                            <div class="code">
+                                @message You crafted this! // this applies to all recipes within this file
 
-COMBINE
-@broadcast {player} has crafted a fine sword!
-pattern abcc
-a iron_ingot
-b gold_ingot
-c diamond
-= golden_sword
-  @enchant durability max
-  @name Fine Gold Sword
-  @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
-</pre>
+                                COMBINE
+                                @broadcast {player} has crafted a fine sword!
+                                pattern abcc
+                                a iron_ingot
+                                b gold_ingot
+                                c diamond
+                                = golden_sword
+                                @enchant durability max
+                                @name Fine Gold Sword
+                                @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
+                            </div>
                         </div>
                         <div class="tab__content">
-<pre class="code">
-@message You crafted this! // this applies to all recipes within this file
+                            <div class="code">
+                                @message You crafted this! // this applies to all recipes within this file
 
-COMBINE
-@broadcast {player} has crafted a fine sword!
-iron_ingot + gold_ingot + diamond:0:2
-= golden_sword
-  @enchant durability max
-  @name Fine Gold Sword
-  @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
-</pre>
+                                COMBINE
+                                @broadcast {player} has crafted a fine sword!
+                                iron_ingot + gold_ingot + diamond:0:2
+                                = golden_sword
+                                @enchant durability max
+                                @name Fine Gold Sword
+                                @lore &lt;gray&gt;This sword has been crafted from pure awesomeness!
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,13 +168,13 @@ iron_ingot + gold_ingot + diamond:0:2
                     </div>
                 </div>
 
-                <pre class="code">
-CRAFT Some Awesome Recipe
-@modexp +1
-@message false // disable the file-wide flag on this recipe
-apple
-= apple
-</pre>
+                <div class="code">
+                    CRAFT Some Awesome Recipe
+                    @modexp +1
+                    @message false // disable the file-wide flag on this recipe
+                    apple
+                    = apple
+                </div>
                 <div class="inventory inventory--crafting">
                     <div class="inventory__ingredients">
                         <div class="slot"><img src="https://www.recipemanager.dev/img/icons/16/apple.png?v=1"/>
@@ -225,27 +227,27 @@ apple
                     </div>
                     <div class="tabs-content">
                         <div class="tab__content active">
-<pre class="code">
-combine
-@individualresults
-pattern aaa
-a gold_nugget
-= iron_ingot
-  @ingredientcondition gold_nugget | name Silver Nugget
-= diamond
-  @ingredientcondition gold_nugget | name Diamond Nugget
-</pre>
+                            <div class="code">
+                                combine
+                                @individualresults
+                                pattern aaa
+                                a gold_nugget
+                                = iron_ingot
+                                @ingredientcondition gold_nugget | name Silver Nugget
+                                = diamond
+                                @ingredientcondition gold_nugget | name Diamond Nugget
+                            </div>
                         </div>
                         <div class="tab__content">
-<pre class="code">
-combine
-@individualresults
-gold_nugget:0:3
-= iron_ingot
-  @ingredientcondition gold_nugget | name Silver Nugget
-= diamond
-  @ingredientcondition gold_nugget | name Diamond Nugget
-</pre>
+                            <div class="code">
+                                combine
+                                @individualresults
+                                gold_nugget:0:3
+                                = iron_ingot
+                                @ingredientcondition gold_nugget | name Silver Nugget
+                                = diamond
+                                @ingredientcondition gold_nugget | name Diamond Nugget
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -341,11 +343,11 @@ gold_nugget:0:3
         <div id="explosive-fuel" class="doc-section">
             <h3 class="doc-section__title">Explosive Fuel</h3>
             <div class="doc-section__inn">
-<pre class="code">
-fuel
-@forchance 25% @explode fire
-sulphur % 30
-</pre>
+                <div class="code">
+                    fuel
+                    @forchance 25% @explode fire
+                    sulphur % 30
+                </div>
                 <p>When sulphur burns it has 25% chance of exploding and causing fires.</p>
                 <div class="inventory inventory--fuel">
                     <div class="inventory__ingredients">

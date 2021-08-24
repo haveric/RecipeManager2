@@ -20,35 +20,36 @@ js:
 
         <p>A book's .yml file can have:</p>
     </div>
-    <pre class="code">title: The Book Title
-author: RecipeManager
-description: Book description written on the first page
+    <div class="code">
+        title: The Book Title
+        author: RecipeManager
+        description: Book description written on the first page
 
-# book settings and their defaults
-settings:
-  pervolume: 50
-  cover: true
-  contents: true
-  end: true
-  customend: ''
+        # book settings and their defaults
+        settings:
+        pervolume: 50
+        cover: true
+        contents: true
+        end: true
+        customend: ''
 
-# list of recipes to be automatically distributed in volumes
-recipes:
-- list of
-- recipe names or
-- + special arguments
+        # list of recipes to be automatically distributed in volumes
+        recipes:
+        - list of
+        - recipe names or
+        - + special arguments
 
-# or you can directly define individual volumes
-volume 1:
-- recipe name
-- ...
-volume 2:
-- recipe name
-- etc ...
-volume ...
+        # or you can directly define individual volumes
+        volume 1:
+        - recipe name
+        - ...
+        volume 2:
+        - recipe name
+        - etc ...
+        volume ...
 
-# these are comments by the way but they will not be preserved since the plugin will rewrite the files.
-</pre>
+        # these are comments by the way but they will not be preserved since the plugin will rewrite the files.
+    </div>
     <p>Note that a book can not contain the same recipe twice.</p>
 
     <p>'<b>title</b>' (optional, default file name) must not be longer than 64 characters, supports colors.</p>
@@ -113,33 +114,33 @@ volume ...
         <b>Example book:</b>
         'swords.yml'
     </p>
-    <pre class="code">title: Stuff!
-description: Random things.
-recipes:
-- flaming sword of doom
-- oblivion ice axe
-- shaped 3x2 (76 331:0 76 / 1 1 1) diode
-- shaped 1x3 (5 / 5 / 280:0) wooden_sword
-- shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
-- some non-existent recipe name here
-- shaped 1x3 (4 / 4 / 280:0) stone_sword
-</pre>
+    <div class="code">title: Stuff!
+        description: Random things.
+        recipes:
+        - flaming sword of doom
+        - oblivion ice axe
+        - shaped 3x2 (76 331:0 76 / 1 1 1) diode
+        - shaped 1x3 (5 / 5 / 280:0) wooden_sword
+        - shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
+        - some non-existent recipe name here
+        - shaped 1x3 (4 / 4 / 280:0) stone_sword
+    </div>
     <p>
         Which, after using reload, rmreload or rmreloadbooks command, the book's contents will be converted to:
     </p>
-    <pre class="code"># Recipe book configuration (last loaded at May 2, 2013 12:19:45 PM)
-# Read 'recipe books.html' file to learn how to configure books.
+    <div class="code"># Recipe book configuration (last loaded at May 2, 2013 12:19:45 PM)
+        # Read 'recipe books.html' file to learn how to configure books.
 
-title: Stuff!
-description: Random things.
-volume 1:
-- flaming sword of doom
-- oblivion ice axe
-- shaped 3x2 (76 331:0 76 / 1 1 1) diode
-- shaped 1x3 (5 / 5 / 280:0) wooden_sword
-- shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
-- shaped 1x3 (4 / 4 / 280:0) stone_sword
-</pre>
+        title: Stuff!
+        description: Random things.
+        volume 1:
+        - flaming sword of doom
+        - oblivion ice axe
+        - shaped 3x2 (76 331:0 76 / 1 1 1) diode
+        - shaped 1x3 (5 / 5 / 280:0) wooden_sword
+        - shaped 3x3 (5 5 5 / 0 280:0 0 / 0 280:0 0) wood_pickaxe
+        - shaped 1x3 (4 / 4 / 280:0) stone_sword
+    </div>
     <p>
         <b>NOTE</b> You're not supposed to write the auto-generated recipe names manually!<br/>
         As said before, you can give them a custom name or use the <a href="recipe flags.html#addtobook">@addtobook</a> flag.<br/>
