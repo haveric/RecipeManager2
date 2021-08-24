@@ -262,7 +262,7 @@ public class FlagApplyEnchantment extends Flag {
                     }
                 }
 
-                if(!onlyBooks) {
+                if (!onlyBooks) {
                     if (meta != null && meta.hasEnchants()) {
                         for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
                             evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
