@@ -47,6 +47,7 @@ js:
                         <li><img src="https://www.recipemanager.dev/img/icons/64/grindstone.png?v=1"/><a href="#grindstone">Grindstone Recipe</a></li>
                         <li><img src="https://www.recipemanager.dev/img/icons/64/cartography_table.png?v=1"/><a href="#cartography">Cartography Recipe</a></li>
                         <li><img src="https://www.recipemanager.dev/img/icons/64/brewing_stand.png?v=1"/><a href="#brew">Brew/Brewing Stand Recipe</a></li>
+                        <li><img src="https://www.recipemanager.dev/img/icons/64/smithing_table.png?v=1"/><a href="#smithing">Smithing Table Recipe</a></li>
                     </ul>
                 </li>
                 <li>
@@ -1883,6 +1884,46 @@ potion
 @ingredientcondition potion | potion type water
 </pre>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="smithing" class="doc-section">
+            <h3 class="doc-section__title">Smithing Table Recipe</h3>
+            <div class="doc-section__inn">
+                <div class="tabs">
+                    <div class="tabs-nav clearfix">
+                        <div class="tab__title active">
+                            Pattern Format
+                        </div>
+                        <div class="tab__title">
+                            Simple Format
+                        </div>
+                    </div>
+                    <div class="tabs-content">
+                        <div class="tab__content active">
+                            <pre class="code">
+SMITHING [recipe name]
+[@ ingredient flags]
+&lt;letter&gt; &lt;material&gt;:[data][, ...]
+[@ ingredient flags]
+[... more ingredients]
+= [chance]% &lt;material:[data]:[amount]&gt;
+[@ result flags]
+</pre>
+                            <p>Smithing Tables have an implied pattern of "ab". You do not need to set a pattern like you would in a craft/combine recipe.</p>
+                            <p>An ingredient with a letter of "a" is the left ingredient.</p>
+                            <p>An ingredient with a letter of "b" is the right ingredient.</p>
+                        </div>
+                        <div class="tab__content">
+                            <pre class="code">
+SMITHING [recipe name]
+&lt;material[, ...]&gt; + &lt;material[, ...]&gt;
+= [chance]% &lt;material:[data]:[amount]&gt;
+</pre>
+                            <p>The first '&lt;material[, ...]&gt;' is the left ingredient.</p>
+                            <p>The second '&lt;material[, ...]&gt;' is the right ingredient.</p>
                         </div>
                     </div>
                 </div>
