@@ -1859,7 +1859,8 @@ b potion
                                 </div>
                                 <span class="inventory__zoom-out"></span><span class="inventory__zoom-in"></span>
                             </div>
-                            <div class="tab__content">
+                        </div>
+                        <div class="tab__content">
                             <pre class="code">
 BREW [recipe name]
 &lt;material:[data]:[amount]&gt; // ingredient
@@ -1867,14 +1868,14 @@ BREW [recipe name]
 = [chance]% &lt;material:[data]:[amount]&gt;
 [...]
 </pre>
-                                <p>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</p>
-                                <p>The second '&lt;material&gt;:[data]' is the potion with optional data.</p>
-                                <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
-                                <p>Note: Currently requires a vanilla brewing recipe, but can have customized items.</p>
-                                <div>
-                                    <b>Example:</b>
-                                </div>
-                                <pre class="code">
+                            <p>The first '&lt;material&gt;:[data]' is the ingredient with optional data and amount.</p>
+                            <p>The second '&lt;material&gt;:[data]' is the potion with optional data.</p>
+                            <p>And '= [chance]% &lt;material:[data]:[amount]&gt;' is the result with optional success chance.</p>
+                            <p>Note: Currently requires a vanilla brewing recipe, but can have customized items.</p>
+                            <div>
+                                <b>Example:</b>
+                            </div>
+                            <pre class="code">
 brew
 nether_wart
 potion
@@ -1883,7 +1884,6 @@ potion
 @ingredientcondition nether_wart | name &cTest
 @ingredientcondition potion | potion type water
 </pre>
-                            </div>
                         </div>
                     </div>
                 </div>
