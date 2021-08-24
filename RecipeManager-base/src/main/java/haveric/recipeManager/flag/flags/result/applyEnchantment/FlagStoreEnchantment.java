@@ -38,9 +38,10 @@ public class FlagStoreEnchantment extends BaseFlagApplyStoreEnchantment {
             "    onlybooks and onlyitems are mutually exclusive. If you use one, the other is set to false. Using both will set the last defined.",
             "",
             "Actions include:",
-            "  largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)",
-            "  combine = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)",
-            "  anvil   = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)", };
+            "  smallest = Use the smallest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness I)",
+            "  largest  = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)",
+            "  combine  = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)",
+            "  anvil    = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)", };
     }
 
     @Override
@@ -114,7 +115,10 @@ public class FlagStoreEnchantment extends BaseFlagApplyStoreEnchantment {
 
                 if (enchantmentStorageMeta.hasStoredEnchant(enchantment)) {
                     int currentLevel = enchantmentStorageMeta.getStoredEnchantLevel(enchantment);
-                    if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
+
+                    if (resultAction == ApplyEnchantmentAction.SMALLEST && level < currentLevel) {
+                        enchantmentStorageMeta.addStoredEnchant(enchantment, level, ignoreLevelRestriction);
+                    } else if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
                         if (maxLevel > 1) {
                             level = Math.min(level, maxLevel);
                         }

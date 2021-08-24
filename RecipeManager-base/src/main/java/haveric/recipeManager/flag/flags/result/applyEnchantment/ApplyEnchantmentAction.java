@@ -1,7 +1,8 @@
 package haveric.recipeManager.flag.flags.result.applyEnchantment;
 
 public enum ApplyEnchantmentAction {
-    LARGEST,
+    ANVIL,
     COMBINE,
-    ANVIL
+    LARGEST,
+    SMALLEST
 }

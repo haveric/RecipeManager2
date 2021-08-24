@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 ### Coming Soon
 * NEW FLAG: `@AxolotlBucketItem <variant>`
 * NEW FLAG: `@StoreEnchantment`: Similar to `@ApplyEnchantment`, but for storing enchantments in enchanted books
+* NEW: `@ApplyEnchantment`: Added `smallest` action to use the lowest enchantment
 * FIX: `@NeedExp` error on load for `Player.getLevel()`
 * FIX: `@Explode fail` for crafting recipes
 * FIX: Updated grass_path to dirt_path in `item aliases.yml`

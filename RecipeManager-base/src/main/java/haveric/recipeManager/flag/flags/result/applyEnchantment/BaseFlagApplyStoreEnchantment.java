@@ -76,7 +76,9 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
             if (arg.startsWith("ingredientaction")) {
                 value = arg.substring("ingredientaction".length()).trim();
 
-                if (value.equals("largest")) {
+                if (value.equals("smallest")) {
+                    ingredientAction = ApplyEnchantmentAction.SMALLEST;
+                } else if (value.equals("largest")) {
                     ingredientAction = ApplyEnchantmentAction.LARGEST;
                 } else if (value.equals("combine")) {
                     ingredientAction = ApplyEnchantmentAction.COMBINE;
@@ -88,7 +90,9 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
             } else if (arg.startsWith("resultaction")) {
                 value = arg.substring("resultaction".length()).trim();
 
-                if (value.equals("largest")) {
+                if (value.equals("smallest")) {
+                    resultAction = ApplyEnchantmentAction.SMALLEST;
+                } else if (value.equals("largest")) {
                     resultAction = ApplyEnchantmentAction.LARGEST;
                 } else if (value.equals("combine")) {
                     resultAction = ApplyEnchantmentAction.COMBINE;
@@ -168,7 +172,9 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
     protected void evaluateEnchantments(Map<Enchantment, Integer> enchantments, Enchantment enchantment, int level) {
         if (enchantments.containsKey(enchantment)) {
             int currentLevel = enchantments.get(enchantment);
-            if (ingredientAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
+            if (ingredientAction == ApplyEnchantmentAction.SMALLEST && level < currentLevel) {
+                enchantments.put(enchantment, level);
+            } else if (ingredientAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
                 if (maxLevel > 1) {
                     level = Math.min(level, maxLevel);
                 }
