@@ -5,8 +5,9 @@ import haveric.recipeManager.TestEnchantmentSharpness;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.result.FlagApplyEnchantment;
 import haveric.recipeManager.flag.flags.result.FlagEnchantItem;
+import haveric.recipeManager.flag.flags.result.applyEnchantment.ApplyEnchantmentAction;
+import haveric.recipeManager.flag.flags.result.applyEnchantment.FlagApplyEnchantment;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
@@ -91,33 +92,33 @@ public class FlagApplyEnchantmentTest extends FlagBaseTest {
                 String name = recipe.getName();
                 switch (name) {
                     case "default":
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.LARGEST, flag.getIngredientAction());
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.LARGEST, flag.getResultAction());
+                        assertEquals(ApplyEnchantmentAction.LARGEST, flag.getIngredientAction());
+                        assertEquals(ApplyEnchantmentAction.LARGEST, flag.getResultAction());
                         assertEquals(2, result.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
                         break;
                     case "ingredientcombine":
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.COMBINE, flag.getIngredientAction());
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.LARGEST, flag.getResultAction());
+                        assertEquals(ApplyEnchantmentAction.COMBINE, flag.getIngredientAction());
+                        assertEquals(ApplyEnchantmentAction.LARGEST, flag.getResultAction());
                         assertEquals(3, result.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
                         break;
                     case "resultcombine":
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.LARGEST, flag.getIngredientAction());
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.COMBINE, flag.getResultAction());
+                        assertEquals(ApplyEnchantmentAction.LARGEST, flag.getIngredientAction());
+                        assertEquals(ApplyEnchantmentAction.COMBINE, flag.getResultAction());
                         assertEquals(3, result.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
                         break;
                     case "bothcombine":
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.COMBINE, flag.getIngredientAction());
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.COMBINE, flag.getResultAction());
+                        assertEquals(ApplyEnchantmentAction.COMBINE, flag.getIngredientAction());
+                        assertEquals(ApplyEnchantmentAction.COMBINE, flag.getResultAction());
                         assertEquals(4, result.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
                         break;
                     case "onlybooksdefault":
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.LARGEST, flag.getIngredientAction());
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.LARGEST, flag.getResultAction());
+                        assertEquals(ApplyEnchantmentAction.LARGEST, flag.getIngredientAction());
+                        assertEquals(ApplyEnchantmentAction.LARGEST, flag.getResultAction());
                         assertEquals(1, result.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
                         break;
                     case "onlybookscombine":
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.COMBINE, flag.getIngredientAction());
-                        assertEquals(FlagApplyEnchantment.ApplyEnchantmentAction.COMBINE, flag.getResultAction());
+                        assertEquals(ApplyEnchantmentAction.COMBINE, flag.getIngredientAction());
+                        assertEquals(ApplyEnchantmentAction.COMBINE, flag.getResultAction());
                         assertEquals(2, result.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
                         break;
 

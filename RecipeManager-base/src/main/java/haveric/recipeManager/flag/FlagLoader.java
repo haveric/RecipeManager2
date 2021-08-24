@@ -5,6 +5,8 @@ import haveric.recipeManager.flag.flags.any.flagCooldown.FlagCooldown;
 import haveric.recipeManager.flag.flags.any.flagSummon.FlagSummon;
 import haveric.recipeManager.flag.flags.recipe.*;
 import haveric.recipeManager.flag.flags.result.*;
+import haveric.recipeManager.flag.flags.result.applyEnchantment.FlagApplyEnchantment;
+import haveric.recipeManager.flag.flags.result.applyEnchantment.FlagStoreEnchantment;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
