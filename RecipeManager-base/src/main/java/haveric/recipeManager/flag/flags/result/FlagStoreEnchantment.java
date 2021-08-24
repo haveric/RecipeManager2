@@ -4,6 +4,9 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.FlaggableRecipeChoice;
+import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
@@ -13,11 +16,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlagApplyEnchantment extends Flag {
+public class FlagStoreEnchantment extends Flag {
 
     @Override
     public String getFlagType() {
-        return FlagType.APPLY_ENCHANTMENT;
+        return FlagType.STORE_ENCHANTMENT;
     }
 
     @Override
@@ -29,8 +32,8 @@ public class FlagApplyEnchantment extends Flag {
     @Override
     protected String[] getDescription() {
         return new String[] {
-            "Applies the enchantments from books onto the result",
-            "  If you want to store enchantments in an enchanted book, use: " + FlagType.STORE_ENCHANTMENT,
+            "Stores the enchantments from items into the resulting enchanted book",
+            "  If you want to apply usable enchantments to an item, use: " + FlagType.APPLY_ENCHANTMENT,
             "Using this flag more than once will overwrite the previous one.",
             "",
             "As '<arguments>' you must define at least one feature to copy from the ingredient to the result.",
@@ -39,7 +42,7 @@ public class FlagApplyEnchantment extends Flag {
             "  resultaction <action>     = (default largest) merge action applied to the result",
             "  ignorelevel               = Ignore enchantment level restrictions",
             "  maxlevel <level>          = Restrict the maximum level",
-            "  onlybooks                 = Only copies enchantments from Enchanted Books. Without this, all item enchantments will be copied",
+            "  onlyitems                 = Only copies enchantments from items with enchantments. Without this, all enchanted books will be copied as well",
             "",
             "Actions include:",
             "  largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)",
@@ -52,7 +55,7 @@ public class FlagApplyEnchantment extends Flag {
         return new String[] {
             "{flag}",
             "{flag} resultaction combine // Combines the levels with the resulting item's enchants",
-            "{flag} ingredientaction combine | ignorelevels | onlybooks // Combines all ingredients levels from books while allowing higher than vanilla allowed enchants", };
+            "{flag} ingredientaction combine | ignorelevels | onlyitems // Combines all ingredients levels from items while allowing higher than vanilla allowed enchants", };
     }
 
     public enum ApplyEnchantmentAction {
@@ -65,23 +68,23 @@ public class FlagApplyEnchantment extends Flag {
     private ApplyEnchantmentAction resultAction = ApplyEnchantmentAction.LARGEST;
     private boolean ignoreLevelRestriction = false;
     private int maxLevel = -1;
-    private boolean onlyBooks = false;
+    private boolean onlyItems = false;
 
 
-    public FlagApplyEnchantment() { }
+    public FlagStoreEnchantment() { }
 
-    public FlagApplyEnchantment(FlagApplyEnchantment flag) {
+    public FlagStoreEnchantment(FlagStoreEnchantment flag) {
         super(flag);
         ingredientAction = flag.ingredientAction;
         resultAction = flag.resultAction;
         ignoreLevelRestriction = flag.ignoreLevelRestriction;
         maxLevel = flag.maxLevel;
-        onlyBooks = flag.onlyBooks;
+        onlyItems = flag.onlyItems;
     }
 
     @Override
-    public FlagApplyEnchantment clone() {
-        return new FlagApplyEnchantment((FlagApplyEnchantment) super.clone());
+    public FlagStoreEnchantment clone() {
+        return new FlagStoreEnchantment((FlagStoreEnchantment) super.clone());
     }
 
     public ApplyEnchantmentAction getIngredientAction() {
@@ -96,8 +99,32 @@ public class FlagApplyEnchantment extends Flag {
         return ignoreLevelRestriction;
     }
 
-    public boolean getOnlyBooks() {
-        return onlyBooks;
+    public boolean getOnlyItems() {
+        return onlyItems;
+    }
+
+    @Override
+    public boolean onValidate() {
+        ItemResult result = getResult();
+        boolean validResult = false;
+        if (result != null && (result.getItemMeta() instanceof EnchantmentStorageMeta)) {
+            validResult = true;
+        }
+
+        boolean validFlaggable = false;
+        if (Version.has1_13BasicSupport()) {
+            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+
+            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), EnchantmentStorageMeta.class)) {
+                validFlaggable = true;
+            }
+        }
+
+        if (!validResult && !validFlaggable) {
+            return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs an enchanted book!");
+        }
+
+        return true;
     }
 
     @Override
@@ -151,8 +178,8 @@ public class FlagApplyEnchantment extends Flag {
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxLevel value: " + value + ". Value must be an integer > 1.");
                 }
-            } else if (arg.startsWith("onlybooks")) {
-                onlyBooks = true;
+            } else if (arg.startsWith("onlyitems")) {
+                onlyItems = true;
             } else {
                 ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + arg);
             }
@@ -172,76 +199,81 @@ public class FlagApplyEnchantment extends Flag {
             return;
         }
 
-        Map<Enchantment, Integer> enchantments = new HashMap<>();
+        if (canAddMeta(a)) {
+            ItemMeta meta = a.result().getItemMeta();
 
-        if (a.inventory() instanceof CraftingInventory) {
-            CraftingInventory inv = (CraftingInventory) a.inventory();
-
-            enchantments = copyEnchantments(inv.getMatrix());
-        } else if (a.inventory() instanceof FurnaceInventory) {
-            FurnaceInventory inv = (FurnaceInventory) a.inventory();
-
-            enchantments = copyEnchantments(inv.getSmelting());
-        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
-            ItemStack[] anvilIngredients = new ItemStack[2];
-            anvilIngredients[0] = a.inventory().getItem(0);
-            anvilIngredients[1] = a.inventory().getItem(1);
-
-            enchantments = copyEnchantments(anvilIngredients);
-        } else if (a.inventory() instanceof BrewerInventory) {
-            BrewerInventory inv = (BrewerInventory) a.inventory();
-
-            enchantments = copyEnchantments(inv.getIngredient());
-        } else {
-            a.addCustomReason(getFlagType() + " has unsupported inventory type: " + a.inventory().getType());
-        }
-
-        if (enchantments.size() == 0) {
-            return;
-        }
-
-        ItemMeta resultMeta = a.result().getItemMeta();
-        if (resultMeta == null) {
-            return;
-        }
-
-        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            int level = entry.getValue();
-
-            if (resultMeta.hasEnchant(enchantment)) {
-                int currentLevel = resultMeta.getEnchantLevel(enchantment);
-                if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
-                    if (maxLevel > 1) {
-                        level = Math.min(level, maxLevel);
-                    }
-                    resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
-                } else if (resultAction == ApplyEnchantmentAction.COMBINE) {
-                    level += currentLevel;
-                    if (maxLevel > 1) {
-                        level = Math.min(level, maxLevel);
-                    }
-                    resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
-                } else if (resultAction == ApplyEnchantmentAction.ANVIL) {
-                    int newLevel;
-                    if (level == currentLevel) {
-                        newLevel = level + 1;
-                    } else {
-                        newLevel = Math.max(level, currentLevel);
-                    }
-
-                    if (maxLevel > 1) {
-                        newLevel = Math.min(newLevel, maxLevel);
-                    }
-
-                    resultMeta.addEnchant(enchantment, newLevel, ignoreLevelRestriction);
-                }
-            } else {
-                resultMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
+            if (!(meta instanceof EnchantmentStorageMeta)) {
+                a.addCustomReason("Needs enchanted book!");
+                return;
             }
-        }
 
-        a.result().setItemMeta(resultMeta);
+            Map<Enchantment, Integer> enchantments = new HashMap<>();
+
+            if (a.inventory() instanceof CraftingInventory) {
+                CraftingInventory inv = (CraftingInventory) a.inventory();
+
+                enchantments = copyEnchantments(inv.getMatrix());
+            } else if (a.inventory() instanceof FurnaceInventory) {
+                FurnaceInventory inv = (FurnaceInventory) a.inventory();
+
+                enchantments = copyEnchantments(inv.getSmelting());
+            } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
+                ItemStack[] anvilIngredients = new ItemStack[2];
+                anvilIngredients[0] = a.inventory().getItem(0);
+                anvilIngredients[1] = a.inventory().getItem(1);
+
+                enchantments = copyEnchantments(anvilIngredients);
+            } else if (a.inventory() instanceof BrewerInventory) {
+                BrewerInventory inv = (BrewerInventory) a.inventory();
+
+                enchantments = copyEnchantments(inv.getIngredient());
+            } else {
+                a.addCustomReason(getFlagType() + " has unsupported inventory type: " + a.inventory().getType());
+            }
+
+            if (enchantments.size() == 0) {
+                return;
+            }
+
+            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
+            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                Enchantment enchantment = entry.getKey();
+                int level = entry.getValue();
+
+                if (enchantmentStorageMeta.hasStoredEnchant(enchantment)) {
+                    int currentLevel = enchantmentStorageMeta.getStoredEnchantLevel(enchantment);
+                    if (resultAction == ApplyEnchantmentAction.LARGEST && level > currentLevel) {
+                        if (maxLevel > 1) {
+                            level = Math.min(level, maxLevel);
+                        }
+                        enchantmentStorageMeta.addStoredEnchant(enchantment, level, ignoreLevelRestriction);
+                    } else if (resultAction == ApplyEnchantmentAction.COMBINE) {
+                        level += currentLevel;
+                        if (maxLevel > 1) {
+                            level = Math.min(level, maxLevel);
+                        }
+                        enchantmentStorageMeta.addStoredEnchant(enchantment, level, ignoreLevelRestriction);
+                    } else if (resultAction == ApplyEnchantmentAction.ANVIL) {
+                        int newLevel;
+                        if (level == currentLevel) {
+                            newLevel = level + 1;
+                        } else {
+                            newLevel = Math.max(level, currentLevel);
+                        }
+
+                        if (maxLevel > 1) {
+                            newLevel = Math.min(newLevel, maxLevel);
+                        }
+
+                        enchantmentStorageMeta.addStoredEnchant(enchantment, newLevel, ignoreLevelRestriction);
+                    }
+                } else {
+                    enchantmentStorageMeta.addStoredEnchant(enchantment, level, ignoreLevelRestriction);
+                }
+            }
+
+            a.result().setItemMeta(enchantmentStorageMeta);
+        }
     }
 
     private Map<Enchantment, Integer> copyEnchantments(ItemStack item) {
@@ -255,19 +287,19 @@ public class FlagApplyEnchantment extends Flag {
             if (i != null) {
                 ItemMeta meta = i.getItemMeta();
 
-                if (meta instanceof EnchantmentStorageMeta) {
-                    EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
+                if (!onlyItems) {
+                    if (meta instanceof EnchantmentStorageMeta) {
+                        EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
 
-                    for (Map.Entry<Enchantment, Integer> entry : enchantmentStorageMeta.getStoredEnchants().entrySet()) {
-                        evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
+                        for (Map.Entry<Enchantment, Integer> entry : enchantmentStorageMeta.getStoredEnchants().entrySet()) {
+                            evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
+                        }
                     }
                 }
 
-                if (!onlyBooks) {
-                    if (meta != null && meta.hasEnchants()) {
-                        for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                            evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
-                        }
+                if (meta != null && meta.hasEnchants()) {
+                    for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
+                        evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
                     }
                 }
             }
@@ -316,7 +348,7 @@ public class FlagApplyEnchantment extends Flag {
         toHash += "ingredientAction: " + ingredientAction.toString();
         toHash += "resultAction: " + resultAction.toString();
         toHash += "ignoreLevelRestriction: " + ignoreLevelRestriction;
-        toHash += "onlyBooks: " + onlyBooks;
+        toHash += "onlyItems: " + onlyItems;
 
         return toHash.hashCode();
     }

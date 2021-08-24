@@ -127,6 +127,7 @@ public class FlagLoader {
         if (!Version.has1_13BasicSupport() || force) {
             loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), APPLIED_TO_ITEM, "monsteregg", "egg");
         }
+        loadFlag(FlagType.STORE_ENCHANTMENT, new FlagStoreEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "storeenchant", "storeenchantments", "storeenchants");
         if (Supports.suspiciousStewMeta()) {
             loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
         }
