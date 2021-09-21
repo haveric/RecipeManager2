@@ -106,12 +106,12 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 return;
             }
 
-            ItemStack primary = inventory.getItem(0);
-            ItemStack secondary = inventory.getItem(1);
+            ItemStack originalPrimary = inventory.getItem(0);
+            ItemStack originalSecondary = inventory.getItem(1);
 
             List<ItemStack> ingredients = new ArrayList<>();
-            ingredients.add(primary);
-            ingredients.add(secondary);
+            ingredients.add(originalPrimary);
+            ingredients.add(originalSecondary);
 
             BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.SMITHING, ingredients, null);
             if (baseRecipe instanceof RMSmithingRecipe) {
@@ -144,11 +144,11 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                         if (!recipe.isValidBlockMaterial(blockType)) {
                             break;
                         }
-                        primary = inventory.getItem(0);
-                        secondary = inventory.getItem(1);
+                        ItemStack primary = inventory.getItem(0);
+                        ItemStack secondary = inventory.getItem(1);
 
                         // Make sure no items have changed or stop crafting
-                        if (!ToolsItem.isSameItemHash(primary, inventory.getItem(0)) || !ToolsItem.isSameItemHash(secondary, inventory.getItem(1))) {
+                        if (!ToolsItem.isSameItemHash(primary, originalPrimary) || !ToolsItem.isSameItemHash(secondary, originalSecondary)) {
                             break;
                         }
 
