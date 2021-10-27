@@ -64,7 +64,7 @@ public class ToolsFlag {
                 }
             }
 
-            if (meta.hasCustomModelData()) {
+            if (Version.has1_14Support() && meta.hasCustomModelData()) {
                 recipeString.append(Files.NL).append("@custommodeldata ").append(meta.getCustomModelData());
             }
 

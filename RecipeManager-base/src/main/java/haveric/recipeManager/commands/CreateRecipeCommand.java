@@ -199,7 +199,7 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 // TODO: Add FlagHide support to Conditions
 
-                if (meta.hasCustomModelData()) {
+                if (Version.has1_14Support() && meta.hasCustomModelData()) {
                     ingredientCondition.append(" | custommodeldata ").append(meta.getCustomModelData());
                 }
 

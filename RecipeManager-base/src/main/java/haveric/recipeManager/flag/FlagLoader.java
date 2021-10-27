@@ -104,7 +104,9 @@ public class FlagLoader {
         if (Version.has1_16Support()) {
             loadFlag(FlagType.CROSSBOW_ITEM, new FlagCrossbowItem(), APPLIED_TO_ITEM, "crossbow");
         }
-        loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
+        if (Version.has1_14Support()) {
+            loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
+        }
         loadFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), APPLIED_TO_ITEM, "enchantbook", "enchantingbook");
         loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), APPLIED_TO_ITEM, "enchant", "enchantment");
         loadFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), APPLIED_TO_ITEM, "firework", "fireworkrocket");

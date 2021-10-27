@@ -392,7 +392,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta.hasCustomModelData() && ingredientMeta.hasCustomModelData()) {
+                        if (Version.has1_14Support() && itemMeta.hasCustomModelData() && ingredientMeta.hasCustomModelData()) {
                             if (itemMeta.getCustomModelData() == ingredientMeta.getCustomModelData()) {
                                 quality ++; // Custom Model Data matches
                             }
