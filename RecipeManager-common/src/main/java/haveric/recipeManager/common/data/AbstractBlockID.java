@@ -1,6 +1,6 @@
 package haveric.recipeManager.common.data;
 
-import org.apache.commons.lang.Validate;
+import com.google.common.base.Preconditions;
 
 import java.util.UUID;
 
@@ -22,8 +22,8 @@ public class AbstractBlockID {
      *             if coordinate string isn't valid or id is null
      */
     public AbstractBlockID(UUID id, String coords) {
-        Validate.notNull(id, "id argument must not be null!");
-        Validate.notNull(coords, "coords argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(coords, "coords argument must not be null!");
 
         wid = id;
 

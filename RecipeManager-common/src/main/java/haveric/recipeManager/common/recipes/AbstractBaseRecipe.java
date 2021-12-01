@@ -1,7 +1,6 @@
 package haveric.recipeManager.common.recipes;
 
 import haveric.recipeManager.common.RMCChatColor;
-import org.apache.commons.lang.WordUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +60,8 @@ public abstract class AbstractBaseRecipe {
     }
 
     public String getInvalidErrorMessage() {
-        return WordUtils.capitalizeFully(getType().getDirective()) + " Recipe " + getName() + " is invalid!";
+        String directive = getType().getDirective();
+        return directive.substring(0, 1).toUpperCase() + directive.substring(1) + " Recipe " + getName() + " is invalid!";
     }
 
     public List<String> getIndexes() {
