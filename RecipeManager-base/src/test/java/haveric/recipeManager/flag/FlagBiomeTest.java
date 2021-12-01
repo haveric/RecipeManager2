@@ -46,25 +46,28 @@ public class FlagBiomeTest extends FlagBaseTest {
                     assertTrue(biomes.containsKey(Biome.JUNGLE));
                     assertTrue(biomes.get(Biome.JUNGLE));
                 } else if (resultType == Material.STONE_SWORD) {
-                    assertEquals(2, biomes.size());
+                    assertEquals(3, biomes.size());
                     assertTrue(biomes.containsKey(Biome.JUNGLE));
                     assertTrue(biomes.get(Biome.JUNGLE));
-                    assertTrue(biomes.containsKey(Biome.JUNGLE_HILLS));
-                    assertTrue(biomes.get(Biome.JUNGLE_HILLS));
+                    assertTrue(biomes.containsKey(Biome.BAMBOO_JUNGLE));
+                    assertTrue(biomes.get(Biome.BAMBOO_JUNGLE));
+                    assertTrue(biomes.containsKey(Biome.SPARSE_JUNGLE));
+                    assertTrue(biomes.get(Biome.SPARSE_JUNGLE));
                 } else if (resultType == Material.GOLDEN_SWORD) {
                     assertEquals(2, biomes.size());
-                    assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELDS));
-                    assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
-                    assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELD_SHORE));
-                    assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
+                    assertTrue(biomes.containsKey(Biome.DRIPSTONE_CAVES));
+                    assertFalse(biomes.get(Biome.DRIPSTONE_CAVES));
+                    assertTrue(biomes.containsKey(Biome.LUSH_CAVES));
+                    assertFalse(biomes.get(Biome.LUSH_CAVES));
                 } else if (resultType == Material.IRON_SWORD) {
                     assertEquals(2, biomes.size());
-                    assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELDS));
-                    assertFalse(biomes.get(Biome.MUSHROOM_FIELDS));
-                    assertTrue(biomes.containsKey(Biome.MUSHROOM_FIELD_SHORE));
-                    assertFalse(biomes.get(Biome.MUSHROOM_FIELD_SHORE));
+                    assertTrue(biomes.containsKey(Biome.DRIPSTONE_CAVES));
+                    assertFalse(biomes.get(Biome.DRIPSTONE_CAVES));
+                    assertTrue(biomes.containsKey(Biome.LUSH_CAVES));
+                    assertFalse(biomes.get(Biome.LUSH_CAVES));
                     assertFalse(biomes.containsKey(Biome.JUNGLE));
-                    assertFalse(biomes.containsKey(Biome.JUNGLE_HILLS));
+                    assertFalse(biomes.containsKey(Biome.BAMBOO_JUNGLE));
+                    assertFalse(biomes.containsKey(Biome.SPARSE_JUNGLE));
                 }
             }
         }

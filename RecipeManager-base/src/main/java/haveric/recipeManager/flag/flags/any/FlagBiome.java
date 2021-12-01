@@ -43,20 +43,29 @@ public class FlagBiome extends Flag {
 
     @Override
     protected String[] getExamples() {
-        String[] description = new String[]{
-            "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.JUNGLE_HILLS.name().toLowerCase(),
-        };
+        String[] description = new String[]{};
 
-        String mushrooms = "{flag} ";
-        if (Version.has1_13BasicSupport()) {
-            mushrooms += "!" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !" + Biome.MUSHROOM_FIELD_SHORE.name().toLowerCase();
-        } else if (Version.has1_9Support()) {
-            mushrooms += "!mushroom_island, !mushroom_island_shore";
+        if (Version.has1_18Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.BAMBOO_JUNGLE.name().toLowerCase() + ", " + Biome.SPARSE_JUNGLE.name().toLowerCase(),
+                "{flag} !" + Biome.DRIPSTONE_CAVES.name().toLowerCase() + ", !" + Biome.LUSH_CAVES.name().toLowerCase()
+            }, String.class);
         } else {
-            mushrooms += "!mushroom_island, !mushroom_shore";
-        }
-        description = ObjectArrays.concat(description, new String[]{ mushrooms }, String.class);
+            description = ObjectArrays.concat(description, new String[]{
+                "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", jungle_hills",
+            }, String.class);
 
+            String mushrooms = "{flag} ";
+            if (Version.has1_13BasicSupport()) {
+                mushrooms += "!" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !mushroom_field_shore";
+            } else if (Version.has1_9Support()) {
+                mushrooms += "!mushroom_island, !mushroom_island_shore";
+            } else {
+                mushrooms += "!mushroom_island, !mushroom_shore";
+            }
+            description = ObjectArrays.concat(description, new String[]{ mushrooms }, String.class);
+
+        }
         return description;
     }
 

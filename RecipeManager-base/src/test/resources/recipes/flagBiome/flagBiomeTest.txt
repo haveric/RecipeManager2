@@ -6,15 +6,15 @@ dirt + dirt
 craft
 dirt + stone_sword
 = stone_sword
-@biome jungle, jungle_hills
+@biome jungle, bamboo_jungle, sparse_jungle
 
 craft
 dirt + golden_sword
 = golden_sword
-@biome !mushroom_fields, !mushroom_field_shore
+@biome !dripstone_caves, !lush_caves
 
 craft
 dirt + iron_sword
 = iron_sword
-@biome jungle, jungle_hills
-@biome !mushroom_fields, !mushroom_field_shore
+@biome jungle, bamboo_jungle, sparse_jungle
+@biome !dripstone_caves, !lush_caves
