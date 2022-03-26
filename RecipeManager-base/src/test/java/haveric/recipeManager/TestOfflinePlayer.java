@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.profile.PlayerProfile;
 
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +24,11 @@ public class TestOfflinePlayer implements OfflinePlayer {
 
     @Override
     public UUID getUniqueId() {
+        return null;
+    }
+
+    @Override
+    public PlayerProfile getPlayerProfile() {
         return null;
     }
 
