@@ -29,7 +29,7 @@ public class FlagFireworkItem extends Flag {
     protected String[] getArguments() {
         return new String[] {
             "{flag} effect <effect data>",
-            "{flag} power <0-128>", };
+            "{flag} power <0-127>", };
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FlagFireworkItem extends Flag {
             "Effects can be listed in any order.",
             "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
             "",
-            "The 'power <number 0-128>' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.",
+            "The 'power <number 0-127>' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.",
             "",
             "Specific item: firework.", };
     }
@@ -156,8 +156,8 @@ public class FlagFireworkItem extends Flag {
                 // TODO: Handle exception
             }
 
-            if (power < 0 || power > 128) {
-                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 128.");
+            if (power < 0 || power > 127) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 127.");
             }
         } else {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);
