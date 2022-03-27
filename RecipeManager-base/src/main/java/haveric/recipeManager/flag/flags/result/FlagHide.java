@@ -34,7 +34,7 @@ public class FlagHide extends Flag {
             "  destroys       = Hide what the item can break/destroy",
             "  enchants       = Hide enchants",
             "  placedon       = Hide where this item can be placed on",
-            "  potioneffects  = Hide potion effects on this item",
+            "  potioneffects  = Hide potion effects, book and firework information, map tooltips, and enchantments of enchanted books",
             "  unbreakable    = Hide the unbreakable state",
         };
 

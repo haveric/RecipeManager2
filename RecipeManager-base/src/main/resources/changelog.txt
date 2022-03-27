@@ -13,6 +13,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: `@CloneIngredient`: Add Smithing support
 * FIX: `@ApplyEnchantment`: Add Smithing, Cartography, and Grindstone support
 * FIX: `@LaunchFirework`, `@FireworkItem`: Fix max power of 127
+* FIX: `@Hide`: Updated potioneffects argument description to be more accurate
 * FIX: 1.13 and below: Fixed errors related to custom model data
 
 ### v2.27.1
