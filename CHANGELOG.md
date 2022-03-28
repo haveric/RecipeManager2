@@ -1,5 +1,20 @@
 ## Change log
 
+### v2.28.0
+* NEW FLAG: `@AxolotlBucketItem <variant>`
+* NEW FLAG: `@StoreEnchantment`: Similar to `@ApplyEnchantment`, but for storing enchantments in enchanted books
+* NEW: `@ApplyEnchantment`: Added `smallest` action to use the lowest enchantment
+* FIX: `@NeedExp` error on load for `Player.getLevel()`
+* FIX: `@Explode fail` for crafting recipes
+* FIX: Updated grass_path to dirt_path in `item aliases.yml`
+* FIX: Replaced temporary Smithing recipe support with new events
+* FIX: `@IngredientCondition`: Add Smithing, Cartography, and Grindstone support
+* FIX: `@CloneIngredient`: Add Smithing support
+* FIX: `@ApplyEnchantment`: Add Smithing, Cartography, and Grindstone support
+* FIX: `@LaunchFirework`, `@FireworkItem`: Fix max power of 127
+* FIX: `@Hide`: Updated potioneffects argument description to be more accurate
+* FIX: 1.13 and below: Fixed errors related to custom model data
+
 ### v2.27.1
 * FIX: 1.13+ `@Summon`: Fixed error when summoning a non-breedable entity
 * NEW: `@Summon`: Added support for item recipes within equipment slots
