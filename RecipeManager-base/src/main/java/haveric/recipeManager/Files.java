@@ -289,9 +289,17 @@ public class Files {
         s.append(NL).append("</div>");
 
         for (FlagDescriptor flag : sortedFlags.values()) {
-            String[] args = flag.getArguments();
-            String[] desc = flag.getDescription();
-            String[] ex = flag.getExamples();
+            String[] args;
+            String[] desc;
+            String[] ex;
+            try {
+                args = flag.getArguments();
+                desc = flag.getDescription();
+                ex = flag.getExamples();
+            } catch (NoSuchFieldError e) {
+                MessageSender.getInstance().error(null, e, ChatColor.RED + "Failed to load information for flag: " + flag.getName());
+                continue;
+            }
 
             s.append(NL).append("<div class='doc-section__group'>");
             s.append(NL).append("<a href='#contents' class='back-to-top'>^ Contents</a><a id='").append(flag.getName()).append("'></a>");
